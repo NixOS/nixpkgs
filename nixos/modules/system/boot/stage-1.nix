@@ -8,8 +8,7 @@
 with lib;
 
 let
-
-  udev = config.systemd.package;
+  systemd = config.systemd.package;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
 
@@ -32,314 +31,33 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   # A utility for enumerating the shared-library dependencies of a program
-  findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
-    set -euo pipefail
+  findLibs = pkgs.buildPackages.callPackage ./find-libs.nix {};
 
-    declare -A seen
-    left=()
+  extraUnitsObjects = map (u: { object = u; }) (builtins.attrValues config.boot.initrd.extraUnits
+    ++ lib.concatLists (lib.mapAttrsToList (_: builtins.attrValues) config.boot.initrd.unitOverrides));
+  systemdUnits = pkgs.callPackage ./systemd-units.nix {
+    inherit systemd;
+    inherit (config.boot.initrd) extraUnits unitOverrides;
+  };
 
-    patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
+  fstab = pkgs.writeText "fstab" (lib.concatMapStringsSep "\n"
+    ({ fsType, mountPoint, device, options, ... }:
+      "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," options}") fileSystems);
 
-    function add_needed {
-      rpath="$($patchelf --print-rpath $1)"
-      dir="$(dirname $1)"
-      for lib in $($patchelf --print-needed $1); do
-        left+=("$lib" "$rpath" "$dir")
-      done
-    }
-
-    add_needed "$1"
-
-    while [ ''${#left[@]} -ne 0 ]; do
-      next=''${left[0]}
-      rpath=''${left[1]}
-      ORIGIN=''${left[2]}
-      left=("''${left[@]:3}")
-      if [ -z ''${seen[$next]+x} ]; then
-        seen[$next]=1
-
-        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
-        case "$next" in
-          ld*.so.?) continue;;
-        esac
-
-        IFS=: read -ra paths <<< $rpath
-        res=
-        for path in "''${paths[@]}"; do
-          path=$(eval "echo $path")
-          if [ -f "$path/$next" ]; then
-              res="$path/$next"
-              echo "$res"
-              add_needed "$res"
-              break
-          fi
-        done
-        if [ -z "$res" ]; then
-          echo "Couldn't satisfy dependency $next" >&2
-          exit 1
-        fi
-      fi
+  initrdUdevRules = pkgs.runCommandNoCC "udev-rules" { udevPackages = [ systemd pkgs.lvm2 ]; } ''
+    mkdir -p $out/lib/udev
+    for p in $udevPackages; do
+      cp -r --preserve=all --no-preserve=mode $p/lib/udev $out/lib
     done
   '';
 
-  # Some additional utilities needed in stage 1, like mount, lvm, fsck
-  # etc.  We don't want to bring in all of those packages, so we just
-  # copy what we need.  Instead of using statically linked binaries,
-  # we just copy what we need from Glibc and use patchelf to make it
-  # work.
-  extraUtils = pkgs.runCommandCC "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
-      allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
-    }
-    ''
-      set +o pipefail
-
-      mkdir -p $out/bin $out/lib
-      ln -s $out/bin $out/sbin
-
-      copy_bin_and_libs () {
-        [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
-        cp -pdv $1 $out/bin
-      }
-
-      # Copy BusyBox.
-      for BIN in ${pkgs.busybox}/{s,}bin/*; do
-        copy_bin_and_libs $BIN
-      done
-
-      # Copy some util-linux stuff.
-      copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
-
-      # Copy dmsetup and lvm.
-      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
-      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
-
-      # Add RAID mdadm tool.
-      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
-      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
-
-      # Copy udev.
-      copy_bin_and_libs ${udev}/bin/udevadm
-      copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
-      for BIN in ${udev}/lib/udev/*_id; do
-        copy_bin_and_libs $BIN
-      done
-      # systemd-udevd is only a symlink to udevadm these days
-      ln -sf udevadm $out/bin/systemd-udevd
-
-      # Copy modprobe.
-      copy_bin_and_libs ${pkgs.kmod}/bin/kmod
-      ln -sf kmod $out/bin/modprobe
-
-      # Copy resize2fs if any ext* filesystems are to be resized
-      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
-        # We need mke2fs in the initrd.
-        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
-      ''}
-
-      # Copy secrets if needed.
-      #
-      # TODO: move out to a separate script; see #85000.
-      ${optionalString (!config.boot.loader.supportsInitrdSecrets)
-          (concatStringsSep "\n" (mapAttrsToList (dest: source:
-             let source' = if source == null then dest else source; in
-               ''
-                  mkdir -p $(dirname "$out/secrets/${dest}")
-                  # Some programs (e.g. ssh) doesn't like secrets to be
-                  # symlinks, so we use `cp -L` here to match the
-                  # behaviour when secrets are natively supported.
-                  cp -Lr ${source'} "$out/secrets/${dest}"
-                ''
-          ) config.boot.initrd.secrets))
-       }
-
-      ${config.boot.initrd.extraUtilsCommands}
-
-      # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
-
-      # Copy all of the needed libraries
-      find $out/bin $out/lib -type f | while read BIN; do
-        echo "Copying libs for executable $BIN"
-        for LIB in $(${findLibs}/bin/find-libs $BIN); do
-          TGT="$out/lib/$(basename $LIB)"
-          if [ ! -f "$TGT" ]; then
-            SRC="$(readlink -e $LIB)"
-            cp -pdv "$SRC" "$TGT"
-          fi
-        done
-      done
-
-      # Strip binaries further than normal.
-      chmod -R u+w $out
-      stripDirs "$STRIP" "lib bin" "-s"
-
-      # Run patchelf to make the programs refer to the copied libraries.
-      find $out/bin $out/lib -type f | while read i; do
-        if ! test -L $i; then
-          nuke-refs -e $out $i
-        fi
-      done
-
-      find $out/bin -type f | while read i; do
-        if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-        fi
-      done
-
-      if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
-      # Make sure that the patchelf'ed binaries still work.
-      echo "testing patched programs..."
-      $out/bin/ash -c 'echo hello world' | grep "hello world"
-      export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --help 2>&1 | grep -q "BusyBox"
-      $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
-      $out/bin/udevadm --version
-      $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
-      $out/bin/mdadm --version
-
-      ${config.boot.initrd.extraUtilsCommandsTest}
-      fi
-    ''; # */
-
-
-  # Networkd link files are used early by udev to set up interfaces early.
-  # This must be done in stage 1 to avoid race conditions between udev and
-  # network daemons.
-  linkUnits = pkgs.runCommand "link-units" {
-      allowedReferences = [ extraUtils ];
-      preferLocalBuild = true;
-    } (''
-      mkdir -p $out
-      cp -v ${udev}/lib/systemd/network/*.link $out/
-      '' + (
-      let
-        links = filterAttrs (n: v: hasSuffix ".link" n) config.systemd.network.units;
-        files = mapAttrsToList (n: v: "${v.unit}/${n}") links;
-      in
-        concatMapStringsSep "\n" (file: "cp -v ${file} $out/") files
-      ));
-
-  udevRules = pkgs.runCommand "udev-rules" {
-      allowedReferences = [ extraUtils ];
-      preferLocalBuild = true;
-    } ''
-      mkdir -p $out
-
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
-
-      cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
-      cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      ${config.boot.initrd.extraUdevRulesCommands}
-
-      for i in $out/*.rules; do
-          substituteInPlace $i \
-            --replace ata_id ${extraUtils}/bin/ata_id \
-            --replace scsi_id ${extraUtils}/bin/scsi_id \
-            --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
-            --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
-            --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
-            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace ${udev} ${extraUtils}
-      done
-
-      # Work around a bug in QEMU, which doesn't implement the "READ
-      # DISC INFORMATION" SCSI command:
-      #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
-      # As a result, `cdrom_id' doesn't print
-      # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
-      # /dev/disk/by-label symlinks from being created.  We need these
-      # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
-      # corresponding udev rules for now.  This was the behaviour in
-      # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
-      substituteInPlace $out/60-persistent-storage.rules \
-        --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
-    ''; # */
-
-
-  # The init script of boot stage 1 (loading kernel modules for
-  # mounting the root FS).
-  bootStage1 = pkgs.substituteAll {
-    src = ./stage-1-init.sh;
-
-    shell = "${extraUtils}/bin/ash";
-
-    isExecutable = true;
-
-    postInstall = ''
-      echo checking syntax
-      # check both with bash
-      ${pkgs.buildPackages.bash}/bin/sh -n $target
-      # and with ash shell, just in case
-      ${pkgs.buildPackages.busybox}/bin/ash -n $target
-    '';
-
-    inherit linkUnits udevRules extraUtils modulesClosure;
-
-    inherit (config.boot) resumeDevice;
-
-    inherit (config.system.build) earlyMountScript;
-
-    inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
-
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
-
-    fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
-      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
-
-    setHostId = optionalString (config.networking.hostId != null) ''
-      hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
-        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
-      '' else ''
-        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
-      ''}
-    '';
+  emergencyEnv = pkgs.buildEnv {
+    name = "packages";
+    paths = map (p: lib.getBin p) config.boot.initrd.emergencyPackages;
+    pathsToLink = [ "/bin" ];
   };
 
-
-  # The closure of the init script of boot stage 1 is what we put in
-  # the initial RAM disk.
-  initialRamdisk = pkgs.makeInitrd {
-    name = "initrd-${kernel-name}";
-    inherit (config.boot.initrd) compressor compressorArgs prepend;
-
-    contents =
-      [ { object = bootStage1;
-          symlink = "/init";
-        }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
-          symlink = "/etc/mdadm.conf";
-        }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
-          symlink = "/etc/modprobe.d/ubuntu.conf";
-        }
-        { object = pkgs.kmod-debian-aliases;
-          symlink = "/etc/modprobe.d/debian.conf";
-        }
-      ];
-  };
+  initialRamdisk = pkgs.callPackage ./make-initrd.nix { inherit findLibs; contents = config.boot.initrd.objects; };
 
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
@@ -591,6 +309,31 @@ in
         '';
     };
 
+    boot.initrd.extraUnits = mkOption { type = types.attrsOf types.path; };
+
+    boot.initrd.unitOverrides = mkOption { type = types.attrsOf (types.attrsOf types.path); };
+
+    boot.initrd.emergencyPackages = mkOption { type = types.listOf types.package; };
+
+    boot.initrd.objects = with types; mkOption {
+      type = listOf (submodule {
+        options.object = mkOption { type = path; };
+        options.symlink = mkOption {
+          type = nullOr path;
+          default = null;
+        };
+        options.executable = mkOption {
+          type = bool;
+          default = false;
+        };
+      });
+    };
+
+    boot.initrd.emergencyHashedPassword = mkOption {
+      type = types.nullOr types.str;
+      default = "!";
+    };
+
     boot.loader.supportsInitrdSecrets = mkOption
       { internal = true;
         default = false;
@@ -654,7 +397,7 @@ in
     ];
 
     system.build =
-      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
+      { inherit initialRamdisk initialRamdiskSecretAppender; };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")
@@ -663,5 +406,106 @@ in
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
+    boot.initrd.emergencyPackages = [
+      pkgs.bash
+      pkgs.coreutils
+      pkgs.kmod
+      systemd
+      # TODO: These are actually needed for boot, not just emergency
+      pkgs.util-linuxMinimal
+    ];
+
+    boot.initrd.objects = extraUnitsObjects ++ [
+      {
+        object = "${systemd}/lib/systemd/systemd";
+        symlink = "/init";
+        executable = true;
+      }
+      {
+        object = "${systemdUnits}";
+        symlink = "/etc/systemd";
+      }
+      {
+        object = builtins.toFile "passwd" "root:x:0:0:System Administrator:/root:/bin/bash";
+        symlink = "/etc/passwd";
+      }
+      {
+        object = builtins.toFile "shadow" "root:${config.boot.initrd.emergencyHashedPassword}:::::::";
+        symlink = "/etc/shadow";
+      }
+      # TODO: These are required for emergency mode; figure out which
+      # parts specifically are needed
+      {
+        object = "${pkgs.glibc}/lib";
+        executable = true;
+      }
+      {
+        object = config.environment.etc.os-release.source;
+        symlink = "/etc/initrd-release";
+      }
+      {
+        object = config.environment.etc.os-release.source;
+        symlink = "/etc/os-release";
+      }
+      {
+        object = fstab;
+        symlink = "/etc/fstab";
+      }
+      {
+        symlink = "/etc/modules-load.d/nixos.conf";
+        object = pkgs.writeText "nixos.conf"
+          (lib.concatStringsSep "\n" (config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules));
+      }
+      {
+        object = "${initrdUdevRules}/lib/udev";
+        symlink = "/usr/lib/udev";
+      }
+      {
+        object = "${modulesClosure}/lib/modules";
+        symlink = "/lib/modules";
+      }
+      {
+        object = "${emergencyEnv}/bin/";
+        symlink = "/bin";
+        executable = true;
+      }
+      {
+        symlink = "/etc/bashrc";
+        object = pkgs.writeShellScript "bashrc" ''
+          PATH=${emergencyEnv}/bin
+        '';
+      }
+    ] ++ map (p: {
+      object = "${systemd}/${p}";
+      executable = true;
+    }) [
+      "lib/systemd/systemd-modules-load"
+      "bin/systemctl"
+      "lib/systemd/systemd-udevd"
+      "bin/udevadm"
+      "lib/systemd/systemd-journald"
+      "lib/systemd/systemd-sulogin-shell"
+      "lib/systemd/system-generators"
+      "bin/journalctl"
+      "lib/systemd/systemd-vconsole-setup"
+      "bin/systemd-tty-ask-password-agent"
+      "lib/systemd/systemd-shutdown"
+      "lib/systemd/systemd-makefs"
+      "lib/systemd/systemd-growfs"
+    ] ++ map (p: {
+      object = "${lib.getBin pkgs.lvm2}/${p}";
+      executable = true;
+    }) [ "bin/dmsetup" "bin/lvm" ] ++ map (p: {
+      object = "${lib.getBin p}/bin";
+      executable = true;
+    }) config.boot.initrd.emergencyPackages;
+
+    # TODO: This doesn't seem like it should be necessary.
+    # Seems like we're missing some dependency in the default
+    # unit files since we aren't copying all the default symlinks
+    boot.initrd.unitOverrides."systemd-udevd.service".modules = pkgs.writeText "modules.conf" ''
+      [Unit]
+      After=systemd-modules-load.service
+    '';
   };
 }
