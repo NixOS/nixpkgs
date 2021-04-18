@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pyyaml
+, pytest, pyyaml, hypothesis
 }:
 
 buildPythonPackage rec {
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    hypothesis
     pytest
   ];
 
