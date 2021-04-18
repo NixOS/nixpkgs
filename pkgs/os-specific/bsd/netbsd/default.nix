@@ -393,6 +393,16 @@ let
     sha256 = "0327820171djn9dzb2q1arypxw2zsxiixnd1ahy34dagd9cwcphj";
     meta.platforms = lib.platforms.netbsd;
   };
+
+  config = mkDerivation {
+    path = "usr.bin/config";
+    version = "8.0";
+    sha256 = "0piyn8lgdqxwz9wkgc2plzp2xpj93fs4xncri8l0jfas9rv5j2m5";
+    NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
+    buildInputs = [ compat ];
+    nativeBuildInputs = [ makeMinimal install mandoc byacc flex ];
+    extraPaths = [ cksum.src ];
+  };
   ##
   ## END COMMAND LINE TOOLS
   ##
