@@ -177,6 +177,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
