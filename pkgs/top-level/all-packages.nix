@@ -1296,6 +1296,8 @@ in
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
+  cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
