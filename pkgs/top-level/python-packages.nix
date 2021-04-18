@@ -1668,6 +1668,8 @@ in {
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
 
+  cxxfilt = callPackage ../development/python-modules/cxxfilt { };
+
   cycler = callPackage ../development/python-modules/cycler { };
 
   cymem = callPackage ../development/python-modules/cymem { };
