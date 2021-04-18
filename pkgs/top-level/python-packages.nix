@@ -4499,6 +4499,8 @@ in {
 
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
+  multimethod = callPackage ../development/python-modules/multimethod { };
+
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
