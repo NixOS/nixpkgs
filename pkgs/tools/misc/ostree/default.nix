@@ -12,6 +12,8 @@
 , xz
 , e2fsprogs
 , libsoup
+, glib-networking
+, wrapGAppsHook
 , gpgme
 , which
 , makeWrapper
@@ -78,6 +80,7 @@ in stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -85,6 +88,7 @@ in stdenv.mkDerivation rec {
     systemd
     e2fsprogs
     libsoup
+    glib-networking
     gpgme
     fuse
     libselinux
