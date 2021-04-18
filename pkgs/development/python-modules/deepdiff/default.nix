@@ -1,34 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, mock
-, jsonpickle
-, mmh3
+, fetchFromGitHub
+, click
 , ordered-set
+, clevercsv
+, jsonpickle
 , numpy
 , pytestCheckHook
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "5.2.3";
+  version = "5.3.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ae2cb98353309f93fbfdda4d77adb08fb303314d836bb6eac3d02ed71a10b40e";
+  # pypi source does not contain all fixtures required for tests
+  src = fetchFromGitHub {
+    owner = "seperman";
+    repo = "deepdiff";
+    rev = version;
+    sha256 = "1izw2qpd93nj948zakamjn7q7dlmmr7sapg0c65hxvs0nmij8sl4";
   };
 
-  # # Extra packages (may not be necessary)
-  checkInputs = [
-    mock
-    numpy
-    pytestCheckHook
+  propagatedBuildInputs = [
+    click
+    ordered-set
   ];
 
-  propagatedBuildInputs = [
+  pythonImportsCheck = [
+    "deepdiff"
+  ];
+
+  checkInputs = [
+    clevercsv
     jsonpickle
-    mmh3
-    ordered-set
+    numpy
+    pytestCheckHook
+    pyyaml
   ];
 
   meta = with lib; {
