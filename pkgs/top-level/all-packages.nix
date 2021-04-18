@@ -9308,6 +9308,8 @@ in
 
   tradcpp = callPackage ../development/tools/tradcpp { };
 
+  traitor = callPackage ../tools/security/traitor { };
+
   tre = callPackage ../development/libraries/tre { };
 
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
