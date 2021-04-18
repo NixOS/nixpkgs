@@ -58,7 +58,7 @@ in rec {
     # 8.1.0 is compatible with CUDA 11.0, 11.1, and 11.2:
     # https://docs.nvidia.com/deeplearning/cudnn/support-matrix/index.html#cudnn-cuda-hardware-versions
     srcName = "cudnn-11.2-linux-x64-v8.1.1.33.tgz";
-    sha256 = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
+    hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
   };
 
   cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {
