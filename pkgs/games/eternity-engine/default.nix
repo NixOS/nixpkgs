@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libGL SDL2 SDL2_mixer SDL2_net ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./source/hal/i_directory.cpp \
       --replace "/usr/local/share/eternity/base" "$out/share/eternity/base" \
       --replace "/usr/share/eternity/base" "$out/share/eternity/base"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ MP2E ];
   };
