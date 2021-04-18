@@ -24,7 +24,6 @@ buildPythonPackage rec {
     description = "Python extension wrapping the ICU C++ API";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.rycee ];
   };
 
 }

@@ -126,9 +126,6 @@
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
-# Eclipse
-/pkgs/applications/editors/eclipse @rycee
-
 # Licenses
 /lib/licenses.nix @alyssais
 

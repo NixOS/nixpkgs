@@ -28,7 +28,6 @@ buildPythonPackage {
     homepage = "https://github.com/itkach/slob/";
     description = "Reference implementation of the slob (sorted list of blobs) format";
     license = licenses.gpl3;
-    maintainers = [ maintainers.rycee ];
   };
 
 }
