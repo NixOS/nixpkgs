@@ -433,12 +433,35 @@ let
     path = "sys";
     version = "8.0";
     sha256 = "123ilg8fqmp69bw6bs6nh98fpi1v2n9lamrzar61p27ji6sj7g0w";
+
+    CONFIG = "GENERIC";
+
     propagatedBuildInputs = [ include ];
-    nativeBuildInputs = [ makeMinimal install tsort lorder statHook uudecode ];
+    nativeBuildInputs = [
+      makeMinimal install tsort lorder statHook uudecode config genassym
+    ];
+
+    postConfigure = ''
+      pushd arch/$MACHINE/conf
+      config $CONFIG
+      popd
+    '';
+
+    makeFlags = [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
+    hardeningDisable = [ "pic" ];
+    MKKMOD = "no";
+    NIX_CFLAGS_COMPILE = [ "-Wa,--no-warn" ];
+
+    postBuild = ''
+      make -C arch/$MACHINE/compile/$CONFIG $makeFlags
+    '';
+
+    postInstall = ''
+      cp arch/$MACHINE/compile/$CONFIG/netbsd $out
+    '';
+
     meta.platforms = lib.platforms.netbsd;
     extraPaths = [ common.src ];
-    MKKMOD = "no";
-    makeFlags = [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
   };
 
   headers = symlinkJoin {
