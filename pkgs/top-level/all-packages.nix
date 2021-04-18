@@ -18714,7 +18714,7 @@ in
 
   nsq = callPackage ../servers/nsq { };
 
-  oauth2_proxy = callPackage ../servers/oauth2_proxy {
+  oauth2-proxy = callPackage ../servers/oauth2-proxy {
     buildGoModule = buildGo115Module;
   };
 
