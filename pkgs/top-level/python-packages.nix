@@ -9067,6 +9067,8 @@ in {
 
   woob = callPackage ../development/python-modules/woob { };
 
+  woodblock = callPackage ../development/python-modules/woodblock { };
+
   word2vec = callPackage ../development/python-modules/word2vec { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
