@@ -917,5 +917,17 @@ in
     boot.initrd.postDeviceCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands;
 
     environment.systemPackages = [ pkgs.cryptsetup ];
+
+    boot.initrd.emergencyPackages = [ pkgs.cryptsetup ];
+    boot.initrd.objects = [
+      {
+        object = pkgs.writeText "crypttab"
+          (lib.concatMapStringsSep "\n" ({ device, name, ... }: "${name} ${device}")
+            (builtins.attrValues config.boot.initrd.luks.devices));
+        symlink = "/etc/crypttab";
+      }
+      { object = "${config.systemd.package}/lib/systemd/systemd-cryptsetup"; executable = true; }
+    ];
+
   };
 }
