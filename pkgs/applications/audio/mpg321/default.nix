@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "Command-line MP3 player";
     homepage = "http://mpg321.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.rycee ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

@@ -40,7 +40,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libcdio/";
     description = "Wrapper around libcdio (CD Input and Control library)";
-    maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;
   };
 
