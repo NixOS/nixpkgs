@@ -8877,6 +8877,8 @@ in {
 
   vivisect = callPackage ../development/python-modules/vivisect { };
 
+  viv-utils = callPackage ../development/python-modules/viv-utils { };
+
   vmprof = callPackage ../development/python-modules/vmprof { };
 
   vncdo = callPackage ../development/python-modules/vncdo { };
