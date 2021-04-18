@@ -1,14 +1,21 @@
-{ lib, fetchhg, buildPythonPackage
-, srht, hglib, scmsrht, unidiff }:
+{ lib
+, fetchhg
+, buildPythonPackage
+, srht
+, hglib
+, scmsrht
+, unidiff
+, python
+}:
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.26.19";
+  version = "0.27.4";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
     rev = version;
-    sha256 = "0dc0lgqq8zdaywbd50dlxypk1lv0nffvqr3889v10ycy45qcfymv";
+    sha256 = "1c0qfi0gmbfngvds6917fy9ii2iglawn429757rh7b4bvzn7n6mr";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -22,9 +29,8 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
-
-  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hg.sr.ht";
