@@ -5299,6 +5299,8 @@ in {
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
+  plugnplay = callPackage ../development/python-modules/plugnplay { };
+
   plugwise = callPackage ../development/python-modules/plugwise { };
 
   plum-py = callPackage ../development/python-modules/plum-py { };
