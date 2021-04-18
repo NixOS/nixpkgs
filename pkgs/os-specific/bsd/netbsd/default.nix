@@ -61,7 +61,7 @@ let
     builder = ./builder.sh;
 
     meta = with lib; {
-      maintainers = with maintainers; [matthewbauer];
+      maintainers = with maintainers; [ matthewbauer qyliss ];
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
