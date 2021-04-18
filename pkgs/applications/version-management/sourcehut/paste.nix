@@ -1,14 +1,20 @@
-{ lib, fetchgit, buildPythonPackage
-, srht, pyyaml }:
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, pyyaml
+, python
+}:
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.11.2";
+  version = "0.12.1";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "paste.sr.ht";
     rev = version;
-    sha256 = "15hm5165v8a7ryw6i0vlf189slw4rp22cfgzznih18pbml7d0c8s";
+    sha256 = "sha256-QQhd2LeH9BLmlHilhsv+9fZ+RPNmEMSmOpFA3dsMBFc=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -20,9 +26,8 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
-
-  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
