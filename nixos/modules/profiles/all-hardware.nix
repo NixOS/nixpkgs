@@ -51,6 +51,13 @@ in
 
       # Hyper-V support.
       "hv_storvsc"
+    ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+      # Most of the following falls into two categories:
+      #  - early KMS / early display
+      #  - early storage (e.g. USB) support
+
+      # Allows using framebuffer configured by the initial boot firmware
+      "simplefb"
     ];
 
   # Include lots of firmware.
