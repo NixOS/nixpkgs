@@ -72,14 +72,18 @@ let
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
+        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
+          then "./Configure BSD-x86_64"
+        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
+          then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+        else if stdenv.hostPlatform.isBSD
+          then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${optionalString
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
-          then (if stdenv.hostPlatform.isx86_64
-            then "./Configure linux-x86_64"
-            else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}")
+          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
