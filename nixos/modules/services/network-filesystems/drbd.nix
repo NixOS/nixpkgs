@@ -36,9 +36,9 @@ let cfg = config.services.drbd; in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.drbd ];
+    environment.systemPackages = [ pkgs.drbd-utils ];
 
-    services.udev.packages = [ pkgs.drbd ];
+    services.udev.packages = [ pkgs.drbd-utils ];
 
     boot.kernelModules = [ "drbd" ];
 
@@ -55,10 +55,10 @@ let cfg = config.services.drbd; in
       wants = [ "systemd-udev.settle.service" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        ${pkgs.drbd}/sbin/drbdadm up all
+        ${pkgs.drbd-utils}/bin/drbdadm up all
       '';
       serviceConfig.ExecStop = ''
-        ${pkgs.drbd}/sbin/drbdadm down all
+        ${pkgs.drbd-utils}/bin/drbdadm down all
       '';
     };
   };

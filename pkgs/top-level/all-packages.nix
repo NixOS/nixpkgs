@@ -19510,7 +19510,7 @@ in
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
-  drbd = callPackage ../os-specific/linux/drbd { };
+  drbd-utils = callPackage ../os-specific/linux/drbd-utils { };
 
   dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
