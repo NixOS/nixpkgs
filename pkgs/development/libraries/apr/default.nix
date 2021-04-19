@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "apr-1.7.0";
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
   ];
 
   CPPFLAGS=lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-DAPR_IOVEC_DEFINED";
+
+  nativeBuildInputs =
+    # Update libtool for macOS 11 support
+    lib.optional (stdenv.isDarwin && stdenv.isAarch64) [ autoreconfHook ];
 
   enableParallelBuilding = true;
 
