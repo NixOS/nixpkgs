@@ -22551,6 +22551,8 @@ in
 
   dwm = callPackage ../applications/window-managers/dwm { };
 
+  dwmblocks = callPackage ../applications/misc/dwmblocks { };
+
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   dynamips = callPackage ../applications/virtualization/dynamips { };
