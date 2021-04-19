@@ -65,12 +65,19 @@ let
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
             bin/gdb/linux/bin/gdbserver
 
+          clangPath=$out/clion-${version}/bin/clang/linux/
           patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$clangPath" \
             bin/clang/linux/clangd
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
             bin/clang/linux/clang-tidy
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
+            bin/clang/linux/llvm-symbolizer
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$clangPath" \
+            bin/clang/linux/clazy-standalone
 
           wrapProgram $out/bin/clion \
             --set CL_JDK "${jdk}"
