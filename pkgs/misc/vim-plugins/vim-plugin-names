@@ -269,6 +269,7 @@ kana/vim-textobj-user
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
+kdheepak/lazygit.nvim
 KeitaNakamura/neodark.vim
 keith/investigate.vim
 keith/rspec.vim

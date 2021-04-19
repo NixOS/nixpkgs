@@ -2170,6 +2170,18 @@ let
     meta.homepage = "https://github.com/latex-box-team/latex-box/";
   };
 
+  lazygit-nvim = buildVimPluginFrom2Nix {
+    pname = "lazygit-nvim";
+    version = "2021-03-25";
+    src = fetchFromGitHub {
+      owner = "kdheepak";
+      repo = "lazygit.nvim";
+      rev = "fb5ab7d26ac414a7e7bfff6b89f69e2dd2fd3884";
+      sha256 = "1nn6zhjqfk88jmavl9y8li4y08v3wb2m2kskq9yf36hadw29im30";
+    };
+    meta.homepage = "https://github.com/kdheepak/lazygit.nvim/";
+  };
+
   LeaderF = buildVimPluginFrom2Nix {
     pname = "LeaderF";
     version = "2021-04-16";
