@@ -99,6 +99,7 @@ in rec {
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
       cp -rd ${llvmPackages.clang-unwrapped.lib}/lib/* $out/lib
 
+      cp -d ${llvmPackages.libclang}/lib/libclang-cpp.dylib $out/lib
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
       cp -d ${llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
