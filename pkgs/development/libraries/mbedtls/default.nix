@@ -11,6 +11,10 @@
 
 stdenv.mkDerivation rec {
   pname = "mbedtls";
+  # Auto updates are disabled due to repology listing dev releases as release
+  # versions. See
+  #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
+  #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
   version = "2.26.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
