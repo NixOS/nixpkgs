@@ -18,6 +18,7 @@ in stdenv.mkDerivation rec {
     cups
     libdrm
     libuuid
+    libXdamage
     libX11
     libXScrnSaver
     libXtst
