@@ -62,8 +62,6 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkg-config qmake removeReferencesTo ];
 
   buildInputs = [
