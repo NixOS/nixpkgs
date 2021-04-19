@@ -54,17 +54,15 @@ self = stdenv.mkDerivation rec {
     "LDFLAGS=-fPIC"
     "V=${luaversion}"
     "PLAT=${plat}"
-  ] ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [
-    "CC=${stdenv.hostPlatform.config}-gcc"
-    "RANLIB=${stdenv.hostPlatform.config}-ranlib"
-  ] else [])
-  ;
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ];
 
   configurePhase = ''
     runHook preConfigure
 
     makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(SYSCFLAGS)' )
-    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.hostPlatform.config}-ar rcu'"})
+    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
       TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
