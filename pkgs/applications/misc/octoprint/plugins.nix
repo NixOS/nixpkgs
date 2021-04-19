@@ -13,6 +13,25 @@ self: super: let
 in {
   inherit buildPlugin;
 
+  m86motorsoff = buildPlugin rec {
+    pname = "M84MotorsOff";
+    version = "0.1.0";
+
+    src = fetchFromGitHub {
+      owner = "ntoff";
+      repo = "Octoprint-M84MotOff";
+      rev = "v${version}";
+      sha256 = "1w6h4hia286lbz2gy33rslq02iypx067yqn413xcipb07ivhvdq7";
+    };
+
+    meta = with lib; {
+      description = "Changes the \"Motors off\" button in octoprint's control tab to issue an M84 command to allow compatibility with Repetier firmware Resources";
+      homepage = "https://github.com/ntoff/OctoPrint-M84MotOff";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   abl-expert = buildPlugin rec {
     pname = "ABL_Expert";
     version = "0.6";
@@ -52,6 +71,25 @@ in {
     };
   };
 
+  costestimation = buildPlugin rec {
+    pname = "CostEstimation";
+    version = "3.2.0";
+
+    src = fetchFromGitHub {
+      owner = "OllisGit";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "1j476jcw7gh8zqqdc5vddwv5wpjns7cd1hhpn7m9fxq3d5bi077w";
+    };
+
+    meta = with lib; {
+      description = "Plugin to display the estimated print cost for the loaded model.";
+      homepage = "https://github.com/malnvenshorn/OctoPrint-CostEstimation";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
+    };
+  };
+
   curaenginelegacy = buildPlugin rec {
     pname = "CuraEngineLegacy";
     version = "1.1.1";
@@ -68,6 +106,25 @@ in {
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
       license = licenses.agpl3;
       maintainers = with maintainers; [ gebner ];
+    };
+  };
+
+  displayprogress = buildPlugin rec {
+    pname = "DisplayProgress";
+    version = "0.1.3";
+
+    src = fetchFromGitHub {
+      owner = "OctoPrint";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "080prvfwggl4vkzyi369vxh1n8231hrl8a44f399laqah3dn5qw4";
+    };
+
+    meta = with lib; {
+      description = "Displays the job progress on the printer's display";
+      homepage = "https://github.com/OctoPrint/OctoPrint-DisplayProgress";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
     };
   };
 
@@ -237,6 +294,27 @@ in {
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  telegram = buildPlugin rec {
+    pname = "Telegram";
+    version = "1.6.4";
+
+    src = fetchFromGitHub {
+      owner = "fabianonline";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "14d9f9a5m1prcikd7y26qks6c2ls6qq4b97amn24q5a8k5hbgl94";
+    };
+
+    propagatedBuildInputs = with super; [ pillow ];
+
+    meta = with lib; {
+      description = "Plugin to send status messages and receive commands via Telegram messenger.";
+      homepage = "https://github.com/fabianonline/OctoPrint-Telegram";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ stunkymonkey ];
     };
   };
 
