@@ -11,6 +11,15 @@
 let
 luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 
+plat = if stdenv.isLinux then "linux"
+       else if stdenv.isDarwin then "macosx"
+       else if stdenv.hostPlatform.isMinGW then "mingw"
+       else if stdenv.isFreeBSD then "freebsd"
+       else if stdenv.isSunOS then "solaris"
+       else if stdenv.hostPlatform.isBSD then "bsd"
+       else if stdenv.hostPlatform.isUnix then "posix"
+       else "generic";
+
 self = stdenv.mkDerivation rec {
   pname = "lua";
   luaversion = with sourceVersion; "${major}.${minor}";
@@ -36,11 +45,8 @@ self = stdenv.mkDerivation rec {
     "R=${version}"
     "LDFLAGS=-fPIC"
     "V=${luaversion}"
-  ] ++ (if stdenv.isDarwin then [
-    "PLAT=macosx"
-  ] else [
-    "PLAT=linux"
-  ]) ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [
+    "PLAT=${plat}"
+  ] ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [
     "CC=${stdenv.hostPlatform.config}-gcc"
     "RANLIB=${stdenv.hostPlatform.config}-ranlib"
   ] else [])
