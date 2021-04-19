@@ -367,6 +367,7 @@ mfukar/robotframework-vim
 mfussenegger/nvim-dap
 mfussenegger/nvim-jdtls
 mg979/vim-visual-multi
+mg979/vim-xtabline
 mhartington/oceanic-next
 mhinz/vim-crates
 mhinz/vim-grepper

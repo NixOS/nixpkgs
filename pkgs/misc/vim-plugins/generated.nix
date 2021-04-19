@@ -8646,6 +8646,18 @@ let
     meta.homepage = "https://github.com/lyokha/vim-xkbswitch/";
   };
 
+  vim-xtabline = buildVimPluginFrom2Nix {
+    pname = "vim-xtabline";
+    version = "2021-01-31";
+    src = fetchFromGitHub {
+      owner = "mg979";
+      repo = "vim-xtabline";
+      rev = "654675222adde47c9d72caa400e35c7e680fe5a1";
+      sha256 = "1f7d4vmr7n5v7h5a1bjcvxaqygrdi33y0vdx4yjfdswi835yd45h";
+    };
+    meta.homepage = "https://github.com/mg979/vim-xtabline/";
+  };
+
   vim-yaml = buildVimPluginFrom2Nix {
     pname = "vim-yaml";
     version = "2021-01-14";
