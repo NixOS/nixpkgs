@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gops";
-  version = "0.3.17";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gops";
     rev = "v${version}";
-    sha256 = "1l0k1v2wwwdrwwznrdq2ivbrl5z3hxa89xm89jlaglkd7jjg74zk";
+    sha256 = "0534jyravpsj73lgdmw6fns1qaqiw401jlfk04wa0as5sv09rfhy";
   };
 
   vendorSha256 = null;
