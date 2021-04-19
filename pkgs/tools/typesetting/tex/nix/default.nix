@@ -12,6 +12,7 @@ rec {
     , packages ? []
     , texPackages ? {}
     , copySources ? false
+    , searchPath ? []
     }:
 
     assert generatePDF -> !generatePS;
@@ -32,7 +33,7 @@ rec {
         compressBlanksInIndex copySources;
 
       includes = map (x: [x.key (baseNameOf (toString x.key))])
-        (findLaTeXIncludes {inherit rootFile;});
+        (findLaTeXIncludes {inherit rootFile searchPath;});
 
       buildInputs = [ tex pkgs.perl ] ++ packages;
     };
@@ -43,11 +44,11 @@ rec {
   # \input{}), images (e.g. \includegraphics{}), bibliographies, and
   # so on.
   findLaTeXIncludes =
-    { rootFile
+    { rootFile, searchPath
     }:
 
     builtins.genericClosure {
-      startSet = [{key = rootFile;}];
+      startSet = [{key = toString rootFile;}];
 
       operator =
         {key, ...}:
@@ -63,9 +64,10 @@ rec {
             { rootFile = baseNameOf (toString rootFile); src = key; }
             "${pkgs.perl}/bin/perl ${./find-includes.pl}");
 
+          searchPath' = [(dirOf key)] ++ searchPath;
+
           # Look for the dependencies of `key', trying various
           # extensions determined by the type of each dependency.
-          # TODO: support a search path.
           foundDeps = dep: xs:
             let
               exts =
@@ -73,7 +75,9 @@ rec {
                 else if dep.type == "tex" then [".tex" ""]
                 else [""];
               fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
-                (map (ext: dirOf key + ("/" + dep.name + ext)) exts);
+                (builtins.concatLists 
+                  (map (path: map (ext: toString "${path}/${dep.name}${ext}") exts) searchPath')
+                );
             in if fn != null then [{key = fn;}] ++ xs
                else xs;
 
