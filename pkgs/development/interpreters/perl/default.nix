@@ -1,4 +1,5 @@
-{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
+{ config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
+, callPackage
 , enableThreading ? true, coreutils, makeWrapper
 }:
 
@@ -173,16 +174,20 @@ let
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
     crossVersion = "e53999d0c340769792ba18d749751b0df3d1d177"; # Mar 21, 2021
 
-    perl-cross-src = fetchurl {
-      url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "14vcpwjhq667yh0cs7ism70df8l7068vn4a0ww59hdjyj7yc84i6";
+    perl-cross-src = fetchFromGitHub {
+      name = "perl-cross-${crossVersion}";
+      owner = "arsv";
+      repo = "perl-cross";
+      rev = crossVersion;
+      sha256 = "1kw5xjv6pvkrrcycl6aiqx4zaas1w3652hgd3907q67pcrc4mmdm";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
-      cp -R perl-cross-${crossVersion}/* perl-${version}/
+      chmod -R u+w ${perl-cross-src.name}
+      cp -R ${perl-cross-src.name}/* perl-${version}/
     '';
 
     configurePlatforms = [ "build" "host" "target" ];
