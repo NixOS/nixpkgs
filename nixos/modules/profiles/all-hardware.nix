@@ -74,6 +74,11 @@ in
       "panel-simple"
       "pwm-bl"
 
+      # Power supply drivers, some platforms need them for USB
+      "axp20x-ac-power"
+      "axp20x-battery"
+      "pinctrl-axp209"
+
       # Misc "weak" dependencies
       "analogix-anx6345" # For DP or eDP (e.g. integrated display)
     ];
