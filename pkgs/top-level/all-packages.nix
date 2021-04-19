@@ -2540,6 +2540,8 @@ in
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
+  giph = callPackage ../applications/video/giph { };
+
   gir-rs = callPackage ../development/tools/gir { };
 
   gist = callPackage ../tools/text/gist { };
