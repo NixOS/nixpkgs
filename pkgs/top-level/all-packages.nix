@@ -20601,6 +20601,8 @@ in
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
+  resource-agents = callPackage ../os-specific/linux/resource-agents { };
+
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   riscv-pk = callPackage ../misc/riscv-pk { };
