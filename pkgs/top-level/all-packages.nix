@@ -23479,6 +23479,10 @@ in
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
+  himalaya = callPackage ../applications/networking/mailreaders/himalaya {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   hivelytracker = callPackage ../applications/audio/hivelytracker { };
