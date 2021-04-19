@@ -23,7 +23,7 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py
 
     # Pinned due to API changes in astral>=2.0, required by the sun/moon plugins
-    # https://github.com/home-assistant/core/issues/36636
+    # https://github.com/home-assistant/core/pull/48573; Remove >= 2021.5
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
@@ -43,6 +43,7 @@ let
     })
 
     # Pinned due to API changes in pylilterbot>=2021.3.0
+    # https://github.com/home-assistant/core/pull/48300; Remove >= 2021.5
     (self: super: {
       pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: rec {
         version = "2021.2.8";
@@ -108,7 +109,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.4.5";
+  hassVersion = "2021.4.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -127,7 +128,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "106d1n9z8pfcnqm594vkhczrrrjap801w6fdr0psv5vhdxrqh4sj";
+    sha256 = "1s1slwcqls2prz9kgyhggs8xi3x7ghwdi33j983kvpg0gva7d2f0";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
