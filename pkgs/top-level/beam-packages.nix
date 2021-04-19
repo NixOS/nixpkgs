@@ -111,7 +111,7 @@ rec {
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR23.elixir`.
     inherit (packages.erlang)
-      elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
+      elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_ls;
 
     inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
   };

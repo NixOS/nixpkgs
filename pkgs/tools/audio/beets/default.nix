@@ -105,13 +105,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-03-24";
+  version = "unstable-2021-04-17";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "854b4ab48324afe8884fcd11fa47bd6258d2f4f7";
-    sha256 = "sha256-y5EWVNF4bd9fNvU6VkucMpenyFZuqdPkrqQDgG9ZPJY=";
+    rev = "50163b373f527d1b1f8b2442240ca547e846744e";
+    sha256 = "sha256-l7drav4Qx2JCF+F5OA0s641idcKM3S4Yx2lM2evJQWE=";
   };
 
   propagatedBuildInputs = [
