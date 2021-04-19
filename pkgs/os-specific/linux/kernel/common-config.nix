@@ -871,6 +871,11 @@ let
       # The kernel command line will override a platform-specific configuration from its device tree.
       # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
       CMA_SIZE_MBYTES = freeform "32";
+
+      # Many ARM SBCs hand off a pre-configured framebuffer.
+      # This always can can be replaced by the actual native driver.
+      # Keeping it a built-in ensures it will be used if possible.
+      FB_SIMPLE = yes;
     };
   };
 in
