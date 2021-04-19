@@ -2665,6 +2665,8 @@ in
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
+  jiten = callPackage ../applications/misc/jiten { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   joycond = callPackage ../os-specific/linux/joycond { };
