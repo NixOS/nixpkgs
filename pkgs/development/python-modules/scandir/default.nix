@@ -1,10 +1,10 @@
-{ lib, python, buildPythonPackage, fetchPypi }:
+{ lib, python, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "scandir";
   version = "1.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 ="1bkqwmf056pkchf05ywbnf659wqlp6lljcdb0y88wr9f0vv32ijd";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, six }:
 
 buildPythonPackage rec {
   pname = "scour";
   version = "0.38.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6881ec26660c130c5ecd996ac6f6b03939dd574198f50773f2508b81a68e0daf";
   };

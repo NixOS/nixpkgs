@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , modestmaps
 , pillow
 , pycairo
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "1.51.14";
   disabled = !isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "TileStache";
     inherit version;
     sha256 = "1qjrabl6qr7i6yj6v647ck92abcyklb0vmb6h6kj7x8v2cj5xbvk";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , docopt
 , colorama
 , pytest
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pytest-watch";
   version = "4.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "06136f03d5b361718b8d0d234042f7b2f203910d8568f63df2f866b547b3d4b9";
   };

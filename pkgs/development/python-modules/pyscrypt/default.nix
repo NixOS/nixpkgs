@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, python }:
 
 buildPythonPackage rec {
   pname = "pyscrypt";
   version = "1.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1sd5pd5fpcdnpp4h58kdnvkf0s3afh4ssfqky2ap6z0gy6ax3zds";
   };

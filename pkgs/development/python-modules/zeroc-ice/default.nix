@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{ lib, buildPythonPackage, fetchFromPyPI, openssl, bzip2 }:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
   version = "3.7.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "3b4897cc3f2adf3d03802368cedb72a038aa33c988663a667c1c48e42ea10797";
   };

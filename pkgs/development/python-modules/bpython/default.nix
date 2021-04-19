@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , curtsies
 , greenlet
 , mock
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "bpython";
   version = "0.20.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6e7738806013b469be57b0117082b9c4557ed7c92c70ceb79f96d674d89c7503";
   };

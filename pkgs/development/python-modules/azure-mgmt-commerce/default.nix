@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrestazure
 , azure-common
 , azure-mgmt-core
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-commerce";
   version = "6.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "6f5447395503b2318f451d24f8021ee08db1cac44f1c3337ea690700419626b6";

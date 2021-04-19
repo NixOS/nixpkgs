@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , installShellFiles
 , attrs
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0r0j0y0ii62ppawc8qqjyaq0fkmmb0zk1xb3f9navxp556w2dljv";
   };

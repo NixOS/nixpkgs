@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "python-wink";
   version = "1.10.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1r6qabnqxyy3llnj10z60d4w9pg2zabysl3l7znpy1adss4ywxl0";
   };

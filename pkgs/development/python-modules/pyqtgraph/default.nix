@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , pyopengl
 , pyqt5
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyqtgraph";
   version = "0.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7d1417f36b5b92d1365671633a91711513e5afbcc82f32475d0690317607714e";
   };

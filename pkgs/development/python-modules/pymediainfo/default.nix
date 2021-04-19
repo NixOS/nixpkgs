@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage
 , libmediainfo
 , setuptools_scm
 , pytest, glibcLocales }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "pymediainfo";
   version = "5.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ea61a3b0e0ed6de42ebb2233cf1a9312c57dce95101c025f9f081c10ecec48fb";
   };

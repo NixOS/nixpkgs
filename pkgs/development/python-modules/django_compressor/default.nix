@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   rcssmin, rjsmin, django_appconf }:
 buildPythonPackage rec {
     pname = "django_compressor";
     version = "2.4";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "0kx7bclfa0sxlsz6ka70zr9ra00lks0hmv1kc99wbanx6xhirvfj";
     };

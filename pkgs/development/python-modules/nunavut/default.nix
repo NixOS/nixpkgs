@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , pydsdl
 }:
 
@@ -10,7 +10,7 @@
   version = "1.0.2";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c6fe0a1b92c44bb64b2427f944fee663fe1aaf3d4d4080d04ad9c212b40a8763";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , glibcLocales
 , ipython_genutils
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "nbformat";
   version = "5.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-HSI+ZKGL+nzfLbLpuoqBgxL8KgcB0ukQtY32aAk4WlY=";
   };

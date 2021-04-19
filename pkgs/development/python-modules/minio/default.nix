@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI
 , configparser
 , faker
 , future
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "6.0.2";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "acae9bfae0aec1b92025bd63e18135ebb4994c84600716c5323e14cb0c9a0b03";
   };

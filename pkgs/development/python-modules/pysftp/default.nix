@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , paramiko
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.2.9";
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jl5qix5cxzrv4lb8rfpjkpcghbkacnxkb006ikn7mkl5s05mxgv";
   };

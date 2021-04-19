@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
   version = "3.0.2";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "b4b1ccf086586d041d7e91e68515d495c550f30e4d179d63863fea9ccdbb78eb";
   };

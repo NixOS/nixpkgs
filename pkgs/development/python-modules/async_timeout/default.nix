@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pythonOlder
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "async-timeout";
   version = "3.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , freezegun
 , google-cloud-core
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pname = "google-cloud-bigquery";
   version = "2.13.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "915f93c61c03d1d6024d5b19355bb96af25da9f924d0b5bab5cde851e1bd48f4";
   };

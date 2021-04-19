@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "genzshcomp";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b582910d36f9ad0992756d7e9ccbe3e5cf811934b1002b51f25b99d3dda9d573";
   };

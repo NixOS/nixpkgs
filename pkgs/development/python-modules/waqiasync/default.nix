@@ -2,14 +2,14 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "waqiasync";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yxls7ywfg954c3vxgnp98qa1b8dsq9b2fld11fb9sx1k4mjc29d";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "UkPostcodeParser";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "930264efa293db80af0103a4fe9c161b06365598d24bb6fe5403f3f57c70530e";
   };

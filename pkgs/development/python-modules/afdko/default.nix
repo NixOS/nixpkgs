@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, fetchpatch, pythonOlder, python
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1qg7dgl81yq0sp50pkhgvmf8az1svx20zmpkfa68ka9d0ssh1wjw";
   };

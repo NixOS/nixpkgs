@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , docutils
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "statistics";
   version = "1.0.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2dc379b80b07bf2ddd5488cad06b2b9531da4dd31edb04dc9ec0dc226486c138";
   };

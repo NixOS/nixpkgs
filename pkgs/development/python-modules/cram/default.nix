@@ -1,4 +1,4 @@
-{stdenv, lib, buildPythonPackage, fetchPypi, bash, which}:
+{stdenv, lib, buildPythonPackage, fetchFromPyPI, bash, which}:
 
 buildPythonPackage rec {
   version = "0.7";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   checkInputs = [ which ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bvz6fwdi55rkrz3f50zsy35gvvwhlppki2yml5bj5ffy9d499vx";
   };

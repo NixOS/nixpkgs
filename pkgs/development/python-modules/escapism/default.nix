@@ -1,13 +1,13 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "escapism";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "73256bdfb4f22230f0428fc6efecee61cdc4fad531b6f98b849cb9c80711e4ec";
   };

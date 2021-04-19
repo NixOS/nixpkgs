@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pebble";
   version = "4.6.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Pebble";
     inherit version;
     sha256 = "0a595f7mrf89xlck9b2x83bqybc9zd9jxkl0sa5cf19vax18rg8h";

@@ -1,5 +1,5 @@
 { lib
-, buildPythonPackage, fetchPypi
+, buildPythonPackage, fetchFromPyPI
 , numpy, requests, six, pyglet, scipy, cloudpickle
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "gym";
   version = "0.17.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "96a7dd4e9cdb39e30c7a79e5773570fd9408f7fdb58c714c293cfbb314818eb6";
   };

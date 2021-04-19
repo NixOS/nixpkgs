@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
   version = "1.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17hqck808m59jv6m2g4hasnay44pycy3y0im01fq9jpr3ymcdbi7";
   };

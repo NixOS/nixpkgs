@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "batinfo";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "497e29efc9353ec52e71d43bd040bdfb6d685137ddc2b9143cded4583af572f5";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , pytest
 , numpy
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "folium";
   version = "0.12.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d45ace0a813ae65f202ce0356eb29c40a5e8fde071e4d6b5be0a89587ebaeab2";
   };

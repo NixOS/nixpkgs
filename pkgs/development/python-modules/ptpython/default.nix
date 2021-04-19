@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI
 , appdirs
 , black
 , importlib-metadata
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.0.16";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4b0f6e381a8251ec8d6aa94fe12f3400bf6edf789f89c8a6099f8a91d4a5d2e1";
   };

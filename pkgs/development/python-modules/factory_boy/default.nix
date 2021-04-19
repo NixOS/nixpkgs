@@ -2,7 +2,7 @@
 , buildPythonPackage
 , django
 , faker
-, fetchPypi
+, fetchFromPyPI
 , flask
 , flask_sqlalchemy
 , mongoengine
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "factory_boy";
   version = "3.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nsw2mdjk8sqds3qsix4cf19ws6i0fak79349pw2581ryc7w0720";
   };

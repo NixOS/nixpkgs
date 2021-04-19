@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , astropy
 , requests
 , keyring
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "0.4.1";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xpqrl9h7sg55mql38xsfpbz9rxsm3mxfha1biqyly1gmxpmd47a";
   };

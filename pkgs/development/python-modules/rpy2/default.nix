@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , R
 , rWrapper
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pname = "rpy2";
 
     disabled = isPyPy;
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit version pname;
       sha256 = "8f7d1348b77bc45425b846a0d625f24a51a1c4f32ef2cd1c07a24222aa64e2e0";
     };

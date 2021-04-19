@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   dateutil, simplejson, isPy27
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "73facc37462dfc0b27f571bdaffbef7709e19f7a616beb3802ea425b07843f4e";
   };

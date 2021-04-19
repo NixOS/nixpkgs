@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "0.5.2";
   pname = "grappelli_safe";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "35b7ccaf9acc54684c73aeefbeaddc63b8a16143bd981bd5b3ebef253def07df";
   };

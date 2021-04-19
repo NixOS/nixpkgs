@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
   version = "15.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "e205aada94bb630e1ba5ee57751849456e1535aec3f2173edf2cbf596b99c0d9";

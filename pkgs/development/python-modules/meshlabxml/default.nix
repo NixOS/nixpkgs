@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromPyPI,
   pythonOlder,
   lib,
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "MeshLabXML";
   version = "2018.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1villmg46hqby5jjkkpxr5bxydr72y5b3cbfngwpyxxdljn091w8";
   };

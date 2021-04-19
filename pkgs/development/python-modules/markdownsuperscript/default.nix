@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, markdown,
+{ lib, buildPythonPackage, fetchFromPyPI, markdown,
   pytest, pytestrunner, pytestcov, coverage }:
 
 buildPythonPackage rec {
   pname = "MarkdownSuperscript";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2c255b5959c1f5dd364ae80762bd0a568a0fcc9fd4e4a3d7e7b192e88adf8900";
   };

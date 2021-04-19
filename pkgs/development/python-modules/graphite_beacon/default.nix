@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , tornado_5, pyyaml, funcparserlib
 , nixosTests
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "graphite_beacon";
   version = "0.27.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03bp4wyfn3xhcqyvs5hnk1n87m4smsmm1p7qp459m7j8hwpbq2ks";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
+{ lib, buildPythonPackage, glibcLocales, fetchFromPyPI, six, pytz }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
   version = "1.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0m6fjnrx3sd0bm6pnbhxxx5ywlwqh8bx0lka386kj28mg3fmm2m2";
   };

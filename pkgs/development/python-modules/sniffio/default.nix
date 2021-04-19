@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
+{ buildPythonPackage, lib, fetchFromPyPI, glibcLocales, isPy3k, contextvars
 , pythonOlder, pytest, curio
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "sniffio";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de";
   };

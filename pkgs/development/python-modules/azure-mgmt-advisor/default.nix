@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-advisor";
   version = "9.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "fc408b37315fe84781b519124f8cb1b8ac10b2f4241e439d0d3e25fd6ca18d7b";

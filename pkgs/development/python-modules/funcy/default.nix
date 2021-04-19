@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "funcy";
   version = "1.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "65b746fed572b392d886810a98d56939c6e0d545abb750527a717c21ced21008";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , google-cloud-testutils
 , libcst
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "google-cloud-monitoring";
   version = "2.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-QeMJBJKjW3Zu0p0mSmo5dVOJNwRmmA5FKXRXjCd+zN4=";
   };

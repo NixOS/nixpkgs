@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , eventlet
 , trollius
 , mock
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # version is called 0.5.1 on PyPI, but the filename is aioeventlet-0.5.2.tar.gz
   version = "0.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cecb51ea220209e33b53cfb95124d90e4fcbee3ff8ba8a179a57120b8624b16a";
   };

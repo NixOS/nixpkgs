@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyedimax";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1i3gr5vygqh2ryg67sl13aaql7nvf3nbybrg54628r4g7911b5rk";
   };

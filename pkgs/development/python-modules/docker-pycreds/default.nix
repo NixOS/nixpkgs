@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, six }:
 
 buildPythonPackage rec {
   pname = "docker-pycreds";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6ce3270bcaf404cc4c3e27e4b6c70d3521deae82fb508767870fdbf772d584d4";
   };

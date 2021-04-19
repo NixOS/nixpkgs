@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pythonegardia";
   version = "1.0.40";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rv6m5zaflf3nanpl1xmfmfcpg8kzcnmniq1hhgrybsspkc7mvry";
   };

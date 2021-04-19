@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, alsaUtils, libnotify, which, loguru, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, alsaUtils, libnotify, which, loguru, pytest }:
 
 buildPythonPackage rec {
   pname = "notify_py";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5ba696d18ffe1d7070f3d0a5b4923fee4d6c863de6843af105bec0ce9915ebad";
   };

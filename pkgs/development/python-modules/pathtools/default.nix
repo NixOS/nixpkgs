@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pathtools";
   version = "0.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1h7iam33vwxk8bvslfj4qlsdprdnwf8bvzhqh3jq5frr391cadbw";
   };

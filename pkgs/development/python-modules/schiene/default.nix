@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , beautifulsoup4
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "schiene";
   version = "0.23";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "014aaxmk7yxyml1xgfk3zqallyb5zi04m0v7jgqjkbjqq4n4j3ck";
   };

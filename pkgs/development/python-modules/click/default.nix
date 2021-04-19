@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, locale, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, locale, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "click";
   version = "7.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
   };

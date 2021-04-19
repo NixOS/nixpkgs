@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aflplusplus
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "bsdiff4";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17fc0dd4204x5gqapvbrc4kv83jdajs00jxm739586pl0iapybrw";
   };

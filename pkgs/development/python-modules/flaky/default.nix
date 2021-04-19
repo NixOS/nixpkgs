@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , nose
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "flaky";
   version = "3.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3ad100780721a1911f57a165809b7ea265a7863305acb66708220820caf8aa0d";
   };

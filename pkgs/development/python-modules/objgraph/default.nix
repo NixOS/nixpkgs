@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , substituteAll
 , graphvizPkgs
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "objgraph";
   version = "3.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4752ca5bcc0e0512e41b8cc4d2780ac2fd3b3eabd03b7e950a5594c06203dfc4";
   };

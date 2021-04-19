@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro, futures, enum34 }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, rdkafka, requests, avro3k, avro, futures, enum34 }:
 
 buildPythonPackage rec {
   version = "1.6.0";
   pname = "confluent-kafka";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8a9caabdb02e87cd65c7f10f689ba3f1a15f8774de455e96fa5fc56eecfee63c";
   };

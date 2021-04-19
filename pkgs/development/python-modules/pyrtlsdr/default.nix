@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , rtl-sdr
 , m2r
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pyrtlsdr";
   version = "0.2.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7942fe2e7821d09206002ea7e820e694094b3f964885123eb6eee1167f39b8da";
   };

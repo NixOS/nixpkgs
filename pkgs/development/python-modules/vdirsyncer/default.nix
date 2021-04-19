@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , click
 , click-log
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pname = "vdirsyncer";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bfdb422f52e1d4d60bd0635d203fb59fa7f613397d079661eb48e79464ba13c5";
   };

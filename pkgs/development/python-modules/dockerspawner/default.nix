@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jupyterhub
 , escapism
 , docker
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "dockerspawner";
   version = "0.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "83fd8ee012bb32432cb57bd408ff65534749aed8696648e6ac029a87fc474928";
   };

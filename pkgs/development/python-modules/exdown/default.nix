@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI, pythonOlder
 , importlib-metadata }:
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-BCn+rkMxQSw/gO+dpzgpYSOqEiooWFzSh7LUYIFr6wE=";
   };

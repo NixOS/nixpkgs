@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, requests, six, pbr, setuptools }:
+{ lib, buildPythonApplication, fetchFromPyPI, requests, six, pbr, setuptools }:
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
   version = "3.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3972f8b1986e60ea786ad01697e6882f331209ae947ef8b795531940f1e0732b";
   };

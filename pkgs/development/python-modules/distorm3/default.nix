@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "1bh9xdiz9mkf9lfffimfn3hgd0mh60y7wl1micgkxzpl7hnxrpd4";

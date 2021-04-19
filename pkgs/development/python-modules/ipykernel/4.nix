@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , isPy27
 , mock
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "ipykernel";
   version = "4.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eeb74b2bcfe0ced5a7900361f98fa1171288aa47ed4b522efe5acb167c6cf5fb";
   };

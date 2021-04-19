@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, requests, pytestCheckHook }:
+{ lib, buildPythonApplication, fetchFromPyPI, requests, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "gallery_dl";
   version = "1.17.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1cfaa3a617d5d222d4b9b41634b1bdede2673a8620d6b0e62fb755ae224ca2ac";
   };

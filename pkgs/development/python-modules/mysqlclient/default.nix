@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ lib, buildPythonPackage, fetchFromPyPI, libmysqlclient }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Tests need a MySQL database
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f6ebea7c008f155baeefe16c56cd3ee6239f7a5a9ae42396c2f1860f08a7c432";
   };

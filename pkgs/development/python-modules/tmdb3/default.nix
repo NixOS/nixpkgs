@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "tmdb3";
   version = "0.7.2";
   disabled = isPy3k; # Upstream has not received any updates since 2015, and importing from python3 does not work.
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9b6e043b8a65d159e7fc8f720badc7ffee5109296e38676c107454e03a895983";
   };

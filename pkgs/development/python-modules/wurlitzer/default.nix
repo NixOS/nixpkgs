@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , mock
 , pytest
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "wurlitzer";
   version = "2.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hvmbc41kdwrjns8z1s4a59a4azdvzb8q3vs7nn1li4qm4l0g3yh";
   };

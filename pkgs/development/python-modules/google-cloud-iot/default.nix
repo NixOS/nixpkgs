@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc_google_iam_v1
 , google-api-core
 , libcst
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-iot";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "768ccd567b87bf0030f9458d796cc0a846c40825fa2896b77e9cc7a4af30ba2b";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , pandas
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "bkcharts";
   version = "0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "a5eaa8e78853dcecaa46345812e4fabe9cd3b96330ebf0809f640a4a0556d72e";
   };

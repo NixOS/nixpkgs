@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , markdown-it-py
 , nbformat
 , pytest
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "23123b90c267c67716fe6a022dfae49b84fd3809370d83211f2920eb3106bf40";
   };

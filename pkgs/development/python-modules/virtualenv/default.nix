@@ -3,7 +3,7 @@
 , contextlib2
 , cython
 , distlib
-, fetchPypi
+, fetchFromPyPI
 , filelock
 , flaky
 , importlib-metadata
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pname = "virtualenv";
   version = "20.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b7a8ec323ee02fb2312f098b6b4c9de99559b462775bc8fe3627a73706603c1b";
   };

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "0.57.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
   };

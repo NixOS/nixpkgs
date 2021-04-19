@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   pname = "filebrowser_safe";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5dcd31dd79684025139b43841f6515af1da5a4bb0de15bc4d88003db1970648e";
   };

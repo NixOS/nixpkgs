@@ -3,7 +3,7 @@
 let
   xhtml2pdf = import ./xhtml2pdf.nix {
     inherit lib;
-    fetchPypi = python.pkgs.fetchPypi;
+    fetchFromPyPI = python.pkgs.fetchFromPyPI;
     buildPythonPackage = python.pkgs.buildPythonPackage;
     html5lib = python.pkgs.html5lib;
     httplib2 = python.pkgs.httplib2;

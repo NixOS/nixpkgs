@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-signalr";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "6503ddda9d6f4b634dfeb8eb4bcd14ede5e0900585f6c83bf9010cf82215c126";

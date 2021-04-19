@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, pyyaml
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "yamlloader";
   version = "0.5.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3KtfFrObsD0Q3aTNTzDJQ2dexMd3GAf8Z+fxuzGb9Mg=";
   };

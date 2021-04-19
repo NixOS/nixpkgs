@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , beautifulsoup4
 , lxml
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "ofxparse";
   version = "0.20";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zn3grc6xhgzcc81qc3dxkkwk731cjjqqhb46smw12lk09cdnigb";
   };

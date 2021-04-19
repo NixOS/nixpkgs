@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-batch";
   version = "15.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "9b793bb31a0d4dc8c29186db61db24d83795851a75846aadb187cf95bf853ccb";

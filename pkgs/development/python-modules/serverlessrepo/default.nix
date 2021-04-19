@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , boto3
 , six
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "serverlessrepo";
   version = "0.1.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "671f48038123f121437b717ed51f253a55775590f00fbab6fbc6a01f8d05c017";
   };

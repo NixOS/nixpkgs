@@ -1,6 +1,6 @@
 { buildPythonPackage
 , asn1crypto
-, fetchPypi
+, fetchFromPyPI
 , lib
 , openssl
 }:
@@ -9,12 +9,12 @@ buildPythonPackage rec {
   pname = "oscrypto";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vlryamwr442w2av8f54ldhls8fqs6678fg60pqbrf5pjy74kg23";
   };
 
-  testSources = fetchPypi {
+  testSources = fetchFromPyPI {
     inherit version;
     pname = "oscrypto_tests";
     sha256 = "1crndz647pqdd8148yn3n5l63xwr6qkwa1qarsz59nk3ip0dsyq5";

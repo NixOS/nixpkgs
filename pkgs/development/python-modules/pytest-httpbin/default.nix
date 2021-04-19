@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , httpbin
 , six
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytest-httpbin";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wlvw5qgkax7f0i5ks1562s37h2hdmn5yxnp1rajcc2289zm9knq";
   };

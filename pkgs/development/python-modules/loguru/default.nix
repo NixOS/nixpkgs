@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy27
 , colorama
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   # python3.9 compatibility should be in the next release after 0.5.3
   disabled = isPy27 || pythonAtLeast "3.9";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b28e72ac7a98be3d28ad28570299a393dfcd32e5e3f6a353dec94675767b6319";
   };

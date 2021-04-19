@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , nose, numpy, future
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "uncertainties";
   version = "3.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00z9xl40czmqk0vmxjvmjvwb41r893l4dad7nj1nh6blw3kw28li";
   };

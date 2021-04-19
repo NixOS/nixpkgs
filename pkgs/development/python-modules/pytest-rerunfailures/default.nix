@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1cb11a17fc121b3918414eb5eaf314ee325f2e693ac7cb3f6abf7560790827f2";
   };

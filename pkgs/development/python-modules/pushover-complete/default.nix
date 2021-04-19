@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , requests
 , six
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "1.1.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "pushover_complete";
     inherit version;
     sha256 = "8a8f867e1f27762a28a0832c33c6003ca54ee04c935678d124b4c071f7cf5a1f";

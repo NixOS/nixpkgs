@@ -1,4 +1,4 @@
-{lib, fetchPypi, buildPythonPackage, numpy, pyparsing, pytestcov, pytestCheckHook }:
+{lib, fetchFromPyPI, buildPythonPackage, numpy, pyparsing, pytestcov, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "periodictable";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [numpy pyparsing];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d09c359468e2de74b43fc3a7dcb0d3d71e0ff53adb85995215d8d7796451af6";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27,
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27,
   cssselect, cssutils, lxml, mock, nose, requests, cachetools
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "3.7.0";
   disabled = isPy27; # no longer compatible with urllib
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5eec9603e84cee583a390de69c75192e50d76e38ef0292b027bd64923766aca7";
   };

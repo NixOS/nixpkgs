@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , requests }:
 
 buildPythonPackage rec {
   pname = "yubico-client";
   version = "1.13.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e3b86cd2a123105edfacad40551c7b26e9c1193d81ffe168ee704ebfd3d11162";
   };

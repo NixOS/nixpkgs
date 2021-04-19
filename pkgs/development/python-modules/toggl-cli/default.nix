@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonAtLeast, pythonOlder
 , click
 , click-completion
 , factory_boy
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   version = "2.4.1";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "togglCli";
     inherit version;
     sha256 = "19lry8adcznzmzbvghyid3yl4j05db6931bw38af5vrkkyzyf62i";

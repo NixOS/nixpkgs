@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , glibcLocales
 , entrypoints
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pname = "nbconvert";
   version = "6.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cbbc13a86dfbd4d1b5dee106539de0795b4db156c894c2c5dc382062bbc29002";
   };

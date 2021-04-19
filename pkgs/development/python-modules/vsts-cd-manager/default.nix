@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , msrest
 , mock
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "1.0.2";
   pname = "vsts-cd-manager";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ys4hrmjbxl4qr26qr3dhhs27yfwn1635vwjdqh1qgjmrmcr1c0b";
   };

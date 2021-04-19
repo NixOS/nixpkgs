@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 , lxml
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytrafikverket";
   version = "0.1.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hrjsw53ixgmhsiszdrzzh0wma705nrhq8npzacsyaf43r29zvqy";
   };

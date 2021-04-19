@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc_google_iam_v1
 , google-api-core
 , libcst
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lgz6qpsfv4b7p5ff4sdpjpaddxpbazdvlcrqr1i0c0qil2lkm2i";
   };

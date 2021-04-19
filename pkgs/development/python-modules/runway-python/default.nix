@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , flask-compress
 , flask-cors
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pname = "runway-python";
   version = "0.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "66cf1517dd817bf6db3792608920274f964dd0ced8dabecd925b8bc17aa95740";
   };

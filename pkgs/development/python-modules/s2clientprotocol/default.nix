@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , protobuf
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "s2clientprotocol";
   version = "3.19.1.58600.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02jqwdfj5zpag4c5nf0707qmwk7sqm98yfgrd19rq6pi58zgl74f";
   };

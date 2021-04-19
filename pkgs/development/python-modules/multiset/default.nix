@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytestrunner
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "multiset";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4801569c08bfcecfe7b0927b17f079c90f8607aca8fecaf42ded92b737162bc7";
   };

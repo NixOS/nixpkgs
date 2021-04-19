@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , unittest2
 , colander
 , sqlalchemy
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "ColanderAlchemy";
   version = "0.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "006wcfch2skwvma9bq3l06dyjnz309pa75h1rviq7i4pd9g463bl";
   };

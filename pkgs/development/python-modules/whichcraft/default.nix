@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "whichcraft";
   version = "0.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "11yfkzyplizdgndy34vyd5qlmr1n5mxis3a3svxmx8fnccdvknxc";
   };

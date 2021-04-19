@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, substituteAll, stdenv, setuptools_scm, freetype }:
+{ lib, buildPythonPackage, fetchFromPyPI, substituteAll, stdenv, setuptools_scm, freetype }:
 
 buildPythonPackage rec {
   pname = "freetype-py";
   version = "2.1.0.post1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1k62fx53qrv9nb73mpqi2r11wzbx41qfv5qppvh6rylywnrknf3n";
   };

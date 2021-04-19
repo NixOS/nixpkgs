@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zconfig
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "zdaemon";
   version = "4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f249fc6885646d165d7d6b228a7b71f5170fc7117de9e0688271f8fb97840f72";
   };

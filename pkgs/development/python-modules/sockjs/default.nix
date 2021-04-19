@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp }:
+{ lib, buildPythonPackage, fetchFromPyPI, aiohttp }:
 
 buildPythonPackage rec {
   pname = "sockjs";
   version = "0.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "A0fUBO2e8xllBnh+2AGPh+5OLQuupJ1CDN1TqWm+wik=";
   };

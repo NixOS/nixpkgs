@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , nose, psutil, mock }:
 
 buildPythonPackage rec {
   version = "2.0.2";
   pname = "selectors2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1f1bbaac203a23fbc851dc1b5a6e92c50698cc8cefa5873eb5b89eef53d1d82b";
   };

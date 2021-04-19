@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , azure-storage-common
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "azure-storage-file";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3559b9c7ab13450c66ea833eb82c28233bee24f1bd8ca19aa7d27f8c23d5bc53";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , requests
 , testfixtures, mock, requests_toolbelt
 , betamax, betamax-serializers, betamax-matchers, pytest
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.0.0";
   disabled = isPy27; # see https://github.com/praw-dev/prawcore/pull/101
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-tJjZtvVJkQBecn1SNcj0nqW6DJpteT+3Q7QPoInNNtE=";
   };

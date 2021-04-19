@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, pip, pytest, click, six
+{ lib, fetchFromPyPI, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "5.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a4d3990df2d65961af8b41dacc242e600fdc8a65a2e155ed3d2fc18a5c209f20";
   };

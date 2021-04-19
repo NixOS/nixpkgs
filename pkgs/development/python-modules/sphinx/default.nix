@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , simplejson
 , mock
@@ -34,7 +34,7 @@
 buildPythonPackage rec {
   pname = "sphinx";
   version = "3.3.1";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Sphinx";
     inherit version;
     sha256 = "1e8d592225447104d1172be415bc2972bd1357e3e12fdc76edf2261105db4300";

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , pytestcov
 , pytest-mock
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # pathlib was made part of standard library in 3.5:
   ++ (lib.optionals (pythonOlder "3.4") [ pathlib ]);
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , google-api-core
 , google-cloud-testutils
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-gn/KWf3A4SkTqt9rqwYcsaxvfKXPvb7DXJ+zryGjWIA=";
   };

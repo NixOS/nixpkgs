@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , tornado
 , zeromq
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyzmq";
   version = "20.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "824ad5888331aadeac772bce27e1c2fbcab82fade92edbd234542c4e12f0dca9";
   };

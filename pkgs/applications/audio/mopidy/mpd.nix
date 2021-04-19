@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
   version = "3.0.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0prjli4352521igcsfcgmk97jmzgbfy4ik8hnli37wgvv252wiac";
   };

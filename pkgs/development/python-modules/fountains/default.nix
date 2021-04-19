@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , bitlist
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "fountains";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jk5y099g6ggaq5lwp0jlg4asyhcdxnl3him3ibmzc1k9nnknp30";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_proxy
 , zope_testrunner
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "zope-deferredimport";
   version = "4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "zope.deferredimport";
     inherit version;
     sha256 = "2ddef5a7ecfff132a2dd796253366ecf9748a446e30f1a0b3a636aec9d9c05c5";

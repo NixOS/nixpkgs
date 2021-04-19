@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , graphviz
 , python
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pydot";
   version = "1.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d";
   };

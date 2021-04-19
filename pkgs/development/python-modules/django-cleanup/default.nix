@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, django
+{ lib, buildPythonPackage, fetchFromPyPI, django
 , redis, async-timeout, hiredis
 }:
 
 buildPythonPackage rec {
   pname = "django-cleanup";
   version = "5.1.0";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8976aec12a22913afb3d1fcb541b1aedde2f5ec243e4260c5ff78bb6aa75a089";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, django, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, django, six }:
 
 buildPythonPackage rec {
   pname = "django-pglocks";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523";
   };

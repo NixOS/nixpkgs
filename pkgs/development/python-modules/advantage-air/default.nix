@@ -1,4 +1,4 @@
-{ aiohttp, buildPythonPackage, fetchPypi, lib, pythonOlder }:
+{ aiohttp, buildPythonPackage, fetchFromPyPI, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "advantage_air";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "04q2sjw9r50c00m4sfv98w9cwmmr970830c97m32p5j8ijb10j5x";
   };

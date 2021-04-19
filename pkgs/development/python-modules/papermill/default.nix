@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ansiwrap
 , click
 , future
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pname = "papermill";
   version = "2.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ptwZXypS9b7Y1CkszqOa8PMzgyS+r9VikPlhbJUDNiM=";
   };

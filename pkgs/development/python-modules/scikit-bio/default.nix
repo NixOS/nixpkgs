@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , lockfile
 , cachecontrol
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pname = "scikit-bio";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "48b73ec53ce0ff2c2e3e05f3cfcf93527c1525a8d3e9dd4ae317b4219c37f0ea";
   };

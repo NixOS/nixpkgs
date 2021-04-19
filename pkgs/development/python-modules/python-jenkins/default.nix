@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , pbr
 , pyyaml
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "python-jenkins";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "01jid5s09lr3kayr2h1z9n8h9nhyw3jxv9c4b5hrlxijknkqzvfy";
   };

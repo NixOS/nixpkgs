@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib, buildPythonPackage, fetchFromPyPI, django }:
 
 buildPythonPackage rec {
   pname = "django-sites";
   version = "0.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f6f9ae55a05288a95567f5844222052b6b997819e174f4bde4e7c23763be6fc3";
   };

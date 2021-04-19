@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-auth
 , google-cloud-testutils
 , google-crc32c
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-resumable-media";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hwxdgsqh6933kp4jkv6hwwdcqs7bgjn9j08ga399njv3s9b367f";
   };

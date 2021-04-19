@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy27, python, buildPythonPackage, pythonOlder
+{ lib, fetchFromPyPI, isPy27, python, buildPythonPackage, pythonOlder
 , numpy, hdf5, cython, six, pkgconfig, unittest2, fetchpatch
 , mpi4py ? null, openssh, pytestCheckHook, cached-property }:
 
@@ -12,7 +12,7 @@ in buildPythonPackage rec {
   pname = "h5py";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-iUdL6RG/zbNMvw2YuOxItXjCeon9sa5O51E/HvjZJJ4=";
   };

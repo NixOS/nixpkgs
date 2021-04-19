@@ -397,7 +397,7 @@ path for `fetchCargoTarball`.
 ```nix
 
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , rustPlatform
 , setuptools-rust
 , openssl
@@ -407,7 +407,7 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "3.4.2"; # Also update the hash in vectors.nix
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1i1mx5y9hkyfi9jrrkcw804hmkcglxi6rmf7vin7jfnbr2bf4q64";
   };

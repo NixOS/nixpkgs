@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pdfrw }:
+{ lib, buildPythonPackage, fetchFromPyPI, pdfrw }:
 
 buildPythonPackage rec {
   pname = "pagelabels";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "07as5kzyvj66bfgvx8bph8gkyj6cgm4lhgxwb78bpdl4m8y8kpma";
   };

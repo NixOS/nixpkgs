@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , multipledispatch, toolz
 , pytest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "strategies";
   version = "0.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02i4ydrs9k61p8iv2vl2akks8p9gc88rw8031wlwb1zqsyjmb328";
   };

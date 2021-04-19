@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, python }:
 
 buildPythonPackage rec {
   pname = "asynctest";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1b3zsy7p84gag6q8ai2ylyrhx213qdk2h2zb6im3xn0m5n264y62";
   };

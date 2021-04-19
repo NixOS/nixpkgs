@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , google-cloud-core
 , google-cloud-testutils
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-trace";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lvcm4w1l7hiqg64kdscch3f3bq19q9ii49xj4lljn2a4xffxl8v";
   };

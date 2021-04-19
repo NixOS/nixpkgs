@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "distgen";
   version = "1.5";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
   };

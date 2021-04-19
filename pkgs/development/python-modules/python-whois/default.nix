@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , future
 , nose
 , pytestCheckHook
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-whois";
   version = "0.7.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05jaxbnlw5wck0hl124py364jqrx7a4mmv0hy3d2jzvmp0012sk5";
   };

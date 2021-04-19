@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , setuptools
 , lazr-uri
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "wadllib";
   version = "1.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "84fecbaec2fef5ae2d7717a8115d271f18c6b5441eac861c58be8ca57f63c1d3";
   };

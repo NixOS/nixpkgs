@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, chardet, hypothesis }:
+{ lib, buildPythonPackage, fetchFromPyPI, chardet, hypothesis }:
 
 buildPythonPackage rec {
   pname = "binaryornot";
   version = "0.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061";
   };

@@ -1,10 +1,10 @@
-{lib, buildPythonPackage, fetchPypi}:
+{lib, buildPythonPackage, fetchFromPyPI}:
 
 buildPythonPackage rec {
   pname = "phpserialize";
   version = "1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19qgkb9z4zjbjxlpwh2w6pxkz2j3iymnydi69jl0jg905lqjsrxz";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , libsodium
 , cffi
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pynacl";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "PyNaCl";
     sha256 = "01b56hxrbif3hx8l6rwz5kljrgvlbj7shmmd2rjh0hn7974a5sal";

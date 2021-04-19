@@ -2,7 +2,7 @@
 , bitlist
 , buildPythonPackage
 , fe25519
-, fetchPypi
+, fetchFromPyPI
 , fountains
 , nose
 , parts
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "ge25519";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1wgv0vqg8iv9y5d7if14gmcgslwd5zzgk322w9jaxdfbndldddik";
   };

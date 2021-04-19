@@ -1,7 +1,7 @@
 { lib
 , behave
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lxml
 , pytest
 , pyparsing
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "python-docx";
   version = "0.8.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bc76ecac6b2d00ce6442a69d03a6f35c71cd72293cd8405a7472dfe317920024";
   };

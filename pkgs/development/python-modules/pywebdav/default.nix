@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k }:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
   pname = "PyWebDAV";
   version = "0.9.8";
   disabled = isPy3k;
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1v10vg79h85milnq8w7yd75qq5z6297ywkn9b2kxajldzwqxn3ji";
   };

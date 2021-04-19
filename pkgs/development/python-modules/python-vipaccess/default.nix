@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , oath
 , pycryptodome
 , requests
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-vipaccess";
   version = "0.13";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f148d4534e3a4dda9050a6a038868594c1216ea2413f2144ca6697e0e20c9cad";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27,
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27,
   appdirs, asn1crypto, cffi, cryptography, furl, idna, orderedmultidict,
   packaging, peewee, py, pyasn1, pycparser, pyparsing, pyscrypt,
   python-dateutil, pytz, requests, six, vobject,
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.12.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f20f7e9922ee789c4b71379676ebfe656b675913fe524f2ee722e1b9ef4e5197";
   };

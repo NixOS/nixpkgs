@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPyPy, isPy3k
 , olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 }@args:
@@ -9,7 +9,7 @@ import ./generic.nix (rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0l5rv8jkdrb5q846v60v03mcq64yrhklidjkgwv6s1pda71g17yv";
   };

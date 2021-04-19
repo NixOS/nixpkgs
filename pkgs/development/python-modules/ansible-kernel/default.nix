@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , writeText
 , ipywidgets
 , six
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pname = "ansible-kernel";
   version = "0.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a59039a1724c0f4f4435316e2ad3383f2328ae61f190e74414a66cc8c4637636";
   };

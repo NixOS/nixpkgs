@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , docopt, requests, pygments }:
 
 buildPythonPackage rec {
   pname = "clf";
   version = "0.5.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "abc919a1e99667f32fdde15dfb4bc527dbe22cf86a17acb78a449d7f2dfe937e";
   };

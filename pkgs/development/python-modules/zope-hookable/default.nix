@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_testing
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "zope-hookable";
   version = "5.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "zope.hookable";
     inherit version;
     sha256 = "0hc82lfr7bk53nvbxvjkibkarngyrzgfk2i6bg8wshl0ly0pdl19";

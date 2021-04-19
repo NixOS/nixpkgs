@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyasn1
 , pytest
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyasn1-modules";
   version = "0.2.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e";
   };

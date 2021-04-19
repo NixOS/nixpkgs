@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
   version = "1.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ab45090ae383b716c4ef89e690c41ff8c2b257b85b309f01f3654df3d084bd7c";
   };

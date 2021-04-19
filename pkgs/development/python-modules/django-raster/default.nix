@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k,
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k,
   numpy, django_colorful, pillow, psycopg2,
   pyparsing, django, celery, boto3, importlib-metadata
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9417d8a17930dffee4719f79a38c6ab5d20ac7145d4edf88df0abcb5a360de51";
   };

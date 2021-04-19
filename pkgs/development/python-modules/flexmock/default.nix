@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "flexmock";
   version = "0.10.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b6qw3grhgx58kxlkj7mdma7xdvlj02zabvcf7w2qifnfjwwwcsh";
   };

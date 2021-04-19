@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , requests
 , process-tests
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "manhole";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "224985bf1dd032f2dc0ca4107f727835b6f50e1df6d78781d6c9f4cae8b585e2";
   };

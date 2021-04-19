@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , lazy-object-proxy, six, wrapt, enum34, singledispatch, backports_functools_lru_cache
 , pytest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "astroid";
   version = "1.6.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d25869fc7f44f1d9fb7d24fd7ea0639656f5355fc3089cd1f3d18c6ec6b124c7";
   };

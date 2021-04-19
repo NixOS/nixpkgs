@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , cython
 , numpy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.6.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5c47deffbf9e163186b0997f2d59486d96a7c65766e76500f754fadfbc89f5d9";
   };

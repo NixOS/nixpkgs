@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   disabled = !python3Packages.isPy3k;
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };

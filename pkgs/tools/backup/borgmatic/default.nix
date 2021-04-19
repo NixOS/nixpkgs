@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
   version = "1.5.12";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-XLbBJvNRmH8W9SnOjF7zUbazRYFCMW6SEO2wKN/2VTY=";
   };

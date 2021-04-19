@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   #  sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   #};
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   };

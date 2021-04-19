@@ -2,7 +2,7 @@
 , stdenv
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cvxopt
 , ecos
 , numpy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     hash = "sha256-tJnr+uT8ZF6VI2IVc//LHFtoVKG1wM4dZqippFhgWAc=";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, buildbot }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
   inherit (buildbot) version;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bv1qq4cf24cklxfqfnkhjb6w4xqcp3afdcan75n6v7mnwqxyyvr";
   };

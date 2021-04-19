@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , aiohttp }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = ! isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3dd0f9fc59edff5d87905ddef3eecc93f974c209d818d3a91061b05925da04af";
   };

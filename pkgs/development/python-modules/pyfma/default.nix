@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromPyPI
 , pybind11
 , exdown
 , numpy
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3a9e2503fd01baa4978af5f491b79b7646d7872df9ecc7ab63ba10c250c50d8a";
   };

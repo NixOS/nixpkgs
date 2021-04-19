@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, future, dateutil, six, pytest, mock, parameterized }:
+{ lib, buildPythonPackage, fetchFromPyPI, future, dateutil, six, pytest, mock, parameterized }:
 
 buildPythonPackage rec {
   pname = "vertica-python";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "94cff37e03f89fc4c5e4b2d4c913c7d5d7450f5a205d14f709b39e0a4202be95";
   };

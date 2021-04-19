@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , python
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pycodestyle";
   version = "2.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c58a7d2815e0e8d7972bf1803331fb0152f867bd89adf8a01dfd55085434192e";
   };

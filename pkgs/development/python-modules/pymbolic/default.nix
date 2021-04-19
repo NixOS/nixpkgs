@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytools
 , pytest
 , six
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pymbolic";
   version = "2020.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ca029399f9480f6d51fbac0349fddbb42d937620deb03befa0ba94ac08895e6b";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , msrest
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "azure-servicefabric";
   version = "7.2.0.46";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "c15fd5e8fe33a12295435f16e007edcfd8f660547795742f9b74ef8fb3a431ba";

@@ -12,7 +12,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b46dddbf78b8b137176bc72729124e378242ef9ce93af63f6e0a8c4850c972e7";
   };

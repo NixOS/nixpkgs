@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , six
 , tqdm
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pname = "internetarchive";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "515e6646a2b917c15f2241670d21f14a014b9c67dc509aef4d4aca5a59cdda65";
   };

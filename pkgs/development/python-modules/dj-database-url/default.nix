@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163";
   };

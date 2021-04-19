@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.2.2";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "hhOistr5lHF6rIuMpudKwSuBQhaQDzTdelAOCjyVQZk=";
   };

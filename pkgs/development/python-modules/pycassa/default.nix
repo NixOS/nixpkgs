@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, thrift, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, thrift, isPy3k }:
 
 let
 
   thrift' = thrift.overridePythonAttrs (old: rec {
     version = "0.9.3";
-    src= fetchPypi {
+    src= fetchFromPyPI {
       inherit (old) pname;
       inherit version;
       sha256 = "0zl7cgckqy9j5vq8wyfzw82q1blkdpsblnmhv8c6ffcxs4xkvg6z";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "pycassa";
   version = "1.11.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nsqjzgn6v0rya60dihvbnrnq1zwaxl2qwf0sr08q9qlkr334hr6";
   };

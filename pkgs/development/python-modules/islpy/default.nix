@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isl
 , pybind11
 , pytestCheckHook
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "2020.2.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7eb7dfa41d6a67d9ee4ea4bb9f08bdbcbee42b364502136b7882cfd80ff427e0";
   };

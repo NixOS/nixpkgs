@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pygobject3 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "pydbus";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b0gipvz7vcfa9ddmwq2jrx16d4apb0hdnl5q4i3h8jlzwp1c1s2";
   };

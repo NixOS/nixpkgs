@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , backports_abc
 , backports_ssl_match_hostname
 , certifi
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover *_test.py
   '';
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
   };

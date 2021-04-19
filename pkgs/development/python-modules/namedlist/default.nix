@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "namedlist";
   version = "1.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "34f89fc992592c80b39a709e136edcf41ea17f24ba31eaf84a314a02c8b9bcef";
   };

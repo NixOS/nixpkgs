@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , django
 , pyjwt
 , djangorestframework
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "djangorestframework-jwt";
   version = "1.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19rng6v1sw14mbjp5cplnrgxjnhlj8faalfw02iihi9s5w1k7zjy";
   };

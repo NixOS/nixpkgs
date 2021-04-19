@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib, buildPythonPackage, fetchFromPyPI, python
 , django, ply }:
 
 buildPythonPackage rec {
   pname = "djangoql";
   version = "0.14.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d1b1344cb1e037f094c04ccc67b809e8df80dea1e88cfb919078426131737018";
   };

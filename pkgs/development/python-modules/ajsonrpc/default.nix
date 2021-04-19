@@ -1,4 +1,4 @@
-{ lib, pythonOlder, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, pythonOlder, buildPythonPackage, fetchFromPyPI, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ajsonrpc";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1b5r8975wdnk3qnc1qjnn4lkxmqcir3brbwnxml9ii90dnsw408a";
   };

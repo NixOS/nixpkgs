@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , agate, openpyxl, xlrd, nose
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "agate-excel";
   version = "0.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8f255ef2c87c436b7132049e1dd86c8e08bf82d8c773aea86f3069b461a17d52";
   };

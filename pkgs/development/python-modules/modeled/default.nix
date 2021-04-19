@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zetup
 , six
 , moretools
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "modeled";
   version = "0.1.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     extension = "zip";
     inherit pname version;
     sha256 = "1wcl3r02q10gxy4xw7g8x2wg2sx4sbawzbfcl7a5xdydrxl4r4v4";

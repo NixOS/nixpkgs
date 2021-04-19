@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 , urllib3
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "python-opendata-transport";
   version = "0.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "python_opendata_transport";
     inherit version;
     sha256 = "sha256-Z0VHkKYHpwbBwwFrMtA5JRy0m7f0566IjCmGizoKEoo=";

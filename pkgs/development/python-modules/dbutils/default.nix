@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "2.0";
   pname = "dbutils";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "DBUtils";
     sha256 = "131ifm2c2a7bipij597i8fvjka0dk2qv1xr2ghcvbc30jlkvag2g";

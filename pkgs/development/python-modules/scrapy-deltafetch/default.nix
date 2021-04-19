@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, scrapy, bsddb3 }:
+{ lib, fetchFromPyPI, buildPythonPackage, scrapy, bsddb3 }:
 
 buildPythonPackage rec {
   pname = "scrapy-deltafetch";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1m511psddvlapg492ny36l8rzy7z4i39yx6a1agxzfz6s9b83fq8";
   };

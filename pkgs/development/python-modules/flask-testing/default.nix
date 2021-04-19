@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, isPy3k, flask, blinker, twill }:
 
 buildPythonPackage rec {
   pname = "Flask-Testing";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0a734d7b68e63a9410b413cd7b1f96456f9a858bd09a6222d465650cc782eb01";
   };

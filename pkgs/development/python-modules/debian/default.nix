@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , chardet, six}:
 
 buildPythonPackage rec {
   pname = "python-debian";
   version = "0.1.39";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6cca96239b5981f5203216d2113fea522477628607ed0a8427e15094a792541c";
   };

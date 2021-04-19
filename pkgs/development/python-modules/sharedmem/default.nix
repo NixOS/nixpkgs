@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, numpy }:
+{ buildPythonPackage, fetchFromPyPI, lib, numpy }:
 
 buildPythonPackage rec {
 
   pname = "sharedmem";
   version = "0.3.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c654a6bee2e2f35c82e6cc8b6c262fcabd378f5ba11ac9ef71530f8dabb8e2f7";
   };

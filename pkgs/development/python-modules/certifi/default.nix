@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "certifi";
   version = "2020.12.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "177mdbw0livdjvp17sz6wsfrc32838m9y59v871gpgv2888raj8s";
   };

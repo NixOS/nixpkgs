@@ -4,7 +4,7 @@ python3Packages.buildPythonPackage rec {
   pname = "s-tui";
   version = "1.0.1";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1gqrb2xxii43j7kszy7kvv4f6hr8ac4p0m9q8i1xs5fhsqcx186i";
   };

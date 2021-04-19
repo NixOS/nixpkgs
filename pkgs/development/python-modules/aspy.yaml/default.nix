@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml }:
 
 buildPythonPackage rec {
   pname = "aspy.yaml";
   version = "1.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0i9z2jm2hjwdxdv4vw4kbs70h2ciz49rv8w73zbawb7z5qw45iz7";
   };

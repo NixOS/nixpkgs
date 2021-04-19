@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , toml
 , importlib-metadata
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "importlib_resources";
   version = "3.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05";
   };

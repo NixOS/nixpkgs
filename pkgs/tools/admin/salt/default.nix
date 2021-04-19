@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "salt";
   version = "3003";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "xGiXM9/nOM8ofjHLP908uNFgYpUgKxjY5m1I03LVync=";
   };

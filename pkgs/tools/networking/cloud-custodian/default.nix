@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib, buildPythonApplication, fetchFromPyPI
 , argcomplete
 , boto3
 , botocore
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   pname = "cloud-custodian";
   version = "0.8.45.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "c7n";
     inherit version;
     sha256 = "0c199gdmpm83xfghrbzp02xliyxiygsnx2fvb35j9qpf37wzzp3z";

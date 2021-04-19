@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , mock
 , pytestCheckHook
 , six
@@ -10,7 +10,7 @@ buildPythonApplication rec {
   pname = "wad";
   version = "0.4.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname;
     inherit version;
     sha256 = "02jq77h6g9v7n4qqq7qri6wmhggy257983dwgmpjsf4qsagkgwy8";

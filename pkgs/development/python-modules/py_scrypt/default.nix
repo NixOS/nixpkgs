@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , openssl
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "scrypt";
   version = "0.8.17";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec";
   };

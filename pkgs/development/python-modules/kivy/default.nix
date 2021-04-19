@@ -1,5 +1,5 @@
 { lib
-, buildPythonPackage, fetchPypi
+, buildPythonPackage, fetchFromPyPI
 , pkg-config, cython, docutils
 , kivy-garden
 , mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, gst_all_1
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "Kivy";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1n0j9046vgjncy50v06r3wcg3q2l37jp8n0cznr64dz48kml8pnj";
   };

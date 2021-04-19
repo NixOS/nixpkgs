@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , gdb
 , flask
 , six
@@ -21,7 +21,7 @@ let
   # which depends itself on the latest previous major versions of dependencies.
   python-engineio' = python-engineio.overridePythonAttrs (old: rec {
     version = "3.14.2";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit (old) pname;
       inherit version;
       sha256 = "119halljynqsgswlhlh750qv56js1p7j52sc0nbwxh8450zmbd7a";
@@ -31,7 +31,7 @@ let
   });
   python-socketio' = python-socketio.overridePythonAttrs (old: rec {
     version = "4.6.1";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit (old) pname;
       inherit version;
       sha256 = "047syhrrxh327p0fnab0d1zy25zijnj3gs1qg3kjpsy1jaj5l7yd";
@@ -41,7 +41,7 @@ let
   });
   flask-socketio' = flask-socketio.overridePythonAttrs (old: rec {
     version = "4.3.2";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit (old) pname;
       inherit version;
       sha256 = "0s2xs9kv9cbwy8bcxszhdwlcb9ldv0fj33lwilf5vypj0wsin01p";
@@ -66,7 +66,7 @@ buildPythonApplication rec {
     eventlet
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1v6wwsncgnhlg5c7gsmzcp52hfblfnz5kf5pk4d0zybflsxak02d";
   };

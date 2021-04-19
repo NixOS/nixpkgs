@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyrabbit2";
   version = "1.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d27160cb35c096f0072df57307233d01b117a451236e136604a8e51be6f106c0";
   };

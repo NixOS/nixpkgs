@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , isPy27
 , cmake
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Also support for Python 2 will be deprecated from Onnx v1.8.
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9d65c52009a90499f8c25fdfe5acda3ac88efe0788eb1d5f2575a989277145fb";
   };

@@ -1,7 +1,7 @@
 { lib, stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , libngspice
 , numpy
 , ply
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "1.4.3";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0mnyy8nr06d1al99kniyqcm0p9a8dvkg719s42sajl8yf51sayc9";
   };

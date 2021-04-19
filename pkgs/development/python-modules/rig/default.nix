@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , isPy35, isPy27
 , numpy, pytz, six, enum-compat, sentinel
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "rig";
   version = "2.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5a3896dbde3f291c5dd34769e7329ef5d5e4da34fee53479bd13dc5e5d540b8a";
   };

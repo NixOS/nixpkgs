@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "peppercorn";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ip4bfwcpwkq9hz2dai14k2cyabvwrnvcvrcmzxmqm04g8fnimwn";
   };

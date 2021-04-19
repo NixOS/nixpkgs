@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestrunner, pytest }:
 
 buildPythonPackage rec {
   pname = "Cerberus";
   version = "1.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12cm547hpypqd7bwcl4wr4w6varibc1dagzicg5qbp86yaa6cbih";
   };

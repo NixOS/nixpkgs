@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, pytestrunner, six, beautifulsoup4, requests, }:
+{ lib, fetchFromPyPI, buildPythonPackage, pytestrunner, six, beautifulsoup4, requests, }:
 buildPythonPackage rec {
   pname = "lyricwikia";
   version = "0.1.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0l5lkvr3299x79i7skdiggp67rzgax3s00psd1zqkxfysq27jvc8";
   };

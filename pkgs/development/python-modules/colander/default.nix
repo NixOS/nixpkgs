@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , translationstring, iso8601, enum34 }:
 
 buildPythonPackage rec {
   pname = "colander";
   version = "1.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "259592a0d6a89cbe63c0c5771f9c0c2522387415af8d715f599583eac659f7d4";
   };

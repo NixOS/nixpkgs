@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , pythonOlder
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyfakefs";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-/7KrJkoLg69Uii2wxQl5jiCDYd85YBuomK5lzs+1nLs=";
   };

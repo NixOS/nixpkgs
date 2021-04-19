@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , setuptools_scm
 , cython
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.7.3";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "022b12ad83eb623ec53f154859d49f6ec43b15c36052fa864eaf2d9ee786dd85";
   };

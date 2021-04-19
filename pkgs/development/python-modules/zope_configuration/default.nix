@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_i18nmessageid
 , zope_schema
 , zope_testrunner
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "zope.configuration";
   version = "4.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e9f02bac44405ad1526399d6574b91d792f9694f9c67df8b64e91fe10fcddb3c";
   };

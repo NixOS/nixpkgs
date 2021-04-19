@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , pillow
 , mongoengine
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pname = "flask-admin";
   version = "1.5.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Flask-Admin";
     inherit version;
     sha256 = "1f31vzc0p2xni5mh1wvjk9jxf4ddlx2fj4r0f3vv2n9db3c63iv8";

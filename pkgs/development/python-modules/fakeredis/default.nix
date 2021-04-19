@@ -2,7 +2,7 @@
 , aioredis
 , async_generator
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , hypothesis
 , lupa
 , pytest-asyncio
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "1.5.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ac0cef767c37f51718874a33afb5413e69d132988cb6a80c6e6dbeddf8c7623";
   };

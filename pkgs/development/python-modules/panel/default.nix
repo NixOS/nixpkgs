@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , bokeh
 , param
 , pyviz-comms
@@ -21,7 +21,7 @@ in buildPythonPackage rec {
   # 1. retrieve the package.json file
   # 2. nix shell nixpkgs#nodePackages.node2nix
   # 3. node2nix
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ce531e5c0c8a8ae74d523762aeb1666650caebbe1867aba16129d29791e921f9";
   };

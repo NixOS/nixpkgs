@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI , setuptools, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "lice";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0skyyirbidknfdzdvsjga8zb4ar6xpd5ilvz11dfm2a9yxh3d59d";
   };

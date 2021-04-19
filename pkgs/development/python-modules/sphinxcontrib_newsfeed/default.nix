@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinx
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-newsfeed";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d7gam3mn8v4in4p16yn3v10vps7nnaz6ilw99j4klij39dqd37p";
   };

@@ -1,7 +1,7 @@
 { lib
 , nixosTests
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , argcomplete
 , pyyaml
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "yq";
   version = "2.12.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-HSrUA1BNMGtSWLhsaY+YVtetWLe7F6K4dWkaanuMTCA=";
   };

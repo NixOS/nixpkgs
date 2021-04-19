@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , chart-studio
 , colorlover
 , ipython
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "cufflinks";
   version = "0.17.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };

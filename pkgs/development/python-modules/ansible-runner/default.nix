@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , psutil
 , pexpect
 , python-daemon
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "ansible-runner";
   version = "1.4.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bb56f9061c3238d89ec8871bc842f5b8d0e868f892347e8455c98d5b6fa58a1";
   };

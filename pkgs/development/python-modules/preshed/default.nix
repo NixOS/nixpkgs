@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , murmurhash
 , pytest
 , cython
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "preshed";
   version = "3.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c6d3dba39ed5059aaf99767017b9568c75b2d0780c3481e204b1daecde00360e";
   };

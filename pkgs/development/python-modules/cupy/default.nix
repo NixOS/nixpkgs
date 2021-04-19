@@ -1,5 +1,5 @@
 { lib, buildPythonPackage
-, fetchPypi, isPy3k, cython
+, fetchFromPyPI, isPy3k, cython
 , fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
 , cudatoolkit, cudnn, cutensor, nccl
 , addOpenGLRunpath
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "8.5.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb3f8d3b3454beb249b9880502a45fe493c5a44efacc4c72914cbe1a5dbdf803";
   };

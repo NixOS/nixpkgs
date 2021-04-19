@@ -2,7 +2,7 @@
 , stdenv
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , libjpeg_turbo
 , numpy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pyturbojpeg";
   version = "1.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyTurboJPEG";
     inherit version;
     sha256 = "sha256-dWmj/huCkborcShf2BT+L3ybEfgdKVIGiJnkz755xwo=";

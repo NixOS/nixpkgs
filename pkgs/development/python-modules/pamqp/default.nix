@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , nose
 , pep8
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "3.0.1";
   pname = "pamqp";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0a9b49bde3f554ec49b47ebdb789133979985f24d5f4698935ed589a2d4392a4";
   };

@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, python, six, tox, mock, pytest }:
+{ buildPythonPackage, fetchFromPyPI, lib, python, six, tox, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "smpplib";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jzxlfwf0861ilh4xyd70hmkdbvdki52aalglm1bnpxkg6i3jhfz";
   };

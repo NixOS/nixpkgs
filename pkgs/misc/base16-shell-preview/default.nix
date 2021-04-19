@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "base16-shell-preview";
   version = "0.3.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "base16_shell_preview";
     sha256 = "0x2fbicrcqgf2dl7dqzm14dz08vjjziabaaw33wah3v9wv4rw7jq";

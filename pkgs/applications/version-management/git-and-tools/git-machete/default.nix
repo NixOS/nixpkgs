@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib, buildPythonApplication, fetchFromPyPI
 , installShellFiles, pbr
 , flake8, mock, pycodestyle, pylint, tox }:
 
@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "git-machete";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bb6ap8sdp4ad0xkh3y8vj46a363g5gdw0dzf9ycw0z9ah8ispfx";
   };

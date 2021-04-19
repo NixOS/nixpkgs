@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , param
 , numpy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "holoviews";
   version = "1.14.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "64f85cf2c99b083b96f26cd26452aec4b41ced6d9e57f56ae8d72b88defc61c9";
   };

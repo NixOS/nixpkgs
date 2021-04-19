@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , cryptography
 , bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
 , openssl, openssh, pytestCheckHook }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "2.5.0";
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b65e2af73a2e39a271bd627abbe4f7e4b0345486ed403e65987d79c72fcb70b";
   };

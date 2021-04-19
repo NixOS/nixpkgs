@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, isPy27, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "urwid";
   version = "2.1.2";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
   };

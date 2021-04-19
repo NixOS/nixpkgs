@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyramid
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyramid_exclog";
   version = "1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d05ced5c12407507154de6750036bc83861b85c11be70b3ec3098c929652c14b";
   };

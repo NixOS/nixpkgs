@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , libcst
 , google-api-core
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "google-cloud-automl";
   version = "2.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "874defad583e90e55a3e83aff27eb5fe108d9197d839cd45f3eacf2395881806";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, docutils, six }:
 
 buildPythonPackage rec {
   pname = "bcdoc";
   version = "0.16.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f568c182e06883becf7196f227052435cffd45604700c82362ca77d3427b6202";
   };

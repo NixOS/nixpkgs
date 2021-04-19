@@ -1,10 +1,10 @@
-{ fetchPypi, buildPythonPackage, lib }:
+{ fetchFromPyPI, buildPythonPackage, lib }:
 
 buildPythonPackage rec {
   version = "3.10.3";
   pname = "thespian";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "d9152089f239c80339eb0431b9561966a841fb3ab0d043b36fa47934fc7956f2";

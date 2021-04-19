@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, cffi }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, cffi }:
 
 buildPythonPackage rec {
   pname = "atomiclong";
   version = "0.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
   };

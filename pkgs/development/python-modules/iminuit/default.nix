@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, cmake, numpy, pytestCheckHook }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, cmake, numpy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "iminuit";
   version = "2.4.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "350c13d33f3ec5884335aea1cc11a17ae49dd8e6b2181c3f1b3c9c27e2e0b228";
   };

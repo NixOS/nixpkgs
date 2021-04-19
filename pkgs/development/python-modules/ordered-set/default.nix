@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, isPy27, pytest }:
+{ buildPythonPackage, fetchFromPyPI, lib, isPy27, pytest }:
 
 buildPythonPackage rec {
   pname = "ordered-set";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "159syfbqnwqnivzjfn3x7ak3xwrxmnzbji7c2qhj1jjv0pgv54xs";
   };

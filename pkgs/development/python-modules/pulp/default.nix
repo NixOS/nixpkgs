@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pyparsing
 , amply
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "PuLP";
   version = "2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b2aff10989b3692e3a59301a0cb0acddeb25dcea378f8804c86007075eae55b5";
   };

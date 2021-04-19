@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, cffi }:
+{ lib, fetchFromPyPI, buildPythonPackage, cffi }:
 buildPythonPackage rec {
   pname = "misaka";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1mzc29wwyhyardclj1vg2xsfdibg2lzb7f1azjcxi580ama55wv2";
   };

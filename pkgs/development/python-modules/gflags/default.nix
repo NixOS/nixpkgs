@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, pytest }:
 
 buildPythonPackage rec {
   version = "3.1.2";
   pname = "python-gflags";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "40ae131e899ef68e9e14aa53ca063839c34f6a168afe622217b5b875492a1ee2";
   };

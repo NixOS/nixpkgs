@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , zlib
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pytabix";
   version = "0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ldp5r4ggskji6qx4bp2qxy2vrvb3fam03ksn0gq2hdxgrlg2x07";
   };

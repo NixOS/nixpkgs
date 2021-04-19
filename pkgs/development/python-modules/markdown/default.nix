@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , nose
 , pyyaml
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "Markdown";
   version = "3.3.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5d9f2b5ca24bc4c7a390d22323ca4bad200368612b5aaa7796babf971d2b2f18";
   };

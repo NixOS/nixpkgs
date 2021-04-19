@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "setoptconf";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "177l7j68j751i781bgk6pfhxjj7hwqxzdm2ja5fkywbp0275s2sv";
   };

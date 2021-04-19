@@ -2,7 +2,7 @@
 , async-timeout
 , buildPythonPackage
 , colorlog
-, fetchPypi
+, fetchFromPyPI
 , pyserial
 , pythonOlder
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "4.1";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1h30gmmynihmjkd107skk2gpi210b6gfdahwqmydyj5isxrvzmq2";
   };

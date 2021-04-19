@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , gast
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "beniget";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "062c893be9cdf87c3144fb15041cce4d81c67107c1591952cd45fdce789a0ff1";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , isPyPy
 , ipython
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "line_profiler";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e73ff429236d59d48ce7028484becfa01449b3d52abdcf7337e0ff2acdc5093c";
   };

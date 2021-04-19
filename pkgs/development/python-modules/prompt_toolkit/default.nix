@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , six
 , wcwidth
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "prompt_toolkit";
   version = "3.0.16";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0fa02fa80363844a4ab4b8d6891f62dd0645ba672723130423ca4037b80c1974";
   };

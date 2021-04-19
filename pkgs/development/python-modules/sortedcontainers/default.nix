@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "sortedcontainers";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1";
   };

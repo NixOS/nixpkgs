@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isPyPy }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
   pname = "python-cjson";
   version = "1.2.2";
   disabled = isPy3k || isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3006c2c218297be3448dc793218e0b15d20fe9839775521bfc294fc6aa24972b";
   };

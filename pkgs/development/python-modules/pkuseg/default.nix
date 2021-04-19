@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , cython
 , numpy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "148yp0l7h8cflxag62pc1iwj5b5liyljnaxwfjaiqwl96vwjn0fx";
   };

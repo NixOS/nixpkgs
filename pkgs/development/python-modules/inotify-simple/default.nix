@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "inotify-simple";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "inotify_simple";
     inherit version;
     sha256 = "132craajflksgxxwjawj73nn1ssv8jn58j3k5vvyiq03avbz4sfv";

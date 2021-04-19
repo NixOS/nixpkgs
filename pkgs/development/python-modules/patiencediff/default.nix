@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "patiencediff";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nm2242xgg59l06m54rzxp41aly3lxjh0a1s7h6dk7ryxjh002lv";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pyscard, ecdsa, pyaes
+{ lib, buildPythonPackage, fetchFromPyPI, pyscard, ecdsa, pyaes
 , pythonOlder }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "0.11.4";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-Jj/zZIS9aXmZ2xdi29Eun7iRIrIk9oBlrtN9+6opIMo=";
   };

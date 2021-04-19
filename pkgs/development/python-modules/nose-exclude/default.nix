@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "nose-exclude";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f78fa8b41eeb815f0486414f710f1eea0949e346cfb11d59ba6295ed69e84304";
   };

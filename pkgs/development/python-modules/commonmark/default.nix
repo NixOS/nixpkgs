@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, future }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, glibcLocales, future }:
 
 buildPythonPackage rec {
   pname = "commonmark";
   version = "0.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "452f9dc859be7f06631ddcb328b6919c67984aca654e5fefb3914d54691aed60";
   };

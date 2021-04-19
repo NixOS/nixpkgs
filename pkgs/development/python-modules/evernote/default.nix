@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , oauth2
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "1.25.3";
   disabled = ! isPy27; #some dependencies do not work with py3
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "796847e0b7517e729041c5187fa1665c3f6fc0491cb4d71fb95a62c4f22e64eb";
   };

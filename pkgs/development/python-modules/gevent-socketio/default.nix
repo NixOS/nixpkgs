@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , versiontools
 , gevent-websocket
 , mock
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "gevent-socketio";
   version = "0.3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1zra86hg2l1jcpl9nsnqagy3nl3akws8bvrbpgdxk15x7ywllfak";
   };

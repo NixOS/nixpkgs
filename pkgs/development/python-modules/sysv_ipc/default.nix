@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "sysv_ipc";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1p5lx3yz4p40rfb453m80a4hh8341yp4dki2nhhxz7bq2zfi1zwf";
   };

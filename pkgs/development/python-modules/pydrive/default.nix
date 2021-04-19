@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-python-client
 , oauth2client
 , pyyaml
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pydrive";
   version = "1.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyDrive";
     inherit version;
     sha256 = "11q7l94mb34hfh9wkdwfrh5xw99y13wa33ba7xp1q23q4b60v2c3";

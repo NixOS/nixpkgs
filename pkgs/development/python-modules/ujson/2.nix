@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytestCheckHook
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "ujson";
   version = "2.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18z9gb9ggy1r464b9q1gqs078mqgrkj6dys5a47529rqk3yfybdx";
   };

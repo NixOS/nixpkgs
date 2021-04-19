@@ -1,11 +1,11 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPy27, pythonAtLeast
 , nose, six, colorama, termstyle }:
 
 buildPythonPackage rec {
   pname = "rednose";
   version = "1.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6da77917788be277b70259edc0bb92fc6f28fe268b765b4ea88206cc3543a3e1";
   };

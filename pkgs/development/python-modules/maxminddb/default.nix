@@ -1,5 +1,5 @@
 { stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast
-, fetchPypi
+, fetchFromPyPI
 , libmaxminddb
 , ipaddress
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "maxminddb";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "47e86a084dd814fac88c99ea34ba3278a74bc9de5a25f4b815b608798747c7dc";
   };

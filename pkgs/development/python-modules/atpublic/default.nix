@@ -1,4 +1,4 @@
-{ lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
+{ lib, isPy3k, pythonOlder, fetchFromPyPI, buildPythonPackage
 , pytest
 , pytestcov
 , sybil
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "2.1.3";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e0b274759bfbcb6eeb7c7b44a7a46391990a43ac77aa55359b075765b54d9f5d";
   };

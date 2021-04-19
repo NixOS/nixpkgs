@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, numpy, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";
   version = "1.16.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9fd2fefbd83993b135877a69c498d8ddcf20a9980562b65b800cfb4cdadad003";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , fetchpatch, configobj, six, traitsui
 , pytestCheckHook, tables, pandas
 , pythonOlder, importlib-resources
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "apptools";
   version = "5.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12x5lcs1cllpybz7f0i1lcwvmqsaa5n818wb2165lj049wqxx4yh";
   };

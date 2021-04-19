@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "bitstruct";
   version = "8.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4e7b8769c0f09fee403d0a5f637f8b575b191a79a92e140811aa109ce7461f0c";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , urllib3
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "browsermob-proxy";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bxvmghm834gsfz3pm69772wzhh15p8ci526b25dpk3z4315nd7v";
   };

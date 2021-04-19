@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , azure-common
 , msrest
 , msrestazure
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.7.0";
   disabled = pythonOlder "3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3cf37df471f75441b0afe98a0f3a548434e9bc6a6426dca8c089950b5423f63f";
     extension = "zip";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , six
 , mypy-extensions
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   pname = "pyannotate";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16bm0mf7wxvy0lgmcs1p8n1ji8pnvj1jvj8zk3am70dkp825iv84";
   };

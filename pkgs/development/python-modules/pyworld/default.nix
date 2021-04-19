@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , cython
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyworld";
   version = "0.2.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "896c910696975855578d855f490f94d7a57119e0a75f7f15e11fdf58ba891627";
   };

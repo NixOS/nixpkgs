@@ -1,4 +1,4 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
+{ lib, isPy3k, fetchFromPyPI, buildPythonPackage
 , uvloop, postgresql }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "0.22.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "348ad471d9bdd77f0609a00c860142f47c81c9123f4064d13d65c8569415d802";
   };

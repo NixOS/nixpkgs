@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , cython
 , nose
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.1.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1a64b40f6acb4ffbaccce0545d7fc641744f95351f62e4c6aaa40549326008c9";
   };

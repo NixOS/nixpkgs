@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core, proto-plus }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, google-api-core, proto-plus }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-tGNwSv+rMnwdP6SvKAqFhjW19ZqIRWsqCNtiozajUqo=";
   };

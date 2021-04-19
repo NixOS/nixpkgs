@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromPyPI
 , fetchFromGitHub
 , buildPythonPackage
 , geckodriver
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pname = "selenium";
   version = "3.141.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };

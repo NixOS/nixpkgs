@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, isPy3k, incremental, ipaddress, twisted
+{lib, buildPythonPackage, fetchFromPyPI, isPy3k, incremental, ipaddress, twisted
 , automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
 , GeoIP, isPy27}:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     idna pyopenssl service-identity
   ] ++ lib.optionals (!isPy3k) [ ipaddress ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0yipb41w2icbj50d3z1j92d8w6xhbqd1rnmd31vzb5k3g20x0b0j";
   };

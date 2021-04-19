@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pysha3 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pysha3 }:
 
 buildPythonPackage rec {
   pname = "merkletools";
   version = "1.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pdik5sil0xcrwdcgdfy86c5qcfrz24r0gfc8m8bxa0i7h7x2v9l";
   };

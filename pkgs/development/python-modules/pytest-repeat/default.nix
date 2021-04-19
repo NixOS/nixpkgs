@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytest
 , fetchpatch
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytest-repeat";
   version = "0.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5cd3289745ab3156d43eb9c8e7f7d00a926f3ae5c9cf425bec649b2fe15bad5b";
   };

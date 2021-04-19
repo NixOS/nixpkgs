@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , pythonAtLeast
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "1.0.1";
   disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
   };

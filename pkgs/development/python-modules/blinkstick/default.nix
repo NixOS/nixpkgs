@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyusb
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "BlinkStick";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0rdk3i81s6byw23za0bxvkh7sj5l16qxxgc2c53qjg3klc24wcm9";
   };

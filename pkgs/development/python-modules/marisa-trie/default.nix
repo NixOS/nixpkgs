@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , pytestrunner
 , pytest
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "marisa-trie";
   version = "0.7.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c73bc25d868e8c4ea7aa7f1e19892db07bba2463351269b05340ccfa06eb2baf";
   };

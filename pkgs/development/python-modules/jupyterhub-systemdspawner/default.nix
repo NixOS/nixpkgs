@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jupyterhub
 , tornado
 , bash
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
   version = "0.15.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b6e2d981657aa5d3794abb89b1650d056524158a3d0f0f706007cae9b6dbeb2b";
   };

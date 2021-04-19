@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, flask, isPy27, lib, nixosTests
+{ buildPythonPackage, fetchFromPyPI, flask, isPy27, lib, nixosTests
 , prometheus_client, py-air-control, pytestCheckHook, pytestcov, pytestrunner
 , setuptools_scm }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.3.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ece2e446273542e5c0352c9d6e80d8279132c6ada3649c59e87a711448801a3b";
   };

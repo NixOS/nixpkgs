@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "zope.dottedname";
   version = "4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0cec09844d309550359ac1941abfcd9141e213f67f3c19bb8f90360c40787576";
   };

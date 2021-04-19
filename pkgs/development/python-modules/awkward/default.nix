@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cmake
 , numba
 , numpy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "awkward";
   version = "1.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "89f126a072d3a6eee091e1afeed87e0b2ed3c34ed31a1814062174de3cab8d9b";
   };

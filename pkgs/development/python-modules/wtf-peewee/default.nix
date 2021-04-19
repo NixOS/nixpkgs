@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , peewee
 , wtforms
 , python
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "wtf-peewee";
   version = "3.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03qs6np5s9r0nmsryfzll29ajcqk27b18kcbgd9plf80ys3nb6kd";
   };

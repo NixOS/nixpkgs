@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 # Build dependencies
 , glibcLocales
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pname = "ipython";
   version = "5.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };

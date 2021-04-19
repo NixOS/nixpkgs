@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "twitter";
   version = "1.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "acdc85e5beea752967bb64c63bde8b915c49a31a01db1b2fecccf9f2c1d5c44d";
   };

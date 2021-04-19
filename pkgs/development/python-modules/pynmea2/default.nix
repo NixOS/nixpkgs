@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pynmea2";
   version = "1.17.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0x5xrk51dpzsvky1ncikadm80a44a82j3mjjykmhmx7jddc5qh9d";
   };

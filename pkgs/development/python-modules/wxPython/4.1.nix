@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , which
 , pkg-config
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "4.1.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12x4ci5q7qni4rkfiq6lnpn1fk8b0sfc6dck5wyxkj2sfp5pa91f";
   };

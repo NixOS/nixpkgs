@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , msrest
 , msrestazure
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-sqlvirtualmachine";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1b9am8raa17hxnz7d5pk2ix0309wsnhnchq1mi22icd728sl5adm";
     extension = "zip";

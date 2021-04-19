@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark-parser, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib, buildPythonPackage, fetchFromPyPI, hypothesis, lark-parser, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
   version = "0.1.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-+f8EexXE7TEs49pX6idXD4bWtTzhKvnyXlnmV2oAQQo=";
   };

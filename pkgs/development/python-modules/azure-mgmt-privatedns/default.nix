@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , msrest
 , msrestazure
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-privatedns";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08wdvfkk8jh90m3l4nz7knd5vikgfvsx70lk7mkhcvl0xj6gv76j";
     extension = "zip";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyftdi
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyspiflash";
   version = "0.6.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ifnw1qm4nssb03af93qw6vpa92rmyc2hisw9m4043pm9ryqcmpc";
   };

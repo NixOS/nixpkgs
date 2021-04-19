@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy36, immutables }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy36, immutables }:
 
 buildPythonPackage rec {
   pname = "contextvars";
   version = "2.4";
   disabled = !isPy36;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f38c908aaa59c14335eeea12abea5f443646216c4e29380d7bf34d2018e2c39e";
   };

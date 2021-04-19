@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , isPyPy
 , vobject
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pycarddav";
   disabled = isPy3k || isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0avkrcpisfvhz103v7vmq2jd83hvmpqrb4mlbx6ikkk1wcvclsx8";
   };

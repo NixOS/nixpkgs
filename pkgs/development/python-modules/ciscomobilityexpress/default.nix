@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "ciscomobilityexpress";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d8787245598e8371a83baa4db1df949d8a942c43f13454fa26ee3b09c3ccafc0";
   };

@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, isPy27
+{ buildPythonPackage, lib, fetchFromPyPI, isPy27
 , odfpy
 , openpyxl
 , pandas
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "2.0.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rvvdchdva7j9b29ay0sg8y33pjhpmzynl38wz2rl89pph8gmhlc";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, pytest, pytestCheckHook }:
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI, pytest, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "0.2.0";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05j6pamk8sd51qmvpkl3f7sxajmncrqm0cz6n6bqgsvzjwn66w6x";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, doCheck ? true
+{ lib, buildPythonPackage, fetchFromPyPI, doCheck ? true
 , aiofiles, httptools, httpx, multidict, ujson, uvloop, websockets
 , pytestCheckHook, beautifulsoup4, gunicorn, httpcore, uvicorn
 , pytest-asyncio, pytest-benchmark, pytest-dependency, pytest-sanic, pytest-sugar, pytestcov
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "sanic";
   version = "20.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "06p0lsxqbfbka2yaqlpp0bg5pf7ma44zi6kq7qbb6hhry48dp1w6";
   };

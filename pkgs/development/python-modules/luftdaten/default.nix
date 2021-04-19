@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, aiohttp, async-timeout }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, aiohttp, async-timeout }:
 
 buildPythonPackage rec {
   pname = "luftdaten";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-5SFb+psULyg9UKVY3oJPNLF3TGS/W+Bxoj79iTzReL4=";
   };

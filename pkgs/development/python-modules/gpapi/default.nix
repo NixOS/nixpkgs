@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , requests
 , protobuf
 , pycryptodome
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "gpapi";
   disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
   };

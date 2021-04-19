@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
   };

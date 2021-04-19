@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   flake8, py, pyflakes, six, tox
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3772b2a9923fbf674000ff51abebf6ea8f0fca0a2cfcbfa0d63ff118193d1ec5";
   };

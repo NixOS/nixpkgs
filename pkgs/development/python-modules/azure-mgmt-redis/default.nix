@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-redis";
   version = "12.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "8ae563e3df82a2f206d0483ae6f05d93d0d1835111c0bbca7236932521eed356";

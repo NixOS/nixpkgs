@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , unittest2
 , pyasn1
 , mock
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "rsa";
   version = "4.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa";
   };

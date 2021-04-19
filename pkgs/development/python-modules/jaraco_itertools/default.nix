@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm
 , inflect, more-itertools, six, pytest
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "jaraco.itertools";
   version = "5.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6447d567f57efe5efea386265c7864652e9530830a1b80f43e60b4f222b9ab84";
   };

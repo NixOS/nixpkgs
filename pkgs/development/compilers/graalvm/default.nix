@@ -217,7 +217,7 @@ let
     version = "1.7.2";
     pname = "ninja_syntax";
     doCheck = false;
-    src = python27.pkgs.fetchPypi {
+    src = python27.pkgs.fetchFromPyPI {
       inherit pname version;
       sha256 = "07zg30m0khx55fv2gxxn7pqd549z0vk3x592mrdlk9l8krxwjb9l";
     };

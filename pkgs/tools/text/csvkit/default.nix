@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "csvkit";
   version = "1.0.5";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "1ffmbzk4rxnl1yhqfl58v7kvl5m9cbvjm8v7xp4mvr00sgs91lvv";
   };

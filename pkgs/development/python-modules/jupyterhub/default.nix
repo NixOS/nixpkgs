@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , fetchzip
 , alembic
 , async_generator
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13pf6qhimpaxj20871ff5rvwwan59320cdhhrn9cfh6314971zq5";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , http_signature
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "smartdc";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6ffd866fb98386324e189e24d4f7532f66c1b20eece35ca1a6cb4b2a2639fc85";
   };

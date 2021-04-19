@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cryptography
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "PyMySQL";
   version = "0.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "263040d2779a3b84930f7ac9da5132be0fefcd6f453a885756656103f8ee1fdd";
   };

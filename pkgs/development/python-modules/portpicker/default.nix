@@ -1,13 +1,13 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "portpicker";
   version = "1.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0rwn5ca7ns3yh6bp785zdd2l4018ccpd5i0m2d1fsd9nhxvcgkfj";
   };

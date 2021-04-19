@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   matplotlib, shapely
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "descartes";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nq36w9ylvfwmwn5qd9c8fsp2jzsqpmy4xcr6pzxcpmg8qhm0nhk";
   };

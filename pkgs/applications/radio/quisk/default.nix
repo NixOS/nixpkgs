@@ -1,11 +1,11 @@
-{ lib, python38Packages, fetchPypi
+{ lib, python38Packages, fetchFromPyPI
 , fftw, alsaLib, pulseaudio, wxPython_4_0 }:
 
 python38Packages.buildPythonApplication rec {
   pname = "quisk";
   version = "4.1.73";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "37dfb02a32341025c086b07d66ddf1608d4ee1ae1c62fb51f87c97662f13e0d8";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , click
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "click-threading";
   version = "0.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b2b0fada5bf184b56afaccc99d0d2548d8ab07feb2e95e29e490f6b99c605de7";
   };

@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname   = "pathspec";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "86379d6b86d75816baba717e64b1a3a3469deb93bb76d613c9ce79edc5cb68fd";
   };

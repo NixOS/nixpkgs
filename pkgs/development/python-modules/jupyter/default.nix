@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , notebook
 , qtconsole
 , jupyter_console
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   pname = "jupyter";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
   };

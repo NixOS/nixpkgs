@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , distro
 , packaging
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pname = "scikit-build";
   version = "0.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0p4smkl2rbpl00m5va5qa8hp2hqb3284p2cs6k8zlmi4kgbdyh6s";
   };

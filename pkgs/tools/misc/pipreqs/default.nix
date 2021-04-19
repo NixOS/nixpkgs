@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "pipreqs";
   version = "0.4.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0fdr3mbxjpmrxr7yfc1sn9kbpcyb0qwafimhhrrqvf989dj1sdcy";
   };

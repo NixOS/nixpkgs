@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , glibcLocales
 , ipython_genutils
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "nbformat";
   version = "4.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f7494ef0df60766b7cabe0a3651556345a963b74dbc16bc7c18479041170d402";
   };

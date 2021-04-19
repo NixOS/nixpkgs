@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
+{ lib, buildPythonPackage, fetchFromPyPI, writeText, asttokens
 , pycryptodome, pytest_xdist, pytestcov, recommonmark, semantic-version, sphinx
 , sphinx_rtd_theme, pytestrunner }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "vyper";
   version = "0.2.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e763561a161c35c03b92a0c176096dd9b4c78ab003c2f08324d443f459b3de84";
   };

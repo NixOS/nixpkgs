@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyramid
 , simplejson
 , six
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "cornice";
   version = "5.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c81cd9429759c0de475f580bbff92d5646cfc5f43e8aa24492037e2e90677ee6";
   };

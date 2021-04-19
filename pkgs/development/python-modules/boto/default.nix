@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonAtLeast
 , isPy38
 , python
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "2.49.0";
   disabled = pythonAtLeast "3.9"; # no longer compatible with hmac std lib package
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a";
   };

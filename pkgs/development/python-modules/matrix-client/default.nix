@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , pytest, pytestrunner, responses
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "matrix_client";
   version = "0.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1mgjd0ymf9mvqjkvgx3xjhxap7rzdmpa21wfy0cxbw2xcswcrqyw";
   };

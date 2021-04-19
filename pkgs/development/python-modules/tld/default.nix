@@ -2,7 +2,7 @@
 , buildPythonPackage
 , factory_boy
 , faker
-, fetchPypi
+, fetchFromPyPI
 , pytest-cov
 , pytestCheckHook
 , six
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "tld";
   version = "0.12.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
   };

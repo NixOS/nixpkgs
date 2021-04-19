@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, colorama }:
+{ lib, fetchFromPyPI, buildPythonPackage, colorama }:
 
 buildPythonPackage rec {
   pname = "crayons";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bd33b7547800f2cfbd26b38431f9e64b487a7de74a947b0fafc89b45a601813f";
   };

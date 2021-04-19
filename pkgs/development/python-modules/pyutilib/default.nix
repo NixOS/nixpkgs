@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyutilib";
   version = "5.7.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyUtilib";
     inherit version;
     sha256 = "0bdb5hlj6kyb9m3xnpxzasfv5psnxfj21qx6md8ym8zkcqyq1qs5";

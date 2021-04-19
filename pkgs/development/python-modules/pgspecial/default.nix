@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, psycopg2, click, sqlparse }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, psycopg2, click, sqlparse }:
 
 buildPythonPackage rec {
   pname = "pgspecial";
   version = "1.11.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1jrq6bhzwvz6db8ays8zff15hbk1iazs2qxrzvrnlkgxxjkp8p7n";
   };

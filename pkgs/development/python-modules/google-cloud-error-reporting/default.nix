@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-cloud-logging
 , google-cloud-testutils
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-NT/+2mtIaEMyXnmM1fWX4kEV9pb1+aNas2lNobUPR14=";
   };

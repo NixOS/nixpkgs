@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "scikit-fmm";
   version = "2019.1.30";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eb64b6d8e30b8df8f8636d5fc4fd7ca6a9b05938ccd62518c80c1d9e823069dd";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , inflection
 , requests
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sleepyq";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bhzrxpzglfw4qbqfzyxr7dmmavzq4pq0h90jh0aa8vdw7iy7g7v";
   };

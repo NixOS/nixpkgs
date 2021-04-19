@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , nose
 , pkgs
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pycdio";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "01b7vqqfry071p60sabydym7r3m3rxszyqpdbs1qi5rk2sfyblnn";
   };

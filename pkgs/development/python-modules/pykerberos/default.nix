@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, krb5 }:
+{ lib, fetchFromPyPI, buildPythonPackage, krb5 }:
 
 buildPythonPackage rec {
   pname = "pykerberos";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0v47p840myqgc7hr4lir72xshcfpa0w8j9n077h3njpqyn6wlbag";
   };

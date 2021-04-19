@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , tqdm
 , spacy
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.3.3";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "56ab48a28a8470f0042a4cb7c9da8a6dde8621ecf87a86d75f201cbf1837e77f";
   };

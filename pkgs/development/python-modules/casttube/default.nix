@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests }:
 
 buildPythonPackage rec {
   pname = "casttube";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "10pw2sjy648pvp42lbbdmkkx79bqlkq1xcbzp1frraj9g66azljl";
   };

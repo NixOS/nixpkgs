@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , requests_oauthlib, nose, sh }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b541d9d7f234074a74214505aff1846eb21e5dd6d3915139e817d4675d34f4e3";
   };

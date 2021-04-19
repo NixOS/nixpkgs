@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , asdf
 , astropy
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   version = "2.0.7";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d13ac67c14ea825652dc3e12c4c627e782e8e843e96a1d54440d39dd2ceb6a5c";
   };

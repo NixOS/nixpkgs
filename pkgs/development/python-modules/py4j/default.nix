@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchFromPyPI, lib }:
 
 buildPythonPackage rec {
   pname = "py4j";
 
   version = "0.10.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7605e512bf9b002245f5a9121a8c2df9bfd1a6004fe6dd3ff29d46f901719d53";
   };

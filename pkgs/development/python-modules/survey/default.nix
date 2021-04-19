@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , wrapio
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "survey";
   version = "3.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-aF7ZS5oxeIOb7mJsrusdc3HefcPE+3OTXcJB/pjJxFY=";
   };

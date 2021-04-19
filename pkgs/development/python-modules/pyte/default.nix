@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-runner, wcwidth }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, pytest-runner, wcwidth }:
 
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7e71d03e972d6f262cbe8704ff70039855f05ee6f7ad9d7129df9c977b5a88c5";
   };

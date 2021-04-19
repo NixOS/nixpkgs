@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , stdenv
 , libcxx
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "kiwisolver";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "53eaed412477c836e1b9522c19858a8557d6e595077830146182225613b11a75";
   };

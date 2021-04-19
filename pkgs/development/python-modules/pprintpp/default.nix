@@ -1,10 +1,10 @@
-{ lib, fetchpatch, buildPythonPackage, fetchPypi, python, nose, parameterized }:
+{ lib, fetchpatch, buildPythonPackage, fetchFromPyPI, python, nose, parameterized }:
 
 buildPythonPackage rec {
   pname = "pprintpp";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00v4pkyiqc0y9qjnp3br58a4k5zwqdrjjxbcsv39vx67w84630pa";
   };

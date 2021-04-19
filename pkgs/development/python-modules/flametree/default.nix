@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "flametree";
   version = "0.1.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c8eb81dea8c7f8261a2aa03d2bac98b1d21ebceec9c67efaac423f7c1b4fe061";
   };

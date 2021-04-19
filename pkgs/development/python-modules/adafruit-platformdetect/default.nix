@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools-scm
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "adafruit-platformdetect";
   version = "3.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Adafruit-PlatformDetect";
     inherit version;
     sha256 = "sha256-QJeb9+iiS4QZ7poOBp5oKD5KuagkG6cfTalbNRwrI1M=";

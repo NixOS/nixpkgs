@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , protobuf
 , websockets
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "iterm2";
   version = "1.18";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "88ca7dd76242205dc82761bf98932a42e6c1ba338cb065f1cc775413ef4e0dc2";
   };

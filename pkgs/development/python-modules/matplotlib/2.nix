@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchFromPyPI, python, buildPythonPackage, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   version = "2.2.3";
   pname = "matplotlib";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5";
   };

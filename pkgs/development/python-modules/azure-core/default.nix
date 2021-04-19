@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , aiodns
 , aiohttp
 , mock
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "azure-core";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "adf2b1c6ef150a92295b4b405f982a9d2c55c4846728cb14760ca592acbb09ec";

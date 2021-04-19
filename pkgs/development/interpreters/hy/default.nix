@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "hy";
   version = "0.19.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "05k05qmiiysiwdc05sxmanwhv1crfwbb3l8swxfisbzbvmv1snis";
   };

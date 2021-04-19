@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
   version = "0.12.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0js4avmhmmys78z376xk1w9305hq5nad8zqrnksgmpc1j90p4db6";
   };

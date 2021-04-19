@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, six, cffi, nose }:
 
 buildPythonPackage rec {
   pname = "cld2-cffi";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0rvcdx4fdh5yk4d2nlddq1q1r2r0xqp86hpmbdn447pdcj1r8a9s";
   };

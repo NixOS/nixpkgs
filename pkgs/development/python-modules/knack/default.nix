@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , argcomplete
 , colorama
 , jmespath
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "knack";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16aa47240add6badd933a0b27576f3c090d7469177dc941e3ece05ca88123199";
   };

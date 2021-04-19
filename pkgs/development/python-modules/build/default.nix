@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , filelock
 , flit-core
 , importlib-metadata
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-DrlbLI13DXxMm5LGjCJ8NQu/ZfPsg1UazpCXwYzBX90=";
   };

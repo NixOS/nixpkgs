@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pythonAtLeast, isPy27
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder, pythonAtLeast, isPy27
 , flake8
 , pycodestyle
 , six
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "4.0.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e43dc777f7db1481db473210101ec2df2bd39a45b149d7218a618e954177eda6";
   };

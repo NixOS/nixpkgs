@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "rdbtools";
   version = "0.1.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "689e57e42f43bdc73ea4e893d9676819980d17968696826b69fbd951f59772de";
   };

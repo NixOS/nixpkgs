@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "pure-pcapy3";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14panfklap6wwi9avw46gvd7wg9mkv9xbixvbvmi1m2adpqlb7mr";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , setuptools, setuptools_scm, django, dateutil, whoosh, pysolr
 , coverage, mock, nose, geopy, requests }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "django-haystack";
   version = "3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d490f920afa85471dd1fa5000bc8eff4b704daacbe09aee1a64e75cbc426f3be";
   };

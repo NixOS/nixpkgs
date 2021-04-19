@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , uamqp
 , azure-common
 , azure-core
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-servicebus";
   version = "7.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "c5b3681ce4d7a44c223ddddfdec4c8d2eadede3b11b598ac09c4dbf4b729e89b";

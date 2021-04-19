@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mozfile
 , mozlog
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "mozcrash";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8c2d2f32bd6e0ba3644f5d16e427444d8cb51ec1e9baa340a33e10687307f8c4";
   };

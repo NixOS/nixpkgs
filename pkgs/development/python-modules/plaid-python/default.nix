@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, pytest }:
 
 buildPythonPackage rec {
   version = "7.2.0";
   pname = "plaid-python";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bd599b384f94d8883344925f0ef223e1ab50f218872434aa40ba8c645937699c";
   };

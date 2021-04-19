@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchpatch
-, fetchPypi
+, fetchFromPyPI
 , hopcroftkarp
 , multiset
 , pytest
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.5.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vvf1cd9kw5z1mzvypc9f030nd18lgvvjc8j56b1s9b7dyslli2r";
   };

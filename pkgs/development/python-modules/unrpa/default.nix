@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, uncompyle6, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, uncompyle6, isPy27 }:
 
 buildPythonPackage rec {
   pname = "unrpa";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0yl4qdwp3in170ks98qnldqz3r2iyzil5g1775ccg98qkh95s724";
   };

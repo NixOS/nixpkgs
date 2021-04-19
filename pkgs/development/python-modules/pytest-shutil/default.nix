@@ -1,4 +1,4 @@
-{ lib, isPyPy, buildPythonPackage, fetchPypi
+{ lib, isPyPy, buildPythonPackage, fetchFromPyPI
 , pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pytest-shutil";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };

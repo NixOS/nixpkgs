@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , samba
 , pkg-config
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pysmbc";
   version = "1.0.23";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1y0n1n6jkzf4mr5lqfc73l2m0qp56gvxwfjnx2vj8c0hh5i1gnq8";
   };

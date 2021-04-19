@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, pytestcov, pytest_xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "Keras";
   version = "2.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fedd729b52572fb108a98e3d97e1bac10a81d3917d2103cc20ab2a5f03beb973";
   };

@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , pymongo
 , vcversioner
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "flask-pymongo";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Flask-PyMongo";
     inherit version;
     sha256 = "051kwdk07y4xm4yawcjhn6bz8swxp9nanv7jj35mz2l0r0nv03k2";

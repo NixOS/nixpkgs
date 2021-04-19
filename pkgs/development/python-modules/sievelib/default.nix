@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, mock
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, mock
 , future, six, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "sievelib";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1sl1fnwr5jdacrrnq2rvzh4vv1dyxd3x31vnqga36gj8h546h7mz";
   };

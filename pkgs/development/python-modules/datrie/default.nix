@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch
 , cython, pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
   pname = "datrie";
   version = "0.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
   };

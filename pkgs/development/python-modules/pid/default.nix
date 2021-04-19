@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pid";
   version = "3.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sexpdata
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "epc";
   version = "0.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a14d2ea74817955a20eb00812e3a4630a132897eb4d976420240f1152c0d7d25";
   };

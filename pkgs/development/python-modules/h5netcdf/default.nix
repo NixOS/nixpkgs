@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , h5py
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "h5netcdf";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09bbnpsvwksb07wijn7flyyza56h5b2g2cw0hb3slmwxz6cgcjmr";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , parts
 , pytestCheckHook
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "bitlist";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04dz64r21a39p8wph5qlhvs5y873qgk6xxjlzw8n695b8jm3ixir";
   };

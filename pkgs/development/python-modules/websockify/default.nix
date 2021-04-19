@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.9.0";
   pname = "websockify";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nnalv0jkkj34hw6yb12lp6r6fj1ps9vkkyshjvx65y5xdwmnny3";
   };

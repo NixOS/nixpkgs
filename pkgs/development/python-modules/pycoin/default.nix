@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , gnupg
 , setuptools
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pycoin";
   version = "0.90.20201031";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "65c19204cb7aece4aae30c44b5e08beecb9c118370a9f9994d6cddaee17c351d";
   };

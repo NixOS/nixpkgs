@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , click
 , prompt_toolkit
 , pygments
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "clickhouse-cli";
   version = "0.3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-fDvUdL6LzgCv6LDmB0R0M7v6BbnbL68p9pHMebP58h8=";
   };

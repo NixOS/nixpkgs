@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, dnspython, pycountry, nose, setuptools_scm, six, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, dnspython, pycountry, nose, setuptools_scm, six, isPy27 }:
 
 buildPythonPackage rec {
   pname = "FormEncode";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "049pm276140h30xgzwylhpii24xcln1qfdlfmbj69sqpfhlr5szj";
   };

@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , pytest
 , pytest-xdist
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pytest-order";
   version = "0.9.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9c9e4f1b060414c642e88ad98ca60f1fd37937debd704bd8f4a2ef8e08b9cb6d";
   };

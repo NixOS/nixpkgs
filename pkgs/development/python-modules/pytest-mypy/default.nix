@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , filelock
 , pytest
 , mypy
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pytest-mypy";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "63d418a4fea7d598ac40b659723c00804d16a251d90a5cfbca213eeba5aaf01c";
   };

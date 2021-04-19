@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , virtualenv
 , pytestrunner
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "setuptools_trial";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
   };

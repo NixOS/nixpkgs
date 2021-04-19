@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, atpublic }:
+{ buildPythonPackage, fetchFromPyPI, atpublic }:
 
 buildPythonPackage rec {
   pname = "flufl.i18n";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flufl.i18n" ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e19036292a825a69f0e0a87566d1628830c69eecd3b0295d22f582039477a6bb";
   };

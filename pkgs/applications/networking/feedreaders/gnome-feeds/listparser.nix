@@ -5,7 +5,7 @@ python3.pkgs.buildPythonPackage rec {
   pname = "listparser";
   version = "0.18";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "0hdqs1mmayw1r8yla43hgb4d9y3zqs5483vgf8j9ygczkd2wrq2b";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "csscompressor";
   version = "0.9.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "afa22badbcf3120a4f392e4d22f9fff485c044a1feda4a950ecc5eba9dd31a05";
   };

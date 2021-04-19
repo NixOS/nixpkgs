@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , hypothesis
 , pytest
 , pytest-astropy-header
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "pytest-astropy";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "619800eb2cbf64548fbea25268efe7c6f6ae206cb4825f34abd36f27bcf946a2";
   };

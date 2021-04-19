@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.3.2";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , file
 , stdenv
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sqlmap";
   version = "1.5.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-b2Q5Zelz0AWbNQotOLWdwN5+20Q5jATH3nzLEJQRwno=";
   };

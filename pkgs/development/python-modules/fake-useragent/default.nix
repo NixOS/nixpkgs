@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, six, pytest }:
+{ lib, fetchFromPyPI, buildPythonPackage, six, pytest }:
 
 buildPythonPackage rec {
   pname = "fake-useragent";
   version = "0.1.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0dfz3bpmjmaxlhda6hfgsac7afb65pljibi8zkp9gc0ffn5rj161";
   };

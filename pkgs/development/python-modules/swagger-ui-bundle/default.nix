@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, jinja2, flake8 }:
+{ lib, buildPythonPackage, fetchFromPyPI, jinja2, flake8 }:
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
   version = "0.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "swagger_ui_bundle";
     inherit version;
     sha256 = "1lqxz7q9l2iwf7w11nhw5lnglsh1lgcvq8ydvhabkcc76il3ndy5";

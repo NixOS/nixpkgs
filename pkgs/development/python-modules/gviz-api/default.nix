@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , six
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "1.9.0";
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     sha256 = "1yag559lpmwfdxpxn679a6ajifcbpgljr5n6k5b7rrj38k2xq7jg";
   };

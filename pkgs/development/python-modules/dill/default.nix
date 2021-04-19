@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , nose
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "dill";
   version = "0.3.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c";
   };

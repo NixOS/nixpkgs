@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , azure-common
 , futures
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.36.0";
   pname = "azure-storage";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pyasfxkin6j8j00qmky7d9cvpxgis4fi9bscgclj6yrpvf14qpv";
   };

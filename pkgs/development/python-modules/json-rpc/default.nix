@@ -1,4 +1,4 @@
-{ lib, isPy27, buildPythonPackage, fetchPypi, pytestCheckHook, mock }:
+{ lib, isPy27, buildPythonPackage, fetchFromPyPI, pytestCheckHook, mock }:
 
 let
   pythonEnv = lib.optional isPy27 mock;
@@ -6,7 +6,7 @@ in buildPythonPackage rec {
   pname = "json-rpc";
   version = "1.13.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12bmblnznk174hqg2irggx4hd3cq1nczbwkpsqqzr13hbg7xpw6y";
   };

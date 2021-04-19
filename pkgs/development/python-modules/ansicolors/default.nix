@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest }:
 
 buildPythonPackage rec {
   pname = "ansicolors";
   version = "1.1.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0";

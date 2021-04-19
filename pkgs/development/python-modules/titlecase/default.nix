@@ -1,10 +1,10 @@
-{ buildPythonPackage, lib, nose, fetchPypi, regex }:
+{ buildPythonPackage, lib, nose, fetchFromPyPI, regex }:
 
 buildPythonPackage rec {
   pname = "titlecase";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16e279edf085293bc9c44a68ce959c7d6cd5c653e6b5669a3a3640015cb63eb6";
   };

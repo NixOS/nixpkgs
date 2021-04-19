@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib, buildPythonPackage, fetchFromPyPI, django }:
 
 buildPythonPackage rec {
   pname = "django-ipware";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c7df8e1410a8e5d6b1fbae58728402ea59950f043c3582e033e866f0f0cf5e94";
   };

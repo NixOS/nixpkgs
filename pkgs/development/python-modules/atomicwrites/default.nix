@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest }:
 
 buildPythonPackage rec {
   pname = "atomicwrites";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a";
   };

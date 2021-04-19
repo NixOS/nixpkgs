@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , glibcLocales
 , mpmath
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "sympy";
   version = "1.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-o96SYel1Nbg7uGB7DaLH0DEmZQ+v6isniWV7Ipwkay4=";
   };

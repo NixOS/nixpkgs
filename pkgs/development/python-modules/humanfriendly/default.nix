@@ -1,7 +1,7 @@
 { lib
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , monotonic
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "humanfriendly";
   version = "9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-BmVilWY5qyH/JnbR/aC1mH6YXFNPx2cAoZvVS8uBEh0=";
   };

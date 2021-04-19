@@ -12,7 +12,7 @@ buildPythonApplication rec {
   pname = "expiringdict";
   version = "1.2.1";
 
-  # use fetchFromGitHub instead of fetchPypi because the test suite of
+  # use fetchFromGitHub instead of fetchFromPyPI because the test suite of
   # the package is not included into the PyPI tarball
   src = fetchFromGitHub {
     owner = "mailgun";

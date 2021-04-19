@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , asn1crypto
 , asysocks
 , minikerberos
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "msldap";
   version = "0.3.28";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-0sMi5PpwMWf/W+Hu0akQVF/1ZkbanfOzYDC3R6lZrSE=";
   };

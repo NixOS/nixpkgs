@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , flake8
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "getkey";
   version = "0.6.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ng0ihfagh9g8hral0bq5nhjlp3csqghyv3z8b7ylkdkqc1cgiv8";
   };

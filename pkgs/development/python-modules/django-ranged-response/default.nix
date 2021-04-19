@@ -1,10 +1,10 @@
-{ lib, fetchurl, fetchPypi, buildPythonPackage, django }:
+{ lib, fetchurl, fetchFromPyPI, buildPythonPackage, django }:
 
 buildPythonPackage rec {
   pname = "django-ranged-response";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "11gr3jpmb5rvg3scv026kjwwkmnxwivgq5ypxadnnc9p58szy7zp";
   };

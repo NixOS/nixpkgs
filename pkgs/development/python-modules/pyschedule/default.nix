@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pulp
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyschedule";
   version = "0.2.34";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6bba9e9ea07906ce2dfe3cd847c1822b137f6b13e9f975c50b347312fd98e110";
   };

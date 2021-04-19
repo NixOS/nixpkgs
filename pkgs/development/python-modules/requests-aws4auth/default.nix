@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python, requests, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, python, requests, six }:
 
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9a4a5f4a61c49f098f5f669410308ac5b0ea2682fd511ee3a4f9ff73b5bb275a";
   };

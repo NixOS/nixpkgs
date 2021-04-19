@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , argon2_cffi
 , nose
 , nose_warnings_filters
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   version = "6.2.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0464b28e18e7a06cec37e6177546c2322739be07962dd13bf712bcb88361f013";
   };

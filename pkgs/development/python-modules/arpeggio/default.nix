@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , pytestrunner
 , pytestCheckHook
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "Arpeggio";
   version = "1.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "920d12cc762edb2eb56daae64a14c93e43dc181b481c88fc79314c0df6ee639e";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml }:
 
 buildPythonPackage rec {
   pname = "cmdline";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7cf6af53549892b2218c2f56a199dff54a733be5c5515c0fd626812070b0a86a";
   };

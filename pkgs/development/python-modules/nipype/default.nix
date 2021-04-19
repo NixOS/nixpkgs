@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 # python dependencies
 , click
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   version = "1.6.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bc56ce63f74c9a9a23c6edeaf77631377e8ad2bea928c898cc89527a47f101cf";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , repoze_lru
 , six
 , soupsieve
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "Routes";
   version = "2.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b6346459a15f0cbab01a45a90c3d25caf980d4733d628b4cc1952b865125d053";
   };

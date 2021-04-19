@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyannotate
 , pytest
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.3";
   pname = "pytest-annotate";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ef5924aca93a7b47edaf46a38284fb5a173eed5e3b1a93ec00c8e35f0dd76ab";
   };

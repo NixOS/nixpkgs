@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinx
 , readthedocs-sphinx-ext
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "sphinx_rtd_theme";
   version = "0.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "728607e34d60456d736cc7991fd236afb828b21b82f956c5ea75f94c8414040a";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
   version = "0.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "f2b85d1d7d7db2af106000910ea5f8b95639874176a5de2f7ab37a2caa67af6b";

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, baron, pytestCheckHook }:
+{ lib, fetchFromPyPI, buildPythonPackage, baron, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "redbaron";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bqkq0wn20cc3qrcd1ifq74p4m570j345bkq4axl08kbr8whfba7";
   };

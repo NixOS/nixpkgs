@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4 }:
+{ lib, buildPythonPackage, fetchFromPyPI, beautifulsoup4 }:
 
 buildPythonPackage rec {
   pname = "micawber";
   version = "0.5.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05ef4c89e307e3031dd1d85a3a557cd7f9f900f7dbbbcb33dde454940ca38460";
   };

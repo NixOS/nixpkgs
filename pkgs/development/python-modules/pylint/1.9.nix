@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, astroid, six, isort,
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, astroid, six, isort,
   mccabe, configparser, backports_functools_lru_cache, singledispatch,
   pytest, pytestrunner, setuptools }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pylint";
   version = "1.9.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "004kfapkqxqy2s85pmddqv0fabxdxywxrlbi549p0v237pr2v94p";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , inflection
 , ruamel_yaml
 , setuptools_scm
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "drf-yasg";
   version = "1.20.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
   };

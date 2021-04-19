@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyfaidx";
   version = "0.5.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "73e740eaa45c097a09e543450f88d5ed06c0ece4b6936dad7e71077f67797b74";
   };

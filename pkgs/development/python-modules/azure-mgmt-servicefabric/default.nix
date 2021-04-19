@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrest
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-servicefabric";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "5771f24516c8d4a27f5569f23f3a606f6f106e4ad502eec7f38aedfcd3eadc74";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , pillow
 , blessings
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "nose-progressive";
   version = "1.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1mzmgq0wnfizmg9m2wn0c9g9282rdgv1jnphp8ww5h8kwqrjhvis";
   };

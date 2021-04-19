@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , async_generator
 , paho-mqtt
 , pytestCheckHook
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "asyncio_mqtt";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c1b3bea68a35c83d290a89903079ffb311106195cd56867e201633a1ee1cad0c";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , boltons
 , attrs
 , face
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "glom";
   version = "20.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "54051072bccc9cdb3ebbd8af0559195137a61d308f04bff19678e4b61350eb12";
   };

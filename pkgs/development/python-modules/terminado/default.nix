@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ptyprocess
 , tornado
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "terminado";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "89e6d94b19e4bc9dce0ffd908dfaf55cc78a9bf735934e915a4a96f65ac9704c";
   };

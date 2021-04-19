@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , monotonic
 , testtools
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "fasteners";
   version = "0.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3a176da6b70df9bb88498e1a18a9e4a8579ed5b9141207762368a1017bf8f5ef";
   };

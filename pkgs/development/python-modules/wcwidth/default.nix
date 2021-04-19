@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
+{ lib, fetchFromPyPI, buildPythonPackage, pytestCheckHook
 , isPy3k
 , backports_functools_lru_cache
 , setuptools
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "wcwidth";
   version = "0.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83";
   };

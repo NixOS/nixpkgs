@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , mock
 , pytest
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   # wanted by tests
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b990ba1f7bc4288e63340be0433698c1efe8217f78c689d254c2540af3d38617";
   };

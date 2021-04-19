@@ -1,7 +1,7 @@
 { lib
 , isPy3k
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , Babel
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.7.0";
   disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "BabelGladeExtractor";
     inherit version;
     extension = "tar.bz2";

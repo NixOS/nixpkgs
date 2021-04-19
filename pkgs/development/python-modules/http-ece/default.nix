@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder
 , coverage, flake8, mock, nose, importlib-metadata
 , cryptography }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "http_ece";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1y5ln09ji4dwpzhxr77cggk02kghq7lql60a6969a5n2lwpvqblk";
   };

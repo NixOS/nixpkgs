@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sqlalchemy
 , shapely
 , setuptools_scm
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "GeoAlchemy2";
   version = "0.8.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02jbad9vbnjx8bmfvxg77z18nymrry6li8hy9pwi0yiyvwbnycyr";
   };

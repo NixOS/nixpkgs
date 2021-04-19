@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml, openssh
 , nose, bc, hostname, coreutils, bash, gnused
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "ClusterShell";
   version = "1.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ebc1925c1aed94f99d74cbc0230215127ade80a25240133204094faa74bc41b";
   };

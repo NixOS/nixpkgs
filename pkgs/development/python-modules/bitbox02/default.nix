@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, base58, ecdsa, hidapi, noiseprotocol, protobuf, semver, typing-extensions }:
+{ lib, buildPythonPackage, fetchFromPyPI, base58, ecdsa, hidapi, noiseprotocol, protobuf, semver, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "bitbox02";
   version = "5.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fe0e8aeb9b32fd7d76bb3e9838895973a74dfd532a8fb8ac174a1a60214aee26";
   };

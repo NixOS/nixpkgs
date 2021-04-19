@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , setuptools_scm
 , docutils
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "amply";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cb12dcb49d16b168c02be128a1527ecde50211e4bd94af76ff4e67707f5a2d38";
   };

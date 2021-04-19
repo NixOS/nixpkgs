@@ -5,7 +5,7 @@ let
   pinned_click = python3Packages.click.overridePythonAttrs (old: rec {
     pname = "click";
     version = "6.7";
-    src = python3Packages.fetchPypi {
+    src = python3Packages.fetchFromPyPI {
       inherit pname version;
       hash = "sha256-8VUW30eNWlYYD7+A5o8gYBDm0WD8OfpQi2XgNf11Ews=";
     };

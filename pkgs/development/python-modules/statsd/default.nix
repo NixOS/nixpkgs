@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , mock
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "statsd";
   version = "3.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "07yxnlalvcglgwa9pjs1clwrmwx7a4575jai7q05jz3g4i6dprp3";
   };

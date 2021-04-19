@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, requests }:
 
 buildPythonPackage rec {
   pname = "bitbucket-cli";
   version = "0.5.1";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1xmn73x6jirnwfwcdy380ncmkai9f9dhmld6zin01ypbqwgf50fq";
   };

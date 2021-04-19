@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , liberfa
 , packaging
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09i2qcsvxd3q04a5yaf6fwzg79paaslpksinan9d8smj7viql15i";
   };

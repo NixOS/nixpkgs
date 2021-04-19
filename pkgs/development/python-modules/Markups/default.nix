@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python-markdown-math
 , markdown
 , docutils
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "Markups";
   version = "3.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ea19458dfca6a4562044e701aa8698089a0c659fc535689ed260f89a04f8d39";
   };

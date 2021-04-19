@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , requests
 , psutil
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
   };

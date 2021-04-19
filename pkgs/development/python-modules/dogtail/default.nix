@@ -12,7 +12,7 @@
 , dbus
 , xvfb_run
 , wrapGAppsHook
-# , fetchPypi
+# , fetchFromPyPI
 }:
 
 buildPythonPackage {
@@ -20,7 +20,7 @@ buildPythonPackage {
   version = "0.9.11";
 
   # https://gitlab.com/dogtail/dogtail/issues/1
-  # src = fetchPypi {
+  # src = fetchFromPyPI {
   #   inherit pname version;
   #   sha256 = "0p5wfssvzr9w0bvhllzbbd8fnp4cca2qxcpcsc33dchrmh5n552x";
   # };

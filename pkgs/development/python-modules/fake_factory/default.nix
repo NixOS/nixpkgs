@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , six
 , dateutil
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "fake-factory";
   version = "9999.9.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f5bd18deb22ad8cb4402513c025877bc6b50de58902d686b6b21ba8981dce260";
   };

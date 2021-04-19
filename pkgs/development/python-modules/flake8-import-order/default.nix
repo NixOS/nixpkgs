@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, enum34, pycodestyle, pytest, flake8, pylama }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, enum34, pycodestyle, pytest, flake8, pylama }:
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
   version = "0.18.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14kfvsagqc6lrplvf3x58ia6x744bk8fj91wmk0hcipa8naw73d2";
   };

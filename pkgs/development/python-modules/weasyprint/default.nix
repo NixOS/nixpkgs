@@ -1,5 +1,5 @@
 { buildPythonPackage,
-  fetchPypi,
+  fetchFromPyPI,
   fetchpatch,
   cairosvg,
   pyphen,
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     })
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "WeasyPrint";
     sha256 = "0rwf43111ws74m8b1alkkxzz57g0np3vmd8as74adwnxslfcg4gs";

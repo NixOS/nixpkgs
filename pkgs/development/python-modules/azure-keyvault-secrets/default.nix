@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , azure-core
 , msrest
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "4.2.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "1083ab900da5ec63c518ffef49d9fdca02c81ddffdf80c52c03cd9da479e021f";

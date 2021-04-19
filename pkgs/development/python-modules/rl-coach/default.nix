@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , tensorflow
 , annoy
 , pillow
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "1.0.1";
   pname = "rl-coach";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0i47hf0l76ydyrky6f8h760bfr0zg5g3vy675x6m6pgm9wrklkqc";
   };

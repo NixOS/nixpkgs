@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, packaging, toml }:
+{ lib, fetchFromPyPI, buildPythonPackage, packaging, toml }:
 
 buildPythonPackage rec {
   pname = "sip";
   version = "5.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "sip";
     inherit version;
     sha256 = "1idaivamp1jvbbai9yzv471c62xbqxhaawccvskaizihkd0lq0jx";

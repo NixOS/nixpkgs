@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_schema
 , zope_interface
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "zope.filerepresentation";
   version = "5.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1mp2r80v6ns92j089l7ngh8l9fk95g2661vkp4vqw7c71irs9g1z";
   };

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , python
 , fetchpatch
-, fetchPypi
+, fetchFromPyPI
 , pari
 , gmp
 , cython
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
   version = "2.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03cd45edab8716ebbfdb754e65fea72e873c73dc91aec098fe4a01e35324ac7a";
   };

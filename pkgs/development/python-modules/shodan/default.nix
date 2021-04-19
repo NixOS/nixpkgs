@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , click-plugins
 , colorama
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "shodan";
   version = "1.25.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-fivdvBtgv2IAQtABD0t2KoC0MRHb6pwEHXLUMl4mDCM=";
   };

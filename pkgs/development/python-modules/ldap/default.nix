@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchFromPyPI
 , pyasn1, pyasn1-modules
 , pythonAtLeast, pytestCheckHook
 , openldap, cyrus_sasl, lib, stdenv }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "python-ldap";
   version = "3.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "198as30xy6p760niqps2zdvq2xcmr765h06pmda8fa9y077wl4a7";
   };

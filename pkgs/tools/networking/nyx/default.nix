@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "nyx";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02rrlllz2ci6i6cs3iddyfns7ang9a54jrlygd2jw1f9s6418ll8";
   };

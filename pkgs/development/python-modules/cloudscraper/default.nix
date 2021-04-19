@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , requests
 , requests-toolbelt
 , pyparsing
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.2.56";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "84c5910023dd393619b2b793fdb154392c5c8887b55e4bcac3ad2646f1cfe212";
   };

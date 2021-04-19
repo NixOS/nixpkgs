@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy3k
 , certifi
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "uamqp";
   version = "1.2.13";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-zDUFe/yMCThn+qJqDekMrUHEf1glGxBw4pioExLLoqg=";
   };

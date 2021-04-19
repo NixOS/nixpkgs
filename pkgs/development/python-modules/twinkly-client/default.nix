@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.0.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16jbm4ya4yk2nfswza1kpgks70rmy5lpsv9dv3hdjdnr1j44hr3i";
   };

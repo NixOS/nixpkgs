@@ -1,9 +1,9 @@
-{ lib, buildPythonApplication, fetchPypi, psutil, matplotlib, pytest }:
+{ lib, buildPythonApplication, fetchFromPyPI, psutil, matplotlib, pytest }:
 buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5d48410e543b71e5dc4677705acc2a753db65814d3ccbdfbca8d5d3a09b053b1";
   };

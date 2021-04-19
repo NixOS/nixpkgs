@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cmarkgfm
 , docutils
-, fetchPypi
+, fetchFromPyPI
 , future
 , mock
 , pygments
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "29.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-kv1awr+Gd/MQ8zA6pLzludX58glKuYwp8TeR17gFo9s=";
   };

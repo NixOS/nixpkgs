@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, pythonOlder }:
+{ buildPythonPackage, fetchFromPyPI, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "dugong";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.3"; # Library does not support versions older than 3.3
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "tar.bz2";
     sha256 = "10vjdp21m0gzm096lgl84z184s5l9iz69ppj6acgsc125037dl6h";

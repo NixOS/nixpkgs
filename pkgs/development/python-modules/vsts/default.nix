@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , python
-, fetchPypi
+, fetchFromPyPI
 , msrest
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.1.25";
   pname = "vsts";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15sgwqa72ynpahj101r2kc15s3dnsafg5gqx0sz3hnqz29h925ys";
   };

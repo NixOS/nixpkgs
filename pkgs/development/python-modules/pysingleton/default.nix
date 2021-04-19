@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pysingleton";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5776e7a4ba0bab26709da604f4e648c5814385fef34010723db3da0d41b0dbcc";
   };

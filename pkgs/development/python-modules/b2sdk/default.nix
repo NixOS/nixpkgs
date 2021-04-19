@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, isPy27, pytestCheckHook
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm, isPy27, pytestCheckHook
 , requests, arrow, logfury, tqdm }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8e46ff9d47a9b90d8b9beab1969fcf4920300b02e20e6bf0745be04e09e8a6ff";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib, buildPythonPackage, fetchFromPyPI, python
 , mock
 , purl
 , requests
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "requests-mock";
   version = "1.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e68f46844e4cee9d447150343c9ae875f99fa8037c6dcf5f15bf1fe9ab43d226";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , protobuf
 , googleapis-common-protos
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.18.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-z8RUdMftoP48S57KJUISTyoP9VQyQr7GHo0IvOD1vUg=";
   };

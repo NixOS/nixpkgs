@@ -1,13 +1,13 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonApplication rec {
   pname = "badchars";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1xqki8qnfwl97d60xj69alyzwa1mnfbwki25j0vhvhb05varaxz2";
   };

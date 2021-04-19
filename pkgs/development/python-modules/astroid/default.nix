@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03dzhjrsc5d2whyjngfrwvxn42058k0cjjr85x2wqzai8psr475k";
   };

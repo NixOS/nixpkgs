@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "chkcrontab";
   version = "1.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0gmxavjkjkvjysgf9cf5fcpk589gb75n1mn20iki82wifi1pk1jn";
   };

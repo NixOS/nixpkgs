@@ -57,7 +57,7 @@ in with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.12.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
   };

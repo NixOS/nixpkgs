@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonApplication, protobuf, pythonOlder }:
+{ lib, fetchFromPyPI, buildPythonApplication, protobuf, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
@@ -6,7 +6,7 @@ buildPythonApplication rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "77e10c476cdd3ee14535c2357e64deac6b1a69f33eb500d795b064acda48c66f";
   };

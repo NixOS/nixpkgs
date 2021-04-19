@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-mgmt-common
 , azure-mgmt-core
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "19.0.0";
   pname = "azure-mgmt-compute";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "65afe759c6ee87dd89d65d59c8da4b2c04d197c07c1fbfdc56ef1aea468e4525";

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , decorator
-, fetchPypi
+, fetchFromPyPI
 , future
 , isPy3k
 , tornado
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "13.4.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "141w3701jjl460702xddqvi3hswp24jnkl6cakvz2aqrmcyxq7sc";
   };

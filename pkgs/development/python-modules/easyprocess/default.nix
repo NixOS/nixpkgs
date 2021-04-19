@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "EasyProcess";
   version = "0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "115rzzr0hx4af4m6krf7dxn8851n4l8jfxahjzjc2r0zq2m8v57v";
   };

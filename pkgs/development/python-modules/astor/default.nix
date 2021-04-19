@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pytestCheckHook, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ppscdzzvxpznclkmhhj53iz314x3pfv4yc7c6gwxqgljgdgyvka";
   };

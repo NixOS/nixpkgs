@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , django
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "2.1.2";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "28bad07b5e29a0ea4bd9727c6927cbee25d349d21606a553a0c748fbee0c073c";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , setuptools
 , pytestrunner
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5526cc2a06bfad707d10ec118393e0d33c2aa524605255d96958c22c93e8e7aa";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , pkg-config
 , systemd, libyaml, openzwave, cython, pyserial
 , six, pydispatcher, urwid }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6b40c7711383eeb3535cf5504f1cf47cc1ac7018eb820f299642a5a2795aef84";
     extension = "zip";

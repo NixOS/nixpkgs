@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkgs
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "fusepy";
   version = "3.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gg69qfi9pjcic3g98l8ya64rw2vc1bp8gsf76my6gglq8z7izvj";
   };

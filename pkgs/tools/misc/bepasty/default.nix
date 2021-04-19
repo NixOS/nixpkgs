@@ -38,7 +38,7 @@ in with python.pkgs; buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1y3smw9620w2ia4zfsl2svb9j7mkfgc8z1bzjffyk1w5vryhwikh";
   };

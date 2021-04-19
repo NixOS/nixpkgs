@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , ruamel_yaml
 , python-dateutil
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "strictyaml";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "637399fd80dccc95f5287b2606b74098b23c08031b7ec33c5afb314ccbf10948";
   };

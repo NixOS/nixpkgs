@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , pandas
 , imutils
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.7.3";
   pname = "vidstab";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "649a77a0c1b670d13a1bf411451945d7da439364dc0c33ee3636a23f1d82b456";
   };

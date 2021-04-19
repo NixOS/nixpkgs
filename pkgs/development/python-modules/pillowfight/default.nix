@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pillow
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pillowfight";
   version = "0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "913869b0563c5982bcf08cb1ea56fb0f87e3573d738e3e3692301bf45dba6252";
   };

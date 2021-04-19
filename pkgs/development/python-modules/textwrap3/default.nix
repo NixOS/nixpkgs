@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , tox
 , pytest
 , coverage
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "textwrap3";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "5008eeebdb236f6303dcd68f18b856d355f6197511d952ba74bc75e40e0c3414";

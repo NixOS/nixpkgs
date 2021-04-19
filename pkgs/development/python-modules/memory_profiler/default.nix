@@ -6,7 +6,7 @@ python.pkgs.buildPythonPackage rec {
   pname = "memory_profiler";
   version = "0.55.0";
 
-  src = python.pkgs.fetchPypi {
+  src = python.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "1hdgh5f59bya079w4ahx4l0hf4gc5yvaz44irp5x57cj9hkpp92z";
   };

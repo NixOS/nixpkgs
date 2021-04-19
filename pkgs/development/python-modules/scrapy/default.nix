@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , pytestCheckHook
 , testfixtures
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     "test_download"
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "68c48f01a58636bdf0f6fcd5035a19ecf277b58af24bd70c36dc6e556df3e005";
   };

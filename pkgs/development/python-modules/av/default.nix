@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , numpy
 , ffmpeg
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "8.0.3";
   disabled = isPy27; # setup.py no longer compatible
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "521814309c91d526b6b5c9517018aef2dd12bc3d86351037db69aa67730692b8";
   };

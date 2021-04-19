@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , numpy
 , scipy
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "ase";
   version = "3.17.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d4gxypaahby45zcpl0rffcn2z7n55dg9lcd8sv6jjsmbbf9vr4g";
   };

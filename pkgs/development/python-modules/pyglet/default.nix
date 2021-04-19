@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , libGL
 , libGLU
 , xorg
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "1.4.2";
   pname = "pyglet";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1dxxrl4nc7xh3aai1clgzvk48bvd35r7ksirsddz0mwhx7jmm8px";
   };

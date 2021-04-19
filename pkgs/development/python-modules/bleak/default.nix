@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI
 , bluez, dbus-next, pytestCheckHook, pytest-cov
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1zs5lz3r17a2xn19i4na132iccyjsl9navj0d3v7gks7hlcad5kp";
   };

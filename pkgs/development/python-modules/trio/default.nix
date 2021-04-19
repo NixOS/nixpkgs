@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , attrs
 , sortedcontainers
 , async_generator
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "0.18.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xm0bd1rrlb4l9q0nf2n1wg7xh42ljdnm4i4j0651zi73zk6m9l7";
   };

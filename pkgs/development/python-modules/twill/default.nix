@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, nose
 , lxml
 , requests
 , pyparsing
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "twill";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fc694ac1cb0616cfba2f9db4720e9d354bf656c318e21ef604a7e3caaef83d10";
   };

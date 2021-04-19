@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , pytestCheckHook
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pytest-instafail";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "10lpr6mjcinabqynj6v85bvb1xmapnhqmg50nys1r6hg7zgky9qr";
   };

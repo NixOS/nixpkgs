@@ -1,4 +1,4 @@
-{ aiohttp, buildPythonPackage, fetchPypi, isPy3k, lib, python, requests }:
+{ aiohttp, buildPythonPackage, fetchFromPyPI, isPy3k, lib, python, requests }:
 
 buildPythonPackage rec {
   pname = "agent-py";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hx88m8b8kfb2gm6hii5ldjv7hlvqf99cz0w2vj0d0grrxcbn5cz";
   };

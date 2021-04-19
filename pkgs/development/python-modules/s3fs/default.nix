@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, aiobotocore, fsspec }:
+{ lib, buildPythonPackage, fetchFromPyPI, docutils, aiobotocore, fsspec }:
 
 buildPythonPackage rec {
   pname = "s3fs";
   version = "0.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "87e5210415db17b9de18c77bcfc4a301570cc9030ee112b77dc47ab82426bae1";
   };

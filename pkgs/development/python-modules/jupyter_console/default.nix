@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , jupyter_client
 , ipython
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "6.3.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "947f66bbdeee2221b4fb3a6b78225d337b8f10832f14cecf7932183635abe1d9";
   };

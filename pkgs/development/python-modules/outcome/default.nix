@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , attrs
 , pytest
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "1.1.0";
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e862f01d4e626e63e8f92c38d1f8d5546d3f9cce989263c521b2e7990d186967";
   };

@@ -1,12 +1,12 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 buildPythonPackage rec {
   pname = "varint";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version ;
     sha256 = "a6ecc02377ac5ee9d65a6a8ad45c9ff1dac8ccee19400a5950fb51d594214ca5";
   };

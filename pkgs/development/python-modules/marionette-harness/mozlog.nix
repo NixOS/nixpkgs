@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , blessings
 , mozterm
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0h1hgs13c1w0wvz60400i37m00077li1ky28j7kgx4bl75pkd3sw";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
 , boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "celery";
   version = "5.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f4efebe6f8629b0da2b8e529424de376494f5b7a743c321c8a2ddc2b1414921c";
   };

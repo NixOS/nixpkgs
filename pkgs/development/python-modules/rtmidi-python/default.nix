@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cython, alsaLib }:
+{ lib, buildPythonPackage, fetchFromPyPI, cython, alsaLib }:
 
 buildPythonPackage rec {
   pname = "rtmidi-python";
   version = "0.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1wpcaxfpbmsjc78g8841kpixr0a3v6zn0ak058s3mm25kcysp4m0";
   };

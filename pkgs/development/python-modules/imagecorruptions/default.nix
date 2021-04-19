@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , scikitimage
 , lib
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "imagecorruptions";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
   };

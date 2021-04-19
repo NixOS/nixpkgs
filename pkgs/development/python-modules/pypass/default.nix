@@ -3,7 +3,7 @@
 , click
 , colorama
 , enum34
-, fetchPypi
+, fetchFromPyPI
 , git
 , gnugrep
 , gnupg
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pname = "pypass";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nm4mj7pd7gz4ghic6b3wrnd1b59hd1f0axavdabfl79wy511l7r";
   };

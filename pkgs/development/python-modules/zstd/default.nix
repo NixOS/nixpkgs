@@ -1,4 +1,4 @@
-{ lib, pkg-config, fetchPypi, buildPythonPackage
+{ lib, pkg-config, fetchFromPyPI, buildPythonPackage
 , buildPackages
 , zstd, pytest }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "zstd";
   version = "1.4.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b62b21eb850abd6b8c0046bfc1c5c773c873eeb94f1904ef1ff304e98b62b80e";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc_google_iam_v1
 , google-api-core
 , google-cloud-access-context-manager
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pname = "google-cloud-asset";
   version = "2.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05q0yaw6b553qmzylr45zin17h8mvi8yyyxhbv3cxa7f0ahviw8w";
   };

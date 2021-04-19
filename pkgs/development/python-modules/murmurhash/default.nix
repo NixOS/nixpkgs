@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "murmurhash";
   version = "1.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "98ec9d727bd998a35385abd56b062cf0cca216725ea7ec5068604ab566f7e97f";
   };

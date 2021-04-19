@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , sqlalchemy
 , sqlalchemy-utils
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "SQLAlchemy-i18n";
   version = "1.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15xah8643p29kciz365ixs9pbsflj92pzr2d9anbdh2biyf4cka8";
   };

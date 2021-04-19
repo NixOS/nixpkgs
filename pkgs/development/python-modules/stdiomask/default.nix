@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "stdiomask";
   version = "0.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19m3p6i7fj7nmkbsjhiha3f2l7d05j9gf9ha2pd0pqfrx9lp1r61";
   };

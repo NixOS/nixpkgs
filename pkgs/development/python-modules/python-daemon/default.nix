@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , docutils
 , lockfile
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-daemon";
   version = "2.2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "57c84f50a04d7825515e4dbf3a31c70cc44414394a71608dee6cfde469e81766";
   };

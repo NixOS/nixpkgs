@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, dill }:
+{ lib, buildPythonPackage, fetchFromPyPI, dill }:
 
 buildPythonPackage rec {
   pname = "multiprocess";
   version = "0.70.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9fd5bd990132da77e73dec6e9613408602a4612e1d73caf2e2b813d2b61508e5";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , localimport
 , pathlib2
 , six
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "nodepy-runtime";
   version = "2.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     hash = "sha256-6tSsD76EpCZxkdulv1BcUZtIXGWLG6PuII25J8STygE=";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, six }:
 
 buildPythonPackage rec {
   pname = "mozterm";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [six];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b1e91acec188de07c704dbb7b0100a7be5c1e06567b3beb67f6ea11d00a483a4";
   };

@@ -8,7 +8,7 @@
 , chalice
 , django
 , falcon
-, fetchPypi
+, fetchFromPyPI
 , flask
 , iana-etc
 , isPy3k
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pname = "sentry-sdk";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "71de00c9711926816f750bc0f57ef2abbcb1bfbdf5378c601df7ec978f44857a";
   };

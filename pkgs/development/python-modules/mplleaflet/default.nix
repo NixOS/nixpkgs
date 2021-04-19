@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jinja2
 , six
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "049e0b91797ce5b462853395138161fed9e8dfc1f4723f482ebb0739a0bbd289";
   };

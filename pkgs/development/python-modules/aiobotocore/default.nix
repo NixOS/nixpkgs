@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , wrapt
 , aioitertools
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.1.2";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1fn9hgcg3qr9f7srjxc21bzkiix4al9308531slwlm99r0x3xcjl";
   };

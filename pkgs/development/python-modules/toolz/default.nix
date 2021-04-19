@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "toolz";
   version = "0.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1grz3zvw5ixwqqlbv0n7j11mlcxb66cirh5i9x9zw8kqy0hpk967";
   };

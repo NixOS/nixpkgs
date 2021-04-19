@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose }:
 
 let
   lark-parser = buildPythonPackage rec {
     pname = "lark-parser";
     version = "0.7.8";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "JiFeuxV+b7LudDGapERbnzt+RW4mviFc4Z/aqpAcIKQ=";
     };
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.3.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "VZhI1oJ2EDZGyz3iI6/KYvJq4BGafzR+rcSgHqlUDrA=";
   };

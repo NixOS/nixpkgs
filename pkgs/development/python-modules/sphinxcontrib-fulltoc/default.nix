@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx, pbr }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, sphinx, pbr }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # directories). But python2 is EOL, so not supporting it, should be ok.
   disabled = pythonOlder "3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nbwflv9szyh37yr075xhck8b4gg2c7g3sa38mfi7wv7qhpxcif8";
   };

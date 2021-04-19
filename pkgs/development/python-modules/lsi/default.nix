@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , colored
 , boto
 , pkgs
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.4.0";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b2c4a9a276a32f914a6193509503c28b3cc84bf42d58e191214811cfe78f4736";
   };

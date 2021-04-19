@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, pytestcov, pytest }:
 
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "dockerfile-parse";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f37bfa327fada7fad6833aebfaac4a3aaf705e4cf813b737175feded306109e8";
   };

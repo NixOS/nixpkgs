@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, youtube-dl, fetchPypi }:
+{ lib, buildPythonPackage, youtube-dl, fetchFromPyPI }:
 buildPythonPackage rec {
   pname = "pafy";
   version = "0.5.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "364f1d1312c89582d97dc7225cf6858cde27cb11dfd64a9c2bab1a2f32133b1e";
   };

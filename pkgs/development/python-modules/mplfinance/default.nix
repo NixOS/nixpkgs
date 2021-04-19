@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, matplotlib, pandas }:
+{ lib, buildPythonPackage, fetchFromPyPI, matplotlib, pandas }:
 
 buildPythonPackage rec {
   pname = "mplfinance";
   version = "0.12.7a7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-pATiprTELt8GrEkeKjILPfpdNDVoex5t+Mc+6Gg7cPY=";
   };

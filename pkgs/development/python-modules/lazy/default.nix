@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "lazy";
   version = "1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2c6d27a5ab130fb85435320651a47403adcb37ecbcc501b0c6606391f65f5b43";
     extension = "zip";

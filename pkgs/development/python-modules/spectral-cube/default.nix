@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , aplpy
 , joblib
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17zisr26syfb8kn89xj17lrdycm0hsmy5yp5zrn236wgd8rjriki";
   };

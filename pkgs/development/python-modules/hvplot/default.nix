@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , bokeh
 , holoviews
 , pandas
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "hvplot";
   version = "0.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cdb61183d3cdb1296c7f63c6aab59ee72b7b79b9ddc18abce2ebd3214e8de9db";
   };

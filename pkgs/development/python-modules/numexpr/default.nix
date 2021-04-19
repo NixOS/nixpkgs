@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , numpy
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "numexpr";
   version = "2.7.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ai3i5n07csnzfsxf2dxp8cpdk6ajl5iv8rv0fj6n9ag7qphixac";
   };

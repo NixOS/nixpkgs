@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-core
 , msrest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "azure-appconfiguration";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "b83cd2cb63d93225de84e27abbfc059212f8de27766f4c58dd3abb839dff0be4";

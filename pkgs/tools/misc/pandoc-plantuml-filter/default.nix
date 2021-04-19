@@ -1,5 +1,5 @@
 { buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , pandocfilters
 , lib
 }:
@@ -8,7 +8,7 @@ buildPythonApplication rec {
   pname = "pandoc-plantuml-filter";
   version = "0.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08673mfwxsw6s52mgglbdz7ybb68svqyr3s9w97d7rifbwvvc9ia";
   };

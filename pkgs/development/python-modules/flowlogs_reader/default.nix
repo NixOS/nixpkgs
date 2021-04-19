@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , botocore
 , boto3
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "2.4.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e47637b40a068a0c814ba2087fb691b43aa12e6174ab06b6cdb7109bb94624e4";
   };

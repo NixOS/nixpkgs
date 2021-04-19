@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pythonOlder
 , multidict
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "yarl";
   version = "1.6.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10";
   };

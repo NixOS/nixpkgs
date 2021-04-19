@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , fetchpatch
 , flake8
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "1.45.1";
   disabled = isPy27; # abandoned
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6397602efb3c2d7baebd2166ed85731ae1c1d475abca22090b7141ff5034b3e1";
   };

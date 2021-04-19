@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , psutil
 , pytest
 , setuptools_scm
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pytest-xprocess";
   version = "0.17.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2506d637c4f54c65dd195c1d094abdeedacc9bf0689131d847a324ad0fc951c0";
   };

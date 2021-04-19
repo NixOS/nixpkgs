@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , asciitree
 , numpy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "2.6.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fa7eac1e4ff47ff82d09c42bb4679e18e8a05a73ee81ce59cee6a441a210b2fd";
   };

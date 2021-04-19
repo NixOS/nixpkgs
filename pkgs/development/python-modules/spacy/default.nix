@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , callPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , pytest
 , blis
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pname = "spacy";
   version = "2.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "315278ab60094643baecd866017c7d4cbd966efd2d517ad0e6c888edf7fa5aef";
   };

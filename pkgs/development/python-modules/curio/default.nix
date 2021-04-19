@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy3k
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "curio";
   version = "1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "57edce81c837f3c2cf42fbb346dee26e537d1659e6605269fb13bd179e068744";
   };

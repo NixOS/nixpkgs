@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, six }:
 
 buildPythonPackage rec {
   pname = "jdatetime";
   version = "3.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a589e35f0dab89283c1a3de9d70ed6cf657932aaed8e8ce1b0e5801aaab1da67";
   };

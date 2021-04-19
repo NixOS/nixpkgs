@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pythonOlder
 , attrs
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "aiorpcx";
   version = "0.18.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "aiorpcX";
     sha256 = "808a9ec9172df11677a0f7b459b69d1a6cf8b19c19da55541fa31fb1afce5ce7";

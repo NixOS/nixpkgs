@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, cffi, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, cffi, pytest }:
 
 buildPythonPackage rec {
   pname = "pycmarkgfm";
   version = "1.0.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wkbbma214f927ikn3cijxsrzkmm5cqz1x4fimrwx9s2wfphj250";
   };

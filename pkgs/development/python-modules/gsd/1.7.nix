@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   pname = "gsd";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0fpk69wachyydpk9cbs901m7hkwrrvq24ykxsrz62km9ql8lr2vp";
   };

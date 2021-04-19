@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , EasyProcess
 , entrypoint2
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pyscreenshot";
   version = "2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bfdc311bd6ec1ee9e3c25ece75b24a749673ad5d5f89ee02950080023054ffd5";
   };

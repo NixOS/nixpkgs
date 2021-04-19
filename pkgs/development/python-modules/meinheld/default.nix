@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, greenlet }:
+{ lib, fetchFromPyPI, buildPythonPackage, greenlet }:
 
 buildPythonPackage rec {
   pname = "meinheld";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "008c76937ac2117cc69e032dc69cea9f85fc605de9bac1417f447c41c16a56d6";
   };

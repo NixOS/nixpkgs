@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, isPy3k
 , nose, mock, blinker, pytest
 , flask, six, pytz, aniso8601, pycrypto
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "Flask-RESTful";
   version = "0.3.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05b9lzx5yc3wgml2bcq50lq35h66m8zpj6dc9advcb5z3acsbaay";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , decorator
 , appdirs
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "2020.4.4";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3645ed839cf4d79cb4bf030f37ddaeecd7fe5e2d6698438cc36c24a1d5168809";
   };

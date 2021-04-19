@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , pygraphviz
 , pytestCheckHook
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "transitions";
   version = "0.8.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-56hrMaFhp2Ez8Ymzrp2tJ1WoDqTB4O7hgFZI0CH7Z30=";
   };

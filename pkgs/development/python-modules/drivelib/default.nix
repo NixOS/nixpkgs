@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , expiringdict
 , google-auth-httplib2
 , google-auth-oauthlib
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   pname = "drivelib";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bz3dn6wm9mlm2w8czwjmhvf3ws3iggr57hvd8z8acl1qafr2g4m";
   };

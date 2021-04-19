@@ -1,4 +1,4 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage,
+{ lib, fetchFromPyPI, fetchpatch, buildPythonPackage,
   setuptools_scm, toml, six, astroid, pytest
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "asttokens";
   version = "2.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0a2ixiz04aw4p0aivxh47k3fa9ql804l3y5iv5gcih9aizi5fbm4";
   };

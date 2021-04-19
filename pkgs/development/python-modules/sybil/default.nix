@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , nose
 }:
@@ -9,7 +9,7 @@ buildPythonApplication rec {
   pname = "sybil";
   version = "2.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "597d71e246690b9223c132f0ed7dcac470dcbe9ad022004a801e108a00dc3524";
   };

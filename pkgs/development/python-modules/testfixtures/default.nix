@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, isPy27
 , mock, pytest, sybil, zope_component, twisted }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
   version = "6.15.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "409f77cfbdad822d12a8ce5c4aa8fb4d0bb38073f4a5444fede3702716a2cec2";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, jinja2, inflect }:
+{ lib, buildPythonPackage, fetchFromPyPI, jinja2, inflect }:
 
 buildPythonPackage rec {
   pname = "jinja2_pluralize";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "071wnzzz20wjb0iw7grxgj1lb2f0kz50qyfbcq54rddr2x82sp6z";
   };

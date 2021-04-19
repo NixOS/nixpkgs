@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ecdsa
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "tlslite-ng";
   version = "0.7.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6ab56f0e9629ce3d807eb528c9112defa9f2e00af2b2961254e8429ca5c1ff00";
   };

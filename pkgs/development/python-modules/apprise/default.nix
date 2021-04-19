@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, installShellFiles
+{ lib, buildPythonPackage, fetchFromPyPI, installShellFiles
 , Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
 , pytestrunner, coverage, flake8, mock, pytestCheckHook, pytestcov, tox, gntp, sleekxmpp
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "apprise";
   version = "0.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-FW5gt35yoXVr2+hiGBDJ/5jFFfIpn2Z9sDN8acoO4FI=";
   };

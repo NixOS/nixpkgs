@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, isPyPy, fetchPypi, postgresql, openssl }:
+{ stdenv, lib, buildPythonPackage, isPyPy, fetchFromPyPI, postgresql, openssl }:
 
 buildPythonPackage rec {
   pname = "psycopg2";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb23f6c71107c37fd667cb4ea363ddeb936b348bbd6449278eb92c189699f543";
   };

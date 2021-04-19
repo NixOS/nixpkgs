@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sqlalchemy
 , python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sqlalchemy-citext";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "69ba00f5505f92a1455a94eefc6d3fcf72dda3691ab5398a0b4d0d8d85bd6aab";
   };

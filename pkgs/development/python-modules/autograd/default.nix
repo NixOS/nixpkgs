@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, future }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, future }:
 
 buildPythonPackage rec {
   pname = "autograd";
   version = "1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1i1ylf03b7220n8znk63zg6sgdd3py9wlh1pvqvy03g1fxsi8pd1";
   };

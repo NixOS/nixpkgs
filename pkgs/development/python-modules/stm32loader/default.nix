@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromPyPI
 , progress
 , pyserial
 , pytest
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "stm32loader";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0135qzxlrivvkq6wgkw7shfz94n755qs2c1754p1hc2jk0nqayrg";
   };

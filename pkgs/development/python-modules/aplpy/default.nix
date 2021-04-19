@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , numpy
 , astropy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "2.0.3";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "APLpy";
     inherit version;
     sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , dask
 , numpy, toolz # dask[array]
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
   };

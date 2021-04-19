@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , pytestCheckHook
 , pexpect
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pytest-timeout";
   version = "1.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xnsigs0kmpq1za0d4i522sp3f71x5bgpdh3ski0rs74yqy13cr0";
   };

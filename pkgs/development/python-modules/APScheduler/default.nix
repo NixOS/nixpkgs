@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools-scm
 , pytestCheckHook
 , pytest-asyncio
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "3.7.0";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a";
   };

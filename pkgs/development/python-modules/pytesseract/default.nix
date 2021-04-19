@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, pillow, tesseract, substituteAll }:
+{ buildPythonPackage, fetchFromPyPI, lib, pillow, tesseract, substituteAll }:
 
 buildPythonPackage rec {
   pname = "pytesseract";
   version = "0.3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4ecfc898d00a70fcc38d2bce729de1597c67e7bc5d2fa26094714c9f5b573645";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI
 , azure-keyvault-certificates
 , azure-keyvault-keys
 , azure-keyvault-secrets
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "4.1.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "69002a546921a8290eb54d9a3805cfc515c321bc1d4c0bfcfb463620245eca40";

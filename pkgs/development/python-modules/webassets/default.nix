@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, nose, jinja2, mock, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml, nose, jinja2, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "webassets";
   version = "2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kc1042jydgk54xpgcp0r1ib4gys91nhy285jzfcxj3pfqrk4w8n";
   };

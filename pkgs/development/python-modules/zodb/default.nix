@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , python
 , pythonAtLeast
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     pname = "ZODB";
     version = "5.6.0";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "1zh7rd182l15swkbkm3ib0wgyn16xasdz2mzry8k4lwk6dagnm26";
     };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, unzip }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, unzip }:
 
 buildPythonPackage rec {
   pname = "pytest-catchlog";
   version = "1.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1w7wxh27sbqwm4jgwrjr9c2gy384aca5jzw9c0wzhl0pmk2mvqab";
     extension = "zip";

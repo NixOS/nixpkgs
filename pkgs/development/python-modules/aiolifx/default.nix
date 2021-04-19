@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , ifaddr
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "aiolifx";
   version = "0.6.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0c28e9c058ee504a07eec11cb333bc6496d233da100dcab9c33549e9eb4985c0";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, aspell, aspellDicts, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, aspell, aspellDicts, python }:
 
 buildPythonPackage rec {
   pname = "aspell-python";
   version = "1.15";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "aspell-python-py3";
     extension = "tar.bz2";

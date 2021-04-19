@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , flask
 , flask-silk
 , future
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "Flask-AutoIndex";
   version = "0.6.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ea319f7ccadf68ddf98d940002066278c779323644f9944b300066d50e2effc7";
   };

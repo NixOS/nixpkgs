@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";
   version = "1.6.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0h0b2vg2xpfbnynrkg2yki4zjpscm6wgm6nhaahb088v98zxqbrk";
   };

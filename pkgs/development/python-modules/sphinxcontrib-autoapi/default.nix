@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , astroid
 , jinja2
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.5.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19m9yvlqwaw3b05lbb1vcla38irn4riw2ij0vjmnc2xq4f1qfl2d";
   };

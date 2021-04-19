@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35, fetchpatch
+{ stdenv, lib, fetchFromPyPI, buildPythonPackage, isPy3k, isPy35, fetchpatch
 , mock
 , pysqlite
 , pytestCheckHook
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "SQLAlchemy";
   version = "1.3.23";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6fca33672578666f657c131552c4ef8979c1606e494f78cd5199742dfb26918b";
   };

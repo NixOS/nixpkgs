@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pymatgen
 , marshmallow
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "0.5.1";
   disabled = (!isPy3k);
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4dcbde48948835dcf2d49d6628c9df5747a8ec505d517e374b8d6c7fe95892df";
   };

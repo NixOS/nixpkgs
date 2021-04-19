@@ -2,7 +2,7 @@
 , bluepy
 , buildPythonPackage
 , csrmesh
-, fetchPypi
+, fetchFromPyPI
 , pycryptodome
 , requests
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "avion";
   version = "0.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zgv45086b97ngyqxdp41wxb7hpn9g7alygc21j9y3dib700vzdz";
   };

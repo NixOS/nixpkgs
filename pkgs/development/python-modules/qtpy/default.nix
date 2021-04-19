@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyside, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyside, pytest }:
 
 buildPythonPackage rec {
   pname = "QtPy";
   version = "1.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13cw8l7zrhbdi03k1wl1pg9xdl4ahdfa7yz8gd0f23sxnm22rdrd";
   };

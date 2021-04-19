@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , futures
 , docloud
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2.20.204";
 
   # No source available from official repo
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-JNjD9UtLHsMGwTuXydZ+L5+pPQ2eobkr26Yt9pgs1qA=";
   };

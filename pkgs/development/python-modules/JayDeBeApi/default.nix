@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , JPype1
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "JayDeBeApi";
   version = "1.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f25e9307fbb5960cb035394c26e37731b64cc465b197c4344cee85ec450ab92f";
   };

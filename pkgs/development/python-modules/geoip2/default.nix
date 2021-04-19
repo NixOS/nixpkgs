@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
+{ buildPythonPackage, lib, fetchFromPyPI, pythonOlder
 , aiohttp
 , maxminddb
 , mocket
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "geoip2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "57d8d15de2527e0697bbef44fc16812bba709f03a07ef99297bd56c1df3b1efd";
   };

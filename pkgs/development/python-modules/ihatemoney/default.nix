@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
+{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchFromPyPI
 , alembic
 , aniso8601
 , Babel
@@ -40,7 +40,7 @@ let
   pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
     pname = "WTForms";
     version = "2.2.1";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
     };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pandas
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.8.0";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0a9xrw4qsh95g85pg2611hvj6xcfncw646si2icaz22haw1x410w";
   };

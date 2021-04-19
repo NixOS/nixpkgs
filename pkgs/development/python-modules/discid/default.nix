@@ -1,10 +1,10 @@
-{ lib, stdenv, libdiscid, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, libdiscid, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "discid";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1fc6kvnqwaz9lrs2qgsp8wh0nabf49010r0r53wnsmpmafy315nd";
   };

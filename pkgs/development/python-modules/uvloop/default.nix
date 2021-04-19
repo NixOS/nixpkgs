@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , libuv
 , CoreServices
 , ApplicationServices
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "0.15.2";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2bb0624a8a70834e54dde8feed62ed63b50bad7a1265c40d6403a2ac447bce01";
   };

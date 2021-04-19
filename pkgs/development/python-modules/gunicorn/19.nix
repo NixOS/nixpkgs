@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , coverage
 , mock
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "gunicorn";
   version = "19.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1080jk1ly8j0rc6lv8i33sj94rxjaskd1732cdq5chdqb3ij9ppr";
   };

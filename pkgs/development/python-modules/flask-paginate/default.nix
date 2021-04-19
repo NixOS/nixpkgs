@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask }:
 
 buildPythonPackage rec {
   pname = "flask-paginate";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "31133c29c718aed95276425f7795d0a32b8d45a992ddd359c69600f22f869254";
   };

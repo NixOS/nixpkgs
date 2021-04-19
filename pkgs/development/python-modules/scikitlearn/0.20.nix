@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI
 , gfortran, glibcLocales
 , numpy, scipy, pytest, pillow
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1z3w2c50dwwa297j88pr16pyrjysagsvdj7vrlq40q8777rs7a6z";
   };

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytestCheckHook
 , pytest-asyncio
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "tqdm";
   version = "4.58.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1fjvaag1wy70gglxjkfnn0acrya7fbhzi4adbs1bpap8x03wffn2";
   };

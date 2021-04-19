@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , google-cloud-core
 , pytestCheckHook
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "google-cloud-dns";
   version = "0.32.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ec98a9933b2abd95b174c9cae0477b90aa4c1f5068b69a9f8ced6d20db1cd5a";
   };

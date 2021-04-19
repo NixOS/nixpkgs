@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonAtLeast
 , spark_parser
 , xdis
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "3.7.4";
   disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "af8330861bf940e7a3ae0f06d129b8e645191a36bf73ca15ff51997a837d41f8";
   };

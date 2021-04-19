@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, h5py }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, h5py }:
 
 buildPythonPackage rec {
   pname = "Keras_Applications";
   version = "1.0.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5579f9a12bcde9748f4a12233925a59b93b73ae6947409ff34aa2ba258189fe5";
   };

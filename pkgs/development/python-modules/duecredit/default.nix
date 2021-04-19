@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , contextlib2
 , pytest
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "0.8.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "43b3f01ab5fb2bf2ecc27d3fcf92b873c6b288f44becef3e2e87c96cb89d7b01";
   };

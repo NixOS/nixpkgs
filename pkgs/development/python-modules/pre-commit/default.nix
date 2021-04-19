@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "2.11.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "pre_commit";
     sha256 = "15f1chxrbmfcajk1ngk3jvf6jjbigb5dg66wnn7phmlywaawpy06";

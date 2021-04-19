@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-notificationhubs";
   version = "7.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "92ffed71a2999ff5db41afd66c6ba5cfef9d467f732c7bb45b7c41db371c6e4a";

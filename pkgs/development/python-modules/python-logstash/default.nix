@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "python-logstash";
   version = "0.4.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13763yx0k655y0c8gxv7jj6cqp45zypx2fmnc56jnn9zz1fkx50h";
   };

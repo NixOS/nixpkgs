@@ -1,7 +1,7 @@
 { lib
 , Babel
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , fixtures
 , mock
 , pbr
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   version = "2.0.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05qsaaqfpvr6h4g19prbkpznwb9a4dwzyzivdzh9x80cgkq0r6gb";
   };

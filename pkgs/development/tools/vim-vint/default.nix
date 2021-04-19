@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "15qdh8fby9xgfjxidcfv1xmrqqrxxapky7zmyn46qx1abhp9piax";
   };

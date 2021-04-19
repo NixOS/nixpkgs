@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "volkszaehler";
   version = "0.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-1oqzhC3Yq2V30F3ilr80vKFnTmI/CdIVLuzMlIr40xI=";
   };

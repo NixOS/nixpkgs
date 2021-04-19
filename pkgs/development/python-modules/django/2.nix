@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll,
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, substituteAll,
   isPy3k,
   geos, gdal, pytz, sqlparse,
   withGdal ? false
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hysjf8bz4g8xrn2cdx6pmawimpyr6ag2fg3jxsnc1byr3g3bhih";
   };

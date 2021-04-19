@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , boto3
 , enum34
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "aws-sam-translator";
   version = "1.32.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "jL+sAlKbeXA1QeJVQbAcgIaPEbD/Ko+QMrI1Ew2dVq4=";
   };

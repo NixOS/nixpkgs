@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, linuxHeaders }:
+{ lib, buildPythonPackage, fetchFromPyPI, linuxHeaders }:
 
 buildPythonPackage rec {
   pname = "evdev";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8782740eb1a86b187334c07feb5127d3faa0b236e113206dfe3ae8f77fb1aaf1";
   };

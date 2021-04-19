@@ -9,7 +9,7 @@ buildPythonApplication rec {
   pname = "mycli";
   version = "1.24.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };

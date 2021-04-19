@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "ufonormalizer";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ijc697nv9rff9j1nhbf5vnyaryxlndq13msi94px8aq9gzxfrbi";
     extension = "zip";

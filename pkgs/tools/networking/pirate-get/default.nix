@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "pirate-get";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "07s5ss9dxccx1mip7pyga1fagywkqchxmzz55ng47ac9053ffxkq";
   };

@@ -4,7 +4,7 @@ pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Moped";
   version = "0.7.1";
 
-  src = pythonPackages.fetchPypi {
+  src = pythonPackages.fetchFromPyPI {
     inherit pname version;
     sha256 = "15461174037d87af93dd59a236d4275c5abf71cea0670ffff24a7d0399a8a2e4";
   };

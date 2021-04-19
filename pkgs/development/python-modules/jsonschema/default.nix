@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, python, isPy27
 , attrs
 , functools32
 , importlib-metadata
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "jsonschema";
   version = "3.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a";
   };

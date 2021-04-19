@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pbr
 , docutils
 , six
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "doc8";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4d1df12598807cf08ffa9a1d5ef42d229ee0de42519da01b768ff27211082c12";
   };

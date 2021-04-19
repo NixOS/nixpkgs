@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools }:
 
 buildPythonPackage rec {
   pname = "babelfish";
   version = "0.5.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
   };

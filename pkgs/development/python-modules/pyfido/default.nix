@@ -1,14 +1,14 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pyfido";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b28bhyhscaw7dbc92dxswann05x8mz92cagyawdfm8jnc67gq4b";
   };

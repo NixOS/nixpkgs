@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "datadiff";
   version = "1.1.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "f1402701063998f6a70609789aae8dc05703f3ad0a34882f6199653654c55543";

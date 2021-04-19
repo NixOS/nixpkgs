@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , isPy27
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.4.1";
   pname = "pysnooper";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "PySnooper";
     sha256 = "1xngly13x3ylwwcdml2ns8skpxip2myzavp3b9ff2dpqaalf0hdl";

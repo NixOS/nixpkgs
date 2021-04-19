@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , pygobject3
 , dbus-python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "notify2";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0z8rrv9rsg1r2qgh2dxj3dfj5xnki98kgi3w839kqby4a26i1yik";
   };

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, django }:
+{ lib, fetchFromPyPI, buildPythonPackage, django }:
 
 buildPythonPackage rec {
   pname = "django-csp";
   version = "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "django_csp";
     sha256 = "0ks4zszbjx5lyqlc34pjica8hfcjzw4i5m6pivvnyv8yf0vh4q04";

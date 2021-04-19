@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , cryptography
 , invoke
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "fabric";
   version = "2.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19nzdibjfndzcwvby20p59igqwyzw7skrb45v2mxqsjma5yjv114";
   };

@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isodate
 , html5lib
 , SPARQLWrapper
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "rdflib";
   version = "5.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0mdi7xh4zcr3ngqwlgqdqf0i5bxghwfddyxdng1zwpiqkpa9s53q";
   };

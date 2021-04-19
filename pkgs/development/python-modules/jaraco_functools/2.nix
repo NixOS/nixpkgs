@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , setuptools_scm
 , more-itertools, backports_functools_lru_cache }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "jaraco.functools";
   version = "2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ickpwvvdrlbm477gdzfjfcbgmfia9ksm9a3i3pbx9xia97r9fim";
   };

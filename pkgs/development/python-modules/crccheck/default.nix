@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , nose }:
 
 let
@@ -9,7 +9,7 @@ in buildPythonPackage {
 
   checkInputs = [ nose ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ay9lgy80j7lklm07iw2wq7giwnv9fbv50mncblqlc39y322vi0p";
   };

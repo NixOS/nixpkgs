@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 
 # pythonPackages
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "twofish";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yihp2n42amrxw0wk9f66llpb3w5kwhgkcdg9krkzcik1nsqp7dh";
   };

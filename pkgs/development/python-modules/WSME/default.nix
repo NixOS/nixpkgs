@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonAtLeast
 , pbr
 , six
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   disabled = pythonAtLeast "3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "34209b623635a905bcdbc654f53ac814d038da65e4c2bc070ea1745021984079";
   };

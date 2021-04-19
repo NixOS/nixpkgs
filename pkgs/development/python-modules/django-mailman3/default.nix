@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
+{ lib, buildPythonPackage, fetchFromPyPI, django-gravatar2, django_compressor
 , django-allauth, mailmanclient, django, mock
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "django-mailman3";
   version = "1.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "368595b3c2623edeaca5beea5f12887424c384edd6f7052cf442443075084313";
   };

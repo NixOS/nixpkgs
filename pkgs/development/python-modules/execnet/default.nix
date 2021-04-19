@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPyPy
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , setuptools-scm
 , apipkg
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "execnet";
   version = "1.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-tzxVZeUX8kti3qilzqwXjGYcQwnTqgw+QghWwHLEEbQ=";
   };

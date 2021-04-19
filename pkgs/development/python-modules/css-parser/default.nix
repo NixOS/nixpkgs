@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "css-parser";
   version = "1.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4ed448a8a5622edb1d30d616bbc4bd3d30f11be922343d7a92d7e418e324af2e";
   };

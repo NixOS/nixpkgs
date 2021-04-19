@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, requests, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm, requests, mock }:
 
 buildPythonPackage rec {
   pname = "pysolr";
   version = "3.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rj5jmscvxjwcmlfi6hmkj44l4x6n3ln5p7d8d18j566hzmmzw3f";
   };

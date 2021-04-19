@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools }:
 
 buildPythonPackage rec {
   pname = "bottle";
   version = "0.12.19";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a9d73ffcbc6a1345ca2d7949638db46349f5b2b77dac65d6494d45c23628da2c";
   };

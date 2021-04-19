@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 buildPythonPackage rec {
   pname = "pure-python-adb-homeassistant";
   version = "0.1.6.dev0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fe6d90220a6880649f6d6df4e707ce5034676710ee6146145ef995f7b769a482";
   };

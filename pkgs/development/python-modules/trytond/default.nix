@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , mock
 , lxml
@@ -26,7 +26,7 @@ buildPythonApplication rec {
   version = "5.8.4";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "28e467b51f6dc67b8b4ca60afec82614bba8cf78852c1941cc9071d615ba7972";
   };

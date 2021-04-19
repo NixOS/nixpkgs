@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , isodate
 , pyparsing
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "SPARQLWrapper";
   version = "1.8.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d6a66b5b8cda141660e07aeb00472db077a98d22cb588c973209c7336850fb3c";
   };

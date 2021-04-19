@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromPyPI, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "credstash";
   version = "1.17.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6c04e8734ef556ab459018da142dd0b244093ef176b3be5583e582e9a797a120";
   };

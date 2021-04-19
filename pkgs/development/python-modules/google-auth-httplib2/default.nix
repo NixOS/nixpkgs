@@ -1,7 +1,7 @@
 { lib
 , isPy3k
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , google-auth
 , httplib2
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-auth-httplib2";
   version = "0.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-oHw5/WMr7KzT8HcY39YCG/OWl48DrTzkMh0GABXMMKw=";
   };

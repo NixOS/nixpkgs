@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, appdirs, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, appdirs, requests }:
 buildPythonPackage rec {
   pname = "pyradios";
   version = "0.0.22";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bgfb8vz7jybswss16pdzns0qpqfrwa9f2g8qrh1r4mig4xh2dmi";
   };

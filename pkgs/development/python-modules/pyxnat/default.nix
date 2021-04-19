@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , nose
 , lxml
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.4";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "22524120d744b50d25ef6bfc7052637e4ead9e2afac92563231ec89848f5adf5";
   };

@@ -7,7 +7,7 @@ buildPythonApplication rec {
   pname = "pantsbuild.pants";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d7ff1383287c8e72f2c9855cfef982d362274a64e2707a93c070f988ba80a37";
   };

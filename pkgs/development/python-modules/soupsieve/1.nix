@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , beautifulsoup4
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "soupsieve";
   version = "1.9.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7985bacc98c34923a439967c1a602dc4f1e15f923b6fcf02344184f86cc7efaa";
   };

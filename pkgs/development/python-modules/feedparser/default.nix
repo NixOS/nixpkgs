@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , sgmllib3k
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "6.0.2";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1b00a105425f492f3954fd346e5b524ca9cef3a4bbf95b8809470e9857aa1074";
   };

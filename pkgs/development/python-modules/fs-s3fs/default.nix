@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, fs, six, boto3 }:
+{ buildPythonPackage, fetchFromPyPI, lib, fs, six, boto3 }:
 
 buildPythonPackage rec {
   pname = "fs-s3fs";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b57f8c7664460ff7b451b4b44ca2ea9623a374d74e1284c2d5e6df499dc7976c";
   };

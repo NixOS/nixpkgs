@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "localimport";
   version = "1.7.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     hash = "sha256-p7ACOzJRwH9hICMcxtVt/r+twEoFsDxPKGuarFnFIbo=";
   };

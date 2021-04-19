@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , django
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "django-treebeard";
   version = "4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f50e4eea146f7af6702decf7ef198ac1eee1fb9bb4af2c5dba276c3c48f76623";
   };

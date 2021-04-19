@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , tensorflow
 , absl-py
 , dm-sonnet
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "graph_nets";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "278a040674bef295aaf8bb5b0d1b3f207144dc68f0bcfe3f14912b9b85eb0927";
   };

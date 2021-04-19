@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pysnmp
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "atenpdu";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1np9p3d180c26p54nw33alb003lhx6fprr21h45dd8gqk3slm13c";
   };

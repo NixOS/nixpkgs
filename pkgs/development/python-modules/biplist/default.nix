@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.0.3";
   pname = "biplist";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1im45a9z7ryrfyp1v6i39qia5qagw6i1mhif0hl0praz9iv4j1ac";
   };

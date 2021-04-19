@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "django-reversion";
   version = "3.0.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a5af55f086a3f9c38be2f049c251e06005b9ed48ba7a109473736b1fc95a066f";
   };

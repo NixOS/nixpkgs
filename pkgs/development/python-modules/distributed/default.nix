@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , click
 , cloudpickle
 , dask
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   # get full repository need conftest.py to run tests
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-Qn/n4Ee7rXQTxl1X5W+k1rHPkh/SBqPSyquUv5FTw9s=";
   };

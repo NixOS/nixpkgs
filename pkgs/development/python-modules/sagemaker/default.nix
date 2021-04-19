@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , attrs
 , boto3
 , google-pasta
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "sagemaker";
   version = "2.35.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-12YYUZbctM6oRaC7Sr/hOghAM+s/Cdm5XWHaVU5Gg6Q=";
   };

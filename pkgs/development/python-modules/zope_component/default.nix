@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope-deferredimport
 , zope_deprecation
 , zope_event
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "zope.component";
   version = "4.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "91628918218b3e6f6323de2a7b845e09ddc5cae131c034896c051b084bba3c92";
   };

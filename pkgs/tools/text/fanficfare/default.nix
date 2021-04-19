@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
   version = "3.21.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "16hklfbww6ibmjr32gg98nlnzl4dwanz6lm3fzg2x3vd7d54m92c";
   };

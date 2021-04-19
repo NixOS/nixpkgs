@@ -17,7 +17,7 @@ in buildPythonPackage rec {
   version = "5.15.4";
   format = "other";
 
-  src = pythonPackages.fetchPypi {
+  src = pythonPackages.fetchFromPyPI {
     inherit pname version;
     sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };

@@ -1,7 +1,7 @@
 { lib
 , bitlist
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fountains
 , parts
 , nose
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "fe25519";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1m85qvw9dwxk81mv9k45c9n75pk8wqn70qkinqh56h5zv56vgq24";
   };

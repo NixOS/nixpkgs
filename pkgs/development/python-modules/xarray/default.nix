@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , numpy
 , pandas
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.16.2";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-OOhDnWyRvNW3wPyjSdr44GQ6xohQyYcmLVNSbp19AeQ=";
   };

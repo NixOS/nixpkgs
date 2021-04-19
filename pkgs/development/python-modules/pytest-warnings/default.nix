@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-warnings";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5939f76fe04ad18297e53af0c9fb38aca1ec74db807bd40ad72733603adbbc7d";
   };

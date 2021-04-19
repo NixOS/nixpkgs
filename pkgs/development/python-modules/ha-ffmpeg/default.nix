@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , ffmpeg_3, async-timeout }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8d92f2f5790da038d828ac862673e0bb43e8e972e4c70b1714dd9a0fb776c8d1";
   };

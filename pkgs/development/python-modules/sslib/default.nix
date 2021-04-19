@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k }:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
   pname = "sslib";
   version = "0.2.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b5zrjkvx4klmv57pzhcmvbkdlyn745mn02k7hp811hvjrhbz417";
   };

@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , portalocker
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.11.9";
   pname = "applicationinsights";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hyjdv6xnswgqvip8y164piwfach9hjkbp7vc2qzhd7amjpim89h";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , python
 , isPy3k
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "PyPDF2";
   version = "1.26.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
   };

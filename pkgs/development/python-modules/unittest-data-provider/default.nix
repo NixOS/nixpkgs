@@ -1,13 +1,13 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "1.0.1";
   pname = "unittest-data-provider";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gn2ka4vqpayx4cpbp8712agqjh3wdpk9smdxnp709ccc2v7zg46";
   };

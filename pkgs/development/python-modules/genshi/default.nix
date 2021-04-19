@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "Genshi";
   version = "0.7.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c12d6c2abf7df0ec661d9ff2e197522eae846e43dc58abd5a36443d05bc41135";
   };

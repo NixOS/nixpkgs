@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "0.1";
   pname = "dj-search-url";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "424d1a5852500b3c118abfdd0e30b3e0016fe68e7ed27b8553a67afa20d4fb40";
   };

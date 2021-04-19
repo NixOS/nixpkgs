@@ -3,14 +3,14 @@
 , twine
 , numpy
 , pytest
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "nagiosplugin";
   version = "1.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vr3zy0zfvbrqc4nf81zxv4gs2q82sv5sjamdm4573ld529mk2nv";
   };

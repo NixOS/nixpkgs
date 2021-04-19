@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , backports_csv
 , configobj
 , mock
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "cli_helpers";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "dd6f164310f7d86fa3da1f82043a9c784e44a02ad49be932a80624261e56979b";
   };

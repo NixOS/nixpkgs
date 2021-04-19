@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , meson
 , ninja
 , intreehooks
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.1.9999994";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b5bcca61024164c4a51d29e6921ea1f756d54197c8f052e4c66a2b8399aa9349";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests }:
 
 buildPythonPackage rec {
   pname = "openidc-client";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "680e969cae18c30adbddd6a087ed09f6a296b4937b4c8bc69be813bdbbfa9847";
   };

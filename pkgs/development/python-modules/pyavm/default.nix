@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , astropy
 , astropy-helpers
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyavm";
   version = "0.9.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyAVM";
     inherit version;
     sha256 = "f298b864e5bc101ecbb0e46252e95e18a180ac28ba6ec362e63c12a7e914e386";

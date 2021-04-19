@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pylev, pastel, clikit }:
 
 buildPythonPackage rec {
   pname = "cleo";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3d0e22d30117851b45970b6c14aca4ab0b18b1b53c8af57bed13208147e4069f";
   };

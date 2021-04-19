@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mwlib
 , mwlib-ext
 , pygments
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.14.5";
   pname = "mwlib.rl";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "dddf9603ea0ca5aa87890217709eb5a5b16baeca547db3daad43c3ace73b6bc1";

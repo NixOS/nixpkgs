@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, dnspython, future, ldap3 }:
+{ lib, buildPythonPackage, fetchFromPyPI, dnspython, future, ldap3 }:
 
 buildPythonPackage rec {
   pname = "ldapdomaindump";
   version = "0.9.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "10cis8cllpa9qi5qil9k7521ag3921mxwg2wj9nyn0lk41rkjagc";
   };

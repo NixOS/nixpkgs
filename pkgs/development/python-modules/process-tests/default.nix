@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "process-tests";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15yrgr1hb7i0fq31dh6k8hmc3jnk6yn5nh4xh3gmszk9vag5zrqk";
   };

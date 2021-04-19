@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, pytest, flake8}:
+{lib, buildPythonPackage, fetchFromPyPI, pytest, flake8}:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ flake8 ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f0259761a903563f33d6f099914afef339c085085e643bee8343eb323b32dd6b";
   };

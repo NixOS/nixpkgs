@@ -2,7 +2,7 @@
 , buildPythonPackage
 , aiodns
 , aiohttp
-, fetchPypi
+, fetchFromPyPI
 , gnupg
 , isPy3k
 , pyasn1
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-fy7sRKS7ih4JmjOW/noL8qJ1xWVpQLbBbObHnMwT3Bc=";
   };

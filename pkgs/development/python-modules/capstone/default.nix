@@ -3,7 +3,7 @@
 , buildPythonPackage
 , capstone
 , fetchpatch
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 }:
 

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jellyfish
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jellyfish ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cb11ad0d43deff3a1c3690c74f0c731cff5b862c73339df2edd91133e1496fbc";
   };

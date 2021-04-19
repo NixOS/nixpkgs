@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , pythonOlder
 , google-api-core
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-iam";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d34604508e3e87b9161ccd5ff29474867ac91ffb8d29e1a2fc9ff0e26d934b73";
   };

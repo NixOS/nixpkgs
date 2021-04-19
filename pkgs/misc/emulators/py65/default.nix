@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonApplication }:
+{ lib, fetchFromPyPI, buildPythonApplication }:
 
 buildPythonApplication rec {
   pname = "py65";
   version = "1.1.0";
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     sha256 = "Q7rjiHJ/Ew985vut/8fVAf/wWYW5aBPSvNPm8A6g1zg=";
   };

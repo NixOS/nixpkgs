@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "hijri-converter";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08gv6ypn2zd0i8yrv24m448xkic492qrgxj349slp1achhg9p7ln";
   };

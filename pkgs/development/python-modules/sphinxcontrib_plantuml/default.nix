@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinx
 , plantuml
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
   version = "0.19";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "98b9f02282907b0c5b7a93a446c4649909aaf5785d2da0dd263c8ad68e00e288";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytest
 , pytest-flake8
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "path.py";
   version = "11.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "de7cd643affbc23e56533a6e8d551ecdee4983501a08c24e4e71565202d8cdaa";
   };

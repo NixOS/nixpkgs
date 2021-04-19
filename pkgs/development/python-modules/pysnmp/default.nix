@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyasn1
 , pycryptodomex
 , pysmi
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pysnmp";
   version = "4.4.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1acbfvpbr45i137s00mbhh21p71ywjfw3r8z0ybcmjjqz7rbwg8c";
   };

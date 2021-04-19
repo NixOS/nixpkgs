@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
   version = "2.1.2.5";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1gc4037dwyi48h4vi0bam23rr7pfyn6jrz334radz0r6rk94y8lz";
   };

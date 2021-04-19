@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , glibcLocales
 , importlib-resources
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "netaddr";
   version = "0.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hx2npi0wnhwlcybilgwlddw6qffx1mb7a3sj4p9s7bvl33mgk6n";
   };

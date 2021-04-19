@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromPyPI,
   lib,
   # build dependencies
   cython,
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "tesserocr";
   version = "2.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0cc7d4r11z26rhcwpmcc42fi9kr3f20nq5pk84jrczr18i0g99mh";
   };

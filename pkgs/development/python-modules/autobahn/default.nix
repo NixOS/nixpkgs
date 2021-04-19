@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k,
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k,
   six, txaio, twisted, zope_interface, cffi, trollius, futures,
   mock, pytest, cryptography, pynacl
 }:
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "autobahn";
   version = "20.12.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15b8zm7jalwisfwc08szxy3bh2bnn0hd41dbsnswi0lqwbh962j1";
   };

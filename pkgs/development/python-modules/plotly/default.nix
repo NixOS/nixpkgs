@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , decorator
 , nbformat
 , pytz
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "plotly";
   version = "4.14.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14cxlfl79i9bh3awsf4xgwr14ywm7lnrz2a81s7gp0if77nsx2kx";
   };

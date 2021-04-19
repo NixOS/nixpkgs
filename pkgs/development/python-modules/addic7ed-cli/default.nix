@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
   version = "1.4.6";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };

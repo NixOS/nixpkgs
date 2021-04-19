@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   pname = "nose-pattern-exclude";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0apzxx8lavsdlxlpaxqw1snx5p7q8v5dfbip6v32f9pj2vyain1i";
   };

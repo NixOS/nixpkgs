@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrest
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-msi";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "0n4gbwk843z66hhpcp1kcrnwqkzygbbc2ma01r9asgfv4nmklvyl";

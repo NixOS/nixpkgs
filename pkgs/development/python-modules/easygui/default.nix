@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, tkinter }:
+{ lib, fetchFromPyPI, buildPythonPackage, tkinter }:
 
 buildPythonPackage rec {
   pname = "easygui";
   version = "0.98.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "073f728ca88a77b74f404446fb8ec3004945427677c5618bd00f70c1b999fef2";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch
+{ lib, fetchFromPyPI, buildPythonPackage, fetchpatch
 , libraw
 , pytest, mock }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "rawkit";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0vrhrpr70i61y5q5ysk341x1539ff1q1k82g59zq69lv16s0f76s";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python-dateutil
 , pytestCheckHook
 , pytz
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "croniter";
   version = "1.0.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "708532f70584207e23ef2989ca40f367e6238bfe050133a1aff43e1e0e6f6092";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, setuptools
 , twiggy, requests, offtrac, bugzilla, taskw, dateutil, pytz, keyring, six
 , jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future, jira }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "1.8.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f024c29d2089b826f05481cace33a62aa984f33e98d226f6e41897e6f11b3f51";
   };

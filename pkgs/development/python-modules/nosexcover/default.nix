@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , coverage
 , nose
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "nosexcover";
   version = "1.0.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "298c3c655da587f6cab8a666e9f4b150320032431062dea91353988d45c8b883";
   };

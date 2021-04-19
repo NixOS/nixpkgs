@@ -1,4 +1,4 @@
-{ stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
+{ stdenv, lib, substituteAll, fetchFromPyPI, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
 
 buildPythonPackage rec {
   pname = "PySDL2";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   # sandboxed. Disable for now.
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e4fcc8aa1108e4917cb56794575ee08c2a3d9c2c52620474e3ecc8538dadf209";
   };

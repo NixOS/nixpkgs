@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromPyPI,
   lib,
   nose,
   six,
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "class-registry";
   version = "2.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zjf9nczl1ifzj07bgs6mwxsfd5xck9l0lchv2j0fv2n481xp2v7";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , jsonrpc-base
 , pytest-asyncio
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "jsonrpc-websocket";
   version = "3.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0fmw8xjzlhi7r84swn4w3njy389qqll5ad5ljdq5n2wpg424k98h";
   };

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , debugger
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , Mako
 , makeWrapper
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   version = "4.3.1";
   pname = "pwntools";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12ja913kz8wl4afrmpzxh9fx6j7rcwc2vqzkvfr1fxn42gkqhqf4";
   };

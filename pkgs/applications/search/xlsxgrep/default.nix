@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "xlsxgrep";
   version = "0.0.23";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "014i1nifx67mxi0k9sch00j6bjykb6krzl2q3ara9s1g75inl4rm";
   };

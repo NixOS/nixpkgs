@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "b6a0ddb78db7e00ae7ffe895bf8ef97f91e6310dfc1c4721896bdfd044b1cb03";
   };

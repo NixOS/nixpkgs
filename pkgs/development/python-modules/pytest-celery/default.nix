@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
   version = "0.0.0a1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0qifwi7q8dfwbzz2vm5m40lw23qh2fzibngbmw6qgwnkq8bhh3iy";
   };

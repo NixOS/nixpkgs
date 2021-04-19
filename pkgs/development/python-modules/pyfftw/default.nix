@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
   version = "0.12.0";
   pname = "pyFFTW";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "60988e823ca75808a26fd79d88dbae1de3699e72a293f812aa4534f8a0a58cb0";
   };

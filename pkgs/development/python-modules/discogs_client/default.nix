@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, oauthlib }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, oauthlib }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cc979fcbb5283f74d388c7111c8ed6bef920b01614a014d6b1c5d6fbb554bfc3";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , aiocontextvars
 , boltons
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "1.13.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5760194b308a7ab35514ae1b942d88e9f2359071556d82580383f09ca586fff7";
   };

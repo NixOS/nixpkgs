@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchFromGitHub
 , mock
 , psutil
@@ -11,7 +11,7 @@
 let
   mock' = mock.overridePythonAttrs (old: rec {
     version = "2.0.0";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit (old) pname;
       inherit version;
       sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";

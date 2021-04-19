@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , isPy3k
 , decorator
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   version = "3.9.40";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "061w3zqf4ir7hfj0vzl58lg8szsik1fxv126s32x03nk1sd39r6v";
   };

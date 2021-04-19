@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , coverage
 , ipykernel
 , jupyter_client
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "nbval";
   version = "0.9.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cfefcd2ef66ee2d337d0b252c6bcec4023384eb32e8b9e5fcc3ac80ab8cd7d40";
   };

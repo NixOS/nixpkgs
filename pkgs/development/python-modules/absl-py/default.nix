@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , six
 , enum34
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "absl-py";
   version = "0.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "673cccb88d810e5627d0c1c818158485d106f65a583880e2f730c997399bcfa7";
   };

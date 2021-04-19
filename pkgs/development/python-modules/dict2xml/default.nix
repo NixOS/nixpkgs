@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, six }:
+{ lib, fetchFromPyPI, buildPythonPackage, six }:
 
 buildPythonPackage rec {
   pname = "dict2xml";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bfn8n8sb3slwx7ra8m8fbfy65k20h2qxcqfq99hwqrrkgcffihl";
   };

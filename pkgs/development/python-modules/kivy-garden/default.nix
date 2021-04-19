@@ -1,5 +1,5 @@
 { lib
-, buildPythonPackage, fetchPypi
+, buildPythonPackage, fetchFromPyPI
 , requests
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "kivy-garden";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wkcpr2zc1q5jb0bi7v2dgc0vs5h1y7j42mviyh764j2i0kz8mn2";
   };

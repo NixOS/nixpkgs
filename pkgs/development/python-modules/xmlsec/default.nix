@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , pytestCheckHook
 , libxslt
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "xmlsec";
   version = "1.3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1c4k42zv3plm6v65p7z6l5rxyf50h40d02nhc16vq7cjrfvdf4rx";
   };

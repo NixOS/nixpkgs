@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath";
   version = "0.82";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "46d3fd2016cd5b842283d547877a02c418a0fe9aa7a6b0ae344115a2c990fef4";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, requests, isPy27
 }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "0.18.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6a2d45bb4ac585884a6b03f9eade9161cedd9e8111545141e9aa9058932acb13";
   };

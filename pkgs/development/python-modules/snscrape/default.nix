@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , setuptools
 , requests
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "36ba7f95c8bf5202749189f760e591952f19c849379c35ff598aafafe5d0cfef";
   };

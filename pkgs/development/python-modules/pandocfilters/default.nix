@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "1.4.3";
   pname = "pandocfilters";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bc63fbb50534b4b1f8ebe1860889289e8af94a23bff7445259592df25a3906eb";
   };

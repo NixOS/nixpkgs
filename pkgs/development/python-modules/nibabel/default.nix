@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , packaging
 , pytest
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "3.2.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4d2ff9426b740011a1c916b54fc25da9348282e727eaa2ea163f42e00f1fc29e";
   };

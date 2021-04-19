@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , dnspython
 , mock, nose
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "srvlookup";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1zf1v04zd5phabyqh0nhplr5a8vxskzfrzdh4akljnz1yk2n2a0b";
   };

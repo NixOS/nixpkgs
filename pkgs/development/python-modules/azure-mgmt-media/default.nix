@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-media";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "c35316d3d63dc99feb97ad7f12a7b411046537f5c6d79ef14f6067bcc379292f";

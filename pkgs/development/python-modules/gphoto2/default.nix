@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , pkg-config
 , libgphoto2 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "gphoto2";
   version = "2.2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "48b4c4ab70826d3ddaaf7440564d513c02d78680fa690994b0640d383ffb8a7d";
   };

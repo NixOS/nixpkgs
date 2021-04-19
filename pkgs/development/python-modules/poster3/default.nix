@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , paste
 , webob
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     python = "py3";
     sha256 = "1b27d7d63e3191e5d7238631fc828e4493590e94dcea034e386c079d853cce14";

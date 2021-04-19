@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , enum34
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "gin-config";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9499c060e1faa340959fc4ada7fe53f643d6f8996a80262b28a082c1ef6849de";
 

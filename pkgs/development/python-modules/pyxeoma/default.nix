@@ -1,14 +1,14 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pyxeoma";
   version = "1.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c6a3ed855025662df9b35ae2d1cac3fa41775a7612655804bde7276a8cab8d1c";
   };

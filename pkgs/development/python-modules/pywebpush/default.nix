@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , coverage, flake8, mock, nose
 , http-ece, py-vapid, requests }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pywebpush";
   version = "1.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "596c74020f9cbabc99f7964127ab0bb6cc045fcfe781b7c73cffb3ea45947820";
   };

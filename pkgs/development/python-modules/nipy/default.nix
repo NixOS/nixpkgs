@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , nose
 , matplotlib
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "nipy";
   disabled = pythonOlder "2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1pn731nsczrx198i2gadffqmfbhviglrclv6xxwhnbv6w5hfs2yk";
   };

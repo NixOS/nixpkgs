@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
 buildPythonPackage rec {
   pname = "PyBindGen";
   version = "0.21.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4501aa3954fdac7bb4c049894f8aa1f0f4e1c1f50cc2303feef9bbe3aecfe364";
   };

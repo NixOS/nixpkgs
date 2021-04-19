@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , typing-extensions
 , mypy-extensions
 , isPy39
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "typing-inspect";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "typing_inspect";
     sha256 = "1dzs9a1pr23dhbvmnvms2jv7l7jk26023g5ysf0zvnq8b791s6wg";

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "deluge-client";
   version = "1.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0d2f12108a147d44590c8df63997fcb32f8b2fbc18f8cbb221f0136e2e372b85";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest, pytestrunner }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "srptools";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7fa4337256a1542e8f5bb4bed19e1d9aea98fe5ff9baf76693342a1dd6ac7c96";
   };

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib
+{ buildPythonPackage, fetchFromPyPI, isPy27, lib
 , authres, dnspython, dkimpy, ipaddress, publicsuffix2
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "authheaders";
   version = "0.13.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "935726b784cc636cbcfed2c977f1a6887dc60056806da4eff60db932c5896692";
   };

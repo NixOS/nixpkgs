@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   version = "0.2.4";
   pname = "python-lzf";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1l8m6vzwm1m8hn7ldw8j8r2b6r199k8z3q0wnhdyy4p68hahyhni";
   };

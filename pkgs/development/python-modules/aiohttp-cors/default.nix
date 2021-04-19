@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , typing, aiohttp
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "aiohttp-cors";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pczn54bqd32v8zhfbjfybiza6xh1szwxy6as577dn8g23bwcfad";
   };

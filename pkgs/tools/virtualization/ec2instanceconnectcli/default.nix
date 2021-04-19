@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, boto3, cryptography }:
+{ lib, buildPythonPackage, fetchFromPyPI, boto3, cryptography }:
 
 buildPythonPackage rec {
   pname = "ec2instanceconnectcli";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-VaCyCnEhSx1I3bNo57p0IXf92+tO1tT7KSUXzO1IyIU=";
   };

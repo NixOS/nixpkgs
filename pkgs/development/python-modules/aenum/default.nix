@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
+{ lib, fetchFromPyPI, buildPythonPackage, python, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "aenum";
   version = "3.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17cd8cfed1ee4b617198c9fabbabd70ebd8f01e54ac29cd6c3a92df14bd86656";
   };

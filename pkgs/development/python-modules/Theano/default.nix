@@ -1,6 +1,6 @@
 { lib, stdenv
 , runCommandCC
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPyPy
 , pythonOlder
@@ -51,7 +51,7 @@ in buildPythonPackage rec {
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
   };

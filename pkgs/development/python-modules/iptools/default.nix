@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.7.0";
   pname = "iptools";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1sp2v76qqsgqjk0vqfbm2s4sc4mi0gkkpzjnvwih3ymmidilz2hi";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromPyPI, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "geojson";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     sha256 = "1filqm050ixy53kdv81bd4n80vjvfapnmzizy7jg8a6pilv17gfc";
   };

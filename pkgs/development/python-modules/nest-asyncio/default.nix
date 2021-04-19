@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonAtLeast
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "nest_asyncio";
   disabled = !(pythonAtLeast "3.5");
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eaa09ef1353ebefae19162ad423eef7a12166bcc63866f8bff8f3635353cd9fa";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , six
 , unittest2
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "unicode-slugify";
   version = "0.1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0l7nphfdq9rgiczbl8n3mra9gx7pxap0xz540pkyz034zbz3mkrl";
   };

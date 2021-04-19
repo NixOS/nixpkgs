@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, lxml }:
+{ lib, buildPythonPackage, fetchFromPyPI, dateutil, lxml }:
 
 buildPythonPackage rec {
   pname = "feedgen";
   version = "0.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jl0b87l7v6c0f1nx6k81skjhdj5i11kmchdjls00mynpvdip0cf";
   };

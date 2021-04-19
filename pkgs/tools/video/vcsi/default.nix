@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "vcsi";
   version = "7.0.13";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "01qwbb2l8gwf622zzhh0kzdzw3njvsdwmndwn01i9bn4qm5cas8r";
   };

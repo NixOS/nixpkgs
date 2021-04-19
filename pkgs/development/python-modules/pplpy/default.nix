@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , gmp
 , mpfr
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pplpy";
   version = "0.8.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "500bd0f4ae1a76956fae7fcba77854f5ec3e64fce76803664983763c3f2bd8bd";
   };

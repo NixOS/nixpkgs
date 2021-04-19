@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pytest
 , pytestrunner
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2.6";
   disabled = isPy27; # no longer compatible with icu package
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
   };

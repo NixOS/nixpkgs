@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , pytz
 , tzlocal
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "clickhouse-driver";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "62d37f93872d5a13eb6b0d52bab2b593ed0e14cf9200949aa2d02f9801064c0f";
   };

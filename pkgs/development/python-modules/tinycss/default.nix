@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , python
 , cython
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "tinycss";
   version = "0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
   };

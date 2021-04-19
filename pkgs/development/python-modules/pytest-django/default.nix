@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , django
 , setuptools_scm
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pytest-django";
   version = "4.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "26f02c16d36fd4c8672390deebe3413678d89f30720c16efb8b2a6bf63b9041f";
   };

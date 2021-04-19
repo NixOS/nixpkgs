@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
   version = "0.39.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "71829df4bdbe5bd55c324a97008405a6b4c6113edb1a2a6a8b73a7059fe64a47";
   };

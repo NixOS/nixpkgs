@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPy27, python
 , darwin
 , pytestCheckHook
 , mock
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "psutil";
   version = "5.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1immnj532bnnrh1qmk5q3lsw3san8qfk9kxy1cpmy0knmfcwp70c";
   };

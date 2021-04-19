@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch
 , pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
   pname = "chardet";
   version = "3.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
   };

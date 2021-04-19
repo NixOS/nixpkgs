@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
   version = "8.3.3";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "a2713a31c6e326c774a3ee0328f424f944b951935ff1b893a4a66598d61c5a97";
   };

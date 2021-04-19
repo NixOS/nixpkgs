@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , coverage
 , zope_testrunner
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "zope.i18nmessageid";
   version = "5.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9534142b684c986f5303f469573978e5a340f05ba2eee4f872933f1c38b1b059";
   };

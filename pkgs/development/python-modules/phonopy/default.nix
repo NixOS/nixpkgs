@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , pyyaml
 , matplotlib
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "phonopy";
   version = "2.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1jaizhkb59ixknvc75nrhfq51bh75912q8ay36bxpf4g5hzyhw3a";
   };

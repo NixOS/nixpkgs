@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , astropy
 , pytest
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "radio_beam";
   version = "0.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0g1nqiikv023ab60gfqrvc13kfjv8m70bpfk264vlliaq6mvxdf2";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , async-timeout
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "aiopulse";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0fnscm27l77c8cd7jhbn35axyalq61kksy3fcqzv21fz55lklsm0";
   };

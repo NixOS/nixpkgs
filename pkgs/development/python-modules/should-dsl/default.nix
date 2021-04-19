@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "should-dsl";
   version = "2.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "should_dsl";
     sha256 = "0ai30dxgygwzaj9sgdzyfr9p5b7gwc9piq59nzr4xy5x1zcm7xrn";

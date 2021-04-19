@@ -2,14 +2,14 @@
 , asn1crypto
 , asysocks
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "minikerberos";
   version = "0.2.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-woYs8EYUfALCtqHUCVfF5z1v1UIc9D8Iep9n4NrNIlg=";
   };

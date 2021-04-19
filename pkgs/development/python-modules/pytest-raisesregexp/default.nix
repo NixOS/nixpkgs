@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , py, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-raisesregexp";
   version = "2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b54372494fc1f11388b1b9348aeb36b69609699eb8f46e0e010afc733d78236a";
   };

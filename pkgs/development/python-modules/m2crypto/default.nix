@@ -1,7 +1,7 @@
 { lib
 , fetchpatch
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , swig2
 , openssl
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.36.0";
   pname = "M2Crypto";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hadbdckmjzfb8qzbkafypin6sakfx35j2qx0fsivh757s7c2hhm";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , pytestcov
 , pytest-doctestplus
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
   version = "0.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1s4s2kd31yc65rfvl4xhy8xx806xhy59kc7668h6b6wq88xgrn5p";
   };

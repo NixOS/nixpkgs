@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , pkg-config, swig
 , tpm2-tss
 , cryptography, ibm-sw-tpm2
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.1.9";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-v5Xth0A3tFnLFg54nvWYL2TD201e/GWv+2y5Qc60CmU=";
   };

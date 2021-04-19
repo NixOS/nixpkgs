@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "oath";
   version = "1.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1xqgcqgx6aa0j21hwsdb3aqpqhviwj756bcqjjjcm1h1aij11p6m";
   };

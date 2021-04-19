@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook
 , cheroot
 , dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.62";
   pname = "web.py";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e";
   };

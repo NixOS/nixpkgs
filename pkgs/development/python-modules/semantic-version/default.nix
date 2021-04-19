@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromPyPI, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "semantic_version";
   version = "2.8.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
   };

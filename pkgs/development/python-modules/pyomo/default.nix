@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pyutilib
 , appdirs
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "5.6.1";
   disabled = isPy27; # unable to import pyutilib.th
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Pyomo";
     inherit version;
     sha256 = "449be9a4c9b3caee7c89dbe5f0e4e5ad0eaeef8be110a860641cd249986e362c";

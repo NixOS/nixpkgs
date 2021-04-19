@@ -1,11 +1,11 @@
-{ lib, fetchPypi
+{ lib, fetchFromPyPI
 , buildPythonPackage, python
 }:
 buildPythonPackage rec {
   pname = "parse";
   version = "1.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "91666032d6723dc5905248417ef0dc9e4c51df9526aaeef271eacad6491f06a4";
   };

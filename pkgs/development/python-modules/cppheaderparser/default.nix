@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ply
 , lib
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "CppHeaderParser";
   version = "2.7.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-OCswQW2VsKXoUCshSBDcrCpWQykX4mUUR9Or4lPjzEI=";
   };

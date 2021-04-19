@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0p0gyhfqq6gssf3prsy0pcfq5w0wx2w3pcjqbwx3imvc92ls4xwm";
   };

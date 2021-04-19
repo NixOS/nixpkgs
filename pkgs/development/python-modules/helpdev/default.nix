@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , importlib-metadata
 , psutil
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "helpdev";
   version = "0.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0gfvj28i82va7c264jl2p4cdsl3lpf9fpb9cyjnis55crfdafqmv";
   };

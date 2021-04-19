@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, isPy27, pyserial, srp, lib }:
+{ buildPythonPackage, fetchFromPyPI, isPy27, pyserial, srp, lib }:
 
 buildPythonPackage rec {
   pname = "digi-xbee";
   version = "1.4.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "664737d1aab453ea40b9745f1ee1e88920acff1cce2e07c42e7f5aa64a16e6aa";
   };

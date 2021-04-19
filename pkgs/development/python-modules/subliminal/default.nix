@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , guessit
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pname = "subliminal";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12v2clnbic8320fjsvkg3xfxfa7x8inhjk61z00pzwx46g3rqhy6";
   };

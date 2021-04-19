@@ -2,7 +2,7 @@
 , pythonAtLeast
 , isPy27
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , blessings
 , six
 , nose
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.2.13";
   disabled = pythonAtLeast "3.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0c9zzfv6ciyf9qm7556wil45xxgykg1cj8isp1b88gimwcb2hxg4";
   };

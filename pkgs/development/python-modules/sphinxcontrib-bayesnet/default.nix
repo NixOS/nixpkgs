@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{ lib, buildPythonPackage, fetchFromPyPI, sphinx, sphinxcontrib-tikz }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
   version = "0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0x1kisvj7221cxfzmwplx3xlwbavl636fpncnjh7gghp1af71clw";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, pytestcov, mock, coverage, setuptools
 , Mako, sqlalchemy, python-editor, dateutil
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "alembic";
   version = "1.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5334f32314fb2a56d86b4c4dd1ae34b08c03cae4cb888bc699942104d66bc245";
   };

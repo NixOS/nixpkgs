@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "affinity";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # syntax error
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1i6j7kszvnzh5vh9k48cqwx2kzf73a6abgv9s6bf0j2zmfjl2wb6";
   };

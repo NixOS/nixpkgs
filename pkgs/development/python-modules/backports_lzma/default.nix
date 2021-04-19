@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , xz
 , python
@@ -13,7 +13,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16d8b68e4d3cd4e6c9ddb059850452946da3914c8a8e197a7f2b0954559f2df4";
   };

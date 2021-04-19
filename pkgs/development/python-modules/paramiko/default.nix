@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cryptography
 , bcrypt
 , invoke
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "paramiko";
   version = "2.7.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035";
   };

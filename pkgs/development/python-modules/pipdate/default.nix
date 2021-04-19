@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , isPy27
 , appdirs
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   format = "pyproject";
   disabled = isPy27; # abandoned
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "507065231f2d50b6319d483432cba82aadad78be21b7a2969b5881ed8dee9ab4";
   };

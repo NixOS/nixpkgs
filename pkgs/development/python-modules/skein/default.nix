@@ -1,6 +1,6 @@
 { buildPythonPackage
 , callPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , jre
 , lib
@@ -11,7 +11,7 @@
 let
   pname = "skein";
   version = "0.8.0";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nb64p1hzshgi1kfc2jx1v9vn8b0wzs50460wfra3fsxh0ap66ab";
   };

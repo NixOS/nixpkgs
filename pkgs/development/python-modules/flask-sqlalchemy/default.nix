@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask, mock, sqlalchemy, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
   version = "2.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rgsj49gnx361hnb3vn6c1h17497qh22yc3r70l1r6w0mw71bixz";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPy27, pythonOlder
 , dbus-python
 , entrypoints
 , importlib-metadata
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "21.5.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "207bd66f2a9881c835dad653da04e196c678bf104f8252141d2d3c4f31051579";
   };

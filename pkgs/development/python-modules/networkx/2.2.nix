@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , decorator
 , setuptools
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
   version = "2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "12swxb15299v9vqjsq4z8rgh5sdhvpx497xwnhpnb0gynrx6zra5";

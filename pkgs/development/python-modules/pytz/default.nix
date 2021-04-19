@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, python }:
 
 buildPythonPackage rec {
   pname = "pytz";
   version = "2021.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-g6SpCJS/OOJDzwUsi1jzgb/pp6SD9qnKsUC8f3AqxNo=";
   };

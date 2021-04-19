@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, dateutil, ws4py, requests-unixsocket, requests-toolbelt, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, pbr, dateutil, ws4py, requests-unixsocket, requests-toolbelt, mock }:
 
 buildPythonPackage rec {
   pname = "pylxd";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1db88l55q974fm9z5gllx3i8bkj0jzi25xrr5cs6id3bfy4zp8a7";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , oauthlib
 , pytestCheckHook
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.7.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "ring_doorbell";
     inherit version;
     sha256 = "1qnx9q9rzxhh0pygl3f9bg21b5zv7csv9h1w4zngdvsphbs0yiwg";

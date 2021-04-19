@@ -1,11 +1,11 @@
-{ lib, fetchPypi, python, buildPythonPackage
+{ lib, fetchFromPyPI, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 buildPythonPackage rec {
   version = "3.5.2";
   pname = "tables";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hikrki0hx94ass31pn0jyz9iy0zhnkjacfk86m21cxsc8if685j";
   };

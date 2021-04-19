@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , pytest
 , pyqt5
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytest-qt";
   version = "3.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "714b0bf86c5313413f2d300ac613515db3a1aef595051ab8ba2ffe619dbe8925";
   };

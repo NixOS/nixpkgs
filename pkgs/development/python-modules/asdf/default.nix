@@ -1,7 +1,7 @@
 { lib
 , astropy
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jsonschema
 , numpy
 , packaging
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "11dyr295wn5m2pcynlwj7kgw9xr66msfvwn1m6a5vv13vzj19spp";
   };

@@ -1,4 +1,4 @@
-{   lib, buildPythonApplication, fetchPypi
+{   lib, buildPythonApplication, fetchFromPyPI
   , altair, astor, base58, blinker, boto3, botocore, click, enum-compat
   , future, pillow, protobuf, requests, toml, tornado_5, tzlocal, validators, watchdog
   , jinja2, setuptools
@@ -9,7 +9,7 @@ buildPythonApplication rec {
   version = "0.50.2";
   format = "wheel"; # the only distribution available
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     sha256 = "1wymv7qckafs0p2jdjlxjaf1xrhm3iyd185jkldanbb0na5n3ndz";
   };

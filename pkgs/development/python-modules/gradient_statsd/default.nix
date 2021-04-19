@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , requests, datadog, configparser, python
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "gradient_statsd";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "iWlNX43ZtvU73wz4+8DgDulQNOnssJGxTBkvAaLj530=";
   };

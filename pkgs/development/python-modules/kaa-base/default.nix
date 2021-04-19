@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , isPy3k
 , python
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.99.2dev-384-2b73caca";
   pname = "kaa-base";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0k3zzz84wzz9q1fl3vvqr2ys96z9pcf4viq9q6s2a63zaysmcfd2";
   };

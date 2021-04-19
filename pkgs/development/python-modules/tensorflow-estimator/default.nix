@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , numpy
 , absl-py
 , mock
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.4.0";
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "tensorflow_estimator";
     inherit version format;
     sha256 = "1w0pkcslm6934qqd6m5gxyjdlnb4pbl47k6s99wsh6dyvvr7nysv";

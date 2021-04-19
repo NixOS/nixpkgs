@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-auth
 , google-cloud-iam
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "google-cloud-storage";
   version = "1.37.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-IAPF7Uc/mzfQRfMMTIvn0w19Dripe80sWLOovFScTMw=";
   };

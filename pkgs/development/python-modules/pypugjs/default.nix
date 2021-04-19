@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, six, chardet, nose
+{ lib, buildPythonPackage, fetchFromPyPI, six, chardet, nose
 , django, jinja2, tornado, pyramid, pyramid_mako, Mako }:
 
 buildPythonPackage rec {
   pname = "pypugjs";
   version = "5.9.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0s0a239940z6rsssa13yz6pfkjk4300j35hs7qysyz45f3ixq19j";
   };

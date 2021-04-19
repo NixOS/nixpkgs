@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
 , atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "4.6.11";
   pname = "pytest";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "50fa82392f2120cc3ec2ca0a75ee615be4c479e66669789771f1758332be4353";
   };

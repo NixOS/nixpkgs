@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, buildPythonApplication, fetchFromPyPI, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   version = "1.28.6";
   pname = "docker-compose";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d44906f7ab738ba2d1785130ed31b16111eee6dc5a1dbd7252091dae48c5281";
   };

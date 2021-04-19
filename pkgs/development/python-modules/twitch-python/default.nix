@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, rx, pytestCheckHook, responses, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, rx, pytestCheckHook, responses, isPy3k }:
 
 buildPythonPackage rec {
   pname = "twitch-python";
   version = "0.0.19";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b0b02abdd33458e4ffabc632aa6a6779f3599e188819632551353b6c5553f5c5";
   };

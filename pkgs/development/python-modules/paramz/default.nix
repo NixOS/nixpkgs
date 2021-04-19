@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, scipy, six, decorator, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, scipy, six, decorator, nose }:
 
 buildPythonPackage rec {
   pname = "paramz";
   version = "0.9.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0917211c0f083f344e7f1bc997e0d713dbc147b6380bc19f606119394f820b9a";
   };

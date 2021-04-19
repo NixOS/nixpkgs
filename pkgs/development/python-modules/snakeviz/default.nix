@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, tornado }:
+{ lib, fetchFromPyPI, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
   pname = "snakeviz";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0s6byw23hr2khqx2az36hpi52fk4v6bfm1bb7biaf0d2nrpqgbcj";
   };

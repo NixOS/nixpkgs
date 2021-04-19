@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, swig, pcsclite, PCSC }:
 
 let
   # Package does not support configuring the pcsc library.
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.0.0";
   pname = "pyscard";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0yap0p8mp6dx58n3nina6ryhc2cysaj75sq98wf3qybf33cxjr5k";
   };

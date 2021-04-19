@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, future, cppy }:
+{ lib, buildPythonPackage, fetchFromPyPI, future, cppy }:
 
 buildPythonPackage rec {
   pname = "atom";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "df65a654744ccdc4843ce09c38612fd8f702c84be501b1d955c3ac0b9ad28dc5";
   };

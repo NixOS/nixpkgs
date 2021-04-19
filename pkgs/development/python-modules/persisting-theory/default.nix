@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , nose
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "persisting-theory";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02hcg7js23yjyw6gwxqzvyv2b1wfjrypk98cfxfgf7s8iz67vzq0";
   };

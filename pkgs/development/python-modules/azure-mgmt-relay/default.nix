@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrestazure
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-relay";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "38f6dd9d122a316efa921e72933e01ec4d76ed39d4682655b17a997079e8b20a";

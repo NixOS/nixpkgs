@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , netifaces
 , paho-mqtt
 , pycryptodome
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "libpurecool";
   version = "0.6.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kwbinbg0i4fca1bpx6jwa1fiw71vg0xa89jhq4pmnl5cn9c8kqx";
   };

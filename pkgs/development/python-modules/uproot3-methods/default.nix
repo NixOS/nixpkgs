@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , awkward0
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.10.1";
   pname = "uproot3-methods";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-3Wj5C+HqJ2NguWNpg2hJ3ykEX3/k5TT5rCHqAHmO41g=";
   };

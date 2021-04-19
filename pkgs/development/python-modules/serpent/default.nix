@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy27
 , enum34
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "serpent";
   version = "1.30.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "72753820246a7d8486e8b385353e3bbf769abfceec2e850fa527a288b084ff7a";
   };

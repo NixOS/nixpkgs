@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "colorlog";
   version = "5.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-8XwBOgaWKwL0RJ7gfP2+ayh98p78LJoVFbSjdvTliOo=";
   };

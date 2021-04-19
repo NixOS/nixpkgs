@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage,
+{ lib, fetchFromPyPI, buildPythonPackage,
   wrapt, pytest, tox }:
 
 buildPythonPackage rec {
   pname = "Deprecated";
   version = "1.2.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6d2de2de7931a968874481ef30208fd4e08da39177d61d3d4ebdf4366e7dbca1";
   };

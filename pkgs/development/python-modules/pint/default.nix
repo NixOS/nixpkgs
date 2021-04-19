@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , setuptools_scm
 , importlib-metadata
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "pint";
   version = "0.14";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Pint";
     sha256 = "0wkzb7g20wzpqr3xaqpq96dlfv6irw202icsz81ys8npp7mm194s";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "django-environ";
   version = "0.4.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde";
   };

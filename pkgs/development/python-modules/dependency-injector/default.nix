@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, six, unittest2, pyyaml, flask }:
 
 let
   testPath =
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "dependency-injector";
   version = "4.10.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "93db83fac85bcb861469c0db1af11f4bc874aa2f9380151189a05d38c21afd60";
   };

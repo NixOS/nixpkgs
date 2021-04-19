@@ -1,13 +1,13 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "XStatic";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "80b78dfe37bce6dee4343d64c65375a80bcf399b46dd47c0c7d56161568a23a8";
   };

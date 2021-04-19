@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , docopt
 , pillow
 , enum34
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "psd-tools";
   version = "1.9.17";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d01e11581442dfcc1bd73ac3278bdf1f98e9df8f083a11e5989632ff97322b65";
   };

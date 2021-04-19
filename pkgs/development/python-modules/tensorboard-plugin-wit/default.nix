@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     format = "wheel";
     python = "py3";

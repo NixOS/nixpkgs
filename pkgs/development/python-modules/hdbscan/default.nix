@@ -6,7 +6,7 @@
 , pytestCheckHook
 , scipy
 , scikitlearn
-, fetchPypi
+, fetchFromPyPI
 , joblib
 , six
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "hdbscan";
   version = "0.8.27";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e3a418d0d36874f7b6a1bf0b7461f3857fc13a525fd48ba34caed2fe8973aa26";
   };

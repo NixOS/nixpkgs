@@ -1,7 +1,7 @@
 { lib
 , glibcLocales
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , appdirs
 , scandir
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pname = "fs";
   version = "2.4.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c10ba188b14d6213a1ca950efd004931abbfa64b294c80bbf1045753831bf42f";
   };

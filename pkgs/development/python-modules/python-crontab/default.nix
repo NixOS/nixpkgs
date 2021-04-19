@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, python-dateutil, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "python-crontab";
   version = "2.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4bbe7e720753a132ca4ca9d4094915f40e9d9dc8a807a4564007651018ce8c31";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , squaremap
 , wxPython
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "runsnakerun";
   version = "2.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a66a0cdf0333dc3c0830c18e2f3d62f741dea197cd01a7e0059da4886a3a123f";
   };

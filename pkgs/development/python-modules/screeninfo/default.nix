@@ -1,11 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ lib, buildPythonApplication, fetchFromPyPI, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
   version = "0.6.7";
   disabled = isPy27; # dataclasses isn't available for python2
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1c4bac1ca329da3f68cbc4d2fbc92256aa9bb8ff8583ee3e14f91f0a7baa69cb";
   };

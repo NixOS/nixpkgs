@@ -1,7 +1,7 @@
 { lib
 
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , typing-extensions
 , coverage
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.7.1";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18ql6k2j1839jf2rmmmm29v6fb7mr59l75z8nlf0sadmydy6r9al";
   };

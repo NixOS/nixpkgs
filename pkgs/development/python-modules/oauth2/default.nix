@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , httplib2
 , mock
 , coverage
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "oauth2";
   version = "1.9.0.post1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c006a85e7c60107c7cc6da1b184b5c719f6dd7202098196dfa6e55df669b59bf";
   };

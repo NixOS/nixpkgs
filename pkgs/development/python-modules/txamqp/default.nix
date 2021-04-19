@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , twisted
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "txAMQP";
   version = "0.8.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jd9864k3csc06kipiwzjlk9mq4054s8kzk5q1cfnxj8572s4iv4";
   };

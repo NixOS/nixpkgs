@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , openssl
 , cryptography
 , pyasn1
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   pname = "pyopenssl";
   version = "20.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "pyOpenSSL";
     inherit version;
     sha256 = "4c231c759543ba02560fcd2480c48dcec4dae34c9da7d3747c508227e0624b51";

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cffi }:
+{ lib, buildPythonPackage, fetchFromPyPI, cffi }:
 
 buildPythonPackage rec {
   pname = "milksnake";
   version = "0.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "120nprd8lqis7x7zy72536gk2j68f7gxm8gffmx8k4ygifvl7kfz";

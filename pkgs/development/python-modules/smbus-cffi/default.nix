@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cffi
 , pytestCheckHook
 , pyserial
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "smbus-cffi";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb4195aaabfc01586863f60d3190b5cb1bf8f12622fd597e23e48768dad6bde8";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-cloud-core
 , google-api-core
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
   version = "0.30.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1la643vkf6fm2gapz57cm92xzvmhzgpzv3bb6112yz1cizrvnxrm";
   };

@@ -1,13 +1,13 @@
 { lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
 , cairo, ffmpeg_3, sox, xdg-utils, texlive
 , colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
-, pbr, fetchPypi
+, pbr, fetchFromPyPI
 }:
 buildPythonApplication rec {
   pname = "manim";
   version = "0.1.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "manimlib";
     inherit version;
     sha256 = "0vg9b3rwypq5zir74pi0pmj47yqlcg7hrvscwrpjzjbqq2yihn49";

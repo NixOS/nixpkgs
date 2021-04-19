@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, requests }:
 
 buildPythonPackage rec {
   pname = "pynanoleaf";
   version = "0.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-BiLJgsey7kIIeN5+CKKnrTB2bSKMNEbeMLwGi2LRLcg=";
   };

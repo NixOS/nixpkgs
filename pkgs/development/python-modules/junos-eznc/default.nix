@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , scp
 , pyserial
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "junos-eznc";
   version = "2.5.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
   };

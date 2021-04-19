@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , webtest
 , zope_component
 , hupper
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "pyramid";
   version = "1.10.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fe1bd1140e6b79fe07f0053981d49be2dc66656cc8b481dd7ffcaa872fc25467";
   };

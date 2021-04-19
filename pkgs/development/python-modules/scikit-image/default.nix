@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , cython
 , numpy
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "scikit-image";
   version = "0.17.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bd954c0588f0f7e81d9763dc95e06950e68247d540476e06cb77bcbcd8c2d8b3";
   };

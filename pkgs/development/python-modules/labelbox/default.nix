@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , jinja2
 , pillow
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "labelbox";
   version = "2.4.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e5a631a94ac2059648a884bebf39f7ca1e689baef4a2497f9aa5ec598e24deb7";
   };

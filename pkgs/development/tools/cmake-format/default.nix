@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , autopep8
 , flake8
 , jinja2
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   # The source distribution does not build because of missing files.
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version format;
     python = "py3";
     pname = "cmakelang";

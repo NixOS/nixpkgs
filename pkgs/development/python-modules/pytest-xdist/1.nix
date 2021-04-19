@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, execnet, pytest
+{ lib, fetchFromPyPI, buildPythonPackage, execnet, pytest
 , setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "1.34.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vh4ps32lp5ignch5adbl3pgchvigdfmrl6qpmhxih54wa1qw3il";
   };

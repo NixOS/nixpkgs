@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "75787b6ab140ab267b313d37d045f3276f5dc6a9741074eddfbabc1635cb2efc";
   };

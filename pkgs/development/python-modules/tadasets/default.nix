@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , matplotlib
 , pytest
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "tadasets";
   version = "0.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a0e6c14678750315febd97fcf334bbbfd2695ebd91b4fe7707bb1220d7348416";
   };

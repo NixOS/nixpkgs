@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-hanaonazure";
   version = "0.15.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "f5699cd2f6ad09555c3f1a75c8703e12db76bbbb7ec8b621dcb948d4fc9829a5";

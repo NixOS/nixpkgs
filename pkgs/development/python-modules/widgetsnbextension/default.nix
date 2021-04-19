@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , notebook
 , ipywidgets
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "widgetsnbextension";
   version = "3.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "079f87d87270bce047512400efd70238820751a11d2d8cb137a5a5bdbaf255c7";
   };

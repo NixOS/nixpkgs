@@ -14,7 +14,7 @@ let
         # name explicity for correct version to show in drvName
         name = "${pname}-${version}";
 
-        src = super.fetchPypi {
+        src = super.fetchFromPyPI {
           inherit pname version;
           extension = "zip";
           sha256 = "00cfamn97w2vhq3id87f10mjna8ag5yz5dw0cy5s0sa3ipiyii9n";

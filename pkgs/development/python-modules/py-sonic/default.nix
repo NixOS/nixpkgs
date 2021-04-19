@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27 }:
 
 buildPythonPackage rec {
   pname = "py-sonic";
   version = "0.7.9";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1677b7287914567b5123de90ad872b441628d8a7777cf4a5f41671b813facf75";
   };

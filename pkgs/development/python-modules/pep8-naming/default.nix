@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder
 , flake8-polyfill
 , importlib-metadata
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "pep8-naming";
   version = "0.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0937rnk3c2z1jkdmbw9hfm80p5k467q7rqhn6slfiprs4kflgpd1";
   };

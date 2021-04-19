@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , lib
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "msgpack";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1109s2yynrahwi64ikax68hx0mbclz8p35afmpphw5dwynb49q7s";
   };

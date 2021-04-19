@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flake8
 , pytest_4
 , pytest-expect
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "html5lib";
   version = "1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f";
   };

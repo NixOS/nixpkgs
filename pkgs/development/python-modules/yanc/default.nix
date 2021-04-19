@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, nose }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   pname = "yanc";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0z35bkk9phs40lf5061k1plhjdl5fskm0dmdikrsqi1bjihnxp8w";
   };

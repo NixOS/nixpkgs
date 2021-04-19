@@ -1,7 +1,7 @@
 {
   lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , glibcLocales
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "ratelimiter";
   version = "1.2.0.post0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5c395dcabdbbde2e5178ef3f89b568a3066454a6ddc223b76473dac22f89b4f7";
   };

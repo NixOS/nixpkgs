@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , Babel
 , speaklater
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "flask-babelex";
   version = "0.9.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Flask-BabelEx";
     sha256 = "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r";

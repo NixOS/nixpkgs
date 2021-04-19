@@ -2,7 +2,7 @@
 { stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , lib
 , substituteAll
 , makeFontsConf

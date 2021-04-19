@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyexcel-io
 , xlrd
 , xlwt
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pyexcel-xls";
   version = "0.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2fbf66e8df88051eaaa9745be433903d18db819ddd3a987c992ead1d68b7feb5";
   };

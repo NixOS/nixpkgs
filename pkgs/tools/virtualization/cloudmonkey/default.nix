@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   doCheck = false; # upstream has no tests defined
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "064yk3lwl272nyn20xxrh0qxzh3r1rl9015qqf2i4snqdzwd5cf7";
   };

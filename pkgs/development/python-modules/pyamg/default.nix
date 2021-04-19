@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , scipy
 , pytest
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyamg";
   version = "4.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3ceb38ffd86e29774e759486f2961599c8ed847459c68727493cadeaf115a38a";
   };

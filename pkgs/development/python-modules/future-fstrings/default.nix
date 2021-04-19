@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "future-fstrings";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "future_fstrings";
     sha256 = "1pra33in6rinrcs5wvdb1rbxmx223j93ahdwhzwgf7wyfsnjda98";

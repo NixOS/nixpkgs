@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_location
 , zope_event
 , zope_interface
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "zope.schema";
   version = "6.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9b3fc3ac656099aa9ebf3beb2bbd83d2d6ee6f94b9ac6969d6e3993ec9c4a197";
   };

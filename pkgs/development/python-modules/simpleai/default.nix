@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , isPy3k
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
    pname = "simpleai";
    disabled = isPy3k;
 
-   src = fetchPypi {
+   src = fetchFromPyPI {
      inherit pname version;
      sha256 = "2927d460b09ff6dd177999c2f48f3275c84c956efe5b41b567b5316e2259d21e";
    };

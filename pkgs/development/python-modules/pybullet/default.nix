@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , libGLU, libGL
 , xorg
 , numpy
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pybullet";
   version = "3.0.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "623061d305bd5513a911abb2cbd0e37670be166a270123b43ca757bf78e4b438";
   };

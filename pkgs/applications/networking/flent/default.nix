@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
+{ lib, buildPythonApplication, fetchFromPyPI, matplotlib, procps, pyqt5, python
 , pythonPackages, qt5, sphinx, xvfb_run }:
 
 buildPythonApplication rec {
   pname = "flent";
   version = "1.3.2";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1k265xxxjld6q38m9lsgy7p0j70qp9a49vh9zg0njbi4i21lxq23";
   };

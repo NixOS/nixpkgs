@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , pytest
 , mock
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "5.0.5";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "178f4ce988f69189f7e523337a3e11d91c786ded9360174a3d9ca83e79bc5396";
   };

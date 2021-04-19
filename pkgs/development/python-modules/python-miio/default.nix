@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , poetry
 , click
 , cryptography
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-lk7egCyj+vSsaXmxuWxlQuom8n3JEs/RIWwCuwTOXeI=";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyserial
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "binho-host-adapter";
   version = "0.1.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0mp8xa1qwaww2k5g2nqg7mcivzsbfw2ny1l9yjsi73109slafv8y";
   };

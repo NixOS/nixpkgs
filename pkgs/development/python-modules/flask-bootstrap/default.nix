@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, visitor, dominate }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask, visitor, dominate }:
 
 buildPythonPackage rec {
   pname = "Flask-Bootstrap";
   version = "3.3.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1j1s2bplaifsnmr8vfxa3czca4rz78xyhrg4chx39xl306afs26b";
   };

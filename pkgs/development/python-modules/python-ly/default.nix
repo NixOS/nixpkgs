@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchFromPyPI, lib }:
 
 buildPythonPackage rec {
   pname = "python-ly";
   version = "0.9.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d4d2b68eb0ef8073200154247cc9bd91ed7fb2671ac966ef3d2853281c15d7a8";
   };

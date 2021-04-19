@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest-asyncio
 , pytest-cov
 , pytest-httpserver
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "solax";
   version = "0.2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-3WhJBBnIl6C0AdEsmSX3ZEVDThzCBguS4UUri80ifGg=";
   };

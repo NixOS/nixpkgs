@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , alembic
 , click
 , cloudpickle
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   version = "1.12.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9b8af18d6e779fbbb094edfeb963691e485bba62eeec39fd62dfbe34bc12afeb";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k, pythonOlder
 # runtime dependencies
 , pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata
 # test suite dependencies
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "3.6.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Quandl";
     sha256 = "0jr69fqxhzdmkfh3fxz0yp2kks2hkmixrscjjf59q2l7irglwhc4";

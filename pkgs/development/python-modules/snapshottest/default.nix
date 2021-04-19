@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fastdiff
 , six
 , termcolor
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "snapshottest";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0g35ggqw4jd9zmazw55kj6gfjdghv49qx4jw5q231qyqj8fzijmv";
   };

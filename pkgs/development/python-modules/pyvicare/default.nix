@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , requests_oauthlib
 , simplejson
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.2.5";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyViCare";
     inherit version;
     sha256 = "16wqqjs238ad6znlz2gjadqj8891226bd02a1106xyz6vbbk2gdk";

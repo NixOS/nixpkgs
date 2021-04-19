@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , pillow
 , pymaging_png
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "qrcode";
   version = "6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "505253854f607f2abf4d16092c61d4e9d511a3b4392e60bff957a68592b04369";
   };

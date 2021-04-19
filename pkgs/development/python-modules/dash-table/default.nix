@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "dash_table";
   version = "4.11.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "90fbdd12eaaf657aa80d429263de4bbeef982649eb5981ebeb2410d67c1d20eb";
   };

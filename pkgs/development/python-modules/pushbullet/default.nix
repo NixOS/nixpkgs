@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , requests, websocket_client, python_magic
 , pytest, mock }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pushbullet.py";
   version = "0.12.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "917883e1af4a0c979ce46076b391e0243eb8fe0a81c086544bcfa10f53e5ae64";
   };

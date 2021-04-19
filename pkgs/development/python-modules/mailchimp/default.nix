@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , docopt
 , requests
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.0.9";
   pname = "mailchimp";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
   };

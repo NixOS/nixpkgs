@@ -2,7 +2,7 @@
 , aiosmb
 , aiowinreg
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , minidump
 , minikerberos
 , msldap
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pypykatz";
   version = "0.4.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0il5sj47wyf9gn76alm8v1l63rqw2vsd27v6f7q1dpn0wq209syi";
   };

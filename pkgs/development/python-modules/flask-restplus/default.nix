@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , blinker
 , tzlocal
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "flask-restplus";
   version = "0.13.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0p4zz8b5bwbw7w0vhbyihl99d2gw13cb81rxzj4z626a1cnl8vm6";
   };

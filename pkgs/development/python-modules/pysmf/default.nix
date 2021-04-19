@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pkg-config, libsmf, glib, pytest }:
 
 buildPythonPackage rec {
   pname = "pysmf";
   version = "0.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "10i7vvvdx6c3gl4afsgnpdanwgzzag087zs0fxvfipnqknazj806";
   };

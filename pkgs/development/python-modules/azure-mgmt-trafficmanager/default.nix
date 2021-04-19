@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-trafficmanager";
   version = "0.51.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "fc8ae77022cfe52fda4379a2f31e0b857574d536e41291a7b569b5c0f4104186";

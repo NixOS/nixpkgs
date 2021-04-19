@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, mock, six, twisted, isPy37, isPy27 }:
 
 buildPythonPackage rec {
   pname = "txaio";
   version = "20.4.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17938f2bca4a9cabce61346758e482ca4e600160cbc28e861493eac74a19539d";
   };

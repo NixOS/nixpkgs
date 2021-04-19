@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonAtLeast
 , python
 }:
@@ -9,7 +9,7 @@ if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
   pname = "ipaddress";
   version = "1.0.23";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b7f8e0369580bb4a24d5ba1d7cc29660a4a6987763faf1d8a8046830e020e7e2";
   };

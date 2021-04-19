@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, dns, pyasn1 }:
+{ lib, fetchFromPyPI, buildPythonPackage, dns, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     ./dnspython-ip6.patch
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d213c1de71d92505f95ced0460ee0f84fdc4ddcacb7d7dd343739ed4028e5569";
   };

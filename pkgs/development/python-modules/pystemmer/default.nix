@@ -1,10 +1,10 @@
-{ lib, python, fetchPypi, buildPythonPackage, cython }:
+{ lib, python, fetchFromPyPI, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
   pname = "PyStemmer";
   version = "2.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9b81c35302f1d2a5ad9465b85986db246990db93d97d3e8f129269ed7102788e";
   };

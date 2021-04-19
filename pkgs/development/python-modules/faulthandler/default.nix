@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromPyPI, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "faulthandler";
   version = "3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08ybjjdrfp01syckksxzivqhn6b0yhmc17kdxh77h0lg6rvgvk8y";
   };

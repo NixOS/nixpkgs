@@ -10,7 +10,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
   version = "0.7.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0m62p3jlbx5dlp3j8wn1ka1sqpffsxbpsgv2h5cvj1n1lsgbss2s";
   };

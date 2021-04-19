@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-api-core
 , google-cloud-core
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "google-cloud-translate";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-zVRD2lWRaKtSlZn84Rqpj+a1OT7Wcak524TKsBctueE=";
   };

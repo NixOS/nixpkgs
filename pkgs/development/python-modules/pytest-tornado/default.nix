@@ -2,14 +2,14 @@
 , buildPythonPackage
 , pytest
 , tornado
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pytest-tornado";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1cgisd7lb9q2hf55558cbn5jfhv65vsgk46ykgidzf9kqcq1kymr";
   };

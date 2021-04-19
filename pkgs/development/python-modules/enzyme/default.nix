@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromPyPI, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "enzyme";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # Tests rely on files obtained over the network
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1fv2kh2v4lwj0hhrhj9pib1pdjh01yr4xgyljhx11l94gjlpy5pj";
   };

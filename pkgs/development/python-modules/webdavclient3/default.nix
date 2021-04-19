@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, dateutil, lxml, requests
+{ buildPythonPackage, fetchFromPyPI, isPy27, lib, dateutil, lxml, requests
 , pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0yw3n5m70ysjn1ch48znpn4zr4a1bd0lsm7q2grqz7q5hfjzjwk0";
   };

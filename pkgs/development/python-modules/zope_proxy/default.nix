@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_interface
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "zope.proxy";
   version = "4.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a66a0d94e5b081d5d695e66d6667e91e74d79e273eee95c1747717ba9cb70792";
   };

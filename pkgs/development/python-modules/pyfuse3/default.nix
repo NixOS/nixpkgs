@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
 
 buildPythonPackage rec {
   pname = "pyfuse3";
   version = "3.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9feb42a8639dc4815522ee6af6f7221552cfd2df1c7a7e9df96767be65e18667";
   };

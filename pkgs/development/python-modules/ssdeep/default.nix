@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkgs
 , cffi
 , six
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "ssdeep";
   version = "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0px8k4fjbkjb717bg2v7rjhm4iclrxzq7sh0hfqs55f4ddqi0m8v";
   };

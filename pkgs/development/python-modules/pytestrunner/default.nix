@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-runner";
   version = "5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "96c7e73ead7b93e388c5d614770d2bae6526efd997757d3543fe17b557a0942b";
   };

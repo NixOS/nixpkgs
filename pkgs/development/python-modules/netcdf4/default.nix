@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy, pytest
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7577f4656af8431b2fa6b6797acb45f81fa1890120e9123b3645e14765da5a7c";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , pytest
 , pytest-pylint
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   format = "wheel";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version format;
     python = "py3";
     sha256 = "b745313c5ff9d6a3092eefa97f83fa4dbed178c9ce69161b655e95497cb2f38b";

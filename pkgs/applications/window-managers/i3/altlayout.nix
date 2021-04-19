@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
   version = "0.3";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
   };

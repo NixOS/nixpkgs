@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , spake2
 , pynacl
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pname = "magic-wormhole";
   version = "0.12.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , twitter-common-log
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname   = "twitter.common.confluence";
   version = "0.3.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "323dde2c519f85020569d7a343432f3aac16bce6ebe5e34774dbde557296697c";
   };

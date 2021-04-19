@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI
 , paramiko, pycurl, ajpy, impacket, pyopenssl, cx_oracle, mysqlclient
 , psycopg2, pycrypto, dnspython, ipy, pysnmp, pyasn1, pysqlcipher3 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.9";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "68cb24bdc3042ee0d47a288b19a8b99a6c54bdbd4ddf0c5817d9b9ac0a0d8a15";
   };

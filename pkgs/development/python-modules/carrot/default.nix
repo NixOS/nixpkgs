@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , nose, amqplib, anyjson }:
 
 buildPythonPackage rec {
   pname = "carrot";
   version = "0.10.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0s14rs2fgp1s2qa0avn8gj33lwc3k1hd4y9a2h6mhg487i7kfinb";
   };

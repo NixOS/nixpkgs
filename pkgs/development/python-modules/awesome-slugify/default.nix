@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, unidecode, regex, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, unidecode, regex, python }:
 
 buildPythonPackage rec {
   pname = "awesome-slugify";
   version = "1.6.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wgxrhr8s5vk2xmcz9s1z1aml4ppawmhkbggl9rp94c747xc7pmv";
   };

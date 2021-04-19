@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "py3dns";
   version = "3.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1r25f0ys5p37bhld7m7n4gb0lrysaym3w318w2f8bncq7r3d81qz";
   };

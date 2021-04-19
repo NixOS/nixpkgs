@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , click
-, fetchPypi
+, fetchFromPyPI
 , ipython
 , mock
 , pytestCheckHook
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.15.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "587825ed60b1711daea4832cf37524dfd404325b7db5e25ebe88c495c9f807a0";
   };

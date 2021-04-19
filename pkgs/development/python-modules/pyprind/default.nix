@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , psutil
 , pytest }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "PyPrind";
   version = "2.11.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xg6m5hr33h9bdlrr42kc58jm2m87a9zsagy7n2m4n407d2snv64";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, psutil, docutils }:
+{ lib, buildPythonPackage, fetchFromPyPI, psutil, docutils }:
 
 buildPythonPackage rec {
   pname = "pynisher";
   version = "0.6.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e4e1d9366fc4ca60b4b2354b6d12e65600600a8c7bf4392c84f2f4ff4abc85ff";
   };

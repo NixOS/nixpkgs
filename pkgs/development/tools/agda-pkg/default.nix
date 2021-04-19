@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ee370889a1558caf45930d9f898dbe248048078e1e7e3ee17382bf574dc795f2";
   };

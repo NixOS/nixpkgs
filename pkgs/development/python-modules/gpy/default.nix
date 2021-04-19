@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , scipy
 , six
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "GPy";
   version = "1.9.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04faf0c24eacc4dea60727c50a48a07ddf9b5751a3b73c382105e2a31657c7ed";
   };

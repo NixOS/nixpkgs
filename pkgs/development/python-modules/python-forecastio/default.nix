@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi
+{ buildPythonPackage, lib, fetchFromPyPI
 , requests
 , nose
 , responses
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "python-forecastio";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0m6lf4a46pnwm5xg9dnmwslwzrpnj6d9agw570grciivbvb1ji0l";
 

@@ -1,6 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
+, fetchFromPyPI
 , git
 , isPy27
 , lib
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "3.3.0";
   disabled = isPy27;
 
-  # fetchPypi does not provide tests
+  # fetchFromPyPI does not provide tests
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;

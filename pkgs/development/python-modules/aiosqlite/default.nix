@@ -1,7 +1,7 @@
 { lib
 , aiounittest
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pytestCheckHook
 , typing-extensions
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.17.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-8OaswkvEhkFJJnrIL7Rt+zvkRV+Z/iHfgmCcxua67lE=";
   };

@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
   version = "3.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyOpenGL-accelerate";
     inherit version;
     sha256 = "01iggy5jwxv7lxnj51zbmlbhag9wcb7dvrbwgi97i90n0a5m3r8j";

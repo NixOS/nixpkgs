@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , cmake
 , python
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "vowpalwabbit";
   version = "8.9.0";
 
-  src = fetchPypi{
+  src = fetchFromPyPI{
     inherit pname version;
     sha256 = "37fb7a400f3a7923a04df9921b3eef1bbe96117424ef083dcfed0e4eea77fa08";
   };

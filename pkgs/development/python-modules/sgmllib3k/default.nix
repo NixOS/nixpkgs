@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   disabled = isPy27;
 
-  # fetchFromGitHub instead of fetchPypi to run tests.
+  # fetchFromGitHub instead of fetchFromPyPI to run tests.
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "sgmllib";

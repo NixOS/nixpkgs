@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, packaging, pytest, setuptools-scm }:
+{ lib, buildPythonPackage, fetchFromPyPI, packaging, pytest, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "77d736073598a6224825eef8b8e0c760812a61410af2180cb070b27eb79f257d";
   };

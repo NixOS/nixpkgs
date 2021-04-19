@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , requests
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pymystem3";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15gv78m17g958gfka6rr3rg230g6b5ssgk8bfpsp7k2iajhxdbhs";
   };

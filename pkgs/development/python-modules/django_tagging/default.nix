@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, django }:
+{ buildPythonPackage, fetchFromPyPI, django }:
 
 buildPythonPackage rec {
   pname = "django-tagging";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "28d68fa4831705e51ad7d1e845ed6dd9e354f9b6f8a5f63b655a430646ef4e8d";
   };

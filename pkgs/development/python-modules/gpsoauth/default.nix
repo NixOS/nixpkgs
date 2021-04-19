@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cffi
 , cryptography
 , enum34
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "0.4.3";
   pname = "gpsoauth";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b38f654450ec55f130c9414d457355d78030a2c29c5ad8f20b28304a9fc8fad7";
   };

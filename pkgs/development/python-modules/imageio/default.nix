@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy27
 , pathlib
-, fetchPypi
+, fetchFromPyPI
 , pillow
 , psutil
 , imageio-ffmpeg
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.9.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     sha256 = "52ddbaeca2dccf53ba2d6dec5676ca7bc3b2403ef8b37f7da78b7654bb3e10f0";
     inherit pname version;
   };

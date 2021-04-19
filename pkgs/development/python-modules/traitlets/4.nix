@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , pytest
 , mock
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "traitlets";
   version = "4.3.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d023ee369ddd2763310e4c3eae1ff649689440d4ae59d7485eb4cfbbe3e359f7";
   };

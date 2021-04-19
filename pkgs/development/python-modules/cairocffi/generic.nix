@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "cairocffi";
   inherit version disabled;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version sha256;
   };
 

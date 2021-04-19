@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , pkgs
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pysqlite";
   version = "2.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17d3335863e8cf8392eea71add33dab3f96d060666fe68ab7382469d307f4490";
   };

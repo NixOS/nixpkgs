@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , dnspython
 , enum34
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "eventlet";
   version = "0.30.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d00649a7e17de0bcddff1a96311ed3baf1b295b3223d4b71aceafe7b45e6d6f8";
   };

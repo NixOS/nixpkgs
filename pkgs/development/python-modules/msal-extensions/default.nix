@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , isPy27
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "msal-extensions";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0qbq5qn46053aclpwyzac5zs2xgqirn4hwrf1plrg0m8bnhxy8sm";
   };

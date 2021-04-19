@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , zope_testing
 , setuptools
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "plone.testing";
   version = "8.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "082b03aebe81d0bdcc44a917a795ae60d3add2c2abbee11e7c335fb13d5e7ca7";
   };

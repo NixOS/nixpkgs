@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , pythonOlder
 , importlib-metadata
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.2.12";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ag1d7h1wijkc7v2vpgkbqjlnpiwd4nh8zhxiby0989bpmlp3jr3";
   };

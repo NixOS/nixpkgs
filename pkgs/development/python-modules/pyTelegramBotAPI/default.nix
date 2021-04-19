@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests }:
 
 buildPythonPackage rec {
   pname = "pyTelegramBotAPI";
   version = "3.7.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "859136cbd50e99922e1ea495d4ebe8235b2cb10fe419a5421f28855249db4278";
   };

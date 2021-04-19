@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , coveralls
 , pytestcov
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "cftime";
   version = "1.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7c55540bc164746c3c4f86a07c9c7b9ed4dfb0b0d988348ec63cec065c58766d";
   };

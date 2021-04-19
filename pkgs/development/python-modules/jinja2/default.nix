@@ -1,7 +1,7 @@
 { lib, stdenv
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , markupsafe
 , setuptools
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "Jinja2";
   version = "2.11.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
   };

@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "colorz";
   version = "1.0.3";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0ghd90lgplf051fs5n5bb42zffd3fqpgzkbv6bhjw7r8jqwgcky0";
   };

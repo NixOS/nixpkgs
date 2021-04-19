@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-nspkg
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "azure-storage-nspkg";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6f3bbe8652d5f542767d8433e7f96b8df7f518774055ac7c92ed7ca85f653811";
   };

@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-mgmt-common
 , python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.20.1";
   pname = "azure-mgmt-network";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";

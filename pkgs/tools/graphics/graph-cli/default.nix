@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
   version = "0.1.7";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "graph_cli";
     sha256 = "sha256-/v9COgAjuunJ06HHl55J0moV1p4uO+N+w2QwE8tgebQ=";

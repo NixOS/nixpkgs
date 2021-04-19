@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, astunparse }:
+{ lib, fetchFromPyPI, buildPythonPackage, astunparse }:
 
 buildPythonPackage rec {
   pname = "gast";
   version =  "0.4.0";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "40feb7b8b8434785585ab224d1568b857edb18297e5a3047f1ba012bc83b42c1";
   };

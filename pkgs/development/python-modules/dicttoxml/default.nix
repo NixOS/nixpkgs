@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "dicttoxml";
   version = "1.7.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45";
   };
