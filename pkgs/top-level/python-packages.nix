@@ -7187,6 +7187,8 @@ in {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qiling = callPackage ../development/python-modules/qiling { };
+
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
