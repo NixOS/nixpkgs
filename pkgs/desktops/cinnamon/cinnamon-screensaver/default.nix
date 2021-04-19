@@ -23,26 +23,18 @@
 , xapps
 , xorg
 , iso-flags-png-320x420
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "4.6.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "068lh6wcmznfyvny7hx83q2rf4j96b6mv4a5v79y02k9110m7bsm";
+    hash = "sha256-gvSGxSYKnRqJhj2unRYRHp6qGw/O9SxKPzhw5xjCSSQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon-screensaver/pull/349/commits/4a9e5715f406bf2ca1aacddd5fd8f830102a423c.patch";
-      sha256 = "0fmkmskry4c88zcw0i8vsmh6q14k3m937hqi77p5xi1p93imr46y";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

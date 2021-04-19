@@ -3349,6 +3349,7 @@ in
   };
 
   cjdns = callPackage ../tools/networking/cjdns { };
+  cjdns-tools = callPackage ../tools/admin/cjdns-tools { };
 
   cjson = callPackage ../development/libraries/cjson { };
 
@@ -6109,8 +6110,6 @@ in
 
   mxt-app = callPackage ../misc/mxt-app { };
 
-  mxisd = callPackage ../servers/mxisd { };
-
   naabu = callPackage ../tools/security/naabu { };
 
   nagstamon = callPackage ../tools/misc/nagstamon {
@@ -8569,6 +8568,8 @@ in
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
+  swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
+
   swapview = callPackage ../os-specific/linux/swapview/default.nix { };
 
   swec = callPackage ../tools/networking/swec { };
@@ -10609,6 +10610,8 @@ in
 
   inherit (callPackage ../development/compilers/haxe { })
     haxe_4_2
+    haxe_4_1
+    haxe_4_0
     haxe_3_4
     haxe_3_2
     ;
@@ -18681,6 +18684,15 @@ in
 
   nginx = nginxStable;
 
+  nginxQuic = callPackage ../servers/http/nginx/quic.nix {
+    withPerl = false;
+    # We don't use `with` statement here on purpose!
+    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+    # Use latest boringssl to allow http3 support
+    openssl = boringssl;
+  };
+
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -21138,6 +21150,7 @@ in
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
+  flat-remix-gtk = callPackage ../data/themes/flat-remix-gtk { };
 
   font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome-5 { }).v5;
@@ -22531,6 +22544,8 @@ in
   dwl = callPackage ../applications/window-managers/dwl { };
 
   dwm = callPackage ../applications/window-managers/dwm { };
+
+  dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 

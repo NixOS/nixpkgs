@@ -1017,7 +1017,11 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
-    ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
+    ocaml_extlib = ocaml_extlib-1-7-8;
+
+    ocaml_extlib-1-7-8 = callPackage ../development/ocaml-modules/extlib { };
+
+    ocaml_extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
