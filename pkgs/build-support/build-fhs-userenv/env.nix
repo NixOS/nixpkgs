@@ -81,6 +81,9 @@ let
       # compatibility with NixOS
       ln -s /host/etc/static static
 
+      # symlink nix config
+      ln -s /host/etc/nix nix
+
       # symlink some NSS stuff
       ln -s /host/etc/passwd passwd
       ln -s /host/etc/group group
