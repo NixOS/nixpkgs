@@ -16204,6 +16204,8 @@ in
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
+  libutp = callPackage ../development/libraries/libutp { };
+
   libunwind = if stdenv.isDarwin
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
