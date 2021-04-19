@@ -18678,6 +18678,15 @@ in
 
   nginx = nginxStable;
 
+  nginxQuic = callPackage ../servers/http/nginx/quic.nix {
+    withPerl = false;
+    # We don't use `with` statement here on purpose!
+    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+    # Use latest boringssl to allow http3 support
+    openssl = boringssl;
+  };
+
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     withPerl = false;
     # We don't use `with` statement here on purpose!
