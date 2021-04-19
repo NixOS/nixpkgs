@@ -63,6 +63,8 @@ let
         debugInfo = true;
       };
 
+      elixir_ls = callPackage ./elixir_ls.nix { inherit elixir fetchMixDeps mixRelease; };
+
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
