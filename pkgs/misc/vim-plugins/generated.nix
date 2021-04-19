@@ -6314,6 +6314,18 @@ let
     meta.homepage = "https://github.com/bitc/vim-hdevtools/";
   };
 
+  vim-helm = buildVimPluginFrom2Nix {
+    pname = "vim-helm";
+    version = "2020-01-02";
+    src = fetchFromGitHub {
+      owner = "towolf";
+      repo = "vim-helm";
+      rev = "2c2e2e936607ed93f8f75de2066d04feff0e8e81";
+      sha256 = "1vlaqcxxsbys0ybk2x7ri1flyx412ak0dmanqg1cdig6xzhna2kc";
+    };
+    meta.homepage = "https://github.com/towolf/vim-helm/";
+  };
+
   vim-hexokinase = buildVimPluginFrom2Nix {
     pname = "vim-hexokinase";
     version = "2021-03-31";

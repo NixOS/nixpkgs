@@ -626,6 +626,7 @@ tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
 tomtom/tlib_vim
 tools-life/taskwiki
+towolf/vim-helm
 tpope/vim-abolish
 tpope/vim-capslock
 tpope/vim-commentary
