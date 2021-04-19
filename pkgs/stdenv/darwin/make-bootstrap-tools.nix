@@ -1,10 +1,17 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem, crossSystem ? null }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath
+, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+}:
 
-let
-  pkgs = import pkgspath ({ inherit system; } // (if (crossSystem != null) then { inherit crossSystem; } else {}));
-in
-
-with pkgs;
+let cross = if crossSystem != null
+      then { inherit crossSystem; }
+      else {};
+    custom-bootstrap = if bootstrapFiles != null
+      then { stdenvStages = args:
+              let args' = args // { bootstrapFiles = bootstrapFiles; };
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+           }
+      else {};
+in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
 
 let
   llvmPackageSet = if stdenv.hostPlatform.isAarch64 then "llvmPackages_11" else "llvmPackages_7";
