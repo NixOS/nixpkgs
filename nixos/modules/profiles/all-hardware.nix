@@ -58,6 +58,15 @@ in
 
       # Allows using framebuffer configured by the initial boot firmware
       "simplefb"
+
+      # Allwinner support
+
+      # Required for early KMS
+      "sun4i-drm"
+      "sun8i-mixer" # Audio, but required for kms
+
+      # PWM for the backlight
+      "pwm-sun4i"
     ];
 
   # Include lots of firmware.
