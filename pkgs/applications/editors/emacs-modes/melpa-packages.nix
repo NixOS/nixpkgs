@@ -362,6 +362,7 @@ let
         zmq = super.zmq.overrideAttrs (old: {
           stripDebugList = [ "share" ];
           preBuild = ''
+            export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
           nativeBuildInputs = [
@@ -372,7 +373,7 @@ let
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
           postInstall = ''
-            mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
+            mv $EZMQ_LIBDIR/emacs-zmq.* $out/share/emacs/site-lisp/elpa/zmq-*
             rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
             rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
           '';
