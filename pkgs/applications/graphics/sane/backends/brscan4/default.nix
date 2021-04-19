@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
 
     RPATH=${libusb-compat-0_1.out}/lib
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = with lib; ''
+    runHook preInstall
     PATH_TO_BRSCAN4="opt/brother/scanner/brscan4"
     mkdir -p $out/$PATH_TO_BRSCAN4
     cp -rp $PATH_TO_BRSCAN4/* $out/$PATH_TO_BRSCAN4
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/udev/rules.d
     cp -p ${udevRules}/etc/udev/rules.d/*.rules \
       $out/etc/udev/rules.d
+    runHook postInstall
   '';
 
   dontStrip = true;
