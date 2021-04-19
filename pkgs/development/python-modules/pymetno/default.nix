@@ -9,18 +9,29 @@
 
 buildPythonPackage rec {
   pname = "PyMetno";
-  version = "0.8.1";
+  version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "Danielhiversen";
     rev = version;
-    sha256 = "1jngf0mbn5hn166pqh1ga5snwwvv7n5kv1k9kaksrfibixkvpw6h";
+    sha256 = "0b1zm60yqj1mivc3zqw2qm9rqh8cbmx0r58jyyvm3pxzq5cafdg5";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];
+  propagatedBuildInputs = [
+    aiohttp
+    async-timeout
+    pytz
+    xmltodict
+  ];
 
-  pythonImportsCheck = [ "metno"];
+  pythonImportsCheck = [
+    "metno"
+  ];
+
+  # no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "A library to communicate with the met.no api";
