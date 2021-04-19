@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://doomworld.com/eternity";
+    homepage = "https://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
