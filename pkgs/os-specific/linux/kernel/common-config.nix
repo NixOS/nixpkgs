@@ -715,7 +715,6 @@ let
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)
 
       # Enable initrd support.
-      BLK_DEV_RAM       = yes;
       BLK_DEV_INITRD    = yes;
 
       PM_TRACE_RTC         = no; # Disable some expensive (?) features.
