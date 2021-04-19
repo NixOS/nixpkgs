@@ -1,12 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let
-  rev = "2021-04-01";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "re2";
-  version = builtins.replaceStrings [ "-" ] [ "" ] rev;
+  version = "2021-04-01";
 
   src = fetchFromGitHub {
     owner = "google";
