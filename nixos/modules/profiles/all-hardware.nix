@@ -67,6 +67,15 @@ in
 
       # PWM for the backlight
       "pwm-sun4i"
+
+      # Misc. uncategorized hardware
+
+      # Used for some platform's integrated displays
+      "panel-simple"
+      "pwm-bl"
+
+      # Misc "weak" dependencies
+      "analogix-anx6345" # For DP or eDP (e.g. integrated display)
     ];
 
   # Include lots of firmware.
