@@ -76,7 +76,7 @@ rec {
                 else [""];
               fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
                 (builtins.concatLists
-                  (map (path: map (ext: toString "${path}/${dep.name}${ext}") exts) searchPath')
+                  (map (path: map (ext: path + "/" + dep.name + ext) exts) searchPath')
                 );
             in if fn != null then [{key = fn;}] ++ xs
                else xs;
