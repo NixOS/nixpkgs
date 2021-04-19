@@ -21,7 +21,7 @@ jobs:
       uses: peter-evans/commit-comment@v1
       with:
         body: |
-          @${{ github.actor }} pushed a commit directly to master/release branch
+          @${{ github.actor }}, you pushed a commit directly to master/release branch
           instead of going through a Pull Request.
 
           That's highly discouraged beyond the few exceptions listed
