@@ -30189,6 +30189,8 @@ in
 
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
+  phpmyadmin = callPackage ../servers/web-apps/phpmyadmin { };
+
   physlock = callPackage ../misc/screensavers/physlock { };
 
   pjsip = callPackage ../applications/networking/pjsip {
