@@ -4151,6 +4151,8 @@ in
 
   zeek = callPackage ../applications/networking/ids/zeek { };
 
+  zoekt = callPackage ../tools/text/zoekt { };
+
   zoxide = callPackage ../tools/misc/zoxide { };
 
   zzuf = callPackage ../tools/security/zzuf { };
