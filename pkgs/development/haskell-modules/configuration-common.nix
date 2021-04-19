@@ -326,6 +326,7 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
+  parameterized = dontCheck super.parameterized; # https://github.com/louispan/parameterized/issues/2
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
