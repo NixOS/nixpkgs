@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "4.6.3";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1p8irzf20wari1id5rfx5sypywih1jsrmn0f83zlyhc5fxg02r5p";
+    hash = "sha256-zRW+hnoaKKTe4zIJpY1D0Ahc8k5zRbvYBF5Y4vZ6Rbs=";
   };
 
   buildInputs = [

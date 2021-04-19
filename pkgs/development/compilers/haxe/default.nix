@@ -13,7 +13,8 @@ let
       sha
       dune_2
       luv
-      ocaml_extlib
+      (if lib.versionAtLeast version "4.2"
+      then ocaml_extlib else ocaml_extlib-1-7-7)
     ] else with ocaml-ng.ocamlPackages_4_05; [
       ocaml
       camlp4
@@ -124,6 +125,14 @@ in {
       ${defaultPatch}
       sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
     '';
+  };
+  haxe_4_0 = generic {
+    version = "4.0.5";
+    sha256 = "0f534pchdx0m057ixnk07ab4s518ica958pvpd0vfjsrxg5yjkqa";
+  };
+  haxe_4_1 = generic {
+    version = "4.1.5";
+    sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
   };
   haxe_4_2 = generic {
     version = "4.2.1";

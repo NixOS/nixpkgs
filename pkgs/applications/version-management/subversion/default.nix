@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
+  common = { version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
     pname = "subversion";
 
@@ -29,8 +29,7 @@ let
     # Can't do separate $lib and $bin, as libs reference bins
     outputs = [ "out" "dev" "man" ];
 
-    buildInputs = [ zlib apr aprutil sqlite openssl ]
-      ++ extraBuildInputs
+    buildInputs = [ zlib apr aprutil sqlite openssl lz4 utf8proc ]
       ++ lib.optional httpSupport serf
       ++ lib.optional pythonBindings python
       ++ lib.optional perlBindings perl
@@ -114,12 +113,10 @@ in {
   subversion_1_10 = common {
     version = "1.10.7";
     sha256 = "1nhrd8z6c94sc0ryrzpyd98qdn5a5g3x0xv1kdb9da4drrk8y2ww";
-    extraBuildInputs = [ lz4 utf8proc ];
   };
 
   subversion = common {
     version = "1.12.2";
     sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
-    extraBuildInputs = [ lz4 utf8proc ];
   };
 }
