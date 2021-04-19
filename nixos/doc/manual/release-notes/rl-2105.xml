@@ -675,6 +675,11 @@ environment.systemPackages = [
      Currently, the service doesn't enforce nor checks the correct number of paths to correspond to minio requirements.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     All CUDA toolkit versions prior to CUDA 10 have been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
