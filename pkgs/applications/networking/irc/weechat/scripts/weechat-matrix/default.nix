@@ -53,11 +53,11 @@ in buildPythonPackage {
 
   installPhase = ''
     mkdir -p $out/share $out/bin
-    cp $src/main.py $out/share/matrix.py
+    cp main.py $out/share/matrix.py
 
-    cp $src/contrib/matrix_upload.py $out/bin/matrix_upload
-    cp $src/contrib/matrix_decrypt.py $out/bin/matrix_decrypt
-    cp $src/contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
+    cp contrib/matrix_upload.py $out/bin/matrix_upload
+    cp contrib/matrix_decrypt.py $out/bin/matrix_decrypt
+    cp contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
     substituteInPlace $out/bin/matrix_upload \
       --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_sso_helper \
@@ -66,7 +66,7 @@ in buildPythonPackage {
       --replace '/usr/bin/env python3' '${scriptPython}/bin/python'
 
     mkdir -p $out/${python.sitePackages}
-    cp -r $src/matrix $out/${python.sitePackages}/matrix
+    cp -r matrix $out/${python.sitePackages}/matrix
   '';
 
   dontPatchShebangs = true;
