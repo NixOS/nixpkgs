@@ -2759,6 +2759,8 @@ in
 
   meritous = callPackage ../games/meritous { };
 
+  oh-my-git = callPackage ../games/oh-my-git { };
+
   opendune = callPackage ../games/opendune { };
 
   merriweather = callPackage ../data/fonts/merriweather { };
@@ -5046,6 +5048,8 @@ in
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
+
+  godot-export-templates = callPackage ../development/tools/godot/export-templates.nix { };
 
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
