@@ -17,14 +17,14 @@ let
     localDatabaseName ? cfg.localDatabaseName,
     useSudo ? true
   }: ''
-    if ! test -e "${statePath}/.db-created"; then
-      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \\"}
+    if ! test -e ${escapeShellArg "${statePath}/.db-created"}; then
+      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
         ${postgresPackage}/bin/psql postgres -c \
           "CREATE ROLE ${localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${localDatabasePassword}'"
-      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \\"}
+      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
         ${postgresPackage}/bin/createdb \
-          --owner ${localDatabaseUser} ${localDatabaseName}
-      touch ${statePath}/.db-created
+          --owner ${escapeShellArg localDatabaseUser} ${escapeShellArg localDatabaseName}
+      touch ${escapeShellArg "${statePath}/.db-created"}
     fi
   '';
 
@@ -44,66 +44,26 @@ let
     }) cfg.plugins;
 
   mattermostPlugins = with pkgs;
-    if cfg.plugins == null then null
+    if mattermostPluginDerivations == null then null
     else stdenv.mkDerivation {
       name = "${cfg.package.name}-plugins";
       nativeBuildInputs = [
         autoPatchelfHook
-        postgresPackage
       ] ++ mattermostPluginDerivations;
       buildInputs = [
         cfg.package
       ];
       installPhase = ''
-        # Create a temporary Mattermost install to unpack plugins
-        ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} .
-        mkdir -p ./{data,logs}
-
-        # Create the database
-        db_dir="$(pwd)/db"
-        db_socket_dir="$db_dir/run"
-        initdb --no-locale --encoding=utf8 --pgdata="$db_dir"
-        mkdir -p "$db_socket_dir"
-        echo "unix_socket_directories = '$db_socket_dir'" >> db/postgresql.conf
-        echo "listen_addresses = '''" >> db/postgresql.conf
-
-        # Start it
-        pg_ctl start --pgdata="$db_dir"
-        cleanup() {
-          pg_ctl stop --pgdata="$db_dir"
-        }
-        trap cleanup EXIT
-
-        # Create the Mattermost user
-        export PGHOST="$db_socket_dir"
-        ${createDb {
-          statePath = ".";
-          localDatabaseUser = "mattermost";
-          localDatabasePassword = "mattermost";
-          localDatabaseName = "mattermost";
-          useSudo = false;
-        }}
-
-        # Create destination paths for client and server plugins
-        mkdir -p $out/client $out/server
-
-        # Create the Mattermost config
-        ${jq}/bin/jq -s \
-          --arg serverPlugins $out/server \
-          --arg clientPlugins $out/client \
-          --arg socketDir "$db_socket_dir" \ '
-          .[0] |
-          .PluginSettings.Directory = $serverPlugins |
-          .PluginSettings.ClientDirectory = $clientPlugins |
-          .SqlSettings.DriverName = "postgres" |
-          .SqlSettings.DataSource = "postgres://mattermost:mattermost@/mattermost?host=" + $socketDir
-        ' ${cfg.package}/config/config.json > $out/config.json
-
-        # Add the plugins
+        mkdir -p $out/data/plugins
         plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
-        if [ ''${#plugins[@]} -gt 0 ]; then
-          mattermost plugin add "''${plugins[@]}" --config $out/config.json
-        fi
+        for plugin in "''${plugins[@]}"; do
+          hash="$(sha256sum "$plugin" | cut -d' ' -f1)"
+          mkdir -p "$hash"
+          tar -C "$hash" -xzf "$plugin"
+          autoPatchelf "$hash"
+          GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/data/plugins/$hash.tar.gz" .
+          rm -rf "$hash"
+        done
       '';
 
       dontUnpack = true;
@@ -130,8 +90,8 @@ let
         PluginSettings = {
           Enable = true;
           EnableUploads = false;
-          Directory = "${mattermostPlugins}/server";
-          ClientDirectory = "${mattermostPlugins}/client";
+          Directory = "${cfg.statePath}/plugins/server";
+          ClientDirectory = "${cfg.statePath}/plugins/client";
         };
       }
     );
@@ -326,6 +286,10 @@ in
         preStart = ''
           mkdir -p ${cfg.statePath}/{data,config,logs}
           ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
+        '' + lib.optionalString (mattermostPlugins != null) ''
+          mkdir -p ${cfg.statePath}/plugins/{client,server}
+          rm -rf "${cfg.statePath}/data/plugins"
+          ln -sf ${mattermostPlugins}/data/plugins ${cfg.statePath}/data
         '' + lib.optionalString (!cfg.mutableConfig) ''
           rm -f ${cfg.statePath}/config/config.json
           ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > ${cfg.statePath}/config/config.json
@@ -337,13 +301,18 @@ in
             touch ${cfg.statePath}/config/.initial-created
           fi
         '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-          newConfig="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.statePath}/config/config.json ${mattermostConfJSON})"
+          new_config="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.statePath}/config/config.json ${mattermostConfJSON})"
 
           rm -f ${cfg.statePath}/config/config.json
-          echo "$newConfig" > ${cfg.statePath}/config/config.json
+          echo "$new_config" > ${cfg.statePath}/config/config.json
         '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
-          chown ${cfg.user}:${cfg.group} -R ${cfg.statePath}
-          chmod u+rw,g+r,o-rwx -R ${cfg.statePath}
+          find . -maxdepth 1 -not -name data -not -name . -exec chown ${cfg.user}:${cfg.group} -R {} \;
+          find . -maxdepth 1 -not -name data -not -name . -exec chmod u+rw,g+r,o-rwx -R {} \;
+
+          # Don't change permissions recursively on the data and current directory.
+          # This dramatically increases startup times for installations with a lot of files.
+          chown ${cfg.user}:${cfg.group} ${cfg.statePath}/data .
+          chmod u+rw,g+r,o-rwx ${cfg.statePath}/data .
         '';
 
         serviceConfig = {
