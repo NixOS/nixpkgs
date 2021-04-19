@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre.home}"
 
     # install desktop entry and icons
-    cp -r ${icons}/resources/appimage/AppDir/usr $out/
+    cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
   '';
 
   nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
