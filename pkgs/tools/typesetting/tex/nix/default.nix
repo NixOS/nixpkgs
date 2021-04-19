@@ -75,7 +75,7 @@ rec {
                 else if dep.type == "tex" then [".tex" ""]
                 else [""];
               fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
-                (builtins.concatLists 
+                (builtins.concatLists
                   (map (path: map (ext: toString "${path}/${dep.name}${ext}") exts) searchPath')
                 );
             in if fn != null then [{key = fn;}] ++ xs
