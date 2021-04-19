@@ -26,7 +26,7 @@ let
     stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
   in stdenv'.mkDerivation ({
     name = "${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
-    src = attrs.src or fetchNetBSD attrs.path attrs.version attrs.sha256;
+    src = fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];
 
