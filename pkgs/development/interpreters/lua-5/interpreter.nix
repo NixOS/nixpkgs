@@ -38,6 +38,14 @@ self = stdenv.mkDerivation rec {
 
   inherit patches;
 
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+    # Add a target for a shared library to the Makefile.
+    sed -e '1s/^/LUA_SO = liblua.so/' \
+        -e 's/ALL_T *= */&$(LUA_SO) /' \
+        -i src/Makefile
+    cat ${./lua-dso.make} >> src/Makefile
+  '';
+
   # see configurePhase for additional flags (with space)
   makeFlags = [
     "INSTALL_TOP=${placeholder "out"}"
