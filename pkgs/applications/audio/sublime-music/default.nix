@@ -1,4 +1,12 @@
-{ fetchFromGitLab, lib, python3Packages, gobject-introspection, gtk3, pango, wrapGAppsHook
+{ fetchFromGitLab
+, fetchpatch
+, lib
+, python3Packages
+, gobject-introspection
+, gtk3
+, pango
+, wrapGAppsHook
+, xvfb_run
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -8,18 +16,29 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.10";
+  version = "0.11.11";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g78gmiywg07kaywfc9q0yab2bzxs936vb3157ni1z0flbmcwrry";
+    sha256 = "sha256-r4Tn/7CGDny8Aa4kF4PM5ZKMYthMJ7801X3zPdvXh4Q=";
   };
+
+  patches = [
+    # Switch to poetry-core:
+    # https://gitlab.com/sublime-music/sublime-music/-/merge_requests/60
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://gitlab.com/sublime-music/sublime-music/-/commit/9b0af19dbdfdcc5a0fa23e73bb34c7135a8c2855.patch";
+      sha256 = "sha256-cXG0RvrnBpme6yKWM0nfqMqoK0qPT6spflJ9AaaslVg=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.setuptools
+    python3Packages.poetry-core
     wrapGAppsHook
   ];
 
@@ -53,8 +72,14 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  # no tests
-  doCheck = false;
+  # Use the test suite provided by the upstream project.
+  checkInputs = with python3Packages; [
+    pytest
+    pytest-cov
+  ];
+  checkPhase = "${xvfb_run}/bin/xvfb-run pytest";
+
+  # Also run the python import check for sanity
   pythonImportsCheck = [ "sublime_music" ];
 
   postInstall = ''
