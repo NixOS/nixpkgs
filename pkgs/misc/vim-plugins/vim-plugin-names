@@ -483,6 +483,8 @@ prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
 preservim/tagbar
+preservim/vim-pencil
+preservim/vim-wordy
 preservim/vimux
 psliwka/vim-smoothie
 ptzz/lf.vim
@@ -501,8 +503,6 @@ Raimondi/delimitMate
 rakr/vim-one
 rbgrouleff/bclose.vim
 rbong/vim-flog
-reedes/vim-pencil
-reedes/vim-wordy
 rhysd/committia.vim
 rhysd/devdocs.vim
 rhysd/git-messenger.vim

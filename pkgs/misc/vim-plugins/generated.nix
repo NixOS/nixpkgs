@@ -7305,12 +7305,12 @@ let
     pname = "vim-pencil";
     version = "2021-02-06";
     src = fetchFromGitHub {
-      owner = "reedes";
+      owner = "preservim";
       repo = "vim-pencil";
       rev = "2135374d48a7cb89efd5e818c12bb0ff450dfbb4";
       sha256 = "17wgin33fj40brdb3zhm70qls2j2vssc4yrrv36y1qxwi7gdzn0f";
     };
-    meta.homepage = "https://github.com/reedes/vim-pencil/";
+    meta.homepage = "https://github.com/preservim/vim-pencil/";
   };
 
   vim-phabricator = buildVimPluginFrom2Nix {
@@ -8494,12 +8494,12 @@ let
     pname = "vim-wordy";
     version = "2020-10-24";
     src = fetchFromGitHub {
-      owner = "reedes";
+      owner = "preservim";
       repo = "vim-wordy";
       rev = "667426a0171787b2620dffa5b2d7c01c9040237f";
       sha256 = "1lcrisv2wcd8iw76prql03wd11jgmknm3rvbcw7vv4v5r2s9rv5z";
     };
-    meta.homepage = "https://github.com/reedes/vim-wordy/";
+    meta.homepage = "https://github.com/preservim/vim-wordy/";
   };
 
   vim-xdebug = buildVimPluginFrom2Nix {
