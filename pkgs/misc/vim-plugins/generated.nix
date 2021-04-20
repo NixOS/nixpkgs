@@ -5618,6 +5618,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-dispatch/";
   };
 
+  vim-dispatch-neovim = buildVimPluginFrom2Nix {
+    pname = "vim-dispatch-neovim";
+    version = "2017-01-18";
+    src = fetchFromGitHub {
+      owner = "radenling";
+      repo = "vim-dispatch-neovim";
+      rev = "c8c4e21a95c25032a041002f9bf6e45a75a73021";
+      sha256 = "111n3f7lv9nkpj200xh0fwbi3scjqyivpw5fwdjdyiqzd6qabxml";
+    };
+    meta.homepage = "https://github.com/radenling/vim-dispatch-neovim/";
+  };
+
   vim-docbk = buildVimPluginFrom2Nix {
     pname = "vim-docbk";
     version = "2015-04-01";
