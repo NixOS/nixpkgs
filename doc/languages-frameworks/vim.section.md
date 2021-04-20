@@ -154,7 +154,7 @@ in
           ];
           opt = [];
         };
-        customRC = builtins.readFile ./../dotfiles/.vimrc;
+        # ...
       };
      }
     )
