@@ -150,8 +150,6 @@ in
           packages.myPlugins = with pkgs.vimPlugins; {
           start = [
             vim-go # already packaged plugin
-            vim-nix
-            coverage # custom package
             easygrep # custom package
           ];
           opt = [];
