@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , asn1crypto
 , asysocks
 , minikerberos
@@ -14,11 +14,9 @@ buildPythonPackage rec {
   pname = "msldap";
   version = "0.3.29";
 
-  src = fetchFromGitHub {
-    owner = "skelsec";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-blC65xSGe2dD/g+u9+eYRwaNCv5icdUxApP3BUVOHKo=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0khwyhylh28qvz35pdckr5fdd82zsybv0xmzlzjbgcv99cyy1a94";
   };
 
   propagatedBuildInputs = [
