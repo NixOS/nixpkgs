@@ -2692,6 +2692,8 @@ in {
 
   geeknote = callPackage ../development/python-modules/geeknote { };
 
+  gemfileparser = callPackage ../development/python-modules/gemfileparser { };
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   genome-collector = callPackage ../development/python-modules/genome-collector { };
