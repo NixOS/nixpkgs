@@ -272,6 +272,7 @@ keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
+kevinhwang91/rnvimr
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
@@ -579,6 +580,7 @@ sunaku/vim-dasht
 svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
+TaDaa/vimade
 takac/vim-hardtime
 tami5/compe-conjure
 tami5/lispdocs.nvim
