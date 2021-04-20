@@ -2177,6 +2177,8 @@ in {
 
   django-sr = callPackage ../development/python-modules/django-sr { };
 
+  django-statici18n = callPackage ../development/python-modules/django-statici18n { };
+
   django-storages = callPackage ../development/python-modules/django-storages { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
