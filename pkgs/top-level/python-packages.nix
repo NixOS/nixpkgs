@@ -2307,6 +2307,18 @@ in {
     inherit (pkgs) p7zip;
   };
 
+  extractcode-libarchive = callPackage ../development/python-modules/extractcode/libarchive.nix {
+    inherit (pkgs)
+      libarchive
+      libb2
+      bzip2
+      expat
+      lz4
+      lzma
+      zlib
+      zstd;
+  };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
