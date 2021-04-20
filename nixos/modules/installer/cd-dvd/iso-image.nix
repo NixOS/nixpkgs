@@ -365,11 +365,13 @@ let
     }
 
     ${lib.optionalString (refindBinary != null) ''
-    menuentry 'rEFInd' --class refind {
-      # UUID is hard-coded in the derivation.
-      search --set=root --no-floppy --fs-uuid 1234-5678
-      chainloader (\$root)/EFI/boot/${refindBinary}
-    }
+    # GRUB apparently cannot do "chainloader" operations on "CD".
+    if [ "\$root" != "cd0" ]; then
+      menuentry 'rEFInd' --class refind {
+        # \$root defaults to the drive the EFI is found on.
+        chainloader (\$root)/EFI/boot/${refindBinary}
+      }
+    fi
     ''}
     menuentry 'Firmware Setup' --class settings {
       fwsetup
