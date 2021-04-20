@@ -3,25 +3,29 @@
 , wlroots, wayland-protocols, pixman, libxkbcommon
 , cairo , pango, fontconfig, pandoc, systemd, mesa
 , withXwayland ? true, xwayland
-, nixosTests
+, nixosTests, libdrm
 }:
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = "cagebreak";
     rev = version;
-    hash = "sha256-F7fqDVbJS6pVgmj6C1/l9PAaz5yzcYpaq6oc6a6v/Qk=";
+    sha256 = "10ps59dbvxalkdy0rs67k4dgkhy16xspdwpxl551dcxrgcj2740y";
   };
+
+  postPatch = ''
+    substituteInPlace message.c --replace '<drm_fourcc.h>' '<libdrm/drm_fourcc.h>'
+  '';
 
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon cairo
-    pango fontconfig pandoc systemd
+    pango fontconfig pandoc systemd libdrm
     mesa # for libEGL headers
   ];
 
