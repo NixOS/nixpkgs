@@ -8317,6 +8317,8 @@ in {
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
+  seahub = callPackage ../development/python-modules/seahub { };
+
   seaserv = toPythonModule pkgs.seafile-server;
 
   seccomp = callPackage ../development/python-modules/seccomp { };
