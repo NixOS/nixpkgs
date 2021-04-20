@@ -3851,6 +3851,18 @@ let
     meta.homepage = "https://github.com/gu-fan/riv.vim/";
   };
 
+  rnvimr = buildVimPluginFrom2Nix {
+    pname = "rnvimr";
+    version = "2020-10-02";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "rnvimr";
+      rev = "d83f5a8e070a1fc7e7af0aeea58e71b78956daab";
+      sha256 = "0iwj01p9c2kczhx69vxrh1qd4z41ymcgfq5235b1l0rnz4d6v82y";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/rnvimr/";
+  };
+
   robotframework-vim = buildVimPluginFrom2Nix {
     pname = "robotframework-vim";
     version = "2017-04-14";
