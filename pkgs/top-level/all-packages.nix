@@ -2542,6 +2542,8 @@ in
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
+  giph = callPackage ../applications/video/giph { };
+
   gir-rs = callPackage ../development/tools/gir { };
 
   gist = callPackage ../tools/text/gist { };
@@ -2667,6 +2669,8 @@ in
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
+  jiten = callPackage ../applications/misc/jiten { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   joycond = callPackage ../os-specific/linux/joycond { };
@@ -2758,6 +2762,8 @@ in
   megacmd = callPackage ../applications/misc/megacmd { };
 
   meritous = callPackage ../games/meritous { };
+
+  oh-my-git = callPackage ../games/oh-my-git { };
 
   opendune = callPackage ../games/opendune { };
 
@@ -3464,6 +3470,8 @@ in
   evscript = callPackage ../tools/inputmethods/evscript { };
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
+
+  kime = callPackage ../tools/inputmethods/kime { };
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
@@ -5046,6 +5054,8 @@ in
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
+
+  godot-export-templates = callPackage ../development/tools/godot/export-templates.nix { };
 
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
@@ -25106,6 +25116,8 @@ in
   pamix = callPackage ../applications/audio/pamix { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
+
+  myxer = callPackage ../applications/audio/myxer { };
 
   ncpamixer = callPackage ../applications/audio/ncpamixer { };
 

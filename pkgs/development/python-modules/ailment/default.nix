@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.0.5903";
+  version = "9.0.6281";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-75Ul9JfMFYv3AfBlgmer6IDyfgOAS4AdXexznoxi35Y=";
+    sha256 = "sha256-IFUGtTO+DY8FIxLgvmwM/y/RQr42T9sABPpnJMILkqg=";
   };
 
   propagatedBuildInputs = [ pyvex ];

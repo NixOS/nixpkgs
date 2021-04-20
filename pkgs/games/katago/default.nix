@@ -33,14 +33,14 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.8.1";
-  githash = "73bc3e38b3490cbe00179c9c37f5385dfd60c6bc";
+  version = "1.8.2";
+  githash = "b846bddd88fbc5353e4a93fa514f6cbf45358362";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-Rj6fgj1ZQgYhz6TrZk5b8dCMsCPk5N3qN3kgqV+UEDc=";
+    sha256 = "sha256-kL+y2rsEiC5GGDlWrbzxlJvLxHDCuvVT6CDOlUtXpDk=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
