@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, lib
+{ stdenvNoCC, fetchgit, lib
 , yad, mkvtoolnix-cli, libnotify }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "mpv-convert-script";
   version = "2016-03-18";
   src = fetchgit {
