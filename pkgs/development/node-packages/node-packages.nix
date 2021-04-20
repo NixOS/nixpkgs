@@ -88881,6 +88881,27 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  katex = nodeEnv.buildNodePackage {
+    name = "katex";
+    packageName = "katex";
+    version = "0.13.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/katex/-/katex-0.13.2.tgz";
+      sha512 = "u/KhjFDhyPr+70aiBn9SL/9w/QlLagIXBi2NZSbNnBUp2tR8dCjQplyEMkEzniem5gOeSCBjlBUg4VaiWs1JJg==";
+    };
+    dependencies = [
+      sources."commander-6.2.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Fast math typesetting for the web.";
+      homepage = "https://katex.org";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   karma = nodeEnv.buildNodePackage {
     name = "karma";
     packageName = "karma";
