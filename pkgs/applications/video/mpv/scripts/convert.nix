@@ -39,6 +39,8 @@ stdenvNoCC.mkDerivation {
       and Alt+W again to mark the end of the clip. Then a settings window opens.
     '';
     license = licenses.unfree;
+    # script crashes mpv. See https://github.com/NixOS/nixpkgs/issues/113202
+    broken = true;
   };
 }
 
