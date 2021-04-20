@@ -39,11 +39,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.0.0";
+  version  = "4.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "1d94072yns2xrjpagw1mqq7iyywhwz7vn3lgjdwmbgjy79jzcs1k";
+    sha256 = "1f8a4kflslsjl8jrryhwg034h1yc9y3y1zmllgww3fqkz3aj4xik";
   };
 
   buildInputs = [
