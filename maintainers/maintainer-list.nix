@@ -9457,6 +9457,12 @@
     githubId = 187109;
     name = "Bjarki Ágúst Guðmundsson";
   };
+  suryasr007 = {
+    email = "94suryateja@gmail.com";
+    github = "suryasr007";
+    githubId = 10533926;
+    name = "Surya Teja V";
+  };
   suvash = {
     email = "suvash+nixpkgs@gmail.com";
     github = "suvash";
