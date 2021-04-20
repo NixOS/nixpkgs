@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
 , setuptools-scm
 , importlib-metadata
 , dbus-python
@@ -25,15 +25,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals stdenv.isLinux [
+  propagatedBuildInputs = [
+    # this should be optional, however, it has a different API
+    importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
+
     dbus-python
     jeepney
     secretstorage
   ];
 
-  pythonImportsCheck = [ "keyring" ];
+  pythonImportsCheck = [ "keyring" "keyring.backend" ];
 
   meta = with lib; {
     description = "Store and access your passwords safely";
