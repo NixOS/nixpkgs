@@ -63,6 +63,11 @@
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;
+      devShell = {
+        x86_64-linux = import ./shell.nix { system = "x86_64-linux"; };
+        x86_64-darwin = import ./shell.nix { system = "x86_64-darwin"; };
+        aarch64-linux = import ./shell.nix { system = "aarch64-linux"; };
+      };
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;

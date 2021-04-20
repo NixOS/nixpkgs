@@ -1,0 +1,19 @@
+[devshell]
+name = "nixpkgs"
+packages = [
+  "fd",
+  "nixpkgs-fmt",
+]
+
+[[commands]]
+name = "fmt"
+help = "Check Nix formatting"
+category = "linters"
+command = "nixpkgs-fmt ${@} ."
+
+[[commands]]
+name = "evalnix"
+help = "Check Nix parsing"
+category = "linters"
+command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null"
+
