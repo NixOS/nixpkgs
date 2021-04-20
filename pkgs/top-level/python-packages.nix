@@ -391,6 +391,8 @@ in {
 
   androguard = callPackage ../development/python-modules/androguard { };
 
+  angr = callPackage ../development/python-modules/angr { };
+
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
@@ -1340,6 +1342,8 @@ in {
   claripy =  callPackage ../development/python-modules/claripy { };
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi { };
+
+  cle = callPackage ../development/python-modules/cle { };
 
   cleo = callPackage ../development/python-modules/cleo { };
 
@@ -6668,6 +6672,8 @@ in {
   pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
+
+  pyxbe = callPackage ../development/python-modules/pyxbe { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 

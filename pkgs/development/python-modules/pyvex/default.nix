@@ -2,9 +2,9 @@
 , stdenv
 , archinfo
 , bitstring
-, fetchPypi
-, cffi
 , buildPythonPackage
+, cffi
+, fetchPypi
 , future
 , pycparser
 }:
@@ -25,6 +25,11 @@ buildPythonPackage rec {
     future
     pycparser
   ];
+
+  postPatch = ''
+    substituteInPlace pyvex_c/Makefile \
+      --replace "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc"
+  '';
 
   # No tests are available on PyPI, GitHub release has tests
   # Switch to GitHub release after all angr parts are present

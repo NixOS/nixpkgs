@@ -236,6 +236,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    dap =  callPackage ../development/ocaml-modules/dap { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
@@ -929,6 +931,8 @@ let
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
+
+    path_glob = callPackage ../development/ocaml-modules/path_glob { };
 
     pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
