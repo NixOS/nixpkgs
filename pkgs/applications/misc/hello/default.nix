@@ -1,16 +1,17 @@
 { lib
+, runCommand
 , stdenv
 , fetchurl
 , testVersion
 , hello
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "hello";
   version = "2.10";
 
   src = fetchurl {
-    url = "mirror://gnu/hello/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/hello/${self.pname}-${self.version}.tar.gz";
     sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
   };
 
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
   passthru.tests.version =
     testVersion { package = hello; };
 
+  passthru.tests.run = runCommand "hello-test-run" {
+    nativeBuildInputs = [ self ];
+  } ''
+    diff -U3 --color=auto <(hello) <(echo 'Hello, world!')
+    touch $out
+  '';
+
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
     longDescription = ''
@@ -26,9 +34,9 @@ stdenv.mkDerivation rec {
       It is fully customizable.
     '';
     homepage = "https://www.gnu.org/software/hello/manual/";
-    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}";
+    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${self.version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };
-}
+})
