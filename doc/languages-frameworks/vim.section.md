@@ -138,9 +138,7 @@ let
       sha256 = "0y2p5mz0d5fhg6n68lhfhl8p4mlwkb82q337c22djs4w5zyzggbc";
     };
   };
-
 in
-
 {
   environment.systemPackages = [
     (
