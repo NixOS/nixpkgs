@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
   ++ lib.optional withQt5 "--qt-gui"
