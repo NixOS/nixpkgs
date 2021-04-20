@@ -8756,6 +8756,10 @@ in {
 
   typecode = callPackage ../development/python-modules/typecode { };
 
+  typecode-libmagic = callPackage ../development/python-modules/typecode/libmagic.nix {
+    inherit (pkgs) file zlib;
+  };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
