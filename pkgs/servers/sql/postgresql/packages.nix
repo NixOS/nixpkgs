@@ -45,6 +45,8 @@ self: super: {
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
 
+    pgsql_http = super.callPackage ./ext/pgsql_http.nix { };
+
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
     pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
