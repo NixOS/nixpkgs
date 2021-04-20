@@ -5743,6 +5743,8 @@ in
 
   jq = callPackage ../development/tools/jq { };
 
+  jql = callPackage ../development/tools/jql { };
+
   jo = callPackage ../development/tools/jo { };
 
   jrnl = python3Packages.callPackage ../applications/misc/jrnl { };
