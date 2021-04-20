@@ -3,7 +3,7 @@
 , dotnet-sdk_3
 , autoPatchelfHook
 , glib
-, libdbusmenu-glib
+, libdbusmenu
 , vmopts ? null
 }:
 
@@ -34,7 +34,7 @@ let
       buildInputs = (attrs.buildInputs or []) ++ optional (stdenv.isLinux) [
         python3
         stdenv.cc.cc
-        libdbusmenu-glib
+        libdbusmenu
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
