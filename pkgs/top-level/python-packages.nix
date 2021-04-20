@@ -5329,6 +5329,8 @@ in {
 
   pluggy = callPackage ../development/python-modules/pluggy { };
 
+  plugincode = callPackage ../development/python-modules/plugincode { };
+
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
   plugnplay = callPackage ../development/python-modules/plugnplay { };
