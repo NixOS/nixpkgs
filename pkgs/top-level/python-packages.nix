@@ -7674,6 +7674,8 @@ in {
 
   scales = callPackage ../development/python-modules/scales { };
 
+  scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
+
   scandir = callPackage ../development/python-modules/scandir { };
 
   scapy = callPackage ../development/python-modules/scapy { };
