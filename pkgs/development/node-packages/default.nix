@@ -241,6 +241,10 @@ let
       '';
     };
 
+    teck-programmer = super.teck-programmer.override {
+      buildInputs = [ pkgs.libusb ];
+    };
+
     vega-cli = super.vega-cli.override {
       nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [

@@ -279,6 +279,23 @@ let
         };
       };
 
+      editorconfig.editorconfig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "EditorConfig";
+          publisher = "EditorConfig";
+          version = "0.16.4";
+          sha256 = "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
+          description = "EditorConfig Support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig";
+          homepage = "https://github.com/editorconfig/editorconfig-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
       edonet.vscode-command-runner = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-command-runner";
@@ -522,6 +539,23 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      iciclesoft.workspacesort = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "workspacesort";
+          publisher = "iciclesoft";
+          version = "1.6.0";
+          sha256 = "1pbk8kflywll6lqhmffz9yjf01dn8xq8sk6rglnfn2kl2ildfhh6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/iciclesoft.workspacesort/changelog";
+          description = "Sort workspace-folders alphabetically rather than in chronological order";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=iciclesoft.workspacesort";
+          homepage = "https://github.com/iciclesoft/workspacesort-for-VSCode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
         };
       };
 

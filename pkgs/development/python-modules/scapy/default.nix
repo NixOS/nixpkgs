@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.4";
+  version = "2.4.5";
 
   disabled = isPyPy;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "1wpx7gps3g8q5ykbfcd67mxwcs416zg37b53fwfzzlc1m58vhk3p";
+    sha256 = "0nxci1v32h5517gl9ic6zjq8gc8drwr0n5pz04c91yl97xznnw94";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     patchShebangs .
     .config/ci/test.sh
   '';
+  pythonImportsCheck = [ "scapy" ];
 
   meta = with lib; {
     description = "A Python-based network packet manipulation program and library";
@@ -70,7 +71,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://scapy.net/";
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos bjornfor ];
   };
