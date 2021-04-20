@@ -1,0 +1,34 @@
+From a278f9287f5decdc1e75b16bb39049a2673de5e6 Mon Sep 17 00:00:00 2001
+From: Ruud van Asseldonk <ruud@chorus.one>
+Date: Mon, 26 Apr 2021 13:02:27 +0200
+Subject: [PATCH] Make test_hash_stored_account pass in release mode
+
+The hash differs between debug and release mode, which makes the test
+fail when running under "cargo test --release". Use cfg! to include a
+different expected hash in release mode.
+---
+ runtime/src/accounts_db.rs | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git runtime/src/accounts_db.rs runtime/src/accounts_db.rs
+index b351f3353..5d5759bbf 100644
+--- a/runtime/src/accounts_db.rs
++++ b/runtime/src/accounts_db.rs
+@@ -7538,8 +7538,12 @@ pub mod tests {
+             hash: &hash,
+         };
+         let account = stored_account.clone_account();
+-        let expected_account_hash =
+-            Hash::from_str("4StuvYHFd7xuShVXB94uHHvpqGMCaacdZnYB74QQkPA1").unwrap();
++
++        let expected_account_hash = if cfg!(debug_assertions) {
++            Hash::from_str("4StuvYHFd7xuShVXB94uHHvpqGMCaacdZnYB74QQkPA1").unwrap()
++        } else {
++            Hash::from_str("33ruy7m3Xto7irYfsBSN74aAzQwCQxsfoZxXuZy2Rra3").unwrap()
++        };
+ 
+         assert_eq!(
+             AccountsDb::hash_stored_account(slot, &stored_account),
+-- 
+2.31.1
+
