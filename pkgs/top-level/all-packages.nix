@@ -25728,6 +25728,8 @@ in
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
+  sish = callPackage ../tools/networking/sish { };
+
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
