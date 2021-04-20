@@ -2301,6 +2301,8 @@ in {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  extractcode = callPackage ../development/python-modules/extractcode { };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
