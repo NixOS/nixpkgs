@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , ifaddr
 , lxml
 , poetry-core
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     sha256 = "1hm1vs6m65vqar0lcjnynz0d9y9ri5s75fzhvp0yfjkcnp06gnfa";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/pywemo/pywemo/issues/264
+      url = "https://github.com/pywemo/pywemo/commit/4fd7af8ccc7cb2412f61d5e04b79f83c9ca4753c.patch";
+      sha256 = "1x0rm5dxr0z5llmv446bx3i1wvgcfhx22zn78qblcr0m4yv3mif4";
+    })
+  ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -36,11 +45,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-vcr
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # https://github.com/pywemo/pywemo/issues/264
-    "test_rules_db_from_device"
   ];
 
   pythonImportsCheck = [ "pywemo" ];
