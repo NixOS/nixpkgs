@@ -162,12 +162,14 @@ let
   isolinuxCfg = concatStringsSep "\n"
     ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
+  refindBinary = if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
+
   # Setup instructions for rEFInd.
   refind =
-    if targetArch == "x64" then
+    if refindBinary != null then
       ''
       # Adds rEFInd to the ISO.
-      cp -v ${pkgs.refind}/share/refind/refind_x64.efi $out/EFI/boot/
+      cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/boot/
       ''
     else
       "# No refind for ${targetArch}"
@@ -362,11 +364,13 @@ let
       }
     }
 
+    ${lib.optionalString (refindBinary != null) ''
     menuentry 'rEFInd' --class refind {
       # UUID is hard-coded in the derivation.
       search --set=root --no-floppy --fs-uuid 1234-5678
-      chainloader (\$root)/EFI/boot/refind_x64.efi
+      chainloader (\$root)/EFI/boot/${refindBinary}
     }
+    ''}
     menuentry 'Firmware Setup' --class settings {
       fwsetup
       clear
