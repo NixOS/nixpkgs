@@ -8598,6 +8598,18 @@ let
     meta.homepage = "https://github.com/andrep/vimacs/";
   };
 
+  vimade = buildVimPluginFrom2Nix {
+    pname = "vimade";
+    version = "2021-04-07";
+    src = fetchFromGitHub {
+      owner = "TaDaa";
+      repo = "vimade";
+      rev = "9b9254340e39dab3dad64c05b10af0fd85490b71";
+      sha256 = "0sbk9lf5w136lwl3ca866m594993s23zad5ss4whzm9j0qknihl3";
+    };
+    meta.homepage = "https://github.com/TaDaa/vimade/";
+  };
+
   vimagit = buildVimPluginFrom2Nix {
     pname = "vimagit";
     version = "2020-11-18";
