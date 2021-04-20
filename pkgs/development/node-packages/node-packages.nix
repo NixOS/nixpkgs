@@ -40385,6 +40385,15 @@ let
         sha512 = "Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==";
       };
     };
+    "node-addon-api-3.0.2" = {
+      name = "node-addon-api";
+      packageName = "node-addon-api";
+      version = "3.0.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/node-addon-api/-/node-addon-api-3.0.2.tgz";
+        sha512 = "+D4s2HCnxPd5PjjI0STKwncjXTUKKqm74MDMz9OPXavjsGmjkvwgLtA5yoxJUdmpj52+2u+RrXgPipahKczMKg==";
+      };
+    };
     "node-addon-api-3.1.0" = {
       name = "node-addon-api";
       packageName = "node-addon-api";
@@ -45795,6 +45804,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/prebuild-install/-/prebuild-install-5.3.0.tgz";
         sha512 = "aaLVANlj4HgZweKttFNUVNRxDukytuIuxeK2boIMHjagNJCiVKWFsKF4tCE3ql3GbrD2tExPQ7/pwtEJcHNZeg==";
+      };
+    };
+    "prebuild-install-5.3.6" = {
+      name = "prebuild-install";
+      packageName = "prebuild-install";
+      version = "5.3.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prebuild-install/-/prebuild-install-5.3.6.tgz";
+        sha512 = "s8Aai8++QQGi4sSbs/M1Qku62PFK49Jm1CbgXklGz4nmHveDq0wzJkg7Na5QbnO1uNH8K7iqx2EQ/mV0MZEmOg==";
       };
     };
     "prebuild-install-6.1.1" = {
@@ -59818,6 +59836,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/urlsafe-base64/-/urlsafe-base64-1.0.0.tgz";
         sha1 = "23f89069a6c62f46cf3a1d3b00169cefb90be0c6";
+      };
+    };
+    "usb-1.7.0" = {
+      name = "usb";
+      packageName = "usb";
+      version = "1.7.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/usb/-/usb-1.7.0.tgz";
+        sha512 = "LHm9d389NCzZSMd0DnilxT5Lord4P2E3ETwP1LeuJcEBmI5uLJv8Sd18z/9bairUMbDnnNqX+Hi5Xkl93Kvdmw==";
       };
     };
     "use-3.1.1" = {
@@ -109983,6 +110010,96 @@ in
     meta = {
       description = "Better DiteCross";
       license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  teck-programmer = nodeEnv.buildNodePackage {
+    name = "teck-programmer";
+    packageName = "teck-programmer";
+    version = "1.1.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/teck-programmer/-/teck-programmer-1.1.1.tgz";
+      sha1 = "bd2b3b1e3b88ad3c7471bdc8a5244255564b69e1";
+    };
+    dependencies = [
+      sources."ansi-regex-2.1.1"
+      sources."aproba-1.2.0"
+      sources."are-we-there-yet-1.1.5"
+      sources."base64-js-1.5.1"
+      sources."bindings-1.5.0"
+      (sources."bl-4.1.0" // {
+        dependencies = [
+          sources."readable-stream-3.6.0"
+        ];
+      })
+      sources."buffer-5.7.1"
+      sources."chownr-1.1.4"
+      sources."code-point-at-1.1.0"
+      sources."console-control-strings-1.1.0"
+      sources."core-util-is-1.0.2"
+      sources."decompress-response-4.2.1"
+      sources."deep-extend-0.6.0"
+      sources."delegates-1.0.0"
+      sources."detect-libc-1.0.3"
+      sources."end-of-stream-1.4.4"
+      sources."expand-template-2.0.3"
+      sources."file-uri-to-path-1.0.0"
+      sources."fs-constants-1.0.0"
+      sources."gauge-2.7.4"
+      sources."github-from-package-0.0.0"
+      sources."has-unicode-2.0.1"
+      sources."ieee754-1.2.1"
+      sources."inherits-2.0.4"
+      sources."ini-1.3.8"
+      sources."is-fullwidth-code-point-1.0.0"
+      sources."isarray-1.0.0"
+      sources."mimic-response-2.1.0"
+      sources."minimist-1.2.5"
+      sources."mkdirp-classic-0.5.3"
+      sources."napi-build-utils-1.0.2"
+      sources."node-abi-2.21.0"
+      sources."node-addon-api-3.0.2"
+      sources."noop-logger-0.1.1"
+      sources."npmlog-4.1.2"
+      sources."number-is-nan-1.0.1"
+      sources."object-assign-4.1.1"
+      sources."once-1.4.0"
+      sources."prebuild-install-5.3.6"
+      sources."process-nextick-args-2.0.1"
+      sources."pump-3.0.0"
+      sources."q-1.5.1"
+      sources."rc-1.2.8"
+      sources."readable-stream-2.3.7"
+      sources."safe-buffer-5.1.2"
+      sources."semver-5.7.1"
+      sources."set-blocking-2.0.0"
+      sources."signal-exit-3.0.3"
+      sources."simple-concat-1.0.1"
+      sources."simple-get-3.1.0"
+      sources."string-width-1.0.2"
+      sources."string_decoder-1.1.1"
+      sources."strip-ansi-3.0.1"
+      sources."strip-json-comments-2.0.1"
+      sources."tar-fs-2.1.1"
+      (sources."tar-stream-2.2.0" // {
+        dependencies = [
+          sources."readable-stream-3.6.0"
+        ];
+      })
+      sources."tunnel-agent-0.6.0"
+      sources."usb-1.7.0"
+      sources."util-deprecate-1.0.2"
+      sources."which-pm-runs-1.0.0"
+      sources."wide-align-1.1.3"
+      sources."wrappy-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Programmer for TECK keyboards.";
+      homepage = "https://github.com/m-ou-se/teck-programmer";
+      license = "GPL-3.0+";
     };
     production = true;
     bypassCache = true;

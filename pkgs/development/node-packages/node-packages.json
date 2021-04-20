@@ -221,6 +221,7 @@
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
+, "teck-programmer"
 , "tern"
 , "textlint"
 , "textlint-plugin-latex"
