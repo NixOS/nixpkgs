@@ -6,6 +6,12 @@ let
   ids = config.ids;
   cfg = config.users;
 
+  isPasswdCompatible = str: !(hasInfix ":" str || hasInfix "\n" str);
+  passwdEntry = type: lib.types.addCheck type isPasswdCompatible // {
+    name = "passwdEntry ${type.name}";
+    description = "${type.description}, not containing newlines or colons";
+  };
+
   # Check whether a password hash will allow login.
   allowsLogin = hash:
     hash == "" # login without password
@@ -54,7 +60,7 @@ let
     options = {
 
       name = mkOption {
-        type = types.str;
+        type = passwdEntry types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
@@ -63,7 +69,7 @@ let
       };
 
       description = mkOption {
-        type = types.str;
+        type = passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
         description = ''
@@ -128,7 +134,7 @@ let
       };
 
       home = mkOption {
-        type = types.path;
+        type = passwdEntry types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
@@ -157,7 +163,7 @@ let
       };
 
       shell = mkOption {
-        type = types.nullOr (types.either types.shellPackage types.path);
+        type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
@@ -217,7 +223,7 @@ let
       };
 
       hashedPassword = mkOption {
-        type = with types; nullOr str;
+        type = with types; nullOr (passwdEntry str);
         default = null;
         description = ''
           Specifies the hashed password for the user.
@@ -251,7 +257,7 @@ let
       };
 
       initialHashedPassword = mkOption {
-        type = with types; nullOr str;
+        type = with types; nullOr (passwdEntry str);
         default = null;
         description = ''
           Specifies the initial hashed password for the user, i.e. the
@@ -323,7 +329,7 @@ let
     options = {
 
       name = mkOption {
-        type = types.str;
+        type = passwdEntry types.str;
         description = ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
@@ -340,7 +346,7 @@ let
       };
 
       members = mkOption {
-        type = with types; listOf str;
+        type = with types; listOf (passwdEntry str);
         default = [];
         description = ''
           The user names of the group members, added to the
