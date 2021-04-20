@@ -7,6 +7,7 @@
 , requests
 , pyyaml
 , setuptools
+, installShellFiles
 }:
 
 let
@@ -48,14 +49,21 @@ buildPythonApplication rec {
     cp data-3 linodecli/
   '';
 
-  # requires linode access token for unit tests, and running executable
-  doCheck = false;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd linode-cli --bash <($out/bin/linode-cli --skip-config completion bash)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/linode/linode-cli";
     description = "The Linode Command Line Interface";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ ryantm superherointj ];
   };
 
 }
