@@ -7597,6 +7597,8 @@ in {
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
+  stone = callPackage ../development/python-modules/stone { };
+
   strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
