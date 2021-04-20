@@ -153,8 +153,6 @@ let
 in
 
 {
-  environment.variables = { EDITOR = "vim"; };
-
   environment.systemPackages = [
     (
       pkgs.neovim.override {
