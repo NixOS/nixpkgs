@@ -2303,6 +2303,10 @@ in {
 
   extractcode = callPackage ../development/python-modules/extractcode { };
 
+  extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
+    inherit (pkgs) p7zip;
+  };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
