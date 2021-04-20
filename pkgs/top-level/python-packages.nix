@@ -7616,6 +7616,8 @@ in {
     inherit (pkgs) sane-backends;
   };
 
+  saneyaml = callPackage ../development/python-modules/saneyaml { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   samplerate = callPackage ../development/python-modules/samplerate { };
