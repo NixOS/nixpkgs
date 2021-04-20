@@ -8862,6 +8862,8 @@ in {
   else
     callPackage ../development/python-modules/urllib3/2.nix { };
 
+  urlpy = callPackage ../development/python-modules/urlpy { };
+
   urwid = callPackage ../development/python-modules/urwid { };
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
