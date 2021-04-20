@@ -1035,6 +1035,8 @@ in
 
   asls = callPackage ../development/tools/misc/asls { };
 
+  astc-encoder = callPackage ../tools/graphics/astc-encoder { };
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
     gsl = gsl_1;
