@@ -3395,6 +3395,8 @@ in {
 
   intake = callPackage ../development/python-modules/intake { };
 
+  intbitset = callPackage ../development/python-modules/intbitset { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive { };
