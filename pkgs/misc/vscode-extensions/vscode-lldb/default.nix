@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, jq, callPackage
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, callPackage
 , nodePackages, cmake, nodejs, unzip, python3
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-mi+AeHg9zO0vjF0OZCufPkliInqxTvDGV350wqAwe90=";
+    sha256 = "sha256-Lw9JX7x000pUd/1MnGPv+RcIKlCKFlVgEslwXgrdO4k=";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-vcL/nSGhyE0INQVWxEIpYwXmnOl1soBn+mymZr1FaSM=";
+    cargoSha256 = "sha256-6nN+qVb1AEAMUth7d8mfQfLul0CpHnq9F93lXlp4mS0=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # `adapter` will find python binary and libraries at runtime.
-  fixupPhase = ''
+  postFixup = ''
     wrapProgram $out/$installPrefix/adapter/codelldb \
       --prefix PATH : "${python3}/bin" \
       --prefix LD_LIBRARY_PATH : "${python3}/lib"
