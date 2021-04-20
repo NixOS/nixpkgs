@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.0.2";
+  version = "1.1.0a3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OE6oc/3HYrMmgPnINxvSZ27m8YeZk5Gnn9ok8GlSIZ0=";
+    sha256 = "sha256-GlRTtnxnc4slS4q1I7UTHUYGUJkzU9ew2NpJwSX7KYA=";
   };
 
   nativeBuildInputs = [
