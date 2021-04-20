@@ -8592,6 +8592,8 @@ in {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  tsfresh = callPackage ../development/python-modules/tsfresh { };
+
   ttystatus = callPackage ../development/python-modules/ttystatus { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
