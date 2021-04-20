@@ -279,6 +279,23 @@ let
         };
       };
 
+      editorconfig.editorconfig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "EditorConfig";
+          publisher = "EditorConfig";
+          version = "0.16.4";
+          sha256 = "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
+          description = "EditorConfig Support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig";
+          homepage = "https://github.com/editorconfig/editorconfig-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
       edonet.vscode-command-runner = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-command-runner";
