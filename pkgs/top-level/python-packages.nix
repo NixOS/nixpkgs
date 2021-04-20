@@ -2409,6 +2409,8 @@ in {
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
 
+  fingerprints = callPackage ../development/python-modules/fingerprints { };
+
   fints = callPackage ../development/python-modules/fints { };
 
   fiona = callPackage ../development/python-modules/fiona { };
