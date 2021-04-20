@@ -129,17 +129,6 @@ If one of your favourite plugins isn't packaged, you can package it yourself:
 { config, pkgs, ... }:
 
 let
-
-  coverage = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-coverage";
-    src = pkgs.fetchFromGitHub {
-      owner = "ruanyl";
-      repo = "coverage.vim";
-      rev = "1d4cd01e1e99d567b640004a8122be8105046921";
-      sha256 = "1vr6ylppwd61rj0l7m6xb0scrld91wgqm0bvnxs54b20vjbqcsap";
-    };
-  };
-
   easygrep = pkgs.vimUtils.buildVimPlugin {
     name = "vim-easygrep";
     src = pkgs.fetchFromGitHub {
