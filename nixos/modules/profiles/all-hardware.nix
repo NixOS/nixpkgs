@@ -68,6 +68,10 @@ in
       # PWM for the backlight
       "pwm-sun4i"
 
+      # Broadcom
+
+      "pcie-brcmstb"
+
       # Misc. uncategorized hardware
 
       # Used for some platform's integrated displays
@@ -78,6 +82,9 @@ in
       "axp20x-ac-power"
       "axp20x-battery"
       "pinctrl-axp209"
+
+      # USB drivers
+      "xhci-pci-renesas"
 
       # Misc "weak" dependencies
       "analogix-anx6345" # For DP or eDP (e.g. integrated display)
