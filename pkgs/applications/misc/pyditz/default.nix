@@ -8,7 +8,7 @@ in buildPythonApplication rec {
   pname = "pyditz";
   version = "0.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "da0365ae9064e30c4a27526fb0d7a802fda5c8651cda6990d17be7ede89a2551";
   };

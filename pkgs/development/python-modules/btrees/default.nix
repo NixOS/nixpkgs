@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , persistent
 , zope_interface
@@ -21,7 +21,7 @@ buildPythonPackage rec {
       --replace "testShortRepr" "no_testShortRepr"
   '';
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7ce4a5eb5c135bcb5c06b5bd1ca6fd7fd39d8631306182307ed8bc30d3033846";
   };

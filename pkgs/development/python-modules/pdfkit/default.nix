@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pdfkit";
   version = "0.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lcc1njpjd2zadbljqsnkrvamschl6j099p4giz1jd6mg1ds67gg";
   };

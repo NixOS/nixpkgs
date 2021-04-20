@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , cython
 , pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "cysignals";
   version = "1.10.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-XEYGxDV3UCgxb3Jf23y4lOPK4Lb9L4YqDSlxdIRptDo=";
   };

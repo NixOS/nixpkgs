@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrestazure
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-consumption";
   version = "8.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "b4cc167648634f864394066d5621afc137c1be795ee76f7539125f9538a2bf37";

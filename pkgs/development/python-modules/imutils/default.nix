@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , opencv3
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.5.4";
   pname = "imutils";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03827a9fca8b5c540305c0844a62591cf35a0caec199cb0f2f0a4a0fb15d8f24";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
 , nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "deform";
   version = "2.0.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1e912937650c1dbb830079dd9c039950762a230223a567740fbf1b23f1090367";
   };

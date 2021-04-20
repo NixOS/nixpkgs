@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, stdenv, exiv2, boost, libcxx, substituteAll, python }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, stdenv, exiv2, boost, libcxx, substituteAll, python }:
 
 buildPythonPackage rec {
   pname = "py3exiv2";
   version = "0.8.0";
   disabled = !(isPy3k);
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1v419f1kkqw8hqyc3yhzslnbzk52j8j3wfknfkjg308n5mf5bn09";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "shippai";
   # Please make sure that vdirsyncer still builds if you update this package.
   version = "0.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0r6iwvmay8ygn2m15pyjrk9am4mfpk7rkf0lcbcb15pnabixlyzj";
   };

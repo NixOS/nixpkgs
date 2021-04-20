@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, watchman }:
+{ lib, buildPythonPackage, fetchFromPyPI, watchman }:
 
 buildPythonPackage rec {
   pname = "pywatchman";
   version = "1.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yf2gm20wc3djpb5larxii3l55xxby0il2ns3q0v1byyfnr7w16h";
   };

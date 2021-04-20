@@ -14,7 +14,7 @@ buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.30.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ca69v479537bbj2hjliwk9zzy9fqqsf7fm188k6xxj0a37q9y41";
   };

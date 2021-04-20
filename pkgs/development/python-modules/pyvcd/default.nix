@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , setuptools_scm
 , six
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pyvcd";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "071e51a8362908ad5a2a12f078185639b98b20b653a56f01679de169d0fa425d";
   };

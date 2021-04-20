@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , azure-mgmt-core
 , msrest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-hdinsight";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d0070817ee2be611d45af91eabc5665dd53f024eaa7a55e490ace4f71a55c733";
     extension = "zip";

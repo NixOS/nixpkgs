@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pyasn1 }:
+{ lib, fetchFromPyPI, buildPythonPackage, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "ldap3";
   version = "2.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "37d633e20fa360c302b1263c96fe932d40622d0119f1bddcb829b03462eeeeb7";
   };

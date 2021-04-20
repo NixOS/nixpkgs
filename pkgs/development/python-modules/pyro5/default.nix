@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 , serpent
 , pythonOlder
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "867cdd291d85560373e0c468da7fd18754f2568ef60e0bc504af42f391d7a3e5";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinx
 , livereload
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sphinx-autobuild";
   version = "2020.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vbaf4vrxahylyp8zrlw5dx1d2faajp926c3pl5i1wlkp1yll62b";
   };

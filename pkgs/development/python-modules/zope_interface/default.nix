@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_event
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "zope.interface";
   version = "5.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8251f06a77985a2729a8bdbefbae79ee78567dddc3acbd499b87e705ca59fe24";
   };

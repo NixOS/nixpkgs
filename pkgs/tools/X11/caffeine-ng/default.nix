@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "3.4.2";
 
-  src = python3Packages.fetchPypi{
+  src = python3Packages.fetchFromPyPI{
     inherit pname version;
     sha256="05k8smjlfjcccgmp8qi04l7106k46fs4p8fl5bdqqjwv6pwl7y4w";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   nose, pytz, six, versiontools
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kx2j49lag30d32zhzsr50gl5b949wa4lcdap2filg0d07picsdh";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , amqp
 , botocore
 , case
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "kombu";
   version = "5.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f4965fba0a4718d47d470beeb5d6446e3357a62402b16c510b6a2f251e05ac3c";
   };

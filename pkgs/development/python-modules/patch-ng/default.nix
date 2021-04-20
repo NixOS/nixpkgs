@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "1.17.4"; # note: `conan` package may require a hardcoded one
   pname = "patch-ng";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kja1nn08w0k8k6j4kad48k581hh9drvjjb8x60v9j13sxdvqyk2";
   };

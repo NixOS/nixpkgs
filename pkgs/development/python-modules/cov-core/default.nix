@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, coverage }:
+{ lib, buildPythonPackage, fetchFromPyPI, coverage }:
 
 buildPythonPackage rec {
   pname = "cov-core";
   version = "1.15.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0k3np9ymh06yv1ib96sb6wfsxjkqhmik8qfsn119vnhga9ywc52a";
   };

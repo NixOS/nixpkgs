@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, aiohttp }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
   };

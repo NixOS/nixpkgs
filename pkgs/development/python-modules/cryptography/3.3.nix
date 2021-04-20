@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy27
 , ipaddress
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "3.3.2"; # Also update the hash in vectors-3.3.nix
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vcvw4lkw1spiq322pm1256kail8nck6bbgpdxx3pqa905wd6q2s";
   };

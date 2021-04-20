@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pyusb, pyserial }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, pyusb, pyserial }:
 
 buildPythonPackage rec {
   pname = "facedancer";
   version = "2019.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1zhwnlfksblgp54njd9gjsrr5ibg12cx1x9xxcqkcdfhn3m2kmm0";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , ciso8601
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "dwdwfsapi";
   version = "1.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-PX1b1msaZH8HKVBo3GU7TOr8Lo7INLjjJBkDHHs6mzk=";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyftdi
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pyi2cflash";
   version = "0.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nkazgf7pajz7jym5rfy2df71lyfp4skxqbrg5ch0h4dwjdwllx1";
   };

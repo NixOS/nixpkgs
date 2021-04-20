@@ -1,4 +1,4 @@
-{ lib, stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
+{ lib, stdenv, python, fetchFromPyPI, makeWrapper, unzip, makeSetupHook
 , pipInstallHook
 , setuptoolsBuildHook
 , wheel, pip, setuptools

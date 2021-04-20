@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
 , zope_component, lynx, postfix, authheaders, gunicorn
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "3.3.4";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "01rx322b8mzcdj9xh4bjwnl0zis6n2wxd31rrij4cw3a2j03xpas";
   };

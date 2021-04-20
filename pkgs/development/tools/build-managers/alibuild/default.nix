@@ -4,7 +4,7 @@ python.pkgs.buildPythonApplication rec {
   pname = "alibuild";
   version = "1.5.5";
 
-  src = python.pkgs.fetchPypi {
+  src = python.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "1sh02avpab4qlyin3p928xw91l4fgs8x5x2rzl623ayqsnfjv19j";
   };

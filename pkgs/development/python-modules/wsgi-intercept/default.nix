@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, httplib2, py, pytestCheckHook, requests, urllib3 }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, httplib2, py, pytestCheckHook, requests, urllib3 }:
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
   version = "1.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "wsgi_intercept";
     inherit version;
     sha256 = "1b6251d03jnhqywr54bzj9fnc3qzp2kvz22asxpd27jy984qx21n";

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k
 , numpy
 , wheel
 , werkzeug
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   format = "wheel";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "tensorboard";
     inherit version format;
     python = "py3";

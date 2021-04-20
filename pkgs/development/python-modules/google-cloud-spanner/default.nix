@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc_google_iam_v1
 , google-cloud-core
 , google-cloud-testutils
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "google-cloud-spanner";
   version = "3.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-XnOCmxQ6YCO1C7RYHzcZY4ihrt2KommWTkTD9y+B5tg=";
   };

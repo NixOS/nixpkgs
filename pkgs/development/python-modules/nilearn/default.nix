@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, matplotlib
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, matplotlib
 , nibabel, numpy, pandas, scikitlearn, scipy, joblib, requests }:
 
 buildPythonPackage rec {
   pname = "nilearn";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rhpy6na7hkhc211ri14zghvmb2fxkh995wi09pkc68klf1dzjg7";
   };

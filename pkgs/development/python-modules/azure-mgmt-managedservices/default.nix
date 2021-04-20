@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , msrest
 , msrestazure
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-managedservices";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "06ddfqriqlvwjsjhqka9r5vhshardyj9c10xgjissfkpqsgkkn7y";
     extension = "zip";

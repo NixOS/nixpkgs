@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, django, pytestCheckHook, pytest-django }:
+{ lib, fetchFromPyPI, buildPythonPackage, django, pytestCheckHook, pytest-django }:
 
 buildPythonPackage rec {
   pname = "jsonfield";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0yl828cd0m8jsyr4di6hcjdqmi31ijh5vk57mbpfl7p2gmcq8kky";
   };

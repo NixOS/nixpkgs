@@ -3,7 +3,7 @@
 python.pkgs.buildPythonPackage rec {
   pname = "pystemd";
   version = "0.8.0";
-  src = python.pkgs.fetchPypi {
+  src = python.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "0wlrid2xd73dmzl4m0jgg6cqmkx3qs9v9nikvwxd8a5b8chf9hna";
   };

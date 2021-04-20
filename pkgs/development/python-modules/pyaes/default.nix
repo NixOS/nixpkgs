@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromPyPI, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "pyaes";
   version = "1.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f";
   };

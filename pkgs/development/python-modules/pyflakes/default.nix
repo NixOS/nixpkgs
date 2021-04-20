@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, unittest2 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, unittest2 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";
   version = "2.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8";
   };

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cryptography
 , dateutil
-, fetchPypi
+, fetchFromPyPI
 , idna
 , isPy27
 , mock
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pname = "urllib3";
   version = "1.26.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0dw9w9bs3hmr5dp3r3h43jyzzb1g1046ag7lj8pqf58i4kvj3c77";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
 
 let
 
@@ -7,7 +7,7 @@ let
   redis' = redis.overridePythonAttrs (old: rec {
     pname = "redis";
     version = "2.10.6";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "03vcgklykny0g0wpvqmy8p6azi2s078317wgb2xjv5m2rs9sjb52";
     };

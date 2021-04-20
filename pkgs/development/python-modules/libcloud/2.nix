@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , mock
 , pycrypto
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "apache-libcloud";
   version = "2.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "70096690b24a7832cc5abdfda1954b49fddc1c09a348a1e6caa781ac867ed4c6";
   };

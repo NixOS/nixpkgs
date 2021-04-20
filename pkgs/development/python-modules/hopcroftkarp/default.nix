@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "hopcroftkarp";
   version = "1.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "28a7887db81ad995ccd36a1b5164a4c542b16d2781e8c49334dc9d141968c0e7";
   };

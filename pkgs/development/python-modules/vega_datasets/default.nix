@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pandas, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pandas, pytest }:
 
 buildPythonPackage rec {
   pname = "vega_datasets";
   version = "0.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9dbe9834208e8ec32ab44970df315de9102861e4cda13d8e143aab7a80d93fc0";
   };

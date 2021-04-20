@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 # Build dependencies
 , glibcLocales
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "7.16.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9f4fcb31d3b2c533333893b9172264e4821c1ac91839500f31bd43f2c59b3ccf";
   };

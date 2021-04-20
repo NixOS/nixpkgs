@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "imaplib2";
   version = "2.45.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a35b6d88258696e80aabecfb784e08730b8558fcaaa3061ff2c7f8637afbd0b3";
   };

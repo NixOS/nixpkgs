@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, isPy3k, isPyPy, python }:
 
 let
   testDir = if isPy3k then "src" else "python2";
@@ -7,7 +7,7 @@ in buildPythonPackage rec {
   pname = "typing";
   version = "3.7.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1187fb9c82fd670d10aa07bbb6cfcfe4bdda42d6fab8d5134f04e8c4d0b71cc9";
   };

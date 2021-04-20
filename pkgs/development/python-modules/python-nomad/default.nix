@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests }:
 
 buildPythonPackage rec {
   pname = "python-nomad";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ivkfdrmb4wpyawvwrgm3jvx6hn49vqjpwbkmkmamigghqqwacx3";
   };

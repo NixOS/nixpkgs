@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-machinelearningcompute";
   version = "0.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "7a52f85591114ef33a599dabbef840d872b7f599b7823e596af9490ec51b873f";

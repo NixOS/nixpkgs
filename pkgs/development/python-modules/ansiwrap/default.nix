@@ -2,7 +2,7 @@
 , ansicolors
 , buildPythonPackage
 , coverage
-, fetchPypi
+, fetchFromPyPI
 , pytest-cov
 , pytestCheckHook
 , textwrap3
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "ansiwrap";
   version = "0.8.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "ca0c740734cde59bf919f8ff2c386f74f9a369818cdc60efe94893d01ea8d9b7";

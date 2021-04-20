@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , repeated_test
 , sphinx
 , mock
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "sigtools";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1b890f22ece64bc47d3d4e84c950581e83917794a6cf1548698145590e221aff";
   };

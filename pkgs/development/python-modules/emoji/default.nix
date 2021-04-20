@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   pname = "emoji";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18siknldyqvxvjf0nv18m0a1c26ahkg7vmhkij1qayanb0h46vs9";
   };

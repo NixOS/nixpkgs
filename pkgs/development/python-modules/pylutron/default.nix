@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pylutron";
   version = "0.2.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-wwVTDpoRT/TIJhoRap0T01a8gmYt+vfKc+ATRs6phB4=";
   };

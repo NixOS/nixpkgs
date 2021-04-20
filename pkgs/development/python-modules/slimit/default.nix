@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, fetchpatch, python, ply }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, fetchpatch, python, ply }:
 
 buildPythonPackage rec {
   pname = "slimit";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "f433dcef899f166b207b67d91d3f7344659cb33b8259818f084167244e17720b";

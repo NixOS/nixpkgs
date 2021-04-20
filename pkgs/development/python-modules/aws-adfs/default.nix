@@ -3,7 +3,7 @@
 , buildPythonPackage
 , click
 , configparser
-, fetchPypi
+, fetchFromPyPI
 , fido2
 , glibcLocales
 , isPy27
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "1.24.5";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6a78bd31477ea9988166215ae86abcbfe1413bee20373ecdf0dd170b7290db55";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkgs
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pylibacl";
   version = "0.5.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0drvxb21y7p0aikcv3jx90vdcjk96kibf9x8qgxic2prxxd3f3q6";
   };

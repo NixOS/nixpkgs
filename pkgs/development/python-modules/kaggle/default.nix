@@ -1,6 +1,6 @@
 { buildPythonPackage
 , certifi
-, fetchPypi
+, fetchFromPyPI
 , lib
 , python-dateutil
 , python-slugify
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "kaggle";
   version = "1.5.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b4d87d107bff743aaa805c2b382c3661c4c175cdb159656d4972be2a9cef42cb";
   };

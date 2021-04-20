@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, logilab_common, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, logilab_common, six }:
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
   };

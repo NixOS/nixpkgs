@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pythonAtLeast
 , Keras, numpy, scipy, six, tensorflow }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = !(isPy27 || pythonAtLeast "3.4");
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3818b39e77c26fc1a37767a74fdd5e7d02877d75ed901ead2f40bd03baaa109f";
   };

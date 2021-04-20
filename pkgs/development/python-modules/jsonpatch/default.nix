@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jsonpointer
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "jsonpatch";
   version = "1.27";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4d08af10d71723b5b2924da6ba90f273a4d1a5c6accfb605eb970cb2f9b29cf9";
   };

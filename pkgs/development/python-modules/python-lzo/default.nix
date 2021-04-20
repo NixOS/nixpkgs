@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, lzo, nose }:
+{ lib, fetchFromPyPI, buildPythonPackage, lzo, nose }:
 
 buildPythonPackage rec {
   pname = "python-lzo";
   version = "1.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0iakqgd51n1cd7r3lpdylm2rgbmd16y74cra9kcapwg84mlf9a4p";
   };

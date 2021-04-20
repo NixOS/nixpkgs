@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , graphql-core
 , pytest-asyncio
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "graphql-relay";
   version = "3.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-cNWn7lmV6nwqmjflEidmOxpGTx9A6Y/d6VC+VBXf4LQ=";
   };

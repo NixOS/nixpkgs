@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , six
 , pytest
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.8.0";
   disabled = isPy27; # abandoned upstream
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb083925a17ce636f33997c275f61123e63372c1db11fefac1e991ed25a4ca37";
   };

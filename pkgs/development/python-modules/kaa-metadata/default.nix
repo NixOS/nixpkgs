@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , kaa-base
 , isPyPy
 , isPy3k
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "kaa-metadata";
   disabled = isPyPy || isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bkbzfgxvmby8lvzkqjp86anxvv3vjd9nksv2g4l7shsk1n7y27a";
   };

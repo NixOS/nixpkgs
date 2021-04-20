@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
+{ lib, buildPythonPackage, fetchFromPyPI, cloudpickle, ipykernel, wurlitzer,
   jupyter_client, pyzmq }:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
   version = "1.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "416534d7504c0f337e6e6e2cbd893d1866ad20d3bec99a94ad617d2fd60699ae";
   };

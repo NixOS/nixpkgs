@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , six, sqlalchemy
 , mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, dateutil
 , docutils, flexmock, psycopg2, pygments }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "sqlalchemy-utils";
   version = "0.36.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "SQLAlchemy-Utils";
     sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";

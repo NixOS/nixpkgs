@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
+{ buildPythonPackage, fetchFromPyPI, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "dnspython";
   version = "2.0.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "044af09374469c3a39eeea1a146e8cac27daec951f1f1f157b1962fc7cb9d1b7";

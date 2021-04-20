@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , funcsigs
 , six
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "mock";
   version = "3.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3";
   };

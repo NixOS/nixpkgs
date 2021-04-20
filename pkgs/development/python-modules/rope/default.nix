@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, nose }:
 
 buildPythonPackage rec {
   pname = "rope";
   version = "0.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04";
   };

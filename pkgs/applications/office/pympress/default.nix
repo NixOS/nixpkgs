@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   pname = "pympress";
   version = "1.5.1";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "173d9scf2z29qg279jf33zcl7sgc3wp662fgpm943bn9667q18wf";
   };

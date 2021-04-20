@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pymemoize";
   version = "1.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "PyMemoize";
     sha256 = "0yqr60hm700zph6nv8wb6yp2s0i08mahxvw98bvkmw5ijbsviiq7";

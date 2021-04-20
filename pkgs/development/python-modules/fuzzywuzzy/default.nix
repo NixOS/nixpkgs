@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python-Levenshtein, pycodestyle, hypothesis, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, python-Levenshtein, pycodestyle, hypothesis, pytest }:
 
 buildPythonPackage rec {
   pname = "fuzzywuzzy";
   version = "0.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1s00zn75y2dkxgnbw8kl8dw4p1mc77cv78fwfa4yb0274s96w0a5";
   };

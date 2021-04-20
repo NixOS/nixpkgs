@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , confluent-kafka
 , distributed
 , flaky
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "streamz";
   version = "0.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04446ece273c041506b1642bd3d8380367a8372196be4d6d6d03faafadc590b2";
   };

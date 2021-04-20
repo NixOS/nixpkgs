@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pythonAtLeast
 , coverage, nose, pbkdf2 }:
 
 buildPythonPackage rec {
   pname = "cryptacular";
   version = "1.5.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb4d48716e88e4d050255ff0f065f6d437caa358ceef16ba5840c95cece224f9";
   };

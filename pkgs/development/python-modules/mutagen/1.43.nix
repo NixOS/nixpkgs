@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , hypothesis
 , pycodestyle
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "mutagen";
   version = "1.43.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d873baeb7815311d3420aab0a1d83f050f628228cbc2d6045a14a16460411bc9";
   };

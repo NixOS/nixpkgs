@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy36
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, isPy36
 , dataclasses
 , h11
 , pytest
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   disabled = pythonOlder "3.6"; # python versions <3.6
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "868776f8456997ad0d9720f7322b746bbe9193751b5b290b7f924659377c8c38";
   };

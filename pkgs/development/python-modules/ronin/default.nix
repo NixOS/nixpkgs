@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , blessings
 , colorama
 , glob2
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "ronin";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     hash = "sha256-5gZ8S0NR4JzKBIdi/xYtVmFg9ObbCSkT7sz+OKWnK/U=";
   };

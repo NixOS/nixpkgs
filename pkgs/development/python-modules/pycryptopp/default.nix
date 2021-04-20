@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy3k
 , setuptoolsDarcs
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.7.1.869544967005693312591928092448767568728501330214";
   disabled = isPy3k;  # see https://bitbucket.org/pypy/pypy/issue/1190/
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17v98bhh3nd6rkw0kk1xmnc9vm5ql0fji4in2wyd4zlvlfhmgb88";
   };

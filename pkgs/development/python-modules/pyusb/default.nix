@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, libusb1, setuptools_scm }:
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, libusb1, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "pyusb";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7d449ad916ce58aff60b89aae0b65ac130f289c24d6a5b7b317742eccffafc38";
   };

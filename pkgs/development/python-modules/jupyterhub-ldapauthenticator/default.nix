@@ -2,14 +2,14 @@
 , buildPythonPackage
 , jupyterhub
 , ldap3
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
   version = "1.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "758081bbdb28b26313bb18c9d8aa2b8fcdc9162e4d3ab196c626567e64f1ab8b";
   };

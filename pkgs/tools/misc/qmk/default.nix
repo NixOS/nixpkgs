@@ -7,7 +7,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "0.0.45";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "43f297f36b21d68c34c5efa0ce1449dddb2e28753f80939cadf761ee7a2a0901";
   };

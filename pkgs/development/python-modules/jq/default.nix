@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, jq }:
+{ buildPythonPackage, fetchFromPyPI, lib, jq }:
 
 buildPythonPackage rec {
   pname = "jq";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "77e747c6ad10ce65479f5f9064ab036483bf307bf71fdd7d6235ef895fcc506e";
   };

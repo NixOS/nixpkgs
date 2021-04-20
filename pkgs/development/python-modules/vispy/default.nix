@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, substituteAll, stdenv,
-  fetchPypi, numpy, cython, freetype-py, fontconfig, libGL,
+  fetchFromPyPI, numpy, cython, freetype-py, fontconfig, libGL,
   setuptools_scm, setuptools-scm-git-archive
   }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "vispy";
   version = "0.6.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6f3c4d00be9e6761c046d520a86693d78a0925d47eeb2fc095e95dac776f74ee";
   };

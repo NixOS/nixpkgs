@@ -1,4 +1,4 @@
-{ python_openzwave, fetchPypi, openzwave, fetchFromGitHub }:
+{ python_openzwave, fetchFromPyPI, openzwave, fetchFromGitHub }:
 
 (python_openzwave.override {
   openzwave = openzwave.overrideAttrs (oldAttrs: {
@@ -17,7 +17,7 @@
   pname = "homeassistant_pyozw";
   version = "0.1.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "47c1abd8f3dc287760471c6c7b5fad222ead64763c4cb25e37d0599ea3b26952";

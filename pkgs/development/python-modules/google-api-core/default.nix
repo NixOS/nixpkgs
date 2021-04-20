@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-auth
 , googleapis-common-protos
 , grpcio
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "google-api-core";
   version = "1.26.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-uRQ0XH6iOGEWJpOidwO6uASlVQT35umryv8XTYDfMqw=";
   };

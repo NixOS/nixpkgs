@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , requests_toolbelt
 , requests_oauthlib
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname   = "flickrapi";
   version = "2.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03g2z21k6nhxgwysjrgnxj9m1yg25mnnkr10gpyfhfkd9w77pcpz";
   };

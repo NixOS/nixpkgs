@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , pkgs
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "gnureadline";
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xllr43dizvybmb68i0ybk1xhaqx5abjwxa9vrg43b9ds0pggvk1";
   };

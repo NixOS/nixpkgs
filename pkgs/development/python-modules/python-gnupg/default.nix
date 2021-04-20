@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, gnupg }:
+{ lib, buildPythonPackage, fetchFromPyPI, gnupg }:
 
 buildPythonPackage rec {
   pname   = "python-gnupg";
   version = "0.4.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3aa0884b3bd414652c2385b9df39e7b87272c2eca1b8fcc3089bc9e58652019a";
   };

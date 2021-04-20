@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , fonttools
 , pytest, pytestrunner
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "fontMath";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09xdqdjyjlx5k9ymi36d7hkgvn55zzjzd65l2yqidkfazlmh14ss";
     extension = "zip";

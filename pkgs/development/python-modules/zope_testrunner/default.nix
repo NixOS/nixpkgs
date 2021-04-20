@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_interface
 , zope_exceptions
 , zope_testing
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "zope.testrunner";
   version = "5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "873d6017abadc213992a0c38c786ed020341b6e0fe78d14bc2a684cf5a70de4b";
   };

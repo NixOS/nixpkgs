@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , libvlc
 , substituteAll
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "python-vlc";
   version = "3.0.11115";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a4d3bdddfce84a8fb1b2d5447193a0239c55c16ca246e5194d48efd59c4e236b";
   };

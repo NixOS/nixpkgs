@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , attrs
 , defusedxml
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "connect-box";
   version = "0.2.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "connect_box";
     inherit version;
     sha256 = "1lvz7g2f0a9ifnjczmbavn105miirdgyayr4sixhzgdgadcdhz3l";

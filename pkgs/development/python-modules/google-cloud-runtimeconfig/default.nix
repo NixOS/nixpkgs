@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , google-cloud-core
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
   version = "0.32.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bd8hlp0ssi20ds4gknbxai8mih6xiz8b60ab7p0ngpdqp1kw52p";
   };

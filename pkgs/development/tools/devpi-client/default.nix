@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 # buildInputs
 , glibcLocales
 , pkginfo
@@ -27,7 +27,7 @@ buildPythonApplication rec {
   pname = "devpi-client";
   version = "5.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
   };

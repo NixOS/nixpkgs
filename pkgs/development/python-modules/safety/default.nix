@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, dparse, click, setuptools, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "safety";
   version = "1.10.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-MOOU0CogrEm39lKS0Z04+pJ6j5WCzf060a27xmxkGtU=";
   };

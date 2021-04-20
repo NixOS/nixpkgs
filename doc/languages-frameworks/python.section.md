@@ -345,13 +345,13 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 `toolz` package.
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
   };
@@ -372,7 +372,7 @@ it accepts a set. In this case the set is a recursive set, `rec`. One of the
 arguments is the name of the package, which consists of a basename (generally
 following the name on PyPi) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
-`fetchPypi`. The argument `doCheck` is used to set whether tests should be run
+`fetchFromPyPI`. The argument `doCheck` is used to set whether tests should be run
 when building the package. Furthermore, we specify some (optional) meta
 information. The output of the function is a derivation.
 
@@ -396,7 +396,7 @@ with import <nixpkgs> {};
       pname = "toolz";
       version = "0.10.0";
 
-      src = python38.pkgs.fetchPypi {
+      src = python38.pkgs.fetchFromPyPI {
         inherit pname version;
         sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
       };
@@ -439,13 +439,13 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi, numpy, multipledispatch, dateutil, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, multipledispatch, dateutil, pytest }:
 
 buildPythonPackage rec {
   pname = "datashape";
   version = "0.4.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
   };
@@ -473,13 +473,13 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
-{ lib, pkgs, buildPythonPackage, fetchPypi }:
+{ lib, pkgs, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "lxml";
   version = "3.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
   };
@@ -506,13 +506,13 @@ The bindings don't expect to find each of them in a different folder, and
 therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 ```nix
-{ lib, pkgs, buildPythonPackage, fetchPypi, numpy, scipy }:
+{ lib, pkgs, buildPythonPackage, fetchFromPyPI, numpy, scipy }:
 
 buildPythonPackage rec {
   pname = "pyFFTW";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
   };
@@ -721,7 +721,7 @@ buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
   };
@@ -847,13 +847,13 @@ using setup hooks.
 The following is an example:
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools_scm, attrs, py, setuptools, six, pluggy }:
+{ lib, buildPythonPackage, fetchFromPyPI, hypothesis, setuptools_scm, attrs, py, setuptools, six, pluggy }:
 
 buildPythonPackage rec {
   pname = "pytest";
   version = "3.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
   };
@@ -962,7 +962,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: rec {
         version = "0.19.1";
-        src =  super.fetchPypi {
+        src =  super.fetchFromPyPI {
           pname = "pandas";
           inherit version;
           sha256 = "08blshqj9zj1wyjhhw3kl2vas75vhhicvv72flvf1z3jvapgw295";
@@ -997,7 +997,7 @@ python3Packages.buildPythonApplication rec {
   pname = "luigi";
   version = "2.7.9";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
@@ -1544,7 +1544,7 @@ self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       twisted = python-super.twisted.overrideAttrs (oldAttrs: {
-        src = super.fetchPypi {
+        src = super.fetchFromPyPI {
           pname = "twisted";
           version = "19.10.0";
           sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
@@ -1592,6 +1592,6 @@ The following rules are desired to be respected:
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
-  If necessary, `pname` has to be given a different value within `fetchPypi`.
+  If necessary, `pname` has to be given a different value within `fetchFromPyPI`.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.

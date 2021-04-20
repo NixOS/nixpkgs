@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , Babel
 , pytz
 , nine
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "Kajiki";
   version = "0.8.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bbec46b19285d42769d7c4f5a8a0195b72a62b54cd360a26a8875319d58efef6";
   };

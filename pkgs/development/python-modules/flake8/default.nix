@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , mock, pytest, pytestrunner
 , configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "flake8";
   version = "3.8.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "aadae8761ec651813c24be05c6f7b4680857ef6afaae4651a4eccaef97ce6c3b";
   };

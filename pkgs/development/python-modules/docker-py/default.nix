@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, requests, websocket_client, docker_pycreds }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, requests, websocket_client, docker_pycreds }:
 
 buildPythonPackage rec {
   version = "1.10.6";
   pname = "docker-py";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
   };

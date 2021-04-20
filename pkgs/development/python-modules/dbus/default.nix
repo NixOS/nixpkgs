@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
+{ lib, fetchFromPyPI, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
 , ncurses, pygobject3, isPy3k }:
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "196m5rk3qzw5nkmgzjl7wmq0v7vpwfhh8bz2sapdi5f9hqfqy8qi";
   };

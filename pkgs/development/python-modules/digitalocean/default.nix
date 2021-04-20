@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , jsonpickle
 , mock

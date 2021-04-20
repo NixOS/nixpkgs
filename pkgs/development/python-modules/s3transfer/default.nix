@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , buildPythonPackage
 , docutils
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "s3transfer";
   version = "0.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7fdddb4f22275cf1d32129e21f056337fd2a80b6ccef1664528145b72c49e6d2";
   };

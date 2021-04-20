@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , aiohttp
 , pytest
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   format = "flit";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "01a0msjh4w58fd7jplmblh0hwgpzwjs5xkgqz3d0p5yv3cykwjwf";
   };

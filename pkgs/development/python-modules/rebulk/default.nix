@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex}:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, pytestrunner, six, regex}:
 
 buildPythonPackage rec {
   pname = "rebulk";
   version = "2.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "320ded3cc456347d828f95e9aa5f8bab77ac01943cad024c06012069fe19690a";
   };

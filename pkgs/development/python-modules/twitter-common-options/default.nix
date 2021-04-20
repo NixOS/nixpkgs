@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname   = "twitter.common.options";
   version = "0.3.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a495bcdffc410039bc4166f1a30c2caa3c92769d7a161a4a39d3651836dd27e1";
   };

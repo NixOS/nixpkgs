@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , enum34
 , glibcLocales
 , matplotlib
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pname = "pymatgen";
   version = "2020.12.31";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5002490facd47c55d2dae42c35712e061c1f5d881180485c0543a899589856d6";
   };

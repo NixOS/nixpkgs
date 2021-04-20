@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "salt-pepper";
   version = "0.7.5";
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1wh6yidwdk8jvjpr5g3azhqgsk24c5rlzmw6l86dmi0mpvmxm94w";
   };

@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
   version = "2.0.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "Mopidy-SomaFM";
     sha256 = "1j88rrliys8hqvnb35k1xqw88bvrllcb4rb53lgh82byhscsxlf3";

@@ -2,7 +2,7 @@
 , lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , radare2
 , coreutils
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     substituteInPlace r2pipe/open_base.py --replace 'which("radare2")' "'${radare2}/bin/radare2'"
   '';
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8f3708195c8a6e91c5753940fd348cd821df1389d23b889b01b3e88acf407485";
   };

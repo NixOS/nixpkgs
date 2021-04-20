@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , docutils
 , jinja2
 , nbconvert
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "nbsphinx";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19lf036h0d9ryqasrh91myhn3dq5zcw4rik9jy6sayq7l6irmm94";
   };

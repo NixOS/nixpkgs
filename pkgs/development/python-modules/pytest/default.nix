@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , hypothesis
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   version = "6.2.2";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-nR7fnn0LhNcuo9vN/SKzX7VDpejypgCS3VeJNr9j1/k=";
   };

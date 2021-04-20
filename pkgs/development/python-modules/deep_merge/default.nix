@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, nose }:
 
 buildPythonPackage rec {
   pname = "deep_merge";
   version = "0.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "tUQV+Qk0xC4zQRTihky01OczWzStOW41rYYQyWBlpH4=";
   };

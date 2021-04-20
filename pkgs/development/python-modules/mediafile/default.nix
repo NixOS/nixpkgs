@@ -1,7 +1,7 @@
 { buildPythonPackage
 , enum34
 , fetchpatch
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , lib
 , mutagen
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "mediafile";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-o/tSAHu8FTr6LZoMHvegr9uCZovNLHS9KkP2U9y4uko=";
   };

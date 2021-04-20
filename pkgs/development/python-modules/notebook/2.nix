@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , nose_warnings_filters
 , glibcLocales
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pname = "notebook";
   version = "5.7.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b10107e1438e7a564292aa32510e610c88844cae03c882fe5286b891792b5c11";
   };

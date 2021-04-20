@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , docutils
 , readme_renderer
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "restview";
   version = "2.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1p1jgdvc04ws8kga3r0vrq3m0b52qw3clwyydl96a13wb3mrf03r";
   };

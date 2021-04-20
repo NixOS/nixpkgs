@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , pytestrunner
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "paste";
   version = "3.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Paste";
     inherit version;
     sha256 = "17f3zppjjprs2jnklvzkz23mh9jdn6b1f445mvrjdm4ivi15q28v";

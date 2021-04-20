@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "mlarchive2maildir";
   version = "0.0.9";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "02zjwa7zbcbqj76l0qmg7bbf3fqli60pl2apby3j4zwzcrrryczs";
   };

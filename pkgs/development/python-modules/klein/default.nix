@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch
 , six, twisted, werkzeug, incremental
 , mock }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "klein";
   version = "17.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "30aaf0d78a987d5dbfe0968a07367ad0c73e02823cc8eef4c54f80ab848370d0";
   };

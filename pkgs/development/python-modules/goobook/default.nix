@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , docutils, installShellFiles
 , google-api-python-client, simplejson, oauth2client, setuptools, xdg
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "3.5.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6e69aeaf69112d116302f0c42ca1904f3b6efd17f15cefc12c866206160293be";
   };

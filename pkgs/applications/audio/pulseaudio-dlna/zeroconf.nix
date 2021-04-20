@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ifaddr
 , typing
 , pythonOlder
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.19.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ykzg730n915qbrq9bn5pn06bv6rb5zawal4sqjyfnjjm66snkj3";
   };

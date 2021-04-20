@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkgs
 , pytest
 , isPy3k
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "plyvel";
   version = "1.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a7a09033a0fd33ca47094e8bbe01714abfcf644f4b7a337d3970e91a2599e2c4";
   };

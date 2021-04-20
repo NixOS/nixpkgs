@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-search";
   version = "8.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "a96d50c88507233a293e757202deead980c67808f432b8e897c4df1ca088da7e";

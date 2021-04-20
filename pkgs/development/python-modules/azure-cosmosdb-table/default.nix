@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cryptography
 , azure-common
 , azure-storage-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-cosmosdb-table";
   version = "1.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5f061d2ab8dcf2f0b4e965d5976e7b7aeb1247ea896911f0e1d29092aaaa29c7";
   };

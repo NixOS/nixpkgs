@@ -1,11 +1,11 @@
 { lib, buildPythonPackage
-, fetchPypi, urllib3 }:
+, fetchFromPyPI, urllib3 }:
 
 buildPythonPackage rec {
   pname = "unifi";
   version = "1.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0prgx01hzs49prrazgxrinm7ivqzy57ch06qm2h7s1p957sazds8";
   };

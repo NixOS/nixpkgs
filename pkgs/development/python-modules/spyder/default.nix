@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, makeDesktopItem, intervaltree,
   jedi, pycodestyle, psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint,
   keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
   cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7f93bc5b8b119cc1e195ce3efcc1598386e082c4096334c1fa2b018938ac79b9";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , multitasking
 , numpy
 , pandas
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.1.55";
 
   # GitHub source releases aren't tagged
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "65d39bccf16bef35f6a08bf0df33650c0515b5ce8ea3c53924601f5fe00590cb";
   };

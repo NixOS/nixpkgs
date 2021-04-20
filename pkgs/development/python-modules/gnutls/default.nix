@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , pkgs
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # https://github.com/AGProjects/python-gnutls/issues/2
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "79f94017e6472ac665c85bc16d68aa2e6681f53b6a9e74516557b49b6fc6a651";
   };

@@ -5,7 +5,7 @@
 , boto3
 , certifi
 , cffi
-, fetchPypi
+, fetchFromPyPI
 , future
 , idna
 , ijson
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   version = "2.3.10";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ad62bfd31e677d39984449d9c68e233da2776b80894a988a2421aad412e4c44f";
   };

@@ -7,7 +7,7 @@ let
 in python3Packages.buildPythonPackage {
   inherit pname version format;
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version format;
     sha256 = "sha256-jmToDFLQODqgTycBp2J8LyoJ1Zxho9w1VdhFMzvDFkg=";
   };

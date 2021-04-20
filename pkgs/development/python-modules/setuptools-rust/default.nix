@@ -1,7 +1,7 @@
 { callPackage
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , semantic-version
 , setuptools
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.12.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "647009e924f0ae439c7f3e0141a184a69ad247ecb9044c511dabde232d3d570e";
   };

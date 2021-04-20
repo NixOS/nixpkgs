@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , pytest
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "readthedocs-sphinx-ext";
   version = "2.1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "209c4b5ecf233b8bb44fcb8b4548460b0806e347ce50fd8172adcb7d23969a4a";
   };

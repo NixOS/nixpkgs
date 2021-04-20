@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "progressbar231";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0j0ifxk87xz3wkyacxaiqygghn27wwz6y5pj9k8j2yq7n33fbdam";
   };

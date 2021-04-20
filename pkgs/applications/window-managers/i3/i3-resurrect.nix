@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, click, i3ipc, psutil, natsort, fetchPypi, xprop, xdotool, importlib-metadata }:
+{ lib, buildPythonApplication, click, i3ipc, psutil, natsort, fetchFromPyPI, xprop, xdotool, importlib-metadata }:
 
 buildPythonApplication rec {
   pname = "i3-resurrect";
   version = "1.4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0h181frdwpqfj9agw43qgicdvzv1i7xwky0vs0ksd8h18qxqp4hr";
   };

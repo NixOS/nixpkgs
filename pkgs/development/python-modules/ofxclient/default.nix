@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
  ofxhome, ofxparse, beautifulsoup4, lxml, keyring
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "2.0.3";
   pname = "ofxclient";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jdhqsbl34yn3n0x6mwsnl58c25v5lp6vr910c2hk7l74l5y7538";
   };

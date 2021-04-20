@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "asn1crypto";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c";
   };

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytest, boto3, mock, giflib, pytz
 , gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "Fiona";
   version = "1.8.18";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b732ece0ff8886a29c439723a3e1fc382718804bb057519d537a81308854967a";
   };

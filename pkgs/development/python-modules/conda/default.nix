@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pycosat
 , requests
 , ruamel_yaml
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "conda";
   version = "4.3.16";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a91ef821343dea3ba9670f3d10b36c1ace4f4c36d70c175d8fc8886e94285953";
   };

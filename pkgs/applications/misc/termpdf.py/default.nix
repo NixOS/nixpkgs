@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, fetchPypi
+, fetchFromPyPI
 , bibtool
 , pybtex
 , pymupdf

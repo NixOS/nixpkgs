@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , pytest-asyncio
 , python-rapidjson
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "structlog";
   version = "20.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7a48375db6274ed1d0ae6123c486472aa1d0890b08d314d2b016f3aa7f35990b";
   };

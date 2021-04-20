@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   version = "1.1.1";
   format = "wheel";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit format version;
     pname = "git_big_picture";  # underscores needed for working download URL
     python = "py3";  # i.e. no Python 2.7

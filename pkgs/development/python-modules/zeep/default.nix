@@ -1,4 +1,4 @@
-{ fetchPypi
+{ fetchFromPyPI
 , lib
 , fetchpatch
 , buildPythonPackage
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pname = "zeep";
   version = "3.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0e98669cfeb60756231ae185498f9ae21b30b2681786b8de58ed34c3b93e41dd";
   };

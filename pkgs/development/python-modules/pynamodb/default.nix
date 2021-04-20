@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , botocore
-, fetchPypi
+, fetchFromPyPI
 , mock
 , mypy
 , python-dateutil
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pynamodb";
   version = "4.3.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ced47c200073dbbfafb10b26931b9c9bf3c6b898f41dffa3676f5c2e2eddc2f0";
   };

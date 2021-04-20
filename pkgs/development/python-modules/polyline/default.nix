@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , flake8
 , nose
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "polyline";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0x60lm3ccq9zrcqlzyk041xgr1mi0k9lzyyv3cbbdiq9kb88jzvw";
   };

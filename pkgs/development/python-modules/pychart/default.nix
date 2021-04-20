@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pychart";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = ! isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "882650928776a7ca72e67054a9e0ac98f78645f279c0cfb5910db28f03f07c2e";
   };

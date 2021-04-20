@@ -2,7 +2,7 @@
 , attrs
 , buildPythonPackage
 , defusedxml
-, fetchPypi
+, fetchFromPyPI
 , hypothesis
 , isPy3k
 , lxml
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   version = "2.11.1";
   disabled = ! isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0vs7qa3s4scfhyldfw99hhxpna6rj49rsbr2k0j6b4qx1bw8h141";
   };

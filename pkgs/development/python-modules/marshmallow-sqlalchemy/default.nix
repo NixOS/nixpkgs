@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , marshmallow
 , sqlalchemy
 , pytest-lazy-fixture
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
   version = "0.24.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ee3ead3b83de6608c6850ff60515691b0dc556ca226680f8a82b9f785cdb71b1";
   };

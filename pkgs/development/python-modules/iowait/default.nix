@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi }:
+{ buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "iowait";
   version = "0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16djvxd9sxm7cr57clhqkyrq3xvdzgwj803sy5hwyb62hkmw46xb";
   };

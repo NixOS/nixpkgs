@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 buildPythonPackage rec {
   pname = "kitchen";
   version = "1.2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0g5hq2icnng9vy4www5hnr3r5srisfwp0wxw1sv5c5dxy61gak5q";
   };

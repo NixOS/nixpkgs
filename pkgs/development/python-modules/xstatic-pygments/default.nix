@@ -1,13 +1,13 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "XStatic-Pygments";
   version = "2.7.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "b22b0a59ce17bf06e26508fdd264fff74409ebd9968af87a0a63402fce838dc2";
   };

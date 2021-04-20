@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
+{ lib, buildPythonPackage, python, fetchFromPyPI, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "pystache";
   version = "0.5.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
   };

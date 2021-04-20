@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , dateutil, mock, isPy3k }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = lib.optional (!isPy3k) mock;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "be08b19c19ca527af722f2d4ba4dc569db292ec96f7de963746df4bb0bff9250";
   };

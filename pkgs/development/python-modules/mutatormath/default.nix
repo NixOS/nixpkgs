@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , defcon, fontmath
 , unicodedata2, fs
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "MutatorMath";
   version = "3.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0r1qq45np49x14zz1zwkaayqrn7m8dn2jlipjldg2ihnmpzw29w1";
     extension = "zip";

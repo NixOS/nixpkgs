@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-benchmark, wasmer }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, pytest-benchmark, wasmer }:
 
 buildPythonPackage rec {
   pname = "fastdiff";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ai95vjchl4396zjl1b69xfqvn9kn1y7c40d9l0qxdss0pcx6fk2";
   };

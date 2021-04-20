@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
   version = "3.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-VBzT4+JS+xmntI9CC3mLU0gzArf+TZlUyUdgXQomPWI=";
   };

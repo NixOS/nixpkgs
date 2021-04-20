@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pyparsing }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyparsing }:
 buildPythonPackage rec {
   pname = "pylibconfig2";
   version = "0.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1iwm11v0ghv2pq2cyvly7gdwrhxsx6iwi581fz46l0snhgcd4sqq";
   };

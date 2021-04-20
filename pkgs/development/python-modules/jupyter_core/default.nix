@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ipython
 , traitlets
 , glibcLocales
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "jupyter_core";
   version = "4.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "79025cb3225efcd36847d0840f3fc672c0abd7afd0de83ba8a1d3837619122b4";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , pytest
 , pytz
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "python-rapidjson";
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d79a412d7df30f01d3cb12e0e8863a48cfecd2fd7612719e16bc76eb1b65b332";
   };

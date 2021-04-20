@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 }:
 
@@ -8,7 +8,7 @@ buildPythonApplication rec {
   pname = "pyznap";
   version = "1.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "88bf1d6de2c11f14acbdfa01b61eb95c94f95d829ddebdaee3786b64ccb93ae3";
   };

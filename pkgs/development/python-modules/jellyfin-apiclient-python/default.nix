@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests
+{ lib, buildPythonPackage, fetchFromPyPI, requests
 , websocket_client, pythonOlder }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.7.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-nSLUa9/jAT6XrHo77kV5HYBxPO/lhcWKqPfpES7ul9A=";
   };

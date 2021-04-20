@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fontconfig, python, cython, freefont_ttf, makeFontsConf }:
+{ lib, buildPythonPackage, fetchFromPyPI, fontconfig, python, cython, freefont_ttf, makeFontsConf }:
 
 let
   fontsConf = makeFontsConf {
@@ -8,7 +8,7 @@ in buildPythonPackage rec {
   pname = "Python-fontconfig";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
   };

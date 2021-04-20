@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   pname = "slicerator";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18e60393e6765ca96986f801bbae62a617a1eba6ed57784e61b165ffc7dc1848";
   };

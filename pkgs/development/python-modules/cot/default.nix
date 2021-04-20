@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, pythonOlder, isPy3k
 , colorlog, pyvmomi, requests, verboselogs
 , psutil, pyopenssl, setuptools
 , mock, pytest-mock, pytestCheckHook, qemu
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.2.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f4b3553415f90daac656f89d3e82e79b3d751793239bb173a683b4cc0ceb2635";
   };

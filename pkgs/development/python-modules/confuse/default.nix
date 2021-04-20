@@ -1,6 +1,6 @@
 { buildPythonPackage
 , enum34
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , lib
 , pathlib
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "confuse";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-kvwEUcbiwnMqw2PQ9Z1+pgir3b7QYt2o6Y6ajJhs5GQ=";
   };

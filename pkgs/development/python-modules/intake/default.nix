@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , appdirs
 , dask
 , holoviews
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   version = "0.6.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f09800203fcaf1512f9234e54dbd07ec2b5217aafd21716385725ec052f5a52e";
   };

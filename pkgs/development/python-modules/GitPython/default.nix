@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , substituteAll
 , git
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.1.13";
   disabled = isPy27; # no longer supported
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-hiGn53fidqXsg4tZKAulJy3RRKGBacNskD2LOLmfdQo=";
   };

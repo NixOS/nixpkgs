@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm, fusepy, fuse
 , openssl }:
 
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "4.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jmg525n4n98hwy3hf303jbnq23z79sqwgliji9j7qcnph47gkgq";
   };

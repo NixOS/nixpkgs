@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchFromPyPI, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   version = "1.0.0";
   pname = "pluginbase";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "497894df38d0db71e1a4fbbfaceb10c3ef49a3f95a0582e11b75f8adaa030005";
   };

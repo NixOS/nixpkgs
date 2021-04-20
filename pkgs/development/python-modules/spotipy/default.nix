@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , six }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "spotipy";
   version = "2.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-9yk7gIaWgH6azsa9z/Y/fcw8wbFIwMS0KZ70PJZvcXc=";
   };

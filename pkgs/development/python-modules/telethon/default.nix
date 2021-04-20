@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, async_generator, rsa, pyaes, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromPyPI, openssl, async_generator, rsa, pyaes, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "telethon";
   version = "1.17.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Telethon";
     sha256 = "1v1rgr030z8s1ldv5lm1811znyd568c22pmlrzzf3ls972xk514m";

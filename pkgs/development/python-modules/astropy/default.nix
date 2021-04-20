@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , buildPythonPackage
 , isPy3k
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k; # according to setup.py
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2c194f8a429b8399de64a413a06881ea49f0525cabaa2d78fc132b9e970adc6a";
   };

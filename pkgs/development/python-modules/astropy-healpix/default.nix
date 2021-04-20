@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , astropy
 , astropy-helpers
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   doCheck = false; # tests require pytest-astropy
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bfdq33mj6mwk5fkc6n23f9bc9z8j7kmvql3zchz4h58jskmvqas";
   };

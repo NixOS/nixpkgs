@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , azure-mgmt-nspkg
 , msrestazure
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "f1870b0f97d5001cdb66208e5a236c9717a0ed18b34dbfdb238a828f3ca2a683";

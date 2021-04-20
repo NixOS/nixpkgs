@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , gviz-api
 , protobuf
 , werkzeug
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.4.0";
   format = "wheel";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     format = "wheel";
     python = "py3";

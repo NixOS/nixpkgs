@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, tkinter, supercollider }:
+{ lib, buildPythonPackage, fetchFromPyPI, tkinter, supercollider }:
 
 buildPythonPackage rec {
   pname = "FoxDot";
   version = "0.8.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00yqpkv7cxwk301cyiwjzr9yfq8hpnhqyspw3z874ydrl3cmssdb";
   };

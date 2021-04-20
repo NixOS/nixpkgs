@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , slicerator
 , scikitimage
 , six
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5";
   pname = "PIMS";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a02cdcbb153e2792042fb0bae7df4f30878bbba1f2d176114a87ee0dc18715a0";
   };

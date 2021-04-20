@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm, mock }:
 
 buildPythonPackage rec {
   pname = "backports.unittest_mock";
   version = "1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eff58e53de8fdeb27a1c87a9d57e7b91d15d1bc3854e85344b1a2e69f31ecda7";
   };

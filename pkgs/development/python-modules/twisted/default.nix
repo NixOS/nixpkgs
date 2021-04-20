@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , zope_interface
 , incremental
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "Twisted";
   version = "20.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "tar.bz2";
     sha256 = "040yzha6cyshnn6ljgk2birgh6mh2cnra48xp5ina5vfsnsmab6p";

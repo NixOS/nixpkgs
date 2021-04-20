@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, fetchpatch
+{ buildPythonPackage, lib, fetchFromPyPI, fetchpatch
 , pytestCheckHook, filelock, mock, pep8
 , cython
 , six, pyshp, shapely, geos, numpy
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "cartopy";
   version = "0.18.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Cartopy";
     sha256 = "0d24fk0cbp29gmkysrwq05vry13swmwi3vx3cpcy04c0ixz33ykz";

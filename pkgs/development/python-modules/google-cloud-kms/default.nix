@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , grpc_google_iam_v1
 , google-api-core
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "google-cloud-kms";
   version = "2.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0f3k2ixp1zsgydpvkj75bs2mb805389snyw30hn41c38qq5ksdga";
   };

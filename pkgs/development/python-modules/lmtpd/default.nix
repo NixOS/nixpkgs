@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib }:
+{ buildPythonPackage, fetchFromPyPI, isPy3k, lib }:
 
 buildPythonPackage rec {
   pname = "lmtpd";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2c6825d2ffa1de099440411a742f58e1b3e8deeb3345adcfd4c2c38d4baf62b3";
   };

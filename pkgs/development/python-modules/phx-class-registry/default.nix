@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phx-class-registry";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14iap8db2ldmnlf5kvxs52aps31rl98kpa5nq8wdm30a86n6457i";
   };

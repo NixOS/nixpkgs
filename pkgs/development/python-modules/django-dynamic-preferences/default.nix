@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , django, persisting-theory, six
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "django-dynamic-preferences";
   version = "1.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e4b2bb7b2563c5064ba56dd76441c77e06b850ff1466a386a1cd308909a6c7de";
   };

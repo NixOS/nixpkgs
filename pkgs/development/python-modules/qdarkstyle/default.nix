@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , helpdev
 , qtpy
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "qdarkstyle";
   version = "2.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "QDarkStyle";
     sha256 = "0883vzg35fzpyl1aiijzpfcdfvpq5vi325w0m7xkx7nxplh02fym";

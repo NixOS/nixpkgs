@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , jdcal
 , et_xmlfile
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "openpyxl";
   version = "2.6.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d53801678e18d7fe38c116f1ad0c2383a654670c4c8806105b611c92d92f2e3";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # directories). But python2 is EOL, so not supporting it should be ok.
   disabled = pythonOlder "3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fa80aba8af9d78f70a0a255815d44e33e8aca8e806ca6101e0eb18b2b7243246";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, dnspython, chardet, lmtpd
+{ lib, buildPythonPackage, fetchFromPyPI, dnspython, chardet, lmtpd
 , python-daemon, six, jinja2, mock, click }:
 
 buildPythonPackage rec {
   pname = "salmon-mail";
   version = "3.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0q2m6xri1b7qv46rqpv2qfdgk2jvswj8lpaacnxwjna3m685fhfx";
   };

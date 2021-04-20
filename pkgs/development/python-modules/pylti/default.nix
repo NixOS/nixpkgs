@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , httplib2
 , oauth
 , oauth2
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest-flakes sphinx mock chalice
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "80938a235b1ab390f6889a95237d087ea7adde5cc50fcae9c80c49898e8ee78e";
   };

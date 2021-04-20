@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchurl
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "memcached";
   version = "1.51";
 
-  src = if isPy3k then fetchPypi {
+  src = if isPy3k then fetchFromPyPI {
     inherit version;
     pname = "python3-${pname}";
     sha256 = "0na8b369q8fivh3y0nvzbvhh3lgvxiyyv9xp93cnkvwfsr8mkgkw";

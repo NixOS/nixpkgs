@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, dnspython, pytestCheckHook }:
+{ lib, buildPythonApplication, fetchFromPyPI, dnspython, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "nxdomain";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1z9iffggqq2kw6kpnj30shi98cg0bkvkwpglmhnkgwac6g55n2zn";
   };

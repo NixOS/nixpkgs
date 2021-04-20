@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , grpcio
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "chirpstack-api";
   version = "3.9.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08djidy3fyhghyzvndcjas3hb1s9d7719gvmgbl8bzxjm4h2c433";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , re2
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "fb-re2";
   version = "1.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "83b2c2cd58d3874e6e3a784cf4cf2f1a57ce1969e50180f92b010eea24ef26cf";
   };

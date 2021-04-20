@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , pytest, nose, glibcLocales
 , numpy, scipy, matplotlib, h5py }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # them properly.
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ed0057dc22bd392df4b3bba23536117e1b2866e3201b12c5a37428d23421a5ba";
   };

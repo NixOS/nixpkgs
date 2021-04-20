@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27 }:
 
 buildPythonPackage rec {
   pname = "itemadapter";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cb7aaa577fefe2aa6f229ccf4d058e05f44e0178a98c8fb70ee4d95acfabb423";
   };

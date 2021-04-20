@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , libftdi1
 , libusb1
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pylibftdi";
   version = "0.19.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bb0ec74df292ef884aa37bf1e98fb9df4d338718e1559eebda363317a792123e";
   };

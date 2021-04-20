@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8;
   '';
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "61a98ec126552d985c0e3e3c33cc72e79d7577f91f6edba99f635411a173d3b9";
   };

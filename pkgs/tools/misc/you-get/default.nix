@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi }:
+{ lib, buildPythonApplication, fetchFromPyPI }:
 
 buildPythonApplication rec {
   pname = "you-get";
@@ -8,7 +8,7 @@ buildPythonApplication rec {
   # probably aren't suitable for a build environment anyway.
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5a6cc0d661fe0cd4210bf467d6c89afd8611609e402690254722c1415736da92";
   };

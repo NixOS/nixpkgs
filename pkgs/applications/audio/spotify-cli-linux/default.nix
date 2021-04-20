@@ -3,7 +3,7 @@ python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
   version = "1.6.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0slyc3jfrj3rwq8rv6p5aqkw487aw7a87kmf1fb6n4vnvcf08v7w";
   };

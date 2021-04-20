@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , click
 , num2words
 , numpy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "0.12.4";
   pname = "pybids";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "830f3f518ab0d2e058e9ba6d6ff9a942792909c874433b3ad58a3339a23f46bf";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , numpy
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "nose-randomly";
   version = "1.2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7e483a3d79e13ae760d6ade57ae07ae45bb4b223b61a805e958b4c077116c67c";
   };

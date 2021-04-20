@@ -1,14 +1,14 @@
 { lib
 , bluepy
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "bluepy-devices";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "bluepy_devices";
     inherit  version;
     sha256 = "02zzzivxq2vifgs65m2rm8pqlsbzsbc419c032irzvfxjx539mr8";

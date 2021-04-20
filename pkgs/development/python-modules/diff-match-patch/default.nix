@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, python }:
 
 buildPythonPackage rec {
   pname = "diff-match-patch";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "da6f5a01aa586df23dfc89f3827e1cafbb5420be9d87769eeb079ddfd9477a18";
   };

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, setuptools, setuptools_scm
+{ buildPythonPackage, fetchFromPyPI, isPy27, lib, setuptools, setuptools_scm
 , pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b36542e2faab612f861c5ef4da17220ac1553f5892b3583c67281dbe4faad404";
   };

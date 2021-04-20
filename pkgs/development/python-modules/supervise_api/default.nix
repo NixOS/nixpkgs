@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , supervise
 , isPy3k
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "supervise_api";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1230f42294910e83421b7d3b08a968d27d510a4a709e966507ed70db5da1b9de";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , nose
 , scikitlearn
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "pynndescent";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "74a05a54d13573a38878781d44812ac6df97d8762a56f9bb5dd87a99911820fe";
   };

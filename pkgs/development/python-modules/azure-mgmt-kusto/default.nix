@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , azure-common
 , azure-mgmt-core
 , msrest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-kusto";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fa3ede0ebd6489bbf993f420bcb5fc63d9fad2a1e945c3c49b26fa012bb3534e";
     extension = "zip";

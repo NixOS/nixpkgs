@@ -5,7 +5,7 @@
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    fetchPypi
+    fetchFromPyPI
     pythonOlder;
 in
 buildPythonApplication rec {
@@ -13,7 +13,7 @@ buildPythonApplication rec {
   version = "1.2.0";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7af6360ca8d556f1cfe82b97f03b8d1ea5a9d6de1fa3018290c844b6566d9d6e";
   };

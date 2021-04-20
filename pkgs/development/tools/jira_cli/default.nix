@@ -1,11 +1,11 @@
 { lib, libffi, openssl, python3Packages }:
 let
-  inherit (python3Packages) fetchPypi buildPythonApplication vcrpy mock hiro;
+  inherit (python3Packages) fetchFromPyPI buildPythonApplication vcrpy mock hiro;
 in
   buildPythonApplication rec {
     pname = "jira-cli";
     version = "3.0";
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "86f7d4ad7292c9a27bbc265d09e7bcd00ef8159f20172998d85f25aad53b0df6";
     };

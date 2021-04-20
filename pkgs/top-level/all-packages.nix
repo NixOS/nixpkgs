@@ -4754,7 +4754,7 @@ in
   git-annex-remote-dbx = callPackage ../applications/version-management/git-and-tools/git-annex-remote-dbx {
     inherit (python3Packages)
     buildPythonApplication
-    fetchPypi
+    fetchFromPyPI
     dropbox
     annexremote
     humanfriendly;
@@ -4763,7 +4763,7 @@ in
   git-annex-remote-googledrive = callPackage ../applications/version-management/git-and-tools/git-annex-remote-googledrive {
     inherit (python3Packages)
     buildPythonApplication
-    fetchPypi
+    fetchFromPyPI
     annexremote
     drivelib
     GitPython

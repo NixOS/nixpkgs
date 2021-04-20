@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python, mohawk, requests }:
+{ lib, buildPythonPackage, fetchFromPyPI, python, mohawk, requests }:
 
 buildPythonPackage rec {
   pname = "requests-hawk";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1a5e61cab14627f1b5ba7de0e3fb2b681007ff7b2a49110d504e5cd6d7fd62d6";
   };

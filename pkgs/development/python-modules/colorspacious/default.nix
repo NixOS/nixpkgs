@@ -1,4 +1,4 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
+{ lib, pkgs, buildPythonPackage, fetchFromPyPI, isPy3k
 , numpy
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "colorspacious";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "065n24zbm9ymy2gvf03vx5cggk1258vcjdaw8jn9v26arpl7542y";
   };

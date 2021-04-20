@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # Needs yanc
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f74d190c4bff0953d76124cb8ed319a8a999138720e42957f0db481ef4746ae8";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, flask
+{ lib, fetchFromPyPI, buildPythonPackage, flask
 , brotli
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.9.0";
   pname = "Flask-Compress";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d93edd8fc02ae74b73c3df10a8e7ee26dee489c65dedce0b3a1d2ce05ac3d1be";
   };

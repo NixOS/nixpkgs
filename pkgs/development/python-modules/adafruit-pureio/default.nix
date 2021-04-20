@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools-scm
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "Adafruit-PureIO";
   version = "1.1.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Adafruit_PureIO";
     inherit version;
     sha256 = "1mfa6sfz7qwgajz3lqw0s69ivvwbwvblwkjzbrwdrxjbma4jaw66";

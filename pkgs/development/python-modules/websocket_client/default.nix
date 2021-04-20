@@ -1,7 +1,7 @@
 { lib
 , backports_ssl_match_hostname
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pytestCheckHook
 , six
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "websocket_client";
   version = "0.58.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-Y1CbQdFYrlt/Z+tK0g/su07umUNOc+FANU3D/44JcW8=";
   };

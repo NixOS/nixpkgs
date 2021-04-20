@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python, numpy, matplotlib, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, python, numpy, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "deap";
   version = "1.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bvshly83c4h5jhxaa97z192viczymz5fxp6vl8awjmmrs9l9x8i";
   };

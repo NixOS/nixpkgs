@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, attrs, protobuf, zeroconf }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, attrs, protobuf, zeroconf }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-LdBUtU5rNoixh7DPIFkHxLMvBeI6MZH57sO0IjuOQAw=";
   };

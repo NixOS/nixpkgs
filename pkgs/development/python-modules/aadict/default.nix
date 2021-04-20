@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , nose
 , coverage
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "aadict";
   version = "0.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "013pn9ii6mkql6khgdvsd1gi7zmya418fhclm5fp7dfvann2hwx7";
   };

@@ -1,11 +1,11 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
+{ lib, fetchFromPyPI, fetchpatch, buildPythonPackage
 , dateparser, humanize, pendulum, ruamel_yaml, tzlocal }:
 
 buildPythonPackage rec {
   pname = "maya";
   version = "0.3.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1x88k4irpckvd7jf2yvqjw1s52hjqbxym1r1d928yb3fkj7rvlxs";
   };

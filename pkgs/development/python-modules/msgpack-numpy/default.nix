@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , msgpack
 , numpy
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "msgpack-numpy";
   version = "0.4.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7eaf51acf82d7c467d21aa71df94e1c051b2055e54b755442051b474fa7cf5e1";
   };

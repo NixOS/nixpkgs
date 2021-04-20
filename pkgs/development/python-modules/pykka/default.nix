@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "Pykka";
   version = "2.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4b9d2363365b3455a0204bf163f09bd351d24b938c618c79d975a9510e128e95";
   };

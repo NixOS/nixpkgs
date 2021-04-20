@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "opensensemap-api";
   version = "0.1.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-e60aVIoKFqo++WJHUYGutugkjB8YgyNQgJbILgAyOOY=";
   };

@@ -2,7 +2,7 @@
 , breezy
 , build
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , git
 , mock
 , pep517
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "check-manifest";
   version = "0.46";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5895e42a012989bdc51854a02c82c8d6898112a4ab11f2d7878200520b49d428";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, setuptools-scm, rich, pytest-mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, setuptools-scm, rich, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "enrich";
   version = "1.2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-Dpn/V9h/e13vDKeZF+iPuTUaoNUuIo7ji/982FgxX+Q=";
   };

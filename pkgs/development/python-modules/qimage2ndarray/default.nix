@@ -1,4 +1,4 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
+{ lib, pkgs, buildPythonPackage, fetchFromPyPI, isPy3k
 , numpy
 , pyqt5
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "1.8.3";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b02bd2dc7de774f954544312ec1020cf2d7e03fdd23ec9eb79901da55ccb3365";
   };

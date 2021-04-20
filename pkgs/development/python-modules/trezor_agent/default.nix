@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , trezor
 , libagent
 , ecdsa
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "trezor_agent";
   version = "0.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "139d917d6495bf290bcc21da457f84ccd2e74c78b4d59a649e0cdde4288cd20c";
   };

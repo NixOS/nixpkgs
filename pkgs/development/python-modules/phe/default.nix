@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, click, gmpy2, numpy } :
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy, isPy3k, click, gmpy2, numpy } :
 
 let
   pname = "phe";
@@ -11,7 +11,7 @@ buildPythonPackage {
   # https://github.com/n1analytics/python-paillier/issues/51
   disabled = isPyPy || ! isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wzlk7d24kp0f5kpm0kvvc88mm42144f5cg9pcpb1dsfha75qy5m";
   };

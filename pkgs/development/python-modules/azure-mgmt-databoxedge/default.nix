@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , msrestazure
 , azure-common
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "g8BtUpIGOse8Jrws48gQ/o7sgymlgX0XIxl1ThHS3XA=";

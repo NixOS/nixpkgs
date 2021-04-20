@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy27
+{ lib, fetchFromPyPI, isPy27
 , buildPythonPackage
 , traits, apptools, pytestCheckHook
 , ipykernel, ipython
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zrxlq4v3091727vf10ngc8418sp26raxa8q83i4h0sydfkh2dic";
   };

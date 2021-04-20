@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , requests
 , twitch-python
 , pytz
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   pname = "twitch-chat-downloader";
   version = "3.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "tcd";
     sha256 = "f9b5ea2ad3badb7deffdd9604368ccb54170cd7929efbaa2d7b534e089ae6338";

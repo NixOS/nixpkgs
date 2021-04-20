@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, blessings, mock, nose, pyte, wcwidth, typing }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, pythonOlder, blessings, mock, nose, pyte, wcwidth, typing }:
 
 buildPythonPackage rec {
   pname = "curtsies";
   version = "0.3.0";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "89c802ec051d01dec6fc983e9856a3706e4ea8265d2940b1f6d504a9e26ed3a9";
   };

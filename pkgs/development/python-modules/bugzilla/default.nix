@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pep8, coverage, logilab_common, requests }:
 
 buildPythonPackage rec {
   pname = "bugzilla";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "python-${pname}";
     inherit version;
     sha256 = "0q8c3k0kdnd11g2s56cp8va9365x0xfr2m2zn9fgxjijdyhwdic5";

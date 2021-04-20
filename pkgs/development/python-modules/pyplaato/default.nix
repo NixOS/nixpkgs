@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , python-dateutil
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyplaato";
   version = "0.0.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nykbkv2fg1x5min07cbi44x6am48f5gw3mnyj7x2kpmj6sqfpqp";
   };

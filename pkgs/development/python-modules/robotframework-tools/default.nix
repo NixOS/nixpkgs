@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , robotframework
 , moretools
 , pathpy
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.1rc4";
   pname = "robotframework-tools";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0377ikajf6c3zcy3lc0kh4w9zmlqyplk2c2hb0yyc7h3jnfnya96";
   };

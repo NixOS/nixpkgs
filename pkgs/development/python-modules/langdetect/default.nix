@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, six }:
 
 buildPythonPackage rec {
   pname = "langdetect";
   version = "1.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "0c5zm6c7xzsigbb9c7v4r33fcpz911zscfwvh3dq1qxdy3ap18ci";

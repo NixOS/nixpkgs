@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , arrow
 , requests
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "stravalib";
   version = "0.10.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "76db248b24cbd6c51cf93b475d8a8df04ec4b6c6287dca244e47f37a433276d7";
   };

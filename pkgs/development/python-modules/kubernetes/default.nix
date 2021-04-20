@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast,
+{ lib, buildPythonPackage, fetchFromPyPI, pythonAtLeast,
   ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google-auth, adal,
   isort, pytest, coverage, mock, sphinx, autopep8, pep8, codecov, recommonmark, nose }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test --ignore=kubernetes/dynamic/test_client.py
   '';
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ec52ea01d52e2ec3da255992f7e859f3a76f2bdb51cf65ba8cd71dfc309d8daa";
   };

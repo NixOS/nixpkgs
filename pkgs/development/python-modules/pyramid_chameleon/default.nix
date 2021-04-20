@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , chameleon
 , pyramid
 , zope_interface
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pyramid_chameleon";
   version = "0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d176792a50eb015d7865b44bd9b24a7bd0489fa9a5cebbd17b9e05048cef9017";
   };

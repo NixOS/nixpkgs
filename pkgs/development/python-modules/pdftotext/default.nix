@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, poppler }:
+{ lib, buildPythonPackage, fetchFromPyPI, poppler }:
 
 buildPythonPackage rec {
   pname = "pdftotext";
   version = "2.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "98aeb8b07a4127e1a30223bd933ef080bbd29aa88f801717ca6c5618380b8aa6";
   };

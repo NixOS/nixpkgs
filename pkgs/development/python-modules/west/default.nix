@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k
 , colorama, configobj, packaging, pyyaml, pykwalify
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-gwbrxnQ0j0FV2Cv+hQEoK0HthstEw/xjaozPjgV7GEc=";
   };

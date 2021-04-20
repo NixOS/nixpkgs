@@ -10,7 +10,7 @@ in buildPythonPackage rec {
   pname = "tasklib";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7fe8676acb4559129c4e958be7704c12dccdbae302fff47c5398bc0dd1c9e563";
   };

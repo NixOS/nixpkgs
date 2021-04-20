@@ -1,7 +1,7 @@
 { lib
 , isPy27
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
   # Python Inputs
 , ipywidgets
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e8549a7ac7dc45948a5f2735e17f97622313c7fea24ea3c1bd4a5ebf02bf5638";
   };

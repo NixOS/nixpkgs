@@ -35,7 +35,7 @@ let
     pname = "PyQt5_sip";
     version = "12.8.1";
 
-    src = pythonPackages.fetchPypi {
+    src = pythonPackages.fetchFromPyPI {
       inherit pname version;
       sha256 = "30e944db9abee9cc757aea16906d4198129558533eb7fadbe48c5da2bd18e0bd";
     };
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
   version = "5.15.2";
   format = "other";
 
-  src = pythonPackages.fetchPypi {
+  src = pythonPackages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1z74295i69cha52llsqffzhb5zz7qnbjc64h8qg21l91jgf0harp";
   };

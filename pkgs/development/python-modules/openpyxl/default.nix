@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pytest
 , jdcal
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.0.6";
   disabled = isPy27; # 2.6.4 was final python2 release
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b229112b46e158b910a5d1b270b212c42773d39cab24e8db527f775b82afc041";
   };

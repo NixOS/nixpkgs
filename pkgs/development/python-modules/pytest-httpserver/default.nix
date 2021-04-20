@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest-asyncio
 , pytest-cov
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "pytest-httpserver";
   version = "0.3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "pytest_httpserver";
     inherit version;
     sha256 = "sha256-YgTcrUlwh2jz0tJdMUgjm8RcqrtpJ/oUQm3SnxUc5Z4=";

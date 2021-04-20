@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pytest, isort }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, mock, pytest, isort }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f0fcf9674f3a627b36e07466d335e82b0f7c4f9e0f7ec39f2a1750b0189d5371";
   };

@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, vcversioner, pytestrunner, mock, pytest, pytest-asyncio, pytest-trio, twisted, zipp, pyparsing, pyhamcrest, futures, attrs, isPy27 }:
+{ buildPythonPackage, fetchFromPyPI, lib, vcversioner, pytestrunner, mock, pytest, pytest-asyncio, pytest-trio, twisted, zipp, pyparsing, pyhamcrest, futures, attrs, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pyee";
   version = "8.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "92dacc5bd2bdb8f95aa8dd2585d47ca1c4840e2adb95ccf90034d64f725bfd31";
   };

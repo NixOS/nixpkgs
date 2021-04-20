@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   version = "2.1.1";
   pname   = "sigal";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version pname;
     sha256 = "0l07p457svznirz7qllgyl3qbhiisv7klhz7cbdw6417hxf9bih8";
   };

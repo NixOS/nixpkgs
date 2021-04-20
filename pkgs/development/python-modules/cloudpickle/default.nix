@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
   version = "1.6.0";
   disabled = isPy27; # abandoned upstream
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9bc994f9e9447593bd0a45371f0e7ac7333710fcf64a4eb9834bf149f4ef2f32";
   };

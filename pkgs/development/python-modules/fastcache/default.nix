@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest }:
 
 buildPythonPackage rec {
   pname = "fastcache";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0avqpswfmw5b08xx3ib6zchc5bis390fn1v74vg7nnrkf1pb3qbd";
   };

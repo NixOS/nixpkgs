@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy27
 , ansible
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = isPy27;
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-vgt/KqNozTPaON/I19SybBZuo7bbl3Duq5dTBTMlj44=";
   };

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchFromPyPI, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "libtmux";
   version = "0.8.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1d35b9f8451944d31c5ed22ed9e6c8e18034adcc75718fcc5b27fbd9621543e1";
   };

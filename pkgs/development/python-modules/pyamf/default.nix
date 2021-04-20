@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k, defusedxml }:
 
 buildPythonPackage rec {
   pname = "PyAMF";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # according to setup.py
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1r3lp9gkph48g9lijby5rs5daa3lhxs204r14zw4kvp3hf4xcm84";
   };

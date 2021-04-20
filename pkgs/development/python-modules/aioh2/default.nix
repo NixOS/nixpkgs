@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, h2, priority }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, h2, priority }:
 
 buildPythonPackage rec {
   pname = "aioh2";
   version = "0.2.2";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03i24wzpw0mrnrpck3w6qy83iigwl7n99sdrndqzxfyrc69b99wd";
   };

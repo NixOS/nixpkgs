@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, enum34 }:
+{ lib, buildPythonPackage, fetchFromPyPI, enum34 }:
 
 buildPythonPackage rec {
   pname = "enum-compat";
   version = "0.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3677daabed56a6f724451d585662253d8fb4e5569845aafa8bb0da36b1a8751e";
   };

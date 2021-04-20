@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , unittest2
 , robotframework
 , lxml
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.7.2";
   pname = "robotframework-requests";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "662e0ce5036a55bcb4cb46ff9741f40c78c670f4fb64cd37714cf83d5fd31774";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, ci-info, ci-py, requests, pytest }:
 
 buildPythonPackage rec {
   version = "0.2.1";
   pname = "etelemetry";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rw8im09ppnb7z7p7rx658rp5ib8zca8byxg1kiflqwgx5c8zddz";
   };

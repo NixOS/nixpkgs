@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 ,
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pycountry";
   version = "20.7.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hnbabsmqimx5hqh0jbd2f64i8fhzhhbrvid57048hs5sd9ll241";
   };

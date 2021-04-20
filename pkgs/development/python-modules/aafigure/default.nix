@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pillow }:
+{ lib, buildPythonPackage, fetchFromPyPI, pillow }:
 
 buildPythonPackage rec {
   pname = "aafigure";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "49f2c1fd2b579c1fffbac1386a2670b3f6f475cc7ff6cc04d8b984888c2d9e1e";
   };

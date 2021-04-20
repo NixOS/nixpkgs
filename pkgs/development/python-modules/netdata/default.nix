@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "netdata";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-oGOT4RvftI/2Ri2icM/AtglNZXt10jkFh/rlr6A46YE=";
   };

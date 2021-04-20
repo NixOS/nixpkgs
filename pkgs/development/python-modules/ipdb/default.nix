@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ipython
 , isPyPy
 , isPy27
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.13.4";
   disabled = isPyPy || isPy27;  # setupterm: could not find terminfo database
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c85398b5fb82f82399fc38c44fe3532c0dde1754abee727d8f5cfcc74547b334";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cryptography
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "jwcrypto";
   version = "0.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b7fee2635bbefdf145399392f5be26ad54161c8271c66b5fe107b4b452f06c24";
   };

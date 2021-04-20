@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, mock, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, mock, six }:
 
 buildPythonPackage rec {
   pname = "whisper";
   version = "1.1.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08biw3g6x6p2aa1nlvfazbgcs1xvf6m0hvskdjhgwnsbwxk1xq46";
   };

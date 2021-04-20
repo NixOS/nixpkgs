@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, blinker, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask, blinker, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-Principal";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0lwlr5smz8vfm5h9a9i7da3q1c24xqc6vm9jdywdpgxfbi5i7mpm";
   };

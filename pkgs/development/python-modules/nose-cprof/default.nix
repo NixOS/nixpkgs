@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "nose-cprof";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0178834759b63dc50388444d4ff8d1ae84e1ba110bb167419afee6bf4699b119";
   };

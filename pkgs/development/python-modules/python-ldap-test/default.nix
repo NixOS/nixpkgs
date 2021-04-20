@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, py4j }:
+{ lib, buildPythonPackage, fetchFromPyPI, py4j }:
 
 buildPythonPackage rec {
   pname = "python-ldap-test";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1qh9x3lncaldnw79fgpqbayichs8pbz8abr6pxb5qxbs7zrnyrwf";
   };

@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , glibcLocales
 , libarchive
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "libarchive-c";
   version = "2.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9919344cec203f5db6596a29b5bc26b07ba9662925a05e24980b84709232ef60";
   };

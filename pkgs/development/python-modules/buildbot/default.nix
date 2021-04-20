@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
   txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
@@ -27,7 +27,7 @@ let
     pname = "buildbot";
     version = "3.1.0";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "1b9m9l8bz2slkrq0l5z8zd8pd0js5w4k7dam8bdp00kv3aln4si9";
     };

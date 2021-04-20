@@ -7,7 +7,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
   version = "1.14.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "E+xIS0Z3M/ilBswH8XwXWnGb9gbDRuuKKE39qau9fFc=";
   };

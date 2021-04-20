@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, pyyaml }:
+{ lib, buildPythonApplication, fetchFromPyPI, pyyaml }:
 
 buildPythonApplication rec {
   version = "0.1.5";
   pname = "podman-compose";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1sgbc889zq127qhxa9frhswa1mid19fs5qnyzfihx648y5i968pv";
   };

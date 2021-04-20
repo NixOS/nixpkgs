@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, webassets, flask_script, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask, webassets, flask_script, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-Assets";
   version = "2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1dfdea35e40744d46aada72831f7613d67bf38e8b20ccaaa9e91fdc37aa3b8c2";
   };

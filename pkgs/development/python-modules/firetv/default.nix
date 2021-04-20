@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , adb-homeassistant
 , flask
 , pure-python-adb-homeassistant
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "firetv";
   version = "1.0.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "602de77411c2caffb322e4ff63fa6cc4eeb9a50c5f4b14e13930ed7cd87cf513";
   };

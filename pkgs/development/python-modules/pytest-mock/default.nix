@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest-asyncio
 , pytestCheckHook
 , setuptools_scm
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytest-mock";
   version = "3.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1z6r3n78bilfzkbxj083p0ib04ia1bhfgnj2qq9x6q4mmykapqm1";
   };

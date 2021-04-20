@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, future, configparser, isPy27 }:
+{ lib, buildPythonPackage, fetchFromPyPI, future, configparser, isPy27 }:
 
 buildPythonPackage rec {
   pname = "arabic_reshaper";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "zzGPpdUdLSJPpJv2vbu0aE9r0sBot1z84OYH+JrBmdw=";
   };

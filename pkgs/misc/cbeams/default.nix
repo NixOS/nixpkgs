@@ -1,11 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, isPy3k, blessings, docopt }:
+{ lib, buildPythonApplication, fetchFromPyPI, isPy3k, blessings, docopt }:
 
 buildPythonApplication rec {
   pname = "cbeams";
   version = "1.0.3";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1agcjg6kmcyvk834xd2j60mi349qi9iw3dc2vwpd7pqwq1daq3gi";
   };

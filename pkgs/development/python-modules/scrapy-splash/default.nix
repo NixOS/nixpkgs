@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, scrapy, six }:
+{ lib, fetchFromPyPI, buildPythonPackage, scrapy, six }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
   version = "0.7.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1dg7csdza2hzqskd9b9gx0v3saqsch4f0fwdp0a3p0822aqqi488";
   };

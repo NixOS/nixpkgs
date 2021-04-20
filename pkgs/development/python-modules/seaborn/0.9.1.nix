@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , pandas
 , matplotlib
@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.9.1";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "da33aa8c20a9a342ce73831d02831a10413f54a05471c7f31edf34f225d456ae";
   };

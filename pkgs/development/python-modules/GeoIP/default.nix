@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi
+{lib, buildPythonPackage, fetchFromPyPI
 , geoip, nose}:
 
 buildPythonPackage rec {
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     geoip
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rphxf3vrn8wywjgr397f49s0s22m83lpwcq45lm0h2p45mdm458";
   };

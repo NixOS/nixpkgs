@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 , flask
 , google-api-core
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "google-cloud-logging";
   version = "2.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-yi3lG7tKi2BkU7vtMIEPsll1UX/JxrNj4G+DJaGQ/+k=";
   };

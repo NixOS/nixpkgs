@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro";
   version = "1.10.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "381b990cc4c4444743c3297348ffd46e0c3a5d7a17e15b2f4a9042f6e955c31a";
   };

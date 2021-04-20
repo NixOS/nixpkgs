@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
 , zlib
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     zlib
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3656355c1f9cd1731065c9d589f66d33653cbe5e0879cbe5d8447b51e4ddb4ec";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , numpy
 , libsndfile
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "soundfile";
   version = "0.10.3.post1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "SoundFile";
     inherit version;
     sha256 = "0yqhrfz7xkvqrwdxdx2ydy4h467sk7z3gf984y1x2cq7cm1gy329";

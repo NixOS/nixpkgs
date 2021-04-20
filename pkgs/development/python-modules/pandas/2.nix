@@ -2,7 +2,7 @@
 
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , stdenv
 , pytest
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pname = "pandas";
   version = "0.24.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , celery
 , humanize
 , mock
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "flower";
   version = "0.9.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cf27a254268bb06fd4972408d0518237fcd847f7da4b4cd8055e228150ace8f3";
   };

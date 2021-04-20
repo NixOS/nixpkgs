@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , httplib2
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "python-pipedrive";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0f8qiyl82bpwxwjw2746vdvkps2010mvn1x9b6j6ppmifff2d4pl";
   };

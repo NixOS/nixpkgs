@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , twisted, whisper, txamqp, cachetools, urllib3
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "carbon";
   version = "1.1.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08ndphpcbdx2ab4f5jsn2y4l5p55h9wscbg7clhbyyh03r5hianr";
   };

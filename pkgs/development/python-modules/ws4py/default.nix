@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, mock, git
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, mock, git
 , cherrypy, gevent, tornado }:
 
 buildPythonPackage rec {
   pname = "ws4py";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483";
   };

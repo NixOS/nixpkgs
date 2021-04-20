@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , elasticsearch
 , ipaddress
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "elasticsearch-dsl";
   version = "7.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ed75f6ff037e36b2397a8e92cae0ddde79b83adc70a154b8946064cb62f7301";
   };

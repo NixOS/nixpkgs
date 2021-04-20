@@ -3,7 +3,7 @@
 , asynctest
 , buildPythonPackage
 , ddt
-, fetchPypi
+, fetchFromPyPI
 , pbr
 , pytestCheckHook
 , pythonOlder
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.7.2";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-guSV0Ri3SJaqW01H4X7/teLMeD5RCuOVzq3l6Hyr6Jo=";
   };

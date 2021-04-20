@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , setuptools_scm
 , wcwidth
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "prettytable";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wcpp1nkicrswb353yn6xd2x535cpif62nw5rgz33c1wj0wzbdvb";
   };

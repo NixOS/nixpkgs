@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, routerFeatures
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder, routerFeatures
 , janus, ncclient, paramiko, pyyaml, sanic }:
 
 let
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "entrance";
   version = "1.1.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5b354ecf03226edae567511c8a8db95038cc9c3da20fcfcf5546d1e197eb3aef";
   };

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, requests, hidapi }:
+{ lib, fetchFromPyPI, buildPythonPackage, requests, hidapi }:
 
 buildPythonPackage rec {
   pname = "python-u2flib-host";
   version = "3.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02pwafd5kyjpc310ys0pgnd0adff1laz18naxxwsfrllqafqnrxb";
   };

@@ -1,8 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, six, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, mock }:
 buildPythonPackage rec {
   pname = "hiro";
   version = "0.5.1";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
 
     sha256 = "d10e3b7f27b36673b4fa1283cd38d610326ba1ff1291260d0275152f15ae4bc7";

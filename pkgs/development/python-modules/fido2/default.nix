@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , cryptography
 , mock
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "fido2";
   version = "0.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     hash = "sha256-hoDuJSOOIwdZbrOQCg+MDZzJEYkUbtgDlUTxo6ad/m4=";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , nose, pyparsing, decorator, six, future }:
 
 buildPythonPackage rec {
   pname = "PyContracts";
   version = "1.8.14";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03q5m595ysjrc9h57m7prrca6b9l4yrzvdijnzxnhd61p7jzbh49";
   };

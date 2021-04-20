@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, urllib3, pyee, tqdm, websockets, appdirs }:
+{ buildPythonPackage, fetchFromPyPI, lib, urllib3, pyee, tqdm, websockets, appdirs }:
 
 buildPythonPackage rec {
   pname = "pyppeteer";
   version = "0.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c2974be1afa13b17f7ecd120d265d8b8cd324d536a231c3953ca872b68aba4af";
   };

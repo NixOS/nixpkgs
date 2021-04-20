@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc_google_iam_v1
 , google-api-core
 , google-cloud-core
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "google-cloud-bigtable";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "90bd53a19c33c34101b8567c82a6dc0386af4118d70e1ad69b49375358a21aa6";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, requests, requests_oauthlib
+{ lib, buildPythonPackage, fetchFromPyPI, requests, requests_oauthlib
 , django, python3-openid }:
 
 buildPythonPackage rec {
   pname = "django-paintstore";
   version = "0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12wxgwv1qbkfq7w5i7bm7aidv655c2sxp0ym73qf8606dxbjcwwg";
   };

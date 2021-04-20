@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cmake
 , future
 , numpy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "osqp";
   version = "0.6.2.post0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5f0695f26a3bef0fae91254bc283fab790dcca0064bfe0f425167f9c9e8b4cbc";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , httplib2
 , keyring
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "launchpadlib";
   version = "1.10.13";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5804d68ec93247194449d17d187e949086da0a4d044f12155fad269ef8515435";
   };

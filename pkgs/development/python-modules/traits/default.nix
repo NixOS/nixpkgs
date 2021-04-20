@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , python
 , pytest
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "6.1.1";
   disabled = isPy27; # setup.py no longer py3 compat
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "807da52ee0d4fc1241c8f8a04d274a28d4b23d3a5f942152497d19405482d04f";
   };

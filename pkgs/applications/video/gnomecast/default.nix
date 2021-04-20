@@ -5,7 +5,7 @@ buildPythonApplication rec {
   pname = "gnomecast";
   version = "1.9.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4d8cd7a71f352137252c5a9ee13475bd67fb99594560ecff1efb0f718d8bbaac";
   };

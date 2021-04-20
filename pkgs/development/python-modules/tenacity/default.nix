@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, isPy3k
 , pbr, six, futures, monotonic, typing, setuptools_scm
 , pytest, sphinx, tornado, typeguard
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "tenacity";
   version = "6.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zsdajdpcjd7inrl7r9pwiyh7qpgh9jk7g2bj1iva2d3n0gijkg1";
   };

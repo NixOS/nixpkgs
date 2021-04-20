@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, mock }:
 
 buildPythonPackage rec {
   pname = "darcsver";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yb1c3jxqvy4r3qiwvnb86qi5plw6018h15r3yk5ji3nk54qdcb6";
   };

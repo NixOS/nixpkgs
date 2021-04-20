@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, krb5Full, nose, GitPython, mock, git }:
 
 buildPythonPackage rec {
   pname = "CCColUtils";
   version = "1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gwcq4xan9as1j3q9k2zqrywxp46qx0ljwxbck9id2fvilds6ck3";
   };

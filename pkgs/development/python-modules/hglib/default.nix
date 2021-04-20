@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, substituteAll, python, nose, mercurial }:
 
 buildPythonPackage rec {
   pname = "python-hglib";
   version = "2.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7c1fa0cb4d332dd6ec8409b04787ceba4623e97fb378656f7cab0b996c6ca3b2";
   };

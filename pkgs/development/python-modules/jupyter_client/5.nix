@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , traitlets
 , jupyter_core
 , pyzmq
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "jupyter_client";
   version = "5.3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5efdf4131124d4a0d5789101e74827022585f172d2f4b60cf6fa98e0a7511b25";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , future
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "blockchain";
   version = "1.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1qpbmz6dk5gx1996dswpipwhj6sp5j0dlfap012l46zqnvmkxanv";
   };

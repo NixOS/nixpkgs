@@ -1,11 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, freezegun }:
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, pythonOlder, pytest, freezegun }:
 
 buildPythonPackage rec {
   version = "5.0.1";
   pname = "ftputil";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "394997ccb3cd4825c6e22b5e349c62cf5016c35db4d60940f3513db66d205561";
   };

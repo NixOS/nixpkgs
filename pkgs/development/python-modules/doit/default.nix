@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , mock
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "37c3b35c2151647b968b2af24481112b2f813c30f695366db0639d529190a143";
   };

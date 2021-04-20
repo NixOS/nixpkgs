@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, fetchpatch
 , aws-xray-sdk
 , backports_tempfile
 , boto3
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   pname = "moto";
   version = "1.3.16";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0zy0prsyip264i6h03lxsn1qg1n3dc8c4iyfawckjqvm24gnns3c";
   };

@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cmake
 , numpy
 , scipy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "lightgbm";
   version = "3.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "000c6e0e225834a8a94a84571cf41e4b7c7b97a0db6d286c1237de8ba6066726";
   };

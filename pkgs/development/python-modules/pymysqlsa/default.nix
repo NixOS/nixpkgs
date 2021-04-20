@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pymysql
 , sqlalchemy
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pymysql-sa";
   version = "1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "pymysql_sa";
     sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";

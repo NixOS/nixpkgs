@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , isPy3k
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "imageio-ffmpeg";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13b05b17a941a9f4a90b16910b1ffac159448cff051a153da8ba4b4343ffa195";
   };

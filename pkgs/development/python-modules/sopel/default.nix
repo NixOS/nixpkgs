@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy
 , dnspython
 , geoip2
 , ipython
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "7.0.7";
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "84d42708d176aecfb7b95299af0e484896f5f80df61f43c92d8e7a53de0b2099";
   };

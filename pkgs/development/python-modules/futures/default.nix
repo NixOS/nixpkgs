@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python, stdenv }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, python, stdenv }:
 
 buildPythonPackage rec {
   pname = "futures";
   version = "3.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794";
   };

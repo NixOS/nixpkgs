@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , graphviz
 , coreutils
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a7bec6609f37cf1e64898c59f075afd659106cf9356c5f387cecaa2e0cdb2304";
     extension = "zip";

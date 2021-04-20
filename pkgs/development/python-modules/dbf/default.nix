@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
+{ lib, fetchFromPyPI, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
 
 buildPythonPackage rec {
     pname = "dbf";
     version = "0.99.1";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "4ed598a3866dfe7761b8099cf53ab44cb6ed5e4a7dbffb0da8c67a4af8d62fc5";
     };

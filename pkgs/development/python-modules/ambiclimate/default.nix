@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , async-timeout
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "ambiclimate";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Ambiclimate";
     inherit version;
     sha256 = "0vhmpazc2n7qyyh7wqsz635w0f8afk2i5d592ikb84bgnfn83483";

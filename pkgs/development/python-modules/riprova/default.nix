@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec{
   pname = "riprova";
   version = "0.2.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04drdvjjbh370csv2vb5zamg2aanxqkfm6w361qkybnra4g4g0dz";
   };

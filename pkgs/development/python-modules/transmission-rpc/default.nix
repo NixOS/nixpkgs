@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 , typing-extensions
 , requests
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "transmission-rpc";
   version = "3.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1y5048109j6z4smzwysvdjfn6cj9698dsxfim9i4nqam4nmw2wi7";
   };

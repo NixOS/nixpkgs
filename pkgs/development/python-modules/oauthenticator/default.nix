@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , google-api-python-client
 , google-auth-oauthlib
 , jupyterhub
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "0.13.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5202adcd96ddbbccbc267da02f2d14e977300c81291aaa77be4fd9f2e27cfa37";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , chardet
 , pyyaml
 , requests
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "prance";
   version = "0.20.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4ffcddae6218cf6753a02af36ca9fb1c92eec4689441789ee2e9963230882388";
   };

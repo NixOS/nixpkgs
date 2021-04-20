@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "littleutils";
   version = "0.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0vwijrylppmk0nbddqvn527r9cg3zw8d6zk6r58hslry42jf7jp6";
   };

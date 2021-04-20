@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "mbed-cli";
   version = "1.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1228plh55id03qywsw0ai88ypdpbh9iz18jfcyhn21pci7mj77fv";
   };

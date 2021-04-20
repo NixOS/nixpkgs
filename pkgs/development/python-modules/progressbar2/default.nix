@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python-utils
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "progressbar2";
   version = "3.53.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ef72be284e7f2b61ac0894b44165926f13f5d995b2bf3cd8a8dedc6224b255a7";
   };

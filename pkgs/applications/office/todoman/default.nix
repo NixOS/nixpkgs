@@ -6,13 +6,13 @@
 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchFromPyPI;
 in
 buildPythonApplication rec {
   pname = "todoman";
   version = "3.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
   };

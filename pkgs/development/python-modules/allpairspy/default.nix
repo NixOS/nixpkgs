@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, pytest }:
 
 buildPythonPackage rec {
   pname = "allpairspy";
   version = "2.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9358484c91abe74ba18daf9d6d6904c5be7cc8818397d05248c9d336023c28b1";
   };

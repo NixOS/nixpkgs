@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , jsonrpc-async
 , jsonrpc-websocket
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pykodi";
   version = "0.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1al2q4jiqxjnz0j2xvs2hqzrz6fm3hmda5zjnkp8gdvgchd1cmn7";
   };

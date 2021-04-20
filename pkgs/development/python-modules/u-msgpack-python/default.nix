@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , glibcLocales
 , python
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "u-msgpack-python";
   version = "2.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b7e7d433cab77171a4c752875d91836f3040306bab5063fb6dbe11f64ea69551";
   };

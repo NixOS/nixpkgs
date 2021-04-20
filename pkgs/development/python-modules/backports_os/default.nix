@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , future
 , isPy3k
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "backports.os";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b472c4933094306ca08ec90b2a8cbb50c34f1fb2767775169a1c1650b7b74630";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , mock
 , libcst
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "google-cloud-dataproc";
   version = "2.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-TADApBkE4DvEFkVFy56Flh2s6XR9uGxzGTf5aspohsA=";
   };

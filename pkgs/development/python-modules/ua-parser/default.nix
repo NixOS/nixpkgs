@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml }:
 
 buildPythonPackage rec {
   pname = "ua-parser";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0csh307zfz666kkk5idrw3crj1x8q8vsqgwqil0r1n1hs4p7ica7";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , xorgserver
 , mock
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "xvfbwrapper";
   version = "0.2.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };

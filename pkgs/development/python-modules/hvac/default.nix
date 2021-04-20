@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, six }:
 
 buildPythonPackage rec {
   pname = "hvac";
   version = "0.10.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cd74138994b1b99cdb75d34aadfd900352b3170bfc31c5e4cc0ff63eaa731cf9";
   };

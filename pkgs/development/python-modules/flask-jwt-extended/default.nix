@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, flask, pyjwt, werkzeug, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, dateutil, flask, pyjwt, werkzeug, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-JWT-Extended";
   version = "3.25.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bbf4467f41c56cf1fd8a5870d2556f419c572aad2b4085757581c3f9b4d7767a";
   };

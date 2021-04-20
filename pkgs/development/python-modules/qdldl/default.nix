@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cmake
 , pybind11
 , numpy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "qdldl";
   version = "0.1.5.post0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c392c7427651d8b226423c7aba4a0f2338a1f38a4bbdabac6bc4afd8bc934f06";
   };

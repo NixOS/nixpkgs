@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , fetchNuGet
 , buildPythonPackage
 , python
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pname = "pythonnet";
   version = "2.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ach9jic7a9rd3vmc4bphkr9fq01a0qk81f8a7gr9npwzmkqx8x3";
   };

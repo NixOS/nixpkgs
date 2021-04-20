@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , colorlog
 , cryptography
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.9.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "82bca8a98fc1dbda9f67c8eceac59cb92abe07db6227c120a1eb1d040ea40fda";
   };

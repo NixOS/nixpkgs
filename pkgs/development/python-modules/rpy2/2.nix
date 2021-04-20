@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , isPy27
 , readline
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     version = "2.8.6"; # python2 support dropped in 2.9.x
     pname = "rpy2";
     disabled = isPyPy;
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit version pname;
       sha256 = "162zki5c1apgv6qbafi7n66y4hgpgp43xag7q75qb6kv99ri6k80";
     };

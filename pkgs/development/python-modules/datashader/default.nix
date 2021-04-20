@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , dask
 , bokeh
 , toolz
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pname = "datashader";
   version = "0.12.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a135612876dc3e4b16ccb9ddb70de50519825c8c1be251b49aefa550bcf8a39a";
   };

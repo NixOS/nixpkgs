@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
+{ lib, fetchFromPyPI, buildPythonPackage, python, pkg-config, libX11
 , SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pygame";
   version = "2.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8b1e7b63f47aafcdd8849933b206778747ef1802bd3d526aca45ed77141e4001";
   };

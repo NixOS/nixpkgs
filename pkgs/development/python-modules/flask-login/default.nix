@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, buildPythonPackage, fetchFromPyPI, pythonAtLeast
 , flask, blinker, nose, mock, semantic-version }:
 
 buildPythonPackage rec {
   pname = "Flask-Login";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
   };

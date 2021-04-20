@@ -1,7 +1,7 @@
 { lib
 , asysocks
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , minikerberos
 , prompt_toolkit
 , pythonOlder
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.2.37";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0daf1fk7406vpywc0yxv0wzf4nw986js9lc2agfyfxz0q7s29lf0";
   };

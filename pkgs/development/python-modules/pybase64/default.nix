@@ -1,4 +1,4 @@
-{ buildPythonPackage, isPy3k, lib, fetchPypi, six, pytest }:
+{ buildPythonPackage, isPy3k, lib, fetchFromPyPI, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pybase64";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c430b36751dd89820c867aadd0130bbe8ce007ee570cbe91bb23012fb6f52e87";
   };

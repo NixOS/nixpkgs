@@ -1,11 +1,11 @@
-{ lib, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
+{ lib, isPy27, buildPythonPackage, fetchFromPyPI, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "mlrose";
   version = "1.3.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cec83253bf6da67a7fb32b2c9ae13e9dbc6cfbcaae2aa3107993e69e9788f15e";
   };

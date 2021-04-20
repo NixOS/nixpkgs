@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , azure-common
 , azure-core
 , msrest
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "a13124dc9405277f697f6452728d7dcf4c50601ee76055fd42f12b51494d6579";

@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
   disabled = python3Packages.isPy27;
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "b09f0804d26b018360b240778612390810e8e00ea0f79d5412fd0d4775c0e3cd";
   };

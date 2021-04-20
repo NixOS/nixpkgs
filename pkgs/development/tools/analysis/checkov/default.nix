@@ -17,7 +17,7 @@ let
     pname = "dpath";
     version = "1.5.0";
 
-    src = pkgs.python3Packages.fetchPypi {
+    src = pkgs.python3Packages.fetchFromPyPI {
       inherit pname version;
       sha256 = "SWYVtOqEI20Y4NKGEi3nSGmmDg+H4sfsZ4f/KGxINhs=";
     };

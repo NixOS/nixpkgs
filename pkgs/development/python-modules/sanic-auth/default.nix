@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, sanic, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, sanic, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Sanic-Auth";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0dc24ynqjraqwgvyk0g9bj87zgpq4xnssl24hnsn7l5vlkmk8198";
   };

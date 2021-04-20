@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   six, pytest, pytestrunner, pytestcov, coverage
 }:
 buildPythonPackage rec {
   pname = "libais";
   version = "0.17";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pyka09h8nb0vlzh14npq4nxmzg1046lr3klgn97dsf5k0iflapb";
   };

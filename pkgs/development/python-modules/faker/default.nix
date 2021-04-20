@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , dateutil
 , text-unidecode
 , freezegun
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "Faker";
   version = "5.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bskhmiir1ajipj7j535j2mxgnp6s3mxbvlag4aryj9zbhgg1c19";
   };

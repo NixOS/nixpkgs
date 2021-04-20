@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "python-codon-tables";
   version = "0.1.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "python_codon_tables";
     inherit version;
     sha256 = "265beac928cbb77c6745bc728471adc7ffef933b794be303d272ecb9ad37d3d4";

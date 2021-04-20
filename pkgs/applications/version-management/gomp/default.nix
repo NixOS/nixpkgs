@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   pname = "gomp";
   version = "1.1.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "11nq40igqbyfiygdzb1zyxx1n6d9xkv8vlmprbbi75mq54gfihhb";
   };

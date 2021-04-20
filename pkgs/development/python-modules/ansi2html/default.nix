@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools_scm, toml }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools_scm, toml }:
 
 buildPythonPackage rec {
   pname = "ansi2html";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0f124ea7efcf3f24f1f9398e527e688c9ae6eab26b0b84e1299ef7f94d92c596";
   };

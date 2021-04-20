@@ -2,7 +2,7 @@
 , stdenv
 , pythonAtLeast
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , python
 , buildPythonPackage
 , numpy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # uses f-strings, python 3.9 is not yet supported
   disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "44661c5bd85e3d3619be0a40eedee34e397e9ccb3d4c458b70e10bf95d1ce933";
   };

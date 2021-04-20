@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , setuptools_scm
 , cython
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyclipper";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "ca3751e93559f0438969c46f17459d07f983281dac170c3479de56492e152855";

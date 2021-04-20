@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy
 , pytest, pytestcov, pytest-mock, freezegun
 , jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
 , python-slugify }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # not sure why this is broken
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "efb6b2d4780feda8908a873e38f0e61778c23f6a2ea58215723bcceb5b515dac";
   };

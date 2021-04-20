@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, cython }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, cython }:
 
 buildPythonPackage rec {
   pname = "libmr";
   version = "0.1.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "43ccd86693b725fa3abe648c8cdcef17ba5fa46b5528168829e5f9b968dfeb70";

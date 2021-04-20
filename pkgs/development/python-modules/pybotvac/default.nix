@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , requests_oauthlib
 , voluptuous
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pybotvac";
   version = "0.0.20";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-1NnTSO4vO3Ryt4vYD5ZTQGr241GqA2KsGRBVowSTCzM=";
   };

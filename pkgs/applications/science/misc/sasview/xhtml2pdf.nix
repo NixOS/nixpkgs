@@ -1,4 +1,4 @@
-{lib, fetchPypi, buildPythonPackage, html5lib, httplib2, nose, pillow, pypdf2, reportlab}:
+{lib, fetchFromPyPI, buildPythonPackage, html5lib, httplib2, nose, pillow, pypdf2, reportlab}:
 
 let
   #xhtml2pdf specifically requires version "1.0b10" of html5lib
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [html5];
   propagatedBuildInputs = [httplib2 nose pillow pypdf2 reportlab html5];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1n9r8zdk9gc2x539fq60bhszmd421ipj8g78zmsn3njvma1az9k1";
   };

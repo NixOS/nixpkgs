@@ -1,13 +1,13 @@
 {lib
 ,buildPythonPackage
-,fetchPypi
+,fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "wsgitools";
   version = "0.3.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0q6kmrkqf02fgww7z1g9cw8f70fimdzs1bvv9inb7fsk0c3pcf1i";
   };

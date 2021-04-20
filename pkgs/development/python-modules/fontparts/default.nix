@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib, buildPythonPackage, fetchFromPyPI, python
 , fonttools, lxml, fs, unicodedata2
 , defcon, fontpens, fontmath, booleanoperations
 , pytest, setuptools_scm
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "fontParts";
   version = "0.9.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hwjnqbkcfkhigx581w4532vddsx5wiy73gx46kjisp0hlir9628";
     extension = "zip";

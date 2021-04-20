@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, numpy, pytest_4 }:
+{ buildPythonPackage, fetchFromPyPI, lib, numpy, pytest_4 }:
 
 buildPythonPackage rec {
   version = "2.3.2";
   pname = "opt_einsum";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "0ny3v8x83mzpwmqjdzqhzy2pzwyy4wx01r1h9i29xw3yvas69m6k";
   };

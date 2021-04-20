@@ -1,7 +1,7 @@
 { lib
 , substituteAll
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinx
 , pdf2svg
 , texLive
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
   version = "0.4.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5c5194055d3219e2ed8d02b52b664d399674154f3db9724ae09e881d091b3d10";
   };

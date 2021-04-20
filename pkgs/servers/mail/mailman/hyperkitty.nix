@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, isort, coverage, mock
 , robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
 , django-haystack, flufl_lock, networkx, dateutil, defusedxml
 , django-paintstore, djangorestframework, django, django-q
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.3.4";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lbh8n66fp3l5s0xvmvsbfvgs3z4knx0gwf0q117n2nfkslf13zp";
   };

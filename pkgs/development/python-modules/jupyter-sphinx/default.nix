@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nbformat
 , sphinx
 , ipywidgets
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "jupyter-sphinx";
   version = "0.2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "jupyter_sphinx";
     sha256 = "b5ba1efdd1488b385de0068036a665932ed93998e40ce3a342c60f0926781fd9";

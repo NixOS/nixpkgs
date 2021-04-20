@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, requests-mock, tox
 , autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "0.7.9";
   pname = "python-binance";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "476459d91f6cfe0a37ccac38911643ea6cca632499ad8682e0957a075f73d239";
   };

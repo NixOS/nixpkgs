@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pypdf2 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pypdf2 }:
 
 buildPythonPackage rec {
   pname = "pdftools.pdfposter";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pypdf2 ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0c1avpbr9q53yzq5ar2x485rmp9d0l3z27aham32bg7gplzd7w0j";
   };

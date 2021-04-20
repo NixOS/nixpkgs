@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flaky
 , ipython
 , jupyter_client
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "ipykernel";
   version = "5.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "98321abefdf0505fb3dc7601f60fc4087364d394bd8fad53107eb1adee9ff475";
   };

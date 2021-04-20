@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
+{ lib, buildPythonPackage, fetchFromPyPI, numpy, nose, openmp }:
 
 buildPythonPackage rec {
   pname = "pykdtree";
   version = "1.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bebe5c608129f2997e88510c00010b9a78581b394924c0e3ecd131d52415165d";
   };

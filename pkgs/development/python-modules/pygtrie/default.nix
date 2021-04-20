@@ -1,8 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage, ... }:
+{ lib, fetchFromPyPI, buildPythonPackage, ... }:
 buildPythonPackage rec {
   pname = "pygtrie";
   version = "2.4.2";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "43205559d28863358dbbf25045029f58e2ab357317a59b11f11ade278ac64692";
   };

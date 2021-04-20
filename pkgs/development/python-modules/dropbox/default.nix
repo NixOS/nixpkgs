@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytestrunner, requests, urllib3, mock, setuptools }:
 
 buildPythonPackage rec {
   pname = "dropbox";
   version = "10.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "df43e9e0bdcae6d610dd754a5ec72f2f91a311bbc2c8a28d076df69695b18398";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , annexremote
 , drivelib
 , GitPython
@@ -12,7 +12,7 @@ buildPythonApplication rec {
   pname = "git-annex-remote-googledrive";
   version = "1.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "118w0fyy6pck8hyj925ym6ak0xxqhkaq2vharnpl9b97nab4mqg8";
   };

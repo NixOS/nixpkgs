@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "tmuxp";
   version = "1.7.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "14296b62db260420d4600dcd805408ea908b3a78d4ea0a6a403d092fdbf6d075";
   };

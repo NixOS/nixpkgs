@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, i3ipc, importlib-metadata }:
+{ lib, buildPythonApplication, fetchFromPyPI, i3ipc, importlib-metadata }:
 
 buildPythonApplication rec {
   pname = "autotiling";
   version = "1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hwvy9bxwv9fakqqiyrkmpckxgm0z85c240p84ibdhja9sm086v0";
   };

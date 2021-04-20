@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, pytestCheckHook }:
+{ buildPythonPackage, fetchFromPyPI, lib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "packageurl-python";
   version = "0.9.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0mpvj8imsaqhrgfq1cxx16flc5201y78kqa7bh2i5zxsc29843mx";
   };

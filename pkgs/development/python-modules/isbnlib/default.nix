@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , coverage
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "isbnlib";
   version = "3.10.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-gbMxV9qOLCpIH3rUceG1ds9ZUpjwOv1gyYL3GLkS3Ik=";
   };

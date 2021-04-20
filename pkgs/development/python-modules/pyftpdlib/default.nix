@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , psutil
 , pyopenssl
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "1.5.6";
   pname = "pyftpdlib";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pnv2byzmzg84q5nmmhn1xafvfil85qa5y52bj455br93zc5b9px";
   };

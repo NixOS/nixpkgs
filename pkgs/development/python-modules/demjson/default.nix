@@ -1,10 +1,10 @@
-{ lib, python, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, python, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";
   version = "2.2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ygbddpnvp5lby6mr5kz60la3hkvwwzv3wwb3z0w9ngxl0w21pii";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cloudpickle
 , dask
 , numpy, toolz # dask[array]
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.2.0";
   pname = "dask-glm";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "58b86cebf04fe5b9e58092e1c467e32e60d01e11b71fdc628baaa9fc6d1adee5";
   };

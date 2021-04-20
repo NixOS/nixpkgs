@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , capstone
 , filebytes
 , pytest
@@ -10,7 +10,7 @@ buildPythonApplication rec {
   pname = "ropper";
   version = "1.13.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6e4226f5ef01951c7df87029535e051c6deb3f156f7511613fb69e8a7f4801fb";
   };

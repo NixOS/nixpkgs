@@ -1,13 +1,13 @@
 { lib, python3 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
+  inherit (python3.pkgs) buildPythonApplication fetchFromPyPI requests;
 in
 buildPythonApplication rec {
   pname = "tzupdate";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5b55795c390e4ccc90e649c8cc387447daaf30a21d68f7196b49824cbcba8adc";
   };

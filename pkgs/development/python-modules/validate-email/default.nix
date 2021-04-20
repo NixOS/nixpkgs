@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "validate-email";
   version = "1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "validate_email";
     sha256 = "1bxffaf5yz2cph8ki55vdvdypbwkvn2xr1firlcy62vqbzf1jivq";

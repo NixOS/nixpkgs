@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , numpy
 , zlib
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pyBigWig";
   version = "0.3.18";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4c2a8c571b4100ad7c4c318c142eb48558646be52aaab28215a70426f5be31bc";
   };

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib
+{ buildPythonPackage, fetchFromPyPI, lib
 , dicttoxml
 , importlib-metadata
 , pexpect
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "argcomplete";
   version = "1.12.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "de0e1282330940d52ea92a80fea2e4b9e0da1932aaa570f84d268939d1897b04";
   };

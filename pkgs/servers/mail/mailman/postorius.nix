@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
+{ lib, buildPythonPackage, fetchFromPyPI, beautifulsoup4, vcrpy, mock
 , django-mailman3, mailmanclient, readme_renderer
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
   version = "1.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-L2ApUGQNvR0UVvodVM+wMzjYLZkegI4fT4yUiU/cibU=";
   };

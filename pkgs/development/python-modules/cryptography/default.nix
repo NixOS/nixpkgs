@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , rustPlatform
 , setuptools-rust
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "3.4.7"; # Also update the hash in vectors.nix
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04x7bhjkglxpllad10821vxddlmxdkd3gjvp35iljmnj2s0xw41x";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, typing, pythonOlder }:
+{ lib, fetchFromPyPI, buildPythonPackage, typing, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mypy-extensions";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # Tests not included in pip package.
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "mypy_extensions";
     sha256 = "2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "clickhouse-cityhash";
   version = "1.0.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0z8nl0ly2p1h6nygwxs6y40q8y424w40fkjv3jyf8vvcg4h7sdrg";
   };

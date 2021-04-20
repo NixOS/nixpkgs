@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
+{ lib, fetchFromPyPI, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
 
 buildPythonPackage rec {
   pname = "block-io";
   version = "1.1.15";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "97ea037a67af72037cb08cec7e0a9f7866ecdfaa1a8c8ebcc0f4b9359a1516d7";
   };

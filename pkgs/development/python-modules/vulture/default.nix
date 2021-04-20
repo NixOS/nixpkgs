@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , coverage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , pytest-cov
 , pytestCheckHook
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2.3";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ryrmsm72z3fzaanyblz49q40h9d3bbl4pspn2lvkkp9rcmsdm83";
   };

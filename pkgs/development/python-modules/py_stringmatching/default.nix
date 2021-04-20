@@ -3,14 +3,14 @@
 , numpy
 , six
 , nose
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "py_stringmatching";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c87f62698fba1612a18f8f44bd57f0c4e70aac2d7ca6dfb6ed46dabd2194453c";
   };

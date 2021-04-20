@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , python
-, fetchPypi
+, fetchFromPyPI
 , flask
 , Babel
 , jinja2
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "Flask-Babel";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
   };

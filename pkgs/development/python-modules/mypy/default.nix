@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, typed-ast, psutil, isPy3k
 , mypy-extensions
 , typing-extensions
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.812";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "069i9qnfanp7dn8df1vspnqb0flvsszzn22v00vj08nzlnd061yd";
   };

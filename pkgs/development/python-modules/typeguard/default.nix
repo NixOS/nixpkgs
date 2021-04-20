@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , lib
 , setuptools_scm
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "typeguard";
   version = "2.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d830132dcd544d3f8a2a842ea739eaa0d7c099fcebb9dcdf3802f4c9929d8191";
   };

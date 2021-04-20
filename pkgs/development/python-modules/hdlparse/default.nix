@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "hdlparse";
   version = "1.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fb6230ed1e7a04a8f82f8d3fb59791d0751ae35e5b8e58dbbf2cbcf100d0d0f2";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, d2to1 }:
+{ lib, buildPythonPackage, fetchFromPyPI, d2to1 }:
 
 buildPythonPackage rec {
   pname = "colour";
   version = "0.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "af20120fefd2afede8b001fbef2ea9da70ad7d49fafdb6489025dae8745c3aee";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , tvdb_api
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "tvnamer";
   version = "3.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a5ff916e104b2c0b567c2c7f2d8ae15a66a7ac57d67390e7c67207a33b79022f";
   };

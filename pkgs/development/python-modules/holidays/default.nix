@@ -2,7 +2,7 @@
 , buildPythonPackage
 , convertdate
 , dateutil
-, fetchPypi
+, fetchFromPyPI
 , hijri-converter
 , korean-lunar-calendar
 , pytestCheckHook
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.11.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-f6/YRvZ/Drfh+cGcOPSnlnvweu1d7S3XqKovk3sOoBs=";
   };

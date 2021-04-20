@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrest
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-maps";
   version = "0.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "c120e210bb61768da29de24d28b82f8d42ae24e52396eb6569b499709e22f006";

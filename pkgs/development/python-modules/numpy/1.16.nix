@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , python
 , buildPythonPackage
 , gfortran
@@ -41,7 +41,7 @@ in buildPythonPackage rec {
   version = "1.16.6";
   format = "pyproject.toml";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "e5cf3fdf13401885e8eea8170624ec96225e2174eb0c611c6f26dd33b489e3ff";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , influxdb, graphite_api, memcached
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "influxgraph";
   version = "1.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0l33sfwdh4bfprmzp2kx0d9098g6yxbnhyyx9qr3kzczpm0jg9vy";
   };

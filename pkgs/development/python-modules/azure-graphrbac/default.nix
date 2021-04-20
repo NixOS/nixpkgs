@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrest
 , msrestazure
 , azure-common
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.61.1";
   pname = "azure-graphrbac";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "1qmjhpqw0sgy406ij5xyzkffisjah9m1pfz9x54v66bwrbi8msak";

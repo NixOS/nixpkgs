@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , scikitlearn
 , numpy
 , matplotlib
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "persim";
   version = "0.1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "be4ea4bfc2a0c6fcfc28ebd52e23a351ee00b0ef0ddaf527526bd0f919145348";
   };

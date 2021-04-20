@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sharkiqpy";
   version = "0.1.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nk1nbplyk28qadxc7rydjvdgbz3za0xjg6c95l95mhiz453q5sw";
   };

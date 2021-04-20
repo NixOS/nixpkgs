@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi, isPy27
+, fetchFromPyPI, isPy27
 , ldap , django
 , mock
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "django-auth-ldap";
   version = "2.3.0";
   disabled = isPy27;
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5894317122a086c9955ed366562869a81459cf6b663636b152857bb5d3a0a3b7";
   };

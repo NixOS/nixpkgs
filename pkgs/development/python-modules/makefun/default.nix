@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , setuptools_scm
 }:
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "makefun";
   version = "1.11.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-2qNQpILtWLVyREPGUUMhkem5ewyDdDh50JExccaigIU=";
   };

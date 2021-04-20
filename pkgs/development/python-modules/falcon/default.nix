@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , coverage
 , ddt
 , nose
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "falcon";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc";
   };

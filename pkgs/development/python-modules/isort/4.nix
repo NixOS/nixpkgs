@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools, isPy27, futures
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools, isPy27, futures
 , backports_functools_lru_cache, mock, pytest
 }:
 
@@ -9,7 +9,7 @@ in buildPythonPackage rec {
   pname = "isort";
   version = "4.3.21"; # Note 4.x is the last version that supports Python2
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1";
   };

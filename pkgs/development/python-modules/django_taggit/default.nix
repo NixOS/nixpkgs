@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , python
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , django
 , mock
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4a833bf71f4c2deddd9745924eee53be1c075d7f0020a06f12e29fa3d752732d";
   };

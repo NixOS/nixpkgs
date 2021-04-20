@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   click
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "click-didyoumean";
   version = "0.0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1svaza5lpvdbmyrx5xi0riqzq4hb9wnlpqrg6r8zy14pbi42j8hi";
   };

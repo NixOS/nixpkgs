@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , python
 , glibcLocales
@@ -28,7 +28,7 @@ in buildPythonPackage rec {
   pname = "Cython";
   version = "0.29.22";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-32uDx6bR2WfqiaKQPkqTE3djSil0WWUuRVFzTEgZVAY=";
   };

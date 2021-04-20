@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pep257 }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, pep257 }:
 
 buildPythonPackage rec {
   pname = "pytest-pep257";
   version = "0.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "082v3d5k4331x53za51kl8zxsndsw1pcyf1xdfpb2gjdjrhixb8w";
   };

@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "cum";
   version = "0.9.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15qc6agka2g3kcnpnz0hbjic1s3260cr9bda0rlcyninxs1vndq0";
   };

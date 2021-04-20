@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , dulwich
 , isPy3k
 , fetchpatch
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.8.12";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13hbm0ki6s88r6p65ibvrbxnskinzdz0m9gsshb8s571p91ymfjn";
   };

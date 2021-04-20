@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , blessed, keyring, keyrings-alt, lxml, measurement, python-dateutil, requests, six, rich
 , pytestCheckHook, mock, nose }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "myfitnesspal";
   version = "1.16.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "44b31623fd71fedd891c3f66be3bc1caa6f1caf88076a75236ab74f8807f6ae5";
   };

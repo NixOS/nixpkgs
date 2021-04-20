@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , enum34, functools32, typing
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "tomlkit";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618";
   };

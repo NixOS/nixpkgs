@@ -4,7 +4,7 @@
 , bitstring
 , buildPythonPackage
 , cffi
-, fetchPypi
+, fetchFromPyPI
 , future
 , pycparser
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "pyvex";
   version = "9.0.6281";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-E8BYCzV71qVNRzWCCI2yTVU88JVMA08eqnIO8OtbNlM=";
   };

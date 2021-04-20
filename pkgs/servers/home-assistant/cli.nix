@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
   version = "0.9.3";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "18h6bc99skzb0a1pffb6lr2z04928srrcz1w2zy66bndasic5yfs";
   };

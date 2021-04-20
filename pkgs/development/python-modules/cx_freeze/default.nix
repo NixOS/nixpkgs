@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
   version = "6.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fe0af7c658442402bcd209f993219a6ab98a951459495b4a141eb03b552a1c68";
   };

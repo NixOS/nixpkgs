@@ -1,5 +1,5 @@
 { lib, fetchpatch
-, buildPythonPackage, fetchPypi, isPy3k
+, buildPythonPackage, fetchFromPyPI, isPy3k
 , beautifulsoup4, lxml, cssutils, future, enum34, six
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "pycaption";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0f2hx9ky65c4niws3x5yx59yi8mqqrw9b2cghd220g4hj9yl800h";
   };

@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pytankerkoenig";
   version = "0.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "021fg1a4n3527fz86zxfbsi0jrk0dnai1y92q6hwh5za68lrs710";
   };

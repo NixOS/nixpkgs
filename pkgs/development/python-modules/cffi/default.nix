@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchFromPyPI, libffi, pycparser, pytest }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
   version = "1.14.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fd78e5fee591709f32ef6edb9a015b4aa1a5022598e36227500c8f4e02328d9c";
   };

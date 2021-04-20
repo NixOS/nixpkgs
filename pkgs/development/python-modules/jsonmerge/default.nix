@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jsonschema
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "jsonmerge";
   version = "1.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a86bfc44f32f6a28b749743df8960a4ce1930666b3b73882513825f845cb9558";
   };

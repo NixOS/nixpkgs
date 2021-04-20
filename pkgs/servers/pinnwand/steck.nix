@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "steck";
   version = "0.7.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
   };

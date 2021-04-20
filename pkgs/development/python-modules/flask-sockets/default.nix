@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , gevent
 , gevent-websocket
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "Flask-Sockets";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "072927da8edca0e81e024f5787e643c87d80b351b714de95d723becb30e0643b";
   };

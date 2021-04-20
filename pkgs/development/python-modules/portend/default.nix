@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
 
 buildPythonPackage rec {
   pname = "portend";
   version = "2.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "986ed9a278e64a87b5b5f4c21e61c25bebdce9919a92238d9c14c37a7416482b";
   };

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage }:
+{ stdenv, lib, fetchFromPyPI, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "pyserial";
   version="3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1nyd4m4mnrz8scbfqn4zpq8gnbl4x42w5zz62vcgpzqd2waf0xrw";
   };

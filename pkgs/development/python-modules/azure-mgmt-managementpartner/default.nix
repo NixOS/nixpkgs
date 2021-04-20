@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-managementpartner";
   version = "0.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "1bvcmx7dkf2adi26z7c2ga63ggpzdfqj8q1gzcic1yn03v6nb8i7";

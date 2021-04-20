@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, toml }:
+{ lib, buildPythonPackage, fetchFromPyPI, toml }:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
   version = "4.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a8994582e716ec690f33fec70cca0f85bd23ec974e3f783233e4879090a7faa8";
   };

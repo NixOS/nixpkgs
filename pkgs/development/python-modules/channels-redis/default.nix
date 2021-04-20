@@ -3,7 +3,7 @@
 , asgiref
 , buildPythonPackage
 , channels
-, fetchPypi
+, fetchFromPyPI
 , hiredis
 , msgpack
 , pythonOlder
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "channels_redis";
     sha256 = "1rjs9irnq59yr6zwc9k6nnw6xrmr48dakrm25m0gcwskn1iimcrg";

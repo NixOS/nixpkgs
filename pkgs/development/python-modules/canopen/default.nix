@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools-scm
 , can
 , canmatrix
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "canopen";
   version = "1.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18d01d56ff0023795cb336cafd4810a76cf402b98b42139b201fa8c5d4ba8c06";
   };

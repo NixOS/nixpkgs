@@ -1,9 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, ply, isPy3k }:
+{ lib, fetchFromPyPI, buildPythonPackage, ply, isPy3k }:
 buildPythonPackage rec {
   pname = "PlyPlus";
   version = "0.7.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0g3flgfm3jpb2d8v9z0qmbwca5gxdqr10cs3zvlfhv5cs06ahpnp";
   };

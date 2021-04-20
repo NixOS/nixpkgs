@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, libversion, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromPyPI, pkg-config, libversion, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libversion";
   version = "1.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cf9ef702d0bc750f0ad44a2cffe8ebd83cd356b92cc25f767846509f84ea7e73";
   };

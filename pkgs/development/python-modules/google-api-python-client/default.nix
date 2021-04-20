@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , google-auth, google-auth-httplib2, google-api-core
 , httplib2, six, uritemplate, oauth2client, setuptools }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "google-api-python-client";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04c0c8m4c7lzqv0m3jm0zks9wjcv1myas80rxswvi36wn376qs28";
   };

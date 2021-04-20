@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytestrunner, pytestcov, pytest-flakes, sphinx, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook, pytestrunner, pytestcov, pytest-flakes, sphinx, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
   version = "2.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12c0glzkm81ljgf6pwh0d4rmdm1r7vvgg3ifzp8yp9cfyngw07zj";
   };

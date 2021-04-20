@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools-scm
 , alarmdecoder
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "adext";
   version = "0.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yz1rpfvhbf7kfjck5vadbj9rd3bkx5248whaa3impdrjh7vs03x";
   };

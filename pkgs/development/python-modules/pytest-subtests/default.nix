@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.4.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-jZ4sHR3OEfe30snQkgLr/HdXt/8MrJtyrTKO3+fuA3s=";
   };

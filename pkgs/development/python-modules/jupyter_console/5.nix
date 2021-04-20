@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , jupyter_client
 , ipython
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "jupyter_console";
   version = "5.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "545dedd3aaaa355148093c5609f0229aeb121b4852995c2accfa64fe3e0e55cd";
   };

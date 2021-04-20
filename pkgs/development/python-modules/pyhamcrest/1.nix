@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , mock, pytest
 , six
 }:
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "PyHamcrest";
   version = "1.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0x08lfcnsak7pkym32xrdn0sn3wcf26n1jff3d11mwbizpfikbpp";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "django-multiselectfield";
   version = "0.1.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ygra8s394d1szgj7yawlca17q08hygsrzvq2k3k48zvd0awg96h";
   };

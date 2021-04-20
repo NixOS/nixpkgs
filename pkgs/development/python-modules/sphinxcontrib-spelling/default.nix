@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , importlib-metadata
 , sphinx
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
   version = "7.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5b4240808a6d21eab9c49e69ad5ac0cb3efb03fe2e94763d23c860f85ec6a799";
   };

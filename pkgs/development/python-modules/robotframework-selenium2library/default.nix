@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, robotframework-seleniumlibrary }:
+{ lib, buildPythonPackage, fetchFromPyPI, robotframework-seleniumlibrary }:
 
 buildPythonPackage rec {
   version = "3.0.0";
   pname = "robotframework-selenium2library";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2a8e942b0788b16ded253039008b34d2b46199283461b294f0f41a579c70fda7";
   };

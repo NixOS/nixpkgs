@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , markdown
 , pygments
 }:
@@ -9,7 +9,7 @@ buildPythonApplication rec {
   version = "0.3.3";
   pname = "vimwiki-markdown";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "ee4ef08f7e4df27f67ffebb5fa413a7cf4fad967a248c1c75d48b00122a5b945";
   };

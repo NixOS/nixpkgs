@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , Mako
 , pytest
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "abc689307cf34d3dcc94d43815f64e2265469b50ecce6c903a3180589666fb36";
   };

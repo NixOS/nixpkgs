@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , python
 , blas, lapack # build segfaults with 64-bit blas
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = isPyPy; # hangs at [translation:info]
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a4c433706fd0ad9d47e7f222773a7f7601766fb8e74b633524b3c3fce29aa73e";
   };

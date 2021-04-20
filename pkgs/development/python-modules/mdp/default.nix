@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, future, numpy }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, future, numpy }:
 
 buildPythonPackage rec {
   pname = "MDP";
   version = "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ac52a652ccbaed1857ff1209862f03bf9b06d093b12606fb410787da3aa65a0e";
   };

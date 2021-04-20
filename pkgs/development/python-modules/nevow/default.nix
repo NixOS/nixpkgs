@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchpatch, fetchPypi, isPy3k, twisted }:
+{ lib, buildPythonPackage, fetchpatch, fetchFromPyPI, isPy3k, twisted }:
 
 buildPythonPackage rec {
   pname = "Nevow";
   version = "0.14.5";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
   };

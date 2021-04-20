@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , paste
 , six
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.2.2";
   disabled = isPy3k; # Judging from SyntaxError
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wqz1q8cvb81a37gb4kkxxpv4w7k8192a08qzyz67rn68ln2wcig";
   };

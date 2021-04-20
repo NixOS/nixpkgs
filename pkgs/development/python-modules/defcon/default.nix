@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , fonttools, setuptools-scm
 , pytest, pytestrunner, lxml, fs, unicodedata2, fontpens
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1sj9yhwkyvzchglpy07pkx5362mwlap581ibv150b5l9s5mxn2j1";
     extension = "zip";

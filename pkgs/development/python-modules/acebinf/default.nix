@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyvcf
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "ACEBinf";
   version = "1.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1168pny671l6zfm2vv1pwspnflmzi7f4v8yldjl7zlz0b9cm5zlz";
   };

@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkgs
 , pillow
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyopengl";
   version = "3.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyOpenGL";
     inherit version;
     sha256 = "0bdf5ed600df30c8830455702338902528717c0af85ac5914f1dc5aa0bfa6eee";

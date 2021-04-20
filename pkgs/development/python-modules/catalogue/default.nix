@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , importlib-metadata
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0d01077dbfca7aa53f3ef4adecccce636bce4f82e5b52237703ab2f56478e56e";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mozlog
 , mozdevice
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "mozversion";
   version = "2.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0jczc1yr2yi3mf1qdgpvg9sidp5hf3jplzs4917j65ymvk2zw9na";
   };

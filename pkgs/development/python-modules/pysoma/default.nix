@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pysoma";
   version = "0.0.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1q8afi6m3mfh0rfpghyvx6z76kgrpkbnlqzbs4p8ax13n0fnlkdi";
   };

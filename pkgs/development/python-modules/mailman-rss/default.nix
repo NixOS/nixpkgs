@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";
   version = "0.2.4";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1brrik70jyagxa9l0cfmlxvqpilwj1q655bphxnvjxyganxf4c00";
   };

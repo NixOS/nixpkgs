@@ -2,7 +2,7 @@
 , buildPythonPackage
 , certifi
 , chardet
-, fetchPypi
+, fetchFromPyPI
 , idna
 , pytest-mock
 , pytest-xdist
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "requests";
   version = "2.25.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-J5c91KkEpPE7JjoZyGbBO5KjntHJZGVfAl8/jT11uAQ=";
   };

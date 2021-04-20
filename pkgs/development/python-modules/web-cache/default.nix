@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "web-cache";
   version = "1.1.0";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "web_cache";
     sha256 = "1d8f1s3i0s3h1jqvjq6cp639hhbbpxvyq7cf9dwzrvvvr0s0m8fm";

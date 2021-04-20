@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
   version = "1.0.3";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0fff1c88669a20bb6a4e7331960673a3a02a2e04ff163e4c9299496646edcf61";
   };

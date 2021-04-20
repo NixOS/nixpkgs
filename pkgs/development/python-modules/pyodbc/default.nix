@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, unixODBC }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy, unixODBC }:
 
 buildPythonPackage rec {
   pname = "pyodbc";
   version = "4.0.30";
   disabled = isPyPy;  # use pypypdbc instead
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0skjpraar6hcwsy82612bpj8nw016ncyvvq88j5syrikxgp5saw5";
   };

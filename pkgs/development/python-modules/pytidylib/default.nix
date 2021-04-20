@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, python, html-tidy }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, python, html-tidy }:
 
 buildPythonPackage rec {
   pname = "pytidylib";
   version = "0.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "22b1c8d75970d8064ff999c2369e98af1d0685417eda4c829a5c9f56764b0af3";
   };

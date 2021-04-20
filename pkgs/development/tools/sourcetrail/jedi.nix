@@ -1,6 +1,6 @@
 # Taken from a past commit of nixpkgs
 
-{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # https://github.com/CoatiSoftware/SourcetrailPythonIndexer#requirements
   version = "0.17.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
   };

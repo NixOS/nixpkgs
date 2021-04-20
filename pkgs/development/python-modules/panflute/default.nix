@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , click
 , pyyaml
 , buildPythonPackage
@@ -12,7 +12,7 @@ buildPythonPackage rec{
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ssmqcyr91f0gpl49lz6a9jkl17l06h6qcik24rlmva28ii6aszz";
   };

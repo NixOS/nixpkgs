@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , appdirs
 , attrs
 , beautifulsoup4
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   pname = "archivy";
   version = "1.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-oSmwQcKvp9RABmc7aq6fdLOZapMauIi6+7azVTXVb30=";
   };

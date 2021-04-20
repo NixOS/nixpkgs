@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, lz4, keyring, pbkdf2, pycryptodome, pyaes}:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k, lz4, keyring, pbkdf2, pycryptodome, pyaes}:
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
   version = "0.12.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5f26422091ad0e97375d565f8fbacfaf314d0722db35c921635eab23686e4fc4";
   };

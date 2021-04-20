@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest, pytestcov, pytest-mock, pytest_xdist }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, pytest, pytestcov, pytest-mock, pytest_xdist }:
 
 buildPythonPackage rec {
   pname = "stripe";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # them. ~ C.
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e32c68194a47522a10945eb893218e5cb5ee65e3a3c2c4df7efca117a6bf1902";
   };

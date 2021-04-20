@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, hypothesis }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, hypothesis }:
 
 buildPythonPackage rec {
   pname = "priority";
   version = "1.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gpzn9k9zgks0iw5wdmad9b4dry8haiz2sbp6gycpjkzdld9dhbb";
   };

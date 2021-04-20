@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, unrar }:
+{ lib, buildPythonPackage, fetchFromPyPI, unrar }:
 
 buildPythonPackage rec {
   pname = "unrardll";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4149c0729cf96a0bae80360e7d94dc40af1088c8da7f6eb8d10e09b8632e92ad";
   };

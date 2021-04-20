@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
+{ lib, fetchFromPyPI, buildPythonPackage, isPyPy, python, libev, greenlet
 , zope_interface
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "20.9.0";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "13aw9x6imsy3b369kfjblqiwfni69pp32m4r13n62r9k3l2lhvaz";
   };

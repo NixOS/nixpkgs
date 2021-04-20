@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , pytest, pytestrunner, pbr, glibcLocales , pytestcov
 , requests, requests_oauthlib, requests_toolbelt, defusedxml
 , ipython
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   PBR_VERSION = version;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e2a94adff98e45b29ded030adc76103eab34fa7d4d57303f211f572bedba0e93";
   };

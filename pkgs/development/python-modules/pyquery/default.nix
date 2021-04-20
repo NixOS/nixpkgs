@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cssselect
-, fetchPypi
+, fetchFromPyPI
 , lxml
 , pythonOlder
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "1.4.3";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";

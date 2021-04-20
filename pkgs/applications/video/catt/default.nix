@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "catt";
   version = "0.12.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fef58bf7a8ebaba98399d1077cc4615f53d0196aab2a989df369a66f7111963b";
   };

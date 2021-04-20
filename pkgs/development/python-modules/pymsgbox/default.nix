@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, tkinter }:
+{ lib, fetchFromPyPI, buildPythonPackage, tkinter }:
 
 buildPythonPackage rec {
   pname = "PyMsgBox";
   version = "1.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0kmd00w7p6maiyqpqqb2j8m6v2gh9c0h5i198pa02bc1c1m1321q";
     extension = "zip";

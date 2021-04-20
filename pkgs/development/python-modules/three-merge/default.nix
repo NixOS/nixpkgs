@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, diff-match-patch }:
+{ lib, buildPythonPackage, fetchFromPyPI, diff-match-patch }:
 
 buildPythonPackage rec {
   pname = "three-merge";
   version = "0.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0w6rv7rv1zm901wbjkmm6d3vkwyf3csja9p37bb60mar8khszxk0";
   };

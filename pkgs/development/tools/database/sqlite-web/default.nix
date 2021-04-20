@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   pname = "sqlite-web";
   version = "0.3.6";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "17pymadm063358nji70xzma64zkfv26c3pai5i1whsfp9ahqzasg";
   };

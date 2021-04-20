@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , greenlet
 , pytest
 , decorator
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pytest-twisted";
   version = "1.13.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "cee2320becc5625050ab221b8f38533e636651a24644612f4726891fdf1f1847";

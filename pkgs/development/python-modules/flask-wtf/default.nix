@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
+{ lib, fetchFromPyPI, buildPythonPackage, flask, wtforms, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-WTF";
   version = "0.14.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "086pvg2x69n0nczcq7frknfjd8am1zdy8qqpva1sanwb02hf65yl";
   };

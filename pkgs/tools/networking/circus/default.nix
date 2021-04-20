@@ -8,14 +8,14 @@ let
     };
   };
 
-  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado mock six;
+  inherit (python.pkgs) buildPythonApplication fetchFromPyPI iowait psutil pyzmq tornado mock six;
 in
 
 buildPythonApplication rec {
   pname = "circus";
   version = "0.16.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0paccmqwgard2l0z7swcc3nwc418l9b4mfaddb4s31bpnqg02z6x";
   };

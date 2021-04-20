@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy27
 , isPy3k
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "tifffile";
   version = "2020.11.26";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c712df6f201385fbd3500e26e45dc20fabcbb0c6c1fbfb4c1e44538a9d0269a8";
   };

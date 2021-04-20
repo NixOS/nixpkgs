@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ifaddr
 , requests
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pywilight";
   version = "0.0.68";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1s1xyw5hkfr4rlni1p9z4941pp1740fsg4a3b23a618hv2p1i4ww";
   };

@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "jsonrpclib-pelix";
   version = "0.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "340915c17ebef7451948341542bf4789fc8d8c9fe604e86f00b722b6074a89f0";
   };

@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "tockloader";
   version = "1.5.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "11k4ppwq845lnj265ydfr0cn1rrym5amx2i19x1h3ccbxc3gsy3x";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , sphinxcontrib-serializinghtml
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
   version = "1.2.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4edf0223a0685a7c485ae5a156b6f529ba1ee481a1417817935b20bde1956232";
   };

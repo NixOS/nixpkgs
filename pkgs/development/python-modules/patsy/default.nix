@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , nose
 , six
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "patsy";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "149rbrdzwns0ay88caf1zsm1r53v1q5np1mrb36na50y432cw5gi";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "mullvad-api";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "mullvad_api";
     inherit version;
     sha256 = "0r0hc2d6vky52hxdqxn37w0y42ddh1zal6zz2cvqlxamc53wbiv1";

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, buildPythonPackage, fetchFromPyPI, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "py";
   version = "1.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342";
   };

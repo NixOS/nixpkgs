@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ipykernel
 , gcc
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "jupyter-c-kernel";
   version = "1.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "jupyter_c_kernel";
     inherit version;
     sha256 = "e4b34235b42761cfc3ff08386675b2362e5a97fb926c135eee782661db08a140";

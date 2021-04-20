@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cffi
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "cmarkgfm";
   version = "0.5.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-tqVJq6Mnq9mG1nSM8hyGN9dBx2hQ5/773vjSi/4TjjI=";
   };

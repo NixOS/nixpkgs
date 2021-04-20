@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six, pyyaml, mock
 , pytestCheckHook
 , enum34
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "ddt";
   version = "1.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ZKZzZqJxXmNriGlMxgdcwC2ykvAQmLjjhTl8iU05U3g=";
   };

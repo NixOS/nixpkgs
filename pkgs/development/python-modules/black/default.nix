@@ -1,5 +1,5 @@
 { stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm, pytestCheckHook
+, buildPythonPackage, fetchFromPyPI, pythonOlder, setuptools_scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , appdirs
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1spv6sldp3mcxr740dh3ywp25lly9s8qlvs946fin44rl1x5a0hw";
   };

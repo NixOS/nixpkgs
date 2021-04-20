@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrest
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
   version = "8.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "2c974c6114d8d27152642c82a975812790a5e86ccf609bf370a476d9ea0d2e7d";

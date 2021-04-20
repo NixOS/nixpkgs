@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "mopidy-youtube";
   version = "3.2";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "Mopidy-YouTube";
     sha256 = "0wmalfqnskglssq3gj6kkrq6h6c9yab503y72afhkm7n9r5c57zz";

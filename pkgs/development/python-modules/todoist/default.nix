@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , requests, fetchpatch, pythonOlder, typing
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "todoist-python";
   version = "8.1.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-AFRKA5VRD6jyiguZYP7WOQOWqHq1GjUzbuez0f1070U=";
   };

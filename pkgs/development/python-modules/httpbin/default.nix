@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , flask-limiter
 , markupsafe
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "httpbin";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1yldvf3585zcwj4vxvfm4yr9wwlz3pa2mx2pazqz8x8mr687gcyb";
   };

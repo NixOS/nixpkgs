@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , numpy
 , netcdf4
 , h5py
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "4.3.10";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1i34bk8bbc0dnizrlgj0yxnbzyvndkmnl6ryymxgcl9rv1abkfki";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , twisted
 , pyopenssl
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "foolscap";
   version = "20.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0rbw9makjmawkcxnkkngybj3n14s0dnzn9gkqqq2krcm514kmlb9";
   };

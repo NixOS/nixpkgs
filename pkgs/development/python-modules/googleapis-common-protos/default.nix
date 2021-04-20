@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpc
 , protobuf
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "googleapis-common-protos";
   version = "1.53.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-qI7okDqgqB9sPOwtXPYtPIqmfAZDmwSWtJBI+xhU6/Q=";
   };

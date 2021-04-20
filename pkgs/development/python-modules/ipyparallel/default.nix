@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , dateutil
 , ipython_genutils
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "ipyparallel";
   version = "6.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0a97b276c62db633e9e97a816282bdd166f9df74e28204f0c8fa54b71944cfdc";
   };

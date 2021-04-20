@@ -1,7 +1,7 @@
 { lib
 , isPy3k
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestrunner
 , setuptools_scm
 , isort
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "diofant";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "Diofant";
     sha256 = "0qjg0mmz2cqxryr610mppx3virf1gslzrsk24304502588z53v8w";

@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, mock, unittest2, six, futures }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPy3k, mock, unittest2, six, futures }:
 
 buildPythonPackage rec {
   pname = "trollius";
   version = "2.2.post1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "06s44k6pcq35vl5j4i2pgkpb848djal818qypcvx44gyn4azjrqn";
   };

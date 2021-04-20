@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib, buildPythonApplication, fetchFromPyPI
 , python-slugify, requests, urllib3, six, setuptools }:
 
 buildPythonApplication rec {
@@ -9,7 +9,7 @@ buildPythonApplication rec {
     urllib3 requests python-slugify six setuptools
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0lgd77vrddvyn8afkxr7a7hblmp4k5sr0i9i1032xdih2bipdd9f";
   };

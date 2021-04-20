@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, six }:
 
 buildPythonPackage rec {
   pname = "derpconf";
   version = "0.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bb152d8a1cf5c2a6d629bf29acd4af0c00811339642fc0a56172b0a83b31a15";
   };

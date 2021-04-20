@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchFromGitHub
 , Mako
 , boost
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pname = "pycuda";
   version = "2020.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "effa3b99b55af67f3afba9b0d1b64b4a0add4dd6a33bdd6786df1aa4cc8761a5";
   };

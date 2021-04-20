@@ -1,10 +1,10 @@
-{ isPy3k, buildPythonPackage, fetchPypi, service-identity, ldap3, twisted, ldaptor, mock }:
+{ isPy3k, buildPythonPackage, fetchFromPyPI, service-identity, ldap3, twisted, ldaptor, mock }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
   version = "0.1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
   };

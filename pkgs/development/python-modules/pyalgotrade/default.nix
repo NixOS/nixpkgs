@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , matplotlib
 , numpy
 , python-dateutil
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "pyalgotrade";
   version = "0.20";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "PyAlgoTrade";
     inherit version;
     sha256 = "7927c87af202869155280a93ff6ee934bb5b46cdb1f20b70f7407337f8541cbd";

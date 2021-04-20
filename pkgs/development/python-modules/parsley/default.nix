@@ -1,12 +1,12 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "Parsley";
   version = "1.3";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hcd41bl07a8sx7nmx12p16xprnblc4phxkawwmmy78n8y6jfi4l";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pythonAtLeast, setuptools
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, pythonAtLeast, setuptools
 , transitions, websockets, passlib, docopt, pyyaml, nose }:
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # https://github.com/beerfactory/hbmqtt/issues/223
   disabled = !isPy3k || pythonAtLeast "3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1n9c8yj11npiq9qxivwmfhib1qkjpcyw42a7q0w641bdrz3x6r37";
   };

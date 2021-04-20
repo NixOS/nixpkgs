@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
+{ lib, buildPythonPackage, fetchFromPyPI, click, prompt_toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";
   version = "0.1.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1mcmz95595nrp4r58spy1ac993db26hk4q97isghbmn4md99vwmr";
   };

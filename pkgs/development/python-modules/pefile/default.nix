@@ -1,6 +1,6 @@
 { buildPythonPackage
 , future
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a5d6e8305c6b210849b47a6174ddf9c452b2888340b8177874b862ba6c207645";
   };

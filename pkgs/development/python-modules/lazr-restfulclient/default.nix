@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromPyPI
 , distro
 , httplib2
 , oauthlib
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = isPy27; # namespace is broken for python2
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9f28bbb7c00374159376bd4ce36b4dacde7c6b86a0af625aa5e3ae214651a690";
   };

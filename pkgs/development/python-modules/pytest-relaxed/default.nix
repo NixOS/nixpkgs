@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , six
 , decorator
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "1.1.5";
   pname = "pytest-relaxed";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "e39a7e5b14e14dfff0de0ad720dfffa740c128d599ab14cfac13f4deb34164a6";
   };

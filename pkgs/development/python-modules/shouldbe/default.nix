@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonAtLeast
-, fetchPypi
+, fetchFromPyPI
 , nose
 , forbiddenfruit
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # incompatible, https://github.com/DirectXMan12/should_be/issues/4
   disabled = pythonAtLeast "3.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "16zbvjxf71dl4yfbgcr6idyim3mdrfvix1dv8b95p0s9z07372pj";
   };

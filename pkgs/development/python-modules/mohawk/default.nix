@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock, nose, pytest, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, python, mock, nose, pytest, six }:
 
 with lib;
 buildPythonPackage rec {
   pname = "mohawk";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08wppsv65yd0gdxy5zwq37yp6jmxakfz4a2yx5wwq2d222my786j";
   };

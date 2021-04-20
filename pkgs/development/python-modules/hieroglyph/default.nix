@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27, sphinx }:
+{ lib, fetchFromPyPI, buildPythonPackage, isPy27, sphinx }:
 
 buildPythonPackage rec {
   pname = "hieroglyph";
   version = "2.1.0";
   disabled = isPy27; # python2 compatible sphinx is too low
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b4b5db13a9d387438e610c2ca1d81386ccd206944d9a9dd273f21874486cddaf";
   };

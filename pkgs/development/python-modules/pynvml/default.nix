@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , cudatoolkit
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "8.0.4";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0pfykj1amqh1rixp90rg85v1nj6qmx89fahqr6ii4zlcckffmm68";
   };

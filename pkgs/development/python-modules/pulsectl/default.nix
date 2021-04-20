@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
+{ lib, buildPythonPackage, fetchFromPyPI, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
 
 buildPythonPackage rec {
   pname = "pulsectl";
   version = "21.3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-+qi5M2I3VlmQKY8ghw4T3RZ4pFhoR8paf/Kr8QdS81Y=";
   };

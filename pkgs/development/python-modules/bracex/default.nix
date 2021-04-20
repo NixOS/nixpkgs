@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "bracex";
   version = "2.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-AfcVzQ7XpiLsizIyLnFYE/dXTeUx8Jtw9vOywQ9oJCU=";
   };

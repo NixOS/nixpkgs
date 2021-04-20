@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
   version = "1.99.6";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-B1oyWUAXn63mmVFN9brJwbHxi7I5nYrK2JJU1DjAlb8=";
   };

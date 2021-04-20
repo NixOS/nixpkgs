@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "tableaudocumentapi";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fc6d44b62cf6ea29916c073686e2f9f35c9902eccd57b8493f8d44a59a2f60d9";
   };

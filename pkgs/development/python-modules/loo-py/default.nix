@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytools
 , pymbolic
 , genpy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "loo-py";
   version = "2017.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "loo.py";
     inherit version;
     sha256 = "c656992de48b328cdaccd7d1f14eb522b9dd5a1d0d15f54623f4ab18fd219abc";

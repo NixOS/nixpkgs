@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , webtest
 , jinja2
 , pyramid
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pyramid_jinja2";
   version = "2.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "81e0615cb3108f2a251ff3141ad0d698a5d03685819f3a836ea84787e8489502";
   };

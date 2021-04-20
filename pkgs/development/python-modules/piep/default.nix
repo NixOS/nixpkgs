@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , pygments
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "piep";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0b5anpsq16xkiisws95jif5s5mplkl1kdnhy0w0i6m0zcy50jnxq";
   };

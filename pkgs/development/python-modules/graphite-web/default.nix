@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , django
 , memcached
 , txamqp
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "graphite-web";
   version = "1.1.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b3cb3b9affe1b9e3777aab046416b3d545390ceea4d35d55c753b1e4732eaad0";
   };

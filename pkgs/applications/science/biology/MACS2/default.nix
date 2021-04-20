@@ -4,7 +4,7 @@ python3.pkgs.buildPythonPackage rec {
   pname = "MACS2";
   version = "2.2.7.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "1rcxj943kgzs746f5jrb72x1cp4v50rk3qmad0m99a02vndscb5d";
   };

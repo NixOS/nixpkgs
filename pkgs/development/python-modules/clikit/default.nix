@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , isPy27, pythonAtLeast
 , pylev, pastel, typing, enum34, crashtest }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "clikit";
   version = "0.6.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0ngdkmb73gkp5y00q7r9k1cdlfn0wyzws2wrqlshc4hlkbdyabj4";
   };

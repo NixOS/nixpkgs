@@ -1,6 +1,6 @@
 { buildPythonPackage
 , isPyPy
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , curl
 , openssl
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "7.43.0.6";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8301518689daefa53726b59ded6b48f33751c383cf987b0ccfbbc4ed40281325";
   };

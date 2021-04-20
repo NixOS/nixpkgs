@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config }:
+{ lib, buildPythonPackage, fetchFromPyPI, pkg-config }:
 
 buildPythonPackage rec {
   pname = "pkgconfig";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     baseBinName
   ;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "38d612488f0633755a2e7a8acab6c01d20d63dbc31af75e2a9ac98a6f638ca94";
   };

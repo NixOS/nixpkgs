@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
   version = "0.5.1";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     hash = "sha256-Sy6U0XhIQ9mPmznmWKqoyqE34vaE84fwlivouaF7Dd0=";
   };

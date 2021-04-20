@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , requests, chardet, cssselect, lxml
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname   = "PyReadability";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1k6fq416pdmjcdqh6gdxl0y0k8kj1zlpzwp5574xsvsha18p2zpn";
   };

@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , doit
 , glibcLocales
 , pytest
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     phpserialize jinja2 toml notebook ruamel_yaml aiohttp watchdog
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "05eac356bb4273cdd05d2dd6ad676226133496c457af91987c3f0d40e2fe57ef";
   };

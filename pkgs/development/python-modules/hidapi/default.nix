@@ -1,10 +1,10 @@
-{ lib, stdenv, libusb1, udev, darwin, fetchPypi, buildPythonPackage, cython }:
+{ lib, stdenv, libusb1, udev, darwin, fetchFromPyPI, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
   pname = "hidapi";
   version = "0.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a1170b18050bc57fae3840a51084e8252fd319c0fc6043d68c8501deb0e25846";
   };

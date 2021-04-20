@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask }:
 
 buildPythonPackage rec {
   pname = "Flask-HTTPAuth";
   version = "4.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8c7e49e53ce7dc14e66fe39b9334e4b7ceb8d0b99a6ba1c3562bb528ef9da84a";
   };

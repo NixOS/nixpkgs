@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , pkg-config, alsaLib, libjack2, tox, flake8, alabaster
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "1.4.7";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d7dbc2b174b09015dfbee449a672a072aa72b367be40b13e04ee35a2e2e399e3";
   };

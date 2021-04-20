@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, nose, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "blinker";
   version = "1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1dpq0vb01p36jjwbhhd08ylvrnyvcc82yxx3mwjx6awrycjyw6j7";
   };

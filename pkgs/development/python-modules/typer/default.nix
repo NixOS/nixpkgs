@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , click
 , pytestCheckHook
 , shellingham
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "typer";
   version = "0.3.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00v3h63dq8yxahp9vg3yb9r27l2niwv8gv0dbds9dzrc298dfmal";
   };

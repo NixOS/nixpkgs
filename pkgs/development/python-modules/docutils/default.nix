@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , isPy38
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "docutils";
   version = "0.16";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc";
   };

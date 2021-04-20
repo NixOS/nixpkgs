@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-api-core
 , libcst
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-lrMnp9jVndz0C8VdreVudYdwh7zSdRniPHYm9BNdjak=";
   };

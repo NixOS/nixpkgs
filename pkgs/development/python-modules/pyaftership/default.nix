@@ -1,4 +1,4 @@
-{ aiohttp, async-timeout, buildPythonPackage, fetchPypi, isPy3k, lib }:
+{ aiohttp, async-timeout, buildPythonPackage, fetchFromPyPI, isPy3k, lib }:
 
 buildPythonPackage rec {
   pname = "pyaftership";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "057dwzacc0lmsq00ipfbnxkq4rc2by8glmza6s8i6dzi1cc68v98";
   };

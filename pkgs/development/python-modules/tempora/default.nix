@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools, pythonOlder
 , pytest-flake8, pytestcov, pytest-black, pytest-mypy
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "tempora";
   version = "4.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9af06854fafb26d3d40d3dd6402e8baefaf57f90e48fdc9a94f6b22827a60fb3";
   };

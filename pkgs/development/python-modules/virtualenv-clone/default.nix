@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , virtualenv
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "virtualenv-clone";
   version = "0.5.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0absh96fsxk9di7ir76f5djyfm2c214wnyk53avrhjy8akflhpk6";
   };

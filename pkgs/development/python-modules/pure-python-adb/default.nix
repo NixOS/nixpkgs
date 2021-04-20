@@ -1,4 +1,4 @@
-{ aiofiles, buildPythonPackage, fetchPypi, lib, pythonOlder }:
+{ aiofiles, buildPythonPackage, fetchFromPyPI, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pure-python-adb";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0kdr7w2fhgjpcf1k3l6an9im583iqkr6v8hb4q1zw30nh3bqkk0f";
   };

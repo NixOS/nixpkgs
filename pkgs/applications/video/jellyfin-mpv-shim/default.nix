@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , copyDesktopItems
-, fetchPypi
+, fetchFromPyPI
 , makeDesktopItem
 , flask
 , jellyfin-apiclient-python
@@ -22,7 +22,7 @@ buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
   version = "1.10.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-QMyb69S8Ln4X0oUuLpL6vtgxJwq8f+Q4ReNckrN4E+E=";
   };

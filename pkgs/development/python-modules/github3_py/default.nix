@@ -1,7 +1,7 @@
 { lib
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , betamax
 , pytest
 , betamax-matchers
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "github3.py";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8dd4ac612fd60cb277eaf6e2ce02f68dda54aba06870ca6fa2b28369bf39aa14";
   };

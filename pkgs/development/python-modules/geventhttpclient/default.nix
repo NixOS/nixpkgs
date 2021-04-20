@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , gevent
 , certifi
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "geventhttpclient";
   version = "1.4.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3f0ab18d84ef26ba0c9df73ae2a41ba30a46072b447f2e36c740400de4a63d44";
   };

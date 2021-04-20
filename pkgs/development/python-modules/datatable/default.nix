@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, substituteAll, pythonOlder
 , pipInstallHook, writeText
 , blessed
 , docutils
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.11.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "19c602711e00f72e9ae296d8fa742d46da037c2d3a2d254bdf68f817a8da76bb";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkg-config
 , pytest
 , pytestrunner
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "secp256k1";
   version = "0.13.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a3b43e02d321c09eafa769a6fc2c156f555cab3a7db62175ef2fd21e16cdf20c";
   };

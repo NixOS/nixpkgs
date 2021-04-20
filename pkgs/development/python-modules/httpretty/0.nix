@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , tornado
 , requests
 , httplib2
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
   doCheck = lib.versionAtLeast version "0.9.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe";
   };

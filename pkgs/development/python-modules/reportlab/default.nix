@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , freetype
 , pillow
 , glibcLocales
@@ -13,7 +13,7 @@ in buildPythonPackage rec {
   pname = "reportlab";
   version = "3.5.59";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a755cca2dcf023130b03bb671670301a992157d5c3151d838c0b68ef89894536";
   };

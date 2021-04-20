@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "schedule";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f9fb5181283de4db6e701d476dd01b6a3dd81c38462a54991ddbb9d26db857c9";
   };

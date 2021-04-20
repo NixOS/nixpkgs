@@ -1,10 +1,10 @@
-{ buildPythonPackage, lib, fetchPypi, dmenu }:
+{ buildPythonPackage, lib, fetchFromPyPI, dmenu }:
 
 buildPythonPackage rec {
   pname = "dmenu-python";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "dmenu";
     sha256 = "06v2fq0ciallbib7sbk4kncj0n3gdqp1kz8n5k2669x49wyh34wm";

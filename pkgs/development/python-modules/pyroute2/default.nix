@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
   version = "0.5.18";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-CKxAytUsC7Lg8gCHUgWZqpH8zgsiHdJukEIzBCiBC8U=";
   };

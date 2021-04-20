@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , google-api-core
 , libcst
 , mock
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "google-cloud-speech";
   version = "2.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-AviYDI68Z11M/rqHgQTQugYNemPTA5nW4aVQTiwMYxI=";
   };

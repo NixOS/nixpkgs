@@ -1,10 +1,10 @@
-{ buildPythonPackage, lib, fetchPypi, setuptools }:
+{ buildPythonPackage, lib, fetchFromPyPI, setuptools }:
 
 buildPythonPackage rec {
   pname = "face_recognition_models";
   version = "0.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kwnv3qpy5bhspk780bkyg8jd9n5f6p91ja6sjlwk1wcm00d56xp";
   };

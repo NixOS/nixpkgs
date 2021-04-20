@@ -5,7 +5,7 @@
 , pytest
 , wheel
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , lib
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "argon2_cffi";
   version = "20.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "argon2-cffi";
     inherit version;
     sha256 = "0zgr4mnnm0p4i99023safb0qb8cgvl202nly1rvylk2b7qnrn0nq";

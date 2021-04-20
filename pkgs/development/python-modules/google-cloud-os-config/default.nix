@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, google-api-core, libcst, mock, proto-plus, pytestCheckHook, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchFromPyPI, google-api-core, libcst, mock, proto-plus, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c993129ecb1db6ab9b49cacfa11f368f30c7d897640c56f52558edf542c08ade";
   };

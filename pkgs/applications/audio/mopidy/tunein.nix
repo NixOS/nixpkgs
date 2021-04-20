@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
   version = "1.1.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "Mopidy-TuneIn";
     sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";

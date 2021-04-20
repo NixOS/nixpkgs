@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pathvalidate";
   version = "2.4.1";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-PJvZTH7CPpz7IR/741audfl51sCZosdF7pSQ9STzJGg=";
   };

@@ -5,7 +5,7 @@ buildPythonApplication rec {
   pname = "autoflake";
   version = "1.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "61a353012cff6ab94ca062823d1fb2f692c4acda51c76ff83a8d77915fba51ea";
   };

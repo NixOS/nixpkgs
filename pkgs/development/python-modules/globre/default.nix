@@ -1,7 +1,7 @@
 { lib
 , pythonAtLeast
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , coverage
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # https://github.com/metagriffin/globre/issues/7
   disabled = pythonAtLeast "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1qhjpg0722871dm5m7mmldf6c7mx58fbdvk1ix5i3s9py82448gf";
   };

@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, pythonAtLeast, lib, requests, pytestCheckHook, mock }:
+{ buildPythonPackage, fetchFromPyPI, pythonAtLeast, lib, requests, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
   version = "2.4.0";
   disabled = pythonAtLeast "3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8454a58f254a29988b8d1ca9ab663fd28a1f392a3d29b844d8824807db6333d7";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
+{ lib, stdenv, fetchFromPyPI, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
 , contextlib2 ? null, typing ? null, setuptools_scm
 , pytest, mock ? null, pytest-mock
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "cmd2";
   version = "1.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "701a8c9975c4abc45e5d13906ab149f959f812869106347323a3f89ac0e82a62";
   };

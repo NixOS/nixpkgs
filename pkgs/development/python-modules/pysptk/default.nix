@@ -1,5 +1,5 @@
 { lib
-, buildPythonPackage, fetchPypi
+, buildPythonPackage, fetchFromPyPI
 , numpy, scipy, cython, six, decorator
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "pysptk";
   version = "0.1.18";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "34c5ccc40c9e177cfd764daa9f7635c4c1e648e14ce78ba975537dae5a14c4e4";
   };

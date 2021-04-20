@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, isPyPy, fetchFromPyPI, pythonOlder
 , cffi, pycparser, mock, pytest, py, six }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "bcrypt";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29";
   };

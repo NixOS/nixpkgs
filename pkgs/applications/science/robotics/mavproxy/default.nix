@@ -1,11 +1,11 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
+{ stdenv, lib, buildPythonApplication, fetchFromPyPI, matplotlib, numpy, pymavlink, pyserial
 , setuptools, wxPython_4_0, billiard, gnureadline }:
 
 buildPythonApplication rec {
   pname = "MAVProxy";
   version = "1.8.34";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b922c9b6cf4719667e195a02d8364ccebbe7966a9c18666f8ac22eae9d9e7a2c";
   };

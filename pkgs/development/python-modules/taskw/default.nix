@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , tox
 , six
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   pname = "taskw";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "fadd8afc12df026c3c2d39b633c55d3337f7dca95602fce2239455a048bc85fe";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , requests
 , lxml
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "4.7.3";
   disabled = isPy27; # python2 pandas is too old
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
   };

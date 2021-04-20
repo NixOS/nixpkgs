@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, python, mock }:
 
 buildPythonPackage rec {
   pname = "stem";
   version = "1.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hk8alc0r4m669ggngdfvryndd0fbx0w62sclcmg55af4ak8xd50";
   };

@@ -1,7 +1,7 @@
 { lib
 , substituteAll
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , joblib
 , segments
 , attrs
@@ -14,7 +14,7 @@ buildPythonApplication rec {
   pname = "phonemizer";
   version = "2.2.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ae252f0bc7633e172b08622f318e7e112cde847e9281d4675ea7210157325146";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ruamel_base
 , ruamel_ordereddict
 , ruamel_yaml_clib
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "ruamel.yaml";
   version = "0.16.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "076cc0bc34f1966d920a49f18b52b6ad559fbe656a0748e3535cf7b3f29ebf9e";
   };

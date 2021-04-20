@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , cloudpickle, numpy, future, networkx
 , six, tqdm, scipy, pymongo
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "hyperopt";
   version = "0.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bc6047d50f956ae64eebcb34b1fd40f186a93e214957f20e87af2f10195295cc";
   };

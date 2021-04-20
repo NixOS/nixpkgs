@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, six, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, pytest, six, mock }:
 
 buildPythonPackage rec {
   version = "2.0.2";
   pname = "kafka-python";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "04dfe7fea2b63726cd6f3e79a2d86e709d608d74406638c5da33a01d45a9d7e3";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, requests, requests-cache }:
+{ lib, buildPythonApplication, fetchFromPyPI, requests, requests-cache }:
 
 buildPythonApplication rec {
   pname = "cryptop";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0akrrz735vjfrm78plwyg84vabj0x3qficq9xxmy9kr40fhdkzpb";
   };

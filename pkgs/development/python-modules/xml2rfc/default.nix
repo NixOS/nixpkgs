@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
+{ lib, fetchFromPyPI, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
 , pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "3.5.0";
   disabled = pythonAtLeast "3.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "3ec836a9545f549707a8c8176038160185b9d08c1dd80304a906527da21bff68";
   };

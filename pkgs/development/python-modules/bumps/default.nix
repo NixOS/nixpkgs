@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six}:
+{ lib, buildPythonPackage, fetchFromPyPI, six}:
 
 buildPythonPackage rec {
   pname = "bumps";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # always fails
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9f92c05effd8175763799d19ca55592e89b053318f611148a6725159aea41d67";
   };

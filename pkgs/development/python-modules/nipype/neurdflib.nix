@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isodate
 , html5lib
 , SPARQLWrapper
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "neurdflib";
   version = "5.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d34493cee15029ff5db16157429585ff863ba5542675a4d8a94a0da1bc6e3a50";
   };

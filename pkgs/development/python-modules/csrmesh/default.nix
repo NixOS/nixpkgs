@@ -1,7 +1,7 @@
 { lib
 , bluepy
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pycryptodomex
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "csrmesh";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03lzam54ypcfvqvikh3gsrivvlidmz1ifdq15xv8c5i3n5b178ag";
   };

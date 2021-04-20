@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyparsing
 , six
 , pytestCheckHook
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "20.4";
   format = "setuptools";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8";
   };

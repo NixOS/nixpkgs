@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , arrow
 , jinja2
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.2.0";
   pname = "jinja2-time";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0h0dr7cfpjnjj8bgl2vk9063a53649pn37wnlkd8hxjy656slkni";
   };

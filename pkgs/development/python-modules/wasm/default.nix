@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 }:
 
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "wasm";
   version = "1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "179xcinfc35xgk0bf9y58kwxzymzk7c1p58w6khmqfiqvb91j3r8";
   };

@@ -1,12 +1,12 @@
 { buildPythonPackage, lib, glibcLocales, mock, nose, isPy3k, jinja2, six
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "mr-bob";
   version = "0.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "mr.bob";
     sha256 = "6737eaf98aaeae85e07ebef844ee5156df2f06a8b28d7c3dcb056f811c588121";

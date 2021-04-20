@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , matplotlib
 , setuptools
 , sympy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "3.6.1";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "be454f9d05dcbe0623328b4df43a1bfd1f0925e516be97399710452931a19bb0";
   };

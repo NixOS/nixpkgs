@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , flake8
 , orderedmultidict
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "furl";
   version = "2.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "08dnw3bs1mk0f1ccn466a5a7fi1ivwrp0jspav9arqpf3wd27q60";
   };

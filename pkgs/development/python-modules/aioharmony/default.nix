@@ -2,7 +2,7 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , slixmpp
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.2.7";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-aej8xC0Bsy6ip7IwO6onp55p6afkz8yZnz14cCExSPA=";
   };

@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib
+{ buildPythonPackage, fetchFromPyPI, lib
 }:
 
 buildPythonPackage rec {
   pname = "stringcase";
   version = "1.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "023hv3gknblhf9lx5kmkcchzmbhkdhmsnknkv7lfy20rcs06k828";
   };

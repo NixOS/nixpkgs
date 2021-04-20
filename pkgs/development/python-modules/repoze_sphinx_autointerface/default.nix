@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_interface
 , sphinx
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "repoze.sphinx.autointerface";
   version = "0.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8ef0383276ab722efb1e4a6523726262058dfd82615ccf7e5004aee3fe8ecc23";
   };

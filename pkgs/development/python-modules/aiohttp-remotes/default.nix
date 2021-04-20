@@ -1,4 +1,4 @@
-{ lib, fetchpatch, buildPythonPackage, fetchPypi
+{ lib, fetchpatch, buildPythonPackage, fetchFromPyPI
 , aiohttp, pytest, pytestcov, pytest-aiohttp
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "aiohttp_remotes";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1vv2ancxsaxlls9sinigjnrqyx95n7cphq37m8nwifkhvs0idv6a";
   };

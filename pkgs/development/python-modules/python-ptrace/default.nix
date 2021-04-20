@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , six
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "python-ptrace";
   version = "0.9.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b998e3436cec975b6907552af6e7f3ff8779097e32d2b905696e5a9feb09e070";
   };

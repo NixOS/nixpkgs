@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, flask }:
+{ lib, fetchFromPyPI, buildPythonPackage, flask }:
 
 buildPythonPackage rec {
   pname = "Flask-SSLify";
   version = "0.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0gjl1m828z5dm3c5dpc2qjgi4llf84cp72mafr0ib5fd14y1sgnk";
   };

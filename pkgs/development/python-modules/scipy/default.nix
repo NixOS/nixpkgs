@@ -1,4 +1,4 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
+{lib, fetchFromPyPI, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
 
 let
   pybind = pybind11.overridePythonAttrs(oldAttrs: {
@@ -11,7 +11,7 @@ in buildPythonPackage rec {
   pname = "scipy";
   version = "1.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "048vd4c843xaq45yk3kn491gvqnvhp2i9rxhg671ddlh923fpz64";
   };

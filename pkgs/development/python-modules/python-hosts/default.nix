@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytestcov }:
+{ lib, buildPythonPackage, fetchFromPyPI, pyyaml, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5b9749ce807170fb340d044d3f971e1da4dac0ae6af8ce8db00b6758a920a2bc";
   };

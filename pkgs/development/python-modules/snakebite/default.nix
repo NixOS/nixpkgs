@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , tox
 , virtualenv
 , protobuf
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "085238b4944cb9c658ee62d5794de936ac3d0c337c504b2cc86424a205ae978a";
   };

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pkg-config
 , which
 , cairo
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pname = "wxPython";
   version = "4.0.7.post2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e";
   };

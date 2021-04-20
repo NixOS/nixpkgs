@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, isPy3k
 , setuptools_scm
 , cheroot, portend, more-itertools, zc_lockfile, routes
 , jaraco_collections
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "CherryPy";
     inherit version;
     sha256 = "16f410izp2c4qhn4n3l5l3qirmkf43h2amjqms8hkl0shgfqwq2n";

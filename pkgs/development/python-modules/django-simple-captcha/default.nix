@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , six
 , testfixtures
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "django-simple-captcha";
   version = "0.5.14";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "84b5c188e6ae50e9ecec5e5d734c5bc4d2a50fbbca7f59d2c12da9a3bbee5051";
     extension = "zip";

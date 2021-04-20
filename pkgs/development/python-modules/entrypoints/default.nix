@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , configparser
 , pytest
 , isPy3k
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "entrypoints";
   version = "0.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451";
   };

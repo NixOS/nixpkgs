@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "adafruit-ampy";
   version = "1.0.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1dz5sksalccv4c3bzk3c1jxpg3s28lwlw8hfwc9dfxhw3a1np3fd";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   version = "0.3.3";
   pname = "ofxhome";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1rpyfqr2q9pnin47rjd4qapl8ngk1m9jx36iqckhdhr8s8gla445";
   };

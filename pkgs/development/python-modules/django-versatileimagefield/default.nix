@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 , python
 , pillow
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "django-versatileimagefield";
   version = "2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b197e7066f23bb73b001a61525f2b1cae3dd654bf208a944a7ff5a3fe6107b51";
   };

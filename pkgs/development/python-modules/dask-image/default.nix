@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , dask
 , numpy, toolz # dask[array]
 , scipy
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.4.0";
   pname = "dask-image";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a6873a39af21b856a4eb7efee6838e6897b1399f21ab9e65403e69eb62f96c2d";
   };

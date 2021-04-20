@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder
 , dateutil
 , importlib-metadata
 , poetry
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2.1.2";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b06a0ca1bfe41c990bbf0c029f0b6501a7f2ec4e38bfec730712015e8860f207";
   };

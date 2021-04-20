@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy36 }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy36 }:
 
 buildPythonPackage rec {
   pname = "dataclasses";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # backport only works on Python 3.6, and is in the standard library in Python 3.7
   disabled = !isPy36;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "8479067f342acf957dc82ec415d355ab5edb7e7646b90dc6e2fd1d96ad084c97";
   };

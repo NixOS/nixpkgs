@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , nose
 , webob
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "webtest";
   disabled = isPy27; # paste.deploy is not longer a valid import
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "WebTest";
     inherit version;
     sha256 = "4221020d502ff414c5fba83c1213985b83219cb1cc611fe58aa4feaf96b5e062";

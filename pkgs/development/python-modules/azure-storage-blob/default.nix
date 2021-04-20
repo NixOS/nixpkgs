@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , azure-core
 , azure-storage-common
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-storage-blob";
   version = "12.8.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "36b85a3423379d4a93f663022487cf53aa3043a355f8414321dde878c00cb577";

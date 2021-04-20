@@ -1,10 +1,10 @@
-{ lib, fetchPypi, python3Packages }:
+{ lib, fetchFromPyPI, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "sabyenc3";
   version = "4.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "dfaa0bdd01752a9cfde0d349a8f4e178b04b1cf9c1bc018b287961192cd2bb90";
   };

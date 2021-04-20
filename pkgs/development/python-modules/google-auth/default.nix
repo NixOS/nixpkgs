@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchpatch
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , cachetools
 , flask
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "google-auth";
   version = "1.28.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-m9Q20ZqwRwAaE0ByDStinrlt1QMljFJJIewq8+6IqA4=";
   };

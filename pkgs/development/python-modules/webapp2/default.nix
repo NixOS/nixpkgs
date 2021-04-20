@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , webob
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "webapp2";
   version = "2.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "997db622a266bd64eb7fcc9cfe823efb69277544aa92064030c16acbfb2733a5";
   };

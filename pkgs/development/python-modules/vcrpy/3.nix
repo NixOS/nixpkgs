@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , six
-, fetchPypi
+, fetchFromPyPI
 , pyyaml
 , mock
 , contextlib2
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "vcrpy";
   version = "3.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "21168d5ae14263a833d4b71acfd8278d8841114f24be1b4ab4a5719d0c7f07bc";
   };

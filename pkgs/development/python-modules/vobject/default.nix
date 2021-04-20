@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, python, dateutil }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPyPy, python, dateutil }:
 
 buildPythonPackage rec {
   version = "0.9.6.1";
   pname = "vobject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "96512aec74b90abb71f6b53898dd7fe47300cc940104c4f79148f0671f790101";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , grpcio
 , googleapis-common-protos
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
   version = "0.12.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0bfb5b56f648f457021a91c0df0db4934b6e0c300bd0f2de2333383fe958aa72";
   };

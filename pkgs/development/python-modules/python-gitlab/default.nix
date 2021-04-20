@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
+{ lib, buildPythonPackage, fetchFromPyPI, requests, mock, httmock, pythonOlder, pytest, responses }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
   version = "2.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "68b42aafd4b620ab2534ff78a52584c7f799e4e55d5ac297eab4263066e6f74b";
   };

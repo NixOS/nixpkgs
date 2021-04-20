@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , attrs
 , botocore
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pname = "chalice";
   version = "1.21.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "312f88838c8ea4b4ac79dce0e5b4ba3125130ca66ea99a4694f535501dca95e3";
   };

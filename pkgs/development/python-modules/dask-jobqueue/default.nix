@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , dask
 , distributed
 , docrep
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.7.2";
   pname = "dask-jobqueue";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1767f4146b2663d9d2eaef62b882a86e1df0bccdb8ae68ae3e5e546aa6796d35";
   };

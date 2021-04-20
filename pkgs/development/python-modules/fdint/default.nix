@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , numpy
 , python
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "fdint";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "30db139684d362652670e2cd3206b5dd7b3b93b86c3aff37f4b4fd4a3f98aead";
   };

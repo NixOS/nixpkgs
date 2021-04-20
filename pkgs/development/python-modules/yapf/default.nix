@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "yapf";
   version = "0.31.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     hash = "sha256-QI+5orJUwwL0nbg8WfmqC0sP0OwlvjpcURgTJ5Iv9j0=";
   };

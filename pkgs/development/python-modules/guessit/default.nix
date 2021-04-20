@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestrunner
 , dateutil
 , babelfish
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "guessit";
   version = "3.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1c530pb0h34z0ziym256qps21b8mh533ia1lcnx9wqwx9rnqriki";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , urwid
 , glibcLocales
 , pytestCheckHook
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "urwid_readline";
   version = "0.13";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-AYAgy8hku17Ye+F9wmsGnq4nVcsp86nFaarDve0e+vQ=";
   };

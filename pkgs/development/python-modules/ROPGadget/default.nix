@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , capstone}:
 
 buildPythonPackage rec {
   pname = "ROPGadget";
   version = "6.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4c0e56f2ba0aef13b2c8ca286aad663525b92020b11bacd16791f5236247905c";
   };

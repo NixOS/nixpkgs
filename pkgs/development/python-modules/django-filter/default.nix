@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django
 , djangorestframework, python, mock
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "django-filter";
   version = "2.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , glibcLocales
 , celery, django, psycopg2
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cf3ce7626305d218a8bf2b6a219266ef8061aceeefc1c70a54170f4105465202";
   };

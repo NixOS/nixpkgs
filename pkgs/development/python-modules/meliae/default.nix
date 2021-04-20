@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , cython
 , isPy3k
 , simplejson
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "meliae";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname;
     # FIXME when updating to the next version: The tarball on pypi is called
     # "meliae-0.4.0.tar.gz" while the version within that tarball is

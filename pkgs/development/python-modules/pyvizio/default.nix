@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , click
-, fetchPypi
+, fetchFromPyPI
 , jsonpickle
 , requests
 , tabulate
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "pyvizio";
   version = "0.1.59";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1j2zbziklx4az55m3997y7yp4xflk7i0gsbdfh7fp9k0qngb2053";
   };

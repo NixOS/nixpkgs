@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , stompclient, python-daemon, redis, pid, pytest, six, click, coverage
 , sqlalchemy }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "CoilMQ";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4cbfeb5ed2459df14902c1380157be6267702b1271682924cd316ccad8a29d1d";
   };

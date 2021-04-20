@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy3k, buildPythonPackage }:
+{ lib, fetchFromPyPI, isPy3k, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "pyobjc";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # pyobjc-framework-Collaboration==4.0b1 (from pyobjc==4.0b1)"
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f4fd120683b19a2abeac351784204e6b092cf1fb94f597b6eb22f30c117b2ef0";
   };

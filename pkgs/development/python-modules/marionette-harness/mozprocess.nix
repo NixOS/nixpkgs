@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mozinfo
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "mozprocess";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a0fd8367e663d3cac74ee46bffa789667bc8d52f242d81a14522205fa6650cb2";
   };

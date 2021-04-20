@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, msgpack }:
+{ lib, buildPythonPackage, fetchFromPyPI, msgpack }:
 
 buildPythonPackage rec {
   pname = "fluent-logger";
   version = "0.10.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "678bda90c513ff0393964b64544ce41ef25669d2089ce6c3b63d9a18554b9bfa";
   };

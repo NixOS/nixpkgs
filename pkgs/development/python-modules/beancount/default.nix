@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , beautifulsoup4
 , bottle
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-K/CM5qldmAAPTXM5WYXNHeuBwNUu1aduYQusd9gvhsA=";
   };

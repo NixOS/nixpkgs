@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pillow, poppler_utils }:
+{ lib, buildPythonPackage, fetchFromPyPI, pillow, poppler_utils }:
 
 buildPythonPackage rec {
   pname = "pdf2image";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow poppler_utils ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "066527e1bf954762fb4369c677ae3bc15f2ce8707eee830cccef8471fde736d7";
   };

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
+{ buildPythonPackage, fetchFromPyPI, lib, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
 , substituteAll
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "python-poppler-qt5";
   version = "0.24.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0l69llw1fzwz8y90q0qp9q5pifbrqjjbwii7di54dwghw5fc6w1r";
   };

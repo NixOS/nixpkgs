@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   version = "1.3.2";
   pname = "pyvoro";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f31c047f6e4fc5f66eb0ab43afd046ba82ce247e18071141791364c4998716fc";
   };

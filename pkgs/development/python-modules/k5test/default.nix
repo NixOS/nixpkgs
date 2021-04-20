@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , six
 , krb5Full
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "k5test";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lqp3jgfngyhaxjgj3n230hn90wsylwilh120yjf62h7b1s02mh8";
   };

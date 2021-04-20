@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , msrest
 , msrestazure
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-redhatopenshift";
   disabled = isPy27; # don't feel like fixing namespace issues on python2
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "1g65lbia1i1jw6qkyjz2ldyl3p90rbr78l8kfryg70sj7z3gnnjn";

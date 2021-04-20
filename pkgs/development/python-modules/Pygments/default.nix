@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , docutils
 , pytestCheckHook
 , doCheck ? true
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "Pygments";
   version = "2.7.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "df49d09b498e83c1a73128295860250b0b7edd4c723a32e9bc0d295c7c2ec337";
   };

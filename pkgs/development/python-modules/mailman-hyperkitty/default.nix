@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, mailman, mock }:
+{ lib, buildPythonPackage, fetchFromPyPI, mailman, mock }:
 
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
   version = "1.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1lfqa9admhvdv71f528jmz2wl0i5cv77v6l64px2pm4zqr9ckkjx";
   };

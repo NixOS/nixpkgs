@@ -4,7 +4,7 @@ python3Packages.buildPythonPackage rec {
   pname = "s3bro";
   version = "2.8";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0k25g3vch0q772f29jlghda5mjvps55h5lgwhwwbd5g2nlnrrspq";
   };

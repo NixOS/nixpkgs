@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , django
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "django-storages";
   version = "1.11.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c823dbf56c9e35b0999a13d7e05062b837bae36c518a40255d522fbe3750fbb4";
   };

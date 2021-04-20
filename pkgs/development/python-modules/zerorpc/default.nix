@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, future, gevent, msgpack, pyzmq }:
+{ lib, buildPythonPackage, fetchFromPyPI, future, gevent, msgpack, pyzmq }:
 
 buildPythonPackage rec {
   pname = "zerorpc";
   version = "0.6.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d2ee247a566fc703f29c277d767f6f61f1e12f76d0402faea4bd815f32cbf37f";
   };

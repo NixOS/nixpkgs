@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , jupyter_client
 , ipykernel
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "nbsmoke";
   version = "0.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2400d7878e97714e822ab200a71fc71ede487e671f42b4b411745dba95f9cb32";
   };

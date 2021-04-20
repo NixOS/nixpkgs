@@ -1,4 +1,4 @@
-{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k
+{ fetchFromPyPI, buildPythonPackage, lib, six, singledispatch, isPy3k
 , click
 , joblib
 , regex
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "3.5";
   pname = "nltk";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "845365449cd8c5f9731f7cb9f8bd6fd0767553b9d53af9eb1b3abf7700936b35";

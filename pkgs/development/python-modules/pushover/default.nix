@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , requests }:
 
 buildPythonPackage rec {
   pname = "python-pushover";
   version = "0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "dee1b1344fb8a5874365fc9f886d9cbc7775536629999be54dfa60177cf80810";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , snappy
 , cffi
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-snappy";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "06l9my361ig4x5ycyrmq33q83zcdib3y2zxfxv7k7dlpyp9ri2hn";
   };

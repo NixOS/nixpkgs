@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, scipy }:
+{ lib, buildPythonPackage, fetchFromPyPI, scipy }:
 
 buildPythonPackage rec {
   pname = "iapws";
   version = "1.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "781285acaedff49d72c074aa308aabf7ca17f486cca490e5ed3f35526bbe4153";
   };

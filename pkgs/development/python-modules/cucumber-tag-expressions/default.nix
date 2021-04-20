@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pytest, pytest-html }:
+{ lib, fetchFromPyPI, buildPythonPackage, pytest, pytest-html }:
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
   version = "3.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0kb8dq458sflwl2agb2v9hp04qwygslrhdps819vq27wc44jabxw";
   };

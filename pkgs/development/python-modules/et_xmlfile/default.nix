@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lxml
 , pytest
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.1";
   pname = "et_xmlfile";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };

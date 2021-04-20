@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jinja2
 , pyyaml
 , setuptools
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "j2cli";
   version = "0.3.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6f6f643b3fa5c0f72fbe9f07e246f8e138052b9f689e14c7c64d582c59709ae4";
   };

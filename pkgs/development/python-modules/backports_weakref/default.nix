@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 # , backports
 , python
@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "backports.weakref";
   version = "1.0.post1";
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "bc4170a29915f8b22c9e7c4939701859650f2eb84184aee80da329ac0b9825c2";
   };

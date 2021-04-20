@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, isPy27, pythonAtLeast
 , graphviz
 , multipledispatch
 , numpy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   disabled = isPy27 || pythonAtLeast "3.8";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1my94a11jzg1hv6ln8wxklbqrg6z5l2l77vr89aq0829yyxacmv7";
   };

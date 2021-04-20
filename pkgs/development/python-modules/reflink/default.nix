@@ -1,6 +1,6 @@
 { buildPythonPackage
 , cffi
-, fetchPypi
+, fetchFromPyPI
 , lib
 , pytestCheckHook
 , pytestrunner
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "reflink";
   version = "0.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
   };

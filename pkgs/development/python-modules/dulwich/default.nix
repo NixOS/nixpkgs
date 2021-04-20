@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , fastimport
-, fetchPypi
+, fetchFromPyPI
 , gevent
 , geventhttpclient
 , git
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.20.21";
   pname = "dulwich";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-rHZMmpuA+mGv40BNUnDFBgqlf38IexGpU5XTt287cf0=";
   };

@@ -5,7 +5,7 @@ buildPythonApplication rec {
   pname = "doh-proxy";
   version = "0.0.9";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1fxzxipzdvk75yrcr78mpdz8lwpisba67lk4jcwxdnkv6997dwfp";
   };

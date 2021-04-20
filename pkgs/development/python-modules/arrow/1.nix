@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder
 , simplejson, typing-extensions, python-dateutil, pytz, pytest-mock, sphinx
 , dateparser, pytestcov, pytestCheckHook
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0793badh4hgbk2c5g70hmbl7n3d4g5d87bcflld0w9rjwy59r71r";
   };

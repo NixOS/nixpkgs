@@ -2,7 +2,7 @@
 , lib
 , isPy27
 , six
-, fetchPypi
+, fetchFromPyPI
 , pyyaml
 , mock
 , contextlib2
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "57095bf22fc0a2d99ee9674cdafebed0f3ba763018582450706f7d3a74fff599";
   };

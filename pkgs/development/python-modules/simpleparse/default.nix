@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , isPyPy
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "simpleparse";
   disabled = isPy3k || isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "SimpleParse";
     inherit version;
     sha256 = "010szm4mbqgfdksa2n4l9avj617rb0gkwrryc70mfjmyww0bd1m6";

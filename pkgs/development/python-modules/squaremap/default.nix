@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromPyPI
 , six
 , wxPython
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "1.0.5";
   disabled = isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "SquareMap";
     inherit version;
     sha256 = "1a79jm7mp0pvi3a19za5c3idavnj7hlral01hhr3x9mz1jayav5i";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , zope_i18nmessageid
 , zope_interface
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "zope.size";
   version = "4.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6f3eb687c9181e3b7400c5cd4d4209a2f676475b7b85c99ee11de2404b3493ec";
   };

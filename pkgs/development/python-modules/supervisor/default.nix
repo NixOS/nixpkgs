@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
+{ stdenv, lib, buildPythonPackage, isPy3k, fetchFromPyPI
 , mock
 , pytest
 , setuptools
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "supervisor";
   version = "4.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c479c875853e9c013d1fa73e529fd2165ff1ecaecc7e82810ba57e7362ae984d";
   };

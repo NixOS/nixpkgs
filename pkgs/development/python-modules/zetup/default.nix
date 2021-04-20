@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nbconvert
 , pathpy
 , pytestCheckHook
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "zetup";
   version = "0.2.64";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b8a9bdcfa4b705d72b55b218658bc9403c157db7b57a14158253c98d03ab713d";
   };

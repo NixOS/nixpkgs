@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, fetchpatch, python
 , unittest2, scripttest, pytz, mock
 , testtools, pbr, tempita, decorator, sqlalchemy
 , six, sqlparse, testrepository
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };

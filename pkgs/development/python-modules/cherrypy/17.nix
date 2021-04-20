@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI
 , setuptools_scm
 , cheroot, contextlib2, portend, routes, six, zc_lockfile
 , backports_unittest-mock, objgraph, pathpy, pytest, pytestcov, backports_functools_lru_cache, requests_toolbelt
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "cherrypy";
   version = "17.4.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "CherryPy";
     inherit version;
     sha256 = "ef1619ad161f526745d4f0e4e517753d9d985814f1280e330661333d2ba05cdf";

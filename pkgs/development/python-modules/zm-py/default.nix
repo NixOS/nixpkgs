@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchFromPyPI, buildPythonPackage, isPy3k
 , pytest, requests }:
 
 buildPythonPackage rec {
   pname = "zm-py";
   version = "0.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b391cca0e52f2a887aa7a46c314b73335b7e3341c428b425fcf314983e5ebb36";
   };

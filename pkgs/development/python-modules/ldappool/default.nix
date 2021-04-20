@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pbr, ldap, prettytable, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
   pname = "ldappool";
   version = "2.4.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "ldappool";
     inherit version;
     sha256 = "23edef09cba4b1ae764f1ddada828d8e39d72cf32a457e599f5a70064310ea00";

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
   version = "1.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hz13vc65zi4zmay40nz8wzxickv1q9zzl6x03qc7rvvapz0c91p";
   };

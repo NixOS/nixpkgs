@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ lib, fetchFromPyPI, buildPythonPackage, pyparsing, robotframework, allpairspy }:
 
 buildPythonPackage rec {
   pname = "RoboMachine";
   version = "0.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
   };

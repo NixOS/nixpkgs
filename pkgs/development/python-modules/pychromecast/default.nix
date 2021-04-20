@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, requests, zeroconf, protobuf, casttube, isPy3k }:
+{ lib, fetchFromPyPI, buildPythonPackage, requests, zeroconf, protobuf, casttube, isPy3k }:
 
 buildPythonPackage rec {
   pname = "PyChromecast";
   version = "9.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-kHZWzqRtOdDpPsgVl5V470+29lX9i/TojmQh/NeCToU=";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , git
 , lxml
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "citeproc-py";
   version = "0.5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "00aaff50jy4j0nakdzq9258z1gzrac9baarli2ymgspj88jg5968";
   };

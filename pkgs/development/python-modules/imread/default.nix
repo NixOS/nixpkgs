@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , pkg-config
 , libjpeg
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "python-imread";
   version = "0.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version;
     pname = "imread";
     sha256 = "0yb0fmy6ilh5fvbk69wl2bzqgss2g0951668mx8z9yyj4jhr1z2y";

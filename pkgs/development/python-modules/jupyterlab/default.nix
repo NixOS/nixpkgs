@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jupyterlab_server
 , notebook
 , pythonOlder
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.0.12";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "929c60d7fb4aa704084c02d8ededc209b8b378e0b3adab46158b7fa6acc24230";
   };

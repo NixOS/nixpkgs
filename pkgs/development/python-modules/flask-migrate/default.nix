@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, flask, flask_sqlalchemy, flask_script, alembic }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k, glibcLocales, flask, flask_sqlalchemy, flask_script, alembic }:
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
   version = "2.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
   };

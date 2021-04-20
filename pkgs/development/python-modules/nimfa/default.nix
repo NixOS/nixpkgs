@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , numpy
 , scipy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "nimfa";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "39cff2b86856d03ca8a3d9c38598034ecf1a768c325fd3a728bb9eadb8c6b919";
   };

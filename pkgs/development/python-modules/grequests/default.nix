@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , requests
 , gevent
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "grequests";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0rpnim3ppxjdsaa869h1jdimcyc66mamcs593rd7brk8cq68kv3x";
   };

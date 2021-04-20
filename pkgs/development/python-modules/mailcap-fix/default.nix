@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy36
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.0.1";
   disabled = isPy36; # this fix is merged into python 3.6
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "02lijkq6v379r8zkqg9q2srin3i80m4wvwik3hcbih0s14v0ng0i";
   };

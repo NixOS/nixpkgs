@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nmap
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "python-nmap";
   version = "0.6.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "013q2797d9sf6mrj7x1hqfcql5gqgg50zgiifp2yypfa4k8cwjsx";
   };

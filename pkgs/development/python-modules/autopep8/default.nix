@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
+{ lib, fetchFromPyPI, buildPythonPackage, pycodestyle, glibcLocales
 , toml
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "autopep8";
   version = "1.5.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cae4bc0fb616408191af41d062d7ec7ef8679c7f27b068875ca3a9e2878d5443";
   };

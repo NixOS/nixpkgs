@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.30.7";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "16b3105834dd6d9e374e976cad0978e1acfed0f0328c5054bc214550aea3e2c5";
   };

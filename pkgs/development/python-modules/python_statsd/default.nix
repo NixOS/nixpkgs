@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , mock
 , nose
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2.1.0";
   disabled = isPy3k;  # next release will be py3k compatible
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d2c573d325d0f015b4d79f0d0f8c88dd8413d7b9ef890c09076a9b6089ab301c";
   };

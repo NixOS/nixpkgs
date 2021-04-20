@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , ffmpeg_3
 , tqdm
 }:
@@ -9,7 +9,7 @@ buildPythonApplication rec {
   pname = "ffmpeg-normalize";
   version = "1.19.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "18dpck9grnr3wgbjvdh4mjlx0zfwcxpy4rnpmc39in0yk3w7li2x";
   };

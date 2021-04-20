@@ -1,7 +1,7 @@
 { lib
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , stdenv
 , numpydoc
 , pytestCheckHook
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "092bnvr724cfvka8267z687bf086fvm7i1hwslkyrzf1g836dn3s";
   };

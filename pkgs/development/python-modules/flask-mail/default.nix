@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   blinker, flask, mock, nose, speaklater
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0hazjc351s3gfbhk975j8k65cg4gf31yq404yfy0gx0bjjdfpr92";
   };

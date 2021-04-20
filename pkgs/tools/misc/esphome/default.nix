@@ -13,7 +13,7 @@ in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
   version = "1.16.0";
 
-  src = python.pkgs.fetchPypi {
+  src = python.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "0pvwzkdcpjqdf7lh1k3xv1la5v60lhjixzykapl7f2xh71fbm144";
   };

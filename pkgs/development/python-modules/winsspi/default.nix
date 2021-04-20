@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , minikerberos
 , pythonAtLeast
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "winsspi";
   version = "0.0.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1q8hr8l8d9jxyp55qsrlkyhdhqjc0n18ajzms7hf1xkhdl7rrbd2";
   };

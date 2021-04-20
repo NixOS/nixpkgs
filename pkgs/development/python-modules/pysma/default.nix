@@ -2,7 +2,7 @@
 , aiohttp
 , attrs
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , jmespath
 , async-timeout
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "pysma";
   version = "0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-BOVALVFb/p2q3A4NkvgtwmL5fNvwMCk0hb1L5MRWzHY=";
   };

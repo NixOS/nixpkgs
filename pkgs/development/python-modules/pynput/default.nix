@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, sphinx, setuptools-lint, xlib, evdev }:
 
 buildPythonPackage rec {
   pname = "pynput";
   version = "1.7.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4e50b1a0ab86847e87e58f6d1993688b9a44f9f4c88d4712315ea8eb552ef828";
   };

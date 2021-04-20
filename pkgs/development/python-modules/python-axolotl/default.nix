@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519, protobuf }:
+{ lib, buildPythonPackage, fetchFromPyPI, cryptography, python-axolotl-curve25519, protobuf }:
 
 buildPythonPackage rec {
   pname = "python-axolotl";
   version = "0.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1bwdp24fmriffwx91aigs9k162albb51iskp23nc939z893q23py";
   };

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, docopt, pythonOlder }:
+{ lib, fetchFromPyPI, buildPythonPackage, docopt, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "httpserver";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # Because it uses asyncio
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1q62g324dvb0hqdwwrnj41sqr4d3ly78v9nc26rz1whj4pwdmhsv";
   };

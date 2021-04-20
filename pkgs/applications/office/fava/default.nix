@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "fava";
   version = "1.18";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "21336b695708497e6f00cab77135b174c51feb2713b657e0e208282960885bf5";
   };

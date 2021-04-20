@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , django-discover-runner
 , mock
 , dj-database-url
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "2.2";
   pname = "django-configurations";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915";
   };

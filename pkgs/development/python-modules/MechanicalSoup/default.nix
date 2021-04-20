@@ -1,4 +1,4 @@
-{ fetchPypi, buildPythonPackage, lib
+{ fetchFromPyPI, buildPythonPackage, lib
 , requests, beautifulsoup4, six, lxml
 , pytestrunner, requests-mock, pytestcov, pytest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "MechanicalSoup";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "37d3b15c1957917d3ae171561e77f4dd4c08c35eb4500b8781f6e7e1bb6c4d07";
   };

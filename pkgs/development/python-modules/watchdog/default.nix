@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , fetchpatch
 , argh
 , pathtools
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "watchdog";
   version = "2.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-Uy/t2ZPnVVRnH6o2zQTFgM7T+uCEJUp3mvu9iq8AVms=";
   };

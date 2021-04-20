@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
 
 buildPythonPackage rec {
   pname = "pytest-virtualenv";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03w2zz3crblj1p6i8nq17946hbn3zqp9z7cfnifw47hi4a4fww12";
   };

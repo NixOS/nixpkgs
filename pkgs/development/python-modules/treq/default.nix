@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
+{ lib, fetchFromPyPI, buildPythonPackage, service-identity, requests, six
 , mock, twisted, incremental, pep8, httpbin
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "treq";
   version = "20.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "83cd2ca75aef4f1fbdbe144c186426d930c3e8b20385df8cec9e12d442986da2";
   };

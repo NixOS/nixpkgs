@@ -225,7 +225,7 @@ def _get_latest_version_github(package, extension, current_version, target):
 
 FETCHERS = {
     'fetchFromGitHub'   :   _get_latest_version_github,
-    'fetchPypi'         :   _get_latest_version_pypi,
+    'fetchFromPyPI'         :   _get_latest_version_pypi,
     'fetchurl'          :   _get_latest_version_pypi,
 }
 
@@ -256,11 +256,11 @@ def _determine_extension(text, fetcher):
     """Determine what extension is used in the expression.
 
     If we use:
-    - fetchPypi, we check if format is specified.
+    - fetchFromPyPI, we check if format is specified.
     - fetchurl, we determine the extension from the url.
     - fetchFromGitHub we simply use `.tar.gz`.
     """
-    if fetcher == 'fetchPypi':
+    if fetcher == 'fetchFromPyPI':
         try:
             src_format = _get_unique_value('format', text)
         except ValueError as e:

@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy27
 , numpy
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "3.21.1";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "78b01d88529d5f604e76bc64be102d48f058ca50faad72ac740d717545711c7b";
   };

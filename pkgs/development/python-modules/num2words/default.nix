@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , docopt
 , delegator-py
 , pytest
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.5.10";
   pname = "num2words";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0myc27k087rhgpwn1a1dffzl32rwz6ngdbf3rm2i0zlgcxh4zk9p";
   };

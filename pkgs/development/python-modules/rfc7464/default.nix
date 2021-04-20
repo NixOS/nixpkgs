@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchFromPyPI, lib }:
 
 buildPythonPackage rec {
   pname = "rfc7464";
   version = "17.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1hcn6h38qplfcmq392cs58r01k16k202bqyap4br02376pr4ik7a";
     extension = "zip";

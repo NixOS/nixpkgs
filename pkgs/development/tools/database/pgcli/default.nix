@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 , cli-helpers
 , click
@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d5b2d803f7e4e7fe679306a000bde5d14d15ec590ddd108f3dc4c0ecad169d2b";
   };

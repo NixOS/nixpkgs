@@ -3,7 +3,7 @@
 , click
 , ecdsa
 , hidapi
-, fetchPypi
+, fetchFromPyPI
 , pyaes
 , pythonOlder
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.1.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b660225ac06fc06ad17b33ece428126eef785388450e14313f72d25d4082c5ab";
   };

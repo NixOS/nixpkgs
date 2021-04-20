@@ -4,7 +4,7 @@ let
   truffleHogRegexes = python3Packages.buildPythonPackage rec {
     pname = "truffleHogRegexes";
     version = "0.0.7";
-    src = python3Packages.fetchPypi {
+    src = python3Packages.fetchFromPyPI {
       inherit pname version;
       sha256 = "b81dfc60c86c1e353f436a0e201fd88edb72d5a574615a7858485c59edf32405";
     };
@@ -14,7 +14,7 @@ in
     pname = "truffleHog";
     version = "2.1.11";
 
-    src = python3Packages.fetchPypi {
+    src = python3Packages.fetchFromPyPI {
       inherit pname version;
       sha256 = "53619f0c5be082abd377f987291ace80bc3b88f864972b1a30494780980f769e";
     };

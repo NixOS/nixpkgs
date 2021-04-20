@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, protobuf, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, protobuf, six }:
 
 buildPythonPackage rec {
   pname = "protobuf3-to-dict";
   version = "0.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0nibblvj3n20zvq6d73zalbjqjby0w8ji5mim7inhn7vb9dw4hhy";
   };

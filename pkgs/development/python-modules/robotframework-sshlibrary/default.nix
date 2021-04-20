@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , robotframework
 , paramiko
 , scp
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "3.5.1";
   pname = "robotframework-sshlibrary";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "843af44722d1d4e39f616e5441d6f49e82202cd1a8cc9d16637a6475a8ecb023";
   };

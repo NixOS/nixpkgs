@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, i3ipc }:
+{ lib, buildPythonPackage, fetchFromPyPI, i3ipc }:
 
 buildPythonPackage rec {
   pname = "i3-balance-workspace";
   version = "1.8.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1gndzrwff8gfdqjjxv4zf2h2k0x7y97w1c3mrjpihz8xd0hbnk4d";
   };

@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   pname = "wllvm";
   name = "${pname}-${version}";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1d88fzg4ba4r3hwrinnv6agiyj3xxdy4yryb8wz2ml51nc6bi591";
   };

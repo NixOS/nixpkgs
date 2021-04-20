@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy38
 , beautifulsoup4
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pname = "pandas";
   version = "1.2.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "078b4nncn6778ymmqn80j2q6n7fcs4d6bbaraar5nypgbaw10vyz";
   };

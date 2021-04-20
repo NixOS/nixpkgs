@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , docutils, pygments, setuptools
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pyroma";
   version = "2.6.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2527423e3a24ccd56951f3ce1b0ebbcc4fa0518c82fca882e696c78726ab9c2f";
   };

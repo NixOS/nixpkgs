@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , mock
 , zope_testing
 , lib
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "zc.lockfile";
   version = "2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "307ad78227e48be260e64896ec8886edc7eae22d8ec53e4d528ab5537a83203b";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytest
 , FormEncode
 , PasteDeploy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "SQLObject";
   version = "3.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "620657105ab5720658222d10ad13c52281fe524137b59ab166eee4427ee2f548";
   };

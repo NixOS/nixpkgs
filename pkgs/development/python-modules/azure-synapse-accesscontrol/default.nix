@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , azure-common
 , azure-core
 , msrest
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "azure-synapse-accesscontrol";
   version = "0.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2f8f71561ca30ff3b04b172f5a64b231baeb02f4bce4bd6763df93a178c8b5d7";
     extension = "zip";

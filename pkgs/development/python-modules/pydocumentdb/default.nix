@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , six
 , requests
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "2.3.5";
   pname = "pydocumentdb";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1e6f072ae516fc061c9442f8ca470463b53dc626f0f6a86ff3a803293f4b50dd";
   };

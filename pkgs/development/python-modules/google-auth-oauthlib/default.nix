@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , click
 , mock
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "google-auth-oauthlib";
   version = "0.4.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-CYMsbnUDL5OBjt8a/+R0YSHWQMYlpb75tclq9nbpju4=";
   };

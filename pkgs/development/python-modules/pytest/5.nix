@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, buildPythonPackage, pythonOlder, fetchFromPyPI, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1n67lk8iwlsmfdm8663k8l7isllg1xd3n9p1yla7885szhdk6ybr";
   };

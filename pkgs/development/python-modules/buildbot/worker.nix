@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
+{ lib, buildPythonPackage, fetchFromPyPI, buildbot, setuptoolsTrial, mock, twisted,
   future, coreutils }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
   inherit (buildbot) version;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0n5p9x9gz276nv1m8vn3d74jfbd35gff332cjxxqvabk06iqcjp6";
   };

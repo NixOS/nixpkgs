@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.2";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit version;
     pname = "onlykey";
     sha256 = "1qkbgab5xlg7bd0jfzf8k5ppb1zhib76r050fiaqi5wibrqrfwdi";

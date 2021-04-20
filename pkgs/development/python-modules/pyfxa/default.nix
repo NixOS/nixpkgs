@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , requests, cryptography, pybrowserid, hawkauthlib, six
 , grequests, mock, responses, pytest, pyjwt }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "PyFxA";
   version = "0.7.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6c85cd08cf05f7138dee1cf2a8a1d68fd428b7b5ad488917c70a2a763d651cdb";
   };

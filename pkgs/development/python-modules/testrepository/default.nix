@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , testtools
 , testresources
 , pbr
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "testrepository";
   version = "0.0.20";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
   };

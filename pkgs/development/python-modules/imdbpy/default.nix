@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, lxml, sqlalchemy }:
+{ lib, buildPythonPackage, fetchFromPyPI, lxml, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "IMDbPY";
   version = "2020.9.25";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1p3j9j1jcgbw4626cvgpryhvczy9gzlg0laz6lflgq17m129gin2";
   };

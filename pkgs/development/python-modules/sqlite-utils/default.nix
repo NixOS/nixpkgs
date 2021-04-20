@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , click
 , click-default-group
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "3.6";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-WCqbz0tssy7i76Sg2PeexjDollypPGnOqqfUJOHAFWA=";
   };

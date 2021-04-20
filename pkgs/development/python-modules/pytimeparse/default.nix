@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, nose }:
+{ lib, fetchFromPyPI, buildPythonPackage, nose }:
 
 buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.8";
 
-    src = fetchPypi {
+    src = fetchFromPyPI {
       inherit pname version;
       sha256 = "e86136477be924d7e670646a98561957e8ca7308d44841e21f5ddea757556a0a";
     };

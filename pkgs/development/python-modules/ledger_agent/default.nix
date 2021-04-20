@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ledgerblue
 , setuptools
 , libagent
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "ledger_agent";
   version = "0.9.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "03zj602m2rln9yvr08dswy56vzkbldp8b074ixwzz525dafblr92";
   };

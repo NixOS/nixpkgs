@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, keystone }:
+{ lib, buildPythonPackage, fetchFromPyPI, keystone }:
 
 buildPythonPackage rec {
   pname = "keystone-engine";
   version = "0.9.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
    inherit pname version;
    sha256 = "1xahdr6bh3dw5swrc2r8kqa8ljhqlb7k2kxv5mrw5rhcmcnzcyig";
   };

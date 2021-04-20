@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
   version = "11.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "71414e3cd7445e44fc18f217f2d22df05c36877e1233328b2297d07ddf27e82a";

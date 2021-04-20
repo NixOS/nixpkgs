@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, ldapdomaindump, pycryptodomex, pyasn1, pyopenssl }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask, ldapdomaindump, pycryptodomex, pyasn1, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "impacket";
   version = "0.9.22";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4bf7e7b595356585599b4b2773b8a463d7b9765c97012dcd5a44eb6d547f6a1d";
   };

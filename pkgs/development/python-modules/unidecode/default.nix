@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromPyPI, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Unidecode";
   version = "1.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "a039f89014245e0cad8858976293e23501accc9ff5a7bdbc739a14a2b7b85cdc";
   };

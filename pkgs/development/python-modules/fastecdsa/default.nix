@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , gmp
 , pytestCheckHook
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "fastecdsa";
   version = "2.1.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d0772f7fe243e8a82d33e95c542ea6cc0ef7f3cfcced7440d6defa71a35addfa";
   };

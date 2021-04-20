@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, wrapQtAppsHook
+{ lib, buildPythonPackage, isPy27, fetchFromPyPI, wrapQtAppsHook
 , pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "tar.bz2";
     sha256 = "095p7mds6kqqrp7xqv24iygr3mw85rm7x41wb5y4yc3gi1pznldy";

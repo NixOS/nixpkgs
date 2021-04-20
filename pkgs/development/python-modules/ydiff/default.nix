@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pygments
+{ lib, buildPythonPackage, fetchFromPyPI, docutils, pygments
 , gitMinimal, mercurial, subversion, patchutils, less
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "ydiff";
   version = "1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f5430577ecd30974d766ee9b8333e06dc76a947b4aae36d39612a0787865a121";
   };

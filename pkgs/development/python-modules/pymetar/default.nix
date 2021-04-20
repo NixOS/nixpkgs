@@ -1,4 +1,4 @@
-{ lib, python, buildPythonPackage, isPy3k, fetchPypi }:
+{ lib, python, buildPythonPackage, isPy3k, fetchFromPyPI }:
 
 buildPythonPackage rec {
   pname = "pymetar";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0y42l7mmp7jn4pzg66x3k57c6hqpxc22mgzgaqqpblkx2kzh42n9";
   };

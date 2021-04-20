@@ -2,7 +2,7 @@
 , buildPythonPackage
 , marisa-trie
 , pythonOlder
-, fetchPypi
+, fetchFromPyPI
 , nose
 }:
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "2.1.0";
   disabled = pythonOlder "3.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "75bcaca8825e1a321965b136815dee53083c63314975e024ad0ccff8545e681f";
   };

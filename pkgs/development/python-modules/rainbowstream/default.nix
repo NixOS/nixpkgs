@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , pkgs
 , pillow
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "rainbowstream";
   version = "1.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "527d39778c55d88300fe2017913341bfa1b1f0ffdc1fe5eab57a82bf4cd2edb3";
   };

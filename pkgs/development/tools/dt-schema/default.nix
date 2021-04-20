@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , git
 , ruamel_yaml
 , jsonschema
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "dtschema";
   version = "2021.2.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "d9f88f069068dc5dc7e895785d7172d260cbbc34cab3b52704b20e89b80c6de8";
   };

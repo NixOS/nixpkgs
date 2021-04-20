@@ -4,7 +4,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
   version = "3.0.6";
 
-  src = python3.pkgs.fetchPypi {
+  src = python3.pkgs.fetchFromPyPI {
     inherit pname version;
     sha256 = "a9433d3df97135d9c02cec8dde4199444daf1b73ad161ded398d67b8e629fdc6";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromPyPI,
   django, pillow
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
   };
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f862949208d9066cd3d84ffcf9c2dbe9c7344ea6152b741e440f861eca46855c";
   };

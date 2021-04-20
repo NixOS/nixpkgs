@@ -1,10 +1,10 @@
-{ buildPythonPackage, lib, fetchPypi, requests }:
+{ buildPythonPackage, lib, fetchFromPyPI, requests }:
 
 buildPythonPackage rec {
   pname = "pyepsg";
   version = "0.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2d08fad1e7a8b47a90a4e43da485ba95705923425aefc4e2a3efa540dbd470d7";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , attrs
 , pendulum
 , pprintpp
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "tbm-utils";
   version = "2.6.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1v7pb3yirkhzbv1z5i1qp74vl880f56zvzfj68p08b5jxv64hmr3";
   };

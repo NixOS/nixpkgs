@@ -1,11 +1,11 @@
-{ lib, pillow, fetchPypi, buildPythonPackage, isPy27, pikepdf }:
+{ lib, pillow, fetchFromPyPI, buildPythonPackage, isPy27, pikepdf }:
 
 buildPythonPackage rec {
   pname = "img2pdf";
   version = "0.4.0";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "eaee690ab8403dd1a9cb4db10afee41dd3e6c7ed63bdace02a0121f9feadb0c9";
   };

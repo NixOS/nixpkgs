@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, six, cmigemo, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cmigemo";
   version = "0.1.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09j68kvcskav2cqb7pj12caksmj4wh2lhjp0csq00xpn0wqal4vk";
   };

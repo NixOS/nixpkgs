@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , six
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "selectors34";
   version = "1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09f5066337f8a76fb5233f267873f89a27a17c10bf79575954894bb71686451c";
   };

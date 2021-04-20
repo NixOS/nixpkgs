@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , stringcase
 , typing-inspect
 , marshmallow-enum
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "dataclasses-json";
   version = "0.5.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "56ec931959ede74b5dedf65cf20772e6a79764d20c404794cce0111c88c085ff";
   };

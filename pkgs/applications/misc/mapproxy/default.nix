@@ -7,7 +7,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "MapProxy";
   version = "1.13.0";
-  src = fetchPypi {
+  src = fetchFromPyPI {
   inherit pname version;
   sha256 = "0qi63ap8yi5g2cas33jv4jsmdrl6yv3qp6bh0zxrfpkb704lcng4";
   };

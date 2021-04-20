@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "exrex";
   version = "0.10.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1wq8nyycdprxl9q9y1pfhkbca4rvysj45h1xn7waybl3v67v3f1z";
   };

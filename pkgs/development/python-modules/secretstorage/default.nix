@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, cryptography, jeepney }:
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder, cryptography, jeepney }:
 
 buildPythonPackage rec {
   pname = "secretstorage";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "SecretStorage";
     inherit version;
     sha256 = "15ginv4gzxrx77n7517xnvf2jcpqc6ran12s951hc85zlr8nqrpx";

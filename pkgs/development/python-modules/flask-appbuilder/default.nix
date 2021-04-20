@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , apispec
 , colorama
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pname = "flask-appbuilder";
   version = "3.1.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Flask-AppBuilder";
     inherit version;
     sha256 = "076b020b0ba125339a2e710e74eab52648cde2b18599f7cb0fa1eada9bbb648c";

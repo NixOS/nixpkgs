@@ -1,7 +1,7 @@
 { lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromPyPI,
   libspatialindex,
   numpy,
   pytestCheckHook
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "Rtree";
   version = "0.9.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "be8772ca34699a9ad3fb4cfe2cfb6629854e453c10b3328039301bbfc128ca3e";
   };

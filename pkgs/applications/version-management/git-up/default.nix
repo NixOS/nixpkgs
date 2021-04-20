@@ -4,7 +4,7 @@ pythonPackages.buildPythonApplication rec {
   pname = "git-up";
   version = "1.6.1";
 
-  src = pythonPackages.fetchPypi {
+  src = pythonPackages.fetchFromPyPI {
     inherit pname version;
     sha256 = "0gs791yb0cndg9879vayvcj329jwhzpk6wrf9ri12l5hg8g490za";
   };

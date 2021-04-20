@@ -1,11 +1,11 @@
-{ lib, fetchPypi, openssl, buildPythonPackage
+{ lib, fetchFromPyPI, openssl, buildPythonPackage
 , pytest, dnspython, pynacl, authres, python }:
 
 buildPythonPackage rec {
   pname = "dkimpy";
   version = "1.0.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9a2420bf09af686736773153fca32a02ae11ecbe24b540c26104628959f91121";
 };

@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "html2text";
   version = "2018.1.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "627514fb30e7566b37be6900df26c2c78a030cc9e6211bda604d8181233bcdd4";
   };

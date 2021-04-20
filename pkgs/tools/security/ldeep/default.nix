@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromPyPI
 , commandparse
 , dnspython
 , ldap3
@@ -12,7 +12,7 @@ buildPythonApplication rec {
   pname = "ldeep";
   version = "1.0.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-/7mcmAj69NmuiK+xlQijAk39sMLDX8kHatmSI6XYbwE=";
   };

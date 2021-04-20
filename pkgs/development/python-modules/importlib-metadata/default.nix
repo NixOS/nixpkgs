@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , zipp
 , pathlib2
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "importlib_metadata";
     inherit version;
     sha256 = "10vz0ydrzspdhdbxrzwr9vhs693hzh4ff71lnqsifvdzvf66bfwh";

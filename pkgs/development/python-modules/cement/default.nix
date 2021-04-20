@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cement";
   version = "3.0.4";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "10a8459dc9fc31d6c038ede24a9081c5c3bd5fcd75b071e01baf281f81c9eace";
   };

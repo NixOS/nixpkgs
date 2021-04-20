@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytestrunner
 , setuptools
 , coverage, pytest
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "diceware";
   version = "0.9.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0klb0ysybzlh2wihvir82hgq62v0jjmlcqklwajyms7c0p529yby";
   };

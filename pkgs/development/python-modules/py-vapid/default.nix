@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , flake8, mock, nose, pytest
 , cryptography
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "py-vapid";
   version = "1.7.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f05cecaa9fc009515086d04b6117324f30eedf1a196f67fb1ec360a9dbdad4ee";
   };

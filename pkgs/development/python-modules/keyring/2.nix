@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI
 , dbus-python, setuptools_scm, entrypoints, secretstorage
 , pytest, pytest-flake8 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "keyring";
   version = "18.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0f58jq58jhfzlhix7x2zz7c4ycdvcs1z3sgs4lkr4xxx680wrmk7";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, nose }:
+{ lib, buildPythonPackage, isPy3k, fetchFromPyPI, nose }:
 
 buildPythonPackage rec {
   pname = "metaphone";
   version = "0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Metaphone";
     inherit version;
     sha256 = "09ysaczwh2rlsqq9j5fz7m4pq2fs0axp5vvivrpfrdvclvffl2xd";

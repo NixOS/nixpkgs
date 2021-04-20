@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, python, python-dateutil, requests
+{ buildPythonPackage, fetchFromPyPI, lib, python, python-dateutil, requests
 , six, sseclient-py }:
 
 buildPythonPackage rec {
   pname = "python-nest";
   version = "4.1.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "12iyypbl92ybh8w1bf4z0c2g0sb9id2c07c89vzvnlxgjylw3wbi";
   };

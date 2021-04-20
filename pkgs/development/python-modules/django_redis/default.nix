@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage,
+{ lib, fetchFromPyPI, buildPythonPackage,
   mock, django, redis, msgpack }:
 buildPythonPackage rec {
   pname = "django-redis";
   version = "4.12.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "306589c7021e6468b2656edc89f62b8ba67e8d5a1c8877e2688042263daa7a63";
   };

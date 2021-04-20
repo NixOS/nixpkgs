@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , boto
 , boto3
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "4.1.2";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "4bbb6233364fc1173cc0af6b7a56ed76fce32509514f1978a995a5835f3177f1";
   };

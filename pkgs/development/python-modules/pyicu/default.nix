@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , six
 , icu
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "PyICU";
   version = "2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0wb3v421i2fnnxdywam4ay8hqvnxlz0r2nrpx5lqy3rn6dlbz9d9";
   };

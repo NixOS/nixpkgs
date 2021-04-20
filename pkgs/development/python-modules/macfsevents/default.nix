@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, CoreFoundation, CoreServices }:
+{ lib, buildPythonPackage, fetchFromPyPI, CoreFoundation, CoreServices }:
 
 buildPythonPackage rec {
   pname = "MacFSEvents";
   version = "0.8.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1324b66b356051de662ba87d84f73ada062acd42b047ed1246e60a449f833e10";
   };

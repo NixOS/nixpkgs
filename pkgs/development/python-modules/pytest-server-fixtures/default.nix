@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromPyPI
 , pytest, pytest-shutil, pytest-fixture-config, psutil
 , requests, future, retry }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "pytest-server-fixtures";
   version = "1.7.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "07vdv3y89qzv89ws0y48h92yplqsx208b9cizx80w644dazb398g";
   };

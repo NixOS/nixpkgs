@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, click, google-auth, six }:
+{ lib, buildPythonPackage, fetchFromPyPI, click, google-auth, six }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ojvnzCO8yxrm3rt0pH3FtRhYtjIvzwNMqS/npKy4lvM=";
   };

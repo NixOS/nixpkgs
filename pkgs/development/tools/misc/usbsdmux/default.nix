@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
   version = "0.2.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ydDUSqBTY62iOtWdgrFh2qrO9LMi+OCYIw5reh6uoIA=";
   };

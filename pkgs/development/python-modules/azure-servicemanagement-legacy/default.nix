@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-common
 , requests
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.20.7";
   pname = "azure-servicemanagement-legacy";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit version pname;
     extension = "zip";
     sha256 = "1kcibw17qm8c02y28xabm3k1zrawi6g4q8kzc751l5l3vagqnf2x";

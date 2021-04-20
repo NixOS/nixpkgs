@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , substituteAll
 , pyparsing
 , graphviz
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "dot2tex";
   version = "2.11.3";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1kp77wiv7b5qib82i3y3sn9r49rym43aaqm5aw1bwnzfbbq2m6i9";
   };

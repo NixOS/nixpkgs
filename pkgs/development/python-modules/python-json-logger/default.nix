@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , nose
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "python-json-logger";
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f26eea7898db40609563bed0a7ca11af12e2a79858632706d835a0f961b7d398";
   };

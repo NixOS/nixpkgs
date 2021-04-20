@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, setuptools }:
+{ lib, fetchFromPyPI, buildPythonPackage, setuptools }:
 
 buildPythonPackage rec {
   pname = "iso-639";
   version = "0.4.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "dc9cd4b880b898d774c47fe9775167404af8a85dd889d58f9008035109acce49";
   };

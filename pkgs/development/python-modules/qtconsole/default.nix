@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , isPy27
 , mock
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "qtconsole";
   version = "5.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "404994edfe33c201d6bd0c4bd501b00c16125071573c938533224992bea0b30f";
   };

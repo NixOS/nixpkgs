@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, hypothesis, isPy3k }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
   version = "1.2.7";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "94aa84fa42393f773c8215fab679bd3b72bbdb9f7931643d3672184cde9981d9";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
   # Python Inputs
 , ipyvue
 }:
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "1.5.1";
 
   # GitHub version tries to run npm (Node JS)
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "593f5d6761e304cbb78bca967030485d8835e8d310ef7d83ac1b0e6a13e4911c";
   };

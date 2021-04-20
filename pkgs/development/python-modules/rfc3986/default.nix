@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromPyPI, idna, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rfc3986";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17dvx15m3r49bmif5zlli8kzjd6bys6psixzbp14sd5367d9h8qi";
   };

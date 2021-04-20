@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 
 # Test dependencies
 , pytest, pytest-mock
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "RestrictedPython";
   version = "5.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "9ae16e500782b41bd1abefd8554ccb26330817bba9ce090d385aa226f1ca83e8";
   };

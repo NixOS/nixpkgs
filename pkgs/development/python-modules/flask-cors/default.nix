@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromPyPI, buildPythonPackage
 , nose, flask, six, packaging }:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";
   version = "3.0.10";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de";
   };

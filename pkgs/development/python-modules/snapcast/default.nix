@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , construct
-, fetchPypi
+, fetchFromPyPI
 , isPy3k
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "2.1.2";
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-ILBleqxEO7wTxAw/fvDW+4O4H4XWV5m5WWtaNeRBr4g=";
   };

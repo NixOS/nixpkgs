@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage , fetchPypi, pythonOlder
+{ lib, buildPythonPackage , fetchFromPyPI, pythonOlder
 , jupyter_core, pandas, ipywidgets, jupyter }:
 
 buildPythonPackage rec {
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "3.4.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f343ceb11add58d24cd320d69e410b111a56c98c9069ebb4ef89c608c4c1950d";
   };

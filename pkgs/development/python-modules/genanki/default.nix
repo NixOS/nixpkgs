@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromPyPI, isPy3k
 , cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
 }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "genanki";
   version = "0.10.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "ced1ddcaecc37289c65c26affb20027705e3821e692327e354e0d5b9b0fd8446";
   };

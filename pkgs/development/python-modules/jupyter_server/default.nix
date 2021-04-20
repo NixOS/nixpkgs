@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , pytestCheckHook
 , pytest-tornasync
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "1.4.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-sBJvI39nlTPuxGJEz8ZtYeOh+OwPrS1HNS+hnT51Tkc=";
   };

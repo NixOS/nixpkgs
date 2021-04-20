@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pythonOlder
 , pytestCheckHook
 , pytest-subtests
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2021.1";
   format = "pyproject";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-4ZxzUfiHUioaxznSEEHlkt3ebdG3ZP3vqPeys1UdPTg=";
   };

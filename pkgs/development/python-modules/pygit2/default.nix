@@ -1,10 +1,10 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
 
 buildPythonPackage rec {
   pname = "pygit2";
   version = "1.4.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cbeb38ab1df9b5d8896548a11e63aae8a064763ab5f1eabe4475e6b8a78ee1c8";
   };

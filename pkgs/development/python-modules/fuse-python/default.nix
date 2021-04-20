@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse }:
+{ lib, buildPythonPackage, fetchFromPyPI, pkg-config, fuse }:
 
 buildPythonPackage rec {
   pname = "fuse-python";
   version = "1.0.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "da42d4f596a2e91602bcdf46cc51747df31c074a3ceb78bccc253c483a8a75fb";
   };

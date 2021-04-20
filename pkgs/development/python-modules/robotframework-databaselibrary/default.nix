@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , robotframework
 }:
 
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "1.2.4";
   pname = "robotframework-databaselibrary";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "627d872b3dda6a308a650ac9e676dadedf9c294e4ef70ad207cbb86b78eb8847";
   };

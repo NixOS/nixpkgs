@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
+{ lib, buildPythonPackage, fetchFromPyPI, fetchpatch, pytest }:
 
 buildPythonPackage rec {
   version = "0.5.1";
   pname = "pytest-dependency";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c2a892906192663f85030a6ab91304e508e546cddfe557d692d61ec57a1d946b";
   };

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , isPy3k
 , jaraco_functools
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0r98qqdp9ww5r5ma6wf1n66r9813rrmfvc54z7yij39jkj5c528h";
   };

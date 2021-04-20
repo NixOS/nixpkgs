@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , internetarchive
-, fetchPypi
+, fetchFromPyPI
 , youtube-dl
 , docopt
 , isPy27
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c1869363eddb85f39c05971d159bb2bf8cafa596acff3b9117635ebebfd1d342";
   };

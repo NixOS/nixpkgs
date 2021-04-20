@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 , click
 , requests
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-mystrom";
   version = "2.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "050dkx29wrmdd8z7pmyk36k2ihpapqi4qmyb70bm6xl5l4jh4k7j";
   };

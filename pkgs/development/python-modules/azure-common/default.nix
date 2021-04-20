@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , azure-nspkg
 , isPyPy
 , setuptools
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "azure-common";
   disabled = isPyPy;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "b2866238aea5d7492cfb0282fc8b8d5f6d06fb433872345864d45753c10b6e4f";

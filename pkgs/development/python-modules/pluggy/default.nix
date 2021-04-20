@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromPyPI
 , setuptools_scm
 , importlib-metadata
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pluggy";
   version = "0.13.1";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0";
   };

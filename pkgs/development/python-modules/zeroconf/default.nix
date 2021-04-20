@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , ifaddr
 , pythonOlder
 , pytestCheckHook
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.29.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-eu+7ZYtFKx/X5REkNk+TjG9eQtbqiT+iVXvqjAbFQK8=";
   };

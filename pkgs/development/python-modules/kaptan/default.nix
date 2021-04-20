@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pyyaml
 , pytest
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "kaptan";
   version = "0.5.12";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1abd1f56731422fce5af1acc28801677a51e56f5d3c3e8636db761ed143c3dd2";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , nose
 , ipython
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "ipdbplugin";
   version = "1.5.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "cdcd6bc1e995c3c2c4971ed95f207e680aa44980b716fa43fb675ff2dcc7894f";
   };

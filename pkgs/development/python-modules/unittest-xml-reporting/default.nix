@@ -1,4 +1,4 @@
-{lib, fetchPypi, buildPythonPackage, isPy27, six}:
+{lib, fetchFromPyPI, buildPythonPackage, isPy27, six}:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # The tarball from Pypi doesn't actually contain the unit tests
   doCheck = false;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "984cebba69e889401bfe3adb9088ca376b3a1f923f0590d005126c1bffd1a695";
   };

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPy27
 , setuptools_scm
 , setuptools
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "humanize";
   disabled = isPy27; # setup.py no longer compatible
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "09ph6fd1362xdn2hgwdgh30z0zqjp3bgvr1akyvm36b8jm400sdb";
   };

@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromPyPI, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pysha3";
   version = "1.0.2";
   disabled = pythonOlder "2.7";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "17kkjapv6sr906ib0r5wpldmzw7scza08kv241r98vffy9rqx67y";
   };

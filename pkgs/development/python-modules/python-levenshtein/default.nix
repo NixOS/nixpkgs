@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 }:
 
 buildPythonPackage rec {
   pname = "python-Levenshtein";
   version = "0.12.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "dc2395fbd148a1ab31090dd113c366695934b9e85fe5a4b2a032745efd0346f6";
   };

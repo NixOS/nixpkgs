@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , flask
 , python3-openid
 , isPy3k
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "1.2.5";
   disable = !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     pname = "Flask-OpenID";
     inherit version;
     sha256 = "5a8ffe1c8c0ad1cc1f5030e1223ea27f8861ee0215a2a58a528cc61379e5ccab";

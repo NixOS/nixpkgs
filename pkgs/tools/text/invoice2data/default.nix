@@ -4,7 +4,7 @@ python3Packages.buildPythonPackage rec {
   pname = "invoice2data";
   version = "0.2.93";
 
-  src = python3Packages.fetchPypi {
+  src = python3Packages.fetchFromPyPI {
     inherit pname version;
     sha256 = "1phz0a8jxg074k0im7shrrdfvdps7bn1fa4zwcf8q3sa2iig26l4";
   };

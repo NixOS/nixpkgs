@@ -1,7 +1,7 @@
 { lib
 , paho-mqtt
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , aiohttp
 }:
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pyeconet";
   version = "0.1.14";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-x0mkC2k65VrDhv7UavgDUuRWIQoAJMDtA7jNXNUJuVg=";
   };

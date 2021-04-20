@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , setuptools
 , nose
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "0.6.0";
   pname = "markerlib";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "2fdb3939441f5bf4f090b1979a34f84a11d33eed6c0e3995de88ae5c06b6e3ae";
   };

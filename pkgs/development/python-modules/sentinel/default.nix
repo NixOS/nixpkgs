@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi}:
+{ lib, buildPythonPackage, fetchFromPyPI}:
 
 buildPythonPackage rec {
   pname = "sentinel";
   version = "0.1.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c7aeee3f57c56a8e52771fc64230345deecd62c48debbbe1f1aca453439741d0";
   };

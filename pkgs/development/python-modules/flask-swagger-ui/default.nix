@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask }:
+{ lib, buildPythonPackage, fetchFromPyPI, flask }:
 
 buildPythonPackage rec {
   pname = "flask-swagger-ui";
   version = "3.36.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "f329752a65b2940ada8eeb57bce613f7c0a12856a9c31063bb9e33798554c9ed";
   };

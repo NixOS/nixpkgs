@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pytestCheckHook
 , google-api-core
 , libcst
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
   version = "2.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "sha256-zzssVnXA1xe3270yEOREJ9GdmyRPjV1F4EBelf9AQ/c=";
   };

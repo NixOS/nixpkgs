@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromPyPI
 , buildPythonPackage
 , python
 , llvm
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = isPyPy || !isPy3k;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "80e51d5aa02ad72da9870e89d21f9b152b0220ca551b4596a6c0614bcde336fc";
   };

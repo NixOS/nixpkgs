@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , factory_boy, faker, numpy
 , pytest, pytest_xdist
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "440cec143fd9b0adeb072006c71e0294402a2bc2ccd08079c2341087ba4cf2d1";
   };

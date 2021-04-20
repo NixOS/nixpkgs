@@ -1,10 +1,10 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage }:
+{ lib, fetchFromPyPI, fetchpatch, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "rocket-errbot";
   version = "1.2.5";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
   };

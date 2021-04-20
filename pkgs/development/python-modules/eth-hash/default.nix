@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto,
+{ lib, fetchFromPyPI, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto,
   pycryptodome }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
   version = "0.2.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "0xpiz0wrxxj11ki9yapvsibl25qnki90bl3d39nqascg14nw17a9";
   };

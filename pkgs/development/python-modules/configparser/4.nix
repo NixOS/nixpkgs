@@ -1,10 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, stdenv, buildPythonPackage, fetchFromPyPI, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "configparser";
   version = "4.0.2";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "c7d282687a5308319bf3d2e7706e575c635b0a470342641c93bea0ea3b5331df";
   };

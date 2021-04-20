@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , twitter-common-options
 , twitter-common-dirutil
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname   = "twitter.common.log";
   version = "0.3.11";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "7160a864eed30044705e05b816077dd193aec0c66f50ef1c077b7f8490e0d06a";
   };

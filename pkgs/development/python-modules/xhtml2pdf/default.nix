@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , pillow
 , html5lib
 , pypdf2
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     setuptools python-bidi arabic-reshaper
   ];
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "6797e974fac66f0efbe927c1539a2756ca4fe8777eaa5882bac132fc76b39421";
   };

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, python3Packages }:
+{ lib, fetchFromPyPI, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "nextinspace";
   version = "1.0.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1h3dksxyy5gq071fa7i2p73s50918y1bkk38hgfwr4226c3wipvg";
   };

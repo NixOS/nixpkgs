@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , python
 , isPy3k
 , msrest
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "azure-mgmt-devtestlabs";
   version = "9.0.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     extension = "zip";
     sha256 = "d8160d93fd3d947e5613c6919176b0edf72c94ac69679ea3b92cf27ff7398e64";

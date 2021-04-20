@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll
+{ stdenv, lib, buildPythonPackage, fetchFromPyPI, substituteAll
 , portmidi, pygame, python-rtmidi, rtmidi-python
 , pytest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "mido";
   version = "1.2.9";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1k3sgkxc7j49bapib3b5jnircb1yhyyd8mi0mbfd78zgix9db9y4";
   };

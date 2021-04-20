@@ -1,7 +1,7 @@
 { lib
 
 , buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , isPyPy
 , pyflakes
 , pep8
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   version = "4.3.1";
   pname = "Mezzanine";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "42c7909953cc5aea91921b47d804b61e14893bf48a2a476ce49a96559a0fa1d3";
   };

@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, imagemagick, feh, isPy3k }:
+{ lib, buildPythonPackage, fetchFromPyPI, imagemagick, feh, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pywal";
   version = "3.3.0";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "1drha9kshidw908k7h3gd9ws2bl64ms7bjcsa83pwb3hqa9bkspg";
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromPyPI, isPy27
 , requests, six
 , backports_unittest-mock, pytestCheckHook, pytestrunner }:
 
@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "sseclient";
   version = "0.0.27";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     sha256 = "b2fe534dcb33b1d3faad13d60c5a7c718e28f85987f2a034ecf5ec279918c11c";
   };

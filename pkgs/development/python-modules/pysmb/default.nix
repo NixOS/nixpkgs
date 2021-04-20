@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromPyPI
 , lib
 
 # pythonPackages
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "pysmb";
   version = "1.2.6";
 
-  src = fetchPypi {
+  src = fetchFromPyPI {
     inherit pname version;
     format = "setuptools";
     extension = "zip";
