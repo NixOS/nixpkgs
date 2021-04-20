@@ -186,7 +186,7 @@ let
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont (hd0)/EFI/boot/unicode.pf2; then
+    if loadfont /EFI/boot/unicode.pf2; then
       # Use graphical term, it can be either with background image or a theme.
       # input is "console", while output is "gfxterm".
       # This enables "serial" input and output only when possible.
@@ -207,11 +207,11 @@ let
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
-      set theme=(hd0)/EFI/boot/grub-theme/theme.txt
+      set theme=/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (hd0)/EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
     '' else ''
-      if background_image (hd0)/EFI/boot/efi-background.png; then
+      if background_image /EFI/boot/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
