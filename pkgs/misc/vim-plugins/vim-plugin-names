@@ -63,6 +63,7 @@ christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 chuling/ci_dark
 ckarnell/antonys-macro-repeater
+clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim

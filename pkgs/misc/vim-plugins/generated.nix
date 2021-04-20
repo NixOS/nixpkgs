@@ -6459,6 +6459,18 @@ let
     meta.homepage = "https://github.com/fisadev/vim-isort/";
   };
 
+  vim-jack-in = buildVimPluginFrom2Nix {
+    pname = "vim-jack-in";
+    version = "2021-03-27";
+    src = fetchFromGitHub {
+      owner = "clojure-vim";
+      repo = "vim-jack-in";
+      rev = "80c69cc021486d1cfa5dac7d9d6ab6954ff20c27";
+      sha256 = "11dw8kngzznzf91n6iyvw7yi1l35vgpva32dck3n25vpxc24krpn";
+    };
+    meta.homepage = "https://github.com/clojure-vim/vim-jack-in/";
+  };
+
   vim-janah = buildVimPluginFrom2Nix {
     pname = "vim-janah";
     version = "2018-10-01";
