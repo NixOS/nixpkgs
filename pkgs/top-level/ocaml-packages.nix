@@ -717,6 +717,8 @@ let
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
+    mirage-net-xen = callPackage ../development/ocaml-modules/mirage-net-xen { };
+
     mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
@@ -754,6 +756,8 @@ let
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
+
+    netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
