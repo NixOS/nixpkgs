@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchFromGitHub
-, requests
+, requests, tqdm
 , nose, vcrpy
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1d8yj9xz5qabcj57rpjzvg0jcscvzrpb0739mll29nijbsaimfr1";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests tqdm ];
 
   checkInputs = [ nose vcrpy ];
   checkPhase = "make test";
