@@ -8054,6 +8054,8 @@ in {
 
   sparse = callPackage ../development/python-modules/sparse { };
 
+  spdx-tools = callPackage ../development/python-modules/spdx-tools { };
+
   speaklater = callPackage ../development/python-modules/speaklater { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
