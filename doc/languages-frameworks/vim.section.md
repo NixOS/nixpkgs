@@ -145,7 +145,6 @@ in
   environment.systemPackages = [
     (
       pkgs.neovim.override {
-        vimAlias = true;
         configure = {
           packages.myPlugins = with pkgs.vimPlugins; {
           start = [
