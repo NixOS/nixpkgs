@@ -1593,6 +1593,18 @@ let
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
   };
 
+  gina-vim = buildVimPluginFrom2Nix {
+    pname = "gina-vim";
+    version = "2020-10-07";
+    src = fetchFromGitHub {
+      owner = "lambdalisue";
+      repo = "gina.vim";
+      rev = "97116f338f304802ce2661c2e7c0593e691736f8";
+      sha256 = "1j3sc6dpnwp4fipvv3vycqb77cb450nrk5abc4wpikmj6fgi5hk0";
+    };
+    meta.homepage = "https://github.com/lambdalisue/gina.vim/";
+  };
+
   git-blame-nvim = buildVimPluginFrom2Nix {
     pname = "git-blame-nvim";
     version = "2021-04-15";

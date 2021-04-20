@@ -287,6 +287,7 @@ kshenoy/vim-signature
 kyazdani42/nvim-tree.lua
 kyazdani42/nvim-web-devicons
 lambdalisue/fern.vim
+lambdalisue/gina.vim
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
