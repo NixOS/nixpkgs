@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
     env:
       GITHUB_SHA: ${{ github.sha }}
       GITHUB_REPOSITORY: ${{ github.repository }}
@@ -25,4 +26,4 @@ jobs:
           instead of going through a Pull Request.
 
           That's highly discouraged beyond the few exceptions listed
-          on https://github.com/NixOS/nixpkgs/issues/118661.
+          on https://github.com/NixOS/nixpkgs/issues/118661
