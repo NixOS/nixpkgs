@@ -9,7 +9,67 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
+
+  makeOverlayable = mkDerivationSimple: # TODO(@robert): turn mkDerivationSimple into let binding.
+    fnOrAttrs:
+      if builtins.isFunction fnOrAttrs
+      then makeDerivationExtensible mkDerivationSimple fnOrAttrs
+      else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
+
+  # Based off lib.makeExtensible, with modifications:
+  #  - lib.fix' -> lib.fix ∘ mkDerivationSimple; then inline fix
+  #  - convert `f` to an overlay
+  #  - inline overrideAttrs and make it positional instead of // to reduce allocs
+  makeDerivationExtensible = mkDerivationSimple: rattrs:
+    let
+      r = mkDerivationSimple
+        (f0:
+          let
+            f = self: super:
+              # Convert f0 to an overlay. Legacy is:
+              #   overrideAttrs (super: {})
+              # We want to introduce self. We follow the convention of overlays:
+              #   overrideAttrs (self: super: {})
+              # Which means the first parameter can be either self or super.
+              # This is surprising, but far better than the confusion that would
+              # arise from flipping an overlay's parameters in some cases.
+              let x = f0 super;
+              in
+                if builtins.isFunction x
+                then
+                  # Can't reuse `x`, because `self` comes first.
+                  # Looks inefficient, but `f0 super` was a cheap thunk.
+                  f0 self super
+                else x;
+          in
+            makeDerivationExtensible mkDerivationSimple
+              (self: let super = rattrs self; in super // f self super))
+        (rattrs r);
+    in r;
+
+  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  # but pre-evaluated for a slight improvement in performance.
+  makeDerivationExtensibleConst = mkDerivationSimple: attrs:
+    mkDerivationSimple (f0:
+      let
+        f = self: super:
+          let x = f0 super;
+          in
+            if builtins.isFunction x
+            then
+              # Can't reuse `x`, because `self` comes first.
+              # Looks inefficient, but `f0 super` was a cheap thunk.
+              f0 self super
+            else x;
+      in
+        makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
+      attrs;
+
 in
+
+# TODO(@roberth): inline makeOverlayable; reindenting whole rest of this file.
+makeOverlayable (overrideAttrs:
+
 
 # `mkDerivation` wraps the builtin `derivation` function to
 # produce derivations that use this stdenv and its shell.
@@ -70,6 +130,7 @@ in
 
 , # TODO(@Ericson2314): Make always true and remove
   strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
+
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -381,8 +442,6 @@ in
 lib.extendDerivation
   validity.handled
   ({
-     overrideAttrs = f: stdenv.mkDerivation (attrs // (f attrs));
-
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -408,10 +467,12 @@ lib.extendDerivation
        args = [ "-c" "export > $out" ];
      });
 
-     inherit meta passthru;
+     inherit meta passthru overrideAttrs;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
   (derivation derivationArg)
+
+)
