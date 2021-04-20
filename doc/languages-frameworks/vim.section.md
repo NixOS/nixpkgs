@@ -156,12 +156,6 @@ in
   environment.variables = { EDITOR = "vim"; };
 
   environment.systemPackages = [
-    pkgs.fzf
-    pkgs.git
-    pkgs.gitAndTools.gh
-    pkgs.nodejs
-    pkgs.nodePackages.serverless
-    pkgs.ripgrep
     (
       pkgs.neovim.override {
         vimAlias = true;
