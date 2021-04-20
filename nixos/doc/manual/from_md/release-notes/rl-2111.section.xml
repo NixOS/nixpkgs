@@ -357,6 +357,14 @@
           <link linkend="opt-services.multipath.enable">services.multipath</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.seafile.com/en/home/">seafile</link>,
+          an open source file syncing &amp; sharing software. Available
+          as
+          <link xlink:href="options.html#opt-services.seafile.enable">services.seafile</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

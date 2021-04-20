@@ -836,6 +836,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
+  ./services/networking/seafile.nix
   ./services/networking/searx.nix
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
