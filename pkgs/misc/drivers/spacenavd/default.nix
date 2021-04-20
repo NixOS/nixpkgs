@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     # Changes the pidfile path from /run/spnavd.pid to $XDG_RUNTIME_DIR/spnavd.pid
     # to allow for a user service
     ./configure-pidfile-path.patch
+    # Changes the config file path from /etc/spnavrc to $XDG_CONFIG_HOME/spnavrc or $HOME/.config/spnavrc
+    # to allow for a user service
+    ./configure-cfgfile-path.patch
   ];
 
   buildInputs = [ libX11 ]
