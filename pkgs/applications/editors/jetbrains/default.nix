@@ -28,10 +28,10 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optional (stdenv.isLinux) [
+      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
         autoPatchelfHook
       ];
-      buildInputs = (attrs.buildInputs or []) ++ optional (stdenv.isLinux) [
+      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
