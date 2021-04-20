@@ -6181,9 +6181,13 @@ in
   nodejs-slim-15_x = callPackage ../development/web/nodejs/v15.nix {
     enableNpm = false;
   };
+  nodejs-16_x = callPackage ../development/web/nodejs/v16.nix { };
+  nodejs-slim-16_x = callPackage ../development/web/nodejs/v16.nix {
+    enableNpm = false;
+  };
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs-15_x;
-  nodejs-slim_latest = nodejs-slim-15_x;
+  nodejs_latest = nodejs-16_x;
+  nodejs-slim_latest = nodejs-slim-16_x;
 
   nodePackages_latest = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
     nodejs = pkgs.nodejs_latest;
