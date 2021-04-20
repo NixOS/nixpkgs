@@ -8722,6 +8722,8 @@ in {
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
+  typecode = callPackage ../development/python-modules/typecode { };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
