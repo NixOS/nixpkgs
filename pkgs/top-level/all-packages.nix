@@ -3752,6 +3752,8 @@ in
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
+  dcs = callPackage ../tools/text/dcs { };
+
   dcfldd = callPackage ../tools/system/dcfldd { };
 
   debianutils = callPackage ../tools/misc/debianutils { };
