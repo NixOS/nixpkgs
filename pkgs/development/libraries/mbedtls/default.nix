@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     "-Wno-error=format"
     "-Wno-error=format-truncation"
   ];
