@@ -19,7 +19,41 @@ in rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    {
+    fnOrAttrs:
+      makeDerivationExtensible (
+        if builtins.isFunction fnOrAttrs
+        then fnOrAttrs
+        else _: fnOrAttrs
+        );
+
+  # Based off lib.makeExtensible, with modifications:
+  #  - lib.fix' -> lib.fix ∘ mkDerivation_; then inline fix
+  #  - convert `f` to an overlay
+  makeDerivationExtensible = rattrs:
+    let
+      r = mkDerivation_ (rattrs r // {
+        overrideAttrs = f0:
+          let
+            f = self: super:
+              # Convert f0 to an overlay. Legacy is:
+              #   overrideAttrs (super: {})
+              # We want to introduce self. We follow the convention of overlays:
+              #   overrideAttrs (self: super: {})
+              # Which means the first parameter can be either self or super.
+              # This is surprising, but far better than the confusion that would
+              # arise from flipping an overlay's parameters in some cases.
+              let x = f0 super;
+              in
+                if builtins.isFunction x
+                then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
+                else x;
+          in
+            makeDerivationExtensible (lib.extends f rattrs);
+      });
+    in r;
+
+  mkDerivation_ =
+    { overrideAttrs
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
@@ -28,7 +62,7 @@ in rec {
     # TODO(@Ericson2314): Stop using legacy dep attribute names
 
     #                           host offset -> target offset
-      depsBuildBuild              ? [] # -1 -> -1
+    , depsBuildBuild              ? [] # -1 -> -1
     , depsBuildBuildPropagated    ? [] # -1 -> -1
     , nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
     , propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
@@ -192,7 +226,7 @@ in rec {
 
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "pos"
+          ["meta" "passthru" "pos" "overrideAttrs"
            "checkInputs" "installCheckInputs"
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
@@ -371,8 +405,6 @@ in rec {
       lib.extendDerivation
         validity.handled
         ({
-           overrideAttrs = f: mkDerivation (attrs // (f attrs));
-
            # A derivation that always builds successfully and whose runtime
            # dependencies are the original derivations build time dependencies
            # This allows easy building and distributing of all derivations
@@ -398,7 +430,7 @@ in rec {
              args = [ "-c" "export > $out" ];
            });
 
-           inherit meta passthru;
+           inherit meta passthru overrideAttrs;
          } //
          # Pass through extra attributes that are not inputs, but
          # should be made available to Nix expressions using the
