@@ -136,8 +136,7 @@ let
       # "#!/usr/bin/env perl"
     ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' +
-    ''
+    '' + ''
       mkdir -p $bin
       mv $out/bin $bin/bin
 
