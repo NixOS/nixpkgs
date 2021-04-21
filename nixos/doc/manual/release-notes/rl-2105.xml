@@ -94,6 +94,12 @@
      been introduced.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <link xlink:href="https://nginx.org">Nginx</link> has been updated to stable version 1.20.0.
+      Now nginx uses the zlib-ng library by default.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
