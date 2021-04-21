@@ -2109,6 +2109,8 @@ in {
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
 
+  dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
+
   dtopt = callPackage ../development/python-modules/dtopt { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
@@ -8287,6 +8289,8 @@ in {
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
+
+  tailer = callPackage ../development/python-modules/tailer { };
 
   tarman = callPackage ../development/python-modules/tarman { };
 

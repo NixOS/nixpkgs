@@ -187,7 +187,7 @@
     "doorbird" = ps: with ps; [ aiohttp-cors ]; # missing inputs: doorbirdpy
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
-    "dsmr" = ps: with ps; [ ]; # missing inputs: dsmr_parser
+    "dsmr" = ps: with ps; [ dsmr-parser ];
     "dsmr_reader" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "dte_energy_bridge" = ps: with ps; [ ];
     "dublin_bus_transport" = ps: with ps; [ ];
