@@ -8066,6 +8066,8 @@ in {
 
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
 
+  sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
+
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
   spidev = callPackage ../development/python-modules/spidev { };
