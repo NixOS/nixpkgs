@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, PCSC }:
 
 buildGoModule rec {
   pname = "cosign";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zwb2q62ngb2zh1hasvq7r7pmrjlpgfhs5raibbhkxbk5kayvmii";
+    sha256 = "0hisjyn5z93w34gxvz1z0l74gmj8js5l3lbqhqz7pc0fra59lvx6";
   };
 
-  vendorSha256 = "0nwbjaps4z5fhiknbj9pybxb6kgwb1vf2qhy0mzpycprf04q6g0v";
+  buildInputs =
+    lib.optional stdenv.isLinux (lib.getDev pcsclite)
+    ++ lib.optionals stdenv.isDarwin [ PCSC ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  vendorSha256 = "15163v484rv08rn439y38r9spyqn3lf4q4ly8xr18nnf4bs3h6y2";
 
   subPackages = [ "cmd/cosign" ];
 
