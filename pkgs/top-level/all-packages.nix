@@ -12701,6 +12701,8 @@ in
 
   kustomize-sops = callPackage ../development/tools/kustomize/kustomize-sops.nix { };
 
+  controller-tools = callPackage ../development/tools/controller-tools { };
+
   ktlint = callPackage ../development/tools/ktlint { };
 
   kythe = callPackage ../development/tools/kythe { };
