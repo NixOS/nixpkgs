@@ -3245,6 +3245,8 @@ in {
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
+  hyperion-py = callPackage ../development/python-modules/hyperion-py { };
+
   hyperkitty = callPackage ../servers/mail/mailman/hyperkitty.nix { };
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
