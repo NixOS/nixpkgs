@@ -30921,6 +30921,8 @@ in
     inherit (darwin) libresolv;
   };
 
+  dnstwist = callPackage ../tools/networking/dnstwist {};
+
   dsniff = callPackage ../tools/networking/dsniff {};
 
   wal-g = callPackage ../tools/backup/wal-g { };
