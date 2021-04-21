@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hisjyn5z93w34gxvz1z0l74gmj8js5l3lbqhqz7pc0fra59lvx6";
+    sha256 = "1gfzard6bh78xxgjk14c9zmdplppkcjqxhvfazcbv8qppjl2pbbd";
   };
 
   buildInputs =
@@ -20,6 +20,8 @@ buildGoModule rec {
   vendorSha256 = "15163v484rv08rn439y38r9spyqn3lf4q4ly8xr18nnf4bs3h6y2";
 
   subPackages = [ "cmd/cosign" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/sigstore/cosign/cmd/cosign/cli.gitVersion=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";
