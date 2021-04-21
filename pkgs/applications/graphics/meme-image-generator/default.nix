@@ -1,23 +1,20 @@
 { lib
-, unstableGitUpdater
 , buildGoModule
 , fetchFromGitHub
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "meme-image-generator";
-  version = "unstable-2020-05-28";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nomad-software";
     repo = "meme";
-    rev = "33a8b7d0de6996294a0464a605dacc17b26a6b02";
-    sha256 = "05h8d6pjszhr49xqg02nw94hm95kb7w1i7nw8jxi582fxxm2qbnm";
+    rev = "v${version}";
+    sha256 = "089r0v5az2d2njn0s3d3wd0861pcs4slg6zl0rj4cm1k5cj8yd1k";
   };
 
   vendorSha256 = null;
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A command line utility for creating image macro style memes";
