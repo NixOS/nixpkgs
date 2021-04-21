@@ -2031,6 +2031,8 @@ in {
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
+  
+  dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
@@ -3084,6 +3086,8 @@ in {
   hypchat = callPackage ../development/python-modules/hypchat { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
+
+  hyperion-py = callPackage ../development/python-modules/hyperion-py { };
 
   hyperkitty = callPackage ../servers/mail/mailman/hyperkitty.nix { };
 
@@ -7711,6 +7715,8 @@ in {
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
+  tailer = callPackage ../development/python-modules/tailer { };
+
   tasklib = callPackage ../development/python-modules/tasklib { };
 
   taskw = callPackage ../development/python-modules/taskw { };
@@ -8130,6 +8136,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  unify = callPackage ../development/python-modules/unify { };
+
   unifiled = callPackage ../development/python-modules/unifiled { };
 
   units = callPackage ../development/python-modules/units { };
@@ -8147,6 +8155,8 @@ in {
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   untangle = callPackage ../development/python-modules/untangle { };
+
+  untokenize = callPackage ../development/python-modules/untokenize { };
 
   upass = callPackage ../development/python-modules/upass { };
 

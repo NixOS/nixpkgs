@@ -1744,6 +1744,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  binwalk = with python3Packages; toPythonApplication binwalk;
+
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
@@ -3455,6 +3457,8 @@ in
   u3-tool = callPackage ../tools/filesystems/u3-tool { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
+
+  unify = with python3Packages; toPythonApplication unify;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 

@@ -296,7 +296,7 @@ in {
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      # We also include "%t/ipfs.sock" because tere is no way to put the "%t"
+      # We also include "%t/ipfs.sock" because there is no way to put the "%t"
       # in the multiaddr.
       socketConfig.ListenStream = let
           fromCfg = multiaddrToListenStream cfg.apiAddress;
