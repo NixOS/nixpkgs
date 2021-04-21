@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight and modular continuous integration service";
     homepage = "https://laminar.ohwg.net";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kaction maralorn ];
   };
