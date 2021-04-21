@@ -1666,6 +1666,10 @@ in
 
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
 
+  badtouch = callPackage ../tools/security/badtouch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   bandwhich = callPackage ../tools/networking/bandwhich {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
