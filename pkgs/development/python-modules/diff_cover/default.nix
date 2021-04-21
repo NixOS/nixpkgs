@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
+, chardet
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "e80f7a4979b7a9d373903776588279ed2898f17729e608255c4119462c822edb";
   };
 
-  propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
+  propagatedBuildInputs = [ chardet jinja2 jinja2_pluralize pygments six inflect ];
 
   checkInputs = [ mock coverage pytest nose pylint pyflakes pycodestyle ];
 
