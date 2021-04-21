@@ -1,17 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "git-chglog";
-  version = "0.9.1";
-
-  goPackagePath = "github.com/git-chglog/git-chglog";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "git-chglog";
     repo = "git-chglog";
-    rev = version;
-    sha256 = "08x7w1jlvxxvwnz6pvkjmfd3nqayd8n15r9jbqi2amrp31z0gq0p";
+    rev = "v${version}";
+    sha256 = "124bqywkj37gv61fswgrg528bf3rjqms1664x22lkn0sqh22zyv1";
   };
+
+  vendorSha256 = "09zjypmcc3ra7sw81q1pbbrlpxxp4k00p1cfkrrih8wvb25z89h5";
+
+  buildPhase = ''
+    VERSION=${version} make build
+  '';
+
+  installPhase = ''
+    install -Dm0755 git-chglog $out/bin/git-chglog
+    ./git-chglog --version
+  '';
 
   meta = with lib; {
     description = "CHANGELOG generator implemented in Go (Golang)";
