@@ -2,7 +2,7 @@
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
 , libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
