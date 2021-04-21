@@ -1,5 +1,4 @@
 { stdenv, symlinkJoin, lib, makeWrapper
-, vimUtils
 , writeText
 , bundlerEnv, ruby
 , nodejs

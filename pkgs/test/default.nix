@@ -41,6 +41,8 @@ with pkgs;
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
 
+  vim = callPackage ./vim {};
+
   nixos-functions = callPackage ./nixos-functions {};
 
   patch-shebangs = callPackage ./patch-shebangs {};
