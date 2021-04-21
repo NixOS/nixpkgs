@@ -125,13 +125,21 @@ self: super: {
     '';
   });
 
-  completion-tabnine = super.completion-tabnine.overrideAttrs (old: {
-    buildInputs = [ tabnine ];
+  completion-buffers = super.completion-buffers.overrideAttrs (old: {
+    dependencies = with self; [ completion-nvim ];
+  });
 
+  completion-tabnine = super.completion-tabnine.overrideAttrs (old: {
+    dependencies = with self; [ completion-nvim ];
+    buildInputs = [ tabnine ];
     postFixup = ''
       mkdir $target/binaries
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
+  });
+
+  completion-treesitter = super.completion-treesitter.overrideAttrs (old: {
+    dependencies = with self; [ completion-nvim nvim-treesitter ];
   });
 
   cpsm = super.cpsm.overrideAttrs (old: {
@@ -256,6 +264,10 @@ self: super: {
 
   ghcid = super.ghcid.overrideAttrs (old: {
     configurePhase = "cd plugins/nvim";
+  });
+
+  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
@@ -415,10 +427,15 @@ self: super: {
     });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
-    dependencies = with self; [ sql-nvim ];
+    dependencies = with self; [ sql-nvim telescope-nvim ];
+  });
+
+  telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
   });
 
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
     preFixup =
       let
         fzy-lua-native-path = "deps/fzy-lua-native";
@@ -440,6 +457,18 @@ self: super: {
         ln -s ${fzy-lua-native}/lua $target/${fzy-lua-native-path}/lua
       '';
     meta.platforms = lib.platforms.all;
+  });
+
+  telescope-nvim = super.telescope-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim popup-nvim ];
+  });
+
+  telescope-symbols-nvim = super.telescope-symbols-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+  });
+
+  telescope-z-nvim = super.telescope-z-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
   });
 
   unicode-vim =
