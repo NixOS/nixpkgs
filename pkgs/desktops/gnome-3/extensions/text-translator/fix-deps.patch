@@ -1,0 +1,58 @@
+diff --git a/extension.js b/extension.js
+index 421a2aa..6b84ef9 100644
+--- a/extension.js
++++ b/extension.js
+@@ -6,6 +6,7 @@
+             GIRepository.Repository.prepend_search_path("/usr/lib/" + path);
+         }
+     );
++    GIRepository.Repository.prepend_search_path('@clutter@');
+ })();
+ 
+ const St = imports.gi.St;
+diff --git a/google_tts.js b/google_tts.js
+index 469e29d..0daaa1b 100644
+--- a/google_tts.js
++++ b/google_tts.js
+@@ -8,6 +8,8 @@ var GoogleTTS = class GoogleTTS {
+     constructor() {
+         Gst.init(null);
+ 
++        Gst.Registry.get().scan_path('@gstBase@');
++
+         this._player = Gst.ElementFactory.make("playbin", "player");
+         this._bus = this._player.get_bus();
+         this._bus.add_signal_watch();
+diff --git a/translation_provider_base.js b/translation_provider_base.js
+index cbb5c96..405bccc 100644
+--- a/translation_provider_base.js
++++ b/translation_provider_base.js
+@@ -259,7 +259,7 @@ var TranslationProviderBase = class TranslationProviderBase {
+ 
+     translate(source_lang, target_lang, text, callback) {
+         let command = [
+-            "trans",
++            "@trans@",
+             "-e",
+             this.engine,
+             "--show-original",
+diff --git a/utils.js b/utils.js
+index 1c3d179..22ea56d 100644
+--- a/utils.js
++++ b/utils.js
+@@ -7,7 +7,6 @@ const Gio = imports.gi.Gio;
+ const GLib = imports.gi.GLib;
+ const ExtensionUtils = imports.misc.extensionUtils;
+ const Soup = imports.gi.Soup;
+-const Clutter = imports.gi.Clutter;
+ 
+ var _httpSession = new Soup.SessionAsync();
+ Soup.Session.prototype.add_feature.call(
+@@ -127,6 +126,7 @@ function get_files_in_dir(path) {
+ }
+ 
+ function get_unichar(keyval) {
++    const Clutter = imports.gi.Clutter;
+     let ch = Clutter.keysym_to_unicode(keyval);
+ 
+     if (ch) {
