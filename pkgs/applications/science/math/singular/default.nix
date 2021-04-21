@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
 , lib
 , fetchpatch
-, autoreconfHook269
+, autoreconfHook
 , sharutils
 , file
 , flint
@@ -48,7 +48,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = lib.optionals enableDocs [
+  patches = [
+    # add aarch64 support to cpu-check.m4. copied from redhat.
+    ./redhat-aarch64.patch
+  ] ++ lib.optionals enableDocs [
     # singular supports building without 4ti2, bertini, normaliz or
     # topcom just fine, but the docbuilding does not skip manual pages
     # tagged as depending on those binaries (probably a bug in
@@ -96,7 +99,7 @@ stdenv.mkDerivation rec {
     bison
     perl
     pkg-config
-    autoreconfHook269
+    autoreconfHook
     sharutils # needed for regress.cmd install checks
   ] ++ lib.optionals enableDocs [
     doxygen
