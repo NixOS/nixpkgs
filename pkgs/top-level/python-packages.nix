@@ -8284,6 +8284,8 @@ in {
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
+  tailer = callPackage ../development/python-modules/tailer { };
+
   tarman = callPackage ../development/python-modules/tarman { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
