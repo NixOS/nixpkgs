@@ -8751,6 +8751,8 @@ in {
 
   untangle = callPackage ../development/python-modules/untangle { };
 
+  untokenize = callPackage ../development/python-modules/untokenize { };
+
   upass = callPackage ../development/python-modules/upass { };
 
   update_checker = callPackage ../development/python-modules/update_checker { };
