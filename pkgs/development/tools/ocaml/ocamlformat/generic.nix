@@ -21,11 +21,10 @@ let src =
       "0.15.1" = "1x6fha495sgk4z05g0p0q3zfqm5l6xzmf6vjm9g9g7c820ym2q9a";
       "0.16.0" = "1vwjvvwha0ljc014v8jp8snki5zsqxlwd7x0dl0rg2i9kcmwc4mr";
       "0.17.0" = "0f1lxp697yq61z8gqxjjaqd2ns8fd1vjfggn55x0gh9dx098p138";
+      "0.18.0" = "0571kzmb1h03qj74090n3mg8wfbh29qqrkdjkai6rnl5chll86lq";
     }."${version}";
-  }
-; in
-
-let ocamlPackages =
+  };
+  ocamlPackages =
   if lib.versionAtLeast version "0.14.3"
   then ocaml-ng.ocamlPackages
   else ocaml-ng.ocamlPackages_4_07
@@ -33,7 +32,7 @@ let ocamlPackages =
 
 with ocamlPackages;
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
@@ -45,7 +44,24 @@ buildDunePackage rec {
   useDune2 = true;
 
   buildInputs =
-    if lib.versionAtLeast version "0.17.0"
+    if lib.versionAtLeast version "0.18.0"
+    then [
+      base
+      cmdliner
+      fpath
+      odoc
+      re
+      stdio
+      uuseg
+      uutf
+      fix
+      menhir
+      dune-build-info
+      ocaml-version
+      # Changed since 0.16.0:
+      (ppxlib.override { version = "0.22.0"; })
+    ]
+    else if lib.versionAtLeast version "0.17.0"
     then [
       base
       cmdliner
