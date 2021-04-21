@@ -27,20 +27,6 @@
 , unicorn
 }:
 
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-  });
-in
-
 buildPythonPackage rec {
   pname = "angr";
   version = "9.0.6281";
@@ -76,7 +62,7 @@ buildPythonPackage rec {
     sqlalchemy
     rpyc
     sortedcontainers
-    unicorn'
+    unicorn
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
@@ -89,5 +75,6 @@ buildPythonPackage rec {
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
+    broken = true; # https://github.com/angr/angr/issues/2541
   };
 }
