@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls }:
+{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls, Security }:
 
 let
   ocamlDependencies = version:
@@ -31,7 +31,8 @@ let
       inherit version;
 
       buildInputs = [ zlib pcre neko ]
-        ++ lib.optional (lib.versionAtLeast version "4.1") [ mbedtls ]
+        ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls
+        ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
         ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
