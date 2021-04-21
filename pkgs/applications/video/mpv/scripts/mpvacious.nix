@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, curl, xclip }:
+{ lib, stdenvNoCC, fetchFromGitHub, curl, xclip }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mpvacious";
   version = "0.14";
 

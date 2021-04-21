@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, lib
+{ stdenvNoCC, fetchgit, lib
 , yad, mkvtoolnix-cli, libnotify }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "mpv-convert-script";
   version = "2016-03-18";
   src = fetchgit {
@@ -30,14 +30,17 @@ stdenv.mkDerivation {
   '';
   passthru.scriptName = "convert_script.lua";
 
-  meta = {
+  meta = with lib; {
     description = "Convert parts of a video while you are watching it in mpv";
     homepage = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ maintainers.Profpatsch ];
     longDescription = ''
       When this script is loaded into mpv, you can hit Alt+W to mark the beginning
       and Alt+W again to mark the end of the clip. Then a settings window opens.
     '';
+    license = licenses.unfree;
+    # script crashes mpv. See https://github.com/NixOS/nixpkgs/issues/113202
+    broken = true;
   };
 }
 
