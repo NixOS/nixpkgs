@@ -23471,6 +23471,8 @@ in
 
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
+  hachoir = with python3Packages; toPythonApplication hachoir;
+
   hackrf = callPackage ../applications/radio/hackrf { };
 
   hacksaw = callPackage ../tools/misc/hacksaw {};
