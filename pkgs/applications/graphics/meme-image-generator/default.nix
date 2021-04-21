@@ -5,7 +5,7 @@
 }:
 
 buildGoModule {
-  pname = "meme";
+  pname = "meme-image-generator";
   version = "unstable-2020-05-28";
 
   src = fetchFromGitHub {
