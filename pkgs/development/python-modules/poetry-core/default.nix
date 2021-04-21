@@ -23,6 +23,13 @@ buildPythonPackage rec {
     sha256 = "07x0zagf9cfr7g3132jjd5byywkbnzpfbxjfjzpzpj70fqw70qrc";
   };
 
+  postPatch = lib.optionalString (pythonOlder "3.8") ''
+    # remove >1.0.3
+    substituteInPlace pyproject.toml \
+      --replace 'importlib-metadata = {version = "^1.7.0", python = "~2.7 || >=3.5, <3.8"}' \
+        'importlib-metadata = {version = ">=1.7.0", python = "~2.7 || >=3.5, <3.8"}'
+  '';
+
   nativeBuildInputs = [
     intreehooks
   ];
