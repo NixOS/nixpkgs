@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-apiclient-python";
     description = "Python API client for Jellyfin";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ jojosch ];
   };
 }
