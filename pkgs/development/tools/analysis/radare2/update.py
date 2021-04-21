@@ -55,24 +55,12 @@ def git(dirname: str, *args: str) -> str:
 def get_repo_info(dirname: str, rev: str) -> Dict[str, str]:
     sha256 = prefetch_github("radare", "radare2", rev)
 
-    cs_ver = None
-    with open(Path(dirname).joinpath("shlr", "Makefile")) as makefile:
-        for l in makefile:
-            match = re.match("CS_VER=(\S+)", l)
-            if match:
-                cs_ver = match.group(1)
-    assert cs_ver is not None
-
-    cs_sha256 = prefetch_github("aquynh", "capstone", cs_ver)
-
     return dict(
         rev=rev,
         sha256=sha256,
         version_commit=git(dirname, "rev-list", "--all", "--count"),
         gittap=git(dirname, "describe", "--tags", "--match", "[0-9]*"),
         gittip=git(dirname, "rev-parse", "HEAD"),
-        cs_ver=cs_ver,
-        cs_sha256=cs_sha256,
     )
 
 
@@ -107,8 +95,6 @@ def main() -> None:
   rev = "{info["rev"]}";
   version = "{version}";
   sha256 = "{info["sha256"]}";
-  cs_ver = "{info["cs_ver"]}";
-  cs_sha256 = "{info["cs_sha256"]}";
   #</generated>"""
                     )
                 elif "#</generated>" in l:
