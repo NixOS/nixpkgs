@@ -6493,7 +6493,9 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
-  manix = callPackage ../tools/nix/manix {};
+  manix = callPackage ../tools/nix/manix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   marktext = callPackage ../applications/misc/marktext { };
 
