@@ -373,7 +373,7 @@
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ hydrawiser ];
-    "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
+    "hyperion" = ps: with ps; [ hyperion-py ];
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ iaqualink ];
     "icloud" = ps: with ps; [ pyicloud ];
