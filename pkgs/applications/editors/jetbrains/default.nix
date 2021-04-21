@@ -321,12 +321,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.1"; /* updated by script */
+    version = "2021.1.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "052m7mqa1s548my0gda9y2mysi2ijq27c9b3bskrwqsf1pm5ry63"; /* updated by script */
+      sha256 = "1dl5151a15g4mwyrbnxds42zk577hyyl12x5qgcxkhp01iwjq0ic"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
