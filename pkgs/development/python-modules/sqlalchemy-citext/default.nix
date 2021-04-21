@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, psycopg2
 , sqlalchemy
 , python
 }:
@@ -16,6 +17,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     sqlalchemy
+
+    # not listed in `install_requires`, but is imported in citext/__init__.py
+    psycopg2
   ];
 
   # tests are not packaged in pypi tarball
