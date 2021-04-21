@@ -12766,6 +12766,8 @@ in
 
   eresi = callPackage ../development/tools/analysis/eresi { };
 
+  esbuild = callPackage ../development/web/esbuild { };
+
   evmdis = callPackage ../development/tools/analysis/evmdis { };
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
