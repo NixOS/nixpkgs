@@ -9771,6 +9771,8 @@ in
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
+  zellij = callPackage ../tools/misc/zellij { };
+
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
