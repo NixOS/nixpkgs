@@ -6,10 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "diffutils-3.7";
+  pname = "diffutils";
+  version = "3.7";
 
   src = fetchurl {
-    url = "mirror://gnu/diffutils/${name}.tar.xz";
+    url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
     sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
   };
 
