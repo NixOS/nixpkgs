@@ -1744,6 +1744,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  binwalk = with python3Packages; toPythonApplication binwalk;
+
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
