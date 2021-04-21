@@ -2921,6 +2921,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  hachoir = callPackage ../development/python-modules/hachoir { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   halo = callPackage ../development/python-modules/halo { };
@@ -7596,6 +7598,8 @@ in {
   stevedore = callPackage ../development/python-modules/stevedore { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
+
+  stone = callPackage ../development/python-modules/stone { };
 
   strategies = callPackage ../development/python-modules/strategies { };
 
