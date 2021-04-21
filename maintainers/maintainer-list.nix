@@ -11304,6 +11304,16 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  zane = {
+    name = "Zane van Iperen";
+    email = "zane@zanevaniperen.com";
+    github = "vs49688";
+    githubId = 4423262;
+    keys = [{
+      longkeyid = "rsa4096/0x68616B2D8AC4DCC5";
+      fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
+    }];
+  };
   zseri = {
     name = "zseri";
     email = "zseri.devel@ytrizja.de";
