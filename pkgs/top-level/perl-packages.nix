@@ -9273,7 +9273,7 @@ let
     meta = {
       homepage = "https://github.com/yappo/p5-HTTP-AcceptLanguage";
       description = "Accept-Language header parser and find available language";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -13028,7 +13028,7 @@ let
     meta = {
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
-      license = lib.licenses.artistic2;
+      license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.zakame ];
     };
   };
