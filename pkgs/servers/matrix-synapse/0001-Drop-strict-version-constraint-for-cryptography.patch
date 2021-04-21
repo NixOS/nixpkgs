@@ -1,0 +1,39 @@
+From 4de6e3d1977e20203d12c1e1959aeb98464c38d8 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Wed, 21 Apr 2021 14:11:39 +0200
+Subject: [PATCH] Drop strict version constraint for `cryptography'
+
+As mentioned in the original upstream commit[1] this is only needed to
+ensure a cryptography version with latest openssl patches is used.
+
+`cryptography` at 3.3.2 also fixes CVE-2020-36242[2], however it is only a
+workaround for an underlying openssl vulnerability[3][4].
+
+Given that CVE-2021-23840[4] is fixed in openssl 1.1.1j which is
+backported to 20.09, there's nothing else to do here.
+
+[1] https://github.com/matrix-org/synapse/commit/12d61847133c4da60d3e511af37d6f7e548ccb7a#diff-20fcfa23c90d1385048e0cc6331196d126e147e8894eba8ef481088e664b91d2
+[2] https://nvd.nist.gov/vuln/detail/CVE-2020-36242
+[3] https://access.redhat.com/security/cve/cve-2020-36242
+[4] https://nvd.nist.gov/vuln/detail/CVE-2021-23840
+---
+ synapse/python_dependencies.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/synapse/python_dependencies.py b/synapse/python_dependencies.py
+index 2a1c925..0c99e37 100644
+--- a/synapse/python_dependencies.py
++++ b/synapse/python_dependencies.py
+@@ -83,9 +83,6 @@ REQUIREMENTS = [
+     "Jinja2>=2.9",
+     "bleach>=1.4.3",
+     "typing-extensions>=3.7.4",
+-    # We enforce that we have a `cryptography` version that bundles an `openssl`
+-    # with the latest security patches.
+-    "cryptography>=3.4.7;python_version>='3.6'",
+ ]
+ 
+ CONDITIONAL_REQUIREMENTS = {
+-- 
+2.29.3
+

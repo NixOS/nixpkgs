@@ -20,6 +20,10 @@ buildPythonApplication rec {
   patches = [
     # adds an entry point for the service
     ./homeserver-script.patch
+
+    # drop constraint on `cryptography'. The commit message
+    # at the top provides more context.
+    ./0001-Drop-strict-version-constraint-for-cryptography.patch
   ];
 
   propagatedBuildInputs = [
