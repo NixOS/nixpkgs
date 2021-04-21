@@ -1050,6 +1050,8 @@ in
 
   asls = callPackage ../development/tools/misc/asls { };
 
+  astc-encoder = callPackage ../tools/graphics/astc-encoder { };
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
     gsl = gsl_1;
@@ -8463,6 +8465,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  srt-live-server = callPackage ../applications/video/srt-live-server { };
+
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
 
   sourcehut = callPackage ../applications/version-management/sourcehut { };
@@ -9228,6 +9232,8 @@ in
   };
 
   welkin = callPackage ../tools/graphics/welkin {};
+
+  wemux = callPackage ../tools/misc/wemux { };
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
 
@@ -10620,7 +10626,9 @@ in
       graphviz = graphviz-nox;
     });
 
-  inherit (callPackage ../development/compilers/haxe { })
+  inherit (callPackage ../development/compilers/haxe {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  })
     haxe_4_2
     haxe_4_1
     haxe_4_0
@@ -18740,7 +18748,7 @@ in
 
   nsq = callPackage ../servers/nsq { };
 
-  oauth2_proxy = callPackage ../servers/oauth2_proxy {
+  oauth2-proxy = callPackage ../servers/oauth2-proxy {
     buildGoModule = buildGo115Module;
   };
 
@@ -24633,6 +24641,7 @@ in
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
+    mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix {};
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
@@ -26810,6 +26819,7 @@ in
       ++ optional (cfg.enableStella or false) stella
       ++ optional (cfg.enableStella2014 or false) stella2014
       ++ optional (cfg.enableTGBDual or false) tgbdual
+      ++ optional (cfg.enableThePowderToy or false) the-powder-toy
       ++ optional (cfg.enableTIC80 or false) tic80
       ++ optional (cfg.enableVbaNext or false) vba-next
       ++ optional (cfg.enableVbaM or false) vba-m

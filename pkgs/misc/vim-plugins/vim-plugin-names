@@ -63,6 +63,7 @@ christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 chuling/ci_dark
 ckarnell/antonys-macro-repeater
+clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
@@ -272,6 +273,7 @@ keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
+kevinhwang91/rnvimr
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
@@ -496,6 +498,7 @@ qnighy/lalrpop.vim
 qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
+radenling/vim-dispatch-neovim
 rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
 raghur/fruzzy
@@ -579,6 +582,7 @@ sunaku/vim-dasht
 svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
+TaDaa/vimade
 takac/vim-hardtime
 tami5/compe-conjure
 tami5/lispdocs.nvim

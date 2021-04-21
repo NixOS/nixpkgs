@@ -214,7 +214,8 @@ in {
         PrivateMounts = true;
         SystemCallFilter = "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_INET AF_INET6";
+        # AF_UNIX is required to connect to a postgres socket.
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
     };
 

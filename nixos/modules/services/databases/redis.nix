@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.redis;
 
+  ulimitNofile = cfg.maxclients + 32;
+
   mkValueString = value:
     if value == true then "yes"
     else if value == false then "no"
@@ -14,8 +16,8 @@ let
     listsAsDuplicateKeys = true;
     mkKeyValue = generators.mkKeyValueDefault { inherit mkValueString; } " ";
   } cfg.settings);
-in
-{
+
+in {
   imports = [
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
     (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
@@ -119,6 +121,12 @@ in
         type = types.int;
         default = 16;
         description = "Set the number of databases.";
+      };
+
+      maxclients = mkOption {
+        type = types.int;
+        default = 10000;
+        description = "Set the max number of connected clients at the same time.";
       };
 
       save = mkOption {
@@ -253,6 +261,7 @@ in
         logfile = cfg.logfile;
         syslog-enabled = cfg.syslog;
         databases = cfg.databases;
+        maxclients = cfg.maxclients;
         save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") cfg.save;
         dbfilename = "dump.rdb";
         dir = "/var/lib/redis";
@@ -295,6 +304,34 @@ in
         StateDirectoryMode = "0700";
         # Access write directories
         UMask = "0077";
+        # Capabilities
+        CapabilityBoundingSet = "";
+        # Security
+        NoNewPrivileges = true;
+        # Process Properties
+        LimitNOFILE = "${toString ulimitNofile}";
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @privileged @raw-io @reboot @resources @setuid @swap";
       };
     };
   };

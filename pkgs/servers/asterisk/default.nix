@@ -74,7 +74,7 @@ let
     meta = with lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
       homepage = "https://www.asterisk.org/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };
@@ -105,8 +105,8 @@ in rec {
   asterisk = asterisk_18;
 
   asterisk_13 = common {
-    version = "13.38.0";
-    sha256 = "1kxff6pbry8nydkspi0mqllidz2lw3d3g3r127x8jwgx021x0rik";
+    version = "13.38.2";
+    sha256 = "1v7wgsa9vf7qycg3xpvmn2bkandkfh3x15pr8ylg0w0gvfkkf5b9";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -114,8 +114,8 @@ in rec {
   };
 
   asterisk_16 = common {
-    version = "16.15.0";
-    sha256 = "12nc7ywm6w1xyn720kdc1sqz5wkjjrkxr25wisl02f4v5wz8py7m";
+    version = "16.17.0";
+    sha256 = "1bzlsk9k735qf8a693b6sa548my7m9ahavmdicwmc14px70wrvnw";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -123,8 +123,8 @@ in rec {
   };
 
   asterisk_17 = common {
-    version = "17.9.0";
-    sha256 = "1fnm1z7g45m883ivkm36r4kqb7163bzazi70mwf0fc2rc28jd1z4";
+    version = "17.9.3";
+    sha256 = "0nhk0izrxx24pz806fwnhidjmciwrkcrsvxvhrdvibiqyvfk8yk7";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -132,8 +132,8 @@ in rec {
   };
 
   asterisk_18 = common {
-    version = "18.1.0";
-    sha256 = "1pq2nrf60xnvh2h1rv82bdfbxxxd277g68xas0vbfgr4531gc4nc";
+    version = "18.3.0";
+    sha256 = "1xb953i9ay82vcdv8izi5dd5xnspcsvg10ajiyph377jw2xnd5fb";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "minidump";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65a71ca1da2b73ee96daa9d52e4fb9c9b80a849475502c6a1c2a80a68bd149b0";
+    sha256 = "sha256-nlPW83Tr3aec1tSYHgcZTwd+ydN12S6WNwK7gdwdatY=";
   };
 
   # Upstream doesn't have tests
