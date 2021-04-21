@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/linux-sgx-driver";
     license = with licenses; [ bsd3 /* OR */ gpl2Only ];
     maintainers = with maintainers; [ oxalica ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
