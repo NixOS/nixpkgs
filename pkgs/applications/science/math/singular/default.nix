@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
   patches = [
     # add aarch64 support to cpu-check.m4. copied from redhat.
     ./redhat-aarch64.patch
+
+    # the newest version of ax-prog-cc-for-build.m4 seems to trigger
+    # linker errors. see
+    # https://github.com/alsa-project/alsa-firmware/issues/3 for a
+    # related issue.
+    ./use-older-ax-prog-cc-for-build.patch
   ] ++ lib.optionals enableDocs [
     # singular supports building without 4ti2, bertini, normaliz or
     # topcom just fine, but the docbuilding does not skip manual pages
