@@ -216,6 +216,8 @@ stdenv.mkDerivation rec {
     in
     (concatStringsSep "\n"
       (flatten [
+        "runHook preInstall"
+
         (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
@@ -227,9 +229,18 @@ stdenv.mkDerivation rec {
 
         # link in the CLI utils
         (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+
+        "runHook postInstall"
       ])
     )
   ;
+
+  postInstall = ''
+    mkdir -p $out/share
+    ln -s ${base}/share/applications $out/share/applications
+    ln -s ${base}/share/icons $out/share/icons
+    ln -s ${base}/share/mime $out/share/mime
+  '';
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
@@ -248,7 +259,7 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.gpl3Plus;
     # berce seems inactive...
     maintainers = with lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform
