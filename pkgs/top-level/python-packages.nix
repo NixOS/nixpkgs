@@ -2109,6 +2109,8 @@ in {
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
 
+  dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
+
   dtopt = callPackage ../development/python-modules/dtopt { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
