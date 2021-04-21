@@ -261,6 +261,7 @@ in with py.pkgs; buildPythonApplication rec {
     "html5"
     "http"
     "hue"
+    "hyperion"
     "iaqualink"
     "ifttt"
     "image"
