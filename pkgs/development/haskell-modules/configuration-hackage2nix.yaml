@@ -10001,7 +10001,6 @@ broken-packages:
   - servant-db
   - servant-db-postgresql
   - servant-dhall
-  - servant-docs
   - servant-docs-simple
   - servant-ede
   - servant-ekg
