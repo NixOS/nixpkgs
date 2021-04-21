@@ -105,6 +105,8 @@ rec {
 
         # systemd
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+        substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
+        install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
       '';
 
       DOCKER_BUILDTAGS = []
@@ -195,6 +197,11 @@ rec {
       ./man/md2man-all.sh -q
 
       installManPage man/*/*.[1-9]
+    '' + ''
+      # systemd
+      mkdir -p $out/etc/systemd/system
+      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '';
 
     passthru.tests = { inherit (nixosTests) docker; };
