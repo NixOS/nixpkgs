@@ -3454,6 +3454,8 @@ in
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
+  unify = with python3Packages; toPythonApplication unify;
+
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
   usb-modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
