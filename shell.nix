@@ -19,4 +19,27 @@ let
   devshell = import devshellSrc { inherit system pkgs; };
 
 in
-devshell.fromTOML ./devshell.toml
+devshell.mkShell {
+  devshell = {
+    name = "nixpkgs";
+    packages = with pkgs; [
+      fd
+      nixpkgs-fmt
+    ];
+  };
+
+  commands = [
+    {
+      name = "fmt";
+      help = "Check Nix formatting";
+      category = "linters";
+      command = "nixpkgs-fmt $${@} .";
+    }
+    {
+      name = "evalnix";
+      help = "Check Nix parsing";
+      category = "linters";
+      command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null";
+    }
+  ];
+}
