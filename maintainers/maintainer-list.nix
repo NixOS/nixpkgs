@@ -374,6 +374,12 @@
     githubId = 786394;
     name = "Alexander Krupenkin ";
   };
+  akshgpt7 = {
+    email = "akshgpt7@gmail.com";
+    github = "akshgpt7";
+    githubId = 20405311;
+    name = "Aksh Gupta";
+  };
   albakham = {
     email = "dev@geber.ga";
     github = "albakham";
