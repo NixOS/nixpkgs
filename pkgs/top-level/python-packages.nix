@@ -2031,7 +2031,7 @@ in {
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
-  
+
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
