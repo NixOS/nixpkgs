@@ -16,6 +16,15 @@ in
       '';
     };
 
+    afterServices = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "loki.service" "systemd-journald.service" ];
+      description = ''
+        Your vector topology might depend on other services being started.
+      '';
+    };
+
     settings = mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
@@ -36,8 +45,8 @@ in
     systemd.services.vector = {
       description = "Vector event and log aggregator";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      requires = [ "network-online.target" ];
+      after = [ "network-online.target" ] ++ cfg.settings.afterServices;
+      requires = [ "network-online.target" ] ++ cfg.settings.afterServices;
       serviceConfig =
         let
           format = pkgs.formats.toml { };
