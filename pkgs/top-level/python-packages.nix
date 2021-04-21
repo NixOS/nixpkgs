@@ -8074,6 +8074,8 @@ in {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
+  sphinx-material = callPackage ../development/python-modules/sphinx-material { };
+
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
