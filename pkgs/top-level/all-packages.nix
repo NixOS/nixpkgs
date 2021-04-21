@@ -758,7 +758,7 @@ in
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
   agi = callPackage ../tools/graphics/agi { };
-  
+
   apt = callPackage ../tools/package-management/apt { };
 
   agrep = callPackage ../tools/text/agrep { };
