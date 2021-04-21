@@ -1629,6 +1629,18 @@ let
     meta.homepage = "https://github.com/rhysd/git-messenger.vim/";
   };
 
+  git-worktree-nvim = buildVimPluginFrom2Nix {
+    pname = "git-worktree-nvim";
+    version = "2021-04-19";
+    src = fetchFromGitHub {
+      owner = "ThePrimeagen";
+      repo = "git-worktree.nvim";
+      rev = "77c54ff659ec3eba0965e9a54e8569abd084b726";
+      sha256 = "0lraa4di5z5jm103bqzr804bjcxa49b131mhpgg4r40zpam9iip1";
+    };
+    meta.homepage = "https://github.com/ThePrimeagen/git-worktree.nvim/";
+  };
+
   gitignore-vim = buildVimPluginFrom2Nix {
     pname = "gitignore-vim";
     version = "2014-03-16";
