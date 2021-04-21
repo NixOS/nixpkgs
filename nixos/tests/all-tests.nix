@@ -262,6 +262,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nebula = handleTest ./nebula.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
