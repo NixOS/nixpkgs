@@ -228,6 +228,7 @@ in with py.pkgs; buildPythonApplication rec {
     "devolo_home_control"
     "dhcp"
     "discovery"
+    "dsmr"
     "econet"
     "emulated_hue"
     "esphome"
