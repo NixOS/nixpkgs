@@ -19,28 +19,26 @@
 , xcbutilxrm
 , makeWrapper
 , removeReferencesTo
+, alsaLib
+, curl
+, libmpdclient
+, libpulseaudio
+, wirelesstools
+, libnl
+, i3
+, i3-gaps
+, jsoncpp
 
-# optional packages-- override the variables ending in 'Support' to enable or
-# disable modules
-, alsaSupport   ? true,  alsaLib       ? null
-, githubSupport ? false, curl          ? null
-, mpdSupport    ? false, libmpdclient  ? null
-, pulseSupport  ? false, libpulseaudio ? null
-, iwSupport     ? false, wirelesstools ? null
-, nlSupport     ? true,  libnl         ? null
-, i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
+# override the variables ending in 'Support' to enable or disable modules
+, alsaSupport   ? true
+, githubSupport ? false
+, mpdSupport    ? false
+, pulseSupport  ? false
+, iwSupport     ? false
+, nlSupport     ? true
+, i3Support     ? false
+, i3GapsSupport ? false
 }:
-
-assert alsaSupport   -> alsaLib       != null;
-assert githubSupport -> curl          != null;
-assert mpdSupport    -> libmpdclient  != null;
-assert pulseSupport  -> libpulseaudio != null;
-
-assert iwSupport     -> ! nlSupport && wirelesstools != null;
-assert nlSupport     -> ! iwSupport && libnl         != null;
-
-assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
-assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
