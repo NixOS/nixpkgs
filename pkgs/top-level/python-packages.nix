@@ -8733,6 +8733,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  unify = callPackage ../development/python-modules/unify { };
+
   unifiled = callPackage ../development/python-modules/unifiled { };
 
   units = callPackage ../development/python-modules/units { };
