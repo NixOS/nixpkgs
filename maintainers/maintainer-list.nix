@@ -9687,12 +9687,6 @@
     githubId = 102685;
     name = "Thomas Friese";
   };
-  tavyc = {
-    email = "octavian.cerna@gmail.com";
-    github = "tavyc";
-    githubId = 3650609;
-    name = "Octavian Cerna";
-  };
   tazjin = {
     email = "mail@tazj.in";
     github = "tazjin";

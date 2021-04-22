@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ dezgeg tavyc tkerber ];
+    maintainers = with maintainers; [ dezgeg tkerber ];
   };
 }
