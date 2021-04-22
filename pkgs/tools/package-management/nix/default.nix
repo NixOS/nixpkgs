@@ -227,6 +227,13 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = nixUnstable;
+  nixFlakes = callPackage ({ makeWrapper, runCommand, ... }:
+    runCommand "nix-flakes" { buildInputs = [ makeWrapper ]; } ''
+      mkdir -p $out/bin
+        for bin in ${nixUnstable}/bin/*; do
+          makeWrapper $bin $out/bin/$(basename $bin) \
+            --suffix NIX_CONFIG "\n" "experimental-features = nix-command flakes"
+        done;
+    '') {};
 
 }
