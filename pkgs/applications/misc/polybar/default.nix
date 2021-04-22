@@ -7,6 +7,7 @@
 , pcre
 , pkg-config
 , python3
+, python3Packages # sphinx-build
 , lib
 , stdenv
 , xcbproto
@@ -18,40 +19,47 @@
 , xcbutilxrm
 , makeWrapper
 , removeReferencesTo
+, alsaLib
+, curl
+, libmpdclient
+, libpulseaudio
+, wirelesstools
+, libnl
+, i3
+, i3-gaps
+, jsoncpp
 
-# optional packages-- override the variables ending in 'Support' to enable or
-# disable modules
-, alsaSupport   ? true,  alsaLib       ? null
-, githubSupport ? false, curl          ? null
-, mpdSupport    ? false, libmpdclient ? null
-, pulseSupport  ? false, libpulseaudio ? null
-, iwSupport     ? false, wirelesstools ? null
-, nlSupport     ? true,  libnl         ? null
-, i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
+# override the variables ending in 'Support' to enable or disable modules
+, alsaSupport   ? true
+, githubSupport ? false
+, mpdSupport    ? false
+, pulseSupport  ? false
+, iwSupport     ? false
+, nlSupport     ? true
+, i3Support     ? false
+, i3GapsSupport ? false
 }:
-
-assert alsaSupport   -> alsaLib       != null;
-assert githubSupport -> curl          != null;
-assert mpdSupport    -> libmpdclient != null;
-assert pulseSupport  -> libpulseaudio != null;
-
-assert iwSupport     -> ! nlSupport && wirelesstools != null;
-assert nlSupport     -> ! iwSupport && libnl         != null;
-
-assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
-assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.5.2";
+    version = "3.5.5";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "1ir8fdnzrba9fkkjfvax5szx5h49lavwgl9pabjzrpbvif328g3x";
+      sha256 = "sha256-oRtTm5bXdL0C2WJsaK8H2Oc40DPWgAfjP7FgIHrpKGI=";
       fetchSubmodules = true;
     };
+
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+      python3Packages.sphinx
+      removeReferencesTo
+
+      (if i3Support || i3GapsSupport then makeWrapper else null)
+    ];
 
     buildInputs = [
       cairo
@@ -79,8 +87,6 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then jsoncpp else null)
       (if i3Support then i3 else null)
       (if i3GapsSupport then i3-gaps else null)
-
-      (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
 
     postInstall = if i3Support
@@ -93,18 +99,13 @@ stdenv.mkDerivation rec {
                        ''
                   else '''';
 
-    nativeBuildInputs = [
-      cmake
-      pkg-config
-      removeReferencesTo
-    ];
-
     postFixup = ''
         remove-references-to -t ${stdenv.cc} $out/bin/polybar
     '';
 
     meta = with lib; {
       homepage = "https://polybar.github.io/";
+      changelog = "https://github.com/polybar/polybar/releases/tag/${version}";
       description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ afldcr Br1ght0ne ];
+      maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ];
       platforms = platforms.linux;
     };
 }
