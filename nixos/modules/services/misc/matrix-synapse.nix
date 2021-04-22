@@ -7,118 +7,122 @@ let
   pg = config.services.postgresql;
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
-  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
-  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
   pluginsEnv = cfg.package.python.buildEnv.override {
     extraLibs = cfg.plugins;
   };
-  configFile = pkgs.writeText "homeserver.yaml" ''
-${optionalString (cfg.tls_certificate_path != null) ''
-tls_certificate_path: "${cfg.tls_certificate_path}"
-''}
-${optionalString (cfg.tls_private_key_path != null) ''
-tls_private_key_path: "${cfg.tls_private_key_path}"
-''}
-${optionalString (cfg.tls_dh_params_path != null) ''
-tls_dh_params_path: "${cfg.tls_dh_params_path}"
-''}
-no_tls: ${boolToString cfg.no_tls}
-${optionalString (cfg.bind_port != null) ''
-bind_port: ${toString cfg.bind_port}
-''}
-${optionalString (cfg.unsecure_port != null) ''
-unsecure_port: ${toString cfg.unsecure_port}
-''}
-${optionalString (cfg.bind_host != null) ''
-bind_host: "${cfg.bind_host}"
-''}
-server_name: "${cfg.server_name}"
-pid_file: "/run/matrix-synapse.pid"
-${optionalString (cfg.public_baseurl != null) ''
-public_baseurl: "${cfg.public_baseurl}"
-''}
-listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
-database: {
-  name: "${cfg.database_type}",
-  args: {
-    ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
-    )}
-  }
-}
-event_cache_size: "${cfg.event_cache_size}"
-verbose: ${cfg.verbose}
-log_config: "${logConfigFile}"
-rc_messages_per_second: ${cfg.rc_messages_per_second}
-rc_message_burst_count: ${cfg.rc_message_burst_count}
-federation_rc_window_size: ${cfg.federation_rc_window_size}
-federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
-federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
-federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
-federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "${cfg.dataDir}/media"
-uploads_path: "${cfg.dataDir}/uploads"
-max_upload_size: "${cfg.max_upload_size}"
-max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
-url_preview_enabled: ${boolToString cfg.url_preview_enabled}
-${optionalString (cfg.url_preview_enabled == true) ''
-url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
-url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
-url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
-''}
-recaptcha_private_key: "${cfg.recaptcha_private_key}"
-recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
-turn_uris: ${builtins.toJSON cfg.turn_uris}
-turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${boolToString cfg.enable_registration}
-${optionalString (cfg.registration_shared_secret != null) ''
-registration_shared_secret: "${cfg.registration_shared_secret}"
-''}
-recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
-turn_user_lifetime: "${cfg.turn_user_lifetime}"
-user_creation_max_duration: ${cfg.user_creation_max_duration}
-bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: ${boolToString cfg.allow_guest_access}
 
-account_threepid_delegates:
-  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
-  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
+  # This is organized to match the sections in
+  # https://github.com/matrix-org/synapse/blob/develop/docs/sample_config.yaml
+  # Not everything in the config is configurable directly via Nix, so
+  # use extraConfig or settings to extend.
+  yamlConfig = {
+    # Server
+    inherit (cfg) server_name public_baseurl listeners;
+    inherit (cfg) bind_port unsecure_port bind_host; # deprecated, but keeping for backwards compatibility
+    pid_file = "/run/matrix-synapse.pid";
 
-room_prejoin_state:
-  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
-  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
-${optionalString (cfg.macaroon_secret_key != null) ''
-  macaroon_secret_key: "${cfg.macaroon_secret_key}"
-''}
-expire_access_token: ${boolToString cfg.expire_access_token}
-enable_metrics: ${boolToString cfg.enable_metrics}
-report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
-key_refresh_interval: "${cfg.key_refresh_interval}"
-perspectives:
-  servers: {
-    ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-    "${n}": {
-      "verify_keys": {
-        ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-        "${n}": {
-          "key": "${v}"
-        }'') v)}
-      }
-    '') cfg.servers)}
-    }
-  }
-redaction_retention_period: ${toString cfg.redaction_retention_period}
-app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
+    # Homeserver blocking
+    inherit (cfg) redaction_retention_period;
 
-${cfg.extraConfig}
-'';
+    # TLS
+    inherit (cfg) tls_certificate_path tls_private_key_path no_tls;
+    inherit (cfg) tls_dh_params_path; # deprecated, but keeping for backwards compatibility
+
+    # Federation
+
+    # Caching
+    inherit (cfg) event_cache_size;
+
+    # Database
+    database = {
+      name = cfg.database_type;
+      args = cfg.database_args;
+    };
+
+    # Logging
+    inherit (cfg) verbose;
+    log_config = logConfigFile;
+
+    # Ratelimiting
+    rc_message = with cfg; {
+      per_second = rc_messages_per_second;
+      burst_count = rc_message_burst_count;
+    };
+    rc_federation = with cfg; {
+      window_size = federation_rc_window_size;
+      sleep_limit = federation_rc_sleep_limit;
+      sleep_delay = federation_rc_sleep_delay;
+      reject_limit = federation_rc_reject_limit;
+      concurrent = federation_rc_concurrent;
+    };
+
+    # Media Store
+    inherit (cfg) max_upload_size max_image_pixels dynamic_thumbnails;
+    media_store_path = "${cfg.dataDir}/media";
+    uploads_path = "${cfg.dataDir}/uploads"; # https://github.com/matrix-org/synapse/pull/9462
+  } // optionalAttrs cfg.url_preview_enabled {
+    url_preview_enabled = true;
+    url_preview_ip_range_blacklist = cfg.url_preview_ip_range_blacklist;
+    url_preview_ip_range_whitelist = cfg.url_preview_ip_range_whitelist;
+    url_preview_url_blacklist = cfg.url_preview_url_blacklist;
+  } // {
+
+    # Captcha
+    inherit (cfg) recaptcha_private_key recaptcha_public_key enable_registration_captcha;
+    recaptcha_siteverify_api = "https://www.google.com/recaptcha/api/siteverify";
+
+    # TURN
+    inherit (cfg) turn_uris turn_shared_secret turn_user_lifetime;
+
+    # Registration
+    inherit (cfg) enable_registration registration_shared_secret bcrypt_rounds allow_guest_access;
+    inherit (cfg) user_creation_max_duration; # deprecated, but keeping for backwards compatibility
+
+    account_threepid_delegates = filterAttrs (_: v: v != null) {
+      inherit (cfg.account_threepid_delegates) email msisdn;
+    };
+
+    # Account Validity
+
+    # Metrics
+    inherit (cfg) enable_metrics report_stats;
+
+    # API Configuration
+    inherit (cfg) macaroon_secret_key app_service_config_files room_prejoin_state;
+    inherit (cfg) expire_access_token; # deprecated by https://github.com/matrix-org/synapse/pull/5782
+
+    # Signing Keys
+    inherit (cfg) key_refresh_interval;
+    signing_key_path = "${cfg.dataDir}/homeserver.signing.key";
+
+    perspectives = {
+      servers = mapAttrs
+        (name: value: {
+          verify_keys = mapAttrs (name: value: { key = value; }) value;
+        })
+        cfg.servers;
+    };
+
+    # Single sign-on integration
+    # Push
+    # Rooms
+    # Opentracing
+    # Workers
+  };
+
+  configFile = pkgs.writeText "homeserver.yaml" (
+    generators.toYAML { } (filterAttrs (_: v: v != null)
+      (fold recursiveUpdate { } [ yamlConfig cfg.settings ])));
+
+  extraConfigFile = pkgs.writeText "extra-homeserver.yaml" cfg.extraConfig;
 
   hasLocalPostgresDB = let args = cfg.database_args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
-in {
+
+  configFiles = [ configFile extraConfigFile ] ++ cfg.extraConfigFiles;
+  configFilesArgString = concatMapStringsSep " " (x: "--config-path ${x}") configFiles;
+in
+{
   options = {
     services.matrix-synapse = {
       enable = mkEnableOption "matrix.org synapse";
@@ -645,7 +649,8 @@ in {
         type = types.lines;
         default = "";
         description = ''
-          Extra config options for matrix-synapse.
+          Extra config options for matrix-synapse. The options are included via
+          an extra configuration file with the `--config-path` argument.
         '';
       };
       extraConfigFiles = mkOption {
@@ -658,6 +663,20 @@ in {
           argument --config-path. This allows to configure secrets without
           having to go through the Nix store, e.g. based on deployment keys if
           NixOPS is in use.
+        '';
+      };
+      settings = mkOption {
+        type = (pkgs.formats.yaml { }).type;
+        default = { };
+        description = ''
+          Extra Synapse settings. Refer to
+          <link xlink:href="https://github.com/matrix-org/synapse/blob/develop/docs/sample_config.yaml"/>
+          for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            metrics_flags.known_servers = true;
+          }
         '';
       };
       logConfig = mkOption {
@@ -716,7 +735,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
-          --config-path ${configFile} \
+          ${configFilesArgString} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
@@ -732,7 +751,7 @@ in {
         '')) ];
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
-            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            ${configFilesArgString} \
             --keys-directory ${cfg.dataDir}
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
