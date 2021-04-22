@@ -9295,6 +9295,8 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
+  xplr = callPackage ../applications/misc/xplr {};
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
