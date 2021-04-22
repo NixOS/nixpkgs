@@ -633,7 +633,11 @@ let
     version = "8.0";
     sha256 = "1jmqpi0kg2daiqnvpwdyfy8rpnszxsm70sxizz0r7wn53xjr5hva";
     meta.platforms = lib.platforms.netbsd;
+    LIBC_PIC = "${stdenv.cc.libc}/lib/libc_pic.a";
+    # Hack to prevent a symlink being installed here for compatibility.
+    SHLINKINSTALLDIR = "/usr/libexec";
     USE_FORT = "yes";
+    makeFlags = [ "CLIBOBJ=${stdenv.cc.libc}/lib" ];
     extraPaths = [ libc.src ] ++ libc.extraPaths;
   };
 
