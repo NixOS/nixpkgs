@@ -41,7 +41,6 @@ in stdenv.mkDerivation {
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
-    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

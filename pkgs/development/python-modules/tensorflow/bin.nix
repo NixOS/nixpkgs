@@ -96,10 +96,19 @@ in buildPythonPackage {
     # Unpack the wheel file.
     wheel unpack --dest unpacked ./*.whl
 
-    # Tensorflow has a hard dependency on gast==0.2.2, but we relax it to
-    # gast==0.3.2.
-    substituteInPlace ./unpacked/tensorflow*/tensorflow_core/tools/pip_package/setup.py --replace "gast == 0.2.2" "gast == 0.3.2"
-    substituteInPlace ./unpacked/tensorflow*/tensorflow_*.dist-info/METADATA --replace "gast (==0.2.2)" "gast (==0.3.2)"
+    # Tensorflow wheels tightly constrain the versions of gast, tensorflow-estimator and scipy.
+    # This code relaxes these requirements:
+    substituteInPlace ./unpacked/tensorflow*/tensorflow_core/tools/pip_package/setup.py \
+      --replace "tensorflow_estimator >= 2.1.0rc0, < 2.2.0" "tensorflow_estimator" \
+      --replace "tensorboard >= 2.1.0, < 2.2.0" "tensorboard" \
+      --replace "gast == 0.2.2" "gast"  \
+      --replace "scipy == 1.2.2" "scipy"
+
+    substituteInPlace ./unpacked/tensorflow*/tensorflow*.dist-info/METADATA  \
+      --replace "gast (==0.2.2)" "gast" \
+      --replace "tensorflow-estimator (<2.2.0,>=2.1.0rc0)" "tensorflow_estimator" \
+      --replace "tensorboard (<2.2.0,>=2.1.0)" "tensorboard" \
+      --replace "scipy (==1.4.1)" "scipy"
 
     # Pack the wheel file back up.
     wheel pack ./unpacked/tensorflow*
