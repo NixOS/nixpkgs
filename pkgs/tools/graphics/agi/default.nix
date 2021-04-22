@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "agi";
-  version = "1.1.0-dev-20210413";
+  version = "1.1.0-dev-20210421";
 
   src = fetchzip {
     url = "https://github.com/google/agi-dev-releases/releases/download/v${version}/agi-${version}-linux.zip";
-    sha256 = "13i6n95d0cjrhx68qsich6xzk5f9ga0y3m19k4z2d58s164rnh0v";
+    sha256 = "sha256-2IgGvQy6omDEwrzQDfa/OLi3f+Q2zarvJVGk6ZhsjSA=";
   };
 
   nativeBuildInputs = [
