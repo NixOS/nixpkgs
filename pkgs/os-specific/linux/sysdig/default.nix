@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb protobuf grpc
   ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"

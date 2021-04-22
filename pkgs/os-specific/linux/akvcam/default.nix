@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0r5xg7pz0wl6pq5029rpzm9fn978vq0md31xjkp2amny7rrgxw72";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ qmake ];
   dontWrapQtApps = true;
 

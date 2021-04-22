@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zv6vlaszlik98gj9200sv0irvfzrvjn46rnr2v2m37x66288lym";
   };
 
+  hardeningDisable = [ "pie" ];
+
   enableParallelBuilding = true;
 
   makefile     = "Makefile.psm";

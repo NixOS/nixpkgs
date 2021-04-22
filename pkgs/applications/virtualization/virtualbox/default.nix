@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
     ++ optionals (headless) [ libXrandr libGL ]
     ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
 
-  hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
+  hardeningDisable = [ "format" "fortify" "pic" "pie" "stackprotector" ];
 
   prePatch = ''
     set -x

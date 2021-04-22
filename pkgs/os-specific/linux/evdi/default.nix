@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  hardeningDisable = [ "format" "pic" "fortify" ];
+  hardeningDisable = [ "format" "fortify" "pic" "pie" ];
 
   installPhase = ''
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko

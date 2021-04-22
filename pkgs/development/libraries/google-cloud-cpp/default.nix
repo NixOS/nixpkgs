@@ -30,6 +30,8 @@ let
       sha256 = "02zkcq2wl831ayd9qy009xvfx7q80pgycx7mzz9vknwd0nn6dd0n";
     };
 
+    hardeningDisable = [ "pie" ];
+
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ grpc openssl protobuf ];
 

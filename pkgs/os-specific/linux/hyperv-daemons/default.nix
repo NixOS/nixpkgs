@@ -11,7 +11,7 @@ let
     nativeBuildInputs = [ makeWrapper ];
 
     # as of 4.9 compilation will fail due to -Werror=format-security
-    hardeningDisable = [ "format" ];
+    hardeningDisable = [ "format" "pie" ];
 
     postPatch = ''
       cd tools/hv

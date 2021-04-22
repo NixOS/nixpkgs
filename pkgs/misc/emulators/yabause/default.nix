@@ -10,6 +10,8 @@ mkDerivation rec {
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
 

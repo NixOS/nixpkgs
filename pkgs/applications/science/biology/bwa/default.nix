@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zfhv2zg9v1icdlq4p9ssc8k01mca5d1bd87w71py2swfi74s6yy";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ zlib ];
 
   # Avoid hardcoding gcc to allow environments with a different

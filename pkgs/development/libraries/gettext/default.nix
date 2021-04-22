@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 

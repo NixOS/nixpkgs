@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   postPatch = "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults";
   NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ popt ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];

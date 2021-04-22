@@ -5,7 +5,6 @@ stdenv.mkDerivation {
   name = "security-wrapper";
   buildInputs = [ linuxHeaders ];
   dontUnpack = true;
-  hardeningEnable = [ "pie" ];
   CFLAGS = [
     ''-DWRAPPER_DIR="${parentWrapperDir}"''
   ] ++ (if debug then [

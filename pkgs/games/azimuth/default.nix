@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ which ];
   buildInputs = [ SDL ];
 

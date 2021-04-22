@@ -39,6 +39,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0vmfv8zpyf8ymx3rjydpd7iqis080lni94vb316vfxkgvjmqbhym";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
 

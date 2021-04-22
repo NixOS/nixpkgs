@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kp72yv4k176i94np0m09g10cviqp2pnpm7jmiq6ik7fmmbknk7c";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ ocaml findlib ocamlbuild ];
 
   makeFlags = [ "-C" "interpreter" ];

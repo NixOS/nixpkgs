@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
     })
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   configureFlags = [
     "--with-linux-kernel-build=${kernelBuildDir}"

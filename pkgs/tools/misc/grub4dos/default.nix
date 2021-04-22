@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ nasm ];
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "cfprotection" "pie" "stackprotector" ];
 
   configureFlags = [ "--host=${arch}-pc-linux-gnu" ];
 

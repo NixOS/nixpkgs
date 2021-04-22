@@ -122,6 +122,8 @@ let
       sha256 = "sha256-RX0f2oY0qDni/Xz8VbmL1W82tq5z0xu530Pd4wEsqnw=";
     };
 
+    hardeningDisable = [ "glibcxxassertions" ];
+
     buildInputs = [
       readline
       ncurses

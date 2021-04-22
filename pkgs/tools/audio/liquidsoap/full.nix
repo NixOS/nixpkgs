@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir
     ];
 
-  hardeningDisable = [ "format" "fortify" ];
+  hardeningDisable = [ "format" "fortify" "pie" ];
 
   meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";

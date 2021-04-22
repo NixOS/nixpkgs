@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   postInstall = ''
     mkdir -p $out/share/doc

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libzip glib libusb1 libftdi1 check libserialport
     librevisa doxygen glibmm python

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1my2m9hvnvdrvzcg0fgqgaga59y2cd5zlpv7xrfj2nn98sjhglwq";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # ensure *this* kernel's userspace-headers are picked up before we
   # fall back to those in glibc, as they will be from a mismatched
   # kernel version

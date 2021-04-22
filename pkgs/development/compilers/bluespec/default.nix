@@ -36,6 +36,8 @@ in stdenv.mkDerivation rec {
       sha256 = "1bcdhql4cla137d8xr8m2h21dyxv0jpjpalpr5mgj2jxqfsmkbrn";
     };
 
+  hardeningDisable = [ "pie" ];
+
   enableParallelBuilding = true;
 
   patches = [ ./libstp_stub_makefile.patch ];

@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
   nativeBuildInputs = [ pkg-config ];
 
-  hardeningEnable = [ "pie" ];
-
   configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" ]
     ++ lib.optional stdenv.isLinux "--enable-scfilter";
 

@@ -248,6 +248,7 @@ in {
         rev = "90769b2216bc66c5ea5e41a929236c20d367c63b";
         sha256 = "0bf0dwxrzd42l84p8nxcsjdk1gvzlhad93nsbn97z6kr61n4cr33";
       };
+      hardeningDisable = [ "pie" ];
       installPhase = ''
         mkdir -p $out/lib $out/include/libconv++
         cp source.a $out/lib/libconv++.a
@@ -264,6 +265,7 @@ in {
         rev = "eee4046d2ae440974bcc8ceec00b069f0a2c62b9";
         sha256 = "01aqvwmwh5kk3mncqpim8llwha9gj5qq0c4cvqfn4h8wqi3d9l3p";
       };
+      hardeningDisable = [ "pie" ];
       installPhase = ''
         mkdir -p $out/lib $out/include/liblog++
         cp source.a $out/lib/liblog++.a
@@ -280,6 +282,7 @@ in {
         rev = "212847f0efaeffee8422059b8e202d844174aaf3";
         sha256 = "0vjl6ld6aj25rzxm26yjv3h2gy7gp7qnbinpw6sf1shg2xim9x0b";
       };
+      hardeningDisable = [ "pie" ];
       installPhase = ''
         mkdir -p $out/lib $out/include/libnet++
         cp source.a $out/lib/libnet++.a
@@ -297,6 +300,7 @@ in {
         rev = "ca19013c9451cbac7a90155b486ea9959ced0f67";
         sha256 = "0jk93zm3qzl9z96gfs6xl1c8ip8lckgbzibf7jay7dbgkg9kyjfg";
       };
+      hardeningDisable = [ "pie" ];
       installPhase = ''
         mkdir -p $out/lib $out/include/libfritz++
         cp source.a $out/lib/libfritz++.a

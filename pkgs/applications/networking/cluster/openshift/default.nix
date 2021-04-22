@@ -31,6 +31,8 @@ in buildGoPackage rec {
     sha256 = "16bc6ljm418kxz92gz8ldm82491mvlqamrvigyr6ff72rf7ml7ba";
   };
 
+  hardeningDisable = [ "pie" ]; # clang-7: error: argument unused during compilation: '-pie'
+
   goPackagePath = "github.com/openshift/origin";
 
   buildInputs = [ libkrb5 ncurses ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     cp bios.bin bios.bin.elf $out/.
   '';
 
-  hardeningDisable = [ "stackprotector" "pic" ];
+  hardeningDisable = [ "pic" "pie" "stackprotector" ];
 
   passthru.tests = { qboot = nixosTests.qboot; };
 

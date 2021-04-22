@@ -305,6 +305,8 @@ stdenv.mkDerivation ({
 
   inherit src;
 
+  hardeningDisable = [ "pie" ];
+
   inherit depsBuildBuild nativeBuildInputs;
   buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;

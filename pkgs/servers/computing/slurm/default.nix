@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
   # this doesn't fix tests completely at least makes slurmd to launch
-  hardeningDisable = [ "bindnow" ];
+  hardeningDisable = [ "bindnow" "pie" ];
 
   nativeBuildInputs = [ pkg-config libtool python3 ];
   buildInputs = [

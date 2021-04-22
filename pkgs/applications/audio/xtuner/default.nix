@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo libX11 libjack2 liblo libsigcxx zita-resampler fftwFloat ];
 

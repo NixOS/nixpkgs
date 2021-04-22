@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ bmake ];
   enableParallelBuilding = true;
 

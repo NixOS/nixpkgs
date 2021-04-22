@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cEbw01w4KgSG3JTvTE/qruo7i4/L++m02HW+0VNmSSQ=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     rm -rf dlib/external
   '';

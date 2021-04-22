@@ -73,6 +73,8 @@ self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
 
+  hardeningDisable = [ "pie" ];
+
   passthru = {
     inherit coq-version;
     inherit ocamlPackages ocamlBuildInputs;

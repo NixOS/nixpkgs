@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   cmakeFlags = [ "-DWITH_PROCPS=Off" ];
 
   # CMake is hardcoded to always build static library which causes linker

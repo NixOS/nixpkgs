@@ -75,7 +75,7 @@ let
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
-    hardeningDisable = [ "pic" "format" ];
+    hardeningDisable = [ "format" "pic" "pie" ];
 
     dontStrip = true;
     dontPatchELF = true;

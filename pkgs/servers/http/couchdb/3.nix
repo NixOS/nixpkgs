@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "18wcqxrv2bz88xadkqpqznprrxmcmwr0g6k895xrm8rbp9mpdzlg";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ erlang icu openssl spidermonkey_68 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
     substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-68' "${spidermonkey_68.dev}/include/mozjs-68"

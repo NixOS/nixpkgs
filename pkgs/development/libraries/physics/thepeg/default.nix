@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gif4vb9lw2px2qdywqm7x0frbv0h5gq9lq36c50f2hv77a5bgwp";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   buildInputs = [ boost fastjet gsl hepmc2 lhapdf rivet zlib ];
 
   configureFlags = [

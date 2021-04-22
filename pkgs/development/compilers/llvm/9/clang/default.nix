@@ -91,6 +91,7 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
+      hardeningUnsupportedFlags = [ "stackclashprotection" ];
     };
 
     meta = {

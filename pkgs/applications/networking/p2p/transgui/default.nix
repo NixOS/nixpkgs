@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
+  hardeningDisable = [ "glibcxxassertions" "pie" ];
+
   nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
     fpc lazarus stdenv.cc

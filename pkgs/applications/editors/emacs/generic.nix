@@ -121,7 +121,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals nativeComp [ libgccjit ]
     ;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ lib.optionals (lib.versionOlder version "27") [ "pie" ];
 
   configureFlags = [
     "--disable-build-details" # for a (more) reproducible build

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   strictDeps = true;
 
-  hardeningDisable = [ "format" "stackprotector" ];
+  hardeningDisable = [ "cfprotection" "format" "pie" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
     "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"

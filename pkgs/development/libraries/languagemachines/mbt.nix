@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "mbt-${release.version}.tar.gz"; };
+  hardeningDisable = [ "glibcxxassertions" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf bzip2 libtar libtool autoconf-archive
                   libxml2

@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
     dontWrapPythonPrograms
     meta
   ;
-
+  hardeningDisable = [ "glibcxxassertions" ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;

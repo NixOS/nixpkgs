@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     ./Fix-to-string.agda-to-compile-with-Agda-2.6.1.patch
   ];

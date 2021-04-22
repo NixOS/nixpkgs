@@ -8,6 +8,8 @@ stdenv.mkDerivation {
   pname = "bpftool";
   inherit (linuxPackages_latest.kernel) version src;
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libopcodes libbfd libelf zlib ];
 

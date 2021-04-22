@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     url = "https://tibleiz.net/download/copper-${version}-src.tar.gz";
     sha256 = "1nf0bw143rjhd019yms3k6k531rahl8anidwh6bif0gm7cngfwfw";
   };
+  hardeningDisable = [ "pie" ];
   buildInputs = [
     libffi
   ];

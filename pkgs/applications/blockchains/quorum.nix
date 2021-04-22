@@ -13,6 +13,8 @@ buildGoPackage rec {
     sha256 = "0xfdaqp9bj5dkw12gy19lxj73zh7w80j051xclsvnd41sfah86ll";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ git which ];
 
   buildPhase = ''

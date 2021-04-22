@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
   };
 
+  hardeningDisable = [ "pie" ];
+
   doCheck = false;
 
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];

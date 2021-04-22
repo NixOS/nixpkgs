@@ -14,7 +14,7 @@ bintoolsWrapper_addLDVars () {
     getHostRoleEnvHook
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_LDFLAGS${role_post}+=" -L$1/lib64"
+        export "NIX_LDFLAGS${role_post}"+=" -L$1/lib64"
     fi
 
     if [[ -d "$1/lib" ]]; then
@@ -24,7 +24,7 @@ bintoolsWrapper_addLDVars () {
         # directories and bloats the size of the environment variable space.
         local -a glob=( $1/lib/lib* )
         if [ "${#glob[*]}" -gt 0 ]; then
-            export NIX_LDFLAGS${role_post}+=" -L$1/lib"
+            export "NIX_LDFLAGS${role_post}"+=" -L$1/lib"
         fi
     fi
 }
@@ -52,7 +52,7 @@ fi
 
 # Export tool environment variables so various build systems use the right ones.
 
-export NIX_BINTOOLS${role_post}=@out@
+export "NIX_BINTOOLS${role_post}"=@out@
 
 for cmd in \
     ar as ld nm objcopy objdump readelf ranlib strip strings size windres
@@ -63,10 +63,6 @@ do
         export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
     fi
 done
-
-# If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
-export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_post cmd upper_case

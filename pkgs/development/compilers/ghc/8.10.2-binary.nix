@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 

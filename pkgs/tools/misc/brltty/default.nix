@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nk54chr7z2w579vyiak9xk2avhnvrx7x2l5sk8nyw2zplchkx9q";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config python3.pkgs.cython ];
   buildInputs = [ bluez ]
     ++ lib.optional alsaSupport alsaLib

@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q62kjsvy2iwy8adfiygx2bfwlh83rphgxbis95ycspqidg9py87";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [
     libGLU libGL
     libdrm

@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   buildInputs = [ libuuid ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
-  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
+  hardeningDisable = [ "fortify" "pic" "pie" "stackprotector" ];
 
   stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
 

@@ -31,6 +31,7 @@ let
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src patches;
+    hardeningDisable = [ "glibcxxassertions" ];
     nativeBuildInputs = [ cmake ];
     buildInputs = [ zlib gmp jdk8 ];
 

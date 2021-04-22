@@ -12,6 +12,8 @@ mkDerivation rec {
     sha256 = "sha256-DUtaQITzHhQrqA9QJd0U/5EDjH0IzY9/kal/7SYQ/Ck=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     substituteInPlace GNUmakefile \
       --replace -I/usr/include/KF5/KCoreAddons -I${kcoreaddons.dev}/include/KF5/KCoreAddons \

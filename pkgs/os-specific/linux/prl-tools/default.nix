@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jwzwif69qlhmfky9kigjaxpxfj0lyrl1iyrpqy4iwqvajdgbbym";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [ "format" "pic" "pie" ];
 
   # also maybe python2 to generate xorg.conf
   nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;

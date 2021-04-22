@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "8f0deb8b2cd775b339229054f4f282583a4cfbcba9d27a6213cf910bab944f3e";
   };
 
+  hardeningDisable = [ "pie" ];
+
   prePatch = ''
     mkdir -p $out/bin
     sed -e "s@/usr@$out@" -i Makefile

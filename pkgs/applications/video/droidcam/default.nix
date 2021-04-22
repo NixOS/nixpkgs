@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ny/PJu+ifs9hQRDUv1pONBb6fKJzoiNtjPOFc4veU8c=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [
     pkg-config
   ];

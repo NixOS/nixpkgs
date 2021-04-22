@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ajrkkg5awmi8m4b3mha7h07ylg18k252qprvk1sgq0qbyd66zy7";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   # This problem is gone on libiscsi master.

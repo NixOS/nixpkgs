@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l54j85540386a8aypqka7p5hy1b63cwmpsscv9rmmf10f78v8mm";
   };
 
+  hardeningDisable = [ "pie" ];
+
   INSTALL_MOD_PATH = "\${out}";
 
   postPatch = ''

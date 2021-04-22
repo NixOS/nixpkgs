@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     sha256 = "0j5vaf930lb21gx4h7z6mksh1fazqw32gajjjkyir94wbmml9n3s";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # put data at the correct locations else cmake tries to fetch them,
   # which fails in sandboxed mode
   prePatch = ''

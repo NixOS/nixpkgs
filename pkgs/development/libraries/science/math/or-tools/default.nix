@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zqgvkaw5vf2d8pwsa34g9jysbpiwplzxc8jyy8kdbzmj8ax3gpg";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   patches = [
     # This patch (on master as of Feb 11, 2021) fixes or-tools failing to respect
     # USE_SCIP=OFF and then failing to find scip/scip.h

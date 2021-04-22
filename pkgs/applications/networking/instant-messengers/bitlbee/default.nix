@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zhhcbcr59sx9h4maf8zamzv2waya7sbsl7w74gbyilvy93dw5cz";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
   buildInputs = [ gnutls libotr python2 ]

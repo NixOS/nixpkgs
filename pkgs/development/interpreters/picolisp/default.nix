@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://www.software-lab.de/${pname}-${version}.tgz";
     sha256 = "0l51x98bn1hh6kv40sdgp0x09pzg5i8yxbcjvm9n5bxsd6bbk5w2";
   };
+  hardeningDisable = [ "pie" ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [openssl] ++ optional stdenv.is64bit jdk;
   patchPhase = ''

@@ -12,6 +12,8 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ qmake ];

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FnhwNy4OHe8d5M6iYCClkxzcB/EHXg0veXwv43ZlxbA=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   patches = [

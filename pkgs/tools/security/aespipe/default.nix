@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "15pg9j27mjzl78mpzkdqd84kdafj0g6j72f8wgjrpp2qkxjy2ddi";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   configureFlags = [ "--enable-padlock" "--enable-intelaes" ];

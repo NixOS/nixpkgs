@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-VUcS4OzvPj0o627ZWIOBqEAQJ4JuMCMjgaZoMkL/IHc=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   setSourceRoot = ''
     export sourceRoot=$(pwd)/source/hid-xpadneo/src
   '';

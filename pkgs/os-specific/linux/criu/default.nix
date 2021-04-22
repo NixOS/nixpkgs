@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     export SHELL=""
   '';
 
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [ "fortify" "pie" "stackprotector" ];
   # dropping fortify here as well as package uses it by default:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 

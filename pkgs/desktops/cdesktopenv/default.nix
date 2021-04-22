@@ -23,6 +23,8 @@ in stdenv.mkDerivation rec {
     sha256 = "029rljhi5r483x8rzdpl8625z0wx8r7k2m0364nbw66h5pig9lbx";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # remove with next release
   patches = [
     ./2.3.2.patch

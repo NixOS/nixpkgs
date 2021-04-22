@@ -20,6 +20,7 @@ gsmakeDerivation {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${version}.tar.gz";
     sha256 = "10xjrv5d443wzll6lf9y65p6v9kvx7xxklhsm1j05y93vwgzl0w8";
   };
+  hardeningDisable = [ "pie" ];
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     aspell audiofile

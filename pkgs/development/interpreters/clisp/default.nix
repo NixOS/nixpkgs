@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     sha256 = "8132ff353afaa70e6b19367a25ae3d5a43627279c25647c220641fed00f8e890";
   };
 
+  hardeningDisable = [ "pie" ];
+
   inherit libsigsegv gettext coreutils;
 
   ffcallAvailable = stdenv.isLinux && (libffcall != null);

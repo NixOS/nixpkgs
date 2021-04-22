@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   preConfigure = ''
     patchShebangs mkversion

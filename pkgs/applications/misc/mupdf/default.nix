@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rljl44y8p8hgaqializlyrgpij1wbnrzyp0ll5kcg7w05nylq48";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = lib.optional stdenv.isDarwin ./darwin.patch ++ [
     (fetchpatch {
       name = "pdfocr.patch";

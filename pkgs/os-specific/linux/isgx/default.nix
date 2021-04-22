@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

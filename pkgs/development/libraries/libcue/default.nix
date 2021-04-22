@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1iqw4n01rv2jyk9lksagyxj8ml0kcfwk67n79zy1r6zv1xfp5ywm";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ cmake bison flex ];
 
   doCheck = false; # fails all the tests (ctest)

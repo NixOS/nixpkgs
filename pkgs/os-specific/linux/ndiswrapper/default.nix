@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "ndiswrapper-${version}-${kernel.version}";
   inherit version;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   patches = [ ./no-sbin.patch ];
 

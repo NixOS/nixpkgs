@@ -27,6 +27,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0bpk3rlqzbxvgrxmrzs0hcrgwhsqnpjqv1kdd9cp09knimmksvy5";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ lazarus fpc makeWrapper ];
 
   buildInputs = [ pango cairo glib atk gtk2 libX11 gdk-pixbuf ];

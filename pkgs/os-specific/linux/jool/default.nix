@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = sourceAttrs.src;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   prePatch = ''
     sed -e 's@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@' -i src/mod/*/Makefile

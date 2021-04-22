@@ -18,6 +18,8 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     inherit sha256;
   };
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     rm -rf gmock
     cp -r ${gtest.src}/googlemock gmock

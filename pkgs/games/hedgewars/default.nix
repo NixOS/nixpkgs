@@ -23,6 +23,8 @@ mkDerivation rec {
     sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
   buildInputs = [

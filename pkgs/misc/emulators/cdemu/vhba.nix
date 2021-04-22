@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   meta = with lib; {
     description = "Provides a Virtual (SCSI) HBA";

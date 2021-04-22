@@ -124,8 +124,6 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";

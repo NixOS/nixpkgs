@@ -66,6 +66,8 @@ in stdenv.mkDerivation rec {
     hash = "sha256-xvKjb+ql3WxnGHqcn3WnxunY5+s9f8Gt/n6EFSBrNdI=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"

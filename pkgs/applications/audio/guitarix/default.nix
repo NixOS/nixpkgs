@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qsfbyrrpb3bbdyq68k28mjql7kglxh8nqcw9jvja28x6x9ik5a0";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [
     gettext
     hicolor-icon-theme

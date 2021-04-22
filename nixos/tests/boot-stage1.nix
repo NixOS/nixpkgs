@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         kdev = config.boot.kernelPackages.kernel.dev;
         kver = config.boot.kernelPackages.kernel.modDirVersion;
         ksrc = "${kdev}/lib/modules/${kver}/build";
-        hardeningDisable = [ "pic" ];
+        hardeningDisable = [ "pic" "pie" ];
         nativeBuildInputs = kdev.moduleBuildDependencies;
       } ''
         echo "obj-m += $name.o" > Makefile

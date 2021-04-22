@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-adwLtG6o/DB9TKHgthyMNV6yB9Cwxp9PhGIyjnTXueo=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 

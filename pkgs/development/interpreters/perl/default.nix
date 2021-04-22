@@ -26,6 +26,8 @@ let
       inherit sha256;
     };
 
+    hardeningDisable = [ "pie" ];
+
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
       optional crossCompiling "mini";

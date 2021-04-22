@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ddqr80kmz4l8g3r3gf7bmf2v29fgivlc2bgxfiscjg2sarivjz1";
   };
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;

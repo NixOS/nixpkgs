@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   # perf refers both to newt and slang
   nativeBuildInputs = [

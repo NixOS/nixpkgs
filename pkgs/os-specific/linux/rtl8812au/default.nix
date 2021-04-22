@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bc nukeReferences ];
   buildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [ "format" "pic" "pie" ];
 
   prePatch = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"

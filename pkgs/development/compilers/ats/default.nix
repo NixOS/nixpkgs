@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l2kj1fzhxwsklwmn5yj2vp9rmw4jg0b18bzwqz72bfi8i39736k";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # this is necessary because atxt files usually include some .hats files
   patches = [ ./install-atsdoc-hats-files.patch ];
   buildInputs = [ gmp ];

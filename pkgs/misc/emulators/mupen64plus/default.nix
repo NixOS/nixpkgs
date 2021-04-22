@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a21n4gqdvag6krwcjm5bnyw5phrlxw6m0mk73jy53iq03f3s96m";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ pkg-config nasm ];
   buildInputs = [ boost dash freetype libpng SDL which zlib ];
 

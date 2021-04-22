@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ which ocaml ocamlbuild ];
 
   dontAddPrefix = true;

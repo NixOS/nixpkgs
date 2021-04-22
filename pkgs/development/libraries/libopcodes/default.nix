@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--enable-shared"
+    "--with-pic"
   ];
 
   enableParallelBuilding = true;

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17chvi3i80rj4750smpizf562xjzd2xcv5rfyh997pyvc1zbq5rh";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   nativeBuildInputs = [
     cmake
     python3

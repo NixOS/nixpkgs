@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     sha256 = "17i3nlhxm4x4zx00i00aivhxmagbnyizxnpwiqzg57bf23hrvdj3";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
 
   buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];

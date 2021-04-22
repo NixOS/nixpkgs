@@ -25,6 +25,8 @@ in rec {
       fetchSubmodules = true;
     };
 
+    hardeningDisable = [ "pie" ]; # clang-7: error: argument unused during compilation: '-pie'
+
     # Patches:
     # irods_root_path.patch : the root path is obtained by stripping 3 items of the path,
     #                         but we don't use /usr with nix, so remove only 2 items.
@@ -71,6 +73,8 @@ in rec {
        rev = version;
        sha256 = "08hqrc9iaw0y9rrrcknnl5mzbcrsvqc39pwvm62fipl3vnfqryli";
      };
+
+     hardeningDisable = [ "pie" ]; # clang-7: error: argument unused during compilation: '-pie'
 
      patches = [ ./zmqcpp-deprecated-send_recv.patch ];
 

@@ -14,6 +14,8 @@ let
         url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
       };
 
+      hardeningDisable = [ "pie" ];
+
       nativeBuildInputs = [ flex bison ];
       buildInputs = [ readline libssh ];
 

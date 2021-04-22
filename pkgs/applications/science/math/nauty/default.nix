@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
     sha256 = "0xsfqfcknbd6g6wzpa5l7crmmk3bf3zjh37rhylq6b20dqcmvjkn";
   };
+  hardeningDisable = [ "pie" ];
   outputs = [ "out" "dev" ];
   configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very

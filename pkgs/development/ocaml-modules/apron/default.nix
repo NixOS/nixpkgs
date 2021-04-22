@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "14ymjahqdxj26da8wik9d5dzlxn81b3z1iggdl7rn2nn06jy7lvy";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
 

@@ -29,6 +29,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
   };
 
+  hardeningDisable = lib.optionals qtMode [ "pie" ];
+
   buildInputs = [ ncurses ]
                 ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];

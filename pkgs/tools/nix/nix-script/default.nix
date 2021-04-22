@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0yiqljamcj9x8z801bwj7r30sskrwv4rm6sdf39j83jqql1fyq7y";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs  = [
     (haskellPackages.ghcWithPackages (hs: with hs; [ posix-escape ]))
   ];

@@ -21,6 +21,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1c4cv9b0d7r4bxzkwzdv9h651ziq822iya6fbyizm57n1nzdkk4s";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs =
     [ zlib libpng libtiff ]
     ++ lib.optionals (subproject != "library") [ jabcode ];

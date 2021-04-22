@@ -95,7 +95,7 @@ let
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
 
-      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
+      hardeningDisable = [ "fortify" "pic" "pie" "stackprotector" ];
 
       configureFlags = [
         "--with-config=${configFile}"

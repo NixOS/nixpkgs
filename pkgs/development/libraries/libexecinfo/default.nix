@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
-  hardeningEnable = [ "stackprotector" ];
 
   buildFlags =
       lib.optional enableStatic "static"

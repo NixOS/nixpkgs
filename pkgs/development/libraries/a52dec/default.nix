@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   configureFlags = [
     "--enable-shared"
   ];

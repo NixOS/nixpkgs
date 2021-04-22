@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "013g1zngxffavqrk5jy934q3bdhsv6z05ilfixdn8dj0zy26lwv5";
   };
 
+  hardeningDisable = [ "pie" ];
+
   makeFlags = [
     "BUILD=RELEASE"
     "VERSION=${version}"

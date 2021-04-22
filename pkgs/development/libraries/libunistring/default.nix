@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
   };
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [ "out" "dev" "info" "doc" ];
 
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;

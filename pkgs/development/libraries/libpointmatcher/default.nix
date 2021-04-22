@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lai6sr3a9dj1j4pgjjyp7mx10wixy5wpvbka8nsc2danj6xhdyd";
   };
 
+  hardeningDisable = [ "glibcxxassertions" "pie" ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen boost libnabo ];
 
