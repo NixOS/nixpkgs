@@ -4863,6 +4863,8 @@ in {
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
+  ondilo = callPackage ../development/python-modules/ondilo { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   onnx = callPackage ../development/python-modules/onnx { };
