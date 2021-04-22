@@ -8033,6 +8033,18 @@ let
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
   };
 
+  vim-strip-trailing-whitespace = buildVimPluginFrom2Nix {
+    pname = "vim-strip-trailing-whitespace";
+    version = "2021-01-03";
+    src = fetchFromGitHub {
+      owner = "axelf4";
+      repo = "vim-strip-trailing-whitespace";
+      rev = "9a93dd653806ba3f886b2cf92111b663ce8d44bd";
+      sha256 = "1pvirqj21xl2qbs9ycdp7n3lnf4n8b2bz1y90nphnvda4dfaac8l";
+    };
+    meta.homepage = "https://github.com/axelf4/vim-strip-trailing-whitespace/";
+  };
+
   vim-stylish-haskell = buildVimPluginFrom2Nix {
     pname = "vim-stylish-haskell";
     version = "2019-11-28";
