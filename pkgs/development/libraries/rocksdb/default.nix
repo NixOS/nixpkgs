@@ -47,12 +47,13 @@ stdenv.mkDerivation rec {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional
+  ]
+  ++ (lib.optional
         (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
         "-DFORCE_SSE42=1")
-    (lib.optional enableLite "-DROCKSDB_LITE=1")
-    "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
-  ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
+  ++ (lib.optional enableLite "-DROCKSDB_LITE=1")
+  ++ [ "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}" ]
+  ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";

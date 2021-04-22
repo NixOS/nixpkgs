@@ -5731,7 +5731,7 @@ let
       sha256 = "1k6n261nrrcll9wxn5xwi4ibpavqv1il96687k62mbpznzl2gx37";
     };
 
-    SYBASE = pkgs.freetds;
+    env.SYBASE = toString pkgs.freetds;
 
     buildInputs = [ pkgs.freetds ];
     propagatedBuildInputs = [ DBI ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     export UPX_UCLDIR=${ucl}
   '';
 
-  makeFlags = [ "-C" "src" "CHECK_WHITESPACE=true" ];
+  makeFlags = [ "-C src" "CHECK_WHITESPACE=true" ];
 
   installPhase = ''
     mkdir -p $out/bin

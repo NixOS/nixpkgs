@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     rm -rf contrib
   '';
 
-  fontsPath = lib.optionalString tileMode dejavu_fonts;
+  env.fontsPath = toString (lib.optionalString tileMode dejavu_fonts);
 
   makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=${stdenv.cc.targetPrefix}cc" "FORCE_CXX=${stdenv.cc.targetPrefix}c++" "HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}c++"
                 "FORCE_PKGCONFIG=y"

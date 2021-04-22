@@ -23,7 +23,7 @@ in rustPlatform.buildRustPackage rec {
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   cargoSha256 = "0ga7ahlszja8ilng8xsrwdy7zy6bbci4mf00lknladjhlw16wibf";
   cargoBuildFlags = [ featuresFlag ];

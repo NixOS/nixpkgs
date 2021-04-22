@@ -80,7 +80,7 @@ rec {
 
     # TODO: not sure why I'm having to set this for nix-build...
     #       can anyone tell if I'm doing something wrong?
-    SOURCE_DATE_EPOCH = 315532800;
+    env.SOURCE_DATE_EPOCH = 315532800;
 
     # These aren't, strictly speaking, nix/nixpkgs specific, but I've
     # had hell upstreaming them. Pulling from resholve source and
@@ -103,10 +103,10 @@ rec {
       patchShebangs asdl build core doctools frontend native oil_lang
     '';
 
-    _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
+    env._NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    env.LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
 
     meta = {
       description = "A new unix shell";

@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     }
     mkdir -p $out/share
 
-    for src in $srcs; do
+    for src in "''${srcs[@]}"; do
       dst=$out/share/$(dictname $src)
       echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
       iconv -f EUC-JP -t UTF-8 $src |\

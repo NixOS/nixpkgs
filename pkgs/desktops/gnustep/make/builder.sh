@@ -1,3 +1,5 @@
+source .attrs.sh
+
 source $stdenv/setup
 
 preConfigure() {
@@ -76,7 +78,7 @@ postInstall() {
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_INFO" in *"${tmp}"*) false;; *) true;; esac; then
 	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
     fi
-    
+
     # write the config file
     echo GNUSTEP_MAKEFILES=$GNUSTEP_MAKEFILES >> $conf
     if [ -n "$NIX_GNUSTEP_SYSTEM_APPS" ]; then
@@ -112,7 +114,7 @@ postInstall() {
     if [ -n "$NIX_GNUSTEP_SYSTEM_DOC_INFO" ]; then
 	echo NIX_GNUSTEP_SYSTEM_DOC_INFO="$NIX_GNUSTEP_SYSTEM_DOC_INFO" >> $conf
     fi
-    
+
     for i in $out/bin/*; do
 	echo "wrapping $(basename $i)"
 	wrapGSMake "$i" "$out/share/.GNUstep.conf"

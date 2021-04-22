@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper unzip which gdb git ]
 
-  ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
   ]);
 

@@ -18,9 +18,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   postPatch = ''
-    substituteInPlace \
-      --replace "CC = gcc" "CC = cc' \
-        Makefile
+    substituteInPlace Makefile \
+      --replace "CC = gcc" "CC = cc"
   '';
 
   installPhase = ''

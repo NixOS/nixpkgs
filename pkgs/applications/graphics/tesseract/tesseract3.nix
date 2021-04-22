@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
 
-  LIBLEPT_HEADERSDIR = "${leptonica}/include";
+  env.LIBLEPT_HEADERSDIR = "${leptonica}/include";
 
   meta = {
     description = "OCR engine";

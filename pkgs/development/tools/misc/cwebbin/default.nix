@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     zcat ${cweb} | tar -xvpf -
-    make -f Makefile.unix boot $makeFlags
-    make -f Makefile.unix cautiously $makeFlags
+    make -f Makefile.unix boot "''${makeFlags[@]}"
+    make -f Makefile.unix cautiously "''${makeFlags[@]}"
   '';
 
   installPhase = ''
     mkdir -p $out/share/man/man1 $out/share/texmf/tex/generic $out/share/emacs $out/lib
-    make -f Makefile.unix install $makeFlags
+    make -f Makefile.unix install "''${makeFlags[@]}"
   '';
 
   meta = with lib; {

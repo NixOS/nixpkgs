@@ -33,7 +33,7 @@ mkDerivation rec {
 
   makeWrapperArgs = [
     # hacky workaround for https://github.com/NixOS/nixpkgs/issues/59901
-    "--set OMP_NUM_THREADS 1"
+    "--set" "OMP_NUM_THREADS" "1"
   ];
 
   postPatch = ''

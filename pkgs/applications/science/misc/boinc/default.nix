@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./_autosetup
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
+    configureFlags+=("--sysconfdir=$out/etc")
   '';
 
   enableParallelBuilding = true;

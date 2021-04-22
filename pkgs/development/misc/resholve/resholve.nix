@@ -58,7 +58,7 @@ python27Packages.buildPythonApplication {
 
   inherit doCheck;
   checkInputs = [ bats ];
-  RESHOLVE_PATH = "${lib.makeBinPath [ file findutils gettext ]}";
+  env.RESHOLVE_PATH = "${lib.makeBinPath [ file findutils gettext ]}";
 
   checkPhase = ''
     # explicit interpreter for test suite
