@@ -308,6 +308,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "nx584"
     "omnilogic"
     "ozw"
     "panel_custom"
