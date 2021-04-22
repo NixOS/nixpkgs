@@ -5,7 +5,6 @@
 , jinja2
 , mpv
 , pillow
-, pydantic
 , pystray
 , python-mpv-jsonipc
 , pywebview
@@ -14,18 +13,17 @@
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YAZnNSzgAGYSb45VINRCPeUUbbtuOp/bLbIqz/90W6g=";
+    sha256 = "sha256-NXDLqQzCUfDPoKNPrmIn5FMedMKYxtDhkawRE2lg/vI=";
   };
 
   propagatedBuildInputs = [
     jellyfin-apiclient-python
     mpv
     pillow
-    pydantic
     python-mpv-jsonipc
 
     # gui dependencies
