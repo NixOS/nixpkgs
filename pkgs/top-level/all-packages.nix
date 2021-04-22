@@ -1347,6 +1347,8 @@ in
 
   enpass = callPackage ../tools/security/enpass { };
 
+  esbuild = callPackage ../development/tools/esbuild { };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
