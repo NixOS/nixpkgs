@@ -1,5 +1,6 @@
 { stdenv, lib, buildDunePackage, fetchurl, ocaml
-, result, alcotest, cohttp-lwt-unix, odoc, curl }:
+, result, alcotest, cohttp-lwt-unix, odoc, curl, cacert
+}:
 
 buildDunePackage rec {
   pname = "curly";
@@ -15,7 +16,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ result ];
-  checkInputs = [ alcotest cohttp-lwt-unix ];
+  checkInputs = [ alcotest cohttp-lwt-unix cacert ];
   # test dependencies are only available for >= 4.08
   # https://github.com/mirage/ca-certs/issues/16
   doCheck = lib.versionAtLeast ocaml.version "4.08"
