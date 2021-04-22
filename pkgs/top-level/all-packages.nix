@@ -30649,6 +30649,8 @@ in
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wprecon = callPackage ../tools/security/wprecon { };
+
   wraith = callPackage ../applications/networking/irc/wraith {
     openssl = openssl_1_0_2;
   };
