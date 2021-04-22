@@ -8,7 +8,6 @@
 , lua5_3
 , libid3tag
 , flac
-, mongoose
 , pcre
 }:
 
