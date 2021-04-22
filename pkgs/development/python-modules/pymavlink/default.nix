@@ -14,6 +14,8 @@ buildPythonPackage rec {
   # No tests included in PyPI tarball
   doCheck = false;
 
+  pythonImportsCheck = [ "pymavlink" ];
+
   meta = with lib; {
     description = "Python MAVLink interface and utilities";
     homepage = "https://github.com/ArduPilot/pymavlink";
