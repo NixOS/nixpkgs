@@ -1,4 +1,8 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , setuptools-scm
 , importlib-metadata
 , dbus-python
@@ -21,10 +25,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   propagatedBuildInputs = [
     # this should be optional, however, it has a different API
     importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
@@ -34,7 +34,25 @@ buildPythonPackage rec {
     secretstorage
   ];
 
-  pythonImportsCheck = [ "keyring" "keyring.backend" ];
+  pythonImportsCheck = [
+    "keyring"
+    "keyring.backend"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # Keychain communications isn't possible in our build environment
+  # keyring.errors.KeyringError: Can't get password from keychain: (-25307, 'Unknown Error')
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    "test_multiprocess_get"
+    "test_multiprocess_get_after_native_get"
+  ];
+
+  disabledTestsPaths = [
+    "tests/backends/test_macOS.py"
+  ];
 
   meta = with lib; {
     description = "Store and access your passwords safely";
