@@ -510,11 +510,18 @@ let
     path = "lib/libterminfo";
     version = "8.0";
     sha256 = "14gp0d6fh6zjnbac2yjhyq5m6rca7gm6q1s9gilhzpdgl9m7vb9r";
+    nativeBuildInputs = [
+      makeMinimal install tsort lorder mandoc statHook nbperf tic
+    ];
     buildInputs = [ compat ];
+    SHLIBINSTALLDIR = "$(out)/lib";
     postPatch = ''
       substituteInPlace term.c --replace /usr/share $out/share
       substituteInPlace setupterm.c \
         --replace '#include <curses.h>' 'void use_env(bool);'
+    '';
+    postBuild = ''
+      make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share
     '';
     postInstall = ''
       make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share install
