@@ -381,6 +381,7 @@ in with py.pkgs; buildPythonApplication rec {
     "zha"
     "zone"
     "zwave"
+    "zwave_js"
   ];
 
   pytestFlagsArray = [
