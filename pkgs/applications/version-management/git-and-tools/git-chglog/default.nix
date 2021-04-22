@@ -13,17 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "09zjypmcc3ra7sw81q1pbbrlpxxp4k00p1cfkrrih8wvb25z89h5";
 
-  buildPhase = ''
-    VERSION=${version} make build
-  '';
+  buildFlagsArray = [ "-ldflags= -s -w -X=main.Version=v${version}" ];
 
-  installPhase = ''
-    install -Dm0755 git-chglog $out/bin/git-chglog
-    ./git-chglog --version
-  '';
+  subPackages = [ "cmd/git-chglog" ];
 
   meta = with lib; {
     description = "CHANGELOG generator implemented in Go (Golang)";
+    homepage = "https://github.com/git-chglog/git-chglog";
     license = licenses.mit;
     maintainers = with maintainers; [ ldenefle ];
   };
