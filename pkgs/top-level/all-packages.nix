@@ -12438,9 +12438,7 @@ in
     wxGTK = wxGTK30;
   };
 
-  buck = callPackage ../development/tools/build-managers/buck {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  buck = callPackage ../development/tools/build-managers/buck { };
 
   buildkite-agent = buildkite-agent3;
   buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
