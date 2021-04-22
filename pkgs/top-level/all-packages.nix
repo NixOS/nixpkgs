@@ -450,7 +450,9 @@ with pkgs;
 
   dispad = callPackage ../tools/X11/dispad { };
 
-  dupeguru = callPackage ../applications/misc/dupeguru { };
+  dupeguru = with python3Packages; callPackage ../applications/misc/dupeguru {
+    inherit (qt5) wrapQtAppsHook;
+  };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
 
