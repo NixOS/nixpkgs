@@ -30,10 +30,12 @@ buildGoModule rec {
   meta = with lib; {
     description = "A man in the middle tool";
     longDescription = ''
-      BetterCAP is a powerful, flexible and portable tool created to perform various types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic in realtime, sniff for credentials and much more.
+      BetterCAP is a powerful, flexible and portable tool created to perform various
+      types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic
+      in realtime, sniff for credentials and much more.
     '';
     homepage = "https://www.bettercap.org/";
-    license = with licenses; gpl3;
+    license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ y0no ];
   };
 }
