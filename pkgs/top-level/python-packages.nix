@@ -5121,6 +5121,8 @@ in {
 
   mapbox = callPackage ../development/python-modules/mapbox { };
 
+  mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
+
   mariadb = callPackage ../development/python-modules/mariadb { };
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
