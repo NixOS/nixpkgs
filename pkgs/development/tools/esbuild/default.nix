@@ -1,11 +1,8 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
-let
+buildGoModule rec {
   pname = "esbuild";
   version = "0.11.12";
-
-in buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "evanw";
@@ -21,6 +18,5 @@ in buildGoModule {
     homepage = "https://esbuild.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ lucus16 ];
-    platforms = platforms.all;
   };
 }
