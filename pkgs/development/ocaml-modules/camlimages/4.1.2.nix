@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    branch = "4.0";
-    homepage = "https://bitbucket.org/camlspotter/camlimages";
+    branch = "4.1";
+    homepage = "https://gitlab.com/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = licenses.lgpl2;
     maintainers = [ maintainers.vbgl ];
