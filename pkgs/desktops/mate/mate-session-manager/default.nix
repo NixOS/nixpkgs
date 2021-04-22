@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/xsessions/mate.desktop \
-      --replace "Exec=mate-session" "Exec=$out/bin/mate-session" \
-      --replace "TryExec=mate-session" "TryExec=$out/bin/mate-session"
+      --replace "Exec=mate-session" "Exec=$out/bin/mate-session"
   '';
 
   passthru.providedSessions = [ "mate" ];
