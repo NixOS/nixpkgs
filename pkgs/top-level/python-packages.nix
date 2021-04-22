@@ -2660,6 +2660,8 @@ in {
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
+  gcsfs = callPackage ../development/python-modules/gcsfs { };
+
   gdal = toPythonModule (pkgs.gdal.override { pythonPackages = self; });
 
   gdata = callPackage ../development/python-modules/gdata { };
