@@ -23786,6 +23786,8 @@ in
     wlroots = wlroots_0_12;
   };
 
+  workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
+
   windowchef = callPackage ../applications/window-managers/windowchef/default.nix { };
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
