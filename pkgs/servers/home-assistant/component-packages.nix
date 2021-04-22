@@ -984,6 +984,6 @@
     "zone" = ps: with ps; [ ];
     "zoneminder" = ps: with ps; [ zm-py ];
     "zwave" = ps: with ps; [ aiohttp-cors homeassistant-pyozw paho-mqtt pydispatcher python-openzwave-mqtt ];
-    "zwave_js" = ps: with ps; [ aiohttp-cors ]; # missing inputs: zwave-js-server-python
+    "zwave_js" = ps: with ps; [ aiohttp-cors zwave-js-server-python ];
   };
 }
