@@ -563,9 +563,6 @@ let
     version = "8.0";
     sha256 = "03azp5anavhjr15sinjlik9792lyf7w4zmkcihlkksrywhs05axh";
     meta.platforms = lib.platforms.netbsd;
-    postPatch = ''
-      substituteInPlace rpc/Makefile --replace /usr $out
-    '';
   };
 
   librpcsvc = mkDerivation {
