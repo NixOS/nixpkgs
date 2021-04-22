@@ -19,6 +19,7 @@
 , libsoup
 , libstartup_notification
 , libXtst
+, libXdamage
 , muffin
 , networkmanager
 , pkg-config
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
     libsoup
     libstartup_notification
     libXtst
+    libXdamage
     muffin
     networkmanager
     pkg-config
