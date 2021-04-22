@@ -7745,6 +7745,8 @@ in {
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
+  seqeval = callPackage ../development/python-modules/seqeval { };
+
   sequoia = disabledIf (isPyPy || !isPy3k) (toPythonModule (pkgs.sequoia.override {
     pythonPackages = self;
     pythonSupport = true;
