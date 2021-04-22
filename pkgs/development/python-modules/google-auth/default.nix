@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -46,6 +47,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_request_with_timeout_success"
+    "test_request_with_timeout_failure"
+    "test_request_headers"
+    "test_request_error"
+    "test_request_basic"
   ];
 
   meta = with lib; {
