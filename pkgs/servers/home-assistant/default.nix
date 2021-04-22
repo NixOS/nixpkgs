@@ -27,6 +27,19 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
+    # Pinned due to API changes in brother>=1.0, remove >= 2021.5
+    (self: super: {
+      brother = super.brother.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.2";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "brother";
+          rev = version;
+          sha256 = "sha256-vIefcL3K3ZbAUxMFM7gbbTFdrnmufWZHcq4OA19SYXE=";
+        };
+      });
+    })
+
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
@@ -205,6 +218,7 @@ in with py.pkgs; buildPythonApplication rec {
     "axis"
     "bayesian"
     "binary_sensor"
+    "brother"
     "caldav"
     "calendar"
     "camera"
