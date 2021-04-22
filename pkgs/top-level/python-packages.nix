@@ -7743,6 +7743,8 @@ in {
 
   telethon-session-sqlalchemy = callPackage ../development/python-modules/telethon-session-sqlalchemy { };
 
+  telfhash = callPackage ../development/python-modules/telfhash { };
+
   tempita = callPackage ../development/python-modules/tempita { };
 
   tempora = callPackage ../development/python-modules/tempora { };
@@ -8753,6 +8755,8 @@ in {
   };
 
   zulip = callPackage ../development/python-modules/zulip { };
+
+  zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 }
