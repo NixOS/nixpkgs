@@ -1347,6 +1347,8 @@ in
 
   enpass = callPackage ../tools/security/enpass { };
 
+  esbuild = callPackage ../development/tools/esbuild { };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
@@ -1598,6 +1600,10 @@ in
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
+  anevicon = callPackage ../tools/networking/anevicon {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   apprise = with python3Packages; toPythonApplication apprise;
 
   aria2 = callPackage ../tools/networking/aria2 {
@@ -1665,6 +1671,10 @@ in
   b3sum = callPackage ../tools/security/b3sum {};
 
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
+
+  badtouch = callPackage ../tools/security/badtouch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   bandwhich = callPackage ../tools/networking/bandwhich {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -9297,6 +9307,8 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
+  xplr = callPackage ../applications/misc/xplr {};
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
@@ -12440,9 +12452,7 @@ in
     wxGTK = wxGTK30;
   };
 
-  buck = callPackage ../development/tools/build-managers/buck {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  buck = callPackage ../development/tools/build-managers/buck { };
 
   buildkite-agent = buildkite-agent3;
   buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
@@ -17524,6 +17534,8 @@ in
 
   sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
 
+  sqlitecpp = callPackage ../development/libraries/sqlitecpp { };
+
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
@@ -21873,7 +21885,7 @@ in
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
       buildPythonApplication appdirs colorama dateutil
-      requests requests_toolbelt sqlalchemy fusepy;
+      requests requests_toolbelt setuptools sqlalchemy fusepy;
   };
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
@@ -30301,7 +30313,9 @@ in
 
   rmount = callPackage ../tools/filesystems/rmount {};
 
-  romdirfs = callPackage ../tools/filesystems/romdirfs {};
+  romdirfs = callPackage ../tools/filesystems/romdirfs {
+    stdenv = gccStdenv;
+  };
 
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
@@ -30645,6 +30659,8 @@ in
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wprecon = callPackage ../tools/security/wprecon { };
+
   wraith = callPackage ../applications/networking/irc/wraith {
     openssl = openssl_1_0_2;
   };
@@ -30928,6 +30944,8 @@ in
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
   };
+
+  dnstwist = callPackage ../tools/networking/dnstwist {};
 
   dsniff = callPackage ../tools/networking/dsniff {};
 

@@ -6012,6 +6012,12 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  malo = {
+    email = "mbourgon@gmail.com";
+    github = "malob";
+    githubId = 2914269;
+    name = "Malo Bourgon";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
@@ -8761,6 +8767,12 @@
     githubId = 8534888;
     name = "Savanni D'Gerinel";
   };
+  sayanarijit = {
+    email = "sayanarijit@gmail.com";
+    github = "sayanarijit";
+    githubId = 11632726;
+    name = "Arijit Basu";
+  };
   sb0 = {
     email = "sb@m-labs.hk";
     github = "sbourdeauducq";
@@ -9472,6 +9484,12 @@
     github = "SuprDewd";
     githubId = 187109;
     name = "Bjarki Ágúst Guðmundsson";
+  };
+  suryasr007 = {
+    email = "94suryateja@gmail.com";
+    github = "suryasr007";
+    githubId = 10533926;
+    name = "Surya Teja V";
   };
   suvash = {
     email = "suvash+nixpkgs@gmail.com";

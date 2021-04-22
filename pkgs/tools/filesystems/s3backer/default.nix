@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl expat ];
 
+  # AC_CHECK_DECLS doesn't work with clang
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace configure.ac --replace \
+      'AC_CHECK_DECLS(fdatasync)' ""
+  '';
+
   autoreconfPhase = ''
     patchShebangs ./autogen.sh
     ./autogen.sh
@@ -25,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }
