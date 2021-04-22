@@ -20,6 +20,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "01sp24z63r3nqxx57zc4873b8i5dqipy7yrxzrwjns531vznhiy2";
   };
 
+  hardeningDisable = lib.optionals withDriver [ "pie" ];
+
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

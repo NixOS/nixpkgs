@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     sha256 = "0c4nqp6yzmpj0mcpg7ibmwyqi8hjw3sza8myvy4nzq3fa6wldy5l";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ gmp ];
 
   setupHook = with lib;

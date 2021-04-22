@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSeccomp libseccomp
     ++ lib.optional stdenv.isLinux pps-tools;
 
-  hardeningEnable = [ "pie" ];
-
   postInstall = ''
     rm -rf $out/share/doc
   '';

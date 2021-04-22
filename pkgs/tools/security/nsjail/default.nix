@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256          = "1w6x8xcrs0i1y3q41gyq8z3cq9x24qablklc4jiydf855lhqn4dh";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ autoconf bison flex libtool pkg-config which ];
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;

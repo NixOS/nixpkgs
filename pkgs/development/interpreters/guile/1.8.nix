@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
   };
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 

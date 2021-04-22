@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ wine_custom libX11 libGLU libGL curl ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];

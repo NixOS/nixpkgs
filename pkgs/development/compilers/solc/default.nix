@@ -44,6 +44,8 @@ let
       sha256 = "11w7sa1y2dirzh84k04fkwbfc6xpjp5jr65w1pmb2pnkjvvf46xq";
     };
 
+    hardeningDisable = [ "glibcxxassertions" ];
+
     postPatch = ''
       substituteInPlace cmake/jsoncpp.cmake \
         --replace "${jsoncppUrl}" ${jsoncpp}

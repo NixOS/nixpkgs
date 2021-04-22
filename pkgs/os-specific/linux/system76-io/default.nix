@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

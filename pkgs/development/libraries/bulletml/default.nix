@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     "-C src"
   ];
   nativeBuildInputs = [ bison perl ];
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   installPhase = ''
     install -D -m 644 src/bulletml.d "$out"/include/d/bulletml.d

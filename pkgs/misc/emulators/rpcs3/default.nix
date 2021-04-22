@@ -20,6 +20,8 @@ mkDerivation {
     sha256 = "182rkmbnnlcfzam4bwas7lwv10vqiqvvaw3299a3hariacd7rq8x";
   };
 
+  hardeningDisable = [ "pie" ];
+
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
     #define RPCS3_GIT_VERSION "${gitVersion}"

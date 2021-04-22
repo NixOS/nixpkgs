@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sgbgv7ljfr0lwwwrb9wsnav7mw7jmr3k8mygwza15icass6dsdq";
   };
 
+  hardeningDisable = [ "pie" ];
+
   configureFlags = [
     "--enable-dddmp"
     "--enable-obj"

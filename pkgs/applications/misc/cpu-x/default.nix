@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LWIcE86o+uU8G9DtumiH6iTqHhvq4y/QyQX7J3FhKEc=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
   buildInputs = [
     gtk3 ncurses libcpuid pciutils procps

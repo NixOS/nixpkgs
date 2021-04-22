@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
   };
 
+  hardeningDisable = [ "pie" ];
+
   # remove all non-essential packages (which take up a lot of space)
   preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
     patchShebangs .

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     })
     else throw "Architecture not supported";
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [ "format" "pic" "pie" ];
 
   # clm uses timestamps of dcl, icl, abc and o files to decide what must be rebuild
   # and for chroot builds all of the library files will have equal timestamps.  This

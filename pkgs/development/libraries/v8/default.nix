@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     sha256 = "07ymw4kqbz7kv311gpk5bs5q90wj73n2q7jkyfhqk4hvhs1q5bw7";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   postUnpack = ''
     ${lib.concatStringsSep "\n" (
       lib.mapAttrsToList (n: v: ''

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [
     libtoxcore dbus libvpx libX11 openal freetype
     libv4l libXrender fontconfig libXext libXft filter-audio

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--enable-ansi"
   ];
 
-  hardeningDisable = [ "pic" "bindnow" ];
+  hardeningDisable = [ "bindnow" "pic" "pie" ];
 
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 

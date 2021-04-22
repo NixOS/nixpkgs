@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 

@@ -147,7 +147,7 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" "pie" ];
+  hardeningDisable = [ "format" "pie" ] ++ optionals langAda [ "cfprotection" "stackclashprotection" ];
 
   prePatch =
     # This should kill all the stdinc frameworks that gcc and friends like to
@@ -316,6 +316,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langAda langGo version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "cfprotection" "stackclashprotection" ];
   };
 
   enableParallelBuilding = true;

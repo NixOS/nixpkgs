@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   # hilariously this is something of a double negative: 'disable' the
   # 'strictoverflow' hardening protection actually means we *allow* the compiler
   # to do strict overflow optimization. somewhat misleading...
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = [ "glibcxxassertions" "pie" "strictoverflow" ]; # clang-10: error: argument unused during compilation: '-pie'
 
   checkPhase = ''
     export ISPC_HOME=$PWD/bin

@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ ocaml findlib ];
 
   installTargets = [ "ocamlfind-install" ];

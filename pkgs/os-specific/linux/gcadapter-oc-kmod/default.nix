@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1nqhj3vqq9rnj37cnm2c4867mnxkr8di3i036shcz44h9qmy9d40";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [

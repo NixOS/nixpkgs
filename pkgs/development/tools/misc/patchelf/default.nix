@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "14npmdxppmh0ci140w8i8cy7zg1pnqg81a1mdsnza711ab7k36k9";
   };
 
+  hardeningDisable = [ "pie" ];
+
   setupHook = [ ./setup-hook.sh ];
 
   # fails 8 out of 24 tests, problems when loading libc.so.6

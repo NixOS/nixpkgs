@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cyrus_sasl libevent];
 
-  hardeningEnable = [ "pie" ];
-
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
     ++ lib.optional stdenv.isDarwin "-Wno-error";
 

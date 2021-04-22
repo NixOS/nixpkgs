@@ -15,6 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-Xf5Tj4tbY/A+mO2sUg19mmpNIuSC5cltTQb8xUhcJfI=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 

@@ -7,6 +7,8 @@ stdenvNoLibs.mkDerivation rec {
   name = "libgcc-${version}";
   inherit (gcc.cc) src version;
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [ "out" "dev" ];
 
   strictDeps = true;

@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     sha256="1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [
     ncurses
     fontconfig

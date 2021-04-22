@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q8dbqh14c7r15q6k6iv5k0d6xpi74i71d5r54py60gr099m2ha4";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   configurePhase = ''
     cd src

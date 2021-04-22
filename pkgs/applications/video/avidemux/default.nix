@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YopAT1If8oEnYHAK4+KqeOWBaw/z+2/QWsPnUkjZdAE=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     ./dynamic_install_dir.patch
     ./bootstrap_logging.patch

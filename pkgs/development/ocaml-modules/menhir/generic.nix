@@ -6,6 +6,8 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;

@@ -105,15 +105,11 @@ in rec {
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
-      supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-                              # Musl-based platforms will keep "pie", other platforms will not.
-      defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-                                # Except when:
-                                #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-                                #    - static armv7l, where compilation fails.
-                                !((stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) && stdenv.hostPlatform.isStatic)
-                              then supportedHardeningFlags
-                              else lib.remove "pie" supportedHardeningFlags;
+      supportedHardeningFlags = [ "bindnow" "cfprotection" "format" "fortify" "glibcxxassertions" "pic" "pie" "relro" "stackclashprotection" "stackprotector" "strictoverflow" ];
+      # static aarch64: compilation works, but produces segfaulting dynamically linked binaries.
+      # static armv7l: compilation fails.
+      defaultHardeningFlags = if stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) then lib.remove "pie" supportedHardeningFlags else supportedHardeningFlags;
+
       enabledHardeningOptions =
         if builtins.elem "all" hardeningDisable
         then []
@@ -253,6 +249,8 @@ in rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+
+          NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
@@ -288,8 +286,6 @@ in rec {
           in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;
-        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
-          NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
           requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {

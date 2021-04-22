@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "144f6g17q4m50kxzdncsfzdyycdfprnpwdaxcwgxj4jky1xsha1d";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''

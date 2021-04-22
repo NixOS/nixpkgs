@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     sha256 = "0n3k190qjhdlj10fjqijx6ismz0g7fk28i83j0480cxdqgmmlbxc";
   };
 
+  hardeningDisable = [ "pie" ];
+
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
   '';

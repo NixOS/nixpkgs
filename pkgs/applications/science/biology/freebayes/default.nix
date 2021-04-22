@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ zlib bzip2 xz ];
 
   installPhase = ''

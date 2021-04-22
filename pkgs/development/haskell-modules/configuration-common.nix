@@ -204,7 +204,7 @@ self: super: {
   search = dontCheck super.search;
 
   # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
-  opencv = dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch);
+  opencv = disableHardening (dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch)) [ "pie" ];
   opencv-extra = dontCheck (appendPatch super.opencv-extra ./patches/opencv-fix-116.patch);
 
   # https://github.com/ekmett/structures/issues/3
@@ -278,7 +278,7 @@ self: super: {
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
-  hlibgit2 = disableHardening super.hlibgit2 [ "format" ];
+  hlibgit2 = disableHardening super.hlibgit2 [ "format" "pie" ];
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hquery = dontCheck super.hquery;
   hs2048 = dontCheck super.hs2048;
@@ -298,7 +298,7 @@ self: super: {
   language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
-  lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
+  lvmrun = disableHardening (dontCheck super.lvmrun) ["format" "pie"];
   math-functions = if pkgs.stdenv.isDarwin
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;

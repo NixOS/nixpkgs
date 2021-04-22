@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     curlOpts = "--referer https://www.amd.com/en/support";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [ "format" "pic" "pie" ];
 
   patchPhaseSamples = "patch -p2 < ${./patches/patch-samples.patch}";
   patches = [

@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "101y617a295hzwr98ykvza1sycxlk29kzxn2ybjwc718r0alkbzz";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ ncurses portmidi ];
 
   patchPhase = ''

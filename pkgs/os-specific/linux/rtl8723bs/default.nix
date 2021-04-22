@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pxqya14a61vv2v5ky1ldybc0mjfin9mpvmajlmv0lls904rph7g";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   buildInputs = [ nukeReferences ];
 

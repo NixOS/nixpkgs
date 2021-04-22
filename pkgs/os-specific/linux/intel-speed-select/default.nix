@@ -4,6 +4,8 @@ stdenv.mkDerivation {
   pname = "intel-speed-select";
   inherit (kernel) src version;
 
+  hardeningDisable = [ "pie" ];
+
   makeFlags = [ "bindir=${placeholder "out"}/bin" ];
 
   postPatch = ''

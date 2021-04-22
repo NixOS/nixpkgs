@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
+  hardeningDisable = [ "glibcxxassertions" "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libffi llvm_6 ];
 

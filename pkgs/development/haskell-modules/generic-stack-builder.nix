@@ -20,6 +20,8 @@ let
 
 in stdenv.mkDerivation (args // {
 
+  hardeningDisable = [ "pie" ];
+
   # Doesn't work in the sandbox. Pass `--option sandbox relaxed` or
   # `--option sandbox false` to be able to build this
   __noChroot = true;

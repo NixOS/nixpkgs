@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   makeFlags = with kernel; [
     "DESTDIR=$(out)"

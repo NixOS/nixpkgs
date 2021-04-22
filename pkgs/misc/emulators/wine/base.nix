@@ -140,7 +140,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
-  hardeningDisable = [ "bindnow" ]
+  hardeningDisable = [ "bindnow" "pie" "stackclashprotection" ]
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 

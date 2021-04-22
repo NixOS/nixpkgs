@@ -26,6 +26,8 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = optional crossBuildTools ./cross-tools-flags.patch;
 
   # ncurses is required to build `makedoc'

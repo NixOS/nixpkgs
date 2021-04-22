@@ -7,6 +7,11 @@ mkChromiumDerivation (base: rec {
   packageName = "chromium";
   buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
 
+  hardeningDisable = [
+    "cfprotection"
+    "pie" # clang++: warning: argument unused during compilation: '-pie'
+  ];
+
   outputs = ["out" "sandbox"];
 
   sandboxExecutableName = "__chromium-suid-sandbox";

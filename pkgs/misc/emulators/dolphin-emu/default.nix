@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     # Fix build with soundtouch 2.1.2
     (fetchpatch {

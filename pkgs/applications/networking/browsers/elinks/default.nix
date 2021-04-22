@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LxJJ0yBlw9hJ/agyL9dbVe4STKdXE8rtk1mMFqe1fFI=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [
     ncurses xlibsWrapper bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev

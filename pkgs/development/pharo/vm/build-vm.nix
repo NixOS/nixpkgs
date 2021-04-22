@@ -42,17 +42,13 @@ stdenv.mkDerivation rec {
   pharo-share = import ./share.nix { inherit lib stdenv fetchurl unzip; };
 
   # Note: -fPIC causes the VM to segfault.
-  hardeningDisable = [ "format" "pic"
-                       # while the VM depends on <= gcc48:
-                       "stackprotector" ];
+  hardeningDisable = [ "format" "pic" ];
 
   # gcc 4.8 used for the build:
   #
   # gcc5 crashes during compilation; gcc >= 4.9 produces a
   # binary that crashes when forking a child process. See:
   # http://forum.world.st/OSProcess-fork-issue-with-Debian-built-VM-td4947326.html
-  #
-  # (stack protection is disabled above for gcc 4.8 compatibility.)
   nativeBuildInputs = [ autoreconfHook unzip ];
   buildInputs = [
     bash

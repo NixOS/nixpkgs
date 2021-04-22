@@ -36,6 +36,8 @@ common =
 
       VERSION_SUFFIX = suffix;
 
+      hardeningDisable = lib.optionals is24 [ "glibcxxassertions" ];
+
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =

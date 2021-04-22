@@ -9,6 +9,8 @@ stdenv.mkDerivation {
 
   inherit (linux) src makeFlags;
 
+  hardeningDisable = [ "pie" ];
+
   preConfigure = ''
     cd tools/gpio
   '';

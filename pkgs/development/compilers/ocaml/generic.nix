@@ -44,6 +44,8 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
+  hardeningDisable = [ "pie" ];
+
   prefixKey = "-prefix ";
   configureFlags =
     let flags = new: old:

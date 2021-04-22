@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "07rg1zrz6i6ghp11cm14w7bbaaa1s8sb0y5i7gr2sds0ijlpq223";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     (fetchpatch {
       name = "check-for-sysctl-h.patch";

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     url = "https://tibleiz.net/download/code-browser-${version}-src.tar.gz";
     sha256 = "1svi0v3h42h2lrb8c7pjvqc8019v1p20ibsnl48pfhl8d96mmdnz";
   };
+  hardeningDisable = [ "pie" ];
   postPatch = ''
     substituteInPlace Makefile --replace "LFLAGS=-no-pie" "LFLAGS=-no-pie -L."
     substituteInPlace libs/copper-ui/Makefile --replace "moc -o" "${qtbase.dev}/bin/moc -o"

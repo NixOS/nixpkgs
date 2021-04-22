@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fdl9ndmspqspdlmghzxlaqk56j3yajk52d7jxcg21b7sxglpy94";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildPhase = ''
     mkdir -p $out/lib
     cd libmilter

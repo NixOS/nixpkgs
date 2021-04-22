@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1b44fn0apsgawyqa4alx2qj5hls334mhbszxsy6rfr0q074swhdr";
   };
 
+  hardeningDisable = [ "pie" ];
+
   doCheck = true;
   # attempts to open non-existent file
   preCheck = ''

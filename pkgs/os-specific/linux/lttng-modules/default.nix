@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 

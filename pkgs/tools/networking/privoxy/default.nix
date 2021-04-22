@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xh3kAIxiRF7Bjx8nBAfL8jcuq6k76szcnjI4uy3v7tc=";
   };
 
-  hardeningEnable = [ "pie" ];
-
   nativeBuildInputs = [ autoreconfHook w3m man ];
   buildInputs = [ zlib pcre mbedtls brotli ];
 

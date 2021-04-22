@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1s48qpwybwh5pwqas2d1v2a7x4r97sm4hr9i4902r1d7h384bv17";
   };
 
+  hardeningDisable = [ "pie" ];
+
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''

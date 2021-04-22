@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     intltool gettext zlib
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   NIX_LDFLAGS=" -lz ";
 

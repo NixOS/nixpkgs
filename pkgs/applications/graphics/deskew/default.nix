@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zjjj66qhgqkmfxl3q7p78dv4xl4ci918pgl4d5259pqdj1bfgc8";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ fpc ];
   buildInputs = [ libtiff ];
 

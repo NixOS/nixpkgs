@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ndgcawhxh3qb3llrrilrwzhs36qpxv7f53rxgcansbff9b3za6n";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ unbound openssl boost libunwind lmdb miniupnpc ];
 

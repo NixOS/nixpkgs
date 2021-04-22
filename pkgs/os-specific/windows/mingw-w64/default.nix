@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ windows.mingw_w64_headers ];
   dontStrip = true;
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [ "fortify" "stackclashprotection" "stackprotector" ];
 
   meta = {
     platforms = lib.platforms.windows;

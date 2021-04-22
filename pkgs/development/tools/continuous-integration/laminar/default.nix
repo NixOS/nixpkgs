@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
     url = "https://github.com/ohwgiles/laminar/archive/${version}.tar.gz";
     sha256 = "11m6h3rdmj2rsmsryy7r40gqccj4gg1cnqwy6blscs87gx4s423g";
   };
+  hardeningDisable = [ "pie" ];
   patches = [ ./patches/no-network.patch ];
   nativeBuildInputs = [ cmake pandoc ];
   buildInputs = [ capnproto sqlite boost zlib rapidjson ];

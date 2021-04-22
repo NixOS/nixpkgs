@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl readline ];
 
-  hardeningEnable = [ "pie" ];
-
   checkInputs = [ which nettools ];
   doCheck = false; # fails a bunch, hangs
 

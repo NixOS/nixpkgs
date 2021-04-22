@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m9g16wrrr86gw4fz2fazrh8nkqms0n863w7ndcvrmyafgxvxsnr";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ ocaml findlib ]
   ++ lib.optional gtkSupport lablgtk
   ;

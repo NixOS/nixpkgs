@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mdzaqmxzgspfgx9w1hdip18y17hwpdcgjyq1rrfm843vkascwip";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     (fetchpatch {
       url = "https://github.com/magnetophon/MBdistortion/commit/10e35084b88c559f1b63760cf40fd5ef5a6745a5.patch";

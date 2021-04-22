@@ -24,8 +24,6 @@ in stdenv.mkDerivation {
     sha256 = "sha256-zrxNCXJIuEbtE3YNRK8Bxu2koHsQkcF+xItoIyhj9Uc=";
   };
 
-  hardeningEnable = [ "pie" ];
-
   configurePhase = ''
     runHook preConfigure
     sh configure.sh

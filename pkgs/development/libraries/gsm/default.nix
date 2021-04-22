@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xkha9ss5g5qnfaybi8il0mcvp8knwg9plgh8404vh58d0pna0s9";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patchPhase = ''
     substituteInPlace Makefile \
       --replace "= gcc " "?= gcc "

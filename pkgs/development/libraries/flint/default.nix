@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     url = "http://www.flintlib.org/flint-${version}.tar.gz";
     sha256 = "07j8r96kdzp19cy3a5yvpjxf90mkd6103yr2n42qmpv7mgcjyvhq";
   };
+  hardeningDisable = [ "pie" ];
   buildInputs = [
     gmp
     mpir

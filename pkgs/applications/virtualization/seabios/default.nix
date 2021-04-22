@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
+  hardeningDisable = [ "fortify" "pic" "pie" "stackprotector" ];
 
   configurePhase = ''
     # build SeaBIOS for CSM

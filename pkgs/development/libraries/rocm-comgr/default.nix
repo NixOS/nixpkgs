@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-LbQqyJxRqb6vpXiYSkRlF1FeqXJJXktPafGmYDDK02U=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   sourceRoot = "source/lib/comgr";
 
   nativeBuildInputs = [ cmake ];

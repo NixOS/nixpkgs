@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     sha256 = "Xfx0bsHUQ5+Dp+xk0sVWWP83oyXQcUH5AX4PNEE7fY4=";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
     "-DENABLE_USB=ON"

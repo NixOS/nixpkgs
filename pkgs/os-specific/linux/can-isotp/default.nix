@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "can-isotp";
   version = "20200910";
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   src = fetchFromGitHub {
     owner = "hartkopp";

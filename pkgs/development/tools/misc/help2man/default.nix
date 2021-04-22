@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3op0dAvQWGRlZ7kqtOzeudqfGgfMfE9gejwU3TjRB5k=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
   buildInputs = [ perlPackages.perl perlPackages.LocaleGettext ];
 

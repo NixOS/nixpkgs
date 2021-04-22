@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
   };
 
+  hardeningDisable = [ "pie" ];
+
   patches = [
     (fetchpatch {
       url = "https://github.com/thorkill/eresi/commit/a79406344cc21d594d27fa5ec5922abe9f7475e7.patch";

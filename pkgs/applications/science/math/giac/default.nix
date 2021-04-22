@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c5A9/I6L/o3Y3dxEPoTKpw/fJqYMr6euLldaQ1HWT5c=";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   patches = [
     (fetchpatch {
       name = "pari_2_11.patch";

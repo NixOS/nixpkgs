@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     "-DReadline_ROOT_DIR=${readline.dev}"
   ];
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = [ "fortify" "pie" ];
 
   meta = with lib; {
     description = "Private, secure, untraceable currency";

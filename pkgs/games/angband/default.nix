@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-z1HTt3+lWIr2F9YZFdw47lkYVgYl17qbb/OJ9YyYQa8=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses5 ];
   installFlags = [ "bindir=$(out)/bin" ];

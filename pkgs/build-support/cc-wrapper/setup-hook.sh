@@ -69,11 +69,11 @@ ccWrapper_addCVars () {
     getHostRoleEnvHook
 
     if [ -d "$1/include" ]; then
-        export NIX_CFLAGS_COMPILE${role_post}+=" -isystem $1/include"
+        export "NIX_CFLAGS_COMPILE${role_post}"+=" -isystem $1/include"
     fi
 
     if [ -d "$1/Library/Frameworks" ]; then
-        export NIX_CFLAGS_COMPILE${role_post}+=" -iframework $1/Library/Frameworks"
+        export "NIX_CFLAGS_COMPILE${role_post}"+=" -iframework $1/Library/Frameworks"
     fi
 }
 
@@ -105,16 +105,12 @@ fi
 
 # Export tool environment variables so various build systems use the right ones.
 
-export NIX_CC${role_post}=@out@
+export "NIX_CC${role_post}"=@out@
 
-export CC${role_post}=@named_cc@
-export CXX${role_post}=@named_cxx@
-export CC${role_post}=@named_cc@
-export CXX${role_post}=@named_cxx@
-
-# If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
-export NIX_HARDENING_ENABLE
+export "CC${role_post}"=@named_cc@
+export "CXX${role_post}"=@named_cxx@
+export "CC${role_post}"=@named_cc@
+export "CXX${role_post}"=@named_cxx@
 
 # No local scope in sourced file
 unset -v role_post

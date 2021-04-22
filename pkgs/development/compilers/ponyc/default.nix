@@ -23,6 +23,11 @@ stdenv.mkDerivation (rec {
     fetchSubmodules = true;
   };
 
+  hardeningDisable = [
+    "cfprotection" # Segmentation fault on some CPUs
+    "pie" # clang-7: error: argument unused during compilation: '-pie'
+  ];
+
   ponygbenchmark = fetchurl {
     url = "https://github.com/google/benchmark/archive/v1.5.0.tar.gz";
     sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";

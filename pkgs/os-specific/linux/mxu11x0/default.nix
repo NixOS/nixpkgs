@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   meta = with lib; {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";

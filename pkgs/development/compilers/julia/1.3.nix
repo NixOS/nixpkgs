@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
      sha256 = src_sha256;
    };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   prePatch = ''
     export PATH=$PATH:${cmake}/bin
     '';

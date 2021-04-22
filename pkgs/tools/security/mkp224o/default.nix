@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
           stdenv.mkDerivation {
             name = "mkp224o-${suffix}-${version}";
             inherit version src configureFlags;
+            hardeningDisable = [ "pie" ];
             nativeBuildInputs = [ autoreconfHook ];
             buildInputs = [ libsodium ];
             installPhase = "install -D mkp224o $out";

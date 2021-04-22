@@ -15,7 +15,7 @@ for flag in @hardening_unsupported_flags@; do
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
+  declare -a allHardeningFlags=(cfprotection format fortify glibcxxassertions pic pie stackclashprotection stackprotector strictoverflow)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -36,13 +36,25 @@ fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
+    cfprotection)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling cfprotection >&2; fi
+      hardeningCFlags+=('-fcf-protection')
+      ;;
+    format)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
+      hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+      ;;
     fortify)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
       hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
       ;;
-    stackprotector)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
-      hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+    glibcxxassertions)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling glibcxxassertions >&2; fi
+      hardeningCFlags+=('-D_GLIBCXX_ASSERTIONS')
+      ;;
+    pic)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
+      hardeningCFlags+=('-fPIC')
       ;;
     pie)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
@@ -52,17 +64,17 @@ for flag in "${!hardeningEnableMap[@]}"; do
         hardeningCFlags+=('-pie')
       fi
       ;;
-    pic)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
-      hardeningCFlags+=('-fPIC')
+    stackclashprotection)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackclashprotection >&2; fi
+      hardeningCFlags+=('-fstack-clash-protection')
+      ;;
+    stackprotector)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
+      hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
     strictoverflow)
        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
       hardeningCFlags+=('-fno-strict-overflow')
-      ;;
-    format)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
-      hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
       ;;
     *)
       # Ignore unsupported. Checked in Nix that at least *some*

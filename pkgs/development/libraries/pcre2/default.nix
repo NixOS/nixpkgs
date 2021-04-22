@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p3699msps07p40g9426lvxa3b41rg7k2fn7qxl2jm0kh4kkkvx9";
   };
 
+  hardeningDisable = [ "cfprotection" ];
+
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"

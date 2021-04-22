@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}";
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ gmp ];
   nativeBuildInputs = lib.optional stdenv.isLinux patchelf;
 

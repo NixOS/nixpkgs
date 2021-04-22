@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "08582jy01j32b3mj8hf6m8687qrcz64zv2m236j24inlkmd94q21";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "pie" ];
 
   makeFlags = [
     "KERNEL_VERSION=${kernel.version}"

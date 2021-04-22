@@ -52,6 +52,8 @@ in stdenv.mkDerivation {
 
   src = srcs.opam;
 
+  hardeningDisable = [ "pie" ];
+
   postUnpack = ''
     ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
     ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}

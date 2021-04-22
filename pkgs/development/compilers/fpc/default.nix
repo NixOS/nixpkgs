@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f38glyn3ffmqww432snhx2b8wyrq0yj1njkp4zh56lqrvm19fgr";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ startFPC gawk ];
   glibc = stdenv.cc.libc.out;
 

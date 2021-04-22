@@ -64,7 +64,7 @@ stdenv.mkDerivation (rec {
 
   dontUseCmakeConfigure = true;
 
-  hardeningDisable = [ "stackprotector" "fortify" "pic" ];
+  hardeningDisable = [ "cfprotection" "fortify" "pic" "pie" "stackprotector" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

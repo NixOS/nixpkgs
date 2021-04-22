@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-umzvf4I6LSgWYimYLvySYDnUIxPEDiL+DGd2wT0AFbI=";
   };
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     cp ${overrides} ide/${overrides.name}
   '';

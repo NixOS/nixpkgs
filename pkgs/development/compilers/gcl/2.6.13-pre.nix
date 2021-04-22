@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     "--enable-ansi"
   ];
 
-  hardeningDisable = [ "pic" "bindnow" ];
+  hardeningDisable = [ "bindnow" "pic" "pie" ];
 
   meta = {
     description = "GNU Common Lisp compiler working via GCC";

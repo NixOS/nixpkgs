@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ autoconf bison flex gperf ];
 
   buildInputs = [ bzip2 ncurses readline zlib ];

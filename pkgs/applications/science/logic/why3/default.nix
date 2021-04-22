@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1n0a2nn1gnk0zg339lh698g4wpk7m8m1vyi2yvifd5adqvk4milw";
   };
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = with ocamlPackages; [
     ocaml findlib ocamlgraph zarith menhir
     # Compressed Sessions

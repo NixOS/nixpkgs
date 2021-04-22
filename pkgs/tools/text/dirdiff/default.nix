@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lljd8av68j70733yshzzhxjr1lm0vgmbqsm8f02g03qsma3cdyb";
   };
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [ tcl tk ];
 

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "05lvnvapjawgkky38xknb9lgaliiwan4kggmb9yggl4ifpjrh8qf";
   };
 
+  hardeningDisable = [ "glibcxxassertions" ];
+
   doCheck = true;
   dontAddPrefix = true;
 
