@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The MATE Power Manager";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3;
+    license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo chpatrick ];
   };

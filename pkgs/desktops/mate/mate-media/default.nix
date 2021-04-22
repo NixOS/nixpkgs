@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Media tools for MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo maintainers.chpatrick ];
   };

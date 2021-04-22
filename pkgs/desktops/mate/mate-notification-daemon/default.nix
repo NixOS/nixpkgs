@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Notification daemon for MATE Desktop";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus gpl3Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

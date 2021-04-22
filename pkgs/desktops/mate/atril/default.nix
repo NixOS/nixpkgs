@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

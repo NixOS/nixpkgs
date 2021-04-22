@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname version; };
 
-  meta = {
+  meta = with lib; {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

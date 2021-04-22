@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus gpl3Plus lgpl2Plus mit ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

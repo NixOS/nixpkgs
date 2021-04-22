@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname version; };
 
-  meta = {
+  meta = with lib; {
     description = "Powerful text editor for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

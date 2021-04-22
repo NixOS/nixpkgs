@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     url = "https://pub.mate-desktop.org/releases/themes";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A set of themes from MATE";
     homepage = "https://mate-desktop.org";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = with licenses; [ lgpl21Plus lgpl3Only gpl3Plus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

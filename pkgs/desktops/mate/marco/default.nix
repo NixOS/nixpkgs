@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ licenses.gpl2 ];
+    license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };
