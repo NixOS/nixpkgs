@@ -1,5 +1,9 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, byacc, flex
-, makeSetupHook, writeText, buildPackages, splicePackages, symlinkJoin }:
+{ stdenv, lib, stdenvNoCC
+, buildPackages, splicePackages
+, bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
+, zlib
+, writeText, symlinkJoin
+}:
 
 let
   fetchNetBSD = path: version: sha256: fetchcvs {
@@ -30,7 +34,10 @@ let
 
     extraPaths = [ ];
 
-    nativeBuildInputs = [ makeMinimal install tsort lorder mandoc groff statHook ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal install tsort lorder mandoc groff statHook
+    ];
     buildInputs = [ compat ];
     # depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -56,9 +63,7 @@ let
     LD = "${stdenv'.cc.targetPrefix or ""}ld";
     STRIP = "${stdenv'.cc.targetPrefix or ""}strip";
 
-    NETBSD_PATH = attrs.path;
-
-    builder = ./builder.sh;
+    BSD_PATH = attrs.path;
 
     meta = with lib; {
       maintainers = with maintainers; [ matthewbauer qyliss ];
@@ -85,7 +90,7 @@ let
     version = "8.0";
 
     buildInputs = [];
-    nativeBuildInputs = [];
+    nativeBuildInputs = [ bsdSetupHook ];
 
     skipIncludesPhase = true;
 
@@ -106,7 +111,7 @@ let
       install -D nbmake $out/bin/nbmake
       ln -s $out/bin/nbmake $out/bin/make
       mkdir -p $out/share
-      cp -r $NETBSDSRCDIR/share/mk $out/share/mk
+      cp -r $BSDSRCDIR/share/mk $out/share/mk
 
       runHook postInstall
     '';
@@ -124,7 +129,10 @@ let
     ];
 
     # override defaults to prevent infinite recursion
-    nativeBuildInputs = [ makeMinimal ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+    ];
     buildInputs = [ zlib ];
 
     # the build system re-runs `./configure` with `HOST_CC` (which is their
@@ -148,24 +156,24 @@ let
 
       # why aren't these installed by netbsd?
       install -D compat_defs.h $out/include/compat_defs.h
-      install -D $NETBSDSRCDIR/include/cdbw.h $out/include/cdbw.h
-      install -D $NETBSDSRCDIR/sys/sys/cdbr.h $out/include/cdbr.h
-      install -D $NETBSDSRCDIR/sys/sys/featuretest.h \
+      install -D $BSDSRCDIR/include/cdbw.h $out/include/cdbw.h
+      install -D $BSDSRCDIR/sys/sys/cdbr.h $out/include/cdbr.h
+      install -D $BSDSRCDIR/sys/sys/featuretest.h \
                  $out/include/sys/featuretest.h
-      install -D $NETBSDSRCDIR/sys/sys/md5.h $out/include/md5.h
-      install -D $NETBSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
-      install -D $NETBSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
-      install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
-      install -D $NETBSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
-      install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
-      install -D $NETBSDSRCDIR/include/db.h $out/include/db.h
-      install -D $NETBSDSRCDIR/include/netconfig.h $out/include/netconfig.h
-      install -D $NETBSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
-      install -D $NETBSDSRCDIR/include/utmpx.h $out/include/utmpx.h
-      install -D $NETBSDSRCDIR/include/tzfile.h $out/include/tzfile.h
-      install -D $NETBSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
-      install -D $NETBSDSRCDIR/include/nl_types.h $out/include/nl_types.h
-      install -D $NETBSDSRCDIR/include/stringlist.h $out/include/stringlist.h
+      install -D $BSDSRCDIR/sys/sys/md5.h $out/include/md5.h
+      install -D $BSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
+      install -D $BSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
+      install -D $BSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
+      install -D $BSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
+      install -D $BSDSRCDIR/include/vis.h $out/include/vis.h
+      install -D $BSDSRCDIR/include/db.h $out/include/db.h
+      install -D $BSDSRCDIR/include/netconfig.h $out/include/netconfig.h
+      install -D $BSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
+      install -D $BSDSRCDIR/include/utmpx.h $out/include/utmpx.h
+      install -D $BSDSRCDIR/include/tzfile.h $out/include/tzfile.h
+      install -D $BSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
+      install -D $BSDSRCDIR/include/nl_types.h $out/include/nl_types.h
+      install -D $BSDSRCDIR/include/stringlist.h $out/include/stringlist.h
    '' + lib.optionalString stdenv.isDarwin ''
       mkdir -p $out/include/ssp
       touch $out/include/ssp/ssp.h
@@ -194,7 +202,11 @@ let
     version = "8.0";
     sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
     extraPaths = [ mtree.src make.src ];
-    nativeBuildInputs = [ makeMinimal mandoc groff ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      mandoc groff
+    ];
     skipIncludesPhase = true;
     buildInputs = [ compat fts ];
     installPhase = ''
@@ -214,7 +226,9 @@ let
     path = "include/fts.h";
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
     version = "8.0";
-    nativeBuildInputs = [ ];
+    nativeBuildInputs = [
+      bsdSetupHook
+    ];
     propagatedBuildInputs = [ compat ];
     extraPaths = [
       (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
@@ -248,7 +262,11 @@ let
     path = "usr.bin/stat";
     version = "8.0";
     sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff
+    ];
   };
 
   # stat isn't in POSIX, and NetBSD stat supports a completely
@@ -266,14 +284,22 @@ let
     path = "usr.bin/tsort";
     version = "8.0";
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff
+    ];
   };
 
   lorder = mkDerivation {
     path = "usr.bin/lorder";
     version = "8.0";
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff
+    ];
   };
   ##
   ## END BOOTSTRAPPING
@@ -290,17 +316,17 @@ let
       # make needs this to pick up our sys make files
       export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
 
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
         --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.kinc.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.kinc.mk \
         --replace /bin/rm rm
     '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.sys.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
         --replace '-Wl,--warn-shared-textrel' ""
     '';
     postInstall = ''
-      make -C $NETBSDSRCDIR/share/mk FILESDIR=$out/share/mk install
+      make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
     '';
     extraPaths = [
       (fetchNetBSD "share/mk" "8.0" "033q4w3rmvwznz6m7fn9xcf13chyhwwl8ijj3a9mrn80fkwm55qs")
@@ -371,7 +397,11 @@ let
     sha256 = "092y7db7k4kh2jq8qc55126r5qqvlb8lq8mhmy5ipbi36hwb4zrz";
     HOSTPROG = "tic";
     buildInputs = [ compat ];
-    nativeBuildInputs = [ makeMinimal install mandoc groff nbperf ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff nbperf
+    ];
     makeFlags = [ "TOOLDIR=$(out)" ];
     extraPaths = [
       libterminfo.src
@@ -399,8 +429,11 @@ let
     version = "8.0";
     sha256 = "0piyn8lgdqxwz9wkgc2plzp2xpj93fs4xncri8l0jfas9rv5j2m5";
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal install mandoc byacc flex
+    ];
     buildInputs = [ compat ];
-    nativeBuildInputs = [ makeMinimal install mandoc byacc flex ];
     extraPaths = [ cksum.src ];
   };
   ##
@@ -414,7 +447,11 @@ let
     path = "include";
     version = "8.0";
     sha256 = "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq";
-    nativeBuildInputs = [ makeMinimal install mandoc groff nbperf rpcgen ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff nbperf rpcgen
+    ];
     extraPaths = [ common.src ];
     headersOnly = true;
     noCC = true;
@@ -438,6 +475,7 @@ let
 
     propagatedBuildInputs = [ include ];
     nativeBuildInputs = [
+      bsdSetupHook
       makeMinimal install tsort lorder statHook uudecode config genassym
     ];
 
@@ -524,7 +562,7 @@ let
       make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share
     '';
     postInstall = ''
-      make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share install
+      make -C $BSDSRCDIR/share/terminfo BINDIR=$out/share install
     '';
     extraPaths = [
       (fetchNetBSD "share/terminfo" "8.0" "18db0fk1dw691vk6lsm6dksm4cf08g8kdm0gc4052ysdagg2m6sm")
@@ -627,8 +665,12 @@ let
     version = "8.0";
     sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
     meta.platforms = lib.platforms.netbsd;
-    nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          byacc genassym gencat lorder tsort statHook ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff flex
+      byacc genassym gencat lorder tsort statHook
+    ];
     extraPaths = [ sys.src ld_elf_so.src ];
   };
 
@@ -651,12 +693,18 @@ let
     sha256 = "0lgbc58qgn8kwm3l011x1ml1kgcf7jsgq7hbf0hxhlbvxq5bljl3";
     USE_FORT = "yes";
     MKPROFILE = "no";
-    extraPaths = [ common.src i18n_module.src sys.src
-                   ld_elf_so.src libpthread.src libm.src libresolv.src
-                   librpcsvc.src libutil.src librt.src libcrypt.src ];
+    extraPaths = [
+      common.src i18n_module.src sys.src
+      ld_elf_so.src libpthread.src libm.src libresolv.src
+      librpcsvc.src libutil.src librt.src libcrypt.src
+    ];
+    nativeBuildInputs = [
+      bsdSetupHook
+      makeMinimal
+      install mandoc groff flex
+      byacc genassym gencat lorder tsort statHook rpcgen
+    ];
     buildInputs = [ buildPackages.netbsd.headers csu ];
-    nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          byacc genassym gencat lorder tsort statHook rpcgen ];
     NIX_CFLAGS_COMPILE = "-B${csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -677,29 +725,29 @@ let
       NIX_CFLAGS_COMPILE+=" -I$out/include"
       NIX_LDFLAGS+=" -L$out/lib"
 
-      make -C $NETBSDSRCDIR/lib/libpthread $makeFlags
-      make -C $NETBSDSRCDIR/lib/libpthread $makeFlags install
+      make -C $BSDSRCDIR/lib/libpthread $makeFlags
+      make -C $BSDSRCDIR/lib/libpthread $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libm $makeFlags
-      make -C $NETBSDSRCDIR/lib/libm $makeFlags install
+      make -C $BSDSRCDIR/lib/libm $makeFlags
+      make -C $BSDSRCDIR/lib/libm $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libresolv $makeFlags
-      make -C $NETBSDSRCDIR/lib/libresolv $makeFlags install
+      make -C $BSDSRCDIR/lib/libresolv $makeFlags
+      make -C $BSDSRCDIR/lib/libresolv $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags
-      make -C $NETBSDSRCDIR/lib/librpcsvc $makeFlags install
+      make -C $BSDSRCDIR/lib/librpcsvc $makeFlags
+      make -C $BSDSRCDIR/lib/librpcsvc $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags
-      make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags install
+      make -C $BSDSRCDIR/lib/i18n_module $makeFlags
+      make -C $BSDSRCDIR/lib/i18n_module $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libutil $makeFlags
-      make -C $NETBSDSRCDIR/lib/libutil $makeFlags install
+      make -C $BSDSRCDIR/lib/libutil $makeFlags
+      make -C $BSDSRCDIR/lib/libutil $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librt $makeFlags
-      make -C $NETBSDSRCDIR/lib/librt $makeFlags install
+      make -C $BSDSRCDIR/lib/librt $makeFlags
+      make -C $BSDSRCDIR/lib/librt $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags
-      make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags install
+      make -C $BSDSRCDIR/lib/libcrypt $makeFlags
+      make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
     '';
     postPatch = ''
       sed -i 's,/usr\(/include/sys/syscall.h\),${buildPackages.netbsd.headers}\1,g' \
