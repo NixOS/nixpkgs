@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu orivej ];
   };
