@@ -1294,6 +1294,8 @@ in {
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
+  connectedcars = callPackage ../development/python-modules/connectedcars { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
