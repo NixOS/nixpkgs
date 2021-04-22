@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , flex
 , systemd
@@ -19,8 +20,6 @@ stdenv.mkDerivation rec {
     url = "https://linbit.com/downloads/drbd/utils/${pname}-${version}.tar.gz";
     sha256 = "sha256:0s1dgg4nvvvxzh9qrah3n15b92h38b8m9pa43s14fdjdg11m6wk2";
   };
-
-  # patches = [ ./pass-force.patch ./fix-glibc-compilation.patch ];
 
   nativeBuildInputs = [
     flex
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "SHELL=${stdenv.shell}"
     "OCF_ROOT=${resource-agents}/lib/ocf"
     "SOURCE_DATE_EPOCH=1"
     "WANT_DRBD_REPRODUCIBLE_BUILD=1"

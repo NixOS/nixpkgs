@@ -61,7 +61,7 @@ let cfg = config.services.drbd; in
       };
       preStart = ''
         # Check the configuration file for syntax errors
-        ${pkgs.drbd}/bin/drbdadm sh-nop
+        ${pkgs.drbd-utils}/bin/drbdadm sh-nop
       '';
       script = ''
         # Activate all resources on start
