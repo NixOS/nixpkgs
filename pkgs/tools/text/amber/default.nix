@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-opRinhTmhZxpAwHNiVOLXL8boQf09Y1NXrWQ6HWQYQ0=";
 
-  buildInputs = lib.optional stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "A code search-and-replace tool";
