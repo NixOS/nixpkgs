@@ -827,8 +827,8 @@ let
         mktplcRef = {
           name = "scala";
           publisher = "scala-lang";
-          version = "0.5.1";
-          sha256 = "0p9nhds2xn08xz8x822q15jdrdlqkg2wa1y7mk9k89n8n2kfh91g";
+          version = "0.5.3";
+          sha256 = "0isw8jh845hj2fw7my1i19b710v3m5qsjy2faydb529ssdqv463p";
         };
         meta = {
           license = lib.licenses.mit;
@@ -839,8 +839,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.9.13";
-          sha256 = "0vrg25ygmyjx1lwif2ypyv688b290ycfn1qf0izxbmgi2z3f0wf9";
+          version = "1.10.3";
+          sha256 = "0m4qm1z1j6gfqjjnxl8v48ga7zkaspjy3gcnkrch3aj4fyafjl09";
         };
         meta = {
           license = lib.licenses.asl20;

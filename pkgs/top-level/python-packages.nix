@@ -3513,6 +3513,8 @@ in {
 
   karton-core = callPackage ../development/python-modules/karton-core { };
 
+  karton-dashboard = callPackage ../development/python-modules/karton-dashboard { };
+
   karton-mwdb-reporter = callPackage ../development/python-modules/karton-mwdb-reporter { };
 
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
@@ -3687,6 +3689,10 @@ in {
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
   liblarch = callPackage ../development/python-modules/liblarch { };
+
+  liblzfse = callPackage ../development/python-modules/liblzfse {
+    inherit (pkgs) lzfse;
+  };
 
   libmodulemd = pipe pkgs.libmodulemd [
     toPythonModule
