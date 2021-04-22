@@ -72,6 +72,14 @@ in
 
       "pcie-brcmstb"
 
+      # Rockchip
+      "dw-hdmi"
+      "dw-mipi-dsi"
+      "rockchipdrm"
+      "rockchip-rga"
+      "phy-rockchip-pcie"
+      "pcie-rockchip-host"
+
       # Misc. uncategorized hardware
 
       # Used for some platform's integrated displays
