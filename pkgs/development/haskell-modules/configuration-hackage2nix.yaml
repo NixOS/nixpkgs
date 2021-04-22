@@ -11633,7 +11633,6 @@ broken-packages:
   - wshterm
   - wsjtx-udp
   - wss-client
-  - wstunnel
   - wtk
   - wtk-gtk
   - wu-wei
