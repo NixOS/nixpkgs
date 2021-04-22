@@ -1,5 +1,3 @@
-# Support for DRBD, the Distributed Replicated Block Device.
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -8,18 +6,9 @@ let cfg = config.services.drbd; in
 
 {
 
-  ###### interface
-
   options = {
 
-    services.drbd.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable support for DRBD, the Distributed Replicated
-        Block Device.
-      '';
-    };
+    services.drbd.enable = mkEnableOption "support for DRBD, the Distributed Replicated Block Device";
 
     services.drbd.config = mkOption {
       default = "";
@@ -31,9 +20,6 @@ let cfg = config.services.drbd; in
 
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.drbd-utils ];
@@ -42,13 +28,13 @@ let cfg = config.services.drbd; in
 
     boot.kernelModules = [ "drbd" ];
 
-    boot.extraModprobeConfig =
-      ''
-        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
-      '';
+    boot.extraModprobeConfig = ''
+      options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
+    '';
 
-    environment.etc."drbd.conf" =
-      { source = pkgs.writeText "drbd.conf" cfg.config; };
+    environment.etc."drbd.conf" = {
+      source = pkgs.writeText "drbd.conf" cfg.config;
+    };
 
     systemd.services.drbd = {
       description = "Distributed Replicated Block Device";
@@ -59,13 +45,15 @@ let cfg = config.services.drbd; in
         Type = "oneshot";
         RemainAfterExit = "yes";
       };
+      path = [ pkgs.drbd-utils ];
+      restartTriggers = [ config.environment.etc."drbd.conf".source ];
       preStart = ''
         # Check the configuration file for syntax errors
         ${pkgs.drbd-utils}/bin/drbdadm sh-nop
       '';
       script = ''
         # Activate all resources on start
-        ${pkgs.drbd-utils}/bin/drbdadm up all
+        ${pkgs.drbd-utils}/bin/drbdadm adjust all
       '';
       reload = ''
         # Re-adjust everything on reload
