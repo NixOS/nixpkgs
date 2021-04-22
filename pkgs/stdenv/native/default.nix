@@ -129,7 +129,7 @@ in
       name = "cc-native";
       nativeTools = true;
       nativeLibc = true;
-      inherit nativePrefix;
+      inherit lib nativePrefix;
       bintools = import ../../build-support/bintools-wrapper {
         name = "bintools";
         inherit stdenvNoCC nativePrefix;
