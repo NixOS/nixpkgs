@@ -606,6 +606,7 @@ let
     version = "8.0";
     sha256 = "11vpb3p2343wyrhw4v9gwz7i0lcpb9ysmfs9gsx56b5gkgipdy4v";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = [ libc.src ];
   };
 
   libm = mkDerivation {
