@@ -1,0 +1,14 @@
+diff --git a/src/libstore/globals.hh b/src/libstore/globals.hh
+index 3e4ead76c..81d407236 100644
+--- a/src/libstore/globals.hh
++++ b/src/libstore/globals.hh
+@@ -923,7 +923,8 @@ public:
+           value.
+           )"};
+ 
+-    Setting<Strings> experimentalFeatures{this, {}, "experimental-features",
++    Setting<Strings> experimentalFeatures{
++        this, {"flakes", "nix-command"}, "experimental-features",
+         "Experimental Nix features to enable."};
+ 
+     bool isExperimentalFeatureEnabled(const std::string & name);

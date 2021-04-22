@@ -227,13 +227,8 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = callPackage ({ makeWrapper, runCommand, ... }:
-    runCommand "nix-flakes" { buildInputs = [ makeWrapper ]; } ''
-      mkdir -p $out/bin
-        for bin in ${nixUnstable}/bin/*; do
-          makeWrapper $bin $out/bin/$(basename $bin) \
-            --suffix NIX_CONFIG "\n" "experimental-features = nix-command flakes"
-        done;
-    '') {};
+  nixFlakes = nixUnstable.overrideAttrs (prev: {
+    patches = (prev.patches or []) ++ [ ./enable-flakes.patch ];
+  });
 
 }
