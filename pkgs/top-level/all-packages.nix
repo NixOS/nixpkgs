@@ -6932,6 +6932,8 @@ in
 
   notable = callPackage ../applications/misc/notable { };
 
+  ntlmrecon = callPackage ../tools/security/ntlmrecon { };
+
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
   miller = callPackage ../tools/text/miller { };
