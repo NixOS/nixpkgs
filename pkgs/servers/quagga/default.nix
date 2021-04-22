@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/quagga/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tavyc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       name = "quagga";
 
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ tavyc ];
+        maintainers = [ ];
       };
 
       nodes = {
