@@ -454,7 +454,7 @@ in
       {
         symlink = "/etc/modules-load.d/nixos.conf";
         object = pkgs.writeText "nixos.conf"
-          (lib.concatStringsSep "\n" (config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules));
+          (lib.concatStringsSep "\n" config.boot.initrd.kernelModules);
       }
       {
         object = "${initrdUdevRules}/lib/udev";
@@ -467,6 +467,12 @@ in
       {
         object = "${emergencyEnv}/bin/";
         symlink = "/bin";
+        executable = true;
+      }
+      # Put it at /sbin too so we don't have to set /proc/sys/kernel/modprobe
+      {
+        object = "${emergencyEnv}/bin/";
+        symlink = "/sbin";
         executable = true;
       }
       {
