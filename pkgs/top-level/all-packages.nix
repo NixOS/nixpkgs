@@ -13868,7 +13868,8 @@ in
   boost173 = callPackage ../development/libraries/boost/1.73.nix { };
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
   boost175 = callPackage ../development/libraries/boost/1.75.nix { };
-  boost17x = boost175;
+  boost176 = callPackage ../development/libraries/boost/1.76.nix { };
+  boost17x = boost176;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
