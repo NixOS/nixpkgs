@@ -90,6 +90,7 @@ in
       "axp20x-ac-power"
       "axp20x-battery"
       "pinctrl-axp209"
+      "mp8859"
 
       # USB drivers
       "xhci-pci-renesas"
