@@ -6952,6 +6952,8 @@ in {
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 
+  python-registry = callPackage ../development/python-modules/python-registry { };
+
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
@@ -7198,6 +7200,8 @@ in {
   qdldl = callPackage ../development/python-modules/qdldl { };
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
+
+  qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
 
