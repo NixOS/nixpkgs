@@ -5,6 +5,7 @@
 , rust
 , rustPlatform
 , installShellFiles
+, libiconv
 , libobjc
 , Security
 , CoreServices
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libobjc Security CoreServices Metal Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv libobjc Security CoreServices Metal Foundation ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
