@@ -6080,6 +6080,8 @@ in {
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
+  pymdstat = callPackage ../development/python-modules/pymdstat { };
+
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
@@ -6445,6 +6447,8 @@ in {
   pysmappee = callPackage ../development/python-modules/pysmappee { };
 
   pysmb = callPackage ../development/python-modules/pysmb { };
+
+  pysmart-smartx = callPackage ../development/python-modules/pysmart-smartx { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
 
@@ -8003,6 +8007,8 @@ in {
   spambayes = callPackage ../development/python-modules/spambayes { };
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
+
+  sparklines = callPackage ../development/python-modules/sparklines { };
 
   SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
