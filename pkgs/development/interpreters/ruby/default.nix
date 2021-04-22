@@ -12,7 +12,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -112,7 +112,17 @@ let
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
           ++ op atLeast27 ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch;
+          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
+          # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
+          # the resulting error was swallowed. Newer rubygems no longer swallows
+          # this error. We upgrade rubygems when rubygemsSupport is enabled, so
+          # we have to fix this bug to prevent the install step from failing.
+          # See https://github.com/ruby/ruby/pull/2930
+          ++ op (!atLeast30 && rubygemsSupport)
+            (fetchpatch {
+              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
+              sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
+            });
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
