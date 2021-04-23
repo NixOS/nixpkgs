@@ -704,7 +704,9 @@ in lib.makeScopeWithSplicing
     path = "lib/libm";
     version = "8.0";
     sha256 = "0i22603cgj6n00gn2m446v4kn1pk109qs1g6ylrslmihfmiy2h1d";
+    SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ sys.src ];
   };
 
   i18n_module = mkDerivation {
