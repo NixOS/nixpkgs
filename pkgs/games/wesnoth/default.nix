@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.15";
+  version = "1.14.16";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    sha256 = "sha256-HbQy5yhNe6HFydipqh2wWcyLfIjbdRjcBQaqAOtBJsY=";
+    sha256 = "sha256-QMz7atxol18r//UNb6+H6xAAEQdR4hAN8UW0KeGSH1g=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

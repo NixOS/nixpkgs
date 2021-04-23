@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ ehmry rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

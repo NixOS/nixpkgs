@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.19.8";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "sha256-xhnhc4vhKw5T93076vS+pszIOpj22KzaPyzCvuHMaPE=";
+    sha256 = "sha256-nlZblUPS0678dR0hyp+V9uH/nHL9YH81+O1Zzq8T8Pw=";
   };
 
   outputs = [ "out" "man" ];
@@ -45,15 +45,19 @@ buildGoModule rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
     make bin/buildah GIT_COMMIT="unknown"
     make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
+    runHook postInstall
   '';
 
   meta = with lib; {

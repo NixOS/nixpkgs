@@ -476,11 +476,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2020-09-29.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-09-29.tar.bz2";
-    sha256 = "cbe9fca811a37056560aab73e9fc9d3522b46b6785cb02db165f521bf42c230f";
+    name = "language-subtag-registry-2020-12-18.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-12-18.tar.bz2";
+    sha256 = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1";
     md5 = "";
-    md5name = "cbe9fca811a37056560aab73e9fc9d3522b46b6785cb02db165f521bf42c230f-language-subtag-registry-2020-09-29.tar.bz2";
+    md5name = "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1-language-subtag-registry-2020-12-18.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -546,11 +546,11 @@
     md5name = "d6242790324f1432fb0a6fae71b6851f520b2c5a87675497cf8ea14c2924d52e-liblangtag-0.6.2.tar.bz2";
   }
   {
-    name = "libnumbertext-1.0.6.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/libnumbertext-1.0.6.tar.xz";
-    sha256 = "739f220b34bf7cb731c09de2921771d644d37dfd276c45564401e5759f10ae57";
+    name = "libnumbertext-1.0.7.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libnumbertext-1.0.7.tar.xz";
+    sha256 = "17b8249cb89ae11ae15a85612d2665626c0e0e3e56b35654363ba6566d8b61fc";
     md5 = "";
-    md5name = "739f220b34bf7cb731c09de2921771d644d37dfd276c45564401e5759f10ae57-libnumbertext-1.0.6.tar.xz";
+    md5name = "17b8249cb89ae11ae15a85612d2665626c0e0e3e56b35654363ba6566d8b61fc-libnumbertext-1.0.7.tar.xz";
   }
   {
     name = "ltm-1.0.zip";
@@ -735,18 +735,18 @@
     md5name = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3-poppler-21.01.0.tar.xz";
   }
   {
-    name = "postgresql-9.2.24.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2";
-    sha256 = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126";
+    name = "postgresql-13.1.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/postgresql-13.1.tar.bz2";
+    sha256 = "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f";
     md5 = "";
-    md5name = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126-postgresql-9.2.24.tar.bz2";
+    md5name = "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f-postgresql-13.1.tar.bz2";
   }
   {
-    name = "Python-3.8.4.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/Python-3.8.4.tar.xz";
-    sha256 = "5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37";
+    name = "Python-3.8.8rc1.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/Python-3.8.8rc1.tar.xz";
+    sha256 = "bd746ed1ad9ccfa9b2a8d13736a5c452025c3600913d000078e6ed1df3d767b6";
     md5 = "";
-    md5name = "5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37-Python-3.8.4.tar.xz";
+    md5name = "bd746ed1ad9ccfa9b2a8d13736a5c452025c3600913d000078e6ed1df3d767b6-Python-3.8.8rc1.tar.xz";
   }
   {
     name = "QR-Code-generator-1.4.0.tar.gz";

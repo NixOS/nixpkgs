@@ -10,12 +10,12 @@ let
   mkListen = kind: addr: let
     al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
     al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
-    al_portOnly = builtins.match "()([0-9]+)" addr;
+    al_portOnly = builtins.match "([0-9]+)" addr;
     al = findFirst (a: a != null)
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
     port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '127.0.0.1'}";
+    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
     in # freebind is set for compatibility with earlier kresd services;
        # it could be configurable, for example.
       ''
@@ -137,10 +137,5 @@ in {
     };
     # We don't mind running stop phase from wrong version.  It seems less racy.
     systemd.services."kresd@".stopIfChanged = false;
-
-    # Try cleaning up the previously default location of cache file.
-    # Note that /var/cache/* should always be safe to remove.
-    # TODO: remove later, probably between 20.09 and 21.05
-    systemd.tmpfiles.rules = [ "R /var/cache/kresd" ];
   };
 }

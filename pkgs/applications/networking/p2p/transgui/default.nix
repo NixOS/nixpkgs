@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    unzip fpc lazarus stdenv.cc
+    fpc lazarus stdenv.cc
     libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
   ];
 

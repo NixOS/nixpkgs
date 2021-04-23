@@ -108,8 +108,8 @@ in {
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       path = with pkgs; if config.networking.nftables.enable
-        then [ nftables iproute systemd ]
-        else [ iptables ipset iproute systemd ];
+        then [ nftables iproute2 systemd ]
+        else [ iptables ipset iproute2 systemd ];
 
       # The sshguard ipsets must exist before we invoke
       # iptables. sshguard creates the ipsets after startup if

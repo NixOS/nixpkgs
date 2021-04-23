@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zjpscxdhlcv99py7jx5r6dw32nzbcr49isrzkdr6g3zwyxwzbfm";
+    sha256 = "sha256-xYwnv30I0+CAx4QODSeMNhdlM2NuM8v4J3rx99NdYCc=";
   };
 
   propagatedBuildInputs = [
@@ -32,14 +32,22 @@ buildPythonPackage rec {
   disabledTests = [
     # Some tests needs network capabilities
     "test_str_types_empty"
+    "test_associate_reject"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestFindSCP"
+    "TestFindSCPCLI"
+    "TestGetSCP"
+    "TestGetSCPCLI"
+    "TestMoveSCP"
+    "TestMoveSCPCLI"
+    "TestQRGetServiceClass"
+    "TestQRMoveServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestQRGetServiceClass"
-    "TestQRMoveServiceClass"
+    "TestState"
   ];
 
   pythonImportsCheck = [ "pynetdicom" ];
@@ -49,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydicom/pynetdicom";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # Tests are not passing on Darwin, thus it's assumed that it doesn't work
-    broken = stdenv.isDarwin;
+    # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
+    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

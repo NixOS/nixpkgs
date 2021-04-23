@@ -307,4 +307,28 @@ rec {
 ${expr "" v}
 </plist>'';
 
+  /* Translate a simple Nix expression to Dhall notation.
+   * Note that integers are translated to Integer and never
+   * the Natural type.
+  */
+  toDhall = { }@args: v:
+    with builtins;
+    let concatItems = lib.strings.concatStringsSep ", ";
+    in if isAttrs v then
+      "{ ${
+        concatItems (lib.attrsets.mapAttrsToList
+          (key: value: "${key} = ${toDhall args value}") v)
+      } }"
+    else if isList v then
+      "[ ${concatItems (map (toDhall args) v)} ]"
+    else if isInt v then
+      "${if v < 0 then "" else "+"}${toString v}"
+    else if isBool v then
+      (if v then "True" else "False")
+    else if isFunction v then
+      abort "generators.toDhall: cannot convert a function to Dhall"
+    else if isNull v then
+      abort "generators.toDhall: cannot convert a null to Dhall"
+    else
+      builtins.toJSON v;
 }

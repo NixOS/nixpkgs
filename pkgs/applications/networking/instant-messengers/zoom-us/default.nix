@@ -7,6 +7,7 @@
 , atk
 , cairo
 , dbus
+, dpkg
 , libGL
 , fontconfig
 , freetype
@@ -29,11 +30,11 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.5.7938.0228";
+  version = "5.6.16775.0418";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "KM8o2tgIn0lecOM4gKdTOdk/zsohlFqtNX+ca/S6FGY=";
+      url = "https://zoom.us/client/${version}/zoom_amd64.deb";
+      sha256 = "1fmzwxq8jv5k1b2kvg1ij9g6cdp1hladd8vm3cxzd8fywdjcndim";
     };
   };
 
@@ -70,17 +71,21 @@ in stdenv.mkDerivation rec {
   inherit version;
   src = srcs.${stdenv.hostPlatform.system};
 
-  dontUnpack = true;
-
   nativeBuildInputs = [
+    dpkg
     makeWrapper
   ];
+
+  unpackCmd = ''
+    mkdir out
+    dpkg -x $curSrc out
+  '';
 
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${src}
-    mv $out/usr/* $out/
+    mv usr/* $out/
+    mv opt $out/
     runHook postInstall
   '';
 

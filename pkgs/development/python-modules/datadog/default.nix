@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.39.0";
+  version = "0.40.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0ef69a27aad0e4412c1ac3e6894fa1b5741db735515c34dfe1606d8cf30e4e5";
+    sha256 = "sha256-Q4wd3lRi5oxceSt7Sh2HoN3ZcK89sxs88VmA7tDEQxE=";
   };
 
   postPatch = ''
@@ -43,12 +43,11 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/unit/dogstatsd/test_statsd.py" # does not work in sandbox
+    "tests/performance"
   ];
 
   disabledTests = [
     "test_default_settings_set"
-    "test_threadstats_thread_safety"
   ];
 
   pythonImportsCheck = [ "datadog" ];

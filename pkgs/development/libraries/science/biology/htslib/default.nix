@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, lzma, curl, perl }:
+{ lib, stdenv, fetchurl, zlib, bzip2, xz, curl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "htslib";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # perl is only used during the check phase.
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib bzip2 lzma curl ];
+  buildInputs = [ zlib bzip2 xz curl ];
 
   configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 

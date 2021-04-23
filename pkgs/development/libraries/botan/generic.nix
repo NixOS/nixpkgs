@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
   inherit postPatch;
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ]
+  buildInputs = [ python3 bzip2 zlib gmp openssl boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''

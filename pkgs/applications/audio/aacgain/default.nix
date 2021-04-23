@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  # -Wnarrowing is enabled by default in recent GCC versions,
+  # causing compilation to fail.
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
   postPatch = ''
     (
       cd mp4v2

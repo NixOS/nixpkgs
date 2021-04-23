@@ -12,11 +12,11 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20210117";
+  version = "1.3-20210306";
 
   src = fetchurl {
     url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
-    sha256 = "PB7Qj0S89vFZ8qpv3nZduU6Jl7Pu+0nYtMhmkWk8Q+E=";
+    hash = "sha256-pz57YHtjX2PAICuzMTEG5wD5H+Sp9NJspwA/brK5yw8=";
   };
 
   buildInputs = [ ncurses ];

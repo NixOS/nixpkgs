@@ -6,38 +6,38 @@
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2020.11.22",
-    "sha256": "0dkvzm32ls03pfp40fxvsyrkfmyznc5yrj65cp4a8pp9kpkvzlz7"
+    "rev": "2021.02.13",
+    "sha256": "1p2r2q1al6rcsdbbg8ilm4xn6w48bj348khxdmpak7vfwx9741h8"
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2021.01.12",
-    "sha256": "1mavv3krs4srdp362prf4sncssxjh11la5j4lkx0wk5csrmd1pc9"
+    "rev": "2021.04.01",
+    "sha256": "12sncivsv6pvwflzzy12rpn1fjiq64n2n3bcj7630xxlrbygkhxb"
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2021.01.19",
-    "sha256": "0lpgfwljwh9mypscbpj5c7fivhza0hizjgqypval3v0209cx38d1"
+    "rev": "2021.04.09",
+    "sha256": "1ldr2z88zywn0ccgs17vfhq55ibihjcmfjjxcqsjifrbm0y6wipp"
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2021.01.17",
-    "sha256": "14i4jdpbmh6sjpvbwipdvvmmqqw8wg592b34a9wdf2f9qxq2p4ly"
+    "rev": "2021.04.01",
+    "sha256": "1g6zp9d7vwjisad3y1mfnk1jcbjqxp3yimm0sh1655al6qwn886m"
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2021.01.12",
-    "sha256": "107zyd65vc72fl4mvyirhv2a9m47l9bs6gwqiwar7hrn02zns6bq"
+    "rev": "2021.03.16",
+    "sha256": "159s1rpl829bmaa4bllqhjm8z0vji1ncsd6hw2s8z8hz28n905k8"
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2020.10.04",
-    "sha256": "0z66cm9pgdi7whqaim6hva4aa08zrr1881n1fal7lnz6wlla824k"
+    "rev": "2021.04.01",
+    "sha256": "1hq9hbv81mcymjcms97wcwcfqfpxis6h6v5m0syyih4r53khv0az"
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2021.01.16",
-    "sha256": "07qv3x1cm3r12gxfnqzxly6nff39bghwwgxzl2lxi1qbpqhcs2l5"
+    "rev": "2021.02.18",
+    "sha256": "0fy6bmpdcl2aa8pb7zban6midkfwdj99x14hdghrv7cp8l4gcsg5"
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
@@ -46,8 +46,8 @@
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
-    "rev": "2021.01.16",
-    "sha256": "13zyg0cm1c1662l3f7sy462pbc39l1cwm5214nx8ijngf8kgn2zh"
+    "rev": "2021.02.01",
+    "sha256": "051jnrhfpl9n5pgrssf68lj732zxhvjbvna4746ngmdyxvw6dqfd"
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",

@@ -230,6 +230,8 @@ let
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };
+      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+        gcc.abi = "elfv2";
       };
     });
   };

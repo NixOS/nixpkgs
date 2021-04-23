@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
@@ -30,10 +31,11 @@ buildPythonPackage rec {
     pytest-timeout
     # tests of optional features
     numpy
-    pandas
     rich
     tkinter
-  ];
+  ] ++
+    # pandas is not supported on i686
+    lib.optional (!stdenv.isi686) pandas;
 
   # Remove performance testing.
   # Too sensitive for on Hydra.

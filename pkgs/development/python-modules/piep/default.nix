@@ -3,11 +3,13 @@
 , fetchPypi
 , nose
 , pygments
+, isPy3k
 }:
 
 buildPythonPackage rec {
   version = "0.9.2";
   pname = "piep";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

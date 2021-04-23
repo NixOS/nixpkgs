@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-THordDPdH2qwk6lFTgeFmkl7iDuA/7YH71PTUe6vJCs=";
   };
+
+  patches = [
+    # https://github.com/nlohmann/json/pull/2690
+    (fetchpatch {
+      url = "https://github.com/nlohmann/json/commit/53a9850eebb88c6ff95f6042d08d5c0cc9d18097.patch";
+      sha256 = "k+Og00nXNg5IsFQY5fWD3xVQQXUFFTie44UXole0S1M=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

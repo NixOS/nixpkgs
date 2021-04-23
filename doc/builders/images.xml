@@ -7,6 +7,6 @@
  </para>
  <xi:include href="images/appimagetools.xml" />
  <xi:include href="images/dockertools.section.xml" />
- <xi:include href="images/ocitools.xml" />
+ <xi:include href="images/ocitools.section.xml" />
  <xi:include href="images/snaptools.xml" />
 </chapter>

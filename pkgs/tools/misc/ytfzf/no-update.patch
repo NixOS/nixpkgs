@@ -1,8 +1,8 @@
 diff --git a/ytfzf b/ytfzf
-index 5238682..c5c3a1a 100755
+index 42f41c0..f75f5cb 100755
 --- a/ytfzf
 +++ b/ytfzf
-@@ -757,23 +757,8 @@ clear_history () {
+@@ -892,23 +892,8 @@ send_notify () {
  }
  
  update_ytfzf () {
@@ -27,4 +27,4 @@ index 5238682..c5c3a1a 100755
 +	exit 1
  }
  
- 
+ scrape_subscriptions () {

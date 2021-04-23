@@ -11,7 +11,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ packaging pytest ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ packaging ];
 
   # pypi does not contain tests and GitHub archive is not supported because setuptools-scm can't detect the version
   doCheck = false;

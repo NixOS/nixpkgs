@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.27.0";
+  version = "3.28.0";
 
   src = fetchFromGitHub {
     owner  = "leanprover-community";
     repo   = "lean";
     rev    = "v${version}";
-    sha256 = "sha256-DSIWuMlweu9dsah5EdVCNQ9ADjYoEZongfw/Yh7/N/A=";
+    sha256 = "sha256-IzoFE92F559WeSUCiYZ/fx2hrsyRzgOACr3/pzJ4OOY=";
   };
 
   nativeBuildInputs = [ cmake ];

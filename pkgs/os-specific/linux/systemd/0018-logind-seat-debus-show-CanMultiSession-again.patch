@@ -1,7 +1,7 @@
-From 120b53a3279ba098ee8e5a346b39cb2b7ef4a106 Mon Sep 17 00:00:00 2001
+From ebb37f81c28aaa80acd9187a7d77dcb3cb3828db Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Mon, 26 Oct 2020 21:21:38 +0100
-Subject: [PATCH 18/18] logind-seat-debus: show CanMultiSession again
+Subject: [PATCH 18/19] logind-seat-debus: show CanMultiSession again
 
 Fixes the "switch user" function in Plasma < 5.20.
 ---
@@ -22,5 +22,5 @@ index a60ed2d3c2..69b6271075 100644
          SD_BUS_PROPERTY("CanGraphical", "b", property_get_can_graphical, 0, SD_BUS_VTABLE_PROPERTY_EMITS_CHANGE),
          SD_BUS_PROPERTY("Sessions", "a(so)", property_get_sessions, 0, 0),
 -- 
-2.29.2
+2.30.1
 

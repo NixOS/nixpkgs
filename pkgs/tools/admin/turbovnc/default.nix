@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 
 # Dependencies
 , cmake
@@ -100,6 +101,8 @@ stdenv.mkDerivation rec {
       --prefix JAVA_HOME : "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
+
+  passthru.tests.turbovnc-headless-server = nixosTests.turbovnc-headless-server;
 
   meta = {
     homepage = "https://turbovnc.org/";

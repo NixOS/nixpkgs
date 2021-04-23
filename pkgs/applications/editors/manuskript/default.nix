@@ -57,6 +57,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.steveej ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

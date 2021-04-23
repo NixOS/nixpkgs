@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     description = "A lightweight IDE for Clojure";
     homepage = "https://github.com/arthuredelstein/clooj";
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

@@ -188,7 +188,25 @@ rec {
     };
   };
 
-  # 12. example of running something as root on top of a parent image
+  # 12 Create a layered image on top of a layered image
+  layered-on-top-layered = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-on-top-layered";
+    tag = "latest";
+    fromImage = layered-image;
+    extraCommands = ''
+      mkdir ./example-output
+      chmod 777 ./example-output
+    '';
+    config = {
+      Env = [ "PATH=${pkgs.coreutils}/bin/" ];
+      WorkingDir = "/example-output";
+      Cmd = [
+        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+      ];
+    };
+  };
+
+  # 13. example of running something as root on top of a parent image
   # Regression test related to PR #52109
   runAsRootParentImage = buildImage {
     name = "runAsRootParentImage";
@@ -197,7 +215,7 @@ rec {
     fromImage = bash;
   };
 
-  # 13. example of 3 layers images This image is used to verify the
+  # 14. example of 3 layers images This image is used to verify the
   # order of layers is correct.
   # It allows to validate
   # - the layer of parent are below
@@ -235,23 +253,23 @@ rec {
     '';
   };
 
-  # 14. Environment variable inheritance.
+  # 15. Environment variable inheritance.
   # Child image should inherit parents environment variables,
   # optionally overriding them.
-  environmentVariables = let
-    parent = pkgs.dockerTools.buildImage {
-      name = "parent";
-      tag = "latest";
-      config = {
-        Env = [
-          "FROM_PARENT=true"
-          "LAST_LAYER=parent"
-        ];
-      };
+  environmentVariablesParent = pkgs.dockerTools.buildImage {
+    name = "parent";
+    tag = "latest";
+    config = {
+      Env = [
+        "FROM_PARENT=true"
+        "LAST_LAYER=parent"
+      ];
     };
-  in pkgs.dockerTools.buildImage {
+  };
+
+  environmentVariables = pkgs.dockerTools.buildImage {
     name = "child";
-    fromImage = parent;
+    fromImage = environmentVariablesParent;
     tag = "latest";
     contents = [ pkgs.coreutils ];
     config = {
@@ -262,14 +280,27 @@ rec {
     };
   };
 
-  # 15. Create another layered image, for comparing layers with image 10.
+  environmentVariablesLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "child";
+    fromImage = environmentVariablesParent;
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    config = {
+      Env = [
+        "FROM_CHILD=true"
+        "LAST_LAYER=child"
+      ];
+    };
+  };
+
+  # 16. Create another layered image, for comparing layers with image 10.
   another-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
-  # 16. Create a layered image with only 2 layers
+  # 17. Create a layered image with only 2 layers
   two-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "two-layered-image";
     tag = "latest";
@@ -278,7 +309,7 @@ rec {
     maxLayers = 2;
   };
 
-  # 17. Create a layered image with more packages than max layers.
+  # 18. Create a layered image with more packages than max layers.
   # coreutils and hello are part of the same layer
   bulk-layer = pkgs.dockerTools.buildLayeredImage {
     name = "bulk-layer";
@@ -289,7 +320,19 @@ rec {
     maxLayers = 2;
   };
 
-  # 18. Create a "layered" image without nix store layers. This is not
+  # 19. Create a layered image with a base image and more packages than max
+  # layers. coreutils and hello are part of the same layer
+  layered-bulk-layer = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-bulk-layer";
+    tag = "latest";
+    fromImage = two-layered-image;
+    contents = with pkgs; [
+      coreutils hello
+    ];
+    maxLayers = 4;
+  };
+
+  # 20. Create a "layered" image without nix store layers. This is not
   # recommended, but can be useful for base images in rare cases.
   no-store-paths = pkgs.dockerTools.buildLayeredImage {
     name = "no-store-paths";
@@ -321,7 +364,7 @@ rec {
     };
   };
 
-  # 19. Support files in the store on buildLayeredImage
+  # 21. Support files in the store on buildLayeredImage
   # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
   filesInStore = pkgs.dockerTools.buildLayeredImageWithNixDb {
     name = "file-in-store";
@@ -341,7 +384,7 @@ rec {
     };
   };
 
-  # 20. Ensure that setting created to now results in a date which
+  # 22. Ensure that setting created to now results in a date which
   # isn't the epoch + 1 for layered images.
   unstableDateLayered = pkgs.dockerTools.buildLayeredImage {
     name = "unstable-date-layered";
@@ -441,4 +484,36 @@ rec {
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
+
+  # layered image with files owned by a user other than root
+  layeredImageWithFakeRootCommands = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-image-with-fake-root-commands";
+    tag = "latest";
+    contents = [
+      pkgs.pkgsStatic.busybox
+    ];
+    fakeRootCommands = ''
+      mkdir -p ./home/jane
+      chown 1000 ./home/jane
+    '';
+  };
+
+  # tarball consisting of both bash and redis images
+  mergedBashAndRedis = pkgs.dockerTools.mergeImages [
+    bash
+    redis
+  ];
+
+  # tarball consisting of bash (without tag) and redis images
+  mergedBashNoTagAndRedis = pkgs.dockerTools.mergeImages [
+    bashNoTag
+    redis
+  ];
+
+  # tarball consisting of bash and layered image with different owner of the
+  # /home/jane directory
+  mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
+    bash
+    layeredImageWithFakeRootCommands
+  ];
 }

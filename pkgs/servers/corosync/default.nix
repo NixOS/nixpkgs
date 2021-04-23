@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nss, nspr, libqb
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
 , dbus, rdma-core, libstatgrab, net-snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
@@ -10,17 +10,17 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "corosync";
-  version = "2.4.5";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "0pxs18vci9kq3qnqsg5i1h35jrxxiccwbm0mzja3g8j3izdsyvmb";
+    sha256 = "sha256-eAypUbDeGa3GKF/wJ602dyTW5FlkvjWeCRXT6h0d4zw=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    nss nspr libqb
+    kronosnet nss nspr libqb
   ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     "LOGROTATEDIR=$(out)/etc/logrotate.d"
   ];
 
+  enableParallelBuilding = true;
+
   preConfigure = optionalString enableInfiniBandRdma ''
     # configure looks for the pkg-config files
     # of librdmacm and libibverbs
@@ -61,13 +63,11 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/sbin:${libqb}/sbin"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ montag451 ];
+    maintainers = with maintainers; [ montag451 ryantm ];
   };
 }

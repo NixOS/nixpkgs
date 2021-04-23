@@ -135,7 +135,5 @@ rustPlatform.buildRustPackage {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ Profpatsch ];
-    # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isAarch64;
   };
 }

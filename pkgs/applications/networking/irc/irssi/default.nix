@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "irssi";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "https://github.com/irssi/irssi/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0g2nxazn4lszmd6mf1s36x5ablk4999g1qx7byrnvgnjsihjh62k";
+    sha256 = "09cwz5ff1i5lp35qhhmw6kbw5dwcn9pl16gpzkc92xg5sx3bgjr9";
   };
 
   nativeBuildInputs = [ pkg-config ];

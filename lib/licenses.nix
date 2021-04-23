@@ -603,6 +603,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     free = false;
   };
 
+  odbl = spdx {
+    spdxId = "ODbL-1.0";
+    fullName = "Open Data Commons Open Database License v1.0";
+  };
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";

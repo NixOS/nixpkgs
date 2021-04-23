@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.4.00.4855";
+  version = "1.4.00.7556";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "1g0lsydz4l536qf890drdz6g86xb0sm3326hz3ymj9pi8vvbs7d9";
+    sha256 = "0yak3jxh0gdn57wjss0s7sdjssf1b70j0klrcpv66bizqvw1xl7b";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -82,6 +82,11 @@ stdenv.mkDerivation rec {
       echo "Adding runtime dependencies to RPATH of Node module $mod"
       patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
     done;
+
+    # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
+    # while we create the wrapper ourselves, gappsWrapperArgs leads to the same issue
+    # another option would be to introduce gappsWrapperAppendedArgs, to allow control of positioning
+    substituteInPlace "$out/bin/teams" --replace '.teams-wrapped"  --disable-namespace-sandbox --disable-setuid-sandbox "$@"' '.teams-wrapped" "$@" --disable-namespace-sandbox --disable-setuid-sandbox'
   '';
 
   meta = with lib; {

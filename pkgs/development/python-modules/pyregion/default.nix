@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , pyparsing
 , numpy
 , cython
 , astropy
 , astropy-helpers
-, pytest
+, pytestCheckHook
 , pytest-astropy
 }:
 
@@ -15,15 +15,18 @@ buildPythonPackage rec {
   pname = "pyregion";
   version = "2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a8ac5f764b53ec332f6bc43f6f2193ca13e8b7d5a3fb2e20ced6b2ea42a9d094";
+  # pypi src contains cython-produced .c files which don't compile
+  # with python3.9
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = pname;
+    rev = version;
+    sha256 = "1izar7z606czcyws9s8bjbpb1xhqshpv5009rlpc92hciw7jv4kg";
   };
 
   propagatedBuildInputs = [
     pyparsing
     numpy
-    cython
     astropy
   ];
 
@@ -36,9 +39,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ astropy-helpers ];
+  nativeBuildInputs = [ astropy-helpers cython ];
 
-  checkInputs = [ pytest pytest-astropy ];
+  checkInputs = [ pytestCheckHook pytest-astropy ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
@@ -46,9 +49,11 @@ buildPythonPackage rec {
   '';
 
   # Tests must be run in the build directory
-  checkPhase = ''
-    cd build/lib.*
-    pytest
+  preCheck = ''
+    pushd build/lib.*
+  '';
+  postCheck = ''
+    popd
   '';
 
   meta = with lib; {

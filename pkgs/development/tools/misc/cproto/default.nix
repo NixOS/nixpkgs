@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cproto";
-  version = "4.7q";
+  version = "4.7r";
 
   src = fetchurl {
     urls = [
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       # No version listings and apparently no versioned tarball over http(s).
       "ftp://ftp.invisible-island.net/cproto/cproto-${version}.tgz"
     ];
-    sha256 = "138n5j6lkanbbdcs63irzxny4nfgp0zk66z621xjbnybf920svpk";
+    sha256 = "sha256-bgRg2yVZXHobUz8AUaV4ZKBkp2KjP+2oXbDXmPTUX8U=";
   };
 
   # patch made by Joe Khoobyar copied from gentoo bugs

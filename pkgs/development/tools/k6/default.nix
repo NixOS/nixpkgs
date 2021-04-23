@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "k6";
-  version = "0.31.0";
+  version = "0.31.1";
 
   goPackagePath = "github.com/loadimpact/k6";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "loadimpact";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UAVbYN4uDUMqUspycEZ2VGHzxFD7IlIW6m91U8ccZXw=";
+    sha256 = "sha256-wngOG0uSNoUU+88oShDpCgPpzuevzJxcwzSzWS3PzAw=";
   };
 
   subPackages = [ "./" ];

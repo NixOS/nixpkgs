@@ -7,7 +7,7 @@
 , rWrapper
 , rPackages
 , pcre
-, lzma
+, xz
 , bzip2
 , zlib
 , icu
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
     buildInputs = [
       pcre
-      lzma
+      xz
       bzip2
       zlib
       icu

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "popt";
-  version = "1.16";
+  version = "1.18";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/p/popt/popt_${version}.orig.tar.gz";
-    sha256 = "1j2c61nn2n351nhj4d25mnf3vpiddcykq005w2h6kw79dwlysa77";
+    sha256 = "1lf5zlj5rbg6s4bww7hbhpca97prgprnarx978vcwa0bl81vqnai";
   };
 
   patches = lib.optionals stdenv.isCygwin [

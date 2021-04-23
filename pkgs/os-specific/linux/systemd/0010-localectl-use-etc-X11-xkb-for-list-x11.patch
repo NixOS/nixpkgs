@@ -1,7 +1,7 @@
-From aff592e0bf9a911e7f44ce07b66517c38456b627 Mon Sep 17 00:00:00 2001
+From bf285fe7e12bd22f95c14bcefbb5008888c32bfa Mon Sep 17 00:00:00 2001
 From: Imuli <i@imu.li>
 Date: Wed, 19 Oct 2016 08:46:47 -0400
-Subject: [PATCH 10/18] localectl: use /etc/X11/xkb for list-x11-*
+Subject: [PATCH 10/19] localectl: use /etc/X11/xkb for list-x11-*
 
 NixOS has an option to link the xkb data files to /etc/X11, but not to
 /usr/share/X11.
@@ -23,5 +23,5 @@ index 7d2e887660..91c5139eed 100644
                  return log_error_errno(errno, "Failed to open keyboard mapping list. %m");
  
 -- 
-2.29.2
+2.30.1
 

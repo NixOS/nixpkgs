@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-tools" ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 libogg libvorbis zlib unzip ];
+  nativeBuildInputs = [ pkg-config unzip ];
+  buildInputs = [ SDL2 libogg libvorbis zlib ];
 
   enableParallelBuilding = true;
 

@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "WSME";
-  version = "0.10.0";
+  version = "0.10.1";
 
   disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "965b9ce48161e5c50d84aedcf50dca698f05bf07e9d489201bccaec3141cd304";
+    sha256 = "34209b623635a905bcdbc654f53ac814d038da65e4c2bc070ea1745021984079";
   };
 
   nativeBuildInputs = [ pbr ];

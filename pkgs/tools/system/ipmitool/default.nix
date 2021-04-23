@@ -22,6 +22,11 @@ stdenv.mkDerivation {
       url = "https://github.com/ipmitool/ipmitool/commit/5db314f694f75c575cd7c9ffe9ee57aaf3a88866.patch";
       sha256 = "01niwrgajhrdhl441gzmw6v1r1yc3i8kn98db4b6smfn5fwdp1pa";
     })
+    (fetchpatch {
+      name = "CVE-2020-5208.patch";
+      url = "https://github.com/ipmitool/ipmitool/commit/e824c23316ae50beb7f7488f2055ac65e8b341f2.patch";
+      sha256 = "sha256-X7MnoX2fzByRpRY4p33xetT+V2aehlQ/qU+aeaqtTUY=";
+    })
   ];
 
   buildInputs = [ openssl ];

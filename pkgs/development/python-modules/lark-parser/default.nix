@@ -1,28 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, regex
+  # Test inputs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "lark-parser";
-  version = "0.8.8";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "1q2dvkkfx9dvag5v5ps0ki4avh7i003gn9sj30jy1rsv1bg4y2mb";
+    sha256 = "1v1piaxpz4780km2z5i6sr9ygi9wpn09yyh999b3f4y0dcz20pbd";
   };
 
-  # tests of Nearley support require js2py
-  preCheck = ''
-    rm -r tests/test_nearley
-  '';
+  propagatedBuildInputs = [ regex ];
 
-  meta = {
+  checkInputs = [ pytestCheckHook ];
+  disabledTestPaths = [
+    "tests/test_nearley" # requires Js2Py package (not in nixpkgs)
+  ];
+  disabledTests = [
+    "test_override_rule"  # has issue with file access paths
+  ];
+
+  meta = with lib; {
     description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://github.com/lark-parser/lark";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fridh drewrisinger ];
   };
 }

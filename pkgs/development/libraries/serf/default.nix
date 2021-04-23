@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
+{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5
 , pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ lib.optional (!stdenv.isCygwin) kerberos;
+    ++ lib.optional (!stdenv.isCygwin) libkrb5;
 
   patches = [ ./scons.patch ];
 
@@ -22,19 +22,13 @@ stdenv.mkDerivation rec {
     "OPENSSL=${openssl}"
     "ZLIB=${zlib}"
   ] ++ lib.optional (!stdenv.isCygwin)
-    "GSSAPI=${kerberos.dev}";
+    "GSSAPI=${libkrb5.dev}";
 
   preConfigure = ''
     sconsFlags+=(
       "APR=$(echo ${apr.dev}/bin/*-config)"
       "APU=$(echo ${aprutil.dev}/bin/*-config)"
       "CC=$CC"
-      "OPENSSL=${openssl}"
-      "ZLIB=${zlib}"
-    )
-  '' + lib.optionalString (!stdenv.isCygwin) ''
-    sconsFlags+=(
-      "GSSAPI=${kerberos.dev}"
     )
   '';
 

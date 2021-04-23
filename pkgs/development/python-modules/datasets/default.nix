@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , dill
 , filelock
+, fsspec
+, huggingface-hub
 , multiprocess
 , numpy
 , pandas
@@ -14,18 +16,20 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.1.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = version;
-    hash = "sha256-upXZ2rOfmjnJbDo6RMGeHv/fe10RQAf/zwDWWKdt6SA=";
+    hash = "sha256-is8TS84varARWyfeDTbQH0pcYFTk0PcEyK183emB4GE=";
   };
 
   propagatedBuildInputs = [
     dill
     filelock
+    fsspec
+    huggingface-hub
     multiprocess
     numpy
     pandas
@@ -36,7 +40,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"'
+    substituteInPlace setup.py \
+      --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"' \
+      --replace "huggingface_hub==0.0.2" "huggingface_hub>=0.0.2"
   '';
 
   # Tests require pervasive internet access.

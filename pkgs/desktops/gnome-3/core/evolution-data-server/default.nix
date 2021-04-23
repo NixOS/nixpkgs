@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, substituteAll, pkg-config, gnome3, python3, gobject-introspection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr, p11-kit
 , db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre, vala, cmake, ninja
-, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib, glib, gtk3, libphonenumber
+, libkrb5, openldap, webkitgtk, libaccounts-glib, json-glib, glib, gtk3, libphonenumber
 , gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas, boost, protobuf }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib libsoup libxml2 gtk3 gnome-online-accounts
     gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite kerberos openldap webkitgtk glib-networking
+    icu sqlite libkrb5 openldap webkitgtk glib-networking
     libcanberra-gtk3 pcre libphonenumber boost protobuf
   ];
 

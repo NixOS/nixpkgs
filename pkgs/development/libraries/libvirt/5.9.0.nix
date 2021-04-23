@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchgit
 , pkg-config, makeWrapper, libtool, autoconf, automake, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr
-, iproute, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
+, iproute2, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, glib, rpcsvc-proto, libtirpc
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
-    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
 
 
   postInstall = let
-    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+    binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \

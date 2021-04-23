@@ -2,26 +2,37 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , zlib
+, libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-/vtiHRHsbF7lfn9tfgfKhm5YwofjSJniNNnKahphHFg=";
+    sha256 = "sha256-Hv1aefuiu7pOlSMUjZLGY6bxVy+6myFH1afZZ5gtmi0=";
   };
 
-  cargoSha256 = "sha256-gwy/LeVznZyawliXnkULyyVSXATk0sjSTUZPHO2K+9o=";
+  cargoSha256 = "sha256-CgiHluc9+5+hKwsC7UZimy1586QBUsj+TVlb2lQRXs0=";
 
-  nativeBuildInputs = [ pkg-config zlib ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ installShellFiles pkg-config zlib ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  checkFlags = [ "--skip=cant_navigate_up_the_root" ];
+
+  postInstall = ''
+    installShellCompletion --cmd miniserve \
+      --bash <($out/bin/miniserve --print-completions bash) \
+      --fish <($out/bin/miniserve --print-completions fish) \
+      --zsh <($out/bin/miniserve --print-completions zsh)
+  '';
 
   meta = with lib; {
     description = "For when you really just want to serve some files over HTTP right now!";

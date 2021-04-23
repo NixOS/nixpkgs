@@ -6,6 +6,7 @@
 , go
 , ninja
 , python3
+, nixosTests
 }:
 
 let
@@ -37,7 +38,7 @@ buildBazelPackage rec {
 
   patches = [
     # Quiche needs to be updated to compile under newer GCC.
-    # This is a manual backport of http://github.com/envoyproxy/envoy/pull/13949.
+    # This is a manual backport of https://github.com/envoyproxy/envoy/pull/13949.
     ./0001-quiche-update-QUICHE-tar-13949.patch
 
     # upb needs to be updated to compile under newer GCC.
@@ -109,6 +110,11 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
   ];
+
+  passthru.tests = {
+    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
+    inherit (nixosTests) pomerium;
+  };
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";

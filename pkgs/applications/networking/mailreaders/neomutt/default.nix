@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
-, ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cyrus_sasl gss gpgme kerberos libidn ncurses
+    cyrus_sasl gss gpgme libkrb5 libidn ncurses
     notmuch openssl perl lmdb
     mailcap sqlite
   ];

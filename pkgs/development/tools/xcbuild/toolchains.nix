@@ -44,8 +44,8 @@ runCommand "Toolchains" {} (''
     fi
   done
 
-  ln -s ${buildPackages.yacc}/bin/yacc $toolchain/bin/yacc
-  ln -s ${buildPackages.yacc}/bin/bison $toolchain/bin/bison
+  ln -s ${buildPackages.bison}/bin/yacc $toolchain/bin/yacc
+  ln -s ${buildPackages.bison}/bin/bison $toolchain/bin/bison
   ln -s ${buildPackages.flex}/bin/flex $toolchain/bin/flex
   ln -s ${buildPackages.flex}/bin/flex++ $toolchain/bin/flex++
   ln -s $toolchain/bin/flex $toolchain/bin/lex

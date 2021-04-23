@@ -259,7 +259,7 @@ in
             wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            path = [ pkgs.iproute2 config.virtualisation.vswitch.package ];
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \

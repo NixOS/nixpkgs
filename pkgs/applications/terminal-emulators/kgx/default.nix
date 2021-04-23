@@ -4,6 +4,7 @@
 , fetchFromGitLab
 , gettext
 , gnome3
+, libgtop
 , gtk3
 , libhandy
 , pcre2
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gettext
-    gnome3.libgtop
+    libgtop
     gnome3.nautilus
     gtk3
     libhandy

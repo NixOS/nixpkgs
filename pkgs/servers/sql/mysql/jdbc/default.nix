@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dfjshrrx0ndfb6xbdpwhn1f1jkw0km57rgpar0ny8ixmgdnlwnm";
   };
 
-  buildInputs = [ unzip ant ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ ant ];
 
   meta = {
     platforms = lib.platforms.unix;

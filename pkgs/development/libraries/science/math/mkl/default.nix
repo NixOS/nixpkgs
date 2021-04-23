@@ -17,40 +17,57 @@
 let
   # Release notes and download URLs are here:
   # https://registrationcenter.intel.com/en/products/
-  version = "${year}.${spot}.${rel}";
+  version = "${mklVersion}.${rel}";
 
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
-  year = if stdenvNoCC.isDarwin then "2019" else "2020";
-  spot = if stdenvNoCC.isDarwin then "3" else "4";
-  rel = if stdenvNoCC.isDarwin then "199" else "304";
+  mklVersion = if stdenvNoCC.isDarwin then "2019.3" else "2021.1.1";
+  rel = if stdenvNoCC.isDarwin then "199" else "52";
 
-  # Replace `openmpSpot` by `spot` after 2020.
-  openmpSpot = if stdenvNoCC.isDarwin then spot else "3";
+  # Intel openmp uses its own versioning.
+  openmpVersion = if stdenvNoCC.isDarwin then "19.0.3" else "19.1.3";
+  openmpRel = "189";
 
-  rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
-
-  # Intel openmp uses its own versioning, but shares the spot release patch.
-  openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
-  openmp-ver = "${openmp}.${openmpSpot}-${rel}-${openmp}.${openmpSpot}-${rel}";
+  # Thread Building Blocks release.
+  tbbRel = "119";
 
   shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
-in stdenvNoCC.mkDerivation {
+  oneapi-mkl = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
+    hash = "sha256-G2Y7iX3UN2YUJhxcMM2KmhONf0ls9owpGlOo8hHOfqA=";
+  };
+
+  oneapi-mkl-common = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
+    hash = "sha256-HrMt2OcPIRxM8EL8SPjYTyuHJnC7RhPFUrvLhRH+7vc=";
+  };
+
+  oneapi-mkl-common-devel = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-devel-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
+    hash = "sha256-XDE2WFJzEcpujFmO2AvqQdipZMvKB6/G+ksBe2sE438=";
+  };
+
+  oneapi-mkl-devel = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-devel-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
+    hash = "sha256-GhUJZ0Vr/ZXp10maie29/5ryU7zzX3F++wRCuuFcE0s=";
+  };
+
+  oneapi-openmp = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-openmp-${mklVersion}-${mklVersion}-${openmpRel}.x86_64.rpm";
+    hash = "sha256-yP2c4aQAFNRffjLoIZgWXLcNXbiez8smsgu2wXitefU=";
+  };
+
+  oneapi-tbb = fetchurl {
+    url = "https://yum.repos.intel.com/oneapi/intel-oneapi-tbb-${mklVersion}-${mklVersion}-${tbbRel}.x86_64.rpm";
+    hash = "sha256-K1BvhGoGVU2Zwy5vg2ZvJWBrSdh5uQwo0znt5039X0A=";
+  };
+
+in stdenvNoCC.mkDerivation ({
   pname = "mkl";
   inherit version;
 
-  src = if stdenvNoCC.isDarwin
-    then
-      (fetchurl {
-        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_${version}.dmg";
-        sha256 = "14b3ciz7995sqcd6jz7hc8g2x4zwvqxmgxgni46vrlb7n523l62f";
-      })
-    else
-      (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16917/l_mkl_${version}.tgz";
-        hash = "sha256-IxTUZTaXTb0I8qTk+emhVdx+eeJ5jHTn3fqtAKWRfqU=";
-      });
+  dontUnpack = stdenvNoCC.isLinux;
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
@@ -63,30 +80,15 @@ in stdenvNoCC.mkDerivation {
       tar xzvf $f
     done
   '' else ''
-    # Common stuff
-    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
-    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
+    rpmextract ${oneapi-mkl}
+    rpmextract ${oneapi-mkl-common}
+    rpmextract ${oneapi-mkl-common-devel}
+    rpmextract ${oneapi-mkl-devel}
+    rpmextract ${oneapi-openmp}
+    rpmextract ${oneapi-tbb}
+  '';
 
-    # Dynamic libraries
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
-
-    # Intel OpenMP runtime
-    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
-  '' + (if enableStatic then ''
-    # Static libraries
-    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
-  '' else ''
-    # Take care of installing dynamic-only PkgConfig files during the installPhase
-  ''
-  );
-
-  installPhase = ''
+  installPhase = if stdenvNoCC.isDarwin then ''
     for f in $(find . -name 'mkl*.pc') ; do
       bn=$(basename $f)
       substituteInPlace $f \
@@ -95,42 +97,54 @@ in stdenvNoCC.mkDerivation {
         --replace "lib/intel64_lin" "lib" \
         --replace "lib/intel64" "lib"
     done
-
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
       substituteInPlace $f \
         --replace "../compiler/lib" "lib"
     done
-  '' +
-    (if stdenvNoCC.isDarwin then ''
-      mkdir -p $out/lib
 
-      cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
+    mkdir -p $out/lib
 
-      cp -r compilers_and_libraries_${version}/licensing/mkl/en/license.txt $out/lib/
-      cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
-      cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
-      cp -r compilers_and_libraries_${version}/mac/tbb/lib/* $out/lib/
+    cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
 
-      mkdir -p $out/lib/pkgconfig
-      cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
+    cp -r compilers_and_libraries_${version}/licensing/mkl/en/license.txt $out/lib/
+    cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
+    cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
+    cp -r compilers_and_libraries_${version}/mac/tbb/lib/* $out/lib/
+
+    mkdir -p $out/lib/pkgconfig
+    cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
   '' else ''
-      mkdir -p $out/lib
-      cp license.txt $out/lib/
+    for f in $(find . -name 'mkl*.pc') ; do
+      bn=$(basename $f)
+      substituteInPlace $f \
+        --replace $\{MKLROOT} "$out" \
+        --replace "lib/intel64" "lib"
 
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/include $out/
+      sed -r -i "s|^prefix=.*|prefix=$out|g" $f
+    done
 
-      mkdir -p $out/lib/pkgconfig
-  '') +
+    for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
+      substituteInPlace $f --replace "../compiler/lib" "lib"
+    done
+
+    # License
+    install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/2021.1.1/licensing/en/license.txt
+
+    # Dynamic libraries
+    install -Dm0755 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so*
+    install -Dm0755 -t $out/lib opt/intel/oneapi/compiler/2021.1.1/linux/compiler/lib/intel64_lin/*.so*
+    install -Dm0755 -t $out/lib opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8/*.so*
+
+    # Headers
+    cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
+  '' +
     (if enableStatic then ''
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/* $out/lib/pkgconfig
+      install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.a
+      install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/2021.1.1/tools/pkgconfig/*.pc
     '' else ''
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/*.so* $out/lib/
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/*.so* $out/lib/
-      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/*dynamic*.pc $out/lib/pkgconfig
+      cp opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so* $out/lib
+      install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/2021.1.1/tools/pkgconfig/*dynamic*.pc
     '') + ''
-
     # Setup symlinks for blas / lapack
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
@@ -159,13 +173,18 @@ in stdenvNoCC.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  passthru.tests.pkg-config = callPackage ./test { };
+  passthru.tests = {
+    pkg-config-dynamic-iomp = callPackage ./test { enableStatic = false; execution = "iomp"; };
+    pkg-config-static-iomp = callPackage ./test { enableStatic = true; execution = "iomp"; };
+    pkg-config-dynamic-seq = callPackage ./test { enableStatic = false; execution = "seq"; };
+    pkg-config-static-seq = callPackage ./test { enableStatic = true; execution = "seq"; };
+  };
 
   meta = with lib; {
-    description = "Intel Math Kernel Library";
+    description = "Intel OneAPI Math Kernel Library";
     longDescription = ''
-      Intel Math Kernel Library (Intel MKL) optimizes code with minimal effort
-      for future generations of Intel processors. It is compatible with your
+      Intel OneAPI Math Kernel Library (Intel oneMKL) optimizes code with minimal
+      effort for future generations of Intel processors. It is compatible with your
       choice of compilers, languages, operating systems, and linking and
       threading models.
     '';
@@ -174,4 +193,9 @@ in stdenvNoCC.mkDerivation {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ bhipple ];
   };
-}
+} // lib.optionalAttrs stdenvNoCC.isDarwin {
+  src = fetchurl {
+    url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_${version}.dmg";
+    sha256 = "14b3ciz7995sqcd6jz7hc8g2x4zwvqxmgxgni46vrlb7n523l62f";
+  };
+})

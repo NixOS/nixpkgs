@@ -1,6 +1,4 @@
-{ stdenv, symlinkJoin, lib, makeWrapper
-, writeText
-}:
+{ symlinkJoin, lib, makeWrapper, writeText }:
 
 helm:
 

@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
 , pkg-config
 , gtk3
 , alsaLib
@@ -8,16 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Htk2NHgYVL622URx67BUtounAUopLTahaSqfAqd3+ZI=";
+    sha256 = "sha256-dU8c+tpt+4nCWQj3P2rl6CJNtWFcXaYb3ZESg8hAllQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ copyDesktopItems pkg-config ];
   buildInputs = [ gtk3 alsaLib ];
 
   postPatch = ''
@@ -55,11 +57,34 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.thomasokken.free42bin";
+      desktopName = "Free42Bin";
+      genericName = "Calculator";
+      exec = "free42bin";
+      type = "Application";
+      comment = meta.description;
+      categories = "Utility;Calculator;";
+      terminal = "false";
+    })
+    (makeDesktopItem {
+      name = "com.thomasokken.free42dec";
+      desktopName = "Free42Dec";
+      genericName = "Calculator";
+      exec = "free42dec";
+      type = "Application";
+      comment = meta.description;
+      categories = "Utility;Calculator;";
+      terminal = "false";
+    })
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/thomasokken/free42";
     description = "A software clone of HP-42S Calculator";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres plabadens ];
     platforms = with platforms; unix;
   };
 }

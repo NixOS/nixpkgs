@@ -1,21 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2 }:
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.4.5";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "sha256-PMBlvres95UIbd3uqZWPE3OzyrEAGEXit/Z7X1p46GY=";
+    sha256 = "07dzcqd98nsrdv72wp93q6f23mn3pfmpyyi61dx6c26w0j5n4r0p";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  vendorSha256 = "sha256-WvojOnGQ/ssBkoQwIlOVsaEUJmi2ugqgtTAVKJg8Spk=";
+  vendorSha256 = "0wbw9pc0cv05bw2gsps3099zipwjj3r23vyf87qy6g21r08xrrm8";
 
   doCheck = false;
 
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${
-      lib.makeBinPath [ iproute iptables ]
+      lib.makeBinPath [ iproute2 iptables ]
     }
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service

@@ -1,13 +1,13 @@
 { lib, stdenv
 , fetchurl
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
   pname = "conway_polynomials";
   version = "0.5";
 
-  pythonEnv = python.withPackages (ps: with ps; [ six ]);
+  pythonEnv = python2.withPackages (ps: with ps; [ six ]);
 
   src = fetchurl {
     url = "mirror://sageupstream/conway_polynomials/conway_polynomials-${version}.tar.bz2";

@@ -16,8 +16,9 @@ buildPythonPackage rec {
     sha256 = "1i6fin91mklvbi8jzfiswvwf1m91f43smpj36a17xrzk4gisfs6i";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     vcrpy
    ];
 

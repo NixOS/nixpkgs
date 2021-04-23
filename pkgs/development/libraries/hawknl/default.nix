@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "11shn2fbxj3w0j77w0234pqyj1368x686kkgv09q5yqhi1cdp028";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   makefile = "makefile.linux";
 

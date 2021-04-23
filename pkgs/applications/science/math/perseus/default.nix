@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "perseus-4-beta";
   version = "4-beta";
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   hardeningDisable = [ "stackprotector" ];
 

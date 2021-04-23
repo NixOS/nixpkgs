@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "12rnc9ksl7v6l8wsxvr26ylkafzq80dbsa7yafzw9pqc8pafkhx1";
   };
 
-  buildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   inherit dosbox;
 

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    substituteInPlace Makefile \
+      --replace "= gcc " "?= gcc "
     # Fix include directory
     sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
   '' + optionalString (!staticSupport) (

@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
 , gnome3
+, dconf
 , wxGTK30
 , wxGTK31
 , makeWrapper
@@ -186,12 +187,12 @@ stdenv.mkDerivation rec {
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
+    "--prefix XDG_DATA_DIRS : ${gnome3.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
+    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
 
     "--set-default KISYSMOD ${footprints}/share/kicad/modules"
     "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
@@ -215,6 +216,8 @@ stdenv.mkDerivation rec {
     in
     (concatStringsSep "\n"
       (flatten [
+        "runHook preInstall"
+
         (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
@@ -226,9 +229,18 @@ stdenv.mkDerivation rec {
 
         # link in the CLI utils
         (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+
+        "runHook postInstall"
       ])
     )
   ;
+
+  postInstall = ''
+    mkdir -p $out/share
+    ln -s ${base}/share/applications $out/share/applications
+    ln -s ${base}/share/icons $out/share/icons
+    ln -s ${base}/share/mime $out/share/mime
+  '';
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
@@ -247,7 +259,7 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.gpl3Plus;
     # berce seems inactive...
     maintainers = with lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform

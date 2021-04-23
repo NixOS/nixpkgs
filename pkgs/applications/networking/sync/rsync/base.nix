@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, fetchurl }:
 
 rec {
   version = "3.2.3";

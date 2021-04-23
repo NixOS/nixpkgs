@@ -4,6 +4,7 @@
 with lib;
 
 let
+  json = pkgs.formats.json {};
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
                            && pkgs.stdenv.isx86_64
@@ -18,65 +19,24 @@ let
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
 
-  prioritizeNativeProtocol = {
-    "context.modules" = {
-      # Most other modules depend on this, so put it first
-      "libpipewire-module-protocol-native" = {
-        _priority = -100;
-        _content = null;
-      };
-    };
-  };
-
-  fixDaemonModulePriorities = {
-    "context.modules" = {
-      # Most other modules depend on thism so put it first
-      "libpipewire-module-protocol-native" = {
-        _priority = -100;
-        _content = null;
-      };
-      # Needs to be before libpipewire-module-access
-      "libpipewire-module-portal" = {
-        _priority = -50;
-        _content = {
-          flags = [
-            "ifexists"
-            "nofail"
-          ];
-        };
-      };
-    };
-  };
-
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
-    client = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client.conf.json)) prioritizeNativeProtocol;
-    client-rt = recursiveUpdate (builtins.fromJSON (builtins.readFile ./client-rt.conf.json)) prioritizeNativeProtocol;
-    jack = recursiveUpdate (builtins.fromJSON (builtins.readFile ./jack.conf.json)) prioritizeNativeProtocol;
+    client = builtins.fromJSON (builtins.readFile ./client.conf.json);
+    client-rt = builtins.fromJSON (builtins.readFile ./client-rt.conf.json);
+    jack = builtins.fromJSON (builtins.readFile ./jack.conf.json);
     # Remove session manager invocation from the upstream generated file, it points to the wrong path
-    pipewire = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire.conf.json)) fixDaemonModulePriorities;
-    pipewire-pulse = recursiveUpdate (builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json)) prioritizeNativeProtocol;
+    pipewire = builtins.fromJSON (builtins.readFile ./pipewire.conf.json);
+    pipewire-pulse = builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json);
   };
 
-  # Helpers for generating the pipewire JSON config file
-  mkSPAValueString = v:
-  if builtins.isList v then "[${lib.concatMapStringsSep " " mkSPAValueString v}]"
-  else if lib.types.attrs.check v then
-    "{${lib.concatStringsSep " " (mkSPAKeyValue v)}}"
-  else if builtins.isString v then "\"${lib.generators.mkValueStringDefault { } v}\""
-  else lib.generators.mkValueStringDefault { } v;
-
-  mkSPAKeyValue = attrs: map (def: def.content) (
-  lib.sortProperties
-    (
-      lib.mapAttrsToList
-        (k: v: lib.mkOrder (v._priority or 1000) "${lib.escape [ "=" ] k} = ${mkSPAValueString (v._content or v)}")
-        attrs
-    )
-  );
-
-  toSPAJSON = attrs: lib.concatStringsSep "\n" (mkSPAKeyValue attrs);
+  configs = {
+    client = recursiveUpdate defaults.client cfg.config.client;
+    client-rt = recursiveUpdate defaults.client-rt cfg.config.client-rt;
+    jack = recursiveUpdate defaults.jack cfg.config.jack;
+    pipewire = recursiveUpdate defaults.pipewire cfg.config.pipewire;
+    pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
+  };
 in {
 
   meta = {
@@ -108,7 +68,7 @@ in {
 
       config = {
         client = mkOption {
-          type = types.attrs;
+          type = json.type;
           default = {};
           description = ''
             Configuration for pipewire clients. For details see
@@ -117,7 +77,7 @@ in {
         };
 
         client-rt = mkOption {
-          type = types.attrs;
+          type = json.type;
           default = {};
           description = ''
             Configuration for realtime pipewire clients. For details see
@@ -126,7 +86,7 @@ in {
         };
 
         jack = mkOption {
-          type = types.attrs;
+          type = json.type;
           default = {};
           description = ''
             Configuration for the pipewire daemon's jack module. For details see
@@ -135,7 +95,7 @@ in {
         };
 
         pipewire = mkOption {
-          type = types.attrs;
+          type = json.type;
           default = {};
           description = ''
             Configuration for the pipewire daemon. For details see
@@ -144,7 +104,7 @@ in {
         };
 
         pipewire-pulse = mkOption {
-          type = types.attrs;
+          type = json.type;
           default = {};
           description = ''
             Configuration for the pipewire-pulse daemon. For details see
@@ -217,11 +177,21 @@ in {
       source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
     };
 
-    environment.etc."pipewire/client.conf" = { text = toSPAJSON (recursiveUpdate defaults.client cfg.config.client); };
-    environment.etc."pipewire/client-rt.conf" = { text = toSPAJSON (recursiveUpdate defaults.client-rt cfg.config.client-rt); };
-    environment.etc."pipewire/jack.conf" = { text = toSPAJSON (recursiveUpdate defaults.jack cfg.config.jack); };
-    environment.etc."pipewire/pipewire.conf" = { text = toSPAJSON (recursiveUpdate defaults.pipewire cfg.config.pipewire); };
-    environment.etc."pipewire/pipewire-pulse.conf" = { text = toSPAJSON (recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse); };
+    environment.etc."pipewire/client.conf" = {
+      source = json.generate "client.conf" configs.client;
+    };
+    environment.etc."pipewire/client-rt.conf" = {
+      source = json.generate "client-rt.conf" configs.client-rt;
+    };
+    environment.etc."pipewire/jack.conf" = {
+      source = json.generate "jack.conf" configs.jack;
+    };
+    environment.etc."pipewire/pipewire.conf" = {
+      source = json.generate "pipewire.conf" configs.pipewire;
+    };
+    environment.etc."pipewire/pipewire-pulse.conf" = {
+      source = json.generate "pipewire-pulse.conf" configs.pipewire-pulse;
+    };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";

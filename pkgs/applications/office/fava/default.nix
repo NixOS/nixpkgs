@@ -1,44 +1,49 @@
-{ lib, python3, beancount }:
+{ lib, python3 }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fava";
   version = "1.18";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "21336b695708497e6f00cab77135b174c51feb2713b657e0e208282960885bf5";
   };
 
-  checkInputs = [ python3.pkgs.pytest ];
-  propagatedBuildInputs = with python3.pkgs;
-    [
-      Babel
-      cheroot
-      flaskbabel
-      flask
-      jinja2
-      beancount
-      click
-      markdown2
-      ply
-      simplejson
-      werkzeug
-      jaraco_functools
-    ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
-  # CLI test expects fava on $PATH.  Not sure why static_url fails.
-  # the entry_slices and render_entries requires other files to pass
-  checkPhase = ''
-    py.test tests -k 'not cli and not static_url and not entry_slice and not render_entries'
+  propagatedBuildInputs = with python3.pkgs; [
+    Babel
+    beancount
+    cheroot
+    click
+    flask
+    flaskbabel
+    jaraco_functools
+    jinja2
+    markdown2
+    ply
+    simplejson
+    werkzeug
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TEMPDIR
   '';
 
-  meta = {
-    homepage = "https://beancount.github.io/fava";
+  disabledTests = [
+    # runs fava in debug mode, which tries to interpret bash wrapper as Python
+    "test_cli"
+  ];
+
+  meta = with lib; {
     description = "Web interface for beancount";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    homepage = "https://beancount.github.io/fava";
+    changelog = "https://beancount.github.io/fava/changelog.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

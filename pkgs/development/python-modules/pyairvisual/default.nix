@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "5.0.6";
+  version = "5.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7u8AwIr1Ah/7zCfXFwj/C/CaD/B3uLRkZ8Gf6d18Xp0=";
+    sha256 = "sha256-r/AJl36dv6+C92tc3kpX4/VzG69qdh4ERCyQxDOHdVU=";
   };
 
   nativeBuildInputs = [ poetry-core ];

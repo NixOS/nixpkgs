@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, python3Packages }:
+{ lib, fetchFromGitHub, makeWrapper, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xkeysnail";

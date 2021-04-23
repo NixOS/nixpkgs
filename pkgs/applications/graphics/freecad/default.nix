@@ -1,48 +1,115 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
-xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
-opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
-gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi,
-spaceNavSupport ? true, libspnav, qtx11extras }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, GitPython
+, boost
+, coin3d
+, eigen
+, gfortran
+, gts
+, hdf5
+, libGLU
+, libXmu
+, libf2c
+, libspnav
+, matplotlib
+, medfile
+, mpi
+, ode
+, opencascade-occt
+, pivy
+, pkg-config
+, pycollada
+, pyside2
+, pyside2-tools
+, python
+, pyyaml
+, qtbase
+, qttools
+, qtwebengine
+, qtx11extras
+, qtxmlpatterns
+, scipy
+, shiboken2
+, soqt
+, spaceNavSupport ? stdenv.isLinux
+, swig
+, vtk
+, wrapQtAppsHook
+, xercesc
+, zlib
+}:
 
-let
-  pythonPackages = python3Packages;
-in mkDerivation rec {
-  pname = "freecad-unstable";
-  version = "2020-12-08";
+mkDerivation rec {
+  pname = "freecad";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = "daea30341ea2d5eaf2bfb65614128a5fa2abc8b7";
-    sha256 = "1fza64lygqq35v7kzgqmiq5dvl5rpgkhlzv06f9dszdz44hznina";
+    rev = version;
+    hash = "sha256-itIrO+/mKXOPNs+2POKT8u4YZuqx/QAwVBWrHgKP1qQ=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    pythonPackages.pyside2-tools
+    pyside2-tools
     wrapQtAppsHook
   ];
 
   buildInputs = [
-    coin3d xercesc ode eigen opencascade-occt gts
-    zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
-    libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
-  ] ++ (with pythonPackages; [
-    matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
-    scipy pyyaml # (at least for) PyrateWorkbench
-  ]) ++ lib.optionals spaceNavSupport [ libspnav qtx11extras ];
+    boost
+    coin3d
+    eigen
+    gfortran
+    gts
+    hdf5
+    libGLU
+    libXmu
+    libf2c
+    matplotlib
+    medfile
+    mpi
+    ode
+    opencascade-occt
+    pivy
+    pycollada
+    pyside2
+    pyside2-tools
+    python
+    pyyaml # (at least for) PyrateWorkbench
+    qtbase
+    qttools
+    qtwebengine
+    qtxmlpatterns
+    scipy
+    shiboken2
+    soqt
+    swig
+    vtk
+    xercesc
+    zlib
+  ] ++ lib.optionals spaceNavSupport [
+    libspnav
+    qtx11extras
+  ];
 
   cmakeFlags = [
+    "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
-    "-DSHIBOKEN_INCLUDE_DIR=${pythonPackages.shiboken2}/include"
+    "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
-    ("-DPYSIDE_INCLUDE_DIR=${pythonPackages.pyside2}/include"
-      + ";${pythonPackages.pyside2}/include/PySide2/QtCore"
-      + ";${pythonPackages.pyside2}/include/PySide2/QtWidgets"
-      + ";${pythonPackages.pyside2}/include/PySide2/QtGui"
+    ("-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
+      + ";${pyside2}/include/PySide2/QtCore"
+      + ";${pyside2}/include/PySide2/QtWidgets"
+      + ";${pyside2}/include/PySide2/QtGui"
       )
     "-DPYSIDE_LIBRARY=PySide2::pyside2"
   ];
@@ -65,13 +132,31 @@ in mkDerivation rec {
 
   postFixup = ''
     mv $out/share/doc $out
+    ln -s $out/bin/FreeCAD $out/bin/freecad
+    ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
   meta = with lib; {
-    description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     homepage = "https://www.freecadweb.org/";
+    description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
+    longDescription = ''
+      FreeCAD is an open-source parametric 3D modeler made primarily to design
+      real-life objects of any size. Parametric modeling allows you to easily
+      modify your design by going back into your model history and changing its
+      parameters.
+
+      FreeCAD allows you to sketch geometry constrained 2D shapes and use them
+      as a base to build other objects. It contains many components to adjust
+      dimensions or extract design details from 3D models to create high quality
+      production ready drawings.
+
+      FreeCAD is designed to fit a wide range of uses including product design,
+      mechanical engineering and architecture. Whether you are a hobbyist, a
+      programmer, an experienced CAD user, a student or a teacher, you will feel
+      right at home with FreeCAD.
+    '';
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ viric gebner ];
+    maintainers = with maintainers; [ viric gebner AndersonTorres ];
     platforms = platforms.linux;
   };
 }

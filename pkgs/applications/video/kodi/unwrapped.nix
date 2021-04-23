@@ -230,6 +230,7 @@ in stdenv.mkDerivation {
 
     passthru = {
       pythonPackages = python3Packages;
+      ffmpeg = ffmpeg;
     };
 
     meta = with lib; {
@@ -237,6 +238,6 @@ in stdenv.mkDerivation {
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
-      maintainers = with maintainers; [ titanous edwtjo peterhoeg sephalon ];
+      maintainers = teams.kodi.members;
     };
 }

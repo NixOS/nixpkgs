@@ -3,7 +3,7 @@
     inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
-    matched = builtins.match "(.*).git" base;
+    matched = builtins.match "(.*)\\.git" base;
 
     short = builtins.substring 0 7 rev;
 

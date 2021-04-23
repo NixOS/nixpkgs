@@ -146,8 +146,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
 
-      buildInputs = [ pkgs.v8_6_x ];
-      configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+      buildInputs = [ pkgs.v8 ];
+      configureFlags = [ "--with-v8=${pkgs.v8}" ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = true;
@@ -159,8 +159,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
 
-      buildInputs = [ pkgs.v8_6_x ];
-      configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+      buildInputs = [ pkgs.v8 ];
+      configureFlags = [ "--with-v8js=${pkgs.v8}" ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = true;

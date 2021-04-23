@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pymitv";
-  version = "1.4.3";
+  version = "1.5.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jbs1zhqpnsyad3pd8cqy1byv8m5bq17ydc6crmrfkjbp6xvvg3x";
+    sha256 = "sha256-0n4IS5W3nvYwKdl6FVf4upRrFDGdYHohsaXadFy8d8w=";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -86,11 +86,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
   ];
 
-  # Help vulkan-loader find the validation layers
-  setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-  '';
-
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
   patchPhase = ''

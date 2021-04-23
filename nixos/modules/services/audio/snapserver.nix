@@ -65,7 +65,7 @@ let
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "snapserver" "controlPort"] [ "services" "snapserver" "tcp" "port" ])
+    (mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
   ];
 
   ###### interface
@@ -200,12 +200,21 @@ in {
             location = mkOption {
               type = types.oneOf [ types.path types.str ];
               description = ''
-                The location of the pipe, file, Librespot/Airplay/process binary, or a TCP address.
-                Use an empty string for alsa.
+                For type <literal>pipe</literal> or <literal>file</literal>, the path to the pipe or file.
+                For type <literal>librespot</literal>, <literal>airplay</literal> or <literal>process</literal>, the path to the corresponding binary.
+                For type <literal>tcp</literal>, the <literal>host:port</literal> address to connect to or listen on.
+                For type <literal>meta</literal>, a list of stream names in the form <literal>/one/two/...</literal>. Don't forget the leading slash.
+                For type <literal>alsa</literal>, use an empty string.
+              '';
+              example = literalExample ''
+                "/path/to/pipe"
+                "/path/to/librespot"
+                "192.168.1.2:4444"
+                "/MyTCP/Spotify/MyPipe"
               '';
             };
             type = mkOption {
-              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" ];
+              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
               default = "pipe";
               description = ''
                 The type of input stream.

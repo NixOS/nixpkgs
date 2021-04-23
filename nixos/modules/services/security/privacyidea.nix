@@ -57,6 +57,26 @@ in
     services.privacyidea = {
       enable = mkEnableOption "PrivacyIDEA";
 
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/root/privacyidea.env";
+        description = ''
+          File to load as environment file. Environment variables
+          from this file will be interpolated into the config file
+          using <package>envsubst</package> which is helpful for specifying
+          secrets:
+          <programlisting>
+          { <xref linkend="opt-services.privacyidea.secretKey" /> = "$SECRET"; }
+          </programlisting>
+
+          The environment-file can now specify the actual secret key:
+          <programlisting>
+          SECRET=veryverytopsecret
+          </programlisting>
+        '';
+      };
+
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/privacyidea";
@@ -206,7 +226,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "postgresql.service" ];
         path = with pkgs; [ openssl ];
-        environment.PRIVACYIDEA_CONFIGFILE = piCfgFile;
+        environment.PRIVACYIDEA_CONFIGFILE = "${cfg.stateDir}/privacyidea.cfg";
         preStart = let
           pi-manage = "${pkgs.sudo}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
           pgsu = config.services.postgresql.superUser;
@@ -214,6 +234,10 @@ in
         in ''
           mkdir -p ${cfg.stateDir} /run/privacyidea
           chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} /run/privacyidea
+          umask 077
+          ${lib.getBin pkgs.envsubst}/bin/envsubst -o ${cfg.stateDir}/privacyidea.cfg \
+                                                   -i "${piCfgFile}"
+          chown ${cfg.user}:${cfg.group} ${cfg.stateDir}/privacyidea.cfg
           if ! test -e "${cfg.stateDir}/db-created"; then
             ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
             ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createdb --owner ${cfg.user} privacyidea
@@ -231,6 +255,7 @@ in
           Type = "notify";
           ExecStart = "${uwsgi}/bin/uwsgi --json ${piuwsgi}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           NotifyAccess = "main";
           KillSignal = "SIGQUIT";
@@ -239,6 +264,7 @@ in
 
       users.users.privacyidea = mkIf (cfg.user == "privacyidea") {
         group = cfg.group;
+        isSystemUser = true;
       };
 
       users.groups.privacyidea = mkIf (cfg.group == "privacyidea") {};
@@ -269,6 +295,7 @@ in
 
       users.users.pi-ldap-proxy = mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
         group = cfg.ldap-proxy.group;
+        isSystemUser = true;
       };
 
       users.groups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};

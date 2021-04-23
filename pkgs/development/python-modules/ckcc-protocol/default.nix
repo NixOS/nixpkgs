@@ -4,19 +4,18 @@
 , ecdsa
 , hidapi
 , fetchPypi
-, pytest
 , pyaes
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ckcc-protocol";
-  version = "1.0.3";
+  version = "1.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d83a77d94e9563c3fb0e982d847ec88ba6ac45e3e008e5e53729c0b9800097fc";
+    sha256 = "b660225ac06fc06ad17b33ece428126eef785388450e14313f72d25d4082c5ab";
   };
 
   propagatedBuildInputs = [ click ecdsa hidapi pyaes ];

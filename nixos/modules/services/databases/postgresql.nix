@@ -18,7 +18,12 @@ let
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+
+  configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
+    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    touch $out
+  '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -51,6 +56,12 @@ in
         description = ''
           The port on which PostgreSQL listens.
         '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Check the syntax of the configuration file at compile time";
       };
 
       dataDir = mkOption {
@@ -152,7 +163,7 @@ in
               '';
               example = literalExample ''
                 {
-                  "DATABASE nextcloud" = "ALL PRIVILEGES";
+                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
                   "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
                 }
               '';
@@ -284,8 +295,7 @@ in
       # systems!
       mkDefault (if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
             else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
-            else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
+            else throw "postgresql_9_5 was removed, please upgrade your postgresql version.");
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
@@ -314,6 +324,8 @@ in
      "/share/postgresql"
     ];
 
+    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
 
@@ -337,7 +349,7 @@ in
               touch "${cfg.dataDir}/.first_startup"
             fi
 
-            ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
+            ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"

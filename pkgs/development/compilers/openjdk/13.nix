@@ -22,9 +22,9 @@ let
       sha256 = "1871ziss7ny19rw8f7bay5vznmhpqbfi4ihn3yygs06wyxhm0zmv";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk13-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [

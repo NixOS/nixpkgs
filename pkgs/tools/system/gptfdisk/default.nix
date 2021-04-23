@@ -1,14 +1,14 @@
-{ fetchurl, lib, stdenv, libuuid, popt, icu, ncurses }:
+{ fetchurl, lib, stdenv, libuuid, popt, icu, ncurses, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     # https://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3cVR1kOlPwvURANF064yxJsEp5fpwBA26kYLa7QWjKg=";
+    sha256 = "sha256-dUAEt/hbJ5KHx6w8BGmx1+Dq4EOpei5YewVgyl84KMA=";
   };
 
   postPatch = ''
@@ -37,10 +37,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isx86 {
+    installer-simpleLabels = nixosTests.installer.simpleLabels;
+  };
+
   meta = with lib; {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";
     platforms = platforms.all;
+    maintainers = [ maintainers.ehmry ];
   };
 }

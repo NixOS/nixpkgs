@@ -32,7 +32,7 @@
 , ntl
 , numpy
 , pari
-, pkgconfig
+, pkgconfig # the python module, not the pkg-config alias
 , pkg-config
 , planarity
 , ppl

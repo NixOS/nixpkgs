@@ -58,7 +58,7 @@ in
   };
 
   bird2 = generic {
-    version = "2.0.7";
-    sha256 = "0rhhbfmfw2d93rvhglv03rdzxsq2disw6s1wm8d6bgdxmrc2n7b3";
+    version = "2.0.8";
+    sha256 = "1xp7f0im1v8pqqx3xqyfkd1nsxk8vnbqgrdrwnwhg8r5xs1xxlhr";
   };
 }

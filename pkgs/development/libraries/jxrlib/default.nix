@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "jxrlib";
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
       --replace '.so' '.dylib'
   '';
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
+
+  strictDeps = true;
 
   makeFlags = [ "DIR_INSTALL=$(out)" "SHARED=1" ];
 

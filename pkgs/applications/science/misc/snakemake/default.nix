@@ -2,13 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "5.28.0";
+  version = "6.0.5";
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
     ConfigArgParse
     datrie
     docutils
+    filelock
     GitPython
     jsonschema
     nbformat
@@ -17,19 +18,20 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     ratelimiter
     requests
+    smart_open
     toposort
     wrapt
   ];
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "2367ce91baf7f8fa7738d33aff9670ffdf5410bbac49aeb209f73b45a3425046";
+    sha256 = "9441169034cce46086a8b45486d75175db645b932e766d28fed312ec837792d3";
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
 
   meta = with lib; {
-    homepage = "https://snakemake.readthedocs.io";
+    homepage = "https://snakemake.github.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
     longDescription = ''

@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputs = [ "lib" "art" "out" ];
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $lib/hack/{plugins,lua} $art/data/art

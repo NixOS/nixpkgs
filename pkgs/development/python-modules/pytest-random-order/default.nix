@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://github.com/jbasko/pytest-random-order";

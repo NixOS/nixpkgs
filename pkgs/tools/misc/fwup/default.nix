@@ -8,7 +8,7 @@
 , libarchive
 , libconfuse
 , libsodium
-, lzma
+, xz
 , zlib
 , coreutils
 , dosfstools
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libarchive
     libconfuse
     libsodium
-    lzma
+    xz
     zlib
   ]
     ++ lib.optionals stdenv.isDarwin [

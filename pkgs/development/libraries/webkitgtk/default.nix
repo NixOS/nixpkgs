@@ -37,6 +37,7 @@
 , libGL
 , libGLU
 , libintl
+, libmanette
 , openjpeg
 , enableGeoLocation ? true
 , geoclue2
@@ -59,7 +60,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.30.5";
+  version = "2.32.0";
 
   outputs = [ "out" "dev" ];
 
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "07vzbbnvz69rn9pciji4axfpclp98bpj4a0br2z0gbn5wc4an3bx";
+    sha256 = "1w3b0w8izp0i070grhv19j631sdcd0mcqnjnax13k8mdx7dg8zcx";
   };
 
   patches = optionals stdenv.isLinux [
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libidn
     libintl
+    libmanette
     libnotify
     libpthreadstubs
     libsecret

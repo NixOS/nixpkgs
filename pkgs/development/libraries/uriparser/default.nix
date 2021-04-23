@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, gtest }:
+{ lib, stdenv, fetchurl, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
-  version = "0.9.4";
+  version = "0.9.5";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0yzqp1j6sglyrmwcasgn7zlwg841p3nbxy0h78ngq20lc7jspkdp";
+    sha256 = "0v30qr5hl3xybl9nzwaw46kblwn94w5xpri22wanrrpjlzmn306x";
   };
 
   nativeBuildInputs = [ cmake ];

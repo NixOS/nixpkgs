@@ -3,7 +3,7 @@
 fetchzip {
   name = "paratype-pt-mono";
 
-  url = [
+  urls = [
     "https://company.paratype.com/system/attachments/631/original/ptmono.zip"
     "http://rus.paratype.ru/system/attachments/631/original/ptmono.zip"
   ];

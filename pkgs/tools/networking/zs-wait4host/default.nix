@@ -1,4 +1,4 @@
-{ bash, coreutils, fetchurl, fping, lib, stdenvNoCC }:
+{ coreutils, fetchurl, fping, lib, stdenvNoCC }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "zs-wait4host";
@@ -8,8 +8,6 @@ stdenvNoCC.mkDerivation rec {
     url = "https://ytrizja.de/distfiles/${pname}-${version}.tar.gz";
     sha256 = "9F1264BDoGlRR7bWlRXhfyvxWio4ydShKmabUQEIz9I=";
   };
-
-  buildInputs = [ bash coreutils fping ];
 
   postPatch = ''
     for i in zs-wait4host zs-wait4host-inf; do

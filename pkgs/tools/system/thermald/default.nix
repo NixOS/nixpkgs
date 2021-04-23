@@ -10,7 +10,7 @@
 , libevdev
 , libtool
 , libxml2
-, lzma
+, xz
 , pkg-config
 , lib, stdenv
 , upower
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     dbus-glib
     libevdev
     libxml2
-    lzma
+    xz
     upower
   ];
 

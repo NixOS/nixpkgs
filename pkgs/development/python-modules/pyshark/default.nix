@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyshark";
-  version = "0.4.2.11";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07dkhkf85cplcj1h3k8mmqzsn4zdkxzr0zg3gvf8yc8p5g5azx9q";
+    sha256 = "sha256-cveiFkkSplfQPgUEVWyV40KKHCtKJZsfvdV8JmEUmE4=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +28,8 @@ buildPythonPackage rec {
     pytestCheckHook
     wireshark-cli
   ];
+
+  pythonImportsCheck = [ "pyshark" ];
 
   meta = with lib; {
     description = "Python wrapper for tshark, allowing python packet parsing using wireshark dissectors";

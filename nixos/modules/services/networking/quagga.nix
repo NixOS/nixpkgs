@@ -164,7 +164,7 @@ in
                   preStart = ''
                     install -m 0755 -o quagga -g quagga -d /run/quagga
 
-                    ${pkgs.iproute}/bin/ip route flush proto zebra
+                    ${pkgs.iproute2}/bin/ip route flush proto zebra
                   '';
                 }
               else

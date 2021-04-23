@@ -3,17 +3,16 @@
 , intltool
 , libxfce4ui
 , xfce4-panel
-, gtk3
 , gettext
 }:
 
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-datetime-plugin";
-  version = "0.8.0";
+  version = "0.8.1";
 
-  rev-prefix = "datetime-";
-  sha256 = "12drh7y70d70r93lpv43fkj5cbyl0vciz4a41nxrknrfbhxrvyah";
+  rev-prefix = "xfce4-datetime-plugin-";
+  sha256 = "06h13bmh2sni4qbr3kfnqaa5dq5f48h4xkywrm9pa6h2nyvn4rma";
 
   nativeBuildInputs = [
     gettext
@@ -21,7 +20,6 @@ mkXfceDerivation {
   ];
 
   buildInputs = [
-    gtk3
     libxfce4ui
     xfce4-panel
   ];

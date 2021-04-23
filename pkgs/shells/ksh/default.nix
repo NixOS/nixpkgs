@@ -1,4 +1,4 @@
-{ lib, stdenv, meson, ninja, fetchFromGitHub, which, python, fetchpatch
+{ lib, stdenv, meson, ninja, fetchFromGitHub, which, python3, fetchpatch
 , libiconv }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja which python ];
+  nativeBuildInputs = [ meson ninja which python3 ];
 
   buildInputs = [ libiconv ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "KornShell Command And Programming Language";

@@ -24,7 +24,7 @@
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, gssSupport ? true, kerberos
+, gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
 ## privacy-related options
@@ -161,7 +161,7 @@ buildStdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     xorg.pixman yasm libGLU libGL
     xorg.xorgproto
-    xorg.libXext unzip makeWrapper
+    xorg.libXext makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
     nasm icu67 libvpx_1_8
@@ -174,7 +174,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
@@ -222,6 +222,7 @@ buildStdenv.mkDerivation ({
       rust-cbindgen
       rustc
       which
+      unzip
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]

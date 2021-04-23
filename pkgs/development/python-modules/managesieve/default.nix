@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "managesieve";
-  version = "0.7";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dx0j8hhjwip1ackaj2m4hqrrx2iiv846ic4wa6ymrawwb8iq8m6";
+    sha256 = "44930a3b48332d23b35a5305ae7ba47904d4485ed1b7a22208b7d5ad9d60427a";
   };
 
   checkInputs = [ pytestCheckHook ];

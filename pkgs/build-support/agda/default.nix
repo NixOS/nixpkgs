@@ -1,6 +1,6 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, mkShell, ghcWithPackages }:
+{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, mkShell, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
@@ -18,7 +18,10 @@ let
   in runCommandNoCC "${pname}-${version}" {
     inherit pname version;
     nativeBuildInputs = [ makeWrapper ];
-    passthru.unwrapped = Agda;
+    passthru = {
+      unwrapped = Agda;
+      tests = { inherit (nixosTests) agda; };
+    };
   } ''
     mkdir -p $out/bin
     makeWrapper ${Agda}/bin/agda $out/bin/agda \

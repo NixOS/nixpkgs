@@ -3,6 +3,10 @@
 , ounit
 }:
 
+if !lib.versionAtLeast ppxlib.version "0.18.0"
+then throw "ppx_bitstring is not available with ppxlib-${ppxlib.version}"
+else
+
 buildDunePackage rec {
   pname = "ppx_bitstring";
   inherit (bitstring) version useDune2 src;

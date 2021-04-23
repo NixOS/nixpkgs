@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-hardware-monitor-plugin";
     description = "Hardware monitor plugin for the XFCE4 panel";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
+    broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
     maintainers = [ maintainers.romildo ];
   };
 }

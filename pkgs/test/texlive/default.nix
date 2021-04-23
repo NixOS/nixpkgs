@@ -1,4 +1,4 @@
-{ runCommandNoCC, fetchurl, file, texlive }:
+{ runCommandNoCC, fetchurl, file, texlive, writeShellScript }:
 
 {
   chktex = runCommandNoCC "texlive-test-chktex" {
@@ -17,7 +17,7 @@
   '';
 
   # https://github.com/NixOS/nixpkgs/issues/75605
-  dvipng = runCommandNoCC "texlive-test-dvipng" {
+  dvipng.basic = runCommandNoCC "texlive-test-dvipng-basic" {
     nativeBuildInputs = [ file texlive.combined.scheme-medium ];
     input = fetchurl {
       name = "test_dvipng.tex";
@@ -37,6 +37,47 @@
     mkdir "$out"
     mv document*.png "$out"/
   '';
+
+  # test dvipng's limited capability to render postscript specials via GS
+  dvipng.ghostscript = runCommandNoCC "texlive-test-ghostscript" {
+    nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+    input = builtins.toFile "postscript-sample.tex" ''
+      \documentclass{minimal}
+      \begin{document}
+        Ni
+        \special{ps:
+          newpath
+          0 0 moveto
+          7 7 rlineto
+          0 7 moveto
+          7 -7 rlineto
+          stroke
+          showpage
+        }
+      \end{document}
+    '';
+    gs_trap = writeShellScript "gs_trap.sh" ''
+      exit 1
+    '';
+  } ''
+    cp "$gs_trap" ./gs
+    export PATH=$PWD:$PATH
+    # check that the trap works
+    gs && exit 1
+
+    cp "$input" ./document.tex
+
+    latex document.tex
+    dvipng -T 1in,1in -strict -picky document.dvi
+    for f in document*.png; do
+      file "$f" | tee output
+      grep PNG output
+    done
+
+    mkdir "$out"
+    mv document*.png "$out"/
+  '';
+
 
   # https://github.com/NixOS/nixpkgs/issues/75070
   dvisvgm = runCommandNoCC "texlive-test-dvisvgm" {

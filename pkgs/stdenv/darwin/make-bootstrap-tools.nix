@@ -18,7 +18,7 @@ in rec {
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
   # Avoid messing with libkrb5 and libnghttp2.
-  curl_ = curl.override (args: { gssSupport = false; http2Support = false; });
+  curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";

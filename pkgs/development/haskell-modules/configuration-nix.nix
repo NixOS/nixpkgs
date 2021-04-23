@@ -445,6 +445,7 @@ self: super: builtins.intersectAttrs super {
 
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -658,9 +659,7 @@ self: super: builtins.intersectAttrs super {
     let
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak (super.spago.override {
-        dhall = self.dhall_1_37_1;
-      });
+      spagoWithOverrides = doJailbreak super.spago;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
@@ -815,5 +814,4 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
-
 }

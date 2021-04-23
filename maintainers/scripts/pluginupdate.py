@@ -416,6 +416,7 @@ def rewrite_input(
                 }
         with open(deprecated, "w") as f:
             json.dump(deprecations, f, indent=4, sort_keys=True)
+            f.write("\n")
 
     lines = sorted(lines, key=str.casefold)
 
@@ -514,7 +515,7 @@ def update_plugins(editor: Editor):
         )
 
     for plugin_line in args.add_plugins:
-        rewrite_input(args.input_fil, editor.deprecated, append=(plugin_line + "\n",))
+        rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
         update()
         plugin = fetch_plugin_from_pluginline(plugin_line)
         commit(

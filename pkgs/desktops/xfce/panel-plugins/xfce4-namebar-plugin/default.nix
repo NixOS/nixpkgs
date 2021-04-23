@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 libwnck3 libxfce4util xfce4-panel ];
 
   postPatch = ''
-    for f in src/preferences.vala src/namebar.vala; do
-      substituteInPlace $f --replace 'var dirs = Environment.get_system_data_dirs()' "string[] dirs = { \"$out/share\" }"
-    done
+    substituteInPlace src/namebar.vala --replace 'var dirs = Environment.get_system_data_dirs()' "string[] dirs = { \"$out/share\" }"
+    substituteInPlace src/preferences.vala --replace 'var dir_strings = Environment.get_system_data_dirs()' "string[] dir_strings = { \"$out/share\" }"
   '';
 
   passthru.updateScript = xfce.updateScript {

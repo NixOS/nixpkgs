@@ -126,7 +126,12 @@ in rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
+                              # Musl-based platforms will keep "pie", other platforms will not.
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
+                                # Except when:
+                                #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+                                #    - static armv7l, where compilation fails.
+                                !((stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) && stdenv.hostPlatform.isStatic)
                               then supportedHardeningFlags
                               else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
@@ -218,15 +223,21 @@ in rec {
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
-          name = "${attrs.pname}-${attrs.version}";
-        } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
-          # Fixed-output derivations like source tarballs shouldn't get a host
-          # suffix. But we have some weird ones with run-time deps that are
-          # just used for their side-affects. Those might as well since the
-          # hash can't be the same. See #32986.
-          name = "${attrs.name or "${attrs.pname}-${attrs.version}"}-${stdenv.hostPlatform.config}";
-        } // {
+        // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
+          name =
+            let
+              staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
+              name' = attrs.name or
+                "${attrs.pname}${staticMarker}-${attrs.version}";
+              # Fixed-output derivations like source tarballs shouldn't get a host
+              # suffix. But we have some weird ones with run-time deps that are
+              # just used for their side-affects. Those might as well since the
+              # hash can't be the same. See #32986.
+              hostSuffix = lib.optionalString
+                (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
+                "-${stdenv.hostPlatform.config}";
+            in name' + hostSuffix;
+        }) // {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -325,6 +336,7 @@ in rec {
                lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
+          ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
           ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
           ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";

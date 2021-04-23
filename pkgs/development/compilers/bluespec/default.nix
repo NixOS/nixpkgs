@@ -27,13 +27,13 @@ let
   ghcWithPackages = ghc.withPackages (g: (with g; [old-time regex-compat syb split ]));
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "unstable-2021.02.14";
+  version = "unstable-2021.03.29";
 
   src = fetchFromGitHub {
       owner  = "B-Lang-org";
       repo   = "bsc";
-      rev    = "c085ecd807d85f31d102d8bec71f5c28dc96b31d";
-      sha256 = "0c86gwhrarw78cr9c9slb9vij6kcwx3x281kbqji96qqzs0dfb32";
+      rev    = "00185f7960bd1bd5554a1167be9f37e1f18ac454";
+      sha256 = "1bcdhql4cla137d8xr8m2h21dyxv0jpjpalpr5mgj2jxqfsmkbrn";
     };
 
   enableParallelBuilding = true;

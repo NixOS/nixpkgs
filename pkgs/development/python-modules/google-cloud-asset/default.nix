@@ -24,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "05q0yaw6b553qmzylr45zin17h8mvi8yyyxhbv3cxa7f0ahviw8w";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"google-cloud-org-policy >= 0.1.2, < 0.2.0dev"' '"google-cloud-org-policy >= 0.1.2, < 0.2.1"'
+  '';
+
   propagatedBuildInputs = [
     grpc_google_iam_v1
     google-api-core

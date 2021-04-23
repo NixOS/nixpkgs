@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";
-    homepage = "http://ranger.github.io/";
+    homepage = "https://ranger.github.io/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ toonn magnetophon ];

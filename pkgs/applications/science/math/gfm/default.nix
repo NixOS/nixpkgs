@@ -5,6 +5,7 @@
 , pkg-config
 , autoreconfHook
 , gnome2
+, gtk2
 , glib
 , libtifiles2
 , libticables2
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome2.gtk
+    gtk2
     gnome2.libglade
     glib
     libtifiles2

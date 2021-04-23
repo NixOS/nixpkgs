@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, iproute, perl }:
+{ lib, fetchurl, perlPackages, iproute2, perl }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
@@ -19,8 +19,8 @@ perlPackages.buildPerlPackage rec {
     touch Makefile.PL
     substituteInPlace ddclient \
       --replace 'in the output of ifconfig' 'in the output of ip addr show' \
-      --replace 'ifconfig -a' '${iproute}/sbin/ip addr show' \
-      --replace 'ifconfig $arg' '${iproute}/sbin/ip addr show $arg' \
+      --replace 'ifconfig -a' '${iproute2}/sbin/ip addr show' \
+      --replace 'ifconfig $arg' '${iproute2}/sbin/ip addr show $arg' \
       --replace '/usr/bin/perl' '${perl}/bin/perl' # Until we get the patchShebangs fixed (issue #55786) we need to patch this manually
   '';
 

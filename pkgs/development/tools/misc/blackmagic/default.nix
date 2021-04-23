@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkg-config
-, python, pythonPackages
+, python3
 }:
 
 with lib;
@@ -19,16 +19,25 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix deprecation warning with libftdi 1.5
+    (fetchpatch {
+      url = "https://github.com/blacksphere/blackmagic/commit/dea4be2539c5ea63836ec78dca08b52fa8b26ab5.patch";
+      sha256 = "0f81simij1wdhifsxaavalc6yxzagfbgwry969dbjmxqzvrsrds5";
+    })
+  ];
+
   nativeBuildInputs = [
     gcc-arm-embedded pkg-config
+    python3
   ];
 
   buildInputs = [
     libftdi1
     libusb-compat-0_1
-    python
-    pythonPackages.intelhex
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:

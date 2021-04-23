@@ -38,7 +38,7 @@ buildPythonPackage rec {
     PATH="${pkgs.parted}/sbin:$PATH"
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   checkInputs = [ six ];
   propagatedBuildInputs = [ pkgs.parted ];
 

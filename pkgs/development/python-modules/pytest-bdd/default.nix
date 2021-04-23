@@ -22,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "1yqzz44as4pxffmg4hk9lijvnvlc2chg1maq1fbj5i4k4jpagvjz";
   };
 
-  propagatedBuildInputs = [ glob2 Mako parse parse-type py pytest six ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ glob2 Mako parse parse-type py six ];
 
   # Tests require extra dependencies
   checkInputs = [ execnet mock pytest ];

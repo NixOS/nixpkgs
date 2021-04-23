@@ -13,12 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.20.20";
+  version = "0.20.21";
   pname = "dulwich";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QmlZuXBfrcxsgg5a3zKR1xpIq6CvzPdBFCLjMI8RX4c=";
+    sha256 = "sha256-rHZMmpuA+mGv40BNUnDFBgqlf38IexGpU5XTt287cf0=";
   };
 
   LC_ALL = "en_US.UTF-8";

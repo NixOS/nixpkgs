@@ -14,8 +14,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0a4zi8w18pjj813n7kmxldl1d9r1jp0iyhkw7pbqgl8f7qaq994w";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libX11 unzip ois freetype libuuid boost ]
+  nativeBuildInputs = [ cmake pkg-config unzip ];
+  buildInputs = [ libX11 ois freetype libuuid boost ]
     ++ (if withOgre then [ ogre ] else [ libGL libGLU ]);
 
   # Tools are disabled due to compilation failures.

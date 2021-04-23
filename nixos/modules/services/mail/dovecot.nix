@@ -405,7 +405,7 @@ in
         };
     } // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
       ${cfg.mailUser} =
-        { description = "Virtual Mail User"; } // optionalAttrs (cfg.mailGroup != null)
+        { description = "Virtual Mail User"; isSystemUser = true; } // optionalAttrs (cfg.mailGroup != null)
           { group = cfg.mailGroup; };
     };
 

@@ -4,7 +4,7 @@
 { gcc6Stdenv, lib, fetchurl, fetchFromGitHub
 
 , which, findutils, m4, gawk
-, python, openjdk, mono, libressl
+, python2, openjdk, mono, libressl
 , ...
 }:
 
@@ -51,7 +51,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
+        nativeBuildInputs = [ python2 openjdk gawk which m4 findutils mono ];
         buildInputs = [ libressl boost ];
 
         inherit patches;

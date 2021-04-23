@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, lzma
+, xz
 , qt5
 , wrapQtAppsHook
 , miniupnpc_2
@@ -8,16 +8,16 @@
 , pythonPackages
 }:
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "426";
+  version = "434";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "1acdc258e5bb2ae22f5eafaf3dac8d9265dba5e2";
-    sha256 = "1snihd433hx36s6d5hsnq4qg0xs6ag4822lwm5fqak64n22ad2qb";
+    rev = "v${version}";
+    sha256 = "sha256-7Allc9zawja8DO2idv+MAYZ/cBRTCMd0mbgBLfEVii8=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,12 @@ pythonPackages.buildPythonPackage {
     service-identity
     twisted
     lz4
-    lzma
+    xz
     pysocks
     matplotlib
     qtpy
     pyside2
+    mpv
   ];
 
   checkInputs = with pythonPackages; [ nose httmock ];
@@ -74,11 +75,11 @@ pythonPackages.buildPythonPackage {
     -e TestServer \
   '';
 
-  extraOutputsToLink = [ "doc" ];
+  outputs = [ "out" "doc" ];
 
   postPatch = ''
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${miniupnpc_2}/bin/upnpc";' \
-      -i ./hydrus/core/HydrusNATPunch.py
+      -i ./hydrus/core/networking/HydrusNATPunch.py
 
     sed 's;os\.path\.join(\sHC\.BIN_DIR,.*;"${swftools}/bin/swfrender";' \
       -i ./hydrus/core/HydrusFlashHandling.py

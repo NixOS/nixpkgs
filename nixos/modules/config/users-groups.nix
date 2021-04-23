@@ -92,6 +92,8 @@ let
           the user's UID is allocated in the range for system users
           (below 500) or in the range for normal users (starting at
           1000).
+          Exactly one of <literal>isNormalUser</literal> and
+          <literal>isSystemUser</literal> must be true.
         '';
       };
 
@@ -107,6 +109,8 @@ let
           <option>useDefaultShell</option> to <literal>true</literal>,
           and <option>isSystemUser</option> to
           <literal>false</literal>.
+          Exactly one of <literal>isNormalUser</literal> and
+          <literal>isSystemUser</literal> must be true.
         '';
       };
 
@@ -521,6 +525,7 @@ in {
       };
       nobody = {
         uid = ids.uids.nobody;
+        isSystemUser = true;
         description = "Unprivileged account (don't use!)";
         group = "nogroup";
       };
@@ -556,10 +561,8 @@ in {
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl}/bin/perl -w \
-          -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
-          -I${pkgs.perlPackages.JSON}/${pkgs.perl.libPrefix} \
-          ${./update-users-groups.pl} ${spec}
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
+        -w ${./update-users-groups.pl} ${spec}
       '';
 
     # for backwards compatibility
@@ -593,8 +596,8 @@ in {
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
         assertion = !cfg.mutableUsers ->
-          any id ((mapAttrsToList (name: cfg:
-            (name == "root"
+          any id ((mapAttrsToList (_: cfg:
+            (cfg.name == "root"
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
@@ -610,21 +613,32 @@ in {
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.'';
       }
-    ] ++ flip mapAttrsToList cfg.users (name: user:
-      {
+    ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
+      [
+        {
         assertion = (user.hashedPassword != null)
-                    -> (builtins.match ".*:.*" user.hashedPassword == null);
+        -> (builtins.match ".*:.*" user.hashedPassword == null);
         message = ''
-          The password hash of user "${name}" contains a ":" character.
-          This is invalid and would break the login system because the fields
-          of /etc/shadow (file where hashes are stored) are colon-separated.
-          Please check the value of option `users.users."${name}".hashedPassword`.'';
-      }
-    );
+            The password hash of user "${user.name}" contains a ":" character.
+            This is invalid and would break the login system because the fields
+            of /etc/shadow (file where hashes are stored) are colon-separated.
+            Please check the value of option `users.users."${user.name}".hashedPassword`.'';
+          }
+          {
+            assertion = let
+              xor = a: b: a && !b || b && !a;
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 500);
+            in xor isEffectivelySystemUser user.isNormalUser;
+            message = ''
+              Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+            '';
+          }
+        ]
+    ));
 
     warnings =
       builtins.filter (x: x != null) (
-        flip mapAttrsToList cfg.users (name: user:
+        flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the
         # specific implementation of crypt(3) we only support the (sane)
@@ -647,9 +661,9 @@ in {
             && user.hashedPassword != ""  # login without password
             && builtins.match mcf user.hashedPassword == null)
         then ''
-          The password hash of user "${name}" may be invalid. You must set a
+          The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
-          check the value of option `users.users."${name}".hashedPassword`.''
+          check the value of option `users.users."${user.name}".hashedPassword`.''
         else null
       ));
 

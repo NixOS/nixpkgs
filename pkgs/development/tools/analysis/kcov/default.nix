@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, curl, elfutils, python, libiberty, libopcodes}:
+{lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, curl, elfutils, python3, libiberty, libopcodes}:
 
 stdenv.mkDerivation rec {
   pname = "kcov";
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
-  buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
+  buildInputs = [ curl zlib elfutils libiberty libopcodes ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Code coverage tester for compiled programs, Python scripts and shell scripts";

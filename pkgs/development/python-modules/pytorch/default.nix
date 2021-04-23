@@ -38,6 +38,7 @@ assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
 assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
+  setBool = v: if v then "1" else "0";
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
@@ -116,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.8.0";
+  version = "1.8.1";
 
   disabled = !isPy3k;
 
@@ -131,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-qdZUtlxHZjCYoGfTdp5Bq3MtfXolWZrvib0kuzF3uIc=";
+    sha256 = "sha256-HERbvmrfhWwH164GFHU/M0KbhVAuhI5sBZSxCZy8mRk=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -160,16 +161,17 @@ in buildPythonPackage rec {
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
-  BUILD_NAMEDTENSOR = true;
-  BUILD_DOCS = buildDocs;
+  BUILD_NAMEDTENSOR = setBool true;
+  BUILD_DOCS = setBool buildDocs;
 
-  USE_MKL = blas.implementation == "mkl";
+  # We only do an imports check, so do not build tests either.
+  BUILD_TEST = setBool false;
 
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
-  USE_MKLDNN = mklDnnSupport;
-  USE_MKLDNN_CBLAS = mklDnnSupport;
+  USE_MKLDNN = setBool mklDnnSupport;
+  USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -198,7 +200,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)

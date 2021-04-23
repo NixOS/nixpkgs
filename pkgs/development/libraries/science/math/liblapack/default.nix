@@ -3,7 +3,6 @@
   fetchFromGitHub,
   gfortran,
   cmake,
-  python2,
   shared ? true
 }:
 let
@@ -11,7 +10,7 @@ let
   version = "3.9.0";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "liblapack";
   inherit version;
 
@@ -22,16 +21,40 @@ stdenv.mkDerivation {
     sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
   };
 
-  nativeBuildInputs = [ gfortran python2 cmake ];
+  nativeBuildInputs = [ gfortran cmake ];
+
+  # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "stackprotector" ];
 
   cmakeFlags = [
     "-DCMAKE_Fortran_FLAGS=-fPIC"
     "-DLAPACKE=ON"
     "-DCBLAS=ON"
+    "-DBUILD_TESTING=ON"
   ]
   ++ optional shared "-DBUILD_SHARED_LIBS=ON";
 
   doCheck = true;
+
+  # Some CBLAS related tests fail on Darwin:
+  #  14 - CBLAS-xscblat2 (Failed)
+  #  15 - CBLAS-xscblat3 (Failed)
+  #  17 - CBLAS-xdcblat2 (Failed)
+  #  18 - CBLAS-xdcblat3 (Failed)
+  #  20 - CBLAS-xccblat2 (Failed)
+  #  21 - CBLAS-xccblat3 (Failed)
+  #  23 - CBLAS-xzcblat2 (Failed)
+  #  24 - CBLAS-xzcblat3 (Failed)
+  #
+  # Upstream issue to track:
+  # * https://github.com/Reference-LAPACK/lapack/issues/440
+  ctestArgs = lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
+
+  checkPhase = ''
+    runHook preCheck
+    ctest ${ctestArgs}
+    runHook postCheck
+  '';
 
   meta = with lib; {
     inherit version;

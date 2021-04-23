@@ -33,6 +33,7 @@
 
 buildPythonPackage rec {
   pname = "bokeh";
+  # update together with panel which is not straightforward
   version = "2.3.0";
 
   src = fetchPypi {

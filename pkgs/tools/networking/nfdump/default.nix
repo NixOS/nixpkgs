@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoconf, automake, libtool, pkg-config
-, bzip2, libpcap, flex, yacc }:
+, bzip2, libpcap, flex, bison }:
 
 let version = "1.6.22"; in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "14x2k85ard1kp99hhd90zsmvyw24g03m84rn13gb4grm9gjggzrj";
   };
 
-  nativeBuildInputs = [ autoconf automake flex libtool pkg-config yacc ];
+  nativeBuildInputs = [ autoconf automake flex libtool pkg-config bison ];
   buildInputs = [ bzip2 libpcap ];
 
   preConfigure = ''

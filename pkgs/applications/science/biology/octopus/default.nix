@@ -1,14 +1,14 @@
-{lib, stdenv, fetchpatch, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
+{lib, stdenv, fetchpatch, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, xz, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "luntergroup";
     repo = "octopus";
     rev = "v${version}";
-    sha256 = "sha256-TZ57uKTZ87FWpLNGPY8kbML1EDM8fnEFbXR+Z3dmiao=";
+    sha256 = "sha256-sPOBZ0YrEdjMNVye/xwqwA5IpsLy2jWN3sm/ce1fLg4=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost gmp htslib zlib lzma ];
+  buildInputs = [ boost gmp htslib zlib xz ];
 
   postInstall = ''
     mkdir $out/bin

@@ -13,6 +13,19 @@ let
         export NG_CLI_ANALYTICS=false
       '';
     };
+
+    aws-azure-login = super.aws-azure-login.override {
+      meta.platforms = pkgs.lib.platforms.linux;
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/aws-azure-login \
+            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+      '';
+    };
+
     bower2nix = super.bower2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -107,7 +120,7 @@ let
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
       postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l_utils ]);
+        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
       in
       ''
         substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
@@ -226,6 +239,10 @@ let
         wrapProgram "$out/bin/typescript-language-server" \
           --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
+    };
+
+    teck-programmer = super.teck-programmer.override {
+      buildInputs = [ pkgs.libusb ];
     };
 
     vega-cli = super.vega-cli.override {

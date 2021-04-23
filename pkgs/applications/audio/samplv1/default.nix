@@ -5,11 +5,11 @@
 
 mkDerivation rec {
   pname = "samplv1";
-  version = "0.9.18";
+  version = "0.9.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/samplv1/${pname}-${version}.tar.gz";
-    sha256 = "ePhM9OTLJp1Wa2D9Y1Dqq/69WlEhEp3ih9yNUIJU5Y4=";
+    sha256 = "sha256-9tm72lV9i/155TVweNwO2jpPsCJkh6r82g7Z1wCI1ho=";
   };
 
   nativeBuildInputs = [ qttools pkg-config ];

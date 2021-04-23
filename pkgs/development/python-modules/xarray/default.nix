@@ -6,6 +6,7 @@
 , pandas
 , setuptools
 , isPy3k
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-OOhDnWyRvNW3wPyjSdr44GQ6xohQyYcmLVNSbp19AeQ=";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ numpy pandas setuptools ];
   checkInputs = [ pytestCheckHook ];
 

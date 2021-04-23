@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
-      --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
   '';
 
   meta = with lib; {

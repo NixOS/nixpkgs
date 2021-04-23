@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "3.1.1";
+  version = "3.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0m6i7vspp8ssdk2k32kznql1j8gkp300kzb7pk67hzvpijdy3mca";
+    sha256 = "sha256-lARti3Sb/jh7h8x+lFLqkM/BlL6XmELm46owsL041Cw=";
   };
 
   nativeBuildInputs = [ poetry-core ];

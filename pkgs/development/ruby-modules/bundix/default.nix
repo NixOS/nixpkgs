@@ -1,28 +1,19 @@
 { buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, nix,
-  nix-prefetch-git, fetchpatch }:
+  nix-prefetch-git }:
 
 buildRubyGem rec {
   inherit (bundler) ruby;
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "05y8sy6v9km1dwvpjzkjxpfzv95g6yzac1b5blac2f1r2kw167p8";
+    sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
   };
-
-  patches = [
-    # write trailing newline to gemset.nix
-    # https://github.com/nix-community/bundix/pull/78
-    (fetchpatch {
-      url = "https://github.com/nix-community/bundix/commit/02ca7a6c656a1e5e5465ad78b31040d82ae1a7e6.patch";
-      sha256 = "18r30icv7r79dlmxz1d1qlk5b6c7r257x23sqav55yhfail9hqrb";
-    })
-  ];
 
   buildInputs = [ ruby bundler ];
   nativeBuildInputs = [ makeWrapper ];
@@ -47,7 +38,7 @@ buildRubyGem rec {
     '';
     homepage = "https://github.com/manveru/bundix";
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru qyliss zimbatm ];
+    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
   };
 }

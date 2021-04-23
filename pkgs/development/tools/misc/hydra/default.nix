@@ -2,12 +2,12 @@
 
 {
   hydra-unstable = callPackage ./common.nix {
-    version = "2021-03-10";
+    version = "2021-03-29";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "hydra";
-      rev = "930f05c38eeac63ad6c3e3250de2667e2df2e96e";
-      sha256 = "06s2lg119p96i1j4rdbg3z097n25bgvq8ljdn4vcwcw3yz0lnswm";
+      rev = "9bb04ed97af047968196bad1728f927f7a6d905f";
+      sha256 = "sha256-gN/zNI2hGDMnYUjeGnU7SAuXP4KCmNqG+AYOVfINaQE=";
     };
     nix = nixFlakes;
 

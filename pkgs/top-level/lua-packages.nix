@@ -8,7 +8,7 @@
 { fetchurl, stdenv, lua, unzip, pkg-config
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
 , autoreconfHook, gnum4
-, mysql, postgresql, cyrus_sasl
+, postgresql, cyrus_sasl
 , fetchFromGitHub, which, writeText
 , pkgs
 , lib

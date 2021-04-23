@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F/tKW81bAyYtwpxhl5XC8YyMB+6S0XmqqigwJY2WFDU=";
   };
 
+  patches = [
+    # Look for kernel modules in /run/booted-system/kernel-modules/lib/modules/*
+    ./nixos-paths.diff
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     i2c-tools udev libgudev

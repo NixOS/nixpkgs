@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   version = "10.8";
   pname = "textadept";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2 ncurses glib zip
   ];
 
   src = fetchhg {

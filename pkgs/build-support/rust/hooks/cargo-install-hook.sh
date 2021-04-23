@@ -43,7 +43,7 @@ cargoInstallHook() {
 }
 
 
-if [ -z "${installPhase-}" ]; then
+if [ -z "${dontCargoInstall-}" ] && [ -z "${installPhase-}" ]; then
   installPhase=cargoInstallHook
   postBuildHooks+=(cargoInstallPostBuildHook)
 fi

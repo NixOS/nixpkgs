@@ -2,6 +2,7 @@
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytest, boto3, mock, giflib, pytz
 , gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
+, certifi
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+    certifi
     click
     cligj
     click-plugins

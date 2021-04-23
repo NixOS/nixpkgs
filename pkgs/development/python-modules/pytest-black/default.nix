@@ -16,7 +16,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ black pytest toml ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ black toml ];
 
   # does not contain tests
   doCheck = false;

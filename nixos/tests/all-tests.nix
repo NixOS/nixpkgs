@@ -49,6 +49,7 @@ in
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cage = handleTest ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
+  calibre-web = handleTest ./calibre-web.nix {};
   cassandra_2_1 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_1; };
   cassandra_2_2 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_2; };
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
@@ -87,6 +88,7 @@ in
   croc = handleTest ./croc.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
+  discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnscrypt-wrapper = handleTestOn ["x86_64-linux"] ./dnscrypt-wrapper {};
   doas = handleTest ./doas.nix {};
@@ -110,6 +112,7 @@ in
   ergo = handleTest ./ergo.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
+  etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
@@ -135,6 +138,7 @@ in
   gnome3 = handleTest ./gnome3.nix {};
   gnome3-xorg = handleTest ./gnome3-xorg.nix {};
   go-neb = handleTest ./go-neb.nix {};
+  gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
@@ -176,6 +180,7 @@ in
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   initrd-secrets = handleTest ./initrd-secrets.nix {};
+  inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
   iodine = handleTest ./iodine.nix {};
   ipfs = handleTest ./ipfs.nix {};
@@ -190,9 +195,7 @@ in
   keepalived = handleTest ./keepalived.nix {};
   keepassxc = handleTest ./keepassxc.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
-  kernel-latest = handleTest ./kernel-latest.nix {};
-  kernel-lts = handleTest ./kernel-lts.nix {};
-  kernel-testing = handleTest ./kernel-testing.nix {};
+  kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
@@ -224,6 +227,7 @@ in
   mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
   mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   matomo = handleTest ./matomo.nix {};
+  matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
@@ -258,6 +262,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nebula = handleTest ./nebula.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
@@ -286,6 +291,7 @@ in
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
+  ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
@@ -317,6 +323,7 @@ in
   plikd = handleTest ./plikd.nix {};
   plotinus = handleTest ./plotinus.nix {};
   podman = handleTestOn ["x86_64-linux"] ./podman.nix {};
+  pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   postfix = handleTest ./postfix.nix {};
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
   postgis = handleTest ./postgis.nix {};
@@ -393,6 +400,7 @@ in
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-unit-path = handleTest ./systemd-unit-path.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
@@ -408,6 +416,7 @@ in
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   tuptime = handleTest ./tuptime.nix {};
+  turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   ucg = handleTest ./ucg.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   unbound = handleTest ./unbound.nix {};
@@ -423,7 +432,9 @@ in
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = handleTest ./vscodium.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
+  wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  wmderland = handleTest ./wmderland.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};

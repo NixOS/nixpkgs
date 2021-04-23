@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
     ++ optional withDebug [ "--enable-debug" ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";

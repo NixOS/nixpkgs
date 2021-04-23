@@ -19,8 +19,8 @@ in python3Packages.buildPythonApplication rec {
 
   passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ docutils unzip ]
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   makeFlags = [ "PREFIX=$(out)" ];

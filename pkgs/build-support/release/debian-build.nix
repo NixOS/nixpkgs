@@ -3,7 +3,7 @@
 
 { name ? "debian-build"
 , diskImage
-, src, lib, stdenv, vmTools, checkinstall
+, src, stdenv, vmTools, checkinstall
 , fsTranslation ? false
 , # Features provided by this package.
   debProvides ? []
@@ -21,7 +21,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     prePhases = "installExtraDebsPhase sysInfoPhase";
   }
 
-  // removeAttrs args ["vmTools"] //
+  // removeAttrs args ["vmTools" "lib"] //
 
   {
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");

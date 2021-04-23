@@ -15,6 +15,8 @@ mkDerivation rec {
     sha256 = "0kz8wixjmy4yxq2gk11ybswryxb6alfymd3bzcar9xinscllhh3a";
   };
 
+  outputs = [ "out" "doc" ];
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   propagatedBuildInputs = [

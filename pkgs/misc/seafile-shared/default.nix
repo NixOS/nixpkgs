@@ -1,11 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, ccnet
 , curl
-, fuse
-, glib
-, intltool
 , libevent
 , libsearpc
 , libuuid
@@ -13,7 +9,6 @@
 , python3
 , sqlite
 , vala
-, which
 }:
 
 stdenv.mkDerivation rec {

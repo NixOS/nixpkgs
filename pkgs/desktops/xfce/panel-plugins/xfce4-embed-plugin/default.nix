@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
     description = "Embed arbitrary app windows on Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
     maintainers = [ ];
   };
 }

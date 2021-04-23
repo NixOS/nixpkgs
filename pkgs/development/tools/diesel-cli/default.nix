@@ -1,7 +1,7 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkg-config, Security
 , sqliteSupport ? true, sqlite
 , postgresqlSupport ? true, postgresql
-, mysqlSupport ? true, mysql, zlib, libiconv
+, mysqlSupport ? true, mariadb, zlib, libiconv
 }:
 
 assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
@@ -16,26 +16,37 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "diesel-rs";
     repo = "diesel";
-    rev = "v${version}";
-    sha256 = "0wp4hvpl9cf8hw1jyz3z476k5blrh6srfpv36dw10bj126rz9pvb";
+    # diesel and diesel_cli are independently versioned. diesel_cli
+    # 1.4.1 first became available in diesel 1.4.5, but we can use
+    # a newer diesel tag.
+    rev = "v1.4.6";
+    sha256 = "0c8a2f250mllzpr20j7j0msbf2csjf9dj8g7j6cl04ifdg7gwb9z";
   };
 
   patches = [
-    # Allow warnings to fix many instances of `error: trait objects without an explicit `dyn` are deprecated`
-    #
-    # Remove this after https://github.com/diesel-rs/diesel/commit/9004d1c3fa12aaee84986bd3d893002491373f8c
-    # is in a release.
-    ./allow-warnings.patch
+    # Fixes:
+    #    Compiling diesel v1.4.6 (/build/source/diesel)
+    # error: this `#[deprecated]` annotation has no effect
+    #    --> diesel/src/query_builder/insert_statement/mod.rs:205:1
+    #     |
+    # 205 | / #[deprecated(
+    # 206 | |     since = "1.2.0",
+    # 207 | |     note = "Use `<&'a [U] as Insertable<T>>::Values` instead"
+    # 208 | | )]
+    #     | |__^ help: remove the unnecessary deprecation attribute
+    #     |
+    #     = note: `#[deny(useless_deprecated)]` on by default
+    ./fix-deprecated.patch
   ];
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1vbb7r0dpmq8363i040bkhf279pz51c59kcq9v5qr34hs49ish8g";
+  cargoSha256 = "1vkwp861vm20agj0lkhnnxgg4vwg4d5clvvyzxrmm4y4yw46cdl2";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -44,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ mysql zlib ];
+    ++ optionals mysqlSupport [ mariadb zlib ];
 
   buildAndTestSubdir = "diesel_cli";
 

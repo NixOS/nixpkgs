@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , async_generator
 , buildPythonPackage
 , doCheck ? true
@@ -21,7 +22,10 @@ buildPythonPackage rec {
     sha256 = "1zpgnw1lqbll59chv4hgcn31mdql1nv4gw9crbihky3ly3d3ncqi";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
+    aiohttp
     async_generator
     httpx
     pytest

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, makeWrapper, pkg-config,
-  gnome2, glib, pango, cairo, gdk-pixbuf, atk, freetype, xorg,
+  gnome2, gtk2, glib, pango, cairo, gdk-pixbuf, atk, freetype, xorg,
   configH ? ""
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    gnome2.vte glib pango gnome2.gtk cairo gdk-pixbuf atk freetype xorg.libX11
+    gnome2.vte glib pango gtk2 cairo gdk-pixbuf atk freetype xorg.libX11
     xorg.xorgproto xorg.libXext makeWrapper pkg-config
   ];
 

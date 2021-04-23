@@ -7,15 +7,16 @@
 , mock
 , graphviz
 , pycodestyle
+, fontconfig
 }:
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c60ec0828cd037820726283cad5d4d77a5e31514e058b51250420e9873e9bc7";
+    sha256 = "sha256-56hrMaFhp2Ez8Ymzrp2tJ1WoDqTB4O7hgFZI0CH7Z30=";
   };
 
   propagatedBuildInputs = [
@@ -30,10 +31,9 @@ buildPythonPackage rec {
     pycodestyle
   ];
 
-  disabledTests = [
-    # Fontconfig error: Cannot load default config file
-    "test_diagram"
-  ];
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";

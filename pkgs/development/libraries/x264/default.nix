@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, nasm }:
+{ stdenv, lib, fetchurl, nasm
+, enableShared ? !stdenv.hostPlatform.isStatic
+ }:
 
 stdenv.mkDerivation rec {
   pname = "x264";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     export AS=$CC
   '';
 
-  configureFlags = [ "--enable-shared" ]
+  configureFlags = lib.optional enableShared "--enable-shared"
     ++ lib.optional (!stdenv.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 

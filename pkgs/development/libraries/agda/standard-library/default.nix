@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages }:
+{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages, nixosTests }:
 
 mkDerivation rec {
   pname = "standard-library";
@@ -19,6 +19,7 @@ mkDerivation rec {
     rm EverythingSafe.agda EverythingSafeGuardedness.agda EverythingSafeSizedTypes.agda
   '';
 
+  passthru.tests = { inherit (nixosTests) agda; };
   meta = with lib; {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
     description = "A standard library for use with the Agda compiler";

@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
 
+# libunwind does not have the supportsHost attribute on darwin, thus
+# when this package is evaluated it causes an evaluation error
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   pname = "strace";
   version = "5.11";

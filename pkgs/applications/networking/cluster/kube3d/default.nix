@@ -1,21 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.4-k3s1" }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.6-k3s1" }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "4.3.0";
-
-  excludedPackages = "tools";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-ybEYKr0rQY8Qg74V1mXqShq5Z2d/Adf0bSSbEMIyo3I=";
+    sha256 = "sha256-6BDetNPWyAVZOsnCWs90HljVpfUlAytFDPQ/SqPxwgg=";
   };
 
   vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = "\\(tools\\|docgen\\)";
 
   preBuild = let t = "github.com/rancher/k3d/v4/version"; in
     ''
@@ -29,6 +29,14 @@ buildGoModule rec {
       --bash <($out/bin/k3d completion bash) \
       --fish <($out/bin/k3d completion fish) \
       --zsh <($out/bin/k3d completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/k3d --help
+    $out/bin/k3d version | grep "k3d version v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

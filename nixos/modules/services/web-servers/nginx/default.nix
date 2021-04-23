@@ -154,10 +154,10 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   90;
-        proxy_send_timeout      90;
-        proxy_read_timeout      90;
-        proxy_http_version      1.0;
+        proxy_connect_timeout   60;
+        proxy_send_timeout      60;
+        proxy_read_timeout      60;
+        proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
 
@@ -249,7 +249,15 @@ let
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";";
+          + ";"
+          + (if ssl && vhost.http3 then ''
+          # UDP listener for **QUIC+HTTP/3
+          listen ${addr}:${toString port} http3 reuseport;
+          # Advertise that HTTP/3 is available
+          add_header Alt-Svc 'h3=":443"';
+          # Sent when QUIC was used
+          add_header QUIC-Status $quic;
+          '' else "");
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
@@ -397,11 +405,25 @@ in
         default = pkgs.nginxStable;
         defaultText = "pkgs.nginxStable";
         type = types.package;
+        apply = p: p.override {
+          modules = p.modules ++ cfg.additionalModules;
+        };
         description = "
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as <literal>nginxMainline</literal>.
         ";
+      };
+
+      additionalModules = mkOption {
+        default = [];
+        type = types.listOf (types.attrsOf types.anything);
+        example = literalExample "[ pkgs.nginxModules.brotli ]";
+        description = ''
+          Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
+          to install. Packaged modules are available in
+          <literal>pkgs.nginxModules</literal>.
+        '';
       };
 
       logError = mkOption {
@@ -662,6 +684,7 @@ in
                 Defines the address and other parameters of the upstream servers.
               '';
               default = {};
+              example = { "127.0.0.1:8000" = {}; };
             };
             extraConfig = mkOption {
               type = types.lines;
@@ -676,6 +699,14 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
+        example = literalExample ''
+          "backend_server" = {
+            servers = { "127.0.0.1:8000" = {}; };
+            extraConfig = ''''
+              keepalive 16;
+            '''';
+          };
+        '';
       };
 
       virtualHosts = mkOption {
@@ -804,7 +835,7 @@ in
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) (optionals (cfg.package ? modules) cfg.package.modules));
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;

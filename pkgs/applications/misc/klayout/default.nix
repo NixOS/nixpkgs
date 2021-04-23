@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch
-, python, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
+, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
 , which, perl, makeWrapper
 }:
 
@@ -21,11 +21,11 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     which
+    python3
+    ruby
   ];
 
   buildInputs = [
-    python
-    ruby
     qtbase
     qtmultimedia
     qttools

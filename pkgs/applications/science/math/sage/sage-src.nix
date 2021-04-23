@@ -87,6 +87,14 @@ stdenv.mkDerivation rec {
       rev = "2959ac792ebd6107fe87c9af1541083de5ba02d6";
       sha256 = "sha256-bWIpEGir9Kawak5CJegBMNcHm/CqhWmdru+emeSsvO0=";
     })
+
+    # fix intermittent errors in doctest/test.py: https://trac.sagemath.org/ticket/26912
+    (fetchSageDiff {
+      base = "9.3.beta8";
+      name = "set-cysignals-crash-ndebug.patch";
+      rev = "ca5257a5d0f32efc9f8f07e126020856270b1a18";
+      sha256 = "sha256-KViw63xE3O0eUiOYzoxNrr4NL+csql9GPJLDJCf/EZs=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -152,6 +160,14 @@ stdenv.mkDerivation rec {
       name = "make-gcd-lcm-interact-better-with-pari-and-gmpy2.patch";
       rev = "75c1516f0abb9e6f8c335e38e4031f6ef674ed30";
       sha256 = "sha256-RukkieIZcXNrju904H2oyGKdtpdE+9vNzvyjN2IBNg0=";
+    })
+
+    # cypari 2.1.2 update (https://trac.sagemath.org/ticket/31029)
+    (fetchSageDiff {
+      base = "9.3.beta3";
+      name = "cypari-2.1.2-update.patch";
+      rev = "b9aadfd08e81d74ca7c229bb80eb853b592887d0";
+      sha256 = "sha256-eKaMy7kpu+YKdL8bPStgocxBCTfc2Z/10RrGy2LENFw=";
     })
   ];
 

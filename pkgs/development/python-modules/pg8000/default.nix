@@ -8,15 +8,20 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.18.0";
+  version = "1.19.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nkjxf95ldda41mkmahbikhd1fvxai5lfjb4a5gyhialpz4g5fim";
+    sha256 = "sha256-EexwwLIOpECAfiyGmUDxSE7qk9cbQ1gHtjhW3YK3RN0=";
   };
 
-  propagatedBuildInputs = [ passlib scramp ];
+  propagatedBuildInputs = [passlib scramp ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "scramp==1.3.0" "scramp>=1.3.0"
+  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

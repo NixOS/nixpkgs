@@ -10,10 +10,8 @@
 , cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, fetchurl
 , ffmpeg_3
 , gdk-pixbuf
-, git
 , glib
 , graphviz
 , gtk2
@@ -30,12 +28,11 @@
 , makeWrapper
 , mbedtls
 , mediastreamer
-, mediastreamer-openh264
 , openldap
 , ortp
 , pango
 , pkg-config
-, python
+, python3
 , readline
 , soci
 , speex
@@ -49,7 +46,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.4.21";
+  version = "4.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -57,7 +54,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vs65lBRTYYhx2F90n32qnf0CvcPJUIXc16hmggTF/JI=";
+    sha256 = "05ybbxq2yqzy3f3vzq8c3szs3qr0zl64la53icpqnmfakwnps5gs";
   };
 
   # Do not build static libraries
@@ -67,7 +64,7 @@ stdenv.mkDerivation rec {
   # defined when liblinphone and linphone-desktop weren't separated yet, so some
   # of them might not be needed for liblinphone alone.
   buildInputs = [
-    (python.withPackages (ps: [ ps.pystache ps.six ]))
+    (python3.withPackages (ps: [ ps.pystache ps.six ]))
     bcg729
     bctoolbox
     belcard
@@ -113,6 +110,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
+
+  strictDeps = true;
 
   # Some grammar files needed to be copied too from some dependencies. I suppose
   # if one define a dependency in such a way that its share directory is found,

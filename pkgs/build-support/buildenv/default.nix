@@ -36,8 +36,9 @@ lib.makeOverridable
 , # Shell commands to run after building the symlink tree.
   postBuild ? ""
 
-, # Additional inputs. Handy e.g. if using makeWrapper in `postBuild`.
-  buildInputs ? []
+# Additional inputs
+, nativeBuildInputs ? [] # Handy e.g. if using makeWrapper in `postBuild`.
+, buildInputs ? []
 
 , passthru ? {}
 , meta ? {}
@@ -54,7 +55,8 @@ in
 runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
-            meta pathsToLink extraPrefix postBuild buildInputs;
+            meta pathsToLink extraPrefix postBuild
+            nativeBuildInputs buildInputs;
     pkgs = map (drv: {
       paths =
         # First add the usual output(s): respect if user has chosen explicitly,
@@ -72,7 +74,6 @@ runCommand name
     }) paths;
     preferLocalBuild = true;
     allowSubstitutes = false;
-    # XXX: The size is somewhat arbitrary
   }
   ''
     source .attrs.sh

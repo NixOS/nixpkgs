@@ -3,11 +3,12 @@ lib, stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
+, jdk11
 , jdk8
 }:
 
 let
-  generic = { version, sha256, ... }@attrs:
+  generic = { version, sha256, platform ? "", jdk, ... }@attrs:
   let
     desktopItem = makeDesktopItem {
       categories = "Network;Development;WebDevelopment;Java;";
@@ -25,13 +26,13 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}.tar.gz";
+        url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}${platform}.tar.gz";
         inherit sha256;
       };
       nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
-        makeWrapper ${jdk8.jre}/bin/java $out/bin/charles \
+        makeWrapper ${jdk}/bin/java $out/bin/charles \
           --add-flags "-Xmx1024M -Dcharles.config='~/.charles.config' -jar $out/share/java/charles.jar"
 
         for fn in lib/*.jar; do
@@ -56,12 +57,15 @@ let
 
 in {
   charles4 = (generic {
-    version = "4.2.8";
-    sha256 = "1jzjdhzxgrq7pdfryfkg0hsjpyni14ma4x8jbdk1rqll78ccr080";
+    version = "4.6.1";
+    sha256 = "1kl83jjj5wjhdpj34gcj04vf1asxlqlfx9zi91ln4v90swlaaclv";
+    platform = "_amd64";
+    jdk = jdk11;
   });
   charles3 = (generic {
     version = "3.12.3";
     sha256 = "13zk82ny1w5zd9qcs9qkq0kdb22ni5byzajyshpxdfm4zv6p32ss";
+    jdk = jdk8.jre;
   });
 }
 

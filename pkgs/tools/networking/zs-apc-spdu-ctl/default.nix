@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fping libowlevelzs net-snmp ];
+  buildInputs = [ libowlevelzs net-snmp ];
 
   postPatch = ''
     substituteInPlace src/confent.cxx \
-      --replace /usr/sbin/fping "${lib.makeBinPath [fping]}/fping"
+      --replace /usr/sbin/fping "${fping}/bin/fping"
   '';
 
   meta = with lib; {

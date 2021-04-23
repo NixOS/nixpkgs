@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
-, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, python2Packages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1n6w0m2603q9cldlz0wyscp75ci561dipc36jqbf3mjmylybv0x3";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng proj openssl sqlite
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libjpeg libtiff libgeotiff libpng proj openssl sqlite
     libspatialite poppler hdf4 qhull giflib expat libxml2 proj ]
-  ++ (with pythonPackages; [ python numpy wrapPython ])
+  ++ (with python2Packages; [ python numpy wrapPython ])
   ++ lib.optional stdenv.isDarwin libiconv
   ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 

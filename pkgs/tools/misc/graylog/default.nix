@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, openjdk11_headless, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "graylog";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+  makeWrapperArgs = [ "--set-default" "JAVA_HOME" "${openjdk11_headless}" ];
 
   passthru.tests = { inherit (nixosTests) graylog; };
 

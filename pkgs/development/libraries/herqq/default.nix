@@ -4,8 +4,8 @@ mkDerivation rec {
   version = "unstable-20-06-26";
   pname = "herqq";
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase unzip qtmultimedia ];
+  nativeBuildInputs = [ qmake unzip ];
+  buildInputs = [ qtbase qtmultimedia ];
 
   outputs = [ "out" "dev" ];
 

@@ -1,15 +1,14 @@
-{ lib, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python3Packages) python;
   pname = "honcho";
 
 in
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   version = "1.0.1";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "nickstenning";
@@ -18,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "11bd87474qpif20xdcn0ra1idj5k16ka51i658wfpxwc6nzsn92b";
   };
 
-  checkInputs = with pythonPackages; [ jinja2 pytest mock coverage ];
+  checkInputs = with python3Packages; [ jinja2 pytest mock coverage ];
 
   buildPhase = ''
     ${python.interpreter} setup.py build

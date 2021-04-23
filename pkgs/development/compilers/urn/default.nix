@@ -53,6 +53,7 @@ stdenv.mkDerivation {
     description = "Yet another Lisp variant which compiles to Lua";
     license = licenses.bsd3;
     maintainers = with maintainers; [ CrazedProgrammer ];
+    platforms = platforms.all;
   };
 
   passthru = {

@@ -35,6 +35,7 @@
   <xi:include href="contributing/quick-start.xml" />
   <xi:include href="contributing/coding-conventions.xml" />
   <xi:include href="contributing/submitting-changes.chapter.xml" />
+  <xi:include href="contributing/vulnerability-roundup.chapter.xml" />
   <xi:include href="contributing/reviewing-contributions.xml" />
   <xi:include href="contributing/contributing-to-documentation.xml" />
  </part>

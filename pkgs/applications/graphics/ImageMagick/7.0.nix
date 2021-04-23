@@ -12,26 +12,18 @@ let
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
     else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "7.0.10-61";
-    sha256 = "sha256-c/90N5H9iz5JYmn7/ynHgSOAmO5NTtkxajChZvjfMP8=";
-    patches = [];
-  };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "7.0.11-6";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    rev = version;
+    sha256 = "sha256-QClOS58l17KHeQXya+IKNx6nIkd6jCKp8uupRH7Fwnk=";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -84,6 +76,7 @@ stdenv.mkDerivation {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ erictapen ];
     license = licenses.asl20;
   };
 }

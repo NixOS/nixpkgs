@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ makefu ];
     broken = stdenv.isAarch64;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

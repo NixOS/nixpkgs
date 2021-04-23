@@ -7,7 +7,7 @@
 , libticonv
 , libtifiles2
 , libticables2
-, lzma
+, xz
 , bzip2
 , acl
 , libobjc
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libticonv
     libtifiles2
     libticables2
-    lzma
+    xz
     bzip2
   ] ++ lib.optionals stdenv.isLinux [
     acl

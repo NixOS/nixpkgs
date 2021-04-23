@@ -142,6 +142,9 @@ let
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
+      IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
+      IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
       NET_SCHED                   = yes;
@@ -244,8 +247,9 @@ let
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
+      DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = yes;
-      DRM_GMA3600            = yes;
+      DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
@@ -288,21 +292,31 @@ let
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
-      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_APOLLOLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_CANNONLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COFFEELAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COMETLAKE             = whenAtLeast "5.12" module;
       SND_SOC_SOF_COMETLAKE_H_SUPPORT   = whenOlder "5.8" yes;
-      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
-      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
-      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = whenOlder "5.12" yes;
+      SND_SOC_SOF_ELKHARTLAKE           = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = whenOlder "5.12" yes;
+      SND_SOC_SOF_GEMINILAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = whenOlder "5.12" yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
       SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
-      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_ICELAKE               = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = whenOlder "5.12" yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
-      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
-      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
+      SND_SOC_SOF_JASPERLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_MERRIFIELD            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_TIGERLAKE             = whenAtLeast "5.12" module;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = whenOlder "5.12" yes;
     };
 
     usb-serial = {
@@ -522,7 +536,7 @@ let
       KVM_VFIO                          = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
-      # We nneed 64 GB (PAE) support for Xen guest support
+      # We need 64 GB (PAE) support for Xen guest support
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
@@ -669,7 +683,14 @@ let
       DEBUG_MEMORY_INIT     = option yes;
     });
 
-    misc = {
+    misc = let
+      # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
+      # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
+      useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
+    in {
+      KERNEL_XZ            = mkIf (!useZstd) yes;
+      KERNEL_ZSTD          = mkIf useZstd yes;
+
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
@@ -685,10 +706,6 @@ let
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
 
-      # use zstd for kernel compression if newer than 5.9, else xz.
-      KERNEL_XZ          = whenOlder "5.9" yes;
-      KERNEL_ZSTD        = whenAtLeast "5.9" yes;
-
       SYSVIPC            = yes;  # System-V IPC
 
       AIO                = yes;  # POSIX asynchronous I/O
@@ -698,7 +715,6 @@ let
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)
 
       # Enable initrd support.
-      BLK_DEV_RAM       = yes;
       BLK_DEV_INITRD    = yes;
 
       PM_TRACE_RTC         = no; # Disable some expensive (?) features.

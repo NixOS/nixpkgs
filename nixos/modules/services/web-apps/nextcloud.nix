@@ -607,6 +607,7 @@ in {
         home = "${cfg.home}";
         group = "nextcloud";
         createHome = true;
+        isSystemUser = true;
       };
       users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 

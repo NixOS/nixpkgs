@@ -1,6 +1,6 @@
 {
   alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl, fetchzip, fontconfig, freetype,
-  gdk-pixbuf, glib, gnome3, libX11, libXScrnSaver, libXcomposite, libXcursor,
+  gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor,
   libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst,
   libxcb, nspr, nss, lib, stdenv, udev, libuuid, pango, at-spi2-atk, at-spi2-core
 }:
@@ -19,7 +19,7 @@
     freetype
     gdk-pixbuf
     glib
-    gnome3.gtk
+    gtk3
     pango
     libuuid
     libX11

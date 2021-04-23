@@ -21,8 +21,9 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     pytest-doctestplus
     pytestcov
     pytestCheckHook

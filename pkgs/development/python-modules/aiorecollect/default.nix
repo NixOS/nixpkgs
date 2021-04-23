@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0dlz8zmqcn6g6000lfgcy5krpfafzdzrznmk6iwra65wcs7l9392";
+    sha256 = "sha256-S4HL8vJS/dTKsR5egKRSHqZYPClcET5Le06euHPyIkU=";
   };
 
   nativeBuildInputs = [ poetry-core ];

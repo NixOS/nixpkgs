@@ -33,17 +33,19 @@ buildPythonPackage rec {
     pandas
     six
     toolz
+    jinja2
   ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [
     glibcLocales
     ipython
-    jinja2
     pytest
     recommonmark
     sphinx
     vega_datasets
   ];
+
+  pythonImportsCheck = [ "altair" ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8

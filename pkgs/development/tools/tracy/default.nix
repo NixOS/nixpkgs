@@ -1,14 +1,16 @@
 { stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone }:
 
-stdenv.mkDerivation rec {
+let
+  disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
+in stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-Fk/Kuc7DwmdoyLx/YjdEHQ7S0M+ksAXl9QqeSPH2vJ8=";
+    sha256 = "sha256-jp+Geqk39ZPoe2KzUJJ0w5hvCnyUlHGwVKn73lJJt94=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     install -D ./update/build/unix/update-release $out/bin/update
   '';
 
-  fixupPhase = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/Tracy
   '';
 

@@ -1,7 +1,7 @@
 { pname, version, src, branchName
 , stdenv, lib, fetchFromGitHub, fetchpatch, wrapQtAppsHook
 , cmake, pkg-config
-, libpulseaudio, libjack2, alsaLib, sndio, ecasound
+, libpulseaudio, libjack2, alsaLib, sndio
 , vulkan-loader, vulkan-headers
 , qtbase, qtwebengine, qttools
 , nlohmann_json, rapidjson
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    libpulseaudio libjack2 alsaLib sndio ecasound
+    libpulseaudio libjack2 alsaLib sndio
     vulkan-loader vulkan-headers
     qtbase qtwebengine qttools
     nlohmann_json rapidjson

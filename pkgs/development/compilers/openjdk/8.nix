@@ -83,9 +83,9 @@ let
 
     outputs = [ "out" "jre" ];
 
-    nativeBuildInputs = [ pkg-config lndir ];
+    nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which unzip zip perl openjdk8-bootstrap zlib cups freetype alsaLib
+      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig
     ] ++ lib.optionals (!headless && enableGnome2) [

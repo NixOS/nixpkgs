@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "screen-message";
-  version = "0.25";
+  version = "0.26";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/screen-message/screen-message_${version}.orig.tar.gz";
-    sha256 = "1lw955qq5pq010lzmaf32ylj2iprgsri9ih4hx672c3f794ilab0";
+    sha256 = "sha256-vBKnuXOEQZDACmlNP9wjJ3NbIdixIx7I72a6Nj6pjzc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

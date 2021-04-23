@@ -1,6 +1,6 @@
 { stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, which, python3, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, llvmPackages_8, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -210,8 +210,8 @@ stdenv'.mkDerivation rec {
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+          --replace "/usr/bin/env python" "${python3.interpreter}" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python3.interpreter}" \
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -287,11 +287,13 @@ stdenv'.mkDerivation rec {
     buildJdk
   ];
 
+  strictDeps = true;
+
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
-    python
+    python3
     unzip
     makeWrapper
     which
@@ -380,7 +382,7 @@ stdenv'.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
-    echo "${python}" >> $out/nix-support/depends
+    echo "${python3}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

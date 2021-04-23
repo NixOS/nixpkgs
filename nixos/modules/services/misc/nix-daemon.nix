@@ -21,6 +21,7 @@ let
          calls in `libstore/build.cc', don't add any supplementary group
          here except "nixbld".  */
       uid = builtins.add config.ids.uids.nixbld nr;
+      isSystemUser = true;
       group = "nixbld";
       extraGroups = [ "nixbld" ];
     };

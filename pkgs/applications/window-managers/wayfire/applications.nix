@@ -1,23 +1,20 @@
-{ newScope, wayfirePlugins }:
+{ lib, newScope, wayfirePlugins }:
 
-let
-  self = with self; {
-    inherit wayfirePlugins;
+lib.makeExtensible (self: with self; {
+  inherit wayfirePlugins;
 
-    callPackage = newScope self;
+  callPackage = newScope self;
 
-    wayfire = callPackage ./. { };
+  wayfire = callPackage ./. { };
 
-    wcm = callPackage ./wcm.nix {
-      inherit (wayfirePlugins) wf-shell;
-    };
-
-    wrapWayfireApplication = callPackage ./wrapper.nix { };
-
-    withPlugins = selector: self // {
-      wayfire = wrapWayfireApplication wayfire selector;
-      wcm = wrapWayfireApplication wcm selector;
-    };
+  wcm = callPackage ./wcm.nix {
+    inherit (wayfirePlugins) wf-shell;
   };
-in
-self
+
+  wrapWayfireApplication = callPackage ./wrapper.nix { };
+
+  withPlugins = selector: self // {
+    wayfire = wrapWayfireApplication wayfire selector;
+    wcm = wrapWayfireApplication wcm selector;
+  };
+})

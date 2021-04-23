@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnutar";
-  version = "1.32";
+  version = "1.34";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.xz";
-    sha256 = "1n7xy657ii0sa42zx6944v2m4v9qrh6sqgmw17l3nch3y43sxlyh";
+    sha256 = "sha256-Y769JoecXh7qQ1Lw0DyZH5Zq6z3es8dEXJAlaNVBHSg=";
   };
 
   # avoid retaining reference to CF during stdenv bootstrap

@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     url = "http://unicon.org/dist/uni-2-4-2010.zip";
     sha256 = "1g9l2dfp99dqih2ir2limqfjgagh3v9aqly6x0l3qavx3qkkwf61";
   };
-  buildInputs = [ libnsl libX11 libXt unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libnsl libX11 libXt ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -41,4 +42,3 @@ stdenv.mkDerivation {
     homepage = "http://unicon.org";
   };
 }
-

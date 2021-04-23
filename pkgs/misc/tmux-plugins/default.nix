@@ -24,10 +24,11 @@ let
     preInstall ? "",
     postInstall ? "",
     path ? lib.getName pluginName,
-    dependencies ? [],
     ...
   }:
-    addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
+    if lib.hasAttr "dependencies" a then
+      throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
+    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
       pname = namePrefix + pluginName;
 
       inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
@@ -44,11 +45,13 @@ let
 
         runHook postInstall
       '';
-
-      dependencies = [ pkgs.bash ] ++ dependencies;
     }));
 
 in rec {
+  inherit mkTmuxPlugin;
+
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
+
   battery = mkTmuxPlugin {
     pluginName = "battery";
     version = "unstable-2019-07-04";
@@ -69,7 +72,6 @@ in rec {
       rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
       sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
-    dependencies = [ resurrect ];
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continous saving of tmux environment";
@@ -141,6 +143,34 @@ in rec {
     };
   };
 
+  extrakto = mkTmuxPlugin {
+    pluginName = "extrakto";
+    version = "unstable-2021-04-04";
+    src = fetchFromGitHub {
+      owner = "laktak";
+      repo = "extrakto";
+      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
+      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+    for f in extrakto.sh open.sh tmux-extrakto.sh; do
+      wrapProgram $target/scripts/$f \
+        --prefix PATH : ${with pkgs; lib.makeBinPath (
+        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
+        )}
+    done
+
+    '';
+    meta = {
+      homepage = "https://github.com/laktak/extrakto";
+      description = "Fuzzy find your text with fzf instead of selecting it by hand ";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kidd ];
+    };
+  };
+
   fingers = mkTmuxPlugin rec {
     pluginName = "fingers";
     rtpFilePath = "tmux-fingers.tmux";
@@ -152,7 +182,15 @@ in rec {
       sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
       fetchSubmodules = true;
     };
-    dependencies = [ pkgs.gawk ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
+      wrapProgram $target/scripts/$f \
+        --prefix PATH : ${with pkgs; lib.makeBinPath (
+          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
+        )}
+      done
+    '';
   };
 
   fpp = mkTmuxPlugin {
@@ -167,7 +205,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
     '';
-    dependencies = [ pkgs.fpp ];
   };
 
   fzf-tmux-url = mkTmuxPlugin {
@@ -207,8 +244,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
     '';
-    dependencies = [ pkgs.ruby ];
-
     meta = with lib; {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
@@ -473,7 +508,7 @@ in rec {
       find $target -type f -print0 | xargs -0 sed -i -e 's|sed |${pkgs.gnused}/bin/sed |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|tput |${pkgs.ncurses}/bin/tput |g'
     '';
-     meta = {
+    meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
       longDescription =
@@ -506,7 +541,6 @@ in rec {
     postInstall = ''
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
-    dependencies = [ pkgs.urlview ];
   };
 
   vim-tmux-focus-events = mkTmuxPlugin {

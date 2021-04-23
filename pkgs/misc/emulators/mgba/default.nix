@@ -15,13 +15,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0nqj4bnn5c2z1bq4bnbw1wznc0wpmq4sy3w8pipd6n6620b9m4qq";
+    sha256 = "sha256-JVauGyHJVfiXVG4Z+Ydh1lRypy5rk9SKeTbeHFNFYJs=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook pkg-config cmake ];

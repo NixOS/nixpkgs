@@ -160,6 +160,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isClang then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -298,10 +299,11 @@ stdenv.mkDerivation {
     # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
-    + optionalString (isClang && gccForLibs != null
+    + optionalString (isClang
                       && targetPlatform.isLinux
                       && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
-                      && !(stdenv.targetPlatform.useLLVM or false)) ''
+                      && !(stdenv.targetPlatform.useLLVM or false)
+                      && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
@@ -482,6 +484,10 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+    ''
+
+    + optionalString stdenv.targetPlatform.isDarwin ''
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     ##

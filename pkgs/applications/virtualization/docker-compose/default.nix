@@ -8,12 +8,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.28.5";
+  version = "1.28.6";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b3ff8f0352eb4055c4c483cb498aeff7c90195fa679f3caf7098a2d6fa6030e5";
+    sha256 = "1d44906f7ab738ba2d1785130ed31b16111eee6dc5a1dbd7252091dae48c5281";
   };
 
   # lots of networking and other fails
@@ -21,12 +21,12 @@ buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
   checkInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
-    pyyaml backports_ssl_match_hostname colorama dockerpty docker
+    pyyaml colorama dockerpty docker
     ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property paramiko distro python-dotenv
-  ] ++
-    lib.optional (pythonOlder "3.4") enum34 ++
-    lib.optional (pythonOlder "3.2") functools32;
+  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
+  ++ lib.optional (pythonOlder "3.4") enum34
+  ++ lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also

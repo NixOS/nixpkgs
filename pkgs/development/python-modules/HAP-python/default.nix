@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "3.4.0";
+  version = "3.4.1";
   disabled = pythonOlder "3.5";
 
   # pypi package does not include tests
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mkrs3fwiyp4am9fx1dnhd9h7rphfwymr46khw40xavrfb5jmsa7";
+    sha256 = "sha256-tZ6Zwlx5J62Xqpxxmt8Phdd9ngtKYhP/p3uor1dRfK8=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     "test_idle_connection_cleanup"
     "test_we_can_start_stop"
     "test_push_event"
+    "test_bridge_run_stop"
   ];
 
   meta = with lib; {

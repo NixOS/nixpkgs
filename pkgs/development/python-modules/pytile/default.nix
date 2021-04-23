@@ -25,10 +25,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'aiohttp = "^3.7.4"' 'aiohttp = "^3.7.3"'
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [

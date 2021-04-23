@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, yacc, flex, readline, ncurses, gnused}:
+{lib, stdenv, fetchurl, bison, flex, readline, ncurses, gnused}:
 
 stdenv.mkDerivation {
   name = "cdecl-2.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANDIR=$out/man1 CATDIR=$out/cat1 CC=$CC";
     mkdir -p $out/bin;
   '';
-  buildInputs = [yacc flex readline ncurses];
+  buildInputs = [bison flex readline ncurses];
 
   meta = {
     description = "Translator English -- C/C++ declarations";

@@ -5,16 +5,19 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ fetchurl, unzip }:
+{ lib, fetchurl, unzip }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
-, url
+, url ? ""
+, urls ? []
 , extraPostFetch ? ""
 , name ? "source"
 , ... } @ args:
 
-(fetchurl ({
+(fetchurl (let
+  basename = baseNameOf (if url != "" then url else builtins.head urls);
+in {
   inherit name;
 
   recursiveHash = true;
@@ -27,7 +30,7 @@
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${basename}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
     ''

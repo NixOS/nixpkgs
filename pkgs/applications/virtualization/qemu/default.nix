@@ -101,6 +101,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Otherwise tries to ensure /var/run exists.
+  postPatch = ''
+    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+        qga/meson.build
+  '';
+
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
@@ -119,6 +125,7 @@ stdenv.mkDerivation rec {
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--localstatedir=/var"
       "--sysconfdir=/etc"
     ]
     ++ optional numaSupport "--enable-numa"

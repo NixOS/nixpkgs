@@ -1,17 +1,13 @@
-{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, gsl, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "08g0f84l7r6vm4n7gn36qi3bzacscpv061m9xar2572vf10wxpak";
+    sha256 = "sha256-N+3ICilozhAxWJ5DumtJKHfKeQG+o4+Lt1NqXIz4EA0=";
   };
-
-  patches = [
-    ./darwin.patch # configure relies on impure sw_vers to -Dunix
-  ];
 
   latex = texlive.combine { inherit (texlive)
     scheme-basic

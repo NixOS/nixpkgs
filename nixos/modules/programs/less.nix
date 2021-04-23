@@ -40,7 +40,7 @@ in
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = literalExample "$${pkgs.my-configs}/lesskey";
+        example = literalExample "\${pkgs.my-configs}/lesskey";
         description = ''
           Path to lesskey configuration file.
 

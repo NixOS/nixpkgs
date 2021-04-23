@@ -313,7 +313,7 @@ self: super:
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
           buildInputs =
             (old.buildInputs or [ ])
-            ++ [ pkgs.hdf5 self.pkgconfig self.cython ]
+            ++ [ pkgs.hdf5 self.pkg-config self.cython ]
             ++ lib.optional mpiSupport mpi
           ;
           propagatedBuildInputs =
@@ -453,7 +453,7 @@ self: super:
   );
 
   jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkgconfig ];
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.yajl ];
   });
 

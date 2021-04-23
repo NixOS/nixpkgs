@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/graysky2/profile-cleaner";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.devhell ];
   };
 }

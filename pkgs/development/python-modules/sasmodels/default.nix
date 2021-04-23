@@ -1,20 +1,30 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils
-, pyopencl, opencl-headers
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytest_5
+, numpy
+, scipy
+, matplotlib
+, docutils
+, pyopencl
+, opencl-headers
 }:
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
     rev = "v${version}";
-    sha256 = "1qvh7q0fkls5r8r9mrph6igcvv8x3qsslqsc5jf1n20alcs5zjrl";
+    sha256 = "0h2k81dm92sm0z086qy3ipw6y6cfgpb7ppl7lhjmx6816s3k50sa";
   };
 
   buildInputs = [ opencl-headers ];
-  checkInputs = [ pytest ];
+  # Note: the 1.0.5 release should be compatible with pytest6, so this can
+  # be set back to 'pytest' at that point
+  checkInputs = [ pytest_5 ];
   propagatedBuildInputs = [ docutils matplotlib numpy scipy pyopencl ];
 
   checkPhase = ''
