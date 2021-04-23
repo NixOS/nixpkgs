@@ -4913,6 +4913,8 @@ in {
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
+  omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
+
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
