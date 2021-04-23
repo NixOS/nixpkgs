@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   version = "3.2.0";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
+    url = "https://releases.pagure.org/virt-manager/${pname}-${version}.tar.gz";
     sha256 = "11kvpzcmyir91qz0dsnk7748jbb4wr8mrc744w117qc91pcy6vrb";
   };
 
