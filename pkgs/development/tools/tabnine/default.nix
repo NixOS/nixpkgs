@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 TabNine $out/bin/TabNine
+    install -Dm755 TabNine-deep-cloud $out/bin/TabNine-deep-cloud
+    install -Dm755 TabNine-deep-local $out/bin/TabNine-deep-local
+    install -Dm755 WD-TabNine $out/bin/WD-TabNine
   '';
 
   meta = with lib; {
