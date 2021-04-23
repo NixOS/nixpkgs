@@ -479,19 +479,14 @@ in lib.makeScopeWithSplicing
       makeMinimal
       install mandoc groff nbperf rpcgen
     ];
-    extraPaths = with self; [ common.src ];
+    extraPaths = with self; [ common ];
     headersOnly = true;
     noCC = true;
     meta.platforms = lib.platforms.netbsd;
     makeFlags = [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
   };
 
-  common = mkDerivation {
-    path = "common";
-    version = "8.0";
-    sha256 = "1fsm2b7p7zkhiz523jw75088cq2h39iknp0fp3di9a64bikwbhi1";
-    noCC = true;
-  };
+  common = fetchNetBSD "common" "8.0" "1fsm2b7p7zkhiz523jw75088cq2h39iknp0fp3di9a64bikwbhi1";
 
   sys-headers = mkDerivation {
     pname = "sys-headers";
@@ -527,7 +522,7 @@ in lib.makeScopeWithSplicing
     '';
 
     meta.platforms = lib.platforms.netbsd;
-    extraPaths = with self; [ common.src ];
+    extraPaths = with self; [ common ];
 
     installPhase = "includesPhase";
     dontBuild = true;
@@ -564,7 +559,7 @@ in lib.makeScopeWithSplicing
     path = "lib/libutil";
     version = "8.0";
     sha256 = "077syyxd303m4x7avs5nxzk4c9n13d5lyk5aicsacqjvx79qrk3i";
-    extraPaths = with self; [ common.src libc.src sys.src ];
+    extraPaths = with self; [ common libc.src sys.src ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
       makeMinimal
@@ -678,7 +673,7 @@ in lib.makeScopeWithSplicing
     version = "8.0";
     sha256 = "078qsi4mg1hyyxr1awvjs9b0c2gicg3zw4vl603g1m9vm8gfxw9l";
     meta.platforms = lib.platforms.netbsd;
-    extraPaths = with self; [ common.src libc.src ];
+    extraPaths = with self; [ common libc.src ];
     postPatch = ''
       sed -i 's,/usr\(/include/sys/syscall.h\),${self.headers}\1,g' \
         $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
@@ -710,7 +705,7 @@ in lib.makeScopeWithSplicing
     noCC = false;
     dontBuild = false;
     buildInputs = with self; [ headers ];
-    extraPaths = with self; [ common.src libc.src sys.src ];
+    extraPaths = with self; [ common libc.src sys.src ];
   };
 
   libresolv = mkDerivation {
@@ -773,7 +768,7 @@ in lib.makeScopeWithSplicing
     USE_FORT = "yes";
     MKPROFILE = "no";
     extraPaths = with self; [
-      common.src i18n_module.src sys.src
+      common i18n_module.src sys.src
       ld_elf_so.src libpthread.src libm.src libresolv.src
       librpcsvc.src libutil.src librt.src libcrypt.src
     ];
