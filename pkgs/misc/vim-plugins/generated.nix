@@ -3046,6 +3046,18 @@ let
     meta.homepage = "https://github.com/windwp/nvim-autopairs/";
   };
 
+  nvim-base16 = buildVimPluginFrom2Nix {
+    pname = "nvim-base16";
+    version = "2021-04-12";
+    src = fetchFromGitHub {
+      owner = "RRethy";
+      repo = "nvim-base16";
+      rev = "9d6649c01221680e5bb20ff9e2455280d9665de2";
+      sha256 = "18a974l753d92x3jyv5j0anri99hxzfw454lkz94amabbnc010p6";
+    };
+    meta.homepage = "https://github.com/RRethy/nvim-base16/";
+  };
+
   nvim-bqf = buildVimPluginFrom2Nix {
     pname = "nvim-bqf";
     version = "2021-04-23";

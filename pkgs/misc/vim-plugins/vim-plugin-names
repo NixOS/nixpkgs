@@ -529,6 +529,7 @@ roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
