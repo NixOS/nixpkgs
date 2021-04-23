@@ -30,10 +30,16 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace yarGen.py \
+      --replace "./3rdparty/strings.xml" "$out/share/yarGen/3rdparty/strings.xml"
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dt "$out/bin" yarGen.py
+    install -Dt "$out/share/yarGen/3rdparty" 3rdparty/strings.xml
 
     runHook postInstall
   '';
