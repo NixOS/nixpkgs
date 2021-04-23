@@ -12644,6 +12644,8 @@ in
 
   csslint = callPackage ../development/web/csslint { };
 
+  css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
+
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm clang-unwrapped;
   };

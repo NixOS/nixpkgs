@@ -1631,6 +1631,8 @@ in {
 
   cssmin = callPackage ../development/python-modules/cssmin { };
 
+  css-html-js-minify = callPackage ../development/python-modules/css-html-js-minify { };
+
   css-parser = callPackage ../development/python-modules/css-parser { };
 
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
@@ -8099,6 +8101,8 @@ in {
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
+
+  sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
 
