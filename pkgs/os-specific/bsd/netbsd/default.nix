@@ -591,6 +591,7 @@ in lib.makeScopeWithSplicing
     version = "8.0";
     sha256 = "14gp0d6fh6zjnbac2yjhyq5m6rca7gm6q1s9gilhzpdgl9m7vb9r";
     nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook
       makeMinimal install tsort lorder mandoc statHook nbperf tic
     ];
     buildInputs = with self; compatIfNeeded;
@@ -601,7 +602,7 @@ in lib.makeScopeWithSplicing
         --replace '#include <curses.h>' 'void use_env(bool);'
     '';
     postBuild = ''
-      make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share
+      make -C $BSDSRCDIR/share/terminfo BINDIR=$out/share
     '';
     postInstall = ''
       make -C $BSDSRCDIR/share/terminfo BINDIR=$out/share install
