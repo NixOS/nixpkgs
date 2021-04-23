@@ -25,6 +25,7 @@ ap/vim-css-color
 arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
+axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
@@ -656,6 +657,7 @@ tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
 tversteeg/registers.nvim@main
+tweekmonster/wstrip.vim
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle

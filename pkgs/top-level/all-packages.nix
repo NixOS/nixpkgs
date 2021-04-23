@@ -1300,6 +1300,8 @@ in
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
+  cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
@@ -1709,6 +1711,10 @@ in
   };
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+
+  beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
+    inherit (plasma5Packages) breeze-icons;
+  };
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -2369,6 +2375,8 @@ in
   dyncall = callPackage ../development/libraries/dyncall { };
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
+
+  earlybird = callPackage ../tools/security/earlybird { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
@@ -6933,6 +6941,8 @@ in
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
   notable = callPackage ../applications/misc/notable { };
+
+  ntlmrecon = callPackage ../tools/security/ntlmrecon { };
 
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
@@ -16349,6 +16359,8 @@ in
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
   libxls = callPackage ../development/libraries/libxls { };
+
+  libxlsxwriter = callPackage ../development/libraries/libxlsxwriter { };
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
@@ -30681,6 +30693,8 @@ in
 
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
+  xorex = callPackage ../tools/security/xorex { };
+
   xow = callPackage ../misc/drivers/xow { };
 
   xbps = callPackage ../tools/package-management/xbps { };
@@ -30748,6 +30762,8 @@ in
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yarGen = callPackage ../tools/security/yarGen { };
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 

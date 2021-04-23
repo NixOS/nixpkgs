@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_multiprocess_get_after_native_get"
   ];
 
-  disabledTestsPaths = [
+  disabledTestPaths = [
     "tests/backends/test_macOS.py"
   ];
 

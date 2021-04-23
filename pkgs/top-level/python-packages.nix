@@ -1707,6 +1707,8 @@ in {
 
   debugpy = callPackage ../development/python-modules/debugpy { };
 
+  debut = callPackage ../development/python-modules/debut { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deep_merge = callPackage ../development/python-modules/deep_merge { };
@@ -4530,6 +4532,8 @@ in {
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
+  ondilo = callPackage ../development/python-modules/ondilo { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   onnx = callPackage ../development/python-modules/onnx { };
@@ -5529,6 +5533,10 @@ in {
 
   PyICU = callPackage ../development/python-modules/pyicu { };
 
+  pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy {
+    inherit (pkgs) ssdeep;
+  };
+
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
@@ -5650,6 +5658,8 @@ in {
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
+
+  pymdstat = callPackage ../development/python-modules/pymdstat { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
@@ -6005,6 +6015,8 @@ in {
   pysmappee = callPackage ../development/python-modules/pysmappee { };
 
   pysmb = callPackage ../development/python-modules/pysmb { };
+
+  pysmart-smartx = callPackage ../development/python-modules/pysmart-smartx { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
 
@@ -6487,6 +6499,8 @@ in {
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 
+  python-registry = callPackage ../development/python-modules/python-registry { };
+
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
@@ -6715,6 +6729,8 @@ in {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qiling = callPackage ../development/python-modules/qiling { };
+
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
@@ -6899,6 +6915,8 @@ in {
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
+
+  requirements-parser = callPackage ../development/python-modules/requirements-parser { };
 
   resampy = callPackage ../development/python-modules/resampy { };
 
@@ -7447,6 +7465,8 @@ in {
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
 
+  sparklines = callPackage ../development/python-modules/sparklines { };
+
   SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
@@ -7813,6 +7833,8 @@ in {
   termplotlib = callPackage ../development/python-modules/termplotlib { };
 
   termstyle = callPackage ../development/python-modules/termstyle { };
+
+  tern = callPackage ../development/python-modules/tern { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 

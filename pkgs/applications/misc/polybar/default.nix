@@ -57,9 +57,8 @@ stdenv.mkDerivation rec {
       pkg-config
       python3Packages.sphinx
       removeReferencesTo
-
-      (if i3Support || i3GapsSupport then makeWrapper else null)
-    ];
+    ]
+    ++ lib.optional (i3Support || i3GapsSupport) makeWrapper;
 
     buildInputs = [
       cairo
@@ -75,19 +74,16 @@ stdenv.mkDerivation rec {
       xcbutilrenderutil
       xcbutilwm
       xcbutilxrm
-
-      (if alsaSupport   then alsaLib       else null)
-      (if githubSupport then curl          else null)
-      (if mpdSupport    then libmpdclient  else null)
-      (if pulseSupport  then libpulseaudio else null)
-
-      (if iwSupport     then wirelesstools else null)
-      (if nlSupport     then libnl         else null)
-
-      (if i3Support || i3GapsSupport then jsoncpp else null)
-      (if i3Support then i3 else null)
-      (if i3GapsSupport then i3-gaps else null)
-    ];
+    ]
+    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional githubSupport curl
+    ++ lib.optional mpdSupport libmpdclient
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional iwSupport wirelesstools
+    ++ lib.optional nlSupport libnl
+    ++ lib.optional (i3Support || i3GapsSupport) jsoncpp
+    ++ lib.optional i3Support i3
+    ++ lib.optional i3GapsSupport i3-gaps;
 
     postInstall = if i3Support
                   then ''wrapProgram $out/bin/polybar \
