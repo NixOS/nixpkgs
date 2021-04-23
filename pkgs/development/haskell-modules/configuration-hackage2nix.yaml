@@ -101,7 +101,7 @@ default-package-overrides:
   - gi-secret < 0.0.13
   - gi-vte < 2.91.28
 
-  # Stackage Nightly 2021-04-15
+  # Stackage Nightly 2021-04-23
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -437,6 +437,7 @@ default-package-overrides:
   - calendar-recycling ==0.0.0.1
   - call-stack ==0.3.0
   - can-i-haz ==0.3.1.0
+  - capability ==0.4.0.0
   - ca-province-codes ==1.0.0.0
   - cardano-coin-selection ==1.0.1
   - carray ==0.1.6.8
@@ -531,6 +532,7 @@ default-package-overrides:
   - composite-aeson ==0.7.5.0
   - composite-aeson-path ==0.7.5.0
   - composite-aeson-refined ==0.7.5.0
+  - composite-aeson-throw ==0.1.0.0
   - composite-base ==0.7.5.0
   - composite-binary ==0.7.5.0
   - composite-ekg ==0.7.5.0
@@ -710,7 +712,7 @@ default-package-overrides:
   - distributed-closure ==0.4.2.0
   - distribution-opensuse ==1.1.1
   - distributive ==0.6.2.1
-  - dl-fedora ==0.8
+  - dl-fedora ==0.9
   - dlist ==0.8.0.8
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
@@ -902,6 +904,7 @@ default-package-overrides:
   - format-numbers ==0.1.0.1
   - formatting ==6.3.7
   - foundation ==0.0.25
+  - fourmolu ==0.3.0.0
   - free ==5.1.5
   - free-categories ==0.2.0.2
   - freenect ==1.2.1
@@ -1081,6 +1084,7 @@ default-package-overrides:
   - hashmap ==1.3.3
   - hashtables ==1.2.4.1
   - haskeline ==0.8.1.2
+  - haskell-awk ==1.2
   - haskell-gi ==0.24.7
   - haskell-gi-base ==0.24.5
   - haskell-gi-overloading ==1.0
@@ -1187,15 +1191,15 @@ default-package-overrides:
   - hslua-module-path ==0.1.0.1
   - hslua-module-system ==0.2.2.1
   - hslua-module-text ==0.3.0.1
-  - HsOpenSSL ==0.11.6.2
+  - HsOpenSSL ==0.11.7
   - HsOpenSSL-x509-system ==0.1.0.4
   - hsp ==0.10.0
-  - hspec ==2.7.9
+  - hspec ==2.7.10
   - hspec-attoparsec ==0.1.0.2
   - hspec-checkers ==0.1.0.2
   - hspec-contrib ==0.5.1
-  - hspec-core ==2.7.9
-  - hspec-discover ==2.7.9
+  - hspec-core ==2.7.10
+  - hspec-discover ==2.7.10
   - hspec-expectations ==0.8.2
   - hspec-expectations-json ==1.0.0.3
   - hspec-expectations-lifted ==0.10.0
@@ -1228,7 +1232,7 @@ default-package-overrides:
   - html-entities ==1.1.4.5
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
-  - http2 ==2.0.6
+  - http2 ==3.0.1
   - HTTP ==4000.3.16
   - http-api-data ==0.4.2
   - http-client ==0.6.4.1
@@ -1330,7 +1334,7 @@ default-package-overrides:
   - inliterate ==0.1.0
   - input-parsers ==0.2.2
   - insert-ordered-containers ==0.2.4
-  - inspection-testing ==0.4.3.0
+  - inspection-testing ==0.4.4.0
   - instance-control ==0.1.2.0
   - int-cast ==0.2.0.0
   - integer-logarithms ==1.0.3.1
@@ -1356,6 +1360,7 @@ default-package-overrides:
   - io-streams ==1.5.2.0
   - io-streams-haproxy ==1.0.1.0
   - ip6addr ==1.0.2
+  - ipa ==0.3
   - iproute ==1.7.11
   - IPv6Addr ==2.0.2
   - ipynb ==0.1.0.1
@@ -1410,6 +1415,7 @@ default-package-overrides:
   - kind-generics ==0.4.1.0
   - kind-generics-th ==0.2.2.2
   - kmeans ==0.1.3
+  - koji ==0.0.1
   - koofr-client ==1.0.0.3
   - krank ==0.2.2
   - kubernetes-webhook-haskell ==0.2.0.3
@@ -1422,7 +1428,7 @@ default-package-overrides:
   - language-bash ==0.9.2
   - language-c ==0.8.3
   - language-c-quote ==0.12.2.1
-  - language-docker ==9.2.0
+  - language-docker ==9.3.0
   - language-java ==0.2.9
   - language-javascript ==0.7.1.0
   - language-protobuf ==1.0.1
@@ -1689,6 +1695,7 @@ default-package-overrides:
   - network-ip ==0.3.0.3
   - network-messagepack-rpc ==0.1.2.0
   - network-messagepack-rpc-websocket ==0.1.1.1
+  - network-run ==0.2.4
   - network-simple ==0.4.5
   - network-simple-tls ==0.4
   - network-transport ==0.5.4
@@ -1713,9 +1720,9 @@ default-package-overrides:
   - no-value ==1.0.0.0
   - nowdoc ==0.1.1.0
   - nqe ==0.6.3
-  - nri-env-parser ==0.1.0.6
-  - nri-observability ==0.1.0.1
-  - nri-prelude ==0.5.0.3
+  - nri-env-parser ==0.1.0.7
+  - nri-observability ==0.1.0.2
+  - nri-prelude ==0.6.0.0
   - nsis ==0.3.3
   - numbers ==3000.2.0.2
   - numeric-extras ==0.1
@@ -1743,7 +1750,7 @@ default-package-overrides:
   - oo-prototypes ==0.1.0.0
   - opaleye ==0.7.1.0
   - OpenAL ==1.7.0.5
-  - openapi3 ==3.0.2.0
+  - openapi3 ==3.1.0
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.2
   - OpenGL ==3.0.3.0
@@ -1777,7 +1784,9 @@ default-package-overrides:
   - pagination ==0.2.2
   - pagure-cli ==0.2
   - pandoc ==2.13
+  - pandoc-dhall-decoder ==0.1.0.1
   - pandoc-plot ==1.1.1
+  - pandoc-throw ==0.1.0.0
   - pandoc-types ==1.22
   - pantry ==0.5.1.5
   - parallel ==3.2.2.0
@@ -1861,7 +1870,7 @@ default-package-overrides:
   - pipes-safe ==2.3.3
   - pipes-wai ==3.2.0
   - pkcs10 ==0.2.0.0
-  - pkgtreediff ==0.4
+  - pkgtreediff ==0.4.1
   - place-cursor-at ==1.0.1
   - placeholders ==0.1
   - plaid ==0.1.0.4
@@ -1874,6 +1883,8 @@ default-package-overrides:
   - poly-arity ==0.1.0
   - polynomials-bernstein ==1.1.2
   - polyparse ==1.13
+  - polysemy ==1.5.0.0
+  - polysemy-plugin ==0.3.0.0
   - pooled-io ==0.0.2.2
   - port-utils ==0.2.1.0
   - posix-paths ==0.2.1.6
@@ -1929,7 +1940,7 @@ default-package-overrides:
   - promises ==0.3
   - prompt ==0.1.1.2
   - prospect ==0.1.0.0
-  - proto3-wire ==1.2.0
+  - proto3-wire ==1.2.1
   - protobuf ==0.2.1.3
   - protobuf-simple ==0.1.1.0
   - protocol-buffers ==2.4.17
@@ -2059,7 +2070,6 @@ default-package-overrides:
   - resolv ==0.1.2.0
   - resource-pool ==0.2.3.2
   - resourcet ==1.2.4.2
-  - resourcet-pool ==0.1.0.0
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
   - retry ==0.8.1.2
@@ -2146,11 +2156,17 @@ default-package-overrides:
   - serf ==0.1.1.0
   - serialise ==0.2.3.0
   - servant ==0.18.2
+  - servant-auth ==0.4.0.0
+  - servant-auth-client ==0.4.1.0
+  - servant-auth-docs ==0.2.10.0
+  - servant-auth-server ==0.4.6.0
+  - servant-auth-swagger ==0.2.10.1
   - servant-blaze ==0.9.1
   - servant-client ==0.18.2
   - servant-client-core ==0.18.2
   - servant-conduit ==0.15.1
   - servant-docs ==0.11.8
+  - servant-elm ==0.7.2
   - servant-errors ==0.1.6.0
   - servant-exceptions ==0.2.1
   - servant-exceptions-server ==0.2.1
@@ -2158,13 +2174,13 @@ default-package-overrides:
   - servant-http-streams ==0.18.2
   - servant-machines ==0.15.1
   - servant-multipart ==0.12
-  - servant-openapi3 ==2.0.1.1
+  - servant-openapi3 ==2.0.1.2
   - servant-pipes ==0.15.2
   - servant-rawm ==1.0.0.0
   - servant-server ==0.18.2
   - servant-swagger ==1.1.10
-  - servant-swagger-ui ==0.3.4.3.37.2
-  - servant-swagger-ui-core ==0.3.4
+  - servant-swagger-ui ==0.3.5.3.47.1
+  - servant-swagger-ui-core ==0.3.5
   - serverless-haskell ==0.12.6
   - serversession ==1.0.2
   - serversession-frontend-wai ==1.0
@@ -2289,7 +2305,7 @@ default-package-overrides:
   - storable-record ==0.0.5
   - storable-tuple ==0.0.3.3
   - storablevector ==0.2.13.1
-  - store ==0.7.10
+  - store ==0.7.11
   - store-core ==0.4.4.4
   - store-streaming ==0.2.0.3
   - stratosphere ==0.59.1
@@ -2459,7 +2475,7 @@ default-package-overrides:
   - th-test-utils ==1.1.0
   - th-utilities ==0.2.4.3
   - thyme ==0.3.5.5
-  - tidal ==1.7.3
+  - tidal ==1.7.4
   - tile ==0.3.0.0
   - time-compat ==1.9.5
   - timeit ==2.0
@@ -2645,10 +2661,11 @@ default-package-overrides:
   - wai-rate-limit-redis ==0.1.0.0
   - wai-saml2 ==0.2.1.2
   - wai-session ==0.3.3
+  - wai-session-redis ==0.1.0.1
   - wai-slack-middleware ==0.2.0
   - wai-websockets ==3.0.1.2
   - wakame ==0.1.0.0
-  - warp ==3.3.14
+  - warp ==3.3.15
   - warp-tls ==3.3.0
   - warp-tls-uid ==0.2.0.6
   - wave ==0.2.0
@@ -2670,7 +2687,7 @@ default-package-overrides:
   - Win32 ==2.6.1.0
   - Win32-notify ==0.3.0.3
   - windns ==0.1.0.1
-  - witch ==0.0.0.5
+  - witch ==0.1.1.0
   - witherable ==0.4.1
   - within ==0.2.0.1
   - with-location ==0.1.0
@@ -2707,7 +2724,7 @@ default-package-overrides:
   - xlsx-tabular ==0.2.2.1
   - xml ==1.3.14
   - xml-basic ==0.1.3.1
-  - xml-conduit ==1.9.1.0
+  - xml-conduit ==1.9.1.1
   - xml-conduit-writer ==0.1.1.2
   - xmlgen ==0.6.2.2
   - xml-hamlet ==0.5.0.1
@@ -2726,16 +2743,16 @@ default-package-overrides:
   - xxhash-ffi ==0.2.0.0
   - yaml ==0.11.5.0
   - yamlparse-applicative ==0.1.0.3
-  - yesod ==1.6.1.0
-  - yesod-auth ==1.6.10.2
-  - yesod-auth-hashdb ==1.7.1.5
+  - yesod ==1.6.1.1
+  - yesod-auth ==1.6.10.3
+  - yesod-auth-hashdb ==1.7.1.6
   - yesod-auth-oauth2 ==0.6.3.0
   - yesod-bin ==1.6.1
   - yesod-core ==1.6.19.0
   - yesod-fb ==0.6.1
   - yesod-form ==1.6.7
   - yesod-gitrev ==0.2.1
-  - yesod-markdown ==0.12.6.8
+  - yesod-markdown ==0.12.6.9
   - yesod-newsfeed ==1.7.0.0
   - yesod-page-cursor ==2.0.0.6
   - yesod-paginator ==1.1.1.0
