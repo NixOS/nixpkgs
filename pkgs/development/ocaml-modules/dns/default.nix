@@ -4,14 +4,14 @@
 
 buildDunePackage rec {
   pname = "dns";
-  version = "5.0.0";
+  version = "5.0.1";
 
   useDune2 = true;
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-dns/releases/download/v${version}/dns-v${version}.tbz";
-    sha256 = "ef93435407955a46e51e3be857a1b00a6765ec3b673d4a859a9536c7e3365111";
+    sha256 = "72c0a1a91c8e409bd448c8e0ea28d16d13177c326aea403ee1c30ddcb5969adc";
   };
 
   propagatedBuildInputs = [ rresult astring fmt logs ptime domain-name gmap cstruct ipaddr lru duration metrics ];
