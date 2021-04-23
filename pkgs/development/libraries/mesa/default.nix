@@ -5,7 +5,6 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd
-, enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
