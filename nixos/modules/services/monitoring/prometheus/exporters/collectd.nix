@@ -61,6 +61,7 @@ in
     collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
       -collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
       -collectd.security-level ${cfg.collectdBinary.securityLevel} \
+      ${optionalString (cfg.colledtdBinary.authFile != null) "-collextd.auth-file ${cfg.collectdBinary.authFile}"} \
     '' else "";
   in {
     serviceConfig = {
