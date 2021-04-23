@@ -1,7 +1,7 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
 from xml.sax.saxutils import XMLGenerator
 import queue
 import io
@@ -204,6 +204,37 @@ class Logger:
         self.log("({:.2f} seconds)".format(toc - tic))
 
         self.xml.endElement("nest")
+
+
+def _perform_ocr_on_screenshot(
+    screenshot_path: str, model_ids: Iterable[int]
+) -> List[str]:
+    if shutil.which("tesseract") is None:
+        raise Exception("OCR requested but enableOCR is false")
+
+    magick_args = (
+        "-filter Catrom -density 72 -resample 300 "
+        + "-contrast -normalize -despeckle -type grayscale "
+        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
+        + "-blur 1x65535"
+    )
+
+    tess_args = f"-c debug_file=/dev/null --psm 11"
+
+    cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
+    ret = subprocess.run(cmd, shell=True, capture_output=True)
+    if ret.returncode != 0:
+        raise Exception(f"TIFF conversion failed with exit code {ret.returncode}")
+
+    model_results = []
+    for model_id in model_ids:
+        cmd = f"tesseract {screenshot_path}.tiff - {tess_args} --oem {model_id}"
+        ret = subprocess.run(cmd, shell=True, capture_output=True)
+        if ret.returncode != 0:
+            raise Exception(f"OCR failed with exit code {ret.returncode}")
+        model_results.append(ret.stdout.decode("utf-8"))
+
+    return model_results
 
 
 class Machine:
@@ -639,43 +670,29 @@ class Machine:
         """
         self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
 
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            screenshot_path = os.path.join(tmpdir, "ppm")
+            self.send_monitor_command(f"screendump {screenshot_path}")
+            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
+
+    def get_screen_text_variants(self) -> List[str]:
+        return self._get_screen_text_variants([0, 1, 2])
+
     def get_screen_text(self) -> str:
-        if shutil.which("tesseract") is None:
-            raise Exception("get_screen_text used but enableOCR is false")
-
-        magick_args = (
-            "-filter Catrom -density 72 -resample 300 "
-            + "-contrast -normalize -despeckle -type grayscale "
-            + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-            + "-blur 1x65535"
-        )
-
-        tess_args = "-c debug_file=/dev/null --psm 11 --oem 2"
-
-        with self.nested("performing optical character recognition"):
-            with tempfile.NamedTemporaryFile() as tmpin:
-                self.send_monitor_command("screendump {}".format(tmpin.name))
-
-                cmd = "convert {} {} tiff:- | tesseract - - {}".format(
-                    magick_args, tmpin.name, tess_args
-                )
-                ret = subprocess.run(cmd, shell=True, capture_output=True)
-                if ret.returncode != 0:
-                    raise Exception(
-                        "OCR failed with exit code {}".format(ret.returncode)
-                    )
-
-                return ret.stdout.decode("utf-8")
+        return self._get_screen_text_variants([2])[0]
 
     def wait_for_text(self, regex: str) -> None:
         def screen_matches(last: bool) -> bool:
-            text = self.get_screen_text()
-            matches = re.search(regex, text) is not None
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
 
-            if last and not matches:
-                self.log("Last OCR attempt failed. Text was: {}".format(text))
+            if last:
+                self.log("Last OCR attempt failed. Text was: {}".format(variants))
 
-            return matches
+            return False
 
         with self.nested("waiting for {} to appear on screen".format(regex)):
             retry(screen_matches)
