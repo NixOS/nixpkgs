@@ -7,7 +7,6 @@
 , atk
 , cairo
 , dbus
-, dpkg
 , libGL
 , fontconfig
 , freetype
@@ -33,11 +32,10 @@ let
   version = "5.6.16775.0418";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_amd64.deb";
-      sha256 = "1fmzwxq8jv5k1b2kvg1ij9g6cdp1hladd8vm3cxzd8fywdjcndim";
+      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
+      sha256 = "twtxzniojgyLTx6Kda8Ej96uyw2JQB/jIhLdTgTqpCo=";
     };
   };
-  dontUnpack = true;
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
@@ -67,24 +65,22 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation {
-  name = "zoom-${version}";
+in stdenv.mkDerivation rec {
+  pname = "zoom";
+  inherit version;
+  src = srcs.${stdenv.hostPlatform.system};
+
+  dontUnpack = true;
 
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
-
-  unpackCmd = ''
-    mkdir out
-    dpkg -x $curSrc out
-  '';
 
   installPhase = ''
     runHook preInstall
     mkdir $out
-    mv usr/* $out/
-    mv opt $out/
+    tar -C $out -xf ${src}
+    mv $out/usr/* $out/
     runHook postInstall
   '';
 
