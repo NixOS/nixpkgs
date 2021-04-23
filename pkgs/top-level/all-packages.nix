@@ -7233,6 +7233,10 @@ in
     openvpn_24
     openvpn;
 
+  openvpn3 = callPackage ../tools/networking/openvpn3 {
+    inherit (python3Packages) docutils jinja2;
+  };
+
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
