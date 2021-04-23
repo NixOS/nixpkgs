@@ -923,6 +923,8 @@ in {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  banal = callPackage ../development/python-modules/banal { };
+
   bandit = callPackage ../development/python-modules/bandit { };
 
   bap = callPackage ../development/python-modules/bap {
@@ -1463,6 +1465,8 @@ in {
 
   commandparse = callPackage ../development/python-modules/commandparse { };
 
+  commoncode = callPackage ../development/python-modules/commoncode { };
+
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
@@ -1706,6 +1710,8 @@ in {
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
+
+  debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
   debts = callPackage ../development/python-modules/debts { };
 
@@ -2209,6 +2215,24 @@ in {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  extractcode = callPackage ../development/python-modules/extractcode { };
+
+  extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
+    inherit (pkgs) p7zip;
+  };
+
+  extractcode-libarchive = callPackage ../development/python-modules/extractcode/libarchive.nix {
+    inherit (pkgs)
+      libarchive
+      libb2
+      bzip2
+      expat
+      lz4
+      lzma
+      zlib
+      zstd;
+  };
+
   extras = callPackage ../development/python-modules/extras { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
@@ -2310,6 +2334,8 @@ in {
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
+
+  fingerprints = callPackage ../development/python-modules/fingerprints { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -2575,6 +2601,8 @@ in {
   });
 
   geeknote = callPackage ../development/python-modules/geeknote { };
+
+  gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
   genanki = callPackage ../development/python-modules/genanki { };
 
@@ -3229,6 +3257,8 @@ in {
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   intake = callPackage ../development/python-modules/intake { };
+
+  intbitset = callPackage ../development/python-modules/intbitset { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
@@ -4425,6 +4455,8 @@ in {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  normality = callPackage ../development/python-modules/normality { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose = callPackage ../development/python-modules/nose { };
@@ -4961,6 +4993,8 @@ in {
   plotly = callPackage ../development/python-modules/plotly { };
 
   pluggy = callPackage ../development/python-modules/pluggy { };
+
+  plugincode = callPackage ../development/python-modules/plugincode { };
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
@@ -5666,6 +5700,8 @@ in {
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
+
+  pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
 
@@ -7109,6 +7145,8 @@ in {
     inherit (pkgs) sane-backends;
   };
 
+  saneyaml = callPackage ../development/python-modules/saneyaml { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   samplerate = callPackage ../development/python-modules/samplerate { };
@@ -7128,6 +7166,8 @@ in {
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
   scales = callPackage ../development/python-modules/scales { };
+
+  scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
 
   scapy = callPackage ../development/python-modules/scapy { };
 
@@ -7486,6 +7526,8 @@ in {
   SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
+
+  spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speaklater = callPackage ../development/python-modules/speaklater { };
 
@@ -8118,6 +8160,12 @@ in {
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
+  typecode = callPackage ../development/python-modules/typecode { };
+
+  typecode-libmagic = callPackage ../development/python-modules/typecode/libmagic.nix {
+    inherit (pkgs) file zlib;
+  };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
@@ -8237,6 +8285,8 @@ in {
   urllib3 = callPackage ../development/python-modules/urllib3 {
     pytestCheckHook = self.pytestCheckHook_6_1;
   };
+
+  urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
 

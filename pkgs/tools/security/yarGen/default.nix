@@ -22,12 +22,24 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/Neo23x0/yarGen/commit/cae14ac8efeb5536885792cae99d1d0f7fb6fde3.patch";
       sha256 = "0z6925r7n1iysld5c8li5nkm1dbxg8j7pn0626a4vic525vf8ndl";
     })
+    # https://github.com/Neo23x0/yarGen/pull/34
+    (fetchpatch {
+      name = "use-cwd-for-abspath.patch";
+      url = "https://github.com/Neo23x0/yarGen/commit/441dafb702149f5728c2c6736fc08741a46deb26.patch";
+      sha256 = "lNp3oC2BM7tBzN4AetvPr+xJLz6KkZxQmsldeZaxJQU=";
+    })
   ];
+
+  postPatch = ''
+    substituteInPlace yarGen.py \
+      --replace "./3rdparty/strings.xml" "$out/share/yarGen/3rdparty/strings.xml"
+  '';
 
   installPhase = ''
     runHook preInstall
 
     install -Dt "$out/bin" yarGen.py
+    install -Dt "$out/share/yarGen/3rdparty" 3rdparty/strings.xml
 
     runHook postInstall
   '';
