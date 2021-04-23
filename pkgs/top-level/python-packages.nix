@@ -1566,6 +1566,8 @@ in {
 
   cssmin = callPackage ../development/python-modules/cssmin { };
 
+  css-html-js-minify = callPackage ../development/python-modules/css-html-js-minify { };
+
   css-parser = callPackage ../development/python-modules/css-parser { };
 
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
@@ -1602,6 +1604,8 @@ in {
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
+
+  cxxfilt = callPackage ../development/python-modules/cxxfilt { };
 
   cycler = callPackage ../development/python-modules/cycler { };
 
@@ -1718,6 +1722,8 @@ in {
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
+
+  deezer-python = callPackage ../development/python-modules/deezer-python { };
 
   defcon = callPackage ../development/python-modules/defcon { };
 
@@ -3789,6 +3795,10 @@ in {
 
   license-expression = callPackage ../development/python-modules/license-expression { };
 
+  lief = (toPythonModule (pkgs.lief.override {
+    inherit python;
+  })).py;
+
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
@@ -4220,6 +4230,8 @@ in {
   multidict = callPackage ../development/python-modules/multidict { };
 
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
+
+  multimethod = callPackage ../development/python-modules/multimethod { };
 
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
@@ -4949,6 +4961,8 @@ in {
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
+
+  plugnplay = callPackage ../development/python-modules/plugnplay { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
 
@@ -7533,6 +7547,8 @@ in {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
+  sphinx-material = callPackage ../development/python-modules/sphinx-material { };
+
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
@@ -8306,6 +8322,10 @@ in {
 
   vispy = callPackage ../development/python-modules/vispy { };
 
+  vivisect = callPackage ../development/python-modules/vivisect { };
+
+  viv-utils = callPackage ../development/python-modules/viv-utils { };
+
   vmprof = callPackage ../development/python-modules/vmprof { };
 
   vncdo = callPackage ../development/python-modules/vncdo { };
@@ -8455,6 +8475,8 @@ in {
   wled = callPackage ../development/python-modules/wled { };
 
   woob = callPackage ../development/python-modules/woob { };
+
+  woodblock = callPackage ../development/python-modules/woodblock { };
 
   word2vec = callPackage ../development/python-modules/word2vec { };
 

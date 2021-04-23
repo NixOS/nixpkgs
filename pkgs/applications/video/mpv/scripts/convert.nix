@@ -12,15 +12,17 @@ stdenvNoCC.mkDerivation {
 
   patches = [ ./convert.patch ];
 
-  postPatch =
-    let
-      t = k: v: '' 'local ${k} = "${v}"' '';
-      subs = var: orig: repl: "--replace " + t var orig + t var repl;
-    in ''
-      substituteInPlace convert_script.lua \
-        ${subs "NOTIFY_CMD" "notify-send" "${libnotify}/bin/notify-send"} \
-        ${subs "YAD_CMD" "yad" "${yad}/bin/yad"} \
-        ${subs "MKVMERGE_CMD" "mkvmerge" "${mkvtoolnix-cli}/bin/mkvmerge"}
+  postPatch = ''
+    substituteInPlace convert_script.lua \
+      --replace 'mkvpropedit_exe = "mkvpropedit"' \
+                'mkvpropedit_exe = "${mkvtoolnix-cli}/bin/mkvpropedit"' \
+      --replace 'mkvmerge_exe = "mkvmerge"' \
+                'mkvmerge_exe = "${mkvtoolnix-cli}/bin/mkvmerge"' \
+      --replace 'yad_exe = "yad"' \
+                'yad_exe = "${yad}/bin/yad"' \
+      --replace 'notify_send_exe = "notify-send"' \
+                'notify_send_exe = "${libnotify}/bin/notify-send"' \
+
   '';
 
   dontBuild = true;
@@ -38,9 +40,7 @@ stdenvNoCC.mkDerivation {
       When this script is loaded into mpv, you can hit Alt+W to mark the beginning
       and Alt+W again to mark the end of the clip. Then a settings window opens.
     '';
+    # author was asked to add a license https://gist.github.com/Zehkul/25ea7ae77b30af959be0#gistcomment-3715700
     license = licenses.unfree;
-    # script crashes mpv. See https://github.com/NixOS/nixpkgs/issues/113202
-    broken = true;
   };
 }
-
