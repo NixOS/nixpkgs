@@ -90,7 +90,7 @@
     "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
-    "bluetooth_tracker" = ps: with ps; [ bt_proximity ]; # missing inputs: pybluez
+    "bluetooth_tracker" = ps: with ps; [ bt_proximity pybluez ];
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
@@ -750,7 +750,7 @@
     "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
     "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "skybell" = ps: with ps; [ skybellpy ];
-    "slack" = ps: with ps; [ ]; # missing inputs: slackclient
+    "slack" = ps: with ps; [ slackclient ];
     "sleepiq" = ps: with ps; [ sleepyq ];
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
