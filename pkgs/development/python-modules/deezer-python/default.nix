@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A friendly Python wrapper around the Deezer API";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/browniebroke/deezer-python";
     license = licenses.mit;
     maintainers = with maintainers; [ synthetica ];
   };
