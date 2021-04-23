@@ -163,6 +163,8 @@ let format' = format; in let
 
   closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
 
+  blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
+
   prepareImage = ''
     export PATH=${binPath}
 
@@ -173,6 +175,15 @@ let format' = format; in let
 
     sectorsToBytes() {
       echo $(( "$1" * 512  ))
+    }
+
+    # Given lines of numbers, adds them together
+    sum_lines() {
+      local acc=0
+      while read -r number; do
+        acc=$((acc+number))
+      done
+      echo "$acc"
     }
 
     mkdir $out
@@ -235,12 +246,23 @@ let format' = format; in let
 
     ${if diskSize == "auto" then ''
       ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
-        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) / 1000 ))
+        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) ))
       '' else ''
-        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') / 1000 ))
+        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') ))
       ''}
-      diskSize=$(( $(set -- $(du -d0 $root); echo "$1") + $additionalSpace ))
-      truncate -s "$diskSize"K $diskImage
+
+      # Compute required space in filesystem blocks
+      requiredSpace=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
+      # Convert to bytes
+      requiredSpace=$(( requiredSpace * ${blockSize} ))
+
+      diskSize=$(( requiredSpace  + additionalSpace ))
+      truncate -s "$diskSize" $diskImage
+
+      printf "Automatic disk size...\n"
+      printf "  Space needed: %d bytes\n" $requiredSpace
+      printf "  Additional space: %d bytes\n" $additionalSpace
+      printf "  Disk image size: %d bytes\n" $diskSize
     '' else ''
       truncate -s ${toString diskSize}M $diskImage
     ''}
@@ -251,9 +273,9 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
     ''}
 
     echo "copying staging root to image..."
