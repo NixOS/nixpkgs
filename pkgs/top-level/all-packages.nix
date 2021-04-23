@@ -2725,7 +2725,9 @@ in
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
-  lief = callPackage ../development/libraries/lief {};
+  lief = callPackage ../development/libraries/lief {
+    python = python3;
+  };
 
   libnbd = callPackage ../development/libraries/libnbd { };
 
