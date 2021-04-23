@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Command line encoder frontend for libfdk-aac encder";
+    description = "Command line encoder frontend for libfdk-aac encoder";
     longDescription = ''
       fdkaac reads linear PCM audio in either WAV, raw PCM, or CAF format,
       and encodes it into either M4A / AAC file.
