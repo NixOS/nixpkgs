@@ -17,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    chmod +x yarGen.py
-    mv yarGen.py $out/bin/yargen
+    install -Dt "$out/bin" yarGen.py
 
     runHook postInstall
   '';
