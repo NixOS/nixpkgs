@@ -9,7 +9,7 @@ mixRelease rec {
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
-    rev = "v{version}";
+    rev = "v${version}";
     sha256 = "0d0hqc35hfjkpm88vz21mnm2a9rxiqfrdi83whhhh6d2ba216b7s";
     fetchSubmodules = true;
   };
