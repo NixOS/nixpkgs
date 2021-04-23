@@ -680,6 +680,17 @@ environment.systemPackages = [
      All CUDA toolkit versions prior to CUDA 10 have been removed.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <package>kbdKeymaps</package> package was removed since dvp and neo
+       are now included in <package>kbd</package>.
+
+       If you want to use the Programmer Dvorak Keyboard Layout, you have to use
+       <literal>dvorak-programmer</literal> in <option>console.keyMap</option>
+       now instead of <literal>dvp</literal>.
+       In <option>services.xserver.xkbVariant</option> it's still <literal>dvp</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
