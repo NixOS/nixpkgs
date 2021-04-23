@@ -12452,6 +12452,8 @@ in
 
   bloaty = callPackage ../development/tools/bloaty { };
 
+  bloomrpc = callPackage ../development/web/bloorpc { };
+
   bloop = callPackage ../development/tools/build-managers/bloop { };
 
   bossa = callPackage ../development/tools/misc/bossa {
