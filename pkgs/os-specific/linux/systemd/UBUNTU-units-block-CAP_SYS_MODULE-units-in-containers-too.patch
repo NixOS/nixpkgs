@@ -1,0 +1,38 @@
+From: Dimitri John Ledkov <xnox@ubuntu.com>
+Date: Thu, 26 Jul 2018 14:22:25 +0100
+Subject: units: block CAP_SYS_MODULE units in containers too
+
+lxd/lxc usually keep the usernamespace capabilities, whilst in practice one
+does not have these in the initial namespace. Thus add additional condition
+!container, such that sys-kernel-config.mount and systemd-modules.load.service
+are not started in the lxd containers. This should make default lxd containers
+start non-degraded.
+---
+ units/sys-kernel-config.mount         | 1 +
+ units/systemd-modules-load.service.in | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/units/sys-kernel-config.mount b/units/sys-kernel-config.mount
+index b99b4f4..c6dff31 100644
+--- a/units/sys-kernel-config.mount
++++ b/units/sys-kernel-config.mount
+@@ -14,6 +14,7 @@ Documentation=https://www.freedesktop.org/wiki/Software/systemd/APIFileSystems
+ DefaultDependencies=no
+ ConditionPathExists=/sys/kernel/config
+ ConditionCapability=CAP_SYS_RAWIO
++ConditionVirtualization=!container
+ Before=sysinit.target
+ 
+ # These dependencies are used to make certain that the module is fully
+diff --git a/units/systemd-modules-load.service.in b/units/systemd-modules-load.service.in
+index fdb5b3a..920ae5e 100644
+--- a/units/systemd-modules-load.service.in
++++ b/units/systemd-modules-load.service.in
+@@ -14,6 +14,7 @@ DefaultDependencies=no
+ Conflicts=shutdown.target
+ Before=sysinit.target shutdown.target
+ ConditionCapability=CAP_SYS_MODULE
++ConditionVirtualization=!container
+ ConditionDirectoryNotEmpty=|/lib/modules-load.d
+ ConditionDirectoryNotEmpty=|/usr/lib/modules-load.d
+ ConditionDirectoryNotEmpty=|/usr/local/lib/modules-load.d

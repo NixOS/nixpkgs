@@ -1,0 +1,34 @@
+From: Balint Reczey <balint.reczey@canonical.com>
+Date: Thu, 12 Dec 2019 12:56:44 +0100
+Subject: Revert "namespace: be more careful when handling namespacing
+ failures gracefully"
+
+This partially reverts commit 1beab8b0d0ff2d7d1436b52d4a0c3d56dc908962.
+
+Until after the lowest LXD version running this packaged systemd contains
+https://github.com/lxc/lxd/commit/a6b780703350faff8328f3d565f6bac7b6dcf59f
+
+The first LXD version fixed is 3.10. Ubuntu 18.04 LTS has LXD 3.0.3 and is
+supported until 2028.
+---
+ src/core/execute.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/core/execute.c b/src/core/execute.c
+index 0ec1bd6..823db9c 100644
+--- a/src/core/execute.c
++++ b/src/core/execute.c
+@@ -3234,6 +3234,13 @@ static int apply_mount_namespace(
+ 
+ finalize:
+         bind_mount_free_many(bind_mounts, n_bind_mounts);
++
++        /* If we couldn't set up the namespace this is probably due to a
++         * missing capability. In this case, silently proceeed. */
++        if (IN_SET(r, -EPERM, -EACCES)) {
++                log_unit_debug_errno(u, r, "Failed to set up namespace, assuming containerized execution, ignoring: %m");
++                return 0;
++        }
+         return r;
+ }
+ 

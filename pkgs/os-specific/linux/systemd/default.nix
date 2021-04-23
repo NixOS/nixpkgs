@@ -151,6 +151,9 @@ stdenv.mkDerivation {
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
     ./0019-pkg-config-derive-prefix-from-prefix.patch
+    # those are from the ubuntu devel version's systemd package sources
+    ./UBUNTU-Revert-namespace-be-more-careful-when-handling-namespacin.patch
+    ./UBUNTU-units-block-CAP_SYS_MODULE-units-in-containers-too.patch
   ];
 
   postPatch = ''
