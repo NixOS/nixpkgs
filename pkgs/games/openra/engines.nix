@@ -22,7 +22,7 @@ let
 
 in {
   release = name: (buildUpstreamOpenRAEngine rec {
-    version = "20190314";
+    version = "20210321";
     rev = "${name}-${version}";
     sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
   } name);
