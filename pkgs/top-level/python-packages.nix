@@ -6430,6 +6430,8 @@ self: super: with self; {
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
+  muscima = callPackage ../development/python-modules/muscima { };
+
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
   mutag = callPackage ../development/python-modules/mutag { };
