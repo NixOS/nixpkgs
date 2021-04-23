@@ -1,4 +1,5 @@
 { buildPythonPackage
+, addOpenGLRunpath
 , fetchPypi
 , fetchFromGitHub
 , Mako
@@ -40,12 +41,23 @@ buildPythonPackage rec {
     ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte
   '';
 
+  postFixup = ''
+    find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting opengl runpath for $lib..."
+      addOpenGLRunpath "$lib"
+    done
+  '';
+
   # Requires access to libcuda.so.1 which is provided by the driver
   doCheck = false;
 
   checkPhase = ''
     py.test
   '';
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     numpy

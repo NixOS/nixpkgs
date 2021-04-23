@@ -4481,6 +4481,20 @@ let
     propagatedBuildInputs = [ Clone ];
   };
 
+  CSSMinifier = buildPerlPackage {
+    pname = "CSS-Minifier";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMICHAUX/CSS-Minifier-0.01.tar.gz";
+      sha256 = "0Kk0m46LfoOrcM+IVM+7Qv8pwfbHyCmPIlfdIaoMf+8=";
+    };
+    meta = with lib; {
+      description = "Perl extension for minifying CSS";
+      license = licenses.artistic1;
+      maintainers = teams.determinatesystems.members;
+    };
+  };
+
   CSSMinifierXS = buildPerlModule {
     pname = "CSS-Minifier-XS";
     version = "0.09";

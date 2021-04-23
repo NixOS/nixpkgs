@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3wsr";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "roosta";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zpyncg29y8cv5nw0vgd69nywbj1ppxf6qfm4zc6zz0gk0vxy4pn";
+    sha256 = "sha256-PluczllPRlfzoM2y552YJirrX5RQZQAkBQkner7fWhU=";
   };
 
-  cargoSha256 = "0snys419d32anf73jcvrq8h9kp1fq0maqcxz6ww04yg2jv6j47nc";
+  cargoSha256 = "sha256-GwRiyAHTcRoByxUViXSwslb+IAP6LK8IWZ0xICQ8qag=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

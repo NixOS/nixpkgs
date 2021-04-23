@@ -6012,6 +6012,12 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  malo = {
+    email = "mbourgon@gmail.com";
+    github = "malob";
+    githubId = 2914269;
+    name = "Malo Bourgon";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
@@ -7949,6 +7955,12 @@
     githubId = 18549627;
     name = "Proglodyte";
   };
+  progval = {
+    email = "progval+nix@progval.net";
+    github = "ProgVal";
+    githubId = 406946;
+    name = "Valentin Lorentz";
+  };
   protoben = {
     email = "protob3n@gmail.com";
     github = "protoben";
@@ -8761,6 +8773,12 @@
     githubId = 8534888;
     name = "Savanni D'Gerinel";
   };
+  sayanarijit = {
+    email = "sayanarijit@gmail.com";
+    github = "sayanarijit";
+    githubId = 11632726;
+    name = "Arijit Basu";
+  };
   sb0 = {
     email = "sb@m-labs.hk";
     github = "sbourdeauducq";
@@ -9473,6 +9491,12 @@
     githubId = 187109;
     name = "Bjarki Ágúst Guðmundsson";
   };
+  suryasr007 = {
+    email = "94suryateja@gmail.com";
+    github = "suryasr007";
+    githubId = 10533926;
+    name = "Surya Teja V";
+  };
   suvash = {
     email = "suvash+nixpkgs@gmail.com";
     github = "suvash";
@@ -9668,12 +9692,6 @@
     github = "tasmo";
     githubId = 102685;
     name = "Thomas Friese";
-  };
-  tavyc = {
-    email = "octavian.cerna@gmail.com";
-    github = "tavyc";
-    githubId = 3650609;
-    name = "Octavian Cerna";
   };
   tazjin = {
     email = "mail@tazj.in";

@@ -404,6 +404,8 @@ in
 
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
+  flare-floss = callPackage ../tools/security/flare-floss { };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro/default.nix { };
@@ -1300,6 +1302,8 @@ in
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
+  cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
@@ -1346,6 +1350,8 @@ in
   enchive = callPackage ../tools/security/enchive { };
 
   enpass = callPackage ../tools/security/enpass { };
+
+  esbuild = callPackage ../development/tools/esbuild { };
 
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
@@ -1598,6 +1604,10 @@ in
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
+  anevicon = callPackage ../tools/networking/anevicon {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   apprise = with python3Packages; toPythonApplication apprise;
 
   aria2 = callPackage ../tools/networking/aria2 {
@@ -1703,6 +1713,10 @@ in
   };
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+
+  beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
+    inherit (plasma5Packages) breeze-icons;
+  };
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -2362,6 +2376,8 @@ in
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
 
+  earlybird = callPackage ../tools/security/earlybird { };
+
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
@@ -2709,7 +2725,9 @@ in
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
-  lief = callPackage ../development/libraries/lief {};
+  lief = callPackage ../development/libraries/lief {
+    python = python3;
+  };
 
   libnbd = callPackage ../development/libraries/libnbd { };
 
@@ -3764,6 +3782,8 @@ in
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
+  dcs = callPackage ../tools/text/dcs { };
+
   dcfldd = callPackage ../tools/system/dcfldd { };
 
   debianutils = callPackage ../tools/misc/debianutils { };
@@ -4162,6 +4182,8 @@ in
   zabbixctl = callPackage ../tools/misc/zabbixctl { };
 
   zeek = callPackage ../applications/networking/ids/zeek { };
+
+  zoekt = callPackage ../tools/text/zoekt { };
 
   zoxide = callPackage ../tools/misc/zoxide { };
 
@@ -6922,6 +6944,8 @@ in
 
   notable = callPackage ../applications/misc/notable { };
 
+  ntlmrecon = callPackage ../tools/security/ntlmrecon { };
+
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
   miller = callPackage ../tools/text/miller { };
@@ -9295,6 +9319,8 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
+  xplr = callPackage ../applications/misc/xplr {};
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
@@ -11288,6 +11314,10 @@ in
   };
   rust = rust_1_51;
 
+  mrustc = callPackage ../development/compilers/mrustc { };
+  mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
+  mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
+
   rustPackages_1_45 = rust_1_45.packages.stable;
   rustPackages_1_51 = rust_1_51.packages.stable;
   rustPackages = rustPackages_1_51;
@@ -12436,9 +12466,7 @@ in
     wxGTK = wxGTK30;
   };
 
-  buck = callPackage ../development/tools/build-managers/buck {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  buck = callPackage ../development/tools/build-managers/buck { };
 
   buildkite-agent = buildkite-agent3;
   buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
@@ -12621,6 +12649,8 @@ in
   csmith = callPackage ../development/tools/misc/csmith { };
 
   csslint = callPackage ../development/web/csslint { };
+
+  css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm clang-unwrapped;
@@ -16338,6 +16368,8 @@ in
 
   libxls = callPackage ../development/libraries/libxls { };
 
+  libxlsxwriter = callPackage ../development/libraries/libxlsxwriter { };
+
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
@@ -17520,6 +17552,8 @@ in
   }) sqlite-analyzer sqldiff;
 
   sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
+
+  sqlitecpp = callPackage ../development/libraries/sqlitecpp { };
 
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
@@ -19123,8 +19157,6 @@ in
   };
 
   qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
-
-  quagga = callPackage ../servers/quagga { };
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
@@ -21878,7 +21910,7 @@ in
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
       buildPythonApplication appdirs colorama dateutil
-      requests requests_toolbelt sqlalchemy fusepy;
+      requests requests_toolbelt setuptools sqlalchemy fusepy;
   };
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
@@ -29039,9 +29071,7 @@ in
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
-  beluga = callPackage ../applications/science/logic/beluga {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
-  };
+  beluga = callPackage ../applications/science/logic/beluga {};
 
   boogie = dotnetPackages.Boogie;
 
@@ -30304,7 +30334,9 @@ in
 
   rmount = callPackage ../tools/filesystems/rmount {};
 
-  romdirfs = callPackage ../tools/filesystems/romdirfs {};
+  romdirfs = callPackage ../tools/filesystems/romdirfs {
+    stdenv = gccStdenv;
+  };
 
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
@@ -30676,6 +30708,8 @@ in
 
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
+  xorex = callPackage ../tools/security/xorex { };
+
   xow = callPackage ../misc/drivers/xow { };
 
   xbps = callPackage ../tools/package-management/xbps { };
@@ -30743,6 +30777,8 @@ in
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yarGen = callPackage ../tools/security/yarGen { };
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 
@@ -30933,6 +30969,8 @@ in
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
   };
+
+  dnstwist = callPackage ../tools/networking/dnstwist {};
 
   dsniff = callPackage ../tools/networking/dsniff {};
 

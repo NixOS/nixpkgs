@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "0.2.2";
+  version = "1.0.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vIefcL3K3ZbAUxMFM7gbbTFdrnmufWZHcq4OA19SYXE=";
+    sha256 = "sha256-0NfqPlQiOkNhR+H55E9LE4dGa9R8vcSyPNbbIeiRJV8=";
   };
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, udev, autoconf, automake, libtool, kernelOlder }:
+{ lib, stdenv, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
 
 stdenv.mkDerivation {
   name = "usbip-${kernel.name}";
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     cd tools/usb/usbip
     ./autogen.sh
   '';
+
+  configureFlags = [ "--with-usbids-dir=${hwdata}/share/hwdata/" ];
 
   meta = with lib; {
     homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
