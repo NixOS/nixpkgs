@@ -13837,6 +13837,8 @@ in
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
+  beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
+
   belcard = callPackage ../development/libraries/belcard { };
 
   belr = callPackage ../development/libraries/belr { };
