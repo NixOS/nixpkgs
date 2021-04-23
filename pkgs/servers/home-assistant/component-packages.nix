@@ -583,7 +583,7 @@
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
     "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
-    "ondilo_ico" = ps: with ps; [ aiohttp-cors ]; # missing inputs: ondilo
+    "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
     "onvif" = ps: with ps; [ ha-ffmpeg zeep ]; # missing inputs: WSDiscovery onvif-zeep-async

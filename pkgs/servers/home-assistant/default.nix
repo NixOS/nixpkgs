@@ -331,6 +331,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notion"
     "number"
     "omnilogic"
+    "ondilo_ico"
     "ozw"
     "panel_custom"
     "panel_iframe"

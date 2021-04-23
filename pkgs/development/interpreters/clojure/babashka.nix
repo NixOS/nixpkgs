@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.3.1";
+  version = "0.3.5";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "0ar2ry07axgrmdb6nsc0786v1a1nwlyvapgxncaaympvn38qk8qf";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
+    sha256 = "sha256-TVFdGFXclJE9GpolKzTGSmeianBdb2Yp3kbNUWlddPw=";
   };
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "1fapkyq7fcgydy8sls6jzxagfkhgxhwp1rdvjqxdmqk4d82jwrh2";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-tOLT5W5kK38fb9XL9jOQpw0LjHPjbn+BarckbCuwQAc=";
   };
 
   dontUnpack = true;
