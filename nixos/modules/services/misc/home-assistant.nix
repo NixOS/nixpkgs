@@ -233,7 +233,7 @@ in {
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
         cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
       '' else ''
