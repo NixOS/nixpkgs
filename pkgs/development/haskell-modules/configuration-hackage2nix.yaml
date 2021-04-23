@@ -8691,7 +8691,6 @@ broken-packages:
   - openai-servant
   - openapi-petstore
   - openapi-typed
-  - openapi3
   - openapi3-code-generator
   - opench-meteo
   - OpenCL
