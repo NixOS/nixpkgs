@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Manage dynamic plugins for Python applications";
     homepage = "https://docs.openstack.org/stevedore/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }
