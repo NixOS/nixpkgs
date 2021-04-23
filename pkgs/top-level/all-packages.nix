@@ -18110,6 +18110,8 @@ in
 
   commonsCompress = callPackage ../development/libraries/java/commons/compress { };
 
+  commonsDaemon = callPackage ../development/libraries/java/commons/daemon { };
+
   commonsFileUpload = callPackage ../development/libraries/java/commons/fileupload { };
 
   commonsLang = callPackage ../development/libraries/java/commons/lang { };
