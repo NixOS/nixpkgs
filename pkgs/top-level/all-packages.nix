@@ -13693,6 +13693,8 @@ in
 
   ytt = callPackage ../development/tools/ytt {};
 
+  zls = callPackage ../development/tools/zls { };
+
   zydis = callPackage ../development/libraries/zydis { };
 
   winpdb = callPackage ../development/tools/winpdb { };
