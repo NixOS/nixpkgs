@@ -665,6 +665,11 @@ in lib.makeScopeWithSplicing
     version = "8.0";
     sha256 = "078qsi4mg1hyyxr1awvjs9b0c2gicg3zw4vl603g1m9vm8gfxw9l";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ common.src libc.src ];
+    postPatch = ''
+      sed -i 's,/usr\(/include/sys/syscall.h\),${self.headers}\1,g' \
+        $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
+    '';
   };
 
   libcrypt = mkDerivation {
@@ -807,10 +812,7 @@ in lib.makeScopeWithSplicing
       make -C $BSDSRCDIR/lib/libcrypt $makeFlags
       make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
     '';
-    postPatch = ''
-      sed -i 's,/usr\(/include/sys/syscall.h\),${self.headers}\1,g' \
-        sys/Makefile.inc ../librt/sys/Makefile.inc
-    '';
+    inherit (self.librt) postPatch;
   };
   #
   # END LIBRARIES
