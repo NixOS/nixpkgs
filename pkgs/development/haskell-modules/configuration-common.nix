@@ -1780,4 +1780,11 @@ self: super: {
   # https://github.com/hasufell/lzma-static/issues/1
   lzma-static = doJailbreak super.lzma-static;
 
+  # Fix haddock errors: https://github.com/koalaman/shellcheck/issues/2216
+  ShellCheck = appendPatch super.ShellCheck (pkgs.fetchpatch {
+    url = "https://github.com/koalaman/shellcheck/commit/9e60b3ea841bcaf48780bfcfc2e44aa6563a62de.patch";
+    sha256 = "1vmg8mmmnph34x7y0mhkcd5nzky8f1rh10pird750xbkp9zlk099";
+    excludes = ["test/buildtest"];
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
