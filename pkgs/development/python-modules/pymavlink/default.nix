@@ -11,7 +11,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future lxml ];
 
-  # No tests included in PyPI tarball
+  # No tests included in PyPI tarball. We cannot use the GitHub tarball because
+  # we would like to use the same commit of the mavlink messages repo as
+  # included in the PyPI tarball, and there is no easy way to determine what
+  # commit is included.
   doCheck = false;
 
   pythonImportsCheck = [ "pymavlink" ];
