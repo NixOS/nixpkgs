@@ -10045,7 +10045,6 @@ broken-packages:
   - servant-multipart
   - servant-namedargs
   - servant-nix
-  - servant-openapi3
   - servant-pagination
   - servant-pandoc
   - servant-polysemy
