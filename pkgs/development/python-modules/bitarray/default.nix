@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, stdenv }:
 
 buildPythonPackage rec {
   pname = "bitarray";
@@ -17,5 +17,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/ilanschnell/bitarray/blob/master/CHANGE_LOG";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
+    # tests (test_explicit, test_hex2ba, test_hex2ba_errors, test_round_trip) fail
+    broken = stdenv.isAarch64;
   };
 }
