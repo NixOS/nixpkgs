@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -30,6 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing ];
 
+  pythonImportsCheck = [ "httplib2" ];
+
+  # Don't run tests for Python 2.7
+  doCheck = !isPy27;
+
   checkInputs = [
     mock
     pytest-forked
@@ -40,12 +44,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Don't run tests for Python 2.7 or Darwin
-  # Nearly 50% of the test suite requires local network access
-  # which isn't allowed on sandboxed Darwin builds
-  doCheck = !(isPy27 || stdenv.isDarwin);
   pytestFlagsArray = [ "--ignore python2" ];
-  pythonImportsCheck = [ "httplib2" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";

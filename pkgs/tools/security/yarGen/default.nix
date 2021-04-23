@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "yarGen";
@@ -14,18 +15,24 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "6PJNAeeLAyUlZcIi0g57sO1Ex6atn7JhbK9kDbNrZ6A=";
   };
 
+  patches = [
+    # https://github.com/Neo23x0/yarGen/pull/33
+    (fetchpatch {
+      name = "use-built-in-scandir.patch";
+      url = "https://github.com/Neo23x0/yarGen/commit/cae14ac8efeb5536885792cae99d1d0f7fb6fde3.patch";
+      sha256 = "0z6925r7n1iysld5c8li5nkm1dbxg8j7pn0626a4vic525vf8ndl";
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    chmod +x yarGen.py
-    mv yarGen.py $out/bin/yargen
+    install -Dt "$out/bin" yarGen.py
 
     runHook postInstall
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    scandir
     pefile
     lxml
   ];
