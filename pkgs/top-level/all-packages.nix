@@ -5950,9 +5950,7 @@ in
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   lefthook = callPackage ../applications/version-management/git-and-tools/lefthook {
-    # Please use empty attrset once upstream bugs have been fixed
-    # https://github.com/Arkweid/lefthook/issues/151
-    buildGoModule = buildGo114Module;
+    buildGoModule = buildGoModule;
   };
 
   lego = callPackage ../tools/admin/lego { };
