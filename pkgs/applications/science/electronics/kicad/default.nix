@@ -195,6 +195,8 @@ stdenv.mkDerivation rec {
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+    # required to open a bug report link in firefox-wayland
+    "--set-default MOZ_DBUS_REMOTE 1"
   ]
   ++ optionals (stable)
   [
@@ -278,8 +280,7 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    # berce seems inactive...
-    maintainers = with lib.maintainers; [ evils kiwi berce ];
+    maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
     # despite that, nipkgs' wxGTK for darwin is "wxmac"
