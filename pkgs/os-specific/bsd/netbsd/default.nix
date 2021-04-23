@@ -659,6 +659,11 @@ in lib.makeScopeWithSplicing
     sha256 = "14ri9w6gdhsm4id5ck133syyvbmkbknfa8w0xkklm726nskhfkj7";
     makeFlags = [ "INCSDIR=$(out)/include/rpcsvc" ];
     meta.platforms = lib.platforms.netbsd;
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook
+      makeMinimal
+      install tsort lorder rpcgen statHook
+    ];
   };
 
   librt = mkDerivation {
