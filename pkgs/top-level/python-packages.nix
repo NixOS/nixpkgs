@@ -3443,6 +3443,8 @@ in {
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
+  json-logging = callPackage ../development/python-modules/json-logging { };
+
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
