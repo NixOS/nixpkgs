@@ -55,7 +55,7 @@ let
     env = {
       inherit (go.env) GOOS GOARCH;
       GO111MODULE = "on";
-    } // args.env;
+    } // (args.env or {});
 
     patches = args.patches or [];
     preBuild = args.preBuild or "";
@@ -124,7 +124,7 @@ let
       inherit (go.env) GOOS GOARCH;
       GO111MODULE = "on";
       GOFLAGS = "-mod=vendor" + lib.optionalString (!allowGoReference) " -trimpath";
-    } // args.env;
+    } // (args.env or {});
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
