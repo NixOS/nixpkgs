@@ -2314,6 +2314,18 @@ let
     meta.homepage = "https://github.com/tami5/lispdocs.nvim/";
   };
 
+  lsp-colors-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-colors-nvim";
+    version = "2021-04-23";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "lsp-colors.nvim";
+      rev = "525c57c1138ca5640547efb476758938aedba943";
+      sha256 = "0dxalh12ifsghksl423bbawq096k8fcl1cgmnvaw3f2x71fngfs6";
+    };
+    meta.homepage = "https://github.com/folke/lsp-colors.nvim/";
+  };
+
   lsp-status-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-status-nvim";
     version = "2021-04-09";
