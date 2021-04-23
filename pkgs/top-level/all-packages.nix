@@ -5740,6 +5740,8 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  jsvc = callPackage ../tools/system/jsvc { };
+
   jumpnbump = callPackage ../games/jumpnbump { };
 
   junkie = callPackage ../tools/networking/junkie { };
