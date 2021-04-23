@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, runCommand, fetchCrate, rustPlatform, Security, openssl, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, runCommand
+, fetchCrate
+, rustPlatform
+, Security
+, openssl
+, pkg-config
 , SystemConfiguration
 }:
 
