@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, libXcomposite
-, libxcb, sqlite, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus, makeWrapper }:
+, libxcb, sqlite, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus, makeWrapper
+, xkeyboardconfig }:
 
 let
   arch =
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
+  propagatedBuildInputs = [ xkeyboardconfig ];
 
   doInstallCheck = true;
 
@@ -97,7 +99,9 @@ stdenv.mkDerivation rec {
 
   # wayland is not supported by Qt included in binary package, so make sure it uses xcb
   fixupPhase = ''
-    wrapProgram $out/bin/googleearth-pro --set QT_QPA_PLATFORM xcb
+    wrapProgram $out/bin/googleearth-pro \
+      --set QT_QPA_PLATFORM xcb \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
 
 
