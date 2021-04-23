@@ -210,9 +210,9 @@ in {
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc3";
+    version = "2.1.0-rc4";
 
-    sha256 = "sha256-ARRUuyu07dWwEuXerTz9KBmclhlmsnnGucfBxxn0Zsw=";
+    sha256 = "sha256-eakOEA7LCJOYDsZH24Y5JbEd2wh1KfCN+qX3QxQZ4e8=";
 
     isUnstable = true;
   };
