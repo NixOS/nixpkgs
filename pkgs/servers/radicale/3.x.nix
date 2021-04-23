@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
@@ -27,6 +27,10 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
     waitress
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) radicale;
+  };
 
   meta = with lib; {
     homepage = "https://www.radicale.org/3.0.html";
