@@ -1668,6 +1668,8 @@ in {
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
 
+  cxxfilt = callPackage ../development/python-modules/cxxfilt { };
+
   cycler = callPackage ../development/python-modules/cycler { };
 
   cymem = callPackage ../development/python-modules/cymem { };
@@ -5319,6 +5321,8 @@ in {
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
+  plugnplay = callPackage ../development/python-modules/plugnplay { };
+
   plugwise = callPackage ../development/python-modules/plugwise { };
 
   plum-py = callPackage ../development/python-modules/plum-py { };
@@ -8918,6 +8922,10 @@ in {
   visitor = callPackage ../development/python-modules/visitor { };
 
   vispy = callPackage ../development/python-modules/vispy { };
+
+  vivisect = callPackage ../development/python-modules/vivisect { };
+
+  viv-utils = callPackage ../development/python-modules/viv-utils { };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
