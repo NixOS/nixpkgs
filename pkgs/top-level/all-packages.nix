@@ -4141,6 +4141,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
+  timeline = callPackage ../applications/office/timeline/default.nix { };
+
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
 
