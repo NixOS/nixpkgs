@@ -7004,6 +7004,8 @@ in {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
+  python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
+
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
