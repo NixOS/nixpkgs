@@ -1,21 +1,21 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, pytest
-, pillow
-, scikitimage
+, fetchPypi
 , h5py
-, pyhamcrest
-, muscima
-, mung
-, numpy
+, ipython
 , lxml
+, mung
+, muscima
+, numpy
+, pillow
+, pytestCheckHook
+, scikitimage
+, sphinx_rtd_theme
+, sympy
+, pandas
+, pyhamcrest
 , tqdm
 , twine
-, sympy
-, sphinx_rtd_theme
-, pandas
-, ipython
 }:
 
 buildPythonPackage rec {
@@ -45,37 +45,18 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest omrdatasettools/ -s -k 'not ${lib.concatStringsSep " and not " disabledTests}'
-  '';
+  disabledTestPaths = [
+    # The download tests require internet access
+    "omrdatasettools/tests/test_downloader.py"
+  ];
 
   disabledTests = [
     # The download tests require internet access
     "test_download_extract_and_crop_bitmaps"
-    "test_download_and_extract_bargheer_edirom_dataset_expect_folder_to_be_created"
-    "test_download_and_extract_freischuetz_edirom_dataset_expect_folder_to_be_created"
-    "test_download_of_audiveris_dataset"
-    "test_download_of_baro_dataset"
-    "test_download_of_capitan_dataset"
-    "test_download_of_deepscores_dataset"
-    "test_download_of_fornes_dataset"
-    "test_download_of_homus_v1_dataset"
-    "test_download_of_homus_v2_dataset"
-    "test_download_of_measure_bounding_box_annotations_v1"
-    "test_download_of_measure_bounding_box_annotations_v2"
-    "test_download_of_muscima_pp_measure_annotations"
-    "test_download_of_muscima_pp_v1_dataset"
-    "test_download_of_muscima_pp_v1_images"
-    "test_download_of_muscima_pp_v2_dataset"
-    "test_download_of_muscima_pp_v2_images"
-    "test_download_of_openomr_dataset"
-    "test_download_of_printed_symbols_dataset"
-    "test_download_of_rebelo1_dataset"
     "test_download_extract_and_render_all_symbols"
-    "test_download_of_rebelo2_dataset"
     "test_download_extract_and_draw_bitmaps"
     # Other failures
     "test_render_node_masks_instance_segmentation_of_staff_blobs"
