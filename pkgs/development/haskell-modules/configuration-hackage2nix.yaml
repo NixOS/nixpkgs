@@ -6837,6 +6837,7 @@ broken-packages:
   - hsdip
   - hsdns-cache
   - Hsed
+  - hsendxmpp
   - hsenv
   - HSet
   - hset
@@ -8691,6 +8692,8 @@ broken-packages:
   - opentelemetry-http-client
   - opentheory-char
   - opentok
+  - opentracing-jaeger
+  - opentracing-zipkin-v1
   - opentype
   - OpenVG
   - OpenVGRaw
@@ -9815,6 +9818,7 @@ broken-packages:
   - safe-globals
   - safe-lazy-io
   - safe-length
+  - safe-numeric
   - safe-plugins
   - safe-printf
   - safecopy-migrate
@@ -10005,6 +10009,7 @@ broken-packages:
   - servant-ede
   - servant-ekg
   - servant-elm
+  - servant-event-stream
   - servant-examples
   - servant-fiat-content
   - servant-generate
@@ -10765,6 +10770,7 @@ broken-packages:
   - TaskMonad
   - tasty-auto
   - tasty-bdd
+  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-groundhog-converters
@@ -11570,6 +11576,7 @@ broken-packages:
   - whois
   - why3
   - wide-word
+  - wide-word-instances
   - WikimediaParser
   - wikipedia4epub
   - wild-bind-indicator
