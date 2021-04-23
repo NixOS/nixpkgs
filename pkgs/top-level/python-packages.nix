@@ -5773,6 +5773,8 @@ in {
 
   pydrive = callPackage ../development/python-modules/pydrive { };
 
+  pydrive2 = callPackage ../development/python-modules/pydrive2 { };
+
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
   pydub = callPackage ../development/python-modules/pydub { };
