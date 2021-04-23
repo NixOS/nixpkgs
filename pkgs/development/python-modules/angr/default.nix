@@ -18,7 +18,6 @@
 , protobuf
 , psutil
 , pycparser
-, pkgs
 , pythonOlder
 , pyvex
 , sqlalchemy
@@ -43,14 +42,14 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.6281";
+  version = "9.0.6790";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "10i4qdk8f342gzxiwy0pjdc35lc4q5ab7l5q420ca61cgdvxkk4r";
+    sha256 = "sha256-PRghK/BdgxGpPuinkGr+rREza1pQXz2gxnXiSmxBSTc=";
   };
 
   propagatedBuildInputs = [
