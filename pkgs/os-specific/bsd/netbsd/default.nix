@@ -602,10 +602,10 @@ in lib.makeScopeWithSplicing
         --replace '#include <curses.h>' 'void use_env(bool);'
     '';
     postBuild = ''
-      make -C $BSDSRCDIR/share/terminfo BINDIR=$out/share
+      make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share
     '';
     postInstall = ''
-      make -C $BSDSRCDIR/share/terminfo BINDIR=$out/share install
+      make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share install
     '';
     extraPaths = with self; [
       (fetchNetBSD "share/terminfo" "8.0" "18db0fk1dw691vk6lsm6dksm4cf08g8kdm0gc4052ysdagg2m6sm")
