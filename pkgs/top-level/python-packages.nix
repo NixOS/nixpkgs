@@ -6261,6 +6261,8 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-console-scripts = callPackage ../development/python-modules/pytest-console-scripts { };
+
   pytest-cov = self.pytestcov; # self 2021-01-04
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
 
