@@ -6087,6 +6087,8 @@ in
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -8296,6 +8298,8 @@ in
   sigal = callPackage ../applications/misc/sigal { };
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
+
+  signald = callPackage ../applications/networking/instant-messengers/signald { };
 
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
