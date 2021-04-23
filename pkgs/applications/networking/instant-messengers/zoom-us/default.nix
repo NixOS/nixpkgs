@@ -7,7 +7,6 @@
 , atk
 , cairo
 , dbus
-, dpkg
 , libGL
 , fontconfig
 , freetype
@@ -33,8 +32,8 @@ let
   version = "5.6.16775.0418";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_amd64.deb";
-      sha256 = "1fmzwxq8jv5k1b2kvg1ij9g6cdp1hladd8vm3cxzd8fywdjcndim";
+      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
+      sha256 = "twtxzniojgyLTx6Kda8Ej96uyw2JQB/jIhLdTgTqpCo=";
     };
   };
 
@@ -71,21 +70,17 @@ in stdenv.mkDerivation rec {
   inherit version;
   src = srcs.${stdenv.hostPlatform.system};
 
+  dontUnpack = true;
+
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
-
-  unpackCmd = ''
-    mkdir out
-    dpkg -x $curSrc out
-  '';
 
   installPhase = ''
     runHook preInstall
     mkdir $out
-    mv usr/* $out/
-    mv opt $out/
+    tar -C $out -xf ${src}
+    mv $out/usr/* $out/
     runHook postInstall
   '';
 
