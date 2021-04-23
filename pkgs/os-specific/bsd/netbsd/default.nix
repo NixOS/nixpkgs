@@ -691,6 +691,8 @@ in lib.makeScopeWithSplicing
     installPhase = null;
     noCC = false;
     dontBuild = false;
+    buildInputs = with self; [ headers ];
+    extraPaths = with self; [ common.src libc.src sys.src ];
   };
 
   libresolv = mkDerivation {
