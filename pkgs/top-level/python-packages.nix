@@ -7554,6 +7554,8 @@ in {
 
   roku = callPackage ../development/python-modules/roku { };
 
+  rokuecp = callPackage ../development/python-modules/rokuecp { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   roombapy = callPackage ../development/python-modules/roombapy { };

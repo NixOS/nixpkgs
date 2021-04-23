@@ -692,7 +692,7 @@
     "rituals_perfume_genie" = ps: with ps; [ pyrituals ];
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
-    "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
+    "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
     "roon" = ps: with ps; [ ]; # missing inputs: roonapi
     "route53" = ps: with ps; [ boto3 ];
