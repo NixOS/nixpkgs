@@ -564,7 +564,14 @@ in lib.makeScopeWithSplicing
     path = "lib/libutil";
     version = "8.0";
     sha256 = "077syyxd303m4x7avs5nxzk4c9n13d5lyk5aicsacqjvx79qrk3i";
-    extraPaths = with self; [ common.src ];
+    extraPaths = with self; [ common.src libc.src sys.src ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook
+      makeMinimal
+      byacc install tsort lorder mandoc statHook
+    ];
+    buildInputs = with self; [ headers ];
+    SHLIBINSTALLDIR = "$(out)/lib";
   };
 
   libedit = mkDerivation {
