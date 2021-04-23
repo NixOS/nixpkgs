@@ -590,7 +590,7 @@
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
-    "openerz" = ps: with ps; [ ]; # missing inputs: openerz-api
+    "openerz" = ps: with ps; [ openerz-api ];
     "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage

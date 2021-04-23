@@ -324,6 +324,7 @@ in with py.pkgs; buildPythonApplication rec {
     "number"
     "omnilogic"
     "ondilo_ico"
+    "openerz"
     "ozw"
     "panel_custom"
     "panel_iframe"

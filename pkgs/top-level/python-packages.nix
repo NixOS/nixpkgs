@@ -4906,6 +4906,8 @@ in {
     pythonPackages = self;
   }));
 
+  openerz-api = callPackage ../development/python-modules/openerz-api { };
+
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
