@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -13,13 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-Uro9P5uULEnX5LwQW7KFUcRAZfE5plBiq3kSvvEMmvs=";
   };
 
-  postCheck = ''
-    echo "We now run tests ourselves, since the setuptools installer doesn't."
-    ${python.interpreter} -c 'import test_regex; test_regex.test_main();'
+  # Sources for different Python releases are located in same folder
+  checkPhase = ''
+    rm -r ${if !isPy27 then "regex_2" else "regex_3"}
+    ${python.interpreter} -m unittest
   '';
-
-  # No tests in archive
-  doCheck = false;
 
   pythonImportsCheck = [ "regex" ];
 
