@@ -3149,6 +3149,8 @@ in {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
+  humblewx = callPackage ../development/python-modules/humblewx { };
+
   hupper = callPackage ../development/python-modules/hupper { };
 
   hvac = callPackage ../development/python-modules/hvac { };
