@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hfinger";
-  version = "0.2.0";
+  version = "0.2.1";
   disabled = python3.pythonOlder "3.3";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vz8mf572qyng684fvb9gdwaaiybk7mjmikbymvjvy24d10raak1";
+    sha256 = "sha256-QKnrprDDBq+D8N1brkqgcfK4E+6ssvgPtRaSxkF0C84=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

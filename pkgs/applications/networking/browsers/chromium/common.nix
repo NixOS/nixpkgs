@@ -163,14 +163,12 @@ let
       ./patches/fix-missing-atspi2-dependency.patch
     ++ optionals (chromiumVersionAtLeast "91") [
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
-      (githubPatch
-        # Revert "Reland #7 of "Force Python 3 to be used in build.""
-        "38b6a9a8e5901766613879b6976f207aa163588a"
-        "1lvxbd7rl6hz5j6kh6q83yb6vd9g7anlqbai8g1w1bp6wdpgwvp9"
-      )
     ];
 
-    postPatch = ''
+    postPatch = lib.optionalString (chromiumVersionAtLeast "91") ''
+      # Required for patchShebangs (unsupported):
+      chmod -x third_party/webgpu-cts/src/tools/deno
+    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then

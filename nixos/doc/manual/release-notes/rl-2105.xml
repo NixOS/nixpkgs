@@ -675,6 +675,11 @@ environment.systemPackages = [
      Currently, the service doesn't enforce nor checks the correct number of paths to correspond to minio requirements.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     All CUDA toolkit versions prior to CUDA 10 have been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -953,6 +958,11 @@ environment.systemPackages = [
      Prior to this release, systemd would also read system units from an undocumented <literal>/etc/systemd-mutable/system</literal> path.
      This path has been dropped from the defaults. That path (or others) can be re-enabled by adding it to the
      <link linkend="opt-boot.extraSystemdUnitPaths">boot.extraSystemdUnitPaths</link> list.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL 9.5 is scheduled EOL during the 21.05 life cycle and has been removed.
     </para>
    </listitem>
   </itemizedlist>

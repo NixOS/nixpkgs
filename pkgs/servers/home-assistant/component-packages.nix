@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.4.5";
+  version = "2021.4.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -90,7 +90,7 @@
     "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
-    "bluetooth_tracker" = ps: with ps; [ bt_proximity ]; # missing inputs: pybluez
+    "bluetooth_tracker" = ps: with ps; [ bt_proximity pybluez ];
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
@@ -187,7 +187,7 @@
     "doorbird" = ps: with ps; [ aiohttp-cors ]; # missing inputs: doorbirdpy
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
-    "dsmr" = ps: with ps; [ ]; # missing inputs: dsmr_parser
+    "dsmr" = ps: with ps; [ dsmr-parser ];
     "dsmr_reader" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "dte_energy_bridge" = ps: with ps; [ ];
     "dublin_bus_transport" = ps: with ps; [ ];
@@ -373,7 +373,7 @@
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ hydrawiser ];
-    "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
+    "hyperion" = ps: with ps; [ hyperion-py ];
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ iaqualink ];
     "icloud" = ps: with ps; [ pyicloud ];
@@ -583,14 +583,14 @@
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
     "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
-    "ondilo_ico" = ps: with ps; [ aiohttp-cors ]; # missing inputs: ondilo
+    "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
     "onvif" = ps: with ps; [ ha-ffmpeg zeep ]; # missing inputs: WSDiscovery onvif-zeep-async
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
-    "openerz" = ps: with ps; [ ]; # missing inputs: openerz-api
+    "openerz" = ps: with ps; [ openerz-api ];
     "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage
@@ -750,7 +750,7 @@
     "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
     "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "skybell" = ps: with ps; [ skybellpy ];
-    "slack" = ps: with ps; [ ]; # missing inputs: slackclient
+    "slack" = ps: with ps; [ slackclient ];
     "sleepiq" = ps: with ps; [ sleepyq ];
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
@@ -984,6 +984,6 @@
     "zone" = ps: with ps; [ ];
     "zoneminder" = ps: with ps; [ zm-py ];
     "zwave" = ps: with ps; [ aiohttp-cors homeassistant-pyozw paho-mqtt pydispatcher python-openzwave-mqtt ];
-    "zwave_js" = ps: with ps; [ aiohttp-cors ]; # missing inputs: zwave-js-server-python
+    "zwave_js" = ps: with ps; [ aiohttp-cors zwave-js-server-python ];
   };
 }

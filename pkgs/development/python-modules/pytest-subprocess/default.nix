@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.0.1";
+  version = "1.1.0";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     rev = version;
-    sha256 = "16ghwyv1vy45dd9cysjvcvvpm45958x071id2qrvgaziy2j6yx3j";
+    sha256 = "sha256-r6WNDdvZAHMG1kPtLJlCwvhbVG1gC1NEvRfta+Chxnk=";
   };
 
   buildInputs = [

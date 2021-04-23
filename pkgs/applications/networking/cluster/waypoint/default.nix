@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lB9ELa/okNvtKFDP/vImEdYFJCKRgtAcpBG1kIoAysE=";
+    sha256 = "sha256-WzKUVfc7oGMh0TamL5b6gsm/BAfSCZ6EB3Hg4Tg/3Hw=";
   };
 
   deleteVendor = true;
@@ -36,7 +36,7 @@ buildGoModule rec {
     export HOME="$TMPDIR"
 
     $out/bin/waypoint --help
-    $out/bin/waypoint version | grep "Waypoint v${version}"
+    $out/bin/waypoint version | grep "CLI: v${version}"
     runHook postInstallCheck
   '';
 

@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/cryfs/files/cryfs-0.10.2-unbundle-libs.patch?id=192ac7421ddd4093125f4997898fb62e8a140a44";
       sha256 = "0hzss5rawcjrh8iqzc40w5yjhxdqya4gbg6dzap70180s50mahzs";
     })
+
+    # Backported from https://github.com/cryfs/cryfs/pull/378
+    ./use-macfuse.patch
   ];
 
   postPatch = ''
@@ -48,16 +51,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ boost cryptopp curl fuse openssl gtest ];
+  buildInputs = [ boost cryptopp curl fuse openssl ];
+
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
     "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive
     "-DUSE_SYSTEM_LIBS:BOOL=TRUE"
-    "-DBUILD_TESTING:BOOL=TRUE"
-  ];
+    "-DBUILD_TESTING:BOOL=${if doCheck then "TRUE" else "FALSE"}"
+  ] ++ lib.optional doCheck "-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake";
 
-  doCheck = (!stdenv.isDarwin); # Cryfs tests are broken on darwin
+  doCheck = true;
 
   checkPhase = ''
     # Skip CMakeFiles directory and tests depending on fuse (does not work well with sandboxing)
@@ -73,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.cryfs.org";
     license     = licenses.lgpl3;
     maintainers = with maintainers; [ peterhoeg c0bw3b ];
-    platforms   = with platforms; linux;
+    platforms   = platforms.unix;
   };
 }

@@ -5,6 +5,7 @@
 , rust
 , rustPlatform
 , installShellFiles
+, libiconv
 , libobjc
 , Security
 , CoreServices
@@ -15,20 +16,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LrJGwsP+P8zXYwboF5791YuWGVdhcQJLOoBv+VzrYzs=";
+    sha256 = "sha256-h8dXGSu7DebzwZdc92A2d9xlYy6wD34phBUj5v5KuIc=";
   };
-  cargoSha256 = "sha256-JDapls3nRNETri6nZPRjZFlAFVN1Owhp965zf0Rn3ug=";
+  cargoSha256 = "sha256-htxpaALOXFQpQ68YE4b0T0jhcCIONgUZwpMPCcSdcgs=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libobjc Security CoreServices Metal Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv libobjc Security CoreServices Metal Foundation ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance

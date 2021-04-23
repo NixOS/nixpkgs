@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
-    homepage = "https://pylib.readthedocs.org/";
+    homepage = "https://py.readthedocs.io/";
     license = licenses.mit;
   };
 }

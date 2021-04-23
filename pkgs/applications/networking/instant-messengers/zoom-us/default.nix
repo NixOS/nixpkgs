@@ -29,11 +29,11 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.6.13632.0328";
+  version = "5.6.16775.0418";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "0nskpg3rbv40jcbih95sfdr0kfv5hjv50z9jdz1cddl8v7hbqg71";
+      sha256 = "twtxzniojgyLTx6Kda8Ej96uyw2JQB/jIhLdTgTqpCo=";
     };
   };
 

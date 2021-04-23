@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , pkg-config
 , which
 , bison
 , gnuplot
 , libxls
+, libxlsxwriter
 , libxml2
 , libzip
 , ncurses
@@ -25,6 +27,18 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
+  patches = [
+    # libxls and libxlsxwriter are not found without the patch
+    # https://github.com/andmarti1424/sc-im/pull/542
+    (fetchpatch {
+      name = "use-pkg-config-for-libxls-and-libxlsxwriter.patch";
+      url = "https://github.com/andmarti1424/sc-im/commit/b62dc25eb808e18a8ab7ee7d8eb290e34efeb075.patch";
+      sha256 = "1yn32ps74ngzg3rbkqf8dn0g19jv4xhxrfgx9agnywf0x8gbwjh3";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -35,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnuplot
     libxls
+    libxlsxwriter
     libxml2
     libzip
     ncurses

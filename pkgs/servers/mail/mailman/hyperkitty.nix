@@ -9,12 +9,12 @@ buildPythonPackage rec {
   pname = "HyperKitty";
   # Note: Mailman core must be on the latest version before upgrading HyperKitty.
   # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
-  version = "1.3.3";
+  version = "1.3.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p85r9q6mn5as5b39xp9hkkipnk0156acx540n2ygk3qb3jd4a5n";
+    sha256 = "1lbh8n66fp3l5s0xvmvsbfvgs3z4knx0gwf0q117n2nfkslf13zp";
   };
 
   nativeBuildInputs = [ isort ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Archiver for GNU Mailman v3";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ peti globin ];
+    maintainers = with lib.maintainers; [ peti globin qyliss ];
   };
 }

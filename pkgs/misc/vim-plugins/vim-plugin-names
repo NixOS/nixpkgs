@@ -25,6 +25,7 @@ ap/vim-css-color
 arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
+axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
@@ -63,6 +64,7 @@ christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 chuling/ci_dark
 ckarnell/antonys-macro-repeater
+clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
@@ -272,6 +274,7 @@ keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
+kevinhwang91/rnvimr
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
@@ -287,6 +290,7 @@ kshenoy/vim-signature
 kyazdani42/nvim-tree.lua
 kyazdani42/nvim-web-devicons
 lambdalisue/fern.vim
+lambdalisue/gina.vim
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
@@ -483,6 +487,8 @@ prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
 preservim/tagbar
+preservim/vim-pencil
+preservim/vim-wordy
 preservim/vimux
 psliwka/vim-smoothie
 ptzz/lf.vim
@@ -493,6 +499,7 @@ qnighy/lalrpop.vim
 qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
+radenling/vim-dispatch-neovim
 rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
 raghur/fruzzy
@@ -501,8 +508,6 @@ Raimondi/delimitMate
 rakr/vim-one
 rbgrouleff/bclose.vim
 rbong/vim-flog
-reedes/vim-pencil
-reedes/vim-wordy
 rhysd/committia.vim
 rhysd/devdocs.vim
 rhysd/git-messenger.vim
@@ -578,6 +583,7 @@ sunaku/vim-dasht
 svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
+TaDaa/vimade
 takac/vim-hardtime
 tami5/compe-conjure
 tami5/lispdocs.nvim
@@ -589,6 +595,7 @@ terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
 Th3Whit3Wolf/one-nvim@main
 theHamsta/nvim-dap-virtual-text
+ThePrimeagen/git-worktree.nvim
 ThePrimeagen/vim-apm
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
@@ -650,6 +657,7 @@ tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
 tversteeg/registers.nvim@main
+tweekmonster/wstrip.vim
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle

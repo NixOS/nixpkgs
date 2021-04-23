@@ -1,22 +1,39 @@
-{ lib, stdenv, fetchgit, cmake, perl, go }:
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, ninja
+, perl
+, buildGoModule
+}:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-stdenv.mkDerivation {
+buildGoModule {
   pname = "boringssl";
-  version = "2019-12-04";
+  version = "2021-04-18";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "243b5cc9e33979ae2afa79eaa4e4c8d59db161d4";
-    sha256 = "1ak27dln0zqy2vj4llqsb99g03sk0sg25wlp09b58cymrh3gccvl";
+    rev    = "468cde90ca58421d63f4dfeaebcf8bb3fccb4127";
+    sha256 = "0gaqcbvp6r5fq265mckmg0i0rjab0bhxkxcvfxp3ar5dm7q88w39";
   };
 
-  nativeBuildInputs = [ cmake perl go ];
+  nativeBuildInputs = [ cmake ninja perl ];
 
-  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  # hack to get both go and cmake configure phase
+  # (if we use postConfigure then cmake will loop runHook postConfigure)
+  preBuild = ''
+    cmakeConfigurePhase
+  '';
+
+  buildPhase = ''
+    ninjaBuildPhase
+  '';
 
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     mkdir -p $bin/bin $out/include $out/lib

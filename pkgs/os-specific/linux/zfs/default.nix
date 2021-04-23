@@ -157,7 +157,7 @@ let
         done
       '';
 
-      outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+      outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
       passthru = {
         inherit enableMail;
@@ -210,9 +210,9 @@ in {
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.4";
+    version = "2.1.0-rc3";
 
-    sha256 = "sha256-ySTt0K3Lc0Le35XTwjiM5l+nIf9co7wBn+Oma1r8YHo=";
+    sha256 = "sha256-ARRUuyu07dWwEuXerTz9KBmclhlmsnnGucfBxxn0Zsw=";
 
     isUnstable = true;
   };

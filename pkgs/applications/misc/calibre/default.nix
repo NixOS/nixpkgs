@@ -26,11 +26,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.13.0";
+  version = "5.16.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GDFAZxZmkio7e7kVjhYqhNdhXIlUPJF0iMWVl0uWVCM=";
+    hash = "sha256-lTXCW0MGNOezecaGO9c2JGU4ylwpPmBaMXTY3nLNcrE=";
   };
 
   patches = [
@@ -61,8 +61,6 @@ mkDerivation rec {
   '';
 
   dontUseQmakeConfigure = true;
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config qmake removeReferencesTo ];
 

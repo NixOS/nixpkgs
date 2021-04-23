@@ -11,13 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "mbedtls";
-  version = "2.16.9"; # nixpkgs-update: no auto update
+  # Auto updates are disabled due to repology listing dev releases as release
+  # versions. See
+  #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
+  #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
+  version = "2.26.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = "${pname}-${version}";
-    sha256 = "0mz7n373b8d287crwi6kq2hb8ryyi228j38h25744lqai23qj5cf";
+    sha256 = "0scwpmrgvg6q7rvqkc352d2fqlsx0aylcbyibcp1f1rsn8iiif2m";
   };
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
@@ -30,6 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=format"
+    "-Wno-error=format-truncation"
+  ];
 
   meta = with lib; {
     homepage = "https://tls.mbed.org/";

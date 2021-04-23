@@ -1,15 +1,17 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, expat, glib, nspr, nss }:
+{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, expat, glib, nspr, nss, gtest }:
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "2.6.8";
+  version = "2.6.13";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "0m2d5r0f82qv4kqmq5yxzpi1awkjir2b2s2mfwkjn8p55r7gzp7c";
+    sha256 = "1xvinmwyx7mai84i8c394dqw86zb6ib9wnxjmv7zpky6x64lvv10";
   };
+
+  extraNativeBuildInputs = [ gtest ];
 
   extraBuildInputs = [ expat ];
 

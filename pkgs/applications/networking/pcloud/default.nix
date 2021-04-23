@@ -84,8 +84,8 @@ in stdenv.mkDerivation {
     substitute \
       app/pcloud.desktop \
       share/applications/pcloud.desktop \
-      --replace "Name=pcloud" "Name=pCloud" \
-      --replace "Exec=AppRun" "Exec=$out/bin/pcloud"
+      --replace 'Name=pcloud' 'Name=pCloud' \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
 
     # Build the main executable
     cat > bin/pcloud <<EOF

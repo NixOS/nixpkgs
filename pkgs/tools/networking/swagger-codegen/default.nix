@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "04wl5k8k1ziqz7k5w0g7i6zdfn41pbh3k0m8vq434k1886inf8yn";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
-    install -D "$src" "$out/share/java/${jarfilename}"
+    install -D $src $out/share/java/${jarfilename}
 
-    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen \
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 

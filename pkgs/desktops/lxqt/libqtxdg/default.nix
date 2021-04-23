@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0wiannhaydnbqd8ni3nflx2s4036grxs8aklcb95j88v3cgr2gck";
+    sha256 = "1x806hdics3d49ys0a2vkln9znidj82qscjnpcqxclxn26xqzd91";
   };
 
   nativeBuildInputs = [

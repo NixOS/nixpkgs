@@ -137,7 +137,7 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
+        isDarwin isLinux isSunOS isCygwin isBSD isFreeBSD isOpenBSD
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;

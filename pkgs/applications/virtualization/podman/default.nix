@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
@@ -16,13 +17,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-Cql9ikk0lo/LeWNykEJSKgfGnBSUU5vOh/zUIEvMapk=";
+    sha256 = "sha256-PS41e7myv5xCSJIeT+SRj4rLVCXpthq7KeHisYoSiOE=";
   };
 
   patches = [

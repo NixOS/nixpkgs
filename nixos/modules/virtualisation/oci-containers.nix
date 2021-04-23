@@ -59,6 +59,18 @@ let
         '';
         };
 
+        environmentFiles = mkOption {
+          type = with types; listOf path;
+          default = [];
+          description = "Environment files for this container.";
+          example = literalExample ''
+            [
+              /path/to/.env
+              /path/to/.env.secret
+            ]
+        '';
+        };
+
         log-driver = mkOption {
           type = types.str;
           default = "journald";
@@ -236,6 +248,7 @@ let
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
       ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+      ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
       ++ map (p: "-p ${escapeShellArg p}") container.ports
       ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
