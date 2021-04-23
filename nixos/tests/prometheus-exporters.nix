@@ -118,6 +118,8 @@ let
       metricProvider = {
         services.bird2.enable = true;
         services.bird2.config = ''
+          router id 127.0.0.1;
+
           protocol kernel MyObviousTestString {
             ipv4 {
               import all;
