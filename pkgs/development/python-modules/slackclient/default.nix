@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-slackclient";
+  pname = "slackclient";
   version = "2.9.3";
 
   disabled = !isPy3k;
