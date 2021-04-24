@@ -110,16 +110,19 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
+  warnObsoleteVersionConditional = min-version: result:
+    let ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
+    in if versionAtLeast ungoogled-version min-version
+       then warn "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
+            result
+       else result;
   chromiumVersionAtLeast = min-version:
-    versionAtLeast upstream-info.version min-version;
+    let result = versionAtLeast upstream-info.version min-version;
+    in  warnObsoleteVersionConditional min-version result;
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
-    in if versionAtLeast ungoogled-version upto-version
-       then warn "chromium: ungoogled version ${ungoogled-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
-            result
-       else result;
+    in warnObsoleteVersionConditional upto-version result;
 
   ungoogler = ungoogled-chromium {
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
@@ -161,9 +164,9 @@ let
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-    ] ++ optional (chromiumVersionAtLeast "90")
+      # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-    ++ optionals (chromiumVersionAtLeast "91") [
+    ] ++ optionals (chromiumVersionAtLeast "91") [
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ];
 
@@ -276,12 +279,9 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs (chromiumVersionAtLeast "89") {
-      rtc_pipewire_version = "0.3"; # TODO: Can be removed once ungoogled-chromium is at M90
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;
-    } // optionalAttrs (chromiumVersionAtLeast "90") {
       # Disable build with TFLite library because it fails without additional changes:
       # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
       # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
