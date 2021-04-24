@@ -356,6 +356,7 @@ in with py.pkgs; buildPythonApplication rec {
     "simulated"
     "sleepiq"
     "sma"
+    "smhi"
     "sensor"
     "slack"
     "smarttub"
