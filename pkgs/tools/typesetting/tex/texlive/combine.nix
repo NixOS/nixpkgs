@@ -52,7 +52,7 @@ let
     # generate ls-R database
     ''
       perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
-        "$out/share/texmf/scripts/texlive/mktexlsr.pl" "$out/share/texmf"
+        -- "$out/share/texmf/scripts/texlive/mktexlsr.pl" --sort "$out/share/texmf"
     '' +
     # link info and man pages
     ''
@@ -213,7 +213,7 @@ in (buildEnv {
     # Regenerate the map files (this is optional)
     perl `type -P updmap.pl` --sys --force
 
-    perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
+    perl -- `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
