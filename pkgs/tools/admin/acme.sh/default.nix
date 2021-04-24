@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute2, unixtools, dnsutils }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute2,
+  unixtools, dnsutils, coreutils, gnugrep, gnused }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
   version = "2.8.8";
@@ -18,6 +19,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
       --prefix PATH : "${
         lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
           socat
           openssl
           curl
