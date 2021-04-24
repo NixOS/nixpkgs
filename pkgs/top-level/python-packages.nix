@@ -2584,6 +2584,8 @@ in {
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
+  gcsfs = callPackage ../development/python-modules/gcsfs { };
+
   gdal = toPythonModule (pkgs.gdal.override { pythonPackages = self; });
 
   gdata = callPackage ../development/python-modules/gdata { };
@@ -4362,6 +4364,8 @@ in {
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
   ncclient = callPackage ../development/python-modules/ncclient { };
+
+  nclib = callPackage ../development/python-modules/nclib { };
 
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
@@ -7606,6 +7610,8 @@ in {
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
+
+  sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
