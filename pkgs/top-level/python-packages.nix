@@ -395,6 +395,8 @@ in {
 
   angr = callPackage ../development/python-modules/angr { };
 
+  angrop = callPackage ../development/python-modules/angrop { };
+
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
