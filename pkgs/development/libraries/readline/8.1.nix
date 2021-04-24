@@ -1,13 +1,13 @@
-{ fetchurl, lib, stdenv, ncurses
+{ fetchurl, stdenv, lib, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "readline";
-  version = "8.0p${toString (builtins.length upstreamPatches)}";
+  version = "8.1p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/readline/readline-${meta.branch}.tar.gz";
-    sha256 = "0qg4924hf4hg0r0wbx2chswsr08734536fh5iagkd3a7f4czafg3";
+    sha256 = "00ibp0n9crbwx15k9vvckq5wsipw98b1px8pd8i34chy2gpb9kpq";
   };
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     (let
        patch = nr: sha256:
          fetchurl {
-           url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline80-${nr}";
+           url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline81-${nr}";
            inherit sha256;
          };
      in
-       import ./readline-8.0-patches.nix patch);
+       import ./readline-8.1-patches.nix patch);
 
   patches =
     [ ./link-against-ncurses.patch
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
 
     platforms = platforms.unix;
-    branch = "8.0";
+    branch = "8.1";
   };
 }
