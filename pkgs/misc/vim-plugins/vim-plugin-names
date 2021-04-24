@@ -62,7 +62,6 @@ chriskempson/base16-vim
 ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
-chuling/ci_dark
 ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
@@ -751,5 +750,6 @@ ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar
 yuki-yano/ncm2-dictionary
+yunlingz/ci_dark
 zah/nim.vim
 ziglang/zig.vim

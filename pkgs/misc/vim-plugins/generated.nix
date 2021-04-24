@@ -427,12 +427,12 @@ let
     pname = "ci_dark";
     version = "2021-04-24";
     src = fetchFromGitHub {
-      owner = "chuling";
+      owner = "yunlingz";
       repo = "ci_dark";
       rev = "4c314000b5a21a1b9f52442a0c80e4b3fd4f0a1f";
       sha256 = "1wxsgaixdmb8v87kavvyyiyqlkn7ck5g39hkq4j19747jnb6lvqf";
     };
-    meta.homepage = "https://github.com/chuling/ci_dark/";
+    meta.homepage = "https://github.com/yunlingz/ci_dark/";
   };
 
   clang_complete = buildVimPluginFrom2Nix {
