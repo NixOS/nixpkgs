@@ -94,6 +94,10 @@ let
       buildInputs = [ self.node-gyp-build pkgs.unbound ];
     };
 
+    hyperpotamus = super.hyperpotamus.override {
+      buildInputs = [ self.node-pre-gyp ];
+    };
+
     ijavascript = super.ijavascript.override (oldAttrs: {
       preRebuild = ''
         export NPM_CONFIG_ZMQ_EXTERNAL=true
