@@ -32,7 +32,7 @@
     "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
     "analytics" = ps: with ps; [ aiohttp-cors ];
-    "android_ip_webcam" = ps: with ps; [ ]; # missing inputs: pydroid-ipcam
+    "android_ip_webcam" = ps: with ps; [ pydroid-ipcam ];
     "androidtv" = ps: with ps; [ adb-shell androidtv pure-python-adb ];
     "anel_pwrctrl" = ps: with ps; [ ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [ ]; # missing inputs: anthemav

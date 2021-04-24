@@ -1567,6 +1567,10 @@ in
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
+  gomobile = callPackage ../development/mobile/gomobile {
+    buildGoModule = buildGo115Module;
+  };
+
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
   ssh-import-id = python3Packages.callPackage ../tools/admin/ssh-import-id { };
@@ -5951,11 +5955,7 @@ in
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
-  lefthook = callPackage ../applications/version-management/git-and-tools/lefthook {
-    # Please use empty attrset once upstream bugs have been fixed
-    # https://github.com/Arkweid/lefthook/issues/151
-    buildGoModule = buildGo114Module;
-  };
+  lefthook = callPackage ../applications/version-management/git-and-tools/lefthook { };
 
   lego = callPackage ../tools/admin/lego { };
 
@@ -13702,6 +13702,8 @@ in
 
   ytt = callPackage ../development/tools/ytt {};
 
+  zls = callPackage ../development/tools/zls { };
+
   zydis = callPackage ../development/libraries/zydis { };
 
   winpdb = callPackage ../development/tools/winpdb { };
@@ -17518,6 +17520,10 @@ in
   speexdsp = callPackage ../development/libraries/speexdsp {
     fftw = fftwFloat;
   };
+
+  sphinx = with python3Packages; toPythonApplication sphinx;
+
+  sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
@@ -28948,6 +28954,7 @@ in
   osi = callPackage ../development/libraries/science/math/osi { };
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
+    python = python3;
     abseil-cpp = abseil-cpp.override { static = true; };
   };
 
@@ -29859,6 +29866,8 @@ in
   illum = callPackage ../tools/system/illum { };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
+
+  infnoise = callPackage ../misc/drivers/infnoise { };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };

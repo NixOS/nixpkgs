@@ -4401,6 +4401,12 @@
     githubId = 5283991;
     name = "Jake Waksbaum";
   };
+  jakubgs = {
+    email = "jakub@gsokolowski.pl";
+    github = "jakubgs";
+    githubId = 2212681;
+    name = "Jakub Grzgorz Sokołowski";
+  };
   jamiemagee = {
     email = "jamie.magee@gmail.com";
     github = "JamieMagee";
@@ -6977,6 +6983,12 @@
     githubId = 818502;
     name = "Nathan Yong";
   };
+  nbren12 = {
+    email = "nbren12@gmail.com";
+    github = "nbren12";
+    githubId = 1386642;
+    name = "Noah Brenowitz";
+  };
   nckx = {
     email = "github@tobias.gr";
     github = "nckx";
@@ -9420,8 +9432,8 @@
     name = "Stian Lågstad";
   };
   StijnDW = {
-    email = "stekke@airmail.cc";
-    github = "StijnDW";
+    email = "nixdev@rinsa.eu";
+    github = "Stekke";
     githubId = 1751956;
     name = "Stijn DW";
   };

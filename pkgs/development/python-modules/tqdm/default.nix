@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.59.0";
+  version = "4.60.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d666ae29164da3e517fcf125e41d4fe96e5bb375cd87ff9763f6b38b5592fe33";
+    sha256 = "ebdebdb95e3477ceea267decfc0784859aa3df3e27e22d23b83e9b272bf157ae";
   };
 
   nativeBuildInputs = [
@@ -39,14 +39,19 @@ buildPythonPackage rec {
 
   # Remove performance testing.
   # Too sensitive for on Hydra.
-  PYTEST_ADDOPTS = "-k \"not perf\"";
+  disabledTests = [
+    "perf"
+  ];
 
   LC_ALL="en_US.UTF-8";
 
-  meta = {
+  pythonImportsCheck = [ "tqdm" ];
+
+  meta = with lib; {
     description = "A Fast, Extensible Progress Meter";
     homepage = "https://github.com/tqdm/tqdm";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
+    changelog = "https://tqdm.github.io/releases/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

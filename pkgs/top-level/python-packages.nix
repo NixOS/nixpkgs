@@ -393,6 +393,8 @@ in {
 
   angr = callPackage ../development/python-modules/angr { };
 
+  angrop = callPackage ../development/python-modules/angrop { };
+
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
@@ -2582,6 +2584,8 @@ in {
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
+  gcsfs = callPackage ../development/python-modules/gcsfs { };
+
   gdal = toPythonModule (pkgs.gdal.override { pythonPackages = self; });
 
   gdata = callPackage ../development/python-modules/gdata { };
@@ -4361,6 +4365,8 @@ in {
 
   ncclient = callPackage ../development/python-modules/ncclient { };
 
+  nclib = callPackage ../development/python-modules/nclib { };
+
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
   ndjson = callPackage ../development/python-modules/ndjson { };
@@ -5422,6 +5428,8 @@ in {
   };
 
   pydrive = callPackage ../development/python-modules/pydrive { };
+
+  pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
@@ -7602,6 +7610,8 @@ in {
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
+
+  sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
