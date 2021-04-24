@@ -150,7 +150,12 @@ let
       inherit (unwrapped) pname version; # for home-manager module
     };
 
-    inherit meta;
+    meta = meta // {
+      description = ''
+        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+        Should allow for easy usage of extensions without nix-specific modifications.
+      '';
+    };
   };
 in
   unwrapped
