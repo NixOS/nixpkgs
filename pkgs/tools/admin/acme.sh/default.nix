@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $out/bin $out/libexec
     cp -R $src/* $_
     makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
           (if stdenv.isLinux then iproute2 else unixtools.netstat)
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
