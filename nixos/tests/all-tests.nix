@@ -478,6 +478,7 @@ in
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
