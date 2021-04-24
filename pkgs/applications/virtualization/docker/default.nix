@@ -180,6 +180,11 @@ rec {
     '' + optionalString (stdenv.isLinux) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+
+      # systemd
+      mkdir -p $out/etc/systemd/system
+      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '' + ''
       # completion (cli)
       installShellCompletion --bash ./contrib/completion/bash/docker
@@ -197,11 +202,6 @@ rec {
       ./man/md2man-all.sh -q
 
       installManPage man/*/*.[1-9]
-    '' + ''
-      # systemd
-      mkdir -p $out/etc/systemd/system
-      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
-      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '';
 
     passthru.tests = { inherit (nixosTests) docker; };
