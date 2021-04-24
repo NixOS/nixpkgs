@@ -188,6 +188,25 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
+     <methodname>get_screen_text_variants</methodname>
+    </term>
+    <listitem>
+     <para>
+      Return a list of different interpretations of what is currently visible
+      on the machine's screen using optical character recognition. The number
+      and order of the interpretations is not specified and is subject to
+      change, but if no exception is raised at least one will be returned.
+     </para>
+     <note>
+      <para>
+       This requires passing <option>enableOCR</option> to the test attribute
+       set.
+      </para>
+     </note>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <methodname>get_screen_text</methodname>
     </term>
     <listitem>
@@ -350,7 +369,8 @@ start_all()
      <para>
       Wait until the supplied regular expressions matches the textual contents
       of the screen by using optical character recognition (see
-      <methodname>get_screen_text</methodname>).
+     <methodname>get_screen_text</methodname> and
+     <methodname>get_screen_text_variants</methodname>).
      </para>
      <note>
       <para>

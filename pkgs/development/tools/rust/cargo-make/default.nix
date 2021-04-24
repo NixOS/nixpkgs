@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, runCommand, fetchCrate, rustPlatform, Security, openssl, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, runCommand
+, fetchCrate
+, rustPlatform
+, Security
+, openssl
+, pkg-config
 , SystemConfiguration
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
 
   cargoSha256 = "sha256-Upegh3W31sTaXl0iHZ3HiYs9urgXH/XhC0vQBAWvDIc=";
 

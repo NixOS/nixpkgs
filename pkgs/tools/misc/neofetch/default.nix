@@ -1,14 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, pciutils }:
+{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, pciutils, ueberzug }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
-  version = "7.1.0";
+  version = "unstable-2020-11-26";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
-    rev = version;
-    sha256 = "0i7wpisipwzk0j62pzaigbiq42y1mn4sbraz4my2jlz6ahwf00kv";
+    rev = "6dd85d67fc0d4ede9248f2df31b2cd554cca6c2f";
+    sha256 = "sha256-PZjFF/K7bvPIjGVoGqaoR8pWE6Di/qJVKFNcIz7G8xE=";
   };
 
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/neofetch \
-      --prefix PATH : ${lib.makeBinPath [ pciutils ]}
+      --prefix PATH : ${lib.makeBinPath [ pciutils ueberzug ]}
   '';
 
   makeFlags = [

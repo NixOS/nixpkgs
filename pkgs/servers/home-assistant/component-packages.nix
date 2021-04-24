@@ -590,7 +590,7 @@
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
-    "openerz" = ps: with ps; [ ]; # missing inputs: openerz-api
+    "openerz" = ps: with ps; [ openerz-api ];
     "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage
@@ -692,7 +692,7 @@
     "rituals_perfume_genie" = ps: with ps; [ pyrituals ];
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
-    "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
+    "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
     "roon" = ps: with ps; [ ]; # missing inputs: roonapi
     "route53" = ps: with ps; [ boto3 ];

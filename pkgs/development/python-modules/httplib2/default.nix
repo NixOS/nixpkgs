@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -44,9 +45,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # fails with HTTP 408 Request Timeout, instead of expected 200 OK
+    "test_timeout_subsequent"
+  ];
 
-  __darwinAllowLocalNetworking = true;
+  pytestFlagsArray = [ "--ignore python2" ];
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";

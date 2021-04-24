@@ -132,6 +132,7 @@ fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
+folke/lsp-colors.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
@@ -529,6 +530,7 @@ roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer

@@ -3008,13 +3008,13 @@
     name = "John Ericson";
   };
   erictapen = {
-    email = "justin.humm@posteo.de";
+    email = "kerstin@erictapen.name";
     github = "erictapen";
     githubId = 11532355;
-    name = "Justin Humm";
+    name = "Kerstin Humm";
     keys = [{
-      longkeyid = "rsa4096/0x438871E000AA178E";
-      fingerprint = "984E 4BAD 9127 4D0E AE47  FF03 4388 71E0 00AA 178E";
+      longkeyid = "rsa4096/0x40293358C7B9326B";
+      fingerprint = "F178 B4B4 6165 6D1B 7C15  B55D 4029 3358 C7B9 326B";
     }];
   };
   erikryb = {
@@ -7954,6 +7954,12 @@
     github = "proglodyte";
     githubId = 18549627;
     name = "Proglodyte";
+  };
+  progval = {
+    email = "progval+nix@progval.net";
+    github = "ProgVal";
+    githubId = 406946;
+    name = "Valentin Lorentz";
   };
   protoben = {
     email = "protob3n@gmail.com";
