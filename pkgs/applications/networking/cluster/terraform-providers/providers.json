@@ -823,11 +823,13 @@
     "version": "1.5.0"
   },
   "rancher2": {
-    "owner": "terraform-providers",
+    "owner": "rancher",
+    "provider-source-address": "registry.terraform.io/hashicorp/rancher2",
     "repo": "terraform-provider-rancher2",
-    "rev": "v1.8.3",
-    "sha256": "1k2d9j17b7sssliraww6as196ihdcra1ylhg1qbynklpr0asiwna",
-    "version": "1.8.3"
+    "rev": "v1.13.0",
+    "sha256": "0xczv9qsviryiw95yd6cl1nnb0daxs971fm733gfvwm36jvmyr89",
+    "vendorSha256": "0apy6qbmshfj4pzz9nqdhyk6h7l9qwrccz30q8ljl928pj49q04c",
+    "version": "1.13.0"
   },
   "random": {
     "owner": "hashicorp",
