@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdbxx";
-  version = "0.9.14.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "drycpp";
+    owner = "hoytech";
     repo = "lmdbxx";
     rev = version;
-    sha256 = "1jmb9wg2iqag6ps3z71bh72ymbcjrb6clwlkgrqf1sy80qwvlsn6";
+    sha256 = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
   };
 
   buildInputs = [ lmdb ];

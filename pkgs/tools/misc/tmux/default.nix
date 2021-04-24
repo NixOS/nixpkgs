@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , bison
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0alq81h1rz1f0zsy8qb2dvsl47axpa86j4bplngwkph0ksqqgr3p";
   };
+
+  patches = [
+    # Fix cross-compilation
+    # https://github.com/tmux/tmux/pull/2651
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/bb6242675ad0c7447daef148fffced882e5b4a61.patch";
+      sha256 = "1acr3xv3gqpq7qa2f8hw7c4f42hi444lfm1bz6wqj8f3yi320zjr";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -484,13 +484,6 @@ let
     '';
   };
 
-  libkern = mkDerivation {
-    path = "lib/libkern";
-    version = "8.0";
-    sha256 = "1wirqr9bms69n4b5sr32g1b1k41hcamm7c9n7i8c440m73r92yv4";
-    meta.platforms = lib.platforms.netbsd;
-  };
-
   column = mkDerivation {
     path = "usr.bin/column";
     version = "8.0";

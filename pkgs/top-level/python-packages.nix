@@ -6539,6 +6539,8 @@ in {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
+  python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
+
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
@@ -7057,6 +7059,8 @@ in {
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
 
   roku = callPackage ../development/python-modules/roku { };
+
+  rokuecp = callPackage ../development/python-modules/rokuecp { };
 
   roman = callPackage ../development/python-modules/roman { };
 

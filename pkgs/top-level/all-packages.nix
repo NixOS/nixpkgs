@@ -6089,6 +6089,8 @@ in
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -8303,6 +8305,8 @@ in
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
+  signald = callPackage ../applications/networking/instant-messengers/signald { };
+
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
@@ -9312,8 +9316,7 @@ in
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
-  wstunnel = haskell.lib.justStaticExecutables
-    (haskellPackages.callPackage ../tools/networking/wstunnel {});
+  wstunnel = haskell.lib.justStaticExecutables haskellPackages.wstunnel;
 
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
