@@ -23695,6 +23695,8 @@ in
       '' + (drv.postInstall or "");
     });
 
+  pixelnuke = callPackage ../applications/graphics/pixelnuke { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
