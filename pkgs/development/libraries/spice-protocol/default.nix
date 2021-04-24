@@ -1,13 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "spice-protocol";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
-    sha256 = "0ahk5hlanwhbc64r80xmchdav3ls156cvh9l68a0l22bhdhxmrkr";
+    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.xz";
+    sha256 = "0yj8k7gcirrsf21w0q6146n5g4nzn2pqky4p90n5760m5ayfb1pr";
   };
+
+  nativeBuildInputs = [ meson ninja ];
 
   postInstall = ''
     mkdir -p $out/lib
