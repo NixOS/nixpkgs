@@ -5742,6 +5742,8 @@ in {
 
   pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
 
+  pycocotools = callPackage ../development/python-modules/pycocotools { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -7828,6 +7830,8 @@ in {
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
+
+  seqeval = callPackage ../development/python-modules/seqeval { };
 
   sequoia = disabledIf (isPyPy || !isPy3k) (toPythonModule (pkgs.sequoia.override {
     pythonPackages = self;
