@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreServices, CoreFoundation }:
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
@@ -17,12 +17,24 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  buildInputs = lib.optional stdenv.isDarwin [ CoreServices CoreFoundation ];
+
   preBuild = ''
+    substituteInPlace 3rd/luamake/ninja/macos.ninja \
+      --replace "-mmacosx-version-min=10.13" "-mmacosx-version-min=10.15" \
+      --replace "command = gcc" "command = $CC" \
+      --replace "command = g++" "command = $CXX"
+
     cd 3rd/luamake
   '';
 
   ninjaFlags = [
-    "-fninja/linux.ninja"
+    (
+      if stdenv.isDarwin then
+        "-fninja/macos.ninja"
+      else
+        "-fninja/lunux.ninja"
+    )
   ];
 
   postBuild = ''
@@ -51,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ mjlbach ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
