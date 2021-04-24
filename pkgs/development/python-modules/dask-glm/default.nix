@@ -5,7 +5,6 @@
 , dask
 , numpy, toolz # dask[array]
 , multipledispatch
-, setuptools-scm
 , scipy
 , scikitlearn
 , pytest
@@ -23,7 +22,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytest ];
-  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
 
   checkPhase = ''
