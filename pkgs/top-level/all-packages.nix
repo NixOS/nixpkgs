@@ -11982,6 +11982,8 @@ in
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python310 python3Minimal pypy27 pypy36;
 
+  # List of overlays with overrides to apply to all Python package sets.
+  pythonPackagesOverlays = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
   python36Packages = python36.pkgs;

@@ -11,6 +11,7 @@
 , substituteAll
 , lib
 , callPackage
+, pkgs
 }:
 
 let
@@ -119,6 +120,19 @@ let
     # test-overrideScope = let
     #  myPackages = python.pkgs.overrideScope extension;
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
+  } // lib.optionalAttrs (python ? pythonAttr) {
+    # Test applying overrides using pythonPackagesOverlays.
+    # Test is commented out because we should not use pkgs.extend in Nixpkgs
+    # Unfortunately, there is no other way to test this functionality.
+    # test-pythonPackagesOverlays = let
+    #   pkgs_ = pkgs.extend(final: prev: {
+    #     pythonPackagesOverlays = prev.pythonPackagesOverlays ++ [
+    #       (python-final: python-prev: {
+    #         foo = python-prev.setuptools;
+    #       })
+    #     ];
+    #   });
+    # in pkgs_.${python.pythonAttr}.pkgs.foo;
   };
 
 in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests)

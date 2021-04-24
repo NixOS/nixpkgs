@@ -19,9 +19,14 @@ with pkgs;
     , pythonOnBuildForTarget
     , pythonOnHostForHost
     , pythonOnTargetForTarget
+    , pythonAttr ? null
     , self # is pythonOnHostForTarget
     }: let
       pythonPackages = callPackage
+        # Function that when called
+        # - imports python-packages.nix
+        # - adds spliced package sets to the package set
+        # - applies overrides from `packageOverrides` and `pythonPackagesOverlays`.
         ({ pkgs, stdenv, python, overrides }: let
           pythonPackagesFun = import ../../../top-level/python-packages.nix {
             inherit stdenv pkgs lib;
@@ -74,7 +79,7 @@ with pkgs;
           pkgs.newScope
           otherSplices
           keep
-          (lib.extends overrides pythonPackagesFun))
+          (lib.extends (lib.composeManyExtensions (pkgs.pythonPackagesOverlays ++ [ overrides ]))  pythonPackagesFun))
         {
           overrides = packageOverrides;
         };
@@ -107,6 +112,8 @@ with pkgs;
         tests = callPackage ./tests.nix {
           python = self;
         };
+
+        inherit pythonAttr;
   };
 
   sources = {

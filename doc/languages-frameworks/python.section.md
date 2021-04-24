@@ -1556,6 +1556,26 @@ self: super: {
 }
 ```
 
+### How to override a Python package for all Python versions using overlays?
+
+The following overlay overrides the call to `buildPythonPackage` for the
+`foo` package for all interpreters by appending a Python overlay to the
+`pythonPackagesOverlays` list of overlays.
+
+```nix
+final: prev: {
+  pythonPackagesOverlays = prev.pythonPackagesOverlays ++ [
+    (
+      python-final: python-prev: {
+        foo = python-prev.foo.overridePythonAttrs (oldAttrs: {
+          ...
+        });
+      }
+    )
+  ];
+}
+```
+
 ### How to use Intel's MKL with numpy and scipy?
 
 MKL can be configured using an overlay. See the section "[Using overlays to

@@ -30,6 +30,7 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+    inherit pythonAttr;
 
     pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
