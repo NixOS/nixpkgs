@@ -50,7 +50,6 @@
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
     findutils
     installShellFiles

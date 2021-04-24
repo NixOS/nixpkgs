@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [] ++ lib.optionals stdenv.isDarwin [ libresolv ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
 
   meta = with lib; {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";

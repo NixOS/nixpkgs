@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
 
   installPhase = ''
     runHook preInstall

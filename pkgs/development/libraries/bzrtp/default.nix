@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with lib; {
     description = "An opensource implementation of ZRTP keys exchange protocol";

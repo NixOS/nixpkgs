@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
-  NIX_CFLAGS_COMPILE = [ "-lpthread" ];
+  env.NIX_CFLAGS_COMPILE = "-lpthread";
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency

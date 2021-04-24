@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/lib/lib*.so
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
+  env.NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
 
   enableParallelBuilding = true;
 

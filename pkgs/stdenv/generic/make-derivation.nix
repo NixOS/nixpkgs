@@ -88,8 +88,28 @@ in rec {
     , hardeningDisable ? []
 
     , patches ? []
+    , __structuredAttrs ? true
+
+    , env ? {}
 
     , ... } @ attrs:
+
+    assert lib.isList (attrs.buildFlags or []);
+    assert lib.isList configureFlags;
+    assert lib.isList cmakeFlags;
+    assert lib.isList (attrs.makeFlags or []);
+    assert lib.isList (attrs.checkFlags or []);
+    assert lib.isList (attrs.patchFlags or []);
+    assert lib.isList (attrs.installFlags or []);
+    assert lib.isList (attrs.installTargets or []);
+    assert !(attrs ? CFLAGS);
+    assert !(attrs ? CXXFLAGS);
+    assert !(attrs ? LDFLAGS);
+    assert !(attrs ? NIX_LDFLAGS);
+    assert !(attrs ? NIX_CFLAGS_COMPILE);
+    assert !(attrs ? NIX_CFLAGS_LINK);
+    assert !(attrs ? NIX_NO_SELF_RPATH);
+    assert !(attrs ? NIX_DONT_SET_RPATH);
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -133,7 +153,9 @@ in rec {
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
-      dependencies = map (map lib.chooseDevOutputs) [
+      filterNull = ds: lib.filter (d: d != null) ds;
+
+      dependencies = map (map filterNull) (map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
@@ -150,8 +172,8 @@ in rec {
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
         ]
-      ];
-      propagatedDependencies = map (map lib.chooseDevOutputs) [
+      ]);
+      propagatedDependencies = map (map filterNull) (map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
           (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
@@ -164,7 +186,7 @@ in rec {
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
         ]
-      ];
+      ]);
 
       computedSandboxProfile =
         lib.concatMap (input: input.__propagatedSandboxProfile or [])
@@ -185,6 +207,14 @@ in rec {
       computedPropagatedImpureHostDeps =
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
+
+      propagaterOutput = let
+        # mimic behavior from `multiple-outputs.sh`
+        find = n: default: lib.findFirst (x: n == x) default outputs;
+        outputDev = find "dev" (find "out" null);
+      in if lib.elem outputDev outputs then outputDev else lib.head outputs;
+      propagatedBuildOutputs = attrs.propagatedBuildOutputs or
+        (lib.filter (i: i != propagaterOutput && lib.elem i outputs) [ "out" "bin" "dev" "lib"]);
 
       derivationArg =
         (removeAttrs attrs
@@ -212,6 +242,12 @@ in rec {
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
 
+          env = lib.mapAttrs
+            (k: v: if lib.isString v || lib.isBool v || lib.isInt v
+                   then v
+                   else throw "Environment variable '${k}' is a ${builtins.typeOf v} but should be a string, boolean or integer")
+            env;
+
           # The `system` attribute of a derivation has special meaning to Nix.
           # Derivations set it to choose what sort of machine could be used to
           # execute the build, The build platform entirely determines this,
@@ -222,28 +258,63 @@ in rec {
 
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+          inherit __structuredAttrs;
 
           inherit strictDeps;
 
-          depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
-          nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
-          depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-          depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
-          buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
-          depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
+          depsBuildBuild =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          nativeBuildInputs =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 1; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsBuildTarget =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 2; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsHostHost =
+            let deps = lib.elemAt (lib.elemAt dependencies 1) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          buildInputs =
+            let deps = lib.elemAt (lib.elemAt dependencies 1) 1; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsTargetTarget =
+            let deps = lib.elemAt (lib.elemAt dependencies 2) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
 
-          depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
-          propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
-          depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-          depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
-          propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
-          depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
+          depsBuildBuildPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          propagatedNativeBuildInputs =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 1; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsBuildTargetPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 2; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsHostHostPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          propagatedBuildInputs =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 1; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
+          depsTargetTargetPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 2) 0; in
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v || builtins.isString v) deps;
+            deps;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-          configureFlags = let inherit (lib) optional elem; in
-            (/**/ if lib.isString configureFlags then [configureFlags]
-             else if configureFlags == null      then []
-             else                                     configureFlags)
+          configureFlags = let inherit (lib) elem optional; in
+            assert (lib.all (n: lib.isDerivation n || !builtins.isList n && !builtins.isAttrs n) configureFlags); configureFlags
             ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
@@ -253,6 +324,9 @@ in rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+
+          inherit propagaterOutput propagatedBuildOutputs;
+
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]

@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin xcbuild
     ++ lib.optional stdenv.isLinux patchelf;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes"
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes"
     + lib.optionalString stdenv.cc.isClang " -Wno-error=unused-lambda-capture";
 
   buildFlags = [

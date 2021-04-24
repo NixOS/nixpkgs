@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper unrar unzip ];
   buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libmysqlclient ];
 
-  NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
+  env.NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/zod

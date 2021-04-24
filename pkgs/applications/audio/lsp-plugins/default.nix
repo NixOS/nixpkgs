@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "ETC_PATH=$(out)/etc"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
+  env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   doCheck = true;
 

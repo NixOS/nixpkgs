@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = "mkdir -p $HOME";
-  makeFlags="LISP=${sbcl}/bin/sbcl";
+  makeFlags = [ "LISP=${sbcl}/bin/sbcl" ];
 
   doCheck = true;
   checkTarget = "mini-proveall";

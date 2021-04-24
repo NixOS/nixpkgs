@@ -1,25 +1,15 @@
-source $stdenv/setup
+mkdir -p "$out/etc"
 
-mkdir -p $out/etc
-
-set -f
-sources_=($sources)
-targets_=($targets)
-modes_=($modes)
-users_=($users)
-groups_=($groups)
-set +f
-
-for ((i = 0; i < ${#targets_[@]}; i++)); do
-    source="${sources_[$i]}"
-    target="${targets_[$i]}"
+for ((i = 0; i < ${#targets[@]}; i++)); do
+    source="${sources[$i]}"
+    target="${targets[$i]}"
 
     if [[ "$source" =~ '*' ]]; then
 
         # If the source name contains '*', perform globbing.
-        mkdir -p $out/etc/$target
+        mkdir -p "$out/etc/$target"
         for fn in $source; do
-            ln -s "$fn" $out/etc/$target/
+            ln -s "$fn" "$out/etc/$target/"
         done
 
     else

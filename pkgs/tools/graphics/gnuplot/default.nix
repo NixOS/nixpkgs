@@ -48,7 +48,7 @@ in
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ];
 
-  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
+  env.CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
   postInstall = lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \

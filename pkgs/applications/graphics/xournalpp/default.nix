@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLua lua;
 
-  buildFlags = "translations";
+  buildFlags = [ "translations" ];
 
   hardeningDisable = [ "format" ];
 

@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
-  NIX_CFLAGS_COMPILE = "-Wno-error=enum-conversion";
+  env.NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=enum-conversion";
 
   enableParallelBuilding = true;
 

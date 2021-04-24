@@ -52,13 +52,14 @@ let
     nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
 
     inherit (args) src;
-    inherit (go) GOOS GOARCH;
+    env = {
+      inherit (go.env) GOOS GOARCH;
+      GO111MODULE = "on";
+    } // (args.env or {});
 
     patches = args.patches or [];
     preBuild = args.preBuild or "";
     sourceRoot = args.sourceRoot or "";
-
-    GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND" "SOCKS_SERVER"
@@ -110,21 +111,20 @@ let
     '';
 
     dontFixup = true;
-  }; in modArgs // (
-      {
+  }; in lib.recursiveUpdate (modArgs // {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
         outputHash = vendorSha256;
-      }
-  ) // overrideModAttrs modArgs) else "";
+      }) (overrideModAttrs modArgs)) else "";
 
   package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
-    inherit (go) GOOS GOARCH;
-
-    GO111MODULE = "on";
-    GOFLAGS = [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    env = {
+      inherit (go.env) GOOS GOARCH;
+      GO111MODULE = "on";
+      GOFLAGS = "-mod=vendor" + lib.optionalString (!allowGoReference) " -trimpath";
+    } // (args.env or {});
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -153,7 +153,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd "''${buildFlags[@]}" "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1

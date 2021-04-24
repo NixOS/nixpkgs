@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Source/init.cpp --replace "/usr/share/diasurgical/devilutionx/" "${placeholder "out"}/share/diasurgical/devilutionx/"
   '';
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2_ttf}/include/SDL2"
-    ''-DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"''
-  ];
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2_ttf}/include/SDL2" +
+    '' -DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"'';
 
   cmakeFlags = [
     "-DBINARY_RELEASE=ON"

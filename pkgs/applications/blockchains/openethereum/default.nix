@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1gm02pcfll362add8a0dcb0sk0mag8z0q23b87yb6fs870bqvhib";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [
     cmake
     llvmPackages.clang
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   # Exclude some tests that don't work in the sandbox
   # - Nat test requires network access
-  checkFlags = "--skip configuration::tests::should_resolve_external_nat_hosts";
+  checkFlags = [ "--skip configuration::tests::should_resolve_external_nat_hosts" ];
 
   meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";

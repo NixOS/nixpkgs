@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = with lib; {
     homepage = "https://mosh.org/";

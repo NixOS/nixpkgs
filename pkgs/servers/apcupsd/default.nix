@@ -16,6 +16,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
 
+  configureFlags = [
+    "--bindir=${placeholder "out"}/bin"
+    "--sbindir=${placeholder "out"}/bin"
+    "--sysconfdir=${placeholder "out"}/etc/apcupsd"
+    "--mandir=${placeholder "out"}/share/man"
+    "--with-halpolicydir=${placeholder "out"}/share/halpolicy"
+    "--localstatedir=/var/"
+    "--with-nologin=/run"
+    "--with-log-dir=/var/log/apcupsd"
+    "--with-pwrfail-dir=/run/apcupsd"
+    "--with-lock-dir=/run/lock"
+    "--with-pid-dir=/run"
+    "--enable-usb"
+  ] ++ lib.optionals enableCgiScripts [
+    "--enable-cgi"
+    "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
+  ];
+
   prePatch = ''
     sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
         -i ./src/apcagent/Makefile ./autoconf/targets.mak
@@ -27,21 +45,6 @@ stdenv.mkDerivation rec {
     export ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown
     export ac_cv_path_WALL=${wall}/bin/wall
     sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
-    export configureFlags="\
-        --bindir=$out/bin \
-        --sbindir=$out/bin \
-        --sysconfdir=$out/etc/apcupsd \
-        --mandir=$out/share/man \
-        --with-halpolicydir=$out/share/halpolicy \
-        --localstatedir=/var/ \
-        --with-nologin=/run \
-        --with-log-dir=/var/log/apcupsd \
-        --with-pwrfail-dir=/run/apcupsd \
-        --with-lock-dir=/run/lock \
-        --with-pid-dir=/run \
-        --enable-usb \
-        ${lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
-        "
   '';
 
   postInstall = ''

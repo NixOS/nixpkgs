@@ -11,15 +11,14 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lblkid";
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lblkid";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [
     "-DFACTER_RUBY=${ruby}/lib/libruby${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
   ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux ];

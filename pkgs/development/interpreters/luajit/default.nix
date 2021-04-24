@@ -26,7 +26,7 @@ assert enableValgrindSupport -> valgrind != null;
 let
   luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 
-  XCFLAGS = with lib;
+  XCFLAGS = with lib; toString (
      optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
   ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
   ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
@@ -36,7 +36,7 @@ let
   ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
   ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
   ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
-  ;
+  );
 in
 stdenv.mkDerivation rec {
   inherit name version;
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = XCFLAGS;
+  env.NIX_CFLAGS_COMPILE = XCFLAGS;
 
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )

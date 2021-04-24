@@ -44,10 +44,10 @@ in buildGoPackage rec {
     ln -s ${webui} web/ui/static/react
   '';
 
-  buildFlags = "-tags=builtinassets";
-  buildFlagsArray = let
+  buildFlags = let 
     t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
   in [
+    "-tags=builtinassets" 
     ''
       -ldflags=
          -X ${t}.Version=${version}

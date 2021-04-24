@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU libGL xlibsWrapper imagemagick6 libtiff bzip2 ];
 
-  NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
-  NIX_LDFLAGS= "-rpath ${libXext}/lib";
+  env.NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
+  env.NIX_LDFLAGS = "-rpath ${libXext}/lib";
 
   meta = {
     description = "Really Slick Screensavers Port to GLX";

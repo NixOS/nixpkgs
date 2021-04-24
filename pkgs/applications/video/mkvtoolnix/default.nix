@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
+  env.CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++17";
+  env.LDFLAGS = optionalString stdenv.cc.isClang "-lc++fs";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''

@@ -1,15 +1,17 @@
 { stdenv, lib, bundlerEnv, makeWrapper, bundlerUpdateScript }:
 
-stdenv.mkDerivation rec {
+let
   pname = "jsduck";
-  version = (import ./gemset.nix).jsduck.version;
-
   env = bundlerEnv {
     name = pname;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
+in
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = (import ./gemset.nix).jsduck.version;
 
   phases = [ "installPhase" ];
 

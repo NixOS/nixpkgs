@@ -53,11 +53,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     ninja meson cmake makeWrapper pkg-config docutils
-  ] ++ optional (!stdenv.isDarwin) [
+  ] ++ optional (!stdenv.isDarwin)
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
-    darwin.developer_cmds # needed for rpcgen
-  ];
+  ++ optional stdenv.isDarwin
+    darwin.developer_cmds; # needed for rpcgen
 
   buildInputs = [
     bash-completion pkg-config

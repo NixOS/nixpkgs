@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "--disable-tool-name-check";
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \

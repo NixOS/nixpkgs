@@ -120,17 +120,18 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    configureFlags+="
-      -docdir $out/share/doc/${name}
-      -plugindir $out/lib/qt4/plugins
-      -importdir $out/lib/qt4/imports
-      -examplesdir $TMPDIR/share/doc/${name}/examples
-      -demosdir $TMPDIR/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
-      --jobs=$NIX_BUILD_CORES
-    "
     unset LD # Makefile uses gcc for linking; setting LD interferes
+
+    configureFlags+=(
+      "-docdir" "''${out}/share/doc/${name}"
+      "-plugindir" "''${out}/lib/qt4/plugins"
+      "-importdir" "''${out}/lib/qt4/imports"
+      "-examplesdir" "''${TMPDIR}/share/doc/${name}/examples"
+      "-demosdir" "''${TMPDIR}/share/doc/${name}/demos"
+      "-datadir" "''${out}/share/${name}"
+      "-translationdir" "''${out}/share/${name}/translations"
+      "--jobs=''${NIX_BUILD_CORES}"
+    )
   '' + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
@@ -143,7 +144,8 @@ stdenv.mkDerivation rec {
       mkspecs/win32-g++/qmake.conf
   '';
 
-  prefixKey = "-prefix ";
+  prefixKey = "-prefix";
+  prefixAsSeperateFlag = true;
 
   configurePlatforms = [];
   configureFlags = let
@@ -190,7 +192,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ lib.optionals (libmysqlclient != null) [ libmysqlclient ]
+    ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
@@ -198,7 +200,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = toString (
+  env.NIX_CFLAGS_COMPILE = toString (
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
@@ -206,13 +208,13 @@ stdenv.mkDerivation rec {
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
     ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
 
-  NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error
     sed -i 's/struct ::TabletProximityRec;/struct TabletProximityRec;/' \
       src/gui/kernel/qt_cocoa_helpers_mac_p.h
-    find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${NIX_LDFLAGS}/'
+    find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${env.NIX_LDFLAGS}/'
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
 

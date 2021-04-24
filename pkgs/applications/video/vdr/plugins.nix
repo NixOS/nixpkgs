@@ -241,7 +241,7 @@ in {
     libconvpp = stdenv.mkDerivation {
       name = "jowi24-libconv++-20130216";
       propagatedBuildInputs = [ libiconv ];
-      CXXFLAGS = "-std=gnu++11 -Os";
+      env.CXXFLAGS = "-std=gnu++11 -Os";
       src = fetchFromGitHub {
         owner = "jowi24";
         repo = "libconvpp";
@@ -257,7 +257,7 @@ in {
 
     liblogpp = stdenv.mkDerivation {
       name = "jowi24-liblogpp-20130216";
-      CXXFLAGS = "-std=gnu++11 -Os";
+      env.CXXFLAGS = "-std=gnu++11 -Os";
       src = fetchFromGitHub {
         owner = "jowi24";
         repo = "liblogpp";
@@ -273,7 +273,7 @@ in {
 
     libnetpp = stdenv.mkDerivation {
       name = "jowi24-libnet++-20180628";
-      CXXFLAGS = "-std=gnu++11 -Os";
+      env.CXXFLAGS = "-std=gnu++11 -Os";
       src = fetchFromGitHub {
         owner = "jowi24";
         repo = "libnetpp";
@@ -290,7 +290,7 @@ in {
 
     libfritzpp = stdenv.mkDerivation {
       name = "jowi24-libfritzpp-20131201";
-      CXXFLAGS = "-std=gnu++11 -Os";
+      env.CXXFLAGS = "-std=gnu++11 -Os";
       src = fetchFromGitHub {
         owner = "jowi24";
         repo = "libfritzpp";

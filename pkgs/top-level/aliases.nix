@@ -895,8 +895,7 @@ mapAliases ({
   callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
-    ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
-    ocamlPackages_4_03
+    ocamlPackages_4_01_0 ocamlPackages_4_02
     ocamlPackages_latest;
 
   # added 2019-08-01
@@ -913,10 +912,8 @@ mapAliases ({
   zeromq3 = throw "zeromq3 has been deprecated by zeromq4.";
   jzmq = throw "jzmq has been removed from nixpkgs, as it was unmaintained";
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
-  ocaml_4_03   = ocamlPackages_4_03.ocaml;
 }) // {
 
   # added 2019-10-28

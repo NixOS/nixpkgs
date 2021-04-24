@@ -261,7 +261,7 @@ in pythonPackages.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
-  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
+  makeWrapperArgs = [ "--set" "GI_TYPELIB_PATH" "\"$GI_TYPELIB_PATH\"" "--set" "GST_PLUGIN_SYSTEM_PATH_1_0" "\"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
   passthru = {
     # FIXME: remove in favor of pkgs.beetsExternalPlugins

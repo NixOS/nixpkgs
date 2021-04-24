@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libpar2-0.4-external-verification.patch ];
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
     homepage = "http://parchive.sourceforge.net/";

@@ -80,9 +80,9 @@ in stdenvNoCC.mkDerivation rec {
 
   ${if makeUInitrd then "uinitrdCompression" else null} = uInitrdCompression;
 
-  builder = ./make-initrd.sh;
+  buildCommand = builtins.readFile ./make-initrd.sh;
 
-  nativeBuildInputs = [ perl cpio ]
+  nativeBuildInputs = [ perl cpio jq ]
     ++ lib.optional makeUInitrd ubootTools;
 
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";

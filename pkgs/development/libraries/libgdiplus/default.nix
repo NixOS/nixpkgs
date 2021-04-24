@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1387lgph5r17viv3rkf5hbksdn435njzmra7s17q0nzk2mkkm68c";
   };
 
-  NIX_LDFLAGS = "-lgif";
+  env.NIX_LDFLAGS = "-lgif";
 
   outputs = [ "out" "dev" ];
 

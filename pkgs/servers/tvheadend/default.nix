@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation -Wno-error=stringop-truncation";
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.  We now include the dtv-scan-tables ourselves

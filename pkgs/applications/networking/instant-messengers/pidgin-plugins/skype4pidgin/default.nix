@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "116jfh5ravaixivqx4a4bz0lbb9c49d5r83nwmripja56zdbpgr0";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${libnotify}/include/libnotify";
+  env.NIX_CFLAGS_COMPILE = "-I${libnotify}/include/libnotify";
 
   patchPhase = ''
     sed -i -e 's/ [^ ]*-gcc/ gcc/' -e 's/-march[^ ]*//' \

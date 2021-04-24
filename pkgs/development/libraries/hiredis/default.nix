@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "01xnynm9d56a0alb5wxbfayakybm5pnr12icj9mqkn4xxihbnbgr";
   };
 
-  PREFIX = "\${out}";
+  env.PREFIX = "\${out}";
 
   meta = with lib; {
     homepage = "https://github.com/redis/hiredis";

@@ -34,7 +34,7 @@ mkDerivation rec {
   dontUseQmakeConfigure = true;
   dontWrapQtApps = true;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated";
 
   # Disable annoying update reminder
   postPatch = ''

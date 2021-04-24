@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # Causes build failure due to warning
   # https://github.com/jsoftware/jsource/issues/16
-  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
 
   buildPhase = ''
     export SOURCE_DIR=$(pwd)

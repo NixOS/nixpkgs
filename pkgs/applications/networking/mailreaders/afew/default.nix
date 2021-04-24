@@ -19,9 +19,7 @@ python3Packages.buildPythonApplication rec {
     freezegun notmuch
   ];
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${notmuch}/bin"''
-  ];
+  makeWrapperArgs = ''--prefix PATH ':' "${notmuch}/bin"'';
 
   outputs = [ "out" "doc" ];
 

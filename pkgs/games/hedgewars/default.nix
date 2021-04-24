@@ -56,7 +56,7 @@ mkDerivation rec {
         "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
   '';
 
-  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
     SDL2_image
     SDL2_mixer

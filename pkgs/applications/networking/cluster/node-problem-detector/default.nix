@@ -28,8 +28,8 @@ buildGoModule rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ systemd ];
 
-  buildFlags = "-mod vendor" +
-    lib.optionalString stdenv.isLinux " -tags journald";
+  buildFlags = [ "-mod" "vendor" ] ++
+    lib.optionals stdenv.isLinux [ "-tags" "journald" ];
 
   buildFlagsArray = [
     "-ldflags="

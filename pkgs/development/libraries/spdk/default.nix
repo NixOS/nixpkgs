@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-dpdk=${dpdk}" ];
 
-  NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
+  env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
 
   enableParallelBuilding = true;
 

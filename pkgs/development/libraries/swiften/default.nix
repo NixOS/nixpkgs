@@ -24,10 +24,8 @@ stdenv.mkDerivation rec {
     "debug=0"
     "swiften_dll=1"
   ];
-  preInstall = ''
-    installTargets="$out"
-    installFlags+=" SWIFTEN_INSTALLDIR=$out"
-  '';
+  installFlags = [ "SWIFT_INSTALLDIR=${placeholder "out"}" ];
+  installTargets = [ "${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 

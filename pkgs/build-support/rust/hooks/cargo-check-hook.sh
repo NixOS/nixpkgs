@@ -28,7 +28,7 @@ cargoCheckHook() {
               -j $NIX_BUILD_CORES \
               ${argstr} -- \
               --test-threads=${threads} \
-              ${checkFlags} \
+              "${checkFlags[@]}" \
               ${checkFlagsArray+"${checkFlagsArray[@]}"}
     )
 

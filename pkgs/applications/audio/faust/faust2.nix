@@ -58,9 +58,7 @@ let
       cd build
     '';
 
-    cmakeFlags = ''
-      -C ../backends/all.cmake -C  ../targets/all.cmake ..
-    '';
+    cmakeFlags = [ "-C ../backends/all.cmake" "-C  ../targets/all.cmake .." ];
 
     postInstall = ''
       # syntax error when eval'd directly

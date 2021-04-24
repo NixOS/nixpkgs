@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "cef3ce537d213e020af794cecf9de207e2882c375ceda39102eb6fa2580bad8d";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     DESTDIR="$out" ./install

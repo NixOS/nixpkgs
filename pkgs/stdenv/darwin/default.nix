@@ -413,7 +413,9 @@ in rec {
   };
 
   stage4 = prevStage: let
-    persistent = self: super: with prevStage; {
+    persistent = self: super: with prevStage; let
+      libxml2-nopython = super.libxml2.override { pythonSupport = false; };
+    in {
       inherit
         gnumake gzip gnused bzip2 gawk ed xz patch bash python3
         ncurses libffi zlib gmp pcre gnugrep cmake
@@ -485,7 +487,10 @@ in rec {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
     };
-  in import ../generic rec {
+  cc = pkgs.llvmPackages.libcxxClang.override {
+    cc = pkgs.llvmPackages.clang-unwrapped;
+  };
+  in import ../generic {
     name = "stdenv-darwin";
 
     inherit config;
@@ -506,9 +511,7 @@ in rec {
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
 
-    cc = pkgs.llvmPackages.libcxxClang.override {
-      cc = pkgs.llvmPackages.clang-unwrapped;
-    };
+    inherit cc;
 
     extraNativeBuildInputs = [];
     extraBuildInputs = [ pkgs.darwin.CF ];

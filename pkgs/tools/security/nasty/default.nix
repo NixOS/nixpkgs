@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # does not apply cleanly with patchPhase/fetchpatch
   # https://sources.debian.net/src/nasty/0.6-3/debian/patches/02_add_largefile_support.patch
-  CFLAGS = "-D_FILE_OFFSET_BITS=64";
+  env.CFLAGS = "-D_FILE_OFFSET_BITS=64";
 
   buildInputs = [ gpgme ];
 

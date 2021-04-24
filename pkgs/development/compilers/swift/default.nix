@@ -298,7 +298,8 @@ stdenv.mkDerivation {
     export LIBRARY_PATH=${icu}/lib:${libuuid.out}/lib
 
     checkTarget=check-swift-all
-    ninjaFlags='-C buildbot_linux/swift-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}'
+    ninjaFlags=('-C' 'buildbot_linux/swift-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}')
+
     ninjaCheckPhase
   '';
 

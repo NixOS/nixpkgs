@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     make -f Makefile.fip
   '';
 
-  INCDIR = "${placeholder "out"}/include";
-  INSTALLDIR = "${placeholder "out"}/lib";
+  env.INCDIR = "${placeholder "out"}/include";
+  env.INSTALLDIR = "${placeholder "out"}/lib";
 
   preInstall = ''
     mkdir -p $INCDIR $INSTALLDIR

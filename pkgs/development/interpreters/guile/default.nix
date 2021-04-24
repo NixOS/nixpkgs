@@ -58,7 +58,7 @@
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString
+  env.LDFLAGS = lib.optionalString
     (!stdenv.isDarwin && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]

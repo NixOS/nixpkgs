@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
   meta = with lib; {
     inherit version;

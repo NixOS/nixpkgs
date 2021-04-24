@@ -58,5 +58,5 @@ stdenv.mkDerivation rec {
       --add-flags "-O $out/share/renpy/renpy.py"
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${pygame_sdl2}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${pygame_sdl2}/include/${python.libPrefix}";
 }

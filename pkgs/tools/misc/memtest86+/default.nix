@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0cwx20yja24bfknqh1rjb5rl2c0kwnppzsisg1dibbak0l8mxchk";
   };
 
-  NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
+  env.NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
   hardeningDisable = [ "all" ];
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
     ++ lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 
-  CXXFLAGS = "-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [

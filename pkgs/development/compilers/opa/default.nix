@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
   ]);
 
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   postInstall = ''
     # Have compiler use same tools for code generation as used to build it.

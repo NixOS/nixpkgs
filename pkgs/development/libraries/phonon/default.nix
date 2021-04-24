@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   preConfigure = ''
-    cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
-    cmakeFlags+=" -DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
-    cmakeFlags+=" -DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
+    cmakeFlags+=("-DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs")
+    cmakeFlags+=("-DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix")
+    cmakeFlags+=("-DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer")
   '';
 
   postPatch = ''

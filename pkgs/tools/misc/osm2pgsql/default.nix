@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" "-DEXTERNAL_PROTOZERO=ON" ]
     ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
+  env.NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";

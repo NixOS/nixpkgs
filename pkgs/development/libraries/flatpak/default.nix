@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
   # TODO: some issues with temporary files
   doCheck = false;
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   enableParallelBuilding = true;
 

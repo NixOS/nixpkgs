@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     patchShebangs test
   '';
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  env.LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   # You probably shouldn't ever run these! They will reconfigure Linux
   # NUMA settings, which on my build machine makes the rest of package

@@ -2,25 +2,26 @@ mesonConfigurePhase() {
     runHook preConfigure
 
     if [ -z "${dontAddPrefix-}" ]; then
-        mesonFlags="--prefix=$prefix $mesonFlags"
+        mesonFlags=("--prefix=$prefix" ${mesonFlags[@]+"${mesonFlags[@]}"})
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
-    mesonFlags="\
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --localedir=${!outputLib}/share/locale \
-        -Dauto_features=${mesonAutoFeatures:-enabled} \
-        -Dwrap_mode=${mesonWrapMode:-nodownload} \
-        $mesonFlags"
+    mesonFlags=(
+      "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
+      "--bindir=${!outputBin}/bin" "--sbindir=${!outputBin}/sbin"
+      "--includedir=${!outputInclude}/include"
+      "--mandir=${!outputMan}/share/man" "--infodir=${!outputInfo}/share/info"
+      "--localedir=${!outputLib}/share/locale"
+      "-Dauto_features=${mesonAutoFeatures:-enabled}"
+      "-Dwrap_mode=${mesonWrapMode:-nodownload}"
+      ${mesonFlags[@]+"${mesonFlags[@]}"}
+    )
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
+    mesonFlags=(${crossMesonFlags+"$crossMesonFlags"} "--buildtype=${mesonBuildType:-plain}" "${mesonFlags[@]}")
 
-    echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
+    echo "meson flags: ${mesonFlags[@]}"
 
-    meson build $mesonFlags "${mesonFlagsArray[@]}"
+    meson build "${mesonFlags[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then

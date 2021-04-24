@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bash-completion.patch ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ pcre zlib xz ];

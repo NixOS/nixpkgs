@@ -34,7 +34,7 @@ buildPythonApplication rec {
     peewee
     prompt_toolkit
     setuptools
-  ] ++ lib.optional enableDbusUi [
+  ] ++ lib.optionals enableDbusUi [
       dbus-python
       notify2
       pygobject3

@@ -1,11 +1,11 @@
 { qtModule, stdenv, lib, qtbase, systemd }:
 
-let inherit (lib) getLib optional; in
+let inherit (lib) getLib optionalString; in
 
 qtModule {
   name = "qtserialport";
   qtInputs = [ qtbase ];
-  NIX_CFLAGS_COMPILE =
-    optional stdenv.isLinux
+  env.NIX_CFLAGS_COMPILE =
+    optionalString stdenv.isLinux
     ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 }

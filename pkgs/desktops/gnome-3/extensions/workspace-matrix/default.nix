@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildFlags = "schemas";
+  buildFlags = [ "schemas" ];
 
   installPhase = ''
     runHook preInstall

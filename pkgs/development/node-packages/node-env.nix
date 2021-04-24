@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile}:
+{lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile, jq}:
 
 let
   # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
@@ -327,7 +327,7 @@ let
     ''
         # Pinpoint the versions of all dependencies to the ones that are actually being used
         echo "pinpointing versions of dependencies..."
-        source $pinpointDependenciesScriptPath
+        source <(${jq}/bin/jq -r <$NIX_BUILD_TOP/.attrs.json '.pinpointDependenciesScript')
 
         # Patch the shebangs of the bundled modules to prevent them from
         # calling executables outside the Nix store as much as possible
@@ -411,15 +411,13 @@ let
       compositionScript = composePackage args;
       pinpointDependenciesScript = pinpointDependenciesOfPackage args;
 
-      passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
-
       installPhase = ''
         # Create and enter a root node_modules/ folder
         mkdir -p $out/lib/node_modules
         cd $out/lib/node_modules
 
         # Compose the package and all its dependencies
-        source $compositionScriptPath
+        source <(${jq}/bin/jq -r <$NIX_BUILD_TOP/.attrs.json '.compositionScript')
 
         ${prepareAndInvokeNPM { inherit packageName bypassCache reconstructLock npmFlags production; }}
 
@@ -483,13 +481,11 @@ let
         includeScript = includeDependencies { inherit dependencies; };
         pinpointDependenciesScript = pinpointDependenciesOfPackage args;
 
-        passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
-
         installPhase = ''
           mkdir -p $out/${packageName}
           cd $out/${packageName}
 
-          source $includeScriptPath
+          source <(${jq}/bin/jq -r <$NIX_BUILD_TOP/.attrs.json '.includeScript')
 
           # Create fake package.json to make the npm commands work properly
           cp ${src}/package.json .

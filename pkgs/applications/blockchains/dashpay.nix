@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                   miniupnpc protobuf qrencode util-linux ];
 
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib --with-gui=no" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" "--with-gui=no" ]
                     ++ optional enable_Upnp "--enable-upnp-default"
                     ++ optional disable_Wallet "--disable-wallet"
                     ++ optional disable_Daemon "--disable-daemon"

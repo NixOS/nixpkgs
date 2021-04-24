@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gtk2 spice spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   meta = with lib; {
     description = "Enable a running X11 desktop to be available via a Spice server";

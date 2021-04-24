@@ -30,11 +30,8 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ makeWrapper ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${opusfile}/include/opus"
-  ];
-  NIX_CFLAGS_LINK = [ "-lSDL2" ];
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${opusfile}/include/opus";
+  env.NIX_CFLAGS_LINK = "-lSDL2";
 
   postInstall = ''
     for i in `find $out/opt/iortcw -maxdepth 1 -type f -executable`; do

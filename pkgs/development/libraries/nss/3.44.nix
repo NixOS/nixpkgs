@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.is64bit "USE_64=1"
     ++ lib.optional stdenv.isDarwin "CCC=clang++";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # TODO(@oxij): investigate this: `make -n check` works but `make
   # check` fails with "no rule", same for "installcheck".

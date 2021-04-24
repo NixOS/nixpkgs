@@ -82,7 +82,6 @@ let
 in
 
 stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
-  inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
   inherit type;
@@ -99,6 +98,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   inherit src;
 
+  env.RUBY = toString ruby;
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
@@ -131,9 +131,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
   # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
-    "-fdeclspec"
-  ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3")
+    "-fdeclspec";
 
   buildPhase = attrs.buildPhase or ''
     runHook preBuild

@@ -151,7 +151,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-I${src}/include_mod" ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   installPhase = ''
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt

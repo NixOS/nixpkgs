@@ -1,3 +1,5 @@
+out=${outputs[out]}
+
 # this path is used by some packages to install additional makefiles
 export DESTDIR_GNUSTEP_MAKEFILES=$out/share/GNUstep/Makefiles
 

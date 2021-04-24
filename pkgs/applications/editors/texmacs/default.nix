@@ -40,7 +40,7 @@ mkDerivation {
     git
     python3
   ];
-  NIX_LDFLAGS = "-lz";
+  env.NIX_LDFLAGS = "-lz";
 
   qtWrapperArgs = [
     "--suffix" "PATH" ":" (lib.makeBinPath [

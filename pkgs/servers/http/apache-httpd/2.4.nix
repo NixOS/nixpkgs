@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   configureFlags = [
     "--with-apr=${apr.dev}"

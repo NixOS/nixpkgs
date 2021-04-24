@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     ./remove-use-of-dlopen.patch
   ];
   buildInputs = [libpulseaudio alsaLib pkg-config qt5.qtbase];
-  CFLAGS   ="-lasound -lpulse-simple";
+  env.CFLAGS  = "-lasound -lpulse-simple";
 
   dontWrapQtApps = true;
 

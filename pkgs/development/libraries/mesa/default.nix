@@ -210,7 +210,7 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm;

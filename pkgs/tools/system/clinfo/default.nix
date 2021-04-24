@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocl-icd opencl-headers ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=stringop-overflow"
     "-Wno-error=stringop-truncation"
   ];

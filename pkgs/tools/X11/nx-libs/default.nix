@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     xorg.xkbcomp xorg.xkeyboardconfig libtirpc
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_LDFLAGS = "-ltirpc";
 
   postPatch = ''
     patchShebangs .
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     ln -s libNX_X11.so.6.3.0
   '';
 
-  PREFIX=""; # Don't install to $out/usr/local
-  installPhase = ''
-    make DESTDIR="$out" install
-    # See:
-    # - https://salsa.debian.org/debian-remote-team/nx-libs/blob/bcc152100617dc59156015a36603a15db530a64f/debian/rules#L66-72
-    # - https://github.com/ArcticaProject/nx-libs/issues/652
+  installFlags = [ "PREFIX=" "DESTDIR=${placeholder "out"}" ];
+
+  # See:
+  # - https://salsa.debian.org/debian-remote-team/nx-libs/blob/bcc152100617dc59156015a36603a15db530a64f/debian/rules#L66-72
+  # - https://github.com/ArcticaProject/nx-libs/issues/652
+  postFixup = ''
     patchelf --remove-needed "libX11.so.6" $out/bin/nxagent
   '';
 

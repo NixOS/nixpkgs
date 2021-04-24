@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
-  NIX_LDFLAGS = "-lm -lpthread";
+  env.NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"

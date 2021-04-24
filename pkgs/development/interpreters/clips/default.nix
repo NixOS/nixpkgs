@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     substituteInPlace core/makefile --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
-  makeFlags = [ "-C" "core" ];
+  makeFlags = [ "-C core" ];
 
   installPhase = ''
     runHook preInstall

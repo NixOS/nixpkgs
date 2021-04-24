@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml perl ];
 
-  prefixKey = "-prefix ";
+  prefixAsSeperateFlag = true;
 
   preConfigure = ''
     configureFlagsArray=(--strict --libdir $out/lib/ocaml/${ocaml.version}/site-lib)

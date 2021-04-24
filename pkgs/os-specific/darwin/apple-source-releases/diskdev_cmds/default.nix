@@ -5,8 +5,8 @@ appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ libutil ];
 
-  NIX_CFLAGS_COMPILE = "-I.";
-  NIX_LDFLAGS = "-lutil";
+  env.NIX_CFLAGS_COMPILE = "-I.";
+  env.NIX_LDFLAGS = "-lutil";
   patchPhase = ''
     # ugly hacks for missing headers
     # most are bsd related - probably should make this a drv

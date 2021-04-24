@@ -40,9 +40,9 @@ mkDerivation {
   ];
 
   # these libraries are only searched for at runtime so we need to force-link them
-  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
+  env.NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
 
-  NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+  env.NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''

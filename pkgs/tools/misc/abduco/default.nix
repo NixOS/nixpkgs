@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "cp ${writeText "config.def.h" conf} config.def.h";
 
   installFlags = [ "install-completion" ];
-  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
   meta = with lib; {
     homepage = "http://brain-dump.org/projects/abduco";

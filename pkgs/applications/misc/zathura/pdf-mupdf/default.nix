@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
   # avoid: undefined symbol: gumbo_destroy_output
-  NIX_LDFLAGS = [ "-lgumbo" ];
+  env.NIX_LDFLAGS = "-lgumbo";
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ;
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   meta = {
     description = "A fast, easy and free BitTorrent client";

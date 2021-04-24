@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [ SDL SDL_image SDL_mixer ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   desktopItems = [ (makeDesktopItem {
     name = "gnujump";

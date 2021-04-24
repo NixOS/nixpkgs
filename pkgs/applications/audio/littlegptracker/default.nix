@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
     ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
-    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive" +
+    lib.optionalString stdenv.hostPlatform.isAarch64 " -Wno-error=narrowing";
 
-  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";
 
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";

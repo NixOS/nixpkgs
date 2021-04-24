@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0kbrh1dympk8scjxr6av24qs2bffz44l8qmw2m5gyqf4g3rxf6ra";
   };
 
-  NIX_LDFLAGS = "-lSDL_image";
+  env.NIX_LDFLAGS = "-lSDL_image";
 
   buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
 

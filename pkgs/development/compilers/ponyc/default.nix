@@ -85,7 +85,7 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=redundant-move -Wno-error=implicit-fallthrough";
 
   installPhase = "make config=release prefix=$out "
     + lib.optionalString stdenv.isDarwin "bits=64 "

@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${openssh}/bin"''
+    "--prefix" "PATH" ":" "${openssh}/bin"
   ];
 
   postInstall = ''
@@ -51,15 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
-  checkInputs = with python3.pkgs; [
-    pytest
-  ];
-
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test --pyargs borg.testsuite
-  '';
-
-  # 64 failures, needs pytest-benchmark
+  # tries to fuse mount and create directories in /var/tmp
   doCheck = false;
 
   passthru.tests = {

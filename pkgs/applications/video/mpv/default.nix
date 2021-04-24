@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
     ;
   };
 
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
+  env.NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
               + optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   wafConfigureFlags = [

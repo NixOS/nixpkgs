@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   meta = with lib; {
     description = "A fast image viewer";

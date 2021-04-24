@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   mesonFlags = lib.optional stdenv.isLinux
     [ "-Dmoduledir=${mesa.drivers.driverLink}/lib/vdpau" ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lX11";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lX11";
 
   meta = with lib; {
     homepage = "https://people.freedesktop.org/~aplattner/vdpau/";

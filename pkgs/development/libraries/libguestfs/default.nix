@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
     ++ lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
-  NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
+  env.NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 

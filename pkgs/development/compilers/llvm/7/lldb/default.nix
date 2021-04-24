@@ -47,10 +47,10 @@ stdenv.mkDerivation {
     "-DSKIP_DEBUGSERVER=ON"
   ];
 
-  CXXFLAGS = "-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     mkdir -p $out/share/man/man1

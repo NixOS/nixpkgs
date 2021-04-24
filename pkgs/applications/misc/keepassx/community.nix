@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     sha256 = "02ajfkw818cmalvkl0kqvza85rgdgs59kw2v7b3c4v8kv00c41j3";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
-  ];
+  ]);
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch

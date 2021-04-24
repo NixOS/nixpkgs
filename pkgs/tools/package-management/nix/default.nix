@@ -34,8 +34,6 @@ common =
 
       is24 = lib.versionAtLeast version "2.4pre";
 
-      VERSION_SUFFIX = suffix;
-
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =
@@ -71,7 +69,7 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS =
+      env.NIX_LDFLAGS =
         # need to list libraries individually until
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
         # is in a release

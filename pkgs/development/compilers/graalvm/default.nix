@@ -312,11 +312,11 @@ in rec {
         --replace 'entry == false' '*entry == false'
     '';
     hardeningDisable = [ "fortify" ];
-    NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.isDarwin [
+    env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.isDarwin [
       "-Wno-reserved-user-defined-literal"
       "-Wno-c++11-narrowing"
     ] ++
-    lib.optional stdenv.isLinux [
+    lib.optionals stdenv.isLinux [
       "-Wno-error=format-overflow" # newly detected by gcc7
       "-Wno-error=nonnull"
     ]);

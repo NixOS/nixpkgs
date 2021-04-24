@@ -53,7 +53,7 @@ let
       zmusic
     ];
 
-    NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
+    env.NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
     installPhase = ''
       install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"

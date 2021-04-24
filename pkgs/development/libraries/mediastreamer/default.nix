@@ -92,14 +92,14 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v${version}\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
     "-Wno-error=stringop-truncation"
     "-Wno-error=stringop-overflow"
   ];
-  NIX_LDFLAGS = "-lXext";
+  env.NIX_LDFLAGS = "-lXext";
 
   meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";

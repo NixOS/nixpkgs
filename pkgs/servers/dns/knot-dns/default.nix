@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CFLAGS = [ "-O2" "-DNDEBUG" ];
+  env.CFLAGS = "-O2 -DNDEBUG";
 
   doCheck = true;
   doInstallCheck = true;

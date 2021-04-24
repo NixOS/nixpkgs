@@ -16,7 +16,7 @@ mkDerivation rec {
 
   buildInputs = [ boost libvorbis libsndfile minizip gtest qtwebkit ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
 
   installPhase = ''
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin

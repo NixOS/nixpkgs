@@ -59,7 +59,7 @@ mkDerivation rec {
     "pokerth.pro"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
   enableParallelBuilding = true;
 

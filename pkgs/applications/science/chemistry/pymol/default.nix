@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack ];
-  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
   hardeningDisable = [ "format" ];
 
   setupPyBuildFlags = [ "--glut" ];

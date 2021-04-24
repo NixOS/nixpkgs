@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         mkdir -p $sourceRoot/${n}
         cp -r ${v}/* $sourceRoot/${n}
       '') deps)}
-    chmod u+w -R .
+    chmod u+w -R $sourceRoot/
   '';
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   '';
 
-  gnFlags = [
+  gnFlags = builtins.toString ([
     "use_custom_libcxx=false"
     "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
@@ -97,9 +97,9 @@ stdenv.mkDerivation rec {
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
-  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'');
 
-  NIX_CFLAGS_COMPILE = "-O2";
+  env.NIX_CFLAGS_COMPILE = "-O2";
 
   nativeBuildInputs = [ gn ninja pkg-config python ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];

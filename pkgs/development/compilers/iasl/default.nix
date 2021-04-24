@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cb6aa6acrixmdzvj9vv4qs9lmlsbkd27pjlz14i1kq1x3xn0gwx";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   buildFlags = [ "iasl" ];
 

@@ -44,7 +44,7 @@ rec {
       buildInputs = oldAttrs.buildInputs ++ [ libseccomp ];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: {
+    docker-tini = tini.overrideAttrs (oldAttrs: {
       name = "docker-init-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -57,7 +57,7 @@ rec {
       # Do not remove static from make files as we want a static binary
       patchPhase = "";
 
-      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
+      env = oldAttrs.env // { NIX_CFLAGS_COMPILE = "-DMINIMAL=ON"; };
     });
 
     moby = buildGoPackage ((optionalAttrs (stdenv.isLinux)) rec {
@@ -107,11 +107,11 @@ rec {
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
       '';
 
-      DOCKER_BUILDTAGS = []
+      env.DOCKER_BUILDTAGS = toString ([]
         ++ optional (systemd != null) [ "journald" ]
         ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
         ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
-        ++ optional (libseccomp != null) "seccomp";
+        ++ optional (libseccomp != null) "seccomp");
     });
   in
     buildGoPackage ((optionalAttrs (stdenv.isLinux) {

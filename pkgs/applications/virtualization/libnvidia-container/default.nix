@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_LDFLAGS = "-L${libtirpc.dev}/lib -ltirpc";
 
   nativeBuildInputs = [ pkg-config rpcsvc-proto makeWrapper ];
 

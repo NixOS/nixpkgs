@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 bzip2 pango libintl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
   ];
 
-  NIX_CFLAGS_COMPILE
+  env.NIX_CFLAGS_COMPILE
     = lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf

@@ -22,13 +22,16 @@ stdenv.mkDerivation rec {
     (pipInstallHook.override{pip=null;})
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
+
+  postUnpack = ''
+    chmod -R u+w *
+  '';
 
   postPatch = ''
     mkdir -p $out/bin
   '';
-
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ python ];
 
   buildPhase = ":";
 

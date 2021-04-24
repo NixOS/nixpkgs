@@ -28,7 +28,7 @@ mkDerivation {
     networkmanager-qt
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     ''-DNIXPKGS_ENCFS=\"${lib.getBin encfs}/bin/encfs\"''
     ''-DNIXPKGS_ENCFSCTL=\"${lib.getBin encfs}/bin/encfsctl\"''
 

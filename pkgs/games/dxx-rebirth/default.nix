@@ -36,10 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-format-nonliteral"
-    "-Wno-format-truncation"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral -Wno-format-truncation";
 
   postInstall = ''
     install -Dm644 ${music} $out/share/games/dxx-rebirth/${music.name}

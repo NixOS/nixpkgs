@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     ./no-files-in-etc-and-var.patch
   ];
 
-  NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  env.NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
     ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d

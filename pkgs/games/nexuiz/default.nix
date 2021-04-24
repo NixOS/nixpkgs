@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
     cd ../../
   '';
 
-  NIX_LDFLAGS = ''
+  env.NIX_LDFLAGS = ''
     -rpath ${zlib.out}/lib
     -rpath ${curl.out}/lib
     -rpath ${libjpeg.out}/lib

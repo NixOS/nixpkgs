@@ -1,11 +1,10 @@
-{ runCommand, lib, fontconfig, fontDirectories }:
+{ runCommand, lib, fontconfig, jq, fontDirectories }:
 
 runCommand "fc-cache"
   {
-    nativeBuildInputs = [ fontconfig.bin ];
+    nativeBuildInputs = [ fontconfig.bin jq ];
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passAsFile = [ "fontDirs" ];
     fontDirs = ''
       <!-- Font directories -->
       ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
@@ -21,7 +20,7 @@ runCommand "fc-cache"
       <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
       <cachedir>$out</cachedir>
     EOF
-    cat "$fontDirsPath" >> fonts.conf
+    <.attrs.json jq .fontDirs >> fonts.conf
     echo "</fontconfig>" >> fonts.conf
 
     mkdir -p $out

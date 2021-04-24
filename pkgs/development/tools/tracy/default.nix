@@ -19,12 +19,8 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
     ++ lib.optionals stdenv.isLinux [ gtk3 tbb ];
 
-  NIX_CFLAGS_COMPILE = [ ]
-    ++ lib.optional stdenv.isLinux "-ltbb"
-    ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    ++ lib.optional disableLTO "-fno-lto";
-
-  NIX_CFLAGS_LINK = lib.optional disableLTO "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-ltbb"
+    + lib.optionalString stdenv.cc.isClang " -faligned-allocation";
 
   buildPhase = ''
     make -j $NIX_BUILD_CORES -C profiler/build/unix release

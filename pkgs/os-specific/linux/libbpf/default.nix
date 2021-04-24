@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       sha256 = "17mvjrs7s727drz013a8qlyj0345ldi2kph6pazcmxv6kl1qrz2z";
     })
   ];
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
   # https://github.com/libbpf/libbpf/pull/201#issuecomment-689174740
   postPatch = ''
     substituteInPlace ../scripts/check-reallocarray.sh \

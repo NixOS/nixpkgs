@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     libappindicator
   ];
 
-  ac_cv_path_MDOC = "no";
-  installFlagsArray = ["GAPIXMLDIR=/tmp/gapixml"];
+  env.ac_cv_path_MDOC = "no";
+  installFlags = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
   meta = {
     description = "Bindings for appindicator using gobject-introspection";

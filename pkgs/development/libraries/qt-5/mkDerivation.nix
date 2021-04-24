@@ -14,4 +14,4 @@ let
   };
 in
 
-mkDerivation (args // args_)
+mkDerivation (lib.recursiveUpdate args args_)

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   configureFlags = [
     "--sysconfdir=/etc"

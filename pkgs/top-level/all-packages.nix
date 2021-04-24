@@ -11232,8 +11232,6 @@ in
 
   orocos-kdl = callPackage ../development/libraries/orocos-kdl { };
 
-  metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
-
   ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml.nix { };
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
@@ -11243,7 +11241,7 @@ in
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -16391,7 +16389,8 @@ in
     inherit (libxml2) passthru;
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
-      mkdir "$out/nix-support"
+      out="''${outputs[out]}"
+      mkdir -p "$out/nix-support"
       cp '${libxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
     '';
   };

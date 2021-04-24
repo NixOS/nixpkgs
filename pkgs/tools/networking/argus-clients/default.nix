@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c9vj6ma00gqq9h92fg71sxcsjzz912166sdg90ahvnmvmh3l1rj";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
 
   postPatch = ''
     for file in ./examples/*/*.pl; do

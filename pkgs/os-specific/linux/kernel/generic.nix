@@ -1,6 +1,7 @@
 { buildPackages
 , callPackage
 , perl
+, jq
 , bison ? null
 , flex ? null
 , gmp ? null
@@ -101,20 +102,21 @@ let
     pname = "linux-config";
     inherit version;
 
-    generateConfig = ./generate-config.pl;
-
-    kernelConfig = kernelConfigFun intermediateNixConfig;
-    passAsFile = [ "kernelConfig" ];
-
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl gmp libmpc mpfr ]
+ 
+    nativeBuildInputs = [ perl gmp libmpc mpfr jq ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
 
-    platformName = stdenv.hostPlatform.linux-kernel.name;
-    # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
-    # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
+    kernelConfig = kernelConfigFun intermediateNixConfig;
+
+    env = {
+      generateConfig = "${./generate-config.pl}";
+      platformName = stdenv.hostPlatform.linux-kernel.name;
+      # e.g. "defconfig"
+      kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+      # e.g. "bzImage"
+      kernelTarget = stdenv.hostPlatform.linux-kernel.target;
+    };
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -137,7 +139,7 @@ let
 
       # Create the config file.
       echo "generating kernel configuration..."
-      ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
+      jq -r <../.attrs.json '.kernelConfig' > "$buildRoot/kernel-config"
       DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';

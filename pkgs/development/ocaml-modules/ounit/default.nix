@@ -7,10 +7,10 @@ stdenv.mkDerivation {
   buildInputs = [ findlib ];
   propagatedBuildInputs = [ ounit2 ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontBuild = true;
 
   createFindlibDestdir = true;
 
-  installTargets = "install-ounit version='${ounit2.version}'";
+  installTargets = [ "install-ounit" "version='${ounit2.version}'" ];
 
 }

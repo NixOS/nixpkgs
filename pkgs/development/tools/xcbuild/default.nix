@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
     cp liblinenoise.* $out/lib/
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 

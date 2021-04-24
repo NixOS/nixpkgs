@@ -1,3 +1,5 @@
+source .attrs.sh
+
 source $stdenv/setup
 
 boot_bin=$out/bin/boot

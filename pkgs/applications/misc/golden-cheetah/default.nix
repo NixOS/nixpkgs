@@ -40,9 +40,9 @@ in mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-lz";
+  env.NIX_LDFLAGS = "-lz";
 
-  qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
+  qtWrapperArgs = [ "--set" "LD_LIBRARY_PATH" "${zlib.out}/lib" ];
 
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri

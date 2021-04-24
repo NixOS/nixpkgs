@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     osl seexpr
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${openexr.dev}/include/OpenEXR"
     "-I${ilmbase.dev}/include/OpenEXR"
     "-I${openimageio.dev}/include/OpenImageIO"

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "01qhw52kyqwidp5bckw4xmz4ldqdwkjci7k421qm68kk0mx9l48g";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   buildInputs = [
     openssl

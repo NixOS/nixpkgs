@@ -40,7 +40,7 @@ common = rec { # attributes common to both builds
     ncurses openssl zlib pcre2 libiconv curl
   ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ perl cctools CoreServices ]
-    ++ optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
+    ++ optional (!stdenv.hostPlatform.isDarwin) jemalloc;
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -173,17 +173,17 @@ server = stdenv.mkDerivation (common // {
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
     "-DWITHOUT_TOKUDB=1"
-  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
+  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32)
     "-DWITH_NUMA=ON"
-  ] ++ optional (!withStorageMroonga) [
+    ++ optional (!withStorageMroonga)
     "-DWITHOUT_MROONGA=1"
-  ] ++ optional (!withStorageRocks) [
+    ++ optional (!withStorageRocks)
     "-DWITHOUT_ROCKSDB=1"
-  ] ++ optional (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+    ++ optional (!stdenv.hostPlatform.isDarwin && withStorageRocks)
     "-DWITH_ROCKSDB_JEMALLOC=ON"
-  ] ++ optional (!stdenv.hostPlatform.isDarwin) [
+    ++ optional (!stdenv.hostPlatform.isDarwin)
     "-DWITH_JEMALLOC=yes"
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
+    ++ optionals stdenv.hostPlatform.isDarwin [
     "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
@@ -210,6 +210,6 @@ server = stdenv.mkDerivation (common // {
     wrapProgram $out/bin/mytop --set PATH ${makeBinPath [ less ncurses ]}
   '';
 
-  CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  env.CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 });
 in mariadb

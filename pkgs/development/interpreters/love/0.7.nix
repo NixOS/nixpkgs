@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     } || true
   '';
 
-  NIX_CFLAGS_COMPILE = ''
+  env.NIX_CFLAGS_COMPILE = ''
     -I${SDL.dev}/include/SDL
     -I${freetype.dev}include/freetype2
   '';

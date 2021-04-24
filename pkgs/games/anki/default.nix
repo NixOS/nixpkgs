@@ -48,7 +48,7 @@ let
       rev = rev-manual;
       sha256 = sha256-manual;
     };
-    phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
+    dontInstall = true;
     nativeBuildInputs = [ asciidoc ];
     patchPhase = ''
       # rsync isnt needed
@@ -132,7 +132,7 @@ buildPythonApplication rec {
   '';
 
   # UTF-8 locale needed for testing
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   # tests fail with to many open files
   doCheck = !stdenv.isDarwin;

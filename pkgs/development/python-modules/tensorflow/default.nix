@@ -242,7 +242,7 @@ let
     '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
-    NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-stringop-truncation";
 
     preConfigure = let
       opt_flags = []

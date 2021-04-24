@@ -29,9 +29,7 @@ mkDerivation rec {
     ./pass-path.patch
   ];
 
-  CXXFLAGS = [
-    ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"''
-  ];
+  env.CXXFLAGS = ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"'';
 
   meta = with lib; {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";

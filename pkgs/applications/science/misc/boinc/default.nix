@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     libnotify patchelf libX11 libxcb xcbutil
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  env.NIX_LDFLAGS = "-lX11";
 
   preConfigure = ''
     ./_autosetup
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
+    configureFlags+=("--sysconfdir=$out/etc")
   '';
 
   enableParallelBuilding = true;

@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ alsaLib gtk2 libjack2 libxml2 readline ];
   propagatedBuildInputs = [ libuuid ];
-  NIX_LDFLAGS = "-lm -lpthread -luuid";
+  env.NIX_LDFLAGS = "-lm -lpthread -luuid";
 
   postInstall = ''
     for i in lash_control lash_panel

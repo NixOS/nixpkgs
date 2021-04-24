@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     nvidia-texture-tools libsodium fmt
   ] ++ lib.optional withEditor wxGTK;
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include/X11"
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"

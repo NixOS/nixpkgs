@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=format-security"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   postPatch = ''
     patchShebangs ./MPC/prj_install.pl

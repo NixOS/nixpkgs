@@ -29,7 +29,7 @@
     freetype alsaLib curl libjack2 pkg-config libGLU libGL lv2
   ];
 
-  CXXFLAGS = "-DHAVE_LROUND";
+  env.CXXFLAGS = "-DHAVE_LROUND";
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233

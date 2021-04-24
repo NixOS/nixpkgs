@@ -155,7 +155,7 @@ stdenv.mkDerivation {
       -i ./tools/build/src/engine/build.sh
   '';
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
 
   enableParallelBuilding = true;

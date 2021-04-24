@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional stdenv.isLinux "-DCMAKE_OSX_ARCHITECTURES=";
 
   # audacity only looks for ffmpeg at runtime, so we need to link it in manually
-  NIX_LDFLAGS = toString [
+  env.NIX_LDFLAGS = toString [
     # ffmpeg
     "-lavcodec"
     "-lavdevice"

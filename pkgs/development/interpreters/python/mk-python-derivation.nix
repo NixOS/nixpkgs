@@ -89,6 +89,8 @@
 
 , meta ? {}
 
+, env ? {}
+
 , passthru ? {}
 
 , doCheck ? config.doCheckByDefault or false
@@ -149,7 +151,9 @@ let
 
     inherit strictDeps;
 
-    LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    env = {
+      LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    } // env;
 
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;

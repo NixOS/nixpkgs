@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
-    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
-    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
+    make "''${makeFlags[@]}" CC=$CC -C contrib/slapd-modules/passwd/sha2
+    make "''${makeFlags[@]}" CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
   '';
 
   doCheck = false; # needs a running LDAP server
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    make $installFlags install -C contrib/slapd-modules/passwd/sha2
-    make $installFlags install -C contrib/slapd-modules/passwd/pbkdf2
+    make "''${installFlags[@]}" install -C contrib/slapd-modules/passwd/sha2
+    make "''${installFlags[@]}" install -C contrib/slapd-modules/passwd/pbkdf2
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 

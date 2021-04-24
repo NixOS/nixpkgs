@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
@@ -99,10 +99,9 @@ in stdenv.mkDerivation rec {
   ] ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" CXX=$CXX"
+    sconsFlags+=("CC=$CC" "CXX=$CXX")
   '' + optionalString stdenv.isAarch64 ''
-    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+    sconsFlags+=("CCFLAGS='-march=armv8-a+crc'")
   '';
 
   preInstall = ''

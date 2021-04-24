@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
     sha256 = "0lqqpa88v0br93qw7450a4blyi3pwn7sq2k04h0ikbsqrdnfj7lj";
   };
 
-  FONTCONFIG_FILE = fontsConf;
-  LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = lib.concatStringsSep " " [
+  env.LD_LIBRARY_PATH = libPath;
+  env.FONTCONFIG_FILE = toString fontsConf;
+  env.NIX_LDFLAGS = lib.concatStringsSep " " [
     (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
     (lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     mkdir src/build
     cd src/build
 
-    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
+    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${env.LD_LIBRARY_PATH})
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";

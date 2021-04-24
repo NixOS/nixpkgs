@@ -25,7 +25,7 @@ end
 #   repo        - path to local checkout
 #   ref         - the commit hash
 
-ruby = File.join(ENV["ruby"], "bin", RbConfig::CONFIG['ruby_install_name'])
+ruby = File.join(ENV["RUBY"], "bin", RbConfig::CONFIG['ruby_install_name'])
 out = ENV["out"]
 bin_dir = File.join(ENV["out"], "bin")
 

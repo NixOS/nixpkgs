@@ -44,7 +44,6 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
-  prefixKey = "-prefix ";
   configureFlags =
     let flags = new: old:
       if lib.versionAtLeast version "4.08"

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ];
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   dontAddPrefix = true;
 

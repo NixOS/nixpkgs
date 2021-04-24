@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ./format.patch
   ];
 
-  CFLAGS = lib.optionalString debug " -DDEBUG=2";
+  env.CFLAGS = lib.optionalString debug " -DDEBUG=2";
 
   meta = {
     homepage = "http://eflite.sourceforge.net";

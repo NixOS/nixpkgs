@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preFixup = lib.optionalString stdenv.isLinux ''
     sed 's,-ludev,-L${lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la

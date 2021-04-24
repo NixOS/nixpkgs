@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ glib ncurses libcap_ng ];
 
-  LDFLAGS = "-lncurses";
+  env.LDFLAGS = "-lncurses";
 
   postInstall =
     ''

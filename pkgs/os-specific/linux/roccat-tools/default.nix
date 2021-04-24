@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  env.NIX_CFLAGS_COMPILE = "-I${harfbuzz.dev}/include/harfbuzz";
 
   meta = {
     description = "Tools to configure ROCCAT devices";

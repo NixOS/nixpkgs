@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"
+  env.NIX_CFLAGS_COMPILE = "-fpermissive"
     + lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
   meta = with lib; {

@@ -24,7 +24,22 @@ callPackage ./common.nix { inherit stdenv; } {
     # (For example, if you define `patches = [...]` here, it will
     # override the patches in `common.nix`.)
 
-    NIX_NO_SELF_RPATH = true;
+    env = {
+      NIX_NO_SELF_RPATH = true;
+      NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
+        (builtins.concatLists [
+          (lib.optionals withGd gdCflags)
+          # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+          # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+          (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+          (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
+            # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
+            # New warning as of GCC 9
+            # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
+            "-Wno-error=missing-attributes"
+          ])
+        ]);
+    };
 
     postConfigure = ''
       # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
@@ -35,10 +50,14 @@ callPackage ./common.nix { inherit stdenv; } {
 
       export NIX_DONT_SET_RPATH=1
       unset CFLAGS
-
-      # Apparently --bindir is not respected.
-      makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
     '';
+
+    # Apparently --bindir is not respected.
+    makeFlags = [
+      "bindir=${placeholder "bin"}/bin"
+      "sbindir=${placeholder "bin"}/sbin"
+      "rootsbindir=${placeholder "bin"}/sbin"
+    ];
 
     # The stackprotector and fortify hardening flags are autodetected by glibc
     # and enabled by default if supported. Setting it for every gcc invocation
@@ -47,20 +66,6 @@ callPackage ./common.nix { inherit stdenv; } {
     # XXX: Not actually musl-speciic but since only musl enables pie by default,
     #      limit rebuilds by only disabling pie w/musl
       ++ lib.optional stdenv.hostPlatform.isMusl "pie";
-
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
-      (builtins.concatLists [
-        (lib.optionals withGd gdCflags)
-        # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
-        # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
-        (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-        (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
-          # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
-          # New warning as of GCC 9
-          # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
-          "-Wno-error=missing-attributes"
-        ])
-      ]);
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new

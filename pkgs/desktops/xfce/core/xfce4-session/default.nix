@@ -12,7 +12,7 @@ mkXfceDerivation {
   configureFlags = [ "--with-xsession-prefix=${placeholder "out"}" ];
 
   # See https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   passthru.xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
 

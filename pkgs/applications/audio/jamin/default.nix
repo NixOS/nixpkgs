@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 ]
     ++ (with perlPackages; [ perl XMLParser ]);
 
-  NIX_LDFLAGS = "-ldl";
+  env.NIX_LDFLAGS = "-ldl";
 
   postInstall = ''
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa

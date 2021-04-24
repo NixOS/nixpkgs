@@ -20,12 +20,14 @@ rustPlatform.buildRustPackage {
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  # cargo uses git-rs which is made for a version of libgit2 from recent master that
-  # is not compatible with the current version in nixpkgs.
-  #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+  env = {
+    # cargo uses git-rs which is made for a version of libgit2 from recent master that
+    # is not compatible with the current version in nixpkgs.
+    #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
-  # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
-  RUSTC_BOOTSTRAP = 1;
+    # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
+    RUSTC_BOOTSTRAP = 1;
+  };
 
   postInstall = ''
     # NOTE: We override the `http.cainfo` option usually specified in

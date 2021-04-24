@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  CCACHE_DISABLE="1";
-  CCACHE_DIR=".ccache";
+  env.CCACHE_DISABLE="1";
+  env.CCACHE_DIR=".ccache";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
     ++ optional  (opencvSupport) opencv;
 
-  NIX_CFLAGS_COMPILE="-faligned-new";
+  env.NIX_CFLAGS_COMPILE="-faligned-new";
 
   cmakeFlags =
   let

@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env = {
+    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    INSTALL_MOD_PATH = placeholder "out";
+  };
 
   nativeBuildInputs = [ perl bc ] ++ kernel.moduleBuildDependencies;
 
   preBuild = "cd src";
   buildFlags = [ "module" ];
 
-  INSTALL_MOD_PATH = placeholder "out";
   installFlags = [ "DEPMOD=true" ];
   enableParallelBuilding = true;
 

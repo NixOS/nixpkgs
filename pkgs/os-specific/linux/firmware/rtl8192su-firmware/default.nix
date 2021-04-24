@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0j3c35paapq1icmxq0mg7pm2xa2m69q7bkfmwgq99d682yr2cb5l";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     for i in rtl8192sfw.bin \

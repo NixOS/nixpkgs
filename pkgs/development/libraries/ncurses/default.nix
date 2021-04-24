@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  env.CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [

@@ -209,7 +209,7 @@ in buildPythonPackage rec {
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
   # https://github.com/pytorch/pytorch/blob/v1.2.0/setup.py#L17
-  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (blas.implementation == "mkl") "-Wno-error=array-bounds";
 
   nativeBuildInputs = [
     cmake

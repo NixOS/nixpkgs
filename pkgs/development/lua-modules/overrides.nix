@@ -305,7 +305,7 @@ with super;
         nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
 
         # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+        env.NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
           (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
       });
     };

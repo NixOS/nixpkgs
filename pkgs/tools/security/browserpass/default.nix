@@ -25,7 +25,7 @@ buildGoModule rec {
     sed -i -e 's/INSTALL :=.*/INSTALL := install/' Makefile
   '';
 
-  DESTDIR = placeholder "out";
+  env.DESTDIR = placeholder "out";
 
   postConfigure = ''
     make configure

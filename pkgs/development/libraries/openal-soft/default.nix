@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = toString ([]
+  env.NIX_LDFLAGS = toString ([]
     ++ optional alsaSupport "-lasound"
     ++ optional pulseSupport "-lpulse");
 

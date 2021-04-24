@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withAI jdk
     ++ lib.optional withAI python;
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+  env.NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \

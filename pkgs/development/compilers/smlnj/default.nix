@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
   '';
 
   unpackPhase = ''
-    for s in $sources; do
+    for s in "''${sources[@]}"; do
       b=$(basename $s)
       cp $s ''${b#*-}
     done

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ openssl zlib ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=format-truncation"
     "-Wno-error=address-of-packed-member"
     "-Wno-error=format-overflow"

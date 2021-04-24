@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
-  CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
+  env.CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''

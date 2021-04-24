@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1yhkiv0in588il7f84k2xiy78g9lv12ll0y7047gazhiimk5v244";
   };
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   patches = [ ./ubuntu-0.17-9.patch ];
 

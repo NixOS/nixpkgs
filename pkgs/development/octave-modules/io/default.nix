@@ -15,9 +15,7 @@ buildOctavePackage rec {
     sha256 = "044y8lfp93fx0592mv6x2ss0nvjkjgvlci3c3ahav76pk1j3rikb";
   };
 
-  buildInputs = [
-    (lib.optional enableJava jdk)
-  ];
+  buildInputs = lib.optional enableJava jdk;
 
   propagatedBuildInputs = [
     unzip

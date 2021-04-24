@@ -143,7 +143,6 @@ stdenv.mkDerivation ({
   outputs = if langJava || langGo || langJit then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 
@@ -223,8 +222,6 @@ stdenv.mkDerivation ({
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
-
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
     inherit version hostPlatform gnatboot langJava langAda langGo;
@@ -273,44 +270,51 @@ stdenv.mkDerivation ({
 
   installTargets = optional stripped "install-strip";
 
-  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+  env = {
+    NIX_NO_SELF_RPATH = true;
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
-  #
-  # Note: When building the Java AWT GTK peer, the build system doesn't honor
-  # `--with-gmp' et al., e.g., when building
-  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
-  # them to $CPATH and $LIBRARY_PATH in this case.
-  #
-  # Likewise, the LTO code doesn't find zlib.
-  #
-  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-  # compiler (after the specs for the cross-gcc are created). Having
-  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+    # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+    # library headers and binaries, regarless of the language being compiled.
+    #
+    # Note: When building the Java AWT GTK peer, the build system doesn't honor
+    # `--with-gmp' et al., e.g., when building
+    # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+    # them to $CPATH and $LIBRARY_PATH in this case.
+    #
+    # Likewise, the LTO code doesn't find zlib.
+    #
+    # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+    # compiler (after the specs for the cross-gcc are created). Having
+    # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-    ++ optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
+    CPATH = toString (makeSearchPathOutput "dev" "include" ([]
+      ++ optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    ));
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath ([]
-    ++ optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
+    # Per https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html only
+    # affects native buidls, but should be fine for cross.
+    LIBRARY_PATH = toString (makeLibraryPath ([]
+      ++ optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    ));
 
-  inherit
-    (import ../common/extra-target-flags.nix {
-      inherit lib stdenv crossStageStatic libcCross threadsCross;
-    })
-    EXTRA_FLAGS_FOR_TARGET
-    EXTRA_LDFLAGS_FOR_TARGET
-    ;
+    inherit
+      (import ../common/extra-target-flags.nix {
+        inherit stdenv lib crossStageStatic libcCross threadsCross;
+      })
+      EXTRA_FLAGS_FOR_TARGET
+      EXTRA_LDFLAGS_FOR_TARGET
+      ;
+    NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
+    # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+    CC = "gcc -m64";
+  };
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langAda langGo version;

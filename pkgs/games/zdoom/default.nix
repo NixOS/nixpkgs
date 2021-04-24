@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+  env.NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
   preConfigure = ''
     sed -i \

@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper unzip which gdb git ]
 
-  ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
   ]);
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     "osx"
   else
     stdenv.hostPlatform.parsed.kernel.name;
-  top = "$(echo $NIX_BUILD_TOP)";
+  top = "$(echo $NIX_BUILD_TOP/$sourceRoot)";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD

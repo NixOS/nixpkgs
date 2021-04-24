@@ -24,7 +24,7 @@ in rustPlatform.buildRustPackage rec {
   # The BLAKE3 C library is intended to be built by the project depending on it
   # rather than as a standalone library.
   # https://github.com/BLAKE3-team/BLAKE3/blob/0.3.1/c/README.md#building
-  BLAKE3_CSRC = "${blake3-src}/c";
+  env.BLAKE3_CSRC = "${blake3-src}/c";
 
   nativeBuildInputs = [ ronn ];
 

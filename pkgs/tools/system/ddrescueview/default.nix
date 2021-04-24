@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ atk cairo gdk-pixbuf glib gtk2 libX11 pango ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi

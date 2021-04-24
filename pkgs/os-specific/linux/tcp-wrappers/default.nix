@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   prePatch = ''
     tar -xaf $debian
-    patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
+    patches=($(cat debian/patches/series | sed 's,^,debian/patches/,') "''${patches[@]}")
 
     substituteInPlace Makefile --replace STRINGS STRINGDEFS
     substituteInPlace debian/patches/13_shlib_weaksym --replace STRINGS STRINGDEFS

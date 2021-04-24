@@ -58,7 +58,7 @@ in (mkDrv rec {
 
   outputs = [ "out" "dev" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
@@ -406,7 +406,7 @@ in (mkDrv rec {
       gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
       gst-libav
     ])
-    ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
+    ++ lib.optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
     inherit srcs jdk;

@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = toString (makeFontsConf {
     fontDirectories = [ freefont_ttf ];
-  };
+  });
 
   doCheck = false; # test-font: FAIL
 

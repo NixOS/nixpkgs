@@ -14,10 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib python2 ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=maybe-uninitialized"
-    "-Wno-error=pessimizing-move"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized -Wno-error=pessimizing-move";
 
   preConfigure = ''
     sed -i 's|/usr/bin/env python|${python2}/bin/python|' src/python/lib/makeRunScript.py

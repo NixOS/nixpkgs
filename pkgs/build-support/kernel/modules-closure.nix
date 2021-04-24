@@ -8,8 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   name = kernel.name + "-shrunk";
-  builder = ./modules-closure.sh;
+  buildCommand = builtins.readFile ./modules-closure.sh;
   nativeBuildInputs = [ nukeReferences kmod ];
-  inherit kernel firmware rootModules allowMissing;
+  inherit rootModules;
+  env = {
+    kernel = "${kernel}";
+    firmware = "${firmware}";
+    inherit allowMissing;
+  };
   allowedReferences = ["out"];
 }

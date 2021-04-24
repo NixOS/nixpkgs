@@ -15,7 +15,7 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev systemd}/include" ];
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
 
   # tries to access /sys: https://github.com/grafana/agent/issues/333
   preBuild = ''

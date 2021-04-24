@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "-lX11";
+  env.NIX_LDFLAGS = "-lX11";
 
   postInstall =
     ''

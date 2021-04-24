@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ pango cairo glib atk gtk2 libX11 gdk-pixbuf ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap

@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
       ImageIO
       OpenGL
       GLUT
-    ] ++ optional enablePython [
+    ] ++ optionals enablePython [
       pythonInterpreter
     ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];

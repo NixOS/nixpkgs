@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-O6DbY/0ZI+BeG22jd9snbE718Y2vv7fqmeDdGWTnqfY=";
   };
 
-  NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
+  env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
 
   # error: linker `arm-linux-gnueabihf-gcc` not found
   preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

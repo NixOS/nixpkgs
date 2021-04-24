@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error";
 
   meta = with lib; {
     description = "AWS SDK for C module for IO and TLS";

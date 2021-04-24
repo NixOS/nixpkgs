@@ -180,9 +180,9 @@ stdenv.mkDerivation rec {
   # the alternative is to copy the files from /usr/include to src, but there are
   # probably a large number of files that would need to be copied (I stopped
   # after the seventh)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreServices -framework Cocoa -framework AudioUnit";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreServices -framework Cocoa -framework AudioUnit";
 
   postInstall = ''
     moveToOutput lib/cmake "$dev"

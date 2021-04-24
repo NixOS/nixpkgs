@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./CMakeLists.txt.patch ];
 
-  NIX_CFLAGS_COMPILE = toString (optional sdlSupport "-I${SDL.dev}/include/SDL"
+  env.NIX_CFLAGS_COMPILE = toString (optional sdlSupport "-I${SDL.dev}/include/SDL"
     ++ optional speechdSupport "-I${speechd}/include/speech-dispatcher");
 
   # we choose only cmdline and speech-dispatcher speech options.

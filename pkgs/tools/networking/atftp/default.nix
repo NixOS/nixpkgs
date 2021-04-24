@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline tcp_wrappers pcre gcc ];
 
   # Expects pre-GCC5 inline semantics
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   doCheck = false; # fails
 

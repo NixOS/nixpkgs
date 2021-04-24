@@ -85,7 +85,7 @@ stdenv.mkDerivation (removeAttrs ({
 // (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
     [ "${var-coqlib-install}=$(out)/lib/coq/${coq.coq-version}/" ] ++
-    optional (match ".*doc$" (args.installTargets or "") != null)
+    optional (elem "doc" (args.installTargets or []))
       "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ++
     extraInstallFlags;
 })

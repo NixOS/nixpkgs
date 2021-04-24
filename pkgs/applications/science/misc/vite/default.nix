@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 libGLU libGL ];
 
-  NIX_LDFLAGS = "-lGLU";
+  env.NIX_LDFLAGS = "-lGLU";
 
   meta = {
     description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";

@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
-  LINKFLAGS = "-lpthread";
+  env.LINKFLAGS = "-lpthread";
 
   meta = with lib; {
     description = "Multi-track hard disk recording software";

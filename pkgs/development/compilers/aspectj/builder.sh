@@ -1,3 +1,5 @@
+source .attrs.sh
+
 source $stdenv/setup
 
 export JAVA_HOME=$jre

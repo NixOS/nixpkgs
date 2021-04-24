@@ -73,7 +73,7 @@ in
       cp seccomp/${arch}/* $out/share/policy/
     '';
 
-    CROSVM_CARGO_TEST_KERNEL_BINARY =
+    env.CROSVM_CARGO_TEST_KERNEL_BINARY =
       lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
         "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
 

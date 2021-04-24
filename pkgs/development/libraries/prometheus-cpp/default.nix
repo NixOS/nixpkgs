@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = "-ldl";
+  env.NIX_LDFLAGS = "-ldl";
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig

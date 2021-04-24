@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     # autoipd won't build on darwin
     ++ lib.optional stdenv.isDarwin "--disable-autoipd";
 
-  NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
+  env.NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\

@@ -11,12 +11,11 @@ let
   etc = pkgs.stdenvNoCC.mkDerivation {
     name = "etc";
 
-    builder = ./make-etc.sh;
+    buildCommand = builtins.readFile ./make-etc.sh;
 
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    /* !!! Use toXML. */
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';

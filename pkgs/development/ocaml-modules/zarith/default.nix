@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   dontAddPrefix = true;
-  configureFlags = [ "-installdir ${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
+  configureFlags = [ "-installdir" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
 
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 

@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "atinout-${version}";
   version = "0.9.2-alpha";
 
-  NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
-  LANG = "C.UTF-8";
+  env.NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
+  env.LANG = "C.UTF-8";
   nativeBuildInputs = [ ronn mount ];
 
   src = fetchgit {

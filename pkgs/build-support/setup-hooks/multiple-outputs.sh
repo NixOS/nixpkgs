@@ -7,10 +7,10 @@ postFixupHooks+=(_multioutPropagateDev)
 # Assign the first string containing nonempty variable to the variable named $1
 _assignFirst() {
     local varName="$1"
-    local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
     while (( $# )); do
-        if [ -n "${!1-}" ]; then eval "${varName}"="$1"; return; fi
+        if [ "$1" = REMOVE ]; then eval "${varName}"=REMOVE; return; fi
+        if [ ${outputs[$1]+isset} ]; then eval "${varName}"="$1"; return; fi
         shift
     done
     echo "Error: _assignFirst found no valid variant!"
@@ -44,10 +44,14 @@ _overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
 _overrideFirst outputInfo "info" "$outputBin"
 
+# Backwards compatibility to ensure $out etc. exist
+for outputName in "${!outputs[@]}"; do
+  eval "export ${outputName}"="${outputs[$outputName]}"
+done
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
+    if [ "${#outputs[@]}" -eq 1 ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
@@ -66,19 +70,19 @@ _multioutConfig() {
         fi
     fi
 
-    configureFlags="\
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc/${shareDocName} \
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --localedir=${!outputLib}/share/locale \
-        $configureFlags"
+    configureFlags=(
+        "--bindir=${!outputBin}/bin" "--sbindir=${!outputBin}/sbin"
+        "--includedir=${!outputInclude}/include" "--oldincludedir=${!outputInclude}/include"
+        "--mandir=${!outputMan}/share/man" "--infodir=${!outputInfo}/share/info"
+        "--docdir=${!outputDoc}/share/doc/${shareDocName}"
+        "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
+        "--localedir=${!outputLib}/share/locale"
+        "${configureFlags[@]}")
 
-    installFlags="\
-        pkgconfigdir=${!outputDev}/lib/pkgconfig \
-        m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
-        $installFlags"
+    installFlags=(
+        "pkgconfigdir=${!outputDev}/lib/pkgconfig"
+        "m4datadir=${!outputDev}/share/aclocal" "aclocaldir=${!outputDev}/share/aclocal"
+        "${installFlags[@]}")
 }
 
 
@@ -94,10 +98,10 @@ moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
-    for output in $outputs; do
-        if [ "${!output}" = "$dstOut" ]; then continue; fi
+    for output in "${outputs[@]}"; do
+        if [ "${output}" = "$dstOut" ]; then continue; fi
         local srcPath
-        for srcPath in "${!output}"/$patt; do
+        for srcPath in "${output}"/$patt; do
             # apply to existing files/dirs, *including* broken symlinks
             if [ ! -e "$srcPath" ] && [ ! -L "$srcPath" ]; then continue; fi
 
@@ -105,7 +109,7 @@ moveToOutput() {
                 echo "Removing $srcPath"
                 rm -r "$srcPath"
             else
-                local dstPath="$dstOut${srcPath#${!output}}"
+                local dstPath="$dstOut${srcPath#${output}}"
                 echo "Moving $srcPath to $dstPath"
 
                 if [ -d "$dstPath" ] && [ -d "$srcPath" ]
@@ -149,7 +153,7 @@ _multioutDocs() {
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
-    if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
+    if [ "${#outputs[@]}" -eq 1 ] || [ -z "${moveToDev-1}" ]; then return; fi;
     moveToOutput include "${!outputInclude}"
     # these files are sometimes provided even without using the corresponding tool
     moveToOutput lib/pkgconfig "${!outputDev}"
@@ -166,34 +170,10 @@ _multioutDevs() {
 
 # Make the "dev" propagate other outputs needed for development.
 _multioutPropagateDev() {
-    if [ "$outputs" = "out" ]; then return; fi;
-
-    local outputFirst
-    for outputFirst in $outputs; do
-        break
-    done
-    local propagaterOutput="$outputDev"
-    if [ -z "$propagaterOutput" ]; then
-        propagaterOutput="$outputFirst"
-    fi
-
-    # Default value: propagate binaries, includes and libraries
-    if [ -z "${propagatedBuildOutputs+1}" ]; then
-        local po_dirty="$outputBin $outputInclude $outputLib"
-        set +o pipefail
-        propagatedBuildOutputs=`echo "$po_dirty" \
-            | tr -s ' ' '\n' | grep -v -F "$propagaterOutput" \
-            | sort -u | tr '\n' ' ' `
-        set -o pipefail
-    fi
-
-    # The variable was explicitly set to empty or we resolved it so
-    if [ -z "$propagatedBuildOutputs" ]; then
-        return
-    fi
+    if [ ${#outputs[@]} -eq 1 ]; then return; fi;
 
     mkdir -p "${!propagaterOutput}"/nix-support
-    for output in $propagatedBuildOutputs; do
-        echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
+    for output in "${propagatedBuildOutputs[@]+${propagatedBuildOutputs[@]}}"; do
+        echo -n " ${outputs[$output]}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }

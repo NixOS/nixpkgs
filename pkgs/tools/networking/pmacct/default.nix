@@ -19,7 +19,7 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (lib) getDev optional optionalString; in
+let inherit (lib) getDev optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   version = "1.7.5";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ++ optional withNflog libnetfilter_log
     ++ optional withSQLite sqlite
     ++ optional withPgSQL postgresql
-    ++ optional withMysql [ libmysqlclient zlib ];
+    ++ optionals withMysql [ libmysqlclient zlib ];
 
   MYSQL_CONFIG =
     optionalString withMysql "${getDev libmysqlclient}/bin/mysql_config";

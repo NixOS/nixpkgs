@@ -11,5 +11,5 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive openexr qtbase ];
   outputs = [ "out" ]; # plugins only
-  CXXFLAGS = "-I${getDev ilmbase}/include/OpenEXR";
+  env.CXXFLAGS = "-I${getDev ilmbase}/include/OpenEXR";
 }

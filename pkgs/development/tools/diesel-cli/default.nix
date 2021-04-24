@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
 
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
-  NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
+  env.NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
 
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";

@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
 
   preBuild = optionalString (!libsOnly) ''
     pushd usr/src/amdgpu-${build}
-    makeFlags="$makeFlags M=$(pwd)"
+    makeFlags+=("M=$(pwd)")
     patchShebangs pre-build.sh
     ./pre-build.sh ${kernel.version}
     popd
@@ -94,9 +94,9 @@ in stdenv.mkDerivation rec {
   postBuild = optionalString (!libsOnly)
     (concatMapStrings (m: "xz usr/src/amdgpu-${build}/${m}\n") modules);
 
-  NIX_CFLAGS_COMPILE = "-Werror";
+  env.NIX_CFLAGS_COMPILE = "-Werror";
 
-  makeFlags = optionalString (!libsOnly)
+  makeFlags = optional (!libsOnly)
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
 
   depLibPath = makeLibraryPath [

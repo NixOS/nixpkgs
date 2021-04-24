@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ libnest2d sip clipper ];
   nativeBuildInputs = [ cmake ];
 
-  CLIPPER_PATH = "${clipper.out}";
+  env.CLIPPER_PATH = "${clipper.out}";
 
   postPatch = ''
      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' cmake/SIPMacros.cmake

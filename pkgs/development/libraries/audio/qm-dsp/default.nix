@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "LIBDIR=${placeholder "out"}/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${kissfft}/include/kissfft";
+  env.NIX_CFLAGS_COMPILE = "-I${kissfft}/include/kissfft";
 
   meta = with lib; {
     description = "A C++ library of functions for DSP and Music Informatics purposes";

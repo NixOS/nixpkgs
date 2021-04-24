@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
     stripRoot = false; # because it comes with a __MACOSX directory
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -pv $out/share/{doc/${pname}-${version},fonts/{opentype,truetype,WOFF,WOFF2}}
     cp -v ${pname}-${version}/{FONTLOG,OFL-FAQ,OFL}.txt $out/share/doc/

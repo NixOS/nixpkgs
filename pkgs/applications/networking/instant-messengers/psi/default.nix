@@ -13,6 +13,7 @@ mkDerivation rec {
     sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
     fetchSubmodules = true;
   };
+
   patches = [
     ./fix-cmake-hunspell-1.7.patch
   ];

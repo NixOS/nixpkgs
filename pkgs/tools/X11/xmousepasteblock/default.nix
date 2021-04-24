@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vidckfp277cg2gsww8a8q5b18m10iy4ppyp2qipr89771nrcmns";
     rev = version;
   };
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = with xorg; [ libX11 libXext libXi libev ];
   nativeBuildInputs = [ pkg-config ];
   meta = with lib; {

@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nix git ];
 
-  NIX_CFLAGS_COMPILE = "-std=c++1y";
+  env.NIX_CFLAGS_COMPILE = "-std=c++1y";
 
   meta = {
     description = "Run programs defined in nix expressions";

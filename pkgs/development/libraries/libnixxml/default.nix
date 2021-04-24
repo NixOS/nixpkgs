@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = [ "--with-gd" "--with-glib" ];
-  CFLAGS = "-Wall";
+  env.CFLAGS = "-Wall";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxml2 gd.dev glib getopt libxslt nix ];

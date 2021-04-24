@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   makefile = "Makefile.linux";
 
-  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
-  NIX_LDFLAGS = "-lGL";
+  env.NIX_LDFLAGS = "-lGL";
 
   installPhase = ''
     mkdir -p $out/share/${name}

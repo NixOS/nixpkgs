@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, jq }:
 
 rec {
 
@@ -71,19 +71,19 @@ rec {
     # extra arguments to pass to stdenv.mkDerivation
     , name
     # name of the resulting derivation
-    }: buildCommand:
+    }: buildScript:
     stdenv.mkDerivation ({
       name = lib.strings.sanitizeDerivationName name;
-      inherit buildCommand;
-      passAsFile = [ "buildCommand" ]
-        ++ (derivationArgs.passAsFile or []);
+      inherit buildScript;
+      buildCommand = ''
+        source <(${jq}/bin/jq -r <.attrs.json '.buildScript')
+      '';
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
           allowSubstitutes = false;
        })
     // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
-
 
   /* Writes a text file to the nix store.
    * The contents of text is added to the file in the store.
@@ -117,7 +117,6 @@ rec {
     }:
     runCommand name
       { inherit text executable;
-        passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -126,11 +125,7 @@ rec {
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$n"
-        else
-          echo -n "$text" > "$n"
-        fi
+        cp <(${jq}/bin/jq -r <.attrs.json '.text') $n
 
         ${checkPhase}
 
@@ -258,7 +253,6 @@ rec {
     {
       inherit name code;
       executable = true;
-      passAsFile = ["code"];
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
@@ -266,7 +260,7 @@ rec {
     ''
     n=$out/bin/$name
     mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
+    cp <(${jq}/bin/jq -r <.attrs.json '.code') code.c
     $CC -x c code.c -o "$n"
     '';
 
@@ -326,15 +320,14 @@ rec {
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
-          inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
+          inherit preferLocalBuild allowSubstitutes paths;
         }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
+        while IFS= read -r path; do
+          ${lndir}/bin/lndir -silent $path $out
+        done < <(${jq}/bin/jq -r <.attrs.json '.paths[]')
         ${postBuild}
       '';
 

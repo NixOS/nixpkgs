@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (widgetset == "gtk3") gtk3
     ++ lib.optional (widgetset == "qt5") libqt5pas;
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
     cp -r --no-preserve=mode ${dep} ${name}

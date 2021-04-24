@@ -49,9 +49,9 @@ edk2 = buildStdenv.mkDerivation {
   buildInputs = [ libuuid pythonEnv ];
 
   makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+    ++ lib.optionals (stdenv.cc.isClang) [ "BUILD_CC=clang" "BUILD_CXX=clang++" "BUILD_AS=clang" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 

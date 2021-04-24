@@ -41,6 +41,7 @@
 } @ args:
 
 let
+  inherit (lib) foldl recursiveUpdate;
   version = "2.32";
   patchSuffix = "-46";
   sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
@@ -49,7 +50,7 @@ in
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation (foldl recursiveUpdate {} [ {
   inherit version;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
@@ -174,7 +175,7 @@ stdenv.mkDerivation ({
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
 
-  installFlags = [ "sysconfdir=$(out)/etc" ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   outputs = [ "out" "bin" "dev" "static" ];
 
@@ -185,12 +186,12 @@ stdenv.mkDerivation ({
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  env.BASH_SHELL = "/bin/sh";
 
   passthru = { inherit version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+(removeAttrs args [ "withLinuxHeaders" "withGd" ])
 
 {
   name = name + "-${version}${patchSuffix}";
@@ -215,7 +216,7 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
+      ''makeFlags+=("BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib" "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump")''
     }
 
 
@@ -253,11 +254,11 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+(lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 
   # To avoid a dependency on the build system 'bash'.
   preFixup = ''
     rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
   '';
-})
+}) ])

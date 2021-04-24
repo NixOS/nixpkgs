@@ -80,7 +80,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
 
   meta = with lib; {
     description = "System for Automated Geoscientific Analyses";

@@ -50,7 +50,7 @@ mkDerivation rec {
     qtgraphicaleffects
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
+  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
   qmakeFlags = [
     "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"
@@ -66,10 +66,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
-    "--prefix PATH : ${mlt}/bin"
+    "--prefix" "FREI0R_PATH" ":" "${frei0r}/lib/frei0r-1"
+    "--prefix" "LADSPA_PATH" ":" "${ladspaPlugins}/lib/ladspa"
+    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ jack1 SDL2 ])
+    "--prefix" "PATH" ":" "${mlt}/bin"
   ];
 
   postInstall = ''

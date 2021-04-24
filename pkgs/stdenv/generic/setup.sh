@@ -5,9 +5,6 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-: ${outputs:=out}
-
-
 ######################################################################
 # Hook handling.
 
@@ -219,6 +216,10 @@ printWords() {
 ######################################################################
 # Initialisation.
 
+# export all vars that should be in the ENV
+for envVar in "${!env[@]}"; do
+    export $envVar="${env[$envVar]}"
+done
 
 # Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools
 # to provide a deterministic substitute for the "current" time. Note that
@@ -430,30 +431,22 @@ findInputs() {
     done
 }
 
-# Make sure all are at least defined as empty
-: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
-: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
-: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
-: ${depsHostHost=} ${depsHostHostPropagated=}
-: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
-: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
-
-for pkg in $depsBuildBuild $depsBuildBuildPropagated; do
+for pkg in ${depsBuildBuild+"${depsBuildBuild[@]}"} ${depsBuildBuildPropagated+"${depsBuildBuildPropagated[@]}"}; do
     findInputs "$pkg" -1 -1
 done
-for pkg in $nativeBuildInputs $propagatedNativeBuildInputs; do
+for pkg in ${nativeBuildInputs+"${nativeBuildInputs[@]}"} ${propagatedNativeBuildInputs+"${propagatedNativeBuildInputs[@]}"}; do
     findInputs "$pkg" -1  0
 done
-for pkg in $depsBuildTarget $depsBuildTargetPropagated; do
+for pkg in ${depsBuildTarget+"${depsBuildTarget[@]}"} ${depsBuildTargetPropagated+"${depsBuildTargetPropagated[@]}"}; do
     findInputs "$pkg" -1  1
 done
-for pkg in $depsHostHost $depsHostHostPropagated; do
+for pkg in ${depsHostHost+"${depsHostHost[@]}"} ${depsHostHostPropagated+"${depsHostHostPropagated[@]}"}; do
     findInputs "$pkg"  0  0
 done
-for pkg in $buildInputs $propagatedBuildInputs ; do
+for pkg in ${buildInputs+"${buildInputs[@]}"} ${propagatedBuildInputs+"${propagatedBuildInputs[@]}"}; do
     findInputs "$pkg"  0  1
 done
-for pkg in $depsTargetTarget $depsTargetTargetPropagated; do
+for pkg in ${depsTargetTarget+"${depsTargetTarget[@]}"} ${depsTargetTargetPropagated+"${depsTargetTargetPropagated[@]}"}; do
     findInputs "$pkg"  1  1
 done
 # Default inputs must be processed last
@@ -742,11 +735,14 @@ substituteInPlace() {
 }
 
 _allFlags() {
-    for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
+    local varNames="$(comm -3 <(declare | sort) <(declare -f | sort) | cut -d '=' -f 1)"
+    for varName in $varNames; do
+        if ! [ -z ${!varName+x} ] && [ $varName != _ ]; then
+            if (( "${NIX_DEBUG:-0}" >= 1 )); then
+                printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
+            fi
+            args+=("--subst-var" "$varName")
         fi
-        args+=("--subst-var" "$varName")
     done
 }
 
@@ -855,13 +851,13 @@ unpackFile() {
 unpackPhase() {
     runHook preUnpack
 
-    if [ -z "${srcs:-}" ]; then
+    if [ -z ${srcs-"${srcs[@]}"} ]; then
         if [ -z "${src:-}" ]; then
             # shellcheck disable=SC2016
             echo 'variable $src or $srcs should point to the source'
             exit 1
         fi
-        srcs="$src"
+        srcs=("$src")
     fi
 
     # To determine the source directory created by unpacking the
@@ -875,8 +871,13 @@ unpackPhase() {
         fi
     done
 
+    if [ "$sourceRoot" == "." ]; then
+      mkdir source
+      cd source
+    fi
+
     # Unpack all source archives.
-    for i in $srcs; do
+    for i in "${srcs[@]}"; do
         unpackFile "$i"
     done
 
@@ -910,6 +911,11 @@ unpackPhase() {
         exit 1
     fi
 
+    if [ "$sourceRoot" == "." ]; then
+      cd ..
+      sourceRoot=source
+    fi
+
     echo "source root is $sourceRoot"
 
     # By default, add write permission to the sources.  This is often
@@ -926,7 +932,7 @@ unpackPhase() {
 patchPhase() {
     runHook prePatch
 
-    for i in ${patches:-}; do
+    for i in ${patches+"${patches[@]}"}; do
         header "applying patch $i" 3
         local uncompress=cat
         case "$i" in
@@ -945,7 +951,7 @@ patchPhase() {
         esac
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
-        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch "${patchFlags[@]:--p1}"
     done
 
     runHook postPatch
@@ -962,7 +968,6 @@ configurePhase() {
 
     # set to empty if unset
     : ${configureScript=}
-    : ${configureFlags=}
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
@@ -977,32 +982,36 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+        if [[ -z "${prefixAsSeperateFlag:-}" ]]; then
+            configureFlags=("${prefixKey:---prefix=}$prefix" "${configureFlags[@]}")
+        else
+            configureFlags=("${prefixKey:---prefix}" "$prefix" "${configureFlags[@]}")
+        fi
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "${dontAddDisableDepTrack:-}" ]; then
         if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+            configureFlags=("--disable-dependency-tracking" "${configureFlags[@]}")
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "${dontDisableStatic:-}" ]; then
         if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+            configureFlags=("--disable-static" "${configureFlags[@]}")
         fi
     fi
 
     if [ -n "$configureScript" ]; then
         # Old bash empty array hack
         # shellcheck disable=SC2086
-        local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
+        configureFlags+=(
+            ${configureFlagsArray+"${configureFlagsArray[@]}"}
         )
-        echoCmd 'configure flags' "${flagsArray[@]}"
+        echoCmd 'configure flags' "${configureFlags[@]}"
         # shellcheck disable=SC2086
-        $configureScript "${flagsArray[@]}"
+        $configureScript "${configureFlags[@]}"
         unset flagsArray
     else
         echo "no configure script, doing nothing"
@@ -1016,9 +1025,9 @@ buildPhase() {
     runHook preBuild
 
     # set to empty if unset
-    : ${makeFlags=}
+    makeFlags=${makeFlags+"${makeFlags[@]}"}
 
-    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags[@]}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
         foundMakefile=1
@@ -1028,8 +1037,9 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${buildFlags+"${buildFlags[@]}"} ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            ${buildTargets+"${buildTargets[@]}"}
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1067,7 +1077,7 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
         )
@@ -1093,9 +1103,9 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
+        ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
+        ${installFlags+"${installFlags[@]}"} ${installFlagsArray+"${installFlagsArray[@]}"}
+        "${installTargets[@]:-install}"
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
@@ -1112,15 +1122,15 @@ installPhase() {
 fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
     local output
-    for output in $outputs; do
-        if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
+    for output in ${outputs[@]}; do
+        if [ -e "${output}" ]; then chmod -R u+w "${output}"; fi
     done
 
     runHook preFixup
 
     # Apply fixup to each output.
     local output
-    for output in $outputs; do
+    for output in ${!outputs[@]}; do
         prefix="${!output}" runHook fixupOutput
     done
 
@@ -1148,7 +1158,7 @@ fixupPhase() {
         local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
         local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
 
-        [[ "${!propagatedInputsSlice}" ]] || continue
+        [[ "${!propagatedInputsSlice-}" ]] || continue
 
         mkdir -p "${!outputDev}/nix-support"
         # shellcheck disable=SC2086
@@ -1165,7 +1175,7 @@ fixupPhase() {
     if [ -n "${setupHooks:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
         local hook
-        for hook in $setupHooks; do
+        for hook in ${setupHooks[@]}; do
             local content
             consumeEntire content < "$hook"
             substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
@@ -1179,7 +1189,7 @@ fixupPhase() {
     if [ -n "${propagatedUserEnvPkgs:-}" ]; then
         mkdir -p "${!outputBin}/nix-support"
         # shellcheck disable=SC2086
-        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords ${propagatedUserEnvPkgs[@]} > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup
@@ -1201,7 +1211,7 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}
         )
@@ -1257,10 +1267,6 @@ showPhaseHeader() {
 
 
 genericBuild() {
-    if [ -f "${buildCommandPath:-}" ]; then
-        source "$buildCommandPath"
-        return
-    fi
     if [ -n "${buildCommand:-}" ]; then
         eval "$buildCommand"
         return

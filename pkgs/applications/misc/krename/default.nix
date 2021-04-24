@@ -23,7 +23,7 @@ in mkDerivation rec {
 
   propagatedBuildInputs = [ kconfig kcrash kinit kjsembed ];
 
-  NIX_LDFLAGS = "-ltag";
+  env.NIX_LDFLAGS = "-ltag";
 
   meta = with lib; {
     description = "A powerful batch renamer for KDE";

@@ -64,7 +64,8 @@ let
 
           # Make providers available in Terraform 0.13 and 0.12 search paths.
           pluginDir = lib.concatMapStrings (pl: let
-            inherit (pl) version GOOS GOARCH;
+            inherit (pl) version;
+            inherit (pl.env) GOOS GOARCH;
 
             pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
 

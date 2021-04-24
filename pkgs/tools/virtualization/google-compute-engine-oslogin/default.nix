@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl.dev pam ];
 
-  NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
-  NIX_CFLAGS_LINK="-L${json_c}/lib";
+  env.NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
+  env.NIX_CFLAGS_LINK="-L${json_c}/lib";
 
   makeFlags = [
     "VERSION=${version}"

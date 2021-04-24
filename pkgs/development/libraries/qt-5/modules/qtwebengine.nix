@@ -110,7 +110,7 @@ qtModule {
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
     ''));
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
@@ -130,7 +130,7 @@ qtModule {
     # TODO remove when new Apple SDK is in
     #
     "-fno-objc-arc"
-  ];
+  ]);
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -142,7 +142,7 @@ qtModule {
 
   qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
     then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+    else optionals enableProprietaryCodecs [ "--" "-proprietary-codecs" ];
 
   propagatedBuildInputs = [
     # Image formats

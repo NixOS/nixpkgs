@@ -12,11 +12,14 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    buildPackages.stdenvNoCC.mkDerivation ({
+    stdenvNoCC.mkDerivation {
       name = "mirrors-list";
-      builder = ./write-mirror-list.sh;
-      preferLocalBuild = true;
-    } // mirrors);
+      env = lib.mapAttrs (k: m: toString m) mirrors;
+      buildCommand = ''
+        # !!! this is kinda hacky.
+        set | grep -E '^[a-zA-Z]+=.*://' > $out
+      '';
+    };
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
   # "gnu", etc.).
@@ -45,7 +48,7 @@ in
   urls ? []
 
 , # Additional curl options needed for the download to succeed.
-  curlOpts ? ""
+  curlOpts ? []
 
 , # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').

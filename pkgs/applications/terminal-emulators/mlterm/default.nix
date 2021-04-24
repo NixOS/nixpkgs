@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
     -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n

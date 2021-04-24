@@ -91,7 +91,7 @@ mkDerivation {
   # https://github.com/NixOS/nixpkgs/issues/83885
   # https://github.com/NixOS/nixpkgs/issues/29614#issuecomment-488849325
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set" "FREI0R_PATH" "${frei0r}/lib/frei0r-1"
   ];
 
   preFixup = ''

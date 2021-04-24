@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

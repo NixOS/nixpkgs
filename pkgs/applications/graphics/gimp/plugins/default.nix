@@ -70,7 +70,7 @@ in
       url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
-    NIX_LDFLAGS = "-lm";
+    env.NIX_LDFLAGS = "-lm";
     hardeningDisable = [ "format" ];
     meta = with lib; {
       description = "The GIMP Animation Package";
@@ -179,7 +179,7 @@ in
       Filters/Enhance/Wavelet sharpen
     */
     name = "wavelet-sharpen-0.1.2";
-    NIX_LDFLAGS = "-lm";
+    env.NIX_LDFLAGS = "-lm";
     src = fetchurl {
       url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
   cmakeFlags = lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1"  ];
 
   meta = with lib; {

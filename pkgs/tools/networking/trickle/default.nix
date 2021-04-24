@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     sed -i '/#define in_addr_t/ s:^://:' config.h
   '';
 
-  NIX_LDFLAGS = [ "-levent" "-ltirpc" ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_LDFLAGS = "-levent -ltirpc";
+  env.NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
 
   configureFlags = [ "--with-libevent" ];
 
