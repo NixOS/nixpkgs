@@ -11113,6 +11113,10 @@ in
   julia-stable = julia_15;
   julia = julia-lts;
 
+  julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
+  julia-stable-bin = julia_16-bin;
+
+
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
