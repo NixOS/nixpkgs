@@ -15,6 +15,8 @@
 
 , # size of the boot partition, is only used if partitionTableType is
   # either "efi" or "hybrid"
+  # This will be undersized slightly, as this is actually the offset of
+  # the end of the partition. Generally it will be 1MiB smaller.
   bootSize ? "256M"
 
 , # The files and directories to be placed in the target file system.
@@ -253,10 +255,25 @@ let format' = format; in let
 
     ${if diskSize == "auto" then ''
       ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
-        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) ))
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # Normally we'd need to account for alignment and things, if bootSize
+        # represented the actual size of the boot partition. But it instead
+        # represents the offset at which it ends.
+        # So we know bootSize is the reserved space in front of the partition.
+        reservedSpace=$(( gptSpace + $(numfmt --from=iec '${bootSize}') ))
+      '' else if partitionTableType == "legacy+gpt" then ''
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
+        reservedSpace=$(( gptSpace + 2 * 1024*1024 ))
+      '' else if partitionTableType == "legacy" then ''
+        # Add the 1MiB aligned reserved space (includes MBR)
+        reservedSpace=$(( 1024*1024 ))
       '' else ''
-        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') ))
+        reservedSpace=0
       ''}
+      additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
 
       # Compute required space in filesystem blocks
       diskUsage=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
