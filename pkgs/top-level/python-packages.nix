@@ -6518,6 +6518,8 @@ in {
 
   pysmartapp = callPackage ../development/python-modules/pysmartapp { };
 
+  pysmartthings = callPackage ../development/python-modules/pysmartthings { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
