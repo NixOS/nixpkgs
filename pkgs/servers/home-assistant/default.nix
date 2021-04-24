@@ -267,6 +267,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "history"
     "history_stats"
+    "home_connect"
     "home_plus_control"
     "homekit"
     "homekit_controller"
