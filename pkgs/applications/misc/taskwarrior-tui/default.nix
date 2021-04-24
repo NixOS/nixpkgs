@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, makeWrapper
+, taskwarrior
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   # Because there's a test that requires terminal access
   doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper ];
+  postInstall = ''
+    wrapProgram $out/bin/taskwarrior-tui --prefix PATH : "${lib.makeBinPath [ taskwarrior ]}"
+  '';
 
   cargoSha256 = "1sk0xlbllgpc5sawbr88mpwyyl2yrl5qsbj46ih38q8f4hfp365n";
 
