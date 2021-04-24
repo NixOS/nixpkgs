@@ -2,7 +2,7 @@
 gfortran, clang, cmake, gnumake, hwloc, jre, openblas, hdf5, expat, ncurses,
 readline, qt4, webkit, which, lp_solve, omniorb, sqlite, libatomic_ops,
 pkgconfig, file, gettext, flex, bison, doxygen, boost, openscenegraph, gnome2,
-pangox_compat, xorg, git, bash, gtk2, makeWrapper }:
+xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake hwloc
     jre openblas hdf5 expat ncurses readline qt4 webkit which lp_solve omniorb
     sqlite libatomic_ops pkgconfig file gettext flex bison doxygen boost
-    openscenegraph gnome2.gtkglext pangox_compat xorg.libXmu git gtk2
+    openscenegraph gnome2.gtkglext xorg.libXmu git gtk2
     makeWrapper];
 
   hardeningDisable = [ "format" ];
