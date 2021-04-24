@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , xz
-, qt5
 , wrapQtAppsHook
 , miniupnpc_2
 , swftools
@@ -10,14 +9,14 @@
 
 pythonPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "434";
+  version = "436";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-7Allc9zawja8DO2idv+MAYZ/cBRTCMd0mbgBLfEVii8=";
+    sha256 = "sha256-FXm8VUEY0OZ6/dc/qNwOXekhv5H2C9jjg/eNDoMvMn0==";
   };
 
   nativeBuildInputs = [
