@@ -2720,6 +2720,8 @@ in
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
+  jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
+
   jiten = callPackage ../applications/misc/jiten { };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
