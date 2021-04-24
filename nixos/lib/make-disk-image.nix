@@ -186,6 +186,13 @@ let format' = format; in let
       echo "$acc"
     }
 
+    # Approximative percentage of reserved space in an ext4 fs over 512MiB.
+    # 0.05208587646484375
+    #  × 1000, integer part: 52
+    compute_fudge() {
+      echo $(( $1 * 52 / 1000 ))
+    }
+
     mkdir $out
 
     root="$PWD/root"
@@ -252,15 +259,22 @@ let format' = format; in let
       ''}
 
       # Compute required space in filesystem blocks
-      requiredSpace=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
-      # Convert to bytes
-      requiredSpace=$(( requiredSpace * ${blockSize} ))
+      diskUsage=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
+      # Each inode takes space!
+      numInodes=$(find . | wc -l)
+      # Convert to bytes, inodes take two blocks each!
+      diskUsage=$(( (diskUsage + 2 * numInodes) * ${blockSize} ))
+      # Then increase the required space to account for the reserved blocks.
+      fudge=$(compute_fudge $diskUsage)
+      requiredFilesystemSpace=$(( diskUsage + fudge ))
 
-      diskSize=$(( requiredSpace  + additionalSpace ))
+      diskSize=$(( requiredFilesystemSpace  + additionalSpace ))
       truncate -s "$diskSize" $diskImage
 
       printf "Automatic disk size...\n"
-      printf "  Space needed: %d bytes\n" $requiredSpace
+      printf "  Closure space use: %d bytes\n" $diskUsage
+      printf "  fudge: %d bytes\n" $fudge
+      printf "  Filesystem size needed: %d bytes\n" $requiredFilesystemSpace
       printf "  Additional space: %d bytes\n" $additionalSpace
       printf "  Disk image size: %d bytes\n" $diskSize
     '' else ''
