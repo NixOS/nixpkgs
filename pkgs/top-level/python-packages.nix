@@ -3443,6 +3443,8 @@ in {
 
   iocapture = callPackage ../development/python-modules/iocapture { };
 
+  iopath = callPackage ../development/python-modules/iopath { };
+
   iowait = callPackage ../development/python-modules/iowait { };
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
