@@ -62,6 +62,16 @@ in
         description = "The firewall package used by fail2ban service.";
       };
 
+      extraPackages = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        example = lib.literalExample "[ pkgs.ipset ]";
+        description = ''
+          Extra packages to be made available to the fail2ban service. The example contains
+          the packages needed by the `iptables-ipset-proto6` action.
+        '';
+      };
+
       maxretry = mkOption {
         default = 3;
         type = types.ints.unsigned;
@@ -249,7 +259,7 @@ in
       restartTriggers = [ fail2banConf jailConf pathsConf ];
       reloadIfChanged = true;
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ];
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
