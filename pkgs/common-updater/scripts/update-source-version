@@ -19,6 +19,7 @@ args=()
 for arg in "$@"; do
     case $arg in
         --system=*)
+            system="${arg#*=}"
             systemArg="--system ${arg#*=}"
         ;;
         --version-key=*)
@@ -76,6 +77,26 @@ fi
 
 if [[ -z "$versionKey" ]]; then
     versionKey=version
+fi
+
+# Allow finding packages among flake outputs in repos using flake-compat.
+pname=$(nix-instantiate $systemArg --eval --strict -A "$attr.name" || echo)
+if [[ -z "$pname" ]]; then
+    if [[ -z "$system" ]]; then
+        system=$(nix-instantiate --eval -E 'builtins.currentSystem' | tr -d '"')
+    fi
+
+    pname=$(nix-instantiate $systemArg --eval --strict -A "packages.$system.$attr.name" || echo)
+    if [[ -n "$pname" ]]; then
+        attr="packages.$system.$attr"
+    else
+        pname=$(nix-instantiate $systemArg --eval --strict -A "legacyPackages.$system.$attr.name" || echo)
+        if [[ -n "$pname" ]]; then
+            attr="legacyPackages.$system.$attr"
+        else
+            die "Could not find attribute '$attr'!"
+        fi
+    fi
 fi
 
 if [[ -z "$nixFile" ]]; then
