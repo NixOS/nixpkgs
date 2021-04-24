@@ -14,14 +14,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
-  version = "0.2.0";
+  version = "0.3.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "10g3wj9yy15yzyfa1l96i97i3k6blm064p49hn7hp001cmc3w045";
+    sha256 = "0x57dci0prhlj79h74yh79cazn48rn0bckz5j3z4njk4fwc3fvfx";
   };
 
   postPatch = ''
@@ -64,10 +64,6 @@ python3.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
   ];
-
-  preFixup = ''
-    wrapPythonPrograms
-  '';
 
   meta = with lib; {
     description = "Simple application for identifying songs";
