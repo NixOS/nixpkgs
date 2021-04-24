@@ -79,10 +79,48 @@ in
         User = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        DeviceAllow = [
+          config.services.zigbee2mqtt.settings.serial.port
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = false;
+        NoNewPrivileges = true;
+        PrivateDevices = false; # prevents access to /dev/serial, because it is set 0700 root:root
+        PrivateUsers = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
         ProtectSystem = "strict";
         ReadWritePaths = cfg.dataDir;
-        PrivateTmp = true;
         RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SupplementaryGroups = [
+          "dialout"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
       };
       preStart = ''
         cp --no-preserve=mode ${configFile} "${cfg.dataDir}/configuration.yaml"
@@ -93,7 +131,6 @@ in
       home = cfg.dataDir;
       createHome = true;
       group = "zigbee2mqtt";
-      extraGroups = [ "dialout" ];
       uid = config.ids.uids.zigbee2mqtt;
     };
 
