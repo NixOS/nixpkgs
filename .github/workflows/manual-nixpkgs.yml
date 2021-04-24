@@ -1,9 +1,8 @@
 name: "Build Nixpkgs manual"
 
-permissions: read-all
-
 on:
-  pull_request_target:
+  push:
+  pull_request:
     branches:
       - master
     paths:
@@ -13,14 +12,8 @@ jobs:
   nixpkgs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          # pull_request_target checks out the base branch by default
-          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: actions/checkout@v2.3.4
       - uses: cachix/install-nix-action@v13
-        with:
-          # explicitly enable sandbox
-          extra_nix_config: sandbox = true
       - uses: cachix/cachix-action@v9
         with:
           # This cache is for the nixos/nixpkgs manual builds and should not be trusted or used elsewhere.
