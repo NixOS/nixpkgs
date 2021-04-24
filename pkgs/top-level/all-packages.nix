@@ -24639,6 +24639,8 @@ in
 
   motif = callPackage ../development/libraries/motif { };
 
+  mousai = callPackage ../applications/audio/mousai { };
+
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
   easytag = callPackage ../applications/audio/easytag { };
