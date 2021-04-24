@@ -151,12 +151,7 @@ let
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-      # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ] ++ optional (versionRange "89" "90.0.4402.0") (githubPatch
-      # To fix the build of chromiumBeta and chromiumDev:
-      "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
-      "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
-    ) ++ optional (chromiumVersionAtLeast "90")
+    ] ++ optional (chromiumVersionAtLeast "90")
       ./patches/fix-missing-atspi2-dependency.patch
     ++ optionals (chromiumVersionAtLeast "91") [
       ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
