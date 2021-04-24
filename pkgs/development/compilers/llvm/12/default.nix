@@ -192,12 +192,12 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libc++ ({ inherit llvm_meta; } //
+    libcxx = callPackage ./libcxx ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
-    libcxxabi = callPackage ./libc++abi ({ inherit llvm_meta; } //
+    libcxxabi = callPackage ./libcxxabi ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;

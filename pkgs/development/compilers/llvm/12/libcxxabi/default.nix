@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "libc++abi";
+  pname = "libcxxabi";
   inherit version;
 
   src = fetch "libcxxabi" "1cbmzspwjlr8f6sp73pw6ivf4dpg6rpc61by0q1m2zca2k6yif3a";
