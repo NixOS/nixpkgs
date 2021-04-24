@@ -81,7 +81,9 @@ buildPythonPackage rec {
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
-  pythonImportsCheck = [ "angr" ];
+
+  # See http://angr.io/api-doc/
+  pythonImportsCheck = [ "angr" "claripy" "cle" "pyvex" "archinfo" ];
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";
