@@ -59,6 +59,9 @@ newVersion=${args[1]}
 newHash=${args[2]}
 newUrl=${args[3]}
 
+# Third-party repositories might not accept arguments in their default.nix.
+importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
+
 if (( "${#args[*]}" < 2 )); then
     echo "$scriptName: Too few arguments"
     usage
@@ -93,13 +96,13 @@ if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
 
 if [[ -z "$oldUrl" ]]; then
     die "Couldn't evaluate source url from '$attr.src'!"
 fi
 
-oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [[ -z "$oldVersion" ]]; then
     die "Couldn't find out the old version of '$attr'!"
@@ -114,7 +117,7 @@ if [[ "$oldVersion" = "$newVersion" ]]; then
 fi
 
 if [[ -n "$newRevision" ]]; then
-    oldRevision=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.src.rev" | tr -d '"')
+    oldRevision=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.src.rev" | tr -d '"')
     if [[ -z "$oldRevision" ]]; then
         die "Couldn't evaluate source revision from '$attr.src'!"
     fi
