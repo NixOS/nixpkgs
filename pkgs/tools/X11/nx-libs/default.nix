@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ln -s libNX_X11.so.6.3.0
   '';
 
+  preConfigure = "sed -i 's/clq/cq/' nx-X11/config/cf/Imake.tmpl"; # https://github.com/ArcticaProject/nx-libs/issues/1003
+
   PREFIX=""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
