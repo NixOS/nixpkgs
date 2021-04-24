@@ -2678,6 +2678,8 @@ in {
 
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
+  fvcore = callPackage ../development/python-modules/fvcore { };
+
   fx2 = callPackage ../development/python-modules/fx2 { };
 
   gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
