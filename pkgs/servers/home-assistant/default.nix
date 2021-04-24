@@ -358,6 +358,7 @@ in with py.pkgs; buildPythonApplication rec {
     "sma"
     "sensor"
     "slack"
+    "smartthings"
     "smarttub"
     "smtp"
     "smappee"
