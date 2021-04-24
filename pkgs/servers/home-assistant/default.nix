@@ -360,6 +360,7 @@ in with py.pkgs; buildPythonApplication rec {
     "smhi"
     "sensor"
     "slack"
+    "smartthings"
     "smarttub"
     "smtp"
     "smappee"
