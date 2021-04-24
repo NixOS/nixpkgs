@@ -7019,6 +7019,12 @@
     githubId = 628342;
     name = "Tim Steinbach";
   };
+  nerdypepper = {
+    email = "nerdy@peppe.rs";
+    github = "nerdypepper";
+    githubId = 23743547;
+    name = "Akshay Oppiliappan";
+  };
   netixx = {
     email = "dev.espinetfrancois@gmail.com";
     github = "netixx";
