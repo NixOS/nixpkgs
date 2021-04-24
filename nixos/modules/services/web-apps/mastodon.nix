@@ -31,6 +31,8 @@ let
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
+  systemCallsList = [ "@clock" "@cpu-emulation" "@debug" "@keyring" "@module" "@mount" "@obsolete" "@raw-io" "@reboot" "@resources" "@setuid" "@swap" ];
+
   cfgService = {
     # User and group
     User = cfg.user;
@@ -68,7 +70,6 @@ let
     PrivateMounts = true;
     # System Call Filtering
     SystemCallArchitectures = "native";
-    SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @reboot @resources @setuid @swap";
   };
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
@@ -432,6 +433,8 @@ in {
       serviceConfig = {
         Type = "oneshot";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " systemCallsList;
       } // cfgService;
 
       after = [ "network.target" ];
@@ -457,6 +460,8 @@ in {
         Type = "oneshot";
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " systemCallsList;
       } // cfgService;
       after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
       wantedBy = [ "multi-user.target" ];
@@ -481,6 +486,8 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-streaming";
         RuntimeDirectoryMode = "0750";
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@privileged" ]);
       } // cfgService;
     };
 
@@ -503,6 +510,8 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
         RuntimeDirectoryMode = "0750";
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@privileged" ]);
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
@@ -522,6 +531,8 @@ in {
         RestartSec = 20;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@privileged" ]);
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
