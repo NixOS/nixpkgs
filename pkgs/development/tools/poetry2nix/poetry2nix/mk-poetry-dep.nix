@@ -116,8 +116,8 @@ pythonPackages.callPackage
       buildInputs = (
         baseBuildInputs
         ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
-        ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
-        ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optionals (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+        ++ lib.optionals isLocal buildSystemPkgs
         ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 

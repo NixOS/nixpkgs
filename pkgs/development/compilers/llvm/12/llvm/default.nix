@@ -105,7 +105,7 @@ in stdenv.mkDerivation (rec {
   '';
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
-  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
+  env.LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"

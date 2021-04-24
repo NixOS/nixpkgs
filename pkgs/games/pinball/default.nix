@@ -23,10 +23,8 @@ stdenv.mkDerivation rec {
     "--with-sdl-prefix=${lib.getDev SDL}"
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${lib.getDev SDL_image}/include/SDL"
-    "-I${lib.getDev SDL_mixer}/include/SDL"
-  ];
+  env.NIX_CFLAGS_COMPILE =
+    "-I${lib.getDev SDL_image}/include/SDL -I${lib.getDev SDL_mixer}/include/SDL";
 
   enableParallelBuilding = true;
 

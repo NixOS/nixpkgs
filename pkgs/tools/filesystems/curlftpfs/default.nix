@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl glib zlib ];
 
-  CFLAGS = lib.optionalString stdenv.isDarwin "-D__off_t=off_t";
+  env.CFLAGS = lib.optionalString stdenv.isDarwin "-D__off_t=off_t";
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook for

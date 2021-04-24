@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64) then live555 else null;
+  env.LIVE555_PREFIX = optionalString (!stdenv.hostPlatform.isAarch64) (toString live555);
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
-  BUILDCC = "${stdenv.cc}/bin/gcc";
+  env.BUILDCC = "${stdenv.cc}/bin/gcc";
 
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \

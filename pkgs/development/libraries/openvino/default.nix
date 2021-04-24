@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     python
     tbb
     shellcheck
-  ] ++ lib.optional enablePython (with python.pkgs; [
+  ] ++ lib.optionals enablePython (with python.pkgs; [
     cython
     pybind11
   ]);

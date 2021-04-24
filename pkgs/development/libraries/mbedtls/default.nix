@@ -34,10 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=format"
-    "-Wno-error=format-truncation"
-  ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU
+    "-Wno-error=format -Wno-error=format-truncation";
 
   meta = with lib; {
     homepage = "https://tls.mbed.org/";

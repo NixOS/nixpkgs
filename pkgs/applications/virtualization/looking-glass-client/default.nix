@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # Including our own patch here since upstream commit patch doesnt apply cleanly on B3
     ./0001-client-all-fix-more-maybe-uninitialized-when-O3-is-i.patch
   ];
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
 
   sourceRoot = "source/client";
   env.NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
