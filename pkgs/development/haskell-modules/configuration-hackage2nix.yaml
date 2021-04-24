@@ -8691,7 +8691,6 @@ broken-packages:
   - openai-servant
   - openapi-petstore
   - openapi-typed
-  - openapi3
   - openapi3-code-generator
   - opench-meteo
   - OpenCL
@@ -10046,7 +10045,6 @@ broken-packages:
   - servant-multipart
   - servant-namedargs
   - servant-nix
-  - servant-openapi3
   - servant-pagination
   - servant-pandoc
   - servant-polysemy
