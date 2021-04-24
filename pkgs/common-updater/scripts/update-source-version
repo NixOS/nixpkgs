@@ -99,11 +99,10 @@ if [[ -z "$oldUrl" ]]; then
     die "Couldn't evaluate source url from '$attr.src'!"
 fi
 
-drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; lib.getName $attr" | tr -d '"')
-oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (lib.getVersion $attr)" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
-if [[ -z "$drvName" || -z "$oldVersion" ]]; then
-    die "Couldn't evaluate name and version from '$attr.name'!"
+if [[ -z "$oldVersion" ]]; then
+    die "Couldn't find out the old version of '$attr'!"
 fi
 
 if [[ "$oldVersion" = "$newVersion" ]]; then
