@@ -11,9 +11,8 @@ in {
   options = {
     virtualbox = {
       baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 50 * 1024;
+        type = types.int;
+        default = 50 * 1024;
         description = ''
           The size of the VirtualBox base image in MiB.
         '';

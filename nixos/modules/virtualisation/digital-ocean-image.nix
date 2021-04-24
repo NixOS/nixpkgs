@@ -10,9 +10,8 @@ in
 
   options = {
     virtualisation.digitalOceanImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 4096;
+      type = with types; int;
+      default = 4096;
       description = ''
         Size of disk image. Unit is MB.
       '';
