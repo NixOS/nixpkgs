@@ -5821,6 +5821,8 @@ in {
 
   pydrive = callPackage ../development/python-modules/pydrive { };
 
+  pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
+
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
   pydub = callPackage ../development/python-modules/pydub { };
