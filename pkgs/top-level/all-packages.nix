@@ -30915,6 +30915,8 @@ in
 
   fac-build = callPackage ../development/tools/build-managers/fac {};
 
+  treefmt = callPackage ../development/tools/treefmt {};
+
   bottom = callPackage ../tools/system/bottom {};
 
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {
