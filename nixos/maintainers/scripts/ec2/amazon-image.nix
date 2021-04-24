@@ -41,7 +41,8 @@ in {
 
     sizeMB = mkOption {
       type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
+      # TODO(lukegb): this should be "auto"; see #120473
+      default = if config.ec2.hvm then 2048 else 8192;
       example = 8192;
       description = "The size in MB of the image";
     };
