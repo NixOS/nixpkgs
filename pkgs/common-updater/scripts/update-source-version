@@ -83,6 +83,14 @@ if [[ -z "$nixFile" ]]; then
     if [[ ! -f "$nixFile" ]]; then
         die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
     fi
+
+    # flake-compat will return paths in the Nix store, we need to correct for that.
+    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" | tr -d '"')
+    if [[ -n "$possiblyOutPath" ]]; then
+        outPathEscaped=$(echo "$possiblyOutPath" | sed 's#[$^*\\.[|]#\\&#g')
+        pwdEscaped=$(echo "$PWD" | sed 's#[$^*\\.[|]#\\&#g')
+        nixFile=$(echo "$nixFile" | sed "s|^$outPathEscaped|$pwdEscaped|")
+    fi
 fi
 
 oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.src.drvAttrs.outputHashAlgo" | tr -d '"')
