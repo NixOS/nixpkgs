@@ -693,6 +693,11 @@ environment.systemPackages = [
        as for each interface in <varname>services.babeld.interfaces</varname>.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>yadm</package> dotfile manager has been updated from 2.x to 3.x, which has new (XDG) default locations for some data/state files. Most yadm commands will fail and print a legacy path warning (which describes how to upgrade/migrate your repository). If you have scripts, daemons, scheduled jobs, shell profiles, etc. that invoke yadm, expect them to fail or misbehave until you perform this migration and prepare accordingly.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
