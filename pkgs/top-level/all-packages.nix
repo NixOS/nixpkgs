@@ -4513,6 +4513,8 @@ in
 
   flent = python3Packages.callPackage ../applications/networking/flent { };
 
+  flexoptix-app = callPackage ../tools/misc/flexoptix-app { };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   fluentd = callPackage ../tools/misc/fluentd { };
