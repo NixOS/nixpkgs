@@ -10,20 +10,14 @@ let
     osd0 = {
       name = "0";
       ip = "192.168.1.2";
-      key = "AQBCEJNa3s8nHRAANvdsr93KqzBznuIWm2gOGg==";
-      uuid = "55ba2294-3e24-478f-bee0-9dca4c231dd9";
     };
     osd1 = {
       name = "1";
       ip = "192.168.1.3";
-      key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
-      uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
     osd2 = {
       name = "2";
       ip = "192.168.1.4";
-      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
-      uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
   };
   generateCephConfig = { daemonConfig }: {
@@ -48,11 +42,7 @@ let
       bash
       sudo
       ceph
-      xfsprogs
-      netcat-openbsd
     ];
-
-    boot.kernelModules = [ "xfs" ];
 
     services.ceph = cephConfig;
   };
@@ -112,6 +102,9 @@ let
         "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
         "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
         "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
+        "sudo -u ceph mkdir /var/lib/ceph/bootstrap-osd",
+        "sudo -u ceph ceph-authtool --create-keyring /var/lib/ceph/bootstrap-osd/ceph.keyring --gen-key -n client.bootstrap-osd --cap mon 'profile bootstrap-osd' --cap mgr 'allow r'",
+        "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
         "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
         "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
         "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
@@ -133,51 +126,26 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
 
-    # Send the admin keyring to the OSD machines
-    monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
-    osd0.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd1.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
+    # Send the OSD Bootstrap keyring to the OSD machines
+    monA.succeed("cp -r /var/lib/ceph/bootstrap-osd /tmp/shared")
+    osd0.succeed("cp -r /tmp/shared/bootstrap-osd /var/lib/ceph/")
+    osd1.succeed("cp -r /tmp/shared/bootstrap-osd /var/lib/ceph/")
+    osd2.succeed("cp -r /tmp/shared/bootstrap-osd /var/lib/ceph/")
 
     # Bootstrap OSDs
     osd0.succeed(
-        "mkfs.xfs /dev/vdb",
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-        "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-    )
-    osd1.succeed(
-        "mkfs.xfs /dev/vdb",
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-        "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-    )
-    osd2.succeed(
-        "mkfs.xfs /dev/vdb",
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
-    )
-
-    # Initialize the OSDs with regular filestore
-    osd0.succeed(
-        "ceph-osd -i ${cfg.osd0.name} --mkfs --osd-uuid ${cfg.osd0.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "ceph-volume lvm create --no-systemd --data /dev/vdb",
         "systemctl start ceph-osd-${cfg.osd0.name}",
     )
     osd1.succeed(
-        "ceph-osd -i ${cfg.osd1.name} --mkfs --osd-uuid ${cfg.osd1.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "ceph-volume lvm create --no-systemd --data /dev/vdb",
         "systemctl start ceph-osd-${cfg.osd1.name}",
     )
     osd2.succeed(
-        "ceph-osd -i ${cfg.osd2.name} --mkfs --osd-uuid ${cfg.osd2.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "ceph-volume lvm create --no-systemd --data /dev/vdb",
         "systemctl start ceph-osd-${cfg.osd2.name}",
     )
+
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
