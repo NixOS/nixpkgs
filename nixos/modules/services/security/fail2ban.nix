@@ -62,6 +62,12 @@ in
         description = "The firewall package used by fail2ban service.";
       };
 
+      maxretry = mkOption {
+        default = 3;
+        type = types.ints.unsigned;
+        description = "Number of failures before a host gets banned.";
+      };
+
       banaction = mkOption {
         default = "iptables-multiport";
         type = types.str;
@@ -291,7 +297,7 @@ in
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
-      maxretry    = 3
+      maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
       banaction   = ${cfg.banaction}
