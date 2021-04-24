@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libutp";
-  version = "0.1";
+  version = "unstable-2018-05-15";
 
   src = fetchFromGitHub {
-    owner = "transmission";
-    repo = "${pname}";
-    rev = "fda9f4b3db97ccb243fcbed2ce280eb4135d705b";
+    owner = "bittorrent";
+    repo = pname;
+    rev = "2b364cbb0650bdab64a5de2abb4518f9f228ec44";
     sha256 = "0z94v27c4aki4giq7551g1gnycxvi2inm2rfjmzqkc34w0n9kyqa";
   };
 
@@ -24,4 +24,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.onny ];
   };
 }
-
