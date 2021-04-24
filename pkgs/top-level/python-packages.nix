@@ -2373,6 +2373,11 @@ in {
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
+  fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
+    withPython = true;
+    inherit python;
+  });
+
   fastpair = callPackage ../development/python-modules/fastpair { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };

@@ -1,14 +1,16 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , boost
-, fastjet
 , gfortran
 , lhapdf
-, python2
-, root
+, ncurses
+, python
+, swig
 , yoda
 , zlib
+, withPython ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,19 +22,20 @@ stdenv.mkDerivation rec {
     sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
   };
 
+  nativeBuildInputs = lib.optional withPython autoreconfHook;
+
   buildInputs = [
     boost
-    fastjet
     gfortran
     gfortran.cc.lib
     lhapdf
-    python2
-    root
     yoda
-  ];
+  ] ++ lib.optional withPython python
+    ++ lib.optional (withPython && python.isPy3k) ncurses;
+
   propagatedBuildInputs = [
     zlib
-  ];
+  ] ++ lib.optional withPython swig;
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-yoda=${yoda}"
-  ];
+  ] ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 
