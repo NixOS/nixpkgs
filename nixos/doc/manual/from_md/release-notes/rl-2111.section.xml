@@ -672,6 +672,25 @@
           <literal>yambar-wayland</literal> if you are on wayland.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>borgbackup</literal> module now runs its backup
+          job with an unprivileged, dynamic user allocation, as opposed
+          to root, if no explicit
+          <link xlink:href="options.html#opt-services.borgbackup.jobs.&lt;name&gt;.user"><literal>services.borgbackup.jobs.&lt;name&gt;.user</literal></link>
+          was set. This is possible by equipping the service with a
+          capability (<literal>CAP_DAC_READ_SEARCH</literal>) that lets
+          it bypass filesystem permission checks. Its pre- and
+          post-hooks now run in <literal>ExecStartPre</literal> and
+          <literal>ExecStopPost</literal> respectively, and are not part
+          of the primary backup script anymore. They are still run as
+          root, so that certain tasks (e.g. creating snapshots) still
+          work. If you relied on the <literal>exitStatus</literal>
+          variable in your post-hook you now need to migrate to the
+          systemd provided <literal>EXIT_CODE</literal> variable
+          instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

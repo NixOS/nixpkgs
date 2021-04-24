@@ -20,19 +20,8 @@ let
       (mapAttrsToList (x: y: "--keep-${x}=${toString y}") cfg.prune.keep);
 
   mkBackupScript = cfg: ''
-    on_exit()
-    {
-      exitStatus=$?
-      # Reset the EXIT handler, or else we're called again on 'exit' below
-      trap - EXIT
-      ${cfg.postHook}
-      exit $exitStatus
-    }
-    trap 'on_exit' INT TERM QUIT EXIT
-
     archiveName="${cfg.archiveBaseName}-$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
-    ${cfg.preHook}
   '' + optionalString cfg.doInit ''
     # Run borg init if the repo doesn't exist yet
     if ! borg list $extraArgs > /dev/null; then
@@ -70,16 +59,26 @@ let
 
   mkBackupService = name: cfg:
     let
-      userHome = config.users.users.${cfg.user}.home;
+      userHome = if !isNull cfg.user then config.users.users.${cfg.user}.home else "/var/lib/borgbackup";
     in nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
         borgbackup openssh
       ];
       script = mkBackupScript cfg;
-      serviceConfig = {
+      serviceConfig = optionalAttrs (!isNull cfg.user) {
         User = cfg.user;
         Group = cfg.group;
+      } // optionalAttrs (isNull cfg.user) {
+        DynamicUser = true;
+        User = "borgbackup";
+        StateDirectory = "borgbackup";
+        AmbientCapabilities = [
+          "cap_dac_read_search"
+        ];
+      } // {
+        ExecStartPre = "+${pkgs.writeShellScript "borgbackup-pre-${name}" cfg.preHook}";
+        ExecStopPost = "+${pkgs.writeShellScript "borgbackup-post-${name}" cfg.postHook}";
         # Only run when no other process is using CPU or disk
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
@@ -94,6 +93,8 @@ let
       environment = {
         BORG_REPO = cfg.repo;
         inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
+      } // optionalAttrs (isNull cfg.user) {
+        BORG_BASE_DIR = userHome;
       } // (mkPassEnv cfg) // cfg.environment;
       inherit (cfg) startAt;
     };
@@ -294,7 +295,7 @@ in {
           };
 
           user = mkOption {
-            type = types.str;
+            type = with types; nullOr str;
             description = ''
               The user <command>borg</command> is run as.
               User or group need read permission
@@ -304,7 +305,7 @@ in {
           };
 
           group = mkOption {
-            type = types.str;
+            type = with types; nullOr str;
             description = ''
               The group borg is run as. User or group needs read permission
               for the specified <option>paths</option>.
@@ -510,7 +511,7 @@ in {
             description = ''
               Shell commands to run just before exit. They are executed
               even if a previous command exits with a non-zero exit code.
-              The latter is available as <literal>$exitStatus</literal>.
+              The latter is available as <literal>$EXIT_CODE</literal>.
             '';
             default = "";
           };
