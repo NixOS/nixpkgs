@@ -5950,7 +5950,6 @@ in
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   lefthook = callPackage ../applications/version-management/git-and-tools/lefthook {
-    buildGoModule = buildGoModule;
   };
 
   lego = callPackage ../tools/admin/lego { };
