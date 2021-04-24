@@ -29,8 +29,6 @@ let
     + concatMapStrings (mkListen "doh2") cfg.listenDoH
     + cfg.extraConfig
   );
-
-  package = pkgs.knot-resolver;
 in {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
@@ -57,6 +55,13 @@ in {
         You can run <literal>sudo nc -U /run/knot-resolver/control/1</literal>
         and give commands interactively to kresd@1.service.
       '';
+    };
+    package = mkOption {
+      default = pkgs.knot-resolver;
+      type = types.package;
+      description = "
+        knot-resolver package to use.
+      ";
     };
     extraConfig = mkOption {
       type = types.lines;
@@ -115,7 +120,7 @@ in {
       };
     users.groups.knot-resolver.gid = null;
 
-    systemd.packages = [ package ]; # the units are patched inside the package a bit
+    systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
 
     systemd.targets.kresd = { # configure units started by default
       wantedBy = [ "multi-user.target" ];
@@ -123,8 +128,8 @@ in {
         ++ map (i: "kresd@${toString i}.service") (range 1 cfg.instances);
     };
     systemd.services."kresd@".serviceConfig = {
-      ExecStart = "${package}/bin/kresd --noninteractive "
-        + "-c ${package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
+      ExecStart = "${cfg.package}/bin/kresd --noninteractive "
+        + "-c ${cfg.package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
       # Ensure /run/knot-resolver exists
       RuntimeDirectory = "knot-resolver";
       RuntimeDirectoryMode = "0770";
