@@ -42,7 +42,7 @@ There are two ways to try compiling a package which has been marked as broken.
 
 -   For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
 
-    ```shellSession
+    ```ShellSession
     $ export NIXPKGS_ALLOW_BROKEN=1
     ```
 
@@ -61,7 +61,7 @@ There are also two ways to try compiling a package which has been marked as unsu
 
 -   For allowing the build of an unsupported package once, you can use an environment variable for a single invocation of the nix tools:
 
-    ```shellSession
+    ```ShellSession
     $ export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
     ```
 
@@ -81,7 +81,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
 -   To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
 
-    ```shellSession
+    ```ShellSession
     $ export NIXPKGS_ALLOW_UNFREE=1
     ```
 
@@ -134,7 +134,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
 -   To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
 
-    ```shellSession
+    ```ShellSession
     $ export NIXPKGS_ALLOW_INSECURE=1
     ```
 
@@ -294,7 +294,7 @@ This provides us with some useful documentation for using our packages.  However
 
 For this to work fully, you must also have this script sourced when you are logged in. Try adding something like this to your `~/.profile` file:
 
-```shellSession
+```ShellSession
 #!/bin/sh
 if [ -d $HOME/.nix-profile/etc/profile.d ]; then
   for i in $HOME/.nix-profile/etc/profile.d/*.sh; do

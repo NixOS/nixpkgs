@@ -111,7 +111,7 @@ self: super:
 
 This overlay uses Intel's MKL library for both BLAS and LAPACK interfaces. Note that the same can be accomplished at runtime using `LD_LIBRARY_PATH` of `libblas.so.3` and `liblapack.so.3`. For instance:
 
-```shellSession
+```ShellSession
 $ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
 ```
 
