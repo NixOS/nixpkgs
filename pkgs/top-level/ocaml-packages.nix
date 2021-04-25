@@ -413,6 +413,8 @@ let
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
 
+    hpack = callPackage ../development/ocaml-modules/hpack { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
