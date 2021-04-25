@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
 , jdk, cmake, libxml2, zlib, python3, ncurses5
-, dotnet-sdk_3
+, dotnet-sdk_5
 , autoPatchelfHook
 , glib
 , libdbusmenu
@@ -197,7 +197,7 @@ let
       patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
-        ln -s ${dotnet-sdk_3}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
+        ln -s ${dotnet-sdk_5}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
