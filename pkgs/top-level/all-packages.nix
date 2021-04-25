@@ -6490,7 +6490,7 @@ in
 
   ucx = callPackage ../development/libraries/ucx {};
 
-  openmodelica = callPackage ../applications/science/misc/openmodelica { };
+  openmodelica = libsForQt5.callPackage ../applications/science/misc/openmodelica { };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
