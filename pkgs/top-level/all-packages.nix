@@ -24194,6 +24194,8 @@ in
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
+  kile-wl = callPackage ../applications/misc/kile-wl { };
+
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
