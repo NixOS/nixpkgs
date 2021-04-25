@@ -912,6 +912,8 @@ in
     inherit (haskellPackages) ghcWithPackages;
   };
 
+  termsyn = callPackage ../data/fonts/termsyn { };
+
   tilda = callPackage ../applications/terminal-emulators/tilda {
     gtk = gtk3;
   };
