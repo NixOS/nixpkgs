@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "eternity-engine";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dlz7axbiw003bgwk2hl43w8r2bwnxhi042i1xwdiwaja0cpnf5y";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ libGL SDL2 SDL2_mixer SDL2_net ];
 
   postPatch = ''
