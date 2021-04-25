@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p atemu ];
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
     broken = cudaSupport;
   };
 }
