@@ -198,7 +198,7 @@ rec {
 
   /* Set a specific build target instead of compiling all targets in the package.
    * For example, imagine we have a .cabal file with a library, and 2 executables "dev" and "server".
-   * We can build only "server" and not wait on the compilation of "dev" by useing setBuildTarget as follows:
+   * We can build only "server" and not wait on the compilation of "dev" by using setBuildTarget as follows:
    *
    *   setBuildTarget (callCabal2nix "thePackageName" thePackageSrc {}) "server"
    *
