@@ -5,6 +5,7 @@
 , makeWrapper
 , readline
 , gmp
+, zlib
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -61,11 +62,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.10.2";
+  version = "4.11.0";
 
   src = fetchurl {
     url = "https://files.gap-system.org/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
+    sha256 = "sha256-vwcKENwqxgWT/mXfD4c9ctTWdQHobrJipva9SPyGhgI=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -76,6 +77,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     readline
     gmp
+    zlib
   ];
 
   nativeBuildInputs = [
@@ -83,33 +85,21 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://github.com/gap-system/gap/pull/3294
-    (fetchpatch {
-      name = "add-make-install-targets.patch";
-      url = "https://github.com/gap-system/gap/commit/3361c172e6c5ff3bb3f01ba9d6f1dd4ad42cea80.patch";
-      sha256 = "1kwp9qnfvmlbpf1c3rs6j5m2jz22rj7a4hb5x1gj9vkpiyn5pdyj";
-    })
-
     # Fix for locale specific tests causing issues. Already upstream.
     # Backport of https://github.com/gap-system/gap/pull/4022
-    # WHEN REMOVING: also remove the`rm tst/testinstall/strings.tst` line in
-    # `postPatch` below. That line is necessary since the patch is not intended
-    # for gap 4.10.
     (fetchpatch {
       name = "remove-locale-specific-tests.patch";
       url = "https://github.com/gap-system/gap/commit/c18b0c4215b5212a2cc4f305e2d5b94ba716bee8.patch";
-      excludes = ["tst/testinstall/stringobj.tst"];
-      sha256 = "1mz5b4mbw2jdd1ypp5s0dy6pp0jsvwsxr2dm4kbkls20r1r192sc";
+      sha256 = "sha256-De+T9Y7ewRT6plJrj2VR8axRvD/JCTYKOBWB7Bw0oq0=";
     })
 
     # fixes aarch64 gc crashes: https://github.com/gap-system/gap/pull/3965
-    ./mark-genstackfuncbags-as-noinline.patch
+    (fetchpatch {
+      name = "mark-genstackfuncbags-as-noinline.patch";
+      url = "https://github.com/gap-system/gap/commit/f0a8f49ff8dad0a5fa77253d45457c6f40f96778.patch";
+      sha256 = "sha256-GU9tOP1stX2vn8m8kXOBupEpxIYArA76ibKL8eLn0MY=";
+    })
   ];
-
-  postPatch = ''
-    # File not covered by the remove-locale-specific-tests.patch patch above.
-    rm tst/testinstall/strings.tst
-  '';
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
   # tests are run twice, once with all packages loaded and once without
@@ -155,7 +145,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/bin" "$out/share/gap/"
 
-    mkdir -p "$out/share/gap"
     echo "Copying files to target directory"
     cp -ar . "$out/share/gap/build-dir"
 
