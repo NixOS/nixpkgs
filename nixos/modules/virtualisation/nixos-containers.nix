@@ -439,21 +439,16 @@ in
       default = false;
       description = ''
         Whether this NixOS machine is a lightweight container running
-        in another NixOS system. If set to true, support for nested
-        containers is disabled by default, but can be reenabled by
-        setting <option>boot.enableContainers</option> to true.
+        in another NixOS system.
       '';
     };
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = !config.boot.isContainer;
+      default = true;
       description = ''
         Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used), but only if the
-        system is not itself a lightweight container of a host.
-        To enable support for nested containers, this option has to be
-        explicitly set to true (in the outer container).
+        (at no cost if containers are not actually used).
       '';
     };
 
