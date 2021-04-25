@@ -13,6 +13,7 @@ in
 stdenv.mkDerivation rec {
   name = "openmodelica";
   version = "1.13.0";
+  src = fetchgit (import ./src-main.nix);
 
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake hwloc
     jre openblas hdf5 expat ncurses readline qt4 webkit which lp_solve omniorb
