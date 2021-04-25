@@ -6,18 +6,21 @@ let
   fixedHashes' = import ./fixedHashes.nix;
   tlPkgs = import ./pkgs.nix;
 in
-{ lib, fetchurl, runCommand
-, callPackage, ghostscriptX, harfbuzz, poppler_min
+{ lib, newScope
+, ghostscriptX, harfbuzz, poppler_min
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
-  inherit (lib) makeExtensible;
-  applyOverExtensible = applyOverExtensibleWithCustomName "extend";
-  applyOverExtensibleWithCustomName = extenderName: f: extensible:
-    f (extensible // {
-      ${extenderName} = g: f (extensible.${extenderName} g);
-    });
+  # For use with `lib.makeScope`.
+  applyOverScope = f: scope: f (scope // {
+    overrideScope = g: applyOverScope f (scope.overrideScope g);
+    overrideScope' = g: applyOverScope f (scope.overrideScope' g);
+  });
+  # For use with `lib.makeScope'` or `lib.makeScopeWithSplicing`.
+  applyOverScope' = f: scope: f (scope // {
+    overrideScope = g: applyOverScope' f (scope.overrideScope g);
+  });
 
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
@@ -44,6 +47,15 @@ let
   warnRenamed = from: to: lib.warn
     "Obsolete attribute `${from}' is used. It was renamed to `${to}'.";
 
+  # overrides of higher-scoped packages within texlive
+  newScope' = scope: newScope ({
+    ghostscript = ghostscriptX;
+    poppler = poppler_min; # otherwise depend on various X stuff
+    harfbuzz = harfbuzz.override {
+      withIcu = true; withGraphite2 = true;
+    };
+  } // scope);
+
   texliveFinalizer = super:
     super.texlivePackages //
     mapAliases super {
@@ -51,16 +63,11 @@ let
     } //
     super;
 in
-applyOverExtensible texliveFinalizer (makeExtensible (self: {
+applyOverScope texliveFinalizer (lib.makeScope newScope' (self: let
+  inherit (self) callPackage;
+in {
   # various binaries (compiled)
-  texliveBin = callPackage ./bin.nix {
-    inherit (self) combine texlivePackages;
-    poppler = poppler_min; # otherwise depend on various X stuff
-    ghostscript = ghostscriptX;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-  };
+  texliveBin = callPackage ./bin.nix { };
 
   texliveSnapshot = {
     year = "2021";
@@ -69,10 +76,16 @@ applyOverExtensible texliveFinalizer (makeExtensible (self: {
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  buildTexlivePackage = let
-    inherit (lib) optionalAttrs optionalString;
-    snapshot = self.texliveSnapshot;
-  in ({ pname, tlType
+  buildTexlivePackage = callPackage (
+    { lib, fetchurl, runCommand
+    , texliveSnapshot
+    }:
+    let
+      inherit (lib) optionalAttrs optionalString;
+      snapshot = texliveSnapshot;
+    in
+
+    { pname, tlType
     , revision, version, sha512
     , postUnpack ? ""
     , stripPrefix ? 1
@@ -136,7 +149,7 @@ applyOverExtensible texliveFinalizer (makeExtensible (self: {
         (''
           mkdir "$out"
         '' + unpackCmd "'${src}'")
-  );
+  ) { };
 
   # combine a set of TL packages into a single TL meta-package
   combineTexlivePackages = let
@@ -168,11 +181,9 @@ applyOverExtensible texliveFinalizer (makeExtensible (self: {
         ++ combineTexlivePackages (args.deps or {});
     };
 
-  # function for creating a working environment from a set of TL packages
-  combine = callPackage ./combine.nix {
-    inherit (self) texliveBin combineTexlivePackages;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
-  };
+  # function for creating a working environment from a set of TL packages.
+  # `ghostscript` could be without X, probably, but we use X for `texliveBin`.
+  combine = callPackage ./combine.nix { };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   originalTexlivePackages = tlPkgs self.texlivePackages;
