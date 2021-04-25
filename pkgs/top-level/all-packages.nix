@@ -30915,7 +30915,7 @@ in
 
   fac-build = callPackage ../development/tools/build-managers/fac {};
 
-  treefmt = callPackage ../development/tools/treefmt {};
+  treefmt = callPackage ../development/tools/treefmt { };
 
   bottom = callPackage ../tools/system/bottom {};
 
