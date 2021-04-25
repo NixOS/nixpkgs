@@ -115,7 +115,7 @@ in {
     passthru.deps = deps;
 
     meta = with lib; {
-      homepage = "http://openjdk.java.net/projects/openjfx/";
+      homepage = "https://openjdk.java.net/projects/openjfx/";
       license = licenses.gpl2Classpath;
       description = "The next-generation Java client toolkit; unpacked SDK";
       maintainers = with maintainers; [ abbradar ];
@@ -131,7 +131,7 @@ in {
     '';
 
     meta = with lib; {
-      homepage = "http://openjdk.java.net/projects/openjfx/";
+      homepage = "https://openjdk.java.net/projects/openjfx/";
       license = licenses.gpl2Classpath;
       description = "The next-generation Java client toolkit; packed SDK";
       maintainers = with maintainers; [ abbradar ];
