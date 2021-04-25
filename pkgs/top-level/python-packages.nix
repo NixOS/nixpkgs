@@ -4624,6 +4624,8 @@ in {
 
   opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
 
+  openshift = callPackage ../development/python-modules/openshift { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
@@ -6358,6 +6360,8 @@ in {
   pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
+
+  python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
 

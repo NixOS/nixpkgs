@@ -38,15 +38,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "soldat-unstable";
-  version = "2020-11-26";
+  pname = "soldat";
+  version = "unstable-2021-02-09";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "2280296ac56883f6a9cad4da48025af8ae7782e7";
-    sha256 = "17i3nlhxm4x4zx00i00aivhxmagbnyizxnpwiqzg57bf23hrvdj3";
+    rev = "c304c3912ca7a88461970a859049d217a44c6375";
+    sha256 = "09sl2zybfcmnl2n3qghp0gylmr71y01534l6nq0y9llbdy0bf306";
   };
 
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
@@ -63,14 +63,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    for f in client/Makefile server/Makefile; do
-      # fix unportable uname invocation
-      substituteInPlace "$f" --replace "uname -p" "uname -m"
-    done
-  '';
-
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p client/build server/build
 
     # build .so from stb headers
@@ -87,9 +82,13 @@ stdenv.mkDerivation rec {
     pushd server
     make mode=release
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 client/libs/stb/libstb.so -t $out/lib
     install -Dm755 client/build/soldat_* $out/bin/soldat
     install -Dm755 server/build/soldatserver_* $out/bin/soldatserver
@@ -107,6 +106,8 @@ stdenv.mkDerivation rec {
         --add-flags "-fs_userpath \"$configDir\"" \
         --add-flags "-fs_basepath \"${base}/share/soldat\""
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
