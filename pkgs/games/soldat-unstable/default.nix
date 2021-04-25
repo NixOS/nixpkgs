@@ -39,14 +39,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "soldat-unstable";
-  version = "2020-11-26";
+  version = "2021-02-09";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "2280296ac56883f6a9cad4da48025af8ae7782e7";
-    sha256 = "17i3nlhxm4x4zx00i00aivhxmagbnyizxnpwiqzg57bf23hrvdj3";
+    rev = "c304c3912ca7a88461970a859049d217a44c6375";
+    sha256 = "09sl2zybfcmnl2n3qghp0gylmr71y01534l6nq0y9llbdy0bf306";
   };
 
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
@@ -62,13 +62,6 @@ stdenv.mkDerivation rec {
       sha256 = "0wsrazb36i7v4idg06jlzfhqwf56q9szzz7jp5cg4wsvcky3wajf";
     })
   ];
-
-  postPatch = ''
-    for f in client/Makefile server/Makefile; do
-      # fix unportable uname invocation
-      substituteInPlace "$f" --replace "uname -p" "uname -m"
-    done
-  '';
 
   buildPhase = ''
     mkdir -p client/build server/build
