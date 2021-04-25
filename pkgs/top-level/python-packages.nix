@@ -5263,6 +5263,8 @@ in {
 
   pynws = callPackage ../development/python-modules/pynws { };
 
+  pynx584 = callPackage ../development/python-modules/pynx584 { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
