@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, python, pythonOlder
 , cython
 , eventlet
-, futures
+, futures ? null
 , iana-etc
 , geomet
 , libev

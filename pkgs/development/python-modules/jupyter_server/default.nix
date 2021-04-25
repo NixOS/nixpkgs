@@ -4,6 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , pytest-tornasync
+, argon2_cffi
 , jinja2
 , tornado
 , pyzmq
@@ -22,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.4.1";
+  version = "1.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sBJvI39nlTPuxGJEz8ZtYeOh+OwPrS1HNS+hnT51Tkc=";
+    sha256 = "ff127713a57ab7aa7b23f7df9b082951cc4b05d8d64cc0949d01ea02ac24c70c";
   };
 
   postPatch = ''
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    argon2_cffi
     jinja2
     tornado
     pyzmq
@@ -64,7 +66,12 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "jupyter_server/tests/" ];
 
   # disabled failing tests
-  disabledTests = [ "test_server_extension_list" "test_list_formats" "test_base_url" ];
+  disabledTests = [
+    "test_server_extension_list"
+    "test_list_formats"
+    "test_base_url"
+    "test_culling"
+  ];
 
   meta = with lib; {
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications.";

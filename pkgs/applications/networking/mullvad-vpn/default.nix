@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
@@ -20,6 +20,7 @@ let deps = [
     gtk3
     libappindicator
     libnotify
+    mesa
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite

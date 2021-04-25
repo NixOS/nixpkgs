@@ -1,6 +1,6 @@
 { stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35, fetchpatch
 , mock
-, pysqlite
+, pysqlite ? null
 , pytestCheckHook
 , pytest_xdist
 }:

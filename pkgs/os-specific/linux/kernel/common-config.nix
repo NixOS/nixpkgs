@@ -12,7 +12,7 @@
 # Configuration
 { lib, stdenv, version
 
-, features ? { grsecurity = false; xen_dom0 = false; }
+, features ? {}
 }:
 
 with lib;
@@ -42,7 +42,7 @@ let
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) (option no);
+      DEBUG_STACKOVERFLOW       = option no;
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -443,7 +443,7 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
-      DEVKMEM                          = mkIf (!features.grsecurity) no; # Disable /dev/kmem
+      DEVKMEM                          = no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
 
@@ -523,7 +523,7 @@ let
     virtualisation = {
       PARAVIRT = option yes;
 
-      HYPERVISOR_GUEST = mkIf (!features.grsecurity) yes;
+      HYPERVISOR_GUEST = yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
@@ -531,7 +531,7 @@ let
       KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
       KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
-      KVM_GUEST                         = mkIf (!features.grsecurity) yes;
+      KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
       KSM = yes;
@@ -547,13 +547,8 @@ let
       VBOXGUEST = option no;
       DRM_VBOXVIDEO = option no;
 
-    } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
-      XEN = option yes;
-
-      # XXX: why isn't this in the xen-dom0 conditional section below?
-      XEN_DOM0 = option yes;
-
-    } // optionalAttrs features.xen_dom0 {
+      XEN                         = option yes;
+      XEN_DOM0                    = option yes;
       PCI_XEN                     = option yes;
       HVC_XEN                     = option yes;
       HVC_XEN_FRONTEND            = option yes;
@@ -572,7 +567,7 @@ let
       XEN_SELFBALLOONING          = option yes;
       XEN_STUB                    = option yes;
       XEN_TMEM                    = option yes;
-    });
+    };
 
     media = {
       MEDIA_DIGITAL_TV_SUPPORT = yes;

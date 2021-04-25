@@ -252,11 +252,6 @@ stdenv.mkDerivation {
       fi
     '')
 
-    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
-    + optionalString stdenv.targetPlatform.isMacOS ''
-      echo "-sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
-    ''
-
     ##
     ## User env support
     ##
@@ -310,6 +305,13 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
+    ###
+    ### Remove LC_UUID
+    ###
+    + optionalString (stdenv.targetPlatform.isDarwin && !(stdenv.cc.bintools.bintools.isGNU or false)) ''
+      echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
+    ''
+
     + ''
       for flags in "$out/nix-support"/*flags*; do
         substituteInPlace "$flags" --replace $'\n' ' '
@@ -319,6 +321,23 @@ stdenv.mkDerivation {
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
+
+    ###
+    ### Ensure consistent LC_VERSION_MIN_MACOSX
+    ###
+    + optionalString stdenv.targetPlatform.isDarwin (
+      let
+        inherit (stdenv.targetPlatform)
+          darwinPlatform darwinSdkVersion
+          darwinMinVersion darwinMinVersionVariable;
+      in ''
+        export darwinPlatform=${darwinPlatform}
+        export darwinMinVersion=${darwinMinVersion}
+        export darwinSdkVersion=${darwinSdkVersion}
+        export darwinMinVersionVariable=${darwinMinVersionVariable}
+        substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
+      ''
+    )
 
     ##
     ## Extra custom steps

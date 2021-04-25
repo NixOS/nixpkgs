@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.1.5";
+  version = "1.1.6";
   format = "pyproject";
   disabled = isPy27;
 
@@ -32,13 +32,14 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "0bv6irpscpak6pldkzrx4j12dqnpfz5h8fy5lliglizv0avh60hf";
+    sha256 = "sha256-3Nx9xuQMIho+oRjqskHL9eQGKDAWntEGZcWe7evnmNU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
      --replace 'importlib-metadata = {version = "^1.6.0", python = "<3.8"}' \
-       'importlib-metadata = {version = ">=1.6,<2", python = "<3.8"}'
+       'importlib-metadata = {version = ">=1.6,<2", python = "<3.8"}' \
+     --replace 'version = "^21.2.0"' 'version = ">=21.2"'
   '';
 
   nativeBuildInputs = [ intreehooks ];

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "20.9.1";
+  version = "21.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06p0lsxqbfbka2yaqlpp0bg5pf7ma44zi6kq7qbb6hhry48dp1w6";
+    sha256 = "84a04c5f12bf321bed3942597787f1854d15c18f157aebd7ced8c851ccc49e08";
   };
 
   postPatch = ''

@@ -29,11 +29,6 @@ rec {
   binutils = wrapBintoolsWith {
     libc = targetIosSdkPkgs.libraries;
     bintools = binutils-unwrapped;
-    extraBuildCommands = lib.optionalString (sdk.platform == "iPhoneSimulator") ''
-      echo "-platform_version ios-sim ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
-    '' + lib.optionalString (sdk.platform == "iPhoneOS") ''
-      echo "-platform_version ios ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
-    '';
   };
 
   clang = (wrapCCWith {
@@ -46,10 +41,6 @@ rec {
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
-    '' + lib.optionalString (sdk.platform == "iPhoneSimulator") ''
-      echo "-mios-simulator-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
-    '' + lib.optionalString (sdk.platform == "iPhoneOS") ''
-      echo "-miphoneos-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
     '';
   }) // {
     inherit sdk;

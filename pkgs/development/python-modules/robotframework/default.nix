@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "3.2.2";
+  version = "4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0786a916d0572bd9d6afe26e95c6021e3df5dcafa0ece6b302e36366e58c24e";
+    sha256 = "a02a6f4af3b0830e4396058694c333cb63eb47f50acf6723be34f0f7a4d73ad7";
     extension = "zip";
   };
 

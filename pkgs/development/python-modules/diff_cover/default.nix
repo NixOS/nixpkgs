@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
+, chardet
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "4.0.1";
+  version = "5.0.1";
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8;
@@ -24,10 +25,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61a98ec126552d985c0e3e3c33cc72e79d7577f91f6edba99f635411a173d3b9";
+    sha256 = "e80f7a4979b7a9d373903776588279ed2898f17729e608255c4119462c822edb";
   };
 
-  propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
+  propagatedBuildInputs = [ chardet jinja2 jinja2_pluralize pygments six inflect ];
 
   checkInputs = [ mock coverage pytest nose pylint pyflakes pycodestyle ];
 

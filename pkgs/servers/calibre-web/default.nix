@@ -53,7 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     iso-639
     pypdf2
     requests
-    singledispatch
     sqlalchemy
     tornado
     unidecode

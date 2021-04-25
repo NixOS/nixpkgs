@@ -427,6 +427,15 @@ let
         };
       });
 
+      pyjwt = super.pyjwt.overridePythonAttrs(oldAttrs: rec {
+        version = "1.7.1";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
+        };
+      });
 
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
         version = "0.8.0rc2";

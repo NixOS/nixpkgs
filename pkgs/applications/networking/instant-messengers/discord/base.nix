@@ -1,5 +1,5 @@
 { pname, version, src, binaryName, desktopName
-, autoPatchelfHook, fetchurl, makeDesktopItem, lib, stdenv, wrapGAppsHook
+, autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -18,6 +18,7 @@ in stdenv.mkDerivation rec {
     cups
     libdrm
     libuuid
+    libXdamage
     libX11
     libXScrnSaver
     libXtst

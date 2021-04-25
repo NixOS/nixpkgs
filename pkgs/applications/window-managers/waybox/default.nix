@@ -11,6 +11,7 @@
 , pixman
 , udev
 , libGL
+, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     pixman
     udev
     libGL
+    mesa # for libEGL
   ];
 
   meta = with lib; {

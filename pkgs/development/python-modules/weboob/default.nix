@@ -3,7 +3,7 @@
 , cssselect
 , dateutil
 , feedparser
-, futures
+, futures ? null
 , gdata
 , gnupg
 , google-api-python-client
