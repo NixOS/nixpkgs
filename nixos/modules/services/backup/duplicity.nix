@@ -91,6 +91,28 @@ in
         <manvolnum>1</manvolnum></citerefentry>.
       '';
     };
+
+    cleanup = {
+      maxAge = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "6M";
+        description = ''
+          If non-null, delete all backup sets older than the given time.  Old backup sets
+          will not be deleted if backup sets newer than time depend on them.
+        '';
+      };
+      maxFull = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 2;
+        description = ''
+          If non-null, delete all backups sets that are older than the count:th last full
+          backup (in other words, keep the last count full backups and
+          associated incremental sets).
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -100,20 +122,24 @@ in
 
         environment.HOME = stateDirectory;
 
-        serviceConfig = {
-          ExecStart = ''
-                        ${pkgs.duplicity}/bin/duplicity ${escapeShellArgs (
-                          [
-                            cfg.root
-                            cfg.targetUrl
-                            "--archive-dir"
-            stateDirectory
-                          ]
-                          ++ concatMap (p: [ "--include" p ]) cfg.include
-                          ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
-                          ++ cfg.extraFlags
-            )}
+        script =
+          let
+            target = escapeShellArg cfg.targetUrl;
+            extra = escapeShellArgs ([ "--archive-dir" stateDirectory ] ++ cfg.extraFlags);
+            dup = "${pkgs.duplicity}/bin/duplicity";
+          in
+          ''
+            set -x
+            ${dup} cleanup ${target} --force ${extra}
+            ${lib.optionalString (cfg.cleanup.maxAge != null) "${dup} remove-older-than ${lib.escapeShellArg cfg.cleanup.maxAge} ${target} --force ${extra}"}
+            ${lib.optionalString (cfg.cleanup.maxFull != null) "${dup} remove-all-but-n-full ${toString cfg.cleanup.maxFull} ${target} --force ${extra}"}
+            exec ${dup} incr ${lib.escapeShellArgs (
+              [ cfg.root cfg.targetUrl ]
+              ++ concatMap (p: [ "--include" p ]) cfg.include
+              ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
+              )} ${extra}
           '';
+        serviceConfig = {
           PrivateTmp = true;
           ProtectSystem = "strict";
           ProtectHome = "read-only";
