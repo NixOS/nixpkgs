@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs =
-  [ imagemagick ffmpeg swig python3 unittest-cpp
+  [ imagemagick ffmpeg swig python3
     cppzmq zeromq qtbase qtmultimedia ]
     ++ optional stdenv.isDarwin llvmPackages.openmp
   ;
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
-  "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 
   doCheck = false;
 
