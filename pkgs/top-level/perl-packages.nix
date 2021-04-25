@@ -5662,6 +5662,22 @@ let
     };
   };
 
+  DBDMonetdb = buildPerlPackage {
+    pname = "DBD-Monetdb";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SG/SGOELDNER/DBD-monetdb-0.09.tar.gz";
+      sha256 = "18dah5nicb24c79bx8vdvkxk9fhcn383valdhh2zqvfzkj687723";
+    };
+    buildInputs = [ MonetdbCLI ];
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      homepage = "http://monetdb.cwi.nl";
+      description = "MonetDB Driver for DBI";
+      maintainers = [ maintainers.StillerHarpo ];
+    };
+  };
+
   DBDmysql = buildPerlPackage {
     pname = "DBD-mysql";
     version = "4.050";
@@ -13803,6 +13819,37 @@ let
       maintainers = [ maintainers.sgo ];
     };
   };
+
+  MonetdbCLI = buildPerlPackage {
+    pname = "Monetdb-CLI";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SG/SGOELDNER/MonetDB-CLI-0.03.tar.gz";
+      sha256 = "1yvb644pbwdcv3a16gcrr8i3lkd818w1gsrvxjcvpxnmms7ly12k";
+    };
+    buildInputs = [ MonetdbMapiPP ];
+    meta = {
+      homepage = "http://monetdb.cwi.nl";
+      description = "MonetDB Call Level Interface";
+      maintainers = [ maintainers.StillerHarpo ];
+    };
+  };
+
+  MonetdbMapiPP = buildPerlPackage {
+    pname = "Monetdb-MapiPP";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SG/SGOELDNER/MonetDB-CLI-MapiPP-0.03.tar.gz";
+      sha256 = "1h82zbz04nc2fb1bv62a22pbpgg7qalwiyg8vbq5frlwlycz5ihl";
+    };
+    buildInputs = [ IOSocketInet6 ];
+    meta = {
+      homepage = "http://monetdb.cwi.nl";
+      description = " MonetDB::CLI implementation, using the Mapi protocol";
+      maintainers = [ maintainers.StillerHarpo ];
+    };
+  };
+
 
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
