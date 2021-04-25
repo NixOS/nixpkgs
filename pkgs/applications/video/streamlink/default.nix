@@ -1,30 +1,29 @@
 { lib
-, pythonPackages
+, python3
 , fetchFromGitHub
 , rtmpdump
-, ffmpeg_3
+, ffmpeg
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "streamlink";
-  version = "2.0.0";
-  disabled = pythonPackages.pythonOlder "3.5.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = version;
-    sha256 = "+W9Nu5Ze08r7IlUZOkkVOz582E1Bbj0a3qIQHwxSmj8=";
+    sha256 = "14vqh4pck3q766qln7c57n9bz8zrlgfqrpkdn8x0ac9zhlhfn1zm";
   };
 
-  checkInputs = with pythonPackages; [
-    pytest
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
     mock
     requests-mock
     freezegun
   ];
 
-  propagatedBuildInputs = (with pythonPackages; [
+  propagatedBuildInputs = (with python3.pkgs; [
     pycryptodome
     requests
     iso-639
@@ -33,7 +32,11 @@ pythonPackages.buildPythonApplication rec {
     isodate
   ]) ++ [
     rtmpdump
-    ffmpeg_3
+    ffmpeg
+  ];
+
+  disabledTests = [
+    "test_plugin_not_in_removed_list"
   ];
 
   meta = with lib; {
