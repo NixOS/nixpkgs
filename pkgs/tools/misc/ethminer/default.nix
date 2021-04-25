@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     description = "Ethereum miner with OpenCL, CUDA and stratum support";
     homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ nand0p atemu ];
     license = licenses.gpl2;
   };
 }
