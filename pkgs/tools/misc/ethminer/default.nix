@@ -81,5 +81,6 @@ in stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p atemu ];
     license = licenses.gpl2;
+    broken = cudaSupport;
   };
 }
