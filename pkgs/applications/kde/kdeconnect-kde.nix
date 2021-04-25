@@ -21,6 +21,7 @@
 , qca-qt5
 , qtgraphicaleffects
 , qtmultimedia
+, qtquickcontrols2
 , qtx11extras
 , sshfs
 }:
@@ -46,6 +47,7 @@ mkDerivation {
     qca-qt5
     qtgraphicaleffects
     qtmultimedia
+    qtquickcontrols2
     qtx11extras
   ];
 
