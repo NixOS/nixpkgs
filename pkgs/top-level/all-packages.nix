@@ -265,6 +265,8 @@ in
 
   protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
 
+  protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
