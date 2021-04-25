@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p client/build server/build
 
     # build .so from stb headers
@@ -80,9 +82,13 @@ stdenv.mkDerivation rec {
     pushd server
     make mode=release
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 client/libs/stb/libstb.so -t $out/lib
     install -Dm755 client/build/soldat_* $out/bin/soldat
     install -Dm755 server/build/soldatserver_* $out/bin/soldatserver
@@ -100,6 +106,8 @@ stdenv.mkDerivation rec {
         --add-flags "-fs_userpath \"$configDir\"" \
         --add-flags "-fs_basepath \"${base}/share/soldat\""
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
