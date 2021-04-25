@@ -41,7 +41,7 @@ let
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in (buildEnv {
+in buildEnv {
   name = "texlive-${extraName}-${texliveBin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
@@ -52,6 +52,8 @@ in (buildEnv {
     "/"
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
+
+  allowSubstitutes = true;
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
 
@@ -279,6 +281,6 @@ in (buildEnv {
   ''
     + texliveBin.cleanBrokenLinks
   ;
-}).overrideAttrs (_: { allowSubstitutes = true; })
+}
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?

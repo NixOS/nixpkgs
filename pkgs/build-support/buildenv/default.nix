@@ -40,6 +40,9 @@ lib.makeOverridable
 , nativeBuildInputs ? [] # Handy e.g. if using makeWrapper in `postBuild`.
 , buildInputs ? []
 
+, preferLocalBuild ? true
+, allowSubstitutes ? false
+
 , passthru ? {}
 , meta ? {}
 }:
@@ -55,7 +58,8 @@ runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
-            nativeBuildInputs buildInputs;
+            nativeBuildInputs buildInputs
+            preferLocalBuild allowSubstitutes;
     pkgs = builtins.toJSON (map (drv: {
       paths =
         # First add the usual output(s): respect if user has chosen explicitly,
@@ -71,8 +75,6 @@ runCommand name
           (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
     }) paths);
-    preferLocalBuild = true;
-    allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
   }
