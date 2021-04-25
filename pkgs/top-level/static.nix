@@ -110,8 +110,11 @@ in {
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
 
-  openssl = super.openssl_1_1.overrideAttrs (o: {
-    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+  # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+  openssl_1_0_2 = super.openssl_1_0_2.overrideAttrs (o: {
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
+  });
+  openssl_1_1 = super.openssl_1_1.overrideAttrs (o: {
     configureFlags = (removeUnknownConfigureFlags o.configureFlags);
   });
 
