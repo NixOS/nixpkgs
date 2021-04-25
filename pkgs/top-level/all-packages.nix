@@ -1475,6 +1475,8 @@ in
 
   ili2c = callPackage ../tools/misc/ili2c { };
 
+  imagelol = callPackage ../tools/compression/imagelol { };
+
   imageworsener = callPackage ../tools/graphics/imageworsener { };
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
