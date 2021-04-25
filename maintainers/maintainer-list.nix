@@ -8839,6 +8839,12 @@
     githubId = 15379000;
     name = "schneefux";
   };
+  schnusch = {
+    email = "schnusch@users.noreply.github.com";
+    github = "schnusch";
+    githubId = 5104601;
+    name = "schnusch";
+  };
   schristo = {
     email = "schristopher@konputa.com";
     name = "Scott Christopher";
