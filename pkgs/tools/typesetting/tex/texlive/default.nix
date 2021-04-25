@@ -2,15 +2,35 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+let
+  fixedHashes' = import ./fixedHashes.nix;
+  tlPkgs = import ./pkgs.nix;
+in
+{ lib, fetchurl, runCommand
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
+  inherit (lib) makeExtensible;
+  applyOverExtensible = applyOverExtensibleWithCustomName "extend";
+  applyOverExtensibleWithCustomName = extenderName: f: extensible:
+    f (extensible // {
+      ${extenderName} = g: f (extensible.${extenderName} g);
+    });
+
+  # map: name -> fixed-output hash
+  # sha1 in base32 was chosen as a compromise between security and length
+  fixedHashes = lib.optionalAttrs useFixedHashes fixedHashes';
+
+  texliveFinalizer = super:
+    super.texlivePackages //
+    super;
+in
+applyOverExtensible texliveFinalizer (makeExtensible (self: {
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
+    inherit (self) combine texlivePackages;
     poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
@@ -18,87 +38,24 @@ let
     };
   };
 
-  # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
-  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
-
-  # function for creating a working environment from a set of TL packages
-  combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
-  };
-
-  # the set of TeX Live packages, collections, and schemes; using upstream naming
-  tl = let
-    orig = import ./pkgs.nix tl;
-    removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
-                         else p);
-    clean = removeSelfDep (orig // {
-      # overrides of texlive.tlpdb
-
-      texlive-msg-translations = orig.texlive-msg-translations // {
-        hasRunfiles = false; # only *.po for tlmgr
-      };
-
-      xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
-      };
-
-      # remove dependency-heavy packages from the basic collections
-      collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
-      };
-      # add them elsewhere so that collections cover all packages
-      collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
-      };
-      collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
-      };
-    }); # overrides
-
-    # tl =
-    in lib.mapAttrs flatDeps clean;
-    # TODO: texlive.infra for web2c config?
-
-
-  flatDeps = pname: attrs:
-    let
-      version = attrs.version or (builtins.toString attrs.revision);
-      mkPkgV = tlType: let
-        pkg = attrs // {
-          sha512 = attrs.sha512.${tlType};
-          inherit pname tlType version;
-        };
-        in mkPkg pkg;
-    in {
-      # TL pkg contains lists of packages: runtime files, docs, sources, binaries
-      pkgs =
-        # tarball of a collection/scheme itself only contains a tlobj file
-        [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
-        )]
-        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
-        ++ lib.optional (bin ? ${pname})
-            ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or {});
-    };
-
-  snapshot = {
+  texliveSnapshot = {
     year = "2021";
     month = "04";
     day = "08";
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  buildTexlivePackage = let
+    inherit (lib) optionalAttrs optionalString;
+    snapshot = self.texliveSnapshot;
+  in ({ pname, tlType
+    , revision, version, sha512
+    , postUnpack ? ""
+    , stripPrefix ? 1
+    , ... } @ args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
-      urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
+      urlName = pname + optionalString (tlType != "run") ".${tlType}";
       tlName = urlName + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
@@ -123,16 +80,16 @@ let
 
       passthru = {
         inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
+      } // optionalAttrs (sha512 != "") { inherit src; };
       unpackCmd = file: ''
         tar -xf ${file} \
           '--strip-components=${toString stripPrefix}' \
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
-    in if sha512 == "" then
+    in if sha512 == ""
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
-      fetchurl {
+      then fetchurl {
         inherit urls;
         sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
           else fixedHash;
@@ -141,51 +98,117 @@ let
         downloadToTemp = true;
         postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
         # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-     }
-        // passthru
+      } // passthru
 
-    else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
+      else runCommand "texlive-${tlName}"
+        ({ # lots of derivations, not meant to be cached
           preferLocalBuild = true; allowSubstitutes = false;
           inherit passthru;
-        } // lib.optionalAttrs (fixedHash != null) {
+        } // optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha1";
           outputHashMode = "recursive";
-        }
-      )
-      ( ''
+        })
+        (''
           mkdir "$out"
-        '' + unpackCmd "'${src}'"
-      );
+        '' + unpackCmd "'${src}'")
+  );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
-    (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
+  combineTexlivePackages = let
+    inherit (lib) concatLists mapAttrsToList;
+  in pkgSet: concatLists # uniqueness is handled in `combine`
+    (mapAttrsToList (_n: a: a.pkgs) pkgSet);
 
-in
-  tl // {
-    inherit bin combine;
+  flattenTexlivePackage = let
+    inherit (lib) optional;
+    inherit (self) bin buildTexlivePackage combineTexlivePackages;
+  in pname: args:
+    let
+      version = args.version or (builtins.toString args.revision);
+      buildTexlivePackageV = tlType: buildTexlivePackage (args // {
+        sha512 = args.sha512.${tlType};
+        inherit pname tlType version;
+      });
+    in {
+      # TL pkg contains lists of packages: runtime files, docs, sources, binaries
+      pkgs =
+        # tarball of a collection/scheme itself only contains a tlobj file
+        [(if (args.hasRunfiles or false) then buildTexlivePackageV "run"
+          # the fake derivations are used for filtering of hyphenation patterns
+          else { inherit pname version; tlType = "run"; })]
+        ++ optional (args.sha512 ? doc) (buildTexlivePackageV "doc")
+        ++ optional (args.sha512 ? source) (buildTexlivePackageV "source")
+        ++ optional (bin ? ${pname})
+            (bin.${pname} // { inherit pname; tlType = "bin"; })
+        ++ combineTexlivePackages (args.deps or {});
+    };
 
-    # Pre-defined combined packages for TeX Live schemes,
-    # to make nix-env usage more comfortable and build selected on Hydra.
-    combined = with lib; recurseIntoAttrs (
-      mapAttrs
-        (pname: attrs:
-          addMetaAttrs rec {
-            description = "TeX Live environment for ${pname}";
-            platforms = lib.platforms.all;
-            maintainers = with lib.maintainers;  [ veprbl ];
-          }
-          (combine {
-            ${pname} = attrs;
-            extraName = "combined" + lib.removePrefix "scheme" pname;
-            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
-          })
-        )
-        { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
-            scheme-medium scheme-minimal scheme-small scheme-tetex;
+  # function for creating a working environment from a set of TL packages
+  combine = callPackage ./combine.nix {
+    inherit (self) bin combineTexlivePackages;
+    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
+  };
+
+  # the set of TeX Live packages, collections, and schemes; using upstream naming
+  originalTexlivePackages = tlPkgs self.texlivePackages;
+  texlivePackages = let
+    inherit (lib) filterAttrs mapAttrs;
+    inherit (self) flattenTexlivePackage;
+    tl = self.texlivePackages;
+    origTl = self.originalTexlivePackages;
+    removeSelfDep = mapAttrs
+      (n: p: if p ? deps then p // { deps = filterAttrs (dn: _: n != dn) p.deps; }
+                         else p);
+    clean = removeSelfDep (origTl // {
+      # overrides of texlive.tlpdb
+
+      texlive-msg-translations = origTl.texlive-msg-translations // {
+        hasRunfiles = false; # only *.po for tlmgr
+      };
+
+      xdvi = origTl.xdvi // { # it seems to need it to transform fonts
+        deps = (origTl.xdvi.deps or {}) // { inherit (tl) metafont; };
+      };
+
+      # remove dependency-heavy packages from the basic collections
+      collection-basic = origTl.collection-basic // {
+        deps = removeAttrs origTl.collection-basic.deps [ "metafont" "xdvi" ];
+      };
+      # add them elsewhere so that collections cover all packages
+      collection-metapost = origTl.collection-metapost // {
+        deps = origTl.collection-metapost.deps // { inherit (tl) metafont; };
+      };
+      collection-plaingeneric = origTl.collection-plaingeneric // {
+        deps = origTl.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+      };
+    }); # overrides
+  in mapAttrs flattenTexlivePackage clean;
+  # TODO: texlive.infra for web2c config?
+
+  # Pre-defined combined packages for TeX Live schemes,
+  # to make nix-env usage more comfortable and build selected on Hydra.
+  combined = let
+    inherit (lib) addMetaAttrs mapAttrs removePrefix;
+    inherit (self) combine texlivePackages;
+    snapshot = self.texliveSnapshot;
+  in recurseIntoAttrs (
+    mapAttrs
+      (pname: attrs:
+        addMetaAttrs rec {
+          description = "TeX Live environment for ${pname}";
+          platforms = lib.platforms.all;
+          maintainers = [ lib.maintainers.veprbl ];
         }
-    );
-  }
+        (combine {
+          ${pname} = attrs;
+          extraName = "combined" + removePrefix "scheme" pname;
+          extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
+        })
+      )
+      { inherit (texlivePackages)
+          scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+          scheme-medium scheme-minimal scheme-small scheme-tetex;
+      }
+  );
+}))

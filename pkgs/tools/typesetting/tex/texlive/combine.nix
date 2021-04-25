@@ -1,11 +1,14 @@
-params: with params;
-# combine =
-args@{
-  pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
+{ lib, stdenv, buildEnv, makeWrapper, writeText
+, python3, ruby, perl, ghostscript
+, combineTexlivePackages
+, bin
+}:
+
+{ pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
 , extraName ? "combined"
 , extraVersion ? ""
 , ...
-}:
+} @ args:
 let
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
@@ -15,7 +18,7 @@ let
     ];
   };
   pkgList = rec {
-    all = lib.filter pkgFilter (combinePkgs pkgSet);
+    all = lib.filter pkgFilter (combineTexlivePackages pkgSet);
     splitBin = builtins.partition (p: p.tlType == "bin") all;
     bin = mkUniqueOutPaths splitBin.right
       ++ lib.optional
