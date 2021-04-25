@@ -7487,6 +7487,8 @@ in
 
   pgmetrics = callPackage ../tools/misc/pgmetrics { };
 
+  pgsync = callPackage ../development/tools/database/pgsync { };
+
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true;          # enable internal rsh implementation
     ssh = openssh;
