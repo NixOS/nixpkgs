@@ -29880,6 +29880,8 @@ in
 
   loop = callPackage ../tools/misc/loop { };
 
+  maiko = callPackage ../misc/emulators/maiko { inherit (xorg) libX11; };
+
   mailcore2 = callPackage ../development/libraries/mailcore2 {
     icu = icu58;
   };
