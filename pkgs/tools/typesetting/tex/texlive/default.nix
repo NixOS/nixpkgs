@@ -221,29 +221,26 @@ in {
   in mapAttrs flattenTexlivePackage clean;
   # TODO: texlive.infra for web2c config?
 
+  buildTexliveSchemeEnv = let
+    inherit (lib) addMetaAttrs removePrefix;
+    inherit (self) combine;
+    snapshot = self.texliveSnapshot;
+  in pname: pkg:
+    addMetaAttrs {
+      description = "TeX Live environment for ${pname}";
+      platforms = lib.platforms.all;
+      maintainers = [ lib.maintainers.veprbl ];
+    } (combine {
+      ${pname} = pkg;
+      extraName = "combined" + removePrefix "scheme" pname;
+      extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
+    });
+
   # Pre-defined combined packages for TeX Live schemes,
   # to make nix-env usage more comfortable and build selected on Hydra.
-  combined = let
-    inherit (lib) addMetaAttrs mapAttrs removePrefix;
-    inherit (self) combine texlivePackages;
-    snapshot = self.texliveSnapshot;
-  in recurseIntoAttrs (
-    mapAttrs
-      (pname: attrs:
-        addMetaAttrs rec {
-          description = "TeX Live environment for ${pname}";
-          platforms = lib.platforms.all;
-          maintainers = [ lib.maintainers.veprbl ];
-        }
-        (combine {
-          ${pname} = attrs;
-          extraName = "combined" + removePrefix "scheme" pname;
-          extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
-        })
-      )
-      { inherit (texlivePackages)
-          scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
-          scheme-medium scheme-minimal scheme-small scheme-tetex;
-      }
-  );
+  combined = recurseIntoAttrs (lib.mapAttrs self.buildTexliveSchemeEnv {
+    inherit (self.texlivePackages)
+      scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+      scheme-medium scheme-minimal scheme-small scheme-tetex;
+  });
 }))
