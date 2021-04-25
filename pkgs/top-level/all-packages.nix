@@ -685,9 +685,7 @@ in
 
   acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
 
-  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
-    ffmpeg = ffmpeg_2;
-  };
+  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter { };
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
