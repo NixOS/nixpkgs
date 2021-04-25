@@ -104,6 +104,61 @@ else
 let
   inherit (python) stdenv;
 
+  validatePythonMatches = attrName: let
+    isPythonModule = drv:
+      # all pythonModules have the pythonModule attribute
+      (drv ? "pythonModule")
+      # Some pythonModules are turned in to a pythonApplication by setting the field to false
+      && (!builtins.isBool drv.pythonModule);
+    isMismatchedPython = drv: drv.pythonModule != python;
+
+    optionalLocation = let
+        pos = builtins.unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+      in if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+
+    leftPadName = name: against: let
+        len = lib.max (lib.stringLength name) (lib.stringLength against);
+      in lib.strings.fixedWidthString len " " name;
+
+    drvName = drv: drv.pname or drv.name;
+
+    warnMismatch = drv: let
+      myName = "'${name}'";
+      theirName = "'${drvName drv}'";
+    in throw ''
+      Python version mismatch in ${myName}:
+
+      The Python derivation ${myName} depends on a Python derivation
+      named ${theirName}, but the two derivations use different versions
+      of Python:
+
+          ${leftPadName myName theirName} uses ${python}
+          ${leftPadName theirName myName} uses ${toString drv.pythonModule}
+
+      Possible solutions:
+
+        * If ${theirName} is a Python library, change the reference to ${theirName}
+          in the ${attrName} of ${myName} to use a ${theirName} built from the same
+          version of Python
+
+        * If ${theirName} is used as a tool during the build, move the reference to
+          ${theirName} in ${myName} from ${attrName} to nativeBuildInputs
+
+        * If ${theirName} provides executables that are called at run time, pass its
+          bin path to makeWrapperArgs:
+
+              makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${drvName drv } ] }" ];
+
+      ${optionalLocation}
+    '';
+
+    checkDrv = drv:
+      if (isPythonModule drv) && (isMismatchedPython drv)
+      then warnMismatch drv
+      else drv;
+
+    in inputs: builtins.map (checkDrv) inputs;
+
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
@@ -141,9 +196,9 @@ let
       pythonNamespacesHook
     ] ++ nativeBuildInputs;
 
-    buildInputs = buildInputs ++ pythonPath;
+    buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ [ python ]);
 
     inherit strictDeps;
 
