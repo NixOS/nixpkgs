@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fl3lingb4wdh6bz4calzbibixg44wnnwi1qh0js1ijp8b6ll560";
+    sha256 = "0yp3gc5hmlrs5rcmb2qbi4iqb5ndflgqw20qa7ziqayrdd15kzpn";
   };
 
-  cargoSha256 = "10p8di71w7hn36b1994wgk33fnj641lsp80zmccinlg5fiwyzncx";
+  cargoSha256 = "1abz3s9c3byqc0vaws839hjlf96ivq4zbjyijsbg004ffbmbccpn";
 
   nativeBuildInputs = [ ]
     ++ lib.optionals (enableCompletions) [ installShellFiles ]
@@ -34,9 +34,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ];
 
-  # The completions are correctly installed, and there is issue that himalaya
-  # generate empty completion files without mail configure.
-  # This supposed to be fixed in 0.2.7
   postInstall = lib.optionalString enableCompletions ''
     # Install shell function
     installShellCompletion --cmd himalaya \

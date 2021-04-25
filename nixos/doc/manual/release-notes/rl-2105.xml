@@ -680,6 +680,13 @@ environment.systemPackages = [
      All CUDA toolkit versions prior to CUDA 10 have been removed.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <package>babeld</package> service is now being run as an unprivileged user. To achieve that the module configures
+       <literal>skip-kernel-setup true</literal> and takes care of setting forwarding and rp_filter sysctls by itself as well
+       as for each interface in <varname>services.babeld.interfaces</varname>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
