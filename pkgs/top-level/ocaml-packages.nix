@@ -944,6 +944,8 @@ let
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
+    paf = callPackage ../development/ocaml-modules/paf { };
+
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
     path_glob = callPackage ../development/ocaml-modules/path_glob { };
