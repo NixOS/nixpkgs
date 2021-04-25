@@ -24092,11 +24092,6 @@ in
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
-  kino = callPackage ../applications/video/kino {
-    inherit (gnome2) libglade;
-    ffmpeg = ffmpeg_2;
-  };
-
   kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
 
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
