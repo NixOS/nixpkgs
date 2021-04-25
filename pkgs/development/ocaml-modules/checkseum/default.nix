@@ -1,6 +1,8 @@
 { lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
 , bigarray-compat, optint
 , fmt, rresult, bos, fpath, astring, alcotest
+, withFreestanding ? false
+, ocaml-freestanding
 }:
 
 buildDunePackage rec {
@@ -16,6 +18,10 @@ buildDunePackage rec {
     sha256 = "b9e4d054e17618b1faed8c0eb15afe0614b2f093e58b59a180bda4500a5d2da1";
   };
 
+  patches = [
+    ./makefile-no-opam.patch
+  ];
+
   nativeBuildInputs = [
     dune-configurator
     pkg-config
@@ -23,7 +29,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     bigarray-compat
     optint
+  ] ++ lib.optionals withFreestanding [
+    ocaml-freestanding
   ];
+
   checkInputs = [
     alcotest
     bos
