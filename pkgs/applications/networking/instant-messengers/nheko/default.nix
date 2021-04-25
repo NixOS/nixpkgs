@@ -7,7 +7,6 @@
 , lmdb
 , lmdbxx
 , libsecret
-, tweeny
 , mkDerivation
 , qtbase
 , qtkeychain
@@ -26,17 +25,19 @@
 , voipSupport ? true
 , gst_all_1
 , libnice
+, screensharingSupport ? true
+, xorg
 }:
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1v7k3ifzi05fdr06hmws1wkfl1bmhrnam3dbwahp086vkj0r8524";
+    sha256 = "0362hkbprc6jqlgmvzwxyvify4b1ldjakyqdz55m25xsypbpv2f3";
   };
 
   nativeBuildInputs = [
@@ -47,7 +48,6 @@ mkDerivation rec {
 
   buildInputs = [
     nlohmann_json
-    tweeny
     mtxclient
     olm
     boost17x
@@ -69,7 +69,8 @@ mkDerivation rec {
       (gst-plugins-good.override { qt5Support = true; })
       gst-plugins-bad
       libnice
-    ]);
+    ])
+    ++ lib.optional screensharingSupport xorg.libxcb;
 
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
