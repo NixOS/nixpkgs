@@ -8,6 +8,7 @@
   boost,
   makeWrapper,
   cudatoolkit,
+  cudaSupport,
   mesa,
   ethash,
   opencl-info,
@@ -41,6 +42,8 @@ in stdenv.mkDerivation rec {
     "-DAPICORE=ON"
     "-DETHDBUS=OFF"
     "-DCMAKE_BUILD_TYPE=Release"
+  ] ++ lib.optionals (!cudaSupport) [
+    "-DETHASHCUDA=OFF" # on by default
   ];
 
   nativeBuildInputs = [
@@ -54,12 +57,13 @@ in stdenv.mkDerivation rec {
     boost
     opencl-headers
     mesa
-    cudatoolkit
     ethash
     opencl-info
     ocl-icd
     openssl
     jsoncpp
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
   ];
 
   preConfigure = ''
@@ -71,7 +75,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Ethereum miner with OpenCL, CUDA and stratum support";
+    description = "Ethereum miner with OpenCL${lib.optionalString cudaSupport ", CUDA"} and stratum support";
     homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p atemu ];
