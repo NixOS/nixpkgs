@@ -5281,6 +5281,12 @@ in
 
   grub2_pvgrub_image = callPackage ../tools/misc/grub/pvgrub_image { };
 
+  grub2_xen_pvh = grub2_full.override {
+    xenPvhSupport = true;
+  };
+
+  grub2_pvhgrub_image = callPackage ../tools/misc/grub/pvhgrub_image { };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
