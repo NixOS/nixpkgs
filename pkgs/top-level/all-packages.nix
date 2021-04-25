@@ -8019,6 +8019,8 @@ in
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rset = callPackage ../tools/admin/rset { };
+
   rshijack = callPackage ../tools/networking/rshijack { };
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
