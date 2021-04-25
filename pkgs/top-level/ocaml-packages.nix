@@ -576,6 +576,8 @@ let
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
+    letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
