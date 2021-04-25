@@ -2,8 +2,8 @@
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , makeWrapper, t1utils
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf;
+, texlive, tex ? texlive.buildTexliveCombinedEnv {
+    inherit (texlive.texlivePackages) scheme-small lh metafont epsf;
   }
 }:
 

@@ -46,8 +46,8 @@ let
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
 
   dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
-    texlive = pkgs.texlive.combine {
-      inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+    texlive = pkgs.texlive.buildTexliveCombinedEnv {
+      inherit (pkgs.texlive.texlivePackages) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
     };
   };
 

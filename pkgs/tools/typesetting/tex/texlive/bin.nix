@@ -6,7 +6,7 @@
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
 # texlive
-, combine, texlivePackages
+, buildTexliveCombinedEnv, texlivePackages
 }:
 
 # Useful resource covering build options:
@@ -446,7 +446,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (combine { inherit (tl) scheme-basic cyrillic ec; })
+    (buildTexliveCombinedEnv { inherit (tl) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv ];
 

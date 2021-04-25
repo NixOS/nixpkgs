@@ -8,17 +8,17 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 - It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
 
   ```nix
-  texlive.combine {
-    inherit (texlive) scheme-small collection-langkorean algorithms cm-super;
+  texlive.buildTexliveCombinedEnv {
+    inherit (texlive.texlivePackages) scheme-small collection-langkorean algorithms cm-super;
   }
   ```
 
 - There are all the schemes, collections and a few thousand packages, as defined upstream (perhaps with tiny differences).
-- By default you only get executables and files needed during runtime, and a little documentation for the core packages. To change that, you need to add `pkgFilter` function to `combine`.
+- By default you only get executables and files needed during runtime, and a little documentation for the core packages. To change that, you need to add `pkgFilter` function to `buildTexliveCombinedEnv`.
 
   ```nix
-  texlive.combine {
-    # inherit (texlive) whatever-you-want;
+  texlive.buildTexliveCombinedEnv {
+    # inherit (texlive.texlivePackages) whatever-you-want;
     pkgFilter = pkg:
       pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "cm-super";
     # elem tlType [ "run" "bin" "doc" "source" ]
@@ -31,7 +31,7 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
   ```ShellSession
   $ nix repl
   nix-repl> :l <nixpkgs>
-  nix-repl> texlive.collection-[TAB]
+  nix-repl> texlive.texlivePackages.collection-[TAB]
   ```
 
 - Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example `scheme-basic`, into the combination.
@@ -103,8 +103,8 @@ let
   };
   foiltex = { pkgs = [ foiltex_run ]; };
 
-  latex_with_foiltex = texlive.combine {
-    inherit (texlive) scheme-small;
+  latex_with_foiltex = texlive.buildTexliveCombinedEnv {
+    inherit (texlive.texlivePackages) scheme-small;
     inherit foiltex;
   };
 in

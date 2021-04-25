@@ -31,7 +31,7 @@ in
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
-    ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
+    ++ lib.optional withTeXLive (texlive.combined.scheme-small)
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]

@@ -60,6 +60,7 @@ let
     super.texlivePackages //
     mapAliases super {
       bin = warnRenamed "bin" "texliveBin" super.texliveBin; # added 2020-04-24
+      combine = super.buildTexliveCombinedEnv; # added 2020-04-24
     } //
     super;
 in
@@ -154,7 +155,7 @@ in {
   # combine a set of TL packages into a single TL meta-package
   combineTexlivePackages = let
     inherit (lib) concatLists mapAttrsToList;
-  in pkgSet: concatLists # uniqueness is handled in `combine`
+  in pkgSet: concatLists # uniqueness is handled in `buildTexliveCombinedEnv`
     (mapAttrsToList (_n: a: a.pkgs) pkgSet);
 
   flattenTexlivePackage = let
@@ -183,7 +184,7 @@ in {
 
   # function for creating a working environment from a set of TL packages.
   # `ghostscript` could be without X, probably, but we use X for `texliveBin`.
-  combine = callPackage ./combine.nix { };
+  buildTexliveCombinedEnv = callPackage ./combine.nix { };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   originalTexlivePackages = tlPkgs self.texlivePackages;
@@ -223,14 +224,14 @@ in {
 
   buildTexliveSchemeEnv = let
     inherit (lib) addMetaAttrs removePrefix;
-    inherit (self) combine;
+    inherit (self) buildTexliveCombinedEnv;
     snapshot = self.texliveSnapshot;
   in pname: pkg:
     addMetaAttrs {
       description = "TeX Live environment for ${pname}";
       platforms = lib.platforms.all;
       maintainers = [ lib.maintainers.veprbl ];
-    } (combine {
+    } (buildTexliveCombinedEnv {
       ${pname} = pkg;
       extraName = "combined" + removePrefix "scheme" pname;
       extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";

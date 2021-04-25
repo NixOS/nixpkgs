@@ -1,8 +1,8 @@
 # Notes on maintaining/upgrading
 
-## Upgrading texlive.bin
+## Upgrading texlive.texliveBin
 
-texlive contains a few binaries, defined in bin.nix and released once a year.
+texlive contains a few binaries, defined in `bin.nix` and released once a year.
 
 In order to reduce closure size for users who just need a few of them, we split it into
 packages such as core, core-big, xvdi, etc. This requires making assumptions
@@ -12,13 +12,13 @@ you upgrade you may have to do some work here.
 
 ## Updating the package set
 
-texlive contains several thousand packages from CTAN, defined in pkgs.nix.
+texlive contains several thousand packages from CTAN, defined in `pkgs.nix`.
 
 The CTAN mirrors are not version-controlled and continuously moving,
 with more than 100 updates per month.
 
-To create a consistent and reproducible package set in nixpkgs, we snapshot CTAN
-and generate nix expressions for all packages in texlive at that point.
+To create a consistent and reproducible package set in Nixpkgs, we snapshot CTAN
+and generate Nix expressions for all packages in texlive at that point.
 
 We mirror CTAN sources of this snapshot on community-operated servers and on IPFS.
 
@@ -35,8 +35,8 @@ See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 
 ```bash
-curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+curl -L "https://mirror.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz" \
+        | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
 ```
 
 This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`
