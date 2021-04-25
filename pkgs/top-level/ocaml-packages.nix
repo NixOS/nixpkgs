@@ -401,6 +401,8 @@ let
       inherit (pkgs) gsl;
     };
 
+    h2 = callPackage ../development/ocaml-modules/h2 { };
+
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
