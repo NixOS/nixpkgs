@@ -459,6 +459,8 @@ let
 
     git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
 
+    git-paf = callPackage ../development/ocaml-modules/git/paf.nix { };
+
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
     };
