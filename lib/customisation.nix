@@ -217,8 +217,24 @@ rec {
         };
     in self;
 
-  /* Like the above, but aims to support cross compilation. It's still ugly, but
-     hopefully it helps a little bit. */
+  /* Like `makeScope`, but with a non-deprecated `overrideScope`.
+     A bridge between original `makeScope` and `makeScopeWithSplicing`.
+  */
+  makeScope' = newScope: f:
+    let
+      self = f self // {
+        newScope = scope: newScope (self // scope);
+        callPackage = self.newScope {};
+        overrideScope = g: makeScope'
+          newScope
+          (lib.fixedPoints.extends g f);
+        packages = f;
+      };
+    in self;
+
+  /* Like `makeScope'`, but aims to support cross compilation.
+     It's still ugly, but hopefully it helps a little bit.
+  */
   makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: f:
     let
       spliced = splicePackages {
