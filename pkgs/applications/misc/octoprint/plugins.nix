@@ -206,6 +206,27 @@ in {
     };
   };
 
+  octoprint-ldap = buildPlugin rec {
+    pname = "OctoPrint-LDAP";
+    version = "1.1.0";
+
+    src = fetchFromGitHub {
+      owner = "gillg";
+      repo = pname;
+      rev = "01016c2";
+      sha256 = "0y3v0zpw6pj3gmb7h54402cl2rh0zhv4y31cwfqf1yxhs7bqvzwf";
+    };
+
+    propagatedBuildInputs = with super; [ ldap ];
+
+    meta = with lib; {
+      description = "Octoprint LDAP auth plugin";
+      homepage = "https://github.com/gillg/OctoPrint-LDAP";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ busti ];
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "PrintTimeGenius";
     version = "2.2.6";
