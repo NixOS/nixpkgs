@@ -101,6 +101,7 @@ in {
     ovmfPackage = mkOption {
       type = types.package;
       default = pkgs.OVMF;
+      defaultText = "pkgs.OVMF";
       description = ''
         Specifies the default OVMF loader firmware.
       '';
