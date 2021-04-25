@@ -15,7 +15,7 @@
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -159,7 +159,7 @@ qtModule {
 
     libevent
   ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
