@@ -9,7 +9,6 @@
 , six
 , typing-extensions
 , pytestCheckHook
-, pytestrunner
 , nbval
 , tabulate
 }:
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestrunner
     nbval
     tabulate
   ];
@@ -45,6 +43,9 @@ buildPythonPackage rec {
   postPatch = ''
     chmod +x tools/protoc-gen-mypy.sh.in
     patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
+
+    substituteInPlace setup.py \
+      --replace "setup_requires.append('pytest-runner')" ""
   '';
 
   preBuild = ''
