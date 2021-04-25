@@ -22387,7 +22387,6 @@ in
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
     libjack = libjack2;
-    ffmpeg = ffmpeg_2;
   };
 
   cmusfm = callPackage ../applications/audio/cmusfm { };
