@@ -255,6 +255,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share
     ln -s ${base}/share/applications $out/share/applications
+    ln -s ${base}/share/metainfo $out/share/metainfo
     ln -s ${base}/share/icons $out/share/icons
     ln -s ${base}/share/mime $out/share/mime
   '';
