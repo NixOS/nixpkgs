@@ -16975,7 +16975,7 @@ in
   });
 
   poppler_min = poppler.override { # TODO: maybe reduce even more
-    # this is currently only used by texlive.bin.
+    # this is currently only used by texlive.texliveBin.
     minimal = true;
     suffix = "min";
   };

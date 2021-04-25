@@ -1,7 +1,7 @@
 { lib, stdenv, buildEnv, makeWrapper, writeText
 , python3, ruby, perl, ghostscript
 , combineTexlivePackages
-, bin
+, texliveBin
 }:
 
 { pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
@@ -13,8 +13,8 @@ let
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
-      (bin.core.out // { pname = "core"; tlType = "bin"; })
-      (bin.core.doc // { pname = "core"; tlType = "doc"; })
+      (texliveBin.core.out // { pname = "core"; tlType = "bin"; })
+      (texliveBin.core.doc // { pname = "core"; tlType = "doc"; })
     ];
   };
   pkgList = rec {
@@ -42,7 +42,7 @@ let
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in (buildEnv {
-  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
+  name = "texlive-${extraName}-${texliveBin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
 
@@ -80,7 +80,7 @@ in (buildEnv {
     export TEXMFDIST="$out/share/texmf"
     export TEXMFSYSCONFIG="$out/share/texmf-config"
     export TEXMFSYSVAR="$out/share/texmf-var"
-    export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
+    export PERL5LIB="$out/share/texmf/scripts/texlive:${texliveBin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
     # patch texmf-dist  -> $out/share/texmf
     # patch texmf-local -> $out/share/texmf-local
@@ -202,9 +202,9 @@ in (buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     perl `type -P mktexlsr.pl` ./share/texmf
-    ${bin.texlinks} "$out/bin" && wrapBin
+    ${texliveBin.texlinks} "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
-    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+    #${texliveBin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
@@ -217,7 +217,7 @@ in (buildEnv {
   ''
     (
       cd "$out/share/texmf/scripts"
-      source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
+      source '${texliveBin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
       for s in $texmf_scripts; do
         [[ -x "./$s" ]] || continue
         tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
@@ -277,7 +277,7 @@ in (buildEnv {
       )
     fi
   ''
-    + bin.cleanBrokenLinks
+    + texliveBin.cleanBrokenLinks
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file

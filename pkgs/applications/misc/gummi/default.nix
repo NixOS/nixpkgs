@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gtksourceview3 gtk3 gtkspell3 poppler
-    texlive.bin.core # needed for synctex
+    texlive.texliveBin.core # needed for synctex
   ];
 
   postInstall = ''

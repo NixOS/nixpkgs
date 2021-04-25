@@ -23,13 +23,37 @@ let
   # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes fixedHashes';
 
+  # From pkgs/top-level/aliases.nix
+  removeRecurseForDerivations = alias:
+    if alias.recurseForDerivations or false then
+      removeAttrs alias ["recurseForDerivations"]
+    else alias;
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
+    else alias;
+  checkInPkgs = super: n: alias: if builtins.hasAttr n super
+    then throw "Alias ${n} is still in texlive"
+    else alias;
+  mapAliases = super:
+    let checkInPkgs' = checkInPkgs super; in
+    lib.mapAttrs (n: alias:
+      removeDistribute (removeRecurseForDerivations (checkInPkgs' n alias))
+    );
+
+  warnRenamed = from: to: lib.warn
+    "Obsolete attribute `${from}' is used. It was renamed to `${to}'.";
+
   texliveFinalizer = super:
     super.texlivePackages //
+    mapAliases super {
+      bin = warnRenamed "bin" "texliveBin" super.texliveBin; # added 2020-04-24
+    } //
     super;
 in
 applyOverExtensible texliveFinalizer (makeExtensible (self: {
   # various binaries (compiled)
-  bin = callPackage ./bin.nix {
+  texliveBin = callPackage ./bin.nix {
     inherit (self) combine texlivePackages;
     poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
@@ -122,7 +146,7 @@ applyOverExtensible texliveFinalizer (makeExtensible (self: {
 
   flattenTexlivePackage = let
     inherit (lib) optional;
-    inherit (self) bin buildTexlivePackage combineTexlivePackages;
+    inherit (self) texliveBin buildTexlivePackage combineTexlivePackages;
   in pname: args:
     let
       version = args.version or (builtins.toString args.revision);
@@ -139,14 +163,14 @@ applyOverExtensible texliveFinalizer (makeExtensible (self: {
           else { inherit pname version; tlType = "run"; })]
         ++ optional (args.sha512 ? doc) (buildTexlivePackageV "doc")
         ++ optional (args.sha512 ? source) (buildTexlivePackageV "source")
-        ++ optional (bin ? ${pname})
-            (bin.${pname} // { inherit pname; tlType = "bin"; })
+        ++ optional (texliveBin ? ${pname})
+            (texliveBin.${pname} // { inherit pname; tlType = "bin"; })
         ++ combineTexlivePackages (args.deps or {});
     };
 
   # function for creating a working environment from a set of TL packages
   combine = callPackage ./combine.nix {
-    inherit (self) bin combineTexlivePackages;
+    inherit (self) texliveBin combineTexlivePackages;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
