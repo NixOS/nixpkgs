@@ -25795,6 +25795,8 @@ in
 
   secretscanner = callPackage ../tools/security/secretscanner { };
 
+  semiphemeral = callPackage ../tools/misc/semiphemeral { };
+
   sent = callPackage ../applications/misc/sent { };
 
   seq24 = callPackage ../applications/audio/seq24 { };
