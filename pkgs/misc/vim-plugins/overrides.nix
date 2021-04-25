@@ -273,6 +273,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];

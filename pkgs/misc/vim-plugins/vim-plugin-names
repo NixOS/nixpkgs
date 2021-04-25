@@ -437,6 +437,7 @@ norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 npxbr/glow.nvim@main
+npxbr/gruvbox.nvim@main
 ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
