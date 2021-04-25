@@ -8,15 +8,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyMetno";
-  version = "0.8.2";
+  pname = "pymetno";
+  version = "0.8.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "Danielhiversen";
+    repo = "PyMetno";
     rev = version;
-    sha256 = "0b1zm60yqj1mivc3zqw2qm9rqh8cbmx0r58jyyvm3pxzq5cafdg5";
+    sha256 = "sha256-dvZz+wv9B07yKM4E4fQ9VQOgeil9KxZxcGk6D0kWY4g=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library to communicate with the met.no api";
+    description = "A library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];

@@ -8,7 +8,6 @@
 , scipy
 , scikitlearn
 , pytest
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
