@@ -2274,7 +2274,7 @@ in
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
-  dialog = callPackage ../development/tools/misc/dialog { };
+  dialog = callPackage ../tools/misc/dialog { };
 
   dibbler = callPackage ../tools/networking/dibbler { };
 
@@ -4649,7 +4649,7 @@ in
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
   };
 
   ftop = callPackage ../os-specific/linux/ftop { };
