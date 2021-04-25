@@ -38,8 +38,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "soldat-unstable";
-  version = "2021-02-09";
+  pname = "soldat";
+  version = "unstable-2021-02-09";
 
   src = fetchFromGitHub {
     name = "soldat";
