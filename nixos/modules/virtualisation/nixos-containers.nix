@@ -737,6 +737,12 @@ in
     unit = {
       description = "Container '%i'";
 
+      # since the stop script uses machinectl we need both machined and dbus always available,
+      # otherwise the stop script will fail and cause the entire container to be killed hard
+      # after the stop timeout elapses.
+      after    = [ "systemd-machined.service" "dbus.service" ];
+      requires = [ "systemd-machined.service" "dbus.service" ];
+
       unitConfig.RequiresMountsFor = "/var/lib/containers/%i";
 
       path = [ pkgs.iproute2 ];
@@ -788,7 +794,7 @@ in
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
-              after = [ "network.target" ];
+              after = unit.after ++ [ "network.target" ];
               restartTriggers = [
                 containerConfig.path
                 config.environment.etc."containers/${name}.conf".source
