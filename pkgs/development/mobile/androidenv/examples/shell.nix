@@ -23,14 +23,14 @@ let
   android = {
     versions = {
       tools = "26.1.1";
-      platformTools = "30.0.5";
+      platformTools = "31.0.2";
       buildTools = "30.0.3";
-      ndk = "22.0.7026061";
-
-      # or the LTS NDK:
-      # ndk = "21.3.6528147";
-      cmake = "3.10.2";
-      emulator = "30.3.4";
+      ndk = [
+        "22.1.7171670"
+        "21.3.6528147" # LTS NDK
+      ];
+      cmake = "3.18.1";
+      emulator = "30.6.3";
     };
 
     platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
@@ -69,7 +69,7 @@ let
     emulatorVersion = android.versions.emulator;
 
     includeNDK = true;
-    ndkVersion = android.versions.ndk;
+    ndkVersions = android.versions.ndk;
     cmakeVersions = [android.versions.cmake];
 
     useGoogleAPIs = true;
@@ -130,7 +130,7 @@ pkgs.mkShell rec {
 
   shellHook = ''
     # Add cmake to the path.
-    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}".*/)"
+    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
     export PATH="$cmake_root/bin:$PATH"
 
     # Write out local.properties for Android Studio.
