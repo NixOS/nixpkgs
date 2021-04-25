@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     mv -- * $out/share/
 
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/languagetool-http-server \
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
