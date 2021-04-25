@@ -7,7 +7,6 @@ let
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
-  archiveName = "my_archive";
   remoteRepo = "borg@server:."; # No need to specify path
   privateKey = pkgs.writeText "id_ed25519" ''
     -----BEGIN OPENSSH PRIVATE KEY-----
@@ -45,12 +44,10 @@ in {
       services.borgbackup.jobs = {
 
         local = {
+          user = "root";
+          group = "root";
           paths = dataDir;
           repo = localRepo;
-          preHook = ''
-            # Don't append a timestamp
-            archiveName="${archiveName}"
-          '';
           encryption = {
             mode = "repokey";
             inherit passphrase;
@@ -128,19 +125,21 @@ in {
         client.systemctl("start --wait borgbackup-job-local")
         client.fail("systemctl is-failed borgbackup-job-local")
         # Make sure exactly one archive has been created
-        assert int(client.succeed("{} list '${localRepo}' | wc -l".format(borg))) > 0
+        assert int(client.succeed(f"{borg} list '${localRepo}' | wc -l")) > 0
+        # Retrieve the archive name
+        archive_name = client.succeed(
+            f"{borg} list '${localRepo}' | cut -d' ' -f1"
+        ).rstrip()
         # Make sure excludeFile has been excluded
         client.fail(
-            "{} list '${localRepo}::${archiveName}' | grep -qF '${excludeFile}'".format(borg)
+            f"{borg} list '${localRepo}::{archive_name}' | grep -qF '${excludeFile}'"
         )
         # Make sure keepFile has the correct content
-        client.succeed("{} extract '${localRepo}::${archiveName}'".format(borg))
+        client.succeed(f"{borg} extract '${localRepo}::{archive_name}'")
         assert "${keepFileData}" in client.succeed("cat ${dataDir}/${keepFile}")
         # Make sure the same is true when using `borg mount`
         client.succeed(
-            "mkdir -p /mnt/borg && {} mount '${localRepo}::${archiveName}' /mnt/borg".format(
-                borg
-            )
+            f"mkdir -p /mnt/borg && {borg} mount '${localRepo}::{archive_name}' /mnt/borg"
         )
         assert "${keepFileData}" in client.succeed(
             "cat /mnt/borg/${dataDir}/${keepFile}"
