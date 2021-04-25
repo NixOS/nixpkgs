@@ -5149,6 +5149,8 @@ in
 
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
+  gptman = callPackage ../tools/system/gptman { };
+
   ldmtool = callPackage ../tools/misc/ldmtool { };
 
   gphotos-sync = callPackage ../tools/backup/gphotos-sync { };
