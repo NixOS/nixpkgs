@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam, substituteAll,
   extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
   boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
   kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mariadb, qttools,
@@ -34,7 +34,4 @@ mkDerivation {
     ''-DNIXPKGS_POSTGRES_PG_UPGRADE=\"\"''
     ''-DNIXPKGS_POSTGRES_INITDB=\"\"''
   ];
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -DNIX_OUT=\"$out\""
-  '';
 }
