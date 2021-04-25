@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , setuptools_scm
 , vdf
+, bash
 , steam-run
 , winetricks
 , zenity
@@ -11,13 +12,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "0i7p0jj7avmq3b2qlcpwcflipndrnwsvwvhc5aal7rm95aa7xhja";
+    hash = "sha256-IHgoi5VUN3ORbufkruPb6wR7pTekJFQHhhDrnjOWzWM=";
   };
 
   patches = [
@@ -34,6 +35,7 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
+      bash
       steam-run
       (winetricks.override {
         # Remove default build of wine to reduce closure size.
@@ -45,15 +47,7 @@ buildPythonApplication rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
-  disabledTests = [
-    # Steam runtime is hard-coded with steam-run.patch and can't be configured
-    "test_run_steam_runtime_not_found"
-    "test_unknown_steam_runtime_detected"
-
-    # Steam runtime 2 currently isn't supported
-    # See https://github.com/NixOS/nixpkgs/issues/100655
-    "test_run_winetricks_steam_runtime_v2"
-  ];
+  pythonImportsCheck = [ "protontricks" ];
 
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
