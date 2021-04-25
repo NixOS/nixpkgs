@@ -3,16 +3,17 @@
 , fetchPypi
 , buildPythonPackage
 , isPy3k
+, isPy38
 , python
 }:
 
 buildPythonPackage rec {
   pname = "docutils";
-  version = "0.17.1";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aGV30uTDI4C7UMuyL1de10LVgWjO436ZEXqFS82I8SU=";
+    sha256 = "c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc";
   };
 
   # Only Darwin needs LANG, but we could set it in general.
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "http://docutils.sourceforge.net/";
     description = "Python Documentation Utilities";
+    homepage = "http://docutils.sourceforge.net/";
     license = with licenses; [ publicDomain bsd2 psfl gpl3Plus ];
     maintainers = with maintainers; [ AndersonTorres ];
   };
