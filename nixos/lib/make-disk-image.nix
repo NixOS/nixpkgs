@@ -188,6 +188,8 @@ let format' = format; in let
       echo "$acc"
     }
 
+    mebibyte=$(( 1024 * 1024 ))
+
     # Approximative percentage of reserved space in an ext4 fs over 512MiB.
     # 0.05208587646484375
     #  × 1000, integer part: 52
@@ -266,10 +268,10 @@ let format' = format; in let
         # Add the GPT at the end
         gptSpace=$(( 512 * 34 * 1 ))
         # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
-        reservedSpace=$(( gptSpace + 2 * 1024*1024 ))
+        reservedSpace=$(( gptSpace + 2 * mebibyte ))
       '' else if partitionTableType == "legacy" then ''
         # Add the 1MiB aligned reserved space (includes MBR)
-        reservedSpace=$(( 1024*1024 ))
+        reservedSpace=$(( mebibyte ))
       '' else ''
         reservedSpace=0
       ''}
@@ -286,6 +288,14 @@ let format' = format; in let
       requiredFilesystemSpace=$(( diskUsage + fudge ))
 
       diskSize=$(( requiredFilesystemSpace  + additionalSpace ))
+
+      # Round up to the nearest mebibyte.
+      # This ensures whole 512 bytes sector sizes in the disk image
+      # and helps towards aligning partitions optimally.
+      if (( diskSize % mebibyte )); then
+        diskSize=$(( ( diskSize / mebibyte + 1) * mebibyte ))
+      fi
+
       truncate -s "$diskSize" $diskImage
 
       printf "Automatic disk size...\n"
