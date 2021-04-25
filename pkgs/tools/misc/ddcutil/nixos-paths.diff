@@ -1,32 +1,30 @@
-diff --git a/src/app_sysenv/query_sysenv_modules.c b/src/app_sysenv/query_sysenv_modules.c
-index 59df64f1..fb244dd0 100644
---- a/src/app_sysenv/query_sysenv_modules.c
-+++ b/src/app_sysenv/query_sysenv_modules.c
-@@ -50,7 +50,9 @@ bool is_module_loadable(char * module_name, int depth) {
-    g_snprintf(module_name_ko, 100, "%s.ko", module_name);
- 
-    char dirname[PATH_MAX];
--   g_snprintf(dirname, PATH_MAX, "/lib/modules/%s/kernel/drivers/i2c", utsbuf.release);
-+   g_snprintf(dirname, PATH_MAX,
-+      "/run/booted-system/kernel-modules/lib/modules/%s/kernel/drivers/i2c",
-+      utsbuf.release);
- 
-    struct dirent *dent;
-      DIR           *d;
-diff --git a/src/util/linux_util.c b/src/util/linux_util.c
-index 5eb8491c..3a129ccf 100644
 --- a/src/util/linux_util.c
 +++ b/src/util/linux_util.c
-@@ -29,8 +29,10 @@ bool is_module_builtin(char * module_name)
-    int rc = uname(&utsbuf);
-    assert(rc == 0);
+@@ -125,6 +125,7 @@
+                   "lib64",
+                   "lib32",
+                   "usr/lib",  // needed for arch?
++                  "run/booted-system/kernel-modules/lib",  // NixOS
+                   NULL};
+    int result = -1;
+    int ndx = 0;
+@@ -204,14 +205,15 @@
+    if (debug)
+       printf("(%s) machine: %s", __func__, utsbuf.machine);
  
--   char modules_builtin_fn[100];
--   snprintf(modules_builtin_fn, 100, "/lib/modules/%s/modules.builtin", utsbuf.release);
-+   char modules_builtin_fn[PATH_MAX];
-+   snprintf(modules_builtin_fn, PATH_MAX,
-+      "/run/booted-system/kernel-modules/lib/modules/%s/modules.builtin",
-+      utsbuf.release);
+-   char * libdirs[3];
++   char * libdirs[4];
+    libdirs[0] = "lib";
++   libdirs[1] = "run/booted-system/kernel-modules/lib";
+    if (streq(utsbuf.machine, "amd_64")){
+-      libdirs[1] = "lib64";
+-      libdirs[2] = NULL;
++      libdirs[2] = "lib64";
++      libdirs[3] = NULL;
+    }
+    else
+-      libdirs[1] = NULL;
++      libdirs[2] = NULL;
  
-    char ko_name[40];
-    snprintf(ko_name, 40, "%s.ko", module_name);
+    int libsndx = 0;
+    bool found = false;

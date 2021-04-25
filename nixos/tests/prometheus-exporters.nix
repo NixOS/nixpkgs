@@ -118,6 +118,8 @@ let
       metricProvider = {
         services.bird2.enable = true;
         services.bird2.config = ''
+          router id 127.0.0.1;
+
           protocol kernel MyObviousTestString {
             ipv4 {
               import all;
@@ -132,7 +134,9 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-bird-exporter.service")
         wait_for_open_port(9324)
-        succeed("curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'")
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'"
+        )
       '';
     };
 

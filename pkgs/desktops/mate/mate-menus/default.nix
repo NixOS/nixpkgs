@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, python3 }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, python3, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
@@ -20,10 +20,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Menu system for MATE";
     homepage = "https://github.com/mate-desktop/mate-menus";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

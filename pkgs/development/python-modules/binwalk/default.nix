@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "binwalk";
-  version = "27";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "python${version}";
-    sha256 = "03kqhs3j9czdc2pnr1v8iszwx254ljpvrmmj0j5ls0ssjrfxacyx";
+    rev = "v${version}";
+    sha256 = "108mj4jjffdmaz6wjvglbv44j7fkhspaxz1rj2bi1fcnwsri5wsm";
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];
+    license = licenses.mit;
   };
 }
