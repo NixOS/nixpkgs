@@ -16,10 +16,18 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage    = "https://github.com/golang/protobuf";
-    description = " Go bindings for protocol buffer";
-    maintainers = with maintainers; [ lewo ];
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    homepage        = "https://github.com/golang/protobuf";
+    description     = "Go support for Protocol Buffers";
+    longDescription = ''
+      This module (`github.com/golang/protobuf`) contains Go bindings for protocol buffers.
+
+      It has been superseded by the `google.golang.org/protobuf` module,
+      which contains an updated and simplified API, support for protobuf reflection,
+      and many other improvements.
+      We recommend that new code use the `google.golang.org/protobuf` module.
+    '';
+    maintainers     = with maintainers; [ lewo ];
+    license         = licenses.bsd3;
+    platforms       = platforms.unix;
   };
 }

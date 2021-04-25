@@ -17025,6 +17025,8 @@ in
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
+  protobuf-go = callPackage ../development/tools/protobuf-go { };
+
   protolock = callPackage ../development/libraries/protolock { };
 
   protozero = callPackage ../development/libraries/protozero { };
