@@ -91,8 +91,7 @@ in rec {
 
     , __contentAddressed ?
       (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-      && (config.contentAddressedByDefault or false
-          || builtins.getEnv "NIXPKGS_CA_BY_DEFAULT" == "1")
+      && (config.contentAddressedByDefault or false)
 
     , ... } @ attrs:
 
