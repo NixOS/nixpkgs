@@ -129,20 +129,20 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    install -D ${override} ${DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
+    install -D ${override} ${env.DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
   '';
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
-    for o in $outputs; do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+    rsync --archive "${env.DESTDIR}/etc" "$out"
+    rm --recursive "${env.DESTDIR}/etc"
+    for o in "''${outputs[@]}"; do
+        rsync --archive "${env.DESTDIR}/''${o}" "$(dirname "''${o}")"
+        rm --recursive "${env.DESTDIR}/''${o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+    rmdir "${env.DESTDIR}/nix/store" "${env.DESTDIR}/nix" "${env.DESTDIR}"
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   # at install time but Meson does not support this
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env.DESTDIR = "${placeholder "out"}/dest";
 
   passthru = {
     updateScript = gnome3.updateScript {
