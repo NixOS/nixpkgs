@@ -2,7 +2,10 @@
   "context.properties": {
     "link.max-buffers": 16,
     "core.daemon": true,
-    "core.name": "pipewire-0"
+    "core.name": "pipewire-0",
+    "vm.overrides": {
+      "default.clock.min-quantum": 1024
+    }
   },
   "context.spa-libs": {
     "audio.convert.*": "audioconvert/libspa-audioconvert",
