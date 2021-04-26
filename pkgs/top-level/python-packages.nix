@@ -2030,6 +2030,8 @@ in {
     inherit (pkgs) graphviz;
   };
 
+  dotmap = callPackage ../development/python-modules/dotmap { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
