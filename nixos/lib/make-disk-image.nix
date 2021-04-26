@@ -283,6 +283,9 @@ in pkgs.vmTools.runInLinuxVM (
       # Some tools assume these exist
       ln -s vda /dev/xvda
       ln -s vda /dev/sda
+      # make systemd-boot find ESP without udev
+      mkdir /dev/block
+      ln -s /dev/vda1 /dev/block/254:1
 
       mountPoint=/mnt
       mkdir $mountPoint
