@@ -233,7 +233,7 @@ let
       sed -e "s|sed |${gnused}/bin/sed |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
              "$out/share/fish/functions/prompt_pwd.fish"
-      sed -i "s|nroff |${groff}/bin/nroff |"               \
+      sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
       sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
