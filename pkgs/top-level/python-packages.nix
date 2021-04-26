@@ -7020,6 +7020,8 @@ in {
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 
+  rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
+
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
