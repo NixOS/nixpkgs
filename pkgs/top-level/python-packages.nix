@@ -617,6 +617,8 @@ in {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
+
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
