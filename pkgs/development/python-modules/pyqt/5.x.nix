@@ -33,11 +33,11 @@ let
 
   pyqt5_sip = buildPythonPackage rec {
     pname = "PyQt5_sip";
-    version = "12.8.1";
+    version = "12.9.0";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "30e944db9abee9cc757aea16906d4198129558533eb7fadbe48c5da2bd18e0bd";
+      sha256 = "0cmfxb7igahxy74qkq199l6zdxrr75bnxris42fww3ibgjflir6k";
     };
 
     # There is no test code and the check phase fails with:
@@ -47,12 +47,12 @@ let
 
 in buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.2";
+  version = "5.15.4";
   format = if isPy3k then "pyproject" else "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1z74295i69cha52llsqffzhb5zz7qnbjc64h8qg21l91jgf0harp";
+    sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
   };
 
   outputs = [ "out" "dev" ];
