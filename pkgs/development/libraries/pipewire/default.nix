@@ -42,6 +42,8 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
+
+    # Don't forget to also update the NixOS module; see <nixpkgs/nixos/modules/services/desktops/pipewire/README.md>
     version = "0.3.26";
 
     outputs = [
