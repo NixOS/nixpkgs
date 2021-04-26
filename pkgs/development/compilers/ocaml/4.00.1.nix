@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = with platforms; linux;
+
+    knownVulnerabilities = [
+      "CVE-2015-8869"
+      "CVE-2017-9779"
+    ];
   };
 
 }
