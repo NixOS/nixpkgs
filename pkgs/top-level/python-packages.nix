@@ -4594,6 +4594,8 @@ in {
 
   openant = callPackage ../development/python-modules/openant { };
 
+  openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
+
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
