@@ -1603,6 +1603,8 @@ in {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
+  cve-bin-tool = callPackage ../development/python-modules/cve-bin-tool { };
+
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
@@ -4964,6 +4966,8 @@ in {
 
   pynws = callPackage ../development/python-modules/pynws { };
 
+  pynx584 = callPackage ../development/python-modules/pynx584 { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
@@ -7105,6 +7109,8 @@ in {
   rpm = toPythonModule (pkgs.rpm.override {
     inherit python;
   });
+
+  rpmfile = callPackage ../development/python-modules/rpmfile { };
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff { };
 

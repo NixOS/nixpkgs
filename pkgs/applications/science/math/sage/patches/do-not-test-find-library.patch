@@ -1,13 +1,13 @@
 diff --git a/src/sage/env.py b/src/sage/env.py
-index 1ddfc7cfb9..45033d6328 100644
+index 2908f5d04f..81dfd75c0d 100644
 --- a/src/sage/env.py
 +++ b/src/sage/env.py
-@@ -203,97 +203,13 @@ var('ARB_LIBRARY',                   'arb')
- var('SAGE_BANNER', '')
- var('SAGE_IMPORTALL', 'yes')
+@@ -218,93 +218,12 @@ NTL_LIBDIR = var("NTL_LIBDIR")
+ SAGE_BANNER = var("SAGE_BANNER", "")
+ SAGE_IMPORTALL = var("SAGE_IMPORTALL", "yes")
  
 -
--def _get_shared_lib_filename(libname, *additional_libnames):
+-def _get_shared_lib_path(*libnames: str) -> Optional[str]:
 -    """
 -    Return the full path to a shared library file installed in
 -    ``$SAGE_LOCAL/lib`` or the directories associated with the
@@ -25,80 +25,76 @@ index 1ddfc7cfb9..45033d6328 100644
 -    For distributions like Debian that use a multiarch layout, we also try the
 -    multiarch lib paths (i.e. ``/usr/lib/<arch>/``).
 -
--    This returns ``None`` if the file does not exist.
+-    This returns ``None`` if no matching library file could be found.
 -
 -    EXAMPLES::
 -
 -        sage: import sys
 -        sage: from fnmatch import fnmatch
--        sage: from sage.env import _get_shared_lib_filename
--        sage: lib_filename = _get_shared_lib_filename("Singular",
--        ....:                                         "singular-Singular")
+-        sage: from sage.env import _get_shared_lib_path
+-        sage: lib_filename = _get_shared_lib_path("Singular", "singular-Singular")
 -        sage: if sys.platform == 'cygwin':
 -        ....:     pattern = "*/cygSingular-*.dll"
 -        ....: elif sys.platform == 'darwin':
--        ....:     pattern = "*/libSingular.dylib"
+-        ....:     pattern = "*/libSingular-*.dylib"
 -        ....: else:
--        ....:     pattern = "*/lib*Singular.so"
--        sage: fnmatch(lib_filename, pattern)
+-        ....:     pattern = "*/lib*Singular-*.so"
+-        sage: fnmatch(str(lib_filename), pattern)
 -        True
--        sage: _get_shared_lib_filename("an_absurd_lib") is None
+-        sage: _get_shared_lib_path("an_absurd_lib") is None
 -        True
 -    """
 -
--    for libname in (libname,) + additional_libnames:
+-    for libname in libnames:
+-        search_directories: List[Path] = []
+-        patterns: List[str] = []
 -        if sys.platform == 'cygwin':
--            # Later down we take the last matching DLL found, so search
--            # SAGE_LOCAL second so that it takes precedence
--            bindirs = [
--                sysconfig.get_config_var('BINDIR'),
--                os.path.join(SAGE_LOCAL, 'bin')
+-            # Later down we take the first matching DLL found, so search
+-            # SAGE_LOCAL first so that it takes precedence
+-            search_directories = [
+-                Path(SAGE_LOCAL) / 'bin',
+-                Path(sysconfig.get_config_var('BINDIR')),
 -            ]
--            pats = ['cyg{}.dll'.format(libname), 'cyg{}-*.dll'.format(libname)]
--            filenames = []
--            for bindir in bindirs:
--                for pat in pats:
--                    filenames += glob.glob(os.path.join(bindir, pat))
--
--            # Note: This is not very robust, since if there are multi DLL
+-            # Note: The following is not very robust, since if there are multible
 -            # versions for the same library this just selects one more or less
--            # at arbitrary.  However, practically speaking, on Cygwin, there
+-            # at arbitrary. However, practically speaking, on Cygwin, there
 -            # will only ever be one version
--            if filenames:
--                return filenames[-1]
+-            patterns = [f'cyg{libname}.dll', f'cyg{libname}-*.dll']
 -        else:
 -            if sys.platform == 'darwin':
 -                ext = 'dylib'
 -            else:
 -                ext = 'so'
 -
--            libdirs = [
--                os.path.join(SAGE_LOCAL, 'lib'),
--                sysconfig.get_config_var('LIBDIR')
--            ]
--            multilib = sysconfig.get_config_var('MULTILIB')
--            if multilib:
--                libdirs.insert(1, os.path.join(libdirs[0], multilib))
+-            search_directories = [Path(SAGE_LOCAL) / 'lib']
+-            libdir = sysconfig.get_config_var('LIBDIR')
+-            if libdir is not None:
+-                libdir = Path(libdir)
+-                search_directories.append(libdir)
 -
--            for libdir in libdirs:
--                basename = 'lib{}.{}'.format(libname, ext)
--                filename = os.path.join(libdir, basename)
--                if os.path.exists(filename):
--                    return filename
+-                multiarchlib = sysconfig.get_config_var('MULTIARCH')
+-                if multiarchlib is not None: 
+-                    search_directories.append(libdir / multiarchlib),
+-
+-            patterns = [f'lib{libname}.{ext}']
+-
+-        for directory in search_directories:
+-            for pattern in patterns:
+-                path = next(directory.glob(pattern), None)
+-                if path is not None:
+-                    return str(path.resolve())
 -
 -    # Just return None if no files were found
 -    return None
 -
--
  # locate singular shared object
  # On Debian it's libsingular-Singular so try that as well
--SINGULAR_SO = _get_shared_lib_filename('Singular', 'singular-Singular')
-+SINGULAR_SO = '/default'
- var('SINGULAR_SO', SINGULAR_SO)
+-SINGULAR_SO = var("SINGULAR_SO", _get_shared_lib_path("Singular", "singular-Singular"))
++SINGULAR_SO = var("SINGULAR_SO", '/default')
  
  # locate libgap shared object
--GAP_SO= _get_shared_lib_filename('gap','')
-+GAP_SO = '/default'
- var('GAP_SO', GAP_SO)
+-GAP_SO = var("GAP_SO", _get_shared_lib_path("gap", ""))
++GAP_SO = var("GAP_SO", '/default')
  
  # post process
+ if ' ' in DOT_SAGE:

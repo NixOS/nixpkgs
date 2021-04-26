@@ -265,6 +265,8 @@ in
 
   protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
 
+  protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -2274,7 +2276,7 @@ in
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
-  dialog = callPackage ../development/tools/misc/dialog { };
+  dialog = callPackage ../tools/misc/dialog { };
 
   dibbler = callPackage ../tools/networking/dibbler { };
 
@@ -4649,7 +4651,7 @@ in
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
   };
 
   ftop = callPackage ../os-specific/linux/ftop { };
@@ -9768,6 +9770,8 @@ in
   };
 
   zdelta = callPackage ../tools/compression/zdelta { };
+
+  zellij = callPackage ../tools/misc/zellij { };
 
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;

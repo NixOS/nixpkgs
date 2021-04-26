@@ -332,6 +332,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "nx584"
     "omnilogic"
     "ondilo_ico"
     "openerz"

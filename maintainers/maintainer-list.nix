@@ -9861,6 +9861,12 @@
     githubId = 3105057;
     name = "Jan Beinke";
   };
+  therealansh = {
+    email = "tyagiansh23@gmail.com";
+    github = "therealansh";
+    githubId = 57180880;
+    name = "Ansh Tyagi";
+  };
   thesola10 = {
     email = "me@thesola.io";
     github = "thesola10";
