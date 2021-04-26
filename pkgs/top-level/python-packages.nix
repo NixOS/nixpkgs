@@ -2323,6 +2323,8 @@ in {
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
+  fiblary3 = callPackage ../development/python-modules/fiblary3 { };
+
   fido2 = callPackage ../development/python-modules/fido2 { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
