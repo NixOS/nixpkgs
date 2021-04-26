@@ -5959,6 +5959,8 @@ in
 
   lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
 
+  last-resort = callPackage ../data/fonts/last-resort {};
+
   ldc = callPackage ../development/compilers/ldc { };
 
   ldgallery = callPackage ../tools/graphics/ldgallery { };
