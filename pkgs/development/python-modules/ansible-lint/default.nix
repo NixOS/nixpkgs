@@ -63,7 +63,7 @@ buildPythonPackage rec {
     "test_role_handler_positive"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ ansible ]) ];
 
   meta = with lib; {
     homepage = "https://github.com/ansible-community/ansible-lint";
