@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocamlPackages, zlib }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "mldonkey";
   version = "3.1.7-2";
 
@@ -28,15 +28,4 @@ stdenv.mkDerivation (rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-} // (if !ocamlPackages.ocaml.nativeCompilers then
-{
-  # Byte code compilation (the ocaml opt compiler is not supported in some platforms)
-  buildPhase = "make mlnet.byte";
-  installPhase = ''
-    mkdir -p $out/bin
-    cp mlnet.byte $out/bin/mlnet
-  '';
-
-  # ocaml bytecode selfcontained binaries loose the bytecode if stripped
-  dontStrip = true;
-} else {}))
+}
