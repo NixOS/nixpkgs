@@ -13063,6 +13063,8 @@ in
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+  kubei = callPackage ../tools/security/kubei { };
+
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
