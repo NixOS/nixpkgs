@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , llvm_meta
-, fetch
+, src
 , cmake
 , llvm
 , perl
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   pname = "openmp";
   inherit version;
 
-  src = fetch pname "0z8n1wanby6aq3i7d91mgk72hb33zfl5blayk0a22cs7l8i706zb";
+  inherit src;
+  sourceRoot = "source/${pname}";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];

@@ -1,7 +1,6 @@
 { lib, stdenv, llvm_meta
 , buildLlvmTools
-, fetch
-, libunwind
+, src
 , cmake
 , libxml2
 , libllvm
@@ -12,18 +11,12 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "1zakyxk5bwnh7jarckcd4rbmzi58jgn2dbah5j5cwcyfyfbx9drc";
+  inherit src;
+  sourceRoot = "source/${pname}";
 
   patches = [
     ./gnu-install-dirs.patch
   ];
-
-  postPatch = ''
-    substituteInPlace MachO/CMakeLists.txt --replace \
-      '(''${LLVM_MAIN_SRC_DIR}/' '('
-    mkdir -p libunwind/include
-    tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];

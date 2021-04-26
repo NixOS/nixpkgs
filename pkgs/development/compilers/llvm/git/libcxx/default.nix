@@ -1,19 +1,13 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
+{ lib, stdenv, llvm_meta, src, cmake, python3, libcxxabi, fixDarwinDylibNames, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcxx";
   inherit version;
 
-  src = fetch "libcxx" "1wf3ww29xkx7prs7pdwicy5qqfapib26110jgmkjrbka9z57bjvx";
-
-  postUnpack = ''
-    unpackFile ${libcxxabi.src}
-    mv libcxxabi-* libcxxabi
-    unpackFile ${llvm.src}
-    mv llvm-* llvm
-  '';
+  inherit src;
+  sourceRoot = "source/${pname}";
 
   outputs = [ "out" "dev" ];
 

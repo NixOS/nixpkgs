@@ -1,21 +1,17 @@
-{ lib, stdenv, llvm_meta, cmake, python3, fetch, libcxx, libunwind, llvm, version
+{ lib, stdenv, llvm_meta, cmake, python3, src, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
-  src = fetch "libcxxabi" "1cbmzspwjlr8f6sp73pw6ivf4dpg6rpc61by0q1m2zca2k6yif3a";
+  inherit src;
+  sourceRoot = "source/${pname}";
 
   outputs = [ "out" "dev" ];
 
-  postUnpack = ''
-    unpackFile ${libcxx.src}
-    mv libcxx-* libcxx
-    unpackFile ${llvm.src}
-    mv llvm-* llvm
-  '' + lib.optionalString stdenv.isDarwin ''
+  postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}

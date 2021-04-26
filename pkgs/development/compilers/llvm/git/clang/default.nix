@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, src, cmake, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -9,15 +9,8 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "1vd9rhhrd8ghdg111lac7w8by71y9l14yh5zxfijsm6lj4p4avp2";
-    inherit clang-tools-extra_src;
-
-    unpackPhase = ''
-      unpackFile $src
-      mv clang-* clang
-      sourceRoot=$PWD/clang
-      unpackFile ${clang-tools-extra_src}
-    '';
+    inherit src;
+    sourceRoot = "source/clang";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx

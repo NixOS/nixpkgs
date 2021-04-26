@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , runCommand
-, fetch
+, src
 , cmake
 , zlib
 , ncurses
@@ -26,7 +26,8 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "1v85qyq3snk81vjmwq5q7xikyyqsfpqy2c4qmr81mps4avsw1g0l";
+  inherit src;
+  sourceRoot = "source/${pname}";
 
   patches = [
     ./procfs.patch
