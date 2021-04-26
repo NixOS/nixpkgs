@@ -7168,6 +7168,8 @@ in
   openbazaar = callPackage ../applications/networking/openbazaar { };
   openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
 
+  openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
