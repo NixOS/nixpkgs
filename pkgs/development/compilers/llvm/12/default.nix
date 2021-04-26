@@ -229,12 +229,13 @@ let
         libunwind = libraries.libunwind;
       }));
 
-    openmp = callPackage ./openmp { inherit llvm_meta; };
+    libunwind = callPackage ./libunwind ({
+      inherit (buildLlvmTools) llvm;
+    } // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
+      stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
+    });
 
-    libunwind = callPackage ./libunwind ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
+    openmp = callPackage ./openmp { inherit llvm_meta; };
 
   });
 
