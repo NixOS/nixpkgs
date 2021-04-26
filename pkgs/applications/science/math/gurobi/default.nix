@@ -1,13 +1,11 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, python3 }:
 
-let
-  majorVersion = "9.1";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gurobi";
-  version = "${majorVersion}.2";
+  version = "9.1.2";
 
   src = with lib; fetchurl {
-    url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
+    url = "https://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
     sha256 = "7f60bd675f79476bb2b32cd632aa1d470f8246f2b033b7652d8de86f6e7e429b";
   };
 
@@ -47,7 +45,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
-  passthru.libSuffix = lib.replaceStrings ["."] [""] majorVersion;
+  passthru.libSuffix = lib.replaceStrings ["."] [""] (lib.versions.majorMinor version);
 
   meta = with lib; {
     description = "Optimization solver for mathematical programming";
