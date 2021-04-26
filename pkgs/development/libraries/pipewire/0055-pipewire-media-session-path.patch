@@ -18,10 +18,10 @@ index 5c4d1af0..7296220f 100644
 +++ b/src/daemon/systemd/user/meson.build
 @@ -10,7 +10,7 @@ install_data(
  systemd_config = configuration_data()
- systemd_config.set('PW_BINARY', join_paths(pipewire_bindir, 'pipewire'))
- systemd_config.set('PW_PULSE_BINARY', join_paths(get_option('pipewire_pulse_prefix'), 'bin/pipewire-pulse'))
--systemd_config.set('PW_MEDIA_SESSION_BINARY', join_paths(pipewire_bindir, 'pipewire-media-session'))
-+systemd_config.set('PW_MEDIA_SESSION_BINARY', join_paths(get_option('media-session-prefix'), 'bin/pipewire-media-session'))
+ systemd_config.set('PW_BINARY', pipewire_bindir / 'pipewire')
+ systemd_config.set('PW_PULSE_BINARY', get_option('pipewire_pulse_prefix') / 'bin' / 'pipewire-pulse')
+-systemd_config.set('PW_MEDIA_SESSION_BINARY', pipewire_bindir / 'pipewire-media-session')
++systemd_config.set('PW_MEDIA_SESSION_BINARY', get_option('media-session-prefix') / 'bin' / 'pipewire-media-session')
 
  configure_file(input : 'pipewire.service.in',
                 output : 'pipewire.service',

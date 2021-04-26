@@ -6,12 +6,12 @@ index 0073eb13..0ffc6863 100644
  pipewire_localedir = join_paths(prefix, get_option('localedir'))
  pipewire_sysconfdir = join_paths(prefix, get_option('sysconfdir'))
  
--pipewire_configdir = join_paths(pipewire_sysconfdir, 'pipewire')
+-pipewire_configdir = pipewire_sysconfdir / 'pipewire'
 +pipewire_configdir = get_option('pipewire_config_dir')
 +if pipewire_configdir == ''
-+  pipewire_configdir = join_paths(pipewire_sysconfdir, 'pipewire')
++  pipewire_configdir = pipewire_sysconfdir / 'pipewire'
 +endif
- modules_install_dir = join_paths(pipewire_libdir, pipewire_name)
+ modules_install_dir = pipewire_libdir / pipewire_name
  
  if host_machine.system() == 'linux'
 diff --git a/meson_options.txt b/meson_options.txt
