@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.irif.fr/~jch/software/babel/";
     description = "Loop-avoiding distance-vector routing protocol";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz hexa ];
     platforms = platforms.linux;
   };
 }
