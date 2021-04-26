@@ -7,6 +7,7 @@
 , click
 , dataclasses
 , mypy-extensions
+, parameterized
 , pathspec
 , regex
 , toml
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "20.8b1";
+  version = "21.4b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1spv6sldp3mcxr740dh3ywp25lly9s8qlvs946fin44rl1x5a0hw";
+    sha256 = "sha256-kV2RbEhkbb6AQNUmXP9xEUIaYKPf5/fgcnMXalfCSjQ=";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs =  [ pytestCheckHook ];
+  checkInputs =  [ parameterized pytestCheckHook ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -40,6 +41,8 @@ buildPythonPackage rec {
     # Don't know why these tests fails
     "test_cache_multiple_files"
     "test_failed_formatting_does_not_get_cached"
+    "test_output_locking_when_writeback_diff"
+    "test_output_locking_when_writeback_color_diff"
     # requires network access
     "test_gen_check_output"
     "test_process_queue"
