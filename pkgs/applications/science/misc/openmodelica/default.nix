@@ -1,13 +1,13 @@
-{stdenv, lib, mkDerivation, fetchFromGitHub, fetchgit, fetchsvn, autoconf, automake, libtool,
-gfortran, clang, cmake, gnumake, hwloc, jre, openblas, hdf5, expat, ncurses,
+{stdenv, lib, mkDerivation, fetchFromGitHub, fetchgit, autoconf, automake, libtool,
+gfortran, clang, cmake, curl, gnumake, hwloc, jre, openblas, hdf5, expat, ncurses,
 readline, qtbase, qmake, qttools, qtwebkit, webkit, which, lp_solve, omniorb, sqlite, libatomic_ops,
 pkgconfig, file, gettext, flex, bison, doxygen, boost, openscenegraph, gnome2,
-ipopt,
+ipopt, libuuid, qtxmlpatterns,
 xorg, git, bash, gtk2, makeWrapper, autoreconfHook }:
 
 let
 
-  fakegit = import ./fakegit.nix {inherit stdenv fetchgit fetchsvn bash;} ;
+  fakegit = import ./fakegit.nix {inherit stdenv fetchgit bash;} ;
 
 in
 
@@ -21,10 +21,10 @@ mkDerivation rec {
     pkgconfig file
     autoreconfHook];
 
-  buildInputs = [hwloc
+  buildInputs = [hwloc curl
     jre openblas hdf5 expat ncurses readline qtbase qtwebkit webkit which lp_solve
     omniorb sqlite libatomic_ops gettext boost
-    ipopt
+    ipopt libuuid qtxmlpatterns
     openscenegraph gnome2.gtkglext xorg.libXmu git gtk2 makeWrapper];
 
   hardeningDisable = [ "format" ];
@@ -33,7 +33,6 @@ mkDerivation rec {
 
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
-    cp -fv ${fakegit}/bin/checkout-svn.sh libraries/checkout-svn.sh
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
   '';
 

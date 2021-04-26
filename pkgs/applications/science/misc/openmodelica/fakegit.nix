@@ -1,4 +1,4 @@
-{stdenv, fetchgit, fetchsvn, bash } :
+{stdenv, fetchgit, bash } :
 
 let
   mkscript = path : text : ''
@@ -51,29 +51,6 @@ stdenv.mkDerivation {
       rm -rf $DEST
       mkdir -pv $DEST
       echo "FAKEGIT cp -r %out/repos/$URL-$REVISION $DEST" >&2
-      cp -r %out/repos/$URL-$REVISION/* $DEST
-      chmod u+w -R $DEST
-    ''}
-
-    ${stdenv.lib.concatMapStrings
-       (r : ''
-        cp -r ${fetchsvn r} $out/repos/${hashname r}
-       ''
-       ) (import ./src-libs-svn.nix)
-    }
-
-    ${mkscript "$out/bin/checkout-svn.sh" ''
-      if test "$#" -ne 3; then
-        echo "Usage: $0 DESTINATION URL REVISION"
-        exit 1
-      fi
-      DEST=$1
-      URL=`echo $2 | tr :/ __`
-      REVISION=`echo $4 | tr :/ __`
-
-      rm -rf $DEST
-      mkdir -pv $DEST
-      echo "FAKE COPY %out/repos/$URL-$REVISION $DEST"
       cp -r %out/repos/$URL-$REVISION/* $DEST
       chmod u+w -R $DEST
     ''}
