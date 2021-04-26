@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.14";
+  version = "2.15.1";
 
   src = fetchurl {
     urls =
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
     name = "${pname}-${version}.tar.gz";
-    sha256 = "sha256-uNDJIBlt2K4pFS+nRI5ROh+nxYiHG3heP7/Ae0KgX7k=";
+    sha256 = "sha256-gNJ5I8ZjsqLHEPiujNVJhi4E+MBChXBidMNK48jKF9E=";
   };
 
   nativeBuildInputs = [ installShellFiles tcl ];
