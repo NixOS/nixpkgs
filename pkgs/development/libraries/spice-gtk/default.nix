@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals withPolkit [ polkit acl usbutils ] ;
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
     "-Dcelt051=disabled"
