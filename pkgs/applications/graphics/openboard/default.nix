@@ -96,7 +96,7 @@ in mkDerivation rec {
     install -m644 resources/linux/openboard-ubz.xml $out/opt/openboard/etc/
     install -Dm644 resources/images/OpenBoard.png $out/share/icons/hicolor/64x64/apps/OpenBoard.png
 
-    runHook postBuild
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;
