@@ -3555,6 +3555,8 @@ in {
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
 
+  karton-autoit-ripper = callPackage ../development/python-modules/karton-autoit-ripper { };
+
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
   karton-config-extractor = callPackage ../development/python-modules/karton-config-extractor { };
