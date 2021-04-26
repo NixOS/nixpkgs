@@ -222,7 +222,7 @@ in {
     meta = with lib; {
       description = "Octoprint LDAP auth plugin";
       homepage = "https://github.com/gillg/OctoPrint-LDAP";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ busti ];
     };
   };
