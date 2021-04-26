@@ -5,6 +5,7 @@
 , dask
 , numpy, toolz # dask[array]
 , multipledispatch
+, setuptools-scm
 , scipy
 , scikitlearn
 , pytest
