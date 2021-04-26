@@ -31019,6 +31019,8 @@ in
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
+  simple-http-server = callPackage ../servers/simple-http-server { };
+
   diceware = with python3Packages; toPythonApplication diceware;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
