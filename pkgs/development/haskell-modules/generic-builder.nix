@@ -309,7 +309,8 @@ stdenv.mkDerivation ({
   buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
-  LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
+  env.LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
+  env.LOCALE_ARCHIVE = optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
 
   prePatch = optionalString (editedCabalFile != null) ''
     echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
@@ -334,7 +335,7 @@ stdenv.mkDerivation ({
     mkdir -p $packageConfDir
 
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-    configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+    configureFlags=(${concatStringsSep " " defaultConfigureFlags} "''${configureFlags[@]}")
   ''
   # We build the Setup.hs on the *build* machine, and as such should only add
   # dependencies for the build machine.
@@ -351,16 +352,16 @@ stdenv.mkDerivation ({
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${buildPkgDb ghc.name "$packageConfDir"}
       if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
+        configureFlags+=("--extra-include-dirs=$p/include")
       fi
       if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
+        configureFlags+=("--extra-lib-dirs=$p/lib")
       fi
     ''
     # It is not clear why --extra-framework-dirs does work fine on Linux
     + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
       if [[ -d "$p/Library/Frameworks" ]]; then
-        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+        configureFlags+=("--extra-framework-dirs=$p/Library/Frameworks")
       fi
   '' + ''
     done
@@ -422,8 +423,8 @@ stdenv.mkDerivation ({
 
     unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
 
-    echo configureFlags: $configureFlags
-    ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+    echo configureFlags: "''${configureFlags[@]}"
+    ${setupCommand} configure "''${configureFlags[@]}" 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
       if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
         echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -615,21 +616,24 @@ stdenv.mkDerivation ({
       in stdenv.mkDerivation ({
         inherit name shellHook;
 
+        dontUnpack = true;
+
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
           [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkg-config ++
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;
-        phases = ["installPhase"];
-        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-        "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
-        "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
+        installPhase = ''
+          echo "''${nativeBuildInputs[@]}" "''${buildInputs[@]}" > $out
+        '';
+        env.LANG = "en_US.UTF-8";
+        env.LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        env."NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
+        env."NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
         # TODO: is this still valid?
-        "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
-        "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
+        env."NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
+        env."NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/lib/${ghcCommand}-${ghc.version}";
       });
@@ -670,6 +674,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
 // optionalAttrs (args ? hardeningDisable)       { inherit hardeningDisable; }
-// optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )
