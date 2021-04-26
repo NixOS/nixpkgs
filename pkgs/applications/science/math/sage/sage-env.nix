@@ -2,6 +2,7 @@
 , lib
 , writeTextFile
 , sagelib
+, sage_docbuild
 , env-locations
 , gfortran
 , bash
@@ -191,6 +192,7 @@ writeTextFile rec {
   # for find_library
     export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
-} // {
-  lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
+} // { # equivalent of `passthru`, which `writeTextFile` doesn't support
+  lib = sagelib;
+  docbuild = sage_docbuild;
 }

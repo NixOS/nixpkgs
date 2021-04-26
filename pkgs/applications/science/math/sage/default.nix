@@ -11,14 +11,6 @@ let
 
   python3 = pkgs.python3.override {
     packageOverrides = self: super: {
-      cypari2 = super.cypari2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "df1ef62e771ec36e5a456f5fc8b51bc6745b70f0efdd0c7a30c3f0b5f1fb93db";
-        };
-      });
-
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
@@ -26,6 +18,10 @@ let
         ecl = maxima-ecl.ecl;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
+      };
+
+      sage_docbuild = self.callPackage ./sage_docbuild.nix {
+        inherit sage-src;
       };
     };
   };
@@ -46,14 +42,16 @@ let
     logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
   };
 
+  three = callPackage ./threejs-sage.nix { };
+
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
     inherit singular maxima-ecl;
+    inherit three;
     ecl = maxima-ecl.ecl;
     cysignals = python3.pkgs.cysignals;
-    three = nodePackages.three;
     mathjax = nodePackages.mathjax;
   };
 
@@ -61,6 +59,7 @@ let
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
     sagelib = python3.pkgs.sagelib;
+    sage_docbuild = python3.pkgs.sage_docbuild;
     inherit env-locations;
     inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
     ecl = maxima-ecl.ecl;
@@ -78,8 +77,8 @@ let
     inherit python3 pythonEnv;
     inherit sage-env;
     inherit pynac singular maxima-ecl;
+    inherit three;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
-    three = nodePackages.three;
   };
 
   # Doesn't actually build anything, just runs sages testsuite. This is a
@@ -94,6 +93,7 @@ let
 
   pythonRuntimeDeps = with python3.pkgs; [
     sagelib
+    sage_docbuild
     cvxopt
     networkx
     service-identity
