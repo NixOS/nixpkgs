@@ -124,6 +124,9 @@ let
       else callPackage ../development/ocaml-modules/camlimages/4.1.2.nix {
       libpng = pkgs.libpng12;
     };
+
+    camlimages_4_2_4 = callPackage ../development/ocaml-modules/camlimages/4.2.4.nix { };
+
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
