@@ -107,8 +107,7 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Cross-platform interactive whiteboard application intended for use in a classroom setting";
+    description = "Interactive whiteboard application";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
