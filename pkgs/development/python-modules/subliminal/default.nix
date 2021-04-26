@@ -16,7 +16,7 @@
 , appdirs
 , rarfile
 , pytz
-, futures
+, futures ? null
 , sympy
 , vcrpy
 , pytest
