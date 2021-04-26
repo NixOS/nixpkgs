@@ -136,6 +136,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
+    snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     swoole = callPackage ../development/php-packages/swoole { };
