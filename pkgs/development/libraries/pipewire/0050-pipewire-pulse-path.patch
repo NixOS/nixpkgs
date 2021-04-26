@@ -22,7 +22,7 @@ index 0a5e5042..4a70b0b0 100644
  systemd_config = configuration_data()
  systemd_config.set('PW_BINARY', pipewire_bindir / 'pipewire')
 -systemd_config.set('PW_PULSE_BINARY', pipewire_bindir / 'pipewire-pulse')
-+systemd_config.set('PW_PULSE_BINARY', get_option('pipewire_pulse_prefix') / 'bin' / 'pipewire-pulse')
++systemd_config.set('PW_PULSE_BINARY', get_option('pipewire_pulse_prefix') / 'bin/pipewire-pulse')
  systemd_config.set('PW_MEDIA_SESSION_BINARY', pipewire_bindir / 'pipewire-media-session')
  
  configure_file(input : 'pipewire.service.in',
