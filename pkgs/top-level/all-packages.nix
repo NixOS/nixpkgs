@@ -1235,6 +1235,8 @@ in
 
   inherit (nodePackages) castnow;
 
+  castty = callPackage ../tools/misc/castty { };
+
   certigo = callPackage ../tools/admin/certigo { };
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
@@ -7165,6 +7167,8 @@ in
 
   openbazaar = callPackage ../applications/networking/openbazaar { };
   openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
+
+  openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
 
   opencc = callPackage ../tools/text/opencc { };
 
@@ -17627,7 +17631,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+  streamlink = callPackage ../applications/video/streamlink { };
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix {};
 
   sub-batch = callPackage ../applications/video/sub-batch { };
@@ -24657,6 +24661,8 @@ in
 
   motif = callPackage ../development/libraries/motif { };
 
+  mousai = callPackage ../applications/audio/mousai { };
+
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
   easytag = callPackage ../applications/audio/easytag { };
@@ -31014,6 +31020,8 @@ in
   tt2020 = callPackage ../data/fonts/tt2020 { };
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
+
+  simple-http-server = callPackage ../servers/simple-http-server { };
 
   diceware = with python3Packages; toPythonApplication diceware;
 
