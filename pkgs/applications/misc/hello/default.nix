@@ -1,5 +1,5 @@
-{ lib
-, runCommand
+{ callPackage
+, lib
 , stdenv
 , fetchurl
 , nixos
@@ -28,12 +28,7 @@ stdenv.mkDerivation (self: {
         (nixos { environment.noXlibs = true; }).pkgs.hello;
   };
 
-  passthru.tests.run = runCommand "hello-test-run" {
-    nativeBuildInputs = [ self ];
-  } ''
-    diff -U3 --color=auto <(hello) <(echo 'Hello, world!')
-    touch $out
-  '';
+  passthru.tests.run = callPackage ./test.nix { hello = self; };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
