@@ -8014,6 +8014,8 @@ in {
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
+  timeago = callPackage ../development/python-modules/timeago { };
+
   timelib = callPackage ../development/python-modules/timelib { };
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
