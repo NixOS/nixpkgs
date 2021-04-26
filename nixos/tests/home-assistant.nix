@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   configDir = "/var/lib/foobar";
@@ -6,9 +6,7 @@ let
   mqttPassword = "secret";
 in {
   name = "home-assistant";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ dotlambda ];
-  };
+  meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ mosquitto ];
