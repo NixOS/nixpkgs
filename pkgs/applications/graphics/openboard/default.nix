@@ -76,7 +76,7 @@ in mkDerivation rec {
       name = "OpenBoard";
       exec = "OpenBoard %f";
       icon = "OpenBoard";
-      comment = "";
+      comment = "OpenBoard, an interactive white board application";
       desktopName = "OpenBoard";
       mimeType = "application/ubz";
       categories = "Education;";
