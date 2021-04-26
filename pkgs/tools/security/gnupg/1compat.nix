@@ -3,8 +3,9 @@
 stdenv.mkDerivation {
   name = "gnupg1compat-${gnupg.version}";
 
-  builder = writeScript "gnupg1compat-builder" ''
-    PATH=${coreutils}/bin
+  dontUnpack = true;
+
+  installPhase = ''
     # First symlink all top-level dirs
     mkdir -p $out
     ln -s "${gnupg}/"* $out
@@ -20,6 +21,8 @@ stdenv.mkDerivation {
       [[ -e ''${f%2} ]] && continue # ignore commands that already have non-*2 versions
       ln -s -- "''${f##*/}" "''${f%2}"
     done
+
+    rm $out/lib
   '';
 
   meta = gnupg.meta // {
