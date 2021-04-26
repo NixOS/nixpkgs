@@ -5539,6 +5539,8 @@ in {
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
+  pygatt = callPackage ../development/python-modules/pygatt { };
+
   pygbm = callPackage ../development/python-modules/pygbm { };
 
   pygccxml = callPackage ../development/python-modules/pygccxml { };
