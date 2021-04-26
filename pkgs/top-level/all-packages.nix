@@ -10304,6 +10304,9 @@ in
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
 
+  # This is not indented for packages in nixpkgs, but for providing a
+  # faster-running compiler to nixpkgs user by enabling profile-guided
+  # optimizations options when building gcc.
   fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc10);
 
   wrapCCMulti = cc:
