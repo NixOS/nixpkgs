@@ -24120,6 +24120,10 @@ in
 
   kexi = libsForQt514.callPackage ../applications/office/kexi { };
 
+  kgt = callPackage ../development/tools/kgt {
+    inherit (skawarePackages) cleanPackaging;
+  };
+
   khronos = callPackage ../applications/office/khronos { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
