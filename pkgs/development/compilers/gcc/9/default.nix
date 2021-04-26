@@ -5,6 +5,7 @@
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langD ? false
 , langGo ? false
+, reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
@@ -53,6 +54,10 @@ assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
 
 with lib;
 with builtins;

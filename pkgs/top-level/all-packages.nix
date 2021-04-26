@@ -10280,9 +10280,16 @@ in
       if stdenv.targetPlatform.isAarch64 then gcc9 else gcc10;
   gcc-unwrapped = gcc.cc;
 
+  wrapNonDeterministicGcc = stdenv: ccWrapper:
+    if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
+      cc = old.cc.override {
+        reproducibleBuild = false;
+        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+      };
+    }) else ccWrapper;
+
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
     allowedRequisites = null;
-    cc = gcc;
     # Remove libcxx/libcxxabi, and add clang for AS if on darwin (it uses
     # clang's internal assembler).
     extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
@@ -10294,6 +10301,8 @@ in
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
+
+  fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc10);
 
   wrapCCMulti = cc:
     if stdenv.targetPlatform.system == "x86_64-linux" then let
@@ -10359,8 +10368,10 @@ in
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
-        # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+        reproducibleBuild = true;
+        profiledCompiler = false;
+
         isl = if !stdenv.isDarwin then isl_0_20 else null;
 
         # just for stage static
@@ -10378,8 +10389,8 @@ in
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10392,8 +10403,8 @@ in
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10406,8 +10417,8 @@ in
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10425,8 +10436,8 @@ in
   gcc7 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/7 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10440,8 +10451,8 @@ in
   gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10455,8 +10466,8 @@ in
   gcc9 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/9 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     enableLTO = !stdenv.isi686;
 
@@ -10469,8 +10480,8 @@ in
   gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     enableLTO = !stdenv.isi686;
 
