@@ -2697,8 +2697,6 @@ in
 
   jellyfin = callPackage ../servers/jellyfin { };
 
-  jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };
-
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   };
@@ -25804,6 +25802,8 @@ in
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   secretscanner = callPackage ../tools/security/secretscanner { };
+
+  semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
   sent = callPackage ../applications/misc/sent { };
 

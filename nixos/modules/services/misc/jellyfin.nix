@@ -18,6 +18,7 @@ in
 
       package = mkOption {
         type = types.package;
+        default = pkgs.jellyfin;
         example = literalExample "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
@@ -97,11 +98,6 @@ in
         ];
       };
     };
-
-    services.jellyfin.package = mkDefault (
-      if versionAtLeast config.system.stateVersion "20.09" then pkgs.jellyfin
-        else pkgs.jellyfin_10_5
-    );
 
     users.users = mkIf (cfg.user == "jellyfin") {
       jellyfin = {

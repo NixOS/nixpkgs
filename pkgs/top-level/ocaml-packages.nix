@@ -580,6 +580,8 @@ let
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
+    letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
@@ -941,6 +943,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
+
+    paf = callPackage ../development/ocaml-modules/paf { };
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
