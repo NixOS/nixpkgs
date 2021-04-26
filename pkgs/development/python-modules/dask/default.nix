@@ -72,7 +72,10 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+    "-m 'not network'"
+  ];
 
   disabledTests = [
     "test_annotation_pack_unpack"
