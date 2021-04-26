@@ -19,11 +19,11 @@ buildGoModule rec {
     rm net/net_test.go
   '';
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-s"
-    "-w"
-    "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
+  buildFlags = [
+    ("-ldflags="
+      + "-s"
+      + " -w"
+      + " -X github.com/${owner}/${pname}/v3/version.Version=${rev}")
   ];
 
   meta = with lib; {
