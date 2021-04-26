@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256 }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraPatches ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
     pname = "subversion";
 
@@ -35,7 +35,7 @@ let
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
 
-    patches = [ ./apr-1.patch ];
+    patches = [ ./apr-1.patch ] ++ extraPatches;
 
     # We are hitting the following issue even with APR 1.6.x
     # -> https://issues.apache.org/jira/browse/SVN-4813
@@ -118,5 +118,6 @@ in {
   subversion = common {
     version = "1.12.2";
     sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
+    extraPatches = [ ./CVE-2020-17525.patch ];
   };
 }

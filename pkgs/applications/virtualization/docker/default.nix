@@ -105,6 +105,8 @@ rec {
 
         # systemd
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+        substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
+        install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
       '';
 
       DOCKER_BUILDTAGS = []
@@ -178,6 +180,11 @@ rec {
     '' + optionalString (stdenv.isLinux) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+
+      # systemd
+      mkdir -p $out/etc/systemd/system
+      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '' + ''
       # completion (cli)
       installShellCompletion --bash ./contrib/completion/bash/docker
