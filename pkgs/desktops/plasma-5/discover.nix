@@ -17,4 +17,7 @@ mkDerivation {
     karchive kconfig kcrash kdbusaddons kdeclarative kio kirigami2 kitemmodels knewstuff kwindowsystem kxmlgui
     plasma-framework
   ];
+  meta.knownVulnerabilities = [
+    "https://kde.org/info/security/advisory-20210310-1.txt"
+  ];
 }
