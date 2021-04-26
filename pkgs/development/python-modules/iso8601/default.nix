@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Simple module to parse ISO 8601 dates";
     homepage = "https://pyiso8601.readthedocs.io/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ fab ];
   };
 }
