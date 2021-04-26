@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraBuildInputs ? [ ], knownVulnerabilities ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
     pname = "subversion";
 
@@ -101,6 +101,7 @@ let
       homepage = "http://subversion.apache.org/";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
+      inherit knownVulnerabilities;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -114,6 +115,9 @@ in {
   subversion19 = common {
     version = "1.9.12";
     sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
+    knownVulnerabilities = [
+      "https://subversion.apache.org/security/CVE-2020-17525-advisory.txt"
+    ];
   };
 
   subversion_1_10 = common {
