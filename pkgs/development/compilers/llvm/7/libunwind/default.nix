@@ -1,4 +1,4 @@
-{ lib, stdenv, version, fetch, fetchpatch, cmake, llvm, libcxx
+{ lib, stdenv, version, fetch, fetchpatch, cmake, llvm
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -7,6 +7,11 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetch "libunwind" "035dsxs10nyiqd00q07yycvmkjl01yz4jdlrjvmch8klxg4pyjhp";
+
+  postUnpack = ''
+    unpackFile ${llvm.src}
+    cmakeFlagsArray=($cmakeFlagsArray -DLLVM_PATH=$PWD/$(ls -d llvm-*))
+  '';
 
   patches = [
     ./gnu-install-dirs.patch
@@ -24,12 +29,11 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake llvm.dev ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optionals (!enableShared) [
     "-DLIBUNWIND_ENABLE_SHARED=OFF"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
-    "-DLIBUNWIND_HAS_NOSTDINCXX_FLAG=ON"
     "-DLLVM_ENABLE_LIBCXX=ON"
   ];
 }
