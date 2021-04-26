@@ -1,4 +1,5 @@
-{ lib
+{ callPackage
+, lib
 , runCommand
 , stdenv
 , fetchurl
