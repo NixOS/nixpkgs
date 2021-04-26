@@ -7,12 +7,12 @@
 
 let
   pname = "trezor-suite";
-  version = "21.2.2";
+  version = "21.4.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-linux-x86_64.AppImage";
-    sha256 = "0dj3azx9jvxchrpm02w6nkcis6wlnc6df04z7xc6f66fwn6r3kkw";
+    sha256 = "khkWilBDVhUrO4B+HnKC4hlSRh0ndZbGuC3f6BrCQZw=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -48,7 +48,7 @@ appimageTools.wrapType2 rec {
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
     license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [ prusnak ethancedwards8 ];
     platforms = [ "x86_64-linux" ];
   };
 }
