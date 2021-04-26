@@ -40,7 +40,7 @@ in rec {
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
-  bootstrapTools = derivation {
+  bootstrapTools = derivation ({
     inherit system;
 
     name    = "bootstrap-tools";
@@ -50,7 +50,11 @@ in rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  };
+  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  });
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
