@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ninja python3 ];
   buildInputs = [ curl libxml2 objc4 ICU ];
 
+  patches = [ ./0001-Add-missing-TARGET_OS_-defines.patch ];
+
   postPatch = ''
     cd CoreFoundation
 
@@ -76,7 +78,7 @@ stdenv.mkDerivation {
   # please remove this when updating the default llvm versions to 8 or
   # later.
   buildPhase = lib.optionalString true ''
-    for i in {1..512}; do
+    for i in {1..1}; do
         if ninja -j $NIX_BUILD_CORES; then
             break
         fi
