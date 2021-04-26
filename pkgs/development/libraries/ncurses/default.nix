@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "15r2456g0mlq2q7gh2z52vl6zv6y0z8sdchrs80kg4idqd8sm8fd";
   };
 
-  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
-
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
