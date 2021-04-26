@@ -198,6 +198,9 @@ in rec {
 
     doCheck = false; # uses pip to install things from the internet
 
+    # Takes 7+h to build with 2 cores.
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;

@@ -297,6 +297,9 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
+  # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
