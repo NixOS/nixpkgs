@@ -6979,6 +6979,12 @@
     githubId = 628342;
     name = "Tim Steinbach";
   };
+  netcrns = {
+    email = "jason.wing@gmx.de";
+    github = "netcrns";
+    githubId = 34162313;
+    name = "Jason Wing";
+  };
   netixx = {
     email = "dev.espinetfrancois@gmail.com";
     github = "netixx";
