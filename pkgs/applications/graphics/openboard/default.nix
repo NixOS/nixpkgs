@@ -85,7 +85,7 @@ in mkDerivation rec {
   ];
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
 
     lrelease OpenBoard.pro
 
