@@ -27,6 +27,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ zip makeWrapper ];
 
+  # https://github.com/NixOS/nixpkgs/issues/120738
+  patches = [ ./tsh.patch ];
+
   postBuild = ''
     pushd .
     mkdir -p build
