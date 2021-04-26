@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , isPy27
@@ -62,6 +63,9 @@ buildPythonPackage rec {
     "test_run_inside_role_dir"
     "test_role_handler_positive"
   ];
+
+  # fails to run tests due to issues with temporary directory
+  doCheck = !stdenv.isDarwin;
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
 
