@@ -708,6 +708,11 @@ environment.systemPackages = [
    </listitem>
    <listitem>
     <para>
+     The setting <xref linkend="opt-nix.gc.automatic" /> defaults to <literal>true</literal> now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The Mailman NixOS module (<literal>services.mailman</literal>) has a new
      option <xref linkend="opt-services.mailman.enablePostfix" />, defaulting
      to true, that controls integration with Postfix.
