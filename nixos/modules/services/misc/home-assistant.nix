@@ -267,11 +267,13 @@ in {
           "CAP_NET_RAW"
         ]));
       in {
-        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
+        ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "hass";
         Group = "hass";
         Restart = "on-failure";
+        RestartForceExitStatus = "100";
+        SuccessExitStatus = "100";
         KillSignal = "SIGINT";
 
         # Hardening
