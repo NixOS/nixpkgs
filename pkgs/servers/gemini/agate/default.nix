@@ -18,8 +18,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Username and Password use the same ports and causes collision
     # https://github.com/mbrubeck/agate/issues/50
-    "--skip username"
-    "--skip password"
+    "--skip" "username"
+    "--skip" "password"
   ];
 
   doInstallCheck = true;
