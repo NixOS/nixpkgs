@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OomCSA02ypFVzkYMcmkFREWB6x7oxgpt7x2zRANIDMw=";
+    sha256 = "sha256-Z4F5RYPVgFiiDBg6lxILjAh/a/rL7IJBqHIJ/tQyLnE=";
   };
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   nativeBuildInputs = with llvmPackages; [ llvm clang ];
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  cargoSha256 = "sha256-GYNk3j8fjKSo3Qk6Qy0l6kNINK3FxlSYoEkJSx7kVpk=";
+  cargoSha256 = "sha256-WSkN5aXMgfqZJAV1b3elF7kwf2f5OpcntKSf8620YcY=";
 
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";

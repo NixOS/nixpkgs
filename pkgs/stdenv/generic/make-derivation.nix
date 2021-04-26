@@ -89,6 +89,10 @@ in rec {
 
     , patches ? []
 
+    , __contentAddressed ?
+      (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
+      && (config.contentAddressedByDefault or false)
+
     , ... } @ attrs:
 
     let
@@ -253,6 +257,12 @@ in rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs (__contentAddressed) {
+          inherit __contentAddressed;
+          # Provide default values for outputHashMode and outputHashAlgo because
+          # most people won't care about these anyways
+          outputHashAlgo = attrs.outputHashAlgo or "sha256";
+          outputHashMode = attrs.outputHashMode or "recursive";
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
