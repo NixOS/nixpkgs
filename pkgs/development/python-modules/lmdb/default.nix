@@ -4,7 +4,6 @@
 , pytestCheckHook
 , cffi
 , lmdb
-, ludios_wpull
 }:
 
 buildPythonPackage rec {
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ lmdb ];
-
-  propogatedBuildInputs = [ ludios_wpull ];
 
   checkInputs = [ cffi pytestCheckHook ];
 
