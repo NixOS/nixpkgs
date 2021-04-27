@@ -37,7 +37,7 @@ let
     setAttrByPath
     toList
     types
-    warn
+    warnIf
     ;
   inherit (lib.options)
     isOption
@@ -516,8 +516,8 @@ rec {
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
       warnDeprecation =
-        if opt.type.deprecationMessage == null then id
-        else warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+        warnIf (opt.type.deprecationMessage != null)
+          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
