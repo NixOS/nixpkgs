@@ -24015,6 +24015,22 @@ let
     };
   };
 
+  WebMachine = buildPerlPackage {
+    pname = "Web-Machine";
+    version = "0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Web-Machine-0.17.tar.gz";
+      sha256 = "f139d2b3114c549e91847daaab8b75cb699e57daf5bbf0dbd13293f33fe5e22a";
+    };
+    buildInputs = [ NetHTTP TestFailWarnings TestFatal ];
+    propagatedBuildInputs = [ HTTPHeadersActionPack HTTPMessage HashMultiValue IOHandleUtil ModuleRuntime Plack SubExporter TryTiny ];
+    meta = {
+      homepage = http://metacpan.org/release/Web-Machine;
+      description = "A Perl port of Webmachine";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   WebServiceLinode = buildPerlModule {
     pname = "WebService-Linode";
     version = "0.29";
