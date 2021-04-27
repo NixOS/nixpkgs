@@ -9982,6 +9982,21 @@ let
     propagatedBuildInputs = [ XMLDOM ];
   };
 
+  HTTPHeadersActionPack = buildPerlPackage {
+    pname = "HTTP-Headers-ActionPack";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTTP-Headers-ActionPack-0.09.tar.gz";
+      sha256 = "c78111ab857e48c69824903d4b6ce8293feffc6b5d670db550a767f853acc7da";
+    };
+    buildInputs = [ TestFatal TestWarnings ];
+    propagatedBuildInputs = [ HTTPDate HTTPMessage ModuleRuntime SubExporter URI ];
+    meta = {
+      description = "HTTP Action, Adventure and Excitement";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTTPHeaderParserXS = buildPerlPackage {
     pname = "HTTP-HeaderParser-XS";
     version = "0.20";
