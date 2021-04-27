@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }
