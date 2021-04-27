@@ -6183,6 +6183,10 @@ in
 
   nbench = callPackage ../tools/misc/nbench { };
 
+  nbtscanner = callPackage ../tools/security/nbtscanner {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ncrack = callPackage ../tools/security/ncrack { };
 
   nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
