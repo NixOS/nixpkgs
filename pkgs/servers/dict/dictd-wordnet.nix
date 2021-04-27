@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
 
-  buildInputs = [python2 wordnet];
-  convert = ./wordnet_structures.py;
+  dontUnpack = true;
 
-  builder = writeScript "builder.sh" ''
-    . ${stdenv}/setup
+  buildInputs = [python2 wordnet];
+
+  installPhase = ''
     mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       DATA="$DATA `echo $i | sed -e s,data,index,` $i";
     done
 
-    python ${convert} $DATA
+    python ${./wordnet_structures.py} $DATA
     echo en_US.UTF-8 > locale
   '';
 
