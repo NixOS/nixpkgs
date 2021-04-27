@@ -62,7 +62,7 @@ in
 
     mkdir -p ${cacheDhall}
 
-    for dependency in $dependencies; do
+    for dependency in "''${dependencies[@]}"; do
       ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
     done
 
