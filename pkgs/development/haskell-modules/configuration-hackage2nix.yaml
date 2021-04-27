@@ -6962,7 +6962,6 @@ broken-packages:
   - htdp-image
   - hTensor
   - htestu
-  - HTF
   - HTicTacToe
   - htiled
   - htlset
