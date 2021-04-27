@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
 
-  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env.KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [
     libelf
