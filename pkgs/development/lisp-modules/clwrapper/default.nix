@@ -2,7 +2,8 @@
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
-  buildPhase="";
+  dontUnpack = true;
+  dontBuild = true;
 
   installPhase=''
     mkdir -p "$out"/bin
@@ -42,9 +43,7 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  phases="installPhase fixupPhase";
-
-  ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
+  env.ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
 
   passthru = {
     inherit lisp;
