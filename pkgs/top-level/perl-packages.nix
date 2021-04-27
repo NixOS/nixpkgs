@@ -14137,6 +14137,21 @@ let
     };
   };
 
+  MooXTypeTiny = buildPerlPackage {
+    pname = "MooX-TypeTiny";
+    version = "0.002003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/MooX-TypeTiny-0.002003.tar.gz";
+      sha256 = "d81e26ff6f8db10261f0087f96dc54367dcb49a9f3de8d53238f834ece19624b";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ Moo TypeTiny ];
+    meta = {
+      description = "Optimized type checks for Moo + Type::Tiny";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooseAutobox = buildPerlModule {
     pname = "Moose-Autobox";
     version = "0.16";
