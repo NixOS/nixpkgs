@@ -1,7 +1,9 @@
 name: "Checking EditorConfig"
 
+permissions: read-all
+
 on:
-  pull_request:
+  pull_request_target:
     branches-ignore:
       - 'release-**'
 
@@ -21,17 +23,19 @@ jobs:
           >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
     - uses: actions/checkout@v2
+      with:
+        # pull_request_target checks out the base branch by default
+        ref: refs/pull/${{ github.event.pull_request.number }}/merge
       if: env.PR_DIFF
-    - name: Fetch editorconfig-checker
+    - uses: cachix/install-nix-action@v13
       if: env.PR_DIFF
-      env:
-        ECC_VERSION: "2.3.5"
-        ECC_URL: "https://github.com/editorconfig-checker/editorconfig-checker/releases/download"
+    - name: install editorconfig-checker from unstable channel
       run: |
-        curl -sSf -O -L -C - "$ECC_URL/$ECC_VERSION/ec-linux-amd64.tar.gz" && \
-        tar xzf ec-linux-amd64.tar.gz && \
-        mv ./bin/ec-linux-amd64 ./bin/editorconfig-checker
+        nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+        nix-channel --update
+        nix-env -iA nixpkgs.editorconfig-checker
+      if: env.PR_DIFF
     - name: Checking EditorConfig
       if: env.PR_DIFF
       run: |
-        echo "$PR_DIFF" | xargs ./bin/editorconfig-checker -disable-indent-size
+        echo "$PR_DIFF" | xargs editorconfig-checker -disable-indent-size
