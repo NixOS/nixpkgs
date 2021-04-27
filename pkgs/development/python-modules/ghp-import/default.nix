@@ -1,7 +1,7 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , dateutil
 , fetchPypi
-, lib
 }:
 
 buildPythonPackage rec {
