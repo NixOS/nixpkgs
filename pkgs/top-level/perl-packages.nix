@@ -19199,6 +19199,20 @@ let
     };
   };
 
+  ShellGuess = buildPerlPackage {
+    pname = "Shell-Guess";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Guess-0.09.tar.gz";
+      sha256 = "4069fa2637e443118ed956d710231d166823d23b2a64eb87b8a46872e865a12b";
+    };
+    meta = {
+      homepage = https://metacpan.org/pod/Shell::Guess;
+      description = "Make an educated guess about the shell in use";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringToIdentifierEN = buildPerlPackage {
     pname = "String-ToIdentifier-EN";
     version = "0.12";
