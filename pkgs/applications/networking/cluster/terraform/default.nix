@@ -49,7 +49,6 @@ let
           babariviere
           kalbasit
           marsam
-          peterhoeg
           timstott
           zimbatm
         ];
