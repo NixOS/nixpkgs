@@ -1,4 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, symlinkJoin
 , fetchurl
 , fetchzip
 , sconsPackages
@@ -29,25 +31,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
-  buildInputs = [ zlib libiconv ];
+  buildInputs = [ zlib ] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
 
-  preBuild = lib.optionalString stdenv.isLinux ''
-    sconsFlagsArray+=("PATH=$PATH")
-  '' + ''
-    mkdir -p $out/tmp/include
-    cp ${zlib.dev}/include/* $out/tmp/include
-    cp ${libiconv}/include/* $out/tmp/include
-    sconsFlagsArray+=("APPEND_CPPPATH=$out/tmp/include")
-  '';
+  nsisIncludes = symlinkJoin {
+    name = "includes";
+    paths = [zlib.dev] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
+  };
 
   sconsFlags = [
     "SKIPSTUBS=all"
     "SKIPPLUGINS=all"
     "SKIPUTILS=all"
     "SKIPMISC=all"
+    "APPEND_CPPPATH=${nsisIncludes}/include"
     "APPEND_LIBPATH=${zlib}/lib"
     "NSIS_CONFIG_CONST_DATA=no"
   ];
+
+  preBuild = lib.optionalString stdenv.isLinux ''
+    sconsFlagsArray+=("PATH=$PATH")
+  '';
 
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
