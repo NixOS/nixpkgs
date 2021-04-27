@@ -15,9 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-X github.com/Dreamacro/clash/constant.Version=${version}"
+  buildFlags = [
+    "-ldflags=-X github.com/Dreamacro/clash/constant.Version=${version}"
   ];
 
   meta = with lib; {
