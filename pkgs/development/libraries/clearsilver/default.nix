@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1046m1dpq3nkgxbis2dr2x7hynmy51n64465q78d7pdgvqwa178y";
   };
 
-  PYTHON_SITE = "${placeholder "out"}/${python2.sitePackages}";
+  env.PYTHON_SITE = "${placeholder "out"}/${python2.sitePackages}";
 
   configureFlags = [
     "--with-python=${python2.interpreter}"
