@@ -1,14 +1,15 @@
 { lib
 , stdenv
-, fetchurl
-, flex
-, systemd
-, perl
-, docbook_xsl
-, libxslt
 , docbook_xml_dtd_44
 , docbook_xml_dtd_45
+, docbook_xsl
+, fetchurl
+, flex
 , kmod
+, libxslt
+, nixosTests
+, perl
+, systemd
 
 # drbd-utils are compiled twice, once with forOCF = true to extract
 # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -110,6 +111,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PATH=${systemd}/sbin:$PATH
   '';
+
+  passthru.tests.drbd = nixosTests.drbd;
 
   meta = with lib; {
     homepage = "https://linbit.com/drbd/";
