@@ -26,9 +26,11 @@
 , libXrandr
 , libXrender
 , libXtst
+, libdrm
 , libnotify
 , libpulseaudio
 , libuuid
+, mesa
 , nspr
 , nss
 , pango
@@ -88,9 +90,11 @@ in stdenv.mkDerivation rec {
     libXrandr
     libXrender
     libXtst
+    libdrm
     libnotify
     libuuid
     libxcb
+    mesa
     nspr
     nss
     pango
