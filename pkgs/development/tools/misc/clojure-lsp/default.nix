@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
       --replace ":main" ":local-repo \"${repository}\" :main"
   '';
 
-  GRAALVM_HOME = graalvm11-ce;
+  env.GRAALVM_HOME = toString graalvm11-ce;
 
   buildInputs = [ graalvm11-ce leiningen11 repository ];
 
