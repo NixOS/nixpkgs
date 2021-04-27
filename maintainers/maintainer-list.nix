@@ -3452,7 +3452,7 @@
     github = "French-isotope";
     githubId = 83166352;
     name = "French Isotope";
-  };  
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "Fresheyeball";
