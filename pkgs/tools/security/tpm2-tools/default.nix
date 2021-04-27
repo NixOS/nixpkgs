@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
       tpm2-tss
     ] ++ (lib.optional abrmdSupport tpm2-abrmd));
   in ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin \
-        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
-    done
+    wrapProgram $out/bin/tpm2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+    wrapProgram $out/bin/tss2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
   '';
 
 
