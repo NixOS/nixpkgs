@@ -22364,6 +22364,21 @@ let
     propagatedBuildInputs = [ URI ];
   };
 
+  TextWordDiff = buildPerlPackage {
+    pname = "Text-WordDiff";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMK/Text-WordDiff-0.09.tar.gz";
+      sha256 = "fee699ca763adca2f4e18f4a8a836fd2102bc2820af708f8eb43356d5ae0d50e";
+    };
+    propagatedBuildInputs = [ AlgorithmDiff HTMLParser ];
+    meta = {
+      homepage = https://metacpan.org/release/Text-WordDiff;
+      description = "Track changes between documents";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextWrapI18N = buildPerlPackage {
     pname = "Text-WrapI18N";
     version = "0.06";
