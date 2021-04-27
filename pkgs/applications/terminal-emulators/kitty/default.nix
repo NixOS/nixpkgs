@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
