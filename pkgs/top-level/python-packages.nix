@@ -7195,6 +7195,14 @@ in {
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
+  sanic = callPackage ../development/python-modules/sanic {
+    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
+    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
+      doCheck = false;
+      meta.broken = false;
+    });
+  };
+
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
   sanic = callPackage ../development/python-modules/sanic { };
