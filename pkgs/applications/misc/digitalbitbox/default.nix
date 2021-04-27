@@ -79,22 +79,18 @@ in mkDerivation rec {
     qtmultimedia
   ];
 
-  LUPDATE="${qttools.dev}/bin/lupdate";
-  LRELEASE="${qttools.dev}/bin/lrelease";
-  MOC="${qtbase.dev}/bin/moc";
-  QTDIR=qtbase.dev;
-  RCC="${qtbase.dev}/bin/rcc";
-  UIC="${qtbase.dev}/bin/uic";
+  env.LUPDATE = "${qttools.dev}/bin/lupdate";
+  env.LRELEASE = "${qttools.dev}/bin/lrelease";
+  env.MOC = "${qtbase.dev}/bin/moc";
+  env.QTDIR = toString qtbase.dev;
+  env.RCC = "${qtbase.dev}/bin/rcc";
+  env.UIC = "${qtbase.dev}/bin/uic";
 
-  configureFlags = [
-    "--enable-libusb"
-  ];
+  configureFlags = [ "--enable-libusb" ];
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
-  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : $out/lib" ];
+  qtWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" "$out/lib" ];
 
   postInstall = ''
     mkdir -p "$out/lib"
