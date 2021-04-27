@@ -19183,6 +19183,22 @@ let
     };
   };
 
+  ShellConfigGenerate = buildPerlPackage {
+    pname = "Shell-Config-Generate";
+    version = "0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Config-Generate-0.34.tar.gz";
+      sha256 = "84f451f22215dd68e9c18aa3f7ddb03a82007d166cfada003d0f166f571e0562";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ ShellGuess ];
+    meta = {
+      homepage = https://metacpan.org/pod/Shell::Config::Generate;
+      description = "Portably generate config for any shell";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringToIdentifierEN = buildPerlPackage {
     pname = "String-ToIdentifier-EN";
     version = "0.12";
