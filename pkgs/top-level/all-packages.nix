@@ -13094,6 +13094,8 @@ in
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
+  kubesec = callPackage ../tools/security/kubesec { };
+
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
   kubicorn = callPackage ../development/tools/kubicorn {  };
