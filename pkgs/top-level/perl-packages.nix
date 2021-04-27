@@ -220,6 +220,21 @@ let
     };
   };
 
+  AlienLibGumbo = buildPerlModule {
+    pname = "Alien-LibGumbo";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RU/RUZ/Alien-LibGumbo-0.05.tar.gz";
+      sha256 = "0fbe916ab11f680e5c28cd1ac800372323e2a0e06affc6c8b36279fc64d76517";
+    };
+    buildInputs = [ AlienBaseModuleBuild ];
+    propagatedBuildInputs = [ AlienBuild FileShareDir PathClass ];
+    meta = {
+      description = "Gumbo parser library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlienLibxml2 = buildPerlPackage {
     pname = "Alien-Libxml2";
     version = "0.17";
