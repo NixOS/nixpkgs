@@ -9605,6 +9605,20 @@ let
     };
   };
 
+  HTMLGumbo = buildPerlModule {
+    pname = "HTML-Gumbo";
+    version = "0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RU/RUZ/HTML-Gumbo-0.18.tar.gz";
+      sha256 = "bf50b61c24656cc3fc958602d80a9c7d017247af38d8dbfa0e9dec5b75425d5f";
+    };
+    propagatedBuildInputs = [ AlienLibGumbo ];
+    meta = {
+      description = "HTML5 parser based on gumbo C library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLMason = buildPerlPackage {
     pname = "HTML-Mason";
     version = "1.59";
