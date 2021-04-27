@@ -2323,6 +2323,8 @@ in {
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
+  ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
+
   fido2 = callPackage ../development/python-modules/fido2 { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
