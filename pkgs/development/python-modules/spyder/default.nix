@@ -46,7 +46,8 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py \
       --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso"
+      --replace "parso==0.7.0" "parso" \
+      --replace "watchdog>=0.10.3,<2.0.0" "watchdog"
   '';
 
   postInstall = ''
@@ -79,5 +80,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
+    # 2021-04-27: watchdog version is incorrect and textdistance is missing
+    broken = true;
   };
 }
