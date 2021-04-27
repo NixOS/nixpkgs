@@ -23,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/knorrie/python-btrfs";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.evils ];
+    maintainers = with maintainers; [ evils Luflosi ];
   };
 }
