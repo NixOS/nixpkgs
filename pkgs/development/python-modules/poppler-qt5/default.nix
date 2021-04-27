@@ -59,6 +59,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/wbsoft/python-poppler-qt5";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ eduardosm ];
   };
 }
