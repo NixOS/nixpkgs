@@ -7207,6 +7207,8 @@ in {
 
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
+  sanic-testing = callPackage ../development/python-modules/sanic-testing { };
+
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
   sarge = callPackage ../development/python-modules/sarge { };
