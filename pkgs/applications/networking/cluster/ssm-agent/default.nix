@@ -1,29 +1,15 @@
 { lib
-, writeShellScriptBin
 , buildGoPackage
 , makeWrapper
 , fetchFromGitHub
 , coreutils
+, lsb-release
 , nettools
 , dmidecode
 , util-linux
 , bashInteractive
 }:
 
-let
-  # Tests use lsb_release, so we mock it (the SSM agent used to not
-  # read from our /etc/os-release file, but now it does) because in
-  # reality, it won't (shouldn't) be used when active on a system with
-  # /etc/os-release. If it is, we fake the only two fields it cares about.
-  fake-lsb-release = writeShellScriptBin "lsb_release" ''
-    . /etc/os-release || true
-
-    case "$1" in
-      -i) echo "''${NAME:-unknown}";;
-      -r) echo "''${VERSION:-unknown}";;
-    esac
-  '';
-in
 buildGoPackage rec {
   pname = "amazon-ssm-agent";
   version = "3.0.755.0";
@@ -55,7 +41,7 @@ buildGoPackage rec {
     substituteInPlace agent/platform/platform_unix.go \
         --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
         --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-        --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
+        --replace '"lsb_release"' '"${lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
         --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
