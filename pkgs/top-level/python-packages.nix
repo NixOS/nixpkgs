@@ -8276,6 +8276,8 @@ in {
 
   tensorflow-build = self.tensorflow-build_2;
 
+  tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
+
   tensorflow-estimator_2 = callPackage ../development/python-modules/tensorflow-estimator { };
 
   tensorflow-estimator = self.tensorflow-estimator_2;
