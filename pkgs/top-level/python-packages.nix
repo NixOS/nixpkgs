@@ -2658,6 +2658,8 @@ in {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghp-import = callPackage ../development/python-modules/ghp-import { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
@@ -4185,6 +4187,8 @@ in {
   mockito = callPackage ../development/python-modules/mockito { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
+
+  mock-services = callPackage ../development/python-modules/mock-services { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 
@@ -7957,6 +7961,8 @@ in {
   testtools = callPackage ../development/python-modules/testtools { };
 
   test-tube = callPackage ../development/python-modules/test-tube { };
+
+  textdistance = callPackage ../development/python-modules/textdistance { };
 
   textacy = callPackage ../development/python-modules/textacy { };
 

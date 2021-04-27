@@ -49,7 +49,6 @@ let
           babariviere
           kalbasit
           marsam
-          peterhoeg
           timstott
           zimbatm
         ];
@@ -137,8 +136,8 @@ let
   ];
 in rec {
   terraform_0_12 = pluggable (generic {
-    version = "0.12.30";
-    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
+    version = "0.12.31";
+    sha256 = "03p698xdbk5gj0f9v8v1fpd74zng3948dyy4f2hv7zgks9hid7fg";
     patches = [
         ./provider-path.patch
         (fetchpatch {
@@ -150,15 +149,15 @@ in rec {
   });
 
   terraform_0_13 = pluggable (generic {
-    version = "0.13.6";
-    sha256 = "04vas8i894ssfhncdvljdvmvj2qzfrcs20zcv71l1wmnnv9ibs6l";
+    version = "0.13.7";
+    sha256 = "1cahnmp66dk21g7ga6454yfhaqrxff7hpwpdgc87cswyq823fgjn";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.10";
-    sha256 = "05vfb8hzma3qxq4w1h25mmgv96g90if214zlar0sm9fq8zsvb1yw";
+    version = "0.14.11";
+    sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
     vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };

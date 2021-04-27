@@ -24,6 +24,5 @@ buildGoPackage rec {
     description = "The Go language implementation of gRPC. HTTP/2 based RPC";
     license = licenses.asl20;
     maintainers = [ maintainers.raboof ];
-    platforms = platforms.all;
   };
 }

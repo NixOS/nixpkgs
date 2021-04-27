@@ -1481,6 +1481,8 @@ in
 
   ili2c = callPackage ../tools/misc/ili2c { };
 
+  imagelol = callPackage ../tools/compression/imagelol { };
+
   imageworsener = callPackage ../tools/graphics/imageworsener { };
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
@@ -13103,7 +13105,11 @@ in
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+  kubei = callPackage ../tools/security/kubei { };
+
   kubeprompt = callPackage ../development/tools/kubeprompt { };
+
+  kubesec = callPackage ../tools/security/kubesec { };
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
@@ -14528,7 +14534,7 @@ in
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
-  ghp-import = callPackage ../development/tools/ghp-import { };
+  ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
 
@@ -18809,6 +18815,7 @@ in
   nginx = nginxStable;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
+    zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
@@ -18818,6 +18825,7 @@ in
   };
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
+    zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
@@ -18825,6 +18833,7 @@ in
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
@@ -24215,6 +24224,8 @@ in
   fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
+
+  kile-wl = callPackage ../applications/misc/kile-wl { };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
@@ -30331,6 +30342,8 @@ in
   pt = callPackage ../applications/misc/pt { };
 
   protocol = python3Packages.callPackage ../applications/networking/protocol { };
+
+  punes = libsForQt5.callPackage ../misc/emulators/punes { };
 
   pykms = callPackage ../tools/networking/pykms { };
 
