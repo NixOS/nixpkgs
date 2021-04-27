@@ -7205,7 +7205,7 @@ in {
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
-  sanic = callPackage ../development/python-modules/sanic { };
+  sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
