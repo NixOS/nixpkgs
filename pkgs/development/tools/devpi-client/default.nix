@@ -47,7 +47,7 @@ buildPythonApplication rec {
     HOME=$TMPDIR py.test --fast
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     homepage = "http://doc.devpi.net";
