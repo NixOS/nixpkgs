@@ -1737,6 +1737,8 @@ in
 
   buildpack = callPackage ../development/tools/buildpack { };
 
+  bottom-rs = callPackage ../tools/misc/bottom-rs { };
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
