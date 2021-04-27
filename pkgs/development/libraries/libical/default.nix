@@ -21,7 +21,7 @@ assert introspectionSupport -> gobject-introspection != null && vala != null;
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.9";
+  version = "3.0.10";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-efdiGktLGITaQ6VinnfYG52fMhO0Av+JKROt2kTvS1U=";
+    sha256 = "sha256-fLmEJlkZLYLcKZqZwitf8rH261QDPTJZf/+/+FMsGIg=";
   };
 
   nativeBuildInputs = [
