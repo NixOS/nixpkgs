@@ -7962,6 +7962,8 @@ in {
 
   test-tube = callPackage ../development/python-modules/test-tube { };
 
+  textdistance = callPackage ../development/python-modules/textdistance { };
+
   textacy = callPackage ../development/python-modules/textacy { };
 
   texttable = callPackage ../development/python-modules/texttable { };
