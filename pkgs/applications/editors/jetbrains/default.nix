@@ -1,8 +1,7 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, libxml2, zlib, python3, ncurses5
+, jdk, cmake, zlib, python3
 , dotnet-sdk_5
 , autoPatchelfHook
-, glib
 , libdbusmenu
 , vmopts ? null
 }:
