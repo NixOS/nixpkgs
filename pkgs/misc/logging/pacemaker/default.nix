@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     glib
     gnutls
     libqb
-    libuuid.dev
+    libuuid
     libxml2.dev
     libxslt.dev
     pam
