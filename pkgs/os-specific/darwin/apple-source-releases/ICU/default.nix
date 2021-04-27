@@ -59,7 +59,7 @@ appleDerivation {
 
     "DATA_INSTALL_DIR=/share/icu/"
     "DATA_LOOKUP_DIR=$(DSTROOT)$(DATA_INSTALL_DIR)"
-
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ # darwin* platform properties are only defined on darwin
     # hack to use our lower macos version
     "MAC_OS_X_VERSION_MIN_REQUIRED=${formatVersionNumeric stdenv.hostPlatform.darwinMinVersion}"
     "ICU_TARGET_VERSION=-m${stdenv.hostPlatform.darwinPlatform}-version-min=${stdenv.hostPlatform.darwinMinVersion}"
