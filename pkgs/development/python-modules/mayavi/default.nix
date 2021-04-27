@@ -41,5 +41,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/enthought/mayavi";
     maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
+    # 2021-04-27: importlib-metadata dependency is missing
+    broken = true;
   };
 }
