@@ -15458,6 +15458,8 @@ in
 
   libdeflate = callPackage ../development/libraries/libdeflate { };
 
+  libdeltachat = callPackage ../development/libraries/libdeltachat { };
+
   libdevil = callPackage ../development/libraries/libdevil {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
