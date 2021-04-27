@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [ zlib libiconv ];
 
-  preBuild = (if stdenv.isLinux then ''
+  preBuild = lib.optionalString stdenv.isLinux ''
     sconsFlagsArray+=("PATH=$PATH")
-  '' else "") + ''
+  '' + ''
     mkdir -p $out/tmp/include
     cp ${zlib.dev}/include/* $out/tmp/include
     cp ${libiconv}/include/* $out/tmp/include
