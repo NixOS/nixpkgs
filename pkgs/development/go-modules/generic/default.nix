@@ -168,8 +168,8 @@ let
       getGoDirs() {
         local type;
         type="$1"
-        if [ -n "$subPackages" ]; then
-          echo "$subPackages" | sed "s,\(^\| \),\1./,g"
+        if [ ''${#subPackages[@]} -gt 0 ]; then
+          echo "''${subPackages[@]}" | sed "s,\(^\| \),\1./,g"
         else
           find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique
         fi
