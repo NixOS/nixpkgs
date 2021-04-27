@@ -13,9 +13,12 @@ buildPythonPackage rec {
     hash = "sha256-wiqc4Qw3dT4miNFk12WnANrkuNefptsKLDEyuniBiU8=";
   };
 
-  pythonImportsCheck = [ "ghp_import" ];
-
   propagatedBuildInputs = [ dateutil ];
+
+  # Does not include any unit tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "ghp_import" ];
 
   meta = with lib; {
     description = "Copy your docs directly to the gh-pages branch";
