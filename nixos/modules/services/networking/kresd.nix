@@ -57,11 +57,13 @@ in {
       '';
     };
     package = mkOption {
-      default = pkgs.knot-resolver;
       type = types.package;
       description = "
         knot-resolver package to use.
       ";
+      default = pkgs.knot-resolver;
+      defaultText = "pkgs.knot-resolver";
+      example = literalExample "pkgs.knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;
