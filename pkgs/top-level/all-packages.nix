@@ -13092,6 +13092,8 @@ in
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+  kubei = callPackage ../tools/security/kubei { };
+
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
   kubesec = callPackage ../tools/security/kubesec { };
