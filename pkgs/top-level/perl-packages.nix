@@ -9515,6 +9515,21 @@ let
     };
   };
 
+  HTMLFormatExternal = buildPerlPackage {
+    pname = "HTML-FormatExternal";
+    version = "26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/HTML-FormatExternal-26.tar.gz";
+      sha256 = "3c59f233d0b10686a85aed0c994011cec68626da0128dea90b5c4fdc1746cfc3";
+    };
+    propagatedBuildInputs = [ IPCRun URI constant-defer ];
+    meta = {
+      homepage = http://user42.tuxfamily.org/html-formatexternal/index.html;
+      description = "HTML to text formatting using external programs";
+      license = lib.licenses.gpl3Plus;
+    };
+  };
+
   HTMLFormatTextWithLinks = buildPerlModule {
     pname = "HTML-FormatText-WithLinks";
     version = "0.15";
