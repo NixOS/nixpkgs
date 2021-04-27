@@ -3,6 +3,7 @@
 , fetchzip
 , sconsPackages
 , zlib
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -28,21 +29,25 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib libiconv ];
+
+  preBuild = (if stdenv.isLinux then ''
+    sconsFlagsArray+=("PATH=$PATH")
+  '' else "") + ''
+    mkdir -p $out/tmp/include
+    cp ${zlib.dev}/include/* $out/tmp/include
+    cp ${libiconv}/include/* $out/tmp/include
+    sconsFlagsArray+=("APPEND_CPPPATH=$out/tmp/include")
+  '';
 
   sconsFlags = [
     "SKIPSTUBS=all"
     "SKIPPLUGINS=all"
     "SKIPUTILS=all"
     "SKIPMISC=all"
-    "APPEND_CPPPATH=${zlib.dev}/include"
     "APPEND_LIBPATH=${zlib}/lib"
     "NSIS_CONFIG_CONST_DATA=no"
   ];
-
-  preBuild = ''
-    sconsFlagsArray+=("PATH=$PATH")
-  '';
 
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
@@ -51,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pombeirp ];
   };
 }
