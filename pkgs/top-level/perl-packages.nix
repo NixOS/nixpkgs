@@ -16588,6 +16588,22 @@ let
     };
   };
 
+  PathDispatcher = buildPerlPackage {
+    pname = "Path-Dispatcher";
+    version = "1.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Path-Dispatcher-1.08.tar.gz";
+      sha256 = "79a9f61c27408b4fd1ed234dac246974ddeafa7fe635a18fe41ec7783130ae2a";
+    };
+    buildInputs = [ ModuleBuildTiny TestFatal ];
+    propagatedBuildInputs = [ Moo MooXTypeTiny TryTiny TypeTiny ];
+    meta = {
+      homepage = https://github.com/karenetheridge/Path-Dispatcher;
+      description = "Flexible and extensible dispatch";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PathIteratorRule = buildPerlPackage {
     pname = "Path-Iterator-Rule";
     version = "1.014";
