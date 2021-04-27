@@ -36,7 +36,7 @@ pythonPackages.buildPythonApplication rec {
     ./linux-disable-timezone-test.patch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     makeWrapper
