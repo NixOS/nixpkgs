@@ -131,14 +131,12 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     # Copy pre-downloaded files to proper locations
-    download_src=($downloadSrcList)
-    download_dst=($downloadDstList)
-    while [[ "''${#download_src[@]}" -ne 0 ]]; do
-      file_src=''${download_src[0]}
-      file_dst=''${download_dst[0]}
+    while [[ "''${#downloadSrcList[@]}" -ne 0 ]]; do
+      file_src=''${downloadSrcList[0]}
+      file_dst=''${downloadDstList[0]}
       mkdir -p $(dirname $file_dst)
-      download_src=(''${download_src[@]:1})
-      download_dst=(''${download_dst[@]:1})
+      downloadSrcList=(''${downloadSrcList[@]:1})
+      downloadDstList=(''${downloadDstList[@]:1})
       cp -v $file_src $file_dst
     done
 
