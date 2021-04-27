@@ -88,12 +88,12 @@ in
     };
 
     composer2 = mkDerivation rec {
-      version = "2.0.12";
+      version = "2.0.13";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0cd661bn63lj9lvhfz13wzydm7grrmy4q07narzfpb6g6waqrsl2";
+        sha256 = "sha256-EW/fB8ySavZGY1pqvJLYiv97AqXcNlOPgcUKfSc2bb8=";
       };
 
       dontUnpack = true;
@@ -101,11 +101,13 @@ in
       nativeBuildInputs = [ pkgs.makeWrapper ];
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/bin
         install -D $src $out/libexec/composer/composer.phar
         makeWrapper ${php}/bin/php $out/bin/composer \
           --add-flags "$out/libexec/composer/composer.phar" \
           --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
+        runHook postInstall
       '';
 
       meta = with pkgs.lib; {
