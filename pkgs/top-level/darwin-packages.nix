@@ -48,13 +48,18 @@ lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced:
   # SDK.
   useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
 
-  chooseLibs = {
-    inherit (
+  selectAttrs = attrs: names:
+    lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [(lib.nameValuePair n attrs."${n}")] else []) names);
+
+  chooseLibs = (
+    # There are differences in which libraries are exported. Avoid evaluation
+    # errors when a package is not provided.
+    selectAttrs (
       if useAppleSDKLibs
         then apple_sdk
         else appleSourcePackages
-    ) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit;
-
+    ) ["Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit"]
+  ) // {
     inherit (
       if useAppleSDKLibs
         then apple_sdk.frameworks
