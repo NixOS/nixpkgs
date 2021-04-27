@@ -4188,6 +4188,8 @@ in {
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
+  mock-services = callPackage ../development/python-modules/mock-services { };
+
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
