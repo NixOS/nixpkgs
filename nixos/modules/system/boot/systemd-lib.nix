@@ -36,6 +36,9 @@ in rec {
 
   digits = map toString (range 0 9);
 
+  # Apply a list of overrideAttrs functions to a drv
+  applyOverrides = drv: overrides: lib.foldl' (drv': override: drv'.overrideAttrs override) drv overrides;
+
   isByteFormat = s:
     let
       l = reverseList (stringToCharacters s);

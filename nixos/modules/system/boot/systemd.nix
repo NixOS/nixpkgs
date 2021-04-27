@@ -434,7 +434,7 @@ in
         { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
-            unit = mkDefault (makeUnit name config);
+            unit = mkDefault (applyOverrides (makeUnit name config) config.unitFileOverrides);
           };
         }));
     };
@@ -787,7 +787,7 @@ in
         { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
-            unit = mkDefault (makeUnit name config);
+            unit = mkDefault (applyOverrides (makeUnit name config) config.unitFileOverrides);
           };
         }));
     };
