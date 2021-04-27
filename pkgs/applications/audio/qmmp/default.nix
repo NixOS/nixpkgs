@@ -53,7 +53,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = "http://qmmp.ylsoftware.com/";
+    homepage = "https://qmmp.ylsoftware.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
