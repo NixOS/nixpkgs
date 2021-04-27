@@ -9818,6 +9818,8 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
+  tensorflow-addons = callPackage ../development/python-modules/tensorflow-addons { };
+
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudatoolkit = tensorflow_compat_cudatoolkit;
