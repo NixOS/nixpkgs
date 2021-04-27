@@ -2658,6 +2658,8 @@ in {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghp-import = callPackage ../development/python-modules/ghp-import { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
