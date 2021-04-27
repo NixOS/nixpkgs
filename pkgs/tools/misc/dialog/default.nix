@@ -12,14 +12,16 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20210306";
+  version = "1.3-20210324";
 
   src = fetchurl {
     url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
-    hash = "sha256-pz57YHtjX2PAICuzMTEG5wD5H+Sp9NJspwA/brK5yw8=";
+    hash = "sha256-AcLR4umvmwg+ogDKrQhP39pVF41bv05Cyf/0STUVFlM=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
   configureFlags = [
     "--disable-rpath-hacks"

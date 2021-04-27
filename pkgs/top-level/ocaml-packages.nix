@@ -401,6 +401,8 @@ let
       inherit (pkgs) gsl;
     };
 
+    h2 = callPackage ../development/ocaml-modules/h2 { };
+
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
@@ -412,6 +414,8 @@ let
     hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
+
+    hpack = callPackage ../development/ocaml-modules/hpack { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
@@ -575,6 +579,8 @@ let
     lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
+
+    letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
 
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
@@ -938,6 +944,8 @@ let
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
+    paf = callPackage ../development/ocaml-modules/paf { };
+
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
     path_glob = callPackage ../development/ocaml-modules/path_glob { };
@@ -1276,7 +1284,7 @@ let
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
       inherit self;
-      inherit (pkgs) openssl zstd;
+      inherit (pkgs) lib openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
@@ -1494,5 +1502,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_12;
 
-  ocamlPackages = ocamlPackages_4_10;
+  ocamlPackages = ocamlPackages_4_12;
 }

@@ -4,7 +4,7 @@
 , curl, libmms
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
-, libcdio, cdparanoia, libcddb, faad2, ffmpeg_3, wildmidi
+, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
 , alsaLib, libpulseaudio
 # effect plugins
@@ -44,7 +44,7 @@ mkDerivation rec {
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg_3 wildmidi
+      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
       alsaLib libpulseaudio
       # effect plugins
@@ -53,10 +53,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = "http://qmmp.ylsoftware.com/";
-    license = licenses.gpl2;
+    homepage = "https://qmmp.ylsoftware.com/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = "http://qmmp.googlecode.com/svn/";
+    repositories.svn = "https://svn.code.sf.net/p/qmmp-dev/code";
   };
 }

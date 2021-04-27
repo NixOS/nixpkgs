@@ -17,6 +17,12 @@ buildGoModule rec {
     sed "s;/templates/default.tmpl;$out/share&;" -i cmd/alertmanager-bot/main.go
   '';
 
+  preBuild = ''
+    export buildFlagsArray=(
+      "-ldflags=-s -w -X main.Version=v${version} -X main.Revision=${src.rev}"
+    )
+  '';
+
   postInstall = ''
     install -Dm644 -t $out/share/templates $src/default.tmpl
   '';

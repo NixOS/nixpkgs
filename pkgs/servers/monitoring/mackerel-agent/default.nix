@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/mackerelio/mackerel-agent";
     license = licenses.asl20;
     maintainers = with maintainers; [ midchildan ];
-    platforms = platforms.all;
   };
 }

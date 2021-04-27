@@ -265,6 +265,8 @@ in
 
   protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
 
+  protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -463,16 +465,18 @@ in
       perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
       openssl = buildPackages.openssl.override {
         fetchurl = stdenv.fetchurlBoot;
-        coreutils = buildPackages.coreutils.override {
-          fetchurl = stdenv.fetchurlBoot;
+        buildPackages = {
+          coreutils = buildPackages.coreutils.override {
+            fetchurl = stdenv.fetchurlBoot;
+            inherit perl;
+            xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
+            gmp = null;
+            aclSupport = false;
+            attrSupport = false;
+          };
           inherit perl;
-          xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
-          gmp = null;
-          aclSupport = false;
-          attrSupport = false;
         };
         inherit perl;
-        buildPackages = { inherit perl; };
       };
       libssh2 = buildPackages.libssh2.override {
         fetchurl = stdenv.fetchurlBoot;
@@ -1233,6 +1237,8 @@ in
 
   inherit (nodePackages) castnow;
 
+  castty = callPackage ../tools/misc/castty { };
+
   certigo = callPackage ../tools/admin/certigo { };
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
@@ -1474,6 +1480,8 @@ in
   hwi = with python3Packages; toPythonApplication hwi;
 
   ili2c = callPackage ../tools/misc/ili2c { };
+
+  imagelol = callPackage ../tools/compression/imagelol { };
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };
 
@@ -2274,7 +2282,7 @@ in
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
-  dialog = callPackage ../development/tools/misc/dialog { };
+  dialog = callPackage ../tools/misc/dialog { };
 
   dibbler = callPackage ../tools/networking/dibbler { };
 
@@ -2365,7 +2373,8 @@ in
 
   duf = callPackage ../tools/misc/duf { };
 
-  inherit (ocamlPackages) dune_1 dune_2 dune-release;
+  inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
+  inherit (ocamlPackages) dune_2 dune-release;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
@@ -2692,8 +2701,6 @@ in
   iotools = callPackage ../tools/misc/iotools { };
 
   jellyfin = callPackage ../servers/jellyfin { };
-
-  jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
@@ -4649,7 +4656,7 @@ in
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
   };
 
   ftop = callPackage ../os-specific/linux/ftop { };
@@ -5587,6 +5594,8 @@ in
       irods
       irods-icommands;
 
+  ignite = callPackage ../applications/virtualization/ignite { };
+
   igmpproxy = callPackage ../tools/networking/igmpproxy { };
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
@@ -6175,6 +6184,10 @@ in
   natscli = callPackage ../tools/system/natscli { };
 
   nbench = callPackage ../tools/misc/nbench { };
+
+  nbtscanner = callPackage ../tools/security/nbtscanner {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ncrack = callPackage ../tools/security/ncrack { };
 
@@ -7163,6 +7176,8 @@ in
 
   openbazaar = callPackage ../applications/networking/openbazaar { };
   openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
+
+  openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
 
   opencc = callPackage ../tools/text/opencc { };
 
@@ -9768,6 +9783,8 @@ in
   };
 
   zdelta = callPackage ../tools/compression/zdelta { };
+
+  zellij = callPackage ../tools/misc/zellij { };
 
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -13077,7 +13094,11 @@ in
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+  kubei = callPackage ../tools/security/kubei { };
+
   kubeprompt = callPackage ../development/tools/kubeprompt { };
+
+  kubesec = callPackage ../tools/security/kubesec { };
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
@@ -14502,7 +14523,7 @@ in
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
-  ghp-import = callPackage ../development/tools/ghp-import { };
+  ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
 
@@ -16895,10 +16916,7 @@ in
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl =
-    if stdenv.hostPlatform.isMinGW # Work around broken cross build
-    then openssl_1_0_2
-    else openssl_1_1;
+  openssl = openssl_1_1;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_0_2
@@ -17623,7 +17641,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+  streamlink = callPackage ../applications/video/streamlink { };
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix {};
 
   sub-batch = callPackage ../applications/video/sub-batch { };
@@ -23037,7 +23055,7 @@ in
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
-  inherit (ocamlPackages) google-drive-ocamlfuse;
+  inherit (ocaml-ng.ocamlPackages_4_10) google-drive-ocamlfuse;
 
   googler = callPackage ../applications/misc/googler {
     python = python3;
@@ -24194,6 +24212,8 @@ in
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
+  kile-wl = callPackage ../applications/misc/kile-wl { };
+
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
@@ -24652,6 +24672,8 @@ in
     mopidy-youtube;
 
   motif = callPackage ../development/libraries/motif { };
+
+  mousai = callPackage ../applications/audio/mousai { };
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
@@ -25794,6 +25816,8 @@ in
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   secretscanner = callPackage ../tools/security/secretscanner { };
+
+  semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
   sent = callPackage ../applications/misc/sent { };
 
@@ -30306,6 +30330,8 @@ in
 
   protocol = python3Packages.callPackage ../applications/networking/protocol { };
 
+  punes = libsForQt5.callPackage ../misc/emulators/punes { };
+
   pykms = callPackage ../tools/networking/pykms { };
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
@@ -31010,6 +31036,8 @@ in
   tt2020 = callPackage ../data/fonts/tt2020 { };
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
+
+  simple-http-server = callPackage ../servers/simple-http-server { };
 
   diceware = with python3Packages; toPythonApplication diceware;
 

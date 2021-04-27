@@ -90,12 +90,12 @@ stdenv.mkDerivation rec {
       sha256 = "0sj0kr0g6jalygr5mb9i17fgr491jzaxvk3dvala0268940s01x9";
     })
     (fetchpatch {
-      name = "CVE-2020-20221.patch";
+      name = "CVE-2021-20221.patch";
       url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/arm_gic-fix-interrupt-ID-in-GICD_SGIR-CVE-2021-20221.patch";
       sha256 = "1iyvcw87hzlc57fg5l87vddqmch8iw2yghk0s125hk5shn1bygjq";
     })
     (fetchpatch {
-      name = "CVE-2020-20181.patch";
+      name = "CVE-2021-20181.patch";
       url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/9pfs-Fully-restart-unreclaim-loop-CVE-2021-20181.patch";
       sha256 = "149ifiazj6rn4d4mv2c7lcayq744fijsv5abxlb8bhbkj99wd64f";
     })
@@ -296,6 +296,9 @@ stdenv.mkDerivation rec {
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
+
+  # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "http://www.qemu.org/";

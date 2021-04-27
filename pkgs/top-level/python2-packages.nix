@@ -638,7 +638,7 @@ with self; with super; {
 
   yt = callPackage ../development/python-modules/yt { };
 
-  zeek = disablede super.zeek;
+  zeek = disabled super.zeek;
 
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 

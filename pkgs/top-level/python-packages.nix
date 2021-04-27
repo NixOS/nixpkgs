@@ -1603,6 +1603,8 @@ in {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
+  cve-bin-tool = callPackage ../development/python-modules/cve-bin-tool { };
+
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
@@ -2655,6 +2657,8 @@ in {
   gflags = callPackage ../development/python-modules/gflags { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
+
+  ghp-import = callPackage ../development/python-modules/ghp-import { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
@@ -4183,6 +4187,8 @@ in {
   mockito = callPackage ../development/python-modules/mockito { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
+
+  mock-services = callPackage ../development/python-modules/mock-services { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 
@@ -7107,6 +7113,8 @@ in {
   rpm = toPythonModule (pkgs.rpm.override {
     inherit python;
   });
+
+  rpmfile = callPackage ../development/python-modules/rpmfile { };
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff { };
 
