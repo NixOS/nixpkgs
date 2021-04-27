@@ -1,38 +1,41 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, coreutils
 , fetchFromGitHub
-, makeWrapper
-, openssl
-, which
+, findutils
+, gawk
 , gnugrep
 , gnused
-, gawk
+, makeWrapper
 , mktemp
-, coreutils
-, findutils
+, openssl
+, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "ssl-cert-check";
-  version = "3.31";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "Matty9191";
     repo = pname;
-    rev = "698c1996d05152cfaf2a1a3df4cc70482411fac8";
-    sha256 = "0jvi9phs0ngfwrj9zixb03v9byavbwxx8xkp0h5m98qppn1kvl3n";
+    rev = "4056ceeab5abc0e39f4e0ea40cd54147253a3369";
+    sha256 = "07k2n4l68hykraxvy030djc208z8rqff3kc7wy4ib9g6qj7s4mif";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   buildInputs = [
-    openssl
-    which
-    gnugrep
-    mktemp
-    gawk
-    gnused
     coreutils
     findutils
+    gawk
+    gnugrep
+    gnused
+    mktemp
+    openssl
+    which
   ];
 
   prePatch = ''
@@ -47,11 +50,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "a Bourne shell script that can be used to report on expiring SSL certificates";
+    description = "Bourne shell script that can be used to report on expiring SSL certificates";
     homepage = "https://github.com/Matty9191/ssl-cert-check";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.ryantm ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ryantm ];
     platforms = platforms.linux;
   };
-
 }
