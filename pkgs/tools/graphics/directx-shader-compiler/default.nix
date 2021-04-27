@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     # Requires some additional flags to cmake from a file in the repo
     additionalCMakeFlags=$(< utils/cmake-predefined-config-params)
-    cmakeFlags="$additionalCMakeFlags''${cmakeFlags:+ $cmakeFlags}"
+    cmakeFlags+=($additionalCMakeFlags)
     cmakeConfigurePhase
   '';
 
