@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace, file
@@ -125,6 +125,15 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
+
+    # Use the exactly 32 byte long version of db_key_base with
+    # aes-256-gcm, see
+    # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/53602
+    (fetchpatch {
+      name = "secrets_db_key_base_length.patch";
+      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/dea620633d446ca0f53a75674454ff0dd4bd8f99.patch";
+      sha256 = "19m4z4np3sai9kqqqgabl44xv7p8lkcyqr6s5471axfxmf9m2023";
+    })
   ];
 
   postPatch = ''
