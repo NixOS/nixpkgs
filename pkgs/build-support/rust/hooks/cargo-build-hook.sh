@@ -24,7 +24,7 @@ cargoBuildHook() {
         --target @rustTargetPlatformSpec@ \
         --frozen \
         ${cargoBuildProfileFlag} \
-        ${cargoBuildFlags}
+        "${cargoBuildFlags[@]}"
     )
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
