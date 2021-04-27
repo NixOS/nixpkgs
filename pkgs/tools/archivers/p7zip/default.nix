@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.raskin ];
+    mainProgram = "7z";
     # RAR code is under non-free UnRAR license, but we remove it
     license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };
