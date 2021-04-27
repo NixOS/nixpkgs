@@ -137,8 +137,8 @@ let
   ];
 in rec {
   terraform_0_12 = pluggable (generic {
-    version = "0.12.30";
-    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
+    version = "0.12.31";
+    sha256 = "03p698xdbk5gj0f9v8v1fpd74zng3948dyy4f2hv7zgks9hid7fg";
     patches = [
         ./provider-path.patch
         (fetchpatch {
