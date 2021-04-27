@@ -21724,6 +21724,8 @@ in
 
   theano = callPackage ../data/fonts/theano { };
 
+  tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
+
   template-glib = callPackage ../development/libraries/template-glib { };
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
