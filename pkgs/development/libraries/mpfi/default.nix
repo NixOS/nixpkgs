@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, autoconf, automake, libtool, texinfo, mpfr}:
+{lib, stdenv, fetchurl, autoreconfHook, texinfo, mpfr}:
 stdenv.mkDerivation rec {
   pname = "mpfi";
   version = "1.5.4";
@@ -12,12 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ozk4WV1yCvF5c96vcnz8DdQcixbCCtwQOpcPSkOuOlY=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool texinfo ];
+  nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ mpfr ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
 
   meta = {
     inherit version;
