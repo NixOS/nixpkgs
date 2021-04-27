@@ -23,10 +23,9 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   configureFlags = [
-    (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
-    (lib.optionalString (!withPAM) "--without-pam")
     "--pamdir=${placeholder "out"}/etc/pam.d"
-  ];
+  ] ++ lib.optional withTimestamp "--with-timestamp" # to allow the "persist" setting
+    ++ lib.optional (!withPAM) "--without-pam";
 
   patches = [
     # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
