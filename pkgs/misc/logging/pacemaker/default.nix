@@ -16,7 +16,13 @@
 , pam
 , pkg-config
 , python3
-, resource-agents
+
+# Pacemaker is compiled twice, once with forOCF = true to extract its
+# OCF definitions for use in the ocf-resource-agents derivation, then
+# again with forOCF = false, where the ocf-resource-agents is provided
+# as the OCF_ROOT.
+, forOCF ? false
+, ocf-resource-agents
 } :
 
 stdenv.mkDerivation rec {
@@ -49,7 +55,6 @@ stdenv.mkDerivation rec {
     libxslt.dev
     pam
     python3
-    resource-agents
   ];
 
   configureFlags = [
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
     "--enable-systemd"
     "--with-systemdsystemunitdir=/etc/systemd/system"
     "--with-corosync"
-  ];
+  ] ++ lib.optional (!forOCF) "--with-ocfdir=${ocf-resource-agents}/usr/lib/ocf";
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 

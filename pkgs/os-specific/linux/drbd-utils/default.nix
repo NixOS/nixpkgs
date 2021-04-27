@@ -8,8 +8,14 @@
 , libxslt
 , docbook_xml_dtd_44
 , docbook_xml_dtd_45
-, resource-agents
 , kmod
+
+# drbd-utils are compiled twice, once with forOCF = true to extract
+# its OCF definitions for use in the ocf-resource-agents derivation,
+# then again with forOCF = false, where the ocf-resource-agents is
+# provided as the OCF_ROOT.
+, forOCF ? false
+, ocf-resource-agents
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +31,6 @@ stdenv.mkDerivation rec {
     flex
     libxslt
     docbook_xsl
-    resource-agents
   ];
 
   buildInputs = [
@@ -42,10 +47,9 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "OCF_ROOT=${resource-agents}/lib/ocf"
     "SOURCE_DATE_EPOCH=1"
     "WANT_DRBD_REPRODUCIBLE_BUILD=1"
-  ];
+  ] ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
 
   installFlags = [
     "prefix="
@@ -64,29 +68,26 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace user/v84/drbdadm_usage_cnt.c \
-      --replace '			"/lib/drbd");' \
-                '			"${placeholder "out"}/lib/drbd");'
+      --replace '"/lib/drbd");' \
+                '"${placeholder "out"}/lib/drbd");'
     substituteInPlace user/v9/drbdsetup_linux.c \
-      --replace '		ret = system("/sbin/modprobe drbd");' \
-                '		ret = system("${kmod}/bin/modprobe drbd");'
+      --replace 'ret = system("/sbin/modprobe drbd");' \
+                'ret = system("${kmod}/bin/modprobe drbd");'
     substituteInPlace user/v84/drbdsetup.c \
       --replace 'system("/sbin/modprobe drbd")' \
                 'system("${kmod}/bin/modprobe drbd")'
     substituteInPlace documentation/ra2refentry.xsl \
       --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
                 "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
-    substituteInPlace documentation/v9/drbd.conf.xml.in \
-      --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
-                "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
-    substituteInPlace documentation/v9/drbdsetup.xml.in \
-      --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
-                "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
-    substituteInPlace documentation/v84/drbdsetup.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
-                "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
-    substituteInPlace documentation/v84/drbd.conf.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
-                "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
+    function patch_docbook45() {
+      substituteInPlace $1 \
+        --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
+                  "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
+    }
+    patch_docbook45 documentation/v9/drbd.conf.xml.in
+    patch_docbook45 documentation/v9/drbdsetup.xml.in
+    patch_docbook45 documentation/v84/drbdsetup.xml
+    patch_docbook45 documentation/v84/drbd.conf.xml
     # The ja documentation is disabled because:
     # make[1]: Entering directory '/build/drbd-utils-9.16.0/documentation/ja/v84'
     # /nix/store/wyx2nn2pjcn50lc95c6qgsgm606rn0x2-perl5.32.1-po4a-0.62/bin/po4a-translate -f docbook -M utf-8 -L utf-8 -keep 0 -m ../../v84/drbdsetup.xml -p drbdsetup.xml.po -l drbdsetup.xml
@@ -102,8 +103,8 @@ stdenv.mkDerivation rec {
       --replace '$(MAKE) -C documentation/ja/v84 doc' \
                 ""
     substituteInPlace user/v9/drbdtool_common.c \
-      --replace '	add_component_to_path("/lib/drbd");' \
-                '	add_component_to_path("${placeholder "out"}/lib/drbd");'
+      --replace 'add_component_to_path("/lib/drbd");' \
+                'add_component_to_path("${placeholder "out"}/lib/drbd");'
   '';
 
   preConfigure = ''
