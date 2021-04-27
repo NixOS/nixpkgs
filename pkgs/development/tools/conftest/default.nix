@@ -15,11 +15,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-s"
-    "-w"
-    "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
+  buildFlags = [
+    ("-ldflags=-s"
+      + " -w"
+      + " -X github.com/open-policy-agent/conftest/internal/commands.version=${version}")
   ];
 
   meta = with lib; {
