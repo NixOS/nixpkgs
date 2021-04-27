@@ -14,6 +14,6 @@ buildPythonPackage rec {
     description = "Facebook's implementation of a dynamic TFTP server framework";
     homepage = "https://github.com/facebook/fbtftp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ guibou french-isotope ];
+    maintainers = with lib.maintainers; [ guibou French-isotope ];
   };
 }
