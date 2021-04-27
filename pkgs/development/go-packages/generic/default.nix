@@ -165,8 +165,8 @@ let
       getGoDirs() {
         local type;
         type="$1"
-        if [ -n "$subPackages" ]; then
-          echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
+        if [ ''${#subPackages[@]} -gt 0 ]; then
+          echo "''${subPackages[@]}" | sed "s,\(^\| \),\1$goPackagePath/,g"
         else
           pushd "$NIX_BUILD_TOP/go/src" >/dev/null
           find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
