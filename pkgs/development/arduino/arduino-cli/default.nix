@@ -19,9 +19,10 @@ let
 
     doCheck = false;
 
-    buildFlagsArray = [
-      "-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+    buildFlags = [
+      ("-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
+        + lib.optionalString stdenv.isLinux " -extldflags '-static'")
+    ];
 
     meta = with lib; {
       inherit (src.meta) homepage;
