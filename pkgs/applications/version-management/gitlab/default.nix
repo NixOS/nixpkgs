@@ -32,7 +32,7 @@ let
         openssl = x.openssl // {
           buildInputs = [ openssl ];
         };
-        ruby-magic-static = x.ruby-magic-static // {
+        ruby-magic = x.ruby-magic // {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
@@ -131,8 +131,8 @@ stdenv.mkDerivation {
     # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/53602
     (fetchpatch {
       name = "secrets_db_key_base_length.patch";
-      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/dea620633d446ca0f53a75674454ff0dd4bd8f99.patch";
-      sha256 = "19m4z4np3sai9kqqqgabl44xv7p8lkcyqr6s5471axfxmf9m2023";
+      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/a5c78650441c31a522b18e30177c717ffdd7f401.patch";
+      sha256 = "1qcxr5f59slgzmpcbiwabdhpz1lxnq98yngg1xkyihk2zhv0g1my";
     })
   ];
 
