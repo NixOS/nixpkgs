@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dosage";
   version = "2018.04.08";
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "webcomics";
