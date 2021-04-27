@@ -1,0 +1,19 @@
+name: Backport
+on:
+  pull_request_target:
+    types: [opened, closed, labeled, unlabeled, synchronize]
+
+jobs:
+  backport:
+    name: Backport Action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Backport
+        uses: sqren/backport-github-action@v1.0.40
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Required
+          # Backport PR by adding a label
+          # Example: PRs labeled with "backport-to-staging" will be backported to "staging"
+          backport_label_pattern: '^backport-(.*)$'
