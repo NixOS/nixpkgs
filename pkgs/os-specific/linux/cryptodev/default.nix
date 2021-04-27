@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = "\${out}";
-  prefix = "\${out}";
+  env.KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env.INSTALL_MOD_PATH = "\${out}";
+  env.prefix = "\${out}";
 
   meta = {
     description = "Device that allows access to Linux kernel cryptographic drivers";
