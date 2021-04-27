@@ -7201,6 +7201,9 @@ in {
       doCheck = false;
       meta.broken = false;
     });
+    # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
+    # has special logic to disable tests when this is the case.
+    sanic-testing = self.sanic-testing.override { sanic = null; };
   };
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
