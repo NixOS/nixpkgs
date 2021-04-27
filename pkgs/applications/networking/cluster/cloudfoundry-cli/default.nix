@@ -25,12 +25,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-s"
-    "-w"
-    "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${version}"
+  buildFlags = [
+    ("-ldflags=-s"
+      + " -w"
+      + " -X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
+      + " -X code.cloudfoundry.org/cli/version.binaryVersion=${version}")
   ];
 
   postInstall = ''
