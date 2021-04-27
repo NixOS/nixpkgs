@@ -135,7 +135,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
