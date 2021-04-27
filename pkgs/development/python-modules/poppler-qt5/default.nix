@@ -57,7 +57,7 @@ buildPythonPackage rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    homepage = "https://github.com/wbsoft/python-poppler-qt5";
+    homepage = "https://github.com/frescobaldi/python-poppler-qt5";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ eduardosm ];
   };
