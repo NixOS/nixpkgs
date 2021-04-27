@@ -174,6 +174,22 @@ let
     propagatedBuildInputs = [ AlgorithmDiff ];
   };
 
+  AlienBaseModuleBuild = buildPerlModule {
+    pname = "Alien-Base-ModuleBuild";
+    version = "1.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Base-ModuleBuild-1.15.tar.gz";
+      sha256 = "13c9432cf41b34cb14df2454a03e540e2bd5dc9eb9c82824b6ad0f4c67793afd";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ AlienBuild ArchiveExtract CaptureTiny Filechdir PathTiny ShellConfigGenerate ShellGuess SortVersions URI ];
+    meta = {
+      homepage = https://metacpan.org/pod/Alien::Base::ModuleBuild;
+      description = "A Module::Build subclass for building Alien:: modules and their libraries";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlienBuild = buildPerlPackage {
     pname = "Alien-Build";
     version = "2.37";
