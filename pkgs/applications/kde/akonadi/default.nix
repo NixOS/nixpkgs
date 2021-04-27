@@ -33,5 +33,6 @@ mkDerivation {
     ''-DNIXPKGS_POSTGRES_PG_CTL=\"\"''
     ''-DNIXPKGS_POSTGRES_PG_UPGRADE=\"\"''
     ''-DNIXPKGS_POSTGRES_INITDB=\"\"''
+    ''-DNIX_OUT=\"${placeholder "out"}\"''
   ];
 }
