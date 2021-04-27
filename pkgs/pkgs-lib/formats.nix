@@ -39,10 +39,9 @@ rec {
 
     generate = name: value: pkgs.runCommandNoCC name {
       nativeBuildInputs = [ pkgs.jq ];
-      value = builtins.toJSON value;
-      passAsFile = [ "value" ];
+      inherit value;
     } ''
-      jq . "$valuePath"> $out
+      jq .value .attrs.json > $out
     '';
 
   };
@@ -98,11 +97,11 @@ rec {
     in valueType;
 
     generate = name: value: pkgs.runCommandNoCC name {
-      nativeBuildInputs = [ pkgs.remarshal ];
-      value = builtins.toJSON value;
-      passAsFile = [ "value" ];
+      nativeBuildInputs = [ pkgs.remarshal pkgs.jq ];
+      inherit value;
     } ''
-      json2toml "$valuePath" "$out"
+      jq .value .attrs.json > value.json
+      json2toml value.json "$out"
     '';
 
   };
