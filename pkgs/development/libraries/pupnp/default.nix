@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   };
   outputs = [ "dev" "out" ];
 
+  patches = [
+    ./CVE-2020-13848.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   hardeningDisable = [ "fortify" ];
