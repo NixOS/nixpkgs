@@ -1,12 +1,18 @@
-{ lib, rustPlatform, fetchFromGitHub, sqlite }: let
+{ lib, writeText, rustPlatform, fetchFromGitHub, sqlite }:
 
-manifest = {
-  description = "Bukubrow extension host application";
-  name = "com.samhh.bukubrow";
-  path = "@out@/bin/bukubrow";
-  type = "stdio";
-};
-
+let
+  manifest = {
+    description = "Bukubrow extension host application";
+    name = "com.samhh.bukubrow";
+    path = "${placeholder "out"}/bin/bukubrow";
+    type = "stdio";
+  };
+  firefoxManifest = writeText "firefox.json" (builtins.toJSON (manifest // {
+    allowed_extensions = [ "bukubrow@samhh.com" ];
+  }));
+  chromeManifest = writeText "chrome.json" (builtins.toJSON (manifest // {
+    allowed_origins = [ "chrome-extension://ghniladkapjacfajiooekgkfopkjblpn/" ];
+  }));
 in rustPlatform.buildRustPackage rec {
   pname = "bukubrow-host";
   version = "5.0.0";
@@ -22,16 +28,9 @@ in rustPlatform.buildRustPackage rec {
 
   buildInputs = [ sqlite ];
 
-  passAsFile = [ "firefoxManifest" "chromeManifest" ];
-  firefoxManifest = builtins.toJSON (manifest // {
-    allowed_extensions = [ "bukubrow@samhh.com" ];
-  });
-  chromeManifest = builtins.toJSON (manifest // {
-    allowed_origins = [ "chrome-extension://ghniladkapjacfajiooekgkfopkjblpn/" ];
-  });
   postBuild = ''
-    substituteAll $firefoxManifestPath firefox.json
-    substituteAll $chromeManifestPath chrome.json
+    install -v ${firefoxManifest} firefox.json
+    install -v ${chromeManifest} chrome.json
   '';
   postInstall = ''
     install -Dm0644 firefox.json $out/lib/mozilla/native-messaging-hosts/com.samhh.bukubrow.json
