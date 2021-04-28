@@ -99,8 +99,9 @@ in {
       description = ''
       Branch to track
 
-      You can also specify a revision or tag, too, if you want to pin this
-      machine to a specific commit.
+      Technically speaking any ref can be specified here, as this is
+      passed directly to a `git fetch`, but for the use-case of
+      continuous deployment you're likely to want to specify a branch.
       '';
     };
 
@@ -129,27 +130,19 @@ in {
       environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
-      serviceConfig.X-RestartIfChanged = false;
+      restartIfChanged = false;
 
       path = with pkgs; [
         git nix systemd
       ];
 
       script = ''
-      if [ ! -e ${workingDirectory} ]; then
-        mkdir --parents ${workingDirectory}
-      fi
-
       if [ ! -e ${repositoryDirectory} ]; then
-        git clone ${lib.cli.toGNUCommandLineShell {} {
-          local = (isPathType cfg.repository);
-        }} ${lib.escapeShellArg cfg.repository} ${repositoryDirectory}
+        mkdir --parents ${repositoryDirectory}
+        git init ${repositoryDirectory}
       fi
 
-      # Ensure that if cfg.repository is changed, origin is updated
-      ${gitWithRepo} remote set-url origin ${lib.escapeShellArg cfg.repository}
-
-      ${gitWithRepo} fetch origin ${lib.escapeShellArg cfg.branch}
+      ${gitWithRepo} fetch ${lib.escapeShellArg cfg.repository} ${lib.escapeShellArg cfg.branch}
 
       ${gitWithRepo} checkout FETCH_HEAD
 
@@ -163,11 +156,11 @@ in {
 
       ${outPath}/bin/switch-to-configuration ${cfg.switchCommand}
 
-      ${lib.optionalString (cfg.switchCommand == "boot") "systemctl reboot"}
-
       rm ${outPath}
 
       ${gitWithRepo} gc --prune=all
+
+      ${lib.optionalString (cfg.switchCommand == "boot") "systemctl reboot"}
       '';
     };
   };
