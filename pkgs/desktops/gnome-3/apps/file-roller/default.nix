@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, glib, gtk3, meson, ninja, pkg-config, gnome3, gettext, itstool, libxml2, libarchive
-, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales }:
+, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales
+, unzip, cpio }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja gettext itstool pkg-config libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
 
-  buildInputs = [ glib gtk3 json-glib libarchive file gnome3.adwaita-icon-theme libnotify nautilus ];
+  buildInputs = [ glib gtk3 json-glib libarchive file gnome3.adwaita-icon-theme libnotify nautilus cpio ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
@@ -22,6 +23,12 @@ stdenv.mkDerivation rec {
     chmod +x postinstall.py # patchShebangs requires executable file
     patchShebangs postinstall.py
     patchShebangs data/set-mime-type-entry.py
+  '';
+
+  postFixup = ''
+    # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
+    wrapProgram "$out/bin/file-roller" \
+      --prefix PATH : ${lib.makeBinPath [ unzip ]}
   '';
 
   passthru = {
