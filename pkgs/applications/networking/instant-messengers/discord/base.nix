@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ldesgoui MP2E tadeokondrak ];
+    maintainers = with maintainers; [ ldesgoui MP2E ];
     platforms = [ "x86_64-linux" ];
   };
 }

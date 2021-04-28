@@ -4598,6 +4598,8 @@ in {
 
   openant = callPackage ../development/python-modules/openant { };
 
+  openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
+
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
@@ -7023,6 +7025,8 @@ in {
   retrying = callPackage ../development/python-modules/retrying { };
 
   retworkx = callPackage ../development/python-modules/retworkx { };
+
+  rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
