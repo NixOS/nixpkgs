@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ];
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  cargoBuildFlags = [ "--features" "no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
