@@ -93,6 +93,10 @@ in
           object = config.system.build.toplevel;
           symlink = "none";
         }
+        {
+          object = pkgs.stdenv;
+          symlink = "none";
+        }
       ];
 
       contents = [
