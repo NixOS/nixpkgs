@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site"
+    configureFlags+=("--with-guilesitedir=$out/share/guile/site")
   '';
 
   postFixup = ''
