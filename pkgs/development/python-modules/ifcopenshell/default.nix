@@ -39,7 +39,7 @@ buildPythonPackage rec {
     cd cmake
   '';
 
-  PYTHONUSERBASE=".";
+  env.PYTHONUSERBASE=".";
   cmakeFlags = [
     "-DUSERSPACE_PYTHON_PREFIX=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
