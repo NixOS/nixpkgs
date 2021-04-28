@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "themix-icons-papirus";
-
   inherit (themix-gui) version src;
 
   patches = [
@@ -38,12 +37,7 @@ stdenv.mkDerivation rec {
 
   installTargets = "install_icons_papirus";
 
-  meta = {
+  meta = themix-gui.meta // {
     description = "Papirus icons plugin for Themix GUI designer";
-    inherit (themix-gui.meta)
-    homepage
-    license
-    maintainers
-    platforms;
   };
 }
