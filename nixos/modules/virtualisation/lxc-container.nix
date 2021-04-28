@@ -67,16 +67,7 @@ in
   };
 
   config = {
-    system.build.tarball = mkForce (pkgs.callPackage ../../lib/make-system-tarball.nix {
-      extraArgs = "--owner=0";
-
-      storeContents = [
-        {
-          object = config.system.build.toplevel;
-          symlink = "none";
-        }
-      ];
-
+    system.build.metadata = pkgs.callPackage ../../lib/make-system-tarball.nix {
       contents = [
         {
           source = toYAML "metadata.yaml" {
@@ -91,11 +82,25 @@ in
           };
           target = "/metadata.yaml";
         }
+      ] ++ templates.files;
+    };
+
+    system.build.tarball = mkForce (pkgs.callPackage ../../lib/make-system-tarball.nix {
+      extraArgs = "--owner=0";
+
+      storeContents = [
+        {
+          object = config.system.build.toplevel;
+          symlink = "none";
+        }
+      ];
+
+      contents = [
         {
           source = config.system.build.toplevel + "/init";
           target = "/sbin/init";
         }
-      ] ++ templates.files;
+      ];
 
       extraCommands = "mkdir -p proc sys dev";
     });
