@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sha256 = "0464b28e18e7a06cec37e6177546c2322739be07962dd13bf712bcb88361f013";
   };
 
-  LC_ALL = "en_US.utf8";
+  env.LC_ALL = "en_US.utf8";
 
   checkInputs = [ nose pytestCheckHook glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
