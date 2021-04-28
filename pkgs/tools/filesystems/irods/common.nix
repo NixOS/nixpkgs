@@ -28,9 +28,7 @@
     substituteInPlace CMakeLists.txt --replace "DESTINATION usr/bin" "DESTINATION bin"
     substituteInPlace CMakeLists.txt --replace "INCLUDE_DIRS usr/include/" "INCLUDE_DIRS include/"
     substituteInPlace CMakeLists.txt --replace "DESTINATION usr/lib/" "DESTINATION lib/"
-    export cmakeFlags="$cmakeFlags
-      -DCMAKE_INSTALL_PREFIX=$out
-    "
+    cmakeFlags+=("-DCMAKE_INSTALL_PREFIX=$out")
   '';
 
   meta = with lib; {

@@ -45,11 +45,11 @@ in rec {
       do
         substituteInPlace $file --replace "CATCH2}/include" "CATCH2}/include/catch2"
       done
-      export cmakeFlags="$cmakeFlags
-        -DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        "
+      cmakeFlags+=(
+        "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,$out/lib"
+        "-DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib"
+        "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib"
+      )
 
       substituteInPlace cmake/server.cmake --replace SETUID ""
     '';
