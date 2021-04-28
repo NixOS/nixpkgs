@@ -1,3 +1,4 @@
+source .attrs.sh
 source $stdenv/setup
 
 export PLAN9=$out/plan9
