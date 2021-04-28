@@ -58,8 +58,8 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
-    services.gvfs.package = pkgs.gvfs;
 
     services.upower.enable = config.powerManagement.enable;
   };
