@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix" "LD_LIBRARY_PATH" ":" "${vulkan-loader}/lib"
   ];
 
   # - Allow Dolphin to use nix-provided libraries instead of building them
