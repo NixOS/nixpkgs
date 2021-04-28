@@ -14,13 +14,13 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   unpackCmd = ''
     tar -xf $curSrc contents.tar.gz
     mkdir contents
     tar -C contents -xzf contents.tar.gz
   '';
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
