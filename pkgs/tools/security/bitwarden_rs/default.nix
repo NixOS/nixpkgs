@@ -4,7 +4,7 @@
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
 let
-  featuresFlag = "--features ${dbBackend}";
+  featuresFlags = [ "--features" dbBackend ];
 
 in rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
@@ -26,12 +26,12 @@ in rustPlatform.buildRustPackage rec {
   env.RUSTC_BOOTSTRAP = 1;
 
   cargoSha256 = "139by5y2ma3v52nabzr5man1qy395rchs2dlivkj9xi829kg4mcr";
-  cargoBuildFlags = [ featuresFlag ];
+  cargoBuildFlags = featuresFlags;
 
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo cargo test ${toString featuresFlags} -- "''${checkFlags[@]}" ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${toString featuresFlags} -- "''${checkFlags[@]}" ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 
