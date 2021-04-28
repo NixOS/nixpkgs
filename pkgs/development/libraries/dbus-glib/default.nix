@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-glib-0.110";
+  name = "dbus-glib-0.112";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
-    sha256 = "09g8swvc95bk1z6j8sw463p2v0dqmgm2zjfndf7i8sbcyq67dr3w";
+    sha256 = "sha256-fVUNzN/NKG4ziVUBgp7Zce62XGFOc6rbSgiu73GbFDo=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
