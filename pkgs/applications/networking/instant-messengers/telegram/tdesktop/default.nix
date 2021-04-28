@@ -1,4 +1,4 @@
-{ mkDerivation, lib, pkgs, fetchurl, callPackage
+{ mkDerivation, lib, fetchurl, writeTextFile, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -20,7 +20,7 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {};
-  webviewPatch = pkgs.writeTextFile {
+  webviewPatch = writeTextFile {
     name = "fix-webview-includes.patch";
     text = ''
       diff --git a/webview/platform/linux/webview_linux_webkit_gtk.h b/webview/platform/linux/webview_linux_webkit_gtk.h
