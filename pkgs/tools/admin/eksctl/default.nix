@@ -17,10 +17,9 @@ buildGoModule rec {
 
   subPackages = [ "cmd/eksctl" ];
 
-  buildFlags = [ "-tags netgo" "-tags release" ];
-
-  buildFlagsArray = [
+  buildFlags = [
     "-ldflags=-s -w -X github.com/weaveworks/eksctl/pkg/version.gitCommit=${src.rev} -X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
+    "-tags" "netgo" "-tags" "release"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
