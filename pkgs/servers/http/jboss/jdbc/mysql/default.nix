@@ -3,9 +3,14 @@
 stdenv.mkDerivation {
   name = "jboss-mysql-jdbc";
 
-  builder = ./builder.sh;
+  buildInputs = [ mysql_jdbc ];
 
-  inherit mysql_jdbc;
+  dontUnpack = true;
+
+  installPhase = ''
+    mkdir -p $out/server/default/lib
+    ln -s ${mysql_jdbc}/share/java/mysql-connector-java.jar $out/server/default/lib/mysql-connector-java.jar
+  '';
 
   meta = {
     platforms = lib.platforms.unix;
