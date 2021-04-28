@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libimobiledevice libusb1 ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-udevrulesdir=$out/lib/udev/rules.d"
-    configureFlags="$configureFlags --with-systemdsystemunitdir=$out/lib/systemd/system"
+    configureFlags+=("--with-udevrulesdir=$out/lib/udev/rules.d")
+    configureFlags+=("--with-systemdsystemunitdir=$out/lib/systemd/system")
   '';
 
   meta = with lib; {
