@@ -44,7 +44,6 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      phases = "unpackPhase patchPhase buildPhase installPhase";
       nativeBuildInputs = [ unzip ];
       buildInputs = [ bash coreutils which zip ];
       patchPhase = ''
@@ -88,7 +87,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
       unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
@@ -128,7 +126,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
@@ -157,7 +154,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${srcFileName}.dic ${srcFileName}.aff ${srcReadmeFile}
@@ -184,7 +180,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase patchPhase installPhase";
       sourceRoot = ".";
       prePatch = ''
         # Fix dic file empty lines (FS#22275)
@@ -203,7 +198,6 @@ let
 
       inherit srcs;
 
-      phases = ["unpackPhase" "installPhase"];
       sourceRoot = ".";
       # Copy files stripping until first dash (path and hash)
       unpackCmd = "cp $curSrc \${curSrc##*-}";
@@ -241,7 +235,6 @@ let
 
       buildInputs = [ ispell perl hunspell ];
 
-      phases = ["unpackPhase" "installPhase"];
       installPhase = ''
         patchShebangs bin
         make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
