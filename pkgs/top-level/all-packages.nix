@@ -6491,6 +6491,7 @@ in
   ucx = callPackage ../development/libraries/ucx {};
 
   openmodelica = libsForQt5.callPackage ../applications/science/misc/openmodelica { };
+  omcompiler = libsForQt5.callPackage ../applications/science/misc/openmodelica/omcompiler { };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
