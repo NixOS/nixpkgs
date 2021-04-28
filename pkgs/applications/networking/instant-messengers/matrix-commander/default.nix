@@ -23,9 +23,13 @@ stdenv.mkDerivation {
     ]))];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/matrix-commander.py $out/bin/matrix-commander
     chmod +x $out/bin/matrix-commander
+
+    runHook postInstall
   '';
 
   meta = with lib; {
