@@ -101,7 +101,7 @@ default-package-overrides:
   - gi-secret < 0.0.13
   - gi-vte < 2.91.28
 
-  # Stackage Nightly 2021-04-23
+  # Stackage Nightly 2021-04-28
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -319,7 +319,7 @@ default-package-overrides:
   - base64-string ==0.2
   - base-compat ==0.11.2
   - base-compat-batteries ==0.11.2
-  - basement ==0.0.11
+  - basement ==0.0.12
   - base-orphans ==0.8.4
   - base-prelude ==1.4
   - base-unicode-symbols ==0.2.4.2
@@ -827,13 +827,13 @@ default-package-overrides:
   - expiring-cache-map ==0.0.6.1
   - explicit-exception ==0.1.10
   - exp-pairs ==0.2.1.0
-  - express ==0.1.4
+  - express ==0.1.6
   - extended-reals ==0.2.4.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
   - extra ==1.7.9
   - extractable-singleton ==0.0.1
-  - extrapolate ==0.4.2
+  - extrapolate ==0.4.4
   - fail ==4.9.0.0
   - failable ==1.2.4.0
   - fakedata ==0.8.0
@@ -903,7 +903,7 @@ default-package-overrides:
   - forma ==1.1.3
   - format-numbers ==0.1.0.1
   - formatting ==6.3.7
-  - foundation ==0.0.25
+  - foundation ==0.0.26.1
   - fourmolu ==0.3.0.0
   - free ==5.1.5
   - free-categories ==0.2.0.2
@@ -991,7 +991,7 @@ default-package-overrides:
   - ghc-lib ==8.10.4.20210206
   - ghc-lib-parser ==8.10.4.20210206
   - ghc-lib-parser-ex ==8.10.0.19
-  - ghc-parser ==0.2.2.0
+  - ghc-parser ==0.2.3.0
   - ghc-paths ==0.1.0.12
   - ghc-prof ==1.4.1.8
   - ghc-source-gen ==0.4.0.0
@@ -1093,6 +1093,7 @@ default-package-overrides:
   - haskell-lsp ==0.22.0.0
   - haskell-lsp-types ==0.22.0.0
   - haskell-names ==0.9.9
+  - HaskellNet ==0.6
   - haskell-src ==1.0.3.1
   - haskell-src-exts ==1.23.1
   - haskell-src-exts-util ==0.2.5
@@ -1256,7 +1257,7 @@ default-package-overrides:
   - HUnit-approx ==1.1.1.1
   - hunit-dejafu ==2.0.0.4
   - hvect ==0.4.0.0
-  - hvega ==0.11.0.0
+  - hvega ==0.11.0.1
   - hw-balancedparens ==0.4.1.1
   - hw-bits ==0.7.2.1
   - hw-conduit ==0.2.1.0
@@ -1306,7 +1307,7 @@ default-package-overrides:
   - ieee754 ==0.8.0
   - if ==0.1.0.0
   - iff ==0.0.6
-  - ihaskell ==0.10.1.2
+  - ihaskell ==0.10.2.0
   - ihs ==0.1.0.3
   - ilist ==0.4.0.1
   - imagesize-conduit ==1.1
@@ -1446,7 +1447,7 @@ default-package-overrides:
   - lazy-csv ==0.5.1
   - lazyio ==0.1.0.4
   - lca ==0.4
-  - leancheck ==0.9.3
+  - leancheck ==0.9.4
   - leancheck-instances ==0.0.4
   - leapseconds-announced ==2017.1.0.1
   - learn-physics ==0.6.5
@@ -1476,6 +1477,7 @@ default-package-overrides:
   - lifted-async ==0.10.2
   - lifted-base ==0.2.3.12
   - lift-generics ==0.2
+  - lift-type ==0.1.0.1
   - line ==4.0.1
   - linear ==1.21.5
   - linear-circuit ==0.1.0.2
@@ -1665,7 +1667,7 @@ default-package-overrides:
   - mwc-random ==0.14.0.0
   - mwc-random-monad ==0.7.3.1
   - mx-state-codes ==1.0.0.0
-  - mysql ==0.2
+  - mysql ==0.2.0.1
   - mysql-simple ==0.4.5
   - n2o ==0.11.1
   - nagios-check ==0.3.2
@@ -2009,7 +2011,7 @@ default-package-overrides:
   - rate-limit ==1.4.2
   - ratel-wai ==1.1.5
   - rattle ==0.2
-  - rattletrap ==11.0.1
+  - rattletrap ==11.1.0
   - Rattus ==0.5
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
@@ -2113,6 +2115,9 @@ default-package-overrides:
   - sample-frame ==0.0.3
   - sample-frame-np ==0.0.4.1
   - sampling ==0.3.5
+  - sandwich ==0.1.0.3
+  - sandwich-slack ==0.1.0.3
+  - sandwich-webdriver ==0.1.0.4
   - say ==0.1.0.1
   - sbp ==2.6.3
   - scalpel ==0.6.2
@@ -2256,7 +2261,7 @@ default-package-overrides:
   - sop-core ==0.5.0.1
   - sort ==1.0.0.0
   - sorted-list ==0.2.1.0
-  - sourcemap ==0.1.6
+  - sourcemap ==0.1.6.1
   - sox ==0.2.3.1
   - soxlib ==0.0.3.1
   - spacecookie ==1.0.0.0
@@ -2264,7 +2269,7 @@ default-package-overrides:
   - sparse-tensor ==0.2.1.5
   - spatial-math ==0.5.0.1
   - special-values ==0.1.0.0
-  - speculate ==0.4.4
+  - speculate ==0.4.6
   - speedy-slice ==0.3.2
   - Spintax ==0.3.6
   - splice ==0.6.1.1
@@ -2687,7 +2692,7 @@ default-package-overrides:
   - Win32 ==2.6.1.0
   - Win32-notify ==0.3.0.3
   - windns ==0.1.0.1
-  - witch ==0.1.1.0
+  - witch ==0.2.0.2
   - witherable ==0.4.1
   - within ==0.2.0.1
   - with-location ==0.1.0
