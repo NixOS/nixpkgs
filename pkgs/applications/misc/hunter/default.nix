@@ -74,5 +74,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rabite0/hunter";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ fufexan ];
+    # error[E0308]: mismatched types
+    # --> src/files.rs:502:62
+    # expected raw pointer `*const u8`, found raw pointer `*const i8`
+    broken = stdenv.isAarch64;
   };
 }
