@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    configureFlags="--exec_prefix=$prefix $configureFlags"
+    configureFlags+=("--exec_prefix=$prefix")
   '';
 
   postInstall = ''
