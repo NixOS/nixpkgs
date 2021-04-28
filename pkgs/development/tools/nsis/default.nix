@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
-  buildInputs = [ zlib ] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   nsisIncludes = symlinkJoin {
     name = "includes";
-    paths = [zlib.dev] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
+    paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   };
 
   sconsFlags = [
