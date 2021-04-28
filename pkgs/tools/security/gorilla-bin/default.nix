@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
-  phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''
     mkdir gorilla;
