@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   # No tests
-  doCheck = false; 
+  doCheck = false;
 
   makefile = "Makefile_oomox_plugin";
 

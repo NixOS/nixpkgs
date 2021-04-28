@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   # No tests
-  doCheck = false; 
+  doCheck = false;
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 

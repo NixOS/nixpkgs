@@ -3,7 +3,7 @@
 let
   unwrappedWithPlugins = symlinkJoin {
     name = unwrapped.name + "-oomox-root";
-    paths = [ unwrapped ] ++ plugins; 
+    paths = [ unwrapped ] ++ plugins;
   };
 in
 
