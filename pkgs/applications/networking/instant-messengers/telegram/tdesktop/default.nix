@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, writeTextFile, callPackage
+{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -20,21 +20,9 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {};
-  webviewPatch = writeTextFile {
-    name = "fix-webview-includes.patch";
-    text = ''
-      diff --git a/webview/platform/linux/webview_linux_webkit_gtk.h b/webview/platform/linux/webview_linux_webkit_gtk.h
-      index a7f0f97..c2b21c7 100644
-      --- a/webview/platform/linux/webview_linux_webkit_gtk.h
-      +++ b/webview/platform/linux/webview_linux_webkit_gtk.h
-      @@ -14,6 +14,7 @@ extern "C" {
-       #include <gtk/gtk.h>
-       #include <webkit2/webkit2.h>
-       #include <X11/Xlib.h>
-      +#include <gdk/gdkx.h>
-       #define signals public
-       } // extern "C"
-    '';
+  webviewPatch = fetchpatch {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/013eff77a13b6c2629a04e07a4d09dbe60c8ca48/trunk/fix-webview-includes.patch";
+    sha256 = "0112zaysf3f02dd4bgqc5hwg66h1bfj8r4yjzb06sfi0pl9vl96l";
   };
 
 in mkDerivation rec {
