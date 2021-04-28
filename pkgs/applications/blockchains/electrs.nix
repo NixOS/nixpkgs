@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   cargoSha256 = "1rqpadlr9r4z2z825li6vi5a21hivc3bsn5ibxshrdrwiycyyxz8";
 
