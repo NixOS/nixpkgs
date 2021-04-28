@@ -22,7 +22,7 @@
 , at-spi2-core
 , gnome3
 , libhandy
-, replaceDependency
+, runCommand
 }:
 
 stdenv.mkDerivation rec {
@@ -102,11 +102,11 @@ stdenv.mkDerivation rec {
         libhandyWithGlade = libhandy.override {
           enableGlade = true;
         };
-      in (replaceDependency {
-        drv = libhandyWithGlade.glade;
-        oldDependency = libhandyWithGlade.out;
-        newDependency = libhandy.out;
-      });
+      in runCommand "${libhandy.name}-glade" {} ''
+        cp -r "${libhandyWithGlade.glade}" "$out"
+        chmod -R +w "$out"
+        sed -e "s#${libhandyWithGlade.out}#${libhandy.out}#g" -e "s#${libhandyWithGlade.glade}#$out#g" -i $(find "$out" -type f)
+      '';
   };
 
   meta = with lib; {
