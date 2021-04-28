@@ -1,4 +1,9 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, makeWrapper, substituteAll }:
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "bpytop";
@@ -12,6 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   propagatedBuildInputs = with python3Packages; [ python psutil ];
 
   dontBuild = true;
