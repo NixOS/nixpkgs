@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # For some reason (might be related to the alpha status), some includes
   # which are required by lib-src/enigma-core are not picked up by the
   # configure script. Hence we add them manually.
-  CPPFLAGS = "-I${SDL2.dev}/include/SDL2 -I${SDL2_ttf}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
+  env.CPPFLAGS = "-I${SDL2.dev}/include/SDL2 -I${SDL2_ttf}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
 
   postInstall = ''
     rm -r $out/include
