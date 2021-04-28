@@ -6,8 +6,8 @@
 , idna
 , sniffio
 , typing-extensions
-, curio
 , hypothesis
+, pytest-mock
 , pytestCheckHook
 , trio
 , trustme
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "2.2.0";
+  version = "3.1.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "0ram1niv2lg9qj53zssph104a4kxl8f94ilfn6mibn034m3ikcc8";
+    sha256 = "17zc8wxkp22xn84dqw2wbmfx8h9j3bv4why8zdn9swkv0c0r426d";
   };
 
   propagatedBuildInputs = [
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    curio
     hypothesis
+    pytest-mock
     pytestCheckHook
     trio
     trustme
