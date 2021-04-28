@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, xdg_utils }:
+{ lib, stdenv, fetchFromGitLab, xdg-utils }:
 
 stdenv.mkDerivation rec {
   pname = "anarchism";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace debian/anarchism.desktop \
-      --replace "/usr/bin/xdg-open" "${xdg_utils}/bin/xdg-open"
+      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
     substituteInPlace debian/anarchism.desktop \
       --replace "file:///usr" "file://$out"
   '';

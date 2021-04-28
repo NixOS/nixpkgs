@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.41.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ewWw3PyJGRHP23J6WBBWs9YGl4vTb9/j/soZ6n5wbLM=";
+    sha256 = "sha256-mfVSiquZrCtAza4q9Ocle22e4ZMoTgxguevuOlZEUm8=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Home Assistant cloud integration by Nabu Casa, inc.";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

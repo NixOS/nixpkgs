@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, mate, python3Packages }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, mate, python3Packages, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Python binding for Caja components";

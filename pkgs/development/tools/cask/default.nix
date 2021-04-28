@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, emacs }:
+{ lib, stdenv, fetchurl, python3, emacs }:
 
 stdenv.mkDerivation rec {
   pname = "cask";
@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
     s f dash ansi ecukes servant ert-runner el-mock
     noflet ert-async shell-split-string git package-build
   ] ++ [
-    python
+    python3
   ];
+
+  strictDeps = true;
 
   buildPhase = ''
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el

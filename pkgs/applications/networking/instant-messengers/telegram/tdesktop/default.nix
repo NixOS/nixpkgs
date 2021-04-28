@@ -1,11 +1,12 @@
-{ mkDerivation, lib, fetchurl, callPackage
+{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell
-# TODO: Shouldn't be required:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
-, xdg_utils
+, tl-expected, hunspell, glibmm
+# Transitive dependencies:
+, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, at-spi2-core, libXtst, libthai, libdatrie
+, xdg-utils
 }:
 
 with lib;
@@ -19,15 +20,19 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {};
+  tgcalls-gcc10-fix = fetchpatch { # "Fix build on GCC 10, second attempt."
+    url = "https://github.com/TelegramMessenger/tgcalls/commit/eded7cc540123eaf26361958b9a61c65cb2f7cfc.patch";
+    sha256 = "19n1hvn44pp01zc90g93vq2bcr2gdnscaj5il9f82klgh4llvjli";
+  };
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.5.8";
+  version = "2.7.1";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0zj1g24fi4m84p6zj9yk55v8sbhn0jdpdhp33y12d2msz0qwp2cw";
+    sha256 = "01fxzcfz3xankmdar55ja55pb9hkvlf1plgpgjpsda9xwqgbxgs1";
   };
 
   postPatch = ''
@@ -35,6 +40,7 @@ in mkDerivation rec {
       --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
+    patch -d Telegram/ThirdParty/tgcalls/ -p1 < "${tgcalls-gcc10-fix}"
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -46,10 +52,11 @@ in mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected hunspell
+    tl-expected hunspell glibmm
     tg_owt
-    # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
+    # Transitive dependencies:
+    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
+    at-spi2-core libXtst libthai libdatrie
   ];
 
   cmakeFlags = [
@@ -83,7 +90,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix PATH : ${xdg-utils}/bin \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","

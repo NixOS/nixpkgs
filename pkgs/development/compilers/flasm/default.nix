@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   nativeBuildInputs = [ unzip bison flex gperf ];
 

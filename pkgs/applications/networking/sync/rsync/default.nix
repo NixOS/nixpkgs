@@ -15,7 +15,7 @@ assert enableXXHash -> xxHash != null;
 assert enableZstd -> zstd != null;
 
 let
-  base = import ./base.nix { inherit lib stdenv fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl; };
 in
 stdenv.mkDerivation rec {
   name = "rsync-${base.version}";

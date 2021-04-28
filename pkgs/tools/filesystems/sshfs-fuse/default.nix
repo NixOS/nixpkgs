@@ -1,52 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja, docutils, makeWrapper
-, fuse3, glib
-, which, python3Packages
-, openssh
-}:
+{ lib, stdenv, callPackage, fetchpatch }:
 
-stdenv.mkDerivation rec {
-  version = "3.7.1";
-  pname = "sshfs-fuse";
+let mkSSHFS = args: callPackage (import ./common.nix args) { };
+in if stdenv.isDarwin then
+  mkSSHFS {
+    version = "2.10"; # macFUSE isn't yet compatible with libfuse 3.x
+    sha256 = "1dmw4kx6vyawcywiv8drrajnam0m29mxfswcp4209qafzx3mjlp1";
+    patches = [
+      # remove reference to fuse_darwin.h which doens't exist on recent macFUSE
+      ./fix-fuse-darwin-h.patch
 
-  src = fetchFromGitHub {
-    owner = "libfuse";
-    repo = "sshfs";
-    rev = "sshfs-${version}";
+      # From https://github.com/libfuse/sshfs/pull/185:
+      # > With this patch, setting I/O size to a reasonable large value, will
+      # > result in much improved performance, e.g.: -o iosize=1048576
+      (fetchpatch {
+        name = "fix-configurable-blksize.patch";
+        url = "https://github.com/libfuse/sshfs/commit/667cf34622e2e873db776791df275c7a582d6295.patch";
+        sha256 = "0d65lawd2g2aisk1rw2vl65dgxywf4vqgv765n9zj9zysyya8a54";
+      })
+    ];
+    platforms = lib.platforms.darwin;
+  }
+else
+  mkSSHFS {
+    version = "3.7.1";
     sha256 = "088mgcsqv9f2vly4xn6lvvkmqkgr9jjmjs9qp8938hl7j6rrgd17";
-  };
-
-  nativeBuildInputs = [ meson pkg-config ninja docutils makeWrapper ];
-  buildInputs = [ fuse3 glib ];
-  checkInputs = [ which python3Packages.pytest ];
-
-  NIX_CFLAGS_COMPILE = lib.optionalString
-    (stdenv.hostPlatform.system == "i686-linux")
-    "-D_FILE_OFFSET_BITS=64";
-
-  postInstall = ''
-    mkdir -p $out/sbin
-    ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
-    wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
-  '';
-
-  #doCheck = true;
-  checkPhase = ''
-    # The tests need fusermount:
-    mkdir bin && cp ${fuse3}/bin/fusermount3 bin/fusermount
-    export PATH=bin:$PATH
-    # Can't access /dev/fuse within the sandbox: "FUSE kernel module does not seem to be loaded"
-    substituteInPlace test/util.py --replace "/dev/fuse" "/dev/null"
-    # TODO: "fusermount executable not setuid, and we are not root"
-    # We should probably use a VM test instead
-    python3 -m pytest test/
-  '';
-
-  meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ primeos ];
-  };
-}
+    platforms = lib.platforms.linux;
+  }

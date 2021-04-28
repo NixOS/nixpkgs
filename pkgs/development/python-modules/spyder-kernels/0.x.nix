@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "test_turtle_launc"
     "test_umr_skip_cython"
     "test_umr_pathlist"
+    "test_user_sitepackages_in_pathlist"
   ];
 
   meta = with lib; {

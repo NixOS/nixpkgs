@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl , pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
+{ lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl , pam, libiodbc, libkrb5, gcc, libcxx, which, catch2 }:
 
 let
   avro-cpp=avro-cpp_llvm;
@@ -7,7 +7,7 @@ let
   common = import ./common.nix {
     inherit lib stdenv bzip2 zlib autoconf automake cmake gnumake
             help2man texinfo libtool cppzmq libarchive jansson
-            zeromq openssl pam libiodbc kerberos gcc libcxx
+            zeromq openssl pam libiodbc libkrb5 gcc libcxx
             boost avro-cpp which catch2;
   };
 in rec {

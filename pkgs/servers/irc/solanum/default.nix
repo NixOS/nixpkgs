@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";

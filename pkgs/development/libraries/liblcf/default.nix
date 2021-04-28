@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/EasyRPG/liblcf";
     license = licenses.mit;
     maintainers = with maintainers; [ yegortimoshenko ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

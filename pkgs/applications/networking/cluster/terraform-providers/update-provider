@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl jq moreutils
+#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl jq moreutils nix
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -161,7 +161,8 @@ if [[ -z "$vendorSha256" ]]; then
       exit 1
     fi
     rm -f vendor_log.txt
-    vendorSha256=${BASH_REMATCH[1]}
+    # trim the results in case it they have a sha256: prefix or contain more than one line
+    vendorSha256=$(echo "${BASH_REMATCH[1]#sha256:}" | head -n 1)
     # Deal with nix unstable
     if [[ $vendorSha256 = sha256-* ]]; then
       vendorSha256=$(nix to-base32 "$vendorSha256")

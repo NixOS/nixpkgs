@@ -15,6 +15,10 @@ let
   '';
 in
 
+if !versionAtLeast ocaml.version "4.08"
+then throw "nocrypto is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
   version = "0.5.4";

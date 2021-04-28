@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
-  version = "0.9.20";
+  version = "0.9.21";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     rev = version;
-    sha256 = "17bs31wns71fx7s06rdzqkghkgv86r9d9i3814rznyzi9484c7aq";
+    sha256 = "010wasp6hcnwbf0d3gaxmjpkvr85zyv2xxz2pnkwxyk2bbr1h6q8";
   };
 
   installPhase = ''
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

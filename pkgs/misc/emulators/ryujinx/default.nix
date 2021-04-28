@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk_5, dotnetPackages, dotnetCorePackages
-, SDL2, libX11, ffmpeg, openal, libsoundio
+, dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
+, SDL2, libX11, libgdiplus, ffmpeg, openal, libsoundio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
@@ -9,22 +9,23 @@ let
     SDL2
     gtk3
     libX11
+    libgdiplus
     ffmpeg
     openal
     libsoundio
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6448"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6835"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "9eb0ab05c6e820e113b3c61cbacd9b085b2819c4";
-    sha256 = "168nm7p6lqswmsya6gf3296ligyjabqmbrdzginkcviii643yslz";
+    rev = "e520eecb5ba682d4b51bb782e3bc99fb1d6afe04";
+    sha256 = "1yy1xslnvvl0m7g0jszj2pjwdwf0pbv53crzfkhla3n68kvfy00f";
   };
 
-  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
+  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
@@ -36,7 +37,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
-    ./disable-updater.patch # This disables the auto-updater, which does not work as it attempts to modify the nix store.
   ];
 
   configurePhase = ''
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
@@ -108,4 +108,5 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
   };
+  passthru.updateScript = ./updater.sh;
 }

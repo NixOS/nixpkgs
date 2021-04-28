@@ -1,7 +1,7 @@
 {
   lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
   , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
-  , libarchive, lzma
+  , libarchive, xz
 }:
 stdenv.mkDerivation rec {
   baseName = "pixz";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoconf automake libtool asciidoc libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl
-    libarchive lzma
+    libarchive xz
   ];
   preBuild = ''
     echo "XML_CATALOG_FILES='$XML_CATALOG_FILES'"

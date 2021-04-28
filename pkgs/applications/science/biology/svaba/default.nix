@@ -1,4 +1,4 @@
-{ lib, stdenv, zlib, bzip2, lzma, fetchFromGitHub } :
+{ lib, stdenv, zlib, bzip2, xz, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ zlib bzip2 lzma ];
+  buildInputs = [ zlib bzip2 xz ];
 
   installPhase = ''
     runHook preInstall

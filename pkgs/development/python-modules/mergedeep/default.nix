@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "mergedeep";
-  version = "1.3.1";
+  version = "1.3.4";
   disabled = isPy27;
 
   # PyPI tarball doesn't include tests directory
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "clarketm";
     repo = "mergedeep";
     rev = "v${version}";
-    sha256 = "1ryccb64hg438y1wsjlfp4ciq05q4c6khwhllwdnndm8cbkbrgph";
+    sha256 = "1msvvdzk33sxzgyvs4fs8dlsrsi7fjj038z83s0yw5h8m8d78469";
   };
 
   checkInputs = [ pytest ];

@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2020.12.3";
+  version = "2022.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7ae7aba87e88965c3e1490f5b9742c95e06150f2fc73da69647a9366dd88018";
+    sha256 = "69c370ebd2ff9aceb15bb6efd364473609ffb23d2b2f02a3eb64fd537df69de0";
   };
 
   nativeBuildInputs = [ glibcLocales ];
@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   # No tests in pypi tarball.
   doCheck = false;
+  pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";

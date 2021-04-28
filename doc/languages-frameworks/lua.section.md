@@ -50,7 +50,7 @@ and install it in your profile with
 ```shell
 nix-env -iA nixpkgs.myLuaEnv
 ```
-The environment is is installed by referring to the attribute, and considering
+The environment is installed by referring to the attribute, and considering
 the `nixpkgs` channel was used.
 
 #### Lua environment defined in `/etc/nixos/configuration.nix`
@@ -129,7 +129,7 @@ the whitelist maintainers/scripts/luarocks-packages.csv and updated by running m
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
 These customizations go in `pkgs/development/lua-modules/overrides.nix`.
-For instance if the rockspec defines `external_dependencies`, these need to be manually added in in its rockspec file then it won't work.
+For instance if the rockspec defines `external_dependencies`, these need to be manually added in its rockspec file then it won't work.
 
 You can try converting luarocks packages to nix packages with the command `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
 Nix rely on luarocks to install lua packages, basically it runs:

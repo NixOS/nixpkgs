@@ -5,6 +5,7 @@
 , pythonOlder
 , asdf
 , astropy
+, setuptools-scm
 , astropy-helpers
 , astropy-extension-helpers
 , beautifulsoup4
@@ -29,15 +30,16 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "2.0.6";
+  version = "2.1.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "109flghca42yhsm2w5xicqhyx1mc8c3vlwvadbn65fz3lhysqj67";
+    sha256 = "8bbc440e606a4f3fcbd1441150d81da6f0208adace9dc06f6afd2c9cb7c08908";
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     astropy-extension-helpers
   ];
 

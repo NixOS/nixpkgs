@@ -21,6 +21,11 @@ let
     propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious-8-35 ];
   };
 
+  perl' = perl.withPackages (p:
+    [ MojoIOLoopForkCall-0-20
+      p.TAPParserSourceHandlerpgTAP
+    ]);
+
   version = "0.20.0";
   checksum = "15lb5qwksa508m9bj6d3n4rrjpakfaas9qxspg408bcqfp7pqjw3";
 in
@@ -35,7 +40,7 @@ stdenv.mkDerivation {
     sha256 = checksum;
   };
 
-  buildInputs = [ wget perl MojoIOLoopForkCall-0-20 perlPackages.TAPParserSourceHandlerpgTAP ];
+  buildInputs = [ wget perl' ];
 
   nativeBuildInputs = [ autoconf automake autoreconfHook ];
 
@@ -51,30 +56,6 @@ stdenv.mkDerivation {
   preBuild = ''
     aclocal
     automake
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/bin/znapzend --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-8-35}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-20}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
-    substituteInPlace $out/bin/znapzendzetup --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-8-35}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-20}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
-    substituteInPlace $out/bin/znapzendztatz --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-8-35}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-20}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
   '';
 
   meta = with lib; {

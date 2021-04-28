@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
 , desktop-file-utils
 , pkg-config
 , writeScript
@@ -11,7 +10,6 @@
 , wingpanel
 , orca
 , onboard
-, at-spi2-core
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell

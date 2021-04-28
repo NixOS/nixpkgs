@@ -1,7 +1,7 @@
-From ab3dab997695db5346f8efbf8566ac96612f0c6e Mon Sep 17 00:00:00 2001
+From 4e96b2e074c4a4f4ce900409872ce2f86704ee5b Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
-Subject: [PATCH 02/18] Don't try to unmount /nix or /nix/store
+Subject: [PATCH 02/19] Don't try to unmount /nix or /nix/store
 
 They'll still be remounted read-only.
 
@@ -38,5 +38,5 @@ index 3a72a13e1a..541320dc9d 100644
                  || path_equal(path, "/usr")
  #endif
 -- 
-2.29.2
+2.30.1
 

@@ -17,7 +17,6 @@
 , libgpgerror
 , json-glib
 , duplicity
-, dconf
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     libhandy_0
     libgpgerror
     json-glib
-    dconf
   ];
 
   mesonFlags = [

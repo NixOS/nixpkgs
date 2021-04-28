@@ -1,4 +1,4 @@
-{ mkDerivation, base, concatenative, mtl, parsec, lib }:
+{ mkDerivation, base, concatenative, lib, mtl, parsec }:
 mkDerivation {
   pname = "indents";
   version = "0.3.3";

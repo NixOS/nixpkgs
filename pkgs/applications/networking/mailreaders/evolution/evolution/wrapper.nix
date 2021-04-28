@@ -4,7 +4,7 @@ symlinkJoin {
   name = "evolution-with-plugins";
   paths = [ gnome3.evolution-data-server ] ++ plugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     for i in $out/bin/* $out/libexec/**; do

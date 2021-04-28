@@ -32,9 +32,9 @@ buildPythonApplication rec {
     sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
   };
 
-  buildInputs = [ glibcLocales pkginfo check-manifest ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
+  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
 
   checkInputs = [
     pytest pytest-flake8 webtest mock

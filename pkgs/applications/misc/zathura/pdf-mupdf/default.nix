@@ -6,7 +6,7 @@
 , jbig2dec
 , libjpeg
 , mupdf
-, openjpeg_2
+, openjpeg
 , pkg-config
 , zathura_core
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     jbig2dec
     libjpeg
     mupdf
-    openjpeg_2
+    openjpeg
     zathura_core
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 

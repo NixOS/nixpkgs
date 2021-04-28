@@ -2,7 +2,6 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , python
 , numpy
 , qiskit-terra
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.5.1";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.6";
 
@@ -33,11 +32,11 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-ignis";
     rev = version;
-    sha256 = "17kplmi17axcbbgw35dzfr3d5bzfymxfni9sf6v14223c5674p4y";
+    hash = "sha256-L5fwCMsN03ojiDvKIyqsGfUnwej1P7bpyHlL6mu7nh0=";
   };
 
   # hacky, fix https://github.com/Qiskit/qiskit-ignis/issues/532.
-  # TODO: remove on qiskit-ignis v0.5.1
+  # TODO: remove on qiskit-ignis v0.5.2
   postPatch = ''
     substituteInPlace qiskit/ignis/mitigation/expval/base_meas_mitigator.py --replace "plt.axes" "'plt.axes'"
   '';

@@ -36,7 +36,9 @@
 , readline
 , libGL
 , libGLU
+, mesa
 , libintl
+, libmanette
 , openjpeg
 , enableGeoLocation ? true
 , geoclue2
@@ -59,7 +61,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.30.3";
+  version = "2.32.0";
 
   outputs = [ "out" "dev" ];
 
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0zsy3say94d9bhaan0l6mfr59z03a5x4kngyy8b2i20n77q19skd";
+    sha256 = "1w3b0w8izp0i070grhv19j631sdcd0mcqnjnax13k8mdx7dg8zcx";
   };
 
   patches = optionals stdenv.isLinux [
@@ -112,9 +114,11 @@ stdenv.mkDerivation rec {
     harfbuzz
     libGL
     libGLU
+    mesa # for libEGL headers
     libgcrypt
     libidn
     libintl
+    libmanette
     libnotify
     libpthreadstubs
     libsecret
@@ -172,6 +176,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Web content rendering engine, GTK port";

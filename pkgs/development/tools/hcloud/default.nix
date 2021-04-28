@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0sjshcppcfdfz29nsrzvrciypcb4r7fbl2sqhlkcq948b7k3jk8b";
+    sha256 = "sha256-zXlsvuc778z1sxnv02mFJXQzkEEft0BdubWecvcytYg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "0q6jm2ghwrbjxn76i8wz72xjdmwfvl5dn8n4zilyjjx9vvllwdjw";
+  vendorSha256 = "sha256-QdTD6xeVNswaaMms82rFYb5jLDhxL+wQgaLVXqROSFs=";
 
   doCheck = false;
 

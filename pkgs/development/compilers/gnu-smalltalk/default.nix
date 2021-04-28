@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, pkg-config, libtool
 , zip, libffi, libsigsegv, readline, gmp
-, gnutls, gnome2, cairo, SDL, sqlite
+, gnutls, gtk2, cairo, SDL, sqlite
 , emacsSupport ? config.emacsSupport or false, emacs ? null }:
 
 assert emacsSupport -> (emacs != null);
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   # http://smalltalk.gnu.org/download
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libtool zip libffi libsigsegv-shared readline gmp gnutls gnome2.gtk
+    libtool zip libffi libsigsegv-shared readline gmp gnutls gtk2
     cairo SDL sqlite
   ]
   ++ lib.optional emacsSupport emacs;

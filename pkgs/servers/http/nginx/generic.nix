@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
@@ -55,7 +56,6 @@ stdenv.mkDerivation {
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
-    "--with-http_geoip_module"
     "--with-http_sub_module"
     "--with-http_dav_module"
     "--with-http_flv_module"
@@ -81,7 +81,6 @@ stdenv.mkDerivation {
     "--with-debug"
   ] ++ optionals withStream [
     "--with-stream"
-    "--with-stream_geoip_module"
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
@@ -94,6 +93,8 @@ stdenv.mkDerivation {
     "--with-perl_modules_path=lib/perl5"
   ]
     ++ optional (gd != null) "--with-http_image_filter_module"
+    ++ optional (geoip != null) "--with-http_geoip_module"
+    ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
@@ -141,7 +142,10 @@ stdenv.mkDerivation {
 
   passthru = {
     modules = modules;
-    tests.nginx = nixosTests.nginx;
+    tests = {
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+    };
   };
 
   meta = if meta != null then meta else {

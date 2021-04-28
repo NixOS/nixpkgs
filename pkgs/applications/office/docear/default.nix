@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1g5n7r2x4gas6dl2fbyh7v9yxdcb6bzml8n3ldmpzv1rncgjcdp4";
   };
 
-  buildInputs = [ oraclejre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ oraclejre ];
 
   buildPhase = "";
   installPhase = ''

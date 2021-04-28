@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   # configure.ac uses pkg-config only to locate libopusfile
   nativeBuildInputs = optional enableOpusfile pkg-config;
 
+  patches = [ ./0001-musl-rewind-pipe-workaround.patch ];
+
   buildInputs =
     optional (enableAlsa && stdenv.isLinux) alsaLib ++
     optional enableLibao libao ++

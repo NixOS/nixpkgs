@@ -2,16 +2,18 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2020.4";
+  version = "2021.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e6b7dd2d1e0a59084bcee14a17af60c5c562cdc16d828e8eba2e683d3a7e268";
+    sha256 = "sha256-g6SpCJS/OOJDzwUsi1jzgb/pp6SD9qnKsUC8f3AqxNo=";
   };
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s pytz/tests
   '';
+
+  pythonImportsCheck = [ "pytz" ];
 
   meta = with lib; {
     description = "World timezone definitions, modern and historical";

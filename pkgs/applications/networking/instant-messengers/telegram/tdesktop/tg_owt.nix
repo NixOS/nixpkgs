@@ -1,10 +1,11 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, ninja, yasm
 , libjpeg, openssl, libopus, ffmpeg, alsaLib, libpulseaudio, protobuf
+, xorg, libXtst
 }:
 
 let
-  rev = "be23804afce3bb2e80a1d57a7c1318c71b82b7de";
-  sha256 = "0avdxkig8z1ainzyxkm9vmlvkyqbjalwb4h9s9kcail82mnldnhc";
+  rev = "2d804d2c9c5d05324c8ab22f2e6ff8306521b3c3";
+  sha256 = "0kz0i381iwsgcc3yzsq7njx3gkqja4bb9fsgc24vhg0md540qhyn";
 
 in stdenv.mkDerivation {
   pname = "tg_owt";
@@ -23,6 +24,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     libjpeg openssl libopus ffmpeg alsaLib libpulseaudio protobuf
+    xorg.libX11 libXtst
   ];
 
   cmakeFlags = [

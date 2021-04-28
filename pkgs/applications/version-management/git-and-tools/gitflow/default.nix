@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
-  buildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   preBuild = ''
     makeFlagsArray+=(prefix="$out")

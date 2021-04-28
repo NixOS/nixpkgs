@@ -12,7 +12,7 @@
 # Configuration
 { lib, stdenv, version
 
-, features ? { grsecurity = false; xen_dom0 = false; }
+, features ? {}
 }:
 
 with lib;
@@ -42,7 +42,7 @@ let
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) (option no);
+      DEBUG_STACKOVERFLOW       = option no;
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -142,6 +142,9 @@ let
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
+      IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
+      IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
       NET_SCHED                   = yes;
@@ -174,6 +177,8 @@ let
                                               (whenAtLeast "4.17" yes) ];
       NF_TABLES_NETDEV            = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
+      NFT_REJECT_NETDEV           = whenAtLeast "5.11" module;
+
       # IP: Netfilter Configuration
       NF_TABLES_IPV4              = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
@@ -191,16 +196,17 @@ let
       NET_DROP_MONITOR = yes;
 
       # needed for ss
-      INET_DIAG         = module;
-      INET_TCP_DIAG     = module;
-      INET_UDP_DIAG     = module;
-      INET_RAW_DIAG     = whenAtLeast "4.14" module;
-      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
+      # Use a lower priority to allow these options to be overridden in hardened/config.nix
+      INET_DIAG         = mkDefault module;
+      INET_TCP_DIAG     = mkDefault module;
+      INET_UDP_DIAG     = mkDefault module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
+      INET_DIAG_DESTROY = whenAtLeast "4.9" (mkDefault yes);
 
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
-      INET_MPTCP_DIAG = whenAtLeast "5.9" module;
+      INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
     };
 
     wireless = {
@@ -241,8 +247,9 @@ let
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
+      DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = yes;
-      DRM_GMA3600            = yes;
+      DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
@@ -252,6 +259,15 @@ let
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      # amdgpu display core (DC) support
+      DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
+      DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
+      DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
+      DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
+      DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.11" yes;
+      DRM_AMD_DC_HDCP = whenAtLeast "5.5" yes;
+      DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
@@ -276,21 +292,31 @@ let
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
-      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_APOLLOLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_CANNONLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COFFEELAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_COMETLAKE             = whenAtLeast "5.12" module;
       SND_SOC_SOF_COMETLAKE_H_SUPPORT   = whenOlder "5.8" yes;
-      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
-      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
-      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = whenOlder "5.12" yes;
+      SND_SOC_SOF_ELKHARTLAKE           = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = whenOlder "5.12" yes;
+      SND_SOC_SOF_GEMINILAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = whenOlder "5.12" yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
       SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
-      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_ICELAKE               = whenAtLeast "5.12" module;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = whenOlder "5.12" yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
-      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
-      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
-      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
+      SND_SOC_SOF_JASPERLAKE            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_MERRIFIELD            = whenAtLeast "5.12" module;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = whenOlder "5.12" yes;
+      SND_SOC_SOF_TIGERLAKE             = whenAtLeast "5.12" module;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = whenOlder "5.12" yes;
     };
 
     usb-serial = {
@@ -405,6 +431,8 @@ let
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
       DEVTMPFS = yes;
+
+      UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
     };
 
     security = {
@@ -415,12 +443,14 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
-      DEVKMEM                          = mkIf (!features.grsecurity) no; # Disable /dev/kmem
+      DEVKMEM                          = no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
 
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
+
+      RANDOM_TRUST_CPU                 = whenAtLeast "4.19" yes; # allow RDRAND to seed the RNG
 
       MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
@@ -493,7 +523,7 @@ let
     virtualisation = {
       PARAVIRT = option yes;
 
-      HYPERVISOR_GUEST = mkIf (!features.grsecurity) yes;
+      HYPERVISOR_GUEST = yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
@@ -501,12 +531,12 @@ let
       KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
       KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
-      KVM_GUEST                         = mkIf (!features.grsecurity) yes;
+      KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
-      # We nneed 64 GB (PAE) support for Xen guest support
+      # We need 64 GB (PAE) support for Xen guest support
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
@@ -517,13 +547,8 @@ let
       VBOXGUEST = option no;
       DRM_VBOXVIDEO = option no;
 
-    } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
-      XEN = option yes;
-
-      # XXX: why isn't this in the xen-dom0 conditional section below?
-      XEN_DOM0 = option yes;
-
-    } // optionalAttrs features.xen_dom0 {
+      XEN                         = option yes;
+      XEN_DOM0                    = option yes;
       PCI_XEN                     = option yes;
       HVC_XEN                     = option yes;
       HVC_XEN_FRONTEND            = option yes;
@@ -542,7 +567,7 @@ let
       XEN_SELFBALLOONING          = option yes;
       XEN_STUB                    = option yes;
       XEN_TMEM                    = option yes;
-    });
+    };
 
     media = {
       MEDIA_DIGITAL_TV_SUPPORT = yes;
@@ -635,7 +660,12 @@ let
       XZ_DEC_TEST              = option no;
     };
 
-    criu = optionalAttrs (features.criu or false) ({
+    criu = if (versionAtLeast version "4.19") then {
+      # Unconditionally enabled, because it is required for CRIU and
+      # it provides the kcmp() system call that Mesa depends on.
+      CHECKPOINT_RESTORE  = yes;
+    } else optionalAttrs (features.criu or false) ({
+      # For older kernels, CHECKPOINT_RESTORE is hidden behind EXPERT.
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {
@@ -648,7 +678,14 @@ let
       DEBUG_MEMORY_INIT     = option yes;
     });
 
-    misc = {
+    misc = let
+      # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
+      # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
+      useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
+    in {
+      KERNEL_XZ            = mkIf (!useZstd) yes;
+      KERNEL_ZSTD          = mkIf useZstd yes;
+
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
@@ -664,10 +701,6 @@ let
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
 
-      # use zstd for kernel compression if newer than 5.9, else xz.
-      KERNEL_XZ          = whenOlder "5.9" yes;
-      KERNEL_ZSTD        = whenAtLeast "5.9" yes;
-
       SYSVIPC            = yes;  # System-V IPC
 
       AIO                = yes;  # POSIX asynchronous I/O
@@ -677,7 +710,6 @@ let
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)
 
       # Enable initrd support.
-      BLK_DEV_RAM       = yes;
       BLK_DEV_INITRD    = yes;
 
       PM_TRACE_RTC         = no; # Disable some expensive (?) features.
@@ -750,6 +782,8 @@ let
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
+
+      NVME_MULTIPATH = whenAtLeast "4.15" yes;
 
       PSI = whenAtLeast "4.20" yes;
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsaLib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
+, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
 , epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
 }:
 
@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
     libGLU libGL
     libarchive
     libao
-    unzip
-    xdg_utils
+    xdg-utils
     gnome3.adwaita-icon-theme
   ];
 
@@ -37,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
     wrapGAppsHook
+    unzip
   ];
 
   installPhase = ''

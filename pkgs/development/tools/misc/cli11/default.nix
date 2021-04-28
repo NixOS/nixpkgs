@@ -3,7 +3,7 @@
   fetchFromGitHub,
   cmake,
   gtest,
-  python,
+  python3,
   boost
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python ];
+  checkInputs = [ boost python3 ];
 
   doCheck = true;
 

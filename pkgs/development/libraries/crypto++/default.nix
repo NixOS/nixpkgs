@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nasm, which
+{ lib, stdenv, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
 }:
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
     substituteInPlace GNUmakefile \
         --replace "AR = libtool" "AR = ar" \
         --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
+
+    # See https://github.com/weidai11/cryptopp/issues/1011
+    substituteInPlace GNUmakefile \
+      --replace "ZOPT = -O0" "ZOPT ="
+  '';
+
+  preConfigure = ''
+    sh TestScripts/configure.sh
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

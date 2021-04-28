@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "renderizer";
-  version = "2.0.9";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "gomatic";
     repo = pname;
-    rev = version;
-    sha256 = "1bip12pcn8bqgph7vd7bzzadwbyqh80fx7gqciv9fchycwsj04rf";
+    rev = "v${version}";
+    sha256 = "sha256-Ji+wTTXLp17EYRIjUiVgd33ZeBdT8K2O8R2Ejq2Ll5I=";
   };
 
-  vendorSha256 = "13z357ww4j5bmmy8ag6d6gd5b2dib8kby73q8317pqnqzaxrrbcj";
+  buildFlagsArray = [
+    "-ldflags=-s -w -X main.version=${version} -X main.commitHash=${src.rev} -X main.date=19700101T000000"
+  ];
 
-  doCheck = false;
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "CLI to render Go template text files";

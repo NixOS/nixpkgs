@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkg-config
-, makeWrapper, nixosTests, writeScript, common-updater-scripts, git, nixfmt, nix
-, gnused, coreutils, enableDecLocator ? true }:
+{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
+, pkg-config, makeWrapper, nixosTests, writeScript, common-updater-scripts, git
+, nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "363";
+  version = "367";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "2Bo2OeJlUrZ2W9zyi+Hs24rKv5B5VXCOgwrWOX6hC0g=";
+    sha256 = "07y51l06n344pjyxdddq6sdvxw25nl10irl4avynkqjnqyqsiw97";
   };
 
   buildInputs = [
@@ -115,5 +115,6 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ nequissimus vrthra ];
     platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://invisible-island.net/xterm/xterm.log.html";
   };
 }

@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [ lib.maintainers.peti ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

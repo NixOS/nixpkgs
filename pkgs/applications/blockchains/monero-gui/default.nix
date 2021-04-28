@@ -10,14 +10,12 @@
 , randomx, zeromq, libgcrypt, libgpgerror
 , hidapi, rapidjson, quirc
 , trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+,   libusb1
+,   protobuf
+,   python3
 }:
 
 with lib;
-
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 let
   arch = if stdenv.isx86_64  then "x86-64"

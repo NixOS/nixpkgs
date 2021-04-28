@@ -1,25 +1,15 @@
-{ stdenv, lib, fetchurl, fetchpatch }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libhugetlbfs";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchurl {
     url = "https://github.com/libhugetlbfs/libhugetlbfs/releases/download/${version}/libhugetlbfs-${version}.tar.gz";
-    sha256 = "11b7k8xvgx68rjzidm12a6l6b23hwi7hj149y9xxfz2j5kmakp4l";
+    sha256 = "0ya4q001g111d3pqlzrf3yaifadl0ccirx5dndz1pih7x3qp41mp";
   };
 
   outputs = [ "bin" "dev" "man" "doc" "lib" "out" ];
-
-  patches = [
-    # Don't check that 32-bit and 64-bit libraries don't get installed
-    # to the same place if only one platform is being built for.
-    # Can be removed if build succeeds without it.
-    (fetchpatch {
-      url = "https://groups.google.com/forum/message/raw?msg=libhugetlbfs/IswjDAygfwA/PKy7MZbVAAAJ";
-      sha256 = "00fyrhn380d6swil8pcf4x0krl1113ghswrvjn3m9czc3h4p385a";
-    })
-  ];
 
   postConfigure = ''
     patchShebangs ld.hugetlbfs
@@ -34,8 +24,8 @@ stdenv.mkDerivation rec {
     "LIBDIR64=$(lib)/$(LIB64)"
     "EXEDIR=$(bin)/bin"
     "DOCDIR=$(doc)/share/doc/libhugetlbfs"
-  ] ++ map (n: "MANDIR${n}=$(man)/share/man/man${n}")
-    (lib.genList (n: toString (n + 1)) 8);
+    "MANDIR=$(man)/share/man"
+  ];
 
   # Default target builds tests as well, and the tests want a static
   # libc.

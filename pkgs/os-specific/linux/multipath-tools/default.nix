@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
+{ lib, stdenv, fetchurl, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c, kmod }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+    substituteInPlace libmultipath/Makefile \
+      --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+
+    substituteInPlace multipathd/multipathd.service \
+      --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
+      --replace /sbin/multipathd "$out/bin/multipathd"
+
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
     ' libmultipath/defaults.h

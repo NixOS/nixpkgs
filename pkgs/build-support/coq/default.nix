@@ -25,13 +25,16 @@ in
   dropAttrs ? [],
   keepAttrs ? [],
   dropDerivationAttrs ? [],
+  useDune2ifVersion ? (x: false),
+  useDune2 ? false,
   ...
 }@args:
 let
   args-to-remove = foldl (flip remove) ([
     "version" "fetcher" "repo" "owner" "domain" "releaseRev"
     "displayVersion" "defaultVersion" "useMelquiondRemake"
-    "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix" "meta"
+    "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
+    "meta" "useDune2ifVersion" "useDune2"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
@@ -54,6 +57,7 @@ let
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
   var-coqlib-install = (optionalString (versions.isGe "8.7" coq.coq-version) "COQMF_") + "COQLIB";
+  useDune2 = args.useDune2 or useDune2ifVersion fetched.version;
 in
 
 stdenv.mkDerivation (removeAttrs ({
@@ -62,7 +66,10 @@ stdenv.mkDerivation (removeAttrs ({
 
   inherit (fetched) version src;
 
-  buildInputs = [ coq ] ++ optionals mlPlugin coq.ocamlBuildInputs ++ extraBuildInputs;
+  buildInputs = [ coq ]
+    ++ optionals mlPlugin coq.ocamlBuildInputs
+    ++ optionals useDune2 [coq.ocaml coq.ocamlPackages.dune_2]
+    ++ extraBuildInputs;
   inherit enableParallelBuilding;
 
   meta = ({ platforms = coq.meta.platforms; } //
@@ -73,20 +80,30 @@ stdenv.mkDerivation (removeAttrs ({
     optionalAttrs (fetched.broken or false) { coqFilter = true; broken = true; }) //
     (args.meta or {}) ;
 
-} //
-(optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; }) //
-(optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
+}
+// (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
+// (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
     [ "${var-coqlib-install}=$(out)/lib/coq/${coq.coq-version}/" ] ++
     optional (match ".*doc$" (args.installTargets or "") != null)
       "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ++
     extraInstallFlags;
-}) //
-(optionalAttrs (args?useMelquiondRemake) rec {
+})
+// (optionalAttrs useDune2 {
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$out
+    mv $out/lib/coq $out/lib/TEMPORARY
+    mkdir $out/lib/coq/
+    mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}
+    runHook postInstall
+  '';
+})
+// (optionalAttrs (args?useMelquiondRemake) rec {
   COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
   preConfigurePhases = "autoconf";
   configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
   buildPhase = "./remake -j$NIX_BUILD_CORES";
   installPhase = "./remake install";
-}) //
-(removeAttrs args args-to-remove)) dropDerivationAttrs)
+})
+// (removeAttrs args args-to-remove)) dropDerivationAttrs)

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.21";
+  version = "3.22";
 
   src = fetchurl {
-    url = "https://download-mirror.savannah.gnu.org/releases/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "14gyqrbrq6jz4y6x59rdpv9d4c3pbn0vh1blq3iwrc6kz0x4ql35";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "18rplv1cd76ndb2wc91jarjmfm2nk508pykv1hir79bqbwmdygvq";
   };
 
   nativeBuildInputs = [
@@ -46,15 +46,12 @@ stdenv.mkDerivation rec {
     ./sconstruct-env-fixes.patch
   ];
 
-  postPatch = ''
-    sed -i -e '17i#include <sys/sysmacros.h>' serial.c
-  '';
-
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
   preBuild = ''
     patchShebangs .
-    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
+    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConscript
+    export TAR=noop
 
     sconsFlags+=" udevdir=$out/lib/udev"
     sconsFlags+=" python_libdir=$out/lib/${python3Packages.python.libPrefix}/site-packages"
@@ -104,7 +101,8 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = "http://catb.org/gpsd/";
+    homepage = "https://gpsd.gitlab.io/gpsd/index.html";
+    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];

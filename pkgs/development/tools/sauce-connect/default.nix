@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     }
   );
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   patchPhase = lib.optionalString stdenv.isLinux ''
     patchelf \

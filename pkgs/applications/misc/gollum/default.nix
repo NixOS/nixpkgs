@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/v${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich primeos nicknovitski ];
+    maintainers = with maintainers; [ erictapen jgillich nicknovitski ];
     platforms = platforms.unix;
   };
 }

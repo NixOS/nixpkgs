@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.4.0";
+  version = "1.4.2";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "kbr";
     repo = pname;
     rev = version;
-    sha256 = "1p8dqcc75xfhyvc9izjzz8c7qfrdkjkrkj36j7ms5fimn5bwk70q";
+    sha256 = "02w1hwbfwbh5xlq433myzv6ms7jqxg8kn3d6znq4ic22zprzf5r2";
   };
 
   disabled = pythonOlder "3.6";
@@ -18,9 +18,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "fritzconnection" ];
+
   meta = with lib; {
-    description = "Python-Tool to communicate with the AVM FritzBox using the TR-064 protocol";
+    description = "Python-Tool to communicate with the AVM Fritz!Box";
     homepage = "https://github.com/kbr/fritzconnection";
+    changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/changes.html";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda valodim ];
   };

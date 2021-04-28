@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
-  version = "5.8.1";
+  version = "5.9.0";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${version}";
-    sha256 = "0qjlyfxs8s48rs63c2fzspisgq1kk4bwkgnhmh125hgkdhrq2w1c";
+    sha256 = "sha256-tvwpSVgZrfYZHXHN8OQF0Y/aJM03JHGPFok7hUqPE/4=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
   ] ++ lib.optionals stdenv.isDarwin [
     # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.8.1/SuiteSparse_config/SuiteSparse_config.mk#L368
+    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.9.0/SuiteSparse_config/SuiteSparse_config.mk#L368
     "BLAS=-lblas"
     "LAPACK=-llapack"
   ]

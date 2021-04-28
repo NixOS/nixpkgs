@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
+{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
 }:
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl makeWrapper ];
 
-  buildInputs = [ makeWrapper openldap ];
+  buildInputs = [ openldap ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
       cp client/scripts/linux $out/sbin/dhclient-script
       substituteInPlace $out/sbin/dhclient-script \
-        --replace /sbin/ip ${iproute}/sbin/ip
+        --replace /sbin/ip ${iproute2}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
     '';

@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -8,7 +7,6 @@
 , wayland-protocols
 , libwpe
 , libwpe-fdo
-, glib
 , glib-networking
 , webkitgtk
 , makeWrapper

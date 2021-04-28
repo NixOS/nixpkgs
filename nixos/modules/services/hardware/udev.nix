@@ -202,10 +202,24 @@ in
         '';
       };
 
-      extraRules = mkOption {
+      initrdRules = mkOption {
         default = "";
         example = ''
           SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
+        '';
+        type = types.lines;
+        description = ''
+          <command>udev</command> rules to include in the initrd
+          <emphasis>only</emphasis>. They'll be written into file
+          <filename>99-local.rules</filename>. Thus they are read and applied
+          after the essential initrd rules.
+        '';
+      };
+
+      extraRules = mkOption {
+        default = "";
+        example = ''
+          ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="0825", ENV{PULSE_IGNORE}="1"
         '';
         type = types.lines;
         description = ''
@@ -283,6 +297,13 @@ in
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.util-linux udev ];
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
+
+    boot.initrd.extraUdevRulesCommands = optionalString (cfg.initrdRules != "")
+      ''
+        cat <<'EOF' > $out/99-local.rules
+        ${cfg.initrdRules}
+        EOF
+      '';
 
     environment.etc =
       {

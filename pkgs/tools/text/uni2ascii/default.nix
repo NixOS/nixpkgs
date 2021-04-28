@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     similar ASCII characters, e.g. by stripping diacritics.
     '';
     maintainers = with lib.maintainers; [ goibhniu ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

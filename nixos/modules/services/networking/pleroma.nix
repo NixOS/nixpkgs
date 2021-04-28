@@ -75,6 +75,7 @@ in {
         description = "Pleroma user";
         home = cfg.stateDir;
         extraGroups = [ cfg.group ];
+        isSystemUser = true;
       };
       groups."${cfg.group}" = {};
     };

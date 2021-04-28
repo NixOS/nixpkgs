@@ -1,24 +1,30 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, makeWrapper, binutils-unwrapped }:
 
 stdenv.mkDerivation rec {
-  name = "chkrootkit-0.54";
+  pname = "chkrootkit";
+  version = "0.54";
 
   src = fetchurl {
-    url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${name}.tar.gz";
-    sha256 = "sha256-FUySaSH1PbYHKKfLyXyohli2lMFLfSiO/jg+CEmRVgc=";
+    url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${pname}-${version}.tar.gz";
+    sha256 = "01snj54hhgiqzs72hzabq6abcn46m1yckjx7503vcggm45lr4k0m";
   };
 
   # TODO: a lazy work-around for linux build failure ...
   makeFlags = [ "STATIC=" ];
 
-   postPatch = ''
+  nativeBuildInputs = [ makeWrapper ];
+
+  postPatch = ''
     substituteInPlace chkrootkit \
       --replace " ./" " $out/bin/"
-   '';
+  '';
 
   installPhase = ''
     mkdir -p $out/sbin
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
+
+    wrapProgram $out/sbin/chkrootkit \
+      --prefix PATH : "${lib.makeBinPath [ binutils-unwrapped ]}"
   '';
 
   meta = with lib; {

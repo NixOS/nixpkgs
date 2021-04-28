@@ -1,15 +1,37 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm
-, libXmu, libXi, libXp, Xaw3d, libXaw, fig2dev
+{ lib
+, stdenv
+, fetchurl
+, xlibsWrapper
+, makeWrapper
+, libXpm
+, libXmu
+, libXi
+, libXp
+, Xaw3d
+, libXaw
+, fig2dev
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.8";
+  version = "3.2.8a";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    sha256 = "1czamqp0xn0j6qjnasa3fjnrzi072v6qknylr6jrs4gwsfw4ybyw";
+    sha256 = "0y45i1gqg3r0aq55jk047l1hnv90kqis6ld9lppx6c5jhpmc0hxs";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [
+    xlibsWrapper
+    libXpm
+    libXmu
+    libXi
+    libXp
+    Xaw3d
+    libXaw
+  ];
 
   postPatch = ''
     sed -i 's:"fig2dev":"${fig2dev}/bin/fig2dev":' src/main.c
@@ -24,10 +46,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ xlibsWrapper libXpm libXmu libXi libXp Xaw3d libXaw ];
 
   meta = with lib; {
     description = "An interactive drawing tool for X11";

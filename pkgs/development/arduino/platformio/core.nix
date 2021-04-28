@@ -1,5 +1,5 @@
-{ stdenv, lib, buildPythonApplication, fetchpatch
-, bottle, click, colorama, semantic-version
+{ stdenv, lib, buildPythonApplication, bottle
+, click, click-completion, colorama, semantic-version
 , lockfile, pyserial, requests
 , tabulate, pyelftools, marshmallow
 , pytest, tox, jsondiff
@@ -79,8 +79,8 @@ in buildPythonApplication rec {
   inherit version src;
 
   propagatedBuildInputs =  [
-    bottle click colorama git lockfile
-    pyserial requests semantic-version
+    bottle click click-completion colorama git
+    lockfile pyserial requests semantic-version
     tabulate pyelftools marshmallow
   ];
 

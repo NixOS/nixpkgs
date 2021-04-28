@@ -9,10 +9,11 @@
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
+, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
+, nixosTests
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -109,6 +110,7 @@ let
     ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
@@ -121,10 +123,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.8";
+  version = "15.2.10";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
+    sha256 = "1xfijynfb56gydpwh6h4q781xymwxih6nx26idnkcjqih48nsn01";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -133,7 +135,6 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
@@ -146,7 +147,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -160,6 +161,7 @@ in rec {
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
+      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
       # for pybind/rgw to find internal dep
       export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -171,12 +173,10 @@ in rec {
 
     cmakeFlags = [
       "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
@@ -198,9 +198,13 @@ in rec {
 
     doCheck = false; # uses pip to install things from the internet
 
+    # Takes 7+h to build with 2 cores.
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {

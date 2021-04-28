@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "civetweb";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1drnid6gs97cp9zpvsxz42yfj8djmgx98fg9p2993x9mpi547vzv";
+    sha256 = "sha256-6qBsM9zkN838cMtpE3+c7qcrFpZCS/Av7Ch7EWmlnD4=";
   };
 
   makeFlags = [
@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   outputs = [ "out" "dev" ];
+
+  installTargets = [
+    "install-headers"
+    "install-lib"
+    "install-slib"
+    "install"
+  ];
 
   preInstall = ''
     mkdir -p $dev/include

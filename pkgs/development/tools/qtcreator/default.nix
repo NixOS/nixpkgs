@@ -20,12 +20,12 @@ in
 
 mkDerivation rec {
   pname = "qtcreator";
-  version = "4.11.0";
+  version = "4.14.0";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "0ibn7bapw7m26nmxl26dns1hnpawfdqk1i1mgg0gjssja8famszg";
+    sha256 = "07i045mzwbfhwj2jlijhz9xs6ay03qs5dgcw2kzlcr79a69i0h6j";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ] ++
@@ -54,15 +54,13 @@ mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/plugins/plugins.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
+    substituteInPlace src/libs/libs.pro \
+      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
     '' + optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
       --replace '$$clean_path($${LLVM_BINDIR})' '${clang_qt_vendor}/bin'
-
-    # Fix include path to find clang and clang-c include directories.
-    substituteInPlace src/plugins/clangtools/clangtools.pro \
-      --replace 'INCLUDEPATH += $$LLVM_INCLUDEPATH' 'INCLUDEPATH += $$LLVM_INCLUDEPATH ${clang_qt_vendor}'
 
     # Fix paths to libclang library.
     substituteInPlace src/shared/clang/clang_installation.pri \

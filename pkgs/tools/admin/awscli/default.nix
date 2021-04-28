@@ -4,17 +4,9 @@
 , groff
 , less
 }:
-
 let
   py = python3.override {
     packageOverrides = self: super: {
-      rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
-        };
-      });
       # TODO: https://github.com/aws/aws-cli/pull/5712
       colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.3";
@@ -26,21 +18,20 @@ let
     };
   };
 
-in with py.pkgs; buildPythonApplication rec {
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.222"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.19.52"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nVBQ2Lj5+zyvj3g0W3Rxh+CZwG7sbqKehvg6vAhHexs=";
+    sha256 = "sha256-keKyuNeDC/90pn89KjoDTO8AGsmI8nqfDNSeGyM6iHQ=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
-  # https://github.com/aws/aws-cli/pull/5887
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
-      --replace "PyYAML>=3.10,<5.4" "PyYAML>=3.10"
+      --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
 
   # No tests included

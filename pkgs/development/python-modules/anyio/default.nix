@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "2.0.2";
+  version = "2.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "06nazfrm2sclp3lpgsn9wl8vmqxvx36s3gr2gnqz3zhjpf3glkxv";
+    sha256 = "0ram1niv2lg9qj53zssph104a4kxl8f94ilfn6mibn034m3ikcc8";
   };
 
   propagatedBuildInputs = [

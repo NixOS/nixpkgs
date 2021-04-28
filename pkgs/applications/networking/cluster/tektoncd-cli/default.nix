@@ -2,30 +2,34 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.15.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0xb2zlpkh9cwinp6zj2jpv4wlws042ad1fa0wkcnnkh0vjm6mnrl";
+    sha256 = "sha256-7VG9OFt1yVt4st8EM1aiRqLCHwjSqib28GoamoJHHnM=";
   };
 
   vendorSha256 = null;
 
-  doCheck = false;
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}")
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildPhase = ''
-    make bin/tkn
+  # third_party/VENDOR-LICENSE breaks build/check as go files are still included
+  # docs is a tool for generating docs
+  excludedPackages = "\\(third_party\\|cmd/docs\\)";
+
+  preCheck = ''
+    # Change the golden files to match our desired version
+    sed -i "s/dev/${version}/" pkg/cmd/version/testdata/TestGetVersions-*.golden
   '';
 
-  installPhase = ''
-    install bin/tkn -Dt $out/bin
-
-    mkdir -p "$out/share/man/man1"
-    cp docs/man/man1/* "$out/share/man/man1"
+  postInstall = ''
+    installManPage docs/man/man1/*
 
     installShellCompletion --cmd tkn \
       --bash <($out/bin/tkn completion bash) \
@@ -33,15 +37,23 @@ buildGoModule rec {
       --zsh <($out/bin/tkn completion zsh)
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/tkn --help
+    $out/bin/tkn version | grep "Client version: ${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    description = "The Tekton Pipelines cli project provides a CLI for interacting with Tekton";
     homepage = "https://tekton.dev";
+    changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
+    description = "Provides a CLI for interacting with Tekton";
     longDescription = ''
       The Tekton Pipelines cli project provides a CLI for interacting with Tekton!
       For your convenience, it is recommended that you install the Tekton CLI, tkn, together with the core component of Tekton, Tekton Pipelines.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk mstrangfeld ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
   };
 }

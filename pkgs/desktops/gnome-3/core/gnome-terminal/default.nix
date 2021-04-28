@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
+, desktop-file-utils, itstool, wrapGAppsHook, pcre2
 , libxslt, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.38.2";
+  version = "3.38.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "J73cnQumFMhuXstPVMdevDQV4oh6zZFEIFdUj9MgZhg=";
+    sha256 = "EaWw1jXxX9znUINRpRD79OkqpTMVKlD/DHhF4xAuR2Q=";
   };
 
   buildInputs = [

@@ -45,13 +45,16 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview4
     gsettings-desktop-schemas
     gnome3.adwaita-icon-theme
-    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pycairo
   ];
+
+  # gobject-introspection and some other similar setup hooks do not currently work with strictDeps.
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   passthru = {
     updateScript = gnome3.updateScript {

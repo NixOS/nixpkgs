@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/share/xml/docbook/stylesheet/docbook-xsl ${docbook-xsl}/xml/xsl/docbook
   '';
 
-  buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 makeWrapper ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ]
     ++ optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
-  buildFlags = [ "CC=cc" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''

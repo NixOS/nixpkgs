@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "molden";
 
   src = fetchurl {
-    url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";
+    url = "ftp://ftp.cmbi.umcn.nl/pub/molgraph/molden/molden${version}.tar.gz";
     sha256 = "02qi16pz2wffn3cc47dpjqhfafzwfmb79waw4nnhfyir8a4h3cq1";
   };
 
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
      description = "Display and manipulate molecular structures";
-     homepage = "http://www.cmbi.ru.nl/molden/";
+     homepage = "http://www3.cmbi.umcn.nl/molden/";
      license = {
        fullName = "Free for academic/non-profit use";
-       url = "http://www.cmbi.ru.nl/molden/CopyRight.html";
+       url = "http://www3.cmbi.umcn.nl/molden/CopyRight.html";
        free = false;
      };
      platforms = platforms.linux;

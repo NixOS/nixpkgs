@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dh0s9bfh95wmmw8nyf2yw95biq7d9zmrbg8k4vzcyz1if228lac";
   };
 
-  buildInputs = [ unzip apacheAnt jdk ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ apacheAnt jdk ];
   builder = ./builder.sh;
 
   meta = {

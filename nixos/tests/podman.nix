@@ -96,6 +96,15 @@ import ./make-test-python.nix (
           podman.succeed(su_cmd("podman ps | grep sleeping"))
           podman.succeed(su_cmd("podman stop sleeping"))
           podman.succeed(su_cmd("podman rm sleeping"))
+
+      with subtest("Run container with init"):
+          podman.succeed(
+              "tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - busybox"
+          )
+          pid = podman.succeed("podman run --rm busybox readlink /proc/self").strip()
+          assert pid == "1"
+          pid = podman.succeed("podman run --rm --init busybox readlink /proc/self").strip()
+          assert pid == "2"
     '';
   }
 )

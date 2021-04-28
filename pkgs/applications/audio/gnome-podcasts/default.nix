@@ -1,12 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , gettext
-, cargo
-, rustc
 , python3
 , pkg-config
 , glib
@@ -19,9 +17,9 @@
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.4.8";
+stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
+  version = "0.4.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -31,16 +29,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y2332zjq7vf1v38wzwz98fs19vpzy9kl7y0xbdzqr303l59hjb1";
   };
 
-  cargoSha256 = "1jbii9k4bkrivdk1ffr6556q1sgk9j4jbzwnn8vbxmksyl1x328q";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-GInRA/V61r42spb/JYlM8+mATSkmOxdm2zHPRWaKcck=";
+  };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
-    cargo
-    rustc
     python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
     glib
   ];
@@ -58,12 +61,6 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-plugins-good
   ];
 
-  # use Meson/Ninja phases
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-
   # tests require network
   doCheck = false;
 
@@ -75,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Listen to your favorite podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };

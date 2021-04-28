@@ -53,7 +53,8 @@ let
   dynamicLinker =
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
-    else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
+    else if (targetPlatform.libc == "bionic" && targetPlatform.is64bit) then "/system/bin/linker64"
     else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
@@ -64,6 +65,7 @@ let
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
+    else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
@@ -250,11 +252,6 @@ stdenv.mkDerivation {
       fi
     '')
 
-    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
-    + optionalString stdenv.targetPlatform.isMacOS ''
-      echo "-sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
-    ''
-
     ##
     ## User env support
     ##
@@ -304,6 +301,17 @@ stdenv.mkDerivation {
       done
     ''
 
+    + optionalString stdenv.targetPlatform.isDarwin ''
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
+    ''
+
+    ###
+    ### Remove LC_UUID
+    ###
+    + optionalString (stdenv.targetPlatform.isDarwin && !(stdenv.cc.bintools.bintools.isGNU or false)) ''
+      echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
+    ''
+
     + ''
       for flags in "$out/nix-support"/*flags*; do
         substituteInPlace "$flags" --replace $'\n' ' '
@@ -313,6 +321,23 @@ stdenv.mkDerivation {
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
+
+    ###
+    ### Ensure consistent LC_VERSION_MIN_MACOSX
+    ###
+    + optionalString stdenv.targetPlatform.isDarwin (
+      let
+        inherit (stdenv.targetPlatform)
+          darwinPlatform darwinSdkVersion
+          darwinMinVersion darwinMinVersionVariable;
+      in ''
+        export darwinPlatform=${darwinPlatform}
+        export darwinMinVersion=${darwinMinVersion}
+        export darwinSdkVersion=${darwinSdkVersion}
+        export darwinMinVersionVariable=${darwinMinVersionVariable}
+        substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
+      ''
+    )
 
     ##
     ## Extra custom steps

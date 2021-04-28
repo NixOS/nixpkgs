@@ -1,26 +1,28 @@
-{ lib, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
+{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "4B72VYQ+HBvhGQNl577DuZpvWNIvv/6fejRQtVKtFKY=";
+    sha256 = "sha256-orHUovyFFOPRvbfLKQhkfZzM0Gs2Cpe1uJg/6+P8HKY=";
   };
 
-  cargoSha256 = "uOOpDRWPSoH49NTu82rDxxDR/2icoe4ECxVQb/J/45w=";
+  cargoSha256 = "sha256-YDIGZRbszhgWM7iAc2i89jyndZvZZsg63ADQfqFxfXw=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
     installManPage man/just.1
 
-    installShellCompletion --bash --name just.bash completions/just.bash
-    installShellCompletion --fish --name just.fish completions/just.fish
-    installShellCompletion --zsh  --name _just     completions/just.zsh
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh  completions/just.zsh
   '';
 
   checkInputs = [ coreutils bash ];

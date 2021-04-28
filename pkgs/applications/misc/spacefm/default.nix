@@ -13,7 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
-  patches = [ ./glibc-fix.patch ];
+  patches = [
+    # fix compilation error due to missing include
+    ./glibc-fix.patch
+
+    # restrict GDK backends to only X11
+    ./x11-only.patch
+  ];
 
   configureFlags = [
     "--with-bash-path=${pkgs.bash}/bin/bash"

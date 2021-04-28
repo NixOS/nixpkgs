@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amd-libflame";
-  version = "2.2";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
     rev = version;
-    sha256 = "1s8zvq6p843jb52lrbxra7vv0wzmifs4j36z9bp7wf3xr20a0zi5";
+    hash = "sha256-jESae5NqANw90RBbIHH2oGEq5/mudc4IONv50P/AeQ0=";
   };
 
   patches = [

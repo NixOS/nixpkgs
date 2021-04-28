@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation {
   name = "xvfb-run";
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''
     mkdir -p $out/bin
     cp ${xvfb_run} $out/bin/xvfb-run

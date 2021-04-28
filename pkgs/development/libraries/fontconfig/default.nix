@@ -9,6 +9,7 @@
 , gperf
 , dejavu_fonts
 , autoreconfHook
+, CoreFoundation
 }:
 
 stdenv.mkDerivation rec {
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-  ];
+  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
     freetype

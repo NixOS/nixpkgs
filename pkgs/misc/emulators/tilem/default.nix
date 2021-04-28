@@ -3,7 +3,7 @@
 , lib
 , pkg-config
 , glib
-, gnome2
+, gtk2
 , libticonv
 , libtifiles2
 , libticables2
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ba38xzhp3yf21ip3cgql6jzy49jc34sfnjsl4syxyrd81d269zw";
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib gnome2.gtk libticonv libtifiles2 libticables2 libticalcs2 ];
+  buildInputs = [ glib gtk2 libticonv libtifiles2 libticables2 libticalcs2 ];
   NIX_CFLAGS_COMPILE = [ "-lm" ];
   meta = with lib; {
     homepage = "http://lpg.ticalc.org/prj_tilem/";

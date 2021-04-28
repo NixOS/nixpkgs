@@ -213,7 +213,9 @@ in {
       description = "Music Player Daemon Socket";
       wantedBy = [ "sockets.target" ];
       listenStreams = [
-        "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
+        (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
+          then cfg.network.listenAddress
+          else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
       socketConfig = {
         Backlog = 5;

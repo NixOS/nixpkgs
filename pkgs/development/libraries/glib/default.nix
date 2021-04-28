@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.4";
+  version = "2.66.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l9+GcOMvn9T3OSsJgOZh3WJQEgFdWDUNoeWOND9K+YQ=";
+    sha256 = "sha256-l7yH3ZE2VYmvXLv+oldIM66nobcYQP02Xs0oUsdrnIs=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
@@ -99,8 +100,10 @@ stdenv.mkDerivation rec {
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -119,6 +122,8 @@ stdenv.mkDerivation rec {
     # we're using plain
     "-DG_DISABLE_CAST_CHECKS"
   ];
+
+  hardeningDisable = [ "pie" ];
 
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
@@ -144,7 +149,7 @@ stdenv.mkDerivation rec {
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
-  checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"

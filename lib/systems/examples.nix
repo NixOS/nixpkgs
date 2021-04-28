@@ -21,14 +21,10 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
-  ppc64-elfv1 = {
-    config = "powerpc64-unknown-linux-elfv1";
+  ppc64 = {
+    config = "powerpc64-unknown-linux-gnu";
+    gcc = { abi = "elfv2"; }; # for gcc configuration
   };
-  ppc64-elfv2 = {
-    config = "powerpc64-unknown-linux-elfv2";
-  };
-  ppc64 = ppc64-elfv2; # default to modern elfv2
-
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
     gcc = { abi = "elfv2"; }; # for gcc configuration
@@ -60,6 +56,7 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
+    rustc.config = "armv7-linux-androideabi";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
@@ -67,6 +64,7 @@ rec {
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
+    rustc.config = "aarch64-linux-android";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
@@ -219,6 +217,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 
@@ -228,6 +227,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 
@@ -250,9 +250,17 @@ rec {
 
   # BSDs
 
-  amd64-netbsd = {
+  amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
+
+  x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
     libc = "nblibc";
+  };
+
+  x86_64-netbsd-llvm = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+    useLLVM = true;
   };
 
   #

@@ -12,22 +12,24 @@
 , libgee
 , json-glib
 , glib
+, glib-networking
 , sqlite
 , libsoup
 , gtk3
 , pantheon /* granite, icons, maintainers */
 , webkitgtk
+, libpeas
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.5.7";
+  version = "2.6.9";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "0s2f9q7i31c2splflfnaiqviwnxbsp2zvibr70xafhbhnkmzlrsk";
+    sha256 = "17ij017x2cplqhway8376k8mmrll4w1jfwhf7ixldq9g0q2inzd8";
   };
 
   nativeBuildInputs = [
@@ -43,10 +45,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     evolution-data-server
     glib
+    glib-networking
     gtk3
     json-glib
     libgee
     libical
+    libpeas
     libsoup
     pantheon.elementary-icon-theme
     pantheon.granite
@@ -64,6 +68,10 @@ stdenv.mkDerivation rec {
       # the theme is hardcoded
       --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
     )
+  '';
+
+  postFixup = ''
+    ln -s $out/bin/com.github.alainm23.planner $out/bin/planner
   '';
 
   meta = with lib; {

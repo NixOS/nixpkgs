@@ -132,7 +132,8 @@ stdenv.mkDerivation {
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
+                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
+                 ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
     maintainers = with maintainers; [ peti ];
   };
 
@@ -149,6 +150,9 @@ stdenv.mkDerivation {
     cat << EOF >> user-config.jam
     using gcc : cross : ${stdenv.cc.targetPrefix}c++ ;
     EOF
+    # Build b2 with buildPlatform CC/CXX.
+    sed '2i export CC=$CC_FOR_BUILD; export CXX=$CXX_FOR_BUILD' \
+      -i ./tools/build/src/engine/build.sh
   '';
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin

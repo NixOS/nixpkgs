@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pspg";
-  version = "4.0.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YQrANrCd0nFdn98LfHH/Ishm+fDb12cUAkxlwtZ1ng8=";
+    sha256 = "sha256-RWezBNqjKybMtfpxPhDg2ysb4ksKphTPdTNTwCe4pas=";
   };
 
   nativeBuildInputs = [ pkg-config ];

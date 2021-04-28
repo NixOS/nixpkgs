@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };
 
-  buildInputs = [ perlPackages.perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl ];
 
   dontBuild = true;
 

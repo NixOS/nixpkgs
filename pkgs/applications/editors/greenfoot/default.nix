@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     license = licenses.gpl2ClasspathPlus;
-    maintainers = [ maintainers.charvp ];
+    maintainers = [ maintainers.chvp ];
     platforms = platforms.unix;
   };
 }

@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "tests" "--ignore=docs" ];
+  pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 
   meta = with lib; {

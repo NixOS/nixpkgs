@@ -1,22 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "betterdiscordctl";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${version}";
-    sha256 = "0qpmm5l8jhm7k0kqblc0bnr9fl4b6z8iddhjar03bb4kqgr962fa";
+    sha256 = "12c3phcfwl4p2jfh22ihm57vxw4nq5kwqirb7y4gzc91swfh5yj1";
   };
-
-  patches = [
-    (fetchpatch { # Required till https://github.com/bb010g/betterdiscordctl/pull/67 is merged upstream.
-      url = "https://github.com/bb010g/betterdiscordctl/pull/67/commits/f1c7170fc2626d9aec4d244977b5a73c401aa1d4.patch";
-      sha256 = "003zqd9ljb9h674sjwjvvdfs7q4cw0p1ydg3lax132vb4vz9k0zi";
-    })
-  ];
 
   preBuild = "sed -i 's/^nix=$/&yes/g;s/^DISABLE_UPGRADE=$/&yes/g' ./betterdiscordctl";
 

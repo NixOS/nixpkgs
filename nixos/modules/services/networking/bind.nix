@@ -8,6 +8,35 @@ let
 
   bindUser = "named";
 
+  bindZoneOptions = {
+    name = mkOption {
+      type = types.str;
+      description = "Name of the zone.";
+    };
+    master = mkOption {
+      description = "Master=false means slave server";
+      type = types.bool;
+    };
+    file = mkOption {
+      type = types.either types.str types.path;
+      description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+    };
+    masters = mkOption {
+      type = types.listOf types.str;
+      description = "List of servers for inclusion in stub and secondary zones.";
+    };
+    slaves = mkOption {
+      type = types.listOf types.str;
+      description = "Addresses who may request zone transfers.";
+      default = [];
+    };
+    extraConfig = mkOption {
+      type = types.str;
+      description = "Extra zone config to be appended at the end of the zone section.";
+      default = "";
+    };
+  };
+
   confFile = pkgs.writeText "named.conf"
     ''
       include "/etc/bind/rndc.key";
@@ -72,6 +101,7 @@ in
 
       cacheNetworks = mkOption {
         default = ["127.0.0.0/24"];
+        type = types.listOf types.str;
         description = "
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
@@ -83,6 +113,7 @@ in
 
       blockedNetworks = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = "
           What networks are just blocked.
         ";
@@ -90,6 +121,7 @@ in
 
       ipv4Only = mkOption {
         default = false;
+        type = types.bool;
         description = "
           Only use ipv4, even if the host supports ipv6.
         ";
@@ -97,6 +129,7 @@ in
 
       forwarders = mkOption {
         default = config.networking.nameservers;
+        type = types.listOf types.str;
         description = "
           List of servers we should forward requests to.
         ";
@@ -120,10 +153,9 @@ in
 
       zones = mkOption {
         default = [];
+        type = types.listOf (types.submodule [ { options = bindZoneOptions; } ]);
         description = "
           List of zones we claim authority over.
-            master=false means slave server; slaves means addresses
-           who may request zone transfer.
         ";
         example = [{
           name = "example.com";

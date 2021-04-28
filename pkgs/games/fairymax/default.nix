@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp ${ini} fmax.ini
   '';
   buildPhase = ''
-    gcc *.c -o fairymax -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
+    $CC *.c -Wno-return-type -o fairymax -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
   '';
   installPhase = ''
     mkdir -p "$out"/{bin,share/fairymax}
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.free ;
     maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
   };
 }

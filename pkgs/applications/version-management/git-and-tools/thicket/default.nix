@@ -8,13 +8,13 @@ let
 
 in crystal.buildCrystalPackage rec {
   pname = "thicket";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hkmmssiwipx373d0zw9a2yn72gqzqzcvwkqbs522m5adz6qmkzw";
+    sha256 = "sha256-A89E0CbV7VFB7W4ycFcZloP0J/d42agEuD+hs9a6a6E=";
   };
 
   format = "shards";

@@ -19,8 +19,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = with stdenv.targetPlatform; !isRiscV &&
-                (system == "powerpc64-linux" -> parsed.abi.name != "elfv1");
+    useMusl = !stdenv.targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''

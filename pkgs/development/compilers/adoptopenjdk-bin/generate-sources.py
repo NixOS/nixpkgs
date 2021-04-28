@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15")
+releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15", "openjdk16")
 oses = ("mac", "linux")
 types = ("jre", "jdk")
 impls = ("hotspot", "openj9")
@@ -63,3 +63,4 @@ for release in releases:
 
 with open("sources.json", "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
+    f.write('\n')

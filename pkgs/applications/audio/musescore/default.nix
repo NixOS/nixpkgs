@@ -3,17 +3,18 @@
 , portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
 , qtquickcontrols2, qtscript, qtsvg, qttools
 , qtwebengine, qtxmlpatterns
+, nixosTests
 }:
 
 mkDerivation rec {
   pname = "musescore";
-  version = "3.6";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-0M+idYnrgXyH6WLp+2jIYRnFzTB93v+dG1XHmSNyPjE=";
+    sha256 = "sha256-GBGAD/qdOhoNfDzI+O0EiKgeb86GFJxpci35T6tZ+2s=";
   };
 
   patches = [
@@ -39,6 +40,8 @@ mkDerivation rec {
     qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
     qtscript qtsvg qttools qtwebengine qtxmlpatterns
   ];
+
+  passthru.tests = nixosTests.musescore;
 
   meta = with lib; {
     description = "Music notation and composition software";

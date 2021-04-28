@@ -1,27 +1,12 @@
 { lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
 
-let
-
-  runCommand' = runLocal: stdenv: name: env: buildCommand:
-    stdenv.mkDerivation ({
-      name = lib.strings.sanitizeDerivationName name;
-      inherit buildCommand;
-      passAsFile = [ "buildCommand" ];
-    }
-    // (lib.optionalAttrs runLocal {
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-       })
-    // env);
-
-in
-
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
   * `name'.  The attributes in `env' are added to the environment
-  * prior to running the command. By default `runCommand' runs using
-  * stdenv with no compiler environment. `runCommandCC`
+  * prior to running the command. By default `runCommand` runs in a
+  * stdenv with no compiler environment. `runCommandCC` uses the default
+  * stdenv, `pkgs.stdenv`.
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
@@ -42,12 +27,63 @@ rec {
   runCommand = runCommandNoCC;
   runCommandLocal = runCommandNoCCLocal;
 
-  runCommandNoCC = runCommand' false stdenvNoCC;
-  runCommandNoCCLocal = runCommand' true stdenvNoCC;
+  runCommandNoCC = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
+  runCommandNoCCLocal = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = true;
+    inherit name;
+    derivationArgs = env;
+  };
 
-  runCommandCC = runCommand' false stdenv;
+  runCommandCC = name: env: runCommandWith {
+    stdenv = stdenv;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
+
+  /* Generalized version of the `runCommand`-variants
+   * which does customized behavior via a single
+   * attribute set passed as the first argument
+   * instead of having a lot of variants like
+   * `runCommand*`. Additionally it allows changing
+   * the used `stdenv` freely and has a more explicit
+   * approach to changing the arguments passed to
+   * `stdenv.mkDerivation`.
+   */
+  runCommandWith =
+    let
+      # prevent infinite recursion for the default stdenv value
+      defaultStdenv = stdenv;
+    in
+    { stdenv ? defaultStdenv
+    # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
+    , runLocal ? false
+    # whether to build this derivation locally instead of substituting
+    , derivationArgs ? {}
+    # extra arguments to pass to stdenv.mkDerivation
+    , name
+    # name of the resulting derivation
+    }: buildCommand:
+    stdenv.mkDerivation ({
+      name = lib.strings.sanitizeDerivationName name;
+      inherit buildCommand;
+      passAsFile = [ "buildCommand" ]
+        ++ (derivationArgs.passAsFile or []);
+    }
+    // (lib.optionalAttrs runLocal {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+       })
+    // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
+
 
   /* Writes a text file to the nix store.
    * The contents of text is added to the file in the store.

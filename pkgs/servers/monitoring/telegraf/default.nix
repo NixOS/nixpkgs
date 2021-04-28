@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.17.0";
+  version = "1.18.1";
 
   excludedPackages = "test";
 
@@ -12,14 +12,14 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "1j3wi398vcvlnf1q335hhbw6bq69qclak92sg2na05cl4snw68y0";
+    sha256 = "sha256-iFigbnqUXWQrhDovwQYZsr8llkB9553c5LgcKJ78yZ4=";
   };
 
-  vendorSha256 = "0vb1gvmj7pmz4dljyk91smkn8japmv7mc3mgb0s1imvxala8qq83";
+  vendorSha256 = "sha256-m53S/L71nyioCBbIDDAWEnqStBdqTFGq16y5ozsXq1c=";
 
-  buildFlagsArray = [ ''-ldflags=
-    -w -s -X main.version=${version}
-  '' ];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags=-w -s -X main.version=${version}")
+  '';
 
   passthru.tests = { inherit (nixosTests) telegraf; };
 

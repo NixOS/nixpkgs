@@ -108,7 +108,8 @@ stdenv.mkDerivation (
   {
     name = name + (if src ? version then "-" + src.version else "");
 
-    buildInputs = [ant jre zip unzip] ++ lib.optional (args ? buildInputs) args.buildInputs ;
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ant jre zip] ++ lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
       mkdir -p $out/nix-support

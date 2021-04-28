@@ -75,6 +75,21 @@ let
       '';
     };
 
+    artifactory = {
+      exporterConfig = {
+        enable = true;
+        artiUsername = "artifactory-username";
+        artiPassword = "artifactory-password";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-artifactory-exporter.service")
+        wait_for_open_port(9531)
+        succeed(
+            "curl -sSf http://localhost:9531/metrics | grep -q 'artifactory_up'"
+        )
+      '';
+    };
+
     bind = {
       exporterConfig = {
         enable = true;
@@ -103,6 +118,8 @@ let
       metricProvider = {
         services.bird2.enable = true;
         services.bird2.config = ''
+          router id 127.0.0.1;
+
           protocol kernel MyObviousTestString {
             ipv4 {
               import all;
@@ -117,7 +134,27 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-bird-exporter.service")
         wait_for_open_port(9324)
-        succeed("curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'")
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'"
+        )
+      '';
+    };
+
+    bitcoin = {
+      exporterConfig = {
+        enable = true;
+        rpcUser = "bitcoinrpc";
+        rpcPasswordFile = pkgs.writeText "password" "hunter2";
+      };
+      metricProvider = {
+        services.bitcoind.default.enable = true;
+        services.bitcoind.default.rpc.users.bitcoinrpc.passwordHMAC = "e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-bitcoin-exporter.service")
+        wait_for_unit("bitcoind-default.service")
+        wait_for_open_port(9332)
+        succeed("curl -sSf http://localhost:9332/metrics | grep -q '^bitcoin_blocks '")
       '';
     };
 
@@ -186,6 +223,22 @@ let
       '';
     };
 
+    # Access to WHOIS server is required to properly test this exporter, so
+    # just perform basic sanity check that the exporter is running and returns
+    # a failure.
+    domain = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-domain-exporter.service")
+        wait_for_open_port(9222)
+        succeed(
+            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep -q 'domain_probe_success 0'"
+        )
+      '';
+    };
+
     dovecot = {
       exporterConfig = {
         enable = true;
@@ -218,6 +271,29 @@ let
       '';
     };
 
+    jitsi = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
+        services.jitsi-videobridge = {
+          enable = true;
+          apis = [ "colibri" "rest" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("jitsi-videobridge2.service")
+        wait_for_open_port(8080)
+        wait_for_unit("prometheus-jitsi-exporter.service")
+        wait_for_open_port(9700)
+        wait_until_succeeds(
+            'journalctl -eu prometheus-jitsi-exporter.service -o cat | grep -q "key=participants"'
+        )
+        succeed("curl -sSf 'localhost:9700/metrics' | grep -q 'jitsi_participants 0'")
+      '';
+    };
+
     json = {
       exporterConfig = {
         enable = true;
@@ -245,6 +321,24 @@ let
         succeed(
             "curl -sSf 'localhost:7979/probe?target=http://localhost' | grep -q 'json_test_metric 1'"
         )
+      '';
+    };
+
+    knot = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          extraArgs = [ "-v" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_unit("prometheus-knot-exporter.service")
+        wait_for_open_port(9433)
+        succeed("curl -sSf 'localhost:9433' | grep -q 'knot_server_zone_count 0.0'")
       '';
     };
 
@@ -547,6 +641,66 @@ let
       '';
     };
 
+    openldap = {
+      exporterConfig = {
+        enable = true;
+        ldapCredentialFile = "${pkgs.writeText "exporter.yml" ''
+          ldapUser: "cn=root,dc=example"
+          ldapPass: "notapassword"
+        ''}";
+      };
+      metricProvider = {
+        services.openldap = {
+          enable = true;
+          settings.children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/db/openldap";
+                olcSuffix = "dc=example";
+                olcRootDN = {
+                  # cn=root,dc=example
+                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+                };
+                olcRootPW = {
+                  path = "${pkgs.writeText "rootpw" "notapassword"}";
+                };
+              };
+            };
+            "olcDatabase={2}monitor".attrs = {
+              objectClass = [ "olcDatabaseConfig" ];
+              olcDatabase = "{2}monitor";
+              olcAccess = [ "to dn.subtree=cn=monitor by users read" ];
+            };
+          };
+          declarativeContents."dc=example" = ''
+            dn: dc=example
+            objectClass: domain
+            dc: example
+
+            dn: ou=users,dc=example
+            objectClass: organizationalUnit
+            ou: users
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-openldap-exporter.service")
+        wait_for_open_port(389)
+        wait_for_open_port(9330)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9330/metrics | grep -q 'openldap_scrape{result=\"ok\"} 1'"
+        )
+      '';
+    };
+
     openvpn = {
       exporterConfig = {
         enable = true;
@@ -799,6 +953,22 @@ let
         wait_for_unit("prometheus-surfboard-exporter.service")
         wait_for_open_port(9239)
         succeed("curl -sSf localhost:9239/metrics | grep -q 'surfboard_up 1'")
+      '';
+    };
+
+    systemd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = { };
+      exporterTest = ''
+        wait_for_unit("prometheus-systemd-exporter.service")
+        wait_for_open_port(9558)
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep -q '{}'".format(
+                'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
       '';
     };
 

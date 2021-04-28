@@ -14,8 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-TqWe4eARQmmWcwnvb6BIZrzGeKMpiIObPv0cW1JvWj4=";
 
-  buildInputs = with stdenv;
-    lib.optionals isDarwin [ CoreFoundation libiconv libresolv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
 
   meta = with lib; {
     description = "Git repository summary on your terminal";

@@ -5,7 +5,7 @@
 , fftw
 , fftwFloat
 , enablePython ? false
-, pythonPackages
+, pythonPackages ? null
 , llvmPackages
 }:
 let

@@ -1,9 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, mkDerivation
 , makeWrapper
-, fetchFromGitHub
 # Dynamic libraries
 , alsaLib
 , atk
@@ -25,21 +23,19 @@
 , pciutils
 , procps
 , util-linux
-, qttools
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.4.57862.0110";
+  version = "5.6.16775.0418";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "sha256-ZAwXhbZ3nT6PGkSC1vnX2y/XUOZfped0r3OuedI62gY=";
+      sha256 = "twtxzniojgyLTx6Kda8Ej96uyw2JQB/jIhLdTgTqpCo=";
     };
   };
-  dontUnpack = true;
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
@@ -69,8 +65,10 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation {
-  name = "zoom-${version}";
+in stdenv.mkDerivation rec {
+  pname = "zoom";
+  inherit version;
+  src = srcs.${stdenv.hostPlatform.system};
 
   dontUnpack = true;
 
@@ -81,7 +79,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${srcs.${stdenv.hostPlatform.system}}
+    tar -C $out -xf ${src}
     mv $out/usr/* $out/
     runHook postInstall
   '';
@@ -102,9 +100,13 @@ in stdenv.mkDerivation {
     rm $out/bin/zoom
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
+    # Also clear Qt environment variables to prevent
+    # zoom from tripping over "foreign" Qt ressources.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
       --run "cd $out/opt/zoom" \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps qttools.dev util-linux ]} \
+      --unset QML2_IMPORT_PATH \
+      --unset QT_PLUGIN_PATH \
+      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatiblity: we used to call it zoom-us

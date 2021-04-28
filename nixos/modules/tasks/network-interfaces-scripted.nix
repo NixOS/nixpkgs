@@ -101,7 +101,7 @@ let
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
 
             serviceConfig = {
               Type = "oneshot";
@@ -185,7 +185,7 @@ let
             # Restart rather than stop+start this unit to prevent the
             # network from dying during switch-to-configuration.
             stopIfChanged = false;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
@@ -258,7 +258,7 @@ let
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -284,7 +284,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
@@ -372,7 +372,7 @@ let
             wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            path = [ pkgs.iproute2 config.virtualisation.vswitch.package ];
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
@@ -413,7 +413,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute pkgs.gawk ];
+            path = [ pkgs.iproute2 pkgs.gawk ];
             script = ''
               echo "Destroying old bond ${n}..."
               ${destroyBond n}
@@ -451,7 +451,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
@@ -476,7 +476,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
@@ -504,7 +504,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"

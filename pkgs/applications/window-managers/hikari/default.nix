@@ -1,7 +1,7 @@
 { lib, stdenv, fetchzip,
   pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
-  libucl, wayland, wayland-protocols, wlroots,
+  libucl, wayland, wayland-protocols, wlroots, mesa,
   features ? {
     gammacontrol = true;
     layershell   = true;
@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     pango
     pixman
     libucl
+    mesa # for libEGL
     wayland
     wayland-protocols
     wlroots
@@ -42,27 +43,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # Must replace GNU Make by bmake
-  buildPhase = with lib; concatStringsSep " " (
-    [ "bmake" "-j$NIX_BUILD_CORES" "PREFIX=$out" ]
+  makeFlags = with lib; [ "PREFIX=$(out)" ]
     ++ optional stdenv.isLinux "WITH_POSIX_C_SOURCE=YES"
     ++ mapAttrsToList (feat: enabled:
          optionalString enabled "WITH_${toUpper feat}=YES"
-       ) features
-  );
+       ) features;
 
   # Can't suid in nix store
   # Run hikari as root (it will drop privileges as early as possible), or create
   # a systemd unit to give it the necessary permissions/capabilities.
   patchPhase = ''
     substituteInPlace Makefile --replace '4555' '555'
-  '';
-
-  installPhase = ''
-    bmake \
-      PREFIX=$out \
-      install
-    runHook postInstall
   '';
 
   meta = with lib; {

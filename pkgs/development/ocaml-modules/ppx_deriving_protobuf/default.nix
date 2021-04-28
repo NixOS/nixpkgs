@@ -1,22 +1,19 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, cppo, ppx_tools, ppx_deriving
-, ppxfind }:
-
-if lib.versionAtLeast ocaml.version "4.11"
-then throw "ppx_deriving_protobuf is not available for OCaml ${ocaml.version}"
-else
+{ lib, fetchurl, buildDunePackage, cppo, ppx_deriving
+, ppxlib
+}:
 
 buildDunePackage rec {
   pname = "ppx_deriving_protobuf";
-  version = "2.7";
+  version = "3.0.0";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0aq4f3gbkhhai0c8i5mcw2kpqy8l610f4dknwkrxh0nsizwbwryn";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_deriving_protobuf/releases/download/v${version}/ppx_deriving_protobuf-v${version}.tbz";
+    sha256 = "1dc1vxnkd0cnrgac5v3zbaj2lq1d2w8118mp1cmsdxylp06yz1sj";
   };
 
-  buildInputs = [ cppo ppx_tools ppxfind ppx_deriving ];
+  buildInputs = [ cppo ppxlib ppx_deriving ];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";

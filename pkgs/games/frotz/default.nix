@@ -8,7 +8,7 @@
 , lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "2.52";
+  version = "2.53";
   pname = "frotz";
 
   src = fetchFromGitLab {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
-    sha256 = "11ca1dz31b7s5vxjqncwjwmbbcr2m5v2rxjn49g4gnvwd6mqw48y";
+    sha256 = "sha256-xVC/iE71W/Wdy5aPGH9DtcVAHWCcg3HkEA3iDV6OYUo=";
   };
 
   buildInputs = [ libao libmodplug libsamplerate libsndfile libvorbis ncurses ];

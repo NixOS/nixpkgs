@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "BSlizr";
-  version = "1.2.8";
+  version = "1.2.12";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
     rev = version;
-    sha256 = "1f7xrljvsy7a1p8c7wln2zhwarl3ara7gbjxkpyh47wfdpigpdb0";
+    sha256 = "sha256-vPkcgG+pAfjsPRMyxdMRUxWGch+RG+pdaAcekP5pKEA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

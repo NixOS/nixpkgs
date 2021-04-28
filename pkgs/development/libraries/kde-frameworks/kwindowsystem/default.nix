@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   libpthreadstubs, libXdmcp,
   qtbase, qttools, qtx11extras
@@ -7,10 +7,6 @@
 
 mkDerivation {
   name = "kwindowsystem";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-    broken = lib.versionOlder qtbase.version "5.7.0";
-  };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];

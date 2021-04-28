@@ -11,7 +11,7 @@ in symlinkJoin {
 
   paths = [ gimp ] ++ selectedPlugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     for each in gimp-${versionBranch} gimp-console-${versionBranch}; do

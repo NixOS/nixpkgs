@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, fetchgit, crystal, makeWrapper, nix-prefetch-git }:
+{ lib, fetchFromGitHub, crystal, makeWrapper, nix-prefetch-git }:
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "crystal2nix";
     rev = "v${version}";
-    sha256 = "sha256-K1ElG8VC/D0axmSRaufH3cE50xNQisAmFucDkV+5O0s=";
+    sha256 = "sha256-LKZychkhWy/rVdrP3Yo6g8CL1pGdiZlBykzFjnWh0fg=";
   };
 
   format = "shards";

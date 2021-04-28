@@ -52,6 +52,9 @@ in (buildEnv {
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
 
+  # This is set primarily to help find-tarballs.nix to do its job
+  passthru.packages = pkgList.all;
+
   postBuild = ''
     cd "$out"
     mkdir -p ./bin

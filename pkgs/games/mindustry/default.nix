@@ -29,27 +29,27 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "123.1";
+  version = "126.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "0qpgilb0v93zcik12idwzdd5b5lw74431iywq4d55gn5i6gb6bh1";
+    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "146wvm0dahygnq327pspr62lq29irwrhc8ylgwdwwasrvlsscdp5";
+    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # this is never pinned in upstream, see https://github.com/Anuken/Arc/issues/39
-    rev = "73860909189c9c42924eb82e9b4a0eab2a4d5e1c";
-    sha256 = "1gm3r16a539hm8jbc14mfxn7v88dv40vr7nzwmpifnz54qarkg3m";
+    rev = "b33dfc5178fcb2613ee68136f4a4869cadc0b06a";
+    sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
   };
 
   patches = [
@@ -114,7 +114,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "18r2gd1y79cy571f5hvlablfwrlz10cf7ssc9ckkvkk92i0323gk";
+    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
   };
 
 in
@@ -191,6 +191,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin
+    # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
+      || true;
   };
 }

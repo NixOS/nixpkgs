@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "UTF-8 with C++ in a Portable Way";
     license = licenses.free;
     maintainers = with maintainers; [ jobojeha ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

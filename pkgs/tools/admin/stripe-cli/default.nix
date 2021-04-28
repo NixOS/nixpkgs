@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.5.5";
+  version = "1.5.12";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r0szzw3xl9cn5vcqgn6sc4wbk2j17r1rhg14qgix835lzp9wpdv";
+    sha256 = "sha256-eMxukwaJqsXL0+Euvk5mM+pcAsT3GsF9filuyRL4tXg=";
   };
 
-  vendorSha256 = "05cyn9cgmijj6dl075slwm5qc6fj6m5sm414wqm50xz2fjs0400r";
+  vendorSha256 = "sha256-e7EZ5o30vDpS904/R1y7/Mds7HxQNmsIftrnc1Bj2bc=";
 
   subPackages = [
     "cmd/stripe"

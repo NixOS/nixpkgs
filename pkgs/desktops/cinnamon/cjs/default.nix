@@ -2,7 +2,8 @@
 , fetchFromGitHub
 , gobject-introspection
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , python3
 , cairo
@@ -27,14 +28,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cjs-unstable";
-  version = "2020-10-19";
+  pname = "cjs";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = "befc11adb5ba10681464e6fa81b1a79f108ce61c";
-    hash = "sha256-F2t8uKV2r29NxX2+3mYp5x1bug2lwihJZTK1dSS8rPg=";
+    rev = version;
+    hash = "sha256-6+zlWL0DmyP+RFp1ECA4XGbgYUlsMqqyTd6z46w99Ug=";
   };
 
   outputs = [ "out" "dev" ];

@@ -1,6 +1,7 @@
 { fetchurl
 , lib, stdenv
 , pkg-config
+, fetchpatch
 , meson
 , ninja
 , glib
@@ -41,6 +42,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1f9b52vmwnq7s51vj26w2618dn2ph5g12ibbkbyk6fvxcgd7iryn";
   };
+
+  patches = [
+    # Fix tests with e-d-s linked with libphonenumber support
+    # https://gitlab.gnome.org/GNOME/folks/merge_requests/40
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/folks/commit/6d443480a137f6a6ff345b21bf3cb31066eefbcd.patch";
+      sha256 = "D/Y2g12TT0qrcH+iJ2umu4Hmp0EJ3Hoedh0H3aWI+HY=";
+    })
+  ];
 
   mesonFlags = [
     "-Ddocs=true"
@@ -91,6 +101,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  # Prevents e-d-s add-contacts-stress-test from timing out
+  checkPhase = ''
+    runHook preCheck
+    meson test --timeout-multiplier 4
+    runHook postCheck
+  '';
 
   postPatch = ''
     chmod +x meson_post_install.py

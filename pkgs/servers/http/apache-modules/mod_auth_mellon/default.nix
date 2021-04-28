@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "mod_auth_mellon";
-  version = "0.13.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
-    owner = "UNINETT";
+    owner = "latchset";
     repo = "mod_auth_mellon";
     rev = "v${version}";
-    sha256 = "16b43y5a5p8g1287x04rv923230cy8dfs2j18cx6208n4bv4dvnk";
+    sha256 = "03bkvqkmqq72ff1a8cpvpcxngnlz1p6433y2fkkynpjfr19cna2s";
   };
 
   patches = [

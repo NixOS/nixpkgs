@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, yacc, flex, libusb-compat-0_1, libelf, libftdi1, readline
+{ lib, stdenv, fetchurl, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
 # docSupport is a big dependency, disabled by default
 , docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals docSupport "--enable-doc";
 
-  buildInputs = [ yacc flex libusb-compat-0_1 libelf libftdi1 readline ]
+  buildInputs = [ bison flex libusb-compat-0_1 libelf libftdi1 readline ]
     ++ lib.optionals docSupport [ texLive texinfo texi2html ];
 
   meta = with lib; {

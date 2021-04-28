@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "20.12.1";
+  version = "21.3.0";
 
   # Only 3.8.0 and beyond are supported
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "17yl67dgw75dghljcfwzblm11kqnh6sxf47w62mxz86aq9zrvcxd";
+    sha256 = "sha256-2vW4BN5qwJZYQ8FU3bpSA2v1dX6TOhcHDbHRMDPoRAs=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    awesomeversion
     pytest-asyncio
     pytestCheckHook
   ];

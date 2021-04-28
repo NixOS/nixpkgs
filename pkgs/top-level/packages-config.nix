@@ -34,7 +34,6 @@
     "nvidiaPackages"
     "sourceHanPackages"
     "atomPackages"
-    "emacs26.pkgs"
     "emacs27.pkgs"
     "steamPackages"
     "ut2004Packages"

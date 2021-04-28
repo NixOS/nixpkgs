@@ -1,24 +1,20 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "ffuf";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XSdFLfSYDdKI7BYo9emYanvZeSFGxiNLYxuw5QKAyRc=";
+    sha256 = "sha256-0ckpEiXxen2E9IzrsmKoEKagoJ5maAbH1tHKgQjoCjo=";
   };
 
   vendorSha256 = "sha256-szT08rIozAuliOmge5RFX4NeVrJ2pCVyfotrHuvc0UU=";
-
-  # tests don't pass due to an issue with the memory addresses
-  # https://github.com/ffuf/ffuf/issues/367
-  doCheck = false;
 
   meta = with lib; {
     description = "Fast web fuzzer written in Go";

@@ -7,7 +7,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  gummibootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -30,6 +30,17 @@ let
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
+
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+    nativeBuildInputs = [ pkgs.mypy ];
+  } ''
+    install -m755 ${systemdBootBuilder} $out
+    mypy \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
 in {
 
   imports =
@@ -131,7 +142,7 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     system = {
-      build.installBootLoader = gummibootBuilder;
+      build.installBootLoader = checkedSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 

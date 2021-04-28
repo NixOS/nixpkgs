@@ -1,4 +1,4 @@
-{ buildPecl, lib, fetchgit, php, pkgs }:
+{ buildPecl, lib, fetchgit, php, cyrus_sasl, zlib, pkg-config, libmemcached }:
 let
   pname = "memcached";
   version = "3.1.5";
@@ -19,12 +19,12 @@ buildPecl {
   ];
 
   configureFlags = [
-    "--with-zlib-dir=${pkgs.zlib.dev}"
-    "--with-libmemcached-dir=${pkgs.libmemcached}"
+    "--with-zlib-dir=${zlib.dev}"
+    "--with-libmemcached-dir=${libmemcached}"
   ];
 
-  nativeBuildInputs = [ pkgs.pkg-config ];
-  buildInputs = with pkgs; [ cyrus_sasl zlib ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ cyrus_sasl zlib ];
 
   meta.maintainers = lib.teams.php.members;
 }

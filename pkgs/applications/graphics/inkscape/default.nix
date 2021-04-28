@@ -7,6 +7,7 @@
 , fetchurl
 , gettext
 , gdl
+, ghostscript
 , glib
 , glib-networking
 , glibmm
@@ -74,6 +75,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs share/extensions
+    substituteInPlace share/extensions/eps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.py \
+      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
   '';

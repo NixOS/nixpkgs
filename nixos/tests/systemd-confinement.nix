@@ -150,6 +150,7 @@ import ./make-test-python.nix {
 
     config.users.groups.chroot-testgroup = {};
     config.users.users.chroot-testuser = {
+      isSystemUser = true;
       description = "Chroot Test User";
       group = "chroot-testgroup";
     };

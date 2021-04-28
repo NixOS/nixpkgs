@@ -1,6 +1,6 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
 , darwin
-, pytest
+, pytestCheckHook
 , mock
 , ipaddress
 , unittest2
@@ -23,18 +23,24 @@ buildPythonPackage rec {
   #  - some mount paths are required in the build sanbox to make the tests succeed:
   #    https://github.com/giampaolo/psutil/issues/1912
   doCheck = false;
-  checkInputs = [ pytest ]
+  checkInputs = [ pytestCheckHook ]
   ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sanboxing (missing specific errors)
+  pytestFlagsArray = [
+    "$out/${python.sitePackages}/psutil/tests/test_system.py"
+  ];
 
   # Note: $out must be referenced as test import paths are relative
-  checkPhase = ''
-    pytest $out/${python.sitePackages}/psutil/tests/test_system.py \
-      -k 'not user and not disk_io_counters and not sensors_battery and not cpu_times'
-  '';
+  disabledTests = [
+    "user"
+    "disk_io_counters"
+    "sensors_battery"
+    "cpu_times"
+    "cpu_freq"
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.IOKit ];
 

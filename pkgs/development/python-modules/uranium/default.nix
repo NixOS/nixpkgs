@@ -1,8 +1,8 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, cmake
-, pyqt5, numpy, scipy, shapely, libarcus, doxygen, gettext, pythonOlder }:
+, pyqt5, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
-  version = "4.7.1";
+  version = "4.9.0";
   pname = "uranium";
   format = "other";
 
@@ -10,13 +10,13 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1h5d3scy3cnbyhh0pbavflpqklhn2lbp7hl193rc5gx8yzr3mqbh";
+    sha256 = "0bqrc4g4pd7b209swlv06bm5sx7df96h9kjpqpra4mfz469km4nn";
   };
 
   disabled = pythonOlder "3.5.0";
 
   buildInputs = [ python gettext ];
-  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcus ];
+  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcus cryptography ];
   nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''

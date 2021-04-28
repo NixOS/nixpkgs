@@ -4,8 +4,6 @@
 , dask
 , distributed
 , mpi4py
-, pytest
-, requests
 }:
 
 buildPythonPackage rec {
@@ -17,15 +15,11 @@ buildPythonPackage rec {
     sha256 = "76e153fc8c58047d898970b33ede0ab1990bd4e69cc130c6627a96f11b12a1a7";
   };
 
-  checkInputs = [ pytest requests ];
   propagatedBuildInputs = [ dask distributed mpi4py ];
-
-  checkPhase = ''
-    py.test dask_mpi
-  '';
 
   # hardcoded mpirun path in tests
   doCheck = false;
+  pythonImportsCheck = [ "dask_mpi" ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-mpi";

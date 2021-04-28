@@ -1,9 +1,7 @@
 { lib
 , fetchFromGitLab
 # native
-, intltool
 , wrapGAppsHook
-, file
 # not native
 , xorg
 , gobject-introspection
@@ -13,22 +11,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "screenkey";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitLab {
     owner = "screenkey";
     repo = "screenkey";
     rev = "v${version}";
-    sha256 = "1x13n57iy2pg3h3r994q3g5nbmh2gwk3qidmmcv0g7qa89n2gwbj";
+    sha256 = "1rfngmkh01g5192pi04r1fm7vsz6hg9k3qd313sn9rl9xkjgp11l";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.distutils_extra
-    # Shouldn't be needed once https://gitlab.com/screenkey/screenkey/-/issues/122 is fixed.
-    intltool
-    # We are not sure why is this needed, but without it we get "file: command
-    # not found" errors during build.
-    file
     wrapGAppsHook
     # for setup hook
     gobject-introspection
@@ -39,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    Babel
     pycairo
     pygobject3
   ];

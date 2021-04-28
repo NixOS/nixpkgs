@@ -37,7 +37,6 @@ in {
   extraMeta ? {},
 
   # for module compatibility
-  isXen      ? features.xen_dom0 or false,
   isZen      ? false,
   isLibre    ? false,
   isHardened ? false,
@@ -94,7 +93,8 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isXen isZen isHardened isLibre;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         kernelOlder = lib.versionOlder version;
         kernelAtLeast = lib.versionAtLeast version;
       };

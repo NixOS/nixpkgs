@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.27";
+  version = "0.8.30";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "1zkqmsclhnv14s4mxz7h49kfx8wyi3lyi0dik6jn1fh6w8zr962c";
+    sha256 = "sha256-9GCk1gqlQJhuoiKRi7J1qcJlZjlq2ObGicp5tGGDhrY=";
   };
 
-  cargoSha256 = "1j0pr09y5pc43a4rz1zq3h9vmd874zz6z0wd279lpm6p2m0077cs";
+  cargoSha256 = "sha256-pWqbcargCEkisdGnj08VQdRqjocR7zZhWukhYjfZDqI=";
 
   nativeBuildInputs = [ clang ];
 
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ akru andresilva RaghavSood ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ akru andresilva asymmetric RaghavSood ];
     platforms = platforms.linux;
   };
 }

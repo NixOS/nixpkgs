@@ -9,7 +9,6 @@
 , gtk3
 , glib
 , pantheon
-, libsoup
 , gtksourceview
 , libgee
 , nix-update-script

@@ -1,10 +1,15 @@
-{ lib, stdenv, python, buildEnv, makeWrapper
+{ lib, stdenv, buildEnv, makeWrapper
+
+# manually pased
+, python
+, requiredPythonModules
+
+# extra opts
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false
 , permitUserSite ? false
-, requiredPythonModules
 # Wrap executables with the given argument.
 , makeWrapperArgs ? []
 , }:
@@ -22,9 +27,9 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    postBuild = ''
-      . "${makeWrapper}/nix-support/setup-hook"
+    nativeBuildInputs = [ makeWrapper ];
 
+    postBuild = ''
       if [ -L "$out/bin" ]; then
           unlink "$out/bin"
       fi

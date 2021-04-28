@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "09m4dnn4kplawprd2bl15nwa0b4r1brab3x44ga7f1fyk7aw5zwq";
   };
 
-  nativeBuildInputs = [ gettext ];
-  buildInputs = [ makeWrapper alsaLib ncurses libsamplerate fftw ];
+  nativeBuildInputs = [ gettext makeWrapper ];
+  buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 

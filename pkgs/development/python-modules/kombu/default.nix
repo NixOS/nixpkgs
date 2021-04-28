@@ -22,8 +22,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements/test.txt \
       --replace "pytest-sugar" ""
-    substituteInPlace requirements/default.txt \
-      --replace "amqp==2.5.1" "amqp~=2.5"
   '';
 
   propagatedBuildInputs = [

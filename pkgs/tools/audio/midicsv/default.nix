@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace /usr/local $out
+    substituteInPlace Makefile \
+      --replace /usr/local $out \
+      --replace gcc "${stdenv.cc.targetPrefix}cc"
   '';
 
   meta = with lib; {
@@ -17,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.fourmilab.ch/webtools/midicsv/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

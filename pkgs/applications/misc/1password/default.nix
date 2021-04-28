@@ -8,10 +8,12 @@ stdenv.mkDerivation rec {
       url = {
         "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
         "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
+        "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
       }.${stdenv.hostPlatform.system};
       sha256 = {
         "i686-linux" = "teoxscan+EZ76Q0sfKT6nt1w/LSsmDoiN2oh+NGO/4A=";
         "x86_64-linux" = "nRK2GSwhQe5OgcAdR1fg0vUp3fzEkhwU/teIwsEEemw=";
+        "aarch64-linux" = "0932bspm1likky1n0rg15d01gspkm1fns2ma82qyb91yr6d18ddk";
       }.${stdenv.hostPlatform.system};
       stripRoot = false;
     } else fetchurl {
@@ -46,6 +48,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI";
     maintainers  = with maintainers; [ joelburget marsam ];
     license      = licenses.unfree;
-    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

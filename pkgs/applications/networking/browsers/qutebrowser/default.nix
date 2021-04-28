@@ -1,5 +1,5 @@
-{ lib, fetchurl, fetchzip, python3
-, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
+{ lib, fetchurl, fetchzip, fetchpatch, python3
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
@@ -12,12 +12,12 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.6.347";
+    version = "2.8.335";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "0d016fyg81cq464li01xlkf9rxrb3rpsvmk5gh9m4d5yzmcakkfm";
+    sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";
     stripRoot = false;
   };
 
@@ -31,12 +31,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.0.1";
+  version = "2.2.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0hmj19bp5dihzpphxz77377yfmygj498am0h23kxg5m3y5hqv65a";
+    sha256 = "sha256:0anxhrkxqb35mxr7jr820xcfw0v514s92wffsiqap2a2sqaj0pgs";
   };
 
   # Needs tox
@@ -60,13 +60,21 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
+    pynacl
     # extensive ad blocking
     adblock
   ]
     ++ lib.optional (pythonOlder "3.9") importlib-resources
   );
 
-  patches = [ ./fix-restart.patch ];
+  patches = [
+    ./fix-restart.patch
+    (fetchpatch {
+      name = "add-qtwebengine-version-override.patch";
+      url = "https://github.com/qutebrowser/qutebrowser/commit/febb921040b6670d9b1694a6ce55ae39384d1306.patch";
+      sha256 = "15p11kk8via7c7m14jiqgzc63qwxxzayr2bkl93jd10l2gx7pk9v";
+    })
+  ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -109,17 +117,19 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     done
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/qutebrowser \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+    )
   '';
 
   meta = with lib; {
     homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
   };
 }

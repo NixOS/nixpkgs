@@ -126,10 +126,36 @@ let
     }
   '';
 
+  singleMDDoc = name: value: ''
+    ## ${lib.escape [ "<" ">" ] name}
+    ${value.description}
+
+    ${lib.optionalString (value ? type) ''
+      *_Type_*:
+      ${value.type}
+    ''}
+
+    ${lib.optionalString (value ? default) ''
+      *_Default_*
+      ```
+      ${builtins.toJSON value.default}
+      ```
+    ''}
+
+    ${lib.optionalString (value ? example) ''
+      *_Example_*
+      ```
+      ${builtins.toJSON value.example}
+      ```
+    ''}
+  '';
+
 in {
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
+
+  optionsMDDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleMDDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";

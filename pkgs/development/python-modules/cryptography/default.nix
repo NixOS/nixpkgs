@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, isPy27
-, ipaddress
+, rustPlatform
+, setuptools-rust
 , openssl
 , cryptography_vectors
 , darwin
@@ -13,27 +13,39 @@
 , isPyPy
 , cffi
 , pytest
+, pytest-subtests
 , pretend
 , iso8601
 , pytz
 , hypothesis
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.3.1"; # Also update the hash in vectors.nix
+  version = "3.4.7"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ribd1vxq9wwz564mg60dzcy699gng54admihjjkgs9dx95pw5vy";
+    sha256 = "04x7bhjkglxpllad10821vxddlmxdkd3gjvp35iljmnj2s0xw41x";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    name = "${pname}-${version}";
+    sha256 = "1wisxmq26b8ml144m2458sgcbk8jpv419j01qmffsrfy50x9i1yw";
+  };
+
+  cargoRoot = "src/rust";
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
-  ];
+  ] ++ [
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
              ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
@@ -42,8 +54,6 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (!isPyPy) [
     cffi
-  ] ++ lib.optionals isPy27 [
-    ipaddress enum34
   ];
 
   checkInputs = [
@@ -52,6 +62,7 @@ buildPythonPackage rec {
     iso8601
     pretend
     pytest
+    pytest-subtests
     pytz
   ];
 

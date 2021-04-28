@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "0f4nj598w6qhcrhbab15cpfmrda02jcflxhb15vyv7gnplalkya6";
+    sha256 = "0wpayzcyqcnvzk95bqql7p07l8p7mwdgdj7zlbcsdn0wis4yhjm6";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Archive tool for the LXQt desktop environment";
     homepage = "https://github.com/lxqt/lxqt-archiver/";
-    license = licenses.gpl2;
+    description = "Archive tool for the LXQt desktop environment";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ];
   };

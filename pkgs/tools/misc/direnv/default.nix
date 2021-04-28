@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.27.0";
+  version = "2.28.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "05vvn59xd2q4yjizh5fprjib5xqq58by80d5avsm8nb1qxf383b1";
+    sha256 = "sha256-iZ3Lf7Yg+N9BWyLLF+MrT2gpPT9BTcp6pNMpfqwcZXo=";
   };
 
-  vendorSha256 = "084x7d7sshcsyim76d6pl6127nlqacgwwnm965srl9y5w5nqzba6";
+  vendorSha256 = "sha256-P8NLY1iGh86ntmYsTVlnNh5akdaM8nzcxDn6Nfmgr84=";
 
   # we have no bash at the moment for windows
   BASH_PATH =

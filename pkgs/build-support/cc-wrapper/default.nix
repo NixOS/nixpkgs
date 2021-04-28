@@ -100,6 +100,18 @@ let
     else
       false;
 
+
+  darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
+    if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
+    else targetPlatform.darwinPlatform
+  );
+
+  darwinMinVersion = optionalString stdenv.targetPlatform.isDarwin (
+    stdenv.targetPlatform.darwinMinVersion
+  );
+
+  darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
+    stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
 # Ensure bintools matches
@@ -122,6 +134,7 @@ stdenv.mkDerivation {
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix suffixSalt;
+  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
@@ -160,6 +173,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isClang then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -298,7 +312,11 @@ stdenv.mkDerivation {
     # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
-    + optionalString (isClang && gccForLibs != null && targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+    + optionalString (isClang
+                      && targetPlatform.isLinux
+                      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+                      && !(stdenv.targetPlatform.useLLVM or false)
+                      && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
@@ -451,6 +469,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString (targetPlatform.libc == "musl" && targetPlatform.isx86_32) ''
+      hardening_unsupported_flags+=" stackprotector"
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
@@ -465,6 +485,10 @@ stdenv.mkDerivation {
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
         echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
+    ''
+
+    + optionalString stdenv.targetPlatform.isDarwin ''
+        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     # There are a few tools (to name one libstdcxx5) which do not work

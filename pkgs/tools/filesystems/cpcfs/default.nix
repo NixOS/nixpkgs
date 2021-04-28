@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/derikz/cpcfs/" ;
     license = licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

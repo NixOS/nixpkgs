@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
-  nativeBuildInputs = [ qmake qtwebengine  qtxmlpatterns qttools ];
+  nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns qttools unzip ];
 
-  buildInputs = [ python unzip ];
+  buildInputs = [ python ];
 
   qmakeFlags = [ "PythonQt.pro"
                  "INCLUDEPATH+=${python}/include/python3.6"

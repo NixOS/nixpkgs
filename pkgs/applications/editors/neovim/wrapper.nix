@@ -1,5 +1,4 @@
 { stdenv, symlinkJoin, lib, makeWrapper
-, vimUtils
 , writeText
 , bundlerEnv, ruby
 , nodejs
@@ -106,7 +105,7 @@ let
 
     preferLocalBuild = true;
 
-    buildInputs = [makeWrapper];
+    nativeBuildInputs = [ makeWrapper ];
     passthru = { unwrapped = neovim; };
 
     meta = neovim.meta // {
@@ -114,6 +113,7 @@ let
       hydraPlatforms = [];
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;
+      mainProgram = "nvim";
     };
   };
 in

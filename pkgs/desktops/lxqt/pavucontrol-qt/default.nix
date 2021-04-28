@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1d3kp2y3crrmbqak4mn9d6cfbhi5l5xhchhjh44ng8gpww22k5h0";
+    sha256 = "0syc4bc2k7961la2c77787akhcljspq3s2nyqvb7mq7ddq1xn0wx";
   };
 
   nativeBuildInputs = [
@@ -39,9 +39,9 @@ mkDerivation rec {
   passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     homepage = "https://github.com/lxqt/pavucontrol-qt";
-    license = licenses.gpl2;
+    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
   };

@@ -26,6 +26,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
   };
 }

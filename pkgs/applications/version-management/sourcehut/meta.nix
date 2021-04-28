@@ -1,5 +1,4 @@
 { lib, fetchgit, buildPythonPackage
-, python
 , buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
 , sshpubkeys, weasyprint }:

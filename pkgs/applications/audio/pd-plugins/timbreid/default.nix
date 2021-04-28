@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "14k2xk5zrzrw1zprdbwx45hrlc7ck8vq4drpd3l455i5r8yk4y6b";
   };
 
-  buildInputs = [ unzip puredata fftw ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ puredata fftw ];
 
   unpackPhase = ''
     mkdir source

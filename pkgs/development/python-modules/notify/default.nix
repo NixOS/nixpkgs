@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       configure
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ python pygobject2 pygtk pkgs.libnotify pkgs.glib pkgs.gtk2 pkgs.dbus-glib ];
 
   postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";

@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zn37r5xrvjgjbw2bdkc0r7s6q8b1krmcryzj0yf0dyxbx79rasi";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "Makefile" -e "s|^ *PREFIX *=.*$|PREFIX = $out|g"
+    substituteInPlace Makefile --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
   meta = {
@@ -24,6 +25,6 @@ stdenv.mkDerivation rec {
 
     license = "liberal";  # a non-copyleft license, see `Copyright' file
     homepage = "http://www.mesa.nl/pub/mpage/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

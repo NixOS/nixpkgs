@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "qtermwidget";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0kpg4b60h6dads8ncwlk0zj1c8y7xpb0kz28j0v9fqjbmxja7x6w";
+    sha256 = "0pmkk2mba8z6cgfsd8sy4vhf5d9fn9hvxszzyycyy1ndygjrc1v8";
   };
 
   nativeBuildInputs = [
@@ -32,9 +32,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "A terminal emulator widget for Qt 5";
     homepage = "https://github.com/lxqt/qtermwidget";
-    license = licenses.gpl2;
+    description = "A terminal emulator widget for Qt 5";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

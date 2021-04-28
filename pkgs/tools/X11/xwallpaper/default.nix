@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "stoeckmann";
     repo = "xwallpaper";
     rev = "v${version}";
-    sha256 = "121ai4dc0v65qk12gn9w62ixly8hc8a5qrygkbb82vy8ck4jqxj7";
+    sha256 = "sha256-WYtbwMFzvJ0Xr84gGoKSofSSnmb7Qn6ioGMOnQOqdII=";
   };
 
   preConfigure = "./autogen.sh";

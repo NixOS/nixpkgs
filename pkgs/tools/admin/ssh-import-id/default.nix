@@ -2,22 +2,24 @@
 , lib
 , fetchgit
 , requests
+, distro
 , makeWrapper
 , extraHandlers ? []
 }:
 
 buildPythonPackage rec {
   pname = "ssh-import-id";
-  version = "5.8";
+  version = "5.11";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ssh-import-id";
     rev = version;
-    sha256 = "0l9gya1hyf2qfidlmvg2cgfils1fp9rn5r8sihwvx4qfsfp5yaak";
+    sha256 = "sha256-tYbaJGH59qyvjp4kwo3ZFVs0EaE0Lsd2CQ6iraFkAdI=";
   };
 
   propagatedBuildInputs = [
     requests
+    distro
   ] ++ extraHandlers;
 
   nativeBuildInputs = [

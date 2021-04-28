@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "4.11.1";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "sha256-Qe5mV9GBLHsmzMQg6dKib/sTnNdyOTj4wYQ9xd/iqJM=";
+    sha256 = "sha256-qbG0Ii3Xmj1UGGS+n+LdiNPAHBkpQZMGEzrDvOcaUNA=";
   };
 
   libPath = lib.makeLibraryPath (with xorg; [
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  nativeBuildInputs = [makeWrapper wrapGAppsHook];
-  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [makeWrapper wrapGAppsHook unzip];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder

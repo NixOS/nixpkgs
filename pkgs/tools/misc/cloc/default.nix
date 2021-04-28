@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */Unix)
   '';
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
-    perl AlgorithmDiff ParallelForkManager RegexpCommon
-  ]);
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [ perl AlgorithmDiff ParallelForkManager RegexpCommon ]);
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 

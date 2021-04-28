@@ -12,21 +12,18 @@
 , six
 , multipledispatch
 , packaging
-, pytest
-, xgboost
-, tensorflow
-, joblib
 , distributed
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
+  version = "1.8.0";
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5f93e8560217ebbc5a2254eaf705e9cad8e1c82012567c658e26464a74fbab76";
+    sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +39,7 @@ buildPythonPackage rec {
     scipy
     six
     toolz
+    setuptools-scm
   ];
 
   # has non-standard build from source, and pypi doesn't include tests

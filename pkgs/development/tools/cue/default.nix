@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.2.2";
+  version = "0.3.2";
 
   src = fetchgit {
     url = "https://cue.googlesource.com/cue";
     rev = "v${version}";
-    sha256 = "1crl5fldczc3jkwf7gvwvghckr6gfinfslzca4ps1098lbq83zcq";
+    sha256 = "0rfgpq4dyd3zm07vcjzn5vv0dhvvryrarxc50sd2pxagbq5cqc8l";
   };
 
-  vendorSha256 = "0l6slaji9nh16jqp1nvib95h2db1xyjh6knk5hj2zaa1rks4b092";
+  vendorSha256 = "10kvss23a8a6q26a7h1bqc3i0nskm2halsvc9wdv9zf9qsz7zjkp";
 
   doCheck = false;
 
   subPackages = [ "cmd/cue" ];
 
   buildFlagsArray = [
-    "-ldflags=-X cuelang.org/go/cmd/cue/cmd.version=${version}"
+    "-ldflags=-s -w -X cuelang.org/go/cmd/cue/cmd.version=${version}"
   ];
 
   meta = {

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, zlib, util-linux }:
 
 let name = "pigz";
-    version = "2.4";
+    version = "2.6";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
     url = "https://www.zlib.net/${name}/${name}-${version}.tar.gz";
-    sha256 = "0wsgw5vwl23jrnpsvd8v3xcp5k4waw5mk0164fynjhkv58i1dy54";
+    sha256 = "sha256-Lu17DXRJ0dcJA/KmLNYAXSYus6jJ6YaHvIy7WAnbKn0=";
   };
 
   enableParallelBuilding = true;

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchCrate
 , installShellFiles
@@ -11,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.2.0";
+  version = "1.2.9";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1mqaynrqaas82f5957lx31x80v74zwmwmjxxlbywajb61vh00d38";
+    sha256 = "sha256-5tM8ywLBPPjCKEfXIfUZ5aF4t9YpYA3tzERxC1NEsso=";
   };
 
-  cargoHash = "sha256-ffFS1myFjoQ6768D4zUytN6F9paWeJJFPFugCrfh4iU=";
+  cargoHash = "sha256-P5ukwtRUpIJIqJjwTXIB2xRnpyLkzMeBMHmUz4Ery3s=";
 
   nativeBuildInputs = [
     makeWrapper

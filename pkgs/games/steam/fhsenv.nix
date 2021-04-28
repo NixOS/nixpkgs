@@ -29,7 +29,7 @@ let
       # Needed by gdialog, including in the steam-runtime
       perl
       # Open URLs
-      xdg_utils
+      xdg-utils
       iana-etc
       # Steam Play / Proton
       python3
@@ -106,6 +106,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
     libdrm
+    libxkbcommon # paradox launcher
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
@@ -134,6 +135,28 @@ in buildFHSUserEnv rec {
     libuuid
     libbsd
     alsaLib
+
+    # Loop Hero
+    libidn2
+    libpsl
+    nghttp2.lib
+    openssl_1_1
+    rtmpdump
+
+    # needed by getcap for vr startup
+    libcap
+
+    # dependencies for mesa drivers, needed inside pressure-vessel
+    mesa.drivers
+    vulkan-loader
+    expat
+    wayland
+    xorg.libxcb
+    xorg.libXdamage
+    xorg.libxshmfence
+    xorg.libXxf86vm
+    llvm_11.lib
+    libelf
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
@@ -171,7 +194,7 @@ in buildFHSUserEnv rec {
     SDL2
     libusb1
     dbus-glib
-    libav
+    ffmpeg
     atk
     # Only libraries are needed from those two
     libudev0-shim
@@ -186,11 +209,9 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
-    openssl
     libidn
     tbb
     wayland
-    libxkbcommon
 
     # Other things from runtime
     flac
@@ -218,7 +239,14 @@ in buildFHSUserEnv rec {
     libvdpau
   ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
 
-  extraBuildCommands = if (!nativeOnly) then ''
+  extraBuildCommands = ''
+    if [ -f $out/usr/share/vulkan/icd.d/nvidia_icd.json ]; then
+      cp $out/usr/share/vulkan/icd.d/nvidia_icd{,32}.json
+      nvidia32Lib=$(realpath $out/lib32/libGLX_nvidia.so.0 | cut -d'/' -f-4)
+      escapedNvidia32Lib="''${nvidia32Lib//\//\\\/}"
+      sed -i "s/\/nix\/store\/.*\/lib\/libGLX_nvidia\.so\.0/$escapedNvidia32Lib\/lib\/libGLX_nvidia\.so\.0/g" $out/usr/share/vulkan/icd.d/nvidia_icd32.json
+    fi
+  '' + (if (!nativeOnly) then ''
     mkdir -p steamrt
     ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
@@ -231,7 +259,7 @@ in buildFHSUserEnv rec {
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
       ln -s /usr/lib32/libbz2.so usr/lib32/libbz2.so.1.0
     ''}
-  '';
+  '');
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
@@ -251,6 +279,8 @@ in buildFHSUserEnv rec {
     fi
 
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json:/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json:/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd32.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json:/usr/share/vulkan/icd.d/radeon_icd.i686.json
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''

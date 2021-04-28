@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
     nim -d:release -p:${astpatternmatching}/src -p:${jsonschema}/src \
       c --threads:on -d:nimcore -d:nimsuggest -d:debugCommunication \
-      -d:debugLogging -d:explicitSourcePath=${srcOnly nim.unwrapped} -d:tempDir=/tmp src/nimlsp
+      -d:debugLogging -d:explicitSourcePath=${srcOnly nim.passthru.nim} -d:tempDir=/tmp src/nimlsp
   '';
 
   installPhase = ''

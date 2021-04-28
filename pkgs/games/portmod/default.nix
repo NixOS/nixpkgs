@@ -1,5 +1,5 @@
 { lib, callPackage, python3Packages, fetchFromGitLab, cacert,
-  rustPlatform, bubblewrap, git, perlPackages, imagemagick7, fetchurl, fetchzip,
+  rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip,
   jre, makeWrapper, tr-patcher, tes3cmd }:
 
 let
@@ -29,7 +29,7 @@ let
     python3Packages.virtualenv
     tr-patcher
     tes3cmd
-    imagemagick7
+    imagemagick
   ];
 
 in

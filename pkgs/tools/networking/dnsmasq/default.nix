@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack }:
+, libidn, libnetfilter_conntrack, buildPackages }:
 
 with lib;
 let
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.83";
+  version = "2.84";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    sha256 = "1sjamz1v588qf35m8z6wcqkjk5w12bqhj7d7p48dj8jyn3lgghgz";
+    sha256 = "sha256-YDGVxktzE3YJsH4QJK4LN/ZSsvX+Rn3OZphbPRhQBQw=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "MANDIR=$(out)/man"
     "LOCALEDIR=$(out)/share/locale"
+    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
   hardeningEnable = [ "pie" ];

@@ -58,11 +58,11 @@ in stdenv.mkDerivation rec {
       --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = lib.licenses.mit;
+    license     = licenses.mit;
     platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ lib.maintainers.twey ];
+    maintainers = with maintainers; [ twey ];
   };
 }

@@ -85,9 +85,6 @@ rec {
   ;
   postInstall = ""
     # Gcc references
-    + lib.optionalString (hasFeature "volk" features) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
-    ''
     + lib.optionalString (hasFeature "gnuradio-runtime" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime.so)
     ''
@@ -103,9 +100,11 @@ rec {
       features
       featuresInfo
       python
-      qt
-      gtk
     ;
+  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+    inherit qt;
+  } // lib.optionalAttrs (hasFeature "gnuradio-companion" features) {
+    inherit gtk;
   };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;

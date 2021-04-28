@@ -18,14 +18,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.26";
+  version = "3.27";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kwiggdjqjhjvmwb1m7hb9clvm3xz948fy5ia67dif2pakwad754";
+    sha256 = "13nwsyk030fhl3srhpc28j5s6594z0m38606f4ygc4qhv9wxw011";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -105,6 +105,6 @@ stdenv.mkDerivation rec {
     homepage = "https://simgrid.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ mickours mpoquet ];
-    platforms = ["x86_64-linux"];
+    platforms = platforms.all;
   };
 }

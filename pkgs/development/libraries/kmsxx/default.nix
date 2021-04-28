@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libdrm
-, withPython ? false, python }:
+, withPython ? false, python ? null }:
 
 stdenv.mkDerivation {
   pname = "kmsxx";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   cmakeFlags = lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm python ];
+  buildInputs = [ libdrm ] ++ lib.optionals withPython [ python ];
 
   meta = with lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     license = licenses.mpl20;
     maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;
+    broken = true; # marked broken 2021-03-26
   };
 }

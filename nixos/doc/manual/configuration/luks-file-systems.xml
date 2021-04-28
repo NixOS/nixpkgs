@@ -26,7 +26,11 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
 <prompt># </prompt>mkfs.ext4 /dev/mapper/<replaceable>crypted</replaceable>
 </screen>
-  To ensure that this file system is automatically mounted at boot time as
+  The LUKS volume should be automatically picked up by
+  <command>nixos-generate-config</command>, but you might want to verify that your
+  <filename>hardware-configuration.nix</filename> looks correct.
+
+  To manually ensure that the system is automatically mounted at boot time as
   <filename>/</filename>, add the following to
   <filename>configuration.nix</filename>:
 <programlisting>

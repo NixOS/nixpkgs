@@ -11,6 +11,8 @@ let
   in {
     inherit mkDerivation;
 
+    lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+
     agda = withPackages [] // { inherit withPackages; };
 
     standard-library = callPackage ../development/libraries/agda/standard-library {

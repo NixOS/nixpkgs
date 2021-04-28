@@ -18,6 +18,7 @@ with lib;
 
     # Completely removed modules
     (mkRemovedOptionModule [ "fonts" "fontconfig" "penultimate" ] "The corresponding package has removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "deepin" ] "The corresponding packages were removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" "user" ] "")
@@ -70,6 +71,13 @@ with lib;
     '')
 
     (mkRemovedOptionModule [ "services" "seeks" ] "")
+    (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
+
+    (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
+        The hidepid module was removed, since the underlying machinery
+        is broken when using cgroups-v2.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

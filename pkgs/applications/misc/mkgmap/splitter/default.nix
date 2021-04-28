@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "597";
+  version = "598";
 
   src = fetchurl {
     url = "http://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
-    sha256 = "0d928wvlpzqwdpfksmxyyfkqrhjsij21wx2538bs2i29siwyla61";
+    sha256 = "gpbJpDBXA9tmSmx9oKLa7xWtIOHBTYd1iPPgNTC2C2M=";
   };
 
   patches = [

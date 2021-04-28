@@ -1,8 +1,10 @@
-{ lib, fetchurl, pkg-config, buildDunePackage, gtk3, cairo2 }:
+{ lib, fetchurl, pkg-config, buildDunePackage, dune-configurator, gtk3, cairo2 }:
 
 buildDunePackage rec {
   version = "3.1.1";
   pname = "lablgtk3";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.05";
 
@@ -12,6 +14,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ gtk3 cairo2 ];
 
   meta = {

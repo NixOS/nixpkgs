@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradleGen
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
-, ffmpeg_3, python, ruby }:
+, ffmpeg, python3, ruby }:
 
 let
   major = "15";
@@ -21,8 +21,8 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
 

@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , yarl
 }:
 
@@ -30,22 +30,8 @@ buildPythonPackage rec {
   checkInputs = [
     aresponses
     pytest-asyncio
-    pytestcov
+    pytest-cov
     pytestCheckHook
-  ];
-
-  # Some tests are failing due to encoding issues
-  # https://github.com/ctalkington/python-ipp/issues/121
-  disabledTests = [
-    "test_internal_session"
-    "test_request_port"
-    "est_http_error426"
-    "test_unexpected_response"
-    "test_printer"
-    "test_raw"
-    "test_ipp_request"
-    "test_request_tls"
-    "test_ipp_error_0x0503"
   ];
 
   pythonImportsCheck = [ "pyipp" ];

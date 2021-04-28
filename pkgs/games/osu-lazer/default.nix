@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk, dotnet-netcore, dotnetPackages
+, dotnetCorePackages, dotnetPackages, cacert
 , ffmpeg_4, alsaLib, SDL2, lttng-ust, numactl, alsaPlugins
 }:
 
@@ -8,24 +8,31 @@ let
     ffmpeg_4 alsaLib SDL2 lttng-ust numactl
   ];
 
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-net = dotnetCorePackages.net_5_0;
+
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "linux-x64";
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.1225.0";
+  version = "2021.410.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "BISczC4xYcF6m5l3ye/bdZxs/aK0Jz6sFVFOgNDo0v0=";
+    sha256 = "twKg9iZdY+zgwEQeHMOlRZKXxAHic7GnoqH0jOdW7fw=";
   };
 
   patches = [ ./bypass-tamper-detection.patch ];
   patchFlags = [ "--binary" "-p1" ];
 
-  nativeBuildInputs = [ dotnet-sdk dotnetPackages.Nuget makeWrapper ];
+  nativeBuildInputs = [
+    dotnet-sdk dotnetPackages.Nuget makeWrapper
+    # FIXME: Without `cacert`, we will suffer from https://github.com/NuGet/Announcements/issues/49
+    cacert
+  ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
@@ -75,7 +82,7 @@ in stdenv.mkDerivation rec {
       --output $out/lib/osu
 
     makeWrapper $out/lib/osu/osu\! $out/bin/osu\! \
-      --set DOTNET_ROOT "${dotnet-netcore}" \
+      --set DOTNET_ROOT "${dotnet-net}" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png

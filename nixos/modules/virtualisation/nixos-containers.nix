@@ -271,8 +271,8 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-
   system = config.nixpkgs.localSystem.system;
+  kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
 
@@ -320,7 +320,6 @@ let
       };
     };
   };
-
 
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
@@ -440,21 +439,16 @@ in
       default = false;
       description = ''
         Whether this NixOS machine is a lightweight container running
-        in another NixOS system. If set to true, support for nested
-        containers is disabled by default, but can be reenabled by
-        setting <option>boot.enableContainers</option> to true.
+        in another NixOS system.
       '';
     };
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = !config.boot.isContainer;
+      default = true;
       description = ''
         Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used), but only if the
-        system is not itself a lightweight container of a host.
-        To enable support for nested containers, this option has to be
-        explicitly set to true (in the outer container).
+        (at no cost if containers are not actually used).
       '';
     };
 
@@ -463,21 +457,15 @@ in
         { config, options, name, ... }:
         {
           options = {
-
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
-              type = let
-                confPkgs = if config.pkgs == null then pkgs else config.pkgs;
-              in lib.mkOptionType {
+              type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   inherit system;
-                  pkgs = confPkgs;
-                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
-                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
@@ -488,11 +476,16 @@ in
                           networking.useDHCP = false;
                           assertions = [
                             {
-                              assertion =  config.privateNetwork -> stringLength name < 12;
+                              assertion =
+                                (builtins.compareVersions kernelVersion "5.8" <= 0)
+                                -> config.privateNetwork
+                                -> stringLength name <= 11;
                               message = ''
                                 Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
                                 not be longer than 11 characters, because the container's interface name is derived from it.
-                                This might be fixed in the future. See https://github.com/NixOS/nixpkgs/issues/38509
+                                You should either make the container name shorter or upgrade to a more recent kernel that
+                                supports interface altnames (i.e. at least Linux 5.8 - please see https://github.com/NixOS/nixpkgs/issues/38509
+                                for details).
                               '';
                             }
                           ];
@@ -506,7 +499,7 @@ in
 
             path = mkOption {
               type = types.path;
-              example = "/nix/var/nix/profiles/containers/webserver";
+              example = "/nix/var/nix/profiles/per-container/webserver";
               description = ''
                 As an alternative to specifying
                 <option>config</option>, you can specify the path to
@@ -526,12 +519,18 @@ in
               '';
             };
 
-            pkgs = mkOption {
-              type = types.nullOr types.attrs;
-              default = null;
-              example = literalExample "pkgs";
+            nixpkgs = mkOption {
+              type = types.path;
+              default = pkgs.path;
+              defaultText = "pkgs.path";
               description = ''
-                Customise which nixpkgs to use for this container.
+                A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
+
+                To only change the <literal>pkgs</literal> argument used inside the container modules,
+                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
+                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
+                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                container config is ignored in this case.
               '';
             };
 
@@ -672,14 +671,31 @@ in
               '';
             };
 
+            # Removed option. See `checkAssertion` below for the accompanying error message.
+            pkgs = mkOption { visible = false; };
           } // networkOptions;
 
-          config = mkMerge
-            [
-              (mkIf options.config.isDefined {
-                path = config.config.system.build.toplevel;
-              })
-            ];
+          config = let
+            # Throw an error when removed option `pkgs` is used.
+            # Because this is a submodule we cannot use `mkRemovedOptionModule` or option `assertions`.
+            optionPath = "containers.${name}.pkgs";
+            files = showFiles options.pkgs.files;
+            checkAssertion = if options.pkgs.isDefined then throw ''
+              The option definition `${optionPath}' in ${files} no longer has any effect; please remove it.
+
+              Alternatively, you can use the following options:
+              - containers.${name}.nixpkgs
+                This sets the nixpkgs (and thereby the modules, pkgs and lib) that
+                are used for evaluating the container.
+
+              - containers.${name}.config.nixpkgs.pkgs
+                This only sets the `pkgs` argument used inside the container modules.
+            ''
+            else null;
+          in {
+            path = builtins.seq checkAssertion
+              mkIf options.config.isDefined config.config.system.build.toplevel;
+          };
         }));
 
       default = {};
@@ -718,7 +734,7 @@ in
 
       unitConfig.RequiresMountsFor = "/var/lib/containers/%i";
 
-      path = [ pkgs.iproute ];
+      path = [ pkgs.iproute2 ];
 
       environment = {
         root = "/var/lib/containers/%i";

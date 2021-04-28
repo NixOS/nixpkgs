@@ -4,7 +4,32 @@
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
-, extraPacks     ? []
+# Packs must be installed from a local directory during the build, with dependencies
+# resolved manually, e.g. to install the 'julian' pack, which depends on the 'delay', 'list_util' and 'typedef' packs:
+#   julian = pkgs.fetchzip {
+#     name = "swipl-pack-julian";
+#     url = "https://github.com/mndrix/julian/archive/v0.1.3.zip";
+#     sha256 = "1sgql7c21p3c5m14kwa0bcmlwn9fql612krn9h36gla1j9yjdfgy";
+#   };
+#   delay = pkgs.fetchzip {
+#     name = "swipl-pack-delay";
+#     url = "https://github.com/mndrix/delay/archive/v0.3.3.zip";
+#     sha256 = "0ira87afxnc2dnbbmgwmrr8qvary8lhzvhqwd52dccm6yqd3nybg";
+#   };
+#   list_util = pkgs.fetchzip {
+#     name = "swipl-pack-list_util";
+#     url = "https://github.com/mndrix/list_util/archive/v0.13.0.zip";
+#     sha256 = "0lx7vffflak0y8l8vg8k0g8qddwwn23ksbz02hi3f8rbarh1n89q";
+#   };
+#   typedef = builtins.fetchTarball {
+#     name = "swipl-pack-typedef";
+#     url = "https://raw.githubusercontent.com/samer--/prolog/master/typedef/release/typedef-0.1.9.tgz";
+#     sha256 = "056nqjn01g18fb1b2qivv9s7hb4azk24nx2d4kvkbmm1k91f44p3";
+#   };
+#   swiProlog = pkgs.swiProlog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
+#     julian delay list_util typedef
+#   ]; };
+, extraPacks ? []
 , withGui ? false
 }:
 
@@ -26,6 +51,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  # Add the packInstall path to the swipl pack search path
+  postPatch = ''
+    echo "user:file_search_path(pack, '$out/lib/swipl/pack')." >> /build/$sourceRoot/boot/init.pl
+  '';
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
@@ -38,6 +68,10 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ];
+
+  preInstall = ''
+    mkdir -p $out/lib/swipl/pack
+  '';
 
   postInstall = builtins.concatStringsSep "\n"
   ( builtins.map (packInstall "$out") extraPacks

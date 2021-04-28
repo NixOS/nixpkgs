@@ -30,6 +30,7 @@
 , docbook-xsl-nons
 , ninja
 , gcab
+, gnutls
 , python3
 , wrapGAppsHook
 , json-glib
@@ -73,6 +74,9 @@ let
   # only redfish for x86_64
   haveRedfish = stdenv.isx86_64;
 
+  # only use msr if x86 (requires cpuid)
+  haveMSR = isx86;
+
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
   # Experimental
@@ -87,7 +91,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.3";
+    version = "1.5.7";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -96,7 +100,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "005y5wicmm6f2v8i9m3axx7ivgj3z8mbqps4v9m71bsqmq298j86";
+      sha256 = "16isrrv6zhdgccbfnz7km5g1cnvfnip7aiidkfhf5dlnrnyb2sxh";
     };
 
     patches = [
@@ -129,6 +133,7 @@ let
       shared-mime-info
       valgrind
       gcab
+      gnutls
       docbook_xml_dtd_43
       docbook-xsl-nons
       help2man
@@ -178,6 +183,11 @@ let
       "-Defi-libdir=${gnu-efi}/lib"
       "-Defi-ldsdir=${gnu-efi}/lib"
       "-Defi-includedir=${gnu-efi}/include/efi"
+      "-Defi_sbat_distro_id=nixos"
+      "-Defi_sbat_distro_summary=NixOS"
+      "-Defi_sbat_distro_pkgname=fwupd"
+      "-Defi_sbat_distro_version=${version}"
+      "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd&from=0&size=50&sort=relevance&query=fwupd"
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
@@ -194,6 +204,8 @@ let
       "-Dplugin_redfish=false"
     ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
+    ] ++ lib.optionals (!haveMSR) [
+      "-Dplugin_msr=false"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -223,6 +235,8 @@ let
         contrib/get-version.py \
         contrib/generate-version-script.py \
         meson_post_install.sh \
+        plugins/uefi-capsule/efi/generate_sbat.py \
+        plugins/uefi-capsule/efi/generate_binary.py \
         po/make-images \
         po/make-images.sh \
         po/test-deps
@@ -237,8 +251,8 @@ let
         testFw = fetchFromGitHub {
           owner = "fwupd";
           repo = "fwupd-test-firmware";
-          rev = "42b62c62dc85ecfb8e38099fe5de0625af87a722";
-          sha256 = "XUpxE003DZSeLJMtyV5UN5CNHH89/nEVKpCbMStm91Q=";
+          rev = "c13bfb26cae5f4f115dd4e08f9f00b3cb9acc25e";
+          sha256 = "US81i7mtLEe85KdWz5r+fQTk61IhqjVkzykBaBPuKL4=";
         };
       in ''
         # These files have weird licenses so they are shipped separately.
@@ -274,16 +288,14 @@ let
 
     passthru = {
       filesInstalledToEtc = [
-        "fwupd/ata.conf"
         "fwupd/daemon.conf"
-        "fwupd/redfish.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
         "fwupd/remotes.d/vendor-directory.conf"
         "fwupd/thunderbolt.conf"
         "fwupd/upower.conf"
-        "fwupd/uefi.conf"
+        "fwupd/uefi_capsule.conf"
         "pki/fwupd/GPG-KEY-Hughski-Limited"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -293,11 +305,14 @@ let
         "pki/fwupd-metadata/LVFS-CA.pem"
       ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
+      ] ++ lib.optionals haveRedfish [
+        "fwupd/redfish.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
       defaultDisabledPlugins = [
         "test"
+        "test_ble"
         "invalid"
       ];
 

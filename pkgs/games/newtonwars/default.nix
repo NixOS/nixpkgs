@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0g63fwfcdxxlnqlagj1fb8ngm385gmv8f7p8b4r1z5cny2znxdvs";
   };
 
-  buildInputs = [ makeWrapper freeglut libGL libGLU ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ freeglut libGL libGLU ];
 
   patchPhase = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, python, doxygen, xorg }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, doxygen, xorg }:
 
 stdenv.mkDerivation {
   pname = "partio";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut libGLU libGL zlib swig python xorg.libXi xorg.libXmu ];
+  buildInputs = [ freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu ];
 
   buildPhase = ''
     make partio
@@ -31,6 +31,8 @@ stdenv.mkDerivation {
     mkdir $dev/include/partio
     mv $dev/include/*.h $dev/include/partio
   '';
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "C++ (with python bindings) library for easily reading/writing/manipulating common animation particle formats such as PDB, BGEO, PTC";

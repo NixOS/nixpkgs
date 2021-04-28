@@ -46,11 +46,6 @@ buildPythonPackage rec {
     ipython
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'numba==0.43'" "'numba'"
-  '';
-
   # avoid collecting local files
   preCheck = ''
     cd clifford/test
@@ -68,5 +63,7 @@ buildPythonPackage rec {
     homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # many TypeError's in tests
+    broken = true;
   };
 }

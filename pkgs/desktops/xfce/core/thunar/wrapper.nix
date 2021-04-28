@@ -5,7 +5,7 @@ symlinkJoin {
 
   paths = [ thunar ] ++ thunarPlugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram "$out/bin/thunar" \

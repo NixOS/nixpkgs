@@ -23,8 +23,26 @@ class CthonTest(ClientXMPP):
     def __init__(self, jid, password):
         ClientXMPP.__init__(self, jid, password)
         self.add_event_handler("session_start", self.session_start)
+        self.test_succeeded = False
 
     async def session_start(self, event):
+        try:
+            # Exceptions in event handlers are printed to stderr but not
+            # propagated, they do not make the script terminate with a non-zero
+            # exit code. We use the `test_succeeded` flag as a workaround and
+            # check it later at the end of the script to exit with a proper
+            # exit code.
+            # Additionally, this flag ensures that this event handler has been
+            # actually run by ClientXMPP, which may well not be the case.
+            await self.test_xmpp_server()
+            self.test_succeeded = True
+        finally:
+            # Even if an exception happens in `test_xmpp_server()`, we still
+            # need to disconnect explicitly, otherwise the process will hang
+            # forever.
+            self.disconnect(wait=True)
+
+    async def test_xmpp_server(self):
         log = logging.getLogger(__name__)
         self.send_presence()
         self.get_roster()
@@ -42,11 +60,12 @@ class CthonTest(ClientXMPP):
             log.error("ERROR: Cannot run upload command. XEP_0363 seems broken")
             sys.exit(1)
         log.info('Upload success!')
+
         # Test MUC
-        self.plugin['xep_0045'].join_muc('testMucRoom', 'cthon98', wait=True)
+        # TODO: use join_muc_wait() after slixmpp 1.8.0 is released.
+        self.plugin['xep_0045'].join_muc('testMucRoom', 'cthon98')
         log.info('MUC join success!')
         log.info('XMPP SCRIPT TEST SUCCESS')
-        self.disconnect(wait=True)
 
 
 if __name__ == '__main__':
@@ -62,4 +81,7 @@ if __name__ == '__main__':
     ct.register_plugin('xep_0045')
     ct.connect(("server", 5222))
     ct.process(forever=False)
+
+    if not ct.test_succeeded:
+        sys.exit(1)
 ''

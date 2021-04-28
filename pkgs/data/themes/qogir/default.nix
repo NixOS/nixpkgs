@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2020-11-16";
+  version = "2021-04-20";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0qp65py1p93f5bxbf0jgc1d2lwrjhb7d0vzkivm73haji197l9p5";
+    sha256 = "17ajrg5safnb6b1jbwvnysc4rvl6gkpnqdf89bammlrpkj6fr3ip";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
     homepage = "https://vinceliuice.github.io/Qogir-theme";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

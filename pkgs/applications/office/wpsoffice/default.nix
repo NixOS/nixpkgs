@@ -23,7 +23,7 @@
 , libtool
 , libuuid
 , libxml2
-, lzma
+, xz
 , nspr
 , nss
 , openssl
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook wrapQtAppsHook ];
 
-  meta = {
-    description = "Office program originally named Kingsoft Office";
-    homepage = "http://wps-community.org/";
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ mlatus th0rgal ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal ];
   };
 
   buildInputs = with xorg; [
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxml2
-    lzma
+    xz
     nspr
     nss
     openssl

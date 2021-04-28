@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cheesecutter";
-  version = "unstable-2020-04-03";
+  version = "unstable-2021-02-27";
 
   src = fetchFromGitHub {
     owner = "theyamo";
     repo = "CheeseCutter";
-    rev = "68d6518f0e6249a2a5d122fc80201578337c1277";
-    sha256 = "0xspzjhc6cp3m0yd0mwxncg8n1wklizamxvidrnn21jgj3mnaq2q";
+    rev = "84450d3614b8fb2cabda87033baab7bedd5a5c98";
+    sha256 = "sha256:0q4a791nayya6n01l0f4kk497rdq6kiq0n72fqdpwqy138pfwydn";
   };
 
   patches = [

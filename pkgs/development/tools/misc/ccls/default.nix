@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ccls";
-  version = "0.20201025";
+  version = "0.20210330";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "13v00q1bz8g0ckw1sv0zyicbc44irc00vhwxdv3vvwlvylm7s21p";
+    sha256 = "sha256-jipSipgD0avd7XODlpxnqjHK3s6nacaxbIQIddix7X8=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    platforms = platforms.linux;
+    platforms = platforms.all;
     description = "C library implementing the OAuth secure authentication protocol";
     homepage = "http://liboauth.sourceforge.net/";
     repositories.git = "https://github.com/x42/liboauth.git";

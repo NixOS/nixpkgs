@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, lua, pkg-config, systemd, jemalloc, nixosTests
+{ lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
 , tlsSupport ? true, openssl
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.0.10";
   pname = "redis";
+  version = "6.2.1";
 
   src = fetchurl {
-    url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "1gc529nfh8frk4pynyjlnmzvwa0j9r5cmqwyd7537sywz6abifvr";
+    url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-zSIlBQEsziCyVoL8qTHsk70hrpLLSr/nQs97dqqQdSA=";
   };
 
   # Cross-compiling fixes
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lua ]
-    ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd
+    ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
   # More cross-compiling fixes.
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
@@ -31,10 +32,12 @@ stdenv.mkDerivation rec {
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
-    ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"]
+    ++ lib.optional withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
 
   doCheck = false; # needs tcl
 
@@ -44,7 +47,8 @@ stdenv.mkDerivation rec {
     homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ berdario globin ];
+    platforms = platforms.all;
+    changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
+    maintainers = with maintainers; [ berdario globin marsam ];
   };
 }

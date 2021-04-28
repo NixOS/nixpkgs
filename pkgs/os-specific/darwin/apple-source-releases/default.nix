@@ -158,12 +158,30 @@ let
   in fetchApple' pname version sha256;
 
   appleDerivation' = pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
-    inherit pname;
-    version = "${version}-${sdkName}";
+    inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
 
     enableParallelBuilding = true;
+
+    # In rare cases, APPLE may drop some headers quietly on new release.
+    doInstallCheck = attrs ? appleHeaders;
+    passAsFile = [ "appleHeaders" ];
+    installCheckPhase = ''
+      cd $out/include
+
+      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in \$out/include" || true)
+
+      if [ -z "$result" ]; then
+        echo "Apple header list is matched."
+      else
+        echo >&2 "\
+      Apple header list is inconsistent, please ensure no header file is unexpectedly dropped.
+      $result
+      "
+        exit 1
+      fi
+    '';
 
   } // attrs // {
     meta = (with lib; {
@@ -214,7 +232,6 @@ let
   stubPackages = {
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
-    bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "0sgsqjcxbdm2g2zfpc50mzmk4b4ldyw7xvvkwiayhpczg1fga4ff" {};

@@ -1,5 +1,5 @@
 diff --git a/data/meson.build b/data/meson.build
-index 14454458..12a798c0 100644
+index 50154569..f8058a8e 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -17,7 +17,7 @@ endif
@@ -73,10 +73,10 @@ index 826a3c1d..b78db663 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index a6fb55dd..aedb7530 100644
+index b075ca89..8d504d3c 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -183,6 +183,12 @@ endif
+@@ -194,6 +194,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -90,7 +90,7 @@ index a6fb55dd..aedb7530 100644
  gio = dependency('gio-2.0', version : '>= 2.45.8')
  giounix = dependency('gio-unix-2.0', version : '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 0a0e2853..198ae930 100644
+index bc76c0ab..8a67d012 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,4 @@
@@ -98,19 +98,6 @@ index 0a0e2853..198ae930 100644
  option('build', type : 'combo', choices : ['all', 'standalone', 'library'], value : 'all', description : 'build type')
  option('agent', type : 'boolean', value : true, description : 'enable the fwupd agent')
  option('consolekit', type : 'boolean', value : true, description : 'enable ConsoleKit support')
-diff --git a/plugins/ata/meson.build b/plugins/ata/meson.build
-index f32b97fe..679ccc7b 100644
---- a/plugins/ata/meson.build
-+++ b/plugins/ata/meson.build
-@@ -7,7 +7,7 @@ install_data([
- )
- 
- install_data(['ata.conf'],
--  install_dir:  join_paths(sysconfdir, 'fwupd')
-+  install_dir:  join_paths(sysconfdir_install, 'fwupd')
- )
- 
- shared_module('fu_plugin_ata',
 diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
 index ed4eee70..76dbdb1d 100644
 --- a/plugins/dell-esrt/meson.build
@@ -123,10 +110,10 @@ index ed4eee70..76dbdb1d 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 92762791..08bb37ea 100644
+index 205d1394..3223f404 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -26,7 +26,7 @@ shared_module('fu_plugin_redfish',
+@@ -27,7 +27,7 @@ shared_module('fu_plugin_redfish',
  )
  
  install_data(['redfish.conf'],
@@ -148,14 +135,14 @@ index 6b2368fb..2bd06fed 100644
  )
  # we use functions from 2.52 in the tests
  if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
-diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index 2d1b2d22..c4217a72 100644
---- a/plugins/uefi/meson.build
-+++ b/plugins/uefi/meson.build
+diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
+index 0b793a07..ebd3e5ea 100644
+--- a/plugins/uefi-capsule/meson.build
++++ b/plugins/uefi-capsule/meson.build
 @@ -97,7 +97,7 @@ if get_option('man')
  endif
  
- install_data(['uefi.conf'],
+ install_data(['uefi_capsule.conf'],
 -  install_dir:  join_paths(sysconfdir, 'fwupd')
 +  install_dir:  join_paths(sysconfdir_install, 'fwupd')
  )

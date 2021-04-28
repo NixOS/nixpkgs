@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.56.0";
+  version = "0.57.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
+    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
   };
 
   patches = [

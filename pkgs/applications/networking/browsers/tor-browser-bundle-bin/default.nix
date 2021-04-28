@@ -29,12 +29,9 @@
 
 # Media support (implies audio support)
 , mediaSupport ? true
-, ffmpeg_3
+, ffmpeg
 
 , gmp
-
-# Pluggable transport dependencies
-, python27
 
 # Wrapper runtime
 , coreutils
@@ -84,26 +81,26 @@ let
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
   ++ optionals mediaSupport [
-    ffmpeg_3
+    ffmpeg
   ];
 
   # Library search path for the fte transport
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.9";
+  version = "10.0.16";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "Dtlfm/memHSxir5XkUGkJICGEM+tPs//ET4PdVM1HPM=";
+      sha256 = "07h2gd6cwwq17lrwjpfah1xvr8ny8700qvi971qacrr7ssicw2pw";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "GZywFEX/5Br+Zu1w6pegoNOTrSIVQNE2LINsa3Vdlxs=";
+      sha256 = "145kniiby5nnd0ll3v2gggzxz52bqbrdp72hvh96i8qnzi0fq25a";
     };
   };
 in
@@ -133,7 +130,7 @@ stdenv.mkDerivation rec {
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
-    tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
+    tar xf "$src" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.0.2";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s09vs4rnq4637j8zw7grv3f4j7njqprm744b1knzldj91rg0vmi";
+    sha256 = "sha256-yi3lG7tKi2BkU7vtMIEPsll1UX/JxrNj4G+DJaGQ/+k=";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];

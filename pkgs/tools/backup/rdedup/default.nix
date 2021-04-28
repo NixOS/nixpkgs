@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, libsodium
-, llvmPackages, clang, lzma
+, llvmPackages, clang, xz
 , Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config llvmPackages.libclang clang ];
-  buildInputs = [ openssl libsodium lzma ]
+  buildInputs = [ openssl libsodium xz ]
     ++ (lib.optional stdenv.isDarwin Security);
 
   configurePhase = ''

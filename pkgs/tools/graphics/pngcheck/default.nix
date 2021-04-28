@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pngcheck-2.3.0";
+  name = "pngcheck-3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/png-mng/${name}.tar.gz";
-    sha256 = "0pzkj1bb4kdybk6vbfq9s0wzdm5szmrgixkas3xmbpv4mhws1w3p";
+    sha256 = "sha256-DX4mLyQRb93yhHqM61yS2fXybvtC6f/2PsK7dnYTHKc=";
   };
 
   hardeningDisable = [ "format" ];

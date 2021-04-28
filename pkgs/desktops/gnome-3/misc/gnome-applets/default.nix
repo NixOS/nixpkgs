@@ -16,7 +16,6 @@
 , adwaita-icon-theme
 , libgweather
 , gucharmap
-, tracker
 , polkit
 , gnome3
 }:

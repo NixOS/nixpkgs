@@ -1,28 +1,24 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
-, qtbase}:
+, qtbase, python }:
 
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "20.0";
+  version = "21.3";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
-    repo = "raiblocks";
+    repo = "nano-node";
     rev = "V${version}";
-    sha256 = "12nrjjd89yjzx20d85ccmp395pl0djpx0x0qb8dgka8xfy11k7xn";
+    sha256 = "0f6chl5vrzdr4w8g3nivfxk3qm6m11js401998afnhz0xaysm4pm";
     fetchSubmodules = true;
   };
 
-  # Use a patch to force dynamic linking
-  patches = [
-    ./CMakeLists.txt.patch
-  ];
-
   cmakeFlags = let
     options = {
+      PYTHON_EXECUTABLE = "${python}/bin/python";
+      NANO_SHARED_BOOST = "ON";
       BOOST_ROOT = boost;
-      Boost_USE_STATIC_LIBS = "OFF";
       RAIBLOCKS_GUI = "ON";
       RAIBLOCKS_TEST = "ON";
       Qt5_DIR = "${qtbase.dev}/lib/cmake/Qt5";
@@ -37,17 +33,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libGL qtbase ];
 
   buildPhase = ''
+    runHook preBuild
     make nano_wallet
-  '';
-
-  # Move executables under bin directory
-  postInstall = ''
-    mkdir -p $out/bin
-    mv $out/nano* $out/bin/
+    runHook postBuild
   '';
 
   checkPhase = ''
+    runHook preCheck
     ./core_test
+    runHook postCheck
   '';
 
   meta = {

@@ -83,8 +83,8 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper bash ]
-      ++ lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ bash ] ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .

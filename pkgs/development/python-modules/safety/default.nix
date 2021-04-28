@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "1.9.0";
+  version = "1.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23bf20690d4400edc795836b0c983c2b4cbbb922233108ff925b7dd7750f00c9";
+    sha256 = "sha256-MOOU0CogrEm39lKS0Z04+pJ6j5WCzf060a27xmxkGtU=";
   };
 
   propagatedBuildInputs = [ requests dparse click setuptools ];

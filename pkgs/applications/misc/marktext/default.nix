@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
   multiPkgs = null; # no 32bit needed
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
     p.libsecret
-    p.xlibs.libxkbfile
+    p.xorg.libxkbfile
   ];
 
   # Strip version from binary name.

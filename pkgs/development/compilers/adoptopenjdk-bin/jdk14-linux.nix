@@ -2,8 +2,8 @@ let
   sources = builtins.fromJSON (builtins.readFile ./sources.json);
 in
 {
-  jdk-hotspot = import ./jdk-linux-base.nix sources.openjdk14.linux.jdk.hotspot;
-  jre-hotspot = import ./jdk-linux-base.nix sources.openjdk14.linux.jre.hotspot;
-  jdk-openj9 = import ./jdk-linux-base.nix sources.openjdk14.linux.jdk.openj9;
-  jre-openj9 = import ./jdk-linux-base.nix sources.openjdk14.linux.jre.openj9;
+  jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk14.linux.jdk.hotspot; knownVulnerabilities = ["Support ended"]; };
+  jre-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk14.linux.jre.hotspot; knownVulnerabilities = ["Support ended"]; };
+  jdk-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk14.linux.jdk.openj9; knownVulnerabilities = ["Support ended"]; };
+  jre-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk14.linux.jre.openj9; knownVulnerabilities = ["Support ended"]; };
 }

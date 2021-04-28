@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.1.3";
+  version = "0.2.1";
 
   disabled = isPy27;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "neurodata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qdnb1l4hz4dgwhapz1fp9sb2vxxvr8h2ngsbvyf50h3kapcn19r";
+    sha256 = "0izjc68rb6sr3x55c3zzraakzspgzh80qykfax9zj868zypfm365";
   };
 
   propagatedBuildInputs = [

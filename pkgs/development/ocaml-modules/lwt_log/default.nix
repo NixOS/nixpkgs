@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "lwt_log";
   version = "1.1.1";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {

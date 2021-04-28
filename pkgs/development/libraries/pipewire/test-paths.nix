@@ -14,6 +14,7 @@ let
 in runCommand "pipewire-test-paths" { } ''
   touch $out
 
+  ${check-output pipewire.mediaSession paths-out-media-session}
   ${check-output pipewire.lib paths-lib}
   ${check-output pipewire paths-out}
 

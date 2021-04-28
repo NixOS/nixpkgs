@@ -331,6 +331,9 @@ stdenv.mkDerivation {
     # Swift doesn't support 32bit Linux, unknown on other platforms.
     platforms = platforms.linux;
     badPlatforms = platforms.i686;
-    broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
+    broken = true; # 2021-01-29
+    knownVulnerabilities = [
+      "CVE-2020-9861"
+    ];
   };
 }

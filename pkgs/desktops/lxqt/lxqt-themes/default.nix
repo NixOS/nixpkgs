@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "lxqt-themes";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "12pbba7a2rk0kjn3hl2lvn90di58w0s5psbq51kz39ah3rlp9dzz";
+    sha256 = "13zh5yrq0f96cn5m6i7zdvgb9iw656fad5ps0s2zx6x8mj2mv64f";
   };
 
   nativeBuildInputs = [
@@ -25,9 +25,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Themes, graphics and icons for LXQt";
     homepage = "https://github.com/lxqt/lxqt-themes";
-    license = licenses.lgpl21;
+    description = "Themes, graphics and icons for LXQt";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

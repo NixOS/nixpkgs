@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "018zgigp5xlrb4mgshgrvns0cfbhhcg89cifbjj4rv6s3n9riphw";
+    sha256 = "18alxnym54gswsmsr5ra82q4k1q5fyzsyx0jykb2sk2nkpvx7334";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
+    # This patches makes sure we do not attempt to use the MD5 implementation
+    # of the host platform when running the tests
     ./playtests-darwin.patch
-  ] # This I didn't upstream because if you use posix threads with MinGW it will
-    # work fine, and I'm not sure how to write the condition.
-    ++ lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
+  ];
 
   postPatch = lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
@@ -36,13 +36,15 @@ stdenv.mkDerivation rec {
       tests/playTests.sh
   '';
 
-  cmakeFlags = [
-    "-DZSTD_BUILD_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
-    "-DZSTD_BUILD_STATIC:BOOL=${if static then "ON" else "OFF"}"
-    "-DZSTD_PROGRAMS_LINK_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
-    "-DZSTD_LEGACY_SUPPORT:BOOL=${if legacySupport then "ON" else "OFF"}"
-    "-DZSTD_BUILD_TESTS:BOOL=ON"
-  ];
+  cmakeFlags = lib.attrsets.mapAttrsToList
+    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+      BUILD_SHARED = !static;
+      BUILD_STATIC = static;
+      PROGRAMS_LINK_SHARED = !static;
+      LEGACY_SUPPORT = legacySupport;
+      BUILD_TESTS = doCheck;
+    };
+
   cmakeDir = "../build/cmake";
   dontUseCmakeBuildDir = true;
   preConfigure = ''
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ file ];
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests

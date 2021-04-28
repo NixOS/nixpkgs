@@ -18,6 +18,8 @@
 , wrapGAppsHook
 , withGui ? false }:
 
+assert withGui -> !stdenv.isDarwin;
+
 with lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
@@ -30,12 +32,9 @@ stdenv.mkDerivation rec {
     sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
-  CFLAGS="-I${lib.getDev util-linux}/include";
-
   nativeBuildInputs = [
     pkg-config
     sphinx
-    gettext
     scons
   ] ++ lib.optionals withGui [
     makeWrapper
@@ -57,9 +56,21 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
   ];
 
-  # this doesn't seem to support configureFlags, and appends $out afterwards,
-  # so add the --without-gui in front of it
-  prefixKey = lib.optionalString (!withGui) " --without-gui " + "--prefix=";
+  prePatch = ''
+    export CFLAGS="$NIX_CFLAGS_COMPILE"
+    export LDFLAGS="''${NIX_LDFLAGS//-rpath /-Wl,-rpath=}"
+
+    # remove sources of nondeterminism
+    substituteInPlace lib/cmdline.c \
+      --replace "__DATE__" "\"Jan  1 1970\"" \
+      --replace "__TIME__" "\"00:00:00\""
+    substituteInPlace docs/SConscript \
+      --replace "gzip -c " "gzip -cn "
+  '';
+
+  prefixKey = "--prefix=";
+
+  sconsFlags = lib.optionals (!withGui) [ "--without-gui" ];
 
   # in GUI mode, this shells out to itself, and tries to import python modules
   postInstall = lib.optionalString withGui ''
@@ -70,8 +81,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ aaschmid koral ];
   };
 }

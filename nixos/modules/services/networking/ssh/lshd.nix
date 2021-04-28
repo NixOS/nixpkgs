@@ -29,6 +29,7 @@ in
 
       portNumber = mkOption {
         default = 22;
+        type = types.port;
         description = ''
           The port on which to listen for connections.
         '';
@@ -36,6 +37,7 @@ in
 
       interfaces = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = ''
           List of network interfaces where listening for connections.
           When providing the empty list, `[]', lshd listens on all
@@ -46,6 +48,7 @@ in
 
       hostKey = mkOption {
         default = "/etc/lsh/host-key";
+        type = types.str;
         description = ''
           Path to the server's private key.  Note that this key must
           have been created, e.g., using "lsh-keygen --server |
@@ -79,6 +82,7 @@ in
 
       loginShell = mkOption {
         default = null;
+        type = types.nullOr types.str;
         description = ''
           If non-null, override the default login shell with the
           specified value.
@@ -88,6 +92,7 @@ in
 
       srpKeyExchange = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Whether to enable SRP key exchange and user authentication.
         '';
@@ -106,6 +111,7 @@ in
       };
 
       subsystems = mkOption {
+        type = types.listOf types.path;
         description = ''
           List of subsystem-path pairs, where the head of the pair
           denotes the subsystem name, and the tail denotes the path to

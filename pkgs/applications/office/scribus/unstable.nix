@@ -2,7 +2,6 @@
 , cairo
 , cmake
 , cups
-, fetchpatch
 , fetchurl
 , fontconfig
 , freetype
@@ -36,11 +35,11 @@ in
 mkDerivation rec {
   pname = "scribus";
 
-  version = "1.5.6.1";
+  version = "1.5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
+    sha256 = "sha256-MYMWss/Hp2GR0+DT+MImUUfa6gVwFiAo4kPCktgm+M4=";
   };
 
   nativeBuildInputs = [

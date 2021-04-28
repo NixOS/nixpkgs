@@ -257,18 +257,9 @@ rec {
   #     print "Howdy!\n" if true;
   #   ''
   writePerl = name: { libraries ? [] }:
-  let
-    perl-env = pkgs.buildEnv {
-      name = "perl-environment";
-      paths = libraries;
-      pathsToLink = [
-        "/${pkgs.perl.libPrefix}"
-      ];
-    };
-  in
-  makeScriptWriter {
-    interpreter = "${pkgs.perl}/bin/perl -I ${perl-env}/${pkgs.perl.libPrefix}";
-  } name;
+    makeScriptWriter {
+      interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
+    } name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
   writePerlBin = name:

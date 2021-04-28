@@ -1,0 +1,38 @@
+diff --git a/out/extension.js b/out/extension.js
+index e44cef2..fba0899 100644
+--- a/out/extension.js
++++ b/out/extension.js
+@@ -141,24 +141,6 @@ function updateLanguageServer() {
+     return __awaiter(this, void 0, void 0, function* () {
+         const delay = 1000 * 60 * 24;
+         setTimeout(updateLanguageServer, delay); // check for new updates every 24hrs
+-        // skip install if a language server binary path is set
+-        if (!vscodeUtils_1.config('terraform').get('languageServer.pathToBinary')) {
+-            const installer = new languageServerInstaller_1.LanguageServerInstaller(installPath, reporter);
+-            const install = yield installer.needsInstall();
+-            if (install) {
+-                yield stopClients();
+-                try {
+-                    yield installer.install();
+-                }
+-                catch (err) {
+-                    reporter.sendTelemetryException(err);
+-                    throw err;
+-                }
+-                finally {
+-                    yield installer.cleanupZips();
+-                }
+-            }
+-        }
+         return startClients(); // on repeat runs with no install, this will be a no-op
+     });
+ }
+@@ -256,7 +238,7 @@ function pathToBinary() {
+                 reporter.sendTelemetryEvent('usePathToBinary');
+             }
+             else {
+-                command = path.join(installPath, 'terraform-ls');
++                command = 'TERRAFORM-LS-PATH';
+             }
+             _pathToBinaryPromise = Promise.resolve(command);
+         }

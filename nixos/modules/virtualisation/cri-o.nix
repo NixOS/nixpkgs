@@ -103,7 +103,10 @@ in
       cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
       pinns_path = "${cfg.package}/bin/pinns"
-      hooks_dir = []
+      hooks_dir = [
+      ${lib.optionalString config.virtualisation.containers.ociSeccompBpfHook.enable
+        ''"${config.boot.kernelPackages.oci-seccomp-bpf-hook}",''}
+      ]
 
       ${optionalString (cfg.runtime != null) ''
       default_runtime = "${cfg.runtime}"

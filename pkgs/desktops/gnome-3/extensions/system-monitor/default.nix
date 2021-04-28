@@ -1,14 +1,14 @@
-{ lib, stdenv, substituteAll, fetchpatch, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-system-monitor";
-  version = "2020-04-27-unstable";
+  version = "unstable-2021-04-08";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "7f8f0a7b255473941f14d1dcaa35ebf39d3bccd0";
-    sha256 = "tUUvBY0UEUE+T79zVZEAICpKoriFZuuZzi9ArdHdXks=";
+    rev = "942603da39de12f50b1f86efbde92d7526d1290e";
+    sha256 = "0lzb7064bigw2xsqkzr8qfhp9wfmxyi3823j2782v99jpcz423aw";
   };
 
   buildInputs = [

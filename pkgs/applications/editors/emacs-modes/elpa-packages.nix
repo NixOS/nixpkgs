@@ -20,7 +20,7 @@ instantenous and formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo }:
+{ lib, stdenv, texinfo, writeText }:
 
 self: let
 
@@ -31,7 +31,7 @@ self: let
   };
 
   elpaBuild = import ../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo;
+    inherit lib stdenv texinfo writeText;
     inherit (self) emacs;
   };
 
@@ -53,6 +53,9 @@ self: let
       seq = if lib.versionAtLeast self.emacs.version "27"
             then null
             else super.seq;
+      project = if lib.versionAtLeast self.emacs.version "28"
+                then null
+                else super.project;
     };
 
     elpaPackages = super // overrides;

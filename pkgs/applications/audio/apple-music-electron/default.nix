@@ -1,12 +1,12 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "apple-music-electron";
-  version = "1.5.2";
+  version = "1.5.5";
   name = "Apple.Music-${version}";
 
   src = fetchurl {
-    url = "https://github.com/iiFir3z/Apple-Music-Electron/releases/download/${version}/${name}.AppImage";
-    sha256 = "1jl0wgwy6ajmfkzygwb7cm9m49nkhp3x6vd8kwmh6ccs3jy4ayp5";
+    url = "https://github.com/cryptofyre/Apple-Music-Electron/releases/download/v${version}/${name}.AppImage";
+    sha256 = "1gb6j3nvam9fcpsgiv56jccg9a4y14vzsyw11h3hckaigy90knpx";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
@@ -18,7 +18,7 @@ in appimageTools.wrapType2 {
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=$out/bin/apple-music-electron'
+      --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
-, xdg_utils
+, xdg-utils
 # For glewinfo
 , libXmu, libXi, libXext }:
 
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
   };
 
-  buildInputs = [ makeWrapper which xdg_utils ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which xdg-utils ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications

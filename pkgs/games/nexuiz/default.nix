@@ -21,9 +21,8 @@ in stdenv.mkDerivation {
     sha256 = "0010jrxc68qqinkvdh1qn2b8z3sa5v1kcd8d1m4llp3pr6y7xqm5";
   };
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    # required for both
-    unzip
     # glx
     libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsaLib
     # sdl

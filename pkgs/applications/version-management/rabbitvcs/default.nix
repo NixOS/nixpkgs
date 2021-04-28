@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, python3Packages, meld, subversion, gvfs, xdg_utils, gtk3 }:
+{ fetchFromGitHub, lib, python3Packages, meld, subversion, gvfs, xdg-utils, gtk3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rabbitvcs";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ gtk3 ];
-  pythonPath = with python3Packages; [ configobj pygobject3 pysvn dulwich tkinter gvfs xdg_utils ];
+  pythonPath = with python3Packages; [ configobj pygobject3 pysvn dulwich tkinter gvfs xdg-utils ];
 
   prePatch = ''
       sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py

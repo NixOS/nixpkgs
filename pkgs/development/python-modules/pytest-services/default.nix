@@ -6,7 +6,7 @@
 , psutil
 , pytest
 , setuptools_scm
-, subprocess32
+, subprocess32 ? null
 , toml
 , zc_lockfile
 }:
@@ -25,10 +25,11 @@ buildPythonPackage rec {
     toml
   ];
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     requests
     psutil
-    pytest
     zc_lockfile
   ] ++ lib.optional (!isPy3k) subprocess32;
 

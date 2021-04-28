@@ -27,6 +27,14 @@ appleDerivation {
     install_name_tool -id $out/lib/libutil.dylib $out/lib/libutil.dylib
   '';
 
+  # FIXME: headers are different against headersOnly. And all the headers are NOT in macos, do we really want them?
+  # appleHeaders = ''
+  #   libutil.h
+  #   mntopts.h
+  #   tzlink.h
+  #   wipefs.h
+  # '';
+
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;

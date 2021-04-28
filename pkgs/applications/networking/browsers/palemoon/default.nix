@@ -6,7 +6,7 @@
 , libGLU, libGL, perl, python2, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 
-, withGTK3 ? false, gtk3
+, withGTK3 ? true, gtk3
 }:
 
 let
@@ -16,14 +16,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.17.0";
+  version = "29.1.1";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "0478xn5skpls91hkraykc308hppdc8vj9xbgvlm5wkv0y4dp7h5x";
+    sha256 = "1ppdmj816zwccb0l0mgpq14ckdwg785wmqz41wran0nl63fg6i1x";
     fetchSubmodules = true;
   };
 
@@ -43,14 +43,14 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook
+    desktop-file-utils file gnum4 perl pkg-config python2 wget which wrapGAppsHook unzip
   ];
 
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
     gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
     libstartup_notification libGLU libGL
-    libpulseaudio unzip yasm zip zlib
+    libpulseaudio yasm zip zlib
   ]
   ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
@@ -119,6 +119,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     ./mach install
 
+    # Fix missing icon due to wrong WMClass
+    substituteInPlace ./palemoon/branding/official/palemoon.desktop \
+      --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
     desktop-file-install --dir=$out/share/applications \
       ./palemoon/branding/official/palemoon.desktop
 

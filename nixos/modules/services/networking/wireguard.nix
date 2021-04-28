@@ -63,7 +63,7 @@ let
 
       preSetup = mkOption {
         example = literalExample ''
-          ${pkgs.iproute}/bin/ip netns add foo
+          ${pkgs.iproute2}/bin/ip netns add foo
         '';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
@@ -238,7 +238,7 @@ let
         wantedBy = [ "wireguard-${name}.service" ];
         requiredBy = [ "wireguard-${name}.service" ];
         before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard ];
+        path = with pkgs; [ wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -278,7 +278,7 @@ let
         wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-        path = with pkgs; [ iproute wireguard-tools ];
+        path = with pkgs; [ iproute2 wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -333,7 +333,7 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute wireguard-tools ];
+        path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";

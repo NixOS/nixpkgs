@@ -1,4 +1,4 @@
 import ./generic.nix {
-  version = "1.24.0";
-  ldcSha256 = "0g5svf55i0kq55q49awmwqj9qi1n907cyrn1vjdjgs8nx6nn35gx";
+  version = "1.25.1";
+  ldcSha256 = "sha256-DjcW/pknvpEmTR/eXEEHECb2xEJic16evaU4CJthLUA=";
 }

@@ -40,11 +40,6 @@ in pythonPackages.buildPythonApplication rec {
     dateutil
   ];
 
-  prePatch = ''
-    # Pesky unicode punctuation.
-    substituteInPlace setup.cfg --replace "‘" "'"
-  '';
-
   # In order to spare double wrapping, we use:
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

@@ -15,18 +15,18 @@
 , pyyaml
 , setuptools
 , six
-, typing
+, typing ? null
 , watchdog
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.21.9";
+  version = "1.22.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "312f88838c8ea4b4ac79dce0e5b4ba3125130ca66ea99a4694f535501dca95e3";
+    sha256 = "5a84a73c4a8d8b22bb64e06ff99060d7f222097db4237e58749dcad5165f082d";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -52,8 +52,7 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing' \
-      --replace 'attrs>=19.3.0,<20.3.0' 'attrs'
+      --replace 'typing==3.6.4' 'typing'
   '';
 
   checkPhase = ''

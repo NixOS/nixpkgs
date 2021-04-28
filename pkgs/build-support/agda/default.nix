@@ -1,13 +1,13 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, mkShell, ghcWithPackages }:
+{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, mkShell, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
 let
   withPackages' = {
     pkgs,
-    ghc ? ghcWithPackages (p: with p; [ ieee ])
+    ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
     pkgs' = if builtins.isList pkgs then pkgs else pkgs self;
     library-file = writeText "libraries" ''
@@ -18,7 +18,10 @@ let
   in runCommandNoCC "${pname}-${version}" {
     inherit pname version;
     nativeBuildInputs = [ makeWrapper ];
-    passthru.unwrapped = Agda;
+    passthru = {
+      unwrapped = Agda;
+      tests = { inherit (nixosTests) agda; };
+    };
   } ''
     mkdir -p $out/bin
     makeWrapper ${Agda}/bin/agda $out/bin/agda \
@@ -70,7 +73,7 @@ let
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
       };

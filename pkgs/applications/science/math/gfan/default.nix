@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
   '';
 
-  buildFlags = [ "CC=cc" "CXX=c++" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++" ];
   installFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ gmp mpir cddlib ];
 

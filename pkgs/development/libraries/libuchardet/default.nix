@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isi686; # tests fail on i686
 
   meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";

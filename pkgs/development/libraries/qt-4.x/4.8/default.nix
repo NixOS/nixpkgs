@@ -5,8 +5,7 @@
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , alsaLib
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, flashplayerFix ? false, gdk-pixbuf
-, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
+, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2, gdk-pixbuf
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
@@ -108,10 +107,6 @@ stdenv.mkDerivation rec {
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
       }))
-    ++ lib.optional flashplayerFix (substituteAll {
-        src = ./dlopen-webkit-nsplugin.diff;
-        gtk = gtk2.out;
-      })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
         sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";

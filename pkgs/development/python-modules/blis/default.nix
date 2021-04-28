@@ -35,6 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ danieldk ];
   };
 }

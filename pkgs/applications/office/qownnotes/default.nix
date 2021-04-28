@@ -1,19 +1,19 @@
-{  mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv /* for isLinux */ }:
+{ mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv, qtx11extras }:
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "20.2.5";
+  version = "21.4.0";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Can grab official version like so:
-    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-20.2.5.tar.xz.sha256
-    sha256 = "c26d2a86a521cd243ec0a4788e7627e91cb5877dace73d93dd7d35dd02e9e4c5";
+    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-21.4.0.tar.xz.sha256
+    sha256 = "bda454031a79a768b472677036ada7501ea430482277f1694757066922428eec";
   };
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [
-    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets
+    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras
   ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {
@@ -21,7 +21,7 @@ mkDerivation rec {
 
     homepage = "https://www.qownnotes.org/";
     platforms = platforms.all;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ dtzWill ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dtzWill totoroot ];
   };
 }

@@ -1,23 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "eqrion";
     repo = "cbindgen";
     rev = "v${version}";
-    sha256 = "19bwllrajks286wl4zc5axgh4m9qqxdnc5024c30hyk0xnjffd0c";
+    sha256 = "sha256-S3t1hv/mRn6vwyzT78DPIacqiJV3CnjGdOKsdSyYs8g=";
   };
 
-  cargoSha256 = "1lzzckzcgj496chbfd6lhwxcangv0krx8m5k2jwffnb9mfgac7hx";
+  cargoSha256 = "sha256-uaeJmGEQHVSuILlYlJOHmRWWdN6FPvrHu6CbJyb60MY=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
+  checkInputs = [
+    python3Packages.cython
+  ];
+
   checkFlags = [
+    # Disable tests that require rust unstable features
     # https://github.com/eqrion/cbindgen/issues/338
     "--skip test_expand"
+    "--skip test_bitfield"
+    "--skip lib_default_uses_debug_build"
+    "--skip lib_explicit_debug_build"
+    "--skip lib_explicit_release_build"
   ];
 
   meta = with lib; {

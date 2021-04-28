@@ -1,19 +1,14 @@
-{ lib
-, python3
-, groff
-, less
-, fetchFromGitHub
-}:
+{ lib, python3, groff, less, fetchFromGitHub }:
 let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev85";
+        version = "2.0.0dev103";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "962bb5d356096c57e25a5579d09e4b4d928c886d";
-          sha256 = "09bk8d0r3245kbi96641gvfl3q4jjhw55gjldc2cpml6mv36hhnb";
+          rev = "e30d580042687a79776fdf93264e80746e08d21f";
+          sha256 = "sha256-+cTQQO6dPctvf3WZOk8Mgo1eQUdqRdGCcz7jcVhEvNo=";
         };
       });
       prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
@@ -29,18 +24,18 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.1.17"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.1.35"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "1pla97sylzhvj7r5cschv4bg23hpl0ax1m5cx4291fppjnrn2yp9";
+    sha256 = "sha256-YgzagbbVLlGSPIhck0YaJg3gQGEdoqXtLapN04Q6hLw=";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5"
-    substituteInPlace setup.py --replace "cryptography>=2.8.0,<=2.9.0" "cryptography>=2.8.0"
+    substituteInPlace setup.py --replace "cryptography>=3.3.2,<3.4.0" "cryptography>=3.3.2"
     substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
     substituteInPlace setup.py --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml>=0.15.0"
     substituteInPlace setup.py --replace "wcwidth<0.2.0" "wcwidth"

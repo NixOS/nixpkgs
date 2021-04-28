@@ -17,7 +17,8 @@ self = stdenv.mkDerivation rec {
     ./abi-check.patch
   ];
 
-  nativeBuildInputs = [ bison cmake pkg-config rpcsvc-proto ];
+  nativeBuildInputs = [ bison cmake pkg-config ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''

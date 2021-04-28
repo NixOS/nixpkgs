@@ -1,30 +1,33 @@
 {
   lib,
   buildPythonApplication,
-  stdenv,
   substituteAll,
   fetchFromGitHub,
   isPy3k,
   flask,
   flask-httpauth,
+  flask-socketio,
   stem,
+  psutil,
   pyqt5,
   pycrypto,
-  pysocks,
-  pytest,
+  pyside2,
+  pytestCheckHook,
+  qrcode,
   qt5,
   requests,
+  unidecode,
   tor,
   obfs4,
 }:
 
 let
-  version = "2.2";
+  version = "2.3.1";
   src = fetchFromGitHub {
     owner = "micahflee";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "0m8ygxcyp3nfzzhxs2dfnpqwh1vx0aws44lszpnnczz4fks3a5j4";
+    sha256 = "sha256-H09x3OF6l1HLHukGPvV2rZUjW9fxeKKMZkKbY9a2m9I=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -51,63 +54,76 @@ let
     maintainers = with maintainers; [ lourkeur ];
   };
 
-  common = buildPythonApplication {
-    pname = "onionshare-common";
-    inherit version meta src;
-
-    disable = !isPy3k;
-    propagatedBuildInputs = [
-      flask
-      flask-httpauth
-      stem
-      pyqt5
-      pycrypto
-      pysocks
-      requests
-    ];
-    buildInputs = [
-      tor
-      obfs4
-    ];
-
+in rec {
+  onionshare = buildPythonApplication {
+    pname = "onionshare-cli";
+    inherit version meta;
+    src = "${src}/cli";
     patches = [
+      # hardcode store paths of dependencies
       (substituteAll {
         src = ./fix-paths.patch;
         inherit tor obfs4;
         inherit (tor) geoip;
       })
     ];
-    postPatch = "substituteInPlace onionshare/common.py --subst-var-by common $out";
+    disable = !isPy3k;
+    propagatedBuildInputs = [
+      flask
+      flask-httpauth
+      flask-socketio
+      stem
+      psutil
+      pycrypto
+      requests
+      unidecode
+    ];
 
-    doCheck = false;
-  };
-in
-{
-  onionshare = stdenv.mkDerivation {
-    pname = "onionshare";
-    inherit version meta;
+    buildInputs = [
+      tor
+      obfs4
+    ];
 
-    dontUnpack = true;
+    checkInputs = [
+      pytestCheckHook
+    ];
 
-    inherit common;
-    installPhase = ''
-      mkdir -p $out/bin
-      cp $common/bin/onionshare -t $out/bin
+    preCheck = ''
+      # Tests use the home directory
+      export HOME="$(mktemp -d)"
     '';
   };
-  onionshare-gui = stdenv.mkDerivation {
-    pname = "onionshare-gui";
+
+  onionshare-gui = buildPythonApplication {
+    pname = "onionshare";
     inherit version meta;
+    src = "${src}/desktop/src";
+    patches = [
+      # hardcode store paths of dependencies
+      (substituteAll {
+        src = ./fix-paths-gui.patch;
+        inherit tor obfs4;
+        inherit (tor) geoip;
+      })
+    ];
+
+    disable = !isPy3k;
+    propagatedBuildInputs = [
+      onionshare
+      pyqt5
+      pyside2
+      psutil
+      qrcode
+    ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-    dontUnpack = true;
-
-    inherit common;
-    installPhase = ''
-      mkdir -p $out/bin
-      cp $common/bin/onionshare-gui -t $out/bin
-      wrapQtApp $out/bin/onionshare-gui
+    preFixup = ''
+      wrapQtApp $out/bin/onionshare
     '';
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "onionshare" ];
   };
 }

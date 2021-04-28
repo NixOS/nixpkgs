@@ -136,6 +136,7 @@ let
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
     sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
   };
+
   odpBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
@@ -147,6 +148,8 @@ stdenv.mkDerivation rec {
   pname = "asciidoc";
   version = "9.0.4";
 
+  # Note: a substitution to improve reproducibility should be updated once 10.0.0 is
+  # released. See the comment in `patchPhase` for more information.
   src = fetchFromGitHub {
     owner = "asciidoc";
     repo = "asciidoc-py3";
@@ -157,7 +160,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 unzip autoreconfHook ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with lib; ''
+  postPatch = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''
@@ -261,7 +264,15 @@ stdenv.mkDerivation rec {
   '') + ''
     patchShebangs .
 
-    sed -i -e "s,/etc/vim,,g" Makefile.in
+    # Note: this substitution will not work in the planned 10.0.0 release:
+    #
+    # https://github.com/asciidoc/asciidoc-py3/commit/dfffda23381014481cd13e8e9d8f131e1f93f08a
+    #
+    # Update this substitution to:
+    #
+    # --replace "python3 -m asciidoc.a2x" "python3 -m asciidoc.a2x -a revdate=01/01/1980"
+    substituteInPlace Makefile.in \
+      --replace "python3 a2x.py" "python3 a2x.py -a revdate=01/01/1980"
   '';
 
   preInstall = "mkdir -p $out/etc/vim";

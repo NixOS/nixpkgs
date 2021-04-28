@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ace";
-  version = "6.5.11";
+  version = "7.0.1";
 
   src = fetchurl {
-    url = "http://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
-    sha256 = "0fbbysy6aymys30zh5m2bygs84dwwjnbsdl9ipj1rvfrhq8jbylb";
+    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
+    sha256 = "sha256-5nH5a0tBOcGfA07eeh9EjH0vgT3gTRWYHXoeO+QFQjQ=";
   };
 
   enableParallelBuilding = true;
@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     "-Wno-error=format-security"
   ];
 
-  patchPhase = ''substituteInPlace ./MPC/prj_install.pl \
-    --replace /usr/bin/perl "${perl}/bin/perl"'';
+  postPatch = ''
+    patchShebangs ./MPC/prj_install.pl
+  '';
 
   preConfigure = ''
     export INSTALL_PREFIX=$out
@@ -31,10 +32,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://www.dre.vanderbilt.edu/~schmidt/ACE.html";
     description = "ADAPTIVE Communication Environment";
-    homepage = "http://www.dre.vanderbilt.edu/~schmidt/ACE.html";
     license = licenses.doc;
+    maintainers = with maintainers; [ nico202 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.nico202 ];
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mblaze";
-  version = "1.0";
+  version = "1.1";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ ruby ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
@@ -11,10 +11,12 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "0hxy3mjjv4hg856sl1r15fdmqaw4s9c26b3lidsd5x0kpqy601ai";
+    sha256 = "sha256-Ho2Qoxs93ig4yYUOaoqdYnLA8Y4+7CfRM0dju89JOa4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     installShellCompletion contrib/_mblaze

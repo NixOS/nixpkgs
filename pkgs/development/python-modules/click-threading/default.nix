@@ -4,7 +4,7 @@
 , pytest
 , click
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {

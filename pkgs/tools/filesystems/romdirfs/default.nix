@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
     homepage = "https://github.com/mlafeldt/romdirfs";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }

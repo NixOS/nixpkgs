@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "06pfq5wa8d25i9bdjkp4xhms5101dsrbg82riz7rz1a0a32pqxgj";
   };
 
+  postPatch = ''
+    substituteInPlace install-sh \
+      --replace "stripprog=" "stripprog=\$STRIP # "
+  '';
+
   meta = {
     homepage = "https://www.astro.caltech.edu/~mcs/tecla/";
     description = "Command-line editing library";

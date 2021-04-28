@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1gb8vb1wl7ikn269dd1c7ihqhkyrwk19jwx5kd0rdvbk6g7g25ix";
   };
 
+  patches = [
+    # https://build.opensuse.org/request/show/843612
+    ./CVE-2019-19917-and-CVE-2019-19918.patch
+  ];
+
   buildInputs = [ ghostscript ];
   builder = ./builder.sh;
 

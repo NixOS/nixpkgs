@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   # (given the state of Maven support in Nix). We're not actually building any java
   # source here.
   pomFileDir = "exhibitor-standalone/src/main/resources/buildscripts/standalone/maven";
-  nativeBuildInputs = [ maven ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ maven makeWrapper ];
   buildPhase = ''
       cd ${pomFileDir}
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2

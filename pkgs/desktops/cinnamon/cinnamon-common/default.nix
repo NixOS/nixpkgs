@@ -1,5 +1,4 @@
 { atk
-, autoreconfHook
 , cacert
 , fetchpatch
 , dbus
@@ -20,6 +19,7 @@
 , libsoup
 , libstartup_notification
 , libXtst
+, libXdamage
 , muffin
 , networkmanager
 , pkg-config
@@ -42,32 +42,25 @@
 , pciutils
 , timezonemap
 , libnma
+, meson
+, ninja
+, gst_all_1
 }:
 
-let
-  libcroco = callPackage ./libcroco.nix { };
-in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "4.6.1";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    sha256 = "149lhg953fa0glm250f76z2jzyaabh97jxiqkjnqvsk6bjk1d0bw";
+    hash = "sha256-4DMXQYH1/RjLhgrn55I7Vkk6+gGsR+OVmiwxVHUIyro=";
   };
 
   patches = [
-    # remove dbus-glib
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/ce99760fa15c3de2e095b9a5372eeaca646fbed1.patch";
-      sha256 = "0p2sbdi5w7sgblqbgisb6f8lcj1syzq5vlk0ilvwaqayxjylg8gz";
-    })
-    (fetchpatch {
-      url = "https://leigh123linux.fedorapeople.org/pub/patches/new_cjs.patch";
-      sha256 = "07biv3vkbn3jzijbdrxcw73p8xz2djbsax014mlkvmryrmys0rg4";
-    })
+    ./use-sane-install-dir.patch
+    ./libdir.patch
   ];
 
   buildInputs = [
@@ -84,16 +77,17 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     json-glib
-    libcroco
     libsoup
     libstartup_notification
     libXtst
+    libXdamage
     muffin
     networkmanager
     pkg-config
     polkit
     libxml2
     libgnomekbd
+    gst_all_1.gstreamer
 
     # bindings
     cairo
@@ -114,23 +108,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    autoreconfHook
+    meson
+    ninja
     wrapGAppsHook
     intltool
     gtk-doc
   ];
 
-  autoreconfPhase = ''
-    GTK_DOC_CHECK=false NOCONFIGURE=1 bash ./autogen.sh
-  '';
-
   configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" "--enable-gtk-doc=no" ];
 
   postPatch = ''
-    substituteInPlace src/Makefile.am \
-      --replace "\$(libdir)/muffin" "${muffin}/lib/muffin"
-    patchShebangs autogen.sh
-
     find . -type f -exec sed -i \
       -e s,/usr/share/cinnamon,$out/share/cinnamon,g \
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \

@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
     maintainers = with maintainers; [ eelco thoughtpolice ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

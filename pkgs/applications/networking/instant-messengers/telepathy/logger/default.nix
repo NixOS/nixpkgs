@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkg-config
+{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, python2, pkg-config
 , dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
-    dbus telepathy-glib.python
+    dbus python2
   ];
 
   configureFlags = [ "--enable-call" ];

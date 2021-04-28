@@ -12,11 +12,11 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.02";
+  version = "4.03";
 
   src = fetchzip {
-    url = "https://xpdfreader-dl.s3.amazonaws.com/${pname}-${version}.tar.gz";
-    sha256 = "0dzwq6fnk013wa4l5mjpvm4mms2mh5hbrxv4rhk2ab5ljbzz7b2w";
+    url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
+    sha256 = "09yhvmh1vxjy763nnmawynygp5bh3j4i8ixqja64j11676yl77n6";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     lib.optional enablePrinting cups ++
     lib.optional enablePDFtoPPM freetype;
 
-  hardeningDisable = [ "format" ];
-
   desktopItem = makeDesktopItem {
     name = "xpdf";
     desktopName = "Xpdf";
@@ -48,9 +46,14 @@ stdenv.mkDerivation rec {
     terminal = "false";
   };
 
-  postInstall = ''
-    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop $out/share/applications/xpdf.desktop
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
+  '';
+
+  # wrapQtAppsHook broken on macOS (https://github.com/NixOS/nixpkgs/issues/102044)
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp $out/bin/xpdf
   '';
 
   meta = with lib; {
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
         pdffonts:  lists fonts used in PDF files
         pdfdetach: extracts attached files from PDF files
     '';
-    license = with licenses; [ gpl2 gpl3 ];
+    license = with licenses; [ gpl2Only gpl3Only ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [

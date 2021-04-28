@@ -1,14 +1,16 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi
+, bluez, dbus-next, pytestCheckHook, pytest-cov
+}:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.10.0";
+  version = "0.11.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c3a873965f2910865895e572e7a4f10533d6e150e6ba17936397426bf8d1eee";
+    sha256 = "1zs5lz3r17a2xn19i4na132iccyjsl9navj0d3v7gks7hlcad5kp";
   };
 
   postPatch = ''
@@ -19,10 +21,11 @@ buildPythonPackage rec {
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  propagatedBuildInputs = [ txdbus ];
-  checkInputs = [ pytest pytestcov ];
+  propagatedBuildInputs = [ dbus-next ];
 
-  checkPhase = "AGENT_OS=linux py.test";
+  checkInputs = [ pytestCheckHook pytest-cov ];
+
+  pythonImportsCheck = [ "bleak" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy platform Agnostic Klient for Python";

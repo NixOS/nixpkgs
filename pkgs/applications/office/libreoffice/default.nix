@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -58,17 +58,12 @@ in (mkDrv rec {
 
   outputs = [ "out" "dev" ];
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead
-  # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [
-    "-I${librdf_rasqal}/include/rasqal"
-  ] ++ lib.optionals stdenv.isx86_64 [ "-mno-fma" "-mno-avx" ]
-  # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
-  ++ [ "-fno-visibility-inlines-hidden" ];
-
-  patches = [
-    ./xdg-open-brief.patch
+    "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
+    "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
+
+  patches = [ ./xdg-open-brief.patch ];
 
   tarballPath = "external/tarballs";
 
@@ -378,7 +373,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
+  ];
 
   checkPhase = ''
     make unitcheck
@@ -391,7 +386,7 @@ in (mkDrv rec {
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
-    [ ant ArchiveZip boost cairo clucene_core
+    [ ant ArchiveZip boost box2d cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg

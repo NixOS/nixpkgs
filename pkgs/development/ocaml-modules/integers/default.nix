@@ -1,8 +1,10 @@
-{ lib, fetchzip, buildDunePackage }:
+{ lib, fetchzip, buildDunePackage, ocaml }:
 
 buildDunePackage rec {
   pname = "integers";
   version = "0.4.0";
+
+  useDune2 = lib.versionAtLeast ocaml.version "4.08";
 
   src = fetchzip {
     url = "https://github.com/ocamllabs/ocaml-integers/archive/${version}.tar.gz";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildOasisPackage
+{ lib, fetchFromGitHub, buildOasisPackage
 , ctypes, mariadb, libmysqlclient }:
 
 buildOasisPackage rec {

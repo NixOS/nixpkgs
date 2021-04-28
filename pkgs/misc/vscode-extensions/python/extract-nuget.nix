@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   inherit name version src;
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   dontBuild = true;
   unpackPhase = "unzip $src";
   installPhase = ''

@@ -31,6 +31,9 @@ stdenv.mkDerivation {
 
     substituteInPlace sbysrc/sby_core.py \
       --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
+
+    substituteInPlace sbysrc/sby.py \
+      --replace '/usr/bin/env python3' '${python3}/bin/python'
   '';
 
   buildPhase = "true";

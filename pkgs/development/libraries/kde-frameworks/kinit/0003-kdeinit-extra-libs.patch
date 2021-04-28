@@ -33,7 +33,7 @@ index 0801b75..622dd5f 100644
 -// Completely unrelated to plugins.
 -static QString findSharedLib(const QString &lib)
 -{
--    QString path = QFile::decodeName(CMAKE_INSTALL_PREFIX "/" LIB_INSTALL_DIR "/") + lib;
+-    QString path = QFile::decodeName(CMAKE_INSTALL_PREFIX "/" KDE_INSTALL_LIBDIR "/") + lib;
 -    if (QFile::exists(path)) {
 -        return path;
 -    }

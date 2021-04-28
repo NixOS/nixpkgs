@@ -120,6 +120,7 @@ let
           };
       };
 
+    passthru.elkPackages = elk;
     testScript = ''
       import json
 

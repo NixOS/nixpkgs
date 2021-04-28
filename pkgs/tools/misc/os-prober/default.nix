@@ -11,17 +11,17 @@ lvm2        # lvs
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.77";
+  version = "1.78";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = pname;
     rev = version;
-    sha256 = "05sji756xdl67pp2sf7rk0ih9h6f6kgk9nvxlyv1bzbmcizlh2d2";
+    sha256 = "sha256-mfv1b40n/opXdyj6IXWVf/32sWlS+/DbXIRwE1zX4KM=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     # executables
     install -Dt $out/bin os-prober linux-boot-prober

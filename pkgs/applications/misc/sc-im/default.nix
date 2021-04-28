@@ -1,43 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, pkg-config
+, which
+, bison
+, gnuplot
+, libxls
+, libxlsxwriter
+, libxml2
+, libzip
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.7.0";
   pname = "sc-im";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "0xi0n9qzby012y2j7hg4fgcwyly698sfi4i9gkvy0q682jihprbk";
+    sha256 = "sha256-AIYa3d1ml1f5GNLKijeFPX+UabgEqzdXiP60BGvBPsQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ yacc ncurses libxml2 libzip libxls ];
+  sourceRoot = "${src.name}/src";
 
-  buildPhase = ''
-    cd src
+  patches = [
+    # libxls and libxlsxwriter are not found without the patch
+    # https://github.com/andmarti1424/sc-im/pull/542
+    (fetchpatch {
+      name = "use-pkg-config-for-libxls-and-libxlsxwriter.patch";
+      url = "https://github.com/andmarti1424/sc-im/commit/b62dc25eb808e18a8ab7ee7d8eb290e34efeb075.patch";
+      sha256 = "1yn32ps74ngzg3rbkqf8dn0g19jv4xhxrfgx9agnywf0x8gbwjh3";
+    })
+  ];
 
-    sed 's/LDLIBS += -lm/& -lncurses/' -i Makefile
+  patchFlags = [ "-p2" ];
 
-    sed -e "\|^prefix  = /usr/local|   s|/usr/local|$out|" \
-        -e "\|^#LDLIBS += -lxlsreader| s|^#||            " \
-        -e "\|^#CFLAGS += -DXLS|       s|^#||            " \
-        -i Makefile
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    which
+    bison
+  ];
 
-    make
-    export DESTDIR=$out
-  '';
+  buildInputs = [
+    gnuplot
+    libxls
+    libxlsxwriter
+    libxml2
+    libzip
+    ncurses
+  ];
 
-  installPhase = ''
-    make install prefix=
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/andmarti1424/sc-im";
-    description = "SC-IM - Spreadsheet Calculator Improvised - SC fork";
+    description = "An ncurses spreadsheet program for terminal";
     license = licenses.bsdOriginal;
-    maintainers = [ ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;
   };
-
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , flex
-, yacc
+, bison
 , xmlto
 , docbook_xsl
 , docbook_xml_dtd_44
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     flex
-    yacc
+    bison
     swig
     xmlto
     docbook_xml_dtd_44

@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # make zshrc aware of where zsh-prezto is installed
+    sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/share/zsh-prezto/|g" runcoms/zshrc
+  '';
+
   installPhase = ''
     mkdir -p $out/share/zsh-prezto
     cp -R ./ $out/share/zsh-prezto

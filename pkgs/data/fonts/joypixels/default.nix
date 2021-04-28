@@ -58,15 +58,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "joypixels";
-  version = "6.0.0";
+  version = "6.5.0";
 
   src = assert !acceptLicense -> throwLicense;
     with systemSpecific; fetchurl {
       name = fontFile;
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
       sha256 = {
-        darwin = "1s1dibgpv4lc9cwbgykgwjxxhg2rbn5g9fyd10r6apj9xhfn8cyn";
-      }.${kernel.name} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
+        darwin = "034bwxy6ljvhx9zlm6jkb8vw222sg79sjwlcjfql51rk6zkmv4wx";
+      }.${kernel.name} or "1v6hz0qhbnzayxhs5j9qfa2ggn7nak53ij7kr06m93wcmlnnln86";
     };
 
   dontUnpack = true;
@@ -82,9 +82,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
-      New for 2020! JoyPixels 6.0 includes 3,342 originally crafted icon
-      designs and is 100% Unicode 13 compatible. We offer the largest selection
-      of files ranging from png, svg, iconjar, sprites, and fonts.
+      Updated for 2021! JoyPixels 6.5 includes 3,559 originally crafted icon
+      designs and is 100% Unicode 13.1 compatible. We offer the largest
+      selection of files ranging from png, svg, iconjar, sprites, and fonts.
     '';
     homepage = "https://www.joypixels.com/fonts";
     license =

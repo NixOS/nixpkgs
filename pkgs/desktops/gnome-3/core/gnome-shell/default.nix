@@ -57,6 +57,7 @@
 , gnome-autoar
 , asciidoc-full
 , bash-completion
+, mesa
 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
@@ -65,13 +66,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.38.2";
+  version = "3.38.3";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05fm7kxyvws2lbb156wfa2wf4xmkxr49rrjxg0yaxf68v000yq2k";
+    sha256 = "sha256-U0W0GMsSqXKVXOXM6u1mYkgAJzNrXFHa6lcwV1tiHO0=";
   };
 
   patches = [
@@ -147,6 +148,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome-settings-daemon
     gobject-introspection
+    mesa
 
     # recording
     pipewire

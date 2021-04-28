@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "csexp";
-  version = "1.3.2";
+  version = "1.4.0";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
-    sha256 = "0jhwrxfjb0x31xj4g4b89fzw34sq19j0rq2hs2zyh1vz4xxl47zj";
+    sha256 = "sha256-jj1vyofxAqEm3ui3KioNFG8QQ5xHIY38FJ1Rvz7fNk4=";
   };
 
   propagatedBuildInputs = [ result ];

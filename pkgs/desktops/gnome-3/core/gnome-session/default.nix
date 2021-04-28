@@ -1,6 +1,7 @@
 { fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
@@ -20,6 +21,12 @@ stdenv.mkDerivation rec {
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       grep = "${gnugrep}/bin/grep";
       bash = "${bash}/bin/bash";
+    })
+    # Fixes 2 minute delay at poweroff.
+    # https://gitlab.gnome.org/GNOME/gnome-session/issues/74
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-session/-/commit/9de6e40f12e8878f524f8d429d85724c156a0517.diff";
+      sha256 = "19vrjdf7d6dfl7sqxvbc5h5lcgk1krgzg5rkssrdzd1h4ma6y8fz";
     })
   ];
 

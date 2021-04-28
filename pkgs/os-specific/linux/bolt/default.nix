@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
+    sha256 = "1phgp8fs0dlj74kbkqlvfniwc32daz47b3pvsxlfxqzyrp77xrfm";
   };
 
   nativeBuildInputs = [

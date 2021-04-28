@@ -15,8 +15,7 @@ in buildPythonPackage {
   };
 
   buildInputs = [ precis-i18n ];
-  checkInputs = [ gobject-introspection libsoup pygobject3 ];
-  propagatedBuildInputs = [ idna pyopenssl ];
+  propagatedBuildInputs = [ gobject-introspection idna libsoup pygobject3 pyopenssl ];
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";

@@ -5,7 +5,6 @@
 , isPy38
 , isPy39
 , python
-, nvidia_x11
 , addOpenGLRunpath
 , future
 , numpy
@@ -17,10 +16,9 @@
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-  platform = if stdenv.isDarwin then "darwin" else "linux";
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.7.1";
+  version = "1.8.0";
 in buildPythonPackage {
   inherit version;
 
@@ -52,7 +50,7 @@ in buildPythonPackage {
   '';
 
   postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib nvidia_x11 ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."

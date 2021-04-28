@@ -18,13 +18,15 @@ rec {
     ];
 
   qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
-        else if pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64 then "ttyAMA0"
+        else if (with pkgs.stdenv.hostPlatform; isAarch32 || isAarch64 || isPower) then "ttyAMA0"
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 
   qemuBinary = qemuPkg: {
     x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu max";
     armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -enable-kvm -machine virt -cpu host";
     aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -enable-kvm -machine virt,gic-version=host -cpu host";
+    powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
+    powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
     x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu max";
   }.${pkgs.stdenv.hostPlatform.system} or "${qemuPkg}/bin/qemu-kvm";
 }

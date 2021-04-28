@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "http://retroshare.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

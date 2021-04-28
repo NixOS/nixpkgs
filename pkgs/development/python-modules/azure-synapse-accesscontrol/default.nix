@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-accesscontrol";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4f32423d9facaae512c433f5460b4ceec73a6c20b44b00e9de9de7a0e86dacd";
+    sha256 = "2f8f71561ca30ff3b04b172f5a64b231baeb02f4bce4bd6763df93a178c8b5d7";
     extension = "zip";
   };
 

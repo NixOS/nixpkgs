@@ -6,6 +6,7 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
+      # commit does not exist on any branch on the target repository
       rev = "1556cd7966ebc1c80b6626988d2b25fb43a744cf";
       sha256 = "0d74hijzmj82nx3jkv5qmr3pkgvplra0b8fbjx1y3vmzxamb0axd";
     };

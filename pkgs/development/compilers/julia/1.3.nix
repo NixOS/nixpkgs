@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
+      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
       "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"

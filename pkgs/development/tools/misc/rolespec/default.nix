@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     inherit name;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # The default build phase (`make`) runs the test code. It's difficult to do
   # the test in the build environment because it depends on the system package

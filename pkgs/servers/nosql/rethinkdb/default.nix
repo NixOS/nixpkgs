@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu makeWrapper ]
+  buildInputs = [ protobuf boost zlib curl openssl icu ]
     ++ lib.optional (!stdenv.isDarwin) jemalloc
     ++ lib.optional stdenv.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python2Packages.python ];
+  nativeBuildInputs = [ which m4 python2Packages.python makeWrapper ];
 
   enableParallelBuilding = true;
 

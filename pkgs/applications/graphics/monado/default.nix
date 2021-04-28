@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
-, fetchpatch
 , writeText
 , cmake
 , doxygen
@@ -44,23 +44,15 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
-  version = "0.4.1";
+  version = "21.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "114aif79dqyn2qg07mkv6lzmqn15k6fdcii818rdf5g4bp7zzzgm";
+    sha256 = "07zxs96i3prjqww1f68496cl2xxqaidx32lpfyy0pn5am4c297zc";
   };
-
-  patches = [
-    # fix libsurvive autodetection, drop with the next version update
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/345e9eab56e2de9e8b07cf72c2a67cf2ebd01e62.patch";
-      sha256 = "17c110an6sxc8rn7dfz30rfkbayg64w68licicwc8cqabi6cgrm3";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

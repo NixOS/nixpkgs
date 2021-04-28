@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://anthy.osdn.jp/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericsagnes ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 
   src = fetchurl {

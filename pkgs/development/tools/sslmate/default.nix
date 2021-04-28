@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = [ perlPackages.perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl ];
 
   postInstall = ''
     wrapProgram $out/bin/sslmate --prefix PERL5LIB : \

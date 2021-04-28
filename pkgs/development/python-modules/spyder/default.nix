@@ -3,28 +3,28 @@
   keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
   cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
   watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
-  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8
+  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8, textdistance
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.2.0";
+  version = "4.2.4";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44f51473b81c1bfde76097bfb957ec14f580a262b229ae8e90d18f5b82104c95";
+    sha256 = "ec3a6949a3210f7a35142ddd0e8ec529bdd382ae0cae9d1537f2009f557214c8";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    intervaltree jedi pycodestyle psutil rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
     atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
-    flake8
+    flake8 textdistance
   ];
 
   # There is no test for spyder
@@ -44,9 +44,13 @@ buildPythonPackage rec {
     # remove dependency on pyqtwebengine
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
+    # The major version bump in watchdog is due to changes in supported
+    # platforms, not API break.
+    # https://github.com/gorakhargosh/watchdog/issues/761#issuecomment-777001518
     substituteInPlace setup.py \
       --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso"
+      --replace "parso==0.7.0" "parso" \
+      --replace "watchdog>=0.10.3,<2.0.0" "watchdog>=0.10.3,<3.0.0"
   '';
 
   postInstall = ''

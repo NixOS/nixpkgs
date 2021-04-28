@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "${baseurl}/boolstuff.html";
     license = "GPL";
     maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

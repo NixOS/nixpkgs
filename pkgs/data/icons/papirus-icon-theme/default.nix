@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20210101";
+  version = "20210401";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RHuT+zJQyhiApeLuh821PMI9dmD20OoRVxezF/uCWoE=";
+    sha256 = "sha256-t0zoeIpj+0QVH1wmbEIJdqzEDOGzpclePv+bcZgtnwo=";
   };
 
   nativeBuildInputs = [
@@ -25,20 +25,22 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/icons
     mv {,e}Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Papirus icon theme";
     homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ romildo fortuneteller2k ];
   };
 }

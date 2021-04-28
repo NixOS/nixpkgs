@@ -2,16 +2,16 @@
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.26.0";
+  version = "3.28.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "1z8hiamg3h1fnsmr8j5l9q6c8cd81lqmd00gcmz4spw73pqfxg3r";
+    sha256 = "sha256-5YOXYOAh/0fOagcqdK2IEwm5XDCxyfTeTzwBGtsQRCs=";
   };
 
-  vendorSha256 = "1kxnpn4py8a2rz1gwg0y3yiwcwphj38pkp2k9z1p85ccm2wblljz";
+  vendorSha256 = "sha256-3UXZxeiL0WO4X/3/hW8ubL1TormGbn9X/k0PX+/cLuM=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash

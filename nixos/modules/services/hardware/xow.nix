@@ -10,7 +10,10 @@ in {
   config = lib.mkIf cfg.enable {
     hardware.uinput.enable = true;
 
+    boot.extraModprobeConfig = lib.readFile "${pkgs.xow}/lib/modprobe.d/xow-blacklist.conf";
+
     systemd.packages = [ pkgs.xow ];
+    systemd.services.xow.wantedBy = [ "multi-user.target" ];
 
     services.udev.packages = [ pkgs.xow ];
   };

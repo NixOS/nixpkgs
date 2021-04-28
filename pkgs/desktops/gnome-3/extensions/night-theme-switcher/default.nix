@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0z11y18bgdc0y41hrrzzgi4lagm2cg06x12jgdnary1ycng7xja0";
   };
 
-  buildInputs = [ glib gnome3.gnome-shell unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ glib gnome3.gnome-shell ];
 
   uuid = "nightthemeswitcher@romainvigier.fr";
 

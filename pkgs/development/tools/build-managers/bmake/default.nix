@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     ./fix-unexport-env-test.patch
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "Portable version of NetBSD 'make'";
     homepage    = "http://www.crufty.net/help/sjg/bmake.html";

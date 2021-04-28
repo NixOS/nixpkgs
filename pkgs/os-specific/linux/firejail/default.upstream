@@ -1,3 +1,0 @@
-url https://sourceforge.net/projects/firejail/files/firejail/
-version_link '[-][0-9.]+[.]tar[.][a-z0-9]+/download$'
-SF_redirect

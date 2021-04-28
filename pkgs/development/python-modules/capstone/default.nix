@@ -1,9 +1,10 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, setuptools
 , capstone
+, stdenv
+, fetchpatch
+, fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
     ln -s ${capstone}/lib/libcapstone.a prebuilt/
+    substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 
   propagatedBuildInputs = [ setuptools ];
@@ -31,5 +33,7 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with maintainers; [ bennofs ris ];
+    # creates a manylinux2014-x86_64 wheel
+    broken = stdenv.isAarch64;
   };
 }

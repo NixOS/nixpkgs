@@ -6,7 +6,7 @@
 }:
 
 let
-  release_version = "11.0.1";
+  release_version = "11.1.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
@@ -17,7 +17,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1j8n6n4l54k2lrdxh266y1fl4z8vy5dc76wsf0csk5n3ikfi38ic";
+  clang-tools-extra_src = fetch "clang-tools-extra" "18n1w1hkv931xzq02b34wglbv6zd6sd0r5kb8piwvag7klj7qw3n";
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
@@ -31,7 +31,7 @@ let
     '';
   in {
 
-    llvm = callPackage ./llvm.nix { };
+    llvm = callPackage ./llvm { };
 
     clang-unwrapped = callPackage ./clang {
       inherit (tools) lld;
@@ -79,9 +79,9 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld.nix {};
+    lld = callPackage ./lld {};
 
-    lldb = callPackage ./lldb.nix {};
+    lldb = callPackage ./lldb {};
 
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be
@@ -165,7 +165,7 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt.nix ({} //
+    compiler-rt = callPackage ./compiler-rt ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt;
       }));
@@ -179,7 +179,7 @@ let
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
-    libcxxabi = callPackage ./libc++abi.nix ({} //
+    libcxxabi = callPackage ./libc++abi ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;
@@ -187,7 +187,7 @@ let
 
     openmp = callPackage ./openmp.nix {};
 
-    libunwind = callPackage ./libunwind.nix ({} //
+    libunwind = callPackage ./libunwind ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));

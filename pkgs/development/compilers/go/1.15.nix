@@ -4,15 +4,20 @@
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
+, callPackage
 }:
 
 let
 
   inherit (lib) optionals optionalString;
 
+  version = "1.15.11";
+
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
+
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${buildPackages.go_bootstrap}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -36,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.15.7";
+  inherit version;
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1g1a39y1cnvw3y0bjwjms55cz0s9icm8myrgxi295jwfznmb6cc6";
+    sha256 = "1rb1s130yqy80kcl140k5a53xhvw4fmrpmclvqygcv67si0j8nzj";
   };
 
   # perl is used for testing go vet
@@ -153,6 +158,13 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
     ./go_no_vendor_checks.patch
+
+    # support TZ environment variable starting with colon
+    (fetchpatch {
+      name = "tz-support-colon.patch";
+      url = "https://github.com/golang/go/commit/58fe2cd4022c77946ce4b598cf3e30ccc8367143.patch";
+      sha256 = "0vphwiqrm0qykfj3rfayr65qzk22fksg7qkamvaz0lmf6fqvbd2f";
+    })
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
     (if stdenv.isAarch32

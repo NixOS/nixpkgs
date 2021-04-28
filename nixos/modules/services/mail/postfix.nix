@@ -11,6 +11,7 @@ let
 
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != ""
                       || cfg.extraAliases != "";
+  haveCanonical = cfg.canonical != "";
   haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
   haveLocalRecipients = cfg.localRecipients != null;
@@ -244,6 +245,7 @@ let
   ;
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
+  canonicalFile = pkgs.writeText "postfix-canonical" cfg.canonical;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
   localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients);
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
@@ -529,6 +531,15 @@ in
         ";
       };
 
+      canonical = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> table.
+        '';
+      };
+
       virtual = mkOption {
         type = types.lines;
         default = "";
@@ -560,6 +571,7 @@ in
 
       transport = mkOption {
         default = "";
+        type = types.lines;
         description = "
           Entries for the transport map, cf. man-page transport(8).
         ";
@@ -573,6 +585,7 @@ in
 
       dnsBlacklistOverrides = mkOption {
         default = "";
+        type = types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
       };
 
@@ -938,6 +951,9 @@ in
 
     (mkIf haveAliases {
       services.postfix.aliasFiles.aliases = aliasesFile;
+    })
+    (mkIf haveCanonical {
+      services.postfix.mapFiles.canonical = canonicalFile;
     })
     (mkIf haveTransport {
       services.postfix.mapFiles.transport = transportFile;

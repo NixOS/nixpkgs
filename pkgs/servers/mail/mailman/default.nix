@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.1";
+  version = "3.3.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0idfiv48jjgc0jq4731094ddhraqq8bxnwmjk6sg5ask0jss9kxq";
+    sha256 = "01rx322b8mzcdj9xh4bjwnl0zis6n2wxd31rrij4cw3a2j03xpas";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peti ];
+    maintainers = with lib.maintainers; [ peti qyliss ];
   };
 }

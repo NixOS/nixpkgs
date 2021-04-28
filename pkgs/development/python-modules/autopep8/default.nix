@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d21d3901cb0da6ebd1e83fc9b0dfbde8b46afc2ede4fe32fbda0c7c6118ca094";
+    sha256 = "5454e6e9a3d02aae38f866eec0d9a7de4ab9f93c10a273fb0340f3d6d09f7514";
   };
 
   propagatedBuildInputs = [ pycodestyle toml ];

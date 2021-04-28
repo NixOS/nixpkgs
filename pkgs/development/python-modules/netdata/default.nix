@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "netdata";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14kyjp1q3clizs1bqx4rp31d2awjmi5v65z8sarr2ycgwqqmkrzw";
+    sha256 = "sha256-oGOT4RvftI/2Ri2icM/AtglNZXt10jkFh/rlr6A46YE=";
   };
 
   propagatedBuildInputs = [

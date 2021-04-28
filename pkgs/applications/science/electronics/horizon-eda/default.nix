@@ -6,7 +6,7 @@
 , epoxy
 , fetchFromGitHub
 , glm
-, gnome3
+, gtkmm3
 , lib
 , libgit2
 , librsvg
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     curl
     epoxy
     glm
-    gnome3.gtkmm
+    gtkmm3
     libgit2
     librsvg
     libuuid

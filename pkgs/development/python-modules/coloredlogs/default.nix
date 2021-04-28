@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "coloredlogs";
-  version = "14.0";
+  version = "15.0";
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-coloredlogs";
     rev = version;
-    sha256 = "0rnmxwrim4razlv4vi3krxk5lc5ksck6h5374j8avqwplika7q2x";
+    sha256 = "sha256-C1Eo+XrrL3bwhT49KyOE6xjbAHJxn9Qy4s1RR5ERVtA=";
   };
 
   # capturer is broken on darwin / py38, so we skip the test until a fix for

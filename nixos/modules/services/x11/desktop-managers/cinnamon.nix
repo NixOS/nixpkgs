@@ -25,6 +25,7 @@ in
 
       sessionPath = mkOption {
         default = [];
+        type = types.listOf types.package;
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.

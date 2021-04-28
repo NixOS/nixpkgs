@@ -2,8 +2,8 @@
   ameba = {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v0.13.3";
-    sha256 = "0yhb8vfrfzsm3a45h2jmcrn1n7jy3zn2hwims3dikgq8kaggws9y";
+    rev = "v0.14.2";
+    sha256 = "1l1q1icpzg1zvhfj8948w36j7ikaj7w816677zi29vi6y2d1dmf2";
   };
   future = {
     owner = "crystal-community";

@@ -14,12 +14,12 @@ let
   complPath = completionDirs ++ map (vendorDir "completions") pluginPkgs;
   funcPath = functionDirs ++ map (vendorDir "functions") pluginPkgs;
   confPath = confDirs ++ map (vendorDir "conf") pluginPkgs;
-  safeConfPath = map escapeShellArg confPath;
 
 in writeShellScriptBin "fish" ''
   ${fish}/bin/fish --init-command "
     set --prepend fish_complete_path ${escapeShellArgs complPath}
     set --prepend fish_function_path ${escapeShellArgs funcPath}
-    for c in {${concatStringsSep "," safeConfPath}}/*; source $c; end
+    set --local fish_conf_source_path ${escapeShellArgs confPath}
+    for c in $fish_conf_source_path/*; source $c; end
   " "$@"
 '')

@@ -29,6 +29,10 @@ stdenv.mkDerivation {
 
   preInstall = ''
     mkdir -p $INCDIR $INSTALLDIR
+  ''
+  # Workaround for Makefiles.osx not using ?=
+  + lib.optionalString stdenv.isDarwin ''
+    makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

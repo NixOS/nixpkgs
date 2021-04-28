@@ -1,22 +1,28 @@
 { lib, stdenv, fetchurl, texinfo, which }:
 
 stdenv.mkDerivation rec {
-  name = "wdiff-1.2.2";
+  pname = "wdiff";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/wdiff/${name}.tar.gz";
+    url = "mirror://gnu/wdiff/${pname}-${version}.tar.gz";
     sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
   };
+
+  # for makeinfo
+  nativeBuildInputs = [ texinfo ];
 
   buildInputs = [ texinfo ];
 
   checkInputs = [ which ];
 
-  meta = {
+  strictDeps = true;
+
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/wdiff/";
     description = "Comparing files on a word by word basis";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ eelco SuperSandro2000 ];
+    platforms = platforms.unix;
   };
 }

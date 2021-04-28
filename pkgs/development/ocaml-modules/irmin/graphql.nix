@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, cohttp-lwt, graphql-cohttp, graphql-lwt, irmin }:
+{ lib, buildDunePackage, cohttp-lwt, graphql-cohttp, graphql-lwt, irmin
+, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix
+}:
 
 buildDunePackage rec {
 
@@ -10,8 +12,14 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cohttp-lwt graphql-cohttp graphql-lwt irmin ];
 
-  # test requires network
-  doCheck = false;
+  doCheck = true;
+  checkInputs = [
+    alcotest
+    alcotest-lwt
+    logs
+    cohttp-lwt-unix
+    yojson
+  ];
 
   meta = irmin.meta // {
     description = "GraphQL server for Irmin";

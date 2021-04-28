@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace
+, fixup_yarn_lock, replace, file
 }:
 
 let
@@ -31,6 +31,10 @@ let
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
+        };
+        ruby-magic-static = x.ruby-magic-static // {
+          buildInputs = [ file ];
+          buildFlags = [ "--enable-system-libraries" ];
         };
       };
     groups = [
@@ -118,7 +122,19 @@ stdenv.mkDerivation {
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [
+    # Change hardcoded paths to the NixOS equivalent
+    ./remove-hardcoded-locations.patch
+
+    # Use the exactly 32 byte long version of db_key_base with
+    # aes-256-gcm, see
+    # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/53602
+    (fetchpatch {
+      name = "secrets_db_key_base_length.patch";
+      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/dea620633d446ca0f53a75674454ff0dd4bd8f99.patch";
+      sha256 = "19m4z4np3sai9kqqqgabl44xv7p8lkcyqr6s5471axfxmf9m2023";
+    })
+  ];
 
   postPatch = ''
     ${lib.optionalString (!gitlabEnterprise) ''
@@ -137,6 +153,7 @@ stdenv.mkDerivation {
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
 
+    mv config/puma.rb.example config/puma.rb
     # Always require lib-files and application.rb through their store
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the

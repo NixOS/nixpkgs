@@ -2,16 +2,15 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , xmlsec
-, cryptography, defusedxml, future, pyopenssl, dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses
+, cryptography, defusedxml, pyopenssl, dateutil, pytz, requests, six
+, mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "5.0.0";
+  version = "6.5.1";
 
   disabled = !isPy3k;
 
@@ -20,19 +19,13 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hwhxz45h8l1b0615hf855z7valfcmm0nb7k31bcj84v68zp5rjs";
+    sha256 = "1gh74csjk6af23agyigk4id79s4li1xnkmbpp73aqyvlly2kd0b7";
   };
 
   patches = [
     (substituteAll {
       src = ./hardcode-xmlsec1-path.patch;
       inherit xmlsec;
-    })
-    # remove on next release
-    (fetchpatch {
-      name = "fix-test-dates.patch";
-      url = "https://github.com/IdentityPython/pysaml2/commit/1d97d2d26f63e42611558fdd0e439bb8a7496a27.patch";
-      sha256 = "0r6d6hkk6z9yw7aqnsnylii516ysmdsc8dghwmgnwvw6cm7l388p";
     })
   ];
 
@@ -41,7 +34,17 @@ buildPythonPackage rec {
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
-  propagatedBuildInputs = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
+  propagatedBuildInputs = [
+    cryptography
+    dateutil
+    defusedxml
+    importlib-resources
+    pyopenssl
+    pytz
+    requests
+    six
+    xmlschema
+  ];
 
   checkInputs = [ mock pyasn1 pymongo pytest responses ];
 

@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap
-, buildPackages
-}:
+{ lib, stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap, buildPackages }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    sha256 = "1nb50bgzp83q6r5cz4v40y1mcbhpqwqyxlay87xp1lrbkf5pm9n5";
+    sha256 = "sha256-ssENCRUTsnHkcXcnRgex/7o9lbGIu/qHl/lIrskFPFo=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -27,8 +25,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin gettext
     ++ lib.optional enableCapabilities libcap;
 
+  strictDeps = true;
+
   configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
-   ++ lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
+      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm"; # for darwin see https://dev.gnupg.org/T5157
 
   # Necessary to generate correct assembly when compiling for aarch32 on
   # aarch64

@@ -4,7 +4,7 @@ let param =
   let v6_3 = {
     version = "6.3";
     sha256 = "1skf4njvkifwx0qlsrc0jn891gvvcp5ryd6kkpx56hck7nnxv8x6";
-    useDune2 = lib.versionAtLeast ocaml.version "4.12";
+    useDune2 = true;
     buildInputs = [cppo];
   }; in
 {

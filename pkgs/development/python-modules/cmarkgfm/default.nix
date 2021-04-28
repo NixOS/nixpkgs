@@ -1,25 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, cffi, pytest }:
+{ lib
+, buildPythonPackage
+, cffi
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a5131a78836e55dcdb1f2c5f17bbaa40e5f83c86a205de1b71a298928e1391f";
+    sha256 = "sha256-tqVJq6Mnq9mG1nSM8hyGN9dBx2hQ5/773vjSi/4TjjI=";
   };
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "cmarkgfm" ];
 
   meta = with lib; {
     description = "Minimal bindings to GitHub's fork of cmark";
     homepage = "https://github.com/jonparrott/cmarkgfm";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

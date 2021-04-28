@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = pname;
     rev = version;
-    sha256 = "12xq6glg70icwsvbnfw9gm4dahlbnrc7b6adpd0mpf89h4sj2gds";
+    sha256 = "sha256-4vguodLnCj0sOBLM4oJXTfX1p8hIo3WTwIuViPtZxHQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive ];

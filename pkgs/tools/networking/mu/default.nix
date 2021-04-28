@@ -1,18 +1,19 @@
 { lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo , emacs, guile
+, xapian, glib, gmime3, texinfo, emacs, guile
 , gtk3, webkitgtk, libsoup, icu
+, makeWrapper
 , withMug ? false
 , batchSize ? null }:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.4.13";
+  version = "1.4.15";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "03cp2ppj07xpb0c43d3cr8m9jps07mfm8clmlk03sjbxg1widsh0";
+    sha256 = "sha256-VIUA0W+AmEbvGWatv4maBGILvUTGhBgO3iQtjIc3vG8=";
   };
 
   postPatch = lib.optionalString (batchSize != null) ''
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isDarwin) guile
     ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe ];
+  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -37,8 +38,12 @@ stdenv.mkDerivation rec {
       --replace "@abs_top_builddir@" "$out"
   '';
 
-  # Install mug
-  postInstall = lib.optionalString withMug ''
+  # Make sure included scripts can find their dependencies & optionally install mug
+  postInstall = ''
+    wrapProgram "$out/bin/mu" \
+      --prefix LD_LIBRARY_PATH : "$out/lib" \
+      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
+  '' + lib.optionalString withMug ''
     for f in mug ; do
       install -m755 toys/$f/$f $out/bin/$f
     done

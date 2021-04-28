@@ -1,7 +1,7 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchFromGitHub, emacs, texinfo }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText }:
 
 with lib;
 
@@ -28,7 +28,7 @@ let
 
 in
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
 
   ename =
     if ename == null

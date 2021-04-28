@@ -181,23 +181,18 @@
   })
   (fetchNuGet {
     name = "NBitcoin.Altcoins";
-    version = "2.0.21";
-    sha256 = "0xmygiwjlia7fbxy63893jb15g6fxggxxr9bbm8znd9bs3jzp2g1";
+    version = "2.0.28";
+    sha256 = "1zfirfmhgigp733km9rqkgz560h5wg88bpba499x49h5j650cnn4";
   })
   (fetchNuGet {
     name = "NBitcoin.TestFramework";
-    version = "2.0.12";
-    sha256 = "1d6lmymc9x3p74c8hc2x3m61ncnkqqgrddw9cw2m0zkvilkncsns";
+    version = "2.0.21";
+    sha256 = "1k26fkss6d7x2yqlid31z5i04b5dmlbbbwijg9c8i3d996i1z7sq";
   })
   (fetchNuGet {
     name = "NBitcoin";
-    version = "5.0.58";
-    sha256 = "0qim9xbbj380254iyi1jsh2gnr90ddwd2593jw9a8bjwnlk7qr2c";
-  })
-  (fetchNuGet {
-    name = "NBitcoin";
-    version = "5.0.60";
-    sha256 = "0pin4ldfz5lfxyd47mj1ypyp8lmj0v5nq5zvygdjna956vphd39v";
+    version = "5.0.73";
+    sha256 = "0vqgcb0ws5fnkrdzqfkyh78041c6q4l22b93rr0006dd4bmqrmg1";
   })
   (fetchNuGet {
     name = "NETStandard.Library";
@@ -221,8 +216,8 @@
   })
   (fetchNuGet {
     name = "Newtonsoft.Json";
-    version = "11.0.1";
-    sha256 = "1z68j07if1xf71lbsrgbia52r812i2dv541sy44ph4dzjjp7pd4m";
+    version = "11.0.2";
+    sha256 = "1784xi44f4k8v1fr696hsccmwpy94bz7kixxqlri98zhcxn406b2";
   })
   (fetchNuGet {
     name = "Newtonsoft.Json";

@@ -9,7 +9,8 @@ stdenv.mkDerivation  rec {
     sha256 = "0107b5j1gf7dwp7qb4w2snj4bqiyps53d66qzl2rwj4jfpakws5a";
   };
 
-  buildInputs = [ alsaLib libX11 makeWrapper tcl tk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ alsaLib libX11 tcl tk ];
 
   configurePhase = ''
     mkdir -p $out/bin

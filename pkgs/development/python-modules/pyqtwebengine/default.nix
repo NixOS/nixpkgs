@@ -14,12 +14,12 @@ let
 
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
-  version = "5.15.0";
+  version = "5.15.4";
   format = "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0xdzhl07x3mzfnr5cf4d640168vxi7fyl0fz1pvpbgs0irl14237";
+    sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };
 
   inherit patches;

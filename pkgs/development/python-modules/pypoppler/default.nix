@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pkgs.poppler.dev ];
   propagatedBuildInputs = [ pycairo pygobject2 ];
 

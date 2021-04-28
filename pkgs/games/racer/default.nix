@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   } else
     throw "System not supported";
 
-
-  buildInputs = [ allegro libjpeg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ allegro libjpeg ];
 
   prePatch = ''
     sed -i s,/usr/local,$out, Makefile src/HGFX.cpp src/STDH.cpp

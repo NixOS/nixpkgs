@@ -18,8 +18,7 @@ stdenv.mkDerivation {
     sha256 = "0d5mzkwsbh9s9b1vyvpaawqc09b0q41l2a7pmwf7386b1fsx6d58";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ copyDesktopItems unzip ];
   inherit jre;
 
   installPhase = ''

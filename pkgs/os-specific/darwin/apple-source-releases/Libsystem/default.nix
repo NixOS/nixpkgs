@@ -115,6 +115,8 @@ appleDerivation {
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 
+  appleHeaders = builtins.readFile ./headers.txt;
+
   meta = with lib; {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];

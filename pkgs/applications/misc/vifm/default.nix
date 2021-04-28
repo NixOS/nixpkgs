@@ -40,5 +40,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://vifm.info/";
     inherit version;
     updateWalker = true;
+    changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
   };
 }

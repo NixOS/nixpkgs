@@ -2,7 +2,6 @@
 , gettext
 , fetchurl
 , evolution-data-server
-, fetchpatch
 , pkg-config
 , libxslt
 , docbook_xsl

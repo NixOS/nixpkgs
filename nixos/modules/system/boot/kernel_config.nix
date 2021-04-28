@@ -2,24 +2,6 @@
 
 with lib;
 let
-  findWinner = candidates: winner:
-    any (x: x == winner) candidates;
-
-  # winners is an ordered list where first item wins over 2nd etc
-  mergeAnswer = winners: locs: defs:
-    let
-      values = map (x: x.value) defs;
-      inter = intersectLists values winners;
-      winner = head winners;
-    in
-    if defs == [] then abort "This case should never happen."
-    else if winner == [] then abort "Give a valid list of winner"
-    else if inter == [] then mergeOneOption locs defs
-    else if findWinner values winner then
-      winner
-    else
-      mergeAnswer (tail winners) locs defs;
-
   mergeFalseByDefault = locs: defs:
     if defs == [] then abort "This case should never happen."
     else if any (x: x == false) (getValues defs) then false
@@ -28,9 +10,7 @@ let
   kernelItem = types.submodule {
     options = {
       tristate = mkOption {
-        type = types.enum [ "y" "m" "n" null ] // {
-          merge = mergeAnswer [ "y" "m" "n" ];
-        };
+        type = types.enum [ "y" "m" "n" null ];
         default = null;
         internal = true;
         visible = true;

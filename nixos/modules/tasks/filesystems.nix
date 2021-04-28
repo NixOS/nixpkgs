@@ -7,8 +7,9 @@ let
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
-  nonEmptyStr = addCheckDesc "non-empty" types.str
-    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+
+  isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
+  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
@@ -21,17 +22,15 @@ let
                      # their assertions too
                      (attrValues config.fileSystems);
 
-  prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
-
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
-
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = nonEmptyStr;
+        type = addCheckDesc "non-empty without trailing slash" types.str
+          (s: isNonEmpty s && (builtins.match ".+/" s) == null);
         description = "Location of the mounted the file system.";
       };
 
@@ -239,6 +238,8 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+        swapOptions = sw: "defaults"
+          + optionalString (sw.priority != null) ",pri=${toString sw.priority}";
       in ''
         # This is a generated file.  Do not edit!
         #
@@ -261,7 +262,7 @@ in
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
-            "${sw.realDevice} none swap${prioOption sw.priority}\n"
+            "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
       '';
 

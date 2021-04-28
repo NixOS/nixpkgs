@@ -25,9 +25,10 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     hypothesis
-    pytest
     pytest-astropy-header
     pytest-doctestplus
     pytest-filter-subpackage

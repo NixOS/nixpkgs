@@ -10,7 +10,7 @@
 , pkg-config
 , scdoc
 , json_c
-, xdg_utils
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/signon.c \
-      --replace "/usr/bin/xdg-open" "${xdg_utils}/bin/xdg-open"
+      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
   '';
 
   nativeBuildInputs = [

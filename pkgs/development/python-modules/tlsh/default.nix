@@ -6,13 +6,13 @@
 
 buildPythonPackage {
   pname = "tlsh";
-  version = "3.4.5";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = "22fa9a62068b92c63f2b5a87004a7a7ceaac1930";
-    sha256 = "1ydliir308xn4ywy705mmsh7863ldlixdvpqwdhbipzq9vfpmvll";
+    rev = "f2bb7a97cfb0f9418a750ba92c182d1091e6c159";
+    sha256 = "1kxfhdwqjd4pjdlr1gjh2am8mxpaqmfq7rrxkjfi0mbisl1krkwb";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Trend Micro Locality Sensitive Hash";
-    homepage = "https://github.com/trendmicro/tlsh";
+    homepage = "http://tlsh.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

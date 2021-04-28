@@ -1,7 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, isPy27
 , click
 , num2words
 , numpy
@@ -11,8 +10,7 @@
 , patsy
 , bids-validator
 , sqlalchemy
-, pytest
-, pathlib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -36,11 +34,8 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytest ] ++ lib.optionals isPy27 [ pathlib ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "bids" ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";

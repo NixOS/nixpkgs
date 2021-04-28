@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fahviewer python ];
 
-  doBuild = false;
-
   unpackPhase = ''
     dpkg-deb -x ${src} ./
   '';

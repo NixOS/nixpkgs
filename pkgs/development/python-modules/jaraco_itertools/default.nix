@@ -4,20 +4,16 @@
 
 buildPythonPackage rec {
   pname = "jaraco.itertools";
-  version = "5.0.0";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6447d567f57efe5efea386265c7864652e9530830a1b80f43e60b4f222b9ab84";
+    sha256 = "6939e47806a39330a9f9772bf9ea910da39abc159ff2579d454a763358553439";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
   nativeBuildInputs = [ setuptools_scm ];
-
-  patches = [
-    ./0001-Don-t-run-flake8-checks-during-the-build.patch
-  ];
 
   propagatedBuildInputs = [ inflect more-itertools six ];
   checkInputs = [ pytest ];

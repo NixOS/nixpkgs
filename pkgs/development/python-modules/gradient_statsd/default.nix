@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, boto3, requests, datadog, configparser, python
+, requests, datadog, configparser, python
 }:
 
 buildPythonPackage rec {

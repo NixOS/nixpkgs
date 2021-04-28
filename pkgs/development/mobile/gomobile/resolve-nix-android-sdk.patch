@@ -1,0 +1,15 @@
+diff --git a/cmd/gomobile/bind_androidapp.go b/cmd/gomobile/bind_androidapp.go
+index 3b01adc..76216fa 100644
+--- a/cmd/gomobile/bind_androidapp.go
++++ b/cmd/gomobile/bind_androidapp.go
+@@ -372,6 +372,10 @@ func androidAPIPath() (string, error) {
+ 	var apiVer int
+ 	for _, fi := range fis {
+ 		name := fi.Name()
++		// Resolve symlinked directories (this is how the Nix Android SDK package is built)
++		if fi2, err := os.Stat(filepath.Join(sdkDir.Name(), name)); err == nil {
++			fi = fi2
++		}
+ 		if !fi.IsDir() || !strings.HasPrefix(name, "android-") {
+ 			continue
+ 		}

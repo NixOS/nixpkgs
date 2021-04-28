@@ -1,21 +1,21 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry
 , aiohttp
-, numpy
-, pysmb
 , aresponses
 , asynctest
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, poetry-core
+, pysmb
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "5.0.5";
+  version = "5.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,10 +24,10 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0jjvng3py5g97gvx6rdbk5zxbn5rw8gq1ki4qi4vfsypchxbpz2q";
+    sha256 = "sha256-r/AJl36dv6+C92tc3kpX4/VzG69qdh4ERCyQxDOHdVU=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -1,8 +1,17 @@
 diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
-index 482a544..d142013 100644
+index a685db8..1ca1ca1 100644
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -163,31 +163,13 @@ def get_current_gov():
+@@ -72,7 +72,7 @@ def app_version():
+             print("Git commit:", check_output(["git", "describe", "--always"]).strip().decode())
+         else:
+             print(getoutput("pacman -Qi auto-cpufreq | grep Version"))
+-    else:        
++    else:
+         # source code (auto-cpufreq-installer)
+         try:
+             print("Git commit:", check_output(["git", "describe", "--always"]).strip().decode())
+@@ -179,31 +179,13 @@ def get_current_gov():
      return print("Currently using:", getoutput("cpufreqctl.auto-cpufreq --governor").strip().split(" ")[0], "governor")
  
  def cpufreqctl():
@@ -38,8 +47,8 @@ index 482a544..d142013 100644
  
  def footer(l=79):
      print("\n" + "-" * l + "\n")
-@@ -212,74 +194,12 @@ def remove_complete_msg():
- 
+@@ -233,74 +215,12 @@ def remove_complete_msg():
+     footer()
  
  def deploy_daemon():
 -    print("\n" + "-" * 21 + " Deploying auto-cpufreq as a daemon " + "-" * 22 + "\n")
@@ -60,7 +69,7 @@ index 482a544..d142013 100644
 -    except:
 -        print("\nERROR:\nWas unable to turn off bluetooth on boot")
 -
--    auto_cpufreq_log_path.touch(exist_ok=True)
+-    auto_cpufreq_stats_path.touch(exist_ok=True)
 -
 -    print("\n* Deploy auto-cpufreq install script")
 -    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
@@ -102,12 +111,12 @@ index 482a544..d142013 100644
 -    # remove auto-cpufreq-remove
 -    os.remove("/usr/bin/auto-cpufreq-remove")
 -
--    # delete log file
--    if auto_cpufreq_log_path.exists():
--        if auto_cpufreq_log_file is not None:
--            auto_cpufreq_log_file.close()
+-    # delete stats file
+-    if auto_cpufreq_stats_path.exists():
+-        if auto_cpufreq_stats_file is not None:
+-            auto_cpufreq_stats_file.close()
 -
--        auto_cpufreq_log_path.unlink()
+-        auto_cpufreq_stats_path.unlink()
 -
 -    # restore original cpufrectl script
 -    cpufreqctl_restore()
@@ -116,6 +125,15 @@ index 482a544..d142013 100644
  
  def gov_check():
      for gov in get_avail_gov():
+@@ -331,7 +251,7 @@ def countdown(s):
+     if auto_cpufreq_stats_file is not None:
+         auto_cpufreq_stats_file.seek(0)
+         auto_cpufreq_stats_file.truncate(0)
+-                
++
+         # execution timestamp
+         from datetime import datetime
+         now = datetime.now()
 diff --git a/scripts/cpufreqctl.sh b/scripts/cpufreqctl.sh
 index 63a2b5b..e157efe 100755
 --- a/scripts/cpufreqctl.sh

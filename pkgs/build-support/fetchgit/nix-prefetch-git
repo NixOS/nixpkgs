@@ -105,7 +105,7 @@ fi
 
 init_remote(){
     local url=$1
-    clean_git init
+    clean_git init --initial-branch=master
     clean_git remote add origin "$url"
     ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
@@ -149,7 +149,19 @@ checkout_hash(){
     fi
 
     clean_git fetch -t ${builder:+--progress} origin || return 1
-    clean_git checkout -b "$branchName" "$hash" || return 1
+
+    local object_type=$(git cat-file -t "$hash")
+    if [[ "$object_type" == "commit" ]]; then
+        clean_git checkout -b "$branchName" "$hash" || return 1
+    elif [[ "$object_type" == "tree" ]]; then
+        clean_git config user.email "nix-prefetch-git@localhost"
+        clean_git config user.name "nix-prefetch-git"
+        local commit_id=$(git commit-tree "$hash" -m "Commit created from tree hash $hash")
+        clean_git checkout -b "$branchName" "$commit_id" || return 1
+    else
+        echo "Unrecognized git object type: $object_type"
+        return 1
+    fi
 }
 
 # Fetch only a branch/tag and checkout it.

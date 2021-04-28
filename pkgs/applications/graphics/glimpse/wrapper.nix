@@ -12,7 +12,7 @@ symlinkJoin {
 
   paths = [ glimpse ] ++ selectedPlugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     for each in glimpse-${versionBranch} glimpse-console-${versionBranch}; do

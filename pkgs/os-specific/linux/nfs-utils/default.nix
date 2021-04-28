@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
-, sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+, sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , python3, buildPackages, nixosTests, rpcsvc-proto
 , enablePython ? true
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils kerberos tcp_wrappers
+    libuuid keyutils libkrb5 tcp_wrappers
   ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       substituteInPlace configure \
-        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
-        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
+        --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
     '';
 
   configureFlags =
     [ "--enable-gss"
       "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${lib.getLib kerberos}"
+      "--with-krb5=${lib.getLib libkrb5}"
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 
-  disallowedReferences = [ (lib.getDev kerberos) ];
+  disallowedReferences = [ (lib.getDev libkrb5) ];
 
   passthru.tests = {
     nfs3-simple = nixosTests.nfs3.simple;

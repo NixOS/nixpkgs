@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Secure file wiping utility";
     homepage    = "http://wipe.sourceforge.net/";
     license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
     maintainers = [ maintainers.abbradar ];
   };
 }

@@ -6,7 +6,6 @@
 , pkg-config
 , python
 , isPy27
-, pyopengl
 , doxygen
 , cairo
 , ncurses

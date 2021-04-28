@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-IZhRg2JcYQXQKU/lYZpLLcsSdjZZO+toY5yvk+RKUCY=";
   };
 
-  buildInputs = [ unzip jre ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ jre ];
 
   desktopItem = makeDesktopItem {
     name = "basex";

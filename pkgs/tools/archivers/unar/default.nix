@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
       substituteInPlace $f \
-        --replace "= gcc" "=cc" \
-        --replace "= g++" "=c++" \
+        --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+        --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
         --replace "-DGNU_RUNTIME=1" "" \
         --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
     done

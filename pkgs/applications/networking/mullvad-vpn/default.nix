@@ -1,6 +1,6 @@
-{ stdenv, lib, makeWrapper, fetchurl, dpkg
+{ stdenv, lib, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
@@ -20,6 +20,7 @@ let deps = [
     gtk3
     libappindicator
     libnotify
+    mesa
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -41,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.7";
+  version = "2021.2";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "07vryz1nq8r4m5y9ry0d0v62ykz1cnnsv628x34yvwiyazbav4ri";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-nNZK11MckiQ+z8NDgDc7aJ6yrXWI1hPOvMZkrGwDDgU=";
   };
 
   nativeBuildInputs = [
@@ -84,9 +85,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

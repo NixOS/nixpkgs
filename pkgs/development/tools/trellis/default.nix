@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "SymbiFlow";
+       owner  = "YosysHQ";
        repo   = "prjtrellis";
        rev    = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
        sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
      })
 
     (fetchFromGitHub {
-      owner  = "SymbiFlow";
+      owner  = "YosysHQ";
       repo   = "prjtrellis-db";
       rev    = "2cf058e7a3ba36134d21e34823e9b2ecaaceac2c";
       sha256 = "1hjaw5jkwiaiznm2z0smy88m2cdz63cd51z4nibajfih7ikvkj6g";

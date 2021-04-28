@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kpcyrd/rshijack";
     license = licenses.gpl3;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

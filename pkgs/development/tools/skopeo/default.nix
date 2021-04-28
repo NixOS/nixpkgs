@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "1y9pmijazbgxzriymrm7zrifmkd1x1wad9b3zjcj7zwr6c999dhg";
+    sha256 = "sha256-GhLw8wt5eDixKNGtxGA0Fjw3auQ3AsjKa+0M4mLTQlg=";
   };
 
   outputs = [ "out" "man" ];
@@ -35,17 +35,22 @@ buildGoModule rec {
   ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
     make bin/skopeo docs
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/skopeo -t $out/bin
     installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

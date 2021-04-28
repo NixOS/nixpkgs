@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "ef093ae81424c4f3fe696eff9aefb5fb66899e11bb17ae0326adfb70d09c1c1f";
   };
 
-  buildInputs = [ gcc flex bison texinfo jdk erlang makeWrapper
-                  readline ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ gcc flex bison texinfo jdk erlang readline ];
 
   patchPhase = ''
     # Fix calls to programs in /bin

@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitLab, lib }:
+{ buildGoPackage, fetchFromGitLab, lib, runtimeShell }:
 
 buildGoPackage rec {
   pname = "goimapnotify";
@@ -12,6 +12,10 @@ buildGoPackage rec {
     rev = version;
     sha256 = "1d42gd3m2rkvy985d181dbcm5i3f7xsg2z8z6s4bpvw24pfnzs42";
   };
+
+  postPatch = ''
+    substituteInPlace command.go --replace '"sh"' '"${runtimeShell}"'
+  '';
 
   goDeps = ./deps.nix;
 

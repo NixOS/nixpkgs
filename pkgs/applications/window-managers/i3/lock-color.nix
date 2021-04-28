@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.13.c.1";
+  version = "2.13.c.2";
   pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "sha256-E+ejc26eyCJ0PnMpDgQrouaBIaUH0SWlzB08fQs8lDw=";
+    sha256 = "sha256-cMj1uB2Hf7v5Rukw9c5YeUmwbdTn1+PV13bUaOWzBp0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

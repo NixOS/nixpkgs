@@ -21,6 +21,7 @@
 
 # For enableQT.
 , qtbase
+, wrapQtAppsHook
 
 # For enableXM.
 , motif
@@ -48,12 +49,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "10.7.0";
+  version = "10.7.1";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.tar.gz";
-    sha256 = "0jmdxb8z20d4l6sf2w0gk9ska48kylm38yngy3mzyvyj619a8vkp";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.p01.tar.gz";
+    sha256 = "07if874aljizkjyp21qj6v193pmyifyfmwi5kg8jm71x79sn2laj";
   };
 
   boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
@@ -87,7 +88,13 @@ stdenv.mkDerivation rec {
     "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
   ];
 
-  nativeBuildInputs =  [ cmake ];
+  nativeBuildInputs =  [
+    cmake
+  ] ++ lib.optionals enableQT [
+    wrapQtAppsHook
+  ];
+
+  dontWrapQtApps = !enableQT;
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
@@ -101,6 +108,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Don't try to export invalid environment variables.
     sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+  '' + lib.optionalString enableQT ''
+    wrapQtAppsHook
   '';
 
   setupHook = ./geant4-hook.sh;

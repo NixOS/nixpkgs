@@ -1,12 +1,15 @@
 { lib
 , buildPythonPackage
 , python
+, pythonAtLeast
 , fetchFromGitHub
+, fetchpatch
 , django
 , pygments
 , simplejson
 , dateutil
 , requests
+, setuptools-scm
 , sqlparse
 , jinja2
 , autopep8
@@ -23,15 +26,23 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "4.0.1";
+  version = "4.1.0";
 
   # pypi tarball doesn't include test project
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     rev = version;
-    sha256 = "0yy9rzxvwlp2xvnw76r9hnqajlp417snam92xpb6ay0hxwslwqyb";
+    sha256 = "1km3hmx1sir0c5gqr2p1h2938slhxp2hzf10cb80q98mas8spjkn";
   };
+
+  patches = lib.optional (pythonAtLeast "3.9") (fetchpatch {
+    # should be able to remove after 4.1.1
+    name = "python-3.9-support.patch";
+    url = "https://github.com/jazzband/django-silk/commit/134089e4cad7bd3b76fb0f70c423082cb7d2b34a.patch";
+    sha256 = "09c1xd9y33h3ibiv5w9af9d79c909rgc1g5sxpd4y232h5id3c8r";
+  });
+
   # "test_time_taken" tests aren't suitable for reproducible execution, but django's
   # test runner doesn't have an easy way to ignore tests - so instead prevent it from picking
   # them up as tests
@@ -42,6 +53,7 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ mock ];
   propagatedBuildInputs = [
     django pygments simplejson dateutil requests

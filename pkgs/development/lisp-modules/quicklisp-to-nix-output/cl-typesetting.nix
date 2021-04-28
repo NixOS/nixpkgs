@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-typesetting";
-  version = "20170830-git";
+  version = "20210228-git";
 
   description = "Common Lisp Typesetting system";
 
   deps = [ args."cl-pdf" args."iterate" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-typesetting/2017-08-30/cl-typesetting-20170830-git.tgz";
-    sha256 = "1mkdr02qikzij3jiyrqy0dldzy8wsnvgcpznfha6x8p2xap586z3";
+    url = "http://beta.quicklisp.org/archive/cl-typesetting/2021-02-28/cl-typesetting-20210228-git.tgz";
+    sha256 = "13rmzyzp0glq35jq3qdlmrsdssa6csqp5g455li4wi7kq8clrwnp";
   };
 
   packageName = "cl-typesetting";
@@ -18,11 +19,11 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-typesetting DESCRIPTION Common Lisp Typesetting system SHA256
-    1mkdr02qikzij3jiyrqy0dldzy8wsnvgcpznfha6x8p2xap586z3 URL
-    http://beta.quicklisp.org/archive/cl-typesetting/2017-08-30/cl-typesetting-20170830-git.tgz
-    MD5 e12b9f249c60c220c5dc4a0939eb3343 NAME cl-typesetting FILENAME
+    13rmzyzp0glq35jq3qdlmrsdssa6csqp5g455li4wi7kq8clrwnp URL
+    http://beta.quicklisp.org/archive/cl-typesetting/2021-02-28/cl-typesetting-20210228-git.tgz
+    MD5 949e7de37838d63f4c6b6e7dd88befeb NAME cl-typesetting FILENAME
     cl-typesetting DEPS
     ((NAME cl-pdf FILENAME cl-pdf) (NAME iterate FILENAME iterate)
      (NAME zpb-ttf FILENAME zpb-ttf))
-    DEPENDENCIES (cl-pdf iterate zpb-ttf) VERSION 20170830-git SIBLINGS
+    DEPENDENCIES (cl-pdf iterate zpb-ttf) VERSION 20210228-git SIBLINGS
     (xml-render cl-pdf-doc) PARASITES NIL) */

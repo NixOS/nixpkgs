@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/${pname}-${version}}

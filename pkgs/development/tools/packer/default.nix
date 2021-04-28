@@ -1,18 +1,27 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
   pname = "packer";
-  version = "1.6.6";
-
-  goPackagePath = "github.com/hashicorp/packer";
-
-  subPackages = [ "." ];
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-kFDy8Zlx+D5JDyNlAmB/ICTe4K9s6KDbALP5pom5OQg=";
+    sha256 = "sha256-Ey1gkld7WosJgoqnNp4Lz2x3PTI+w5p+A8Cwv4+uUZw=";
   };
+
+  vendorSha256 = null;
+
+  subPackages = [ "." ];
+
+  buildFlagsArray = [ "-ldflags=-s -w" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh contrib/zsh-completion/_packer
+  '';
 
   meta = with lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";

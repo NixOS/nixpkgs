@@ -1,12 +1,15 @@
 { lib
+, aiohttp
 , asynctest
 , buildPythonPackage
+, click
 , fetchFromGitHub
 , mock
+, prompt_toolkit
+, pygments
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
-, pythonOlder
 , redis
 , sqlalchemy
 , tornado
@@ -15,17 +18,21 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "riptideio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x0dv02shcc2yxxm9kvcbhip111sna74dvcfssxdzzy967vnq76v";
+    sha256 = "sha256-b85jfBZfMZtqtmID+tGBgOe9o0BbmBH83UV71lYAI5c=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
   propagatedBuildInputs = [
+    aiohttp
+    click
+    prompt_toolkit
+    pygments
     pyserial
     pyserial-asyncio
     tornado
@@ -34,11 +41,9 @@ buildPythonPackage rec {
   checkInputs = [
     asynctest
     mock
-    pyserial-asyncio
     pytestCheckHook
     redis
     sqlalchemy
-    tornado
     twisted
   ];
 

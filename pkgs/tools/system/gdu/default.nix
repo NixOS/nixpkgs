@@ -6,26 +6,41 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "4.3.2";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m4J797bmQzKuyA01JgDLVlf+PbXDVXWtYbID/0QVLxE=";
+    sha256 = "sha256-E+/Ig6+J7pJ98O+YAntBGERml2ELzkji3gworBdcSVY=";
   };
 
-  vendorSha256 = "sha256-kIMd0xzQ+c+jCpX2+qdD/GcFEirR15PMInbEV184EBU=";
-
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/dundee/gdu/build.Version=${version}" ];
+  vendorSha256 = "sha256-QiO5p0x8kmIN6f0uYS0IR2MlWtRYTHeZpW6Nmupjias=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildFlagsArray = [
+    "-ldflags="
+    "-s"
+    "-w"
+    "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+  ];
+
+  postPatch = ''
+    substituteInPlace cmd/app/app_test.go --replace "development" "${version}"
+  '';
 
   postInstall = ''
     installManPage gdu.1
   '';
 
-  # tests fail if the version is set
+  # tests fail with:
+  #  dir_test.go:76:
+  #              Error Trace:    dir_test.go:76
+  #              Error:          Not equal:
+  #                              expected: 0
+  #                              actual  : 512
+  #              Test:           TestFlags
   doCheck = false;
 
   meta = with lib; {

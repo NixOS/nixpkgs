@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
-  version = "3.0.20.11.20";
+  version = "3.0.21.02.21";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
     rev = version;
-    sha256 = "052xfkbmgfpalmhfwn0dj5114x2mzwz29y37qqhhsdpaxsz0y422";
+    sha256 = "sha256-0ijfbfv1F6mnt1uFH/A4yOADJoAFrPMa3yAOFJW53ek=";
   };
 
   buildInputs = [ ocl-icd opencl-headers ];

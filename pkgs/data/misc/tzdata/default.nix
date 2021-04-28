@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
      mv zic.o zic.o.orig
      mv zic zic.orig
-     make $makeFlags cc=cc AR=ar zic
+     make $makeFlags cc=${stdenv.cc.nativePrefix}cc AR=${stdenv.cc.nativePrefix}ar zic
      mv zic zic-native
      mv zic.o.orig zic.o
      mv zic.orig zic

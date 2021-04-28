@@ -12,8 +12,8 @@ with lib;
 
   system.build.openstackImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
+    additionalSpace = "1024M";
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
-    diskSize = 8192;
     format = "qcow2";
     configFile = pkgs.writeText "configuration.nix"
       ''

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , wrapQtAppsHook
@@ -19,7 +20,7 @@
 }:
 
 let
-  version = "4.0.9";
+  version = "4.1.2";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -35,7 +36,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "0cmdyfabllw4wnpqpdxp3l6hjnm0cvkwxn0z8ph4x54sf4zq9iz3";
+    sha256 = "0zvv8nmjzw5pchykz5p28483nby4lp4ah7iqr08pv36gy89l51v5";
 
     extraPostFetch = ''
       mv $out ./all
@@ -50,12 +51,17 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1fvjiagi78f32nxgr2rx8jas8hxfvpp1c8fpfcalvykmlhdc2gva";
+    sha256 = "05m6vbd4sfjk536kwa5wa3kv21jxxqnglx0ddvnmxfhf98371bhk";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
     cp -ar ${tests} $sourceRoot/electrum/tests
+  '';
+
+  prePatch = ''
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
@@ -77,10 +83,10 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
+    btchip
     ckcc-protocol
     keepkey
     trezor
-    btchip
   ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
@@ -112,7 +118,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pycryptodomex ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
 
@@ -150,6 +156,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak ];
   };
 }

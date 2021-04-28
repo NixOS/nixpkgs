@@ -7,13 +7,13 @@ with lib;
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-classic-" + version;
-  version = "1.3.8";
+  version = "1.3.8uahf";
 
   src = fetchFromGitHub {
     owner = "bitcoinclassic";
     repo = "bitcoinclassic";
     rev = "v${version}";
-    sha256 = "06ij9v7zbdnhxq9429nnxiw655cp8idldj18l7fmj94gqx07n5vh";
+    sha256 = "sha256-V1cOB5FLotGS5jup/aVaiDiyr/v2KJ2SLcIu/Hrjuwk=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

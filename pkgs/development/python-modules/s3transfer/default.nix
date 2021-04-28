@@ -9,16 +9,16 @@
 , wheel
 , unittest2
 , botocore
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db";
+    sha256 = "c5dadf598762899d8cfaecf68eba649cd25b0ce93b6c954b156aaa3eed160547";
   };
 
   propagatedBuildInputs =

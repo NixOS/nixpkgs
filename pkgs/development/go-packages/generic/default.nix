@@ -35,6 +35,8 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
+, CGO_ENABLED ? go.CGO_ENABLED
+
 , meta ? {}, ... } @ args:
 
 
@@ -75,10 +77,12 @@ let
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH GO386 CGO_ENABLED;
+    inherit (go) GOOS GOARCH GO386;
 
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
+
+    inherit CGO_ENABLED;
 
     GO111MODULE = "off";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];

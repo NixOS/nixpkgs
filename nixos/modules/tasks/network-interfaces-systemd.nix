@@ -93,17 +93,7 @@ in
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
-          # IPv6PrivacyExtensions=kernel seems to be broken with networkd.
-          # Instead of using IPv6PrivacyExtensions=kernel, configure it according to the value of
-          # `tempAddress`:
-          networkConfig.IPv6PrivacyExtensions = {
-            # generate temporary addresses and use them by default
-            "default" = true;
-            # generate temporary addresses but keep using the standard EUI-64 ones by default
-            "enabled" = "prefer-public";
-            # completely disable temporary addresses
-            "disabled" = false;
-          }.${i.tempAddress};
+          networkConfig.IPv6PrivacyExtensions = "kernel";
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;
           } // optionalAttrs (i.mtu != null) {
@@ -269,7 +259,7 @@ in
             wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            path = [ pkgs.iproute2 config.virtualisation.vswitch.package ];
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \

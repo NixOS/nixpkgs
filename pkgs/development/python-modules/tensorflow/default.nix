@@ -288,9 +288,9 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "0vyy1hv0jy5pqwvnc8pxb9isgnbw07c4a4d4wn61db00np114crz"
+        "1i7z2a7bc2q1vn1h9nx1xc6g1r1cby2xvbcs20fj9h6c2fgaw9j4"
       else
-        "0vczv5f9s4dxgwdkmf1y9b9ybh5d3y1nllqhb5q8aj9kq73izyn9";
+        "0s8q5rxq8abr50c5jpwv96ncfc0k8jw7w70ri8viqy031g9v9v45";
     };
 
     buildAttrs = {
@@ -325,6 +325,10 @@ let
           addOpenGLRunpath "$lib"
         done
       '';
+
+      requiredSystemFeatures = [
+        "big-parallel"
+      ];
     };
 
     meta = with lib; {

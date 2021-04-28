@@ -24,11 +24,11 @@
 
 mkDerivation rec {
   pname = "qstopmotion";
-  version = "2.4.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${pname}-${version}-Source.tar.gz";
-    sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
+    sha256 = "sha256-jyBUyadkSuQKXOrr5XZ1jy6of1Qw8S2HPxuOrPc7RnE=";
   };
 
   buildInputs = [

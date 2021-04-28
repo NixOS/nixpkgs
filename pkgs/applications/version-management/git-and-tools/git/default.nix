@@ -1,5 +1,4 @@
 { fetchurl, lib, stdenv, buildPackages
-, fetchpatch
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
@@ -8,6 +7,7 @@
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
 , nlsSupport ? true
+, osxkeychainSupport ? stdenv.isDarwin
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -19,11 +19,12 @@
 , gzip # needed at runtime by gitweb.cgi
 }:
 
+assert osxkeychainSupport -> stdenv.isDarwin;
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.30.0";
+  version = "2.31.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "06ad6dylgla34k9am7d5z8y3rryc8ln3ibq5z0d74rcm20hm0wsm";
+    sha256 = "10367n5sv4nsgaxy486pbp7nscx34vjk8vrb06jm9ffm8ix42qcz";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -65,10 +66,10 @@ stdenv.mkDerivation {
         --subst-var-by gettext ${gettext}
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
     ++ lib.optionals withManual [ asciidoctor texinfo xmlto docbook2x
          docbook_xsl docbook_xsl_ns docbook_xml_dtd_45 libxslt ];
-  buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
+  buildInputs = [curl openssl zlib expat cpio libiconv]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
@@ -115,7 +116,7 @@ stdenv.mkDerivation {
     make -C contrib/subtree
   '' + (lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
-  '') + (lib.optionalString stdenv.isDarwin ''
+  '') + (lib.optionalString osxkeychainSupport ''
     make -C contrib/credential/osxkeychain
   '') + (lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
@@ -129,7 +130,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
 
-  preInstall = (lib.optionalString stdenv.isDarwin ''
+  preInstall = (lib.optionalString osxkeychainSupport ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
@@ -248,8 +249,8 @@ stdenv.mkDerivation {
          notSupported "$out/$prog"
        done
      '')
-   + lib.optionalString stdenv.isDarwin ''
-    # enable git-credential-osxkeychain by default if darwin
+   + lib.optionalString osxkeychainSupport ''
+    # enable git-credential-osxkeychain on darwin if desired (default)
     mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
@@ -310,6 +311,9 @@ stdenv.mkDerivation {
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
 
+    # Flaky tests:
+    disable_test t5319-multi-pack-index
+
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
       # when NO_PERL=1, and the test should be skipped, but the test suite does
@@ -335,7 +339,7 @@ stdenv.mkDerivation {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = lib.licenses.gpl2;
-    changelog = "https://raw.githubusercontent.com/git/git/${version}/Documentation/RelNotes/${version}.txt";
+    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.txt";
 
     longDescription = ''
       Git, a popular distributed version control system designed to

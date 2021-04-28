@@ -7,8 +7,9 @@
 #### Overview
 
 Several versions of the Python interpreter are available on Nix, as well as a
-high amount of packages. The attribute `python` refers to the default
-interpreter, which is currently CPython 2.7. It is also possible to refer to
+high amount of packages. The attribute `python3` refers to the default
+interpreter, which is currently CPython 3.8. The attribute `python` refers to
+CPython 2.7 for backwards-compatibility. It is also possible to refer to
 specific versions, e.g. `python38` refers to CPython 3.8, and `pypy` refers to
 the default PyPy interpreter.
 
@@ -78,7 +79,7 @@ $ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy toolz ])'
 By default `nix-shell` will start a `bash` session with this interpreter in our
 `PATH`, so if we then run:
 
-```
+```Python console
 [nix-shell:~/src/nixpkgs]$ python3
 Python 3.8.1 (default, Dec 18 2019, 19:06:26)
 [GCC 9.2.0] on linux
@@ -89,7 +90,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 Note that no other modules are in scope, even if they were imperatively
 installed into our user environment as a dependency of a Python application:
 
-```
+```Python console
 >>> import requests
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -145,8 +146,8 @@ print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 Executing this script requires a `python3` that has `numpy`. Using what we learned
 in the previous section, we could startup a shell and just run it like so:
 
-```
-nix-shell -p 'python38.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
+```ShellSesssion
+$ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
 The dot product of [1 2] and [3 4] is: 11
 ```
 
@@ -334,7 +335,7 @@ Above, we were mostly just focused on use cases and what to do to get started
 creating working Python environments in nix.
 
 Now that you know the basics to be up and running, it is time to take a step
-back and take a deeper look at at how Python packages are packaged on Nix. Then,
+back and take a deeper look at how Python packages are packaged on Nix. Then,
 we will look at how you can use development mode with your code.
 
 #### Python library packages in Nixpkgs
@@ -611,7 +612,7 @@ Using the example above, the analagous pytestCheckHook usage would be:
     "update"
   ];
 
-  disabledTestFiles = [
+  disabledTestPaths = [
     "tests/test_failing.py"
   ];
 ```
@@ -638,7 +639,7 @@ are disabled.
 
 #### Using pythonImportsCheck
 
-Although unit tests are highly prefered to valid correctness of a package. Not
+Although unit tests are highly prefered to validate correctness of a package, not
 all packages have test suites that can be ran easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
@@ -762,10 +763,10 @@ and in this case the `python38` interpreter is automatically used.
 Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
 respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
-`python38`. The default interpreter, `python`, maps to `python2`. The PyPy
-interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
-`pypy3`, with aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`.
-The Nix expressions for the interpreters can be found in
+`python39`. The attribute `python` maps to `python2`. The PyPy interpreters
+compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
+aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`. The Nix
+expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
@@ -787,6 +788,23 @@ Each interpreter has the following attributes:
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.8`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
+
+### Optimizations
+
+The Python interpreters are by default not build with optimizations enabled, because
+the builds are in that case not reproducible. To enable optimizations, override the
+interpreter of interest, e.g using
+
+```
+let
+  pkgs = import ./. {};
+  mypython = pkgs.python3.override {
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = mypython;
+  };
+in mypython
+```
 
 ### Building packages and applications
 
@@ -918,7 +936,7 @@ because their behaviour is different:
 
 * `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
   as well as the items listed in `setup_requires`.
-* `buildInputs ? []`: Build and/or run-time dependencies that need to be be
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
 * `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
@@ -1188,7 +1206,8 @@ community to help save time. No tool is preferred at the moment.
   expressions for your Python project. Note that [sharing derivations from
   pypi2nix with nixpkgs is possible but not
   encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
+- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools)
+- [poetry2nix](https://github.com/nix-community/poetry2nix)
 
 ### Deterministic builds
 
@@ -1486,11 +1505,12 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   nixpkgs.config.packageOverrides = super: {
     python = super.python.override {
       packageOverrides = python-self: python-super: {
-        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-          src = super.fetchgit {
-            url = "https://github.com/sametmax/0bin";
-            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+          src = super.fetchPipy {
+            pname = "twisted";
+            version = "19.10.0";
+            sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+            extension = "tar.bz2";
           };
         });
       };
@@ -1498,9 +1518,11 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-`pythonPackages.zerobin` is now globally overridden. All packages and also the
-`zerobin` NixOS service use the new definition. Note that `python-super` refers
-to the old package set and `python-self` to the new, overridden version.
+`pythonPackages.twisted` is now globally overridden.
+All packages and also all NixOS services that reference `twisted`
+(such as `services.buildbot-worker`) now use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
 
 To modify only a Python package set instead of a whole Python derivation, use
 this snippet:
@@ -1508,7 +1530,7 @@ this snippet:
 ```nix
   myPythonPackages = pythonPackages.override {
     overrides = self: super: {
-      zerobin = ...;
+      twisted = ...;
     };
   }
 ```
@@ -1521,11 +1543,12 @@ Use the following overlay template:
 self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-        src = super.fetchgit {
-          url = "https://github.com/sametmax/0bin";
-          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+      twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        src = super.fetchPypi {
+          pname = "twisted";
+          version = "19.10.0";
+          sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+          extension = "tar.bz2";
         };
       });
     };
@@ -1550,13 +1573,11 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 ### Contributing guidelines
 
-Following rules are desired to be respected:
+The following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
-  `pkgs/development/python-modules/<name>/default.nix`. Libraries in
-  `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid
-  merge conflicts.
+  `pkgs/development/python-modules/<name>/default.nix`.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1566,7 +1587,11 @@ Following rules are desired to be respected:
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-* Attribute names in `python-packages.nix` should be normalized according to
-  [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
-  means that characters should be converted to lowercase and `.` and `_` should
-  be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
+* Attribute names in `python-packages.nix` as well as `pname`s should match the
+  library's name on PyPI, but be normalized according to [PEP
+  0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
+  that characters should be converted to lowercase and `.` and `_` should be
+  replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
+  If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Attribute names in `python-packages.nix` should be sorted alphanumerically to
+  avoid merge conflicts and ease locating attributes.

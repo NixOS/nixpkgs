@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which, ninja, python, pkg-config, protobuf
+{ lib, stdenv, fetchFromGitHub, which, ninja, pkg-config, protobuf
 , ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
 
 let

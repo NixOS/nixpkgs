@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, autoreconfHook, zlib, gmock, buildPackages
+, autoreconfHook, zlib, gtest, buildPackages
 , version, sha256
 , ...
 }:
@@ -20,8 +20,8 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
 
   postPatch = ''
     rm -rf gmock
-    cp -r ${gmock.src}/googlemock gmock
-    cp -r ${gmock.src}/googletest googletest
+    cp -r ${gtest.src}/googlemock gmock
+    cp -r ${gtest.src}/googletest googletest
     chmod -R a+w gmock
     chmod -R a+w googletest
     ln -s ../googletest gmock/gtest

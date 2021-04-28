@@ -30,27 +30,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.10.8";
+  version = "0.11.13";
 
   src = fetchurl {
     url =
-      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.asar.gz";
-    sha256 = "M+iIvnenfe+4JUKLvGDJXub8d5t2BLoPTo5MrF+5xy4=";
+      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+    sha256 = "0QL1rP37pmdIdGM9eHa7PfW1GVrvn2fX4bQPqQ8FOpI=";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];
-
-  unpackPhase = ''
-    gzip -dc $src > obsidian.asar
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/obsidian \
-      --add-flags $out/share/electron/obsidian.asar
+      --add-flags $out/share/obsidian/app.asar
 
-    install -m 444 -D obsidian.asar $out/share/electron/obsidian.asar
+    install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
+    install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
 
     install -m 444 -D "${desktopItem}/share/applications/"* \
       -t $out/share/applications/

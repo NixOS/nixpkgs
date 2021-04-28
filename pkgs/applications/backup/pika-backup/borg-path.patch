@@ -1,0 +1,13 @@
+diff --git a/src/borg/utils.rs b/src/borg/utils.rs
+index 4e30913..30d7d6f 100644
+--- a/src/borg/utils.rs
++++ b/src/borg/utils.rs
+@@ -223,7 +223,7 @@ impl BorgCall {
+     }
+ 
+     pub fn cmd(&self) -> Command {
+-        let mut cmd = Command::new("borg");
++        let mut cmd = Command::new("@borg@");
+ 
+         cmd.args(self.args())
+             .stderr(Stdio::piped())

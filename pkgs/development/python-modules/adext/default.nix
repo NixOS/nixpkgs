@@ -1,24 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 , alarmdecoder
 }:
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.3";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "184qxw6i5ixnhgkjnby4zwn4jg90mxb8xy9vbg80x5w331p4z50f";
+    sha256 = "1yz1rpfvhbf7kfjck5vadbj9rd3bkx5248whaa3impdrjh7vs03x";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "alarmdecoder==1.13.2" "alarmdecoder>=1.13.2"
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ alarmdecoder ];
+  propagatedBuildInputs = [
+    alarmdecoder
+  ];
 
   # Tests are not published yet
   doCheck = false;

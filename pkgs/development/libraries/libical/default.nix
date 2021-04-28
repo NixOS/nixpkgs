@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , buildPackages
 , cmake
 , glib
@@ -22,7 +21,7 @@ assert introspectionSupport -> gobject-introspection != null && vala != null;
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.8";
+  version = "3.0.9";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "0pkh74bfrgp1slv8wsv7lbmal2m7qkixwm5llpmfwaiv14njlp68";
+    sha256 = "sha256-efdiGktLGITaQ6VinnfYG52fMhO0Av+JKROt2kTvS1U=";
   };
 
   nativeBuildInputs = [
@@ -68,19 +67,13 @@ stdenv.mkDerivation rec {
     "-DGOBJECT_INTROSPECTION=True"
     "-DICAL_GLIB_VAPI=True"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DIMPORT_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/GlibSrcGenerator.cmake"
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
 
   patches = [
     # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
-    # Export src-generator binary for use while cross-compiling
-    # https://github.com/libical/libical/pull/439
-    (fetchpatch {
-      url = "https://github.com/libical/libical/commit/1197d84b63dce179b55a6293cfd6d0523607baf1.patch";
-      sha256 = "18i1khnwmw488s7g5a1kf05sladf8dbyhfc69mbcf6dkc4nnc3dg";
-    })
   ];
 
   # Using install check so we do not have to manually set

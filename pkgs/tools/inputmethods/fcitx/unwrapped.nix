@@ -2,7 +2,7 @@
 , libxml2, enchant2, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
-, xkeyboard_config, pcre, libuuid
+, xkeyboard_config, pcre, libuuid, xorg, makeWrapper
 , withPinyin ? true
 , fetchFromGitLab
 }:
@@ -68,7 +68,12 @@ stdenv.mkDerivation rec {
     patchShebangs cmake/
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkg-config pcre ];
+  postInstall = ''
+    wrapProgram $out/bin/fcitx \
+      --prefix PATH : "${xorg.xmodmap}/bin"
+  '';
+
+  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkg-config pcre makeWrapper ];
 
   buildInputs = [
     xkeyboard_config enchant2 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile

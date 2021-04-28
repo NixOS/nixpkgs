@@ -11,11 +11,15 @@
 , zlib
 }: stdenv.mkDerivation rec {
   name = "roon-server";
-  version = "100700571";
+  version = "100800753";
 
+  # N.B. The URL is unstable. I've asked for them to provide a stable URL but
+  # they have ignored me. If this package fails to build for you, you may need
+  # to update the version and sha256.
+  # c.f. https://community.roonlabs.com/t/latest-roon-server-is-not-available-for-download-on-nixos/118129
   src = fetchurl {
-    url = "http://download.roonlabs.com/updates/stable/RoonServer_linuxx64_${version}.tar.bz2";
-    sha256 = "191vlzf10ypkk1prp6x2rszlmsihdwpd3wvgf2jg6ckwyxy2hc6k";
+    url = "https://web.archive.org/web/20210209195555/https://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2";
+    sha256 = "sha256-uas1vqIDWlYr7jgsrlBeJSPjMxwzVnrkCD9jJljkFZs=";
   };
 
   buildInputs = [

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "2.1.1";
+  version = "2.1.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa1d48bcb85bbed90f6ffee6936578f65ff0e93aa607397bd88eaeb408bd96d8";
+    sha256 = "e0b274759bfbcb6eeb7c7b44a7a46391990a43ac77aa55359b075765b54d9f5d";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [

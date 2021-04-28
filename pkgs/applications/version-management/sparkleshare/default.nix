@@ -19,7 +19,7 @@
   stdenv,
   symlinkJoin,
   webkit2-sharp,
-  xdg_utils,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
             mono
             openssh
             openssl
-            xdg_utils
+            xdg-utils
           ];
         }}/bin \
         --set MONO_GAC_PREFIX ${lib.concatStringsSep ":" [

@@ -1,29 +1,45 @@
-{ stdenv, lib, perl, fetchurl, python2
-, pkg-config, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
+{ stdenv, lib, perl, fetchurl, python2, fmt, libidn
+, pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
-, withEditor ? true, wxGTK ? null
+, gloox, nvidia-texture-tools, zeroad-data
+, withEditor ? true, wxGTK
 }:
 
-assert withEditor -> wxGTK != null;
+# You can find more instructions on how to build 0ad here:
+#    https://trac.wildfiregames.com/wiki/BuildInstructions
 
+let
+  # the game requires a special version 78.6.0 of spidermonkey, otherwise
+  # we get compilation errors. We override the src attribute of spidermonkey_78
+  # in order to reuse that declartion, while giving it a different source input.
+  spidermonkey_78_6 = spidermonkey_78.overrideAttrs(old: rec {
+    version = "78.6.0";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+      sha256 = "0lyg65v380j8i2lrylwz8a5ya80822l8vcnlx3dfqpd3s6zzjsay";
+    };
+    patches = (old.patches or []) ++ [
+      ./spidermonkey-cargo-toml.patch
+    ];
+  });
+in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.23b";
+  version = "0.0.24b";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "0draa53xg69i5qhqym85658m45xhwkbiimaldj4sr3703rjgggq1";
+    sha256 = "1a1py45hkh2cswi09vbf9chikgxdv9xplsmg6sv6xhdznv4j6p1j";
   };
 
   nativeBuildInputs = [ python2 perl pkg-config ];
 
   buildInputs = [
-    spidermonkey_38 boost icu libxml2 libpng libjpeg
-    zlib curl libogg libvorbis enet miniupnpc openal
+    spidermonkey_78_6 boost icu libxml2 libpng libjpeg
+    zlib curl libogg libvorbis enet miniupnpc openal libidn
     libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools libsodium
+    nvidia-texture-tools libsodium fmt
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = toString [
@@ -31,35 +47,22 @@ stdenv.mkDerivation rec {
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"
     "-I${SDL2}/include/SDL2"
-  ];
-
-  patches = [
-    ./rootdir_env.patch
-    # Fixes build with spidermonkey-38.8.0, includes the minor version check:
-    # https://src.fedoraproject.org/rpms/0ad/c/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/0ad/raw/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b/f/0ad-mozjs-incompatible.patch";
-      sha256 = "1rzpaalcrzihsgvlk3nqd87n2kxjldlwvb3qp5fcd5ffzr6k90wa";
-    })
+    "-I${fmt.dev}/include"
   ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
 
-    # Workaround invalid pkg-config name for mozjs
-    mkdir pkg-config
-    ln -s ${spidermonkey_38}/lib/pkgconfig/* pkg-config/mozjs-38.pc
-    PKG_CONFIG_PATH="$PWD/pkg-config:$PKG_CONFIG_PATH"
-
     # Update Makefiles
     pushd build/workspaces
     ./update-workspaces.sh \
       --with-system-nvtt \
-      --with-system-mozjs38 \
+      --with-system-mozjs \
       ${lib.optionalString withEditor "--enable-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
+      --datadir="$out"/share/0ad/data \
       --without-tests \
       -j $NIX_BUILD_CORES
     popd
@@ -81,6 +84,11 @@ stdenv.mkDerivation rec {
 
     # Copy l10n data.
     install -Dm755 -t $out/share/0ad/data/l10n binaries/data/l10n/*
+
+    # Link in game data from package
+    ln -s ${zeroad-data}/share/0ad/data/config $out/share/0ad/data/config
+    ln -s ${zeroad-data}/share/0ad/data/mods $out/share/0ad/data/mods
+    ln -s ${zeroad-data}/share/0ad/data/tools $out/share/0ad/data/tools
 
     # Copy libraries.
     install -Dm644 -t $out/lib/0ad        binaries/system/*.so

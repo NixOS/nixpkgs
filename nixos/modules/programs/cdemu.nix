@@ -16,18 +16,21 @@ in {
         '';
       };
       group = mkOption {
+        type = types.str;
         default = "cdrom";
         description = ''
           Group that users must be in to use <command>cdemu</command>.
         '';
       };
       gui = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to install the <command>cdemu</command> GUI (gCDEmu).
         '';
       };
       image-analyzer = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to install the image analyzer.

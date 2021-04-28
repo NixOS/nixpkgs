@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
-  libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
+  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
 }:
 
 let
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     hicolor-icon-theme
     libsigcxx
     libxmlxx
-    xdg_utils
+    xdg-utils
     isocodes
   ];
 

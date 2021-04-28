@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
+{ lib, stdenv, fetchFromGitHub, cmake, xz, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
   nativeBuildInputs = [ cmake makeWrapper docbook_xsl docbook_xsl_ns asciidoc ];
-  buildInputs = [ lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
+  buildInputs = [ xz boost libdevil zlib p7zip openal libvorbis freetype SDL2
     xorg.libX11 xorg.libXcursor libGLU libGL glew curl
     systemd libunwind which minizip ]
     ++ lib.optional withAI jdk
@@ -60,5 +60,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom qknight domenkozar sorki ];
     platforms = platforms.linux;
+    # error: 'snprintf' was not declared in this scope
+    broken = true;
   };
 }

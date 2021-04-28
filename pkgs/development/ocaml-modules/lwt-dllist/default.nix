@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "lwt-dllist";
   version = "1.0.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

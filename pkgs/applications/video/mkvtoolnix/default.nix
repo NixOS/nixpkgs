@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, autoconf, automake, libiconv, drake
-, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
+, ruby, docbook_xsl, file, xdg-utils, gettext, expat, boost, libebml, zlib
 , fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
   , qtbase ? null
@@ -13,13 +13,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "51.0.0";
+  version = "56.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "06k2slgac0fhgypmdriwdc5s09mry22vxk316ixfj5sv3irwn7wc";
+    sha256 = "0nhpp1zkggxqjj7lhj6as5mcjcz5yk3l1d1xcgs7i9153blam1yj";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib fmt
+    expat file xdg-utils boost libebml zlib fmt
     libmatroska libogg libvorbis flac cmark pcre2
   ] ++ optional  stdenv.isDarwin libiconv
     ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
+  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform tools for Matroska";
     homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms   = platforms.linux
       ++ optionals (!withGUI) platforms.darwin;

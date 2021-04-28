@@ -17,9 +17,10 @@ buildPythonPackage rec {
     sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
   };
 
-  doCheck = false;
-
   propagatedBuildInputs = [ requests lxml pandas ];
+
+  doCheck = false;
+  pythonImportsCheck = [ "pytrends" ];
 
   meta = with lib; {
     description = "Pseudo API for Google Trends";

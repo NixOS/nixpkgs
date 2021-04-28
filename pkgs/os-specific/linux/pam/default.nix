@@ -1,5 +1,6 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
+{ lib, stdenv, buildPackages, fetchurl, flex, cracklib, db4, gettext
 , nixosTests
+, withLibxcrypt ? false, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -11,23 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.libc == "musl") [
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
-      sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
-    })
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
-      sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
-    })
-  ];
-
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [ flex ]
+    ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
-  buildInputs = [ cracklib db4 ];
+  buildInputs = [ cracklib db4 ]
+    ++ lib.optional withLibxcrypt libxcrypt;
 
   enableParallelBuilding = true;
 

@@ -1,20 +1,20 @@
 { stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
-, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre
+, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, xz, pcre
 , pkg-config, python, xxHash, zlib, zstd
 , libAfterImage, giflib, libjpeg, libtiff, libpng
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.22.06";
+  version = "6.22.08";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "0mqvj42nax0bmz8h83jjlwjm3xxjy1n0n10inc8csip9ly28fs64";
+    sha256 = "0vrgi83hrw4n9zgx873fn4ba3vk54slrwk1cl4cc4plgxzv1y1kg";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config ];
-  buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
+  buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 xz gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;

@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "Add directory bookmarks, distant listing, and distant editing to the command line";
     maintainers = with maintainers; [ lethalman ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

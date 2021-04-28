@@ -36,7 +36,8 @@ file-version() {
 latest-rt-version() {
     branch="$1" # e.g. 5.4
     curl -sL "$mirror/projects/rt/$branch/sha256sums.asc" |
-        sed -ne '/.patch.xz/ { s/.*patch-\(.*\).patch.xz/\1/; p; q }'
+        sed -ne '/.patch.xz/ { s/.*patch-\(.*\).patch.xz/\1/p}' |
+        tail -n 1
 }
 
 update-if-needed() {

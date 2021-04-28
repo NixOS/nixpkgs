@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v3vla3k6csfb8w0j9njrhcjj4n7yh172n9wv6z397f1sa0fs202";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/lib $out/doc

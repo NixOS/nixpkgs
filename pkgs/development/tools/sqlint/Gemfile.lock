@@ -1,9 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    pg_query (1.2.0)
-    sqlint (0.1.10)
-      pg_query (~> 1)
+    google-protobuf (3.15.6)
+    pg_query (2.0.2)
+      google-protobuf (~> 3.15.5)
+    sqlint (0.2.0)
+      pg_query (~> 2)
 
 PLATFORMS
   ruby

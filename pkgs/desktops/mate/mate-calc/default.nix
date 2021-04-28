@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, libxml2, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, libxml2, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-calc";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0imdimq5d5rjq8mkjcrsd683a2bn9acmhc0lmvyw71y0040inbaw";
+    sha256 = "1yg8j0dqy37fljd20pwxdgna3f1v7k9wmdr9l4r1nqf4a7zwi96l";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Calculator for the MATE desktop";

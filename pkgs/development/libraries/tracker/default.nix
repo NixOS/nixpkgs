@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -28,28 +27,21 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "tracker";
-  version = "3.0.1";
+  version = "3.0.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
+    sha256 = "sha256-b1yEqzvh7aUgUBsq7XIhYWoM8VKRDFN3V7U4vAXv/KM=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
-    })
-
-    # Fix consistency error with sqlite 3.34
-    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
-      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
     })
   ];
 
@@ -90,7 +82,8 @@ stdenv.mkDerivation rec {
     "-Ddocs=true"
   ];
 
-  doCheck = true;
+  # https://gitlab.gnome.org/GNOME/tracker/-/issues/292#note_1075369
+  doCheck = !stdenv.isi686;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
@@ -141,3 +134,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+  // {
+    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
+    enableParallelBuilding = false;
+  }
+)

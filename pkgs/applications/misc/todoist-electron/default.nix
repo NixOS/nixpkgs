@@ -1,65 +1,51 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, dpkg, atk, at-spi2-atk, glib, pango, gdk-pixbuf
-, gtk3, cairo, freetype, fontconfig, dbus, xorg, nss, nspr, alsaLib, cups, expat
-, udev, libpulseaudio, util-linux, makeWrapper }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_11, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
-  version = "1.24.0";
+  version = "0.2.4";
 
   src = fetchurl {
-    url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}_amd64.deb";
-    sha256 = "0g35518z6nf6pnfyx4ax75rq8b8br72mi6wv6jzgac9ric1q4h2s";
+    url = "https://electron-dl.todoist.com/linux/Todoist-${version}.AppImage";
+    sha256 = "1xrf2qjhq116z18qx7n1zd7mhvkb2dccaq7az4w6fs216l8q5zf2";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "Todoist";
-    exec = "todoist %U";
-    icon = "todoist";
-    comment = "Todoist for Linux";
-    desktopName = "Todoist";
-    categories = "Utility";
+  appimageContents = appimageTools.extractType2 {
+    name = "${pname}-${version}";
+    inherit src;
   };
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
-  unpackPhase = ''
-    mkdir pkg
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications $out/share/icons/hicolor/512x512
+
+    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    cp -a ${appimageContents}/todoist.desktop $out/share/applications/${pname}.desktop
+    cp -a ${appimageContents}/usr/share/icons/hicolor/0x0/apps $out/share/icons/hicolor/512x512
+
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
+
+    runHook postInstall
   '';
-  installPhase = let
-    libPath = lib.makeLibraryPath ([
-      stdenv.cc.cc gtk3 atk at-spi2-atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
-      nss nspr alsaLib libpulseaudio cups expat udev util-linux
-    ] ++ (with xorg; [
-      libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-      libXrender libX11 libXtst libXScrnSaver
-    ]));
-  in ''
-    mkdir -p "$out/bin"
-    mv opt "$out/"
-    mv usr/share "$out/share"
 
-    # Patch binary
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}:\$ORIGIN" \
-      $out/opt/Todoist/todoist
-
-    # Hacky workaround for RPATH problems
-    makeWrapper $out/opt/Todoist/todoist $out/bin/todoist \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio udev ]}
-
-    # Desktop item
-    mkdir -p "$out/share"
-    rm -r "$out/share/applications"
-    cp -r "${desktopItem}/share/applications" "$out/share/applications"
+  postFixup = ''
+    makeWrapper ${electron_11}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app.asar \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}"
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/KryDos/todoist-linux";
-    description = "The Linux wrapper for Todoist web version";
+    homepage = "https://todoist.com";
+    description = "The official Todoist electron app";
     platforms = [ "x86_64-linux" ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ i077 ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ i077 kylesferrazza ];
   };
 }

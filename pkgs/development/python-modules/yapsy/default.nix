@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -16,6 +17,7 @@ buildPythonPackage rec {
     homepage = "http://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = licenses.bsd0;
+    # tests fail and are not using pytest to easily disable them
+    broken = stdenv.isDarwin;
   };
-
 }

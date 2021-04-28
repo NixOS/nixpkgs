@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.8.1";
+  version = "0.9.0";
 
   disabled = pythonOlder "3.6";
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "11qyya3vyq50wpzrzzl8v46yx5p72rhpqhybwn47qgazxgg82r1b";
+    hash = "sha256-knue9uJih72UQHsvfXZ9AA94mol4ERa9Lo/GMcp+2hA=";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
@@ -73,13 +73,14 @@ buildPythonPackage rec {
   # It can also be installed at runtime from the pip wheel.
   # We disable appropriate tests below to allow building without pyscf installed
 
-  # NOTE: we remove cplex b/c we can't build pythonPackages.cplex.
-  # cplex is only distributed in manylinux1 wheel (no source), and Nix python is not manylinux1 compatible
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyscf; sys_platform != 'win32'" "" \
-      --replace "cplex; python_version >= '3.6' and python_version < '3.8'" ""
+    # Because this is a legacy/final release, the maintainers restricted the maximum
+    # versions of all dependencies to the latest current version. That will not
+    # work with nixpkgs' rolling release/update system.
+    # Unlock all versions for compatibility
+    substituteInPlace setup.py --replace "<=" ">="
+    sed -i 's/\(\w\+-*\w*\).*/\1/' requirements.txt
+    substituteInPlace requirements.txt --replace "dataclasses" ""
 
     # Add ImportWarning when running qiskit.chemistry (pyscf is a chemistry package) that pyscf is not included
     echo -e "\nimport warnings\ntry: import pyscf;\nexcept ImportError:\n    " \

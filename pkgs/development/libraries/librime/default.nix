@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gmock }:
+  libyamlcpp, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "librime";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gmock ];
+  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest ];
 
   meta = with lib; {
     homepage    = "https://rime.im/";

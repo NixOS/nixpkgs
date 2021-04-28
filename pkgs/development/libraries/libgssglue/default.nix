@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kerberos }:
+{ lib, stdenv, fetchurl, libkrb5 }:
 
 stdenv.mkDerivation rec {
   name = "libgssglue-0.4";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/etc
     cat <<EOF > $out/etc/gssapi_mech.conf
-    ${kerberos}/lib/libgssapi_krb5.so mechglue_internal_krb5_init
+    ${libkrb5}/lib/libgssapi_krb5.so mechglue_internal_krb5_init
     EOF
   '';
 

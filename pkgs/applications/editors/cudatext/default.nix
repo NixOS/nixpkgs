@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.122.3";
+  version = "1.131.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "1h56hj433z0n4l97zl1cwkjv0qvz4qmvf469zzjzf1nj4zj8px2b";
+    sha256 = "1zq17yi5zn4hdgrrn3c3cdk6s38fv36r66dl0dqz2z8jjd6vy4p3";
   };
 
   postPatch = ''
@@ -91,7 +91,12 @@ stdenv.mkDerivation rec {
     install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
     install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
   '' + lib.concatMapStringsSep "\n" (lexer: ''
-    install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+    if [ -d "CudaText-lexers/${lexer}" ]; then
+      install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+    else
+      echo "${lexer} lexer not found"
+      exit 1
+    fi
   '') additionalLexers;
 
   meta = with lib; {
@@ -101,8 +106,8 @@ stdenv.mkDerivation rec {
       Config system in JSON files. Multi-carets and multi-selections.
       Search and replace with RegEx. Extendable by Python plugins and themes.
     '';
-    homepage = "http://www.uvviewsoft.com/cudatext/";
-    changelog = "http://uvviewsoft.com/cudatext/history.txt";
+    homepage = "https://cudatext.github.io/";
+    changelog = "https://cudatext.github.io/history.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

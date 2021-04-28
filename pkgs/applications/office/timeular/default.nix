@@ -1,8 +1,7 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  libsecret
+{ lib
+, fetchurl
+, appimageTools
+, libsecret
 }:
 
 let
@@ -27,7 +26,8 @@ in appimageTools.wrapType2 rec {
     mv $out/bin/{${name},${pname}}
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
-    substituteInPlace $out/share/applications/timeular.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/timeular.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {
@@ -37,7 +37,7 @@ in appimageTools.wrapType2 rec {
       Assign an activity to each side and flip to start tracking your time.
       The desktop app tell you where every minute of your day is spent.
     '';
-    homepage = https://timeular.com;
+    homepage = "https://timeular.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor ];
     platforms = [ "x86_64-linux" ];

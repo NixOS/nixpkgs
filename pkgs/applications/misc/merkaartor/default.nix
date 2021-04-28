@@ -1,5 +1,20 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, pkg-config, fetchpatch
-, boost, gdal, proj, qtbase, qtsvg, qtwebview, qtwebkit }:
+{ mkDerivation
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, qmake
+, qttools
+, qttranslations
+, gdal
+, proj
+, qtsvg
+, qtwebkit
+, withGeoimage ? true, exiv2
+, withGpsdlib ? (!stdenv.isDarwin), gpsd
+, withLibproxy ? false, libproxy
+, withZbar ? false, zbar
+}:
 
 mkDerivation rec {
   pname = "merkaartor";
@@ -13,24 +28,48 @@ mkDerivation rec {
   };
 
   patches = [
+    # Fix build with Qt 5.15 (missing QPainterPath include)
     (fetchpatch {
       url = "https://github.com/openstreetmap/merkaartor/commit/e72553a7ea2c7ba0634cc3afcd27a9f7cfef089c.patch";
       sha256 = "NAisplnS3xHSlRpX+fH15NpbaD+uM57OCsTYGKlIR7U=";
     })
+    # Added a condition to use the new timespec_t on gpsd APIs >= 9
+    (fetchpatch {
+      url = "https://github.com/openstreetmap/merkaartor/commit/13b358fa7899bb34e277b32a4c0d92833050f2c6.patch";
+      sha256 = "129fpjm7illz7ngx3shps5ivrxwf14apw55842xhskwwb0rf5szb";
+    })
   ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ boost gdal proj qtbase qtsvg qtwebview qtwebkit ];
+  buildInputs = [ gdal proj qtsvg qtwebkit ]
+    ++ lib.optional withGeoimage exiv2
+    ++ lib.optional withGpsdlib gpsd
+    ++ lib.optional withLibproxy libproxy
+    ++ lib.optional withZbar zbar;
 
-  enableParallelBuilding = true;
+  preConfigure = ''
+    lrelease src/src.pro
+  '';
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
+  qmakeFlags = [ "TRANSDIR_SYSTEM=${qttranslations}/translations" ]
+    ++ lib.optional withGeoimage "GEOIMAGE=1"
+    ++ lib.optional withGpsdlib "GPSDLIB=1"
+    ++ lib.optional withLibproxy "LIBPROXY=1"
+    ++ lib.optional withZbar "ZBAR=1";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv binaries/bin/merkaartor.app $out/Applications
+    mv binaries/bin/plugins $out/Applications/merkaartor.app/Contents
+    wrapQtApp $out/Applications/merkaartor.app/Contents/MacOS/merkaartor
+  '';
 
   meta = with lib; {
     description = "OpenStreetMap editor";
     homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

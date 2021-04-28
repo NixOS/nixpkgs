@@ -5,7 +5,6 @@
 , distlib
 , fetchPypi
 , filelock
-, fish
 , flaky
 , importlib-metadata
 , importlib-resources
@@ -24,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.2.1";
+  version = "20.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0aac7525e880a429764cefd3aaaff54afb5d9f25c82627563603f5d7de5a6e5";
+    sha256 = "49ec4eb4c224c6f7dd81bb6d0a28a09ecae5894f4e593c89b0db0885f565a107";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     cython
-    fish
     flaky
     pytest-freezegun
     pytest-mock
@@ -69,7 +67,7 @@ buildPythonPackage rec {
   '';
 
   # Ignore tests which require network access
-  disabledTestFiles = [
+  disabledTestPaths = [
     "tests/unit/create/test_creator.py"
     "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
   ];
@@ -77,6 +75,9 @@ buildPythonPackage rec {
   disabledTests = [
     "test_can_build_c_extensions"
     "test_xonsh" # imports xonsh, which is not in pythonPackages
+    # tests search `python3`, fail on python2, pypy
+    "test_python_via_env_var"
+    "test_python_multi_value_prefer_newline_via_env_var"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, flex, bison, vips, gnome2,
-fftw, gsl, goffice, libgsf }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, flex, bison, vips, gtk2
+, fftw, gsl, goffice, libgsf }:
 
 stdenv.mkDerivation rec {
   pname = "nip2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
   [ pkg-config glib libxml2 flex bison vips
-    gnome2.gtk fftw gsl goffice libgsf
+    gtk2 fftw gsl goffice libgsf
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, nixosTests
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils
 , writeScript, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
 with lib;
@@ -10,28 +10,24 @@ let
     "2.10" = {
       version = "2.10.7";
       sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-      tests = [ nixosTests.scala.scala_2_10 ];
       pname = "scala_2_10";
     };
 
     "2.11" = {
       version = "2.11.12";
       sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-      tests = [ nixosTests.scala.scala_2_11 ];
       pname = "scala_2_11";
     };
 
     "2.12" = {
       version = "2.12.13";
       sha256 = "17548sx7liskkadqiqaajmwp2w7bh9m2d8hp2mwyg8yslmjx4pcc";
-      tests = [ nixosTests.scala.scala_2_12 ];
       pname = "scala_2_12";
     };
 
     "2.13" = {
-      version = "2.13.4";
-      sha256 = "1alcnzmxga00nsvgy8yky91zw5b4q0xg2697vrrdgjlglpxiqwdw";
-      tests = [ nixosTests.scala.scala_2_13 ];
+      version = "2.13.5";
+      sha256 = "1ah5rw6xqksiayi5i95r3pcff961q71ilishzn2kmg673z0j2b7d";
       pname = "scala_2_13";
     };
   };
@@ -50,27 +46,35 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jre ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-      mkdir -p $out
-      rm bin/*.bat
-      mv * $out
-      # put docs in correct subdirectory
-      mkdir -p $out/share/doc
-      mv $out/doc $out/share/doc/${name}
-      mv $out/man $out/share/man
+    runHook preInstall
+    mkdir -p $out
+    rm bin/*.bat
+    mv * $out
+    # put docs in correct subdirectory
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/${name}
+    mv $out/man $out/share/man
     for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
           --prefix PATH ":" ${coreutils}/bin \
           --prefix PATH ":" ${gnugrep}/bin \
           --prefix PATH ":" ${jre}/bin \
           --set JAVA_HOME ${jre}
-      done
+    done
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/scalac -version 2>&1 | grep '^Scala compiler version ${version}'
+
+    echo 'println("foo"*3)' | $out/bin/scala 2>/dev/null | grep "foofoofoo"
   '';
 
   passthru = {
-    inherit tests;
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit

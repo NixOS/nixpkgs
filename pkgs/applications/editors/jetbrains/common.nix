@@ -3,7 +3,7 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta }:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }:
 
 with lib;
 
@@ -72,11 +72,11 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
         libnotify
-      ]}" \
+      ] ++ extraLdPath)}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cln, pkg-config, readline, gmp, python }:
+{ lib, stdenv, fetchurl, cln, pkg-config, readline, gmp, python3 }:
 
 stdenv.mkDerivation rec {
   name = "ginac-1.8.0";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ] ++ lib.optional stdenv.isDarwin gmp;
 
-  nativeBuildInputs = [ pkg-config python ];
+  nativeBuildInputs = [ pkg-config python3 ];
+
+  strictDeps = true;
 
   preConfigure = "patchShebangs ginsh";
 

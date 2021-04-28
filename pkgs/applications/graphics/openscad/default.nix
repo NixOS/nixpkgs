@@ -25,17 +25,18 @@
 , mkDerivation
 , qtmacextras
 , qmake
+, spacenavSupport ? stdenv.isLinux, libspnav
 }:
 
 mkDerivation rec {
   pname = "openscad";
-  version = "2019.05";
+  version = "2021.01";
 
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
     rev = "${pname}-${version}";
-    sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
+    sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
@@ -46,9 +47,15 @@ mkDerivation rec {
     qtbase qtmultimedia qscintilla
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
     ++ lib.optional stdenv.isDarwin qtmacextras
+    ++ lib.optional spacenavSupport libspnav
   ;
 
-  qmakeFlags = [ "VERSION=${version}" ];
+  qmakeFlags = [ "VERSION=${version}" ] ++
+    lib.optionals spacenavSupport [
+      "ENABLE_SPNAV=1"
+      "SPNAV_INCLUDEPATH=${libspnav}/include"
+      "SPNAV_LIBPATH=${libspnav}/lib"
+    ];
 
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake

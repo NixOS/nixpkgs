@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       Scream Tracker 3 (S3M), Fast Tracker II (XM), and Impulse Tracker (IT).
     '';
     license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
   };
 
   src = fetchurl {

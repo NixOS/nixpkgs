@@ -1,5 +1,4 @@
 { lib
-, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , httpcore
@@ -8,7 +7,6 @@
 , pytest-cov
 , pytestCheckHook
 , trio
-, xmltodict
 }:
 
 buildPythonPackage rec {

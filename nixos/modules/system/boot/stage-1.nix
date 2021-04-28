@@ -205,13 +205,22 @@ let
     ''; # */
 
 
+  # Networkd link files are used early by udev to set up interfaces early.
+  # This must be done in stage 1 to avoid race conditions between udev and
+  # network daemons.
   linkUnits = pkgs.runCommand "link-units" {
       allowedReferences = [ extraUtils ];
       preferLocalBuild = true;
-    } ''
+    } (''
       mkdir -p $out
       cp -v ${udev}/lib/systemd/network/*.link $out/
-    '';
+      '' + (
+      let
+        links = filterAttrs (n: v: hasSuffix ".link" n) config.systemd.network.units;
+        files = mapAttrsToList (n: v: "${v.unit}/${n}") links;
+      in
+        concatMapStringsSep "\n" (file: "cp -v ${file} $out/") files
+      ));
 
   udevRules = pkgs.runCommand "udev-rules" {
       allowedReferences = [ extraUtils ];
@@ -377,7 +386,7 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
+        (cd "$tmp" && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 

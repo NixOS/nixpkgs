@@ -116,6 +116,16 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
+  patches = [
+    # See upstream patch at
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
+    # from source distributions, the auto-generated configure script needs to be
+    # patched as well, therefore we use an in-tree patch instead of pulling the
+    # upstream patch. Don't forget to check backport status of the upstream patch
+    # when adding new GHC releases in nixpkgs.
+    ./respect-ar-path.patch
+  ];
+
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.

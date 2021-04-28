@@ -2,18 +2,17 @@
 , cmake, pkg-config
 # required
 , libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt
-, pkgs
 # options
-, enableDuktape ? true
-, enableCurl ? true
-, enableTaglib ? true
-, enableLibmagic ? true
-, enableLibmatroska ? true
-, enableAvcodec ? false
-, enableLibexif ? true
-, enableExiv2 ? false
-, enableFFmpegThumbnailer ? false
-, enableInotifyTools ? true
+, enableDuktape ? true, duktape
+, enableCurl ? true, curl
+, enableTaglib ? true, taglib
+, enableLibmagic ? true, file
+, enableLibmatroska ? true, libmatroska, libebml
+, enableAvcodec ? false, ffmpeg
+, enableLibexif ? true, libexif
+, enableExiv2 ? false, exiv2
+, enableFFmpegThumbnailer ? false, ffmpegthumbnailer
+, enableInotifyTools ? true, inotify-tools
 }:
 
 with lib;
@@ -21,13 +20,13 @@ let
   optionOnOff = option: if option then "on" else "off";
 in stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.6.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "0vkgbw2ibvfr0zffnmmws7389msyqsiw8anfad6awvkda3z3rxjm";
+    sha256 = "sha256-unBToiLSpTtnung77z65iuUqiQHwfMVgmFZMUtKU7fQ=";
   };
 
   cmakeFlags = [
@@ -51,16 +50,16 @@ in stdenv.mkDerivation rec {
     libupnp libuuid pugixml libiconv sqlite zlib fmt.dev
     spdlog
   ]
-  ++ optionals enableDuktape [ pkgs.duktape ]
-  ++ optionals enableCurl [ pkgs.curl ]
-  ++ optionals enableTaglib [ pkgs.taglib ]
-  ++ optionals enableLibmagic [ pkgs.file ]
-  ++ optionals enableLibmatroska [ pkgs.libmatroska pkgs.libebml ]
-  ++ optionals enableAvcodec [ pkgs.libav.dev ]
-  ++ optionals enableLibexif [ pkgs.libexif ]
-  ++ optionals enableExiv2 [ pkgs.exiv2 ]
-  ++ optionals enableInotifyTools [ pkgs.inotify-tools ]
-  ++ optionals enableFFmpegThumbnailer [ pkgs.ffmpegthumbnailer ];
+  ++ optionals enableDuktape [ duktape ]
+  ++ optionals enableCurl [ curl ]
+  ++ optionals enableTaglib [ taglib ]
+  ++ optionals enableLibmagic [ file ]
+  ++ optionals enableLibmatroska [ libmatroska libebml ]
+  ++ optionals enableAvcodec [ ffmpeg.dev ]
+  ++ optionals enableLibexif [ libexif ]
+  ++ optionals enableExiv2 [ exiv2 ]
+  ++ optionals enableInotifyTools [ inotify-tools ]
+  ++ optionals enableFFmpegThumbnailer [ ffmpegthumbnailer ];
 
 
   meta = with lib; {

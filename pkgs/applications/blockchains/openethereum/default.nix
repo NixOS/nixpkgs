@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.1.1";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "sha256-RUrJuJF0R0mc7XdLyk915fRWtMfzjp5QE6oeWxHfyEQ=";
+    sha256 = "143w0b0ff1s73qzr844l25w90d2y2z0b3w2fr5kkbc1wsnpcq7jp";
   };
 
-  cargoSha256 = "sha256-b+winsCzU0sXGDX6nUtWq4JrIyTcJ3uva7RlV5VsXfk=";
+  cargoSha256 = "1gm02pcfll362add8a0dcb0sk0mag8z0q23b87yb6fs870bqvhib";
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [
@@ -37,8 +37,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features final" ];
 
-  # test result: FAILED. 88 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
-  doCheck = false;
+  # Fix tests by preventing them from writing to /homeless-shelter.
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Exclude some tests that don't work in the sandbox
+  # - Nat test requires network access
+  checkFlags = "--skip configuration::tests::should_resolve_external_nat_hosts";
 
   meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";

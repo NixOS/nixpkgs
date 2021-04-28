@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
-, overrideCC, gcc6, fetchpatch, autoreconfHook, gtk-doc, autoconf-archive, yelp-tools
-, mysqlSupport ? false, libmysqlclient ? null
-, postgresSupport ? false, postgresql ? null
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, itstool
+, libxml2
+, gtk3
+, openssl
+, gnome3
+, gobject-introspection
+, vala
+, libgee
+, overrideCC
+, gcc6
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, autoconf-archive
+, yelp-tools
+, mysqlSupport ? false
+, libmysqlclient ? null
+, postgresSupport ? false
+, postgresql ? null
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
@@ -24,7 +44,30 @@ assert postgresSupport -> postgresql != null;
     })
   ];
 
-  configureFlags = with lib; [
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    itstool
+    libxml2
+    gobject-introspection
+    vala
+    autoreconfHook
+    gtk-doc
+    autoconf-archive
+    yelp-tools
+  ];
+
+  buildInputs = [
+    gtk3
+    openssl
+    libgee
+  ] ++ lib.optionals mysqlSupport [
+    libmysqlclient
+  ] ++ lib.optionals postgresSupport [
+    postgresql
+  ];
+
+  configureFlags = [
     "--with-mysql=${if mysqlSupport then "yes" else "no"}"
     "--with-postgres=${if postgresSupport then "yes" else "no"}"
 
@@ -40,11 +83,6 @@ assert postgresSupport -> postgresql != null;
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkg-config intltool itstool libxml2 gobject-introspection vala autoreconfHook gtk-doc autoconf-archive yelp-tools ];
-  buildInputs = with lib; [ gtk3 openssl libgee ]
-    ++ optional (mysqlSupport) libmysqlclient
-    ++ optional (postgresSupport) postgresql;
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -54,8 +92,13 @@ assert postgresSupport -> postgresql != null;
   meta = with lib; {
     description = "Database access library";
     homepage = "https://www.gnome-db.org/";
-    license = [ licenses.lgpl2 licenses.gpl2 ];
+    license = with licenses; [
+      # library
+      lgpl2Plus
+      # CLI tools
+      gpl2Plus
+    ];
     maintainers = teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

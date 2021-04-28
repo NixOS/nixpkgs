@@ -8,7 +8,6 @@
 , doxygen
 , fftwSinglePrec
 , flac
-, glibc
 , glibmm
 , graphviz
 , gtkmm2

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.9.7";
+  version = "0.9.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "183y1y11bqd4ky4anyv40qbvsm6i90gnydqzrjg7syspjsqvfqgy";
+    sha256 = "0hwjnqbkcfkhigx581w4532vddsx5wiy73gx46kjisp0hlir9628";
     extension = "zip";
   };
 
@@ -28,7 +28,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} Lib/fontParts/fontshell/test.py
+    runHook postCheck
   '';
   checkInputs = [ pytest ];
 

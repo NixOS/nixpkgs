@@ -55,10 +55,10 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.38";
+  version = "1.39";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "0awkqigvhwwxiapw0x6yd4whl465ka8a4al0v2pcqy9ggjlsqc6b";
+    sha256 = "sha256-n2KnFpt0kcZwof8uM1sNlmMI+y9i4oXHgRBeuQ8YGvM=";
   };
 
   buildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # directories flags
-    "--sysconfdir=${placeholder "out"}/etc"
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbusdatadir=${placeholder "out"}/share"

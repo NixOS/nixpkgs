@@ -8,7 +8,7 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.15";
+  version = "3.7.1";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "0n0m93ymzd0q9hbknxc2ycanz49sqlkyyf73g9fk7n787llc7a0f";
+    url = "mirror://gnupg/gnutls/v3.7/gnutls-${version}.tar.xz";
+    sha256 = "0vxcbig87sdc73h58pmcpbi4al1zgcxid1jn67mhcpna7sbdfxrp";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -34,10 +34,7 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
-    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
-    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -45,14 +42,12 @@ stdenv.mkDerivation {
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
   # Change p11-kit test to use pkg-config to find p11-kit
-  postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
-    sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' -i tests/cert-tests/name-constraints
-  '' + lib.optionalString (lib.versionAtLeast version "3.6") ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "3.6") ''
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
-    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
   '';
 
   preConfigure = "patchShebangs .";

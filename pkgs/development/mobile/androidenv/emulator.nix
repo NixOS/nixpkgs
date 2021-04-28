@@ -5,16 +5,16 @@ deployAndroidPackage {
   buildInputs = [ autoPatchelfHook makeWrapper ]
   ++ lib.optional (os == "linux") [
     pkgs.glibc
-    pkgs.xlibs.libX11
-    pkgs.xlibs.libXext
-    pkgs.xlibs.libXdamage
-    pkgs.xlibs.libXfixes
-    pkgs.xlibs.libxcb
-    pkgs.xlibs.libXcomposite
-    pkgs.xlibs.libXcursor
-    pkgs.xlibs.libXi
-    pkgs.xlibs.libXrender
-    pkgs.xlibs.libXtst
+    pkgs.xorg.libX11
+    pkgs.xorg.libXext
+    pkgs.xorg.libXdamage
+    pkgs.xorg.libXfixes
+    pkgs.xorg.libxcb
+    pkgs.xorg.libXcomposite
+    pkgs.xorg.libXcursor
+    pkgs.xorg.libXi
+    pkgs.xorg.libXrender
+    pkgs.xorg.libXtst
     pkgs.libcxx
     pkgs.libGL
     pkgs.libpulseaudio

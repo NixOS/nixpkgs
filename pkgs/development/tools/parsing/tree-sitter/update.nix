@@ -2,6 +2,9 @@
 , curl, jq, xe
 , src }:
 
+# Grammar list:
+# https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
+
 let
   # Grammars we want to fetch from the tree-sitter github orga
   knownTreeSitterOrgGrammarRepos = [
@@ -11,7 +14,6 @@ let
     "tree-sitter-json"
     "tree-sitter-cpp"
     "tree-sitter-ruby"
-    "tree-sitter-razor"
     "tree-sitter-go"
     "tree-sitter-c-sharp"
     "tree-sitter-python"
@@ -56,6 +58,8 @@ let
     "highlight-schema"
     # website
     "tree-sitter.github.io"
+    # not maintained
+    "tree-sitter-razor"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -68,8 +72,24 @@ let
       repo = "tree-sitter-nix";
     };
     "tree-sitter-lua" = {
-      orga = "nvim-treesitter";
+      orga = "Azganoth";
       repo = "tree-sitter-lua";
+    };
+    "tree-sitter-fennel" = {
+      orga = "travonted";
+      repo = "tree-sitter-fennel";
+    };
+    "tree-sitter-markdown" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-markdown";
+    };
+    "tree-sitter-svelte" = {
+      orga = "Himujjal";
+      repo = "tree-sitter-svelte";
+    };
+    "tree-sitter-yaml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-yaml";
     };
   };
 

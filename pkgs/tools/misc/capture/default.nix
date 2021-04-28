@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0zyyg4mvrny7cc2xgvfip97b6yc75ka5ni39rwls93971jbk83d6";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm755 src/capture.sh $out/bin/capture

@@ -1,9 +1,9 @@
 { lib, stdenv
-, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
 , installShellFiles
+, pkg-config
 , Security
 , withPCRE2 ? true
 , pcre2 ? null
@@ -24,9 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withPCRE2 "--features pcre2";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ]
+    ++ lib.optional withPCRE2 pkg-config;
   buildInputs = (lib.optional withPCRE2 pcre2)
-  ++ (lib.optional stdenv.isDarwin Security);
+    ++ (lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
     installManPage $releaseDir/build/ripgrep-*/out/rg.1
@@ -35,12 +36,21 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh complete/_rg
   '';
 
-  passthru.tests = { inherit (nixosTests) ripgrep; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    $out/bin/rg -N 'bcd' "$file"
+    $out/bin/rg -N 'cd' "$file"
+  '' + lib.optionalString withPCRE2 ''
+    echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+  '';
 
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
+    mainProgram = "rg";
   };
 }

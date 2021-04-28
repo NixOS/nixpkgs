@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   version = "1.0";
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id'qt-default-nix-co-2' />
+  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id='qt-default-nix-co-2' />
 }
 </programlisting>
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
    </para>
   </callout>
-  <callout arearefs="qt-default-nix-co-2'>
+  <callout arearefs='qt-default-nix-co-2'>
     <para>
       All Qt packages must include <literal>wrapQtAppsHook</literal> in
       <literal>nativeBuildInputs</literal>, or you must explicitly set
@@ -103,7 +103,7 @@ supported Qt version.
 ### Example adding a Qt library {#qt-library-all-packages-nix}
 
 The following represents the contents of `qt5-packages.nix`.
-```
+```nix
 {
   # ...
 
@@ -121,7 +121,7 @@ Use the `meta.broken` attribute to disable the package for unsupported Qt versio
 
 stdenv.mkDerivation {
   # ...
-  # Disable this library with Qt &lt; 5.9.0
+  # Disable this library with Qt < 5.9.0
   meta.broken = lib.versionOlder qtbase.version "5.9.0";
 }
 ```
@@ -133,7 +133,7 @@ to select the Qt 5 version used for the application.
 ### Example adding a Qt application {#qt-application-all-packages-nix}
 
 The following represents the contents of `qt5-packages.nix`.
-```
+```nix
 {
   # ...
 
@@ -144,7 +144,7 @@ The following represents the contents of `qt5-packages.nix`.
 ```
 
 The following represents the contents of `all-packages.nix`.
-```
+```nix
 {
   # ...
 

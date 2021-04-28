@@ -1,15 +1,14 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq, xdg_utils, writeText
+, replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, flashplayer, hal-flash
 , ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
 , gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
-, kerberos
+, libkrb5
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
 }:
@@ -47,28 +46,10 @@ let
     assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
-
-      plugins =
-        let
-          removed = lib.filter (a: builtins.hasAttr a cfg) [
-            "enableVLC"
-            "enableDjvu"
-            "enableMPlayer"
-            "jre"
-            "icedtea"
-            "enableGoogleTalkPlugin"
-            "enableFriBIDPlugin"
-            "enableBluejeans"
-            "enableAdobeReader"
-          ];
-        in if removed != []
-           then throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options, except for the adobe flash player, have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
-           else lib.optional enableAdobeFlash flashplayer;
 
       nativeMessagingHosts =
         ([ ]
@@ -84,11 +65,10 @@ let
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
             ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
-            ++ lib.optional gssSupport kerberos
+            ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
-            ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsaLib
             ++ pkcs11Modules;
@@ -135,8 +115,7 @@ let
                 };
               }
             ) {} extensions;
-          } //
-          {
+          } // lib.optionalAttrs usesNixExtensions {
             Extensions = {
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
@@ -163,7 +142,24 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+      # TODO: remove this after the next release (21.03)
+      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
+        "enableAdobeFlash"
+        "enableAdobeReader"
+        "enableBluejeans"
+        "enableDjvu"
+        "enableFriBIDPlugin"
+        "enableGoogleTalkPlugin"
+        "enableMPlayer"
+        "enableVLC"
+        "icedtea"
+        "jre"
+      ];
+      pluginsError =
+        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
+
+    in if configPlugins != [] then throw pluginsError else
+      (stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
@@ -261,16 +257,12 @@ let
 
         makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
-            --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
-            --suffix LD_LIBRARY_PATH ':' "$libs" \
+            --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
-            --prefix PATH ':' "${xdg_utils}/bin" \
-            --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
+            --prefix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString forceWayland ''
@@ -350,9 +342,6 @@ let
 
       preferLocalBuild = true;
 
-      # Let each plugin tell us (through its `mozillaPlugin') attribute
-      # where to find the plugin in its tree.
-      plugins = map (x: x + x.mozillaPlugin) plugins;
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
       gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
@@ -361,14 +350,9 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description =
-          browser.meta.description
-          + " (with plugins: "
-          + lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins))
-          + ")";
+        description = browser.meta.description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    };
-in
-  lib.makeOverridable wrapper
+    });
+in lib.makeOverridable wrapper
