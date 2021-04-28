@@ -178,6 +178,8 @@ with self; with super; {
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
 
+  importlib-resources = callPackage ../development/python-modules/importlib-resources/2.nix { };
+
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel/4.nix { };
