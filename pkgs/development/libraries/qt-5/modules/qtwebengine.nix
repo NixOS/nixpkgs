@@ -236,6 +236,8 @@ qtModule {
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];

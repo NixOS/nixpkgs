@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Fast Library for Number Theory";
     license = lib.licenses.gpl2Plus;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = lib.teams.sage.members;
     platforms = lib.platforms.unix;
     homepage = "http://www.flintlib.org/";
     downloadPage = "http://www.flintlib.org/downloads.html";

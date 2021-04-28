@@ -7,7 +7,6 @@
 , cssselect
 , dateutil
 , feedparser
-, futures
 , gdata
 , gnupg
 , google-api-python-client
@@ -30,6 +29,7 @@
 buildPythonPackage rec {
   pname = "woob";
   version = "3.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     simplejson
     termcolor
     unidecode
-  ] ++ lib.optionals isPy27 [ futures ];
+  ];
 
   checkPhase = ''
     nosetests

@@ -29,7 +29,7 @@
 
 # Media support (implies audio support)
 , mediaSupport ? true
-, ffmpeg_3
+, ffmpeg
 
 , gmp
 
@@ -81,7 +81,7 @@ let
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
   ++ optionals mediaSupport [
-    ffmpeg_3
+    ffmpeg
   ];
 
   # Library search path for the fte transport

@@ -25,7 +25,7 @@ let
     abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
     cmakeVersions = [ "3.10.2" ];
     includeNDK = true;
-    ndkVersion = "22.0.7026061";
+    ndkVersions = ["22.0.7026061"];
     useGoogleAPIs = false;
     useGoogleTVAddOns = false;
     includeExtras = [
@@ -52,7 +52,11 @@ The following parameters are supported:
 * `cmakeVersions` specifies which CMake versions should be deployed.
 * `includeNDK` specifies that the Android NDK bundle should be included.
   Defaults to: `false`.
-* `ndkVersion` specifies the NDK version that we want to use.
+* `ndkVersions` specifies the NDK versions that we want to use. These are linked
+  under the `ndk` directory of the SDK root, and the first is linked under the
+  `ndk-bundle` directory.
+* `ndkVersion` is equivalent to specifying one entry in `ndkVersions`, and
+  `ndkVersions` overrides this parameter if provided.
 * `includeExtras` is an array of identifier strings referring to arbitrary
   add-on packages that should be installed.
 * `platformVersions` specifies which platform SDK versions should be included.

@@ -1,10 +1,8 @@
 { lib
 , buildPythonPackage
-, chardet
 , fetchFromGitHub
 , karton-core
 , mwdblib
-, python
 }:
 
 buildPythonPackage rec {

@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "04y2bc2yv3q84llxnafqrciqxjqpxbrd8glbnvvr16c20fwc3r4q";
+    sha256 = "sha256-e0Mq9AVJEWQ9GEtYFXk2fMIs7GtAUsyJN6XheqAnD3I=";
   };
 
   postPatch = ''
@@ -29,6 +29,11 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ pyparsing ];
+
+  pythonImportsCheck = [ "httplib2" ];
+
+  # Don't run tests for Python 2.7
+  doCheck = !isPy27;
 
   checkInputs = [
     mock
@@ -40,12 +45,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Don't run tests for Python 2.7 or Darwin
-  # Nearly 50% of the test suite requires local network access
-  # which isn't allowed on sandboxed Darwin builds
-  doCheck = !(isPy27 || stdenv.isDarwin);
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # fails with HTTP 408 Request Timeout, instead of expected 200 OK
+    "test_timeout_subsequent"
+  ];
+
   pytestFlagsArray = [ "--ignore python2" ];
-  pythonImportsCheck = [ "httplib2" ];
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";

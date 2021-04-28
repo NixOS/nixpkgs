@@ -204,18 +204,18 @@
     XKB
    </link>
    keyboard layouts using the option
-   <option>
-    <link linkend="opt-services.xserver.extraLayouts">
-     services.xserver.extraLayouts
-    </link>
-   </option>.
+   <option><link linkend="opt-services.xserver.extraLayouts">
+     services.xserver.extraLayouts</link></option>.
+  </para>
+  <para>
    As a first example, we are going to create a layout based on the basic US
    layout, with an additional layer to type some greek symbols by pressing the
    right-alt key.
   </para>
   <para>
-   To do this we are going to create a <literal>us-greek</literal> file
-   with a <literal>xkb_symbols</literal> section.
+   Create a file called <literal>us-greek</literal> with the following
+   content (under a directory called <literal>symbols</literal>; it's
+   an XKB peculiarity that will help with testing):
   </para>
 <programlisting>
 xkb_symbols &quot;us-greek&quot;
@@ -231,14 +231,13 @@ xkb_symbols &quot;us-greek&quot;
 };
 </programlisting>
   <para>
-   To install the layout, the filepath, a description and the list of
-   languages must be given:
+   A minimal layout specification must include the following:
   </para>
 <programlisting>
 <xref linkend="opt-services.xserver.extraLayouts"/>.us-greek = {
   description = "US layout with alt-gr greek";
   languages   = [ "eng" ];
-  symbolsFile = /path/to/us-greek;
+  symbolsFile = /yourpath/symbols/us-greek;
 }
 </programlisting>
   <note>
@@ -248,9 +247,27 @@ xkb_symbols &quot;us-greek&quot;
   </para>
   </note>
   <para>
-   The layout should now be installed and ready to use: try it by
-   running <literal>setxkbmap us-greek</literal> and type
-   <literal>&lt;alt&gt;+a</literal>. To change the default the usual
+   Applying this customization requires rebuilding several packages,
+   and a broken XKB file can lead to the X session crashing at login.
+   Therefore, you're strongly advised to <emphasis role="strong">test
+   your layout before applying it</emphasis>:
+<screen>
+<prompt>$ </prompt>nix-shell -p xorg.xkbcomp
+<prompt>$ </prompt>setxkbmap -I/yourpath us-greek -print | xkbcomp -I/yourpath - $DISPLAY
+</screen>
+  </para>
+  <para>
+   You can inspect the predefined XKB files for examples:
+<screen>
+<prompt>$ </prompt>echo "$(nix-build --no-out-link '&lt;nixpkgs&gt;' -A xorg.xkeyboardconfig)/etc/X11/xkb/"
+</screen>
+  </para>
+  <para>
+   Once the configuration is applied, and you did a logout/login
+   cycle, the layout should be ready to use. You can try it by e.g.
+   running <literal>setxkbmap us-greek</literal> and then type
+   <literal>&lt;alt&gt;+a</literal> (it may not get applied in your
+   terminal straight away). To change the default, the usual
    <option>
     <link linkend="opt-services.xserver.layout">
      services.xserver.layout

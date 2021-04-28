@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "signedjson";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    sha256 = "18s388hm3babnvakbbgfqk0jzq25nnznvhygywd3azp9b4yzmd5c";
+    rev = "v${version}";
+    sha256 = "0y5c9v4vx9hqpnca892gc9b4xgs4gp5xk6l1wma5ciz8zswp9yfs";
   };
 
   propagatedBuildInputs = [ canonicaljson unpaddedbase64 pynacl typing-extensions ];

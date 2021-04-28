@@ -108,7 +108,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools = callPackage ./bintools.nix {};
+    bintools = callPackage ./bintools {};
 
     lldClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -192,18 +192,18 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libc++ ({ inherit llvm_meta; } //
+    libcxx = callPackage ./libcxx ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
-    libcxxabi = callPackage ./libc++abi ({ inherit llvm_meta; } //
+    libcxxabi = callPackage ./libcxxabi ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;
       }));
 
-    openmp = callPackage ./openmp.nix { inherit llvm_meta; };
+    openmp = callPackage ./openmp { inherit llvm_meta; };
 
     libunwind = callPackage ./libunwind ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {

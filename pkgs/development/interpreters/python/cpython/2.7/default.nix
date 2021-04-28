@@ -123,6 +123,8 @@ let
 
       ./CVE-2021-3177.patch
 
+      ./CVE-2021-23336.patch
+
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
       # * https://bugs.python.org/issue35523

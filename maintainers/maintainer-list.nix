@@ -492,11 +492,23 @@
       fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
     }];
   };
+  amanjeev = {
+    email = "aj@amanjeev.com";
+    github = "amanjeev";
+    githubId = 160476;
+    name = "Amanjeev Sethi";
+  };
   amar1729 = {
     email = "amar.paul16@gmail.com";
     github = "amar1729";
     githubId = 15623522;
     name = "Amar Paul";
+  };
+  ambroisie = {
+    email = "bruno.nixpkgs@belanyi.fr";
+    github = "ambroisie";
+    githubId = 12465195;
+    name = "Bruno BELANYI";
   };
   ambrop72 = {
     email = "ambrop7@gmail.com";
@@ -3008,13 +3020,13 @@
     name = "John Ericson";
   };
   erictapen = {
-    email = "justin.humm@posteo.de";
+    email = "kerstin@erictapen.name";
     github = "erictapen";
     githubId = 11532355;
-    name = "Justin Humm";
+    name = "Kerstin Humm";
     keys = [{
-      longkeyid = "rsa4096/0x438871E000AA178E";
-      fingerprint = "984E 4BAD 9127 4D0E AE47  FF03 4388 71E0 00AA 178E";
+      longkeyid = "rsa4096/0x40293358C7B9326B";
+      fingerprint = "F178 B4B4 6165 6D1B 7C15  B55D 4029 3358 C7B9 326B";
     }];
   };
   erikryb = {
@@ -4400,6 +4412,12 @@
     github = "jbaum98";
     githubId = 5283991;
     name = "Jake Waksbaum";
+  };
+  jakubgs = {
+    email = "jakub@gsokolowski.pl";
+    github = "jakubgs";
+    githubId = 2212681;
+    name = "Jakub Grzgorz Sokołowski";
   };
   jamiemagee = {
     email = "jamie.magee@gmail.com";
@@ -6977,6 +6995,12 @@
     githubId = 818502;
     name = "Nathan Yong";
   };
+  nbren12 = {
+    email = "nbren12@gmail.com";
+    github = "nbren12";
+    githubId = 1386642;
+    name = "Noah Brenowitz";
+  };
   nckx = {
     email = "github@tobias.gr";
     github = "nckx";
@@ -8827,6 +8851,12 @@
     githubId = 15379000;
     name = "schneefux";
   };
+  schnusch = {
+    email = "schnusch@users.noreply.github.com";
+    github = "schnusch";
+    githubId = 5104601;
+    name = "schnusch";
+  };
   schristo = {
     email = "schristopher@konputa.com";
     name = "Scott Christopher";
@@ -9420,8 +9450,8 @@
     name = "Stian Lågstad";
   };
   StijnDW = {
-    email = "stekke@airmail.cc";
-    github = "StijnDW";
+    email = "nixdev@rinsa.eu";
+    github = "Stekke";
     githubId = 1751956;
     name = "Stijn DW";
   };
@@ -9836,6 +9866,12 @@
     github = "thelegy";
     githubId = 3105057;
     name = "Jan Beinke";
+  };
+  therealansh = {
+    email = "tyagiansh23@gmail.com";
+    github = "therealansh";
+    githubId = 57180880;
+    name = "Ansh Tyagi";
   };
   thesola10 = {
     email = "me@thesola.io";

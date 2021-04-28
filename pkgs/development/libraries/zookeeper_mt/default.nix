@@ -14,19 +14,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${zookeeper.pname}-${version}/apache-${zookeeper.pname}-${version}.tar.gz";
-    sha512 = "16994067d460a1b6af6a71f3458c64ee32629e876a1ff6646d57be62f1a5adab57462af84074ecaded4186dd3fde035ee24cd9d578b8e5044073eb05f4ab9c3e";
+    sha512 = "90643aa0ae1b9bf1f5e137dfbcee7e3c53db15e5038d7e406e4a1c345d6a0531bf7afa2b03f99d419ebd0fe892f127a7abfe582f786034ba823e53a0a9246bfb";
   };
 
   sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-client/zookeeper-client-c";
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
     jre
   ];
 
   buildInputs = [
     openssl
-    pkg-config
     zookeeper
   ];
 

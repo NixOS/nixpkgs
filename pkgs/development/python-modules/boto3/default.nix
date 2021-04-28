@@ -4,7 +4,7 @@
 , botocore
 , jmespath
 , s3transfer
-, futures
+, futures ? null
 , docutils
 , nose
 , mock

@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
     maintainers = with maintainers; [ vidbina ];
-    platforms = platforms.all;
   };
 }

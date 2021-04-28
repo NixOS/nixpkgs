@@ -294,7 +294,7 @@ let
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
           virtualisation.bootDevice =
-            if grubVersion == 1 then "/dev/sdb" else "/dev/vdb";
+            if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
 
@@ -695,22 +695,23 @@ in {
   };
 
   # Test a basic install using GRUB 1.
-  grub1 = makeInstallerTest "grub1" {
+  grub1 = makeInstallerTest "grub1" rec {
     createPartitions = ''
       machine.succeed(
-          "flock /dev/sda parted --script /dev/sda -- mklabel msdos"
+          "flock ${grubDevice} parted --script ${grubDevice} -- mklabel msdos"
           + " mkpart primary linux-swap 1M 1024M"
           + " mkpart primary ext2 1024M -1s",
           "udevadm settle",
-          "mkswap /dev/sda1 -L swap",
+          "mkswap ${grubDevice}-part1 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/sda2",
+          "mkfs.ext3 -L nixos ${grubDevice}-part2",
           "mount LABEL=nixos /mnt",
           "mkdir -p /mnt/tmp",
       )
     '';
     grubVersion = 1;
-    grubDevice = "/dev/sda";
+    # /dev/sda is not stable, even when the SCSI disk number is.
+    grubDevice = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive1";
   };
 
   # Test using labels to identify volumes in grub

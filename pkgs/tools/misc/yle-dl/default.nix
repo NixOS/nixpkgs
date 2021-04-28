@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg_3 }:
+{ lib, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "yle-dl";
@@ -12,12 +12,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs ConfigArgParse ffmpeg_3 future lxml requests
+    attrs ConfigArgParse ffmpeg future lxml requests
   ];
   pythonPath = [ rtmpdump php wget ];
 
   doCheck = false; # tests require network access
-  checkInputs = with python3Packages; [ ffmpeg_3 pytest pytestrunner ];
+  checkInputs = with python3Packages; [ ffmpeg pytest pytestrunner ];
 
   meta = with lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";

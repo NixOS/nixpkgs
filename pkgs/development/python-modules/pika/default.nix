@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pika";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gqx9avb9nwgiyw5nz08bf99v9b0hvzr1pmqn9wbhd2hnsj6p9wz";
+    sha256 = "f023d6ac581086b124190cb3dc81dd581a149d216fa4540ac34f9be1e3970b89";
   };
 
   checkInputs = [ nose mock twisted tornado ];

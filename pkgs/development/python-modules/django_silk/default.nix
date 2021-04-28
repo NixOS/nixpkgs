@@ -9,6 +9,7 @@
 , simplejson
 , dateutil
 , requests
+, setuptools-scm
 , sqlparse
 , jinja2
 , autopep8
@@ -52,6 +53,7 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ mock ];
   propagatedBuildInputs = [
     django pygments simplejson dateutil requests

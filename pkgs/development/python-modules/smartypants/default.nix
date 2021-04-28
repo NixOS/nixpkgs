@@ -2,10 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPyPy
+, docutils
+, pygments
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "1.8.6";
+  version = "2.0.1";
   pname = "smartypants";
   disabled = isPyPy;
 
@@ -13,19 +16,23 @@ buildPythonPackage rec {
     owner = "leohemsted";
     repo = "smartypants.py";
     rev = "v${version}";
-    sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
-    # remove this file and the name on the next version update
-    extraPostFetch = ''
-      cp ${./hgtags} "$out"/.hgtags
-    '';
-    name = "hg-archive";
+    sha256 = "00p1gnb9pzb3svdq3c5b9b332gsp50wrqqa39gj00m133zadanjp";
   };
+
+  checkInputs = [
+    docutils
+    pygments
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    patchShebangs smartypants
+  '';
 
   meta = with lib; {
     description = "Python with the SmartyPants";
     homepage = "https://github.com/leohemsted/smartypants.py";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
-
 }

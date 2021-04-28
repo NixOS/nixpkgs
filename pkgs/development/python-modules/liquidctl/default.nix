@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.4.2";
+  version = "1.5.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1h5kqpvlx7xppd2wli986lkslqkcrlz1wixv7fvrppzjc2nfz5d4";
+    sha256 = "1l6cvm8vs2gkmg4qwg5m5vqjql1gah2vd9vs7pcj2v5hf0cm5v9x";
   };
 
   propagatedBuildInputs = [

@@ -21,6 +21,7 @@
 , gtk3
 , libpulseaudio
 , libudev0-shim
+, libdrm
 , makeWrapper
 , nspr
 , nss
@@ -101,6 +102,7 @@ in stdenv.mkDerivation rec {
     gtk2
     gtk3
     libpulseaudio
+    libdrm
     nspr
     nss
     qt5.qtbase

@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -29,7 +29,7 @@ perlPackages.buildPerlPackage rec {
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg}/bin"
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]}
     done
   '';
 

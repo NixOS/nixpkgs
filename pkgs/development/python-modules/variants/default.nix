@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestrunner
 , setuptools_scm
-, singledispatch
+, singledispatch ? null
 , pytest
 , lib
 }:

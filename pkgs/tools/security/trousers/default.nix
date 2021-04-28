@@ -1,17 +1,15 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config }:
+{ lib, stdenv, fetchurl, openssl, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "trousers";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/trousers/trousers/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0iwgsbrbb7nfqgl61x8aailwxm8akxh9gkcwxhsvf50x4qx72l6f";
+    sha256 = "0zy7r9cnr2gvwr2fb1q4fc5xnvx405ymcbrdv7qsqwl3a4zfjnqy";
   };
 
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];

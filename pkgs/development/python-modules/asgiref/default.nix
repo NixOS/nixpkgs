@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "3.3.4";
   pname = "asgiref";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "00r4l9x425wkbac6b6c2ksm2yjinrvvdf0ajizrzq32h0jg82016";
+    sha256 = "1rr76252l6p12yxc0q4k9wigg1jz8nsqga9c0nixy9q77zhvh9n2";
   };
 
   propagatedBuildInputs = [ async-timeout ];

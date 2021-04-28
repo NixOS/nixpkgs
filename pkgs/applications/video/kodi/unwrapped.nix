@@ -127,6 +127,7 @@ in stdenv.mkDerivation {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fmt fstrcmp rapidjson
       lirc
+      mesa # for libEGL
     ]
     ++ lib.optional x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp

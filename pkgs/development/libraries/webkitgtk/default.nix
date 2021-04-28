@@ -36,6 +36,7 @@
 , readline
 , libGL
 , libGLU
+, mesa
 , libintl
 , libmanette
 , openjpeg
@@ -113,6 +114,7 @@ stdenv.mkDerivation rec {
     harfbuzz
     libGL
     libGLU
+    mesa # for libEGL headers
     libgcrypt
     libidn
     libintl
@@ -174,6 +176,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Web content rendering engine, GTK port";

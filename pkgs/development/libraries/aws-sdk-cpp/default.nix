@@ -63,6 +63,9 @@ stdenv.mkDerivation rec {
     ./cmake-dirs.patch
   ];
 
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
     homepage = "https://github.com/awslabs/aws-sdk-cpp";

@@ -30,7 +30,6 @@ python3.pkgs.buildPythonApplication rec {
       ++ optionals withDbusPython [ dbus-python ]
       ++ optionals withPyInotify [ pyinotify ]
       ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
-      ++ optionals stdenv.isDarwin [ pyobjc ]
       ++ optionals withPahoMqtt [ paho-mqtt ];
 
   LC_ALL = "en_US.UTF-8";

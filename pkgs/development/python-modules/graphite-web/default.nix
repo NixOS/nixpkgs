@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , django
 , memcached
 , txamqp
@@ -9,7 +11,6 @@
 , cairocffi
 , whisper
 , whitenoise
-, scandir
 , urllib3
 , six
 }:
@@ -38,7 +39,6 @@ buildPythonPackage rec {
     cairocffi
     whisper
     whitenoise
-    scandir
     urllib3
     six
   ];
