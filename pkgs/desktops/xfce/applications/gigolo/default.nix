@@ -1,4 +1,4 @@
-{ lib, mkXfceDerivation, gtk3, gvfs, glib }:
+{ lib, mkXfceDerivation, gtk3, glib }:
 
 mkXfceDerivation {
   category = "apps";
@@ -8,7 +8,7 @@ mkXfceDerivation {
 
   sha256 = "8UDb4H3zxRKx2y+MRsozQoR3es0fs5ooR/5wBIE11bY=";
 
-  buildInputs = [ gtk3 glib gvfs ];
+  buildInputs = [ gtk3 glib ];
 
   postPatch = ''
     # exo-csource has been dropped from exo
