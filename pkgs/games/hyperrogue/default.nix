@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bijgbqpc867pq8lbwwvcnc713gm51mmz625xb5br0q2qw09nkyh";
   };
 
-  CPPFLAGS = "-I${SDL.dev}/include/SDL";
+  env.CPPFLAGS = "-I${SDL.dev}/include/SDL";
 
   buildInputs = [ autoreconfHook SDL SDL_ttf SDL_gfx SDL_mixer libpng glew ];
 
