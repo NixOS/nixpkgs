@@ -1,8 +1,8 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
+{ mkDerivation, lib, pkgs, fetchurl, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm
+, tl-expected, hunspell, glibmm, webkitgtk
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -20,19 +20,31 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {};
-  tgcalls-gcc10-fix = fetchpatch { # "Fix build on GCC 10, second attempt."
-    url = "https://github.com/TelegramMessenger/tgcalls/commit/eded7cc540123eaf26361958b9a61c65cb2f7cfc.patch";
-    sha256 = "19n1hvn44pp01zc90g93vq2bcr2gdnscaj5il9f82klgh4llvjli";
+  webviewPatch = pkgs.writeTextFile {
+    name = "fix-webview-includes.patch";
+    text = ''
+      diff --git a/webview/platform/linux/webview_linux_webkit_gtk.h b/webview/platform/linux/webview_linux_webkit_gtk.h
+      index a7f0f97..c2b21c7 100644
+      --- a/webview/platform/linux/webview_linux_webkit_gtk.h
+      +++ b/webview/platform/linux/webview_linux_webkit_gtk.h
+      @@ -14,6 +14,7 @@ extern "C" {
+       #include <gtk/gtk.h>
+       #include <webkit2/webkit2.h>
+       #include <X11/Xlib.h>
+      +#include <gdk/gdkx.h>
+       #define signals public
+       } // extern "C"
+    '';
   };
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.7.1";
+  version = "2.7.3";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "01fxzcfz3xankmdar55ja55pb9hkvlf1plgpgjpsda9xwqgbxgs1";
+    sha256 = "1mrzdv432hm5c2hh6l7v5zqviqa8xymd3c4jvrdwgpxsj1l9ph68";
   };
 
   postPatch = ''
@@ -40,7 +52,7 @@ in mkDerivation rec {
       --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
-    patch -d Telegram/ThirdParty/tgcalls/ -p1 < "${tgcalls-gcc10-fix}"
+    patch -d Telegram/lib_webview -p1 < "${webviewPatch}"
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -52,7 +64,7 @@ in mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected hunspell glibmm
+    tl-expected hunspell glibmm webkitgtk
     tg_owt
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
