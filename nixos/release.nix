@@ -138,7 +138,7 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
   });
