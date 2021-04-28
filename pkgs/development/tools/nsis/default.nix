@@ -33,9 +33,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nsisIncludes = symlinkJoin {
-    name = "includes";
-    paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  CPPPATH = symlinkJoin {
+     name = "nsis-includes";
+     paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  };
+
+  LIBPATH = symlinkJoin {
+    name = "nsis-libs";
+    paths = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   };
 
   sconsFlags = [
@@ -43,13 +48,17 @@ stdenv.mkDerivation rec {
     "SKIPPLUGINS=all"
     "SKIPUTILS=all"
     "SKIPMISC=all"
-    "APPEND_CPPPATH=${nsisIncludes}/include"
-    "APPEND_LIBPATH=${zlib}/lib"
     "NSIS_CONFIG_CONST_DATA=no"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "APPEND_LINKFLAGS=-liconv";
 
-  preBuild = lib.optionalString stdenv.isLinux ''
-    sconsFlagsArray+=("PATH=$PATH")
+  preBuild = ''
+    sconsFlagsArray+=(
+      "PATH=$PATH"
+      "CC=$CC"
+      "CXX=$CXX"
+      "APPEND_CPPPATH=$CPPPATH/include"
+      "APPEND_LIBPATH=$LIBPATH/lib"
+    )
   '';
 
   prefixKey = "PREFIX=";
