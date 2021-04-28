@@ -105,7 +105,7 @@ in rec {
 
     in stdenv.mkDerivation {
       inherit preBuild postBuild name;
-      phases = ["configurePhase" "buildPhase"];
+      dontUnpack = true;
       buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
 
       configurePhase = ''
@@ -113,8 +113,8 @@ in rec {
         export HOME=$PWD/yarn_home
       '';
 
-      buildPhase = ''
-        runHook preBuild
+      installPhase = ''
+        runHook preInstall
 
         mkdir -p "deps/${pname}"
         cp ${packageJSON} "deps/${pname}/package.json"
@@ -138,7 +138,7 @@ in rec {
         mv deps $out/
         patchShebangs $out
 
-        runHook postBuild
+        runHook postInstall
       '';
     };
 
