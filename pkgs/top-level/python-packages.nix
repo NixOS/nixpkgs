@@ -1463,6 +1463,10 @@ in {
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
+  colorthief = callPackage ../development/python-modules/colorthief { };
+
+  colorz = callPackage ../development/python-modules/colorz { };
+
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
@@ -2972,6 +2976,8 @@ in {
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
+  haishoku = callPackage ../development/python-modules/haishoku { };
 
   halo = callPackage ../development/python-modules/halo { };
 

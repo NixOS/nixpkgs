@@ -1,8 +1,7 @@
-{ stdenv, themix-gui, python3
-# TODO: These optional python packages are not available in nixpkgs.
-# , enableColorthief ? false
-# , enableColorz ? false
-# , enableHaishoku ? false
+{ lib, stdenv, themix-gui, python3
+, enableColorthief ? true
+, enableColorz ? true
+, enableHaishoku ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +9,10 @@ stdenv.mkDerivation rec {
 
   inherit (themix-gui) version src;
 
-  propagatedBuildInputs = with python3.pkgs; [ pillow ];
+  propagatedBuildInputs = with python3.pkgs; [ pillow ]
+    ++ lib.optionals enableColorthief [ colorthief ]
+    ++ lib.optionals enableColorz [ colorz ]
+    ++ lib.optionals enableHaishoku [ haishoku ];
 
   buildPhase = ''
     runHook preBuild
