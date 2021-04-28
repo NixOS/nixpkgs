@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook, python3, gettext
+{ lib, stdenv, fetchFromGitHub, wrapGAppsHook, python3, gettext
 , gtk3, gobject-introspection, hicolor-icon-theme
 }:
 
