@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "VERSION=$(version)"
+    "VERSION=${version}"
     "SYSCONFDIR=$(out)/etc"
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
