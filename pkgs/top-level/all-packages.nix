@@ -3362,7 +3362,8 @@ in
 
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
-    boost = boost172.override { enablePython = true; python = python38; };
+    boost = boost17x.override { enablePython = true; python = python3; };
+    lua = lua5_4;
   })
     ceph
     ceph-client;
