@@ -13,7 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-uuwuiGQWLIQ5UJuCKDBEvCPo2+AXtJ54ARK431qiakc=";
   subPackages = [ "." ];
-  doCheck = false; # Broken
 
   meta = with lib; {
     description = "Daemon used to serve static websites for GitLab users";
