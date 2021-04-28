@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja go ];
 
-  cmakeFlags = [ "-G Ninja" ];
+  cmakeFlags = [ "-G" "Ninja" ];
 
   # tmp home for go
   preBuild = "export HOME=\"$TMPDIR\"";
