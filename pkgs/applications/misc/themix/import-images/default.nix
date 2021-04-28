@@ -5,10 +5,6 @@
 # , enableHaishoku ? false
 }:
 
-let
-  inherit (stdenv.lib) optionals;
-in
-
 stdenv.mkDerivation rec {
   pname = "themix-import-images";
 
@@ -29,12 +25,7 @@ stdenv.mkDerivation rec {
 
   installTargets = "install_import_images";
 
-  meta = {
+  meta = themix-gui.meta // {
     description = "Plugin for Themix GUI designer to get color palettes from images";
-    inherit (themix-gui.meta)
-    homepage
-    license
-    maintainers
-    platforms;
   };
 }

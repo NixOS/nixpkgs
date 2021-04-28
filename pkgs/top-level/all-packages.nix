@@ -30578,8 +30578,8 @@ in
   terranix = callPackage ../applications/networking/cluster/terranix {};
 
   inherit (callPackage ../applications/misc/themix {})
-  themix-gui
-  themixPlugins;
+    themix-gui
+    themixPlugins;
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
 

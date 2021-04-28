@@ -29,11 +29,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ python3 ] ++ (with python3.pkgs; [
-    pygobject3
-  ]) ++ [
-    gettext gtk3 gobject-introspection hicolor-icon-theme
-  ];
+  buildInputs = [ python3 gettext gtk3 gobject-introspection hicolor-icon-theme ]
+    ++ (with python3.pkgs; [ pygobject3 ]);
 
   buildPhase = ''
     runHook preBuild
@@ -57,9 +54,9 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin-based theme designer GUI for desktop/console environments";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/themix-project/oomox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mnacamura ];
     platforms = platforms.linux;

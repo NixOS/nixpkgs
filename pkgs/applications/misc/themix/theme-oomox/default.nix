@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   postInstall = ''
-    cp -r __pycache__ "$out/opt/oomox/plugins/theme_oomox"/
+    cp -r __pycache__ $out/opt/oomox/plugins/theme_oomox/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oomox theme plugin for Themix GUI designer";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/themix-project/oomox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mnacamura ];
     platforms = platforms.linux;
