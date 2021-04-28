@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkg-config fftwFloat alsaLib zlib wavpack wxGTK31 udev ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optional (!jackaudioSupport) [
+  cmakeFlags = lib.optionals (!jackaudioSupport) [
     "-DRTAUDIO_USE_JACK=OFF"
     "-DRTMIDI_USE_JACK=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
