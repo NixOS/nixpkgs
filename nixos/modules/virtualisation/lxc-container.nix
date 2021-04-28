@@ -115,6 +115,6 @@ in
     services.openssh.startWhenNeeded = mkDefault true;
 
     # Allow ssh connections
-    networking.firewall.allowedTCPPorts = [ 22 ];
+    services.openssh.openFirewall = mkDefault true;
   };
 }
