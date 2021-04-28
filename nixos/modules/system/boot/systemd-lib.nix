@@ -228,8 +228,8 @@ in rec {
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target \
-        ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
+        ln -s ../remote-fs.target \
+        ../nss-lookup.target ../nss-user-lookup.target \
         $out/multi-user.target.wants/
       ''}
     ''; # */
