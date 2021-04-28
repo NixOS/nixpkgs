@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 which pychecker ];
   buildInputs = [ python3 ];
   strictDeps = true;
-  SKIP_PYCHECKER = pychecker == null;
+  env.SKIP_PYCHECKER = pychecker == null;
   buildPhase = "make python";
   installPhase = ''
     mkdir $out
