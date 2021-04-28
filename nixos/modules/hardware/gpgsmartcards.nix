@@ -1,19 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-# https://www.gnupg.org/howtos/card-howto/en/gnupg-ccid.rules
-# https://www.gnupg.org/howtos/card-howto/en/gnupg-ccid
-
-# but then: https://dev.gnupg.org/T5409
-# https://salsa.debian.org/debian/gnupg2/-/blob/debian/main/debian/scdaemon.udev
-
-# per https://man7.org/linux/man-pages/man1/dh_installudev.1.html
-# it looks like the default level prefix is 60-...
-
 let
-  # from: https://salsa.debian.org/debian/gnupg2/-/blob/debian/main/debian/scdaemon.udev
-  # latest available on 2021-04-28 (file last commited on 2021-01-05 7817a03).
+  # gnupg's manual describes how to setup ccid udev rules:
+  #   https://www.gnupg.org/howtos/card-howto/en/ch02s03.html
+  # gnupg folks advised me (https://dev.gnupg.org/T5409) to look at debian's rules:
+  # https://salsa.debian.org/debian/gnupg2/-/blob/debian/main/debian/scdaemon.udev
+
+  # the latest rev as of 2021-04-28 (file last commited on 2021-01-05 7817a03):
   scdaemonUdevRev = "01898735a015541e3ffb43c7245ac1e612f40836";
 
   scdaemonRules = builtins.fetchurl {
@@ -21,10 +15,14 @@ let
     sha256 = "08v0vp6950bz7galvc92zdss89y9vcwbinmbfcdldy8x72w6rqr3";
   };
 
+  # per debian's udev deb hook (https://man7.org/linux/man-pages/man1/dh_installudev.1.html)
+  # it looks like the prefix level is 60-...
+  destination = "60-scdaemon.rules";
+
   scdaemonUdevRulesPkg = pkgs.runCommandNoCC "scdaemon-udev-rules" {} ''
     loc="$out/lib/udev/rules.d/"
     mkdir -p "''${loc}"
-    cp "${scdaemonRules}" "''${loc}/60-scdaemon.rules"
+    cp "${scdaemonRules}" "''${loc}/${destination}"
   '';
 
   cfg = config.hardware.gpgSmartcards;
