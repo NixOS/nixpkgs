@@ -53,12 +53,13 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-plugins-bad
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices IOKit Security ];
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+  ]) ++ lib.optionals stdenv.isDarwin [ CoreServices IOKit Security ];
 
   cargoBuildFlags = [ "--no-default-features" "--features=img,video" ];
 
