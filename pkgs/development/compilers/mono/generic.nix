@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     patchShebangs ./
-    ./autogen.sh --prefix $out $configureFlags
+    ./autogen.sh --prefix $out "''${configureFlags[@]}"
   '';
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
