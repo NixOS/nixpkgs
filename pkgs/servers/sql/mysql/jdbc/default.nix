@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-connector-java-5.1.46";
-  builder = ./builder.sh;
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/Connector-J/${name}.zip";
@@ -11,6 +10,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [ ant ];
+
+  unpackPhase = ''
+    unzip $src
+    cd mysql-connector-java-*
+  '';
+
+  installPhase = ''
+    mkdir -p $out/share/java
+    cp mysql-connector-java-*-bin.jar $out/share/java/mysql-connector-java.jar
+  '';
 
   meta = {
     platforms = lib.platforms.unix;
