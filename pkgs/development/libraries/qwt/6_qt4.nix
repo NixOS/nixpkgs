@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
     '';
 
-  qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
+  qmakeFlags = [ "-after" "doc.path=$out/share/doc/${name}" ];
 
   meta = with lib; {
     description = "Qt widgets for technical applications";
