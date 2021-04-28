@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, bc, sassc, glib, libxml2, gdk-pixbuf
+{ lib, stdenv, fetchFromGitHub, python3, bc, sassc, glib, libxml2, gdk-pixbuf
 , gtk-engine-murrine
 , fetchpatch
 }:
