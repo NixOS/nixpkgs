@@ -6,7 +6,7 @@ buildPythonApplication rec {
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   src = fetchurl {
     url = "https://opendev.org/opendev/${pname}/archive/${version}.tar.gz";
