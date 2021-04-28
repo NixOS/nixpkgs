@@ -18,13 +18,13 @@ in
 stdenv.mkDerivation (overridable // {
   nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ];
 
-  MIX_ENV = mixEnv;
-  MIX_DEBUG = if enableDebugInfo then 1 else 0;
-  HEX_OFFLINE = 1;
-  DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
+  env.MIX_ENV = mixEnv;
+  env.MIX_DEBUG = if enableDebugInfo then 1 else 0;
+  env.HEX_OFFLINE = 1;
+  env.DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
   # the api with `mix local.rebar rebar path` makes a copy of the binary
-  MIX_REBAR = "${rebar}/bin/rebar";
-  MIX_REBAR3 = "${rebar3}/bin/rebar3";
+  env.MIX_REBAR = "${rebar}/bin/rebar";
+  env.MIX_REBAR3 = "${rebar3}/bin/rebar3";
 
   postUnpack = ''
     export HEX_HOME="$TEMPDIR/hex"
