@@ -224,15 +224,24 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
+  bootstrapTools =
+    let extraAttrs = lib.optionalAttrs
+      (config.contentAddressedByDefault or false)
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+    in
+    if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else throw "unsupported libc";
 
