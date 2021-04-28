@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     libiconv darwin.apple_sdk.frameworks.Security
   ];
 
-  cargoBuildFlags = [ "--bin httplz" ];
+  cargoBuildFlags = [ "--bin" "httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
   cargoSha256 = "1rpwzrr9bvw375vn97y5fqhraqz35d3ani9kfflvn2758x3g8gwf";
 
