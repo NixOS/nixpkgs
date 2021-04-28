@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.2.9";
+  version = "1.3.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-5tM8ywLBPPjCKEfXIfUZ5aF4t9YpYA3tzERxC1NEsso=";
+    sha256 = "sha256-2FF/oB341PPGfSlXpLEs4mswjVk+3ty/jNsVJKu+fhs=";
   };
 
-  cargoHash = "sha256-P5ukwtRUpIJIqJjwTXIB2xRnpyLkzMeBMHmUz4Ery3s=";
+  cargoHash = "sha256-+UT9cz8OPA1jpFv7HafabxJ3NmLl57K1ODydfcV1FUM";
 
   nativeBuildInputs = [
     makeWrapper
@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
-
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \
