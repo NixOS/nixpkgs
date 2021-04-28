@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-OomCSA02ypFVzkYMcmkFREWB6x7oxgpt7x2zRANIDMw=";
   };
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   nativeBuildInputs = with llvmPackages; [ llvm clang ];
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
