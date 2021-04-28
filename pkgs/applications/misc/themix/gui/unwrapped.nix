@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Plugin-based theme designer GUI for desktop/console environments";
     homepage = "https://github.com/themix-project/oomox";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ mnacamura ];
     platforms = platforms.linux;
   };
