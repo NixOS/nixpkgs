@@ -337,8 +337,10 @@ mapAliases ({
   kodiPlain = kodi;
   kodiPlainWayland = kodi-wayland;
   jellyfin_10_5 = throw "Jellyfin 10.5 is no longer supported and contains a security vulnerability. Please upgrade to a newer version."; # added 2021-04-26
-  julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
-  julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
+  julia_07 = throw "julia_07 has been deprecated in favor of the latest LTS version"; # added 2020-09-15
+  julia_1 = throw "julia_1 has been deprecated in favor of julia_10 as it was ambiguous"; # added 2021-03-13
+  julia_11 = throw "julia_11 has been deprecated in favor of the latest stable version"; # added 2020-09-15
+  julia_13 = throw "julia_13 has been deprecated in favor of the latest stable version"; # added 2021-03-13
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
