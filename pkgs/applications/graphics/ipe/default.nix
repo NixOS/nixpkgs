@@ -42,11 +42,11 @@ mkDerivation rec {
     zlib
   ];
 
-  IPEPREFIX=placeholder "out";
-  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
-  LUA_PACKAGE = "lua";
+  env.IPEPREFIX = placeholder "out";
+  env.URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
+  env.LUA_PACKAGE = "lua";
 
-  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin"  ];
+  qtWrapperArgs = [ "--prefix" "PATH" ":" "${texlive}/bin"  ];
 
   enableParallelBuilding = true;
 
