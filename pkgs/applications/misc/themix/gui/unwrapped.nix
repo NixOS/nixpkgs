@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "themix-gui";
-  version = "1.13.2.1";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "themix-project";
     repo = "oomox";
     rev = version;
-    sha256 = "07lq5bmhbpnf9nqsn6krfgc1inyzpmmzwkmckjajghg44mhcwvvi";
+    sha256 = "0j45cb34vsxx4azjidbrv5pm65asgmrzksl07b0xik5c3hvc2ksr";
   };
 
   patches = [ ./oomox_root.patch ];
