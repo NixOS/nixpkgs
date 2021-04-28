@@ -98,8 +98,6 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   inherit src;
 
-  env.RUBY = toString ruby;
-
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
 
@@ -131,8 +129,12 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
   # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3")
-    "-fdeclspec";
+  env = {
+    RUBY = toString ruby;
+    NIX_CFLAGS_COMPILE = (lib.optionalString (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3")
+      "-fdeclspec")
+      + (lib.optionalString ((attrs.env or {}) ? NIX_CFLAGS_COMPILE) " ${attrs.env.NIX_CFLAGS_COMPILE}");
+  } // (attrs.env or {});
 
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
@@ -173,21 +175,21 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     export GEM_HOME=$out/${ruby.gemPath}
     mkdir -p $GEM_HOME
 
-    echo "buildFlags: $buildFlags"
+    echo "buildFlags: ''${buildFlags[@]}"
 
     ${lib.optionalString (type ==  "url") ''
     ruby ${./nix-bundle-install.rb} \
       "path" \
       '${gemName}' \
       '${version}' \
-      '${lib.escapeShellArgs buildFlags}'
+      "''${buildFlags[@]}"
     ''}
     ${lib.optionalString (type == "git") ''
     ruby ${./nix-bundle-install.rb} \
       "git" \
       '${gemName}' \
       '${version}' \
-      '${lib.escapeShellArgs buildFlags}' \
+      "''${buildFlags[@]}"
       '${attrs.source.url}' \
       '.' \
       '${attrs.source.rev}'
@@ -212,7 +214,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       --backtrace \
       --no-env-shebang \
       ${documentFlag} \
-      $gempkg $gemFlags -- $buildFlags
+      $gempkg "''${gemFlags[@]}" -- "''${buildFlags[@]}"
 
     # looks like useless files which break build repeatability and consume space
     pushd $out/${ruby.gemPath}

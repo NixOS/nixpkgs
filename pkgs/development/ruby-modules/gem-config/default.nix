@@ -169,7 +169,7 @@ in
   };
 
   mimemagic = attrs: {
-    FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    env.FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
   };
 
   mini_magick = attrs: {
