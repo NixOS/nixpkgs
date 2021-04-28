@@ -3485,7 +3485,9 @@ in
 
   ethash = callPackage ../development/libraries/ethash { };
 
-  ethminer = callPackage ../tools/misc/ethminer { };
+  ethminer = callPackage ../tools/misc/ethminer { cudaSupport = config.cudaSupport or true; };
+  ethminer-cuda = ethminer.override { cudaSupport = true; };
+  ethminer-free = ethminer.override { cudaSupport = false; };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
@@ -24118,6 +24120,10 @@ in
 
   kexi = libsForQt514.callPackage ../applications/office/kexi { };
 
+  kgt = callPackage ../development/tools/kgt {
+    inherit (skawarePackages) cleanPackaging;
+  };
+
   khronos = callPackage ../applications/office/khronos { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
@@ -24599,7 +24605,7 @@ in
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
   };
 
   MMA = callPackage ../applications/audio/MMA { };
@@ -29968,6 +29974,8 @@ in
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   loop = callPackage ../tools/misc/loop { };
+
+  maiko = callPackage ../misc/emulators/maiko { inherit (xorg) libX11; };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
     icu = icu58;
