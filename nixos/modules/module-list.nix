@@ -469,6 +469,7 @@
   ./services/misc/couchpotato.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
+  ./services/misc/duckling.nix
   ./services/misc/dwm-status.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix

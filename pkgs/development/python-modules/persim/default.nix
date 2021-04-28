@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, scikitlearn
-, numpy
-, matplotlib
-, scipy
+, deprecated
 , hopcroftkarp
-, pytest
+, joblib
+, matplotlib
+, numpy
+, scikitlearn
+, scipy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,26 +21,24 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    scikitlearn
-    numpy
-    matplotlib
-    scipy
+    deprecated
     hopcroftkarp
+    joblib
+    matplotlib
+    numpy
+    scikitlearn
+    scipy
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-
-    # ignore tests due to python 2.7 fail
-    pytest --ignore test/test_plots.py \
-           --ignore test/test_visuals.py
   '';
 
   meta = with lib; {
