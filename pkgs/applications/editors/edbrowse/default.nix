@@ -4,6 +4,13 @@ stdenv.mkDerivation rec {
   pname = "edbrowse";
   version = "3.7.7";
 
+  src = fetchFromGitHub {
+    owner = "CMB";
+    repo = "edbrowse";
+    rev = "v${version}";
+    sha256 = "0cw9d60mdhwna57r1vxn53s8gl81rr3cxnvm769ifq3xyh49vfcf";
+  };
+
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
 
   postPatch = ''
@@ -14,16 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C src"
     "prefix=${placeholder "out"}"
   ];
 
-  src = fetchFromGitHub {
-    owner = "CMB";
-    repo = "edbrowse";
-    rev = "v${version}";
-    sha256 = "0cw9d60mdhwna57r1vxn53s8gl81rr3cxnvm769ifq3xyh49vfcf";
-  };
   meta = with lib; {
     description = "Command Line Editor Browser";
     longDescription = ''
