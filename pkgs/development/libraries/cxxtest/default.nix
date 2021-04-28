@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub }:
+{ lib, buildPythonApplication, fetchFromGitHub, ply }:
 
 buildPythonApplication rec {
   pname = "cxxtest";
@@ -13,13 +13,22 @@ buildPythonApplication rec {
 
   sourceRoot = "source/python";
 
+  propagatedBuildInputs = [
+    ply
+  ];
+
   postCheck = ''
-    python scripts/cxxtestgen --error-printer -o build/GoodSuite.cpp ../test/GoodSuite.h
-    $CXX -I.. -o build/GoodSuite build/GoodSuite.cpp
-    build/GoodSuite
+    python scripts/cxxtestgen --error-printer -o python3/build/GoodSuite.cpp ../test/GoodSuite.h
+    $CXX -I.. -o python3/build/GoodSuite python3/build/GoodSuite.cpp
+    python3/build/GoodSuite
+  '';
+
+  preInstall = ''
+    pushd python3
   '';
 
   postInstall = ''
+    popd
     mkdir -p "$out/include"
     cp -r ../cxxtest "$out/include"
   '';
