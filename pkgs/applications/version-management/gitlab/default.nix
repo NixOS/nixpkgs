@@ -58,8 +58,8 @@ let
     patches = [ ./remove-hardcoded-locations.patch ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
-    GITLAB_LOG_PATH = "log";
-    FOSS_ONLY = !gitlabEnterprise;
+    env.GITLAB_LOG_PATH = "log";
+    env.FOSS_ONLY = !gitlabEnterprise;
 
     configurePhase = ''
       runHook preConfigure
