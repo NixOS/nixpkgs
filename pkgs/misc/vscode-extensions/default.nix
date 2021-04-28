@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
+{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -702,9 +702,15 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = let
+        raw-package = callPackage ./python {
+          extractNuGet = callPackage ./python/extract-nuget.nix { };
+        };
+      in
+        buildEnv {
+          name = "vscode-extension-ms-python-python-full";
+          paths = [ raw-package self.ms-toolsai.jupyter ];
+        };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
