@@ -105,6 +105,14 @@ in
       extraCommands = "mkdir -p proc sys dev";
     });
 
+    # Add the overrides from lxd distrobuilder
+    systemd.extraConfig = ''
+      [Service]
+      ProtectProc=default
+      ProtectControlGroups=no
+      ProtectKernelTunables=no
+    '';
+
     # Allow the user to login as root without password.
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
