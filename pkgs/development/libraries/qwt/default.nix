@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags INSTALLBASE=$out -after doc.path=$out/share/doc/${name}"
+    qmakeFlags+=("INSTALLBASE=$out" "-after" "doc.path=$out/share/doc/${name}")
   '';
 
   meta = with lib; {
