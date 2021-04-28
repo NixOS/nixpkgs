@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-prefsdir=$out/share"
+    configureFlags+=("--with-prefsdir=$out/share")
   '';
 
   installPhase = ''
