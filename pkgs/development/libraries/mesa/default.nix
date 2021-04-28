@@ -185,14 +185,14 @@ self = stdenv.mkDerivation {
   postFixup = optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
-    substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
     # Move development files for libraries in $drivers to $driversdev
     mkdir -p $driversdev/include
-    mv $dev/include/xa_* $dev/include/d3d* $driversdev/include
+    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
     mkdir -p $driversdev/lib/pkgconfig
     for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
       if [ -f "$dev/$pc" ]; then
