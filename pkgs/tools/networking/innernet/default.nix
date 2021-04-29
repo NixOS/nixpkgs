@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     clang
     installShellFiles
   ];
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
