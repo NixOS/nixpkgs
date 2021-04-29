@@ -30,7 +30,10 @@
       "args": {
         "server.address": [
           "unix:native"
-        ]
+        ],
+        "vm.overrides": {
+          "pulse.min.quantum": "1024/48000"
+        }
       }
     }
   ],
