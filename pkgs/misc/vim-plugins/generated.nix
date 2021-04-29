@@ -5390,6 +5390,18 @@ let
     meta.homepage = "https://github.com/alvan/vim-closetag/";
   };
 
+  vim-code-dark = buildVimPluginFrom2Nix {
+    pname = "vim-code-dark";
+    version = "2021-04-09";
+    src = fetchFromGitHub {
+      owner = "tomasiser";
+      repo = "vim-code-dark";
+      rev = "670fed53a2ae67542a78ef7b642f4aca6b6326dc";
+      sha256 = "0zdhhv3h8lzba8dpv0amc5abpkzayp6gbjw6qv712p638zyr99vw";
+    };
+    meta.homepage = "https://github.com/tomasiser/vim-code-dark/";
+  };
+
   vim-codefmt = buildVimPluginFrom2Nix {
     pname = "vim-codefmt";
     version = "2021-04-15";

@@ -620,6 +620,7 @@ tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
+tomasiser/vim-code-dark
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange
