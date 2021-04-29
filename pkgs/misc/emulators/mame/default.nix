@@ -82,6 +82,6 @@ in mkDerivation {
     platforms = platforms.unix;
     # makefile needs fixes for install target
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

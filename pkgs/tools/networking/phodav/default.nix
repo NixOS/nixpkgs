@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://wiki.gnome.org/phodav";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

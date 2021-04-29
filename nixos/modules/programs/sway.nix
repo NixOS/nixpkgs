@@ -133,5 +133,5 @@ in {
     programs.xwayland.enable = mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];
+  meta.maintainers = with lib.maintainers; [ primeos colemickens ];
 }

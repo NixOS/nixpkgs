@@ -42,5 +42,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ gnidorah ];
+  meta.maintainers = with maintainers; [ ];
 }

@@ -91,6 +91,6 @@ in openmw.overrideAttrs (oldAttrs: rec {
     homepage = "https://tes3mp.com/";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 })

@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

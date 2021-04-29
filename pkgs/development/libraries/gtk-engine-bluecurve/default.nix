@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     description = "Original Bluecurve engine from Red Hat's artwork package";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.gnidorah ];
+    maintainers = [ ];
   };
 }

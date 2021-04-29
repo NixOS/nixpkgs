@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.boost;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

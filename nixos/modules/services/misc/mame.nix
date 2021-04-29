@@ -63,5 +63,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

@@ -25,7 +25,7 @@ let
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
     license = licenses.unfree;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
   };
 

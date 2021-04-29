@@ -22,6 +22,6 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

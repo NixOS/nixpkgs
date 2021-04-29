@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Create bootable USB disks from Windows ISO images";
     homepage = "https://github.com/slacka/WoeUSB";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ bjornfor gnidorah ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

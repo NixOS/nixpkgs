@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     license = licenses.unfree // {
       url = "https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt";
     };
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

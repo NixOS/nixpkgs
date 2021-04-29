@@ -29,7 +29,7 @@ in pythonPackages.buildPythonApplication rec {
     description = "Youtube synthesia video to midi conversion tool";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

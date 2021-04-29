@@ -21,7 +21,7 @@ in mkRambox rec {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.mit;
-    maintainers = with maintainers; [ gnidorah ma27 ];
+    maintainers = with maintainers; [ ma27 ];
     platforms = ["i686-linux" "x86_64-linux"];
     hydraPlatforms = [];
   };
