@@ -1,5 +1,4 @@
 { lib, fetchurl, python }:
-assert with python.pkgs; isPy27 || isPy36 || isPy37 || isPy38 || isPy39;
 
 python.pkgs.buildPythonPackage rec {
   pname = "gurobipy";
