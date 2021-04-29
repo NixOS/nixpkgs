@@ -1485,6 +1485,18 @@ let
     meta.homepage = "https://github.com/megaannum/forms/";
   };
 
+  friendly-snippets = buildVimPluginFrom2Nix {
+    pname = "friendly-snippets";
+    version = "2021-04-17";
+    src = fetchFromGitHub {
+      owner = "rafamadriz";
+      repo = "friendly-snippets";
+      rev = "ee28380b2300b374251b89d73e7e5b23c573e2bc";
+      sha256 = "1ap2nf84gbrqlykw1l8zx01m9hm92vw57wkkzv2cqkjcbm3whqyg";
+    };
+    meta.homepage = "https://github.com/rafamadriz/friendly-snippets/";
+  };
+
   fruzzy = buildVimPluginFrom2Nix {
     pname = "fruzzy";
     version = "2020-08-31";
