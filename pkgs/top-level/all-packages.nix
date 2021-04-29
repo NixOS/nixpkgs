@@ -25240,10 +25240,7 @@ in
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon {
-    # https://developer.palemoon.org/build/linux/
-    stdenv = gcc8Stdenv;
-  };
+  palemoon = callPackage ../applications/networking/browsers/palemoon { };
 
   webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
 
