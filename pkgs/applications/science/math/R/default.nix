@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
-      --without-x
       --with-libpng
       --with-jpeglib
       --with-libtiff
@@ -68,6 +67,7 @@ stdenv.mkDerivation rec {
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
+      --without-x
       OBJC="clang"
       CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
       LDFLAGS="-L${libcxx}/lib"
