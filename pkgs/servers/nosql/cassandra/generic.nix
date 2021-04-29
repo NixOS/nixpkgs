@@ -21,7 +21,7 @@
 
 let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-  binPath = with lib; makeBinPath [
+  binPath = lib.makeBinPath [
     bash
     getopt
     gawk

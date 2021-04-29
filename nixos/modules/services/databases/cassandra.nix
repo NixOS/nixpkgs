@@ -1,8 +1,20 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatStringsSep
+    flip
+    literalExample
+    optionalAttrs
+    optionals
+    recursiveUpdate
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    versionAtLeast
+    ;
+
   cfg = config.services.cassandra;
 
   defaultUser = "cassandra";
@@ -18,14 +30,14 @@ let
       data_file_directories = [ "${cfg.homeDir}/data" ];
       commitlog_directory = "${cfg.homeDir}/commitlog";
       saved_caches_directory = "${cfg.homeDir}/saved_caches";
-    } // lib.optionalAttrs (cfg.seedAddresses != [ ]) {
+    } // optionalAttrs (cfg.seedAddresses != [ ]) {
       seed_provider = [
         {
           class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
           parameters = [{ seeds = concatStringsSep "," cfg.seedAddresses; }];
         }
       ];
-    } // lib.optionalAttrs (lib.versionAtLeast cfg.package.version "3") {
+    } // optionalAttrs (versionAtLeast cfg.package.version "3") {
       hints_directory = "${cfg.homeDir}/hints";
     }
   );
@@ -76,10 +88,10 @@ let
 
   fullJvmOptions =
     cfg.jvmOpts
-    ++ lib.optionals (cfg.jmxRoles != [ ]) [
+    ++ optionals (cfg.jmxRoles != [ ]) [
       "-Dcom.sun.management.jmxremote.authenticate=true"
       "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
-    ] ++ lib.optionals cfg.remoteJmx [
+    ] ++ optionals cfg.remoteJmx [
       "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
     ];
 
@@ -421,7 +433,7 @@ in
     jmxRolesFile = mkOption {
       type = types.nullOr types.path;
       default =
-        if lib.versionAtLeast cfg.package.version "3.11"
+        if versionAtLeast cfg.package.version "3.11"
         then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
         else null;
       example = "/var/lib/cassandra/jmx.password";
@@ -497,7 +509,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStart =
-          lib.concatStringsSep " "
+          concatStringsSep " "
             ([
               "${cfg.package}/bin/nodetool"
               "repair"
@@ -525,7 +537,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStart =
-          lib.concatStringsSep " "
+          concatStringsSep " "
             ([
               "${cfg.package}/bin/nodetool"
               "repair"
