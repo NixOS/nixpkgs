@@ -20,8 +20,7 @@ let
     acl_file ${aclFile}
     persistence true
     allow_anonymous ${boolToString cfg.allowAnonymous}
-    bind_address ${cfg.host}
-    port ${toString cfg.port}
+    listener ${toString cfg.port} ${cfg.host}
     ${passwordConf}
     ${listenerConf}
     ${cfg.extraConf}
