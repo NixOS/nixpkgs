@@ -61,7 +61,7 @@ in
     client.wait_until_succeeds("ping -c1 server")
 
     # make sure pinnwand is listening
-    server.wait_until_succeeds("ss -lnp | grep ${toString port}")
+    server.wait_for_open_port(${toString port})
 
     # send the contents of /etc/machine-id
     response = client.succeed("steck paste /etc/machine-id")
