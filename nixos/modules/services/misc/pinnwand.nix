@@ -40,38 +40,63 @@ in
       '';
     };
 
-    systemd.services.pinnwand = {
-      description = "Pinnwannd HTTP Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd.services = let
+      hardeningOptions = {
+        User = "pinnwand";
+        DynamicUser = true;
 
-      unitConfig.Documentation = "https://pinnwand.readthedocs.io/en/latest/";
-      serviceConfig = {
-        ExecStart = "${pkgs.pinnwand}/bin/pinnwand --configuration-path ${configFile} http --port ${toString(cfg.port)}";
         StateDirectory = "pinnwand";
         StateDirectoryMode = "0700";
 
         AmbientCapabilities = [];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
-        DynamicUser = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         PrivateDevices = true;
         PrivateUsers = true;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
-        ProtectKernelLogs = true;
         ProtectHome = true;
         ProtectHostname = true;
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
         UMask = "0077";
+      };
+
+      command = "${pkgs.pinnwand}/bin/pinnwand --configuration-path ${configFile}";
+    in {
+      pinnwand = {
+        description = "Pinnwannd HTTP Server";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+
+        unitConfig.Documentation = "https://pinnwand.readthedocs.io/en/latest/";
+
+        serviceConfig = {
+          ExecStart = "${command} http --port ${toString(cfg.port)}";
+        } // hardeningOptions;
+      };
+
+      pinnwand-reaper = {
+        description = "Pinnwand Reaper";
+        startAt = "daily";
+
+        serviceConfig = {
+          ExecStart = "${command} -vvvv reap";  # verbosity increased to show number of deleted pastes
+        } // hardeningOptions;
       };
     };
   };
