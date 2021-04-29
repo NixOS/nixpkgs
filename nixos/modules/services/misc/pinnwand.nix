@@ -24,22 +24,22 @@ in
         Your <filename>pinnwand.toml</filename> as a Nix attribute set. Look up
         possible options in the <link xlink:href="https://github.com/supakeen/pinnwand/blob/master/pinnwand.toml-example">pinnwand.toml-example</link>.
       '';
-      default = {
-        # https://github.com/supakeen/pinnwand/blob/master/pinnwand.toml-example
-        database_uri = "sqlite:///var/lib/pinnwand/pinnwand.db";
-        preferred_lexeres = [];
-        paste_size = 262144;
-        paste_help = ''
-          <p>Welcome to pinnwand, this site is a pastebin. It allows you to share code with others. If you write code in the text area below and press the paste button you will be given a link you can share with others so they can view your code as well.</p><p>People with the link can view your pasted code, only you can remove your paste and it expires automatically. Note that anyone could guess the URI to your paste so don't rely on it being private.</p>
-        '';
-        footer = ''
-          View <a href="//github.com/supakeen/pinnwand" target="_BLANK">source code</a>, the <a href="/removal">removal</a> or <a href="/expiry">expiry</a> stories, or read the <a href="/about">about</a> page.
-        '';
-      };
+      default = {};
     };
   };
 
   config = mkIf cfg.enable {
+    services.pinnwand.settings = {
+      database_uri = mkDefault "sqlite:////var/lib/pinnwand/pinnwand.db";
+      paste_size = mkDefault 262144;
+      paste_help = mkDefault ''
+        <p>Welcome to pinnwand, this site is a pastebin. It allows you to share code with others. If you write code in the text area below and press the paste button you will be given a link you can share with others so they can view your code as well.</p><p>People with the link can view your pasted code, only you can remove your paste and it expires automatically. Note that anyone could guess the URI to your paste so don't rely on it being private.</p>
+      '';
+      footer = mkDefault ''
+        View <a href="//github.com/supakeen/pinnwand" target="_BLANK">source code</a>, the <a href="/removal">removal</a> or <a href="/expiry">expiry</a> stories, or read the <a href="/about">about</a> page.
+      '';
+    };
+
     systemd.services.pinnwand = {
       description = "Pinnwannd HTTP Server";
       after = [ "network.target" ];
