@@ -82,5 +82,7 @@ in
     # remove paste and check that it's not available any more
     client.succeed(f"curl {removal_link}")
     client.fail(f"curl --fail {raw_url}")
+
+    server.log(server.succeed("systemd-analyze security pinnwand"))
   '';
 })
