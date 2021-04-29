@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pombeirp ];
   };
 }
