@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.3.0";
+  version = "0.4.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gn2mf2n2g1ffdbijrydgb7dgd60lkvckblx6s86kxlkrp1wqgrq";
+    sha256 = "sha256-Hj+AS8YN7ZtmgY5sUj4TmQspzeiKiLz6dBbmjhGCgXI=";
   };
 
   # Project doesn't publish tests
