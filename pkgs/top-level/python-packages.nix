@@ -1743,6 +1743,8 @@ in {
 
   delegator-py = callPackage ../development/python-modules/delegator-py { };
 
+  deltachat = callPackage ../development/python-modules/deltachat { };
+
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
   demjson = callPackage ../development/python-modules/demjson { };
