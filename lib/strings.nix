@@ -644,8 +644,8 @@ rec {
   floatToString = float: let
     result = toString float;
     precise = float == fromJSON result;
-  in if precise then result
-    else lib.warn "Imprecise conversion from float to string ${result}" result;
+  in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
+    result;
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:

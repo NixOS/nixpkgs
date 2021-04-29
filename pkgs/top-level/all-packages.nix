@@ -3362,7 +3362,8 @@ in
 
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
-    boost = boost172.override { enablePython = true; python = python38; };
+    boost = boost17x.override { enablePython = true; python = python3; };
+    lua = lua5_4;
   })
     ceph
     ceph-client;
@@ -5965,6 +5966,8 @@ in
   lab = callPackage ../applications/version-management/git-and-tools/lab { };
 
   lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
+
+  last-resort = callPackage ../data/fonts/last-resort {};
 
   ldc = callPackage ../development/compilers/ldc { };
 
@@ -10996,21 +10999,17 @@ in
 
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
     libgit2 = libgit2_0_27;
   };
 
-  julia_13 = callPackage ../development/compilers/julia/1.3.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
   julia_15 = callPackage ../development/compilers/julia/1.5.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
-  julia_1 = julia_10;
-  julia = julia_15;
+  julia-lts = julia_10;
+  julia-stable = julia_15;
+  julia = julia-lts;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
