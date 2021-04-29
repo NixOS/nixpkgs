@@ -17,6 +17,12 @@ buildPythonPackage rec {
   # only manual tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "haffmpeg.camera"
+    "haffmpeg.sensor"
+    "haffmpeg.tools"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/pvizeli/ha-ffmpeg";
     description = "Library for home-assistant to handle ffmpeg";
