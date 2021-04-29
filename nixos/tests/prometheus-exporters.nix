@@ -1,65 +1,65 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 }:
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-                     removeSuffix replaceChars singleton splitString;
+    removeSuffix replaceChars singleton splitString;
 
-/*
- * The attrset `exporterTests` contains one attribute
- * for each exporter test. Each of these attributes
- * is expected to be an attrset containing:
- *
- *  `exporterConfig`:
- *    this attribute set contains config for the exporter itself
- *
- *  `exporterTest`
- *    this attribute set contains test instructions
- *
- *  `metricProvider` (optional)
- *    this attribute contains additional machine config
- *
- *  `nodeName` (optional)
- *    override an incompatible testnode name
- *
- *  Example:
- *    exporterTests.<exporterName> = {
- *      exporterConfig = {
- *        enable = true;
- *      };
- *      metricProvider = {
- *        services.<metricProvider>.enable = true;
- *      };
- *      exporterTest = ''
- *        wait_for_unit("prometheus-<exporterName>-exporter.service")
- *        wait_for_open_port("1234")
- *        succeed("curl -sSf 'localhost:1234/metrics'")
- *      '';
- *    };
- *
- *  # this would generate the following test config:
- *
- *    nodes.<exporterName> = {
- *      services.prometheus.<exporterName> = {
- *        enable = true;
- *      };
- *      services.<metricProvider>.enable = true;
- *    };
- *
- *    testScript = ''
- *      <exporterName>.start()
- *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
- *      <exporterName>.wait_for_open_port("1234")
- *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
- *      <exporterName>.shutdown()
- *    '';
- */
+  /*
+    * The attrset `exporterTests` contains one attribute
+    * for each exporter test. Each of these attributes
+    * is expected to be an attrset containing:
+    *
+    *  `exporterConfig`:
+    *    this attribute set contains config for the exporter itself
+    *
+    *  `exporterTest`
+    *    this attribute set contains test instructions
+    *
+    *  `metricProvider` (optional)
+    *    this attribute contains additional machine config
+    *
+    *  `nodeName` (optional)
+    *    override an incompatible testnode name
+    *
+    *  Example:
+    *    exporterTests.<exporterName> = {
+    *      exporterConfig = {
+    *        enable = true;
+    *      };
+    *      metricProvider = {
+    *        services.<metricProvider>.enable = true;
+    *      };
+    *      exporterTest = ''
+    *        wait_for_unit("prometheus-<exporterName>-exporter.service")
+    *        wait_for_open_port("1234")
+    *        succeed("curl -sSf 'localhost:1234/metrics'")
+    *      '';
+    *    };
+    *
+    *  # this would generate the following test config:
+    *
+    *    nodes.<exporterName> = {
+    *      services.prometheus.<exporterName> = {
+    *        enable = true;
+    *      };
+    *      services.<metricProvider>.enable = true;
+    *    };
+    *
+    *    testScript = ''
+    *      <exporterName>.start()
+    *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
+    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
+    *      <exporterName>.shutdown()
+    *    '';
+  */
 
   exporterTests = {
-     apcupsd = {
+    apcupsd = {
       exporterConfig = {
         enable = true;
       };
@@ -192,20 +192,21 @@ let
           "plugin":"testplugin",
           "time":DATE
         }]
-        ''; in ''
-        wait_for_unit("prometheus-collectd-exporter.service")
-        wait_for_open_port(9103)
-        succeed(
-            'echo \'${postData}\'> /tmp/data.json'
-        )
-        succeed('sed -ie "s DATE $(date +%s) " /tmp/data.json')
-        succeed(
-            "curl -sSfH 'Content-Type: application/json' -X POST --data @/tmp/data.json localhost:9103/collectd"
-        )
-        succeed(
-            "curl -sSf localhost:9103/metrics | grep -q 'collectd_testplugin_gauge{instance=\"testhost\"} 23'"
-        )
-      '';
+      ''; in
+        ''
+          wait_for_unit("prometheus-collectd-exporter.service")
+          wait_for_open_port(9103)
+          succeed(
+              'echo \'${postData}\'> /tmp/data.json'
+          )
+          succeed('sed -ie "s DATE $(date +%s) " /tmp/data.json')
+          succeed(
+              "curl -sSfH 'Content-Type: application/json' -X POST --data @/tmp/data.json localhost:9103/collectd"
+          )
+          succeed(
+              "curl -sSf localhost:9103/metrics | grep -q 'collectd_testplugin_gauge{instance=\"testhost\"} 23'"
+          )
+        '';
     };
 
     dnsmasq = {
@@ -258,7 +259,8 @@ let
       '';
     };
 
-    fritzbox = { # TODO add proper test case
+    fritzbox = {
+      # TODO add proper test case
       exporterConfig = {
         enable = true;
       };
@@ -377,19 +379,19 @@ let
         '';
         systemd.services.lnd = {
           serviceConfig.ExecStart = ''
-          ${pkgs.lnd}/bin/lnd \
-            --datadir=/var/lib/lnd \
-            --tlscertpath=/var/lib/lnd/tls.cert \
-            --tlskeypath=/var/lib/lnd/tls.key \
-            --logdir=/var/log/lnd \
-            --bitcoin.active \
-            --bitcoin.mainnet \
-            --bitcoin.node=bitcoind \
-            --bitcoind.rpcuser=bitcoinrpc \
-            --bitcoind.rpcpass=hunter2 \
-            --bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332 \
-            --bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333 \
-            --readonlymacaroonpath=/var/lib/lnd/readonly.macaroon
+            ${pkgs.lnd}/bin/lnd \
+              --datadir=/var/lib/lnd \
+              --tlscertpath=/var/lib/lnd/tls.cert \
+              --tlskeypath=/var/lib/lnd/tls.key \
+              --logdir=/var/log/lnd \
+              --bitcoin.active \
+              --bitcoin.mainnet \
+              --bitcoin.node=bitcoind \
+              --bitcoind.rpcuser=bitcoinrpc \
+              --bitcoind.rpcpass=hunter2 \
+              --bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332 \
+              --bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333 \
+              --readonlymacaroonpath=/var/lib/lnd/readonly.macaroon
           '';
           serviceConfig.StateDirectory = "lnd";
           wantedBy = [ "multi-user.target" ];
@@ -411,14 +413,14 @@ let
         configuration = {
           monitoringInterval = "2s";
           mailCheckTimeout = "10s";
-          servers = [ {
+          servers = [{
             name = "testserver";
             server = "localhost";
             port = 25;
             from = "mail-exporter@localhost";
             to = "mail-exporter@localhost";
             detectionDir = "/var/spool/mail/mail-exporter/new";
-          } ];
+          }];
         };
       };
       metricProvider = {
@@ -520,15 +522,17 @@ let
         url = "http://localhost";
       };
       metricProvider = {
-        systemd.services.nc-pwfile = let
-          passfile = (pkgs.writeText "pwfile" "snakeoilpw");
-        in {
-          requiredBy = [ "prometheus-nextcloud-exporter.service" ];
-          before = [ "prometheus-nextcloud-exporter.service" ];
-          serviceConfig.ExecStart = ''
-            ${pkgs.coreutils}/bin/install -o nextcloud-exporter -m 0400 ${passfile} /var/nextcloud-pwfile
-          '';
-        };
+        systemd.services.nc-pwfile =
+          let
+            passfile = (pkgs.writeText "pwfile" "snakeoilpw");
+          in
+          {
+            requiredBy = [ "prometheus-nextcloud-exporter.service" ];
+            before = [ "prometheus-nextcloud-exporter.service" ];
+            serviceConfig.ExecStart = ''
+              ${pkgs.coreutils}/bin/install -o nextcloud-exporter -m 0400 ${passfile} /var/nextcloud-pwfile
+            '';
+          };
         services.nginx = {
           enable = true;
           virtualHosts."localhost" = {
@@ -585,7 +589,7 @@ let
                 syslog = {
                   listen_address = "udp://127.0.0.1:10000";
                   format = "rfc3164";
-                  tags = ["nginx"];
+                  tags = [ "nginx" ];
                 };
               };
             }
@@ -705,10 +709,10 @@ let
       exporterConfig = {
         enable = true;
         group = "openvpn";
-        statusPaths = ["/run/openvpn-test"];
+        statusPaths = [ "/run/openvpn-test" ];
       };
       metricProvider = {
-        users.groups.openvpn = {};
+        users.groups.openvpn = { };
         services.openvpn.servers.test = {
           config = ''
             dev tun
@@ -828,19 +832,21 @@ let
       };
       metricProvider = {
         # Mock rtl_433 binary to return a dummy metric stream.
-        nixpkgs.overlays = [ (self: super: {
-          rtl_433 = self.runCommand "rtl_433" {} ''
-            mkdir -p "$out/bin"
-            cat <<EOF > "$out/bin/rtl_433"
-            #!/bin/sh
-            while true; do
-              printf '{"time" : "2020-04-26 13:37:42", "model" : "zopieux", "id" : 55, "channel" : 3, "temperature_C" : 18.000}\n'
-              sleep 4
-            done
-            EOF
-            chmod +x "$out/bin/rtl_433"
-          '';
-        }) ];
+        nixpkgs.overlays = [
+          (self: super: {
+            rtl_433 = self.runCommand "rtl_433" { } ''
+              mkdir -p "$out/bin"
+              cat <<EOF > "$out/bin/rtl_433"
+              #!/bin/sh
+              while true; do
+                printf '{"time" : "2020-04-26 13:37:42", "model" : "zopieux", "id" : 55, "channel" : 3, "temperature_C" : 18.000}\n'
+                sleep 4
+              done
+              EOF
+              chmod +x "$out/bin/rtl_433"
+            '';
+          })
+        ];
       };
       exporterTest = ''
         wait_for_unit("prometheus-rtl_433-exporter.service")
@@ -856,7 +862,7 @@ let
     smokeping = {
       exporterConfig = {
         enable = true;
-        hosts = ["127.0.0.1"];
+        hosts = [ "127.0.0.1" ];
       };
       exporterTest = ''
         wait_for_unit("prometheus-smokeping-exporter.service")
@@ -994,13 +1000,36 @@ let
     unifi-poller = {
       nodeName = "unifi_poller";
       exporterConfig.enable = true;
-      exporterConfig.controllers = [ { } ];
+      exporterConfig.controllers = [{ }];
       exporterTest = ''
         wait_for_unit("prometheus-unifi-poller-exporter.service")
         wait_for_open_port(9130)
         succeed(
             "curl -sSf localhost:9130/metrics | grep -q 'unifipoller_build_info{.\\+} 1'"
         )
+      '';
+    };
+
+    unbound = {
+      exporterConfig = {
+        enable = true;
+        fetchType = "uds";
+        controlInterface = "/run/unbound/unbound.ctl";
+      };
+      metricProvider = {
+        services.unbound = {
+          enable = true;
+          localControlSocketPath = "/run/unbound/unbound.ctl";
+        };
+        systemd.services.prometheus-unbound-exporter.serviceConfig = {
+          SupplementaryGroups = [ "unbound" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("unbound.service")
+        wait_for_unit("prometheus-unbound-exporter.service")
+        wait_for_open_port(9167)
+        succeed("curl -sSf localhost:9167/metrics | grep -q 'unbound_up 1'")
       '';
     };
 
@@ -1033,54 +1062,60 @@ let
       '';
     };
 
-    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in {
-      exporterConfig.enable = true;
-      metricProvider = {
-        networking.wireguard.interfaces.wg0 = {
-          ips = [ "10.23.42.1/32" "fc00::1/128" ];
-          listenPort = 23542;
+    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+      {
+        exporterConfig.enable = true;
+        metricProvider = {
+          networking.wireguard.interfaces.wg0 = {
+            ips = [ "10.23.42.1/32" "fc00::1/128" ];
+            listenPort = 23542;
 
-          inherit (snakeoil.peer0) privateKey;
+            inherit (snakeoil.peer0) privateKey;
 
-          peers = singleton {
-            allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+            peers = singleton {
+              allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
 
-            inherit (snakeoil.peer1) publicKey;
+              inherit (snakeoil.peer1) publicKey;
+            };
           };
+          systemd.services.prometheus-wireguard-exporter.after = [ "wireguard-wg0.service" ];
         };
-        systemd.services.prometheus-wireguard-exporter.after = [ "wireguard-wg0.service" ];
+        exporterTest = ''
+          wait_for_unit("prometheus-wireguard-exporter.service")
+          wait_for_open_port(9586)
+          wait_until_succeeds(
+              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+          )
+        '';
       };
-      exporterTest = ''
-        wait_for_unit("prometheus-wireguard-exporter.service")
-        wait_for_open_port(9586)
-        wait_until_succeeds(
-            "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
-        )
-      '';
-    };
   };
 in
-mapAttrs (exporter: testConfig: (makeTest (let
-  nodeName = testConfig.nodeName or exporter;
+mapAttrs
+  (exporter: testConfig: (makeTest (
+    let
+      nodeName = testConfig.nodeName or exporter;
 
-in {
-  name = "prometheus-${exporter}-exporter";
+    in
+    {
+      name = "prometheus-${exporter}-exporter";
 
-  nodes.${nodeName} = mkMerge [{
-    services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
-  } testConfig.metricProvider or {}];
+      nodes.${nodeName} = mkMerge [{
+        services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
+      } testConfig.metricProvider or { }];
 
-  testScript = ''
-    ${nodeName}.start()
-    ${concatStringsSep "\n" (map (line:
-      if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
-      then line
-      else "${nodeName}.${line}"
-    ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
-    ${nodeName}.shutdown()
-  '';
+      testScript = ''
+        ${nodeName}.start()
+        ${concatStringsSep "\n" (map (line:
+          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
+          then line
+          else "${nodeName}.${line}"
+        ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
+        ${nodeName}.shutdown()
+      '';
 
-  meta = with maintainers; {
-    maintainers = [ willibutz elseym ];
-  };
-}))) exporterTests
+      meta = with maintainers; {
+        maintainers = [ willibutz elseym ];
+      };
+    }
+  )))
+  exporterTests

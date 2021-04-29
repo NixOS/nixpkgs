@@ -59,6 +59,7 @@ let
     "surfboard"
     "systemd"
     "tor"
+    "unbound"
     "unifi"
     "unifi-poller"
     "varnish"
