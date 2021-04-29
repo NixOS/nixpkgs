@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
     license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden ];
+    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
     platforms = with platforms; linux;
   };
 }
