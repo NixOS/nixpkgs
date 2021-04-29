@@ -154,7 +154,7 @@ in
     listenAddress = mkOption {
       type = types.nullOr types.str;
       default = "127.0.0.1";
-      example = literalExample "null";
+      example = null;
       description = ''
         Address or interface to bind to and tell other Cassandra nodes
         to connect to. You _must_ change this if you want multiple
@@ -186,7 +186,7 @@ in
     rpcAddress = mkOption {
       type = types.nullOr types.str;
       default = "127.0.0.1";
-      example = literalExample "null";
+      example = null;
       description = ''
         The address or interface to bind the native transport server to.
 
@@ -285,7 +285,7 @@ in
     fullRepairInterval = mkOption {
       type = types.nullOr types.str;
       default = "3w";
-      example = literalExample "null";
+      example = null;
       description = ''
         Set the interval how often full repairs are run, i.e.
         <literal>nodetool repair --full</literal> is executed. See
@@ -308,7 +308,7 @@ in
     incrementalRepairInterval = mkOption {
       type = types.nullOr types.str;
       default = "3d";
-      example = literalExample "null";
+      example = null;
       description = ''
         Set the interval how often incremental repairs are run, i.e.
         <literal>nodetool repair</literal> is executed. See
