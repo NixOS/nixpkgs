@@ -78,6 +78,13 @@ with lib.maintainers; {
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
+  gcc = {
+    members = [
+      synthetica
+    ];
+    scope = "Maitain GCC (GNU Compiler Collection) compilers";
+  };
+
   golang = {
     members = [
       c00w
