@@ -105,8 +105,8 @@ in lib.makeScopeWithSplicing
   ##
   makeMinimal = mkDerivation {
     path = "tools/make";
-    sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
-    version = "8.0";
+    sha256 = "0fh0nrnk18m613m5blrliq2aydciv51qhc0ihsj4k63incwbk90n";
+    version = "9.1";
 
     buildInputs = with self; [];
     nativeBuildInputs = with buildPackages.netbsd; [ bsdSetupHook ];
@@ -138,11 +138,11 @@ in lib.makeScopeWithSplicing
   };
 
   compat = mkDerivation (let
-    version = "8.0";
+    version = "9.1";
     commonDeps = [ zlib ];
   in {
     path = "tools/compat";
-    sha256 = "050449lq5gpxqsripdqip5ks49g5ypjga188nd3ss8dg1zf7ydz3";
+    sha256 = "1vsxg7136nlhc72vpa664vs22874xh7ila95nkmsd8crn3z3cyn0";
     inherit version;
 
     setupHooks = [
@@ -190,12 +190,15 @@ in lib.makeScopeWithSplicing
       install -D $BSDSRCDIR/include/vis.h $out/include/vis.h
       install -D $BSDSRCDIR/include/db.h $out/include/db.h
       install -D $BSDSRCDIR/include/netconfig.h $out/include/netconfig.h
-      install -D $BSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
       install -D $BSDSRCDIR/include/utmpx.h $out/include/utmpx.h
       install -D $BSDSRCDIR/include/tzfile.h $out/include/tzfile.h
       install -D $BSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
       install -D $BSDSRCDIR/include/nl_types.h $out/include/nl_types.h
       install -D $BSDSRCDIR/include/stringlist.h $out/include/stringlist.h
+
+      # Collapse includes slightly to fix dangling reference
+      install -D $BSDSRCDIR/common/include/rpc/types.h $out/include/rpc/types.h
+      sed -i '1s;^;#include "nbtool_config.h"\n;' $out/include/rpc/types.h
    '' + lib.optionalString stdenv.isDarwin ''
       mkdir -p $out/include/ssp
       touch $out/include/ssp/ssp.h
@@ -205,11 +208,11 @@ in lib.makeScopeWithSplicing
         --subst-var-by out $out \
         --subst-var-by version ${version}
     '';
-    extraPaths = with self; [ libc.src libutil.src
-      (fetchNetBSD "include" "8.0" "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq")
-      (fetchNetBSD "external/bsd/flex" "8.0" "0yxcjshz9nj827qhmjwwjmzvmmqgaf0d25b42k7lj84vliwrgyr6")
-      (fetchNetBSD "sys/sys" "8.0" "0b0yjjy0c0cvk5nyffppqwxlwh2s1qr2xzl97a9ldck00dibar94")
-    ] ++ libutil.extraPaths ++ libc.extraPaths;
+    extraPaths = with self; [ include.src libc.src libutil.src
+      (fetchNetBSD "external/bsd/flex" "9.1" "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
+      (fetchNetBSD "sys/sys" "9.1" "1xx633pvmdgdb0h1x0bw1rvkc63h29ziwh51166rc3q5bil7y01n")
+      (fetchNetBSD "common/include/rpc/types.h" "9.1" "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a")
+    ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
   });
 
   # HACK: to ensure parent directories exist. This emulates GNU
@@ -221,7 +224,7 @@ in lib.makeScopeWithSplicing
     xinstall "$@"
   ''; in mkDerivation {
     path = "usr.bin/xinstall";
-    version = "8.0";
+    version = "9.1";
     sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
     extraPaths = with self; [ mtree.src make.src ];
     nativeBuildInputs = with buildPackages.netbsd; [
@@ -247,15 +250,15 @@ in lib.makeScopeWithSplicing
     pname = "fts";
     path = "include/fts.h";
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
-    version = "8.0";
+    version = "9.1";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
     ];
     propagatedBuildInputs = with self; compatIfNeeded;
     extraPaths = with self; [
-      (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
-      (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "1sjvh9nw3prnk4rmdwrfsxh6gdb9lmilkn46jcfh3q5c8glqzrd7")
-      (fetchNetBSD "lib/libc/gen/fts.3" "8.0" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
+      (fetchNetBSD "lib/libc/gen/fts.c" "9.1" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
+      (fetchNetBSD "lib/libc/include/namespace.h" "9.1" "0kksr3pdwdc1cplqf5z12ih4cml6l11lqrz91f7hjjm64y7785kc")
+      (fetchNetBSD "lib/libc/gen/fts.3" "9.1" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
     ];
     skipIncludesPhase = true;
     buildPhase = ''
@@ -282,8 +285,8 @@ in lib.makeScopeWithSplicing
   # Don't add this to nativeBuildInputs directly.  Use statHook instead.
   stat = mkDerivation {
     path = "usr.bin/stat";
-    version = "8.0";
-    sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
+    version = "9.1";
+    sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
       makeMinimal
@@ -304,7 +307,7 @@ in lib.makeScopeWithSplicing
 
   tsort = mkDerivation {
     path = "usr.bin/tsort";
-    version = "8.0";
+    version = "9.1";
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -315,7 +318,7 @@ in lib.makeScopeWithSplicing
 
   lorder = mkDerivation {
     path = "usr.bin/lorder";
-    version = "8.0";
+    version = "9.1";
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -332,8 +335,8 @@ in lib.makeScopeWithSplicing
   ##
   make = mkDerivation {
     path = "usr.bin/make";
-    sha256 = "103643qs3w5kiahir6cca2rkm5ink81qbg071qyzk63qvspfq10c";
-    version = "8.0";
+    sha256 = "09szl3lp9s081h7f3nci5h9zc78wlk9a6g18mryrznrss90q9ngx";
+    version = "9.1";
     postPatch = ''
       # make needs this to pick up our sys make files
       export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
@@ -351,39 +354,39 @@ in lib.makeScopeWithSplicing
       make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
     '';
     extraPaths = [
-      (fetchNetBSD "share/mk" "8.0" "033q4w3rmvwznz6m7fn9xcf13chyhwwl8ijj3a9mrn80fkwm55qs")
+      (fetchNetBSD "share/mk" "9.1" "0qi3ypd5dsxk2c33885fsn68a550nibsxb1jwf5w6bfrvcblzn2z")
     ];
   };
 
   mtree = mkDerivation {
     path = "usr.sbin/mtree";
-    version = "8.0";
-    sha256 = "0hanmzm8bgwz2bhsinmsgfmgy6nbdhprwmgwbyjm6bl17vgn7vid";
+    version = "9.1";
+    sha256 = "04p7w540vz9npvyb8g8hcf2xa05phn1y88hsyrcz3vwanvpc0yv9";
     extraPaths = with self; [ mknod.src ];
   };
 
   mknod = mkDerivation {
     path = "sbin/mknod";
-    version = "8.0";
-    sha256 = "0vq66v0hj0r4z2r2z2d3l3c5vh48pvcdmddc8bhm8hzq2civ5df2";
+    version = "9.1";
+    sha256 = "1d9369shzwgixz3nph991i8q5vk7hr04py3n9avbfbhzy4gndqs2";
   };
 
   getent = mkDerivation {
     path = "usr.bin/getent";
-    sha256 = "1ylhw4dnpyrmcy8n5kjcxywm8qc9p124dqnm17x4magiqx1kh9iz";
-    version = "8.0";
+    sha256 = "1qngywcmm0y7nl8h3n8brvkxq4jw63szbci3kc1q6a6ndhycbbvr";
+    version = "9.1";
     patches = [ ./getent.patch ];
   };
 
   getconf = mkDerivation {
     path = "usr.bin/getconf";
     sha256 = "122vslz4j3h2mfs921nr2s6m078zcj697yrb75rwp2hnw3qz4s8q";
-    version = "8.0";
+    version = "9.1";
   };
 
   locale = mkDerivation {
     path = "usr.bin/locale";
-    version = "8.0";
+    version = "9.1";
     sha256 = "0kk6v9k2bygq0wf9gbinliqzqpzs9bgxn0ndyl2wcv3hh2bmsr9p";
     patches = [ ./locale.patch ];
     NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
@@ -391,31 +394,31 @@ in lib.makeScopeWithSplicing
 
   rpcgen = mkDerivation {
     path = "usr.bin/rpcgen";
-    version = "8.0";
+    version = "9.1";
     sha256 = "1kfgfx54jg98wbg0d95p0rvf4w0302v8fz724b0bdackdsrd4988";
   };
 
   genassym = mkDerivation {
     path = "usr.bin/genassym";
-    version = "8.0";
+    version = "9.1";
     sha256 = "1acl1dz5kvh9h5806vkz2ap95rdsz7phmynh5i3x5y7agbki030c";
   };
 
   gencat = mkDerivation {
     path = "usr.bin/gencat";
-    version = "8.0";
-    sha256 = "1696lgh2lhz93247lklvpvkd0f5asg6z27w2g4bmpfijlgw2h698";
+    version = "9.1";
+    sha256 = "0gd463x1hg36bhr7y0xryb5jyxk0z0g7xvy8rgk82nlbnlnsbbwb";
   };
 
   nbperf = mkDerivation {
     path = "usr.bin/nbperf";
-    version = "8.0";
-    sha256 = "0gzm0zv2400lasnsswnjw9bwzyizhxzdbrcjwcl1k65aj86aqyqb";
+    version = "9.1";
+    sha256 = "1nxc302vgmjhm3yqdivqyfzslrg0vjpbss44s74rcryrl19mma9r";
   };
 
   tic = mkDerivation {
     path = "tools/tic";
-    version = "8.0";
+    version = "9.1";
     sha256 = "092y7db7k4kh2jq8qc55126r5qqvlb8lq8mhmy5ipbi36hwb4zrz";
     HOSTPROG = "tic";
     buildInputs = with self; compatIfNeeded;
@@ -427,29 +430,29 @@ in lib.makeScopeWithSplicing
     makeFlags = [ "TOOLDIR=$(out)" ];
     extraPaths = with self; [
       libterminfo.src
-      (fetchNetBSD "usr.bin/tic" "8.0" "0diirnzmdnpc5bixyb34c9rid9paw2a4zfczqrpqrfvjsf1nnljf")
-      (fetchNetBSD "tools/Makefile.host" "8.0" "1p23dsc4qrv93vc6gzid9w2479jwswry9qfn88505s0pdd7h6nvp")
+      (fetchNetBSD "usr.bin/tic" "9.1" "1mwdfg7yx1g43ss378qsgl5rqhsxskqvsd2mqvrn38qw54i8v5i1")
+      (fetchNetBSD "tools/Makefile.host" "9.1" "15b4ab0n36lqj00j5lz2xs83g7l8isk3wx1wcapbrn66qmzz2sxy")
     ];
   };
 
   uudecode = mkDerivation {
     path = "usr.bin/uudecode";
-    version = "8.0";
+    version = "9.1";
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
     NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
   };
 
   cksum = mkDerivation {
     path = "usr.bin/cksum";
-    version = "8.0";
-    sha256 = "0327820171djn9dzb2q1arypxw2zsxiixnd1ahy34dagd9cwcphj";
+    version = "9.1";
+    sha256 = "0msfhgyvh5c2jmc6qjnf12c378dhw32ffsl864qz4rdb2b98rfcq";
     meta.platforms = lib.platforms.netbsd;
   };
 
   config = mkDerivation {
     path = "usr.bin/config";
-    version = "8.0";
-    sha256 = "0piyn8lgdqxwz9wkgc2plzp2xpj93fs4xncri8l0jfas9rv5j2m5";
+    version = "9.1";
+    sha256 = "08mqq0izd9550dwk181smni51cbiim7rwp208phf25c4mqzaznf4";
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -467,8 +470,8 @@ in lib.makeScopeWithSplicing
   ##
   include = mkDerivation {
     path = "include";
-    version = "8.0";
-    sha256 = "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq";
+    version = "9.1";
+    sha256 = "127kj61prvj3klc2an5rpgavgah2g6igfgprl45255i264wyg8v3";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
       makeMinimal
@@ -481,13 +484,17 @@ in lib.makeScopeWithSplicing
     makeFlags = [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
   };
 
-  common = fetchNetBSD "common" "8.0" "1fsm2b7p7zkhiz523jw75088cq2h39iknp0fp3di9a64bikwbhi1";
+  common = fetchNetBSD "common" "9.1" "000n9frjm02h1bdwhb9rbr7wphs8vrj7n09l3v9hhnqrkn7nhy30";
 
   sys-headers = mkDerivation {
     pname = "sys-headers";
     path = "sys";
-    version = "8.0";
-    sha256 = "123ilg8fqmp69bw6bs6nh98fpi1v2n9lamrzar61p27ji6sj7g0w";
+    version = "9.1";
+    sha256 = "03sv6d7nvnkas4m5z87zxh1rpmggr91ls7di88fwc3cwd3mg3iyx";
+
+    # Fix this error when building bootia32.efi and bootx64.efi:
+    # error: PHDR segment not covered by LOAD segment
+    patches = [ ./no-dynamic-linker.patch ];
 
     CONFIG = "GENERIC";
 
@@ -535,7 +542,7 @@ in lib.makeScopeWithSplicing
   };
 
   headers = symlinkJoin {
-    name = "netbsd-headers-8.0";
+    name = "netbsd-headers-9.1";
     paths = with self; [
       include
       sys-headers
@@ -552,8 +559,8 @@ in lib.makeScopeWithSplicing
   ##
   libutil = mkDerivation {
     path = "lib/libutil";
-    version = "8.0";
-    sha256 = "077syyxd303m4x7avs5nxzk4c9n13d5lyk5aicsacqjvx79qrk3i";
+    version = "9.1";
+    sha256 = "02gm5a5zhh8qp5r5q5r7x8x6x50ir1i0ncgsnfwh1vnrz6mxbq7z";
     extraPaths = with self; [ common libc.src sys.src ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -566,8 +573,8 @@ in lib.makeScopeWithSplicing
 
   libedit = mkDerivation {
     path = "lib/libedit";
-    version = "8.0";
-    sha256 = "0pmqh2mkfp70bwchiwyrkdyq9jcihx12g1awd6alqi9bpr3f9xmd";
+    version = "9.1";
+    sha256 = "1wqhngraxwqk4jgrf5f18jy195yrp7c06n1gf31pbplq79mg1bcj";
     buildInputs = with self; [ libterminfo libcurses ];
     propagatedBuildInputs = with self; compatIfNeeded;
     postPatch = ''
@@ -585,8 +592,8 @@ in lib.makeScopeWithSplicing
 
   libterminfo = mkDerivation {
     path = "lib/libterminfo";
-    version = "8.0";
-    sha256 = "14gp0d6fh6zjnbac2yjhyq5m6rca7gm6q1s9gilhzpdgl9m7vb9r";
+    version = "9.1";
+    sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
       makeMinimal install tsort lorder mandoc statHook nbperf tic
@@ -605,14 +612,14 @@ in lib.makeScopeWithSplicing
       make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share install
     '';
     extraPaths = with self; [
-      (fetchNetBSD "share/terminfo" "8.0" "18db0fk1dw691vk6lsm6dksm4cf08g8kdm0gc4052ysdagg2m6sm")
+      (fetchNetBSD "share/terminfo" "9.1" "1vh9rl4w8118a9qdpblfxmv1wkpm83rm9gb4rzz5bpm56i6d7kk7")
     ];
   };
 
   libcurses = mkDerivation {
     path = "lib/libcurses";
-    version = "8.0";
-    sha256 = "0azhzh1910v24dqx45zmh4z4dl63fgsykajrbikx5xfvvmkcq7xs";
+    version = "9.1";
+    sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
     NIX_CFLAGS_COMPILE = [
       "-D__scanflike(a,b)="
@@ -632,21 +639,21 @@ in lib.makeScopeWithSplicing
 
   column = mkDerivation {
     path = "usr.bin/column";
-    version = "8.0";
+    version = "9.1";
     sha256 = "0r6b0hjn5ls3j3sv6chibs44fs32yyk2cg8kh70kb4cwajs4ifyl";
   };
 
   libossaudio = mkDerivation {
     path = "lib/libossaudio";
-    version = "8.0";
-    sha256 = "03azp5anavhjr15sinjlik9792lyf7w4zmkcihlkksrywhs05axh";
+    version = "9.1";
+    sha256 = "16l3bfy6dcwqnklvh3x0ps8ld1y504vf57v9rx8f9adzhb797jh0";
     meta.platforms = lib.platforms.netbsd;
   };
 
   librpcsvc = mkDerivation {
     path = "lib/librpcsvc";
-    version = "8.0";
-    sha256 = "14ri9w6gdhsm4id5ck133syyvbmkbknfa8w0xkklm726nskhfkj7";
+    version = "9.1";
+    sha256 = "1q34pfiyjbrgrdqm46jwrsqms49ly6z3b0xh1wg331zga900vq5n";
     makeFlags = [ "INCSDIR=$(out)/include/rpcsvc" ];
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = with buildPackages.netbsd; [
@@ -658,10 +665,10 @@ in lib.makeScopeWithSplicing
 
   librt = mkDerivation {
     path = "lib/librt";
-    version = "8.0";
-    sha256 = "078qsi4mg1hyyxr1awvjs9b0c2gicg3zw4vl603g1m9vm8gfxw9l";
+    version = "9.1";
+    sha256 = "07f8mpjcqh5kig5z5sp97fg55mc4dz6aa1x5g01nv2pvbmqczxc6";
     meta.platforms = lib.platforms.netbsd;
-    extraPaths = with self; [ common libc.src ];
+    extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
     postPatch = ''
       sed -i 's,/usr\(/include/sys/syscall.h\),${self.headers}\1,g' \
         $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
@@ -670,7 +677,7 @@ in lib.makeScopeWithSplicing
 
   libcrypt = mkDerivation {
     path = "lib/libcrypt";
-    version = "8.0";
+    version = "9.1";
     sha256 = "0siqan1wdqmmhchh2n8w6a8x1abbff8n4yb6jrqxap3hqn8ay54g";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
@@ -679,8 +686,8 @@ in lib.makeScopeWithSplicing
   libpthread-headers = mkDerivation {
     pname = "libpthread-headers";
     path = "lib/libpthread";
-    version = "8.0";
-    sha256 = "0pcz61klc3ijf5z2zf8s78nj7bwjfblzjllx7vr4z5qv3m0sdb3j";
+    version = "9.1";
+    sha256 = "0mlmc31k509dwfmx5s2x010wxjc44mr6y0cbmk30cfipqh8c962h";
     installPhase = "includesPhase";
     dontBuild = true;
     noCC = true;
@@ -693,21 +700,22 @@ in lib.makeScopeWithSplicing
     noCC = false;
     dontBuild = false;
     buildInputs = with self; [ headers ];
-    extraPaths = with self; [ common libc.src sys.src ];
+    SHLIBINSTALLDIR = "$(out)/lib";
+    extraPaths = with self; [ common libc.src librt.src sys.src ];
   };
 
   libresolv = mkDerivation {
     path = "lib/libresolv";
-    version = "8.0";
-    sha256 = "11vpb3p2343wyrhw4v9gwz7i0lcpb9ysmfs9gsx56b5gkgipdy4v";
+    version = "9.1";
+    sha256 = "1am74s74mf1ynwz3p4ncjkg63f78a1zjm983q166x4sgzps15626";
     meta.platforms = lib.platforms.netbsd;
     extraPaths = with self; [ libc.src ];
   };
 
   libm = mkDerivation {
     path = "lib/libm";
-    version = "8.0";
-    sha256 = "0i22603cgj6n00gn2m446v4kn1pk109qs1g6ylrslmihfmiy2h1d";
+    version = "9.1";
+    sha256 = "1apwfr26shdmbqqnmg7hxf7bkfxw44ynqnnnghrww9bnhqdnsy92";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
     extraPaths = with self; [ sys.src ];
@@ -715,7 +723,7 @@ in lib.makeScopeWithSplicing
 
   i18n_module = mkDerivation {
     path = "lib/i18n_module";
-    version = "8.0";
+    version = "9.1";
     sha256 = "0w6y5v3binm7gf2kn7y9jja8k18rhnyl55cvvfnfipjqdxvxd9jd";
     meta.platforms = lib.platforms.netbsd;
     extraPaths = with self; [ libc.src ];
@@ -723,8 +731,8 @@ in lib.makeScopeWithSplicing
 
   csu = mkDerivation {
     path = "lib/csu";
-    version = "8.0";
-    sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
+    version = "9.1";
+    sha256 = "0al5jfazvhlzn9hvmnrbchx4d0gm282hq5gp4xs2zmj9ycmf6d03";
     meta.platforms = lib.platforms.netbsd;
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -738,8 +746,8 @@ in lib.makeScopeWithSplicing
 
   ld_elf_so = mkDerivation {
     path  = "libexec/ld.elf_so";
-    version = "8.0";
-    sha256 = "1jmqpi0kg2daiqnvpwdyfy8rpnszxsm70sxizz0r7wn53xjr5hva";
+    version = "9.1";
+    sha256 = "0ia9mqzdljly0vqfwflm5mzz55k7qsr4rw2bzhivky6k30vgirqa";
     meta.platforms = lib.platforms.netbsd;
     LIBC_PIC = "${stdenv.cc.libc}/lib/libc_pic.a";
     # Hack to prevent a symlink being installed here for compatibility.
@@ -749,16 +757,20 @@ in lib.makeScopeWithSplicing
     extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
   };
 
-  libc = mkDerivation {
-    path = "lib/libc";
-    version = "8.0";
-    sha256 = "0lgbc58qgn8kwm3l011x1ml1kgcf7jsgq7hbf0hxhlbvxq5bljl3";
-    USE_FORT = "yes";
-    MKPROFILE = "no";
-    extraPaths = with self; [
+  _mainLibcExtraPaths = with self; [
       common i18n_module.src sys.src
       ld_elf_so.src libpthread.src libm.src libresolv.src
       librpcsvc.src libutil.src librt.src libcrypt.src
+  ];
+
+  libc = mkDerivation {
+    path = "lib/libc";
+    version = "9.1";
+    sha256 = "0jg6kpi1xn4wvlqpwnkcv8655hxi0nhcxbk8lzbj7mlr6srxci8j";
+    USE_FORT = "yes";
+    MKPROFILE = "no";
+    extraPaths = with self; _mainLibcExtraPaths ++ [
+      (fetchNetBSD "external/bsd/jemalloc" "9.1" "0cq704swa0h2yxv4gc79z2lwxibk9k7pxh3q5qfs7axx3jx3n8kb")
     ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook
@@ -770,6 +782,7 @@ in lib.makeScopeWithSplicing
     NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
+    MKPICINSTALL = "yes";
     NLSDIR = "$(out)/share/nls";
     makeFlags = [ "FILESDIR=$(out)/var/db"];
     postInstall = ''
@@ -823,24 +836,24 @@ in lib.makeScopeWithSplicing
   dict = mkDerivation {
     path = "share/dict";
     noCC = true;
-    version = "8.0";
-    sha256 = "1pk0y3xc5ihc2k89wjkh33qqx3w9q34k03k2qcffvbqh1l6wm36l";
+    version = "9.1";
+    sha256 = "0svfc0byk59ri37pyjslv4c4rc7zw396r73mr593i78d39q5g3ad";
     makeFlags = [ "BINDIR=$(out)/share" ];
   };
 
   misc = mkDerivation {
     path = "share/misc";
     noCC = true;
-    version = "8.0";
-    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch8";
+    version = "9.1";
+    sha256 = "1j2cdssdx6nncv8ffj7f7ybl7m9hadjj8vm8611skqdvxnjg6nbc";
     makeFlags = [ "BINDIR=$(out)/share" ];
   };
 
   man = mkDerivation {
     path = "share/man";
     noCC = true;
-    version = "8.0";
-    sha256 = "0yp48syf3y5psm0mymxp6va6spym5izjym0ybr628iqwji21cqdz";
+    version = "9.1";
+    sha256 = "14sfvz9a5x0kmr9ywsdz09jhw8r1cmhq45wrrz2xwy09b8ykhip6";
     makeFlags = [ "FILESDIR=$(out)/share" ];
   };
   #
