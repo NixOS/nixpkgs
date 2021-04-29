@@ -81,6 +81,7 @@ with lib.maintainers; {
   gcc = {
     members = [
       synthetica
+      vcunat
     ];
     scope = "Maitain GCC (GNU Compiler Collection) compilers";
   };
