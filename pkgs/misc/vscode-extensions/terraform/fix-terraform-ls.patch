@@ -1,8 +1,8 @@
 diff --git a/out/extension.js b/out/extension.js
-index e44cef2..fba0899 100644
+index e815393..aeade0e 100644
 --- a/out/extension.js
 +++ b/out/extension.js
-@@ -141,24 +141,6 @@ function updateLanguageServer() {
+@@ -141,25 +141,6 @@ function updateLanguageServer() {
      return __awaiter(this, void 0, void 0, function* () {
          const delay = 1000 * 60 * 24;
          setTimeout(updateLanguageServer, delay); // check for new updates every 24hrs
@@ -16,6 +16,7 @@ index e44cef2..fba0899 100644
 -                    yield installer.install();
 -                }
 -                catch (err) {
+-                    console.log(err); // for test failure reporting
 -                    reporter.sendTelemetryException(err);
 -                    throw err;
 -                }
@@ -27,7 +28,7 @@ index e44cef2..fba0899 100644
          return startClients(); // on repeat runs with no install, this will be a no-op
      });
  }
-@@ -256,7 +238,7 @@ function pathToBinary() {
+@@ -257,7 +238,7 @@ function pathToBinary() {
                  reporter.sendTelemetryEvent('usePathToBinary');
              }
              else {
