@@ -1,4 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ autoconf
+, automake
+, buildPackages
+, db
+, fetchurl
+, gettext
+, gnulib
+, groff
+, lib
+, libiconv
+, libpipeline
+, libtool
+, makeWrapper
+, pkg-config
+, stdenv
+, zstd
+}:
 
 stdenv.mkDerivation rec {
   name = "man-db-2.9.4";
@@ -11,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
+  nativeBuildInputs = [ autoconf automake gettext groff libtool makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -27,6 +43,12 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+
+    # use absolute paths to reference programs, otherwise artifacts will have undeclared dependencies
+    for f in configure.ac m4/man-check-progs.m4 m4/man-po4a.m4; do
+      substituteInPlace $f \
+        --replace AC_CHECK_PROGS AC_PATH_PROGS
+    done
   '';
 
   configureFlags = [
@@ -43,7 +65,15 @@ stdenv.mkDerivation rec {
     "ac_cv_func_mempcpy=no"
   ];
 
+
   preConfigure = ''
+    # need to recreate configure script due to substitutions in postPatch
+    ./bootstrap --gnulib-srcdir=${gnulib.src} --no-git
+
+    # deal with autoconf 2.70 bug: https://lists.gnu.org/archive/html/bug-autoconf/2020-12/msg00036.html
+    # can be removed once autoconf 2.71 is merged
+    patch < ${./fix-configure.patch}
+
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
