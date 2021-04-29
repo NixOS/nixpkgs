@@ -12,7 +12,7 @@
 
 let
   pname = "hikari";
-  version = "2.2.2";
+  version = "2.3.0";
 in
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "0sln1n5f67i3vxkybfi6xhzplb45djqyg272vqkv64m72rmm8875";
+    sha256 = "0vxwma2r9mb2h0c3dkpvf8dbrc2x2ykhc5bb0vd72sl9pwj4jxmy";
   };
 
   nativeBuildInputs = [ pkg-config bmake ];
@@ -49,11 +49,13 @@ stdenv.mkDerivation {
          optionalString enabled "WITH_${toUpper feat}=YES"
        ) features;
 
-  # Can't suid in nix store
-  # Run hikari as root (it will drop privileges as early as possible), or create
-  # a systemd unit to give it the necessary permissions/capabilities.
-  patchPhase = ''
+  postPatch = ''
+    # Can't suid in nix store
+    # Run hikari as root (it will drop privileges as early as possible), or create
+    # a systemd unit to give it the necessary permissions/capabilities.
     substituteInPlace Makefile --replace '4555' '555'
+
+    sed -i 's@<drm_fourcc.h>@<libdrm/drm_fourcc.h>@' src/*.c
   '';
 
   meta = with lib; {
