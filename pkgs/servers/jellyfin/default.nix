@@ -11,9 +11,8 @@ let
     else if isAarch64 then "arm64"
     else lib.warn "Unsupported architecture, some image processing features might be unavailable" "unknown";
   musl = lib.optionalString stdenv.hostPlatform.isMusl
-    (if (arch != "x64")
-      then lib.warn "Some image processing features might be unavailable for non x86-64 with Musl" "musl-"
-      else "musl-");
+    (lib.warnIf (arch != "x64") "Some image processing features might be unavailable for non x86-64 with Musl"
+      "musl-");
   runtimeDir = "${os}-${musl}${arch}";
 
 in stdenv.mkDerivation rec {
