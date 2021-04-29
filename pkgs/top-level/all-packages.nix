@@ -12028,6 +12028,8 @@ in
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
 
+  py3c = callPackage ../development/libraries/py3c { };
+
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
@@ -22696,6 +22698,8 @@ in
     jdk = jdk11;
   });
 
+  ecpdap = callPackage ../development/tools/ecpdap { };
+
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
   ed = callPackage ../applications/editors/ed { };
@@ -25240,10 +25244,7 @@ in
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon {
-    # https://developer.palemoon.org/build/linux/
-    stdenv = gcc8Stdenv;
-  };
+  palemoon = callPackage ../applications/networking/browsers/palemoon { };
 
   webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
 

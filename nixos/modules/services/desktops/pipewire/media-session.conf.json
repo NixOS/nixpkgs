@@ -59,6 +59,7 @@
     "with-pulseaudio": [
       "with-audio",
       "bluez5",
+      "logind",
       "restore-stream",
       "streams-follow-default"
     ]
