@@ -34,5 +34,6 @@ mkDerivation {
     ''-DNIXPKGS_POSTGRES_PG_UPGRADE=\"\"''
     ''-DNIXPKGS_POSTGRES_INITDB=\"\"''
     ''-DNIX_OUT=\"${placeholder "out"}\"''
+    ''-I${lib.getDev kio}/include/KF5''  # Fixes: kio_version.h: No such file or directory
   ];
 }
