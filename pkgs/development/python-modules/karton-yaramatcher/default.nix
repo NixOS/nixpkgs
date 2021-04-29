@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "karton-yaramatcher";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "093h5hbx2ss4ly523gvf10a5ky3vvin6wipigvhx13y1rdxl6c9n";
+    sha256 = "0yb9l5z826zli5cpcj234dmjdjha2g1lcwxyvpxm95whkhapc2cf";
   };
 
   propagatedBuildInputs = [
