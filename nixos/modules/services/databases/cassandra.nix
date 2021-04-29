@@ -470,14 +470,14 @@ in
       }
     ];
     users = mkIf (cfg.user == defaultUser) {
-      extraUsers.${defaultUser} = {
+      users.${defaultUser} = {
         group = cfg.group;
         home = cfg.homeDir;
         createHome = true;
         uid = config.ids.uids.cassandra;
         description = "Cassandra service user";
       };
-      extraGroups.${defaultUser}.gid = config.ids.gids.cassandra;
+      groups.${defaultUser}.gid = config.ids.gids.cassandra;
     };
 
     systemd.services.cassandra = {
