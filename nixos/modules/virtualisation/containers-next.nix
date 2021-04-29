@@ -195,14 +195,18 @@ let
           Ephemeral = yesNo config.ephemeral;
           KillSignal = "SIGRTMIN+3";
           X-ActivationStrategy = config.activation.strategy;
+          PrivateUsers = mkDefault "yes";
         }
         (mkIf (!config.ephemeral) {
           LinkJournal = mkDefault "guest";
         })
       ];
-      filesConfig = mkIf config.sharedNix {
-        BindReadOnly = [ "/nix/store" "/nix/var/nix/db" "/nix/var/nix/daemon-socket" ];
-      };
+      filesConfig = mkMerge [
+        { PrivateUsersChown = mkDefault "yes"; }
+        (mkIf config.sharedNix {
+          BindReadOnly = [ "/nix/store" "/nix/var/nix/db" "/nix/var/nix/daemon-socket" ];
+        })
+      ];
       networkConfig = mkMerge [
         (mkIf (config.zone != null || config.network != null) {
           Private = true;
