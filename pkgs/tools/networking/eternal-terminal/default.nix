@@ -3,27 +3,38 @@
 , cmake
 , gflags
 , libsodium
+, openssl
 , protobuf
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.0.13";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    sha256 = "0sb1hypg2276y8c2a5vivrkcxp70swddvhnd9h273if3kv6j879r";
+    sha256 = "0jpm1ilr1qfz55y4mqp75v4q433qla5jhi1b8nsmx48srs7f0j2q";
   };
 
+  cmakeFlags= [
+    "-DDISABLE_VCPKG=TRUE"
+    "-DDISABLE_SENTRY=TRUE"
+    "-DDISABLE_CRASH_LOG=TRUE"
+  ];
+
+  CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++17";
+  LDFLAGS = lib.optional stdenv.cc.isClang "-lc++fs";
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gflags libsodium protobuf ];
+  buildInputs = [ gflags openssl zlib libsodium protobuf ];
 
   meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
-    homepage = "https://mistertea.github.io/EternalTerminal/";
+    homepage = "https://eternalterminal.dev/";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ dezgeg pingiun ];
   };
