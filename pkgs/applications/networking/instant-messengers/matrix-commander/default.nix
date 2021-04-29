@@ -35,8 +35,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
     homepage = "https://github.com/8go/matrix-commander";
-    # currently unknown if gpl3Only or gpl3Plus: https://github.com/8go/matrix-commander/issues/29
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.seb314 ];
   };
