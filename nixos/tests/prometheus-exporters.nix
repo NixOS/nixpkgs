@@ -1000,6 +1000,29 @@ let
       '';
     };
 
+    unbound = {
+      exporterConfig = {
+        enable = true;
+        fetchType = "uds";
+        controlInterface = "/run/unbound/unbound.ctl";
+      };
+      metricProvider = {
+        services.unbound = {
+          enable = true;
+          localControlSocketPath = "/run/unbound/unbound.ctl";
+        };
+        systemd.services.prometheus-unbound-exporter.serviceConfig = {
+          SupplementaryGroups = [ "unbound" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("unbound.service")
+        wait_for_unit("prometheus-unbound-exporter.service")
+        wait_for_open_port(9167)
+        succeed("curl -sSf localhost:9167/metrics | grep -q 'unbound_up 1'")
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
