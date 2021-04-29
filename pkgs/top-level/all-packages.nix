@@ -22695,6 +22695,8 @@ in
     jdk = jdk11;
   });
 
+  ecpdap = callPackage ../development/tools/ecpdap { };
+
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
   ed = callPackage ../applications/editors/ed { };
