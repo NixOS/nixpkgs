@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
 {
   name = "cage";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ matthewbauer flokli ];
+    maintainers = [ matthewbauer ];
   };
 
   machine = { ... }:
