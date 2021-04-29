@@ -30,5 +30,6 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
     license = licenses.gpl2;
+    mainProgram = "trash";
   };
 }
