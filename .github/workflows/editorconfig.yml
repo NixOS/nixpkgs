@@ -3,6 +3,7 @@ name: "Checking EditorConfig"
 permissions: read-all
 
 on:
+  # avoids approving first time contributors
   pull_request_target:
     branches-ignore:
       - 'release-**'
@@ -29,13 +30,17 @@ jobs:
       if: env.PR_DIFF
     - uses: cachix/install-nix-action@v13
       if: env.PR_DIFF
-    - name: install editorconfig-checker from unstable channel
-      run: |
-        nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-        nix-channel --update
-        nix-env -iA nixpkgs.editorconfig-checker
+      with:
+        # nixpkgs commit is pinned so that it doesn't break
+        nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/f93ecc4f6bc60414d8b73dbdf615ceb6a2c604df.tar.gz
+    - name: install editorconfig-checker
+      run: nix-env -iA editorconfig-checker -f '<nixpkgs>'
       if: env.PR_DIFF
     - name: Checking EditorConfig
       if: env.PR_DIFF
       run: |
         echo "$PR_DIFF" | xargs editorconfig-checker -disable-indent-size
+    - if: ${{ failure() }}
+      run: |
+        echo "::error :: Hey! It looks like your changes don't follow our editorconfig settings. Read https://editorconfig.org/#download to configure your editor so you never see this error again."
+
