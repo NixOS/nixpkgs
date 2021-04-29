@@ -1,4 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: let
+  inherit (import ./ssh-keys.nix pkgs)
+    snakeOilPrivateKey snakeOilPublicKey;
+in {
   name = "container-tests";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ma27 ];
@@ -170,6 +173,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         config = { pkgs, ... }: {
           networking.firewall.allowedTCPPorts = [ 80 ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            snakeOilPublicKey
+          ];
           services.nginx = {
             enable = true;
             virtualHosts."localhost" = {
@@ -280,6 +287,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
         client.wait_until_succeeds("ping fd24::2 -c3 >&2")
         client.succeed("curl -sSf 'http://[fd24::2]' | grep -q 'Welcome to nginx'")
+
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@fd24::2 true"
+        )
 
     with subtest("machinectl reboot"):
         server.succeed("machinectl reboot container0")
