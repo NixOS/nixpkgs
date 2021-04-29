@@ -151,5 +151,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     license = with lib.licenses; [ lgpl21Plus ];
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     maintainers = with lib.maintainers; [ avnik raskin bendlas ];
+    mainProgram = "wine";
   };
 })
