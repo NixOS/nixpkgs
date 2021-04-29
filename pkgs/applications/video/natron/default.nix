@@ -1,21 +1,21 @@
 { lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg_3, opencolorio, openimageio,
+  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
   qmake4Hook, libpng, libGL, lndir, libraw, openjpeg, libwebp, fetchFromGitHub }:
 
 let
-  minorVersion = "2.3";
-  version = "${minorVersion}.15";
+  minorVersion = "2.4";
+  version = "${minorVersion}.0";
   OpenColorIO-Configs = fetchurl {
     url = "https://github.com/NatronGitHub/OpenColorIO-Configs/archive/Natron-v${minorVersion}.tar.gz";
-    sha256 = "AZK9J+RnMyxOYcAQOAQZj5QciPQ999m6jrtBt5rdpkA=";
+    sha256 = "sha256-MvHC+U2KMdTj+FXl6e8nF4cseHO0p06x6sKYYvunPSw=";
   };
   seexpr = stdenv.mkDerivation rec {
     version = "1.0.1";
     pname = "seexpr";
     src = fetchurl {
       url = "https://github.com/wdas/SeExpr/archive/rel-${version}.tar.gz";
-      sha256 = "1ackh0xs4ip7mk34bam8zd4qdymkdk0dgv8x0f2mf6gbyzzyh7lp";
+      sha256 = "sha256-lx7o//frGVeFAx3t18Bss/qGSfuoqkXGrOdGojuAk6k=";
     };
     nativeBuildInputs = [ cmake ];
     buildInputs = [ libpng flex bison ];
@@ -24,8 +24,11 @@ let
     stdenv.mkDerivation {
       pname = "openfx-${pluginName}";
       version = version;
-      src = fetchurl {
-        url = "https://github.com/NatronGitHub/openfx-${pluginName}/releases/download/Natron-${version}/openfx-${pluginName}-Natron-${version}.tar.xz";
+      src = fetchFromGitHub {
+        owner = "NatronGitHub";
+        repo = "openfx-${pluginName}";
+        rev = "Natron-${version}";
+        fetchSubmodules = true;
         inherit sha256;
       };
       inherit nativeBuildInputs buildInputs postPatch;
@@ -35,14 +38,6 @@ let
         ${preConfigure}
       '';
     };
-  lodepngcpp = fetchurl {
-    url = "https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.cpp";
-    sha256 = "1dxkkr4jbmvlwfr7m16i1mgcj1pqxg9s1a7y3aavs9rrk0ki8ys2";
-  };
-  lodepngh = fetchurl {
-    url = "https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.h";
-    sha256 = "14drdikd0vws3wwpyqq7zzm5z3kg98svv4q4w0hr45q6zh6hs0bq";
-  };
   cimgversion = "89b9d062ec472df3d33989e6d5d2a8b50ba0775c";
   CImgh = fetchurl {
     url = "https://raw.githubusercontent.com/dtschump/CImg/${cimgversion}/CImg.h";
@@ -55,7 +50,7 @@ let
   plugins = map buildPlugin [
     ({
       pluginName = "arena";
-      sha256 = "tUb6myG03mRieUAfgRZfv5Ap+cLvbpNrLMYCGTiAq8c=";
+      sha256 = "sha256-fAXQyYnLbFYqwKmkwHSoOGa/0cruHJbf2QLMsttiarM=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         pango librsvg librevenge libcdr opencolorio libxml2 libzip
@@ -63,24 +58,20 @@ let
       ];
       preConfigure = ''
         sed -i 's|pkg-config poppler-glib|pkg-config poppler poppler-glib|g' Makefile.master
-        for i in Extra Bundle; do
-          cp ${lodepngcpp} $i/lodepng.cpp
-          cp ${lodepngh} $i/lodepng.h
-        done
       '';
     })
     ({
       pluginName = "io";
-      sha256 = "OQg6a5wNy9TFFySjmgd1subvXRxY/ZnSOCkaoUo+ZaA=";
+      sha256 = "sha256-tt+G2YqHQn8vPdiWtRYuOF3ffz9Qo19oD8Z9DsTDvQQ=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        libpng ffmpeg_3 openexr opencolorio openimageio boost libGL
+        libpng ffmpeg openexr opencolorio openimageio boost libGL
         seexpr libraw openjpeg libwebp
       ];
     })
     ({
       pluginName = "misc";
-      sha256 = "XkdQyWI9ilF6IoP3yuHulNUZRPLX1m4lq/+RbXsrFEQ=";
+      sha256 = "sha256-xKhlXSsjaSkoKq3IdAG89N8oCI6SihHJpji6Jh2bx/8=";
       buildInputs = [
         libGL
       ];
@@ -101,7 +92,7 @@ stdenv.mkDerivation {
     repo = "Natron";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-KuXJmmIsvwl4uqmAxXqWU+273jsdWrCuUSwWn5vuu8M=";
+    sha256 = "sha256-YPfkS19cxLH2a3YXjmUgAlPzHeQHgEDPFdXCI3wVoQs=";
   };
 
   nativeBuildInputs = [ qmake4Hook pkg-config python2Packages.wrapPython ];
