@@ -75,6 +75,12 @@ in
         if line.startswith("Removal link:"):
             removal_link = line.split(":", 1)[1]
 
+
+    # start the reaper, it shouldn't do anything meaningful here
+    server.systemctl("start pinnwand-reaper.service")
+    server.wait_until_fails("systemctl is-active -q pinnwand-reaper.service")
+    server.log(server.execute("journalctl -u pinnwand-reaper -e --no-pager")[1])
+
     # check whether paste matches what we sent
     client.succeed(f"curl {raw_url} > /tmp/machine-id")
     client.succeed("diff /tmp/machine-id /etc/machine-id")
