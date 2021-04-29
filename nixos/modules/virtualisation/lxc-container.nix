@@ -62,6 +62,32 @@ in
       templates = mkOption {
         description = "Templates for LXD";
         type = types.attrsOf (types.submodule (templateSubmodule));
+        example = literalExample ''
+          {
+            # create /etc/hostname on container creation
+            "hostname" = {
+              enable = true;
+              target = "/etc/hostname";
+              template = builtins.writeFile "hostname.tpl" "{{ container.name }}";
+              when = [ "create" ];
+            };
+            # create /etc/nixos/hostname.nix with a configuration for keeping the hostname applied
+            "hostname-nix" = {
+              enable = true;
+              target = "/etc/nixos/hostname.nix";
+              template = builtins.writeFile "hostname-nix.tpl" "{ ... }: { networking.hostName = "{{ container.name }}"; }";
+              # copy keeps the file updated when the container is changed
+              when = [ "create" "copy" ];
+            };
+            # copy allow the user to specify a custom configuration.nix
+            "configuration-nix" = {
+              enable = true;
+              target = "/etc/nixos/configuration.nix";
+              template = builtins.writeFile "configuration-nix" "{{ config_get(\"user.user-data\", properties.default) }}";
+              when = [ "create" ];
+            };
+          };
+        '';
       };
     };
   };
@@ -91,10 +117,6 @@ in
       storeContents = [
         {
           object = config.system.build.toplevel;
-          symlink = "none";
-        }
-        {
-          object = pkgs.stdenv;
           symlink = "none";
         }
       ];
@@ -130,8 +152,5 @@ in
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.enable = mkDefault true;
     services.openssh.startWhenNeeded = mkDefault true;
-
-    # Allow ssh connections
-    services.openssh.openFirewall = mkDefault true;
   };
 }
