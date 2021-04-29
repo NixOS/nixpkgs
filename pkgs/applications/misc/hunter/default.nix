@@ -15,20 +15,17 @@ rustPlatform.buildRustPackage rec {
   patches = [
     (fetchpatch {
       name = "remove-dependencies-on-rust-nightly";
-      url =
-        "https://github.com/06kellyjac/hunter/commit/a5943578e1ee679c8bc51b0e686c6dddcf74da2a.diff";
+      url = "https://github.com/06kellyjac/hunter/commit/a5943578e1ee679c8bc51b0e686c6dddcf74da2a.diff";
       sha256 = "sha256-eOwBFfW5m8tPnu+whWY/53X9CaqiVj2WRr25G+Yy7qE=";
     })
     (fetchpatch {
       name = "fix-accessing-core-when-moved-with-another-clone";
-      url =
-        "https://github.com/06kellyjac/hunter/commit/2e95cc567c751263f8c318399f3c5bb01d36962a.diff";
+      url = "https://github.com/06kellyjac/hunter/commit/2e95cc567c751263f8c318399f3c5bb01d36962a.diff";
       sha256 = "sha256-yTzIXUw5qEaR2QZHwydg0abyZVXfK6fhJLVHBI7EAro=";
     })
     (fetchpatch {
       name = "fix-resolve-breaking-changes-from-package-updates";
-      url =
-        "https://github.com/06kellyjac/hunter/commit/2484f0db580bed1972fd5000e1e949a4082d2f01.diff";
+      url = "https://github.com/06kellyjac/hunter/commit/2484f0db580bed1972fd5000e1e949a4082d2f01.diff";
       sha256 = "sha256-K+WUxEr1eE68XejStj/JwQpMHlhkiOw6PmiSr1GO0kc=";
     })
   ];
@@ -36,14 +33,12 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     (fetchpatch {
       name = "chore-cargo-update";
-      url =
-        "https://github.com/06kellyjac/hunter/commit/b0be49a82191a4420b6900737901a71140433efd.diff";
+      url = "https://github.com/06kellyjac/hunter/commit/b0be49a82191a4420b6900737901a71140433efd.diff";
       sha256 = "sha256-ctxoDwyIJgEhMbMUfrjCTy2SeMUQqMi971szrqEOJeg=";
     })
     (fetchpatch {
       name = "chore-cargo-upgrade-+-cargo-update";
-      url =
-        "https://github.com/06kellyjac/hunter/commit/1b8de9248312878358afaf1dac569ebbccc4321a.diff";
+      url = "https://github.com/06kellyjac/hunter/commit/1b8de9248312878358afaf1dac569ebbccc4321a.diff";
       sha256 = "sha256-+4DZ8SaKwKNmr2SEgJJ7KZBIctnYFMQFKgG+yCkbUv0=";
     })
   ];
