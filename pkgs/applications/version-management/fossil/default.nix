@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uNDJIBlt2K4pFS+nRI5ROh+nxYiHG3heP7/Ae0KgX7k=";
   };
 
-  nativeBuildInputs = [ installShellFiles tcl ];
+  nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
   buildInputs = [ zlib openssl readline sqlite which ed ]
     ++ lib.optional stdenv.isDarwin libiconv;
@@ -35,10 +35,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-internal-sqlite" ]
     ++ lib.optional withJson "--json";
-
-  preCheck = ''
-    export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
-  '';
 
   preBuild = ''
     export USER=nonexistent-but-specified-user
