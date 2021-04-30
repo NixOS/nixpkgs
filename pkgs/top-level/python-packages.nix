@@ -7635,6 +7635,8 @@ in {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
+  sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
+
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
