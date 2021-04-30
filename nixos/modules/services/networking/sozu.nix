@@ -10,6 +10,7 @@ let
 
   configFile = pkgs.writeText "config.toml" ''
     ${fileContents settings}
+
     ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
 in
@@ -271,29 +272,27 @@ in
       sozu
     ];
 
+    users.users.sozu = {
+      description = "Sozu Daemon User";
+      isSystemUser = true;
+    };
+
     systemd.services.sozu = {
       description = "Sozu - A HTTP reverse proxy, configurable at runtime, fast and safe, built in Rust.";
       after = [ "network.target" ];
       wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Create the proper run directory
-        mkdir -p /run/sozu
-        chown -R sozu /run/sozu
-      '';
-
       serviceConfig = {
         PIDFile = "/run/sozu/sozu.pid";
         ExecStart = "${cfg.package}/bin/sozu start --config ${configFile}";
+        ExecReload = "${cfg.package}/bin/sozuctl --config ${configFile} reload";
         Restart = "on-failure";
+        User = "sozu";
+        RuntimeDirectory = "sozu";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
 
-    };
-
-    users.users.sozu = {
-      description = "Sozu Daemon User";
-      isSystemUser = true;
     };
 
   };
