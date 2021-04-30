@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
-    license = licenses.gpl2plus;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.bluescreen303 ];
   };
 }
