@@ -105,5 +105,6 @@ in stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ fpletz ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "java";
   };
 }

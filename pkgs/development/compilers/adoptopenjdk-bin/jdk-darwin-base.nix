@@ -49,6 +49,7 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     platforms = [ "x86_64-darwin" ]; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];
     inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result

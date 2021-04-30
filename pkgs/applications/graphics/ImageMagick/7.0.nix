@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ erictapen ];
     license = licenses.asl20;
+    mainProgram = "magick";
   };
 }

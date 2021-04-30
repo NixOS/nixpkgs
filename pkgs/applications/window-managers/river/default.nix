@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-04-08";
+  version = "unstable-2021-04-27";
 
   src = fetchFromGitHub {
     owner = "ifreund";
-    repo = "river";
-    rev = "9e3e92050e04320949c6cd995273c30319ebd515";
-    sha256 = "1v8dpbadsb3c7bc84sai09dbqv5s5s5d77vs12kdkd45x0ppmk3j";
+    repo = pname;
+    rev = "0c8e718d95a6a621b9cba0caa9158915e567b076";
+    sha256 = "1jjh0dzxi7hy4mg8vag6ipfwb9qxm5lfc07njp1mx6m81nq76ybk";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     zig build -Drelease-safe -Dxwayland -Dman-pages --prefix $out install
-   '';
+  '';
 
   nativeBuildInputs = [ zig wayland scdoc pkg-config ];
 
