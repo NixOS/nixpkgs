@@ -1790,4 +1790,7 @@ self: super: {
     excludes = ["test/buildtest"];
   });
 
+  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
+  pam = super.pam.override { inherit (pkgs) pam; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

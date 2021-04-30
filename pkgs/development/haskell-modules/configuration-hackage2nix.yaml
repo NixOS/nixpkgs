@@ -8806,7 +8806,6 @@ broken-packages:
   - Paillier
   - pairing
   - palette
-  - pam
   - pan-os-syslog
   - panda
   - pandoc-citeproc
