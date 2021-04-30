@@ -246,12 +246,15 @@ let
         };
 
         script = ''
-          mkdir --mode 0644 -p "${dirOf values.privateKeyFile}"
+          set -e
+
+          # If the parent dir does not already exist, create it.
+          # Otherwise, does nothing, keeping existing permisions intact.
+          mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
+
           if [ ! -f "${values.privateKeyFile}" ]; then
-            touch "${values.privateKeyFile}"
-            chmod 0600 "${values.privateKeyFile}"
-            wg genkey > "${values.privateKeyFile}"
-            chmod 0400 "${values.privateKeyFile}"
+            # Write private key file with atomically-correct permissions.
+            (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
           fi
         '';
       };
