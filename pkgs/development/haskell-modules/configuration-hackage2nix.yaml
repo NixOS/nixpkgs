@@ -2879,8 +2879,6 @@ package-maintainers:
   cdepillabout:
     - pretty-simple
     - spago
-  rkrzr:
-    - icepeak
   terlar:
     - nix-diff
   maralorn:
@@ -3217,6 +3215,7 @@ broken-packages:
   - afv
   - ag-pictgen
   - Agata
+  - agda-language-server
   - agda-server
   - agda-snippets
   - agda-snippets-hakyll
@@ -3421,6 +3420,8 @@ broken-packages:
   - asn1-data
   - assert
   - assert4hs
+  - assert4hs-core
+  - assert4hs-hspec
   - assert4hs-tasty
   - assertions
   - asset-map
@@ -3824,6 +3825,7 @@ broken-packages:
   - boring-window-switcher
   - bot
   - botpp
+  - bottom
   - bound-extras
   - bounded-array
   - bowntz
@@ -4049,6 +4051,7 @@ broken-packages:
   - catnplus
   - cautious-file
   - cautious-gen
+  - cayene-lpp
   - cayley-client
   - CBOR
   - CC-delcont-alt
@@ -4327,6 +4330,7 @@ broken-packages:
   - computational-algebra
   - computational-geometry
   - computations
+  - ConClusion
   - concraft
   - concraft-hr
   - concraft-pl
@@ -4901,6 +4905,7 @@ broken-packages:
   - docker
   - docker-build-cacher
   - dockercook
+  - dockerfile-creator
   - docopt
   - docrecords
   - DocTest
@@ -5565,6 +5570,7 @@ broken-packages:
   - funpat
   - funsat
   - funspection
+  - fused-effects-exceptions
   - fused-effects-resumable
   - fused-effects-squeal
   - fused-effects-th
@@ -5634,6 +5640,7 @@ broken-packages:
   - generic-lens-labels
   - generic-lucid-scaffold
   - generic-maybe
+  - generic-optics
   - generic-override-aeson
   - generic-pretty
   - generic-server
@@ -5721,6 +5728,7 @@ broken-packages:
   - ghcup
   - ght
   - gi-cairo-again
+  - gi-gmodule
   - gi-graphene
   - gi-gsk
   - gi-gstaudio
@@ -5730,6 +5738,7 @@ broken-packages:
   - gi-gtksheet
   - gi-handy
   - gi-poppler
+  - gi-vips
   - gi-wnck
   - giak
   - Gifcurry
@@ -5859,8 +5868,10 @@ broken-packages:
   - gpah
   - GPipe
   - GPipe-Collada
+  - GPipe-Core
   - GPipe-Examples
   - GPipe-GLFW
+  - GPipe-GLFW4
   - GPipe-TextureLoad
   - gps
   - gps2htmlReport
@@ -6586,6 +6597,9 @@ broken-packages:
   - hipchat-hs
   - hipe
   - Hipmunk-Utils
+  - hipsql-api
+  - hipsql-client
+  - hipsql-server
   - hircules
   - hirt
   - Hish
@@ -7004,6 +7018,8 @@ broken-packages:
   - http-server
   - http-shed
   - http-wget
+  - http2-client
+  - http2-client-exe
   - http2-client-grpc
   - http2-grpc-proto-lens
   - http2-grpc-proto3-wire
@@ -7114,6 +7130,7 @@ broken-packages:
   - iban
   - ical
   - ice40-prim
+  - icepeak
   - IcoGrid
   - iconv-typed
   - ide-backend
@@ -7295,6 +7312,7 @@ broken-packages:
   - isobmff-builder
   - isohunt
   - isotope
+  - it-has
   - itcli
   - itemfield
   - iter-stats
@@ -8660,6 +8678,7 @@ broken-packages:
   - ois-input-manager
   - olwrapper
   - om-actor
+  - om-doh
   - om-elm
   - om-fail
   - om-http-logging
@@ -8930,6 +8949,9 @@ broken-packages:
   - perfecthash
   - perhaps
   - periodic
+  - periodic-client
+  - periodic-client-exe
+  - periodic-common
   - periodic-server
   - perm
   - permutation
@@ -9104,7 +9126,10 @@ broken-packages:
   - polynomial
   - polysemy-chronos
   - polysemy-conc
+  - polysemy-extra
+  - polysemy-fskvstore
   - polysemy-http
+  - polysemy-kvstore-jsonfile
   - polysemy-log
   - polysemy-log-co
   - polysemy-log-di
@@ -9116,6 +9141,8 @@ broken-packages:
   - polysemy-resume
   - polysemy-test
   - polysemy-time
+  - polysemy-vinyl
+  - polysemy-zoo
   - polyseq
   - polytypeable
   - polytypeable-utils
@@ -9645,6 +9672,7 @@ broken-packages:
   - remote-monad
   - remotion
   - render-utf8
+  - reorder-expression
   - repa-algorithms
   - repa-array
   - repa-bytestring
@@ -9893,6 +9921,7 @@ broken-packages:
   - scalpel-search
   - scan-metadata
   - scan-vector-machine
+  - scanner-attoparsec
   - scc
   - scenegraph
   - scgi
@@ -10013,6 +10042,7 @@ broken-packages:
   - servant-auth-token-rocksdb
   - servant-auth-wordpress
   - servant-avro
+  - servant-benchmark
   - servant-cassava
   - servant-checked-exceptions
   - servant-checked-exceptions-core
@@ -11398,6 +11428,7 @@ broken-packages:
   - vector-clock
   - vector-conduit
   - vector-endian
+  - vector-fftw
   - vector-functorlazy
   - vector-heterogenous
   - vector-instances-collections
@@ -11511,6 +11542,7 @@ broken-packages:
   - wai-session-alt
   - wai-session-mysql
   - wai-session-postgresql
+  - wai-session-redis
   - wai-static-cache
   - wai-thrift
   - wai-throttler
@@ -11520,6 +11552,7 @@ broken-packages:
   - wallpaper
   - warc
   - warp-dynamic
+  - warp-grpc
   - warp-static
   - warp-systemd
   - warped
