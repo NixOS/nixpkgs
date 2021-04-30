@@ -664,6 +664,7 @@ mapAliases ({
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   subversion19 = throw "subversion19 has been removed as it has reached its end of life"; # added 2021-03-31
+  togglesg-download = throw "togglesg-download was removed 2021-04-30 as it's unmaintained";
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
   urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
   urxvt_perls = rxvt-unicode-plugins.perls; # added 2020-02-02

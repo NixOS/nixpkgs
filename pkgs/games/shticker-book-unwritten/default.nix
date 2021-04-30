@@ -8,6 +8,7 @@ in buildFHSUserEnv {
   targetPkgs = pkgs: with pkgs; [
       alsaLib
       xorg.libX11
+      xorg.libXcursor
       xorg.libXext
       libglvnd
       shticker-book-unwritten-unwrapped

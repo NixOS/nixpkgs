@@ -84,7 +84,7 @@ stdenv.mkDerivation (rec {
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
 
