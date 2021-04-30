@@ -24750,6 +24750,8 @@ in
 
   rofi-file-browser = callPackage ../applications/misc/rofi-file-browser { };
 
+  rofi-power-menu = callPackage ../applications/misc/rofi-power-menu { };
+
   ympd = callPackage ../applications/audio/ympd { };
 
   # a somewhat more maintained fork of ympd
