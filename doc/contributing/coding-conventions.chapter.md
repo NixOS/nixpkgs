@@ -179,23 +179,23 @@ The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _s
 
 In Nixpkgs, there are generally three different names associated with a package:
 
-- The `name` attribute of the derivation (excluding the version part). This is what most users see, in particular when using `nix-env`.
+- The `name` (excluding the version part) or `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
 - The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `name` attribute `"e2fsprogs-version"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
 There are a few naming guidelines:
 
-- The `name` attribute _should_ be identical to the upstream package name.
+- The `name` or `pname` attribute _should_ be identical to the upstream package name.
 
-- The `name` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
+- The `name` or `pname` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
 
-- The version part of the `name` attribute _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
+- The version part of the `name` attribute or `version` _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
 
-- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also append `"unstable"` to the name - e.g., `"pkgname-unstable-2014-09-23"`.
+- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also prepend `"unstable"` to the version - e.g., `"pkgname-unstable-2014-09-23"` or `pname = "pkgname"; version = "unstable-2014-09-23"`.
 
 - Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
