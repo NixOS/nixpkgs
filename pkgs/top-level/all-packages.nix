@@ -8199,9 +8199,7 @@ in
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
 
-  scream-receivers = callPackage ../misc/scream-receivers {
-    pulseSupport = config.pulseaudio or false;
-  };
+  scream = callPackage ../applications/audio/scream { };
 
   scimark = callPackage ../misc/scimark { };
 
