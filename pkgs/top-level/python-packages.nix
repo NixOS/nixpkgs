@@ -5896,6 +5896,8 @@ in {
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
 
+  pypiserver = callPackage ../development/python-modules/pypiserver { };
+
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
   pyplatec = callPackage ../development/python-modules/pyplatec { };
