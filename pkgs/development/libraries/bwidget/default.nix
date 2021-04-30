@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl, tcl }:
+{ lib, fetchurl, tcl }:
 
-stdenv.mkDerivation rec {
-  pname = "bwidget";
+let
   version = "1.9.14";
+  libPrefix = "bwidget${version}";
+in tcl.mkTclDerivation {
+  pname = "bwidget";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/bwidget-${version}.tar.gz";
@@ -12,15 +15,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out/lib/${passthru.libPrefix}"
-    cp -R *.tcl lang images "$out/lib/${passthru.libPrefix}"
+    mkdir -p "$out/lib/${libPrefix}"
+    cp -R *.tcl lang images "$out/lib/${libPrefix}"
   '';
-
-  passthru = {
-    libPrefix = "bwidget${version}";
-  };
-
-  buildInputs = [ tcl ];
 
   meta = {
     homepage = "https://sourceforge.net/projects/tcllib";
