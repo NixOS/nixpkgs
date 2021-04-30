@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional stdenv.isDarwin Security;
   checkInputs = [ gitMinimal util-linuxMinimal ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   cargoSha256 = "0n8cw70qh8g4hfwfaxwwxbrrx5hm2z037z8kdhvdpqkxljl9189x";
 
