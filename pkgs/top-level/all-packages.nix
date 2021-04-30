@@ -30931,8 +30931,6 @@ in
 
   mpvc = callPackage ../applications/misc/mpvc { };
 
-  togglesg-download = callPackage ../tools/misc/togglesg-download { };
-
   discord = import ../applications/networking/instant-messengers/discord {
     branch = "stable";
     inherit pkgs;
