@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-     fetchpatch {
+     (fetchpatch {
        url = "https://github.com/themix-project/oomox-gtk-theme/commit/b695fcb8d303f804c53d85ad7d6396b0cd2b29b4.patch";
        sha256 = "0696bvj8pddf34pnljkxbnl2za6ah80a5rmjj89qjs122xg50n0d";
      })
