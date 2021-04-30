@@ -7538,6 +7538,8 @@ in
 
   pim6sd = callPackage ../servers/pim6sd { };
 
+  phosh = callPackage ../applications/window-managers/phosh { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };
