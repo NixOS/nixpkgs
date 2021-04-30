@@ -4569,6 +4569,8 @@ in
 
   flawfinder = callPackage ../development/tools/flawfinder { };
 
+  flip-link = callPackage ../development/tools/flip-link { };
+
   flips = callPackage ../tools/compression/flips { };
 
   fmbt = callPackage ../development/tools/fmbt {
