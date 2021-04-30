@@ -29,7 +29,7 @@
 , libstartup_notification
 , libvpx
 , libwebp
-, llvmPackages
+, llvmPackages_11
 , m4
 , makeDesktopItem
 , nasm
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     cargo
     copyDesktopItems
     gnused
-    llvmPackages.llvm
+    llvmPackages_11.llvm
     m4
     nasm
     nodejs
@@ -220,7 +220,6 @@ stdenv.mkDerivation rec {
     "--with-system-webp"
     "--with-system-libvpx"
 
-    "--enable-rust-simd"
     "--enable-crashreporter"
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
@@ -242,8 +241,8 @@ stdenv.mkDerivation rec {
     "--enable-strip"
   ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+    "--with-libclang-path=${llvmPackages_11.libclang}/lib"
+    "--with-clang-path=${llvmPackages_11.clang}/bin/clang"
   ] ++ lib.optional alsaSupport "--enable-alsa"
   ++ lib.optional calendarSupport "--enable-calendar"
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
