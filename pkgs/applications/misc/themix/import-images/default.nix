@@ -1,18 +1,11 @@
-{ lib, stdenv, themix-gui, python3
-, enableColorthief ? true
-, enableColorz ? true
-, enableHaishoku ? true
-}:
+{ lib, stdenv, themix-gui, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "themix-import-images";
 
   inherit (themix-gui) version src;
 
-  propagatedBuildInputs = with python3.pkgs; [ pillow ]
-    ++ lib.optionals enableColorthief [ colorthief ]
-    ++ lib.optionals enableColorz [ colorz ]
-    ++ lib.optionals enableHaishoku [ haishoku ];
+  propagatedBuildInputs = with python3.pkgs; [ pillow colorthief colorz haishoku ];
 
   buildPhase = ''
     runHook preBuild
