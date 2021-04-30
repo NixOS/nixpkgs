@@ -169,6 +169,18 @@
   })
   ```
 
+- Unnecessary string conversions should be avoided. Do
+
+  ```nix
+  rev = version;
+  ```
+
+  instead of
+
+  ```nix
+  rev = "${version}";
+  ```
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 - Prefer using the top-level `lib` over its alias `stdenv.lib`. `lib` is unrelated to `stdenv`, and so `stdenv.lib` should only be used as a convenience alias when developing to avoid having to modify the function inputs just to test something out.
