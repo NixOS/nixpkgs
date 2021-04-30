@@ -7,9 +7,15 @@ let
 
   format = pkgs.formats.yaml { };
   configFile = format.generate "zigbee2mqtt.yaml" cfg.settings;
+
 in
 {
   meta.maintainers = with maintainers; [ sweber ];
+
+  imports = [
+    # Remove warning before the 21.11 release
+    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+  ];
 
   options.services.zigbee2mqtt = {
     enable = mkEnableOption "enable zigbee2mqtt service";
