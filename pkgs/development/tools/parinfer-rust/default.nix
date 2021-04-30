@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ llvmPackages.clang ];
   buildInputs = [ llvmPackages.libclang ];
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     mkdir -p $out/share/kak/autoload/plugins

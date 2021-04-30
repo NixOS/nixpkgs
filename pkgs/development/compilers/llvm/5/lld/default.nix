@@ -1,7 +1,8 @@
 { lib, stdenv
+, buildLlvmTools
 , fetch
 , cmake
-, llvm
+, libllvm
 , version
 }:
 
@@ -11,15 +12,20 @@ stdenv.mkDerivation {
 
   src = fetch "lld" "1ah75rjly6747jk1zbwca3z0svr9b09ylgxd4x9ns721xir6sia6";
 
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvm ];
+  buildInputs = [ libllvm ];
 
-  outputs = [ "out" "dev" ];
+  cmakeFlags = [
+    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+  ];
 
-  postInstall = ''
-    moveToOutput include "$dev"
-    moveToOutput lib "$dev"
-  '';
+  outputs = [ "out" "lib" "dev" ];
 
   meta = {
     description = "The LLVM Linker";

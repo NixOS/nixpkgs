@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

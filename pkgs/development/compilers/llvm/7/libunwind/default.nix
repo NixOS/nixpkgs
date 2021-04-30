@@ -8,7 +8,9 @@ stdenv.mkDerivation {
 
   src = fetch "libunwind" "035dsxs10nyiqd00q07yycvmkjl01yz4jdlrjvmch8klxg4pyjhp";
 
-  patches = lib.optional (stdenv.hostPlatform.useLLVM or false) [
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     # removes use of `new` that require libc++
     (fetchpatch {
       url = "https://github.com/llvm-mirror/libunwind/commit/34a45c630d4c79af403661d267db42fbe7de1178.patch";
@@ -22,7 +24,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake llvm ];
+  nativeBuildInputs = [ cmake llvm.dev ];
 
   cmakeFlags = lib.optionals (!enableShared) [
     "-DLIBUNWIND_ENABLE_SHARED=OFF"

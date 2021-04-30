@@ -197,7 +197,7 @@ in
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
-    inherit (llvmPackages) clang-unwrapped libclang llvm;
+    inherit (llvmPackages) libclang llvm;
     inherit (python3Packages) sphinx;
   };
 
@@ -10156,6 +10156,7 @@ in
   chez-matchable = callPackage ../development/chez-modules/chez-matchable { };
 
   clang = llvmPackages.clang;
+  libclang = llvmPackages.libclang;
   clang-manpages = llvmPackages.clang-manpages;
 
   clang-sierraHack = clang.override {
@@ -11095,6 +11096,7 @@ in
   lldb_12 = llvmPackages_12.lldb;
 
   llvm = llvmPackages.llvm;
+  libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
   llvm_12 = llvmPackages_12.llvm;
@@ -11151,7 +11153,7 @@ in
   llvmPackages_10 = recurseIntoAttrs (callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries or llvmPackages_10.libraries;
   });
 
   llvmPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/llvm/11 ({
@@ -11378,9 +11380,11 @@ in
   # So this commit doesn't remove the 1.45.2 release.
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm_10 = llvmPackages_10.libllvm;
   };
   rust_1_51 = callPackage ../development/compilers/rust/1_51.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm_11 = llvmPackages_11.libllvm;
   };
   rust = rust_1_51;
 
@@ -13932,7 +13936,7 @@ in
   belr = callPackage ../development/libraries/belr { };
 
   beignet = callPackage ../development/libraries/beignet {
-    inherit (llvmPackages_6) llvm clang-unwrapped;
+    inherit (llvmPackages_6) libllvm libclang;
   };
 
   belle-sip = callPackage ../development/libraries/belle-sip { };

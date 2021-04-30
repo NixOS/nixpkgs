@@ -76,8 +76,8 @@ let
     "-nostdinc"
     "-nostdinc++"
     "-isystem" "${lib.getDev stdenv.cc.libc}/include"
-    "-I" "${unwrapped}/include"
-    "-I" "${unwrapped}/lib/clang/5.0.2/include"
+    "-I" "${lib.getDev unwrapped}/include"
+    "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at

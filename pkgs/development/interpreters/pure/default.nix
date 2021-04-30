@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper,
-  llvm, gmp, mpfr, readline, bison, flex }:
+  libllvm, gmp, mpfr, readline, bison, flex }:
 
 stdenv.mkDerivation rec {
   baseName="pure";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison flex ];
-  propagatedBuildInputs = [ llvm gmp mpfr readline ];
+  propagatedBuildInputs = [ libllvm gmp mpfr readline ];
   NIX_LDFLAGS = "-lLLVMJIT";
 
   postPatch = ''
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-release" ];
   doCheck = true;
   checkPhase = ''
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${llvm}/lib make check
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libllvm}/lib make check
   '';
   postInstall = ''
-    wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${llvm}/lib
+    wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${libllvm}/lib
   '';
 
   meta = {

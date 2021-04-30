@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, clang-unwrapped
 , cmake
 , libclang
 , libffi
@@ -32,13 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${clang-unwrapped}/lib/clang/${lib.getVersion clang-unwrapped}/"
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/lib/clang/${lib.getVersion libclang}/"
     "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
     "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
   buildInputs = [
-    clang-unwrapped
     libffi
     libxml2
     zlib

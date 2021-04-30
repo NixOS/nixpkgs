@@ -2,13 +2,11 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libunwind";
   inherit version;
 
-  src = fetch "libunwind" "0vhgcgzsb33l83qaikrkj87ypqb48mi607rccczccwiiv8ficw0q";
-
-  nativeBuildInputs = [ cmake ];
+  src = fetch pname "0vhgcgzsb33l83qaikrkj87ypqb48mi607rccczccwiiv8ficw0q";
 
   patches = [
     (fetchpatch {
@@ -19,7 +17,12 @@ stdenv.mkDerivation {
       url = "https://github.com/llvm-mirror/libunwind/commit/e050272d2eb57eb4e56a37b429a61df2ebb8aa3e.patch";
       sha256 = "1sxyx5xnax8k713jjcxgq3jq3cpnxygs2rcdf5vfja0f2k9jzldl";
     })
+    ./gnu-install-dirs.patch
   ];
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

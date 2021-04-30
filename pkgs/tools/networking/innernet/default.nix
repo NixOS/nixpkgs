@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     installManPage doc/innernet-server.8.gz

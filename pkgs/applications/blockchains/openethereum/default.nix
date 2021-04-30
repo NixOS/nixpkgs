@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1gm02pcfll362add8a0dcb0sk0mag8z0q23b87yb6fs870bqvhib";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   nativeBuildInputs = [
     cmake
     llvmPackages.clang

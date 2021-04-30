@@ -244,7 +244,7 @@ stdenv.mkDerivation rec {
     "--enable-strip"
   ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ] ++ lib.optional alsaSupport "--enable-alsa"
   ++ lib.optional calendarSupport "--enable-calendar"

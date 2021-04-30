@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages_10.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages_10.libclang.lib}/lib";
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   CARGO_TEST_ARGS = "--workspace --exclude sequoia-store";
