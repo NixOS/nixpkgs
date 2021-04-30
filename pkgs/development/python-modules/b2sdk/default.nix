@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.6.0";
+  version = "1.7.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6fjreuMUC056ljddfAidfBbJkvEDndB/dIkx1bF7efs=";
+    sha256 = "sha256-8X5XLh9SxZI1P7/2ZjOy8ipcEzTcriJfGI7KlMXncv4=";
   };
 
   postPatch = ''
