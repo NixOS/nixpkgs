@@ -2,11 +2,56 @@
 
 ## Syntax {#sec-syntax}
 
-- Use 2 spaces of indentation per indentation level in Nix expressions, 4 spaces in shell scripts.
+The nixpkgs repository is formatted with [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt/).
 
-- Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
+A non-exhaustive list of formatting rules follows. When in doubt, the tool is authoritative.
+
+- Use 2 spaces of indentation in Nix expressions, 4 spaces in shell scripts.
+
+- Do not use tab characters, i.e. configure your editor to use soft tabs. Everybody has different tab settings so it’s asking for trouble.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in <xref linkend="sec-package-naming"/>.
+
+- Empty lists and attribute sets _must_ contain exactly one space
+
+```nix
+[ ]
+
+# and
+
+{ }
+```
+
+not
+
+```nix
+[]
+
+# or
+
+{  }
+```
+
+- There _must_ be a space between list/set delimiters and their elements
+
+``` nix
+[ 1 2 3 ]
+
+# and
+
+{ nixpkgs ? { } }
+```
+
+not
+
+```nix
+[1 2 3]
+
+# or
+
+{nixpkgs ? {  }}: ...
+```
+
 
 - Function calls with attribute set arguments are written as
 
@@ -33,7 +78,7 @@
 
   if it's a short call.
 
-- In attribute sets or lists that span multiple lines, the attribute names or list elements should be aligned:
+- In attribute sets or lists that span multiple lines, the attribute names or list elements should be indented and aligned:
 
   ```nix
   # A long list.
@@ -73,17 +118,14 @@
   attrs = { x = 1280; y = 1024; };
   ```
 
-- Breaking in the middle of a function argument can give hard-to-read code, like
+- Function calls spanning multiple lines must list /all/ their arguments on separate lines. Instead of
 
   ```nix
-  someFunction { x = 1280;
-    y = 1024; } otherArg
-    yetAnotherArg
+  someFunction { x = 1280; y = 1024; }
+    otherArg yetAnotherArg
   ```
 
-  (especially if the argument is very large, spanning multiple lines).
-
-  Better:
+  write
 
   ```nix
   someFunction
@@ -99,11 +141,12 @@
   in someFunction res otherArg yetAnotherArg
   ```
 
-- The bodies of functions, asserts, and withs are not indented to prevent a lot of superfluous indentation levels, i.e.
+- The bodies of top-level functions, `assert`s, and `with`s are not indented to prevent a lot of superfluous indentation levels, i.e.
 
   ```nix
   { arg1, arg2 }:
   assert system == "i686-linux";
+  with arg1;
   stdenv.mkDerivation { ...
   ```
 
@@ -112,8 +155,77 @@
   ```nix
   { arg1, arg2 }:
     assert system == "i686-linux";
-      stdenv.mkDerivation { ...
+      with arg1;
+        stdenv.mkDerivation { ...
   ```
+
+  When functions, `assert`s and `with`s are not top-level, the normal, 2-space indentation rules apply
+
+  ```nix
+  {
+    x = assert true;
+      false;
+    y = with "foo";
+      "bar";
+    z = x: "baz";
+  }
+  ```
+
+- For `let ... in` expressions, the bindings must be indented, whereas the expression must be un-indented and on its own line
+
+  ```nix
+  let
+    x = 1;
+    y = 2;
+  in
+  x + y
+  ```
+
+  not
+
+  ```nix
+  let
+    x = 1;
+    y = 2;
+  in
+    x + y
+
+  # or
+
+  let
+    x = 1;
+    y = 2;
+  in x + y
+  ```
+
+  For single bindings, more compact forms are accepted
+
+  ```nix
+  let x = 1; in x
+
+  let x = 1;
+  in x
+
+  let x = 1;
+  in
+  x
+  ```
+
+- The body of multi-line strings must be indented relative to the bound variable
+
+  ```nix
+  x = ''
+    foo
+  '';
+  ```
+
+  not
+
+  ```nix
+  x = ''
+foo
+'';
+```
 
 - Function formal arguments are written as:
 
@@ -171,7 +283,7 @@
 
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
-- The top-level `lib` must be used in the master and 21.05 branch over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled which is the case for ofborg.
+- The top-level `lib` must be used in the master and 21.05 branches over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled (which is the case for the `ofborg` GitHub bot).
   `lib` is unrelated to `stdenv`, and so `stdenv.lib` should only be used as a convenience alias when developing locally to avoid having to modify the function inputs just to test something out.
 
 ## Package naming {#sec-package-naming}
