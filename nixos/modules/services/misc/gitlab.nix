@@ -155,6 +155,7 @@ let
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
+    MALLOC_ARENA_MAX = "2";
   };
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
@@ -652,6 +653,105 @@ in {
         description = "Extra configuration to merge into shell-config.yml";
       };
 
+      puma.workers = mkOption {
+        type = types.int;
+        default = 2;
+        apply = x: builtins.toString x;
+        description = ''
+          The number of worker processes Puma should spawn. This
+          controls the amount of parallel Ruby code can be
+          executed. GitLab recommends <quote>Number of CPU cores -
+          1</quote>, but at least two.
+
+          <note>
+            <para>
+              Each worker consumes quite a bit of memory, so
+              be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
+      puma.threadsMin = mkOption {
+        type = types.int;
+        default = 0;
+        apply = x: builtins.toString x;
+        description = ''
+          The minimum number of threads Puma should use per
+          worker.
+
+          <note>
+            <para>
+              Each thread consumes memory and contributes to Global VM
+              Lock contention, so be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
+      puma.threadsMax = mkOption {
+        type = types.int;
+        default = 4;
+        apply = x: builtins.toString x;
+        description = ''
+          The maximum number of threads Puma should use per
+          worker. This limits how many threads Puma will automatically
+          spawn in response to requests. In contrast to workers,
+          threads will never be able to run Ruby code in parallel, but
+          give higher IO parallelism.
+
+          <note>
+            <para>
+              Each thread consumes memory and contributes to Global VM
+              Lock contention, so be careful when increasing this.
+            </para>
+          </note>
+        '';
+      };
+
+      sidekiq.memoryKiller.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the Sidekiq MemoryKiller should be turned
+          on. MemoryKiller kills Sidekiq when its memory consumption
+          exceeds a certain limit.
+
+          See <link xlink:href="https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html"/>
+          for details.
+        '';
+      };
+
+      sidekiq.memoryKiller.maxMemory = mkOption {
+        type = types.int;
+        default = 2000;
+        apply = x: builtins.toString (x * 1024);
+        description = ''
+          The maximum amount of memory, in MiB, a Sidekiq worker is
+          allowed to consume before being killed.
+        '';
+      };
+
+      sidekiq.memoryKiller.graceTime = mkOption {
+        type = types.int;
+        default = 900;
+        apply = x: builtins.toString x;
+        description = ''
+          The time MemoryKiller waits after noticing excessive memory
+          consumption before killing Sidekiq.
+        '';
+      };
+
+      sidekiq.memoryKiller.shutdownWait = mkOption {
+        type = types.int;
+        default = 30;
+        apply = x: builtins.toString x;
+        description = ''
+          The time allowed for all jobs to finish before Sidekiq is
+          killed forcefully.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -993,7 +1093,11 @@ in {
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      environment = gitlabEnv;
+      environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
+        SIDEKIQ_MEMORY_KILLER_MAX_RSS = cfg.sidekiq.memoryKiller.maxMemory;
+        SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
+        SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
+      });
       path = with pkgs; [
         postgresqlPackage
         git
@@ -1005,13 +1109,15 @@ in {
         # Needed for GitLab project imports
         gnutar
         gzip
+
+        procps # Sidekiq MemoryKiller
       ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";
-        Restart = "on-failure";
+        Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
       };
@@ -1145,7 +1251,13 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/puma -C ${cfg.statePath}/config/puma.rb -e production";
+        ExecStart = concatStringsSep " " [
+          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+          "-e production"
+          "-C ${cfg.statePath}/config/puma.rb"
+          "-w ${cfg.puma.workers}"
+          "-t ${cfg.puma.threadsMin}:${cfg.puma.threadsMax}"
+        ];
       };
 
     };

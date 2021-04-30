@@ -3,28 +3,27 @@
 , fetchPypi
 , setuptools-scm
 , importlib-metadata
-, typing ? null
-, singledispatch ? null
-, pythonOlder
+, typing
+, singledispatch
 , python
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.1.2";
+  version = "3.3.1";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "642586fc4740bd1cad7690f836b3321309402b20b332529f25617ff18e8e1370";
+    sha256 = "0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.4") singledispatch
-    ++ lib.optional (pythonOlder "3.5") typing
-  ;
+    singledispatch
+    typing
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover
