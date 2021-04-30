@@ -62,6 +62,7 @@ in
       templates = mkOption {
         description = "Templates for LXD";
         type = types.attrsOf (types.submodule (templateSubmodule));
+        default = {};
         example = literalExample ''
           {
             # create /etc/hostname on container creation
