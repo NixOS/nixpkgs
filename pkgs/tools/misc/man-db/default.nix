@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ autoconf automake gettext groff libtool makeWrapper pkg-config zstd ];
+  nativeBuildInputs = [ autoreconfHook gettext groff libtool makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -52,9 +52,6 @@ stdenv.mkDerivation rec {
 
 
   preConfigure = ''
-    # need to recreate configure script due to substitutions in postPatch
-    ./bootstrap --gnulib-srcdir=${gnulib.src} --no-git
-
     # deal with autoconf 2.70 bug: https://lists.gnu.org/archive/html/bug-autoconf/2020-12/msg00036.html
     # can be removed once autoconf 2.71 is merged
     patch < ${./fix-configure.patch}
