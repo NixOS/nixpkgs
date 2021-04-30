@@ -604,8 +604,6 @@ with self; with super; {
 
   traitlets = callPackage ../development/python-modules/traitlets/4.nix { };
 
-  trollius = callPackage ../development/python-modules/trollius { };
-
   ttystatus = callPackage ../development/python-modules/ttystatus { };
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };

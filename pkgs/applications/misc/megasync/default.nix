@@ -7,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
 , libmediainfo
 , libraw
 , libsodium
@@ -52,7 +52,7 @@ mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    ffmpeg
     libmediainfo
     libraw
     libsodium

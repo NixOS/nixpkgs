@@ -1,16 +1,18 @@
 diff --git a/src/protontricks/cli.py b/src/protontricks/cli.py
-index fec0563..d158b96 100755
+index 9641970..6a2b268 100755
 --- a/src/protontricks/cli.py
 +++ b/src/protontricks/cli.py
-@@ -14,7 +14,7 @@ import os
- import logging
+@@ -15,8 +15,8 @@ import sys
  
  from . import __version__
--from .steam import (find_proton_app, find_steam_path, find_steam_runtime_path,
-+from .steam import (find_proton_app, find_steam_path,
-                     get_steam_apps, get_steam_lib_paths)
- from .winetricks import get_winetricks_path
  from .gui import select_steam_app_with_gui
+-from .steam import (find_legacy_steam_runtime_path, find_proton_app,
+-                    find_steam_path, get_steam_apps, get_steam_lib_paths)
++from .steam import (find_proton_app, find_steam_path, get_steam_apps,
++                    get_steam_lib_paths)
+ from .util import run_command
+ from .winetricks import get_winetricks_path
+ 
 @@ -75,8 +75,7 @@ def main(args=None):
              "WINE: path to a custom 'wine' executable\n"
              "WINESERVER: path to a custom 'wineserver' executable\n"
@@ -21,70 +23,73 @@ index fec0563..d158b96 100755
          ),
          formatter_class=argparse.RawTextHelpFormatter
      )
-@@ -133,14 +132,10 @@ def main(args=None):
+@@ -138,18 +137,9 @@ def main(args=None):
+         )
          sys.exit(-1)
  
-     # 2. Find Steam Runtime if enabled
--    steam_runtime_path = None
-+    steam_runtime = False
- 
-     if os.environ.get("STEAM_RUNTIME", "") != "0" and not args.no_runtime:
--        steam_runtime_path = find_steam_runtime_path(steam_root=steam_root)
+-    # 2. Find the pre-installed legacy Steam Runtime if enabled
+-    legacy_steam_runtime_path = None
+-    use_steam_runtime = True
 -
--        if not steam_runtime_path:
++    # 2. Use Steam Runtime if enabled
+     if os.environ.get("STEAM_RUNTIME", "") != "0" and not args.no_runtime:
+-        legacy_steam_runtime_path = find_legacy_steam_runtime_path(
+-            steam_root=steam_root
+-        )
+-
+-        if not legacy_steam_runtime_path:
 -            print("Steam Runtime was enabled but couldn't be found!")
 -            sys.exit(-1)
-+        steam_runtime = True
++        use_steam_runtime = True
      else:
+         use_steam_runtime = False
          logger.info("Steam Runtime disabled.")
- 
-@@ -201,7 +196,7 @@ def main(args=None):
-             winetricks_path=winetricks_path,
+@@ -212,7 +202,6 @@ def main(args=None):
              proton_app=proton_app,
              steam_app=steam_app,
--            steam_runtime_path=steam_runtime_path,
-+            steam_runtime=steam_runtime,
-             command=[winetricks_path, "--gui"]
+             use_steam_runtime=use_steam_runtime,
+-            legacy_steam_runtime_path=legacy_steam_runtime_path,
+             command=[winetricks_path, "--gui"],
+             use_bwrap=use_bwrap
          )
- 
-@@ -269,7 +264,7 @@ def main(args=None):
-             winetricks_path=winetricks_path,
+@@ -282,7 +271,6 @@ def main(args=None):
              proton_app=proton_app,
              steam_app=steam_app,
--            steam_runtime_path=steam_runtime_path,
-+            steam_runtime=steam_runtime,
+             use_steam_runtime=use_steam_runtime,
+-            legacy_steam_runtime_path=legacy_steam_runtime_path,
+             use_bwrap=use_bwrap,
              command=[winetricks_path] + args.winetricks_command)
      elif args.command:
-         run_command(
-@@ -277,7 +272,7 @@ def main(args=None):
-             proton_app=proton_app,
+@@ -292,7 +280,6 @@ def main(args=None):
              steam_app=steam_app,
              command=args.command,
--            steam_runtime_path=steam_runtime_path,
-+            steam_runtime=steam_runtime,
+             use_steam_runtime=use_steam_runtime,
+-            legacy_steam_runtime_path=legacy_steam_runtime_path,
+             use_bwrap=use_bwrap,
              # Pass the command directly into the shell *without*
              # escaping it
-             cwd=steam_app.install_path,
 diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
-index fa5772d..4f30cd3 100644
+index 8554e24..509afb6 100644
 --- a/src/protontricks/steam.py
 +++ b/src/protontricks/steam.py
-@@ -11,7 +11,7 @@ from .util import lower_dict
- 
+@@ -13,8 +13,8 @@ from .util import lower_dict
  __all__ = (
      "COMMON_STEAM_DIRS", "SteamApp", "find_steam_path",
--    "find_steam_proton_app", "find_proton_app", "find_steam_runtime_path",
-+    "find_steam_proton_app", "find_proton_app",
-     "find_appid_proton_prefix", "get_steam_lib_paths", "get_steam_apps",
-     "get_custom_proton_installations"
+     "find_steam_proton_app", "find_proton_app",
+-    "find_legacy_steam_runtime_path", "find_appid_proton_prefix",
+-    "get_steam_lib_paths", "get_steam_apps", "get_custom_proton_installations"
++    "find_appid_proton_prefix", "get_steam_lib_paths",
++    "get_steam_apps", "get_custom_proton_installations"
  )
-@@ -254,37 +254,6 @@ def find_steam_path():
+ 
+ COMMON_STEAM_DIRS = [
+@@ -283,37 +283,6 @@ def find_steam_path():
      return None, None
  
  
--def find_steam_runtime_path(steam_root):
+-def find_legacy_steam_runtime_path(steam_root):
 -    """
--    Find the Steam Runtime either using the STEAM_RUNTIME env or
+-    Find the legacy Steam Runtime either using the STEAM_RUNTIME env or
 -    steam_root
 -    """
 -    env_steam_runtime = os.environ.get("STEAM_RUNTIME", "")
@@ -117,162 +122,149 @@ index fa5772d..4f30cd3 100644
  APPINFO_STRUCT_SECTION = "<LLLLQ20sL"
  
 diff --git a/src/protontricks/util.py b/src/protontricks/util.py
-index d513b46..c48e41f 100644
+index 40fa752..9da5509 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
-@@ -6,7 +6,7 @@ import stat
- from pathlib import Path
- from subprocess import check_output, run, PIPE
- 
--__all__ = ("get_runtime_library_paths", "create_wine_bin_dir", "run_command")
-+__all__ = ("create_wine_bin_dir", "run_command")
- 
- logger = logging.getLogger("protontricks")
- 
-@@ -25,93 +25,10 @@ def lower_dict(d):
+@@ -25,24 +25,6 @@ def lower_dict(d):
      return {k.lower(): v for k, v in d.items()}
  
  
--def get_host_library_paths():
+-def get_legacy_runtime_library_paths(legacy_steam_runtime_path, proton_app):
 -    """
--    Get host library paths to use when creating the LD_LIBRARY_PATH environment
--    variable for use with newer Steam Runtime installations
+-    Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
 -    """
--    # The traditional Steam Runtime does the following when running the
--    # `run.sh --print-steam-runtime-library-paths` command.
--    # Since that command is unavailable with newer Steam Runtime releases,
--    # do it ourselves here.
--    result = run(
--        ["/sbin/ldconfig", "-XNv"],
--        check=True, stdout=PIPE, stderr=PIPE
--    )
--    lines = result.stdout.decode("utf-8").split("\n")
--    paths = [
--        line.split(":")[0] for line in lines
--        if line.startswith("/") and ":" in line
--    ]
--
--    return ":".join(paths)
--
--
--RUNTIME_ROOT_GLOB_PATTERNS = (
--    "var/*/files/",
--    "*/files/"
--)
--
--
--def get_runtime_library_paths(steam_runtime_path, proton_app):
--    """
--    Get LD_LIBRARY_PATH value to run a command using Steam Runtime
--    """
--    def find_runtime_app_root(runtime_app):
--        """
--        Find the runtime root (the directory containing the root fileystem
--        used for the container) for separately installed Steam Runtime app
--        """
--        for pattern in RUNTIME_ROOT_GLOB_PATTERNS:
--            try:
--                return next(
--                    runtime_app.install_path.glob(pattern)
--                )
--            except StopIteration:
--                pass
--
--        raise RuntimeError(
--            "Could not find Steam Runtime runtime root for {}".format(
--                runtime_app.name
--            )
--        )
--
--    if proton_app.required_tool_appid:
--        # bwrap based Steam Runtime is used for Proton installations that
--        # use separate Steam runtimes
--        # TODO: Try to run the Wine binaries inside an user namespace somehow.
--        # Newer Steam Runtime environments may rely on a newer glibc than what
--        # is available on the host system, which may cause potential problems
--        # otherwise.
--        runtime_root = find_runtime_app_root(proton_app.required_tool_app)
--        return "".join([
--            str(proton_app.install_path / "dist" / "lib"), os.pathsep,
--            str(proton_app.install_path / "dist" / "lib64"), os.pathsep,
--            get_host_library_paths(), os.pathsep,
--            str(runtime_root / "lib" / "i386-linux-gnu"), os.pathsep,
--            str(runtime_root / "lib" / "x86_64-linux-gnu")
--        ])
--
--    # Traditional LD_LIBRARY_PATH based Steam Runtime is used otherwise
 -    steam_runtime_paths = check_output([
--        str(steam_runtime_path / "run.sh"),
+-        str(legacy_steam_runtime_path / "run.sh"),
 -        "--print-steam-runtime-library-paths"
 -    ])
 -    steam_runtime_paths = str(steam_runtime_paths, "utf-8")
 -    # Add Proton installation directory first into LD_LIBRARY_PATH
 -    # so that libwine.so.1 is picked up correctly (see issue #3)
 -    return "".join([
--        str(proton_app.install_path / "dist" / "lib"), os.pathsep,
--        str(proton_app.install_path / "dist" / "lib64"), os.pathsep,
+-        str(proton_app.proton_dist_path / "lib"), os.pathsep,
+-        str(proton_app.proton_dist_path / "lib64"), os.pathsep,
 -        steam_runtime_paths
 -    ])
 -
 -
- WINE_SCRIPT_TEMPLATE = (
--    "#!/bin/bash\n"
-+    "#!/bin/sh\n"
-     "# Helper script created by Protontricks to run Wine binaries using Steam Runtime\n"
--    "export LD_LIBRARY_PATH=\"$PROTON_LD_LIBRARY_PATH\"\n"
--    "exec \"$PROTON_PATH\"/dist/bin/{name} \"$@\""
-+    "exec steam-run \"$PROTON_PATH\"/dist/bin/{name} \"$@\""
+ def get_host_library_paths():
+     """
+     Get host library paths to use when creating the LD_LIBRARY_PATH environment
+@@ -54,7 +36,7 @@ def get_host_library_paths():
+     # Since that command is unavailable with newer Steam Runtime releases,
+     # do it ourselves here.
+     result = run(
+-        ["/sbin/ldconfig", "-XNv"],
++        ["steam-run", "ldconfig", "-XNv"],
+         check=True, stdout=PIPE, stderr=PIPE
+     )
+     lines = result.stdout.decode("utf-8").split("\n")
+@@ -72,7 +54,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
  )
  
  
-@@ -172,7 +89,7 @@ def create_wine_bin_dir(proton_app):
+-def get_runtime_library_paths(proton_app, use_bwrap=True):
++def get_runtime_library_paths(proton_app, proton_app_only=True):
+     """
+     Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
+     """
+@@ -95,7 +77,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+             )
+         )
  
+-    if use_bwrap:
++    if proton_app_only:
+         return "".join([
+             str(proton_app.proton_dist_path / "lib"), os.pathsep,
+             str(proton_app.proton_dist_path / "lib64"), os.pathsep
+@@ -111,14 +93,19 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+     ])
+ 
+ 
+-WINE_SCRIPT_RUNTIME_V1_TEMPLATE = (
+-    "#!/bin/bash\n"
+-    "# Helper script created by Protontricks to run Wine binaries using Steam Runtime\n"
+-    "export LD_LIBRARY_PATH=\"$PROTON_LD_LIBRARY_PATH\"\n"
+-    "exec \"$PROTON_DIST_PATH\"/bin/{name} \"$@\""
+-)
++# Add Proton installation directory first into LD_LIBRARY_PATH
++# so that libwine.so.1 is picked up correctly (see issue #3)
++WINE_SCRIPT_RUNTIME_V1_TEMPLATE = """#!/usr/bin/env -S steam-run bash
++# Helper script created by Protontricks to run Wine binaries using Steam Runtime
++export LD_LIBRARY_PATH="$PROTON_LD_LIBRARY_PATH":"$LD_LIBRARY_PATH"
++exec "$PROTON_DIST_PATH"/bin/{name} "$@"
++"""
+ 
+-WINE_SCRIPT_RUNTIME_V2_TEMPLATE = """#!/bin/bash
++# The run script calls pressure-vessel-unruntime which will unset
++# LD_LIBRARY_PATH defined by steam-run. This will cause Pressure
++# Vessel to segfault, so just call pressure-vessel-wrap directly
++# instead.
++WINE_SCRIPT_RUNTIME_V2_TEMPLATE = """#!/usr/bin/env bash
+ # Helper script created by Protontricks to run Wine binaries using Steam Runtime
+ PROTONTRICKS_PROXY_SCRIPT_PATH="{script_path}"
+ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
+@@ -127,9 +114,13 @@ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
+   export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":"$PROTON_LD_LIBRARY_PATH"
+   "$PROTON_DIST_PATH"/bin/{name} "$@"
+ else
+-  exec "$STEAM_RUNTIME_PATH"/run --share-pid --batch --filesystem=/mnt \
+-  --filesystem=/tmp --filesystem=/run/media --filesystem=/etc \
+-  --filesystem=/opt --filesystem=/home --filesystem=/usr -- \
++  exec steam-run "$STEAM_RUNTIME_PATH"/pressure-vessel/bin/pressure-vessel-wrap \
++  --runtime-archive=$(echo "$STEAM_RUNTIME_PATH"/*runtime.tar.gz) \
++  --variable-dir="${{PRESSURE_VESSEL_VARIABLE_DIR:-$STEAM_RUNTIME_PATH/var}}" \
++  --share-pid --batch \
++  --filesystem=/mnt --filesystem=/tmp --filesystem=/run/media \
++  --filesystem=/etc --filesystem=/opt --filesystem=/home \
++  --filesystem=/usr -- \
+   env PROTONTRICKS_INSIDE_STEAM_RUNTIME=1 \
+   "$PROTONTRICKS_PROXY_SCRIPT_PATH" "$@"
+ fi
+@@ -194,7 +185,6 @@ def create_wine_bin_dir(proton_app, use_bwrap=True):
  def run_command(
          winetricks_path, proton_app, steam_app, command,
--        steam_runtime_path=None,
-+        steam_runtime=False,
+         use_steam_runtime=False,
+-        legacy_steam_runtime_path=None,
+         use_bwrap=True,
          **kwargs):
      """Run an arbitrary command with the correct environment variables
-     for the given Proton app
-@@ -180,13 +97,13 @@ def run_command(
-     The environment variables are set for the duration of the call
-     and restored afterwards
+@@ -271,7 +261,7 @@ def run_command(
+             os.environ["STEAM_RUNTIME_PATH"] = \
+                 str(proton_app.required_tool_app.install_path)
+             os.environ["PROTON_LD_LIBRARY_PATH"] = \
+-                get_runtime_library_paths(proton_app, use_bwrap=use_bwrap)
++                get_runtime_library_paths(proton_app, proton_app_only=use_bwrap)
  
--    If 'steam_runtime_path' is provided, run the command using Steam Runtime
-+    If 'steam_runtime' is provided, run the command using Steam Runtime
-     """
-     # Check for incomplete Steam Runtime installation
-     runtime_install_incomplete = \
-         proton_app.required_tool_appid and not proton_app.required_tool_app
- 
--    if steam_runtime_path and runtime_install_incomplete:
-+    if steam_runtime and runtime_install_incomplete:
-         raise RuntimeError(
-             "{} is missing the required Steam Runtime. You may need to launch "
-             "a Steam app using this Proton version to finish the "
-@@ -234,7 +151,7 @@ def run_command(
-     os.environ.pop("WINEARCH", "")
- 
-     wine_bin_dir = None
--    if steam_runtime_path:
-+    if steam_runtime:
-         if proton_app.required_tool_app:
              runtime_name = proton_app.required_tool_app.name
              logger.info(
-@@ -251,8 +168,6 @@ def run_command(
+@@ -294,11 +284,8 @@ def run_command(
+                     "Current Steam Runtime not recognized by Protontricks."
+                 )
+         else:
+-            # Legacy Steam Runtime requires a different LD_LIBRARY_PATH
+             os.environ["PROTON_LD_LIBRARY_PATH"] = \
+-                get_legacy_runtime_library_paths(
+-                    legacy_steam_runtime_path, proton_app
+-                )
++                get_runtime_library_paths(proton_app, proton_app_only=True)
+ 
+         # When Steam Runtime is enabled, create a set of helper scripts
          # that load the underlying Proton Wine executables with Steam Runtime
-         # and Proton libraries instead of system libraries
-         wine_bin_dir = create_wine_bin_dir(proton_app=proton_app)
--        os.environ["PROTON_LD_LIBRARY_PATH"] = \
--            get_runtime_library_paths(steam_runtime_path, proton_app)
+@@ -306,8 +293,6 @@ def run_command(
+         wine_bin_dir = create_wine_bin_dir(
+             proton_app=proton_app, use_bwrap=use_bwrap
+         )
+-        os.environ["LEGACY_STEAM_RUNTIME_PATH"] = \
+-            str(legacy_steam_runtime_path)
+ 
          os.environ["PATH"] = "".join([
              str(wine_bin_dir), os.pathsep, os.environ["PATH"]
-         ])
 diff --git a/tests/test_cli.py b/tests/test_cli.py
-index b612dfa..c4d1de0 100644
+index 1955d81..1de44b3 100644
 --- a/tests/test_cli.py
 +++ b/tests/test_cli.py
-@@ -115,9 +115,6 @@ class TestCLIRun:
+@@ -117,15 +117,10 @@ class TestCLIRun:
          assert str(command.args[0]).endswith(".local/bin/winetricks")
          assert command.args[1] == "winecfg"
          assert command.env["PATH"].startswith(str(wine_bin_dir))
@@ -282,3 +274,61 @@ index b612dfa..c4d1de0 100644
          assert command.env["WINE"] == str(wine_bin_dir / "wine")
          assert command.env["WINELOADER"] == str(wine_bin_dir / "wine")
          assert command.env["WINESERVER"] == str(wine_bin_dir / "wineserver")
+ 
+-        assert command.env["LEGACY_STEAM_RUNTIME_PATH"] == \
+-            str(steam_runtime_dir / "steam-runtime")
+         assert "STEAM_RUNTIME_PATH" not in command.env
+ 
+         for name in ("wine", "wineserver"):
+@@ -166,16 +161,14 @@ class TestCLIRun:
+         assert command.env["PATH"].startswith(str(wine_bin_dir))
+ 
+         # Compared to the traditional Steam Runtime, PROTON_LD_LIBRARY_PATH
+-        # will be different
++        # will be the same (it would be different without steam-run.patch)
+         proton_install_path = Path(proton_app.install_path)
+         assert command.env["PROTON_LD_LIBRARY_PATH"] == "".join([
+             str(proton_install_path / "dist" / "lib"), os.pathsep,
+             str(proton_install_path / "dist" / "lib64"), os.pathsep
+         ])
+ 
+-        # Environment variables for both legacy and new Steam Runtime exist
+-        assert command.env["LEGACY_STEAM_RUNTIME_PATH"] == \
+-            str(steam_runtime_dir / "steam-runtime")
++        # Environment variable for new Steam Runtime exists
+         assert command.env["STEAM_RUNTIME_PATH"] == \
+             str(steam_runtime_soldier.install_path)
+ 
+@@ -238,10 +231,7 @@ class TestCLIRun:
+             str(runtime_root / "lib" / "i386-linux-gnu"), os.pathsep,
+             str(runtime_root / "lib" / "x86_64-linux-gnu")
+         ]))
+-
+-        # Environment variables for both legacy and new Steam Runtime exist
+-        assert command.env["LEGACY_STEAM_RUNTIME_PATH"] == \
+-            str(steam_runtime_dir / "steam-runtime")
++        # Environment variable for new Steam Runtime exists
+         assert command.env["STEAM_RUNTIME_PATH"] == \
+             str(steam_runtime_soldier.install_path)
+ 
+@@ -324,20 +314,6 @@ class TestCLIRun:
+ 
+         assert "Zenity is not installed" in result
+ 
+-    def test_run_steam_runtime_not_found(
+-            self, cli, steam_dir, steam_app_factory):
+-        """
+-        Try performing a command with Steam Runtime enabled but no
+-        available Steam Runtime installation
+-        """
+-        steam_app_factory(name="Fake game 1", appid=10)
+-        result = cli(
+-            ["10", "winecfg"], env={"STEAM_RUNTIME": "invalid/path"},
+-            expect_exit=True
+-        )
+-
+-        assert "Steam Runtime was enabled but couldn't be found" in result
+-
+     def test_run_proton_not_found(self, cli, steam_dir, steam_app_factory):
+         steam_app_factory(name="Fake game 1", appid=10)
+         result = cli(["10", "winecfg"], expect_exit=True)

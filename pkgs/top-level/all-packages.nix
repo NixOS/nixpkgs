@@ -24525,6 +24525,8 @@ in
       canonicaljson;
   };
 
+  matrix-commander = callPackage ../applications/networking/instant-messengers/matrix-commander { };
+
   matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
 
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
@@ -24747,6 +24749,8 @@ in
   rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
 
   rofi-file-browser = callPackage ../applications/misc/rofi-file-browser { };
+
+  rofi-power-menu = callPackage ../applications/misc/rofi-power-menu { };
 
   ympd = callPackage ../applications/audio/ympd { };
 
