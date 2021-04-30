@@ -7195,9 +7195,22 @@ in {
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
+  sanic = callPackage ../development/python-modules/sanic {
+    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
+    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
+      doCheck = false;
+      meta.broken = false;
+    });
+    # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
+    # has special logic to disable tests when this is the case.
+    sanic-testing = self.sanic-testing.override { sanic = null; };
+  };
+
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
-  sanic = callPackage ../development/python-modules/sanic { };
+  sanic-routing = callPackage ../development/python-modules/sanic-routing { };
+
+  sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
