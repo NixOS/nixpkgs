@@ -12,11 +12,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libpst-0.6.75";
+  name = "libpst-0.6.76";
 
   src = fetchurl {
     url = "http://www.five-ten-sg.com/libpst/packages/${name}.tar.gz";
-    sha256 = "11wrf47i3brlxg25wsfz17373q7m5fpjxn2lr41dj252ignqzaac";
+    sha256 = "sha256-PSkb7rvbSNK5NGCLwGGVtkHaY9Ko9eDThvLp1tBaC0I=";
   };
 
   nativeBuildInputs = [
