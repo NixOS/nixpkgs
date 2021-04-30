@@ -10,16 +10,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.23.1";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "1i3ipkq6j47bf9dh9j3axzj6z443jm4j651g38cxyrrx8b2s15x0";
+    sha256 = "sha256-GKvKawvfm/4eBU4mn/Q9fhu3Ml+j+BsxVNPvbvcnMLU=";
   };
 
-  cargoSha256 = "1zkrrg5m0j9rk65g51v2zh404529p9z84qqb7bfyjmgiqlnh48ig";
+  cargoSha256 = "sha256-tWww+rR4DQgRacVeLqnOBcuXA7o/NYmJBcJgWX3aLRY=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
