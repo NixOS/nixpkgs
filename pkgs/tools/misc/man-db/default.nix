@@ -1,10 +1,7 @@
-{ autoconf
-, automake
-, buildPackages
+{ buildPackages
 , db
 , fetchurl
 , gettext
-, gnulib
 , groff
 , lib
 , libiconv
@@ -14,20 +11,22 @@
 , pkg-config
 , stdenv
 , zstd
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.9.4";
+  pname = "man-db";
+  version = "2.9.4";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/${name}.tar.xz";
+    url = "mirror://savannah/man-db/${pname}-${version}.tar.xz";
     sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ autoconf automake gettext groff libtool makeWrapper pkg-config zstd ];
+  nativeBuildInputs = [ autoreconfHook gettext groff libtool makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -67,9 +66,6 @@ stdenv.mkDerivation rec {
 
 
   preConfigure = ''
-    # need to recreate configure script due to substitutions in postPatch
-    ./bootstrap --gnulib-srcdir=${gnulib.src} --no-git
-
     # deal with autoconf 2.70 bug: https://lists.gnu.org/archive/html/bug-autoconf/2020-12/msg00036.html
     # can be removed once autoconf 2.71 is merged
     patch < ${./fix-configure.patch}
