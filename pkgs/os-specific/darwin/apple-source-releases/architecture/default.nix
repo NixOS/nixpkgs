@@ -11,7 +11,7 @@ appleDerivation {
 
   installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];
 
-  DSTROOT = "$(out)";
+  env.DSTROOT = "$(out)";
 
   appleHeaders = ''
     architecture/alignment.h
