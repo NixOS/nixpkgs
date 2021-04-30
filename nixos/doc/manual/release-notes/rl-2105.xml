@@ -334,6 +334,17 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     <link linkend="opt-networking.wireguard.interfaces">networking.wireguard.interfaces.&lt;name&gt;.generatePrivateKeyFile</link>,
+     which is off by default, had a <literal>chmod</literal> race condition
+     fixed. As an aside, the parent directory's permissions were widened,
+     and the key files were made owner-writable.
+     This only affects newly created keys.
+     However, if the exact permissions are important for your setup, read
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/121294">#121294</link>.
+    </para>
+   </listitem>
+   <listitem>
      <para>
       <link linkend="opt-boot.zfs.forceImportAll">boot.zfs.forceImportAll</link>
       previously did nothing, but has been fixed. However its default has been
