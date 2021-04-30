@@ -16641,6 +16641,10 @@ in
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
+  movine = callPackage ../development/tools/database/movine {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
