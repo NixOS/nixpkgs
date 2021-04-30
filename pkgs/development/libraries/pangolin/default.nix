@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
+, xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pangolin";
 
-  version = "2017-08-02";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "stevenlovegrove";
     repo = "Pangolin";
-    rev = "f05a8cdc4f0e32cc1664a430f1f85e60e233c407";
-    sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
+    rev = "v${version}";
+    sha256 = "0abjajxj7lc2yajshimar4w8kf8115prsjnhy83s6jc7cbz63wj8";
   };
 
   nativeBuildInputs = [ cmake pkg-config doxygen ];
@@ -21,8 +21,7 @@ stdenv.mkDerivation {
     libGL
     glew
     xorg.libX11
-    ffmpeg_3
-    python3
+    ffmpeg
     libjpeg
     libpng
     libtiff
