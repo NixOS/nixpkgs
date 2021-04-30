@@ -50,6 +50,7 @@ in
 
     environment.etc."reader.conf".source = cfgFile;
 
+    environment.systemPackages = [ pkgs.pcsclite ];
     systemd.packages = [ (getBin pkgs.pcsclite) ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
