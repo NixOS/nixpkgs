@@ -3991,6 +3991,16 @@
     githubId = 19825977;
     name = "Hiren Shah";
   };
+  hiro98 = {
+    email = "hiro@protagon.space";
+    github = "vale981";
+    githubId = 4025991;
+    name = "Valentin Boettcher";
+    keys = [{
+      longkeyid = "rsa2048/0xC22D4DE4D7B32D19";
+      fingerprint = "45A9 9917 578C D629 9F5F  B5B4 C22D 4DE4 D7B3 2D19";
+    }];
+  };
   hjones2199 = {
     email = "hjones2199@gmail.com";
     github = "hjones2199";
