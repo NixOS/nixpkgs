@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ autoreconfHook gettext groff libtool makeWrapper pkg-config zstd ];
+  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
