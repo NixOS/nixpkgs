@@ -7144,6 +7144,8 @@ in {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rst2ansi = callPackage ../development/python-modules/rst2ansi { };
+
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   Rtree = callPackage ../development/python-modules/Rtree {
