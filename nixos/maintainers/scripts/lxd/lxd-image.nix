@@ -31,4 +31,9 @@ with lib;
   # Network
   networking.useDHCP = false;
   networking.interfaces.eth0.useDHCP = true;
+
+  # As this is intended as a stadalone image, undo some of the minimal profile stuff
+  documentation.enable = true;
+  documentation.nixos.enable = true;
+  environment.noXlibs = false;
 }
