@@ -75,6 +75,10 @@ in
     user = nodes.machine.config.users.users.alice;
     XDG_RUNTIME_DIR = "/run/user/${toString user.uid}";
   in ''
+    # Normal QEMU drivers don't work after wlroots 0.13 it seems, fix ported
+    # from #119615
+    os.environ["QEMU_OPTS"] = "-vga virtio"
+
     start_all()
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_file("${XDG_RUNTIME_DIR}/wayland-0")
