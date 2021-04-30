@@ -9,22 +9,6 @@ let
     name  = "ibus-engine";
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
-
-  impanel =
-    if cfg.panel != null
-    then "--panel=${cfg.panel}"
-    else "";
-
-  ibusAutostart = pkgs.writeTextFile {
-    name = "autostart-ibus-daemon";
-    destination = "/etc/xdg/autostart/ibus-daemon.desktop";
-    text = ''
-      [Desktop Entry]
-      Name=IBus
-      Type=Application
-      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
-    '';
-  };
 in
 {
   imports = [
@@ -57,18 +41,15 @@ in
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
-    environment.systemPackages = [
-      ibusAutostart
-    ];
-
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
     programs.dconf.packages = [ ibusPackage ];
 
-    services.dbus.packages = [
-      ibusAutostart
-    ];
+    services.xserver.displayManager.sessionCommands = ''
+      ${ibusPackage}/bin/ibus-daemon -dx \
+        ${optionalString (cfg.panel != null) "--panel ${cfg.panel}"}
+    '';
 
     environment.variables = {
       GTK_IM_MODULE = "ibus";
