@@ -11,6 +11,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
+  # No tests
+  doCheck = false;
+  pythonImportsCheck = [ "colorthief" ];
+
   meta = with lib; {
     description = "Module for grabbing the color palette from an image";
     homepage = "https://github.com/fengsp/color-thief-py";

@@ -11,6 +11,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
+  # WARNING: Testing via this command is deprecated and will be removed in a future version. Users
+  # looking for a generic test entry point independent of test runner are encouraged to use tox
+  doCheck = false;
+  pythonImportsCheck = [ "haishoku" ];
+
   meta = with lib; {
     description = "Tool for grabbing dominant color palette from images";
     homepage = "https://github.com/LanceGin/haishoku";

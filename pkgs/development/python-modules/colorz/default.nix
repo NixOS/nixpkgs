@@ -11,6 +11,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow scipy ];
 
+  # No tests
+  doCheck = false;
+  pythonImportsCheck = [ "colorz" ];
+
   meta = with lib; {
     description = "Python color scheme generator";
     homepage = "https://github.com/metakirby5/colorz";
