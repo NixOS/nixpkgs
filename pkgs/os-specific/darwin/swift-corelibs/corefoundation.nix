@@ -73,7 +73,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildPhase = "ninja -j $NIX_BUILD_CORES";
+  buildPhase = ''
+    runHook preBuild
+
+    ninja -j $NIX_BUILD_CORES
+
+    runHook postBuild
+  '';
 
   # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now
   # Also, this includes a bunch of private headers in the framework, which is not what we want
