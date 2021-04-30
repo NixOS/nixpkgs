@@ -3252,8 +3252,6 @@ in {
 
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
-  infoqscraper = callPackage ../development/python-modules/infoqscraper { };
-
   inform = callPackage ../development/python-modules/inform { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
