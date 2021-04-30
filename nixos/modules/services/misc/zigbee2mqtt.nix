@@ -10,7 +10,7 @@ let
 
 in
 {
-  meta.maintainers = with maintainers; [ sweber ];
+  meta.maintainers = with maintainers; [ sweber hexa ];
 
   imports = [
     # Remove warning before the 21.11 release
