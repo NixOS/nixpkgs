@@ -27,10 +27,19 @@ stdenv.mkDerivation rec {
     guile-reader
   ];
 
+  doCheck = true;
+
   postInstall = ''
     wrapProgram $out/bin/haunt \
       --prefix GUILE_LOAD_PATH : "$out/share/guile/site:${guile-commonmark}/share/guile/site:${guile-reader}/share/guile/site" \
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/share/guile/site:${guile-commonmark}/share/guile/site:${guile-reader}/share/guile/site"
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/haunt --version
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
@@ -53,7 +62,7 @@ stdenv.mkDerivation rec {
       to do things that aren't provided out-of-the-box.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres AluisioASG ];
     platforms = guile.meta.platforms;
   };
 }
