@@ -1,12 +1,10 @@
 { buildPackages
 , db
 , fetchurl
-, gettext
 , groff
 , lib
 , libiconv
 , libpipeline
-, libtool
 , makeWrapper
 , pkg-config
 , stdenv
