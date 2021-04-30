@@ -10,6 +10,7 @@
 , pygments
 , typing-extensions
 , pytestCheckHook
+, withIPython ? false
 }:
 
 buildPythonPackage rec {
@@ -29,10 +30,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     colorama
-    ipywidgets
     pygments
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses
+    ++ lib.optional withIPython ipywidgets;
 
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "rich" ];
