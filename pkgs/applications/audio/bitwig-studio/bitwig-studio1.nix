@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk-pixbuf
 , wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
-, libbsd, libjack2, libpng, ffmpeg_3
+, libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
 , makeWrapper, pixman, autoPatchelfHook
 , xdg-utils, zenity, zlib }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   binPath = lib.makeBinPath [
-    xdg-utils zenity ffmpeg_3
+    xdg-utils zenity ffmpeg
   ];
 
   installPhase = ''
