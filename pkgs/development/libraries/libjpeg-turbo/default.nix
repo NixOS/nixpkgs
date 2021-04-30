@@ -8,13 +8,13 @@
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.0.6";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = version;
-    sha256 = "0njdxfmyk8smj8bbd6fs3lxjaq3lybivwgg16gpnbiyl984dpi9b";
+    sha256 = "sha256-Ma3Q/zMJPjsQmoaYJtVbHJOx65AfGLWJYi2iRFm3l5s=";
   };
 
   # This is needed by freeimage
