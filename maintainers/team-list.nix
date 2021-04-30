@@ -83,7 +83,7 @@ with lib.maintainers; {
       synthetica
       vcunat
     ];
-    scope = "Maitain GCC (GNU Compiler Collection) compilers";
+    scope = "Maintain GCC (GNU Compiler Collection) compilers";
   };
 
   golang = {
