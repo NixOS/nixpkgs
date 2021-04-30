@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "1k8mxkzvd6y9aawxghddrjkldzskhb6607qhbwjfl9f945ns87qa";
+    sha256 = "sha256-60RgcL4URP19MtMrvKU8Lzu7CiEZPbhhmM9gULeihEE=";
   };
 
   patches = [

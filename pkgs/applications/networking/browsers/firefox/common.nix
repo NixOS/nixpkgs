@@ -9,7 +9,7 @@
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
+, autoconf213, which, gnused, rustPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , debugBuild ? false
@@ -90,19 +90,13 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
-    rustc cargo;
+  inherit (rustPackages) rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
-  # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
   llvmPackages = if stdenv.isDarwin
                  then buildPackages.llvmPackages
-                 else if lib.versionAtLeast rustc.llvm.version "11"
-                      then buildPackages.llvmPackages_11
-                      else buildPackages.llvmPackages_10;
+                 else buildPackages.llvmPackages_11;
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
