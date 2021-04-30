@@ -2111,8 +2111,6 @@ in
 
   jellyfin = callPackage ../servers/jellyfin { };
 
-  jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };
-
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
