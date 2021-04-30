@@ -286,16 +286,18 @@ let
         };
 
         script = let
-          wg_setup = "${wg} set ${interfaceName} peer ${peer.publicKey}" +
-            optionalString (psk != null) " preshared-key ${psk}" +
-            optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
-            optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
-            optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}";
+          wg_setup = concatStringsSep " " (
+            [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
+            ++ optional (psk != null) ''preshared-key "${psk}"''
+            ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
+            ++ optional (peer.persistentKeepalive != null) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
+            ++ optional (peer.allowedIPs != []) ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"''
+          );
           route_setup =
             optionalString interfaceCfg.allowedIPsAsRoutes
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  "${ip} route replace ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
@@ -306,10 +308,10 @@ let
           route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes
             (concatMapStringsSep "\n"
               (allowedIP:
-                "${ip} route delete ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                ''${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
               ) peer.allowedIPs);
         in ''
-          ${wg} set ${interfaceName} peer ${peer.publicKey} remove
+          ${wg} set "${interfaceName}" peer "${peer.publicKey}" remove
           ${route_destroy}
         '';
       };
@@ -345,23 +347,25 @@ let
 
           ${values.preSetup}
 
-          ${ipPreMove} link add dev ${name} type wireguard
-          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) "${ipPreMove} link set ${name} netns ${ns}"}
+          ${ipPreMove} link add dev "${name}" type wireguard
+          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
 
           ${concatMapStringsSep "\n" (ip:
-            "${ipPostMove} address add ${ip} dev ${name}"
+            ''${ipPostMove} address add "${ip}" dev "${name}"''
           ) values.ips}
 
-          ${wg} set ${name} private-key ${privKey} ${
-            optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}"}
+          ${concatStringsSep " " (
+            [ ''${wg} set "${name}" private-key "${privKey}"'' ]
+            ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
+          )}
 
-          ${ipPostMove} link set up dev ${name}
+          ${ipPostMove} link set up dev "${name}"
 
           ${values.postSetup}
         '';
 
         postStop = ''
-          ${ipPostMove} link del dev ${name}
+          ${ipPostMove} link del dev "${name}"
           ${values.postShutdown}
         '';
       };
@@ -371,7 +375,7 @@ let
       nsList = filter (ns: ns != null) [ src dst ];
       ns = last nsList;
     in
-      if (length nsList > 0 && ns != "init") then "ip netns exec ${ns} ${cmd}" else cmd;
+      if (length nsList > 0 && ns != "init") then ''ip netns exec "${ns}" "${cmd}"'' else cmd;
 in
 
 {
