@@ -5054,6 +5054,8 @@ in
     gegl = gegl_0_4;
   };
 
+  gnome-subtitles = callPackage ../applications/video/gnome-subtitles { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
