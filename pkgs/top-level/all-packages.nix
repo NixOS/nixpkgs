@@ -11356,15 +11356,6 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  # Because rustc-1.46.0 enables static PIE by default for
-  # `x86_64-unknown-linux-musl` this release will suffer from:
-  #
-  # https://github.com/NixOS/nixpkgs/issues/94228
-  #
-  # So this commit doesn't remove the 1.45.2 release.
-  rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
   rust_1_51 = callPackage ../development/compilers/rust/1_51.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -11374,7 +11365,6 @@ in
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_45 = rust_1_45.packages.stable;
   rustPackages_1_51 = rust_1_51.packages.stable;
   rustPackages = rustPackages_1_51;
 
