@@ -123,7 +123,7 @@ stdenv.mkDerivation {
       functionalities to Adobe After Effects and Nuke by The Foundry.
     '';
     homepage = "https://natron.fr/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ puffnfresh vojta001 ];
     platforms = platforms.linux;
   };
