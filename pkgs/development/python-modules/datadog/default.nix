@@ -4,7 +4,7 @@
 , pythonOlder
 , decorator
 , requests
-, typing
+, typing ? null
 , configparser
 , click
 , freezegun
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Q4wd3lRi5oxceSt7Sh2HoN3ZcK89sxs88VmA7tDEQxE=";
+    sha256 = "438c1dde5462e68c5c792b7b4a1d87a0ddd970af3db31b3cf15980eed0c44311";
   };
 
   postPatch = ''

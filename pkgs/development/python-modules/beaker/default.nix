@@ -15,8 +15,8 @@
 , cryptography
 , isPy27
 , isPy3k
-, funcsigs
-, pycryptopp
+, funcsigs ? null
+, pycryptopp ? null
 }:
 
 buildPythonPackage rec {

@@ -217,6 +217,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 
@@ -226,6 +227,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 

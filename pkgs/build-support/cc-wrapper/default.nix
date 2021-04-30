@@ -100,6 +100,18 @@ let
     else
       false;
 
+
+  darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
+    if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
+    else targetPlatform.darwinPlatform
+  );
+
+  darwinMinVersion = optionalString stdenv.targetPlatform.isDarwin (
+    stdenv.targetPlatform.darwinMinVersion
+  );
+
+  darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
+    stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
 # Ensure bintools matches
@@ -122,6 +134,7 @@ stdenv.mkDerivation {
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix suffixSalt;
+  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
@@ -474,6 +487,10 @@ stdenv.mkDerivation {
       done
     ''
 
+    + optionalString stdenv.targetPlatform.isDarwin ''
+        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+    ''
+
     # There are a few tools (to name one libstdcxx5) which do not work
     # well with multi line flags, so make the flags single line again
     + ''
@@ -484,10 +501,6 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
-    ''
-
-    + optionalString stdenv.targetPlatform.isDarwin ''
-      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     ##

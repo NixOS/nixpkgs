@@ -25,6 +25,7 @@
 , writeTextFile
 , writeShellScriptBin
 , xkeyboard_config
+, xorg
 , runCommand
 }:
 let
@@ -101,6 +102,7 @@ let
       libcanberra-gtk3
       libpulseaudio
       libxkbfile
+      xorg.libXxf86vm
       polkit
       gdm
       gnome-panel

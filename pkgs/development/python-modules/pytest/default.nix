@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.2";
+  version = "6.2.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nR7fnn0LhNcuo9vN/SKzX7VDpejypgCS3VeJNr9j1/k=";
+    sha256 = "0d5nx7xqr9khagbvg6ac2cjjvcxrvvjp0chwim4z7w2ddsj3h4k7";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -56,9 +56,12 @@ buildPythonPackage rec {
   '';
 
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
+  # test_missing_required_plugins will emit deprecation warning which is treated as error
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+    $out/bin/py.test -x testing/ \
+      --ignore=testing/test_junitxml.py \
+      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
 
     # tests leave behind unreproducible pytest binaries in the output directory, remove:
     find $out/lib -name "*-pytest-${version}.pyc" -delete

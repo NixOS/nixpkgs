@@ -28,7 +28,7 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "tracker";
   version = "3.1.1";
 
@@ -147,3 +147,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+  // {
+    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
+    enableParallelBuilding = false;
+  }
+)

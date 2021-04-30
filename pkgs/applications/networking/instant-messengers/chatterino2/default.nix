@@ -2,12 +2,12 @@
 
 mkDerivation rec {
   pname = "chatterino2";
-  version = "2.2.2";
+  version = "2.3.0";
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "026cs48hmqkv7k4akbm205avj2pn3x1g7q46chwa707k9km325dz";
+    sha256 = "0x12zcrbkxn2nn0hqkj1amrxv4q032id282cajzsx7by970r1shd";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];

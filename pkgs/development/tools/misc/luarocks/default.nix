@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./darwin-3.1.3.patch ];
+
+  postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
+    substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
+  '';
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {

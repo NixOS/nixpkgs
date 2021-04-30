@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.18.0";
+  version = "1.18.1";
 
   excludedPackages = "test";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "sha256-1sFl+F3g2anssW59eKbjPdVCIyGq8JuoJGXVQZys854=";
+    sha256 = "sha256-iFigbnqUXWQrhDovwQYZsr8llkB9553c5LgcKJ78yZ4=";
   };
 
   vendorSha256 = "sha256-m53S/L71nyioCBbIDDAWEnqStBdqTFGq16y5ozsXq1c=";

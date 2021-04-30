@@ -5,7 +5,7 @@
 , azure-common
 , azure-core
 , msrestazure
-, futures
+, futures ? null
 , isPy3k
 }:
 

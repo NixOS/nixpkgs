@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytestCheckHook, mock, pytestcov, coverage
-, future, futures, ujson, isPy38
+, future, futures ? null, ujson, isPy38
 }:
 
 buildPythonPackage rec {

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4136ffdf0aad61da86d1402808029d002a771b2a9ccc9b39c6bcafa7847c21b6";
+    sha256 = "165cd1669b29b16c2d5cc8902b90fede15a7ee475c54d466f1444877a3f511ac";
   };
 
   buildInputs = [ lmdb ];

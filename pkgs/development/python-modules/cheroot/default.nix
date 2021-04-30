@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.4.8";
+  version = "8.5.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r98qqdp9ww5r5ma6wf1n66r9813rrmfvc54z7yij39jkj5c528h";
+    sha256 = "f137d03fd5155b1364bea557a7c98168665c239f6c8cedd8f80e81cdfac01567";
   };
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];

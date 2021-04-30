@@ -17,17 +17,18 @@
 , enablePostScript ? true, libspectre
 , enableXps ? true, libgxps
 , enableImages ? false
+, mateUpdateScript
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0967gxw7h2qh2kpwl0jgv58hicz6aa92kr12mnykbpikad25s95y";
+    sha256 = "06nyicj96dqcv035yqnzmm6pk3m35glxj0ny6lk1vwqkk2l750xl";
   };
 
   nativeBuildInputs = [
@@ -67,10 +68,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

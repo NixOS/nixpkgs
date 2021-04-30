@@ -1,8 +1,8 @@
-diff --git a/src/sage_setup/docbuild/__init__.py b/src/sage_setup/docbuild/__init__.py
-index 73a078e619..059125c59f 100644
---- a/src/sage_setup/docbuild/__init__.py
-+++ b/src/sage_setup/docbuild/__init__.py
-@@ -86,27 +86,6 @@ def builder_helper(type):
+diff --git a/src/sage_docbuild/__init__.py b/src/sage_docbuild/__init__.py
+index 79005b903a..fbe6fe2595 100644
+--- a/src/sage_docbuild/__init__.py
++++ b/src/sage_docbuild/__init__.py
+@@ -85,27 +85,6 @@ def builder_helper(type):
      """
      Returns a function which builds the documentation for
      output type ``type``.
@@ -11,16 +11,16 @@ index 73a078e619..059125c59f 100644
 -
 -    Check that :trac:`25161` has been resolved::
 -
--        sage: from sage_setup.docbuild import DocBuilder, setup_parser
+-        sage: from sage_docbuild import DocBuilder, setup_parser
 -        sage: DocBuilder._options = setup_parser().parse_args([])[0] # builder_helper needs _options to be set
 -
--        sage: import sage_setup.docbuild.sphinxbuild
+-        sage: import sage_docbuild.sphinxbuild
 -        sage: def raiseBaseException():
 -        ....:     raise BaseException("abort pool operation")
--        sage: original_runsphinx, sage_setup.docbuild.sphinxbuild.runsphinx = sage_setup.docbuild.sphinxbuild.runsphinx, raiseBaseException
+-        sage: original_runsphinx, sage_docbuild.sphinxbuild.runsphinx = sage_docbuild.sphinxbuild.runsphinx, raiseBaseException
 -
--        sage: from sage_setup.docbuild import builder_helper, build_ref_doc
--        sage: from sage_setup.docbuild import _build_many as build_many
+-        sage: from sage_docbuild import builder_helper, build_ref_doc
+-        sage: from sage_docbuild import _build_many as build_many
 -        sage: helper = builder_helper("html")
 -        sage: try:
 -        ....:     build_many(build_ref_doc, [("docname", "en", "html", {})])
@@ -30,24 +30,24 @@ index 73a078e619..059125c59f 100644
      """
      def f(self, *args, **kwds):
          output_dir = self._output_dir(type)
-@@ -128,10 +107,9 @@ def builder_helper(type):
+@@ -127,10 +106,9 @@ def builder_helper(type):
          logger.debug(build_command)
  
          # Run Sphinx with Sage's special logger
 -        sys.argv = ["sphinx-build"] + build_command.split()
 -        from .sphinxbuild import runsphinx
-+        args = "python3 -um sage_setup.docbuild.sphinxbuild -N".split() + build_command.split()
++        args = "python3 -um sage_docbuild.sphinxbuild -N".split() + build_command.split()
          try:
 -            runsphinx()
 +            subprocess.check_call(args)
          except Exception:
              if ABORT_ON_ERROR:
                  raise
-diff --git a/src/sage_setup/docbuild/sphinxbuild.py b/src/sage_setup/docbuild/sphinxbuild.py
-index fe7eba43b2..463790965c 100644
---- a/src/sage_setup/docbuild/sphinxbuild.py
-+++ b/src/sage_setup/docbuild/sphinxbuild.py
-@@ -321,3 +321,8 @@ def runsphinx():
+diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
+index f58f6c61d7..ef51a55411 100644
+--- a/src/sage_docbuild/sphinxbuild.py
++++ b/src/sage_docbuild/sphinxbuild.py
+@@ -326,3 +326,8 @@ def runsphinx():
          sys.stderr = saved_stderr
          sys.stdout.flush()
          sys.stderr.flush()

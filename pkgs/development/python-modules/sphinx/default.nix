@@ -26,7 +26,7 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
-, typing
+, typing ? null
 , setuptools
 , packaging
 }:

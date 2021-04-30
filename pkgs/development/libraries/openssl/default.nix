@@ -6,7 +6,7 @@
 # Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
-, withPerl ? true
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 assert (
@@ -42,8 +42,10 @@ let
         substituteInPlace "$a" \
           --replace /bin/rm rm
       done
-    '' + optionalString (versionAtLeast version "1.1.1") ''
-      substituteInPlace config --replace '/usr/bin/env' '${coreutils}/bin/env'
+    ''
+    # config is a configure script which is not installed.
+    + optionalString (versionAtLeast version "1.1.1") ''
+      substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \

@@ -252,6 +252,7 @@
 , "vega-cli"
 , "vega-lite"
 , "vim-language-server"
+, "vls"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"

@@ -101,7 +101,7 @@ default-package-overrides:
   - gi-secret < 0.0.13
   - gi-vte < 2.91.28
 
-  # Stackage Nightly 2021-04-06
+  # Stackage Nightly 2021-04-15
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -139,7 +139,7 @@ default-package-overrides:
   - alex-meta ==0.3.0.13
   - alg ==0.2.13.1
   - algebraic-graphs ==0.5
-  - Allure ==0.9.5.0
+  - Allure ==0.10.2.0
   - almost-fix ==0.0.2
   - alsa-core ==0.5.0.1
   - alsa-mixer ==0.3.0
@@ -327,7 +327,7 @@ default-package-overrides:
   - bazel-runfiles ==0.12
   - bbdb ==0.8
   - bcp47 ==0.2.0.3
-  - bcp47-orphans ==0.1.0.2
+  - bcp47-orphans ==0.1.0.3
   - bcrypt ==0.0.11
   - bech32 ==1.1.0
   - bech32-th ==1.0.2
@@ -391,7 +391,7 @@ default-package-overrides:
   - boundingboxes ==0.2.3
   - bower-json ==1.0.0.1
   - boxes ==0.1.5
-  - brick ==0.60.2
+  - brick ==0.61
   - broadcast-chan ==0.2.1.1
   - bsb-http-chunked ==0.0.0.4
   - bson ==0.4.0.1
@@ -451,8 +451,8 @@ default-package-overrides:
   - cassava-megaparsec ==2.0.2
   - cast ==0.1.0.2
   - category ==0.2.5.0
-  - cayley-client ==0.4.14
-  - cborg ==0.2.4.0
+  - cayley-client ==0.4.15
+  - cborg ==0.2.5.0
   - cborg-json ==0.2.2.0
   - cereal ==0.5.8.1
   - cereal-conduit ==0.8.0
@@ -528,13 +528,13 @@ default-package-overrides:
   - compiler-warnings ==0.1.0
   - composable-associations ==0.1.0.0
   - composable-associations-aeson ==0.1.0.1
-  - composite-aeson ==0.7.4.0
-  - composite-aeson-path ==0.7.4.0
-  - composite-aeson-refined ==0.7.4.0
-  - composite-base ==0.7.4.0
-  - composite-binary ==0.7.4.0
-  - composite-ekg ==0.7.4.0
-  - composite-hashable ==0.7.4.0
+  - composite-aeson ==0.7.5.0
+  - composite-aeson-path ==0.7.5.0
+  - composite-aeson-refined ==0.7.5.0
+  - composite-base ==0.7.5.0
+  - composite-binary ==0.7.5.0
+  - composite-ekg ==0.7.5.0
+  - composite-hashable ==0.7.5.0
   - composite-tuple ==0.1.2.0
   - composite-xstep ==0.1.0.0
   - composition ==1.0.2.2
@@ -681,7 +681,7 @@ default-package-overrides:
   - deferred-folds ==0.9.17
   - dejafu ==2.4.0.2
   - dense-linear-algebra ==0.1.0.0
-  - depq ==0.4.1.0
+  - depq ==0.4.2
   - deque ==0.4.3
   - deriveJsonNoPrefix ==0.1.0.1
   - derive-topdown ==0.0.2.2
@@ -710,7 +710,7 @@ default-package-overrides:
   - distributed-closure ==0.4.2.0
   - distribution-opensuse ==1.1.1
   - distributive ==0.6.2.1
-  - dl-fedora ==0.7.7
+  - dl-fedora ==0.8
   - dlist ==0.8.0.8
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
@@ -800,10 +800,10 @@ default-package-overrides:
   - errors-ext ==0.4.2
   - ersatz ==0.4.9
   - esqueleto ==3.4.1.1
-  - essence-of-live-coding ==0.2.4
-  - essence-of-live-coding-gloss ==0.2.4
-  - essence-of-live-coding-pulse ==0.2.4
-  - essence-of-live-coding-quickcheck ==0.2.4
+  - essence-of-live-coding ==0.2.5
+  - essence-of-live-coding-gloss ==0.2.5
+  - essence-of-live-coding-pulse ==0.2.5
+  - essence-of-live-coding-quickcheck ==0.2.5
   - etc ==0.4.1.0
   - eve ==0.1.9.0
   - eventful-core ==0.2.0
@@ -825,7 +825,7 @@ default-package-overrides:
   - expiring-cache-map ==0.0.6.1
   - explicit-exception ==0.1.10
   - exp-pairs ==0.2.1.0
-  - express ==0.1.3
+  - express ==0.1.4
   - extended-reals ==0.2.4.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
@@ -869,7 +869,7 @@ default-package-overrides:
   - first-class-patterns ==0.3.2.5
   - fitspec ==0.4.8
   - fixed ==0.3
-  - fixed-length ==0.2.2
+  - fixed-length ==0.2.2.1
   - fixed-vector ==1.2.0.0
   - fixed-vector-hetero ==0.6.1.0
   - fix-whitespace ==0.0.5
@@ -936,10 +936,10 @@ default-package-overrides:
   - generic-data-surgery ==0.3.0.0
   - generic-deriving ==1.13.1
   - generic-functor ==0.2.0.0
-  - generic-lens ==2.0.0.0
-  - generic-lens-core ==2.0.0.0
+  - generic-lens ==2.1.0.0
+  - generic-lens-core ==2.1.0.0
   - generic-monoid ==0.1.0.1
-  - generic-optics ==2.0.0.0
+  - generic-optics ==2.1.0.0
   - GenericPretty ==1.2.2
   - generic-random ==1.3.0.1
   - generics-eot ==0.4.0.1
@@ -978,7 +978,7 @@ default-package-overrides:
   - geojson ==4.0.2
   - getopt-generics ==0.13.0.4
   - ghc-byteorder ==4.11.0.0.10
-  - ghc-check ==0.5.0.3
+  - ghc-check ==0.5.0.4
   - ghc-core ==0.5.6
   - ghc-events ==0.16.0
   - ghc-exactprint ==0.6.4
@@ -1028,7 +1028,7 @@ default-package-overrides:
   - gitrev ==1.3.1
   - gi-xlib ==2.0.9
   - gl ==0.9
-  - glabrous ==2.0.2
+  - glabrous ==2.0.3
   - GLFW-b ==3.3.0.0
   - Glob ==0.10.1
   - gloss ==1.13.2.1
@@ -1130,7 +1130,7 @@ default-package-overrides:
   - hgrev ==0.2.6
   - hidapi ==0.1.7
   - hie-bios ==0.7.5
-  - hi-file-parser ==0.1.1.0
+  - hi-file-parser ==0.1.2.0
   - higher-leveldb ==0.6.0.0
   - highlighting-kate ==0.6.4
   - hinfo ==0.0.3.0
@@ -1187,7 +1187,7 @@ default-package-overrides:
   - hslua-module-path ==0.1.0.1
   - hslua-module-system ==0.2.2.1
   - hslua-module-text ==0.3.0.1
-  - HsOpenSSL ==0.11.6.1
+  - HsOpenSSL ==0.11.6.2
   - HsOpenSSL-x509-system ==0.1.0.4
   - hsp ==0.10.0
   - hspec ==2.7.9
@@ -1197,13 +1197,13 @@ default-package-overrides:
   - hspec-core ==2.7.9
   - hspec-discover ==2.7.9
   - hspec-expectations ==0.8.2
-  - hspec-expectations-json ==1.0.0.2
+  - hspec-expectations-json ==1.0.0.3
   - hspec-expectations-lifted ==0.10.0
   - hspec-expectations-pretty-diff ==0.7.2.5
   - hspec-golden ==0.1.0.3
   - hspec-golden-aeson ==0.7.0.0
   - hspec-hedgehog ==0.0.1.2
-  - hspec-junit-formatter ==1.0.0.1
+  - hspec-junit-formatter ==1.0.0.2
   - hspec-leancheck ==0.0.4
   - hspec-megaparsec ==2.2.0
   - hspec-meta ==2.7.8
@@ -1316,7 +1316,7 @@ default-package-overrides:
   - indexed ==0.1.3
   - indexed-containers ==0.1.0.2
   - indexed-list-literals ==0.2.1.3
-  - indexed-profunctors ==0.1
+  - indexed-profunctors ==0.1.1
   - indexed-traversable ==0.1.1
   - indexed-traversable-instances ==0.1
   - infer-license ==0.2.0
@@ -1332,6 +1332,7 @@ default-package-overrides:
   - insert-ordered-containers ==0.2.4
   - inspection-testing ==0.4.3.0
   - instance-control ==0.1.2.0
+  - int-cast ==0.2.0.0
   - integer-logarithms ==1.0.3.1
   - integer-roots ==1.0
   - integration ==0.2.1
@@ -1356,7 +1357,7 @@ default-package-overrides:
   - io-streams-haproxy ==1.0.1.0
   - ip6addr ==1.0.2
   - iproute ==1.7.11
-  - IPv6Addr ==2.0.1
+  - IPv6Addr ==2.0.2
   - ipynb ==0.1.0.1
   - ipython-kernel ==0.10.2.1
   - irc ==0.6.1.0
@@ -1369,13 +1370,12 @@ default-package-overrides:
   - iso639 ==0.1.0.3
   - iso8601-time ==0.1.5
   - iterable ==3.0
-  - it-has ==0.2.0.0
   - ixset-typed ==0.5
   - ixset-typed-binary-instance ==0.1.0.2
   - ixset-typed-conversions ==0.1.2.0
   - ixset-typed-hashable-instance ==0.1.0.2
   - ix-shapable ==0.1.0
-  - jack ==0.7.1.4
+  - jack ==0.7.2
   - jalaali ==1.0.0.0
   - jira-wiki-markup ==1.3.4
   - jose ==0.8.4
@@ -1416,13 +1416,13 @@ default-package-overrides:
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.14
-  - LambdaHack ==0.9.5.0
+  - LambdaHack ==0.10.2.0
   - lame ==0.2.0
   - language-avro ==0.1.3.1
   - language-bash ==0.9.2
   - language-c ==0.8.3
   - language-c-quote ==0.12.2.1
-  - language-docker ==9.1.3
+  - language-docker ==9.2.0
   - language-java ==0.2.9
   - language-javascript ==0.7.1.0
   - language-protobuf ==1.0.1
@@ -1591,7 +1591,7 @@ default-package-overrides:
   - mnist-idx ==0.1.2.8
   - mockery ==0.3.5
   - mock-time ==0.1.0
-  - mod ==0.1.2.1
+  - mod ==0.1.2.2
   - model ==0.5
   - modern-uri ==0.3.4.1
   - modular ==0.1.0.8
@@ -1617,7 +1617,7 @@ default-package-overrides:
   - monad-primitive ==0.1
   - monad-products ==4.0.1
   - MonadPrompt ==1.0.0.5
-  - MonadRandom ==0.5.2
+  - MonadRandom ==0.5.3
   - monad-resumption ==0.1.4.0
   - monad-skeleton ==0.1.5
   - monad-st ==0.2.4.1
@@ -1707,7 +1707,7 @@ default-package-overrides:
   - nonemptymap ==0.0.6.0
   - non-empty-sequence ==0.2.0.4
   - nonempty-vector ==0.2.1.0
-  - nonempty-zipper ==1.0.0.1
+  - nonempty-zipper ==1.0.0.2
   - non-negative ==0.1.2
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
@@ -1715,7 +1715,7 @@ default-package-overrides:
   - nqe ==0.6.3
   - nri-env-parser ==0.1.0.6
   - nri-observability ==0.1.0.1
-  - nri-prelude ==0.5.0.2
+  - nri-prelude ==0.5.0.3
   - nsis ==0.3.3
   - numbers ==3000.2.0.2
   - numeric-extras ==0.1
@@ -1961,8 +1961,8 @@ default-package-overrides:
   - QuickCheck ==2.14.2
   - quickcheck-arbitrary-adt ==0.3.1.0
   - quickcheck-assertions ==0.3.0
-  - quickcheck-classes ==0.6.4.0
-  - quickcheck-classes-base ==0.6.1.0
+  - quickcheck-classes ==0.6.5.0
+  - quickcheck-classes-base ==0.6.2.0
   - quickcheck-higherorder ==0.1.0.0
   - quickcheck-instances ==0.3.25.2
   - quickcheck-io ==0.2.0
@@ -2013,7 +2013,7 @@ default-package-overrides:
   - rebase ==1.6.1
   - record-dot-preprocessor ==0.2.10
   - record-hasfield ==1.0
-  - records-sop ==0.1.0.3
+  - records-sop ==0.1.1.0
   - record-wrangler ==0.1.1.0
   - recursion-schemes ==5.2.2.1
   - reducers ==3.12.3
@@ -2038,7 +2038,7 @@ default-package-overrides:
   - regex-posix ==0.96.0.0
   - regex-tdfa ==1.3.1.0
   - regex-with-pcre ==1.1.0.0
-  - registry ==0.2.0.2
+  - registry ==0.2.0.3
   - reinterpret-cast ==0.1.0
   - relapse ==1.0.0.0
   - relational-query ==0.12.2.3
@@ -2087,7 +2087,7 @@ default-package-overrides:
   - rvar ==0.2.0.6
   - safe ==0.3.19
   - safe-coloured-text ==0.0.0.0
-  - safecopy ==0.10.4.1
+  - safecopy ==0.10.4.2
   - safe-decimal ==0.2.0.0
   - safe-exceptions ==0.1.7.1
   - safe-foldable ==0.1.0.0
@@ -2248,9 +2248,9 @@ default-package-overrides:
   - sparse-tensor ==0.2.1.5
   - spatial-math ==0.5.0.1
   - special-values ==0.1.0.0
-  - speculate ==0.4.2
+  - speculate ==0.4.4
   - speedy-slice ==0.3.2
-  - Spintax ==0.3.5
+  - Spintax ==0.3.6
   - splice ==0.6.1.1
   - splint ==1.0.1.4
   - split ==0.2.3.4
@@ -2419,7 +2419,7 @@ default-package-overrides:
   - text-metrics ==0.3.0
   - text-postgresql ==0.0.3.1
   - text-printer ==0.5.0.1
-  - text-regex-replace ==0.1.1.3
+  - text-regex-replace ==0.1.1.4
   - text-region ==0.3.1.0
   - text-short ==0.1.3
   - text-show ==3.9
@@ -2457,9 +2457,9 @@ default-package-overrides:
   - throwable-exceptions ==0.1.0.9
   - th-strict-compat ==0.1.0.1
   - th-test-utils ==1.1.0
-  - th-utilities ==0.2.4.2
+  - th-utilities ==0.2.4.3
   - thyme ==0.3.5.5
-  - tidal ==1.7.2
+  - tidal ==1.7.3
   - tile ==0.3.0.0
   - time-compat ==1.9.5
   - timeit ==2.0
@@ -2604,9 +2604,9 @@ default-package-overrides:
   - valor ==0.1.0.0
   - vault ==0.3.1.5
   - vec ==0.4
-  - vector ==0.12.2.0
+  - vector ==0.12.3.0
   - vector-algorithms ==0.8.0.4
-  - vector-binary-instances ==0.2.5.1
+  - vector-binary-instances ==0.2.5.2
   - vector-buffer ==0.4.1
   - vector-builder ==0.3.8.1
   - vector-bytes-instances ==0.1.1
@@ -2729,15 +2729,15 @@ default-package-overrides:
   - yesod ==1.6.1.0
   - yesod-auth ==1.6.10.2
   - yesod-auth-hashdb ==1.7.1.5
-  - yesod-auth-oauth2 ==0.6.2.3
+  - yesod-auth-oauth2 ==0.6.3.0
   - yesod-bin ==1.6.1
-  - yesod-core ==1.6.18.8
+  - yesod-core ==1.6.19.0
   - yesod-fb ==0.6.1
   - yesod-form ==1.6.7
   - yesod-gitrev ==0.2.1
   - yesod-markdown ==0.12.6.8
   - yesod-newsfeed ==1.7.0.0
-  - yesod-page-cursor ==2.0.0.5
+  - yesod-page-cursor ==2.0.0.6
   - yesod-paginator ==1.1.1.0
   - yesod-persistent ==1.6.0.6
   - yesod-sitemap ==1.6.0
@@ -5951,7 +5951,6 @@ broken-packages:
   - gw
   - gyah-bin
   - gym-http-api
-  - H
   - h-booru
   - h-gpgme
   - h-reversi
@@ -6838,6 +6837,7 @@ broken-packages:
   - hsdip
   - hsdns-cache
   - Hsed
+  - hsendxmpp
   - hsenv
   - HSet
   - hset
@@ -7193,7 +7193,6 @@ broken-packages:
   - inject-function
   - inline-asm
   - inline-java
-  - inline-r
   - inserts
   - inspector-wrecker
   - instana-haskell-trace-sdk
@@ -8693,6 +8692,8 @@ broken-packages:
   - opentelemetry-http-client
   - opentheory-char
   - opentok
+  - opentracing-jaeger
+  - opentracing-zipkin-v1
   - opentype
   - OpenVG
   - OpenVGRaw
@@ -8781,7 +8782,6 @@ broken-packages:
   - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
-  - pandoc-sidenote
   - pandoc-unlit
   - pandoc-utils
   - PandocAgda
@@ -8813,7 +8813,6 @@ broken-packages:
   - Paraiso
   - Parallel-Arrows-Eden
   - parallel-tasks
-  - parameterized
   - parameterized-utils
   - paranoia
   - parco
@@ -9818,6 +9817,7 @@ broken-packages:
   - safe-globals
   - safe-lazy-io
   - safe-length
+  - safe-numeric
   - safe-plugins
   - safe-printf
   - safecopy-migrate
@@ -10004,11 +10004,11 @@ broken-packages:
   - servant-db
   - servant-db-postgresql
   - servant-dhall
-  - servant-docs
   - servant-docs-simple
   - servant-ede
   - servant-ekg
   - servant-elm
+  - servant-event-stream
   - servant-examples
   - servant-fiat-content
   - servant-generate
@@ -10769,6 +10769,7 @@ broken-packages:
   - TaskMonad
   - tasty-auto
   - tasty-bdd
+  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-groundhog-converters
@@ -11574,6 +11575,7 @@ broken-packages:
   - whois
   - why3
   - wide-word
+  - wide-word-instances
   - WikimediaParser
   - wikipedia4epub
   - wild-bind-indicator
@@ -11637,7 +11639,6 @@ broken-packages:
   - wshterm
   - wsjtx-udp
   - wss-client
-  - wstunnel
   - wtk
   - wtk-gtk
   - wu-wei

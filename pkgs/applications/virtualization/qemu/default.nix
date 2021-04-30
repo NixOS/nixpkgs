@@ -84,6 +84,126 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    (fetchpatch {
+      name = "CVE-2020-27821.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/memory-clamp-cached-translation-if-points-to-MMIO-region-CVE-2020-27821.patch";
+      sha256 = "0sj0kr0g6jalygr5mb9i17fgr491jzaxvk3dvala0268940s01x9";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20221.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/arm_gic-fix-interrupt-ID-in-GICD_SGIR-CVE-2021-20221.patch";
+      sha256 = "1iyvcw87hzlc57fg5l87vddqmch8iw2yghk0s125hk5shn1bygjq";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20181.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/9pfs-Fully-restart-unreclaim-loop-CVE-2021-20181.patch";
+      sha256 = "149ifiazj6rn4d4mv2c7lcayq744fijsv5abxlb8bhbkj99wd64f";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-extract-lo_do_open-from-lo_open.patch";
+      sha256 = "0j4waaz6q54by4a7vd5m8s2n8y0an9hqf0ndycxsy03g4ksm669d";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-optionally-return-inode-pointer-from-lo_do_lookup.patch";
+      sha256 = "08bag890r6dx2rhnq58gyvsxvzwqgvn83pjlg95b5ic0z6gyjnsg";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-prevent-opening-of-special-files-CVE-2020-35517.patch";
+      sha256 = "0ziy6638zbkn037l29ywirvgymbqq66l5rngg8iwyky67acilv94";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20263.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-save-error-code-early-at-the-failure-callsite.patch";
+      sha256 = "15rwb15yjpclrqaxkhx76npr8zlfm9mj4jb19czg093is2cn4rys";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20263.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-drop-remapped-security.capability-xattr-as-needed-CVE-2021-20263.patch";
+      sha256 = "06ylz80ilg30wlskd4dsjx677fp5qr8cranwlakvjhr88b630xw0";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-introduce.patch";
+      sha256 = "0hcpf00vqpg9rc0wl8cry905w04614843aqifybyv15wbv190gpz";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-cadence_gem.patch";
+      sha256 = "12mjnrvs6p4g5frzqb08k4h86hphdqlka91fcma2a3m4ap98nrxy";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-dp8393x.patch";
+      sha256 = "02z6q0578fj55phjlg2larrsx3psch2ixzy470yf57jl3jq1dy6k";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-4.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-e1000.patch";
+      sha256 = "0zzbiz8i9js524mcdi739c7hrsmn82gnafrygi0xrd5sqf1hp08z";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-5.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-lan9118.patch";
+      sha256 = "1f44v5znd9s7l7wgc71nbg8jw1bjqiga4wkz7d7cpnkv3l7b9kjj";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-6.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-msf2.patch";
+      sha256 = "04n1rzn6gfxdalp34903ysdhlvxqkfndnqayjj3iv1k27i5pcidn";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-7.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-pcnet.patch";
+      sha256 = "1p9ls6f8r6hxprj8ha6278fydcxj3av29p1hvszxmabazml2g7l2";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-8.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-rtl8139.patch";
+      sha256 = "0lms1zn49kpwblkp54widjjy7fwyhdh1x832l1jvds79l2nm6i04";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-9.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-sungem.patch";
+      sha256 = "1mkzyrgsp9ml9yqzjxdfqnwjr7n0fd8vxby4yp4ksrskyni8y0p4";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-10.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-tx_pkt-iov.patch";
+      sha256 = "1pwqq8yw06y3p6hah3dgjhsqzk802wbn7zyajla1zwdfpic63jss";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/dont-transfer-any-data-when-command-time-out.patch";
+      sha256 = "0wf1yhb9mqpfgh9rv0hff0v1sw3zl2vsfgjrby4r8jvxdfjrxj8s";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/dont-write-to-SDHC_SYSAD-register-when-transfer-is-in-progress.patch";
+      sha256 = "1dd405dsdc7fbp68yf6f32js1azsv3n595c6nbxh28kfh9lspx4v";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/correctly-set-the-controller-status-for-ADMA.patch";
+      sha256 = "08jk51pfrbn1zfymahgllrzivajh2v2qx0868rv9zmgi0jldbky6";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-4.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/limit-block-size-only-when-SDHC_BLKSIZE-register-is-writable.patch";
+      sha256 = "1valfhw3l83br1cny6n4kmrv0f416hl625mggayqfz4prsknyhh7";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-5.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/reset-the-data-pointer-of-s-fifo_buffer-when-a-different-block-size-is-programmed.patch";
+      sha256 = "01p5qrr00rh3mlwrp3qq56h7yhqv0w7pw2cw035nxw3mnap03v31";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3392.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/mptsas-remove-unused-MPTSASState.pending-CVE-2021-3392.patch";
+      sha256 = "0n7dn2p102c21mf3ncqrnks0wl5kas6yspafbn8jd03ignjgc4hd";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -176,6 +296,9 @@ stdenv.mkDerivation rec {
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
+
+  # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "http://www.qemu.org/";

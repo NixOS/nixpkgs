@@ -10,7 +10,6 @@
 
 mkDerivation {
   name = "kinfocenter";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons

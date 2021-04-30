@@ -1,20 +1,46 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, linuxHeaders, sqlite, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OomCSA02ypFVzkYMcmkFREWB6x7oxgpt7x2zRANIDMw=";
+    sha256 = "sha256-Z4F5RYPVgFiiDBg6lxILjAh/a/rL7IJBqHIJ/tQyLnE=";
   };
+  cargoSha256 = "sha256-WSkN5aXMgfqZJAV1b3elF7kwf2f5OpcntKSf8620YcY=";
+
+  nativeBuildInputs = with llvmPackages; [
+    llvm
+    clang
+    installShellFiles
+  ];
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
   env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
-  nativeBuildInputs = with llvmPackages; [ llvm clang ];
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  cargoSha256 = "sha256-GYNk3j8fjKSo3Qk6Qy0l6kNINK3FxlSYoEkJSx7kVpk=";
+  postInstall = ''
+    installManPage doc/innernet-server.8.gz
+    installManPage doc/innernet.8.gz
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if [[ "$("$out/bin/${pname}"-server --version)" == "${pname}-server ${version}" ]]; then
+      echo '${pname}-server smoke check passed'
+    else
+      echo '${pname}-server smoke check failed'
+      return 1
+    fi
+    if [[ "$("$out/bin/${pname}" --version)" == "${pname} ${version}" ]]; then
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
+  '';
 
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";

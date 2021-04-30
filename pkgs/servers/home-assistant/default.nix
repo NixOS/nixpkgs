@@ -55,6 +55,14 @@ let
       });
     })
 
+    # Pinned due to API changes in pyjwt>=2.0
+    (mkOverride "pyjwt" "1.7.1"
+      "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd")
+
+    # Pinned due to API changes in pykmtronic>=0.2.0
+    (mkOverride "pykmtronic" "0.0.3"
+      "sha256-8bxn27DU1XUQUxQFJklEge29DHx1DMu7pJG4hVE1jDU=")
+
     # Pinned due to API changes in pylilterbot>=2021.3.0
     # https://github.com/home-assistant/core/pull/48300; Remove >= 2021.5
     (self: super: {
@@ -267,6 +275,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hddtemp"
     "history"
     "history_stats"
+    "home_connect"
     "home_plus_control"
     "homekit"
     "homekit_controller"
@@ -291,6 +300,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent_script"
     "ipp"
     "kmtronic"
+    "knx"
     "kodi"
     "light"
     "litterrobot"
@@ -322,6 +332,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "nx584"
     "omnilogic"
     "ondilo_ico"
     "openerz"
@@ -341,6 +352,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rest_command"
     "rituals_perfume_genie"
     "rmvtransport"
+    "roku"
     "rss_feed_template"
     "ruckus_unleashed"
     "safe_mode"
@@ -354,8 +366,10 @@ in with py.pkgs; buildPythonApplication rec {
     "simulated"
     "sleepiq"
     "sma"
+    "smhi"
     "sensor"
     "slack"
+    "smartthings"
     "smarttub"
     "smtp"
     "smappee"

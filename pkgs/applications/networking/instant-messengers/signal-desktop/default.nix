@@ -2,7 +2,7 @@
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
 # Unfortunately this also overwrites the UI language (not just the spell
@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango

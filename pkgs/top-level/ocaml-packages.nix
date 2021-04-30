@@ -401,6 +401,8 @@ let
       inherit (pkgs) gsl;
     };
 
+    h2 = callPackage ../development/ocaml-modules/h2 { };
+
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
@@ -412,6 +414,8 @@ let
     hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
+
+    hpack = callPackage ../development/ocaml-modules/hpack { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
@@ -576,6 +580,8 @@ let
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
+    letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
@@ -675,6 +681,8 @@ let
 
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
+    mirage-bootvar-xen = callPackage ../development/ocaml-modules/mirage-bootvar-xen { };
+
     mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
@@ -717,6 +725,8 @@ let
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
+    mirage-net-xen = callPackage ../development/ocaml-modules/mirage-net-xen { };
+
     mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
@@ -739,6 +749,8 @@ let
 
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
+    mirage-xen = callPackage ../development/ocaml-modules/mirage-xen { };
+
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
@@ -752,6 +764,8 @@ let
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
+
+    netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
@@ -929,6 +943,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
+
+    paf = callPackage ../development/ocaml-modules/paf { };
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
@@ -1138,6 +1154,10 @@ let
 
     sha = callPackage ../development/ocaml-modules/sha { };
 
+    shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
+
+    shared-memory-ring-lwt = callPackage ../development/ocaml-modules/shared-memory-ring/lwt.nix { };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
@@ -1264,7 +1284,7 @@ let
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
       inherit self;
-      inherit (pkgs) openssl zstd;
+      inherit (pkgs) lib openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
@@ -1476,5 +1496,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_12;
 
-  ocamlPackages = ocamlPackages_4_10;
+  ocamlPackages = ocamlPackages_4_12;
 }

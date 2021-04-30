@@ -13,6 +13,7 @@
 , multipledispatch
 , packaging
 , distributed
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     scipy
     six
     toolz
+    setuptools-scm
   ];
 
   # has non-standard build from source, and pypi doesn't include tests

@@ -325,6 +325,10 @@ let
           addOpenGLRunpath "$lib"
         done
       '';
+
+      requiredSystemFeatures = [
+        "big-parallel"
+      ];
     };
 
     meta = with lib; {

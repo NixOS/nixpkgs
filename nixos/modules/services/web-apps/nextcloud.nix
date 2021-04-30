@@ -10,7 +10,7 @@ let
     extensions = { enabled, all }:
       (with all;
         enabled
-        ++ optional (!cfg.disableImagemagick) imagick
+        ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
         ++ optional cfg.caching.redis redis
@@ -62,6 +62,9 @@ in {
 
       Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
       (which can be openend e.g. by running `nixos-help`).
+    '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
+      Use services.nextcloud.nginx.enableImagemagick instead.
     '')
   ];
 
@@ -303,16 +306,14 @@ in {
       };
     };
 
-    disableImagemagick = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to not load the ImageMagick module into PHP.
+    enableImagemagick = mkEnableOption ''
+        Whether to load the ImageMagick module into PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
         See https://github.com/nextcloud/server/issues/13099
-      '';
+    '' // {
+      default = true;
     };
 
     caching = {

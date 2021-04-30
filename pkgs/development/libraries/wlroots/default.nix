@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
-, libGL, wayland-protocols, libinput, libxkbcommon, pixman
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland-scanner
+, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg, libuuid, xcbutilrenderutil, xwayland
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # $out for the library and $examples for the example programs (in examples):
   outputs = [ "out" "examples" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman

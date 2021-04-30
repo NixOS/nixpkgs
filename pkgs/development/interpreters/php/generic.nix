@@ -192,7 +192,7 @@ let
               "--with-libxml-dir=${libxml2.dev}"
             ]
             ++ lib.optional pharSupport   "--enable-phar"
-            ++ lib.optional phpdbgSupport "--enable-phpdbg"
+            ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
 
 
             # Misc flags

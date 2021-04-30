@@ -15,7 +15,7 @@ let
       ${ppdOptionsString p.ppdOptions}
   '';
   ensureDefaultPrinter = name: ''
-    ${pkgs.cups}/bin/lpoptions -d '${name}'
+    ${pkgs.cups}/bin/lpadmin -d '${name}'
   '';
 
   # "graph but not # or /" can't be implemented as regex alone due to missing lookahead support

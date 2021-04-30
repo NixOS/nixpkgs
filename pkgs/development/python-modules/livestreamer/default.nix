@@ -4,8 +4,8 @@
 , isPyPy
 , pycrypto
 , requests
-, singledispatch
-, futures
+, singledispatch ? null
+, futures ? null
 , isPy27
 }:
 

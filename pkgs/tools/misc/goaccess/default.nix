@@ -1,36 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, ncurses, glib, libmaxminddb, fetchpatch }:
+{ lib, stdenv, fetchurl, ncurses, gettext, openssl, withGeolocation ? true, libmaxminddb }:
 
 stdenv.mkDerivation rec {
-  version = "1.4";
+  version = "1.4.6";
   pname = "goaccess";
 
   src = fetchurl {
     url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "1gkpjg39f3afdwm9128jqjsfap07p8s027czzlnxfmi5hpzvkyz8";
+    sha256 = "1l3j3i4vb7ni7i047qvi9a3hs43ym24r6hfcnqsbhgrb731jf3qx";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/allinurl/goaccess/commit/514618cdd69453497fbf67913ccb37a0a0b07391.patch";
-      sha256 = "11lp7mabfl6ibgzsd9nw10k2xvcm0hrimrwidl06r8dqn2jzjxf6";
-    })
-  ];
-
   configureFlags = [
-    "--enable-geoip=mmdb"
     "--enable-utf8"
-  ];
+    "--with-openssl"
+  ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libmaxminddb
-    ncurses
-    glib
-  ];
+  buildInputs = [ ncurses openssl ]
+    ++ lib.optionals withGeolocation [ libmaxminddb ]
+    ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
     homepage    = "https://goaccess.io";
+    changelog   = "https://github.com/allinurl/goaccess/raw/v${version}/ChangeLog";
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ ederoyd46 ];

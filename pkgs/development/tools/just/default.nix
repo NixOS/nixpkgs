@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
+{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-YDIGZRbszhgWM7iAc2i89jyndZvZZsg63ADQfqFxfXw=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
     installManPage man/just.1

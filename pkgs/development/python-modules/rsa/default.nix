@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "rsa";
-  version = "4.6";
+  version = "4.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa";
+    sha256 = "9d689e6ca1b3038bc82bf8d23e944b6b6037bc02301a574935b2dd946e0353b9";
   };
 
   checkInputs = [ unittest2 mock ];

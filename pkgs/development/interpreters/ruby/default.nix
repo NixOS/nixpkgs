@@ -249,18 +249,18 @@ let
 
 in {
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "6" "";
+    version = rubyVersion "2" "6" "7" "";
     sha256 = {
-      src = "1492x795qzgp3zhpl580kd1sdp50n5hfsmpbfhdsq2rnxwyi8jrn";
-      git = "1jr9v99a7awssqmw7531afbx4a8i9x5yfqyffha545g7r4s7kj50";
+      src = "17m9qxalwhk95dw1qhgxbvr3kkcxs3h86yirfg5mwj35gy5pw8p4";
+      git = "08gvknanwdfsaj3lmcv1bdqjf9lldphzi7gmlv3cfa8ligx2vbap";
     };
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "2" "";
+    version = rubyVersion "2" "7" "3" "";
     sha256 = {
-      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
-      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
+      src = "0f2kwn98n9h9hy1fd547s7d0a7ga8jjm4nh294bwiwnq65gaj9c9";
+      git = "0vxg9w4dgpw2ig5snxmkahvzdp2yh71w8qm49g35d5hqdsql7yrx";
     };
   };
 

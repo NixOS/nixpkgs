@@ -123,7 +123,7 @@ depsBuildBuild = [ buildPackages.stdenv.cc ];
 
 Add the following to your `mkDerivation` invocation.
 ```nix
-doCheck = stdenv.hostPlatform == stdenv.buildPlatfrom;
+doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 ```
 
 ## Cross-building packages {#sec-cross-usage}

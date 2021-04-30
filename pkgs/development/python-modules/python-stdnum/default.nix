@@ -1,11 +1,11 @@
 { lib, fetchPypi, buildPythonPackage, nose }:
 
 buildPythonPackage rec {
-  version = "1.14";
+  version = "1.16";
   pname = "python-stdnum";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd3a92b8ec82a159c41dbaa3c5397934d090090c92b04e346412e0fd7e6a1b1c";
+    sha256 = "4248d898042a801fc4eff96fbfe4bf63a43324854efe3b5534718c1c195c6f43";
   };
 
   checkInputs = [ nose ];

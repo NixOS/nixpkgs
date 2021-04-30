@@ -110,7 +110,6 @@ with lib.maintainers; {
     members = [
       mmilata
       petabyteboy
-      prusnak
       ryantm
     ];
     scope = "Maintain Jitsi.";

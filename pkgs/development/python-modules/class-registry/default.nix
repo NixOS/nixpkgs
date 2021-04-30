@@ -4,7 +4,7 @@
   lib,
   nose,
   six,
-  typing,
+  typing ? null,
   isPy27,
 }:
 

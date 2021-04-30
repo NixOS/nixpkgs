@@ -1,22 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, deprecation
 , pythonOlder
 , packaging
 , pytestCheckHook
+, tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.7.12";
+  version = "0.8.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-sUAyV3GIGn33t/LRSZe2GQY/51rnVrkCWFLkNGAAu7g=";
+    pname = "jupyter_packaging";
+    inherit version;
+    sha256 = "sha256-ddzJDcFyY5Iida4QvpACh0FRBIy95IQHCEF5HQl5QbI=";
   };
 
-  propagatedBuildInputs = [ packaging ];
+  propagatedBuildInputs = [ deprecation packaging tomlkit ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -24,8 +27,16 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  # disable tests depending on network connection
-  disabledTests = [ "test_develop" "test_install" ];
+  disabledTests = [
+    # disable tests depending on network connection
+    "test_develop"
+    "test_install"
+    # Avoid unmainted "mocker" fixture library, and calls to dependent "build" module
+    "test_build"
+    "test_npm_build"
+    "test_create_cmdclass"
+    "test_ensure_with_skip_npm"
+  ];
 
   pythonImportsCheck = [ "jupyter_packaging" ];
 

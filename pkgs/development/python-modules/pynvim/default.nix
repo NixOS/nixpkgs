@@ -4,7 +4,7 @@
 , nose
 , msgpack
 , greenlet
-, trollius
+, trollius ? null
 , pythonOlder
 , isPyPy
 , pytestrunner

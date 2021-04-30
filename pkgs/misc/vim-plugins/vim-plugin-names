@@ -62,7 +62,6 @@ chriskempson/base16-vim
 ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
-chuling/ci_dark
 ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
@@ -132,6 +131,7 @@ fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
+folke/lsp-colors.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
@@ -139,6 +139,7 @@ fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
+gcmt/wildfire.vim
 gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
@@ -268,6 +269,7 @@ kana/vim-textobj-user
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
+kdheepak/lazygit.nvim
 KeitaNakamura/neodark.vim
 keith/investigate.vim
 keith/rspec.vim
@@ -291,6 +293,7 @@ kyazdani42/nvim-tree.lua
 kyazdani42/nvim-web-devicons
 lambdalisue/fern.vim
 lambdalisue/gina.vim
+lambdalisue/suda.vim
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
@@ -365,6 +368,7 @@ mfukar/robotframework-vim
 mfussenegger/nvim-dap
 mfussenegger/nvim-jdtls
 mg979/vim-visual-multi
+mg979/vim-xtabline
 mhartington/oceanic-next
 mhinz/vim-crates
 mhinz/vim-grepper
@@ -529,6 +533,7 @@ roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
@@ -622,6 +627,7 @@ tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
 tomtom/tlib_vim
 tools-life/taskwiki
+towolf/vim-helm
 tpope/vim-abolish
 tpope/vim-capslock
 tpope/vim-commentary
@@ -747,7 +753,9 @@ Xuyuanp/nerdtree-git-plugin
 yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
+Yggdroot/LeaderF
 Yilin-Yang/vim-markbar
 yuki-yano/ncm2-dictionary
+yunlingz/ci_dark
 zah/nim.vim
 ziglang/zig.vim

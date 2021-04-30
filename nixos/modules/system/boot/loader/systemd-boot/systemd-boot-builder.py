@@ -236,9 +236,12 @@ def main() -> None:
         gens += get_generations(profile)
     remove_old_entries(gens)
     for gen in gens:
-        write_entry(*gen, machine_id)
-        if os.readlink(system_dir(*gen)) == args.default_config:
-            write_loader_conf(*gen)
+        try:
+            write_entry(*gen, machine_id)
+            if os.readlink(system_dir(*gen)) == args.default_config:
+                write_loader_conf(*gen)
+        except OSError as e:
+            print("ignoring profile '{}' in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
 
     memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
     if os.path.exists(memtest_entry_file):

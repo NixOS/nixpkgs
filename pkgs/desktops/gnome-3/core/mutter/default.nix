@@ -16,9 +16,11 @@
 , ninja
 , xkeyboard_config
 , libxkbfile
+, libXdamage
 , libxkbcommon
 , libXtst
 , libinput
+, libdrm
 , gsettings-desktop-schemas
 , glib
 , gtk3
@@ -27,6 +29,7 @@
 , libgudev
 , libwacom
 , xwayland
+, mesa
 , meson
 , gnome-settings-daemon
 , xorgserver
@@ -84,6 +87,7 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -102,12 +106,14 @@ let self = stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     libcanberra
+    libdrm
     libgudev
     libinput
     libstartup_notification
     libwacom
     libxkbcommon
     libxkbfile
+    libXdamage
     pango
     pipewire
     sysprof
