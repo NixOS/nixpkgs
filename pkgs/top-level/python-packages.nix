@@ -247,8 +247,6 @@ in {
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
-  aioeventlet = callPackage ../development/python-modules/aioeventlet { };
-
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };

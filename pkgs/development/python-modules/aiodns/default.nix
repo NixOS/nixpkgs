@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, isPy27, isPyPy, python, pycares, typing ? null
-, trollius ? null
+, python, pycares, typing ? null
 }:
 
 buildPythonPackage rec {
   pname = "aiodns";
   version = "2.0.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,8 +13,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pycares ]
-    ++ lib.optional (pythonOlder "3.7") typing
-    ++ lib.optional (isPy27 || isPyPy) trollius;
+    ++ lib.optional (pythonOlder "3.7") typing;
 
   checkPhase = ''
     ${python.interpreter} tests.py
