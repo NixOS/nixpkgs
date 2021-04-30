@@ -24600,6 +24600,8 @@ in
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
+  miniaudicle = callPackage ../applications/audio/miniaudicle { };
+
   minicom = callPackage ../tools/misc/minicom { };
 
   minimodem = callPackage ../applications/radio/minimodem { };
