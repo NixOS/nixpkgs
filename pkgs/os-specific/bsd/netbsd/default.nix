@@ -570,6 +570,8 @@ in lib.makeScopeWithSplicing
     sha256 = "0pmqh2mkfp70bwchiwyrkdyq9jcihx12g1awd6alqi9bpr3f9xmd";
     buildInputs = with self; [ libterminfo libcurses ];
     propagatedBuildInputs = with self; compatIfNeeded;
+    SHLIBINSTALLDIR = "$(out)/lib";
+    makeFlags = [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = ''
       sed -i '1i #undef bool_t' el.h
       substituteInPlace config.h \
