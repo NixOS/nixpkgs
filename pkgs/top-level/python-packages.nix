@@ -5894,6 +5894,8 @@ in {
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
 
+  pypiserver = callPackage ../development/python-modules/pypiserver { };
+
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
   pyplatec = callPackage ../development/python-modules/pyplatec { };
@@ -7341,6 +7343,8 @@ in {
   service-identity = callPackage ../development/python-modules/service_identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
+
+  setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
