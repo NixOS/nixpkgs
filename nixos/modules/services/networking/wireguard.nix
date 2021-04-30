@@ -198,7 +198,32 @@ let
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
         description = ''Endpoint IP or hostname of the peer, followed by a colon,
-        and then a port number of the peer.'';
+        and then a port number of the peer.
+
+        Warning for endpoints with changing IPs:
+        The WireGuard kernel side cannot perform DNS resolution.
+        Thus DNS resolution is done once by the <literal>wg</literal> userspace
+        utility, when setting up WireGuard. Consequently, if the IP address
+        behind the name changes, WireGuard will not notice.
+        This is especially common for dynamic-DNS setups, but also applies to
+        any other DNS-based setup.
+        If you do not use IP endpoints, you likely want to set
+        <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
+        to refresh the IPs periodically.
+        '';
+      };
+
+      dynamicEndpointRefreshSeconds = mkOption {
+        default = 0;
+        example = 5;
+        type = with types; int;
+        description = ''
+          Periodically re-execute the <literal>wg</literal> utility every
+          this many seconds in order to let WireGuard notice DNS / hostname
+          changes.
+
+          Setting this to <literal>0</literal> disables periodic reexecution.
+        '';
       };
 
       persistentKeepalive = mkOption {
@@ -256,12 +281,18 @@ let
         '';
       };
 
-  generatePeerUnit = { interfaceName, interfaceCfg, peer }:
+  peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
       keyToUnitName = replaceChars
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
-      unitName = keyToUnitName peer.publicKey;
+      unitName = keyToUnitName publicKey;
+      refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
+    in
+      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+
+  generatePeerUnit = { interfaceName, interfaceCfg, peer }:
+    let
       psk =
         if peer.presharedKey != null
           then pkgs.writeText "wg-psk" peer.presharedKey
@@ -270,7 +301,12 @@ let
       dst = interfaceCfg.interfaceNamespace;
       ip = nsWrap "ip" src dst;
       wg = nsWrap "wg" src dst;
-    in nameValuePair "wireguard-${interfaceName}-peer-${unitName}"
+      dynamicRefreshEnabled = peer.dynamicEndpointRefreshSeconds != 0;
+      # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
+      # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
+      # with the intent to make scripting more obvious.
+      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+    in nameValuePair serviceName
       {
         description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
         requires = [ "wireguard-${interfaceName}.service" ];
@@ -280,10 +316,21 @@ let
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
         path = with pkgs; [ iproute2 wireguard-tools ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
+        serviceConfig =
+          if !dynamicRefreshEnabled
+            then
+              {
+                Type = "oneshot";
+                RemainAfterExit = true;
+              }
+            else
+              {
+                Type = "simple"; # re-executes 'wg' indefinitely
+                # Note that `Type = "oneshot"` services with `RemainAfterExit = true`
+                # cannot be used with systemd timers (see `man systemd.timer`),
+                # which is why `simple` with a loop is the best choice here.
+                # It also makes starting and stopping easiest.
+              };
 
         script = let
           wg_setup = concatStringsSep " " (
@@ -302,6 +349,16 @@ let
         in ''
           ${wg_setup}
           ${route_setup}
+
+          ${optionalString (peer.dynamicEndpointRefreshSeconds != 0) ''
+            # Re-execute 'wg' periodically to notice DNS / hostname changes.
+            # Note this will not time out on transient DNS failures such as DNS names
+            # because we have set 'WG_ENDPOINT_RESOLUTION_RETRIES=infinity'.
+            # Also note that 'wg' limits its maximum retry delay to 20 seconds as of writing.
+            while ${wg_setup}; do
+              sleep "${toString peer.dynamicEndpointRefreshSeconds}";
+            done
+          ''}
         '';
 
         postStop = let
