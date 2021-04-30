@@ -5790,6 +5790,12 @@
     githubId = 5624721;
     name = "Ben Wolsieffer";
   };
+  lorenzleutgeb = {
+    email = "lorenz@leutgeb.xyz";
+    github = "lorenzleutgeb";
+    githubId = 542154;
+    name = "Lorenz Leutgeb";
+  };
   loskutov = {
     email = "ignat.loskutov@gmail.com";
     github = "loskutov";

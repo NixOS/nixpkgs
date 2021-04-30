@@ -12978,19 +12978,15 @@ in
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
-  inherit (import ../development/tools/build-managers/gradle)
+  inherit (callPackage ../development/tools/build-managers/gradle { })
     gradleGen
     gradle_latest
     gradle_7
-    gradle_6_8
-    gradle_5_6
-    gradle_4_10
+    gradle_6
+    gradle_5
+    gradle_4
   ;
-
   gradle = gradle_latest;
-  gradle_6 = gradle_6_8;
-  gradle_5 = gradle_5_6;
-  gradle_4 = gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, jdk, jdk11, jdk8, makeWrapper }:
 
 rec {
-  gradleGen = { version, nativeVersion, jdk, src, sha256 } : stdenv.mkDerivation {
+  gradleGen = { version, nativeVersion, jdk, sha256 } : stdenv.mkDerivation {
     inherit version nativeVersion;
 
     pname = "gradle";
@@ -56,6 +56,7 @@ rec {
       homepage = "http://www.gradle.org/";
       license = lib.licenses.asl20;
       platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.lorenzleutgeb ];
     };
   };
 
@@ -68,21 +69,21 @@ rec {
     jdk = jdk11;
   };
 
-  gradle_6_8 = gradleGen {
+  gradle_6 = gradleGen {
     version = "6.8.3";
     nativeVersion = "0.22-milestone-9";
     sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
     jdk = jdk11;
   };
 
-  gradle_5_6 = gradleGen {
+  gradle_5 = gradleGen {
     version = "5.6.4";
     nativeVersion = "0.18";
     sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
     jdk = jdk11;
   };
 
-  gradle_4_10 = gradleGen {
+  gradle_4 = gradleGen {
     version = "4.10.3";
     nativeVersion = "0.14";
     sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";

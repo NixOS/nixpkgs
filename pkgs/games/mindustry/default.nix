@@ -3,7 +3,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradle_6_8
+, gradle_6
 , jdk
 , perl
 
@@ -87,7 +87,7 @@ let
     popd
   '';
 
-  gradle_6 = gradle_6_8.override { inherit jdk; };
+  gradle_6 = gradle_6.override { inherit jdk; };
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {

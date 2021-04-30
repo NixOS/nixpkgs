@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeText, gradle_4_10, pkg-config, perl, cmake
+{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
 , gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg_3, python, ruby
 , openjdk11-bootstrap }:
 
@@ -7,7 +7,7 @@ let
   update = ".0.3";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = gradle_4_10.override { jdk = openjdk11-bootstrap; };
+  gradle_ = gradle_4.override { jdk = openjdk11-bootstrap; };
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle_6_8, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, jdk, gradle_6, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
 let
-  gradle = gradle_6_8.override { inherit jdk; };
+  gradle = gradle_6.override { inherit jdk; };
 
   pname = "scenebuilder";
   version = "15.0.1";
