@@ -143,6 +143,10 @@ in
     # Allow the user to login as root without password.
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
+    system.activationScripts.installInitScript = mkForce ''
+      ln -fs $systemConfig/init /sbin/init
+    '';
+
     # Some more help text.
     services.getty.helpLine =
       ''
