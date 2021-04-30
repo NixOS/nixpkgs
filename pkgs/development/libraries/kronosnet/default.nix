@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kronosnet";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lP5W+4b9McU2Uqibh2SucIu2y4KluO3B1RpAJKgYq/M=";
+    sha256 = "sha256-qOeSYN+Ty6TQViGA/LbILBdNmZyY+/VM2R9olGJOHT4=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
