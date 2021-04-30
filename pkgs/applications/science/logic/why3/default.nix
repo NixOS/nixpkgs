@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation {
   pname = "why3";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38367/why3-1.3.3.tar.gz";
-    sha256 = "1n0a2nn1gnk0zg339lh698g4wpk7m8m1vyi2yvifd5adqvk4milw";
+    url = "https://gforge.inria.fr/frs/download.php/file/38425/why3-1.4.0.tar.gz";
+    sha256 = "sha256-aOfBrlS28820jmM+pk1o2gGkX191Rcz3Tv8fMvplgFM=";
   };
 
   buildInputs = with ocamlPackages; [
