@@ -1761,6 +1761,18 @@ let
     meta.homepage = "https://github.com/gruvbox-community/gruvbox/";
   };
 
+  gruvbox-nvim = buildVimPluginFrom2Nix {
+    pname = "gruvbox-nvim";
+    version = "2021-04-23";
+    src = fetchFromGitHub {
+      owner = "npxbr";
+      repo = "gruvbox.nvim";
+      rev = "9dc9ea64fd2fb255a39210e227fc7146855434af";
+      sha256 = "04d8knfhidxdm8lzc15hklq1mm6i5kmdkik4iln4cbhd3cg33iqy";
+    };
+    meta.homepage = "https://github.com/npxbr/gruvbox.nvim/";
+  };
+
   gundo-vim = buildVimPluginFrom2Nix {
     pname = "gundo-vim";
     version = "2021-02-21";

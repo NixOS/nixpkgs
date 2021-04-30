@@ -4,20 +4,17 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.14.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "rust-embedded";
     repo = "svd2rust";
     rev = "v${version}";
-    sha256 = "1a0ldmjkhyv5c52gcq8p8avkj0cgj1b367w6hm85bxdf5j4y8rra";
+    sha256 = "1p0zq3q4g9lr0ghavp7v1dwsqq19lkljkm1i2hsb1sk3pxa1f69n";
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0n0xc8b982ra007l6gygssf1n60gfc2rphwyi7n95dbys1chciyg";
-
-  # doc tests fail due to missing dependency
-  doCheck = false;
+  cargoSha256 = "0c0f86x17fzav5q76z3ha3g00rbgyz2lm5a5v28ggy0jmg9xgsv6";
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
