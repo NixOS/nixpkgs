@@ -4,7 +4,7 @@
 , boost
 , curl
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
 , lame
 , libev
 , libmicrohttpd
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     alsaLib
     boost
     curl
-    ffmpeg_3
+    ffmpeg
     lame
     libev
     libmicrohttpd
