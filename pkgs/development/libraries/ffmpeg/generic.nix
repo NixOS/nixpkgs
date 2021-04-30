@@ -17,7 +17,7 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? [], ...
 }:
 
 /* Maintainer notes:
@@ -224,6 +224,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];
-    inherit branch;
+    inherit branch knownVulnerabilities;
   };
 }
