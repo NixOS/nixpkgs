@@ -124,7 +124,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://natron.fr/";
     license = lib.licenses.gpl2;
-    maintainers = [ maintainers.puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh vojta001 ];
     platforms = platforms.linux;
   };
 }
