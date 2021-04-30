@@ -2,25 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ecpdap";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "adamgreig";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z8w37i6wjz6cr453md54ip21y26605vrx4vpq5wwd11mfvc1jsg";
+    sha256 = "1va96hxm22a2lfy141x1sv5f5g8f6mp965an4jsff9qzi55kfv2g";
   };
 
-  # The lock file was not up to date with cargo.toml for this release
-  #
-  # This patch is the lock file after running `cargo update`
-  cargoPatches = [ ./lock-update.patch ];
-
-  cargoSha256 = "08xcnvbxm508v03b3hmz71mpa3yd8lamvazxivp6qsv46ri163mn";
+  cargoSha256 = "1dk6x2f36c546qr415kzmqr2r4550iwdmj4chrb46p3hr64jddhd";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ];
+
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp drivers/*.rules $out/etc/udev/rules.d
+  '';
 
   meta = with lib; {
     description = "A tool to program ECP5 FPGAs";
