@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, cairo, dpkg, freetype
 , gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg_3
+, libglvnd, libjack2, ffmpeg
 , libxkbcommon, xdg-utils, zlib, pulseaudio
 , wrapGAppsHook, makeWrapper }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   binPath = lib.makeBinPath [
-    xdg-utils ffmpeg_3
+    xdg-utils ffmpeg
   ];
 
   ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
