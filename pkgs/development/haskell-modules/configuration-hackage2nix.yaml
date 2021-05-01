@@ -4649,7 +4649,6 @@ broken-packages:
   - data-util
   - data-validation
   - data-variant
-  - database-id-class
   - database-id-groundhog
   - database-study
   - datadog

@@ -1793,4 +1793,8 @@ self: super: {
   # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
   pam = super.pam.override { inherit (pkgs) pam; };
 
+  # Too strict version bounds on base:
+  # https://github.com/obsidiansystems/database-id/issues/1
+  database-id-class = doJailbreak super.database-id-class;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
