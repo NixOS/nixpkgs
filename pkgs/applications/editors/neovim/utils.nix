@@ -50,8 +50,7 @@ let
 
       pluginPython2Packages = getDeps "pythonDependencies" requiredPlugins;
       python2Env = pythonPackages.python.withPackages (ps:
-        [ ps.pynvim ]
-        ++ (extraPython2Packages ps)
+           (extraPython2Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython2Packages));
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
