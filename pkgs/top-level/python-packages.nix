@@ -3168,6 +3168,10 @@ in {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  i2c-tools = callPackage ../development/python-modules/i2c-tools {
+    inherit (pkgs) i2c-tools;
+  };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
