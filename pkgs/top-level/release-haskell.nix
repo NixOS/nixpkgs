@@ -71,6 +71,12 @@ let
     gitAndTools = packagePlatforms pkgs.gitAndTools;
   };
 
+  # names of packages in an attribute set that are maintained
+  maintainedPkgNames = set: builtins.attrNames
+    (lib.filterAttrs (
+      _: v: builtins.length (v.meta.maintainers or []) > 0
+    ) set);
+
   jobs = mapTestOn {
     haskellPackages = packagePlatforms pkgs.haskellPackages;
     haskell.compiler = packagePlatforms pkgs.haskell.compiler;
@@ -195,6 +201,17 @@ let
         jobs.haskellPackages.hsemail
         jobs.haskellPackages.hsyslog
       ];
+    };
+    maintained = pkgs.releaseTools.aggregate {
+      name = "maintained-haskell-packages";
+      meta = {
+        description = "Aggregate jobset of all haskell packages with a maintainer";
+        maintainers = lib.teams.haskell.members;
+      };
+      constituents = accumulateDerivations
+        (builtins.map
+          (name: jobs.haskellPackages."${name}")
+          (maintainedPkgNames pkgs.haskellPackages));
     };
   };
 
