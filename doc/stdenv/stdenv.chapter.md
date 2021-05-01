@@ -929,7 +929,7 @@ stdenv.mkDerivation {
 
 The file [`patch-shebangs.sh`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh) defines the [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24) function. It is used to implement [`patchShebangsAuto`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107), the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
 
-If you need to run `patchShebangs` at build time, it must be called explicitly within a [build phase](#sec-stdenv-phases).
+If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
 
 ### `audit-tmpdir.sh`
 
