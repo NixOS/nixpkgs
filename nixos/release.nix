@@ -224,6 +224,25 @@ in rec {
   );
 
 
+  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
+  # automatic sizing without blocking the channel.
+  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+          ({ ... }: { amazonImage.sizeMB = "auto"; })
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
