@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, python3, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
