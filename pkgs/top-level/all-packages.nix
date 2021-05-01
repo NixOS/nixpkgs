@@ -3274,6 +3274,8 @@ in
 
   bomutils = callPackage ../tools/archivers/bomutils { };
 
+  bottomify = callPackage ../tools/misc/bottomify { };
+
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
