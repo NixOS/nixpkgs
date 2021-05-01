@@ -1,0 +1,22 @@
+diff --git a/overlayunit.pas b/overlayunit.pas
+index a096543..6278440 100644
+--- a/overlayunit.pas
++++ b/overlayunit.pas
+@@ -4689,11 +4689,12 @@ end;
+ 
+ procedure Tgoverlayform.runBitBtnClick(Sender: TObject);
+ begin
+-
+-     //Run vkcube and glxgears
+-     RunCommand('bash -c ''ENABLE_VKBASALT=1 mangohud vkcube & mangohud glxgears''', s);
+-
+-    end;
++    //Run vkcube and glxgears
++    if mangohuddependencyVALUE=1 then
++        RunCommand('bash -c ''ENABLE_VKBASALT=1 mangohud vkcube & mangohud glxgears''', s)
++    else
++        RunCommand('bash -c ''ENABLE_VKBASALT=1 vkcube & glxgears''', s)
++end;
+ 
+ 
+ procedure Tgoverlayform.aboutBitBtnClick(Sender: TObject);
