@@ -5237,6 +5237,8 @@ in
 
   govc = callPackage ../tools/virtualization/govc { };
 
+  goverlay = callPackage ../tools/graphics/goverlay { };
+
   gpart = callPackage ../tools/filesystems/gpart { };
 
   gparted = callPackage ../tools/misc/gparted { };
