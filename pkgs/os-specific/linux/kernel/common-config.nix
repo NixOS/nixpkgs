@@ -859,7 +859,7 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
-    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
 
@@ -876,6 +876,9 @@ let
       # This always can can be replaced by the actual native driver.
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
+
+    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
+      ARM_LPAE = yes;
     };
   };
 in
