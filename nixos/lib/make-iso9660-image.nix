@@ -1,4 +1,4 @@
-{ stdenv, closureInfo, xorriso, syslinux, libossp_uuid
+{ stdenv, closureInfo, xorriso, mtools, grub2_efi, grub2_full, dosfstools, libossp_uuid, grubDir, grubCfg
 
 , # The file name of the resulting ISO image.
   isoName ? "cd.iso"
@@ -17,22 +17,13 @@
   storeContents ? []
 
 , # Whether this should be an El-Torito bootable CD.
-  bootable ? false
+  mbrBootable ? false
 
 , # Whether this should be an efi-bootable El-Torito CD.
   efiBootable ? false
 
 , # Whether this should be an hybrid CD (bootable from USB as well as CD).
   usbBootable ? false
-
-, # The path (in the ISO file system) of the boot image.
-  bootImage ? ""
-
-, # The path (in the ISO file system) of the efi boot image.
-  efiBootImage ? ""
-
-, # The path (outside the ISO file system) of the isohybrid-mbr image.
-  isohybridMbrImage ? ""
 
 , # Whether to compress the resulting ISO image with zstd.
   compressImage ? false, zstd
@@ -41,16 +32,27 @@
   volumeID ? ""
 }:
 
-assert bootable -> bootImage != "";
-assert efiBootable -> efiBootImage != "";
-assert usbBootable -> isohybridMbrImage != "";
-
 stdenv.mkDerivation {
   name = isoName;
   builder = ./make-iso9660-image.sh;
-  nativeBuildInputs = [ xorriso syslinux zstd libossp_uuid ];
+  buildInputs = [
+    grub2_full
+    grub2_efi
+    xorriso
+    mtools # mmd
+    dosfstools # mkfs.vfat
+    zstd
+    libossp_uuid
+  ];
 
-  inherit isoName bootable bootImage compressImage volumeID efiBootImage efiBootable isohybridMbrImage usbBootable;
+  grubEfi = grub2_efi;
+  grubMbr = grub2_full;
+
+  inherit
+    isoName volumeID
+    compressImage
+    mbrBootable efiBootable usbBootable
+    grubDir grubCfg;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
