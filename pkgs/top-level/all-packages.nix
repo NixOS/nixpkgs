@@ -28651,6 +28651,7 @@ in
     freon = callPackage ../desktops/gnome-3/extensions/freon { };
     fuzzy-app-search = callPackage ../desktops/gnome-3/extensions/fuzzy-app-search { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
+    hot-edge = callPackage ../desktops/gnome-3/extensions/hot-edge { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
     material-shell = callPackage ../desktops/gnome-3/extensions/material-shell { };
