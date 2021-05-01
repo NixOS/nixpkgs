@@ -2,7 +2,7 @@
 , pkg-config, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg
 , swig, python3, jsoncpp
-, unittest-cpp, cppzmq, zeromq
+, cppzmq, zeromq
 , qtbase, qtmultimedia
 , llvmPackages
 }:
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with GCC 10.
     (fetchpatch {
       name = "fix-build-with-gcc-10.patch";
       url = "https://github.com/OpenShot/libopenshot/commit/13290364e7bea54164ab83d973951f2898ad9e23.diff";
@@ -33,10 +34,10 @@ stdenv.mkDerivation rec {
     export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
   '';
 
-  nativeBuildInputs = [ pkg-config cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen swig ];
 
   buildInputs =
-  [ imagemagick ffmpeg swig python3 jsoncpp
+  [ imagemagick ffmpeg python3 jsoncpp
     cppzmq zeromq qtbase qtmultimedia ]
     ++ optional stdenv.isDarwin llvmPackages.openmp
   ;
