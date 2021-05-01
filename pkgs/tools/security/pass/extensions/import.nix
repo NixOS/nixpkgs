@@ -17,9 +17,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
   };
 
-  # by default, tries to install scripts/pimport, which is a bash wrapper around "python -m pass_import ..."
-  # This is a better way to do the same, and takes advantage of the existing Nix python environments
   patches = [
+    (fetchpatch {
+      name = "support-for-keepass-4.0.0.patch";
+      url = "https://github.com/roddhjav/pass-import/commit/86cfb1bb13a271fefe1e70f24be18e15a83a04d8.patch";
+      sha256 = "0mrlblqlmwl9gqs2id4rl4sivrcclsv6zyc6vjqi78kkqmnwzhxh";
+    })
+    # by default, tries to install scripts/pimport, which is a bash wrapper around "python -m pass_import ..."
+    # This is a better way to do the same, and takes advantage of the existing Nix python environments
     # from https://github.com/roddhjav/pass-import/pull/138
     (fetchpatch {
       name = "pass-import-pr-138-pimport-entrypoint.patch";

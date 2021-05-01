@@ -853,6 +853,8 @@ mapAliases ({
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPackages; # added 2018-04-25
   kodiPlugins = kodiPackages; # added 2021-03-09;
+  xineLib = xine-lib; # added 2021-04-27
+  xineUI = xine-ui; # added 2021-04-27
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";
