@@ -573,6 +573,8 @@ in
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
+  numworks-epsilon = callPackage ../applications/science/math/numworks-epsilon { };
+
   ociTools = callPackage ../build-support/oci-tools { };
 
   octant = callPackage ../applications/networking/cluster/octant { };

@@ -3029,6 +3029,12 @@
       fingerprint = "F178 B4B4 6165 6D1B 7C15  B55D 4029 3358 C7B9 326B";
     }];
   };
+  erikbackman = {
+    email = "contact@ebackman.net";
+    github = "erikbackman";
+    githubId = 46724898;
+    name = "Erik Backman";
+  };
   erikryb = {
     email = "erik.rybakken@math.ntnu.no";
     github = "erikryb";
