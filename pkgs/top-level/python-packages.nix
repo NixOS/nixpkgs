@@ -1407,6 +1407,8 @@ in {
 
   cloudscraper = callPackage ../development/python-modules/cloudscraper { };
 
+  cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cma = callPackage ../development/python-modules/cma { };
