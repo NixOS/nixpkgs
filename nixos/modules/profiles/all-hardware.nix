@@ -51,7 +51,7 @@ in
 
       # Hyper-V support.
       "hv_storvsc"
-    ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+    ] ++ lib.optionals (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
       # Most of the following falls into two categories:
       #  - early KMS / early display
       #  - early storage (e.g. USB) support
@@ -67,6 +67,10 @@ in
 
       # PWM for the backlight
       "pwm-sun4i"
+    ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+      # Most of the following falls into two categories:
+      #  - early KMS / early display
+      #  - early storage (e.g. USB) support
 
       # Broadcom
 
