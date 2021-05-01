@@ -1359,6 +1359,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion { };
 
+  click-configfile = callPackage ../development/python-modules/click-configfile { };
+
   click-datetime = callPackage ../development/python-modules/click-datetime { };
 
   click-default-group = callPackage ../development/python-modules/click-default-group { };
