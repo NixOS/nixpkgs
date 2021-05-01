@@ -1,4 +1,4 @@
-{ lib, haskellPackages, cabal-install }:
+{ lib, writeText, haskellPackages, cabal-install }:
 
 (haskellPackages.shellFor {
   packages = p: [ p.constraints p.linear ];
@@ -10,7 +10,7 @@
     cd "$sourceRoot"
     tar -xf ${haskellPackages.constraints.src}
     tar -xf ${haskellPackages.linear.src}
-    cp ${builtins.toFile "cabal.project" "packages: constraints* linear*"} cabal.project
+    cp ${writeText "cabal.project" "packages: constraints* linear*"} cabal.project
   '';
   buildPhase = ''
     export HOME=$(mktemp -d)
