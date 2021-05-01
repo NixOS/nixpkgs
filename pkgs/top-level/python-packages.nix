@@ -5861,6 +5861,8 @@ in {
     inherit (pkgs) lz4;
   };
 
+  pyotgw = callPackage ../development/python-modules/pyotgw { };
+
   pyotp = callPackage ../development/python-modules/pyotp { };
 
   pyowm = callPackage ../development/python-modules/pyowm { };
