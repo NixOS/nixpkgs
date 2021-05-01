@@ -34,6 +34,7 @@ tcl.mkTclDerivation {
       ln -s $i private_headers/generic;
     done;
     '';
+  addTclConfigureFlags = false;
   configureFlags = [
     "--with-tclconfig=."
     "--with-tkinclude=${tk.dev}/include"
