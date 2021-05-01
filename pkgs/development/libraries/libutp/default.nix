@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     owner = "bittorrent";
     repo = pname;
     rev = "2b364cbb0650bdab64a5de2abb4518f9f228ec44";
-    sha256 = "0z94v27c4aki4giq7551g1gnycxvi2inm2rfjmzqkc34w0n9kyqa";
+    sha256 = "0yaiqksimnhwh14kmsq4kcyq6662b4ask36ni6p5n14dbyq1h2s6";
   };
 
-  nativeBuildInputs = [ cmake ];
+  installPhase = ''
+    mkdir -p $out/lib $out/include/libutp
+    cp libutp.a libutp.so $out/lib/
+    cp *.h $out/include/libutp/
+  '';
 
   meta = with lib; {
     description = "uTorrent Transport Protocol library";
