@@ -6,7 +6,20 @@
 , libXxf86vm, libICE
 , libXrender
 , withNvidiaCg ? false, nvidia_cg_toolkit
-, withSamples ? false }:
+, withSamples ? false
+, writeScriptBin
+, rsync
+, libobjc
+, Foundation
+, AppKit
+, Cocoa
+, AGL }:
+
+let ditto = writeScriptBin "ditto" ''
+              #!${stdenv.shell}
+              ${rsync}/bin/rsync "$@"
+            '';
+in
 
 stdenv.mkDerivation {
   name = "ogre-1.10.11";
@@ -19,7 +32,8 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
            ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DOGRE_ENABLE_PRECOMPILED_HEADERS=false" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
@@ -29,13 +43,21 @@ stdenv.mkDerivation {
      libX11 libXmu libSM
      libXxf86vm libICE
      libXrender
-   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit
+   ++ lib.optionals stdenv.isDarwin [
+      libobjc
+      Foundation
+      AppKit
+      Cocoa
+      AGL
+      ditto
+    ];
 
   meta = {
     description = "A 3D engine";
     homepage = "https://www.ogre3d.org/";
     maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
 }
