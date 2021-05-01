@@ -108,6 +108,7 @@ let result = stdenv.mkDerivation rec {
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];
     inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result

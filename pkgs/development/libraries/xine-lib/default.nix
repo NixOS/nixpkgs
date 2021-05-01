@@ -1,43 +1,87 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, xorg, alsaLib, libGLU, libGL, aalib
-, libvorbis, libtheora, speex, zlib, perl, ffmpeg_3
-, flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, aalib
+, alsaLib
+, ffmpeg
+, flac
+, libGL
+, libGLU
+, libcaca
+, libcdio
+, libmng
 , libmpcdec
+, libpulseaudio
+, libtheora
+, libv4l
+, libvorbis
+, perl
+, pkg-config
+, speex
+, vcdimager
+, xorg
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.9";
+  pname = "xine-lib";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "13clir4qxl2zvsvvjd9yv3yrdhsnvcn5s7ambbbn5dzy9604xcrj";
+    url = "mirror://sourceforge/xine/xine-lib-${version}.tar.xz";
+    sha256 = "sha256-71GyHRDdoQRfp9cRvZFxz9rwpaKHQjO88W/98o7AcAU=";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
-
-  buildInputs = [
-    xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
-    alsaLib libGLU libGL aalib libvorbis libtheora speex perl ffmpeg_3 flac
-    libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
+  nativeBuildInputs = [
+    pkg-config
+    perl
   ];
+  buildInputs = [
+    aalib
+    alsaLib
+    ffmpeg
+    flac
+    libGL
+    libGLU
+    libcaca
+    libcdio
+    libmng
+    libmpcdec
+    libpulseaudio
+    libtheora
+    libv4l
+    libvorbis
+    perl
+    speex
+    vcdimager
+    zlib
+  ] ++ (with xorg; [
+    libX11
+    libXext
+    libXinerama
+    libXv
+    libxcb
+  ]);
 
   patches = [
+    # splitting path plugin
     (fetchpatch {
       name = "0001-fix-XINE_PLUGIN_PATH-splitting.patch";
       url = "https://sourceforge.net/p/xine/mailman/attachment/32394053-5e27-6558-f0c9-49e0da0bc3cc%40gmx.de/1/";
-      sha256 = "0nrsdn7myvjs8fl9rj6k4g1bnv0a84prsscg1q9n49gwn339v5rc";
+      sha256 = "sha256-LJedxrD8JWITDo9pnS9BCmy7wiPTyJyoQ1puX49tOls=";
     })
   ];
 
   NIX_LDFLAGS = "-lxcb-shm";
 
-  propagatedBuildInputs = [zlib];
-
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://www.xine-project.org/";
+    homepage = "http://www.xinehq.de/";
     description = "A high-performance, portable and reusable multimedia playback engine";
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

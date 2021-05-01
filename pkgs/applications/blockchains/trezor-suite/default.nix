@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchurl
 , appimageTools
 , tor
@@ -7,12 +8,20 @@
 
 let
   pname = "trezor-suite";
-  version = "21.2.2";
+  version = "21.4.1";
   name = "${pname}-${version}";
 
+  suffix = {
+    aarch64-linux = "linux-arm64";
+    x86_64-linux  = "linux-x86_64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
   src = fetchurl {
-    url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-linux-x86_64.AppImage";
-    sha256 = "0dj3azx9jvxchrpm02w6nkcis6wlnc6df04z7xc6f66fwn6r3kkw";
+    url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
+    sha256 = {
+      aarch64-linux = "51ea8a5210f008d13a729ac42085563b5e8b971b17ed766f84d69d76dcb2db0c";
+      x86_64-linux  = "9219168a504356152b3b807e1e7282e21952461d277596c6b82ddfe81ac2419c";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -49,6 +58,6 @@ appimageTools.wrapType2 rec {
     homepage = "https://suite.trezor.io";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }

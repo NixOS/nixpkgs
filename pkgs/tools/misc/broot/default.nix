@@ -4,7 +4,6 @@
 , fetchCrate
 , installShellFiles
 , makeWrapper
-, coreutils
 , libiconv
 , zlib
 , Security
@@ -12,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.2.9";
+  version = "1.3.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-5tM8ywLBPPjCKEfXIfUZ5aF4t9YpYA3tzERxC1NEsso=";
+    sha256 = "sha256-Iz9pXvgPIGUnfbnvk5kYAqlrMlz3I2kLszPe8GwwHVk=";
   };
 
-  cargoHash = "sha256-P5ukwtRUpIJIqJjwTXIB2xRnpyLkzMeBMHmUz4Ery3s=";
+  cargoHash = "sha256-eECAaTUgqasuDhLSk8p/CWSQmV8yV30UoMy3GZCRbGE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -33,8 +32,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
-
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \

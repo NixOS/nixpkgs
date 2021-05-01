@@ -12,13 +12,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-tRjik2LONwKFZOcIuyFDoE1fD23UnZHMdNLo0DdYyOc=";
+    sha256 = "sha256-MRaY10HliP8TA8/9s5caNtB5hks5SJcBJItFXOUryCI=";
   };
 
   postPatch = ''

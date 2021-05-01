@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "102zw4napzx05rpmx6scl6il55syf3lw1gzmy1y66cg1f70sij4d";
+    sha256 = "sha256-spESDjX7scihVQrr/f6KMCI9VfdTxxPWP7FcJ965FYk=";
   };
 
-  cargoSha256 = "121fsch0an6d2hqaq0ws9cm7g5ppzfrycmmhajfacfg6wbiax1m5";
+  cargoSha256 = "0rm31sfcj2d85w1l4hhfmva3j828dfhiv5br1mnpaqaa01zzs1q1";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,13 +22,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    installShellCompletion assets/completions/zellij.{bash,fish} --zsh assets/completions/_zellij
+    installShellCompletion --cmd $pname \
+      --bash <($out/bin/zellij generate-completion bash) \
+      --fish <($out/bin/zellij generate-completion fish) \
+      --zsh <($out/bin/zellij generate-completion zsh)
   '';
 
   meta = with lib; {
     description = "A terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh ];
+    maintainers = with maintainers; [ therealansh _0x4A6F ];
   };
 }

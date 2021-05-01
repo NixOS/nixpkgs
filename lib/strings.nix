@@ -606,7 +606,7 @@ rec {
      This function will fail if the input string is longer than the
      requested length.
 
-     Type: fixedWidthString :: int -> string -> string
+     Type: fixedWidthString :: int -> string -> string -> string
 
      Example:
        fixedWidthString 5 "0" (toString 15)
@@ -644,8 +644,8 @@ rec {
   floatToString = float: let
     result = toString float;
     precise = float == fromJSON result;
-  in if precise then result
-    else lib.warn "Imprecise conversion from float to string ${result}" result;
+  in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
+    result;
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:

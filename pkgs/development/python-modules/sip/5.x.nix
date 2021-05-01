@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, packaging, toml }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, toml }:
 
 buildPythonPackage rec {
   pname = "sip";
@@ -16,6 +16,20 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sipbuild" ];
+
+  # FIXME: Why isn't this detected automatically?
+  # Needs to be specified in pyproject.toml, e.g.:
+  # [tool.sip.bindings.MODULE]
+  # tags = [PLATFORM_TAG]
+  platform_tag =
+    if stdenv.targetPlatform.isLinux then
+      "WS_X11"
+    else if stdenv.targetPlatform.isDarwin then
+      "WS_MACX"
+    else if stdenv.targetPlatform.isWindows then
+      "WS_WIN"
+    else
+      throw "unsupported platform";
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";

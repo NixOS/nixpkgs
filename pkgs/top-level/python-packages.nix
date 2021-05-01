@@ -247,8 +247,6 @@ in {
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
-  aioeventlet = callPackage ../development/python-modules/aioeventlet { };
-
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
@@ -1361,6 +1359,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion { };
 
+  click-configfile = callPackage ../development/python-modules/click-configfile { };
+
   click-datetime = callPackage ../development/python-modules/click-datetime { };
 
   click-default-group = callPackage ../development/python-modules/click-default-group { };
@@ -1372,6 +1372,8 @@ in {
   click-log = callPackage ../development/python-modules/click-log { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
+
+  click-spinner = callPackage ../development/python-modules/click-spinner { };
 
   click-repl = callPackage ../development/python-modules/click-repl { };
 
@@ -1406,6 +1408,8 @@ in {
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cloudscraper = callPackage ../development/python-modules/cloudscraper { };
+
+  cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
@@ -3444,6 +3448,8 @@ in {
   jsonfield = callPackage ../development/python-modules/jsonfield { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
+
+  json-logging = callPackage ../development/python-modules/json-logging { };
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
@@ -5855,6 +5861,8 @@ in {
     inherit (pkgs) lz4;
   };
 
+  pyotgw = callPackage ../development/python-modules/pyotgw { };
+
   pyotp = callPackage ../development/python-modules/pyotp { };
 
   pyowm = callPackage ../development/python-modules/pyowm { };
@@ -5895,6 +5903,8 @@ in {
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
+
+  pypiserver = callPackage ../development/python-modules/pypiserver { };
 
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
@@ -6258,6 +6268,8 @@ in {
   pytest-cid = callPackage ../development/python-modules/pytest-cid { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
+
+  pytest-console-scripts = callPackage ../development/python-modules/pytest-console-scripts { };
 
   pytest-cov = self.pytestcov; # self 2021-01-04
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
@@ -7195,9 +7207,22 @@ in {
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
+  sanic = callPackage ../development/python-modules/sanic {
+    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
+    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
+      doCheck = false;
+      meta.broken = false;
+    });
+    # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
+    # has special logic to disable tests when this is the case.
+    sanic-testing = self.sanic-testing.override { sanic = null; };
+  };
+
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
-  sanic = callPackage ../development/python-modules/sanic { };
+  sanic-routing = callPackage ../development/python-modules/sanic-routing { };
+
+  sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
@@ -7343,6 +7368,8 @@ in {
   service-identity = callPackage ../development/python-modules/service_identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
+
+  setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
@@ -7634,6 +7661,8 @@ in {
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
+
+  sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
 
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 

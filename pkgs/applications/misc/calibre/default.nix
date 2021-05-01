@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , mkDerivation
 , fetchurl
 , poppler_utils
@@ -42,18 +41,11 @@ mkDerivation rec {
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   escaped_pyqt5_dir = builtins.replaceStrings ["/"] ["\\/"] (toString python3Packages.pyqt5);
-  platform_tag =
-    if stdenv.hostPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.hostPlatform.isWindows then
-      "WS_WIN"
-    else
-      "WS_X11";
 
   prePatch = ''
     sed -i "s/\[tool.sip.project\]/[tool.sip.project]\nsip-include-dirs = [\"${escaped_pyqt5_dir}\/share\/sip\/PyQt5\"]/g" \
       setup/build.py
-    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${platform_tag}\"]/g" \
+    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip_5.platform_tag}\"]/g" \
       setup/build.py
 
     # Remove unneeded files and libs

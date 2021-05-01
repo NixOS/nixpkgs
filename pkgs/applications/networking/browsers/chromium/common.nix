@@ -112,10 +112,8 @@ let
 
   warnObsoleteVersionConditional = min-version: result:
     let ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
-    in if versionAtLeast ungoogled-version min-version
-       then warn "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
-            result
-       else result;
+    in warnIf (versionAtLeast ungoogled-version min-version) "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
+      result;
   chromiumVersionAtLeast = min-version:
     let result = versionAtLeast upstream-info.version min-version;
     in  warnObsoleteVersionConditional min-version result;

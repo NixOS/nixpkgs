@@ -132,6 +132,7 @@ fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
 folke/lsp-colors.nvim@main
+folke/which-key.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
@@ -436,6 +437,7 @@ norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 npxbr/glow.nvim@main
+npxbr/gruvbox.nvim@main
 ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
@@ -504,6 +506,7 @@ qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
 radenling/vim-dispatch-neovim
+rafamadriz/friendly-snippets@main
 rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
 raghur/fruzzy
@@ -619,6 +622,7 @@ tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
+tomasiser/vim-code-dark
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange

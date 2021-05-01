@@ -5,7 +5,7 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "13.10.2";
+  version = "13.11.2";
 
   src = fetchFromGitLab {
     owner = data.owner;
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   sourceRoot = "source/workhorse";
 
-  vendorSha256 = "sha256-UCkUSv1ZjDHmTFnETU8dz4moYRDCvy6AYTTfjHBGKeE=";
+  vendorSha256 = "sha256-m/Mx4Nr4tPK6yfcHxAFbjh9DI/1WnKReaaylWpNSrc8=";
   buildInputs = [ git ];
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
   doCheck = false;

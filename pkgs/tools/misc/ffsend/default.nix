@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
-, darwin, installShellFiles
+, installShellFiles
+, CoreFoundation, CoreServices, Security, AppKit, libiconv
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -29,7 +30,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
   buildInputs =
-    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    if stdenv.isDarwin then [ libiconv CoreFoundation CoreServices Security AppKit ]
     else [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (

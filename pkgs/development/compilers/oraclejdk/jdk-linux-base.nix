@@ -184,6 +184,7 @@ let result = stdenv.mkDerivation rec {
   meta = with lib; {
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
+    mainProgram = "java";
   };
 
 }; in result

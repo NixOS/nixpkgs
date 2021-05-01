@@ -178,6 +178,8 @@ with self; with super; {
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
 
+  importlib-resources = callPackage ../development/python-modules/importlib-resources/2.nix { };
+
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel/4.nix { };
@@ -603,8 +605,6 @@ with self; with super; {
   tornado = callPackage ../development/python-modules/tornado/5.nix { };
 
   traitlets = callPackage ../development/python-modules/traitlets/4.nix { };
-
-  trollius = callPackage ../development/python-modules/trollius { };
 
   ttystatus = callPackage ../development/python-modules/ttystatus { };
 

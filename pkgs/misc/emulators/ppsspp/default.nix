@@ -1,11 +1,11 @@
-{ SDL2
-, cmake
+{ mkDerivation
 , fetchFromGitHub
-, ffmpeg_3
+, SDL2
+, cmake
+, ffmpeg
 , glew
 , lib
 , libzip
-, mkDerivation
 , pkg-config
 , python3
 , qtbase
@@ -23,7 +23,7 @@ mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "19948jzqpclf8zfzp3k7s580xfjgqcyfwlcp7x7xj8h8lyypzymx";
+    sha256 = "sha256-vfp/vacIItlPP5dR7jzDT7oOUNFnjvvdR46yi79EJKU=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ mkDerivation rec {
 
   buildInputs = [
     SDL2
-    ffmpeg_3
+    ffmpeg
     glew
     libzip
     qtbase
@@ -45,23 +45,25 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DHEADLESS=OFF"
     "-DOpenGL_GL_PREFERENCE=GLVND"
     "-DUSE_SYSTEM_FFMPEG=ON"
     "-DUSE_SYSTEM_LIBZIP=ON"
     "-DUSE_SYSTEM_SNAPPY=ON"
     "-DUSING_QT_UI=ON"
-    "-DHEADLESS=OFF"
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/ppsspp
     install -Dm555 PPSSPPQt $out/bin/ppsspp
     mv assets $out/share/ppsspp
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A HLE Playstation Portable emulator, written in C++";
     homepage = "https://www.ppsspp.org/";
+    description = "A HLE Playstation Portable emulator, written in C++";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

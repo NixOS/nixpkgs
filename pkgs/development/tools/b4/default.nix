@@ -11,7 +11,8 @@ python3Packages.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace 'requests~=2.24' 'requests~=2.25'
+      --replace 'requests~=2.24.0' 'requests~=2.25' \
+      --replace 'dnspython~=2.0.0' 'dnspython~=2.1'
   '';
 
   # tests make dns requests and fails

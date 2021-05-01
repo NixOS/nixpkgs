@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.1.10";
+  version = "1.1.11";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qmxiafqmh51i3l30pajaqj5h0kziq4d37fn6hl58429bb85dpp9";
+    sha256 = "sha256-fVUYrzIcW4jbxdhS/Bh8eu+aJPFOqj0LXjoQKw+FZdg=";
   };
 
   propagatedBuildInputs = [

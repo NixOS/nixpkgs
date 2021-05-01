@@ -273,6 +273,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -601,7 +605,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "25UkYKhlGmlDg4fz1jZHjpQn5s4k5FKlFK0MU8YM5SE=";
+          cargoSha256 = "1c8bwvwd23d7c3bk1ky1i8xgfz10dr8nqqcvp20g8rldjl8p2r08";
         };
       in
       ''
