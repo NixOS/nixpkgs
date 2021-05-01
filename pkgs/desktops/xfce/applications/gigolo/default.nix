@@ -10,11 +10,6 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 glib ];
 
-  postPatch = ''
-    # exo-csource has been dropped from exo
-    substituteInPlace src/Makefile.am --replace exo-csource xdt-csource
-  '';
-
   meta = {
     description = "A frontend to easily manage connections to remote filesystems";
     license = with lib.licenses; [ gpl2Only ];
