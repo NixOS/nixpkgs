@@ -3951,6 +3951,12 @@
     githubId = 6430643;
     name = "Henry Till";
   };
+  henson = {
+    email = "aden.seaman@gmail.com";
+    github = "adenseaman";
+    githubId = 498361;
+    name = "Aden Seaman";
+  };
   herberteuler = {
     email = "herberteuler@gmail.com";
     github = "herberteuler";
