@@ -901,7 +901,7 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 ### `patch-shebangs.sh` {#setup-hook-patch-shebangs}
 
-This setup hook patches installed scripts to use `/nix/store` paths to their shebang interpreter as found in the build environment's `PATH`. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system what interpreter to use to execute the script's contents.
+This setup hook patches installed scripts to use Nix store paths to their shebang interpreter as found in the build environment's `PATH`. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system what interpreter to use to execute the script's contents.
 
 ::: note
 The [generic builder](https://github.com/NixOS/nixpkgs/blob/6ba632c2a442082f353bf2d7028fda11a888d099/pkgs/stdenv/generic/builder.sh) populates `PATH` from inputs of the derivation.
