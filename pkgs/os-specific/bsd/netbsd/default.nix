@@ -621,6 +621,7 @@ in lib.makeScopeWithSplicing
     ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
     propagatedBuildInputs = with self; compatIfNeeded;
     MKDOC = "no"; # missing vfontedpr
+    makeFlags = [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = lib.optionalString (!stdenv.isDarwin) ''
       substituteInPlace printw.c \
         --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
