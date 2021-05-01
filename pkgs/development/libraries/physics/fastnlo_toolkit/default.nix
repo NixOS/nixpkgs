@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   version = "2.3.1pre-2411";
 
   src = fetchurl {
-    url = "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz";
+    urls = [
+      "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz"
+      "https://sid.ethz.ch/debian/fastnlo/${pname}-${version}.tar.gz"
+    ];
     sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
   };
 
