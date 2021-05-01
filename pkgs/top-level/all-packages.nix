@@ -18104,6 +18104,8 @@ in
 
   xlslib = callPackage ../development/libraries/xlslib { };
 
+  xsimd = callPackage ../development/libraries/xsimd { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xxHash = callPackage ../development/libraries/xxHash {};
