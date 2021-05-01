@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     # jq is linked to libjq:
     ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  preFixup = lib.optionalString minimal ''
+  preFixup = lib.optionalString minimal (''
     rm -r .libs $out/{include,share}
+  '' + lib.optionalString stdenv.isLinux ''
     patchelf --shrink-rpath $out/bin/jq
-  '';
+  '');
 
   doInstallCheck = !minimal;
   installCheckTarget = "check";
