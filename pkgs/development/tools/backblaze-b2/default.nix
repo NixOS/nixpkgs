@@ -1,28 +1,53 @@
-{ fetchFromGitHub, lib, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.1.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     rev = "v${version}";
-    sha256 = "1kkpvxqgh5pw4kr8lh5gy9d7960hv9zvajbjiqhj6xgykwbpbgmq";
+    sha256 = "sha256-KUdDwxVFO4QJ+hKcCWYaxksw9wC67PLmYimrfP++WfQ=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
     class-registry
+    docutils
     phx-class-registry
+    rst2ansi
     setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'setuptools_scm<6.0' 'setuptools_scm' \
+      --replace "use_scm_version=True," 'version="${version}",'
+    substituteInPlace requirements.txt \
+      --replace "arrow>=0.8.0,<1.0.0" "arrow"
+  '';
 
   disabledTests = [
     "test_files_headers"
     "test_integration"
+    # arrow > 1.0.2 has breaking changes, https://github.com/Backblaze/B2_Command_Line_Tool/issues/687
+    "test_parse_millis_from_float_timestamp"
+    "test_sync_exclude_if_modified_after_exact"
+    "test_sync_exclude_if_modified_after_in_range"
   ];
 
   postInstall = ''
