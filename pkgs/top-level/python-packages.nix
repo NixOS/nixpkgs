@@ -1371,6 +1371,8 @@ in {
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
 
+  click-spinner = callPackage ../development/python-modules/click-spinner { };
+
   click-repl = callPackage ../development/python-modules/click-repl { };
 
   click-threading = callPackage ../development/python-modules/click-threading { };
