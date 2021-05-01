@@ -3107,6 +3107,16 @@
     githubId = 2147649;
     name = "Euan Kemp";
   };
+  evalexpr = {
+    name = "Jonathan Wilkins";
+    email = "nixos@wilkins.tech";
+    github = "evalexpr";
+    githubId = 23485511;
+    keys = [{
+      longkeyid = "rsa4096/0x2D1D402E17763DD6";
+      fingerprint = "8129 5B85 9C5A F703 C2F4  1E29 2D1D 402E 1776 3DD6";
+    }];
+  };
   evanjs = {
     email = "evanjsx@gmail.com";
     github = "evanjs";

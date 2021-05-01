@@ -9871,6 +9871,8 @@ in
 
   zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
 
+  zsh-z = callPackage ../shells/zsh/zsh-z { };
+
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd {
