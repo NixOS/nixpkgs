@@ -2,6 +2,8 @@
 
 ## Syntax {#sec-syntax}
 
+The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
+
 The nixpkgs repository is formatted with [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt/).
 
 A non-exhaustive list of formatting rules follows. When in doubt, the tool is authoritative.
@@ -78,7 +80,7 @@ not
 
   if it's a short call.
 
-- In attribute sets or lists that span multiple lines, the attribute names or list elements must be indented and aligned:
+- In attribute sets or lists that span multiple lines, the attribute names or list elements _must_ be indented and aligned:
 
   ```nix
   # A long list.
@@ -118,7 +120,7 @@ not
   attrs = { x = 1280; y = 1024; };
   ```
 
-- Function calls spanning multiple lines must list /all/ their arguments on separate lines. Instead of
+- Function calls spanning multiple lines _must_ list /all/ their arguments on separate lines. Instead of
 
   ```nix
   someFunction { x = 1280; y = 1024; }
@@ -171,7 +173,7 @@ not
   }
   ```
 
-- For `let ... in` expressions, the bindings must be indented, whereas the expression must be un-indented and on its own line
+- For `let ... in` expressions, the bindings _must_ be indented, whereas the expression _must not_ be indented and _must_ be on its own line
 
   ```nix
   let
@@ -211,7 +213,7 @@ not
   x
   ```
 
-- The body of multi-line strings must be indented relative to the bound variable
+- The body of multi-line strings _must_ be indented relative to the bound variable
 
   ```nix
   x = ''
