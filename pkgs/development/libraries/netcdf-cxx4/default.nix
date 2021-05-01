@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, netcdf, hdf5, curl }:
+{ lib, stdenv, fetchzip, netcdf, hdf5, curl, cmake, ninja }:
 stdenv.mkDerivation rec {
   pname = "netcdf-cxx4";
   version = "4.3.1";
@@ -8,12 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "05kydd5z9iil5iv4fp7l11cicda5n5lsg5sdmsmc55xpspnsg7hr";
   };
 
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
-    "--without-nc-config"
-  ]; # prevent linking failure on Darwin
+  preConfigure = ''
+    cmakeFlags+="-Dabs_top_srcdir=$(readlink -f ./)"
+  '';
 
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ netcdf hdf5 curl ];
+
   doCheck = true;
+  enableParallelChecking = false;
 
   meta = {
     description = "C++ API to manipulate netcdf files";
