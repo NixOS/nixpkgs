@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp -v dump1090 view1090 $out/bin
     cp -vr public_html $out/share/dump1090
+
+    runHook postInstall
   '';
 
   meta = with lib; {
