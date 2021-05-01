@@ -240,6 +240,27 @@ let
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
+  # Contains a headers-only libsystem
+  stdenvHeadersLibsystem = pkgs.crossLibcStdenv.override (old: {
+     cc = old.cc.override rec {
+       bintools = old.cc.bintools.override {
+         libc = pkgs.darwin.LibsystemCrossHeaders;
+         noLibc = false;
+       };
+       libc = bintools.libc;
+       noLibc = false;
+     };
+  });
+
+  # Contains a libsystem withot libresolv
+  stdenvBasicLibsystem = stdenvHeadersLibsystem.override (old: {
+     cc = old.cc.override rec {
+       bintools = old.cc.bintools.override {
+         libc = pkgs.darwin.LibsystemCrossBasic;
+       };
+       libc = bintools.libc;
+     };
+  });
 in
 
 developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
@@ -307,5 +328,44 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
 
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
-    Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+
+    # TODO(@Ericson2314): Dedup after fewer overrides are needed, as described below
+    LibsystemCrossHeaders = pkgs.darwin.Libsystem.override {
+      # TODO most of these could unconditionally use stdenvNoCC; do that next mass rebuild.
+      stdenv = pkgs.crossLibcStdenv;
+      xnu = pkgs.darwin.xnu.override { stdenv = pkgs.crossLibcStdenv; };
+      ncurses = pkgs.buildPackages.ncurses; # TODO we are taking headers from a non-darwin package? Find a better way to get headers.
+      libpthread = pkgs.darwin.libpthread.override {
+        xnu = pkgs.darwin.xnu.override { stdenv = pkgs.crossLibcStdenv; };
+      };
+
+      headersOnly = true;
+      withLibresolv = false;
+    };
+    LibsystemCrossBasic = pkgs.darwin.LibsystemCrossHeaders.override {
+      headersOnly = false;
+      Csu = pkgs.darwin.Csu.override {
+        stdenv = stdenvHeadersLibsystem;
+      };
+    };
+    LibsystemCross = pkgs.darwin.LibsystemCrossBasic.override {
+      withLibresolv = true;
+      libresolv = pkgs.darwin.libresolv.override {
+        stdenv = stdenvBasicLibsystem;
+        configd = pkgs.darwin.configd.override {
+          stdenv = stdenvBasicLibsystem;
+          ppp = pkgs.darwin.ppp.override { stdenv = stdenvBasicLibsystem; };
+          IOKit = pkgs.darwin.IOKit.override {
+            stdenv = stdenvBasicLibsystem;
+            xnu = pkgs.darwin.xnu.override { stdenv = pkgs.crossLibcStdenv; };
+          };
+          eap8021x = pkgs.darwin.eap8021x.override { stdenv = stdenvBasicLibsystem; };
+          Security = pkgs.darwin.Security.override {
+            stdenv = stdenvBasicLibsystem;
+          };
+          xnu = pkgs.darwin.xnu.override { stdenv = pkgs.crossLibcStdenv; };
+        };
+      };
+    };
 }

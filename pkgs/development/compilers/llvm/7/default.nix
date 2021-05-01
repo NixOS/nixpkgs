@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapCCWithoutLibc, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -80,6 +80,52 @@ let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
+    };
+
+    clangNoLibcxx = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+      };
+      extraPackages = [
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = ''
+        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
+        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+        echo "-nostdlib++" >> $out/nix-support/cc-cflags
+      '' + mkExtraBuildCommands cc;
+    };
+
+    clangNoLibcYesCompilerRt = wrapCCWithoutLibc rec {
+      cc = tools.clang-unwrapped;
+      extraPackages = [
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = ''
+        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
+        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+      '' + mkExtraBuildCommands cc;
+    };
+
+    # Darwin "builds" Libsystem then compiler-rt
+    clangYesLibcNoCompilerRt = wrapCCWith {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      extraPackages = [ ];
+      extraBuildCommands = ''
+        echo "-nostartfiles" >> $out/nix-support/cc-cflags
+      '';
+    };
+
+    clangNoLibcNoCompilerRt = wrapCCWithoutLibc {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      extraPackages = [ ];
+      extraBuildCommands = ''
+        echo "-nostartfiles" >> $out/nix-support/cc-cflags
+      '';
     };
 
     lld = callPackage ./lld {};
@@ -167,9 +213,12 @@ let
   in {
 
     compiler-rt = callPackage ./compiler-rt {
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt
-               else stdenv;
+      stdenv =
+        /**/ if stdenv.hostPlatform.useLLVM or false
+          then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt
+        else if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isDarwin
+          then overrideCC stdenv buildLlvmTools.clangYesLibcNoCompilerRt
+        else stdenv;
     };
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
@@ -177,11 +226,17 @@ let
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
     libcxx = callPackage ./libc++ ({} //
+      (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isDarwin) {
+        stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      }) //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
     libcxxabi = callPackage ./libc++abi ({} //
+      (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isDarwin) {
+        stdenv = overrideCC stdenv buildLlvmTools.clangYesLibcNoCompilerRt;
+      }) //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
         libunwind = libraries.libunwind;

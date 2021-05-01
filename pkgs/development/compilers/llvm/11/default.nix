@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapCCWithoutLibc, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -77,6 +77,14 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
         targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
+    };
+
+    clangNoLibc = wrapCCWithoutLibc rec {
+      cc = tools.clang-unwrapped;
+      extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;

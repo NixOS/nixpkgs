@@ -64,6 +64,7 @@ let
 
   useGccForLibs = isClang
     && libcxx == null
+    && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
