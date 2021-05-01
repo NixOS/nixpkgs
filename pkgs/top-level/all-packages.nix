@@ -1260,6 +1260,8 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
+  cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
+
   codeql = callPackage ../development/tools/analysis/codeql { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
