@@ -11562,6 +11562,8 @@ in
     gputils = null;
   };
 
+  seren = callPackage ../applications/networking/instant-messengers/seren { };
+
   serialdv = callPackage ../development/libraries/serialdv {  };
 
   serpent = callPackage ../development/compilers/serpent { };
