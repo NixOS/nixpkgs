@@ -78,7 +78,7 @@ not
 
   if it's a short call.
 
-- In attribute sets or lists that span multiple lines, the attribute names or list elements should be indented and aligned:
+- In attribute sets or lists that span multiple lines, the attribute names or list elements must be indented and aligned:
 
   ```nix
   # A long list.
