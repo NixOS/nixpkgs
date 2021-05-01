@@ -4,7 +4,6 @@
 , fetchCrate
 , installShellFiles
 , makeWrapper
-, coreutils
 , libiconv
 , zlib
 , Security
