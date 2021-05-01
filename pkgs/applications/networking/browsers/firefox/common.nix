@@ -98,16 +98,22 @@ let
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
   # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
-  llvmPackages = if stdenv.isDarwin
-                 then buildPackages.llvmPackages
-                 else if lib.versionAtLeast rustc.llvm.version "11"
-                      then buildPackages.llvmPackages_11
-                      else buildPackages.llvmPackages_10;
+  llvmPackages0 =
+    /**/ if stdenv.isDarwin
+      then buildPackages.llvmPackages
+    else if lib.versionAtLeast rustc.llvm.version "11"
+      then buildPackages.llvmPackages_11
+    else buildPackages.llvmPackages_10;
+  # Force the use of lld and other llvm tools for LTO
+  llvmPackages = llvmPackages0.override {
+    bootBintoolsNoLibc = null;
+    bootBintools = null;
+  };
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
-                then overrideCC stdenv llvmPackages.lldClang
+                then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
