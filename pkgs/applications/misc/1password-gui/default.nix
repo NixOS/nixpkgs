@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.30";
+  version = "8.0.33-53.BETA";
 
   src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/1password-${version}.tar.gz";
-    hash = "sha256-R4Tbu2TAig0iF/IN8hnO3Bzqqj6Ru1YyyGhzraM7/9Y=";
+    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+    hash = "sha256-YUYER+UiM1QEDgGl0P9bIT65YVacUnuGtQVkV91teEU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     install -Dm0755 -t $out/share/${pname} {1Password-BrowserSupport,1Password-KeyringHelper}
 
     # Desktop file.
-    install -Dt $out/share/applications usr/share/applications/${pname}.desktop
+    install -Dt $out/share/applications resources/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
     # Icons.
-    cp -a usr/share/icons $out/share
+    cp -a resources/icons $out/share
 
     # Wrap the application with Electron.
     makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
