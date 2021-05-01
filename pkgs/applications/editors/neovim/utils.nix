@@ -4,7 +4,6 @@
 , neovim-unwrapped
 , bundlerEnv
 , ruby
-, pythonPackages
 , python3Packages
 , writeText
 , wrapNeovimUnstable
@@ -48,12 +47,6 @@ let
       requiredPlugins = vimUtils.requiredPlugins configure;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
-      pluginPython2Packages = getDeps "pythonDependencies" requiredPlugins;
-      python2Env = pythonPackages.python.withPackages (ps:
-        [ ps.pynvim ]
-        ++ (extraPython2Packages ps)
-        ++ (lib.concatMap (f: f ps) pluginPython2Packages));
-
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
       python3Env = python3Packages.python.withPackages (ps:
         [ ps.pynvim ]
@@ -69,7 +62,6 @@ let
       # While the latter tells nvim that this provider is not available
       hostprog_check_table = {
         node = withNodeJs;
-        python = withPython2;
         python3 = withPython3;
         ruby = withRuby;
       };
@@ -99,11 +91,12 @@ let
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
       neovimRcContent = vimUtils.vimrcContent configure;
     in
+    assert withPython2 -> throw "Python2 support has been removed from neovim, please remove withPython2 and extraPython2Packages.";
+
     args // {
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
-      inherit python2Env;
       inherit python3Env;
       inherit withNodeJs;
     } // lib.optionalAttrs withRuby {
@@ -120,7 +113,7 @@ let
   # to keep backwards compatibility
   legacyWrapper = neovim: {
     extraMakeWrapperArgs ? ""
-    , withPython ? true
+    , withPython ? false
     /* the function you would have passed to python.withPackages */
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
@@ -138,14 +131,14 @@ let
       else funOrList);
 
       res = makeNeovimConfig {
-        withPython2 = withPython;
-        extraPythonPackages = compatFun extraPythonPackages;
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
         inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
       };
     in
+    assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
+
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs (
         res.wrapperArgs ++ lib.optionals (configure != {}) [
