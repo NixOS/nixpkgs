@@ -573,6 +573,8 @@ in
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
+  numworks-epsilon = callPackage ../applications/science/math/numworks-epsilon { };
+
   ociTools = callPackage ../build-support/oci-tools { };
 
   octant = callPackage ../applications/networking/cluster/octant { };
@@ -807,10 +809,12 @@ in
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.minimal;
+    wine = wineWowPackages.staging;
   };
 
-  yabridgectl = callPackage ../tools/audio/yabridgectl { };
+  yabridgectl = callPackage ../tools/audio/yabridgectl {
+    wine = wineWowPackages.staging;
+  };
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
@@ -1255,6 +1259,8 @@ in
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
+
+  cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
 
@@ -2196,9 +2202,7 @@ in
 
   cppclean = callPackage ../development/tools/cppclean {};
 
-  credhub-cli = callPackage ../tools/admin/credhub-cli {
-    buildGoModule = buildGo114Module;
-  };
+  credhub-cli = callPackage ../tools/admin/credhub-cli {};
 
   crex = callPackage ../tools/misc/crex { };
 
@@ -6566,6 +6570,10 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
+  mangohud = callPackage ../tools/graphics/mangohud/combined.nix {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
+
   manix = callPackage ../tools/nix/manix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7532,9 +7540,15 @@ in
 
   philter = callPackage ../tools/networking/philter { };
 
+  phoc = callPackage ../applications/misc/phoc {
+    wlroots = wlroots_0_12;
+  };
+
   phodav = callPackage ../tools/networking/phodav { };
 
   pim6sd = callPackage ../servers/pim6sd { };
+
+  phosh = callPackage ../applications/window-managers/phosh { };
 
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
@@ -9868,6 +9882,8 @@ in
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
   zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
+
+  zsh-z = callPackage ../shells/zsh/zsh-z { };
 
   zssh = callPackage ../tools/networking/zssh { };
 

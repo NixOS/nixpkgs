@@ -1359,6 +1359,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion { };
 
+  click-configfile = callPackage ../development/python-modules/click-configfile { };
+
   click-datetime = callPackage ../development/python-modules/click-datetime { };
 
   click-default-group = callPackage ../development/python-modules/click-default-group { };
@@ -1370,6 +1372,8 @@ in {
   click-log = callPackage ../development/python-modules/click-log { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
+
+  click-spinner = callPackage ../development/python-modules/click-spinner { };
 
   click-repl = callPackage ../development/python-modules/click-repl { };
 
@@ -1404,6 +1408,8 @@ in {
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cloudscraper = callPackage ../development/python-modules/cloudscraper { };
+
+  cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
@@ -5854,6 +5860,8 @@ in {
   pyosmium = callPackage ../development/python-modules/pyosmium {
     inherit (pkgs) lz4;
   };
+
+  pyotgw = callPackage ../development/python-modules/pyotgw { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
 

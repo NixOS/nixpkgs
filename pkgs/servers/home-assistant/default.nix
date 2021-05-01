@@ -336,6 +336,7 @@ in with py.pkgs; buildPythonApplication rec {
     "omnilogic"
     "ondilo_ico"
     "openerz"
+    "opentherm_gw"
     "ozw"
     "panel_custom"
     "panel_iframe"
