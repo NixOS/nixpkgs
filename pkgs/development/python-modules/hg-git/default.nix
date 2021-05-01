@@ -4,33 +4,28 @@
 , dulwich
 , isPy3k
 , fetchpatch
+, brotli
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "0.8.12";
-  disabled = isPy3k;
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13hbm0ki6s88r6p65ibvrbxnskinzdz0m9gsshb8s571p91ymfjn";
+    sha256 = "0wbnhvn0c9w1hg0ykkqh7vqzr48sfgh33na6j08fqir86a6bvb3p";
   };
 
-  propagatedBuildInputs = [ dulwich ];
+  propagatedBuildInputs = [ dulwich brotli ];
 
-  # Needs patch to work with Mercurial 4.8
-  # https://bitbucket.org/durin42/hg-git/issues/264/unexpected-keyword-argument-createopts-hg
-  patches =
-    fetchpatch {
-      url = "https://bitbucket.org/rsalmaso/hg-git/commits/a778506fd4be0bf1afa75755f6ee9260fa234a0f/raw";
-      sha256 = "12r4qzbc5xcqwv0kvf8g4wjji7n45421zkbf6i75vyi4nl6n4j15";
-    };
+  # circular dependency, tests need mercurial to be installed, but hg-git is a
+  # dependency of nixpkgs' mercurial package.
+  doCheck = false;
 
   meta = with lib; {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "http://hg-git.github.com/";
-    maintainers = with maintainers; [ koral ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ koral holgerpeters ];
+    license = lib.licenses.gpl2Only;
   };
-
 }

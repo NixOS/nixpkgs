@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (python3Packages) docutils python;
+  inherit (python3Packages) docutils python hg-git dulwich;
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
@@ -22,6 +22,8 @@ in python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+
+  propagatedBuildInputs = [ hg-git dulwich ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
