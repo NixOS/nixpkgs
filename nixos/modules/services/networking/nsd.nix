@@ -136,9 +136,9 @@ let
   copyKeys = concatStrings (mapAttrsToList (keyName: keyOptions: ''
     secret=$(cat "${keyOptions.keyFile}")
     dest="${stateDir}/private/${keyName}"
-    echo "  secret: \"$secret\"" > "$dest"
-    chown ${username}:${username} "$dest"
-    chmod 0400 "$dest"
+    tempsec="$(mktemp)"
+    echo "  secret: \"$secret\"" > "$tempsec"
+    install -m 0400 -o ${username} -g ${username} "$tempsec" -D "$dest"
   '') cfg.keys);
 
 
@@ -438,9 +438,7 @@ let
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
   signZones = optionalString dnssec ''
-    mkdir -p ${stateDir}/dnssec
-    chown ${username}:${username} ${stateDir}/dnssec
-    chmod 0600 ${stateDir}/dnssec
+    install -dm 0600 -u ${username} -g ${username} ${stateDir}/dnssec
 
     ${concatStrings (mapAttrsToList signZone dnssecZones)}
   '';
@@ -930,9 +928,9 @@ in
         rm -Rf "${stateDir}/private/"
         rm -Rf "${stateDir}/tmp/"
 
-        mkdir -m 0700 -p "${stateDir}/private"
-        mkdir -m 0700 -p "${stateDir}/tmp"
-        mkdir -m 0700 -p "${stateDir}/var"
+        install -dm 0700 -o ${username} -g ${username} ${stateDir}/private
+        install -dm 0700 -o ${username} -g ${username} ${stateDir}/tmp
+        install -dm 0700 -o ${username} -g ${username} ${stateDir}/var
 
         cat > "${stateDir}/don't touch anything in here" << EOF
         Everything in this directory except NSD's state in var and dnssec
@@ -940,14 +938,12 @@ in
         the nsd.service pre-start script.
         EOF
 
-        chown ${username}:${username} -R "${stateDir}/private"
-        chown ${username}:${username} -R "${stateDir}/tmp"
-        chown ${username}:${username} -R "${stateDir}/var"
-
         rm -rf "${stateDir}/zones"
         cp -rL "${nsdEnv}/zones" "${stateDir}/zones"
 
         ${copyKeys}
+
+        chown ${username}:${username} -R "${stateDir}/var"
       '';
     };
 
