@@ -1,7 +1,6 @@
 { lib, stdenv ,fetchFromGitHub
-, zig, wayland, pkg-config, scdoc
-, xwayland, wayland-protocols, wlroots
-, libxkbcommon, pixman, udev, libevdev, libX11, libGL
+, wayland-protocols, wlroots, pixman, libxkbcommon, udev, libevdev, libX11, libGL
+, zig, wayland, xwayland, pkg-config, scdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -16,27 +15,36 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ xwayland wayland-protocols wlroots pixman
-    libxkbcommon pixman udev libevdev libX11 libGL
+  buildInputs = [
+    wayland-protocols
+    wlroots
+    pixman
+    libxkbcommon
+    udev
+    libevdev
+    libX11
+    libGL
   ];
 
   preBuild = ''
     export HOME=$TMPDIR
   '';
   installPhase = ''
+    runHook preInstall
     zig build -Drelease-safe -Dxwayland -Dman-pages --prefix $out install
+    runHook postInstall
   '';
 
-  nativeBuildInputs = [ zig wayland scdoc pkg-config ];
+  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
+    homepage = "https://github.com/ifreund/river";
     description = "A dynamic tiling wayland compositor";
     longDescription = ''
       river is a dynamic tiling wayland compositor that takes inspiration from dwm and bspwm.
     '';
-    homepage = "https://github.com/ifreund/river";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ branwright1 ];
