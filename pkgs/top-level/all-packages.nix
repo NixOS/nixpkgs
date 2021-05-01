@@ -6572,6 +6572,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  mario = callPackage ../applications/misc/mario { };
+
   marktext = callPackage ../applications/misc/marktext { };
 
   mawk = callPackage ../tools/text/mawk { };
