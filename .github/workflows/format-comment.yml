@@ -1,0 +1,88 @@
+# Workflow to format the changes made in a PR when someone with write access
+# comments '/format'. Uses git-filter-tree to not insert any unneeded commits
+# but rather rewrite such that all commits appear is if they've always been
+# properly formatted. Based on the `/rebase/` workflow.
+
+name: Format (from comment)
+on:
+  issue_comment:
+    types:
+      - created
+
+env:
+  nixpkgs_pin: ff13163e3fd5283d997d11fac04061f243d93f7c
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/format')
+    steps:
+      - uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: eyes
+      - uses: scherermichael-oss/action-has-permission@1.0.6
+        id: check-write-access
+        with:
+          required-permission: write
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: check permissions
+        run: |
+          echo "Commenter doesn't have write access to the repo"
+          exit 1
+        if: "! steps.check-write-access.outputs.has-permission"
+      - name: setup
+        run: |
+          curl "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}" 2>/dev/null >pr.json
+          cat <<EOF >>"$GITHUB_ENV"
+          CAN_MODIFY=$(jq -r '.maintainer_can_modify' pr.json)
+          COMMITS=$(jq -r '.commits' pr.json)
+          CURRENT_BASE=$(jq -r '.base.ref' pr.json)
+          PR_BRANCH=$(jq -r '.head.ref' pr.json)
+          COMMENT_BRANCH=$(echo ${{ github.event.comment.body }} | awk "/^\/rebase / {print \$2}")
+          PULL_REQUEST=${{ github.event.issue.number }}
+          EOF
+          rm pr.json
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: cachix/install-nix-action@v13
+      - name: format pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_BRANCH_SQUELCH_WARNING: "1"
+        run: |
+          set -euxo pipefail
+
+          nix-env -f 'https://github.com/nixos/nixpkgs/archive/${{ env.nixpkgs_pin }}.tar.gz' -iA nixpkgs-fmt
+
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git fetch origin
+
+          gh pr checkout "$PULL_REQUEST"
+
+          # https://stackoverflow.com/questions/34257833/git-filter-branch-get-only-changed-files
+          git show $CURRENT_BASE..$PR_BRANCH --name-status \
+            | egrep ^[AM] | grep .nix | cut -f2 \
+            | sort | uniq > /tmp/changed_files
+
+          # https://serverfault.com/questions/609886/shell-command-to-filter-out-non-existing-files-in-a-pipe
+          FILTER_SCRIPT="cat /tmp/changed_files | perl -ne 'chomp(); if (-e \$_) {print \"\$_\\n\"}' | xargs -d '\n' -- nixpkgs-fmt"
+          git filter-branch --tree-filter "$FILTER_SCRIPT" -- "$CURRENT_BASE..$PR_BRANCH"
+
+          git push --force
+
+      - uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Formatted.
+      - uses: peter-evans/create-or-update-comment@v1
+        if: failure()
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            [Failed to format](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
