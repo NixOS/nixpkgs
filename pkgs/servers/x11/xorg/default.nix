@@ -2678,15 +2678,15 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
-  xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2021.3";
+  xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt, python3 }: stdenv.mkDerivation {
+    name = "xorgproto-2021.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2021.3.tar.bz2";
-      sha256 = "0dypp7cvjf0rvwa7cn1zp7djw5ynhs1rwk9p0r1vczbwzha2nwsc";
+      url = "mirror://xorg/individual/proto/xorgproto-2021.4.tar.bz2";
+      sha256 = "1gwz8lhvczjinndrq2jb0swfvhk7p65rprkwiqwlp132041mfl8g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config python3 ];
     buildInputs = [ libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
