@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/haunt \
-      --prefix GUILE_LOAD_PATH : "$out/share/guile/site:${guile-commonmark}/share/guile/site:${guile-reader}/share/guile/site" \
-      --prefix GUILE_LOAD_COMPILED_PATH : "$out/share/guile/site:${guile-commonmark}/share/guile/site:${guile-reader}/share/guile/site"
-  '';
+  postInstall =
+    let
+      guileVersion = lib.versions.majorMinor guile.version;
+    in
+    ''
+      wrapProgram $out/bin/haunt \
+        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
+    '';
 
   doInstallCheck = true;
   installCheckPhase = ''
