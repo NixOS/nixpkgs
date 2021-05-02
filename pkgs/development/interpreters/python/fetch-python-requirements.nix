@@ -163,7 +163,7 @@ let
           cd $out
           for f in $(ls $out); do
             if [[ "$f" == *.whl ]]; then
-              pname=$(echo "$f" | cut -d "-" -f 1 | sed 's/_/-/' | sed 's/\(.*\)/\L\1/')
+              pname=$(echo "$f" | cut -d "-" -f 1 | sed -e 's/_/-/' -e 's/\(.*\)/\L\1/')
             else
               pname=''${f%-*}
             fi
@@ -177,5 +177,4 @@ let
 in
 
 fetchPythonRequirements
-
 
