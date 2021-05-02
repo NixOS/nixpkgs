@@ -53,7 +53,7 @@ jobs:
         echo "$PR_DIFF" | jq '.' -r | grep '.nix' | xargs -rd '\n' -- nixpkgs-fmt --check
     - if: steps.nixpkgs-fmt.outcome == 'failure'
       run: |
-        echo "::error :: Hey! It looks like your changes don't agree with nixpkgs-fmt."
+        echo "::error :: Hey! It looks like your changes don't follow nixpkgs-fmt. Run nixpkgs-fmt on all .nix files to fix this check."
     - if: steps.nixpkgs-fmt.outcome == 'failure' || steps.editorconfig.outcome == 'failure'
       run: |
         exit 1
