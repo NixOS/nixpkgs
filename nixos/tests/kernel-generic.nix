@@ -9,7 +9,7 @@ let
   testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
     name = "kernel-${linuxPackages.kernel.version}";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus ];
+      maintainers = [ nequissimus atemu ];
     };
 
     machine = { ... }:
