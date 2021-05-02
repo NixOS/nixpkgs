@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
   pythonPath = [
-    pyqt5 pyserial
+    pyqt5.dev pyserial
   ];
 
-  nativeBuildInputs = [ wrapPython qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapPython qt5.wrapQtAppsHook dos2unix ];
 
   buildPhase = "true";
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     cp -r main.py lib res $out/opt/sumorobot-manager
     chmod -R 644 $out/opt/sumorobot-manager/lib/*
     mkdir $out/bin
+    dos2unix $out/opt/sumorobot-manager/main.py
     makeQtWrapper $out/opt/sumorobot-manager/main.py $out/bin/sumorobot-manager \
       --run "cd $out/opt/sumorobot-manager"
   '';
