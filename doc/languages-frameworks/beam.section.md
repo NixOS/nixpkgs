@@ -200,7 +200,7 @@ in
 Usually, we need to create a `shell.nix` file and do our development inside of the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example with Elixir:
 
 ```nix
-{ pkgs ? import "<nixpkgs"> {} }:
+{ pkgs ? import <nixpkgs> {} }:
 
 with pkgs;
 
