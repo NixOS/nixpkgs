@@ -17389,7 +17389,7 @@
     "hash":"sha512-wPVx672XbVX+dS6bTGHo5E5sz0CGWSsWYYlY2TYmd3fYgl38LJJx9v3bNiD1S8qgRfiVExoxES4GYVLyB0jlSQ=="
    },
    "postactions":[
-    null
+    "tlpkg/tlpostcode/dvipdfmx.pl"
    ],
    "revision":"58645",
    "run":{
@@ -24262,7 +24262,7 @@
     "hash":"sha512-Re2vZFvOxKiEltF+SXs5Jnvb/TsRLmi7eKpsgfww3C/58UyYBSakRONqnf73X3rfOsM8PPKft7CAp9Q8hGGtxw=="
    },
    "postactions":[
-    null
+    "tlpkg/tlpostcode/haranoaji-tlpost.pl"
    ],
    "revision":"57574",
    "run":{
@@ -41366,7 +41366,7 @@
     "hash":"sha512-Qufw7qsQALLEnXFMQEBeAIzHsIZIvawbrI9UWbxk6z/W+1Jvq7vCx3dKGxKr03OW44nnyQNR66kqWu71OsPlWA=="
    },
    "postactions":[
-    null
+    "tlpkg/tlpostcode/ptex-fontmaps-tlpost.pl"
    ],
    "revision":"57239",
    "run":{
@@ -41399,7 +41399,7 @@
     "hash":"sha512-gzKOrTRGxB5CaHgZ2d3dbxmsApL9wbqZ6qmnWtni+tigXiN3wZbWBek2DTg4gRlNA5MNKGycQXBu6oOdGdbuZg=="
    },
    "postactions":[
-    null
+    "tlpkg/tlpostcode/ptex2pdf-tlpost.pl"
    ],
    "revision":"58632",
    "run":{
@@ -52421,7 +52421,7 @@
     }
    ],
    "postactions":[
-    null
+    "tlpkg/tlpostcode/xetex.pl"
    ],
    "revision":"57972",
    "run":{

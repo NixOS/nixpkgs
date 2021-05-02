@@ -202,7 +202,7 @@ sub parse_execute {
 
   # postaction script file=:
   if ($key eq 'postaction' and $action eq 'script') {
-    my $file;
+    my $file = $data{'file'};
     delete $data{'file'};
     die "Unexpected arguments in $key $action.\n" if %data;
     return ('postactions', $file);
