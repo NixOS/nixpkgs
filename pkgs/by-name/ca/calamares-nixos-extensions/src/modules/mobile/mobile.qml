@@ -55,8 +55,8 @@ Page
         }
         return ret;
     }())
-    /* Only allow characters, that can be typed in with the initramfs on-screen keyboard
-     * (osk-sdl: see src/keyboard.cpp). FIXME: make configurable, but keep this as default? */
+    /* Only allow characters, that can be typed in with osk-sdl
+     * (src/keyboard.cpp). Details in big comment in validatePassword(). */
      property var allowed_chars:
         /* layer 0 */ "abcdefghijklmnopqrstuvwxyz" +
         /* layer 1 */ "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -389,11 +389,21 @@ Page
         if (pass == "")
             return validationFailure(errorText);
 
+        /* This function gets called for the FDE password and for the user
+         * password. As of writing, all distributions shipping the mobile
+         * module are using osk-sdl to type in the FDE password after the
+         * installation, and another keyboard after booting up, to type in the
+         * user password. The osk-sdl password has the same keys as
+         * squeekboard's default layout, and other keyboards should be able to
+         * type these characters in as well. For now, verify that the password
+         * only contains characters that can be typed in by osk-sdl. If you
+         * need this to be more sophisticated, feel free to submit patches to
+         * make this more configurable. */
         if (!check_chars(pass))
             return validationFailure(errorText,
                                      "The password must only contain" +
-                                     " these characters, others cannot be" +
-                                     " typed in at boot time:\n" +
+                                     " these characters, others can possibly" +
+                                     " not be typed in after installation:\n" +
                                      "\n" +
                                      allowed_chars_multiline());
 
