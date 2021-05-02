@@ -19,7 +19,7 @@ jobs:
       run: |
         echo 'PR_DIFF<<EOF' >> $GITHUB_ENV
         gh api \
-          repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
+          repos/${{github.repository}}/pulls/${{github.event.number}}/files --paginate \
           | jq '.[] | select(.status != "removed") | .filename' \
           >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
