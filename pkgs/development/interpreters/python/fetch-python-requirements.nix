@@ -140,7 +140,7 @@ let
 
           # wait for proxy to come up
           while sleep 0.5; do
-            timeout 5 curl --proxy http://localhost:$proxyPort http://pypi.org 2>/dev/null && break
+            timeout 5 curl --fail --proxy http://localhost:$proxyPort http://pypi.org 2>/dev/null && break
           done
 
           mkdir $out
