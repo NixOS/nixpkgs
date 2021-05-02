@@ -18,7 +18,7 @@ in
           If you use both the standard networking firewall and nftables,
           you may have conflicting rules. Please see [1] for more information
           on how iptables and nftables interact with each other.
-          
+
           Be aware that some applications (in particular, Docker and libvirt)
           will load iptables themselves if it not already loaded.
 
