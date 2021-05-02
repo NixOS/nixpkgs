@@ -30,61 +30,64 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix tl;
+    tlpdb = with builtins; fromJSON (readFile ./texlive-snapshot.tlpdb.json);
+    orig = tlpdb.schemes // tlpdb.collections // tlpdb.packages;
     removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
-                         else p);
+      (n: p: if p ? depends then p // { depends = lib.remove n p.depends; }
+                            else p);
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
-      texlive-msg-translations = orig.texlive-msg-translations // {
-        hasRunfiles = false; # only *.po for tlmgr
-      };
+      # only *.po for tlmgr
+      texlive-msg-translations = lib.filterAttrs (n: v: n != "run") orig.texlive-msg-translations;
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+        depends = (orig.xdvi.depends or [ ]) ++ [ "metafont" ];
       };
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
+        depends = lib.remove "metafont" (lib.remove "xdvi"
+          orig.collection-basic.depends);
       };
       # add them elsewhere so that collections cover all packages
       collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
+        depends = orig.collection-metapost.depends ++ [ "metafont" ];
       };
       collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+        depends = orig.collection-plaingeneric.depends ++ [ "xdvi" ];
       };
     }); # overrides
+    withDeps = lib.mapAttrs
+      (n: p: p // {
+        depends = builtins.map (dn: tl.${dn}) (p.depends or [ ]);
+      }) clean;
 
     # tl =
-    in lib.mapAttrs flatDeps clean;
+    in lib.mapAttrs flatDeps withDeps;
     # TODO: texlive.infra for web2c config?
-
 
   flatDeps = pname: attrs:
     let
-      version = attrs.version or (builtins.toString attrs.revision);
+      version = attrs.catalogue-version or attrs.revision;
       mkPkgV = tlType: let
         pkg = attrs // {
-          sha512 = attrs.sha512.${tlType};
+          hash = attrs.${tlType}.hash;
           inherit pname tlType version;
         };
         in mkPkg pkg;
     in {
       # TL pkg contains lists of packages: runtime files, docs, sources, binaries
       pkgs =
-        # tarball of a collection/scheme itself only contains a tlobj file
-        [( if (attrs.hasRunfiles or false) then mkPkgV "run"
+        [( if (attrs ? run) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
+        ++ lib.optional (attrs ? doc) (mkPkgV "doc")
+        ++ lib.optional (attrs ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or {});
+        ++ combinePkgsList attrs.depends;
     };
 
   snapshot = {
@@ -94,7 +97,7 @@ let
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, hash, postUnpack ? "", relocated ? false, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
@@ -118,18 +121,19 @@ let
         "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
-      src = fetchurl { inherit urls sha512; };
+      src = fetchurl { inherit urls hash; };
 
       passthru = {
-        inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
+        inherit pname tlType version src;
+      };
+
       unpackCmd = file: ''
         tar -xf ${file} \
-          '--strip-components=${toString stripPrefix}' \
+          '--strip-components=${if relocated then "0" else "1"}' \
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
-    in if sha512 == "" then
+    in if hash == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
       fetchurl {
         inherit urls;
@@ -159,8 +163,9 @@ let
       );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
-    (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
+  combinePkgs = pkgSet: combinePkgsList (lib.attrValues pkgSet);
+  combinePkgsList = pkgList: lib.concatLists (lib.catAttrs "pkgs" pkgList);
+  # uniqueness is handled in `combine`
 
 in
   tl // {

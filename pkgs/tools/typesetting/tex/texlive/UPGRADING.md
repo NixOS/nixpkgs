@@ -12,7 +12,8 @@ you upgrade you may have to do some work here.
 
 ## Updating the package set
 
-texlive contains several thousand packages from CTAN, defined in pkgs.nix.
+texlive contains several thousand packages from CTAN, defined in
+`texlive-snapshot.tlpdb.json`.
 
 The CTAN mirrors are not version-controlled and continuously moving,
 with more than 100 updates per month.
@@ -33,14 +34,22 @@ See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 ### Upgrade package information from texlive package database
 
+Update date and hashes in `texlive-snapshot.nix`, `default.nix`, `bin.nix` and run
 
 ```bash
-curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+mv texlive-snapshot.tlpdb.json texlive-snapshot-old.tlpdb.json
+nix-build texlive-snapshot.nix
+cp result texlive-snapshot.tlpdb.json
 ```
 
 This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`
-and regenerate all of the sha512 hashes for the current upstream distribution in `pkgs.nix`.
+and regenerate all of the sha512 hashes for the current upstream distribution in
+`texlive-snapshot.tlpdb.json`.
+
+If the package database adds new information, such as new keys, the script will
+refuse to proceed. If the new information is not relevant for Nix, add it to the
+list of ignored keys and arguments of `tlpdb2json.pl` in a separate commit.
+Otherwise, the change should be investigated.
 
 
 ### Build packages locally and generate fix hashes
@@ -65,4 +74,4 @@ mv fixedHashes-new.nix fixedHashes.nix
 
 ### Commit changes
 
-Commit the updated `pkgs.nix` and `fixedHashes.nix` to the repository.
+Commit the updated files to the repository.
