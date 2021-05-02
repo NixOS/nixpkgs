@@ -1,39 +1,43 @@
-{stdenv, fetchgit, SDL_gfx, SDL, libjpeg, libpng, pkgconfig}:
-let
-  s =
-  rec {
-    date = "2016-08-16";
-    version = "git-${date}";
-    baseName = "quirc";
-    name = "${baseName}-${version}";
-    url = "https://github.com/dlbeer/quirc";
-    rev = "5b262480091d5f84a67a4a56c728fc8b39844339";
-    sha256 = "1w5qvjafn14s6jjs7kiwsqirlsqbgv0p152hrsq463pm34hp0lzy";
-  };
-in
+{ lib, stdenv, fetchFromGitHub
+, SDL_gfx, SDL, libjpeg, libpng, pkg-config
+}:
+
 stdenv.mkDerivation {
-  inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    SDL SDL_gfx libjpeg libpng
-  ];
-  src = fetchgit {
-    inherit (s) url sha256 rev;
+  pname = "quirc";
+  version = "2020-04-16";
+
+  src = fetchFromGitHub {
+    owner = "dlbeer";
+    repo = "quirc";
+    rev = "ed455904f35270888bc902b9e8c0c9b3184a8302";
+    sha256 = "1kqqvcnxcaxdgls9sibw5pqjz3g1gys2v64i4kfqp8wfcgd9771q";
   };
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_gfx}/include/SDL";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ SDL SDL_gfx libjpeg libpng ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL -I${SDL_gfx}/include/SDL";
+
   configurePhase = ''
+    runHook preConfigure
+
+    # don't try to change ownership
     sed -e 's/-[og] root//g' -i Makefile
+
+    runHook postConfigure
   '';
   preInstall = ''
     mkdir -p "$out"/{bin,lib,include}
-    find . -maxdepth 1 -type f -perm -0100 -exec cp '{}' "$out"/bin ';'
+
+    # install all binaries
+    find -maxdepth 1 -type f -executable ! -name '*.so.*' | xargs cp -t "$out"/bin
   '';
-  makeFlags = [ "PREFIX=$(out)" ];
+
   meta = {
-    inherit (s) version;
-    description = ''A small QR code decoding library'';
-    license = stdenv.lib.licenses.isc;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A small QR code decoding library";
+    license = lib.licenses.isc;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }
