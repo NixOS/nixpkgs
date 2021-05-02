@@ -63,6 +63,7 @@ let
           "manylinux1_x86_64"
           "manylinux2010_x86_64"
           "manylinux2014_x86_64"
+          "linux_x86_64"
         ];
         "x86_64-darwin" =
           lib.forEach (lib.range 0 15) (minor: "macosx_10_${builtins.toString minor}_x86_64");
@@ -70,6 +71,7 @@ let
           "manylinux1_aarch64"
           "manylinux2010_aarch64"
           "manylinux2014_aarch64"
+          "linux_aarch64"
         ];
       };
       platforms = if sysToPlatforms ? "${targetSystem}" then sysToPlatforms."${targetSystem}" else throw ''
@@ -105,7 +107,7 @@ let
         outputHashAlgo = "sha256";
         inherit outputHash;
 
-        nativeBuildInputs = with python3.pkgs; [ pythonWithMitmproxy pythonPip curl cacert ];
+        nativeBuildInputs = [ pythonWithMitmproxy pythonPip curl cacert ];
 
         dontUnpack = true;
         dontInstall = true;
@@ -141,7 +143,7 @@ let
 
           # wait for proxy to come up
           while sleep 0.5; do
-            timeout 5 curl -fLsS --proxy http://localhost:$proxyPort http://pypi.org && break
+            timeout 5 curl -fs --proxy http://localhost:$proxyPort http://pypi.org && break
           done
 
           mkdir $out
