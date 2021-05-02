@@ -1,6 +1,6 @@
-{ fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes, lib, stdenv }:
+{ fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes, lib, stdenvNoCC }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
   version = "2021-01-21";
 
