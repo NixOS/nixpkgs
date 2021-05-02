@@ -9,15 +9,29 @@
   #   additionalSpace is taken into account.
   diskSize ? "auto"
 
-, # additional disk space to be added to the image if diskSize "auto"
-  # is used
-  additionalSpace ? "512M"
+, # Additional disk space to be added to the image if diskSize "auto"
+  # is used.
+  #
+  # Can be specified as an integer or string ending in M/MB/MiB. The
+  # value will be assumed to be MiB.
+  additionalSpace ? 512
 
-, # size of the boot partition, is only used if partitionTableType is
-  # either "efi" or "hybrid"
+, # Size of the boot partition, is only used if partitionTableType is
+  # either "efi" or "hybrid".
+  #
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
-  bootSize ? "256M"
+  #
+  # Can be specified as an integer or string ending in M/MB/MiB. The
+  # value will be assumed to be MiB.
+  bootSize ? 256
+
+, # Size of the swap partition, if one is desired. Set this to null if
+  # you don't want a swap partition.
+  #
+  # Can be specified as an integer or string ending in M/MB/MiB. The
+  # value will be assumed to be MiB.
+  swapSize ? null
 
 , # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target, mode, user, group} where
@@ -47,8 +61,28 @@
 , # The root file system type.
   fsType ? "ext4"
 
-, # Filesystem label
+, # The boot partition ID. Also used for the volume label for legacy disk labels.
+  # This default magic value is "Nix!" in little endian and is the same as the SD card
+  # builder.
+  bootPartitionId ? "0x2178694e"
+
+, # The boot UUID.
+  bootUUID ? "44444444-4444-4444-8888-888888888886"
+
+, # The boot filesystem label and partition name. Converted to uppercase for mkfs.msdos.
+  bootLabel ? "efi"
+
+, # The swapspace UUID.
+  swapUUID ? "44444444-4444-4444-8888-888888888887"
+
+, # The swapspace label and partition name.
+  swapLabel ? "swap"
+
+, # Root filesystem label and partition name.
   label ? "nixos"
+
+, # The rootfs UUID, if applicable for fsType.
+  uuid ? "44444444-4444-4444-8888-888888888888"
 
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
@@ -87,44 +121,152 @@ let format' = format; in let
     raw   = "img";
   }.${format} or format;
 
-  rootPartition = { # switch-case
-    legacy = "1";
-    "legacy+gpt" = "2";
-    efi = "2";
-    hybrid = "3";
+  swapPartitionNumber = { # switch-case
+    legacy = 1;
+    "legacy+gpt" = 2;
+    efi = 2;
+    hybrid = 3;
   }.${partitionTableType};
+  swapPartition = toString swapPartitionNumber;
+
+  rootPartitionNumber = if swapSize == null then swapPartitionNumber else swapPartitionNumber + 1;
+  rootPartition = toString rootPartitionNumber;
+
+  # Chops off M/MB/MiB suffixes.
+  normalizeMiB = value: let
+    # Assume that they meant "MiB" by "MB" or "M".
+    regexMatch = builtins.match "^([[:digit:]]+)(M|MB|MiB)?$" value;
+  in
+    if regexMatch == null then throw "Invalid size: ${value}. Provide a string optionally ending in M/MB/MiB."
+    else elemAt regexMatch 0;
+
+  # Validates that the given size is positive.
+  validateMiB = value:
+    if value > 0 then value
+    else throw "Size must be positive";
+
+  # Converts a MiB string to an integer. If an integer is provided,
+  # returns it directly if it represents a valid size.
+  fromMiB = value:
+    if isString value then toInt (normalizeMiB value)
+    else if isInt value then validateMiB value
+    else throw "Sizes must be integers or strings";
+
+  # Converts an integer to a MiB string. If string is provided,
+  # runs it through normalizeMiB and returns it suffixed with MiB.
+  toMiB = value:
+    if isInt value then "${toString (validateMiB value)}MiB"
+    else if isString value then "${normalizeMiB value}MiB"
+    else throw "Sizes must be integers or strings";
+
+  # Additional size to add to the disk, taking into account the boot size
+  # and swap size. Only used if the disk size is auto. Not necessarily 1 MiB
+  # aligned.
+  reservedSpaceBytes = let
+    # One MiB in bytes.
+    MiB = 1024 * 1024;
+
+    # Reserved bytes for the GPT at the end of the disk.
+    reservedEndGptBytes = 512 * 34;
+  in
+    (
+      if partitionTableType == "efi" || partitionTableType == "hybrid" then
+        # This is the offset of the end of the boot partition, as opposed to
+        # the actual partition size
+        (fromMiB bootSize) * MiB + reservedEndGptBytes
+      else if partitionTableType == "legacy+gpt" then
+        # no-fs boot partition ends at +2MiB
+        2 * MiB + reservedEndGptBytes
+      else if partitionTableType == "legacy" then
+        # Next partition starts at +1MiB
+        1 * MiB
+      else
+        0
+    ) + (if swapSize == null then 0 else (fromMiB swapSize) * MiB);
 
   partitionDiskScript = { # switch-case
     legacy = ''
       parted --script $diskImage -- \
-        mklabel msdos \
-        mkpart primary ext4 1MiB -1
+        mklabel msdos
+
+      # We need to use fdisk to set the volume ID.
+      echo "x i "${escapeShellArg bootPartitionId}" r w" | tr ' ' '\n' | fdisk $diskImage
+
+      ${if swapSize == null then ''
+        parted --script $diskImage -- \
+          mkpart primary ext4 ${toMiB 2} -1
+        '' else let swapEnd = 2 + (fromMiB swapSize); in ''
+        parted --script $diskImage -- \
+          mkpart primary linux-swap ${toMiB 2} ${toMiB swapEnd} \
+          mkpart primary ext4 ${toMiB swapEnd} -1
+        ''}
     '';
     "legacy+gpt" = ''
       parted --script $diskImage -- \
-        mklabel gpt \
-        mkpart no-fs 1MB 2MB \
+        mklabel gpt
+
+      # We need to use gdisk to set the volume ID.
+      echo "x g "${escapeShellArg bootUUID}" m w y" | tr ' ' '\n' | gdisk $diskImage
+
+      parted --script $diskImage -- \
+        mkpart no-fs ${toMiB 1} ${toMiB 2} \
         set 1 bios_grub on \
-        align-check optimal 1 \
-        mkpart primary ext4 2MB -1 \
-        align-check optimal 2 \
-        print
+        align-check optimal 1
+
+      ${if swapSize == null then ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg label} ext4 ${toMiB 2} -1 \
+          align-check optimal ${rootPartition}
+        '' else let swapEnd = 2 + (fromMiB swapSize); in ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg swapLabel} linux-swap ${toMiB 2} ${toMiB swapEnd} \
+          align-check optimal ${swapPartition} \
+          mkpart ${escapeShellArg label} ext4 ${toMiB swapEnd} -1 \
+          align-check optimal ${rootPartition}
+        ''}
     '';
     efi = ''
       parted --script $diskImage -- \
-        mklabel gpt \
-        mkpart ESP fat32 8MiB ${bootSize} \
-        set 1 boot on \
-        mkpart primary ext4 ${bootSize} -1
+        mklabel gpt
+
+      # We need to use gdisk to set the volume ID.
+      echo "x g "${escapeShellArg bootUUID}" m w y" | tr ' ' '\n' | gdisk $diskImage
+
+      # bootSize includes the padding at the start of the boot partition.
+      parted --script $diskImage -- \
+        mkpart ${escapeShellArg bootLabel} fat32 ${toMiB 8} ${toMiB bootSize} \
+        set 1 boot on
+
+      ${if swapSize == null then ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg label} ext4 ${toMiB bootSize} -1
+      '' else let swapEnd = (fromMiB bootSize) + (fromMiB swapSize); in ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg swapLabel} linux-swap ${toMiB bootSize} ${toMiB swapEnd} \
+          mkpart ${escapeShellArg label} ext4 ${toMiB swapEnd} -1
+      ''}
     '';
     hybrid = ''
       parted --script $diskImage -- \
-        mklabel gpt \
-        mkpart ESP fat32 8MiB ${bootSize} \
+        mklabel gpt
+
+      # We need to use gdisk to set the volume ID.
+      echo "x g "${escapeShellArg bootUUID}" m w y" | tr ' ' '\n' | gdisk $diskImage
+
+      parted --script $diskImage -- \
+        mkpart ${escapeShellArg bootLabel} fat32 ${toMiB 8} ${toMiB bootSize} \
         set 1 boot on \
-        mkpart no-fs 0 1024KiB \
-        set 2 bios_grub on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart no-fs 0 ${toMiB 1} \
+        set 2 bios_grub on
+
+      ${if swapSize == null then ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg label} ext4 ${toMiB bootSize} -1
+        '' else let swapEnd = (fromMiB bootSize) + (fromMiB swapSize); in ''
+        parted --script $diskImage -- \
+          mkpart ${escapeShellArg swapLabel} linux-swap ${toMiB bootSize} ${toMiB swapEnd} \
+          mkpart ${escapeShellArg label} ext4 ${toMiB swapEnd} -1
+        ''}
     '';
     none = "";
   }.${partitionTableType};
@@ -147,6 +289,7 @@ let format' = format; in let
     [ rsync
       util-linux
       parted
+      gptfdisk
       e2fsprogs
       lkl
       config.system.build.nixos-install
@@ -256,26 +399,8 @@ let format' = format; in let
     diskImage=nixos.raw
 
     ${if diskSize == "auto" then ''
-      ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
-        # Add the GPT at the end
-        gptSpace=$(( 512 * 34 * 1 ))
-        # Normally we'd need to account for alignment and things, if bootSize
-        # represented the actual size of the boot partition. But it instead
-        # represents the offset at which it ends.
-        # So we know bootSize is the reserved space in front of the partition.
-        reservedSpace=$(( gptSpace + $(numfmt --from=iec '${bootSize}') ))
-      '' else if partitionTableType == "legacy+gpt" then ''
-        # Add the GPT at the end
-        gptSpace=$(( 512 * 34 * 1 ))
-        # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
-        reservedSpace=$(( gptSpace + 2 * mebibyte ))
-      '' else if partitionTableType == "legacy" then ''
-        # Add the 1MiB aligned reserved space (includes MBR)
-        reservedSpace=$(( mebibyte ))
-      '' else ''
-        reservedSpace=0
-      ''}
-      additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
+      reservedSpace=$(( ${toString reservedSpaceBytes} ))
+      additionalSpace=$(( ${toString (fromMiB additionalSpace)} * 1024 * 1024 + reservedSpace ))
 
       # Compute required space in filesystem blocks
       diskUsage=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
@@ -305,18 +430,21 @@ let format' = format; in let
       printf "  Additional space: %d bytes\n" $additionalSpace
       printf "  Disk image size: %d bytes\n" $diskSize
     '' else ''
-      truncate -s ${toString diskSize}M $diskImage
+      truncate -s ${toMiB diskSize} $diskImage
     ''}
 
     ${partitionDiskScript}
+    parted --script $diskImage -- \
+      unit MiB \
+      print
 
     ${if partitionTableType != "none" then ''
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      ${escapeShellArg "mkfs.${fsType}"} -b ${blockSize} -F -U ${escapeShellArg uuid} -L ${escapeShellArg label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+      ${escapeShellArg "mkfs.${fsType}"} -b ${blockSize} -F -U ${escapeShellArg uuid} -L ${escapeShellArg label} $diskImage
     ''}
 
     echo "copying staging root to image..."
@@ -326,7 +454,7 @@ let format' = format; in let
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
-      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools libfaketime ];
       postVM = ''
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
@@ -346,8 +474,9 @@ in pkgs.vmTools.runInLinuxVM (
       # Some tools assume these exist
       ln -s vda /dev/xvda
       ln -s vda /dev/sda
+
       # make systemd-boot find ESP without udev
-      mkdir /dev/block
+      mkdir -p /dev/block
       ln -s /dev/vda1 /dev/block/254:1
 
       mountPoint=/mnt
@@ -358,8 +487,13 @@ in pkgs.vmTools.runInLinuxVM (
       # '-E offset=X' option, so we can't do this outside the VM.
       ${optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
         mkdir -p /mnt/boot
-        mkfs.vfat -n ESP /dev/vda1
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${escapeShellArg bootPartitionId} -n ${escapeShellArg (toUpper bootLabel)} /dev/vda1
         mount /dev/vda1 /mnt/boot
+      ''}
+
+      # Create the swapspace. Don't turn it on.
+      ${optionalString (swapSize != null) ''
+        mkswap -U ${escapeShellArg swapUUID} -L ${escapeShellArg swapLabel} /dev/vda${swapPartition}
       ''}
 
       # Install a configuration.nix
