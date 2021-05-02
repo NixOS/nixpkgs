@@ -3039,6 +3039,10 @@ in
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
 
+  sheesy-cli = callPackage ../tools/security/sheesy-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   simdjson = callPackage ../development/libraries/simdjson { };
 
   shipyard = callPackage ../tools/virtualization/shipyard { };
