@@ -20,11 +20,9 @@ in rec {
   #   Explanation about derivations in general
   mkDerivation =
     fnOrAttrs:
-      makeDerivationExtensible (
-        if builtins.isFunction fnOrAttrs
-        then fnOrAttrs
-        else _: fnOrAttrs
-        );
+      if builtins.isFunction fnOrAttrs
+      then makeDerivationExtensible fnOrAttrs
+      else makeDerivationExtensible0 fnOrAttrs;
 
   # Based off lib.makeExtensible, with modifications:
   #  - lib.fix' -> lib.fix ∘ mkDerivation_; then inline fix
@@ -50,6 +48,19 @@ in rec {
           in
             makeDerivationExtensible (self: let super = rattrs self; in super // f self super)) (rattrs r);
     in r;
+
+  # Like makeDerivationExtensible (_: attrs), but specialized for performance
+  makeDerivationExtensible0 = attrs:
+    mkDerivation_ (f0:
+      let
+        f = self: super:
+          let x = f0 super;
+          in
+            if builtins.isFunction x
+            then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
+            else x;
+      in
+        makeDerivationExtensible (self: attrs // f self attrs)) attrs;
 
   removedAttrs = [
     "meta" "passthru" "pos" "overrideAttrs"
