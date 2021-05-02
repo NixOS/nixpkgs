@@ -29,10 +29,10 @@ in rec {
   # Based off lib.makeExtensible, with modifications:
   #  - lib.fix' -> lib.fix ∘ mkDerivation_; then inline fix
   #  - convert `f` to an overlay
+  #  - inline overrideAttrs and make it positional instead of // to reduce allocs
   makeDerivationExtensible = rattrs:
     let
-      r = mkDerivation_ (rattrs r // {
-        overrideAttrs = f0:
+      r = mkDerivation_ (f0:
           let
             f = self: super:
               # Convert f0 to an overlay. Legacy is:
@@ -48,12 +48,11 @@ in rec {
                 then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
                 else x;
           in
-            makeDerivationExtensible (lib.extends f rattrs);
-      });
+            makeDerivationExtensible (lib.extends f rattrs)) (rattrs r);
     in r;
 
-  mkDerivation_ =
-    { overrideAttrs
+  mkDerivation_ = overrideAttrs:
+    {
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
@@ -62,7 +61,7 @@ in rec {
     # TODO(@Ericson2314): Stop using legacy dep attribute names
 
     #                           host offset -> target offset
-    , depsBuildBuild              ? [] # -1 -> -1
+      depsBuildBuild              ? [] # -1 -> -1
     , depsBuildBuildPropagated    ? [] # -1 -> -1
     , nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
     , propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
