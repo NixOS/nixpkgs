@@ -10,6 +10,9 @@
 class Config : public QObject
 {
     Q_OBJECT
+    /* installer UI */
+    Q_PROPERTY( bool builtinVirtualKeyboard READ builtinVirtualKeyboard CONSTANT FINAL )
+
     /* welcome */
     Q_PROPERTY( QString osName READ osName CONSTANT FINAL )
     Q_PROPERTY( QString arch READ arch CONSTANT FINAL )
@@ -57,6 +60,9 @@ public:
     Config( QObject* parent = nullptr );
     void setConfigurationMap( const QVariantMap& );
     Calamares::JobList createJobs();
+
+    /* installer UI */
+    bool builtinVirtualKeyboard() { return m_builtinVirtualKeyboard; }
 
     /* welcome */
     QString osName() const { return m_osName; }
@@ -117,6 +123,9 @@ public:
     QString cmdSshdUseradd() const { return m_cmdSshdUseradd; }
 
 private:
+    /* installer UI */
+    bool m_builtinVirtualKeyboard;
+
     /* welcome */
     QString m_osName;
     QString m_arch;

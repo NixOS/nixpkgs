@@ -142,6 +142,7 @@ Page
     InputPanel {
         id: inputPanel
         y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+        visible: config.builtinVirtualKeyboard
         anchors.left: parent.left
         anchors.right: parent.right
     }
