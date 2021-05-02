@@ -31,9 +31,51 @@ let
     outputHash,     # hash for the fixed output derivation
     requirements,   # list of strings of specs
 
+    # restrict to binary releases (.whl)
+    # this allows buildPlatform independent fetching
+    onlyBinary ? false,
+
+    # additional flags for `pip download`.
+    # for reference see: https://pip.pypa.io/en/stable/cli/pip_download/
     pipFlags ? [],
+
+    # For non-binary downloads, the targetSystem must be a constant.
+    # Do not pass `stdenv.targetPlatform.system` or `builtins.currentSystem`.
+    # This prevents the fetcher from being executed on the wrong platform.
+    targetSystem ?
+      if onlyBinary then stdenv.targetPlatform.system
+      else throw "'targetSystem' must be specified if 'onlyBinary' = false",
   }:
+
+    # specifying `--platform` for pip download is only allowed in combination with `--only-binary :all:`
+    # therefore, if onlyBinary is disabled, we must enforce targetPlatform == buildPlatform to ensure reproducibility
+    if ! onlyBinary && targetSystem != stdenv.buildPlatform.system then
+      throw ''
+        fetchPythonRequirements cannot fetch sdist packages for ${targetSystem} on a ${stdenv.buildPlatform.system}.
+        Either build on a ${targetSystem} or set `onlyBinary = true`.
+      ''
+    else
     let
+      # map nixos system strings to python platforms
+      sysToPlatforms = {
+        "x86_64-linux" = [
+          "manylinux1_x86_64"
+          "manylinux2010_x86_64"
+          "manylinux2014_x86_64"
+        ];
+        "x86_64-darwin" =
+          lib.forEach (lib.range 0 15) (minor: "macosx_10_${builtins.toString minor}_x86_64");
+        "aarch64-linux" = [
+          "manylinux1_aarch64"
+          "manylinux2010_aarch64"
+          "manylinux2014_aarch64"
+        ];
+      };
+      platforms = if sysToPlatforms ? "${targetSystem}" then sysToPlatforms."${targetSystem}" else throw ''
+        'binaryOnly' fetching is currently not supported for target ${targetSystem}.
+        You could set 'binaryOnly = false' and execute the build on a ${targetSystem}.
+      '';
+
       pythonAttrName = lib.stringAsChars (x: if x == "." then "" else x) python.libPrefix;
 
       # We need to execute pip from the python version for which we want to download packages.
@@ -68,8 +110,14 @@ let
 
         buildPhase = ''
           # the script.py will read this date
-          export MAX_DATE=${maxDate}
-          pretty=$(python -c 'import os; import dateutil.parser; print(dateutil.parser.parse(os.getenv("MAX_DATE")))')
+          export MAX_DATE=${builtins.toString maxDate}
+          pretty=$(python -c '
+          import os; import dateutil.parser;
+          try:
+            print(int(os.getenv("MAX_DATE")))
+          except ValueError:
+            print(dateutil.parser.parse(os.getenv("MAX_DATE")))
+          ')
           echo "selected maximum release date for python packages: $pretty"
 
           # find free port for proxy
@@ -103,6 +151,9 @@ let
             --trusted-host pypi.org \
             --trusted-host files.pythonhosted.org \
             ${lib.concatStringsSep " " pipFlags} \
+            ${lib.optionalString onlyBinary "--only-binary :all: ${
+              lib.concatStringsSep " " (lib.forEach platforms (pf: "--platform ${pf}"))
+            }"} \
             "${lib.concatStringsSep "\" \"" requirements}"
 
           # create symlinks to allow files being referenced via their normalized package names
