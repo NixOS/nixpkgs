@@ -11,17 +11,40 @@ stdenv.mkDerivation {
     sha256 = "sha256-HKQnCkO1TDs1e0MDil0Roq4YRembqRHQvb7lK3GAftQ=";
   };
 
-  preConfigure = ''
-    ./bootstrap
+  postPatch = ''
+    # Remove broken test
+    substituteInPlace tests/draw/Makefile.am \
+      --replace "draw-wrong.sh" ""
+    rm tests/draw/draw-wrong.sh
+  '';
+
+  preAutoreconf = ''
+    # Copied from bootstrap script
+    ln -s README.md README
+    mkdir -p config
   '';
 
   configureFlags = [ "--with-gd" "--with-glib" ];
   CFLAGS = "-Wall";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libxml2 gd.dev glib getopt libxslt nix ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    getopt
+    libxslt
+  ];
+  buildInputs = [
+    libxml2
+    gd.dev
+    glib
+    nix
+  ];
+  checkInputs = [
+    nix
+  ];
 
-  doCheck = false;
+  doCheck = true;
 
   meta = with lib; {
     description = "XML-based Nix-friendly data integration library";
