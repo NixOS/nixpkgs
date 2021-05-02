@@ -106,7 +106,9 @@ let
 
         nativeBuildInputs = with python3.pkgs; [ pythonWithMitmproxy pythonPip curl cacert ];
 
-        phases = [ "buildPhase" ];
+        dontUnpack = true;
+        dontInstall = true;
+        dontFixup = true;
 
         buildPhase = ''
           # the script.py will read this date
