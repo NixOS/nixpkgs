@@ -39,12 +39,13 @@ let
     # for reference see: https://pip.pypa.io/en/stable/cli/pip_download/
     pipFlags ? [],
 
-    # For non-binary downloads, the targetSystem must be a constant.
-    # Do not pass `stdenv.targetPlatform.system` or `builtins.currentSystem`.
-    # This prevents the fetcher from being executed on the wrong platform.
-    targetSystem ?
-      if onlyBinary then stdenv.targetPlatform.system
-      else throw "'targetSystem' must be specified if 'onlyBinary' = false",
+    # Throw an error by default to warn the user about the correct usage
+    targetSystem ? throw ''
+      'targetSystem' must be specified for fetchPythonRequirements.
+      Pass only a constant string like for example "x86_64-linux".
+      Do not pass `stdenv.targetPlatform.system` or `builtins.currentSystem`.
+      This prevents the fetcher from being executed on the wrong platform.
+    '',
   }:
 
     # specifying `--platform` for pip download is only allowed in combination with `--only-binary :all:`
@@ -98,7 +99,7 @@ let
       #   "$out/werkzeug" will point to "$out/Werkzeug-0.14.1-py2.py3-none-any.whl"
       self = stdenv.mkDerivation {
 
-        name = "multiple-pypi-packages";
+        name = "python-sources-${targetSystem}";
 
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
