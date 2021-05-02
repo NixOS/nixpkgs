@@ -141,7 +141,7 @@ let
 
           # wait for proxy to come up
           while sleep 0.5; do
-            timeout 5 curl --fail --proxy http://localhost:$proxyPort http://pypi.org 2>/dev/null && break
+            timeout 5 curl -fLsS --proxy http://localhost:$proxyPort http://pypi.org && break
           done
 
           mkdir $out
@@ -177,4 +177,3 @@ let
 in
 
 fetchPythonRequirements
-
