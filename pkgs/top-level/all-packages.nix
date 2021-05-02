@@ -15239,6 +15239,8 @@ in
 
   libacr38u = callPackage ../tools/security/libacr38u { };
 
+  libadwaita = callPackage ../development/libraries/libadwaita { };
+
   libaec = callPackage ../development/libraries/libaec { };
 
   libagar = callPackage ../development/libraries/libagar { };
