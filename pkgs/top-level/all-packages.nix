@@ -24722,6 +24722,7 @@ in
     mopidy-mpd
     mopidy-mpris
     mopidy-musicbox-webclient
+    mopidy-podcast
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
