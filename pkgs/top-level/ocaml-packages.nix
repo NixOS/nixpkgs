@@ -1075,6 +1075,8 @@ let
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
+    ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner {};
+
     ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec {};
 
     ppx_import = callPackage ../development/ocaml-modules/ppx_import (
