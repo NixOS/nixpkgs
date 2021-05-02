@@ -55,13 +55,7 @@ let
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
-      #
-      # Since some Gems require JIT support, there's probably no
-      # escape from this reference. Hence, it was decided to enable this
-      # feature by default, as it's enabled by default by ruby's ./configure
-      # script. If you'd like to have a ruby without reference to cc, setting
-      # jitSupport to false should remove all known references mentioned above.
-      , removeReferencesTo, jitSupport ? true
+      , removeReferencesTo, jitSupport ? false
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -177,8 +171,9 @@ let
         installFlags = lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
+          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
           # Remove unnecessary groff reference from runtime closure, since it's big
-          sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
+          sed -i '/NROFF/d' $rbConfig
           ${
             lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
@@ -187,7 +182,8 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
+                $rbConfig
+              sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
           # Bundler tries to create this directory
@@ -205,8 +201,6 @@ let
           addEnvHooks "$hostOffset" addGemPath
           addEnvHooks "$hostOffset" addRubyLibPath
           EOF
-
-          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
         '' + opString docSupport ''
           # Prevent the docs from being included in the closure
           sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
