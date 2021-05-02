@@ -48,7 +48,7 @@ in rec {
                 then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
                 else x;
           in
-            makeDerivationExtensible (lib.extends f rattrs)) (rattrs r);
+            makeDerivationExtensible (self: let super = rattrs self; in super // f self super)) (rattrs r);
     in r;
 
   removedAttrs = [
