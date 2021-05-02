@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol, wayland-protocols
 , fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
 , libXi, libXext, wayland, wayland-protocols, libffi, libGLU, libXScrnSaver
 , expat, libbfd
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   patchFlags = "-p2";
 
   sourceRoot = "source/client";
-  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+  NIX_CFLAGS_COMPILE = "-mavx -Wno-maybe-uninitialized"; # Fix some sort of AVX compiler problem.
 
   meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
