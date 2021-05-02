@@ -7,7 +7,7 @@
   <file>install_target.qml</file> <!-- install from external to internal? -->
   <file>install_target_confirm.qml</file> <!-- overwrite internal storage? -->
 
-  <file>default_pin.qml</file> <!-- default user: pin -->
+  <file>user_pass.qml</file> <!-- default user: password -->
   <file>ssh_confirm.qml</file> <!-- sshd: enable or not? -->
   <file>ssh_credentials.qml</file> <!-- sshd user: username, password -->
   <file>fs_selection.qml</file> <!-- filesystem selection -->

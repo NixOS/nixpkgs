@@ -33,11 +33,11 @@ Item {
     }
 
     TextField {
-        id: userPin
+        id: userPass
         anchors.top: description.bottom
         placeholderText: qsTr("PIN")
         echoMode: TextInput.Password
-        onTextChanged: validatePin(userPin, userPinRepeat, errorText)
+        onTextChanged: validatePin(userPass, userPassRepeat, errorText)
         text: config.userPassword
 
         /* Let the virtual keyboard change to digits only */
@@ -54,12 +54,12 @@ Item {
     }
 
     TextField {
-        id: userPinRepeat
-        anchors.top: userPin.bottom
+        id: userPassRepeat
+        anchors.top: userPass.bottom
         placeholderText: qsTr("PIN (repeat)")
         inputMethodHints: Qt.ImhDigitsOnly
         echoMode: TextInput.Password
-        onTextChanged: validatePin(userPin, userPinRepeat, errorText)
+        onTextChanged: validatePin(userPass, userPassRepeat, errorText)
         text: config.userPassword
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -68,7 +68,7 @@ Item {
     }
 
     Text {
-        anchors.top: userPinRepeat.bottom
+        anchors.top: userPassRepeat.bottom
         id: errorText
         visible: false
         wrapMode: Text.WordWrap
@@ -86,8 +86,8 @@ Item {
 
         text: qsTr("Continue")
         onClicked: {
-            if (validatePin(userPin, userPinRepeat, errorText)) {
-                config.userPassword = userPin.text;
+            if (validatePin(userPass, userPassRepeat, errorText)) {
+                config.userPassword = userPass.text;
                 navNext();
             }
         }

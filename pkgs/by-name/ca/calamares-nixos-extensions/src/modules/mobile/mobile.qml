@@ -19,7 +19,7 @@ Page
         "welcome": null, /* titlebar disabled */
         "install_target": "Installation target",
         "install_target_confirm": "Warning",
-        "default_pin": "Lockscreen PIN",
+        "user_pass": "User password",
         "ssh_confirm": "SSH server",
         "ssh_credentials": "SSH credentials",
         "fs_selection": "Root filesystem",
@@ -33,8 +33,8 @@ Page
          "screens": ["welcome"]},
         {"name": "installTarget",
          "screens": ["install_target", "install_target_confirm"]},
-        {"name": "userPin",
-         "screens": ["default_pin"]},
+        {"name": "userPassword",
+         "screens": ["user_pass"]},
         {"name": "sshd",
          "screens": ["ssh_confirm", "ssh_credentials"]},
         {"name": "fsType",
@@ -46,7 +46,7 @@ Page
     ]
     property var featureIdByScreen: (function() {
         /* Put "features" above into an index of screen name -> feature id:
-         * featureIdByScreen = {"welcome": 0, "default_pin": 1, ...} */
+         * featureIdByScreen = {"welcome": 0, "user_pass": 1, ...} */
         var ret = {};
         for (var i=0; i<features.length; i++) {
             for (var j=0; j<features[i]["screens"].length; j++) {
@@ -253,7 +253,7 @@ Page
         return true;
     }
 
-    /* Input validation: user-screens (default_pin, ssh_credentials) */
+    /* Input validation: user-screens (user_pass, ssh_credentials) */
     function validatePin(userPin, userPinRepeat, errorText) {
         var pin = userPin.text;
         var repeat = userPinRepeat.text;
