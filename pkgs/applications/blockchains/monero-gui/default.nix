@@ -19,22 +19,15 @@ with stdenv.lib;
 
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
-let
-  arch = if stdenv.isx86_64  then "x86-64"
-    else if stdenv.isi686    then "i686"
-    else if stdenv.isAarch64 then "armv8-a"
-    else throw "unsupported architecture";
-in
-
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.9";
+  version = "0.17.2.1";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0143mmxk0jfb5pmjlx6v0knvf8v49kmkpjxlp6rw8lwnlf71xadn";
+    sha256 = "1apjvpvn6hg0k0ak6wpg4prcdcslnb6fqhzzg2p4iy846f0ai9ji";
   };
 
   nativeBuildInputs = [
@@ -60,7 +53,10 @@ stdenv.mkDerivation rec {
     chmod -R +w source/monero
   '';
 
-  patches = [ ./move-log-file.patch ];
+  patches = [
+    ./move-log-file.patch
+    ./use-system-libquirc.patch
+  ];
 
   postPatch = ''
     # set monero-gui version
@@ -71,17 +67,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/daemon/DaemonManager.cpp \
       --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
 
-    # only build external deps, *not* the full monero
+    # 1: only build external deps, *not* the full monero
+    # 2: use nixpkgs libraries
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(monero)' \
-                'add_subdirectory(monero EXCLUDE_FROM_ALL)'
-
-    # use nixpkgs quirc
-    substituteInPlace CMakeLists.txt \
+                'add_subdirectory(monero EXCLUDE_FROM_ALL)' \
       --replace 'add_subdirectory(external)' ""
   '';
 
-  cmakeFlags = [ "-DARCH=${arch}" ];
+  cmakeFlags = [ "-DARCH=default" ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";
