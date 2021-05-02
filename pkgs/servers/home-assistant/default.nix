@@ -389,6 +389,7 @@ in with py.pkgs; buildPythonApplication rec {
     "tasmota"
     "tcp"
     "template"
+    "tesla"
     "threshold"
     "time_date"
     "timer"
