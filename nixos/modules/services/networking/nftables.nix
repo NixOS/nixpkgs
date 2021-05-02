@@ -15,19 +15,14 @@ in
           Whether to enable nftables.  nftables is a Linux-based packet
           filtering framework intended to replace frameworks like iptables.
 
-          This conflicts with the standard networking firewall, so make sure to
-          disable it before using nftables.
+          If you use both the standard networking firewall and nftables,
+          you may have conflicting rules. Please see [1] for more information
+          on how iptables and nftables interact with each other.
+          
+          Be aware that some applications (in particular, Docker and libvirt)
+          will load iptables themselves if it not already loaded.
 
-          Note that if you have Docker enabled you will not be able to use
-          nftables without intervention. Docker uses iptables internally to
-          setup NAT for containers. This module disables the ip_tables kernel
-          module, however Docker automatically loads the module. Please see [1]
-          for more information.
-
-          There are other programs that use iptables internally too, such as
-          libvirt.
-
-          [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
+          [1]: https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F
         '';
     };
     networking.nftables.ruleset = mkOption {
@@ -97,11 +92,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
-    }];
-    boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     systemd.services.nftables = {
       description = "nftables firewall";
@@ -115,20 +105,11 @@ in
           flush ruleset
           include "${cfg.rulesetFile}"
         '';
-        checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.runtimeShell} -e
-          if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
-            echo "Unload ip_tables before using nftables!" 1>&2
-            exit 1
-          else
-            ${rulesScript}
-          fi
-        '';
       in {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = checkScript;
-        ExecReload = checkScript;
+        ExecStart = rulesScript;
+        ExecReload = rulesScript;
         ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
       };
     };
