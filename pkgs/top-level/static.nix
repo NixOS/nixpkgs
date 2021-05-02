@@ -140,4 +140,9 @@ in {
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
+
+  rhash = super.rhash.overrideAttrs (o: {
+    configureFlags = removeUnknownConfigureFlags o.configureFlags;
+  });
+
 }
