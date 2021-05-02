@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m52v6hhblrjji9c5885bn5qq0xlaw36krbmqfac7fhgsxmkxd2h";
   };
 
+  passthru.updateScript = ./update.sh;
+
   # don't remove runtime deps
   dontPatchELF = true;
 
