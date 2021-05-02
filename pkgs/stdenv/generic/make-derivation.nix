@@ -51,6 +51,14 @@ in rec {
             makeDerivationExtensible (lib.extends f rattrs)) (rattrs r);
     in r;
 
+  removedAttrs = [
+    "meta" "passthru" "pos" "overrideAttrs"
+    "checkInputs" "installCheckInputs"
+    "__darwinAllowLocalNetworking"
+    "__impureHostDeps" "__propagatedImpureHostDeps"
+    "sandboxProfile" "propagatedSandboxProfile"
+  ];
+
   mkDerivation_ = overrideAttrs:
     {
 
@@ -224,12 +232,7 @@ in rec {
           (lib.concatLists propagatedDependencies));
 
       derivationArg =
-        (removeAttrs attrs
-          ["meta" "passthru" "pos" "overrideAttrs"
-           "checkInputs" "installCheckInputs"
-           "__darwinAllowLocalNetworking"
-           "__impureHostDeps" "__propagatedImpureHostDeps"
-           "sandboxProfile" "propagatedSandboxProfile"])
+        removeAttrs attrs removedAttrs
         // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
           name =
             let
