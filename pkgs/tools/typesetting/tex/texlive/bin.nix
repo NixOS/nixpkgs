@@ -3,7 +3,7 @@
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
-, poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
+, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
 }:
@@ -30,8 +30,6 @@ let
       for i in texk/kpathsea/mktex*; do
         sed -i '/^mydir=/d' "$i"
       done
-      cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.86.0,}.cc
-      cp -pv texk/web2c/pdftexdir/pdftosrc{-poppler0.83.0,}.cc
     '';
 
     configureFlags = [
@@ -43,9 +41,8 @@ let
     ]
       ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
-      "zziplib" "xpdf" "poppler" "mpfr" "gmp"
+      "zziplib" "xpdf" "mpfr" "gmp"
       "pixman" "potrace" "gd" "freetype2" "libpng" "libpaper" "zlib"
-        # beware: xpdf means to use stuff from poppler :-/
     ];
 
     # clean broken links to stuff not built
@@ -73,7 +70,7 @@ core = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    /*teckit*/ zziplib poppler mpfr gmp
+    /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
     perl
   ];
@@ -82,7 +79,7 @@ core = stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-      libs/{lua53,luajit,mpfr,pixman,poppler,xpdf,zlib,zziplib}
+      libs/{lua53,luajit,mpfr,pixman,zlib,zziplib}
     mkdir WorkDir
     cd WorkDir
   '';
@@ -178,7 +175,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     luajit = lib.optionalString withLuaJIT ",luajit";
   in ''
     mkdir ./WorkDir && cd ./WorkDir
-    for path in libs/{teckit,lua53${luajit}} texk/web2c; do
+    for path in libs/{pplib,teckit,lua53${luajit}} texk/web2c; do
       (
         if [[ "$path" =~ "libs/lua" ]]; then
           extraConfig="--enable-static --disable-shared"
