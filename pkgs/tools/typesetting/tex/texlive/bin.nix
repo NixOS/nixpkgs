@@ -244,18 +244,17 @@ chktex = stdenv.mkDerivation {
 
 dvisvgm = stdenv.mkDerivation rec {
   pname = "texlive-dvisvgm.bin";
-  version = "2.11";
-  # TODO: dvisvgm was switched to build from upstream sources
-  # to address https://github.com/NixOS/nixpkgs/issues/104847
-  # We might want to consider reverting that change in the future.
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-    sha256 = "12b6h0h8rc487yjh3sq9zsdabm9cs2vqcrb0znnfi8277f87zf3j";
-  };
+  inherit (common) src;
+
+  preConfigure = "cd texk/dvisvgm";
+
+  configureFlags = common.configureFlags
+    ++ [ "--with-system-kpathsea" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ brotli ghostscript zlib freetype woff2 potrace xxHash ];
+  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash ];
 
   enableParallelBuilding = true;
 };
