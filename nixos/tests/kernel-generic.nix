@@ -6,7 +6,7 @@
 with pkgs.lib;
 
 let
-  makeKernelTest = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
+  testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
     name = "kernel-${linuxPackages.kernel.version}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
@@ -41,4 +41,8 @@ let
       linuxPackages_testing;
   };
 
-in mapAttrs (_: kernel: makeKernelTest kernel) kernels
+in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
+  inherit testsForLinuxPackages;
+
+  testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
+}
