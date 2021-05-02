@@ -12,6 +12,17 @@ import QtQuick.Window 2.3
 import QtQuick.VirtualKeyboard 2.1
 
 Item {
+    property var placeholder: (config.userPasswordNumeric
+                               ? "PIN"
+                               : "Password")
+    property var hints: (config.userPasswordNumeric
+                         ? Qt.ImhDigitsOnly
+                         : Qt.ImhPreferLowercase)
+    property var validateFunc: (config.userPasswordNumeric
+                                ? validatePin
+                                : validatePassword);
+
+
     anchors.left: parent.left
     anchors.top: parent.top
     anchors.right: parent.right
@@ -25,9 +36,17 @@ Item {
         anchors.topMargin: 30
         wrapMode: Text.WordWrap
 
-        text: "Set the numeric password of your user. The lockscreen will" +
-              " ask for this PIN. This is <i>not</i> the PIN of your SIM" +
-              " card. Make sure to remember it."
+        text: (function() {
+            if (config.userPasswordNumeric) {
+                return "Set the numeric password of your user. The" +
+                       " lockscreen will ask for this PIN. This is" +
+                       " <i>not</i> the PIN of your SIM card. Make sure to" +
+                       " remember it.";
+            } else {
+                return "Set the password of your user. The lockscreen will" +
+                      " ask for this password. Make sure to remember it.";
+            }
+        }())
 
         width: 500
     }
@@ -35,13 +54,13 @@ Item {
     TextField {
         id: userPass
         anchors.top: description.bottom
-        placeholderText: qsTr("PIN")
+        placeholderText: qsTr(placeholder)
         echoMode: TextInput.Password
-        onTextChanged: validatePin(userPass, userPassRepeat, errorText)
+        onTextChanged: validateFunc(userPass, userPassRepeat, errorText)
         text: config.userPassword
 
         /* Let the virtual keyboard change to digits only */
-        inputMethodHints: Qt.ImhDigitsOnly
+        inputMethodHints: hints
         onActiveFocusChanged: {
             if(activeFocus) {
                 Qt.inputMethod.update(Qt.ImQueryInput)
@@ -56,10 +75,10 @@ Item {
     TextField {
         id: userPassRepeat
         anchors.top: userPass.bottom
-        placeholderText: qsTr("PIN (repeat)")
-        inputMethodHints: Qt.ImhDigitsOnly
+        placeholderText: qsTr(placeholder + " (repeat)")
+        inputMethodHints: hints
         echoMode: TextInput.Password
-        onTextChanged: validatePin(userPass, userPassRepeat, errorText)
+        onTextChanged: validateFunc(userPass, userPassRepeat, errorText)
         text: config.userPassword
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -86,7 +105,7 @@ Item {
 
         text: qsTr("Continue")
         onClicked: {
-            if (validatePin(userPass, userPassRepeat, errorText)) {
+            if (validateFunc(userPass, userPassRepeat, errorText)) {
                 config.userPassword = userPass.text;
                 navNext();
             }

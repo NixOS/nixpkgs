@@ -23,6 +23,7 @@ class Config : public QObject
     /* default user */
     Q_PROPERTY( QString username READ username CONSTANT FINAL )
     Q_PROPERTY( QString userPassword READ userPassword WRITE setUserPassword NOTIFY userPasswordChanged )
+    Q_PROPERTY( bool userPasswordNumeric READ userPasswordNumeric CONSTANT FINAL )
 
     /* ssh server + credentials */
     Q_PROPERTY( bool featureSshd READ featureSshd CONSTANT FINAL )
@@ -75,6 +76,7 @@ public:
     QString username() const { return m_username; }
     QString userPassword() const { return m_userPassword; }
     void setUserPassword( const QString& userPassword );
+    bool userPasswordNumeric() const { return m_userPasswordNumeric; }
 
     /* ssh server + credetials */
     bool featureSshd() { return m_featureSshd; }
@@ -136,6 +138,7 @@ private:
     /* default user */
     QString m_username;
     QString m_userPassword;
+    bool m_userPasswordNumeric;
 
     /* ssh server + credetials */
     bool m_featureSshd;
