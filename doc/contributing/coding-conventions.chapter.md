@@ -513,3 +513,73 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     ```ShellSession
     $ git diff > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
+
+## Package tests {#sec-package-tests}
+
+Tests are important to ensure quality and make reviews and automatic updates easy.
+
+Nix package tests are a lightweight alternative to [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests). They can be used to create simple integration tests for packages while the module tests are used to test services or programs with a graphical user interface on a NixOS VM. Unittests that are included in the source code of a package should be executed in the `checkPhase`.
+
+### Writing package tests {#ssec-package-tests-writing}
+
+This is an example using the `phoronix-test-suite` package with the current best practices.
+
+Add the tests in `passthru.tests` to the package definition like this:
+
+```nix
+{ stdenv, lib, fetchurl, callPackage }:
+
+stdenv.mkDerivation {
+  …
+
+  passthru.tests = {
+    simple-execution = callPackage ./tests.nix { };
+  };
+
+  meta = { … };
+}
+```
+
+Create `tests.nix` in the package directory:
+
+```nix
+{ runCommand, phoronix-test-suite }:
+
+let
+  inherit (phoronix-test-suite) pname version;
+in
+
+runCommand "${pname}-tests" { meta.timeout = 3; }
+  ''
+    # automatic initial setup to prevent interactive questions
+    ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+    # get version of installed program and compare with package version
+    if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+      echo "Error: program version does not match package version"
+      exit 1
+    fi
+    # run dummy command
+    ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+    # needed for Nix to register the command as successful
+    touch $out
+  ''
+```
+
+### Running package tests {#ssec-package-tests-running}
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A phoronix-test-suite.tests
+```
+
+### Examples of package tests {#ssec-package-tests-examples}
+
+Here are examples of package tests:
+
+- [Jasmin compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Lobster compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/lobster/test-can-run-hello-world.nix)
+- [Spacy annotation test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/spacy/annotation-test/default.nix)
+- [Libtorch test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/science/math/libtorch/test/default.nix)
+- [Multiple tests for nanopb](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/nanopb/default.nix)

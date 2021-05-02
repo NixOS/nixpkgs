@@ -11582,6 +11582,8 @@ in
     gputils = null;
   };
 
+  seren = callPackage ../applications/networking/instant-messengers/seren { };
+
   serialdv = callPackage ../development/libraries/serialdv {  };
 
   serpent = callPackage ../development/compilers/serpent { };
@@ -11844,7 +11846,9 @@ in
 
   io = callPackage ../development/interpreters/io { };
 
-  j = callPackage ../development/interpreters/j {};
+  j = callPackage ../development/interpreters/j {
+    stdenv = clangStdenv;
+  };
 
   janet = callPackage ../development/interpreters/janet {};
 

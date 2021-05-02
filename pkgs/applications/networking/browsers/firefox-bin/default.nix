@@ -33,6 +33,7 @@
 , nspr
 , nss
 , pango
+, pipewire
 , pciutils
 , libheimdal
 , libpulseaudio
@@ -126,6 +127,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
       pciutils
       libheimdal
       libpulseaudio
