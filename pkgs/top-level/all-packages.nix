@@ -11434,6 +11434,7 @@ in
   cargo-release = callPackage ../tools/package-management/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-rr = callPackage ../development/tools/rust/cargo-rr { };
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin { };
   cargo-update = callPackage ../tools/package-management/cargo-update {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -24721,6 +24722,7 @@ in
     mopidy-mpd
     mopidy-mpris
     mopidy-musicbox-webclient
+    mopidy-podcast
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
