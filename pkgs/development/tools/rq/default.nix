@@ -11,6 +11,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
   };
 
+  postPatch = ''
+    # Remove #[deny(warnings)] which is equivalent to -Werror in C.
+    # Prevents build failures when upgrading rustc, which may give more warnings.
+    substituteInPlace src/lib.rs \
+      --replace "#![deny(warnings)]" ""
+  '';
+
   cargoSha256 = "0c5vwy3c5ji602dj64z6jqvcpi2xff03zvjbnwihb3ydqwnb3v67";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ]
