@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${src}
+    tar -C $out -xf $src
     mv $out/usr/* $out/
     runHook postInstall
   '';
