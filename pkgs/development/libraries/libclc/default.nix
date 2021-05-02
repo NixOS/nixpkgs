@@ -2,7 +2,6 @@
 
 let
   llvm = llvmPackages.llvm;
-  clang = llvmPackages.clang;
   clang-unwrapped = llvmPackages.clang-unwrapped;
 in
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ];
-  buildInputs = [ llvm clang clang-unwrapped ];
+  buildInputs = [ llvm clang-unwrapped ];
   enableParallelBuilding = true;
 
   meta = with lib; {
