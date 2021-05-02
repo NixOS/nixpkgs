@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  # These fixup steps are slow and unnecessary.
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   installPhase = ''
     runHook preInstall
 
