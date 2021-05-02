@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     sed -i 's,find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH ),find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH ),' CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ llvm clang clang-unwrapped python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ];
+  buildInputs = [ llvm clang clang-unwrapped ];
   enableParallelBuilding = true;
 
   meta = with lib; {
