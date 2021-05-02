@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
-    license = licenses.gpl3Plus;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ figsoda ];
   };
