@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
 , backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
 , pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
@@ -22,6 +22,8 @@ in
 buildPythonPackage rec {
   pname = "python-language-server";
   version = "0.36.2";
+  # https://github.com/palantir/python-language-server/issues/896#issuecomment-752790868
+  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "palantir";
