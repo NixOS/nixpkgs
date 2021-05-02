@@ -1,20 +1,36 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, sqlite, libedit, zlib, runCommand, dieHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3
+, sqlite
+, libedit
+, runCommand
+, dieHook
+}:
 
 let
 
 link-grammar = stdenv.mkDerivation rec {
-  version = "5.8.1";
   pname = "link-grammar";
+  version = "5.9.1";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-EcT/VR+lFpJX2sxXUIDGOwdceQ7awpmEqUZBoJk7UFs=";
+    sha256 = "sha256-4D/rqoIGlvR+q7Az8E1xPYSQQMJMRVeRM9HQIbjssLo=";
   };
 
-  nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = [ sqlite libedit zlib ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
+
+  buildInputs = [
+    sqlite
+    libedit
+  ];
 
   configureFlags = [
     "--disable-java-bindings"
