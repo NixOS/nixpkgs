@@ -17,13 +17,17 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "source/libclc";
 
-  # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch without the patch
+  # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
-    sed -i 's,find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH ),find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH ),' CMakeLists.txt
+    substituteInPlace \
+      CMakeLists.txt \
+      --replace \
+        'find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
+        'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )'
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ];
-  buildInputs = [ llvm clang-unwrapped ];
+  buildInputs = [ llvm clang-unwrapped ]; # Used in postPatch
   enableParallelBuilding = true;
 
   meta = with lib; {
