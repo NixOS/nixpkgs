@@ -1797,4 +1797,8 @@ self: super: {
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
+  cabal2nix-latest = overrideCabal super.cabal2nix-latest {
+    passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-latest.sh;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
