@@ -7826,6 +7826,8 @@ in
 
   qnial = callPackage ../development/interpreters/qnial { };
 
+  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
+
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
