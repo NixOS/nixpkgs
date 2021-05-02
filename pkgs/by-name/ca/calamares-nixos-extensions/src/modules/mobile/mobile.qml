@@ -208,7 +208,9 @@ Page
                 id += 1;
                 continue;
             }
-        } while(false);
+
+            break;
+        } while (id < features.length);
 
         console.log("Navigating to feature: " + features[id]["name"]);
         return navTo(features[id]["screens"][0]);
