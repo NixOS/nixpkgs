@@ -29996,6 +29996,7 @@ in
   keynav = callPackage ../tools/X11/keynav { };
 
   kgx = callPackage ../applications/terminal-emulators/kgx { };
+  kgx-generic = kgx.override { genericBranding = true; };
 
   kmon = callPackage ../tools/system/kmon { };
 
