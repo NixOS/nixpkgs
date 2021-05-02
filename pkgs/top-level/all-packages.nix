@@ -31252,5 +31252,7 @@ in
 
   lc3tools = callPackage ../development/tools/lc3tools {};
 
+  xcolor = callPackage ../tools/graphics/xcolor { };
+
   zktree = callPackage ../applications/misc/zktree {};
 }
