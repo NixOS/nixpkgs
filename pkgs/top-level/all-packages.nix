@@ -2313,13 +2313,9 @@ in
 
   discount = callPackage ../tools/text/discount { };
 
-  discourse = callPackage ../servers/web-apps/discourse {
-    ruby = ruby_2_7;
-  };
+  discourse = callPackage ../servers/web-apps/discourse { };
 
-  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver {
-    ruby = ruby_2_7;
-  };
+  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver { };
 
   discocss = callPackage ../tools/misc/discocss { };
 
@@ -4986,19 +4982,14 @@ in
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_7;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
   gitlab-ee = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_7;
     gitlabEnterprise = true;
   };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell {
-    ruby = ruby_2_7;
-  };
+  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
@@ -5006,9 +4997,7 @@ in
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
-  gitaly = callPackage ../applications/version-management/gitlab/gitaly {
-    ruby = ruby_2_7;
-  };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -12189,8 +12178,8 @@ in
     ruby_2_7
     ruby_3_0;
 
-  ruby = ruby_2_6;
-  rubyPackages = rubyPackages_2_6;
+  ruby = ruby_2_7;
+  rubyPackages = rubyPackages_2_7;
 
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
