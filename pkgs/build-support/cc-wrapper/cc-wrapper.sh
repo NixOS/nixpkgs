@@ -27,6 +27,7 @@ cc1=0
 # shellcheck disable=SC2193
 [[ "@prog@" = *++ ]] && isCxx=1 || isCxx=0
 cxxInclude=1
+cxxLibrary=1
 cInclude=1
 setDynamicLinker=1
 
@@ -53,7 +54,7 @@ while (( "$n" < "$nParams" )); do
     elif [[ "$p" = -x && "$p2" = c++* && "$isCxx" = 0 ]]; then
         isCxx=1
     elif [ "$p" = -nostdlib ]; then
-        isCxx=-1
+        cxxLibrary=0
     elif [ "$p" = -nostdinc ]; then
         cInclude=0
         cxxInclude=0
@@ -135,7 +136,9 @@ if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
         NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
     fi
-    NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+    if [[ "$cxxLibrary" = 1 ]]; then
+        NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+    fi
 fi
 
 source @out@/nix-support/add-hardening.sh
