@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, makeWrapper, unzip
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper
 , guiSupport ? false, tk ? null
 , ApplicationServices
 }:
@@ -19,7 +19,7 @@ in python3Packages.buildPythonApplication rec {
 
   passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
