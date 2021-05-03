@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, python3Packages, makeWrapper
+, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , guiSupport ? false, tk ? null
 , ApplicationServices
 }:
@@ -19,11 +20,25 @@ in python3Packages.buildPythonApplication rec {
 
   passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-  nativeBuildInputs = [ makeWrapper ];
+  cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "1kc2giqvfwsdl5fb0qmz96ws1gdrs3skfdzvpiif2i8f7r4nqlhd";
+    sourceRoot = "${pname}-${version}/rust";
+  } else null;
+  cargoRoot = if rustSupport then "rust" else null;
+
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals rustSupport (with rustPlatform; [
+         cargoSetupHook
+         rust.cargo
+         rust.rustc
+       ]);
   buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ lib.optional rustSupport "PURE=--rust";
 
   postInstall = (lib.optionalString guiSupport ''
     mkdir -p $out/etc/mercurial
