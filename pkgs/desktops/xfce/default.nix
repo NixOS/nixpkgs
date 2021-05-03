@@ -15,9 +15,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
 
-  # Samba is a rather heavy dependency
-  gvfs = pkgs.gvfs.override { samba = null; };
-
   #### CORE
 
   exo = callPackage ./core/exo { };

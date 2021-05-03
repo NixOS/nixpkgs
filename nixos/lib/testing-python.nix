@@ -55,7 +55,7 @@ rec {
 
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.
-  runTests = driver:
+  runTests = { driver, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -69,6 +69,8 @@ rec {
         '';
 
       passthru = driver.passthru;
+
+      inherit pos;
     };
 
 
@@ -79,6 +81,11 @@ rec {
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , passthru ? {}
+    , # For meta.position
+      pos ? # position used in error messages and for meta.position
+        (if t.meta.description or null != null
+          then builtins.unsafeGetAttrPos "description" t.meta
+          else builtins.unsafeGetAttrPos "testScript" t)
     , ...
     } @ t:
     let
@@ -174,7 +181,7 @@ rec {
       driver = mkDriver null;
       driverInteractive = mkDriver pkgs.qemu;
 
-      test = passMeta (runTests driver);
+      test = passMeta (runTests { inherit driver pos; });
 
       nodeNames = builtins.attrNames driver.nodes;
       invalidNodeNames = lib.filter

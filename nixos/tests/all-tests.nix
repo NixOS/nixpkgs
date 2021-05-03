@@ -414,6 +414,7 @@ in
   # traefik test relies on docker-containers
   trac = handleTest ./trac.nix {};
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
+  trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};

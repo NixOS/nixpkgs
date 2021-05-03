@@ -2445,6 +2445,12 @@
     githubId = 8404455;
     name = "Diego Lelis";
   };
+  diogox = {
+    name = "Diogo Xavier";
+    email = "13244408+diogox@users.noreply.github.com";
+    github = "diogox";
+    githubId = 13244408;
+  };
   dipinhora = {
     email = "dipinhora+github@gmail.com";
     github = "dipinhora";
@@ -4746,6 +4752,12 @@
     github = "joamaki";
     githubId = 1102396;
     name = "Jussi Maki";
+  };
+  joaquinito2051 = {
+    email = "joaquinito2051@gmail.com";
+    github = "heroku-miraheze";
+    githubId = 61781343;
+    name = "Joaquín Rufo Gutierrez";
   };
   jobojeha = {
     email = "jobojeha@jeppener.de";

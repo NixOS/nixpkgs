@@ -251,6 +251,8 @@ in
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  frugal = callPackage ../development/tools/frugal { };
+
   glade = callPackage ../development/tools/glade { };
 
   hobbes = callPackage ../development/tools/hobbes { };
@@ -1227,6 +1229,10 @@ in
   boulder = callPackage ../tools/admin/boulder { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
+
+  bucklespring = bucklespring-x11;
+  bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
+  bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
   buildbot = with python3Packages; toPythonApplication buildbot;
   buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
@@ -6175,6 +6181,8 @@ in
 
   multitail = callPackage ../tools/misc/multitail { };
 
+  mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
+
   mxt-app = callPackage ../misc/mxt-app { };
 
   naabu = callPackage ../tools/security/naabu { };
@@ -8095,6 +8103,8 @@ in
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
+
+  rset = callPackage ../tools/admin/rset { };
 
   rshijack = callPackage ../tools/networking/rshijack { };
 
@@ -14048,6 +14058,8 @@ in
 
   cimg = callPackage  ../development/libraries/cimg { };
 
+  cjose = callPackage ../development/libraries/cjose { };
+
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
@@ -19420,6 +19432,8 @@ in
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
+  trafficserver = callPackage ../servers/http/trafficserver { };
+
   inherit (callPackages ../servers/http/tomcat { })
     tomcat7
     tomcat8
@@ -23584,7 +23598,7 @@ in
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
-  googleearth-pro = callPackage ../applications/misc/googleearth-pro { };
+  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
