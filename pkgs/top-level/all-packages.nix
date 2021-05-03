@@ -323,7 +323,7 @@ in
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
-  docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
+  docker-compose = with python3Packages; toPythonApplication docker-compose;
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 

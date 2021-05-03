@@ -2000,6 +2000,8 @@ in {
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds { };
 
+  docker-compose = callPackage ../development/python-modules/docker-compose { };
+
   docker-py = callPackage ../development/python-modules/docker-py { };
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };

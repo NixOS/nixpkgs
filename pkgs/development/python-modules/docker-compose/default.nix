@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
@@ -7,7 +7,7 @@
 , enum34, functools32, paramiko, distro, python-dotenv
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   version = "1.28.6";
   pname = "docker-compose";
 
