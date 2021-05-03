@@ -16,7 +16,7 @@ let
   inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
 
   sip = if isPy3k then
-    pythonPackages.sip_5
+    pythonPackages.sip
   else
     (pythonPackages.sip_4.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
       # If we install sip in another folder, then we need to create a __init__.py as well
