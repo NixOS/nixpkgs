@@ -42,7 +42,7 @@ let
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? "firefox" # Important for tor package or the like
+    , libName ? browser.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -219,8 +219,8 @@ let
 
         find . -type f \( -not -name "${applicationName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${applicationName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${applicationName}" -o -name "${applicationName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
