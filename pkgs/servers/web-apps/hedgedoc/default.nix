@@ -3,13 +3,13 @@
 
 mkYarnPackage rec {
   name = "hedgedoc";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "1w3si1k27c8d9yka2v91883dlz57n0wasan4agi6gw17h9dzb1l6";
+    sha256 = "1xi4gi1yjwggdsnz5hljx9xl4qhnm9r3c24q7i6d5y8yv6lh6lsr";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -36,6 +36,8 @@ mkYarnPackage rec {
     popd
 
     npm run build
+
+    patchShebangs bin/*
 
     runHook postBuild
   '';
