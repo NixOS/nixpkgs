@@ -269,6 +269,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
   };
 
+  mix2nix = callPackage ../development/tools/mix2nix/default.nix { };
+
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
