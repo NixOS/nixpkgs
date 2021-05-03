@@ -54,8 +54,13 @@ rec {
     };
 
   # Run an automated test suite in the given virtual network.
-  # `driver' is the script that runs the network.
-  runTests = { driver, pos }:
+  runTests = {
+    # the script that runs the network
+    driver,
+    # a source position in the format of builtins.unsafeGetAttrPos
+    # for meta.position
+    pos,
+  }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
