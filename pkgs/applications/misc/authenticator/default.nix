@@ -62,14 +62,14 @@ stdenv.mkDerivation rec {
     glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    # See https://gitlab.gnome.org/World/Authenticator/-/blob/master/build-aux/com.belmoussaoui.Authenticator.Devel.json
+
+    # gst-plugins-good needs gtk4 support:
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/merge_requests/767
+    # We copy the way it is built from the Flatpak:
+    # https://gitlab.gnome.org/World/Authenticator/-/blob/master/build-aux/com.belmoussaoui.Authenticator.Devel.json
     (gst_all_1.gst-plugins-good.overrideAttrs (old: {
-      patches = [
-        #(fetchpatch {
-        #  url = "https://gitlab.gnome.org/World/Authenticator/-/raw/master/build-aux/767.patch";
-        #  sha256 = "1g3zkfs248p8wvrvplwrl38vylqsafv6vapfr1nj5kg7ndfrgilf";
-        #})
-        ./767.patch
+      patches = old.patches or [ ] ++ [
+        "${src}/build-aux/767.patch"
       ];
       mesonFlags = old.mesonFlags ++ [
         "-Dgtk3=disabled"
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
         gtk4
       ];
     }))
+
     gst_all_1.gst-plugins-bad
     gtk4
     libadwaita
