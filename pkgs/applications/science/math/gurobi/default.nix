@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildPhase = ''
-    make --directory=src/build
+    make --directory=src/build $makeFlags
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp bin/* $out/bin/
     rm $out/bin/gurobi.sh
-    rm $out/bin/python3.7
+    rm $out/bin/python*
 
     cp lib/gurobi.py $out/bin/gurobi.sh
 
