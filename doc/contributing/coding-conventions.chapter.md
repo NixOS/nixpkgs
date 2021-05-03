@@ -221,7 +221,7 @@ not
   '';
   ```
 
-  not
+  instead of
 
   ```nix
   x = ''
