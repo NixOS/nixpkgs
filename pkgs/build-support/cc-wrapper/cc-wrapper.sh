@@ -25,8 +25,9 @@ dontLink=0
 nonFlagArgs=0
 cc1=0
 # shellcheck disable=SC2193
-[[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
-cppInclude=1
+[[ "@prog@" = *++ ]] && isCxx=1 || isCxx=0
+cxxInclude=1
+cxxLibrary=1
 cInclude=1
 setDynamicLinker=1
 
@@ -50,15 +51,15 @@ while (( "$n" < "$nParams" )); do
         dontLink=1
     elif [[ "$p" = -x && "$p2" = *-header ]]; then
         dontLink=1
-    elif [[ "$p" = -x && "$p2" = c++* && "$isCpp" = 0 ]]; then
-        isCpp=1
+    elif [[ "$p" = -x && "$p2" = c++* && "$isCxx" = 0 ]]; then
+        isCxx=1
     elif [ "$p" = -nostdlib ]; then
-        isCpp=-1
+        cxxLibrary=0
     elif [ "$p" = -nostdinc ]; then
         cInclude=0
-        cppInclude=0
+        cxxInclude=0
     elif [ "$p" = -nostdinc++ ]; then
-        cppInclude=0
+        cxxInclude=0
     elif [[ "$p" = -static || "$p" = -static-pie ]]; then
         setDynamicLinker=0
     elif [[ "$p" != -?* ]]; then
@@ -131,12 +132,13 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${rest+"${rest[@]}"})
 fi
 
-if [[ "$isCpp" = 1 ]]; then
-    NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
-fi
-
-if [[ "$cppInclude" = 1 ]]; then
-    NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
+if [[ "$isCxx" = 1 ]]; then
+    if [[ "$cxxInclude" = 1 ]]; then
+        NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
+    fi
+    if [[ "$cxxLibrary" = 1 ]]; then
+        NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+    fi
 fi
 
 source @out@/nix-support/add-hardening.sh
