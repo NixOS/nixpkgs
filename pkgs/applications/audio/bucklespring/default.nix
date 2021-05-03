@@ -19,12 +19,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bucklespring";
-  version = "unstable-2021-01-21";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = pname;
-    rev = "d63100c4561dd7c57efe6440c12fa8d9e9604145";
+    rev = version;
     sha256 = "114dib4npb7r1z2zd1fwsx71xbf9r6psxqd7n7590cwz1w3r51mz";
   };
 
