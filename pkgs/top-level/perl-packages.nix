@@ -9531,6 +9531,16 @@ let
       sha256 = "1z0s0zvga24m9dzp1lnrsvwv9qmvn21ifd9in520sd54ld774ifp";
     };
 
+    patches = [
+      # Unfortunately, not every release is uploaded to CPAN so security fixes
+      # would need to be cherry-picked from releases
+      (fetchpatch {
+        name = "CVE-2021-22204.patch";
+        url = "https://salsa.debian.org/perl-team/modules/packages/libimage-exiftool-perl/-/raw/0347501fda93cb8366d6451aedcf258b34fb4a2b/debian/patches/CVE-2021-22204.patch";
+        sha256 = "1fxw32zcssillnv764wsd05lyswn8bbrc90q5cy9aknx0ncgsrxj";
+      })
+    ];
+
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/exiftool
