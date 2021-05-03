@@ -721,6 +721,13 @@ environment.systemPackages = [
      automatically based on <option>system.stateVersion</option>, the latest
      version is always used because old versions are not officially supported.
     </para>
+    <para>
+     Furthermore, Radicale's systemd unit was hardened which might break some
+     deployments.  In particular, a non-default
+     <literal>filesystem_folder</literal> has to be added to
+     <option>systemd.services.radicale.serviceConfig.ReadWritePaths</option> if
+     the deprecated <option>services.radicale.config</option> is used.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

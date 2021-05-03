@@ -21,6 +21,8 @@ let
 
   rightsFile = format.generate "radicale.rights" cfg.rights;
 
+  bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
+
 in {
   options.services.radicale = {
     enable = mkEnableOption "Radicale CalDAV and CardDAV server";
@@ -138,15 +140,9 @@ in {
 
     environment.systemPackages = [ pkg ];
 
-    users.users.radicale =
-      { uid = config.ids.uids.radicale;
-        description = "radicale user";
-        home = "/var/lib/radicale";
-        createHome = true;
-      };
+    users.users.radicale.uid = config.ids.uids.radicale;
 
-    users.groups.radicale =
-      { gid = config.ids.gids.radicale; };
+    users.groups.radicale.gid = config.ids.gids.radicale;
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -161,6 +157,41 @@ in {
         ));
         User = "radicale";
         Group = "radicale";
+        StateDirectory = "radicale/collections";
+        StateDirectoryMode = "0750";
+        # Hardening
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "/dev/stdin" ];
+        DevicePolicy = "strict";
+        IPAddressAllow = mkIf bindLocalhost "localhost";
+        IPAddressDeny = mkIf bindLocalhost "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = lib.optional
+          (hasAttrByPath [ "storage" "filesystem_folder" ] cfg.settings)
+          cfg.settings.storage.filesystem_folder;
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
     };
   };

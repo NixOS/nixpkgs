@@ -86,5 +86,10 @@ in {
 
     with subtest("Test web interface"):
         machine.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
+
+    with subtest("Test security"):
+        output = machine.succeed("systemd-analyze security radicale.service")
+        machine.log(output)
+        assert output[-9:-1] == "SAFE :-}"
   '';
 })
