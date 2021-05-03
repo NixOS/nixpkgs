@@ -62,6 +62,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir home
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -75,14 +77,20 @@ stdenv.mkDerivation {
     pushd src/LanguageServer/Impl
     dotnet publish --no-restore -c Release -r linux-x64
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r output/bin/Release/linux-x64/publish $out/lib
 
     mkdir $out/bin
     makeWrapper $out/lib/Microsoft.Python.LanguageServer $out/bin/python-language-server
+
+    runHook postInstall
   '';
 
   postFixup = ''
