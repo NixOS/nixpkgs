@@ -1,5 +1,6 @@
 { fetchurl
 , fetchpatch
+, fetchgit
 , substituteAll
 , lib, stdenv
 , meson
@@ -66,14 +67,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "40.0";
+  version = "40.0-unstable-2021-05-01";
 
   outputs = [ "out" "devdoc" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
+  src = fetchgit {
+    url = "https://gitlab.gnome.org/GNOME/gnome-shell.git";
+    rev = "a8a79c03330427808e776c344f7ebc42782a1b5a";
+    sha256 = "ivHV0SRpnBqsdC7fu1Xhtd/BA55O0UdbUyDLy5KHNYs=";
+    fetchSubmodules = true;
   };
+  # src = fetchurl {
+  #   url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+  #   sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
+  # };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -96,18 +103,6 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
-    })
-
-    # Fix copying technical details when extension crashes.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1795
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/1b5d71130e3a48d8f636542f979346add7829544.patch";
-      sha256 = "WXRG/+u/N7KTTG1HutcMvw5HU2XWUmqFExmOXrOkeeA=";
-    })
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1796
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/53dd291aba24e9eab3994b0ffeadec05e0150470.patch";
-      sha256 = "xD0iIjlUGDLM5tTNDNtx6ZgxL25EKYgaBEH4JOZh8AM=";
     })
   ];
 

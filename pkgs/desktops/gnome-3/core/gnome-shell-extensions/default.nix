@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix_gmenu.patch;
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+    })
+
+    # Do not show welcome dialog in gnome-classic.
+    # Needed for gnome-shell 40.1.
+    # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/merge_requests/169
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions/commit/3e8bbb07ea7109c44d5ac7998f473779e742d041.patch";
+      sha256 = "jSmPwSBgRBfPPP9mGVjw1mSWumIXQqtA6tSqHr3U+3w=";
     })
   ];
 
