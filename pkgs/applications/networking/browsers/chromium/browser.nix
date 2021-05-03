@@ -89,6 +89,5 @@ mkChromiumDerivation (base: rec {
       then ["aarch64-linux" "x86_64-linux"]
       else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-    broken = elem channel [ "beta" "dev" ]; # Build requires LLVM 12
   };
 })

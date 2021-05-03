@@ -11,15 +11,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan4";
-  version = "0.4.9-1";
+  version = "0.4.10-1";
   src = {
     "i686-linux" = fetchurl {
       url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
-      sha256 = "0pkg9aqvnkpjnb9cgzf7lxw2g4jqrf2w98irkv22r0gfsfs3nwma";
+      sha256 = "sha256-ymIAg+rfSYP5uzsAM1hUYZacJ0PXmKEoljNtb0pgGMw=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
-      sha256 = "0kakkl8rmsi2yr3f8vd1kk8vsl9g2ijhqil1cvvbwrhwgi0b7ai7";
+      sha256 = "sha256-Gpr5456MCNpyam3g2qPo7S3aEZFMaUGR8bu7YmRY8xk=";
     };
   }."${stdenv.hostPlatform.system}";
 

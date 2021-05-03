@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "v1.6-1";
+  version = "1.6-3";
 
   src = fetchFromGitHub {
     owner = "mortie";
     repo = "swaylock-effects";
-    rev = version;
-    sha256 = "044fc4makjx8v29fkx5xlil6vr1v4r0k6c8741pl67gzvlm4cx3i";
+    rev = "v${version}";
+    sha256 = "sha256-71IX0fC4xCPP6pK63KtvDMb3KoP1rw/Iz3S7BgiLSpg=";
   };
 
   postPatch = ''
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
-    "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dpam=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with stdenv.lib; {

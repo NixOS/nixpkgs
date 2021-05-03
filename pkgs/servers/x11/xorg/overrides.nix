@@ -631,6 +631,13 @@ self: super:
         ];
         postInstall = ":"; # prevent infinite recursion
       });
+      commonPatches = [
+        (fetchpatch {
+          name = "CVE-2021-3472.patch";
+          url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/7aaf54a18.diff";
+          sha256 = "0h5a2p4rg2i7mzpzacn6fcfs0b1hh80ygllypcbzz4nnnkm04b80";
+        })
+      ];
     in
       if (!isDarwin)
       then {
@@ -642,6 +649,7 @@ self: super:
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
+        patches = commonPatches;
         configureFlags = [
           "--enable-kdrive"             # not built by default
           "--enable-xephyr"
@@ -676,7 +684,7 @@ self: super:
           libAppleWM xorgproto
         ];
 
-        patches = [
+        patches = commonPatches ++ [
           # XQuartz patchset
           (fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";

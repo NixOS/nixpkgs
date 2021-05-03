@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, libuuid, libossp_uuid, gtest }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, libuuid, libossp_uuid, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "11wpk6n9ga2p57h1dcrp37w77mii0r7r6mlrgmykf7rvii1rzgqd";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-21772.patch";
+      url = "https://github.com/3MFConsortium/lib3mf/commit/6ac5f521f0a3e9f100814f515e380859c9a6ec46.patch";
+      sha256 = "1ry1ij8d4bhs6gs85p0s80r4vydv33w32aapbxw2f12wxcw0wbhk";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ninja ];
 

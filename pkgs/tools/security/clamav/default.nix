@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, fetchpatch, pkgconfig
 , zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
 , libmspack, systemd, Foundation
 }:
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
     sha256 = "06rrzyrhnr0rswryijpbbzywr6387rv8qjq8sb8cl3h2d1m45ggf";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-1405.patch";
+      url = "https://github.com/Cisco-Talos/clamav-devel/commit/0c1ec30f9a292b0a5eca4aaaa651150aa5712d6d.patch";
+      sha256 = "0ygqiv9ldwhhnlwxkz91bab4hnzfwczf96mqm1bsa4gz9wmshlks";
+    })
+  ];
 
   # don't install sample config files into the absolute sysconfdir folder
   postPatch = ''

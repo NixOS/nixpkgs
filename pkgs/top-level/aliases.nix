@@ -220,6 +220,7 @@ mapAliases ({
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
+  jellyfin_10_5 = throw "Jellyfin 10.5 is no longer supported and contains a security vulnerability. Please upgrade to a newer version."; # added 2021-04-26
   julia_07 = throw "deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "deprecated in favor of latest Julia version"; # added 2020-09-15
   kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28

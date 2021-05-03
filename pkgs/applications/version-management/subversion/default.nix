@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraBuildInputs ? [ ], extraPatches ? [ ], knownVulnerabilities ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
     pname = "subversion";
 
@@ -36,7 +36,7 @@ let
       ++ stdenv.lib.optional perlBindings perl
       ++ stdenv.lib.optional saslSupport sasl;
 
-    patches = [ ./apr-1.patch ];
+    patches = [ ./apr-1.patch ] ++ extraPatches;
 
     # We are hitting the following issue even with APR 1.6.x
     # -> https://issues.apache.org/jira/browse/SVN-4813
@@ -101,6 +101,7 @@ let
       homepage = "http://subversion.apache.org/";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
+      inherit knownVulnerabilities;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -114,11 +115,14 @@ in {
   subversion19 = common {
     version = "1.9.12";
     sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
+    knownVulnerabilities = [
+      "https://subversion.apache.org/security/CVE-2020-17525-advisory.txt"
+    ];
   };
 
   subversion_1_10 = common {
-    version = "1.10.6";
-    sha256 = "19zc215mhpnm92mlyl5jbv57r5zqp6cavr3s2g9yglp6j4kfgj0q";
+    version = "1.10.7";
+    sha256 = "1nhrd8z6c94sc0ryrzpyd98qdn5a5g3x0xv1kdb9da4drrk8y2ww";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 
@@ -126,5 +130,6 @@ in {
     version = "1.12.2";
     sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
     extraBuildInputs = [ lz4 utf8proc ];
+    extraPatches = [ ./CVE-2020-17525.patch ];
   };
 }

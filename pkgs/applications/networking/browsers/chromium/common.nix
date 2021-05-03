@@ -17,7 +17,7 @@
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
-, pipewire_0_2
+, pipewire
 , libva
 , libdrm, wayland, mesa, libxkbcommon # Ozone
 
@@ -140,7 +140,7 @@ let
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
-      pipewire_0_2
+      pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
@@ -151,12 +151,16 @@ let
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-      # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ] ++ optional (versionRange "89" "90.0.4402.0") (githubPatch
-      # To fix the build of chromiumBeta and chromiumDev:
-      "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
-      "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
-    );
+    ] ++ optional (chromiumVersionAtLeast "90")
+      ./patches/fix-missing-atspi2-dependency.patch
+    ++ optionals (chromiumVersionAtLeast "91") [
+      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+      (githubPatch
+        # Revert "Reland #7 of "Force Python 3 to be used in build.""
+        "38b6a9a8e5901766613879b6976f207aa163588a"
+        "1lvxbd7rl6hz5j6kh6q83yb6vd9g7anlqbai8g1w1bp6wdpgwvp9"
+      )
+    ];
 
     postPatch = ''
       # remove unused third-party
@@ -263,6 +267,7 @@ let
       use_pulseaudio = true;
       link_pulseaudio = true;
     } // optionalAttrs (chromiumVersionAtLeast "89") {
+      rtc_pipewire_version = "0.3"; # TODO: Can be removed once ungoogled-chromium is at M90
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;

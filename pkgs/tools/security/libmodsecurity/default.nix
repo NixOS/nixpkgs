@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "00g2407g2679zv73q67zd50z0f1g1ij734ssv2pp77z4chn5dzib";
+    sha256 = "07vry10cdll94sp652hwapn0ppjv3mb7n2s781yhy7hssap6f2vp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
