@@ -337,7 +337,7 @@ rec {
     };
 
     shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+      check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
     path = mkOptionType {
