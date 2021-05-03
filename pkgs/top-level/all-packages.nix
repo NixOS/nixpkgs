@@ -22876,10 +22876,12 @@ in
 
   flwrap = callPackage ../applications/radio/flwrap { };
 
-  fluidsynth = callPackage ../applications/audio/fluidsynth {
+  inherit (callPackages ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
-  };
-  fluidsynth_1 = fluidsynth.override { version = "1"; };
+   })
+   fluidsynth_1
+   fluidsynth_2
+   fluidsynth;
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
