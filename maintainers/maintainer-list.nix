@@ -428,6 +428,12 @@
     githubId = 782180;
     name = "Alex Vorobiev";
   };
+  alex-eyre = {
+    email = "A.Eyre@sms.ed.ac.uk";
+    github = "alex-eyre";
+    githubId = 38869148;
+    name = "Alex Eyre";
+  };
   algorith = {
     email = "dries_van_daele@telenet.be";
     name = "Dries Van Daele";
