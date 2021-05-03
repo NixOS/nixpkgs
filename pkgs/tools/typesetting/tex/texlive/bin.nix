@@ -281,12 +281,9 @@ dvipng = stdenv.mkDerivation {
   configureFlags = common.configureFlags
     ++ [ "--with-system-kpathsea" "--with-gs=yes" "--disable-debug" ];
 
-  enableParallelBuilding = true;
+  GS="${ghostscript}/bin/gs";
 
-  # I didn't manage to hardcode gs location by configureFlags
-  postInstall = ''
-    wrapProgram "$out/bin/dvipng" --prefix PATH : '${ghostscript}/bin'
-  '';
+  enableParallelBuilding = true;
 };
 
 

@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, python, requests }:
+{ lib, buildPythonPackage, fetchPypi, python, requests, six }:
+
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
@@ -9,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "9a4a5f4a61c49f098f5f669410308ac5b0ea2682fd511ee3a4f9ff73b5bb275a";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests six ];
 
   # pypi package no longer contains tests
   doCheck = false;

@@ -24,19 +24,80 @@
     </para>
    </listitem>
    <listitem>
+    <para>The default Linux kernel was updated to the 5.10 LTS series, coming from the 5.4 LTS series.</para>
+   </listitem>
+   <listitem>
     <para>GNOME desktop environment was upgraded to 3.38, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">release notes</link>.</para>
    </listitem>
    <listitem>
     <para>
      <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
-     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finnally</link>
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
      packaged, along with a rewrite to the Nix expressions, allowing users to
      override the features upstream supports selecting to compile or not to.
      Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
      now point to an externally wrapped by default derivations, that allow you to
      also add `extraPythonPackages` to the Python interpreter used by GNURadio.
      Missing environmental variables needed for operational GUI were also added
-     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#7547</link>).
+     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#75478</link>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> has a
+     <code>pkgs</code> attribute set, and there's a <code>gnuradio.callPackage</code>
+     function that extends <code>pkgs</code> with a <code>mkDerivation</code>, and a
+     <code>mkDerivationWith</code>, like Qt5. Now all <code>gnuradio.pkgs</code> are
+     defined with <code>gnuradio.callPackage</code> and some packages that depend
+     on gnuradio are defined with this as well.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://www.privoxy.org/">Privoxy</link> has been updated
+     to version 3.0.32 (See <link xlink:href="https://lists.privoxy.org/pipermail/privoxy-announce/2021-February/000007.html">announcement</link>).
+     Compared to the previous release, Privoxy has gained support for HTTPS
+     inspection (still experimental), Brotli decompression, several new filters
+     and lots of bug fixes, including security ones. In addition, the package
+     is now built with compression and external filters support, which were
+     previously disabled.
+    </para>
+    <para>
+     Regarding the NixOS module, new options for HTTPS inspection have been added
+     and <option>services.privoxy.extraConfig</option> has been replaced by the new
+     <xref linkend="opt-services.privoxy.settings"/>
+     (See <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC 0042</link>
+     for the motivation).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Python optimizations were disabled again. Builds with optimizations enabled
+     are not reproducible. Optimizations can now be enabled with an option.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.0 "Matrix". See
+     the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
+     further details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <option>services.packagekit.backend</option> option has been removed as
+     it only supported a single setting which would always be the default.
+     Instead new <link
+     xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+     0042</link> compliant <xref linkend="opt-services.packagekit.settings"/>
+     and <xref linkend="opt-services.packagekit.vendorSettings"/> options have
+     been introduced.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <link xlink:href="https://nginx.org">Nginx</link> has been updated to stable version 1.20.0.
+      Now nginx uses the zlib-ng library by default.
     </para>
    </listitem>
   </itemizedlist>
@@ -72,6 +133,16 @@
    <listitem>
      <para>
        <xref linkend="opt-services.samba-wsdd.enable" /> Web Services Dynamic Discovery host daemon
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <link xlink:href="https://www.discourse.org/">Discourse</link>, a
+       modern and open source discussion platform.
+     </para>
+     <para>
+       See the <link linkend="module-services-discourse">Discourse
+       section of the NixOS manual</link> for more information.
      </para>
    </listitem>
   </itemizedlist>
@@ -200,7 +271,7 @@
    </listitem>
    <listitem>
      <para>
-       xfsprogs was update from 4.19 to 5.10. It now enables reflink support by default on filesystem creation.
+       xfsprogs was update from 4.19 to 5.11. It now enables reflink support by default on filesystem creation.
        Support for reflinks was added with an experimental status to kernel 4.9 and deemed stable in kernel 4.16.
        If you want to be able to mount XFS filesystems created with this release of xfsprogs on kernel releases older than those, you need to format them
        with <literal>mkfs.xfs -m reflink=0</literal>.
@@ -259,7 +330,7 @@
    </listitem>
    <listitem>
     <para>
-      <literal>vim</literal> switched to Python 3, dropping all Python 2 support.
+      <literal>vim</literal> and <literal>neovim</literal> switched to Python 3, dropping all Python 2 support.
     </para>
    </listitem>
    <listitem>
@@ -539,6 +610,95 @@ self: super:
      <package>imagemagick6Big</package> if you need the older version.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-services.xserver.videoDrivers" /> no longer uses the deprecated <literal>cirrus</literal> and <literal>vesa</literal> device dependent X drivers by default. It also enables both <literal>amdgpu</literal> and <literal>nouveau</literal> drivers by default now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>kindlegen</literal> package is gone, because it is no longer supported or hosted by Amazon. Sadly, its replacement, Kindle Previewer, has no Linux support. However, there are other ways to generate MOBI files. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/96439">the discussion</link> for more info.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <package>apacheKafka</package> packages are now built with
+      version-matched JREs. Versions 2.6 and above, the ones that recommend it,
+      use jdk11, while versions below remain on jdk8. The NixOS service has
+      been adjusted to start the service using the same version as the package,
+      adjustable with the new
+      <link linkend="opt-services.apache-kafka.jre">services.apache-kafka.jre</link>
+      option. Furthermore, the default list of
+      <link linkend="opt-services.apache-kafka.jvmOptions">services.apache-kafka.jvmOptions</link>
+      have been removed. You should set your own according to the
+      <link xlink:href="https://kafka.apache.org/documentation/#java">upstream documentation</link>
+      for your Kafka version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>kodi</package> package has been modified to allow concise addon management. Consider
+     the following configuration from previous releases of NixOS to install <package>kodi</package>,
+     including the <package>kodiPackages.inputstream-adaptive</package> and <package>kodiPackages.vfs-sftp</package>
+     addons:
+
+     <programlisting>
+environment.systemPackages = [
+  pkgs.kodi
+];
+
+nixpkgs.config.kodi = {
+  enableInputStreamAdaptive = true;
+  enableVFSSFTP = true;
+};
+     </programlisting>
+
+     All Kodi <literal>config</literal> flags have been removed, and as a result the above configuration
+     should now be written as:
+
+     <programlisting>
+environment.systemPackages = [
+  (pkgs.kodi.withPackages (p: with p; [
+    inputstream-adaptive
+    vfs-sftp
+  ]))
+];
+     </programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <option>environment.defaultPackages</option> now includes the nano package.
+     If <package>pkgs.nano</package> is not added to the list,
+     make sure another editor is installed and the <literal>EDITOR</literal>
+     environment variable is set to it.
+     Environment variables can be set using <option>environment.variables</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <option>services.minio.dataDir</option> changed type to a list of paths, required for specifiyng multiple data directories for using with erasure coding.
+     Currently, the service doesn't enforce nor checks the correct number of paths to correspond to minio requirements.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     All CUDA toolkit versions prior to CUDA 10 have been removed.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <package>babeld</package> service is now being run as an unprivileged user. To achieve that the module configures
+       <literal>skip-kernel-setup true</literal> and takes care of setting forwarding and rp_filter sysctls by itself as well
+       as for each interface in <varname>services.babeld.interfaces</varname>.
+     </para>
+    </listitem>
+   <listitem>
+     <para>
+      The <option>services.zigbee2mqtt.config</option> option has been renamed to <option>services.zigbee2mqtt.settings</option> and
+      now follows <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC 0042</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -634,8 +794,8 @@ self: super:
     </para>
 
     <para>
-     Aditionally to the much stricter runtime environmet the
-     <literal>/dev/urandom</literal> mount lines we previously had in the code (that would
+     Additionally to the much stricter runtime environment the
+     <literal>/dev/urandom</literal> mount lines we previously had in the code (that
      randomly failed during the stop-phase) have been removed as systemd will take care of those for us.
     </para>
 
@@ -710,6 +870,13 @@ self: super:
     </para>
    </listitem>
    <listitem>
+    <para>
+      When defining a new user, one of <xref linkend="opt-users.users._name_.isNormalUser" /> and <xref linkend="opt-users.users._name_.isSystemUser" /> is now required.
+      This is to prevent accidentally giving a UID above 1000 to system users, which could have unexpected consequences, like running user activation scripts for system users.
+      Note that users defined with an explicit UID below 500 are exempted from this check, as <xref linkend="opt-users.users._name_.isSystemUser" /> has no effect for those.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The GNOME desktop manager once again installs <package>gnome3.epiphany</package> by default.
      </para>
@@ -723,7 +890,7 @@ self: super:
    <listitem>
     <para>
      Platforms, like <varname>stdenv.hostPlatform</varname>, no longer have a <varname>platform</varname> attribute.
-     It has been (mostly) flattoned away:
+     It has been (mostly) flattened away:
     </para>
     <itemizedlist>
      <listitem><para><varname>platform.gcc</varname> is now <varname>gcc</varname></para></listitem>
@@ -795,6 +962,26 @@ self: super:
      Note that containerd is more strict regarding container image OCI-compliance.
      As an example, images with CMD or ENTRYPOINT defined as strings (not lists) will fail on containerd, while working fine on docker.
      Please test your setup and container images with containerd prior to upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The GitLab module now has support for automatic backups. A
+     schedule can be set with the
+     <link linkend="opt-services.gitlab.backup.startAt">services.gitlab.backup.startAt</link>
+     option.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Prior to this release, systemd would also read system units from an undocumented <literal>/etc/systemd-mutable/system</literal> path.
+     This path has been dropped from the defaults. That path (or others) can be re-enabled by adding it to the
+     <link linkend="opt-boot.extraSystemdUnitPaths">boot.extraSystemdUnitPaths</link> list.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL 9.5 is scheduled EOL during the 21.05 life cycle and has been removed.
     </para>
    </listitem>
   </itemizedlist>

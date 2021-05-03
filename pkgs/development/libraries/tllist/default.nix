@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.mit;
     maintainers = with maintainers; [ fionera AndersonTorres ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
   };
 }

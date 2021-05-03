@@ -9,9 +9,9 @@ let
     url="https://foicica.com/gtdialog/download/gtdialog_1.4.zip";
     sha256="1lhsaz56s8m838fi6vnfcd2r6djymvy3n2pbqhii88hraapq3rfk";
   };
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    cdk unzip gtk2 glib ncurses
+    cdk gtk2 glib ncurses
   ];
 in
 stdenv.mkDerivation {

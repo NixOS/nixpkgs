@@ -192,6 +192,7 @@ in {
       platforms = ["aarch64-linux"];
       license = lib.licenses.unfreeRedistributableFirmware;
     };
+    BL31="${armTrustedFirmwareRK3399}/bl31.elf";
     filesToInstall = ["u-boot.itb" "idbloader.img"];
     postBuild = ''
       ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img

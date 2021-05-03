@@ -96,13 +96,12 @@ in
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
-        containersConf.extraConfig = lib.optionalString cfg.enableNvidia
-          (builtins.readFile (toml.generate "podman.nvidia.containers.conf" {
-            engine = {
-              conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
-              runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
-            };
-          }));
+        containersConf.settings = lib.optionalAttrs cfg.enableNvidia {
+          engine = {
+            conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
+            runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
+          };
+        };
       };
 
       systemd.packages = [ cfg.package ];

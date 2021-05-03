@@ -18,7 +18,8 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out

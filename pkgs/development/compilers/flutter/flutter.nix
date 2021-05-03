@@ -41,11 +41,10 @@ let
 
     buildInputs = [ git ];
 
-    inherit src patches;
+    inherit src patches version;
 
     postPatch = ''
       patchShebangs --build ./bin/
-      find ./bin/ -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
     '';
 
     buildPhase = ''

@@ -1,0 +1,70 @@
+diff --git a/config/nim.cfg b/config/nim.cfg
+index a33a2f0a9..e069193ff 100644
+--- a/config/nim.cfg
++++ b/config/nim.cfg
+@@ -8,26 +8,12 @@
+ # Environment variables can be accessed like so:
+ #  gcc.path %= "$CC_PATH"
+ 
+-cc = gcc
+-
+ # additional options always passed to the compiler:
+ --parallel_build: "0" # 0 to auto-detect number of processors
+ 
+ hint[LineTooLong]=off
+ #hint[XDeclaredButNotUsed]=off
+ 
+-# Examples of how to setup a cross-compiler:
+-
+-# Cross-compiling for Raspberry Pi.
+-# (This compiler is available in gcc-arm-linux-gnueabihf package on Ubuntu)
+-arm.linux.gcc.exe = "arm-linux-gnueabihf-gcc"
+-arm.linux.gcc.linkerexe = "arm-linux-gnueabihf-gcc"
+-
+-# For OpenWRT, you will also need to adjust PATH to point to your toolchain.
+-mips.linux.gcc.exe = "mips-openwrt-linux-gcc"
+-mips.linux.gcc.linkerexe = "mips-openwrt-linux-gcc"
+-
+-
+ path="$lib/deprecated/core"
+ path="$lib/deprecated/pure"
+ path="$lib/pure/collections"
+@@ -111,7 +97,7 @@ path="$lib/pure"
+ @end
+ 
+ @if unix:
+-  @if not bsd or haiku:
++  @if not bsd or genode or haiku:
+     # -fopenmp
+     gcc.options.linker = "-ldl"
+     gcc.cpp.options.linker = "-ldl"
+@@ -295,29 +281,6 @@ vcc.cpp.options.size = "/O1"
+ # Configuration for the Tiny C Compiler:
+ tcc.options.always = "-w"
+ 
+-# Configuration for the Genode toolchain
+-@if genode:
+-  noCppExceptions # avoid std C++
+-  tlsEmulation:on # no TLS segment register magic
+-  @if i386 or amd64:
+-    gcc.exe = "genode-x86-gcc"
+-    gcc.cpp.exe = "genode-x86-g++"
+-    gcc.cpp.linkerexe = "genode-x86-ld"
+-  @elif arm:
+-    gcc.exe = "genode-arm-gcc"
+-    gcc.cpp.exe = "genode-arm-g++"
+-    gcc.cpp.linkerexe = "genode-arm-ld"
+-  @elif arm64:
+-    gcc.exe = "genode-aarch64-gcc"
+-    gcc.cpp.exe = "genode-aarch64-g++"
+-    gcc.cpp.linkerexe = "genode-aarch64-ld"
+-  @elif riscv64:
+-    gcc.exe = "genode-riscv-gcc"
+-    gcc.cpp.exe = "genode-riscv-g++"
+-    gcc.cpp.linkerexe = "genode-riscv-ld"
+-  @end
+-@end
+-
+ @if arm or arm64:
+   --define:nimEmulateOverflowChecks
+ @end

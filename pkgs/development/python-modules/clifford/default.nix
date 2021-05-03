@@ -63,5 +63,7 @@ buildPythonPackage rec {
     homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # many TypeError's in tests
+    broken = true;
   };
 }

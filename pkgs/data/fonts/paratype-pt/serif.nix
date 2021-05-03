@@ -3,7 +3,7 @@
 fetchzip {
   name = "paratype-pt-serif";
 
-  url = [
+  urls = [
     "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
     "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
   ];

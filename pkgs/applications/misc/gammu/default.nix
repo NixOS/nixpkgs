@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, pkg-config, cmake, bluez, libusb1, curl
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, bluez, libusb1, curl
 , libiconv, gettext, sqlite
 , dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
 , postgresSupport ? false, postgresql ? null
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
+  strictDeps = true;
+
+  buildInputs = [ bluez libusb1 curl gettext sqlite libiconv ]
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]
   ++ optionals postgresSupport [ postgresql ];
 

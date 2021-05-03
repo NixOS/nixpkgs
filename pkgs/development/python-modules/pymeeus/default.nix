@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyMeeus";
-  version = "0.3.13";
+  version = "0.5.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43b800a2571f3237e558d8d305e97f6ac4027977666e22af98448e0f1f86af86";
+    sha256 = "bb9d670818d8b0594317b48a7dadea02a0594e5344263bf2054e1a011c8fed55";
   };
 
   checkInputs = [ pytest ];

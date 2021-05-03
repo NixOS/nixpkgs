@@ -1,20 +1,49 @@
-{ lib, stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkg-config }:
+{ lib, stdenv, fetchFromGitHub
+, libjack2, libsndfile, xorg, freetype, libxkbcommon
+, cairo, glib, gnome3, flac, libogg, libvorbis, libopus
+, cmake, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "0zpmvmh7n0064rxfqxb7z9rnz493k7yq7nl0vxppqnasg97jn5f3";
+    sha256 = "sha256-3RdY5+BPsdk6vctDy24w5aJsVOV9qzSgXs62Pm5UEKs=";
     fetchSubmodules = true;
   };
 
+  buildInputs = [
+    libjack2
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xcbutil
+    xorg.xcbutilcursor
+    xorg.xcbutilrenderutil
+    xorg.xcbutilkeysyms
+    xorg.xcbutilimage
+    libxkbcommon
+    cairo
+    glib
+    gnome3.zenity
+    freetype
+  ];
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libjack2 libsndfile ];
+  postPatch = ''
+  substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
+    --replace '"/usr/bin/zenity' '"${gnome3.zenity}/bin/zenity'
+  '';
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"

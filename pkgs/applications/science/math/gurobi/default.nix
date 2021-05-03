@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, python }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, python2 }:
 
 let
   majorVersion = "8.1";
@@ -14,7 +14,9 @@ in stdenv.mkDerivation rec {
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ (python.withPackages (ps: [ ps.gurobipy ])) ];
+  buildInputs = [ (python2.withPackages (ps: [ ps.gurobipy ])) ];
+
+  strictDeps = true;
 
   buildPhase = ''
     cd src/build

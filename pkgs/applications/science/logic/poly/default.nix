@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, gmp, cmake, python}:
+{lib, stdenv, fetchFromGitHub, gmp, cmake, python3}:
 
 stdenv.mkDerivation rec {
   pname = "libpoly";
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gmp python ];
+  buildInputs = [ gmp python3 ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/SRI-CSL/libpoly";

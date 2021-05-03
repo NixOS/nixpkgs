@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, freezegun
 , google-api-core
 , matplotlib
 , networkx
@@ -14,8 +13,10 @@
 , scipy
 , sortedcontainers
 , sympy
+, tqdm
 , typing-extensions
   # test inputs
+, freezegun
 , pytestCheckHook
 , pytest-asyncio
 , pytest-benchmark
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "cirq";
-  version = "0.9.1";
+  version = "0.10.0";
 
   disabled = pythonOlder "3.6";
 
@@ -35,42 +36,36 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "0mygvpq7kzga8l1w2jvwv9a2n3akpss45hrx250gdrnqjp6xrw64";
+    sha256 = "0xinml44n2lfl0q2lb2apmn69gsszlwim83082f66vyk0gpwd4lr";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "freezegun~=0.3.15" "freezegun" \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
       --replace "numpy~=1.16" "numpy" \
-      --replace "protobuf~=3.12.0" "protobuf"
-
-    # Fix serialize_sympy_constants test by allowing small errors in pi
-    substituteInPlace cirq/google/arg_func_langs_test.py \
-      --replace "'float_value': float(str(np.float32(sympy.pi)))" "'float_value': pytest.approx(float(str(np.float32(sympy.pi))))"
+      --replace "protobuf~=3.13.0" "protobuf"
   '';
 
   propagatedBuildInputs = [
-    freezegun
     google-api-core
-    numpy
     matplotlib
     networkx
+    numpy
     pandas
     protobuf
     requests
     scipy
     sortedcontainers
     sympy
+    tqdm
     typing-extensions
   ];
 
-  doCheck = true;
   # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
-  dontUseSetuptoolsCheck = true;
   checkInputs = [
     pytestCheckHook
+    freezegun
     pytest-asyncio
     pytest-benchmark
     ply
@@ -84,9 +79,7 @@ buildPythonPackage rec {
     "--ignore=cirq/contrib/"  # requires external (unpackaged) python packages, so untested.
     "--benchmark-disable" # Don't need to run benchmarks when packaging.
   ];
-  disabledTests = [
-    "test_convert_to_ion_gates" # fails on some systems due to rounding error, 0.75 != 0.750...2
-  ] ++ lib.optionals stdenv.isAarch64 [
+  disabledTests = lib.optionals stdenv.isAarch64 [
     # Seem to fail due to math issues on aarch64?
     "expectation_from_wavefunction"
     "test_single_qubit_op_to_framed_phase_form_output_on_example_case"

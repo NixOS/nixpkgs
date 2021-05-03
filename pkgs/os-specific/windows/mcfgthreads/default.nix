@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lhmouse";
     repo = "mcfgthread";
-    rev = "9570e5ca7b98002d707c502c919d951bf256b9c6";
-    sha256 = "10y2x3x601a7c1hkd6zlr3xpfsnlr05xl28v23clf619756a5755";
+    rev = "c446cf4fcdc262fc899a188a4bb7136284c34222";
+    sha256 = "1ib90lrd4dz8irq4yvzwhxqa86i5vxl2q2z3z04sf1i8hw427p2f";
   };
 
   outputs = [ "out" "dev" ];

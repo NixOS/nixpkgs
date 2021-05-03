@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , nose
 , lxml
 , requests
@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pyxnat";
   version = "1.4";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +18,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ lxml requests ];
+
+  # future is not used, and pathlib is installed part of python38+
+  # w/o an external package
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "pathlib>=1.0" "" \
+      --replace "future>=0.16" ""
+  '';
 
   checkInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";

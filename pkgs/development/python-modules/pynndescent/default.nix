@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , nose
 , scikitlearn
 , scipy
@@ -12,24 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74a05a54d13573a38878781d44812ac6df97d8762a56f9bb5dd87a99911820fe";
+    sha256 = "0w87c2v0li2rdbx6qfc2lb6y6bxpdy3jwfgzfs1kcr4d1chj5zfr";
   };
-
-  patches = [
-    # fixes tests, included in 0.5.2
-    (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/ef5d8c3c3bfe976063b6621e3e0734c0c22d813b.patch";
-      sha256 = "sha256-49n3kevs3wpzd4FfZVKmNpF2o1V8pJs4KOx8zCAhR3s=";
-    })
-  ];
-
-  checkInputs = [
-    nose
-  ];
 
   propagatedBuildInputs = [
     scikitlearn
@@ -37,6 +24,10 @@ buildPythonPackage rec {
     numba
     llvmlite
     joblib
+  ];
+
+  checkInputs = [
+    nose
   ];
 
   checkPhase = ''

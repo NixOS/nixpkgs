@@ -168,9 +168,10 @@ in
       type = lib.types.str;
       default = "keycloak";
       description = ''
-        Username to use when connecting to an external or manually
-        provisioned database; has no effect when a local database is
-        automatically provisioned.
+        Username to use when connecting to the database.
+        This is also used for automatic provisioning of the database.
+        Changing this after the initial installation doesn't delete the
+        old user and can cause further problems.
       '';
     };
 
@@ -587,8 +588,8 @@ in
             PSQL=${config.services.postgresql.package}/bin/psql
 
             db_password="$(<'${cfg.databasePasswordFile}')"
-            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tAc "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB"
-            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
+            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${cfg.databaseUsername}'" | grep -q 1 || $PSQL -tAc "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN PASSWORD '$db_password' CREATEDB"
+            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "${cfg.databaseUsername}"'
           '';
         };
 
@@ -606,9 +607,9 @@ in
             set -eu
 
             db_password="$(<'${cfg.databasePasswordFile}')"
-            ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
+            ( echo "CREATE USER IF NOT EXISTS '${cfg.databaseUsername}'@'localhost' IDENTIFIED BY '$db_password';"
               echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-              echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
+              echo "GRANT ALL PRIVILEGES ON keycloak.* TO '${cfg.databaseUsername}'@'localhost';"
             ) | ${config.services.mysql.package}/bin/mysql -N
           '';
         };

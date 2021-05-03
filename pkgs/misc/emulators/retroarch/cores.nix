@@ -1011,6 +1011,20 @@ in with lib.licenses;
     makefile = "Makefile";
   };
 
+  thepowdertoy = mkLibRetroCore rec {
+    core = "thepowdertoy";
+    src = fetchRetro {
+      repo = "ThePowderToy";
+      rev = "0ff547e89ae9d6475b0226db76832daf03eec937";
+      sha256 = "kDpmo/RPYRvROOX3AhsB5pIl0MfHbQmbyTMciLPDNew=";
+    };
+    description = "Port of The Powder Toy to libretro";
+    license = gpl3Only;
+    extraNativeBuildInputs = [ cmake ];
+    makefile = "Makefile";
+    postBuild = "cd src/";
+  };
+
   tic80 = mkLibRetroCore {
     core = "tic80";
     src = fetchRetro {

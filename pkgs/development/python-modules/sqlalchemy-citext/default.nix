@@ -1,21 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, psycopg2
 , sqlalchemy
 , python
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69ba00f5505f92a1455a94eefc6d3fcf72dda3691ab5398a0b4d0d8d85bd6aab";
+    sha256 = "a1740e693a9a334e7c8f60ae731083fe75ce6c1605bb9ca6644a6f1f63b15b77";
   };
 
   propagatedBuildInputs = [
     sqlalchemy
+
+    # not listed in `install_requires`, but is imported in citext/__init__.py
+    psycopg2
   ];
 
   # tests are not packaged in pypi tarball

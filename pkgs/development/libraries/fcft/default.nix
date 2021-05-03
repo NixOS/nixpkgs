@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/fcft.git";
     rev = version;
-    sha256 = "0k2i57rakm4g86f7hbhkby8af0vv7v63a70lk3m58mkycpy5q2rm";
+    sha256 = "0314r038jl17hrhc9nrbx30jk0pz8ckbdnizws4r46b1rf4h0b1f";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";
     description = "Simple library for font loading and glyph rasterization";
-    maintainers = with maintainers; [ fionera ];
+    maintainers = with maintainers; [
+      fionera
+      sternenseemann
+    ];
     license = licenses.mit;
     platforms = with platforms; linux;
   };

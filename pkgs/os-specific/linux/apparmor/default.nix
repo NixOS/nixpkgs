@@ -136,10 +136,9 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      substituteInPlace $out/bin/aa-notify --replace /usr/bin/notify-send ${libnotify}/bin/notify-send
-      # aa-notify checks its name and does not work named ".aa-notify-wrapped"
-      mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
-      makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
+      substituteInPlace $out/bin/aa-notify \
+        --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
+        --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
     '';
 
     inherit doCheck;

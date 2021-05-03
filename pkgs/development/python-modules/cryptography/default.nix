@@ -22,18 +22,18 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.4.6"; # Also update the hash in vectors.nix
+  version = "3.4.7"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11wgsihfq72fav67c3igi0xbhbd6c5dj869byd1jkq0fbcz24cid";
+    sha256 = "04x7bhjkglxpllad10821vxddlmxdkd3gjvp35iljmnj2s0xw41x";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "1i0sd2y4a5g1yqwcpw2ycp6p4p8sk5v7clblq756i5864j52v6w1";
+    sha256 = "1m6smky4nahwlp4hn6yzibrcxlbsw4nx162dsq48vlw8h1lgjl62";
   };
 
   cargoRoot = "src/rust";
@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
+  ] ++ [
     rustPlatform.cargoSetupHook
     setuptools-rust
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);

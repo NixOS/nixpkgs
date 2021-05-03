@@ -40,8 +40,8 @@ let
   };
 in
 buildPythonPackage rec {
-  version = "2020.09.3";
   pname = "rdkit";
+  version = "2020.09.5";
 
   src =
     let
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "1k1wvzcd1yfx4nhz3iq2aaadzdk5w6sfcb4imhvm7pkbzij0nicx";
+      sha256 = "1ycbjia223d0w9xiwk36x2vkdidsx198rzkfyxz48cbax9vvklzq";
     };
 
   unpackPhase = ''
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   ];
 
   hardeningDisable = [ "format" ]; # required by yaehmop
-  # doCheck = false;
+
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;

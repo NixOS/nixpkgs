@@ -74,9 +74,9 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.googleplaymusicdesktopplayer.com/";
-    description = "A beautiful cross platform Desktop Player for Google Play Music";
+    description = "A beautiful cross platform Desktop Player for Google Play Music and YouTube Music";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.SuprDewd ];
+    maintainers = with lib.maintainers; [ anna328p SuprDewd ];
   };
 }

@@ -9,9 +9,12 @@ asdf-system-connections
 babel
 blackbird
 bordeaux-threads
+calispel
 caveman
+cl-custom-hash-table
 cffi
 cffi-grovel
+cffi-uffi-compat
 chanl
 chipz
 chunga
@@ -39,6 +42,7 @@ cl-fad
 cl-fuse
 cl-fuse-meta-fs
 cl-hooks
+cl-html-diff
 cl-html5-parser
 cl-html-parse
 cl-interpol
@@ -47,6 +51,7 @@ cl-json
 cl-l10n
 cl-libuv
 cl-locale
+cl-markup
 cl-mysql
 closer-mop
 closure-common
@@ -61,7 +66,9 @@ cl-protobufs
 cl-qprint
 cl-reexport
 cl-slice
+cl-speedy-queue
 cl-smtp
+cl-syslog
 clsql
 clsql-postgresql
 clsql-postgresql-socket
@@ -110,6 +117,7 @@ fare-quasiquote
 fare-utils
 fast-http
 fast-io
+file-attributes
 fiveam
 flexi-streams
 form-fiddle

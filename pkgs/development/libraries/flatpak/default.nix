@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
-, docbook_xml_dtd_412
 , docbook_xml_dtd_45
 , docbook-xsl-nons
 , which
@@ -14,7 +14,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
-, yacc
+, bison
 , xdg-dbus-proxy
 , p11-kit
 , bubblewrap
@@ -36,7 +36,7 @@
 , fuse
 , nixosTests
 , libsoup
-, lzma
+, xz
 , zstd
 , ostree
 , polkit
@@ -53,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.1";
+  version = "1.10.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1dywvfpmszvp2wy5hvpzy8z6gz2gzmi9p302njp52p9vpx14ydf1";
+    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
   };
 
   patches = [
@@ -94,6 +94,15 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/43581
     ./use-flatpak-from-path.patch
 
+    # Hardcode flatpak binary path for flatpak-spawn.
+    # When calling the portal’s Spawn command with FLATPAK_SPAWN_FLAGS_CLEAR_ENV flag,
+    # it will clear environment, including PATH, making the flatpak run fail.
+    # https://github.com/flatpak/flatpak/pull/4174
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/495449daf6d3c072519a36c9e4bc6cc1da4d31db.patch";
+      sha256 = "gOX/sGupAE7Yg3MVrMhFXzWHpFn+izVyjtkuPzIckuY=";
+    })
+
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
@@ -105,9 +114,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     libxml2
-    # Remove 4.1.2 again once the following is merged
-    # https://github.com/flatpak/flatpak/pull/4102
-    docbook_xml_dtd_412
     docbook_xml_dtd_45
     docbook-xsl-nons
     which
@@ -118,7 +124,7 @@ stdenv.mkDerivation rec {
     pkg-config
     xmlto
     appstream-glib
-    yacc
+    bison
     wrapGAppsNoGuiHook
   ];
 
@@ -133,7 +139,7 @@ stdenv.mkDerivation rec {
     libcap
     libseccomp
     libsoup
-    lzma
+    xz
     zstd
     polkit
     python3

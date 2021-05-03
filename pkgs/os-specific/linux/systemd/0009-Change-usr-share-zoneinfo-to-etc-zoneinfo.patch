@@ -1,7 +1,7 @@
-From b423ce2560bd380abd80796a890454d95cd8926c Mon Sep 17 00:00:00 2001
+From 367d0dad3d1853048569e315931cb8a27e16a098 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Tue, 11 Oct 2016 13:12:08 +0300
-Subject: [PATCH 09/18] Change /usr/share/zoneinfo to /etc/zoneinfo
+Subject: [PATCH 09/19] Change /usr/share/zoneinfo to /etc/zoneinfo
 
 NixOS uses this path.
 ---
@@ -13,7 +13,7 @@ NixOS uses this path.
  5 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/man/localtime.xml b/man/localtime.xml
-index 73c1b8e5a3..4ab4276283 100644
+index e486474c44..5f373d0723 100644
 --- a/man/localtime.xml
 +++ b/man/localtime.xml
 @@ -20,7 +20,7 @@
@@ -79,7 +79,7 @@ index 742b43f9fc..f2cb121816 100644
          (void) mkdir_parents(etc_localtime, 0755);
          if (symlink(e, etc_localtime) < 0)
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index f790853104..74b51f4d28 100644
+index 14f8a82eb8..8632dadec6 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1810,8 +1810,8 @@ static int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t u
@@ -94,7 +94,7 @@ index f790853104..74b51f4d28 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index a0ee03f134..9ecacad25e 100644
+index e87c4c8919..964a40ba81 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -269,7 +269,7 @@ static int context_read_data(Context *c) {
@@ -128,5 +128,5 @@ index a0ee03f134..9ecacad25e 100644
                          return -ENOMEM;
  
 -- 
-2.29.2
+2.30.1
 

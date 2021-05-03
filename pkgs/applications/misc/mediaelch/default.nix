@@ -9,23 +9,25 @@
 , qtbase
 , qtdeclarative
 , qtmultimedia
+, qtsvg
+, qttools
 }:
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.6";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "1134vw7hr0mpqcsxjq4bqmg5760dngz17bzj97ypfc5cvzcxjh43";
+    sha256 = "0yif0ibmlj0bhl7fnhg9yclxg2iyjygmjhffinp5kgqy0vaabkzw";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia ];
+  buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
 
   prePatch = ''
     substituteInPlace MediaElch.pro --replace "/usr" "$out"

@@ -1,6 +1,6 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
+, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
 , libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
@@ -18,13 +18,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.12";
+  version = "4.13";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1qgi9ciljq8h3ja9kalfvnxnjymddd5j4agv984137z443mqfnrw";
+    sha256 = "0w2r80wf86jijgfxbkv06lgfhz4p2aaidsqd96bx3q1382nrbzcf";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildGoPackage rec {
 
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
            '') ]

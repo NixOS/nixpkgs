@@ -16,11 +16,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "166";
+  version = "172";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-6VhHG3MxmIczolOYqU4D1m00h8w2n0ku4dy/dFEYqk0=";
+    sha256 = "1j162jh5lkiixpb5ym3smyrkvjldm8m8vnx25cgwb7cxkk701w5x";
   };
 
   outputs = [ "out" "man" ];
@@ -70,6 +70,8 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_android_manifest"
     "test_sbin_added_to_path"
+    "test_diff_meta"
+    "test_diff_meta2"
   ];
 
   meta = with lib; {

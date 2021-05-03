@@ -3,7 +3,8 @@
 , expat
 , libffi
 , gdbm
-, lzma
+, xz
+, mime-types ? null, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -11,6 +12,7 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
+, tzdata ? null
 , self
 , configd
 , autoreconfHook
@@ -33,12 +35,11 @@
 , stripTests ? false
 , stripTkinter ? false
 , rebuildBytecode ? true
-, stripBytecode ? false
+, stripBytecode ? reproducibleBuild
 , includeSiteCustomize ? true
 , static ? stdenv.hostPlatform.isStatic
-# Not using optimizations on Darwin
-# configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
-, enableOptimizations ? (!stdenv.isDarwin)
+, enableOptimizations ? false
+, reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -54,11 +55,24 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
+assert mimetypesSupport -> mime-types != null;
+
+assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
+  "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
+
+assert lib.assertMsg (reproducibleBuild -> stripBytecode)
+  "Deterministic builds require stripping bytecode.";
+
+assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
+  "Deterministic builds are not achieved when optimizations are enabled.";
+
 with lib;
 
 let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
+
+  tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -89,10 +103,11 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
-    ++ optionals stdenv.isDarwin [ configd ]);
+    ++ optionals stdenv.isDarwin [ configd ])
+    ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
@@ -175,6 +190,9 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+  ] ++ optionals mimetypesSupport [
+    # Make the mimetypes module refer to the right file
+    ./mimetypes.patch
   ] ++ optionals (isPy35 || isPy36) [
     # Determinism: Write null timestamps when compiling python files.
     ./3.5/force_bytecode_determinism.patch
@@ -185,6 +203,11 @@ in with passthru; stdenv.mkDerivation {
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
+    # The workaround is for unittests on Win64, which we don't support.
+    # It does break aarch64-darwin, which we do support. See:
+    # * https://bugs.python.org/issue35523
+    # * https://github.com/python/cpython/commit/e6b247c8e524
+    ./3.7/no-win64-workaround.patch
   ] ++ optionals (isPy37 || isPy38 || isPy39) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
@@ -230,6 +253,9 @@ in with passthru; stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
+  '' + optionalString mimetypesSupport ''
+    substituteInPlace Lib/mimetypes.py \
+      --replace "@mime-types@" "${mime-types}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
@@ -280,6 +306,8 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals tzdataSupport [
+    "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
 
   preConfigure = ''
@@ -299,7 +327,14 @@ in with passthru; stdenv.mkDerivation {
 
   setupHook = python-setup-hook sitePackages;
 
-  postInstall = ''
+  postInstall = let
+    # References *not* to nuke from (sys)config files
+    keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
+      (placeholder "out")
+    ] ++ optionals tzdataSupport [
+      tzdata
+    ]);
+  in ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/${libPrefix}/test/*; do
@@ -335,8 +370,8 @@ in with passthru; stdenv.mkDerivation {
     done
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
-    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
-    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
+    find $out/lib/python*/config-* -type f -print -exec nuke-refs ${keep-references} '{}' +
+    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs ${keep-references} '{}' +
 
     # Make the sysconfigdata module accessible on PYTHONPATH
     # This allows build Python to import host Python's sysconfigdata
@@ -355,18 +390,19 @@ in with passthru; stdenv.mkDerivation {
     '' + optionalString includeSiteCustomize ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    '' + optionalString rebuildBytecode ''
 
-    # Determinism: rebuild all bytecode
-    # We exclude lib2to3 because that's Python 2 code which fails
-    # We rebuild three times, once for each optimization level
+    '' + optionalString stripBytecode ''
+    # Determinism: deterministic bytecode
+    # First we delete all old bytecode.
+    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
+    '' + optionalString rebuildBytecode ''
+    # Then, we build for the two optimization levels.
+    # We do not build unoptimized bytecode, because its not entirely deterministic yet.
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
-    # This is automatically used when `SOURCE_DATE_EPOCH` is set.
-    find $out -name "*.py" | ${pythonForBuildInterpreter}     -m compileall -q -f -x "lib2to3" -i -
+    # compileall uses this checked-hash method by default when `SOURCE_DATE_EPOCH` is set.
+    # We exclude lib2to3 because that's Python 2 code which fails
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
-    '' + optionalString stripBytecode ''
-    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

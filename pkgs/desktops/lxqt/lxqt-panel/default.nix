@@ -30,13 +30,13 @@
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.16.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1mm23fys5npm5fi47y3h2mzvlhlcaz7k1p4wwmc012f0hqcrvqik";
+    sha256 = "1wmm4sml7par5z9xcs5qx2y2pdbnnh66zs37jhx9f9ihcmh1sqlw";
   };
 
   nativeBuildInputs = [

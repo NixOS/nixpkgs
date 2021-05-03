@@ -1,6 +1,10 @@
 { lib, fetchFromGitHub, stdenv
-, findlib, nonstd, ocaml, ocamlbuild
+, findlib, ocaml, ocamlbuild
 }:
+
+if !lib.versionAtLeast ocaml.version "4.02"
+then throw "sosa is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-sosa-${version}";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "053hdv6ww0q4mivajj4iyp7krfvgq8zajq9d8x4mia4lid7j0dyk";
   };
 
-  buildInputs = [ nonstd ocaml ocamlbuild findlib ];
+  buildInputs = [ ocaml ocamlbuild findlib ];
 
   buildPhase = "make build";
 

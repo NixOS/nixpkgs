@@ -3,29 +3,28 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "sof-firmware";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof-bin";
-    rev = "cbdec6963b2c2d58b0080955d3c11b96ff4c92f0";
-    sha256 = "0la2pw1zpv50cywiqcfb00cxqvjc73drxwjchyzi54l508817nxh";
+    rev = "v${version}";
+    sha256 = "sha256-Z0Z4HLsIIuW8E1kFNhAECmzj1HkJVfbEw13B8V7PZLk=";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontFixup = true; # binaries must not be stripped or patchelfed
 
   installPhase = ''
-    mkdir -p $out/lib/firmware
-
-    patchShebangs go.sh
-    ROOT=$out SOF_VERSION=v${version} ./go.sh
+    mkdir -p $out/lib/firmware/intel/
+    cp -a sof-v${version} $out/lib/firmware/intel/sof
+    cp -a sof-tplg-v${version} $out/lib/firmware/intel/sof-tplg
   '';
 
   meta = with lib; {
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
     license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden ];
+    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
     platforms = with platforms; linux;
   };
 }

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.5.2";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.6";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-ignis";
     rev = version;
-    sha256 = "sha256-Kl3tnoamZrCxwoDdu8betG6Lf3CC3D8R2TYiq8Zl3Aw=";
+    hash = "sha256-L5fwCMsN03ojiDvKIyqsGfUnwej1P7bpyHlL6mu7nh0=";
   };
 
   # hacky, fix https://github.com/Qiskit/qiskit-ignis/issues/532.

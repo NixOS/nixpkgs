@@ -1,10 +1,12 @@
 #!/bin/bash
 
-set -e
+set -xe
 
-BASE_URL="https://lhapdf.hepforge.org/downloads?f=pdfsets/6.2/"
+: ${SED:="$(nix-build '<nixpkgs>' -A gnused --no-out-link)/bin/sed"}
 
-for pdf_set in `curl $BASE_URL 2>/dev/null | gsed -e "s/.*<a href=\"[^\"]*\/\([^\"/]*.tar.gz\)\".*/\1/;tx;d;:x" | gsed -e "s/%2B/+/g" | sort -u`; do
+BASE_URL="https://lhapdfsets.web.cern.ch/lhapdfsets/current/"
+
+for pdf_set in `curl -L $BASE_URL 2>/dev/null | "$SED" -e "s/.*<a href=\"\([^\"/]*.tar.gz\)\".*/\1/;tx;d;:x" | sort -u`; do
 	echo -n "    \"${pdf_set%.tar.gz}\" = \""
 	nix-prefetch-url "${BASE_URL}${pdf_set}" 2>/dev/null | tr -d '\n'
 	echo "\";"

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # I'm too lazy to catch all gcc47-related problems
+  NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing"; # I'm too lazy to catch all gcc47-related problems
   hardeningDisable = [ "format" ];
 
   buildInputs = [

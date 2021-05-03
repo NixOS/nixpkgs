@@ -6,21 +6,34 @@
     "api.v4l2.*": "v4l2/libspa-v4l2",
     "api.libcamera.*": "libcamera/libspa-libcamera"
   },
-  "context.modules": {
-    "libpipewire-module-rtkit": {
+  "context.modules": [
+    {
+      "name": "libpipewire-module-rtkit",
       "args": {},
       "flags": [
         "ifexists",
         "nofail"
       ]
     },
-    "libpipewire-module-protocol-native": null,
-    "libpipewire-module-client-node": null,
-    "libpipewire-module-client-device": null,
-    "libpipewire-module-adapter": null,
-    "libpipewire-module-metadata": null,
-    "libpipewire-module-session-manager": null
-  },
+    {
+      "name": "libpipewire-module-protocol-native"
+    },
+    {
+      "name": "libpipewire-module-client-node"
+    },
+    {
+      "name": "libpipewire-module-client-device"
+    },
+    {
+      "name": "libpipewire-module-adapter"
+    },
+    {
+      "name": "libpipewire-module-metadata"
+    },
+    {
+      "name": "libpipewire-module-session-manager"
+    }
+  ],
   "session.modules": {
     "default": [
       "flatpak",
@@ -46,6 +59,7 @@
     "with-pulseaudio": [
       "with-audio",
       "bluez5",
+      "logind",
       "restore-stream",
       "streams-follow-default"
     ]

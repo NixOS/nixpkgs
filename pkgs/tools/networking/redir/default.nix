@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/troglobit/redir";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

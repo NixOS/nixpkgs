@@ -1,0 +1,26 @@
+From 6c5b9197076f6f384112e6566039116c56600909 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Sat, 10 Apr 2021 13:53:50 +0200
+Subject: [PATCH] Fix a missing atspi2 dependency
+
+See https://bugs.chromium.org/p/chromium/issues/detail?id=1197837 for
+more details.
+---
+ content/public/browser/BUILD.gn | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/content/public/browser/BUILD.gn b/content/public/browser/BUILD.gn
+index 7e7c436d90c7..20ef832f1d8c 100644
+--- a/content/public/browser/BUILD.gn
++++ b/content/public/browser/BUILD.gn
+@@ -535,6 +535,7 @@ source_set("browser_sources") {
+ 
+   if (use_atk) {
+     sources += [ "ax_inspect_factory_auralinux.cc" ]
++    configs += [ "//build/config/linux/atspi2" ]
+   }
+ 
+   if (is_linux || is_chromeos) {
+-- 
+2.20.1
+

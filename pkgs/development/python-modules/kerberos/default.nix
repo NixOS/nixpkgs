@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, kerberos
+, libkrb5
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "cdd046142a4e0060f96a00eb13d82a5d9ebc0f2d7934393ed559bac773460a2c";
   };
 
-  nativeBuildInputs = [ kerberos ];
+  nativeBuildInputs = [ libkrb5 ];
 
   # No tests in archive
   doCheck = false;

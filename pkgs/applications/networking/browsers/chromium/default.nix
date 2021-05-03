@@ -1,8 +1,8 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_11, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_11, llvmPackages_12, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
-, pipewire_0_2
+, pipewire
 , gcc, nspr, nss, runCommand
 , lib
 
@@ -13,7 +13,6 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enableWideVine ? false
-, enableVaapi ? false # Disabled by default due to unofficial support
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -40,6 +39,9 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "90") {
+      llvmPackages = llvmPackages_12;
+      stdenv = llvmPackages_12.stdenv;
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
@@ -161,14 +163,13 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire_0_2 ];
+    libPath = lib.makeLibraryPath [ libva pipewire ];
 
   in with lib; ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
-      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"}
+      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
 
   pname = "steam-runtime";
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
-  version = "0.20201203.1";
+  version = "0.20210317.0";
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
-    sha256 = "sha256-hOHfMi0x3K82XM3m/JmGYbVk5RvuHG+m275eAC0MoQc=";
+    sha256 = "061z2r33n2017prmhdxm82cly3qp3bma2q70pqs57adl65yvg7vw";
     name = "scout-runtime-${version}.tar.gz";
   };
 

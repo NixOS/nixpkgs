@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.8.2";
+  version = "0.9.0";
 
   disabled = pythonOlder "3.6";
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "sha256-ybf8bXqsVk6quYi0vrfo/Mplk7Nr7tQS7cevXxI9khw=";
+    hash = "sha256-knue9uJih72UQHsvfXZ9AA94mol4ERa9Lo/GMcp+2hA=";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
@@ -74,7 +74,13 @@ buildPythonPackage rec {
   # We disable appropriate tests below to allow building without pyscf installed
 
   postPatch = ''
-    substituteInPlace setup.py --replace "docplex==2.15.194" "docplex"
+    # Because this is a legacy/final release, the maintainers restricted the maximum
+    # versions of all dependencies to the latest current version. That will not
+    # work with nixpkgs' rolling release/update system.
+    # Unlock all versions for compatibility
+    substituteInPlace setup.py --replace "<=" ">="
+    sed -i 's/\(\w\+-*\w*\).*/\1/' requirements.txt
+    substituteInPlace requirements.txt --replace "dataclasses" ""
 
     # Add ImportWarning when running qiskit.chemistry (pyscf is a chemistry package) that pyscf is not included
     echo -e "\nimport warnings\ntry: import pyscf;\nexcept ImportError:\n    " \

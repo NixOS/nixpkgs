@@ -83,37 +83,61 @@ self: super: let
       });
     };
 
+  llvmStaticAdapter = llvmPackages:
+    llvmPackages // {
+      stdenv = foldl (flip id) llvmPackages.stdenv staticAdapters;
+      libcxxStdenv = foldl (flip id) llvmPackages.libcxxStdenv staticAdapters;
+    };
+
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
+
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
   gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
   gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
   gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
-  clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
-  libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
 
-  zlib = super.zlib.override {
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
-  openssl = super.openssl_1_1.overrideAttrs (o: {
-    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
-    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
-  });
+  llvmPackages_5 = llvmStaticAdapter super.llvmPackages_5;
+  llvmPackages_6 = llvmStaticAdapter super.llvmPackages_6;
+  llvmPackages_7 = llvmStaticAdapter super.llvmPackages_7;
+  llvmPackages_8 = llvmStaticAdapter super.llvmPackages_8;
+  llvmPackages_9 = llvmStaticAdapter super.llvmPackages_9;
+  llvmPackages_10 = llvmStaticAdapter super.llvmPackages_10;
+  llvmPackages_11 = llvmStaticAdapter super.llvmPackages_11;
+  llvmPackages_12 = llvmStaticAdapter super.llvmPackages_12;
+
   boost = super.boost.override {
     # Don’t use new stdenv for boost because it doesn’t like the
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+
+  curl = super.curl.override {
+    # brotli doesn't build static (Mar. 2021)
+    brotliSupport = false;
+    # disable gss becuase of: undefined reference to `k5_bcmp'
+    gssSupport = false;
+  };
+
+  ocaml-ng = self.lib.mapAttrs (_: set:
+    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
+  ) super.ocaml-ng;
+
+  openssl = super.openssl_1_1.overrideAttrs (o: {
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
+  });
+
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
 
-  ocaml-ng = self.lib.mapAttrs (_: set:
-    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
-  ) super.ocaml-ng;
+  zlib = super.zlib.override {
+    # Don’t use new stdenv zlib because
+    # it doesn’t like the --disable-shared flag
+    stdenv = super.stdenv;
+  };
 }

@@ -37,5 +37,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    changelog = "https://github.com/dstat-real/dstat/blob/v${version}/ChangeLog";
   };
 }

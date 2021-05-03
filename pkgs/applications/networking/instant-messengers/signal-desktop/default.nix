@@ -2,7 +2,7 @@
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
 # Unfortunately this also overwrites the UI language (not just the spell
@@ -25,7 +25,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.40.1"; # Please backport all updates to the stable channel.
+  version = "5.0.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0k57r1x64w38n0295qdrf3p19d3z8m530h46ps0j2x0krhah47w7";
+    sha256 = "17hxg61m9kk1kph6ifqy6507kzx5hi6yafr2mj8n0a6c39vc8f9g";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango
@@ -96,6 +97,8 @@ in stdenv.mkDerivation rec {
   dontAutoPatchelf = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
 
     mv usr/share $out/share
@@ -109,6 +112,8 @@ in stdenv.mkDerivation rec {
     # Symlink to bin
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -136,7 +141,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://signal.org/";
     changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.gpl3;
+    license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };

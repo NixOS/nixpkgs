@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gtk2, lv2, pkg-config, python, serd, sord, sratom
+{ stdenv, lib, fetchurl, gtk2, lv2, pkg-config, python3, serd, sord, sratom
 , wafHook
 , withQt4 ? true, qt4 ? null
 , withQt5 ? false, qt5 ? null }:
@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "0z4v01pjw4wh65x38w6icn28wdwxz13ayl8hvn4p1g9kmamp1z06";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ gtk2 lv2 python serd sord sratom ]
+  nativeBuildInputs = [ pkg-config wafHook python3 ];
+  buildInputs = [ gtk2 lv2 serd sord sratom ]
     ++ (lib.optionals withQt4 [ qt4 ])
     ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 
   dontWrapQtApps = true;
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/suil";

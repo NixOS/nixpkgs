@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zulip-term";
-  version = "0.5.2";
+  version = "0.6.0";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-terminal";
     rev = version;
-    sha256 = "1xhhy3v4wck74a83avil0rnmsi2grrh03cww19n5mv80p2q1cjmf";
+    sha256 = "sha256-nlvZaGMVRRCu8PZHxPWjNSxkqhZs0T/tE1js/3pDUFk=";
   };
 
   patches = [
@@ -26,7 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     urwid-readline
     beautifulsoup4
     lxml
-    mypy-extensions
+    typing-extensions
+    python-dateutil
+    tzlocal
   ];
 
   checkInputs = [

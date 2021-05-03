@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/makeworld-the-better-one/amfora";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ deifactor ];
+    changelog = "https://github.com/makeworld-the-better-one/amfora/blob/v${version}/CHANGELOG.md";
   };
 }

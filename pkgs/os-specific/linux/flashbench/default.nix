@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/bradfa/flashbench";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.rycee ];
   };
 }

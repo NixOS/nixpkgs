@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-wm+WoOvYVa29lMMnXatlQ4gcCLsz+uQZ7D/hUxNjIPc=";
+    sha256 = "sha256-ySdBHlUSGIyhMwInoFT90mm+HfAkO/60wBPACQgxDAM=";
   };
 
   vendorSha256 = null;

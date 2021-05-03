@@ -1,4 +1,4 @@
-{pkgs, quicklisp-to-nix-packages}:
+{pkgs, clwrapper, quicklisp-to-nix-packages}:
 let
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
   skipBuildPhase = x: {
@@ -6,6 +6,10 @@ let
   };
   multiOverride = l: x: if l == [] then {} else
     ((builtins.head l) x) // (multiOverride (builtins.tail l) x);
+  lispName = (clwrapper.lisp.pname or (builtins.parseDrvName clwrapper.lisp.name).name);
+  ifLispIn = l: f: if (pkgs.lib.elem lispName l) then f else (x: {});
+  ifLispNotIn = l: f: if ! (pkgs.lib.elem lispName l) then f else (x: {});
+  extraLispDeps = l: x: { deps = x.deps ++ l; };
 in
 {
   stumpwm = x:{
@@ -23,7 +27,8 @@ in
       '';
     };
   };
-  iterate = skipBuildPhase;
+  iterate = multiOverride [ skipBuildPhase
+    (ifLispNotIn ["sbcl" "gcl"] (x: { parasites=[]; }))];
   cl-fuse = x: {
     propagatedBuildInputs = [pkgs.fuse];
     overrides = y : (x.overrides y) // {
@@ -65,15 +70,32 @@ in
   cl-libuv = addNativeLibs [pkgs.libuv];
   cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
   cl-async-test = addNativeLibs [pkgs.openssl];
-  clsql = x: {
+  clsql = multiOverride [ (x: {
     propagatedBuildInputs = with pkgs; [libmysqlclient postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.libmysqlclient}/include/mysql"
         export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.libmysqlclient}/lib/mysql"
-      '';
-    };
-  };
+      '';};})
+    (ifLispIn ["ecl" "clisp"] (x: {
+       deps = pkgs.lib.filter (x: x.outPath != quicklisp-to-nix-packages.uffi.outPath)
+         (x.deps ++ (with quicklisp-to-nix-packages; [cffi-uffi-compat]));
+       overrides = y: (x.overrides y) // {
+         postUnpack = ''
+           sed -e '1i(cl:push :clsql-cffi cl:*features*)' -i "$sourceRoot/clsql.asd"
+         '';
+       };
+    }))
+  ];
+  clsql-postgresql-socket = ifLispIn ["ecl" "clisp"] (x: {
+       deps = pkgs.lib.filter (x: x.outPath != quicklisp-to-nix-packages.uffi.outPath)
+         (x.deps ++ (with quicklisp-to-nix-packages; [cffi-uffi-compat]));
+       overrides = y: (x.overrides y) // {
+         postUnpack = ''
+           sed -e '1i(cl:push :clsql-cffi cl:*features*)' -i "$sourceRoot/clsql-postgresql-socket.asd"
+         '';
+       };
+    });
   clx-truetype = skipBuildPhase;
   query-fs = x: {
     overrides = y: (x.overrides y) // {
@@ -225,7 +247,7 @@ $out/lib/common-lisp/query-fs"
       x.deps;
   };
   cl-cffi-gtk-glib = addNativeLibs [pkgs.glib];
-  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk_pixbuf];
+  cl-cffi-gtk-gdk-pixbuf = addNativeLibs [pkgs.gdk-pixbuf];
   cl-cffi-gtk-cairo = addNativeLibs [pkgs.cairo];
   cl-cffi-gtk-pango = addNativeLibs [pkgs.pango];
   cl-cffi-gtk-gdk = addNativeLibs [pkgs.gtk3];
@@ -241,4 +263,17 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
+  woo = ifLispNotIn ["sbcl" "gcl"]
+    (extraLispDeps (with quicklisp-to-nix-packages; [cl-speedy-queue]));
+  cl-syslog = x: {
+    overrides = y: (x.overrides y) // {
+      postUnpack = ''
+        sed -e '1a:serial t' -i $sourceRoot/cl-syslog.asd
+      '';
+    };
+  };
+  log4cl = ifLispNotIn ["sbcl" "gcl"]
+    (extraLispDeps (with quicklisp-to-nix-packages; [cl-syslog]));
+  md5 = ifLispNotIn ["sbcl" "ccl" "gcl"]
+    (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
 }

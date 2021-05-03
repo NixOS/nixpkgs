@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
-    license = licenses.gpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ np ];
   };
 }

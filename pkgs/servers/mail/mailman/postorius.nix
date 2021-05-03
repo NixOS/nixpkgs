@@ -4,6 +4,8 @@
 
 buildPythonPackage rec {
   pname = "postorius";
+  # Note: Mailman core must be on the latest version before upgrading Postorious.
+  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
   version = "1.3.4";
 
   src = fetchPypi {
@@ -21,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://docs.mailman3.org/projects/postorius";
     description = "Web-based user interface for managing GNU Mailman";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin peti ];
+    maintainers = with maintainers; [ globin peti qyliss ];
   };
 }

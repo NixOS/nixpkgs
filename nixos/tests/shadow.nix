@@ -13,14 +13,17 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
     users = {
       mutableUsers = true;
       users.emma = {
+        isNormalUser = true;
         password = password1;
         shell = pkgs.bash;
       };
       users.layla = {
+        isNormalUser = true;
         password = password2;
         shell = pkgs.shadow;
       };
       users.ash = {
+        isNormalUser = true;
         password = password4;
         shell = pkgs.bash;
       };

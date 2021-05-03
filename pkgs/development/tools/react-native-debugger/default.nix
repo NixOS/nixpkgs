@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-UXKObJKk9UUgWtm8U+nXWvIJUr4NLm2f//pGTHJISYA=";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   buildCommand = ''
     shopt -s extglob
     mkdir -p $out

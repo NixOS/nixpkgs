@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "0.5.6";
+  version = "0.6.2";
 
   disabled = pythonOlder "3.7";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "markdown-it-py";
     rev = "v${version}";
-    sha256 = "1m9g8xvd7jiz80x9hl8bw9x0ppndqq5nlcn5y8bjxnfj5s31vpbi";
+    sha256 = "1g9p8pdnvjya436lii63r5gjajhmbhmyh9ngbjqf9dqny05nagz1";
   };
 
   propagatedBuildInputs = [ attrs ];

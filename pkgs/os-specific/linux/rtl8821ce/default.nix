@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce-${kernel.version}";
-  version = "unstable-2020-12-16";
+  version = "unstable-2021-03-21";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "14b536f0c9ad2d0abbdab8afc7ade684900ca9cf";
-    sha256 = "0z7r7spsgn22gwv9pcmkdjn9ingi8jj7xkxasph8118h46fw8ip2";
+    rev = "897e7c4c15dd5a0a569745dc223d969a26ff5bfc";
+    sha256 = "0935dzz0njxh78wfd17yqah1dxn6b3kaszvzclwwrwwhwcrdp80j";
   };
 
   hardeningDisable = [ "pic" ];
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hhm samuelgrf ];
+    maintainers = with maintainers; [ hhm ];
   };
 }

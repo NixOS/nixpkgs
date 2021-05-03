@@ -2,7 +2,7 @@
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
-, gradle
+, gradle_6
 , perl
 , jre
 , libpulseaudio
@@ -33,7 +33,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src postPatch;
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -54,7 +54,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
-  nativeBuildInputs = [ gradle perl makeWrapper ];
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)

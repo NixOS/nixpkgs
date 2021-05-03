@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 
 # Dependencies
 , cmake
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = version;
-    sha256 = "0r2lk5lza7a9h02g4z5j59d8qj0x1q1my665d1x1plny4g46vam0";
+    sha256 = "sha256-HSppHPBBkTf+88ZBaYG6JK4A/5lOBCxPFv6898TD7PE=";
   };
 
   # TODO:
@@ -100,6 +101,8 @@ stdenv.mkDerivation rec {
       --prefix JAVA_HOME : "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
+
+  passthru.tests.turbovnc-headless-server = nixosTests.turbovnc-headless-server;
 
   meta = {
     homepage = "https://turbovnc.org/";

@@ -18,7 +18,7 @@
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enablePython    ? false, pythonPackages
+, enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableVtk       ? false, vtk
@@ -35,6 +35,8 @@
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+
+assert enablePython -> pythonPackages != null;
 
 let
   version = "3.4.8";

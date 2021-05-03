@@ -37,7 +37,7 @@ let
     setAttrByPath
     toList
     types
-    warn
+    warnIf
     ;
   inherit (lib.options)
     isOption
@@ -361,6 +361,17 @@ rec {
       */
       byName = attr: f: modules:
         foldl' (acc: module:
+              if !(builtins.isAttrs module.${attr}) then
+                throw ''
+                  You're trying to declare a value of type `${builtins.typeOf module.${attr}}'
+                  rather than an attribute-set for the option
+                  `${builtins.concatStringsSep "." prefix}'!
+
+                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                  definitions inside that are not matched. Please check how to properly define
+                  this option by e.g. referring to `man 5 configuration.nix'!
+                ''
+              else
                 acc // (mapAttrs (n: v:
                                    (acc.${n} or []) ++ f module v
                                  ) module.${attr}
@@ -505,8 +516,8 @@ rec {
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
       warnDeprecation =
-        if opt.type.deprecationMessage == null then id
-        else warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+        warnIf (opt.type.deprecationMessage != null)
+          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;

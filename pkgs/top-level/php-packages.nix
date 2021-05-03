@@ -138,14 +138,16 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
+    swoole = callPackage ../development/php-packages/swoole { };
+
     v8 = buildPecl {
       version = "0.2.2";
       pname = "v8";
 
       sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
 
-      buildInputs = [ pkgs.v8_6_x ];
-      configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+      buildInputs = [ pkgs.v8 ];
+      configureFlags = [ "--with-v8=${pkgs.v8}" ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = true;
@@ -157,8 +159,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
 
-      buildInputs = [ pkgs.v8_6_x ];
-      configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+      buildInputs = [ pkgs.v8 ];
+      configureFlags = [ "--with-v8js=${pkgs.v8}" ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = true;
@@ -399,10 +401,10 @@ lib.makeScope pkgs.newScope (self: with self; {
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache";
-        buildInputs = [ pcre' ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
+        buildInputs = [ pcre' ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
-        patches = [] ++ lib.optionals (lib.versionOlder php.version "7.4") [
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c
@@ -419,7 +421,9 @@ lib.makeScope pkgs.newScope (self: with self; {
              #include "zend_accelerator_util_funcs.h"
           '') ];
         zendExtension = true;
-        doCheck = !(lib.versionOlder php.version "7.4"); }
+        doCheck = !(lib.versionOlder php.version "7.4");
+        # Tests launch the builtin webserver.
+        __darwinAllowLocalNetworking = true; }
       { name = "openssl";
         buildInputs = [ openssl ];
         configureFlags = [ "--with-openssl" ];

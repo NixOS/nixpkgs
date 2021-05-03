@@ -1,4 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, substituteAll
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -34,7 +36,7 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
@@ -48,21 +50,31 @@
 
 assert cupsSupport -> cups != null;
 
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-3.0";
+    gtk_binary_version = "3.0.0";
+  };
+
+in
+
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.24";
+  version = "3.24.27";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
 
   setupHooks = [
-    ./hooks/gtk3-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "12ipk1d376bai9v820qzhxba93kkh5abi6mhyqr4hwjvqmkl77fc";
+    sha256 = "09ksflq5j257bf5zn8q2nnf2flicg9qqgfy7za79z7rkf1shc77p";
   };
 
   patches = [
@@ -131,7 +143,7 @@ stdenv.mkDerivation rec {
     # explicitly propagated, always needed
     Cocoa
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -176,6 +188,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+    # Broadway daemon
+    moveToOutput bin/broadwayd "$out"
 
     # TODO: patch glib directly
     for f in $dev/bin/gtk-encode-symbolic-svg; do
@@ -214,7 +228,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
+    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, boost, fastjet, gfortran, lhapdf, python2, root, yoda, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, boost
+, fastjet
+, gfortran
+, lhapdf
+, python2
+, root
+, yoda
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
@@ -9,8 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "1h41xnqcz401x3zbs8i2dsb4xlhbv8i5ps0561p6y7gcyridgcbl";
   };
 
-  buildInputs = [ boost fastjet gfortran gfortran.cc.lib lhapdf python2 root yoda ];
-  propagatedBuildInputs = [ zlib ];
+  buildInputs = [
+    boost
+    fastjet
+    gfortran
+    gfortran.cc.lib
+    lhapdf
+    python2
+    root
+    yoda
+  ];
+  propagatedBuildInputs = [
+    zlib
+  ];
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -23,11 +45,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "A computer code to create and evaluate fast interpolation tables of pre-computed coefficients in perturbation theory for observables in hadron-induced processes";
-    license      = lib.licenses.gpl3;
-    homepage     = "http://fastnlo.hepforge.org";
-    platforms    = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+  meta = with lib; {
+    homepage = "http://fastnlo.hepforge.org";
+    description = "Fast pQCD calculations for hadron-induced processes";
+    longDescription = ''
+      The fastNLO project provides computer code to create and evaluate fast
+      interpolation tables of pre-computed coefficients in perturbation theory
+      for observables in hadron-induced processes.
+
+      This allows fast theory predictions of these observables for arbitrary
+      parton distribution functions (of regular shape), renormalization or
+      factorization scale choices, and/or values of alpha_s(Mz) as e.g. needed
+      in PDF fits or in systematic studies. Very time consuming complete
+      recalculations are thus avoided.
+    '';
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
   };
 }

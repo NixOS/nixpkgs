@@ -91,13 +91,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    # A regression is present in https://github.com/fwupd/fwupd/commit/fde4b1676a2c64e70bebd88f7720307c62635654
-    # released with 1.5.6.
-    # Fix for the regression: https://github.com/fwupd/fwupd/pull/2902
-    # Maintainer says a new release is to be expected in a few days:
-    #   https://twitter.com/hughsient/status/1362476792297185289
-    # In the mean time, please do not release 1.5.6 and go strait to 1.5.7
-    version = "1.5.5";
+    version = "1.5.7";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -106,7 +100,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "0c2m9qz1g7zxqc6w90w9hksf8y9hvlh0vyvx06q01x893j5hzxh6";
+      sha256 = "16isrrv6zhdgccbfnz7km5g1cnvfnip7aiidkfhf5dlnrnyb2sxh";
     };
 
     patches = [
@@ -189,6 +183,11 @@ let
       "-Defi-libdir=${gnu-efi}/lib"
       "-Defi-ldsdir=${gnu-efi}/lib"
       "-Defi-includedir=${gnu-efi}/include/efi"
+      "-Defi_sbat_distro_id=nixos"
+      "-Defi_sbat_distro_summary=NixOS"
+      "-Defi_sbat_distro_pkgname=fwupd"
+      "-Defi_sbat_distro_version=${version}"
+      "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd&from=0&size=50&sort=relevance&query=fwupd"
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
@@ -236,6 +235,8 @@ let
         contrib/get-version.py \
         contrib/generate-version-script.py \
         meson_post_install.sh \
+        plugins/uefi-capsule/efi/generate_sbat.py \
+        plugins/uefi-capsule/efi/generate_binary.py \
         po/make-images \
         po/make-images.sh \
         po/test-deps
@@ -250,8 +251,8 @@ let
         testFw = fetchFromGitHub {
           owner = "fwupd";
           repo = "fwupd-test-firmware";
-          rev = "42b62c62dc85ecfb8e38099fe5de0625af87a722";
-          sha256 = "XUpxE003DZSeLJMtyV5UN5CNHH89/nEVKpCbMStm91Q=";
+          rev = "c13bfb26cae5f4f115dd4e08f9f00b3cb9acc25e";
+          sha256 = "US81i7mtLEe85KdWz5r+fQTk61IhqjVkzykBaBPuKL4=";
         };
       in ''
         # These files have weird licenses so they are shipped separately.
@@ -311,6 +312,7 @@ let
       # DisabledPlugins key in fwupd/daemon.conf
       defaultDisabledPlugins = [
         "test"
+        "test_ble"
         "invalid"
       ];
 

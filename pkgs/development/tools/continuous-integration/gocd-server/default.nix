@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ grahamc swarren83 ];
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildCommand = "
     unzip $src -d $out

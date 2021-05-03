@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     description = "C client library for Redis (key-value database)";
     homepage = "https://code.google.com/archive/p/credis/";
     license = licenses.bsd3; # from homepage
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }

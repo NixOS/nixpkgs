@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, lua, pkg-config, systemd, nixosTests
+{ lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
 , tlsSupport ? true, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "1jnv6acjlljvrlxmz0mqarsx1fl5vwss24l8zy5dcawnbp129mk7";
+    sha256 = "sha256-zSIlBQEsziCyVoL8qTHsk70hrpLLSr/nQs97dqqQdSA=";
   };
 
   # Cross-compiling fixes
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lua ]
-    ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd
+    ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
   # More cross-compiling fixes.
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
-    ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"]
+    ++ lib.optional withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;

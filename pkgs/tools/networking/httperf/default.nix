@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/httperf/httperf";
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 
 }

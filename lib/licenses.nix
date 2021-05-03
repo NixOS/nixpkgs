@@ -125,6 +125,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalUC = spdx {
+    spdxId = "BSD-4-Clause-UC";
+    fullName = "BSD 4-Clause University of California-Specific";
+  };
+
   bsdProtection = spdx {
     spdxId = "BSD-Protection";
     fullName = "BSD Protection License";
@@ -601,6 +606,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = "OCamlPro Non Commercial license version 1";
     url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
     free = false;
+  };
+
+  odbl = spdx {
+    spdxId = "ODbL-1.0";
+    fullName = "Open Data Commons Open Database License v1.0";
   };
 
   ofl = spdx {

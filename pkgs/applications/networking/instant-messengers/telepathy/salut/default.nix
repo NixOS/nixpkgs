@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, avahi, libsoup
+{ lib, stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, python2, avahi, libsoup
 , libuuid, openssl, pcre, sqlite, pkg-config }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   # pcre needed because https://github.com/NixOS/nixpkgs/pull/15046
   buildInputs = [ glib libxml2 telepathy-glib avahi libsoup libuuid openssl
-    sqlite pcre telepathy-glib.python ];
+    sqlite pcre python2 ];
 
   nativeBuildInputs = [ libxslt pkg-config ];
 

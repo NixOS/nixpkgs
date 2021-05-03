@@ -179,11 +179,7 @@ makeScope newScope (self:
 
     sockets = callPackage ../development/octave-modules/sockets { };
 
-    sparsersb = callPackage ../development/octave-modules/sparsersb {
-      librsb = null;
-      # TODO: Package the librsb library to build this package.
-      # http://librsb.sourceforge.net/
-    };
+    sparsersb = callPackage ../development/octave-modules/sparsersb { };
 
     stk = callPackage ../development/octave-modules/stk { };
 

@@ -3,7 +3,7 @@
 fetchzip {
   name = "paratype-pt-sans";
 
-  url = [
+  urls = [
     "https://company.paratype.com/system/attachments/629/original/ptsans.zip"
     "http://rus.paratype.ru/system/attachments/629/original/ptsans.zip"
   ];

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , hypothesis
-, doCheck ? true
 , dataclasses
 , hypothesmith
 , pytestCheckHook
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.17";
+  version = "0.3.18";
 
   # Some files for tests missing from PyPi
   # https://github.com/Instagram/LibCST/issues/331
@@ -24,17 +23,18 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mlSeB9OjCiUVYwcPYNrQdlfcj9DV/+wqVWt91uFsQsU=";
+    sha256 = "sha256-19yGaKBLpGASSPv/aSX0kx9lh2JxKExHJDKKtuBbuqI=";
   };
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ hypothesis typing-inspect pyyaml ]
+  propagatedBuildInputs = [ hypothesis typing-extensions typing-inspect pyyaml ]
     ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   checkInputs = [ black hypothesmith isort pytestCheckHook ];
 
-  inherit doCheck;
+  # can't run tests due to circular dependency on hypothesmith -> licst
+  doCheck = false;
 
   preCheck = ''
     python -m libcst.codegen.generate visitors
@@ -44,8 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
-    description =
-      "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
+    description = "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ruuda SuperSandro2000 ];

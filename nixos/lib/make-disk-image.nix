@@ -15,6 +15,8 @@
 
 , # size of the boot partition, is only used if partitionTableType is
   # either "efi" or "hybrid"
+  # This will be undersized slightly, as this is actually the offset of
+  # the end of the partition. Generally it will be 1MiB smaller.
   bootSize ? "256M"
 
 , # The files and directories to be placed in the target file system.
@@ -163,6 +165,8 @@ let format' = format; in let
 
   closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
 
+  blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
+
   prepareImage = ''
     export PATH=${binPath}
 
@@ -173,6 +177,24 @@ let format' = format; in let
 
     sectorsToBytes() {
       echo $(( "$1" * 512  ))
+    }
+
+    # Given lines of numbers, adds them together
+    sum_lines() {
+      local acc=0
+      while read -r number; do
+        acc=$((acc+number))
+      done
+      echo "$acc"
+    }
+
+    mebibyte=$(( 1024 * 1024 ))
+
+    # Approximative percentage of reserved space in an ext4 fs over 512MiB.
+    # 0.05208587646484375
+    #  × 1000, integer part: 52
+    compute_fudge() {
+      echo $(( $1 * 52 / 1000 ))
     }
 
     mkdir $out
@@ -235,12 +257,53 @@ let format' = format; in let
 
     ${if diskSize == "auto" then ''
       ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
-        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) / 1000 ))
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # Normally we'd need to account for alignment and things, if bootSize
+        # represented the actual size of the boot partition. But it instead
+        # represents the offset at which it ends.
+        # So we know bootSize is the reserved space in front of the partition.
+        reservedSpace=$(( gptSpace + $(numfmt --from=iec '${bootSize}') ))
+      '' else if partitionTableType == "legacy+gpt" then ''
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
+        reservedSpace=$(( gptSpace + 2 * mebibyte ))
+      '' else if partitionTableType == "legacy" then ''
+        # Add the 1MiB aligned reserved space (includes MBR)
+        reservedSpace=$(( mebibyte ))
       '' else ''
-        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') / 1000 ))
+        reservedSpace=0
       ''}
-      diskSize=$(( $(set -- $(du -d0 $root); echo "$1") + $additionalSpace ))
-      truncate -s "$diskSize"K $diskImage
+      additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
+
+      # Compute required space in filesystem blocks
+      diskUsage=$(find . ! -type d -exec 'du' '--apparent-size' '--block-size' "${blockSize}" '{}' ';' | cut -f1 | sum_lines)
+      # Each inode takes space!
+      numInodes=$(find . | wc -l)
+      # Convert to bytes, inodes take two blocks each!
+      diskUsage=$(( (diskUsage + 2 * numInodes) * ${blockSize} ))
+      # Then increase the required space to account for the reserved blocks.
+      fudge=$(compute_fudge $diskUsage)
+      requiredFilesystemSpace=$(( diskUsage + fudge ))
+
+      diskSize=$(( requiredFilesystemSpace  + additionalSpace ))
+
+      # Round up to the nearest mebibyte.
+      # This ensures whole 512 bytes sector sizes in the disk image
+      # and helps towards aligning partitions optimally.
+      if (( diskSize % mebibyte )); then
+        diskSize=$(( ( diskSize / mebibyte + 1) * mebibyte ))
+      fi
+
+      truncate -s "$diskSize" $diskImage
+
+      printf "Automatic disk size...\n"
+      printf "  Closure space use: %d bytes\n" $diskUsage
+      printf "  fudge: %d bytes\n" $fudge
+      printf "  Filesystem size needed: %d bytes\n" $requiredFilesystemSpace
+      printf "  Additional space: %d bytes\n" $additionalSpace
+      printf "  Disk image size: %d bytes\n" $diskSize
     '' else ''
       truncate -s ${toString diskSize}M $diskImage
     ''}
@@ -251,9 +314,9 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
     ''}
 
     echo "copying staging root to image..."
@@ -283,6 +346,9 @@ in pkgs.vmTools.runInLinuxVM (
       # Some tools assume these exist
       ln -s vda /dev/xvda
       ln -s vda /dev/sda
+      # make systemd-boot find ESP without udev
+      mkdir /dev/block
+      ln -s /dev/vda1 /dev/block/254:1
 
       mountPoint=/mnt
       mkdir $mountPoint

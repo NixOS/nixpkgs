@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pykmtronic";
-  version = "0.0.2";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p0i7g4k8ggmzargdi3ch55id04j5qjlhv8hap2162gc77b16d59";
+    sha256 = "9d0301882f06a0c4865c89bb6c2a381c4a1ba6fe2a7a07d56351bdf5f96c9fa5";
   };
 
   propagatedBuildInputs = [ aiohttp lxml ];

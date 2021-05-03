@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, substituteAll
 , fetchurl
 , pkg-config
 , gettext
@@ -37,7 +38,7 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -53,6 +54,16 @@
 
 assert cupsSupport -> cups != null;
 
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-4.0";
+    gtk_binary_version = "4.0.0";
+  };
+
+in
+
 stdenv.mkDerivation rec {
   pname = "gtk4";
   version = "4.0.3";
@@ -61,8 +72,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   setupHooks = [
-    ./hooks/gtk4-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
   src = fetchurl {
@@ -113,7 +124,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals trackerSupport [
     tracker
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [

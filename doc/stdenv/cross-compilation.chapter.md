@@ -123,7 +123,7 @@ depsBuildBuild = [ buildPackages.stdenv.cc ];
 
 Add the following to your `mkDerivation` invocation.
 ```nix
-doCheck = stdenv.hostPlatform == stdenv.buildPlatfrom;
+doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 ```
 
 ## Cross-building packages {#sec-cross-usage}
@@ -190,7 +190,7 @@ If one imagines the saturating self references at the end being replaced with in
 ```
 (native..., native, native, native, foreign, foreign, foreign...)
 ```
-On can then imagine any sequence of platforms such that there are bootstrap stages with their 3 platforms determined by "sliding a window" that is the 3 tuple through the sequence. This was the original model for bootstrapping. Without a target platform (assume a better world where all compilers are multi-target and all standard libraries are built in their own derivation), this is sufficient. Conversely if one wishes to cross compile "faster", with a "Canadian Cross" bootstrapping stage where `build != host != target`, more bootstrapping stages are needed since no sliding window provides the pesky `pkgsBuildTarget` package set since it skips the Canadian cross stage's "host".
+One can then imagine any sequence of platforms such that there are bootstrap stages with their 3 platforms determined by "sliding a window" that is the 3 tuple through the sequence. This was the original model for bootstrapping. Without a target platform (assume a better world where all compilers are multi-target and all standard libraries are built in their own derivation), this is sufficient. Conversely if one wishes to cross compile "faster", with a "Canadian Cross" bootstrapping stage where `build != host != target`, more bootstrapping stages are needed since no sliding window provides the pesky `pkgsBuildTarget` package set since it skips the Canadian cross stage's "host".
 
 
 ::: note

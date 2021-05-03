@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.30857";
+  version = "1.4.00.7556";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "06r48h1fr2si2g5ng8hsnbcmr70iapnafj21v5bzrzzrigzb2n2h";
+    sha256 = "0yak3jxh0gdn57wjss0s7sdjssf1b70j0klrcpv66bizqvw1xl7b";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -38,9 +38,13 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
+    gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
+    gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{opt,bin}
 
     mv share/teams $out/opt/
@@ -54,6 +58,8 @@ stdenv.mkDerivation rec {
     # Work-around screen sharing bug
     # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
     rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+
+    runHook postInstall
   '';
 
   dontAutoPatchelf = true;
@@ -76,6 +82,11 @@ stdenv.mkDerivation rec {
       echo "Adding runtime dependencies to RPATH of Node module $mod"
       patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
     done;
+
+    # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
+    # while we create the wrapper ourselves, gappsWrapperArgs leads to the same issue
+    # another option would be to introduce gappsWrapperAppendedArgs, to allow control of positioning
+    substituteInPlace "$out/bin/teams" --replace '.teams-wrapped"  --disable-namespace-sandbox --disable-setuid-sandbox "$@"' '.teams-wrapped" "$@" --disable-namespace-sandbox --disable-setuid-sandbox'
   '';
 
   meta = with lib; {

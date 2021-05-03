@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h7qgqd8srrxw2y1rkdw5js4k6f5vc8x6nlm2mq9mq9vjck7n1j7";
   };
 
-  buildInputs = [ unzip puredata ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ puredata ];
 
   unpackPhase = ''
     unzip $src

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Pulse-Eight/platform";
     repositories.git = "https://github.com/Pulse-Eight/platform.git";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.titanous ];
   };
 }

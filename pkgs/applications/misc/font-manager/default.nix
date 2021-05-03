@@ -1,17 +1,18 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
-  pkg-config, libxml2, json-glib , sqlite, itstool, librsvg, yelp-tools,
-  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
+  pkg-config, libxml2, json-glib , sqlite, itstool, yelp-tools,
+  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection,
+  libsoup, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.9";
+  version = "0.8.5-1";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "1nc0i824v2szz0j9a5rwl8gygih15xbxnxpnx9d3wr0yq9057q6q";
+    sha256 = "1p0hfnf06892hn25a6zv8fnhbh4ln11nn2fv1vjqs63rr59fprbk";
   };
 
   nativeBuildInputs = [
@@ -33,9 +34,10 @@ stdenv.mkDerivation rec {
     libxml2
     json-glib
     sqlite
-    librsvg
     gtk3
     gnome3.adwaita-icon-theme
+    libsoup
+    webkitgtk
   ];
 
   postPatch = ''
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

@@ -230,7 +230,7 @@ self: super:
    </para>
 
    <para>
-    For BLAS/LAPACK switching to work correctly, all packages must depend on <literal>blas</literal> or <literal>lapack</literal>. This ensures that only one BLAS/LAPACK library is used at one time. There are two versions versions of BLAS/LAPACK currently in the wild, <literal>LP64</literal> (integer size = 32 bits) and <literal>ILP64</literal> (integer size = 64 bits). Some software needs special flags or patches to work with <literal>ILP64</literal>. You can check if <literal>ILP64</literal> is used in Nixpkgs with <varname>blas.isILP64</varname> and <varname>lapack.isILP64</varname>. Some software does NOT work with <literal>ILP64</literal>, and derivations need to specify an assertion to prevent this. You can prevent <literal>ILP64</literal> from being used with the following:
+    For BLAS/LAPACK switching to work correctly, all packages must depend on <literal>blas</literal> or <literal>lapack</literal>. This ensures that only one BLAS/LAPACK library is used at one time. There are two versions of BLAS/LAPACK currently in the wild, <literal>LP64</literal> (integer size = 32 bits) and <literal>ILP64</literal> (integer size = 64 bits). Some software needs special flags or patches to work with <literal>ILP64</literal>. You can check if <literal>ILP64</literal> is used in Nixpkgs with <varname>blas.isILP64</varname> and <varname>lapack.isILP64</varname>. Some software does NOT work with <literal>ILP64</literal>, and derivations need to specify an assertion to prevent this. You can prevent <literal>ILP64</literal> from being used with the following:
    </para>
 
 <programlisting>

@@ -5,6 +5,7 @@
 , dask
 , numpy, toolz # dask[array]
 , multipledispatch
+, setuptools-scm
 , scipy
 , scikitlearn
 , pytest
@@ -19,6 +20,7 @@ buildPythonPackage rec {
     sha256 = "58b86cebf04fe5b9e58092e1c467e32e60d01e11b71fdc628baaa9fc6d1adee5";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
 

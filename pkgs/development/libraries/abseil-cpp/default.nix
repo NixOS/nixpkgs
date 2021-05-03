@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, static ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_CXX_STANDARD=17"
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ];
 
   nativeBuildInputs = [ cmake ];

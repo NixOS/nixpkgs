@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "124gpi1jhac46x05gp5viykyrafnlp03v1cmkl13c6pgcs8w04pv";
   };
 
+  patches = [
+    # ctypes.stubs no longer pulls in bigarray automatically
+    ./lib-gen-link-bigarray.patch
+  ];
+
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ctypes libsodium ];
 

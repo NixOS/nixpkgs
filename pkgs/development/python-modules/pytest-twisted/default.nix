@@ -16,7 +16,9 @@ buildPythonPackage rec {
     sha256 = "cee2320becc5625050ab221b8f38533e636651a24644612f4726891fdf1f1847";
   };
 
-  propagatedBuildInputs = [ greenlet pytest decorator ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ greenlet decorator ];
 
   meta = with lib; {
     description = "A twisted plugin for py.test";

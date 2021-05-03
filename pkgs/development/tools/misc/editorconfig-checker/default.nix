@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.3.3";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    sha256 = "sha256-u3gTzsAoV4fgQjsnONIIGFE/Y02bKbCTg30O9FTI2/w=";
+    sha256 = "sha256-t1qvmTs6hOrAnq5hjU2Qjt33vdW9MuSOvWCCY82db+g=";
   };
 
-  vendorSha256 = "sha256-0Eznh9xXuYf4mVZipyE99fKwkGYeSAorhBLamupGkvw=";
+  vendorSha256 = "sha256-Rs7u/ZepnMNg5EZ/HWqSdO428KOkxpSbo7rl0treqUY=";
 
   doCheck = false;
 

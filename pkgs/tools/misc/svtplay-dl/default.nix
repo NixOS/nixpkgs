@@ -4,20 +4,20 @@
 let
 
   inherit (python3Packages)
-    python nose pycrypto pyyaml requests mock python-dateutil setuptools;
+    python nose cryptography pyyaml requests mock python-dateutil setuptools;
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "3.0";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "1k7829sgvs2ihnf8d3zrqk99ifm9867wcn6f8zg628h8aqsif4fc";
+    sha256 = "1hnbpj4k08356k2rmsairbfnxwfxs5lv59nxcj6hy5wf162h2hzb";
   };
 
-  pythonPaths = [ pycrypto pyyaml requests ];
+  pythonPaths = [ cryptography pyyaml requests ];
   buildInputs = [ python perl nose mock python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
 
@@ -47,6 +47,5 @@ in stdenv.mkDerivation rec {
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ maintainers.rycee ];
   };
 }

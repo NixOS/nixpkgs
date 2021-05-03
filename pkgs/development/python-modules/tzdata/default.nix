@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, pytest-subtests
+, importlib-resources
+}:
 
 buildPythonPackage rec {
   pname = "tzdata";
@@ -9,6 +16,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-4ZxzUfiHUioaxznSEEHlkt3ebdG3ZP3vqPeys1UdPTg=";
   };
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-subtests
+  ] ++ lib.optional (pythonOlder "3.7") importlib-resources;
 
   pythonImportsCheck = [ "tzdata" ];
 

@@ -7,9 +7,11 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
-, spaceNavSupport ? false, libspnav
+, spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, potrace
+, openxr-loader
 , embree, gmp
 }:
 
@@ -24,16 +26,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.91.0";
+  version = "2.92.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "0x396lgmk0dq9115yrc36s8zwxzmjr490sr5n2y6w27y17yllyjm";
+    sha256 = "15a5vffn18a920286x0avbc2rap56k6y531wgibq68r90g2cz4g7";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ cmake makeWrapper python3Packages.wrapPython ]
+    ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
@@ -41,24 +44,27 @@ stdenv.mkDerivation rec {
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      makeWrapper
       embree
       gmp
+      pugixml
+      potrace
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
       libGLU libGL openal
       libXxf86vm
+      openxr-loader
       # OpenVDB currently doesn't build on darwin
       openvdb
     ]
     else [
-      pugixml llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
+      llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
+  pythonPath = with python3Packages; [ numpy requests ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -104,6 +110,8 @@ stdenv.mkDerivation rec {
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python.sitePackages}/numpy/core/include"
+      "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
@@ -132,10 +140,11 @@ stdenv.mkDerivation rec {
 
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
-  # --python-expr is used to workaround https://developer.blender.org/T74304
   postInstall = ''
+    buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
-      --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages} \
+      --prefix PATH : $program_PATH \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --add-flags '--python-use-system-env'
   '';
 

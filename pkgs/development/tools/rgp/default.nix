@@ -19,15 +19,15 @@
 }:
 
 let
-  buildNum = "2020-11-19-376";
+  buildNum = "2021-03-31-696";
 in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    sha256 = "f71ibuMerd0SmXKSDjaTj7xtyy1dWzkZ5s0PlGtQ1+k=";
+    sha256 = "1GUV75KpYbeq7KkE86QqTfGnf/t3VEgviaAsbg/LWJI=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/
+
+    chmod +x $out/opt/rgp/scripts/*
+    patchShebangs $out/opt/rgp/scripts
 
     for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler rga rtda; do
       # makeWrapper is needed so that executables are started from the opt

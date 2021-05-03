@@ -11,9 +11,9 @@ buildPythonPackage rec {
     sha256 = "1cb11a17fc121b3918414eb5eaf314ee325f2e693ac7cb3f6abf7560790827f2";
   };
 
-  checkInputs = [ mock pytest ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ pytest ];
+  checkInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test test_pytest_rerunfailures.py

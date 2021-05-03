@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, lzma
+, xz
 , python
 , pythonOlder
 }:
@@ -18,7 +18,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage rec {
     sha256 = "16d8b68e4d3cd4e6c9ddb059850452946da3914c8a8e197a7f2b0954559f2df4";
   };
 
-  buildInputs = [ lzma ];
+  buildInputs = [ xz ];
 
   checkPhase = ''
     ${python.interpreter} test/test_lzma.py

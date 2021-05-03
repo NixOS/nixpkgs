@@ -10,7 +10,8 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  buildInputs = [ pytest unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ pytest ];
   checkPhase = "make test";
 
   # Requires pytest < 3.1

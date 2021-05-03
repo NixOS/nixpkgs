@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 let
@@ -150,9 +150,6 @@ in
       wantedBy = [ "multi-user.target" ];
       aliases = [ "dbus-org.freedesktop.resolve1.service" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
-      # Upstream bug: https://github.com/systemd/systemd/issues/18078
-      # systemd-resolved without libidn2 is broken
-      environment.LD_LIBRARY_PATH = "${lib.getLib pkgs.libidn2}/lib";
     };
 
     environment.etc = {

@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1c1n8n7mp0amsd6vkz32n8zj3vnsckv308bb7na0dg0r8969rap1";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc" \
+      --replace "ar" "${stdenv.cc.targetPrefix}ar"
+  '';
+
   makeFlags = [ "INSTALLPREFIX=$(out)" ];
 
   meta = with lib; {
@@ -17,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "NAT-PMP client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , pytestCheckHook
 }:
@@ -7,6 +8,8 @@
 buildPythonPackage rec {
   pname = "cachetools";
   version = "4.2.1";
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "tkem";

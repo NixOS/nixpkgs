@@ -42,13 +42,17 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  cabal-install = super.cabal-install.override {
-    Cabal = super.Cabal_3_4_0_0;
-    hackage-security = super.hackage-security.override { Cabal = super.Cabal_3_4_0_0; };
-    # Usung dontCheck to break test dependency cycles
-    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
-    random = super.random_1_2_0;
-  };
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
+
+  # cabal-install-parsers is written for Cabal 3.4
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -85,4 +89,5 @@ self: super: {
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
+
 }

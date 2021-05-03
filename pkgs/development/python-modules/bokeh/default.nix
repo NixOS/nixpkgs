@@ -1,6 +1,6 @@
 { buildPythonPackage
 , fetchPypi
-, futures
+, futures ? null
 , isPy27
 , isPyPy
 , jinja2
@@ -33,6 +33,7 @@
 
 buildPythonPackage rec {
   pname = "bokeh";
+  # update together with panel which is not straightforward
   version = "2.3.0";
 
   src = fetchPypi {

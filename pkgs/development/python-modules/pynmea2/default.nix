@@ -2,14 +2,16 @@
 
 buildPythonPackage rec {
   pname = "pynmea2";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w9g5qh573276404f04b46684ydlakv30ds0x0r4kcl370ljmfsg";
+    sha256 = "1b94lhpbgvnknb563dlwvs5vkk7w3ma54sj614ynh2dzgqrd6h73";
   };
 
   checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pynmea2" ];
 
   meta = {
     homepage = "https://github.com/Knio/pynmea2";

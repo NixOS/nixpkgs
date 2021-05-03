@@ -1,7 +1,6 @@
 { stdenv
 , lib
-, fetchgit
-, autoreconfHook
+, fetchurl
 , pkg-config
 , hidapi
 , libftdi1
@@ -10,16 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openocd";
-  version = "0.11.0-rc1";
-
-  src = fetchgit {
-    url = "https://git.code.sf.net/p/openocd/code";
-    rev = "v${version}";
-    sha256 = "15g8qalyxhdp0imfrg8mxwnp0nimd836fc5laaavajw49gcm65m4";
-    fetchSubmodules = true;
+  version = "0.11.0";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0z8y7mmv0mhn2l5gs3vz6l7cnwak7agklyc7ml33f7gz99rwx8s3";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi libftdi1 libusb1 ];
 
@@ -64,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://openocd.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor prusnak ];
     platforms = platforms.unix;
   };
 }

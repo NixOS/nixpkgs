@@ -132,12 +132,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         users.users = {
           # user that is permitted to access the unix socket
-          someuser.extraGroups = [
-            config.users.users.unbound.group
-          ];
+          someuser = {
+            isSystemUser = true;
+            extraGroups = [
+              config.users.users.unbound.group
+            ];
+          };
 
           # user that is not permitted to access the unix socket
-          unauthorizeduser = {};
+          unauthorizeduser = { isSystemUser = true; };
         };
 
         environment.etc = {

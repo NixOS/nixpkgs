@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  patches = [
-    # Changes the socket path from /run/spnav.sock to $XDG_RUNTIME_DIR/spnav.sock
-    # to allow for a user service
-    ./configure-socket-path.patch
-  ];
-
   configureFlags = [ "--disable-debug"];
 
   meta = with lib; {

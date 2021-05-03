@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "3.38.2";
+  version = "3.38.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1m7iww1zk845szs9s3zc8a1s1wpd6kizndhq7gqy3575c0xgr2w9";
+    sha256 = "sha256-P2A+pb/UdyLJLPybiFRGtGJg6gnIz7Y/a92f7+NC5Iw=";
   };
 
   nativeBuildInputs = [

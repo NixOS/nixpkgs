@@ -43,12 +43,14 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Build cabal-install with the compiler's native Cabal.
-  cabal-install = (doJailbreak super.cabal-install).override {
-    # Use dontCheck to break test dependency cycles
-    edit-distance = dontCheck (super.edit-distance.override { random = super.random_1_2_0; });
-    random = super.random_1_2_0;
-  };
+  # cabal-install needs more recent versions of random, but an older
+  # version of base16-bytestring.
+  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
+    Cabal = null;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+  });
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
@@ -77,8 +79,8 @@ self: super: {
 
   # Apply patches from head.hackage.
   alex = appendPatch (dontCheck super.alex) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/alex-3.2.5.patch";
-    sha256 = "0q8x49k3jjwyspcmidwr6b84s4y43jbf4wqfxfm6wz8x2dxx6nwh";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
+    sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
   });
   doctest = dontCheck (doJailbreak super.doctest_0_18_1);
   generic-deriving = appendPatch (doJailbreak super.generic-deriving) (pkgs.fetchpatch {
@@ -92,5 +94,8 @@ self: super: {
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
+
+  # The test suite seems pretty broken.
+  base64-bytestring = dontCheck super.base64-bytestring;
 
 }

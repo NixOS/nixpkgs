@@ -14,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "svxlink";
-  version = "19.09.1";
+  version = "19.09.2";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
     repo = pname;
     rev = version;
-    sha256 = "0xmbac821w9kl7imlz0mra19mlhi0rlpbyyay26w1y7h98j4g4yp";
+    sha256 = "sha256-riyFEuEmJ7+jYT3UoTTsMUwFdO3y5mjo4z0fcC3O8gY=";
   };
 
   cmakeFlags = [

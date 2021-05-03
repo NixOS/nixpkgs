@@ -124,7 +124,10 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
     for name in names:
         # treat "-" and "_" equally
         name = re.sub("[-_]", "[-_]", name)
-        pattern = re.compile("^python\\d\\.\\d-{}-\\d".format(name), re.I)
+        # python(minor).(major)-(pname)-(version or unstable-date)
+        # we need the version qualifier, or we'll have multiple matches
+        # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
+        pattern = re.compile("^python\\d\\.\\d-{}-(?:\\d|unstable-.*)".format(name), re.I)
         for attr_path, package in packages.items():
             if pattern.match(package["name"]):
                 attr_paths.add(attr_path)

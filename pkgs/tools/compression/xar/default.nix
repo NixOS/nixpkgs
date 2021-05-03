@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxml2, lzma, openssl, zlib, bzip2, fts, autoconf }:
+{ lib, stdenv, fetchurl, libxml2, xz, openssl, zlib, bzip2, fts, autoconf }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 
-  buildInputs = [ libxml2 lzma openssl zlib bzip2 fts autoconf ];
+  buildInputs = [ libxml2 xz openssl zlib bzip2 fts autoconf ];
 
   prePatch = ''
     substituteInPlace configure.ac \

@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1khzclkrd1yn9mz3g14ndgpsbj8j50v8dsjarcj6kkn9zgbbazc4";
   };
 
+  patches = [
+    ./hdf5-1.12.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ hdf5 ];
 

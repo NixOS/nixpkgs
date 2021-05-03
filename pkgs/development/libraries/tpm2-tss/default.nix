@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute, procps, which
+, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
-    cmocka uthash ibm-sw-tpm2 iproute procps which
+    cmocka uthash ibm-sw-tpm2 iproute2 procps which
   ];
 
   preAutoreconf = "./bootstrap";

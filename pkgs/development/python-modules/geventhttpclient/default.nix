@@ -6,6 +6,7 @@
 , certifi
 , six
 , backports_ssl_match_hostname
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ gevent certifi six backports_ssl_match_hostname ];
+  propagatedBuildInputs = [ gevent certifi six ]
+    ++ lib.optionals (pythonOlder "3.7") [ backports_ssl_match_hostname ];
 
   # Several tests fail that require network
   doCheck = false;

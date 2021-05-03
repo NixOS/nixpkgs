@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnat, zlib, llvm, lib
+{ stdenv, fetchFromGitHub, callPackage, gnat, zlib, llvm, lib
 , backend ? "mcode" }:
 
 assert backend == "mcode" || backend == "llvm";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
   buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
+  propagatedBuildInputs = lib.optionals (backend == "llvm") [ zlib ];
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.
@@ -29,6 +30,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    # run with either of
+    # nix-build -A ghdl-mcode.passthru.tests
+    # nix-build -A ghdl-llvm.passthru.tests
+    tests = {
+      simple = callPackage ./test-simple.nix { inherit backend; };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ghdl/ghdl";

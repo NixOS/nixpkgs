@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , meson
 , ninja
@@ -39,11 +38,11 @@ let
     fontDirectories = [];
   };
 
-  mesonBool = b: if b then "true" else "false";
+  mesonEnable = b: if b then "enabled" else "disabled";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.23";
+    version = "0.3.26";
 
     outputs = [
       "out"
@@ -61,7 +60,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      hash = "sha256:1HMUrE1NBmrdBRMKX3LRlXaCEH3wqP2jGtW8Rp9oyQA=";
+      sha256 = "sha256-s9+70XXMN4K3yDVwIu+L15gL6rFlpRNVQpeekZQOEec=";
     };
 
     patches = [
@@ -103,22 +102,23 @@ let
     ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ];
 
     mesonFlags = [
-      "-Ddocs=true"
-      "-Dman=false" # we don't have xmltoman
-      "-Dexamples=${mesonBool withMediaSession}" # only needed for `pipewire-media-session`
+      "-Ddocs=enabled"
+      "-Dman=disabled" # we don't have xmltoman
+      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
-      "-Dinstalled_tests=true"
+      "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dgstreamer=${mesonBool gstreamerSupport}"
-      "-Dffmpeg=${mesonBool ffmpegSupport}"
-      "-Dbluez5=${mesonBool bluezSupport}"
-      "-Dbluez5-backend-hsp-native=${mesonBool nativeHspSupport}"
-      "-Dbluez5-backend-hfp-native=${mesonBool nativeHfpSupport}"
-      "-Dbluez5-backend-ofono=${mesonBool ofonoSupport}"
-      "-Dbluez5-backend-hsphfpd=${mesonBool hsphfpdSupport}"
+      "-Dlibcamera=disabled"
+      "-Dgstreamer=${mesonEnable gstreamerSupport}"
+      "-Dffmpeg=${mesonEnable ffmpegSupport}"
+      "-Dbluez5=${mesonEnable bluezSupport}"
+      "-Dbluez5-backend-hsp-native=${mesonEnable nativeHspSupport}"
+      "-Dbluez5-backend-hfp-native=${mesonEnable nativeHfpSupport}"
+      "-Dbluez5-backend-ofono=${mesonEnable ofonoSupport}"
+      "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dpipewire_config_dir=/etc/pipewire"
     ];
 
@@ -146,29 +146,31 @@ let
       moveToOutput "bin/pipewire-pulse" "$pulse"
     '';
 
-    passthru.tests = {
-      installedTests = nixosTests.installed-tests.pipewire;
+    passthru = {
+      updateScript = ./update.sh;
+      tests = {
+        installedTests = nixosTests.installed-tests.pipewire;
 
-      # This ensures that all the paths used by the NixOS module are found.
-      test-paths = callPackage ./test-paths.nix {
-        paths-out = [
-          "share/alsa/alsa.conf.d/50-pipewire.conf"
-          "nix-support/etc/pipewire/client.conf.json"
-          "nix-support/etc/pipewire/client-rt.conf.json"
-          "nix-support/etc/pipewire/jack.conf.json"
-          "nix-support/etc/pipewire/pipewire.conf.json"
-          "nix-support/etc/pipewire/pipewire-pulse.conf.json"
-        ];
-        paths-out-media-session = [
-          "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
-          "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
-          "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
-          "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
-        ];
-        paths-lib = [
-          "lib/alsa-lib/libasound_module_pcm_pipewire.so"
-          "share/alsa-card-profile/mixer"
-        ];
+        # This ensures that all the paths used by the NixOS module are found.
+        test-paths = callPackage ./test-paths.nix {
+          paths-out = [
+            "share/alsa/alsa.conf.d/50-pipewire.conf"
+            "nix-support/etc/pipewire/client.conf.json"
+            "nix-support/etc/pipewire/jack.conf.json"
+            "nix-support/etc/pipewire/pipewire.conf.json"
+            "nix-support/etc/pipewire/pipewire-pulse.conf.json"
+          ];
+          paths-out-media-session = [
+            "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
+            "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
+          ];
+          paths-lib = [
+            "lib/alsa-lib/libasound_module_pcm_pipewire.so"
+            "share/alsa-card-profile/mixer"
+          ];
+        };
       };
     };
 

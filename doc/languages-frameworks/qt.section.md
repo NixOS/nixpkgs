@@ -103,7 +103,7 @@ supported Qt version.
 ### Example adding a Qt library {#qt-library-all-packages-nix}
 
 The following represents the contents of `qt5-packages.nix`.
-```
+```nix
 {
   # ...
 
@@ -133,7 +133,7 @@ to select the Qt 5 version used for the application.
 ### Example adding a Qt application {#qt-application-all-packages-nix}
 
 The following represents the contents of `qt5-packages.nix`.
-```
+```nix
 {
   # ...
 
@@ -144,7 +144,7 @@ The following represents the contents of `qt5-packages.nix`.
 ```
 
 The following represents the contents of `all-packages.nix`.
-```
+```nix
 {
   # ...
 

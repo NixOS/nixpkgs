@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub
+{ lib, stdenv, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -19,8 +18,8 @@ with lib;
 let
   majorVersion = "1";
   minorVersion = "5";
-  maintenanceVersion = "3";
-  src_sha256 = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
+  maintenanceVersion = "4";
+  src_sha256 = "1ba1v7hakgj95xvhyff0zcp0574qv6vailjl48wl1f8w5k54lsw2";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -28,19 +27,13 @@ stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-   src = fetchzip {
-     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-     sha256 = src_sha256;
-   };
+  src = fetchzip {
+    url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
+    sha256 = src_sha256;
+  };
 
   patches = [
-    ./use-system-utf8proc-julia-1.3.patch
-
-    # Julia recompiles a precompiled file if the mtime stored *in* the
-    # .ji file differs from the mtime of the .ji file.  This
-    # doesn't work in Nix because Nix changes the mtime of files in
-    # the Nix store to 1. So patch Julia to accept mtimes of 1.
-    ./allow_nix_mtime.patch
+    ./patches/1.5/use-system-utf8proc-julia-1.3.patch
   ];
 
   postPatch = ''
@@ -89,7 +82,7 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
+      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
       "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
@@ -129,6 +122,8 @@ stdenv.mkDerivation rec {
     sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,

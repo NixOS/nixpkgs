@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2021.1.0";
+  version = "2021.3.0";
   pname = "jupyter-repo2docker";
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e3e671407ef2a7f7695338dc6ce2ca9cc75683ffc7a543829cf119564aca802";
+    sha256 = "42e0cf67181bdd03b54dabde695befec0586ed68a4ec1240104e209997d776c4";
   };
 
   propagatedBuildInputs = [

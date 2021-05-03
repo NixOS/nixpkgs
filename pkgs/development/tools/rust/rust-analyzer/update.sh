@@ -8,24 +8,24 @@ nixpkgs=../../../../..
 
 # Update lsp
 
-rev=$(
+ver=$(
     curl -s "https://api.github.com/repos/$owner/$repo/releases" |
     jq 'map(select(.prerelease | not)) | .[0].tag_name' --raw-output
 )
-old_rev=$(sed -nE 's/.*\brev = "(.*)".*/\1/p' ./default.nix)
+old_ver=$(sed -nE 's/.*\bversion = "(.*)".*/\1/p' ./default.nix)
 if grep -q 'cargoSha256 = ""' ./default.nix; then
-    old_rev='broken'
+    old_ver='broken'
 fi
-if [[ "$rev" == "$old_rev" ]]; then
-    echo "Up to date: $rev"
+if [[ "$ver" == "$old_ver" ]]; then
+    echo "Up to date: $ver"
     exit
 fi
-echo "$old_rev -> $rev"
+echo "$old_ver -> $ver"
 
-sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$rev")
+sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$ver")
 # Clear cargoSha256 to avoid inconsistency.
-sed -e "s#rev = \".*\"#rev = \"$rev\"#" \
-    -e "s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
+sed -e "s#version = \".*\"#version = \"$ver\"#" \
+    -e "/fetchFromGitHub/,/}/ s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
     -e "s#cargoSha256 = \".*\"#cargoSha256 = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\"#" \
     --in-place ./default.nix
 node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"

@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, gnome-themes-extra, gtk-engine-murrine
-, accentColor ? "default" }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, gnome-themes-extra
+, gtk-engine-murrine
+, sassc
+, accentColor ? "default"
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "orchis";
-  version = "2021-01-22";
+  version = "2021-04-20";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "1m0wilvrscg2xnkp6a90j0iccxd8ywvfpza1345sc6xmml9gvjzc";
+    sha256 = "sha256-cCUmainVTqFztZGpL2z2Zj6zcE2SQBWrec6yNFUMo5M=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [ gtk3 sassc ];
 
   buildInputs = [ gnome-themes-extra ];
 

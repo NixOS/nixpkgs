@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.51.0";
+  version = "3.53.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "0k3c7gm16snc6dr9a3xgq14ajyqj4hxcrd6hk6jk5fsi9x51rgl2";
+    sha256 = "sha256-ZWh08ursVGcscvQepeoUnFAZfFDeXWdIu0HXIr/D93k=";
   };
 
   # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769

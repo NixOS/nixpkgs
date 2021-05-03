@@ -1,32 +1,35 @@
 { lib, buildPythonPackage
-, fetchPypi, isPy3k, linuxPackages
-, fastrlock, numpy, six, wheel, pytest, mock, setuptools
-, cudatoolkit, cudnn, nccl
+, fetchPypi, isPy3k, cython
+, fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
+, cudatoolkit, cudnn, cutensor, nccl
+, addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "8.4.0";
+  version = "8.5.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58d19af6b2e83388d4f0f6ca4226bae4b947920d2ca4951c2eddc8bc78abf66b";
+    sha256 = "fb3f8d3b3454beb249b9880502a45fe493c5a44efacc4c72914cbe1a5dbdf803";
   };
 
-  checkInputs = [
-    pytest
-    mock
+  preConfigure = ''
+    export CUDA_PATH=${cudatoolkit}
+  '';
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cython
   ];
 
-  preConfigure = ''
-      export CUDA_PATH=${cudatoolkit}
-  '';
+  LDFLAGS = "-L${cudatoolkit}/lib/stubs";
 
   propagatedBuildInputs = [
     cudatoolkit
     cudnn
-    linuxPackages.nvidia_x11
+    cutensor
     nccl
     fastrlock
     numpy
@@ -35,8 +38,20 @@ buildPythonPackage rec {
     wheel
   ];
 
-  # In python3, test was failed...
-  doCheck = !isPy3k;
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
+  # Won't work with the GPU, whose drivers won't be accessible from the build
+  # sandbox
+  doCheck = false;
+
+  postFixup = ''
+    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      addOpenGLRunpath "$lib"
+    done
+  '';
 
   enableParallelBuilding = true;
 

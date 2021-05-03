@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkg-config, python }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "hpx";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost hwloc gperftools ];
-  nativeBuildInputs = [ cmake pkg-config python ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
+
+  strictDeps = true;
 
   meta = {
     description = "C++ standard library for concurrency and parallelism";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
 , writeShellScript
 
 # for update.nix
@@ -30,17 +30,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.5.6";
+  version = "0.4.5.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0cz78pjw2bc3kl3ziip1nhhbq89crv315rf1my3zmmgd9xws7jr2";
+    sha256 = "0x7hhl0svfc4yh9xvq7kkzgmwjcw1ak9i0794wjg4biy2fmclzs4";
   };
 
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
     lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];

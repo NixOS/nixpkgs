@@ -27,6 +27,7 @@ let
     ver = version;
     tag = ver.gitTag;
     atLeast27 = lib.versionAtLeast ver.majMin "2.7";
+    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
@@ -50,7 +51,7 @@ let
       # - If you run:
       #     ruby -e "puts RbConfig::CONFIG['configure_args']"
       # - In:
-      #     $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+      #     $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
@@ -109,7 +110,9 @@ let
           (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny};
+          }).${ver.majMinTiny}
+          ++ op atLeast27 ./do-not-regenerate-revision.h.patch
+          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -121,16 +124,11 @@ let
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
+        '' + opString (!atLeast30) ''
           # Make the build reproducible for ruby <= 2.7
           # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
           sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
-
-        # Force the revision.h generation. Somehow `revision.tmp` is an empty
-        # file and because we don't add `git` to buildInputs, hence the check is
-        # always true.
-        # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
-        buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
 
         configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -149,6 +147,10 @@ let
 
         preConfigure = opString docSupport ''
           configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
+
+          # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
+          # it's not going to be used.
+          export HOME=$TMPDIR
         '';
 
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
@@ -175,7 +177,7 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
@@ -187,7 +189,7 @@ let
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.targetPlatform.system}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
           }
 
           addEnvHooks "$hostOffset" addGemPath
@@ -247,18 +249,26 @@ let
 
 in {
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "6" "";
+    version = rubyVersion "2" "6" "7" "";
     sha256 = {
-      src = "1492x795qzgp3zhpl580kd1sdp50n5hfsmpbfhdsq2rnxwyi8jrn";
-      git = "1jr9v99a7awssqmw7531afbx4a8i9x5yfqyffha545g7r4s7kj50";
+      src = "17m9qxalwhk95dw1qhgxbvr3kkcxs3h86yirfg5mwj35gy5pw8p4";
+      git = "08gvknanwdfsaj3lmcv1bdqjf9lldphzi7gmlv3cfa8ligx2vbap";
     };
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "2" "";
+    version = rubyVersion "2" "7" "3" "";
     sha256 = {
-      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
-      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
+      src = "0f2kwn98n9h9hy1fd547s7d0a7ga8jjm4nh294bwiwnq65gaj9c9";
+      git = "0vxg9w4dgpw2ig5snxmkahvzdp2yh71w8qm49g35d5hqdsql7yrx";
+    };
+  };
+
+  ruby_3_0 = generic {
+    version = rubyVersion "3" "0" "1" "";
+    sha256 = {
+      src = "09vpnxxcxc46qv40xbxr9xkdpbgb0imdy25l2vpsxxlr47djb61n";
+      git = "0vricyhnnczcbsgvz65pdhi9yx1i34zarbjlc5y5mcmj01y9r7ar";
     };
   };
 }

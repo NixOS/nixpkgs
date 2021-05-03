@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/qw3rtman/git-fire";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.swflint ];
   };
 }

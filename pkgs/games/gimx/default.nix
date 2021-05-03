@@ -5,8 +5,8 @@ let
   gimx-config = fetchFromGitHub {
     owner = "matlo";
     repo = "GIMX-configurations";
-    rev = "f31bba7d3be57519540be290cd69ba6a8dc4e4d4";
-    sha256 = "0wpxx2qxyiiblz2qrl5swg00ls1aq7i5vzlk0qlnqdq8ss8jssax";
+    rev = "c20300f24d32651d369e2b27614b62f4b856e4a0";
+    sha256 = "02wcjk8da188x7y0jf3p0arjdh9zbb0lla3fxdb28b1xyybfvx5p";
   };
 
 in stdenv.mkDerivation rec {
@@ -51,15 +51,19 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -r ./loader/firmware $out/share/firmware
     cp -r ${gimx-config}/Linux $out/share/config
-    patch ${gimx-config}/Linux/Dualshock4.xml ${./ds4.patch} -o $out/share/DS4_noff.xml
 
     makeWrapper $out/bin/gimx $out/bin/gimx-with-confs \
-      --set GIMXCONF $out/share
+      --set GIMXCONF $out/share/config
 
     makeWrapper $out/bin/gimx $out/bin/gimx-test-ds4 \
-      --set GIMXCONF $out/share \
+      --set GIMXCONF $out/share/config \
       --add-flags "--nograb" --add-flags "--curses" \
-      --add-flags "-p /dev/ttyUSB0" --add-flags "-c DS4_noff.xml"
+      --add-flags "-p /dev/ttyUSB0" --add-flags "-c Dualshock4.xml"
+
+    makeWrapper $out/bin/gimx $out/bin/gimx-test-xone \
+      --set GIMXCONF $out/share/config \
+      --add-flags "--nograb" --add-flags "--curses" \
+      --add-flags "-p /dev/ttyUSB0" --add-flags "-c XOnePadUsb.xml"
   '';
 
   meta = with lib; {

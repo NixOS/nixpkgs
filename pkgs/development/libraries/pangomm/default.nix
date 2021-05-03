@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, pango, glibmm, cairomm, gnome3
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome3
 , ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.42.1";
+  version= "2.42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03zli5amizhv9bfklwfq7xyf0b5dagchx1lnz9f0v1rhk69h9gql";
+    sha256 = "sha256-GyTJJiSuEnXMtXdYF10198Oa0zQtjAtLpg8NmEnS0Io=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optional stdenv.isDarwin [
     ApplicationServices
   ];
   propagatedBuildInputs = [ pango glibmm cairomm ];

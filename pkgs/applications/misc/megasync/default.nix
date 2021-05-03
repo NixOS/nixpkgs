@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoconf
 , automake
 , c-ares
@@ -6,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
 , libmediainfo
 , libraw
 , libsodium
@@ -24,36 +25,42 @@
 , unzip
 , wget
 }:
-
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.5.0";
+  version = "4.4.0.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
+    sha256 = "1xggca7283943070mmpsfhh7c9avy809h0kgmf7497f4ca5zkg2y";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkg-config qttools swig ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    doxygen
+    libtool
+    lsb-release
+    pkg-config
+    qttools
+    swig
+    unzip
+  ];
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    ffmpeg
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     qtbase
     qtx11extras
     sqlite
-    unzip
     wget
   ];
 
@@ -66,7 +73,7 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
+    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
   '';

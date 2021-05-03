@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "parany";
   version = "8.0.0";
 
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo   = pname;

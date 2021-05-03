@@ -3,7 +3,7 @@
   multimediaSupport ? true
 }:
 let
-  version = "2.1.5";
+  version = "2.2.4";
 in
 stdenv.mkDerivation {
   pname = "notcurses";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner  = "dankamongmen";
     repo   = "notcurses";
     rev    = "v${version}";
-    sha256 = "02x9a0z7mbgry2wsfai1l3jwb2zpcg4gq6a2w5d920ap2fixzy8b";
+    sha256 = "sha256-FScs6eQxhRMEyPDSD+50RO1B6DIAo+KnvHP3RO2oAnw=";
   };
 
   meta = {

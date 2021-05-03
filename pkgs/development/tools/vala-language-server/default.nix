@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-language-server";
-  version = "0.48.1";
+  version = "0.48.2";
 
   src = fetchFromGitHub {
     owner = "benwaffle";
     repo = pname;
     rev = version;
-    sha256 = "12k095052jkvbiyz8gzkj6w7r7p16d5m18fyikl48yvh5nln8fw0";
+    sha256 = "sha256-vtb2l4su+zuwGbS9F+Sv0tDInQMH4Uw6GjT+s7fHIio=";
   };
 
   passthru = {

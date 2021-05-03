@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
+{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5
 , pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ lib.optional (!stdenv.isCygwin) kerberos;
+    ++ lib.optional (!stdenv.isCygwin) libkrb5;
 
   patches = [ ./scons.patch ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sconsFlags+=" OPENSSL=${openssl}"
     sconsFlags+=" ZLIB=${zlib}"
   '' + lib.optionalString (!stdenv.isCygwin) ''
-    sconsFlags+=" GSSAPI=${kerberos.dev}"
+    sconsFlags+=" GSSAPI=${libkrb5.dev}"
   '';
 
   enableParallelBuilding = true;

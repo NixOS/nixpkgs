@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.45.6";
+  version = "1.46.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-X2SsUKK2C45nxbOCuxN97Dk0QBcQPK/8OmFVRCTy1pM=";
+    sha256 = "sha256-958mtPZb3AWfyhLh7GowQMPOGlA/tw65Fb7nGQOBXNU=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -68,10 +68,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
-    license = licenses.gpl2;
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus # lib/ext2fs, lib/e2p
+      bsd3      # lib/uuid
+      mit       # lib/et, lib/ss
+    ];
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
-    # imager.c:70:2: error: unknown type name 'loff_t'; did you mean 'off_t'?
-    broken = stdenv.isDarwin;
   };
 }

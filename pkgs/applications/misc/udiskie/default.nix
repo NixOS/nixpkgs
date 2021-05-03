@@ -19,13 +19,13 @@
 
 buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-eucAFMzLf2RfMfVgFTfPAgVNpDADddvTUZQO/XbBhGo=";
+    hash = "sha256-OeNAcL7jd8GiPVUGxWwX4N/G/jzxfyifaoSD/hXXwyM=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +58,8 @@ buildPythonApplication rec {
   '';
 
   checkInputs = [
-    nose
     keyutils
+    nose
   ];
 
   checkPhase = ''

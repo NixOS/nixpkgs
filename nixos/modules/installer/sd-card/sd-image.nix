@@ -126,6 +126,13 @@ in
       '';
     };
 
+    expandOnBoot = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to configure the sd image to expand it's partition on boot.
+      '';
+    };
   };
 
   config = {
@@ -215,7 +222,7 @@ in
       '';
     }) {};
 
-    boot.postBootCommands = ''
+    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
       # On the first boot do some maintenance tasks
       if [ -f /nix-path-registration ]; then
         set -euo pipefail

@@ -4,7 +4,7 @@
 , requests
 , adal
 , azure-common
-, futures
+, futures ? null
 , pathlib2
 , isPy3k
 }:

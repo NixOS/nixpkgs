@@ -1,12 +1,9 @@
 { fetchFromGitHub
-, autoconf-archive
-, autoreconfHook
 , cinnamon-desktop
 , colord
 , glib
 , gsettings-desktop-schemas
 , gtk3
-, intltool
 , lcms2
 , libcanberra-gtk3
 , libgnomekbd
@@ -29,11 +26,15 @@
 , tzdata
 , nss
 , libgudev
+, meson
+, ninja
+, dbus
+, dbus-glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "4.6.4";
+  version = "4.8.5";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
    #include "csd-power-proxy.h"
@@ -48,14 +49,15 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1xcjzjfwnzvkv9jiyw8adsjyhz92almzhyfwb91115774zgqnb7m";
+    hash = "sha256-PAWVTjGFs8yKXgNQ2ucDnEDS+n7bp2n3lhGl9gHXfdQ=";
   };
 
   patches = [
     ./csd-backlight-helper-fix.patch
+    ./use-sane-install-dir.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0"; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+  mesonFlags = [ "-Dc_args=-I${glib.dev}/include/gio-unix-2.0" ];
 
   buildInputs = [
     cinnamon-desktop
@@ -85,13 +87,14 @@ stdenv.mkDerivation rec {
     fontconfig
     nss
     libgudev
+    dbus
+    dbus-glib
   ];
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
+    meson
+    ninja
     wrapGAppsHook
-    intltool
     pkg-config
   ];
 

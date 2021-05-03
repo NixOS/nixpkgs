@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome3, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ dmd pkg-config which ];
+  nativeBuildInputs = [ ldc pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte

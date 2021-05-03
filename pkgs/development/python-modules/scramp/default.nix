@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.2.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
-    sha256 = "sha256-d/kfrhvU96eH8TQX7n1hVRclEFWLseEvOxiR6VaOdrg=";
+    sha256 = "sha256-aXuRIW/3qBzan8z3EzSSxqaZfa3WnPhlviNa2ugIjik=";
   };
 
   propagatedBuildInputs = [ asn1crypto ];

@@ -5,8 +5,7 @@ let
 in stdenv.mkDerivation {
   pname = "gogui";
   inherit version;
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
   src = fetchurl {
     url = "mirror://sourceforge/project/gogui/gogui/${version}/gogui-${version}.zip";
     sha256 = "0qk6p1bhi1816n638bg11ljyj6zxvm75jdf02aabzdmmd9slns1j";

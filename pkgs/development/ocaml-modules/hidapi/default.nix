@@ -1,10 +1,12 @@
-{ pkgs, lib, fetchurl, buildDunePackage, pkg-config
+{ pkgs, lib, fetchurl, buildDunePackage, pkg-config, dune-configurator
 , bigstring,
 }:
 
 buildDunePackage rec {
   pname = "hidapi";
   version = "1.1.1";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/vbmithr/ocaml-hidapi/releases/download/${version}/${pname}-${version}.tbz";
@@ -13,7 +15,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  buildInputs = [ pkgs.hidapi pkg-config ];
+  buildInputs = [ pkgs.hidapi pkg-config dune-configurator ];
   propagatedBuildInputs = [ bigstring ];
 
   doCheck = true;

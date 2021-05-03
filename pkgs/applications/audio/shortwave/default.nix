@@ -1,10 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitLab
-, cargo
 , dbus
 , desktop-file-utils
 , gdk-pixbuf
 , gettext
+, gitMinimal
 , glib
 , gst_all_1
 , gtk3
@@ -14,13 +15,12 @@
 , openssl
 , pkg-config
 , python3
-, rustc
 , rustPlatform
 , sqlite
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "shortwave";
   version = "1.1.1";
 
@@ -32,18 +32,24 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1vlhp2ss06j41simjrrjg38alp85jddhqyvccy6bhfzm0gzynwld";
   };
 
-  cargoSha256 = "181699rlpr5dszc18wg0kbss3gfskxaz9lpxpgsc4yfb6ip89qnk";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-0+KEbjTLecL0u/3S9FWf2r2h9ZrgcRTY163kS3NKJqA=";
+  };
 
   nativeBuildInputs = [
-    cargo
     desktop-file-utils
     gettext
+    gitMinimal
     glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
     python3
-    rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
   ];
 
@@ -61,12 +67,6 @@ rustPlatform.buildRustPackage rec {
     gst-plugins-good
     gst-plugins-bad
   ]);
-
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py

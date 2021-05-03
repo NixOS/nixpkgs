@@ -104,7 +104,7 @@ let
     ignoreCollisions = true;
   };
 
-  filterGutenprint = pkgs: filter (pkg: pkg.meta.isGutenprint or false == true) pkgs;
+  filterGutenprint = filter (pkg: pkg.meta.isGutenprint or false == true);
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 

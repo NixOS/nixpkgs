@@ -31,7 +31,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
+
+    # The build failure on Darwin will likely be solved after upgrading the
+    # macOS SDK in nixpkgs. Check the current SDK version in
+    # ../../../../os-specific/darwin/apple-sdk/default.nix to see if it has
+    # been updated to 10.13 or later. Once the requirements are met, building
+    # it should be straightforward as Homebrew was able to build it without
+    # patching.
+    broken = stdenv.isDarwin;
   };
 }

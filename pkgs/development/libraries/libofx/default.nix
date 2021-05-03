@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libofx";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gdLh5ZUciN4FCJwTCaJSKJ5RjXgNDXnDOUWkyTZwf2c=";
+    sha256 = "sha256-QIasZKwSD9YCidHCxT/HOThxE5HEQWD0I2/loDP6mlU=";
   };
 
   preConfigure = "./autogen.sh";

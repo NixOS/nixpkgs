@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
+{ lib, fetchFromGitHub, python2Packages, gnome2, keybinder }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   ver = "0.93";
   name = "dockbarx-${ver}";
 
@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace dockx_applets/volume-control.py         --replace /usr/share/             $out/share/
   '';
 
-  propagatedBuildInputs = (with pythonPackages; [ pygtk pyxdg dbus-python pillow xlib ])
+  propagatedBuildInputs = (with python2Packages; [ pygtk pyxdg dbus-python pillow xlib ])
     ++ (with gnome2; [ gnome_python gnome_python_desktop ])
     ++ [ keybinder ];
 

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "5.4.0";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4d3990df2d65961af8b41dacc242e600fdc8a65a2e155ed3d2fc18a5c209f20";
+    sha256 = "3b0c7b95e8d3dfb011bb42cb38f356fcf5d0630480462b59c4d0a112b8d90281";
   };
 
   LC_ALL = "en_US.UTF-8";

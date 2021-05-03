@@ -22,8 +22,6 @@ let
                      # their assertions too
                      (attrValues config.fileSystems);
 
-  prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
-
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
   coreFileSystemOpts = { name, config, ... }: {
@@ -240,6 +238,8 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+        swapOptions = sw: "defaults"
+          + optionalString (sw.priority != null) ",pri=${toString sw.priority}";
       in ''
         # This is a generated file.  Do not edit!
         #
@@ -262,7 +262,7 @@ in
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
-            "${sw.realDevice} none swap${prioOption sw.priority}\n"
+            "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
       '';
 

@@ -13,19 +13,29 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lr9804xyzbs72f9jbbzy1fjqxwrwpb4rp431wqialvms4251d8f";
+    hash = "sha256-AmgJpW7AGCSggbHp1fLO5yhXS9LIm7O77nQdDERJYAA=";
   };
 
-  patches = lib.optional stdenv.isDarwin (substituteAll {
-    src = ./force-objdump-on-darwin.patch;
-    objdump = "${binutils.bintools}/bin/objdump";
-  });
+  patches = [
+    # test/run use compgen to get environment variable names, but
+    # compgen isn't available in non-interactive bash.
+    ./env-instead-of-compgen.patch
+
+    # When building for Darwin, test/run uses dwarfdump, whereas on
+    # Linux it uses objdump. We don't have dwarfdump packaged for
+    # Darwin, so this patch updates the test to also use objdump on
+    # Darwin.
+    (substituteAll {
+      src = ./force-objdump-on-darwin.patch;
+      objdump = "${binutils.bintools}/bin/objdump";
+    })
+  ];
 
   nativeBuildInputs = [ asciidoc cmake perl ];
 
@@ -38,7 +48,7 @@ let ccache = stdenv.mkDerivation rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.modules)$'
+      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
     ''}
   '';
 

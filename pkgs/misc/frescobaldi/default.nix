@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "v${version}";
-    sha256 = "07hjlq29npasn2bsb3qrzr1gikyvcc85avx0sxybfih329bvjk03";
+    sha256 = "1p8f4vn2dpqndw1dylmg7wms6vi69zcfj544c908s4r8rrmbycyf";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -18,6 +18,12 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
+  # Needed because source is fetched from git
+  preBuild = ''
+    make -C i18n
+    make -C linux
+  '';
 
   # no tests in shipped with upstream
   doCheck = false;

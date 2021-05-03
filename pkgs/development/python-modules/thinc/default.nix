@@ -16,6 +16,7 @@
 , pathlib
 , plac
 , preshed
+, pydantic
 , srsly
 , tqdm
 , wasabi
@@ -23,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.4.5";
+  version = "8.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5743fde41706252ec6ce4737c68d3505f7e1cc3d4431174a17149838d594f8cb";
+    sha256 = "20f033b3d9fbd02389d8f828cebcd3a42aee3e17ed4c2d56c6d5163af83a9cee";
   };
 
   buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     preshed
     srsly
     tqdm
+    pydantic
     wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
@@ -61,11 +63,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace setup.cfg \
       --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
-      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
-      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+      --replace "pydantic>=1.7.1,<1.8.0" "pydantic~=1.7"
   '';
 
   checkPhase = ''

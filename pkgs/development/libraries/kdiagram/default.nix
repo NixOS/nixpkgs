@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "kdiagram";
-  version = "2.7.0";
+  version = "2.8.0";
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = pname;
     rev = "v${version}";
-    sha256 = "NSBNHPr8JzBn3y3ivhL0RjiXjDuPwZsTTOeI22pq3vc=";
+    sha256 = "sha256-Se131GZE12wqdfN/V4id1pphUvteSrmMaKZ0+lqg1z8=";
   };
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   propagatedBuildInputs = [ qtbase qtsvg ];

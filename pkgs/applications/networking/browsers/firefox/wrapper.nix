@@ -8,7 +8,7 @@
 , tridactyl-native
 , fx_cast_bridge
 , udev
-, kerberos
+, libkrb5
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
 }:
@@ -65,7 +65,7 @@ let
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
             ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
-            ++ lib.optional gssSupport kerberos
+            ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
@@ -115,8 +115,7 @@ let
                 };
               }
             ) {} extensions;
-          } //
-          {
+          } // lib.optionalAttrs usesNixExtensions {
             Extensions = {
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
@@ -258,13 +257,12 @@ let
 
         makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
-            --suffix LD_LIBRARY_PATH ':' "$libs" \
+            --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --prefix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString forceWayland ''

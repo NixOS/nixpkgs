@@ -86,7 +86,6 @@ let
                           else if targetPlatform.isWindows then "mcf"
                           else "single"}"
       "--enable-nls"
-      "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
@@ -177,6 +176,7 @@ let
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred

@@ -106,6 +106,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
     libdrm
+    libxkbcommon # paradox launcher
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
@@ -135,6 +136,13 @@ in buildFHSUserEnv rec {
     libbsd
     alsaLib
 
+    # Loop Hero
+    libidn2
+    libpsl
+    nghttp2.lib
+    openssl_1_1
+    rtmpdump
+
     # needed by getcap for vr startup
     libcap
 
@@ -143,10 +151,10 @@ in buildFHSUserEnv rec {
     vulkan-loader
     expat
     wayland
-    xlibs.libxcb
-    xlibs.libXdamage
-    xlibs.libxshmfence
-    xlibs.libXxf86vm
+    xorg.libxcb
+    xorg.libXdamage
+    xorg.libxshmfence
+    xorg.libXxf86vm
     llvm_11.lib
     libelf
   ] ++ (if (!nativeOnly) then [
@@ -201,11 +209,9 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
-    openssl
     libidn
     tbb
     wayland
-    libxkbcommon
 
     # Other things from runtime
     flac

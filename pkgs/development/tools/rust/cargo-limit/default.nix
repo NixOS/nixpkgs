@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-limit";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "alopatindev";
     repo = "cargo-limit";
     rev = version;
-    sha256 = "sha256-8HsYhWYeRhCPTxVnU8hOJKLXvza8i9KvKTLL6yLo0+c=";
+    sha256 = "sha256-OHBxQcXhZkJ1F6xLc7/sPpJhJzuJXb91IUjAtyC3XP8=";
   };
 
-  cargoSha256 = "sha256-8uA4oFExrzDMeMV5MacbtE0Awdfx+jUUkrKd7ushOHo=";
+  cargoSha256 = "sha256-LxqxRtMKUKZeuvk1caoYy8rv1bkEOQBM8i5SXMF4GXc=";
 
   passthru = {
     updateScript = nix-update-script {

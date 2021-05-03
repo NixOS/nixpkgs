@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tre-command";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "dduan";
     repo = "tre";
     rev = "v${version}";
-    sha256 = "0syvhpnw9c5csxv8c4gdfwif9a9vl4rjkwj4mfglgxk227k1y53q";
+    sha256 = "1r84xzv3p0ml3wac2j7j5fkm7i93v2xvadb8f8al5wi57q39irj7";
   };
 
-  cargoSha256 = "056wlxz8hzky8315rnn65nh7dd2yhx5323y3hq64g6aqj52vd734";
+  cargoSha256 = "1nbfgz7njc10b0abs6zwi6wzhlwllps3wah6abc1mj5yhrzwccmh";
 
   nativeBuildInputs = [ installShellFiles ];
 

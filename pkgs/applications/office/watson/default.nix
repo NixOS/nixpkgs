@@ -4,26 +4,22 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "watson";
-  version = "1.10.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "TailorDev";
     repo = "Watson";
     rev = version;
-    sha256 = "1s0k86ldqky6avwjaxkw1y02wyf59qwqldcahy3lhjn1b5dgsb3s";
+    sha256 = "1yxqjirv7cpg4hqj4l3a53p3p3kl82bcx6drgvl9v849vcc3l7s0";
   };
-
-  checkPhase = ''
-    pytest -vs tests
-  '';
 
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
   '';
 
-  checkInputs = [ py pytest pytest-datafiles pytest-mock pytestrunner ];
-  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
+  checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
+  propagatedBuildInputs = [ arrow_1 click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {

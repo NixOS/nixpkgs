@@ -17,10 +17,7 @@ stdenv.mkDerivation rec {
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
   configureFlags = [
-    ("--with-pcap=" + {
-      linux = "linux";
-      darwin = "bpf";
-    }.${stdenv.hostPlatform.parsed.kernel.name})
+    "--with-pcap=${if stdenv.isLinux then "linux" else "bpf"}"
   ] ++ optionals stdenv.isDarwin [
     "--disable-universal"
   ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)

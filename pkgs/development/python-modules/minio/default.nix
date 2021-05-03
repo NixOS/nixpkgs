@@ -8,16 +8,17 @@
 , pytz
 , pytestCheckHook
 , urllib3
+, certifi
 }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "6.0.2";
+  version = "7.0.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acae9bfae0aec1b92025bd63e18135ebb4994c84600716c5323e14cb0c9a0b03";
+    sha256 = "f2f6022cfe4694d946972efef2a752f87d08cc030940faa50a640088772953c8";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     urllib3
+    certifi
   ];
 
   checkInputs = [ faker mock nose pytestCheckHook ];

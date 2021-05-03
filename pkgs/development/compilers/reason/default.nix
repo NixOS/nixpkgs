@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.6.2";
+  pname = "ocaml${ocaml.version}-reason";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "6017d6dd930f4989177c3f7c3c20cffbaabaa49a";
-    sha256 = "17wkcl3r0ckhlki9fk0mcwbnd7kpkqm1h0xjw2j2x1097n470df0";
+    rev = "daa11255cb4716ce1c370925251021bd6e3bd974";
+    sha256 = "0m6ldrci1a4j0qv1cbwh770zni3al8qxsphl353rv19f6rblplhs";
   };
 
   nativeBuildInputs = [ makeWrapper ];

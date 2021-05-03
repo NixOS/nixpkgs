@@ -1,17 +1,23 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, makeWrapper, substituteAll }:
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "bpytop";
-  version = "1.0.63";
+  version = "1.0.64";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5KTqiPqYBDI1KFQ+2WN7QZFL/YSb+MPPWbKzJTUa8Zw=";
+    sha256 = "sha256-BwpMBPTWSrfmz7SHYa1+SZ79V2YZdIkZcOTLtlVlgr8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   propagatedBuildInputs = with python3Packages; [ python psutil ];
 
   dontBuild = true;

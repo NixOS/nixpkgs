@@ -45,7 +45,8 @@ let
         platforms = platforms.all;
       };
       phases = "unpackPhase patchPhase buildPhase installPhase";
-      buildInputs = [ bash coreutils unzip which zip ];
+      nativeBuildInputs = [ unzip ];
+      buildInputs = [ bash coreutils which zip ];
       patchPhase = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
            --replace /bin/bash bash \
@@ -86,7 +87,7 @@ let
         license = licenses.lgpl3;
         platforms = platforms.all;
       };
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
@@ -126,7 +127,7 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
@@ -155,7 +156,7 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
@@ -182,7 +183,7 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       phases = "unpackPhase patchPhase installPhase";
       sourceRoot = ".";
       prePatch = ''

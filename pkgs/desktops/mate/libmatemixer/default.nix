@@ -2,7 +2,8 @@
 , alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
- }:
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmatemixer";
@@ -23,10 +24,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

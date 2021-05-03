@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
-, pkgsBuildBuild
+, buildPackages
 , nixosTests
 , fuse # only needed for grub-mount
 , runtimeShell
@@ -35,7 +35,7 @@ let
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.04";
+  version = "2.06-rc1";
 
 in (
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
     rev = "${pname}-${version}";
-    sha256 = "02gly3xw88pj4zzqjniv1fxa1ilknbq1mdk30bj6qy8n44g90i8w";
+    sha256 = "1ngc960g4w91rg13l724v6nlj6fq1adxp6is2mrq4bnp7sm9mysa";
   };
 
   patches = [
@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
   '';
 
-  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake gettext ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake gettext freetype ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
@@ -105,9 +106,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-grub-mount" # dep of os-prober
-    "BUILD_CC=${pkgsBuildBuild.stdenv.cc}/bin/cc"
-  ]
-    ++ optional zfsSupport "--enable-libzfs"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # grub doesn't do cross-compilation as usual and tries to use unprefixed
+    # tools to target the host. Provide toolchain information explicitly for
+    # cross builds.
+    #
+    # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
+    "TARGET_CC=${stdenv.cc.targetPrefix}cc"
+    "TARGET_NM=${stdenv.cc.targetPrefix}nm"
+    "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
+  ] ++ optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
     ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
@@ -154,5 +164,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms = platforms.gnu ++ platforms.linux;
+
+    maintainers = [ maintainers.samueldr ];
   };
 })

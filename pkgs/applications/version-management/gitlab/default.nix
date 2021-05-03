@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace
+, fixup_yarn_lock, replace, file
 }:
 
 let
@@ -31,6 +31,10 @@ let
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
+        };
+        ruby-magic = x.ruby-magic // {
+          buildInputs = [ file ];
+          buildFlags = [ "--enable-system-libraries" ];
         };
       };
     groups = [
@@ -118,7 +122,19 @@ stdenv.mkDerivation {
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [
+    # Change hardcoded paths to the NixOS equivalent
+    ./remove-hardcoded-locations.patch
+
+    # Use the exactly 32 byte long version of db_key_base with
+    # aes-256-gcm, see
+    # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/53602
+    (fetchpatch {
+      name = "secrets_db_key_base_length.patch";
+      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/a5c78650441c31a522b18e30177c717ffdd7f401.patch";
+      sha256 = "1qcxr5f59slgzmpcbiwabdhpz1lxnq98yngg1xkyihk2zhv0g1my";
+    })
+  ];
 
   postPatch = ''
     ${lib.optionalString (!gitlabEnterprise) ''

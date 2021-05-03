@@ -2,7 +2,7 @@
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, shared-mime-info, haskellPackages, libhandy
+, shared-mime-info, libhandy
 }:
 
 let
@@ -13,14 +13,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitLab {
     owner  = "somas";
     repo   = pname;
     domain = "gitlab.gnome.org";
     rev    = "v${version}";
-    sha256 = "1ggrbbnhbnf6p3hs72dww3c9m1rvr4znggmvwcpj6i8v1a3kycnb";
+    sha256 = "1qzy3zhi18wf42m034s8kcmx9gl05j620x3hf6rnycq2fvy7g4gz";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
@@ -32,16 +32,12 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build build-aux/meson_post_install.py
-
-    # get rid of unused distributed dependencies
-    rm -r ${pname}/pylocales
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
       --prefix PATH : "${texlive}/bin"
-      --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';

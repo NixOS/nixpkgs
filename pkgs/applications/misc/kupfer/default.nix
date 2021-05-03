@@ -4,8 +4,11 @@
 , python3Packages
 , gobject-introspection
 , gtk3
+, itstool
 , libwnck3
 , keybinder3
+, desktop-file-utils
+, shared-mime-info
 , wrapGAppsHook
 , wafHook
 }:
@@ -14,19 +17,22 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "kupfer";
-  version = "319";
+  version = "321";
 
   format = "other";
 
   src = fetchurl {
-    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
-    sha256 = "0c9xjx13r8ckfr4az116bhxsd3pk78v04c3lz6lqhraak0rp4d92";
+    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.bz2";
+    sha256 = "0nagjp63gxkvsgzrpjk78cbqx9a7rbnjivj1avzb2fkhrlxa90c7";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
     gobject-introspection wafHook
+    itstool            # for help pages
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info   # for update-mime-info
   ];
   buildInputs = [ docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];

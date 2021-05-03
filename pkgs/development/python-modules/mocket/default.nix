@@ -1,10 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy3k
 , decorator
 , http-parser
-, importlib-metadata
-, python
 , python_magic
-, six
 , urllib3
 , pytestCheckHook
 , pytest-mock
@@ -13,15 +14,17 @@
 , redis
 , requests
 , sure
+, pook
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
   version = "3.9.40";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbe4349a0ed30ed0c5d04684dd5d98517f8d1e4585fe0da4832747e2f01f3c18";
+    sha256 = "061w3zqf4ir7hfj0vzl58lg8szsik1fxv126s32x03nk1sd39r6v";
   };
 
   propagatedBuildInputs = [
@@ -29,8 +32,7 @@ buildPythonPackage rec {
     http-parser
     python_magic
     urllib3
-    six
-  ] ++ lib.optionals (isPy27) [ six ];
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -40,13 +42,14 @@ buildPythonPackage rec {
     redis
     requests
     sure
+    pook
   ];
 
   pytestFlagsArray = [
-    "--ignore=tests/main/test_pook.py" # pook is not packaged
-    "--ignore=tests/main/test_redis.py" # requires a live redis instance
+    # Requires a live Redis instance
+    "--ignore=tests/main/test_redis.py"
   ] ++ lib.optionals (pythonOlder "3.8") [
-    # uses IsolatedAsyncioTestCase which is only available >= 3.8
+    # Uses IsolatedAsyncioTestCase which is only available >= 3.8
     "--ignore=tests/tests38/test_http_aiohttp.py"
   ];
 
@@ -61,6 +64,7 @@ buildPythonPackage rec {
     "test_truesendall_with_recording_https"
     "test_truesendall_after_mocket_session"
     "test_real_request_session"
+    "test_asyncio_record_replay"
   ];
 
   pythonImportsCheck = [ "mocket" ];

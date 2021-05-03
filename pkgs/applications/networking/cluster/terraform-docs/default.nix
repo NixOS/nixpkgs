@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "terraform-docs";
-  version = "0.11.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-x2YTd4ZnimTRkFWbwFp4qz6BymD6ESVxBy6YE+QqQ6k=";
+    sha256 = "sha256-zQFPuHxfFvfwPVV0vPeA+A6XCw2Vt4tY4S2JBGcqaBQ=";
   };
 
-  vendorSha256 = "sha256-drfhfY03Ao0fqleBdzbAnPsE4kVrJMcUbec0txaEIP0=";
+  vendorSha256 = "sha256-HO2E8i5A/2Xi7Pq+Mqb/2ogK1to8IvZjRuDXfzGvOXk=";
 
   subPackages = [ "." ];
 

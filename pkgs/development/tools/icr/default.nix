@@ -13,13 +13,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "icr";
-  version = "unstable-2020-10-06";
+  version = "unstable-2021-03-14";
 
   src = fetchFromGitHub {
     owner = "crystal-community";
     repo = "icr";
-    rev = "8c57cd7c1fdf8088cb05c1587bd6c40d244a8a80";
-    sha256 = "sha256-b0w6oG2npNgdi2ZowMlJy0iUxQWqb9+DiruQl7Ztb0E=";
+    rev = "b6b335f40aff4c2c07d21250949935e8259f7d1b";
+    sha256 = "sha256-Qoy37lCdHFnMAuuqyB9uT15/RLllksFyApYAGy+RmDs=";
   };
 
   shardsFile = ./shards.nix;

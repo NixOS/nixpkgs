@@ -1,13 +1,13 @@
 { lib, fetchzip }:
 let
-  version = "2.11";
+  version = "2.12";
 in
 fetchzip {
   name = "stix-two-${version}";
 
   url = "https://github.com/stipub/stixfonts/raw/v${version}/zipfiles/STIX${builtins.replaceStrings [ "." ] [ "_" ] version}-all.zip";
 
-  sha256 = "19ndavx5k85vm6wvq9603kynpgbfddbjiihivffvnbrxwf13h34n";
+  sha256 = "1a6v8p5zbjlv1gfhph0rzkvnmvxf4n1y0mdrdgng01yyl1nngrn9";
 
   postFetch = ''
     mkdir -p $out/share/fonts/

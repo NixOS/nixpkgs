@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1shfj67kq6qzd0ngyfk09hpzfggybcfxv5s7hqs87nq9l51bssv8";
+    sha256 = "11q3svns3a2ywfci739krxbh67cx691qja772wq22606blyygyjy";
   };
 
   nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
@@ -34,6 +34,10 @@ buildPythonPackage rec {
     tzlocal
   ];
 
+  checkPhase = ''
+    nosetests tests
+  '';
+
   # xandikos and radicale is only a optional test dependency, not available for python3
   postPatch = ''
     substituteInPlace setup.py \
@@ -45,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This project is a CalDAV (RFC4791) client library for Python.";
-    homepage = "https://pythonhosted.org/caldav/";
+    homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];
     #broken = true; # requires radicale which is not packaged yet

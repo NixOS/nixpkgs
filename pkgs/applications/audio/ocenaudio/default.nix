@@ -11,17 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.9.6";
+  version = "3.10.6";
 
   src = fetchurl {
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    sha256 = "07r49133kk99ya4grwby3admy892mkk9cfxz3wh0v81aznhpw4jg";
+    sha256 = "0fgvm1xw2kgrqj3w6slpfxbb3pw9k8i0dz16q9d5d8gyyvr2mh8g";
   };
-
 
   nativeBuildInputs = [
     autoPatchelfHook
     qt5.qtbase
+    qt5.wrapQtAppsHook
     libjack2
     libpulseaudio
     bzip2
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   dontBuild = true;
   dontStrip = true;
-  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out

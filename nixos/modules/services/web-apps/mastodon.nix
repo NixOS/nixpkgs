@@ -31,6 +31,8 @@ let
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
+  systemCallsList = [ "@clock" "@cpu-emulation" "@debug" "@keyring" "@module" "@mount" "@obsolete" "@raw-io" "@reboot" "@setuid" "@swap" ];
+
   cfgService = {
     # User and group
     User = cfg.user;
@@ -43,8 +45,31 @@ let
     LogsDirectoryMode = "0750";
     # Access write directories
     UMask = "0027";
+    # Capabilities
+    CapabilityBoundingSet = "";
+    # Security
+    NoNewPrivileges = true;
     # Sandboxing
+    ProtectSystem = "strict";
+    ProtectHome = true;
     PrivateTmp = true;
+    PrivateDevices = true;
+    PrivateUsers = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectControlGroups = true;
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+    RestrictNamespaces = true;
+    LockPersonality = true;
+    MemoryDenyWriteExecute = false;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    # System Call Filtering
+    SystemCallArchitectures = "native";
   };
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
@@ -408,6 +433,8 @@ in {
       serviceConfig = {
         Type = "oneshot";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
       } // cfgService;
 
       after = [ "network.target" ];
@@ -433,6 +460,8 @@ in {
         Type = "oneshot";
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
       } // cfgService;
       after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
       wantedBy = [ "multi-user.target" ];
@@ -457,6 +486,8 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-streaming";
         RuntimeDirectoryMode = "0750";
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@privileged" "@resources" ]);
       } // cfgService;
     };
 
@@ -479,6 +510,8 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
         RuntimeDirectoryMode = "0750";
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
@@ -498,6 +531,8 @@ in {
         RestartSec = 20;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
         WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = "~" + lib.concatStringsSep " " systemCallsList;
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };

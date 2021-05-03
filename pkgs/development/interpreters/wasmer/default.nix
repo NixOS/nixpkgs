@@ -8,25 +8,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "0.17.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = version;
-    sha256 = "05g4h0xkqd14wnmijiiwmhk6l909fjxr6a2zplrjfxk5bypdalpm";
+    sha256 = "0ciia8hhkkyh6rmrxgbk3bgwjwzkcba6645wlcm0vlgk2w4i5m3z";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1ssmgx9fjvkq7ycyzjanqmlm5b80akllq6qyv3mj0k5fvs659wcq";
+  cargoSha256 = "08r2b4s005w8r207jwq2fd43y3prgd8pg1m72aww1r7yrbxdr0v2";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  # Since wasmer 0.17 no backends are enabled by default. Backends are now detected
-  # using the [makefile](https://github.com/wasmerio/wasmer/blob/master/Makefile).
-  # Enabling cranelift as this used to be the old default. At least one backend is
-  # needed for the run subcommand to work.
-  cargoBuildFlags = [ "--features" "backend-cranelift" ];
+  cargoBuildFlags = [
+    # cranelift+jit works everywhere, see:
+    # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
+    "--features" "cranelift,jit"
+    # must target manifest and desired output bin, otherwise output is empty
+    "--manifest-path" "lib/cli/Cargo.toml"
+    "--bin" "wasmer"
+  ];
+
+  cargoTestFlags = [
+    "--features" "test-cranelift,test-jit"
+  ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 

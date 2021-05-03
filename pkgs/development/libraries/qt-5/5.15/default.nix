@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
+  lib, stdenv, fetchurl, fetchpatch, fetchgit, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -48,6 +48,42 @@ let
       };
       version = "5.212.0-alpha4";
     };
+
+    # Even if developed in the public, QtWebEngine does not have official
+    # releases or new tags since the Qt company made 5.15.3 proprietary.
+    # Apparently they care more about licensing than the security of their users.
+    # See https://lists.qt-project.org/pipermail/interest/2021-March/036387.html
+    qtwebengine =
+      let
+        branchName = "5.15.3";
+        rev = "a059e7404a6db799f4da0ad696e65ae9c854b4b0";
+      in
+      {
+        version = "${branchName}-${lib.substring 0 7 rev}";
+
+        src = fetchgit {
+          url = "https://github.com/qt/qtwebengine.git";
+          sha256 = "1vdgxfbmx4z4qrm2g61dl64gqn3fv5f83jwpp7h1gyfx5z2qvfmv";
+          inherit rev branchName;
+          fetchSubmodules = true;
+          leaveDotGit = true;
+          name = "qtwebengine-${substring 0 7 rev}.tar.gz";
+          postFetch = ''
+            # remove submodule .git directory
+            rm -rf $out/src/3rdparty/.git
+
+            # compress to not exceed the 2GB output limit
+            mv $out source
+            # try to make a deterministic tarball
+            tar -I 'gzip -n' \
+              --sort name \
+              --mtime 1970-01-01 \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              -cf $out source
+          '';
+        };
+      };
   };
 
   patches = {
@@ -83,11 +119,16 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ]
-      ++ optionals stdenv.isDarwin [
-        ./qtwebengine-darwin-no-platform-check.patch
-        ./qtwebengine-mac-dont-set-dsymutil-path.patch
-      ];
+    qtwebengine = [
+      # Fix crashes with non en_US.UTF-8 locales
+      (fetchpatch {
+        url = "https://github.com/qt/qtwebengine/commit/199ea00a9eea13315a652c62778738629185b059.patch";
+        sha256 = "1b5k2g1v8913cvsgvp6ja4mcprjlk5vcwqzi0p1qq7b1wyi4f0g2";
+      })
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebengine-darwin-no-platform-check.patch
+      ./qtwebengine-mac-dont-set-dsymutil-path.patch
+    ];
     qtwebkit = [
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
@@ -162,7 +203,9 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
-      qtwebengine = callPackage ../modules/qtwebengine.nix {};
+      qtwebengine = callPackage ../modules/qtwebengine.nix {
+        inherit (srcs.qtwebengine) version;
+      };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};

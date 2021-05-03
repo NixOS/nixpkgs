@@ -1,4 +1,4 @@
-sourcePerArch:
+{ sourcePerArch, knownVulnerabilities ? [] }:
 
 { stdenv
 , lib
@@ -107,6 +107,8 @@ let result = stdenv.mkDerivation rec {
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];
+    inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result

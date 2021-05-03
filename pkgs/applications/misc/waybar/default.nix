@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , pkg-config
 , ninja
@@ -28,25 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "1kzrgqaclfk6gcwhknxn28xl74gm5swipgn8kk8avacb4nsw1l9q";
+    sha256 = "17cn4d3dx92v40jd9vl41smp8hh3gf5chd1j2f7l1lrpfpnllg5x";
   };
-
-  patches = [
-    # XXX: REMOVE ON NEXT VERSION BUMP
-    # Fixes compatibility of the bluetooth and network modules with linux kernel
-    # >=5.11
-    # c.f. https://github.com/Alexays/Waybar/issues/994
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Alexays/Waybar/pull/1015.patch";
-      sha256 = "sha256-jQZEM3Yru2yxcXAzapU47DoAv4ZoabrV80dH42I2OFk=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config scdoc wrapGAppsHook cmake

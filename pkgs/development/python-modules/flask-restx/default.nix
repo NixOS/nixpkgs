@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.2.0";
+  version = "0.3.0";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
     rev = version;
-    sha256 = "0xf2vkmdngp9cv9klznizai4byxjcf0iqh1pr4b83nann0jxqwy7";
+    sha256 = "0aj13nd3z71gb8c2kqiaz3f9k7jr0srlvrsx8hpz4nkpki8jiz2s";
   };
 
   propagatedBuildInputs = [ aniso8601 jsonschema flask werkzeug pytz six ]
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://flask-restx.readthedocs.io/en/${version}/";
     description = "Fully featured framework for fast, easy and documented API development with Flask";
+    changelog = "https://github.com/python-restx/flask-restx/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

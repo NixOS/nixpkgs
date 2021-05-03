@@ -20,8 +20,8 @@ let
 
   aixlog = dependency {
     name    = "aixlog";
-    version = "1.4.0";
-    sha256  = "0f2bs5j1jjajcpa251dslnwkgglaam3b0cm6wdx5l7mbwvnmib2g";
+    version = "1.5.0";
+    sha256  = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
   };
 
   popl = dependency {
@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "0183hhghzn0fhw2qzc1s009q7miabpcf0pxaqjdscsl8iivxqknd";
+    sha256 = "13yz8alplnqwkcns3mcli01qbyy6l3h62xx0v71ygcrz371l4g9g";
   };
 
   nativeBuildInputs = [ cmake pkg-config boost170.dev ];
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

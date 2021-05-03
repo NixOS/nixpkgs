@@ -41,11 +41,15 @@ with pkgs;
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
 
+  vim = callPackage ./vim {};
+
   nixos-functions = callPackage ./nixos-functions {};
 
   patch-shebangs = callPackage ./patch-shebangs {};
 
   texlive = callPackage ./texlive {};
+
+  cuda = callPackage ./cuda { };
 
   writers = callPackage ../build-support/writers/test.nix {};
 }

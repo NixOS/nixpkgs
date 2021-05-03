@@ -1,7 +1,7 @@
-{ lib, appleDerivation, yacc, flex }:
+{ lib, stdenv, appleDerivation, bison, flex }:
 
 appleDerivation {
-  nativeBuildInputs = [ yacc flex ];
+  nativeBuildInputs = [ bison flex ];
 
   buildPhase = ''
     cd migcom.tproj
@@ -26,7 +26,7 @@ appleDerivation {
     cp migcom.1 $out/share/man/man1
 
     substituteInPlace $out/bin/mig \
-      --replace 'arch=`/usr/bin/arch`' 'arch=i386' \
+      --replace 'arch=`/usr/bin/arch`' 'arch=${stdenv.targetPlatform.darwinArch}' \
       --replace '/usr/bin/' "" \
       --replace '/bin/rmdir' "rmdir" \
       --replace 'C=''${MIGCC}' "C=cc"

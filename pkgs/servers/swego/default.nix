@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "swego";
-  version = "0.92";
+  version = "0.94";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     rev = "v${version}";
-    sha256 = "sha256-SiB0Z6Eqbn/6VGDTt5bQtgcT4V4AjRIIYYk98EW7ss4=";
+    sha256 = "sha256-PquedlfBzNSXa3l6IIHlf6Xb4M4uEb1XCKRfN229IEA=";
   };
 
-  vendorSha256 = "sha256-EPcyhnTis7g0uVl+cJdG7iMbisjh7iuMhpzM/SSOeFI=";
+  vendorSha256 = "sha256-TK1LN9EmVH95jPO6K7gtCwdnW4WOKH3K7Q0FhgNMVUQ=";
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname

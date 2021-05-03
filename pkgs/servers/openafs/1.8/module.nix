@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, which, autoconf, automake, flex, yacc
-, kernel, glibc, perl, libtool_2, kerberos, fetchpatch }:
+{ lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
+, kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
 
 with (import ./srcs.nix {
   inherit fetchurl;
@@ -13,10 +13,10 @@ in stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
+  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;
 
-  buildInputs = [ kerberos ];
+  buildInputs = [ libkrb5 ];
 
   patches = [
     # LINUX 5.8: Replace kernel_setsockopt with new funcs
@@ -91,5 +91,4 @@ in stdenv.mkDerivation {
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
     broken = versionOlder kernel.version "3.18" || kernel.isHardened;
   };
-
 }

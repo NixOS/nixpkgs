@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "php-cs-fixer";
-  version = "2.18.2";
+  version = "2.18.4";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-451be1O/y92ib5hZNVbf8iCkD+e9DoK47Z7IkMnwuo0=";
+    sha256 = "sha256-ZgnWv7Xd+0XgZ/IPdjVpAEraNNJq2KHB3aUUIG1SirU=";
   };
 
   phases = [ "installPhase" ];

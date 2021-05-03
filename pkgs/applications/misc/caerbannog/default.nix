@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromSourcehut
 , python3
 , glib
 , gobject-introspection
@@ -18,8 +18,9 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.3";
   format = "other";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~craftyguy/caerbannog";
+  src = fetchFromSourcehut {
+    owner = "~craftyguy";
+    repo = "caerbannog";
     rev = version;
     sha256 = "0wqkb9zcllxm3fdsr5lphknkzy8r1cr80f84q200hbi99qql1dxh";
   };

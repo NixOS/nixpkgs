@@ -27,6 +27,15 @@ stdenv.mkDerivation rec {
     sha256 = "0wy1hb3kz3k4gqqwx308n37cqag2d017jwfz0b5s30nkx2pbwspw";
   };
 
+  patches = [
+    # Fixes https://github.com/dino/dino/issues/1010 (double' is not a supported generic type argument)
+    (fetchpatch {
+      name = "dino-vala-boxing.patch";
+      url = "https://github.com/dino/dino/commit/9acb54df9254609f2fe4de83c9047d408412de28.patch";
+      sha256 = "1jz4r7d8b1ljwgq846wihp864b6gjdkgh6fnmxh13b2i10x52xsm";
+    })
+  ];
+
   nativeBuildInputs = [
     vala
     cmake

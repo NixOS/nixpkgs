@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, glib, dbus-glib, pkg-config, libxslt }:
+{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, python2, glib, dbus-glib, pkg-config, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jgrp32p6rllj089ynbsk3n9xrvsvzmwzhf0ql05kkgj0nf08xiy";
   };
 
-  buildInputs = [ glib telepathy-glib dbus-glib pidgin telepathy-glib.python ];
+  buildInputs = [ glib telepathy-glib dbus-glib pidgin python2 ];
 
   nativeBuildInputs = [ pkg-config libxslt ];
 

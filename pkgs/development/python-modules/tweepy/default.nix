@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfd19a5c11f35f7f199c795f99d9cbf8a52eb33f0ecfb6c91ee10b601180f604";
+    sha256 = "76e6954b806ca470dda877f57db8792fff06a0beba0ed43efc3805771e39f06a";
   };
 
   doCheck = false;

@@ -10,7 +10,7 @@
 , readline
 , guiSupport ? false, tcl, tcllib, tk
 , miSupport ? true, json_c
-, nbdSupport ? true, libnbd
+, nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
 , dejagnu
 }:
@@ -19,11 +19,11 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-3pMLhwDAdys8LNDQyjX1D9PXe9+CxiUetRa0noyiWwo=";
+    hash = "sha256-9hz42ltkwBoTWTc3JarRyiV/NcHJJp5NUN0GZBg932I=";
   };
 
   postPatch = ''
@@ -68,6 +68,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres metadark ];
     platforms = platforms.unix;
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${version}";
   };
 }
 

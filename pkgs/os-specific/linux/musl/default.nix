@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0jz8fzwgvfyjgxjbpw35ixdglp2apqjvp8m386f6yr4zacc6xbv8";
+    url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "1p8r6bac64y98ln0wzmnixysckq3crca69ys7p16sy9d04i975lv";
   };
 
   enableParallelBuilding = true;
@@ -66,12 +66,6 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
-    })
-    # wcsnrtombs destination buffer overflow, remove >= 1.2.2
-    (fetchurl {
-      name = "CVE-2020-28928.patch";
-      url = "https://www.openwall.com/lists/oss-security/2020/11/20/4/1";
-      sha256 = "077n2p165504nz9di6n8y5421591r3lsbcxgih8z26l6mvkhcs2h";
     })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
@@ -149,7 +143,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "http://www.musl-libc.org";
+    homepage    = "https://musl.libc.org/";
+    changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];

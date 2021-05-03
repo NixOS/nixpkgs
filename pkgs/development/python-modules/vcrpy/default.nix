@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, isPy27
 , six
 , fetchPypi
 , pyyaml
@@ -16,6 +17,8 @@
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "4.1.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -27,7 +27,10 @@
 , sha256
 , passthruFun
 , static ? false
-, enableOptimizations ? (!stdenv.isDarwin)
+, stripBytecode ? reproducibleBuild
+, rebuildBytecode ? true
+, reproducibleBuild ? true
+, enableOptimizations ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -36,11 +39,25 @@ assert x11Support -> tcl != null
                   && xlibsWrapper != null
                   && libX11 != null;
 
+assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
+  "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
+
+assert lib.assertMsg (reproducibleBuild -> stripBytecode)
+  "Deterministic builds require stripping bytecode.";
+
+assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
+  "Deterministic builds are not achieved when optimizations are enabled.";
+
+
 with lib;
 
 let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
+
+  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+    "$out/bin/python"
+  else pythonForBuild.interpreter;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -105,6 +122,14 @@ let
       ./CVE-2019-20907.patch
 
       ./CVE-2021-3177.patch
+
+      ./CVE-2021-23336.patch
+
+      # The workaround is for unittests on Win64, which we don't support.
+      # It does break aarch64-darwin, which we do support. See:
+      # * https://bugs.python.org/issue35523
+      # * https://github.com/python/cpython/commit/e6b247c8e524
+      ../3.7/no-win64-workaround.patch
 
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
@@ -266,14 +291,15 @@ in with passthru; stdenv.mkDerivation ({
         # Determinism: Windows installers were not deterministic.
         # We're also not interested in building Windows installers.
         find "$out" -name 'wininst*.exe' | xargs -r rm -f
-      '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
-      ''
-        # Determinism: rebuild all bytecode
-        # We exclude lib2to3 because that's Python 2 code which fails
-        # We rebuild three times, once for each optimization level
-        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
+      '' + optionalString stripBytecode ''
+        # Determinism: deterministic bytecode
+        # First we delete all old bytecode.
+        find $out -name "*.pyc" -delete
+        '' + optionalString rebuildBytecode ''
+        # Then, we build for the two optimization levels.
+        # We do not build unoptimized bytecode, because its not entirely deterministic yet.
+        find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
       '' + optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';

@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.18.0";
+  version = "2.20.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-3qQKQePyLYwIS3yO3exHNd0uoPr7y4iZ12+GaiHfqz8=";
+    sha256 = "sha256-unG17oiqZZJNGg8QCg7xY0GzuMu2gaAIIgGF8TlMBQQ=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -137,6 +137,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     psutil
     requests
     scp
+    semver
     six
     sshtunnel
     urllib3
@@ -151,9 +152,9 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     argcomplete
   ];
 
-  # TODO: make shell completion actually work
-  # uses argcomplete, so completion needs PYTHONPATH to work
   postInstall = ''
+    substituteInPlace az.completion.sh \
+      --replace register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
     installShellCompletion --bash --name az.bash az.completion.sh
     installShellCompletion --zsh --name _az az.completion.sh
 

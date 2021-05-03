@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3 }:
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
   version = "unstable-2020-07-05";
 

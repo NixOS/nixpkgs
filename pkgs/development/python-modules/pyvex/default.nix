@@ -2,20 +2,20 @@
 , stdenv
 , archinfo
 , bitstring
-, fetchPypi
-, cffi
 , buildPythonPackage
+, cffi
+, fetchPypi
 , future
 , pycparser
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.0.5903";
+  version = "9.0.6885";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qhLlRlmb48zhjX2u9w6TVVv2gb0E9kSapabiv+u4J2s=";
+    sha256 = "sha256-cWQdrGKJyGieBow3TiMj/uB2crIF32Kvl5tVUKg/z+E=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,10 @@ buildPythonPackage rec {
     future
     pycparser
   ];
+
+  preBuild = ''
+    export CC=${stdenv.cc.targetPrefix}cc
+  '';
 
   # No tests are available on PyPI, GitHub release has tests
   # Switch to GitHub release after all angr parts are present

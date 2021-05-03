@@ -3,6 +3,7 @@
 , at-spi2-atk
 , atk
 , buildFHSUserEnv
+, cairo
 , dbus
 , fetchurl
 , fontconfig
@@ -67,6 +68,9 @@ let
       # This libjpeg library interferes with Chromium, so we will be using ours instead.
       rm $out/lib/vmware/libjpeg.*
 
+      # This library causes the program to core-dump occasionally. Use ours instead.
+      rm $out/lib/vmware/view/crtbora/libcairo.*
+
       # Force the default GTK theme (Adwaita) because Horizon is prone to
       # UI usability issues when using non-default themes, such as Adwaita-dark.
       makeWrapper "$out/bin/vmware-view" "$out/bin/vmware-view_wrapper" \
@@ -84,6 +88,7 @@ let
     targetPkgs = pkgs: [
       at-spi2-atk
       atk
+      cairo
       dbus
       fontconfig
       freetype

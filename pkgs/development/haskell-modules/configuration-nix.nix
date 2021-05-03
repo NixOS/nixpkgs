@@ -445,9 +445,7 @@ self: super: builtins.intersectAttrs super {
 
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-
-  # depends on 'hie' executable
-  lsp-test = dontCheck super.lsp-test;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -661,22 +659,26 @@ self: super: builtins.intersectAttrs super {
     let
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak (super.spago.override {
-        dhall = self.dhall_1_37_1;
-      });
+      spagoWithOverrides = doJailbreak super.spago;
 
-      # This defines the version of the purescript-docs-search release we are using.
-      # This is defined in the src/Spago/Prelude.hs file in the spago source.
-      docsSearchVersion = "v0.0.10";
-
-      docsSearchAppJsFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+      docsSearchApp_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
         sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
       };
 
-      purescriptDocsSearchFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+      docsSearchApp_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/docs-search-app.js";
+        sha256 = "17qngsdxfg96cka1cgrl3zdrpal8ll6vyhhnazqm4hwj16ywjm02";
+      };
+
+      purescriptDocsSearch_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/purescript-docs-search";
         sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
+      };
+
+      purescriptDocsSearch_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/purescript-docs-search";
+        sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -699,13 +701,19 @@ self: super: builtins.intersectAttrs super {
           # However, they are not actually available in the spago source, so they
           # need to fetched with nix and put in the correct place.
           # https://github.com/spacchetti/spago/issues/510
-          cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
-          cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+          cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+          cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+          cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+          cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
 
           # For some weird reason, on Darwin, the open(2) call to embed these files
           # requires write permissions. The easiest resolution is just to permit that
           # (doesn't cause any harm on other systems).
-          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
+          chmod u+w \
+            "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+            "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
       });
 
@@ -812,4 +820,10 @@ self: super: builtins.intersectAttrs super {
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
   hadolint = disableCabalFlag super.hadolint "static";
+
+  # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
+  doctest-driver-gen = dontCheck super.doctest-driver-gen;
+
+  # Tests access internet
+  prune-juice = dontCheck super.prune-juice;
 }

@@ -8,7 +8,13 @@
         }
       ],
       "actions": {
-        "update-props": {}
+        "update-props": {
+          "bluez5.auto-connect": [
+            "hfp_hf",
+            "hsp_hs",
+            "a2dp_sink"
+          ]
+        }
       }
     },
     {

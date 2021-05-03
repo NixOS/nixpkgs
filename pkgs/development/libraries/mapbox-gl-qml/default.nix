@@ -1,22 +1,31 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtlocation, mapbox-gl-native }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, curl
+, qtbase
+, qtlocation
+, mapbox-gl-native
+}:
 
 mkDerivation rec {
   pname = "mapbox-gl-qml";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "mapbox-gl-qml";
     rev = version;
-    sha256 = "1izwkfqn8jl83vihcxl2b159sqmkn1amxf92zw0h6psls2g9xhwx";
+    sha256 = "sha256-E6Pkr8khzDbhmJxzK943+H6cDREgwAqMnJQ3hQWU7fw=";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtlocation mapbox-gl-native ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ curl qtlocation mapbox-gl-native ];
 
   postPatch = ''
-    substituteInPlace mapbox-gl-qml.pro \
-      --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
+    substituteInPlace src/CMakeLists.txt \
+      --replace ' ''${QT_INSTALL_QML}' " $out/${qtbase.qtQmlPrefix}"
   '';
 
   # Package expects qt5 subdirectory of mapbox-gl-native to be in the include path
@@ -26,7 +35,7 @@ mkDerivation rec {
     description = "Unofficial Mapbox GL Native bindings for Qt QML";
     homepage = "https://github.com/rinigus/mapbox-gl-qml";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.Thra11 ];
+    maintainers = with maintainers; [ Thra11 dotlambda ];
     platforms = platforms.linux;
   };
 }

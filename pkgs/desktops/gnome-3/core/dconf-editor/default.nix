@@ -1,15 +1,13 @@
 { lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkg-config, glib, gtk3, gnome3, python3, dconf
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
-let
+stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "3.38.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1d1y33c6fm86xz9xbh3bfz4y2pyas01a58lmirmdx0lh6yd292bd";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ElPa2H5iE/vzE/+eydxDWKobECYfKAcsHcDgmXuS+DU=";
   };
 
   nativeBuildInputs = [

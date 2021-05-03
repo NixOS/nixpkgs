@@ -23,7 +23,7 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages_7) llvm;
+    inherit (pkgs.llvmPackages_7) llvm clang-unwrapped;
   };
 
   binutils = pkgs.wrapBintoolsWith {

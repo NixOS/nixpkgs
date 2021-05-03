@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -45,13 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "5.0.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1zs13bivxlgcb24lz1pgmgy2chcjxnmn4lz7g1n0ygiaaj4c30xj";
+    sha256 = "1dicvq17vajk3vr4g1y80599ahkw0dp5ynlany1cfljfjz40s8sx";
   };
 
   nativeBuildInputs = [
@@ -87,6 +88,15 @@ in stdenv.mkDerivation rec {
     zita-convolver
   ];
 
+  patches = [
+    (fetchpatch {
+      # Fix build failure.
+      # https://github.com/wwmm/pulseeffects/pull/934
+      url = "https://github.com/wwmm/pulseeffects/commit/ab7354a6850d23840b4c9af212dbebf4f31a562f.patch";
+      sha256 = "1hd05xn6sp0xs632mqgwk19hl40kh2f69mx5mgzahysrj057w22c";
+    })
+  ];
+
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
@@ -103,6 +113,8 @@ in stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/86131
   BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
+
+  separateDebugInfo = true;
 
   meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";

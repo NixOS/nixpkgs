@@ -1,5 +1,5 @@
 { lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
-, libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
+, libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison, runtimeShell
 , pam ? null, glibcCross ? null
 }:
 
@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
       # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
       ./respect-xml-catalog-files-var.patch
       dots_in_usernames
+      ./runtime-shell.patch
     ];
+
+  RUNTIME_SHELL = runtimeShell;
 
   # The nix daemon often forbids even creating set[ug]id files.
   postPatch =
@@ -76,6 +79,8 @@ stdenv.mkDerivation rec {
       mkdir -p $su/bin
       mv $out/bin/su $su/bin
     '';
+
+  disallowedReferences = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.shellPackage;
 
   meta = with lib; {
     homepage = "https://github.com/shadow-maint";

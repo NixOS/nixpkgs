@@ -13,7 +13,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -33,6 +33,8 @@
 , nspr
 , nss
 , pango
+, pipewire
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -105,7 +107,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       mesa
       libX11
       libXScrnSaver
@@ -125,6 +127,8 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
+      pciutils
       libheimdal
       libpulseaudio
       systemd

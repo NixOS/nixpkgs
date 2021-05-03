@@ -2,19 +2,19 @@
 , ke, duff, decompress, cstruct, optint, bigstringaf, stdlib-shims
 , bigarray-compat, checkseum, logs, psq, fmt
 , result, rresult, fpath, base64, bos, digestif, mmap, alcotest
-, crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner
+, crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner, hxd
 }:
 
 buildDunePackage rec {
   pname = "carton";
-  version = "0.2.0";
+  version = "0.4.0";
 
   useDune2 = true;
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/${pname}-${pname}-v${version}.tbz";
-    sha256 = "0gfns4a9p9540kijccsg52yzyn3jfvi737mb0g71yazyc89dqwhn";
+    sha256 = "777f9692b83cd63570c17527a32c5045818ab9242d923cbbde72fc23d0da0140";
   };
 
   # remove changelogs for mimic and the git* packages
@@ -30,6 +30,7 @@ buildDunePackage rec {
     rresult
     fpath
     bos
+    hxd
   ];
   propagatedBuildInputs = [
     ke

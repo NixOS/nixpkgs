@@ -4,18 +4,19 @@
 , pkg-config
 , cmake
 
-, zlib
+, libdeflate
 , libjpeg
 , xz
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.0";
   pname = "libtiff";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
+    sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
   };
 
   cmakeFlags = if stdenv.isDarwin then [
@@ -35,7 +36,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+
+  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
 
   enableParallelBuilding = true;
 

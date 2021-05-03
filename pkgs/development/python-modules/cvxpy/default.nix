@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchPypi
@@ -8,19 +9,21 @@
 , osqp
 , scipy
 , scs
+, useOpenmp ? true
   # Check inputs
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.1.11";
+  version = "1.1.12";
+  format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W4qly+g07Q1iYJ76/tGZNkBPa+oavhTDUYRQ3cZ+s1I=";
+    hash = "sha256-tJnr+uT8ZF6VI2IVc//LHFtoVKG1wM4dZqippFhgWAc=";
   };
 
   propagatedBuildInputs = [
@@ -32,12 +35,20 @@ buildPythonPackage rec {
     scs
   ];
 
+  # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
+  preBuild = lib.optional useOpenmp ''
+    export CFLAGS="-fopenmp"
+    export LDFLAGS="-lgomp"
+  '';
+
   checkInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "./cvxpy" ];
   # Disable the slowest benchmarking tests, cuts test time in half
   disabledTests = [
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_ecos_bb_mi_lp_2" # https://github.com/cvxgrp/cvxpy/issues/1241#issuecomment-780912155
   ];
 
   meta = with lib; {

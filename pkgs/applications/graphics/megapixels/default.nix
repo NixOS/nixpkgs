@@ -1,16 +1,17 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
 , wrapGAppsHook
 , gtk3
 , gnome3
+, zbar
 , tiffSupport ? true
 , libraw
 , jpgSupport ? true
-, imagemagick
+, graphicsmagick
 , exiftool
 }:
 
@@ -20,24 +21,25 @@ let
   inherit (lib) makeBinPath optional optionals optionalString;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ imagemagick exiftool ]
+    ++ optionals jpgSupport [ graphicsmagick exiftool ]
   );
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.14.0";
+  version = "0.16.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~martijnbraam/megapixels";
+  src = fetchFromSourcehut {
+    owner = "~martijnbraam";
+    repo = "megapixels";
     rev = version;
-    sha256 = "136rv9sx0kgfkpqn5s90j7j4qhb8h04p14g5qhqshb89kmmsmxiw";
+    sha256 = "0z7sx76x18yqf7carq6mg9lib0zbz0yrd1dsg9qd6hbf5niqis37";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ]
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme zbar ]
   ++ optional tiffSupport libraw
-  ++ optional jpgSupport imagemagick;
+  ++ optional jpgSupport graphicsmagick;
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GTK3 camera application using raw v4l2 and media-requests";
     homepage = "https://sr.ht/~martijnbraam/Megapixels";
+    changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;

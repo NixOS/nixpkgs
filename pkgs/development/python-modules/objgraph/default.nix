@@ -3,7 +3,7 @@
 , fetchPypi
 , isPyPy
 , substituteAll
-, graphvizPkg
+, graphvizPkgs
 , graphviz
 , mock
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./hardcode-graphviz-path.patch;
-      graphviz = graphvizPkg;
+      graphviz = graphvizPkgs;
     })
   ];
 

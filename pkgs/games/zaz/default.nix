@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zaz";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "15q3kxzl71m50byw37dshfsx5wp240ywah19ccmqmqarcldcqcp3";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1r3bmwny05zzmdalxm5ah2rray0nnsg1w00r30p47q6x2lpwj8ml";
   };
 
   nativeBuildInputs = [

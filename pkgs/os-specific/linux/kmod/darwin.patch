@@ -121,3 +121,15 @@ index fd2028d..ecb0141 100644
  	if (!cwd)
  		return NULL;
  
+--- a/shared/util.h	2018-01-31 18:10:59.000000000 +0100
++++ b/shared/util.h	2020-12-28 19:48:21.000000000 +0100
+@@ -7,6 +7,9 @@
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#ifdef __APPLE__
++#include <libgen.h>
++#endif
+ 
+ #include <shared/macro.h>
+ 

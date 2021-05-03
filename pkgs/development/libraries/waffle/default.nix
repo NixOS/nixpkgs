@@ -1,36 +1,34 @@
 { stdenv
 , fetchFromGitLab
 , lib
+, cmake
 , meson
 , ninja
+, bash-completion
 , libGL
-, libglvnd ? null
+, libglvnd
 , makeWrapper
 , pkg-config
 , python3
-, x11Support ? true, libxcb ? null, libX11 ? null
-, waylandSupport ? true, wayland ? null
-, useGbm ? true, mesa ? null, libudev ? null
+, x11Support ? true, libxcb, libX11
+, waylandSupport ? true, wayland, wayland-protocols
+, useGbm ? true, mesa, udev
 }:
-
-assert x11Support -> (libxcb != null && libX11 != null);
-assert waylandSupport -> wayland != null;
-assert useGbm -> (mesa != null && libudev != null);
-assert with stdenv.hostPlatform; isUnix && !isDarwin -> libglvnd != null;
 
 stdenv.mkDerivation rec {
   pname = "waffle";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "waffle";
     rev = "v${version}";
-    sha256 = "0s8gislmhccfa04zsj1yqk97lscbbnmxirr2zm4q3p8ybmpfhpqr";
+    sha256 = "iY+dAgXutD/uDFocwd9QXjq502IOsk+3RQMA2S/CMV4=";
   };
 
   buildInputs = [
+    bash-completion
     libGL
   ] ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
     libglvnd
@@ -39,18 +37,24 @@ stdenv.mkDerivation rec {
     libxcb
   ] ++ lib.optionals waylandSupport [
     wayland
+    wayland-protocols
   ] ++ lib.optionals useGbm [
+    udev
     mesa
-    libudev
   ];
 
+  dontUseCmakeConfigure = true;
+
   nativeBuildInputs = [
+    cmake
+    makeWrapper
     meson
     ninja
-    makeWrapper
     pkg-config
     python3
   ];
+
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \

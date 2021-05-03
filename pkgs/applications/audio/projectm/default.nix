@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "projectm";
-  version = "3.1.11";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
     rev = "v${version}";
-    sha256 = "sha256-0aIaT+pzwPjI1nSo6C5SrHBXcrxIpSi6TFV2mgK5GvU=";
+    sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
   };
 
   nativeBuildInputs = [

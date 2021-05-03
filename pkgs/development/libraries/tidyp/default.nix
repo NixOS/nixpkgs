@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A program that can validate your HTML, as well as modify it to be more clean and standard";
     homepage = "http://tidyp.com/";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
     license = licenses.bsd3;
   };

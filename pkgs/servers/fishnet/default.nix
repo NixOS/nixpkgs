@@ -12,21 +12,23 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gif9wagm9bzq7j3biasqvzp9lfvmxqr5wagqqybmhbn8ipj20a8";
+    sha256 = "0dmc58wzv758b82pjpfzcfi0hr14hqcr61cd9v5xlgk5w78cisjq";
   };
 
-  cargoSha256 = "0hqyh0nzfrm7m34kqixrlbc7w8d0k7v6psw8jg6zpwpfcmhqq15j";
+  cargoSha256 = "08v969b0kvsg4dq3xsb159pr52a0vqr34g48j8nvq13979yq6d8p";
 
   preBuild = ''
     rmdir ./assets
     ln -snf ${assets}/${assets.relAssetsPath} ./assets
   '';
+
+  passthru.assets = assets;
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";

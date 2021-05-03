@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aioflo";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1ppsinmjph6snj7s4hg28p3qa67kpkadc98ikjjg6w65vcm3dlaz";
+    sha256 = "sha256-Dap3yjFIS+k/LLNg+vmYmiFQCOEPNp27p0GCMpn/edA=";
   };
 
   nativeBuildInputs = [ poetry-core ];

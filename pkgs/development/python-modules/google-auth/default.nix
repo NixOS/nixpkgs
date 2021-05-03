@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -13,18 +14,25 @@
 , responses
 , rsa
 , six
+, pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.24.0";
+  version = "1.28.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bmdqkyv8k8n6s8dss4zpbcq1cdxwicpb42kwybd02ia85mh43hb";
+    sha256 = "9bd436d19ab047001a1340720d2b629eb96dd503258c524921ec2af3ee88a80e";
   };
 
-  propagatedBuildInputs = [ pyasn1-modules cachetools rsa six ];
+  propagatedBuildInputs = [
+    cachetools
+    pyasn1-modules
+    rsa
+    six
+    pyopenssl
+  ];
 
   checkInputs = [
     flask
@@ -39,6 +47,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_request_with_timeout_success"
+    "test_request_with_timeout_failure"
+    "test_request_headers"
+    "test_request_error"
+    "test_request_basic"
   ];
 
   meta = with lib; {

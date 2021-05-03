@@ -131,10 +131,8 @@ rec {
                   "it's currently ${toString testNameLen} characters long.")
             else
               "nixos-test-driver-${name}";
-
-          warn = if skipLint then lib.warn "Linting is disabled!" else lib.id;
         in
-        warn (runCommand testDriverName
+        lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
           {
             buildInputs = [ makeWrapper ];
             testScript = testScript';

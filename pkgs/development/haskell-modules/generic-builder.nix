@@ -51,6 +51,7 @@ in
 , license
 , enableParallelBuilding ? true
 , maintainers ? null
+, changelog ? null
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
@@ -642,6 +643,7 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? description)    { inherit description; }
          // optionalAttrs (args ? maintainers)    { inherit maintainers; }
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
+         // optionalAttrs (args ? changelog)      { inherit changelog; }
          ;
 
 }

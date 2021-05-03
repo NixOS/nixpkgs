@@ -29,20 +29,20 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "125.1";
+  version = "126.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "0p05ndxhl3zgwm4k9cbqclp995kvcjxxhmbkmpjvv7cphiw82hvw";
+    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "1injdyxwgc9dn49zvr4qggsfrsslkvh5d53z3yv28ayx48qpsgxk";
+    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -114,7 +114,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0dk4w8h0kg0mgbn0ifmk29rw8aj917k3nf27qdf1lyr6wl8k7f8k";
+    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
   };
 
 in
@@ -191,6 +191,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin
+    # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
+      || true;
   };
 }

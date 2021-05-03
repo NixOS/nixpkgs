@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config
 , opencl-clhpp, ocl-icd, fftw, fftwFloat
 , blas, lapack, boost, mesa, libGLU, libGL
-, freeimage, python, clfft, clblas
+, freeimage, python3, clfft, clblas
 , doxygen, buildDocs ? false
 , cudaSupport ? false, cudatoolkit
 }:
@@ -39,8 +39,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    python
+    python3
   ];
+
+  strictDeps = true;
 
   buildInputs = [
     opencl-clhpp fftw fftwFloat

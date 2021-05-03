@@ -8,14 +8,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "16.0.0";
+  version = "17.0.0";
   pname = "azure-mgmt-storage";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "2f9d714d9722b1ef4bac6563676612e6e795c4e90f6f3cd323616fdadb0a99e5";
+    sha256 = "c0e3fd99028d98c80dddabe1c22dfeb3d694e5c1393c6de80766eb240739e4bc";
   };
 
   propagatedBuildInputs = [

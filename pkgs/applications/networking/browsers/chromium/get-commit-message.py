@@ -6,6 +6,8 @@
 import re
 import textwrap
 
+from collections import OrderedDict
+
 import feedparser
 import requests
 
@@ -30,6 +32,7 @@ for entry in feed.entries:
             fixes += " " + zero_days.group(0)
         print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))
     if cve_list := re.findall(r'CVE-[^: ]+', content):
+        cve_list = list(OrderedDict.fromkeys(cve_list))  # Remove duplicates but preserve the order
         cve_string = ' '.join(cve_list)
         print("\nCVEs:\n" + '\n'.join(textwrap.wrap(cve_string, width=72)))
     break  # We only care about the most recent stable channel update

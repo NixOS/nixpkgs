@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     JSON
     ImageExifTool
     librelative
-    LWPUserAgent
+    LWP
     LWPProtocolHttps
     MP3Info
     MP3Tag

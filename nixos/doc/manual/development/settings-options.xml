@@ -167,7 +167,7 @@ in {
 
     # We know that the `user` attribute exists because we set a default value
     # for it above, allowing us to use it without worries here
-    users.users.${cfg.settings.user} = {};
+    users.users.${cfg.settings.user} = { isSystemUser = true; };
 
     # ...
   };

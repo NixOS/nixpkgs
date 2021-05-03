@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, yacc, doxygen
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, bison, doxygen
 , xkeyboard_config, libxcb, libxml2
 , python3
 , libX11
@@ -8,20 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.0.3";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0lmwglj16anhpaq0h830xsl1ivknv75i4lir9bk88aq73s2jy852";
+    sha256 = "1cqzd4vd5jw3ghibmdqvy90mb1h8vvazc81bxgavk6sc0b9sfcz8";
   };
-
-  patches = [
-    ./fix-cross-compilation.patch
-  ];
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config yacc doxygen ]
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
     ++ lib.optional withWaylandSupport wayland;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandSupport [ wayland wayland-protocols ];

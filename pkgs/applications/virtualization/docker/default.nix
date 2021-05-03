@@ -13,7 +13,7 @@ rec {
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute, lvm2, systemd, docker-buildx
+      , sqlite, iproute2, lvm2, systemd, docker-buildx
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp
       , nixosTests
@@ -72,7 +72,7 @@ rec {
       nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
       buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
 
-      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
       buildPhase = ''
         export GOCACHE="$TMPDIR/go-cache"
@@ -105,6 +105,8 @@ rec {
 
         # systemd
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+        substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
+        install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
       '';
 
       DOCKER_BUILDTAGS = []
@@ -132,10 +134,10 @@ rec {
 
     goPackagePath = "github.com/docker/cli";
 
-    nativeBuildInputs = [ pkg-config go-md2man go libtool installShellFiles ];
-    buildInputs = [
-      makeWrapper
-    ] ++ optionals (stdenv.isLinux) [
+    nativeBuildInputs = [
+      makeWrapper pkg-config go-md2man go libtool installShellFiles
+    ];
+    buildInputs = optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 
@@ -178,6 +180,11 @@ rec {
     '' + optionalString (stdenv.isLinux) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+
+      # systemd
+      mkdir -p $out/etc/systemd/system
+      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '' + ''
       # completion (cli)
       installShellCompletion --bash ./contrib/completion/bash/docker

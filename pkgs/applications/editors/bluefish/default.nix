@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, intltool, wrapGAppsHook, pkg-config , gtk, libxml2
-, enchant, gucharmap, python, gnome3
+, enchant, gucharmap, python3, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkg-config wrapGAppsHook ];
   buildInputs = [ gnome3.adwaita-icon-theme gtk libxml2
-    enchant gucharmap python ];
+    enchant gucharmap python3 ];
 
   meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";

@@ -4,18 +4,18 @@
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
 , gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, nspr, nss, pango
+, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
 
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "14.4.3";
+  version = "14.5.1";
 
   src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    hash = "sha256-0wBjZg6IvjVTzAGeXTBBZjIN6s9NxKV0r76YK9h4fFk=";
+    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
+    hash = "sha256-ZrEoeeEhHQOLm/L3KA43Ru5fruIPK35CCUsllwpPB58=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +46,11 @@ stdenv.mkDerivation rec {
     libXi
     libXrandr
     libXrender
+    libxshmfence
     libXtst
     libxcb
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -r opt/draw.io $out/share/
+    cp -r opt/drawio $out/share/
 
     # Application icon
     mkdir -p $out/share/icons/hicolor
@@ -77,11 +79,11 @@ stdenv.mkDerivation rec {
 
     # Symlink wrapper
     mkdir -p $out/bin
-    ln -s $out/share/draw.io/drawio $out/bin/drawio
+    ln -s $out/share/drawio/drawio $out/bin/drawio
 
     # Update binary path
     substituteInPlace $out/share/applications/drawio.desktop \
-      --replace /opt/draw.io/drawio $out/bin/drawio
+      --replace /opt/drawio/drawio $out/bin/drawio
   '';
 
   meta = with lib; {

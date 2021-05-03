@@ -1,13 +1,23 @@
-{ lib, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
-, mkDerivation
+{ lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt5
+, gnuradio3_8Minimal
+, log4cpp
+, mpir
+, fftwFloat
+, alsaLib
+, libjack2
 # drivers (optional):
-, rtl-sdr, hackrf
+, rtl-sdr
+, hackrf
 , pulseaudioSupport ? true, libpulseaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-mkDerivation rec {
+gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
   version = "2.14.4";
 
@@ -18,9 +28,23 @@ mkDerivation rec {
     sha256 = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
   buildInputs = [
-    qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
+    log4cpp
+    mpir
+    fftwFloat
+    alsaLib
+    libjack2
+    gnuradio3_8Minimal.unwrapped.boost
+    qt5.qtbase
+    qt5.qtsvg
+    gnuradio3_8Minimal.pkgs.osmosdr
+    rtl-sdr
+    hackrf
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''

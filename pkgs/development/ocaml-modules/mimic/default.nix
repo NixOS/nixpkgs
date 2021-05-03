@@ -5,14 +5,14 @@
 
 buildDunePackage rec {
   pname = "mimic";
-  version = "0.0.1";
+  version = "0.0.2";
 
   minimumOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/${pname}-${pname}-v${version}.tbz";
-    sha256 = "0j4l99sgm5mdmv67vakkz2pw45l6i89bpza88xqkgmskfk50c5pk";
+    sha256 = "3ad5af3caa1120ecfdf022de41ba5be8edfbf50270fc99238b82d3d2d6e7c317";
   };
 
   # don't install changelogs for other packages
@@ -25,7 +25,6 @@ buildDunePackage rec {
     mirage-flow
     result
     rresult
-    cstruct
     logs
   ];
 
@@ -35,6 +34,7 @@ buildDunePackage rec {
     alcotest-lwt
     bigstringaf
     bigarray-compat
+    cstruct
     ke
   ];
 

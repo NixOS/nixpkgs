@@ -28,7 +28,7 @@ let
   unpack = id: (name: source:
     pkgs.stdenv.mkDerivation {
       name = "redmine-${id}-${name}";
-      buildInputs = [ pkgs.unzip ];
+      nativeBuildInputs = [ pkgs.unzip ];
       buildCommand = ''
         mkdir -p $out
         cd $out

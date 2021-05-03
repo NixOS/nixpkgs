@@ -19,8 +19,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = with stdenv.targetPlatform; !isRiscV &&
-                (system == "powerpc64-linux" -> parsed.abi.name != "elfv1");
+    useMusl = !stdenv.targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -225,15 +224,24 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
+  bootstrapTools =
+    let extraAttrs = lib.optionalAttrs
+      (config.contentAddressedByDefault or false)
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+    in
+    if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else throw "unsupported libc";
 

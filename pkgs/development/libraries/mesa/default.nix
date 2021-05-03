@@ -1,8 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
-, pkg-config, intltool, ninja, meson
-, file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
+, meson, pkg-config, ninja
+, intltool, bison, flex, file, python3Packages
+, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, python3Packages
+, libelf, libvdpau
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
@@ -31,11 +32,10 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.4";
+  version = "21.0.1";
   branch  = versions.major version;
-in
 
-stdenv.mkDerivation {
+self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1120kf280hg4h0a2505vxf6rdw8r2ydl3cg4iwkmpx0zxj3sj8fw";
+    sha256 = "1fqj2xhhd1ary0pfg31jq6fqcnd6qgyrw1445nmz554k8n2ck7rp";
   };
 
   prePatch = "patchShebangs .";
@@ -87,7 +87,9 @@ stdenv.mkDerivation {
       "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
-  outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
+  outputs = [ "out" "dev" "drivers" ]
+    ++ lib.optional enableOSMesa "osmesa"
+    ++ lib.optional stdenv.isLinux "driversdev";
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -113,7 +115,8 @@ stdenv.mkDerivation {
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
+    "-Dosmesa=${boolToString enableOSMesa}" # used by wine
+    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ];
@@ -130,7 +133,7 @@ stdenv.mkDerivation {
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkg-config meson ninja
+    meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
@@ -179,20 +182,22 @@ stdenv.mkDerivation {
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
-  # TODO:
-  #  check $out doesn't depend on llvm: builder failures are ignored
-  #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
-    # Update search path used by pkg-config
-    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      if [ -f "$pc" ]; then
-        substituteInPlace "$pc" --replace $out $drivers
+    # Move development files for libraries in $drivers to $driversdev
+    mkdir -p $driversdev/include
+    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
+    mkdir -p $driversdev/lib/pkgconfig
+    for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
+      if [ -f "$dev/$pc" ]; then
+        substituteInPlace "$dev/$pc" --replace $out $drivers
+        mv $dev/$pc $driversdev/$pc
       fi
     done
 
@@ -210,6 +215,14 @@ stdenv.mkDerivation {
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
+
+    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
+      name = "mesa-dev-does-not-depend-on-llvm";
+      buildCommand = ''
+        echo ${self.dev} >>$out
+      '';
+      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    };
   };
 
   meta = {
@@ -229,4 +242,6 @@ stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
-}
+};
+
+in self

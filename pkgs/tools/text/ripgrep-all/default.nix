@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg_3
+{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
 , pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
 }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 pandoc poppler_utils ripgrep imagemagick tesseract ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract ]}"
   '';
 
   # Use upstream's example data to run a couple of queries to ensure the dependencies
@@ -58,5 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/phiresky/ripgrep-all";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ zaninime ma27 ];
+    mainProgram = "rga";
   };
 }

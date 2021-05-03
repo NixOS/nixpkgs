@@ -2,16 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, setuptools-scm
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "singledispatch";
-  version = "3.4.0.3";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c";
+    sha256 = "58b46ce1cc4d43af0aac3ac9a047bdb0f44e05f0b2fa2eec755863331700c865";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
 
   propagatedBuildInputs = [ six ];
 

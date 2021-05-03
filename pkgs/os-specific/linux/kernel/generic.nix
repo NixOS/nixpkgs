@@ -46,7 +46,6 @@
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
-, isXen      ? features.xen_dom0 or false
 , isZen      ? false
 , isLibre    ? false
 , isHardened ? false
@@ -55,7 +54,7 @@
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
-
+, kernelTests ? []
 , ...
 }:
 
@@ -73,8 +72,6 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
-    grsecurity = false;
-    xen_dom0 = false;
     ia32Emulation = true;
   } // features) kernelPatches;
 
@@ -178,10 +175,12 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig isXen isZen isHardened isLibre;
+    inherit commonStructuredConfig isZen isHardened isLibre modDirVersion;
+    isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     kernelOlder = lib.versionOlder version;
     kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
+    tests = kernelTests;
   };
 
 in lib.extendDerivation true passthru kernel

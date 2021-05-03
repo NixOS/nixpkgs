@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTestFiles = [
+  disabledTestPaths = [
     # Exclude tests that require oslotest
     "tests/test_jsonpath_rw_ext.py"
   ];

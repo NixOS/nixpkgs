@@ -1,11 +1,11 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute
+, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute ];
+  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute2 ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome3.adwaita-icon-theme iproute libappindicator networkmanager ]
+                  gnome3.adwaita-icon-theme iproute2 libappindicator networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 

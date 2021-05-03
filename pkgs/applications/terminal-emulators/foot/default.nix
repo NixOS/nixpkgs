@@ -18,22 +18,28 @@
 , pkg-config
 , allowPgo ? true
 , python3  # for PGO
+# for clang stdenv check
+, foot
+, llvmPackages
+, llvmPackages_latest
 }:
 
 let
-  version = "1.6.4";
+  version = "1.7.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
   # and avoid unnecessary rebuilds as it can take relatively long
   # to generate
+  #
+  # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
     pname = "foot-generate-alt-random-writes";
     inherit version;
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0pnc5nvqrbgx5618ylrkrs9fyxjh4jcsbryfk6vlnk8x4wyyaibz";
+      sha256 = "019bdiqfi3wx2lwrv3nhq83knc1r3lmqd5zgisa33wwshm2kyv7p";
     };
 
     dontUnpack = true;
@@ -65,8 +71,8 @@ let
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument -Wno-profile-instr-out-of-date -Wno-profile-instr-unprofiled";
-    "gcc" = "-O3 -Wno-missing-profile";
+    "clang" = "-O3 -Wno-ignored-optimization-argument";
+    "gcc" = "-O3";
   }."${compilerName}";
 
   # ar with lto support
@@ -87,7 +93,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0awv53l3039s1rnkhdkzc0gwawlnd1m8cl4qhaijhxzzq68w0dfb";
+    sha256 = "0iabj9c0dj1r0m89i5gk2jdmwj4wfsai8na54x2w4fq406q6g9nh";
   };
 
   nativeBuildInputs = [
@@ -128,11 +134,25 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
+    # make sure there is _some_ profiling data on all binaries
+    ./footclient --version
+    ./foot --version
+    # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
+  '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
+
+  passthru.tests = {
+    clang-default-compilation = foot.override {
+      inherit (llvmPackages) stdenv;
+    };
+
+    clang-latest-compilation = foot.override {
+      inherit (llvmPackages_latest) stdenv;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";

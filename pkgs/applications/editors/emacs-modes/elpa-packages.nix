@@ -53,6 +53,9 @@ self: let
       seq = if lib.versionAtLeast self.emacs.version "27"
             then null
             else super.seq;
+      project = if lib.versionAtLeast self.emacs.version "28"
+                then null
+                else super.project;
     };
 
     elpaPackages = super // overrides;

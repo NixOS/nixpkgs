@@ -22,13 +22,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.21.3959";
-    x86_64-linux = "3.22.2937";
+    x86_64-darwin = "3.24.4059";
+    x86_64-linux = "3.24.2939";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "0fgzzqf1wnkjbcr0j0vjn6sggkz0z1kx6w4gi7gk4c4markdicm1";
-    x86_64-linux = "1pl2dsrgckkd8mm0cpxrz8i8rn4jfx7b9lvdyc8392sbq4chjcb7";
+    x86_64-darwin = "1zjv3d8jp0wldrzl02q9kir7q3y5bcb6hsfli6wip8bmaq78dksy";
+    x86_64-linux = "1k9n58pr5fnqv9vacay5vrbs4pvq2p36c0dpg9rjdcnb2fwaqg5p";
   }.${system} or throwSystem;
 
   meta = with lib; {

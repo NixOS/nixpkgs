@@ -1,50 +1,67 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid, installShellFiles,
-  isort, mccabe, pytestCheckHook, pytest-benchmark, pytestrunner, toml }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, installShellFiles
+, astroid
+, isort
+, mccabe
+, toml
+, pytest-benchmark
+, pytest-xdist
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.6.2";
+  version = "2.7.2";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cYt0eG6n7QeqDFi/VyFU1Geflg0m6WQcwd4gSjC4f8k=";
+    sha256 = "0e21d3b80b96740909d77206d741aa3ce0b06b41be375d92e1f3244a274c1f8a";
   };
 
-  nativeBuildInputs = [ pytestrunner installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-benchmark ];
+  propagatedBuildInputs = [
+    astroid
+    isort
+    mccabe
+    toml
+  ];
 
-  propagatedBuildInputs = [ astroid isort mccabe toml ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Remove broken darwin test
-    rm -vf pylint/test/test_functional.py
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp
+    cp -v "elisp/"*.el $out/share/emacs/site-lisp/
+    installManPage man/*.1
   '';
 
-  disabledTests = [
-    # https://github.com/PyCQA/pylint/issues/3198
-    "test_by_module_statement_value"
-    # has issues with local directories
-    "test_version"
-   ] ++ lib.optionals stdenv.isDarwin [
-      "test_parallel_execution"
-      "test_py3k_jobs_option"
-   ];
+  checkInputs = [
+    pytest-benchmark
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  dontUseSetuptoolsCheck = true;
 
   # calls executable in one of the tests
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
 
-  dontUseSetuptoolsCheck = true;
+  pytestFlagsArray = [
+    "-n auto"
+  ];
 
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp "elisp/"*.el $out/share/emacs/site-lisp/
-    installManPage man/*.1
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_parallel_execution"
+    "test_py3k_jobs_option"
+  ];
 
   meta = with lib; {
     homepage = "https://pylint.pycqa.org/";

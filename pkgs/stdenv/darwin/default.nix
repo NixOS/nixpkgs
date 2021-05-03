@@ -1,7 +1,5 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-# Minimum required macOS version, used both for compatibility as well as reproducability.
-, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -36,15 +34,13 @@ in rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
 
-    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
-
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
-  bootstrapTools = derivation {
+  bootstrapTools = derivation ({
     inherit system;
 
     name    = "bootstrap-tools";
@@ -54,7 +50,11 @@ in rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  };
+  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  });
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
@@ -147,9 +147,6 @@ in rec {
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
-        extraAttrs = {
-          inherit macosVersionMin;
-        };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
           fetchurl = thisStdenv.fetchurlBoot;
@@ -322,7 +319,7 @@ in rec {
         libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
         findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-        libssh2 nghttp2 libkrb5 ninja;
+        libssh2 nghttp2 libkrb5 ninja brotli;
 
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (_: _: {
@@ -359,7 +356,7 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out libcxx libcxxabi llvmPackages_7.compiler-rt
-        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out brotli.lib openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
@@ -411,7 +408,7 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out bash libcxx libcxxabi llvmPackages_7.compiler-rt
-        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out brotli.lib openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
@@ -523,7 +520,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin bootstrapTools;
+      inherit bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [
@@ -533,7 +530,7 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
-      curl.out openssl.out libssh2.out nghttp2.lib libkrb5
+      curl.out brotli.lib openssl.out libssh2.out nghttp2.lib libkrb5
       cc.expand-response-params libxml2.out
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale libtapi

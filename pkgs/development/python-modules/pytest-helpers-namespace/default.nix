@@ -1,30 +1,28 @@
 { buildPythonPackage
-, fetchFromGitHub
-, pytest
+, fetchPypi
+, pytestCheckHook
+, isPy27
 , lib
+, setuptools
+, setuptools-declarative-requirements
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-helpers-namespace";
-  version = "2019.1.8";
+  version = "2021.3.24";
+  disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "saltstack";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0z9f25d2wpf3lnqzmmnrlvl5b1f7kqwjjf4nzs9x2bpf91s5zny1";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0pyj2d45zagmzlajzqdnkw5yz8k49pkihbydsqkzm413qnkzb38q";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools setuptools-declarative-requirements setuptools-scm ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest
-  '';
-
-  # The tests fail with newest pytest. They passed with pytest_3, which no longer exists
-  doCheck = false;
+  pythonImportsCheck = [ "pytest_helpers_namespace" ];
 
   meta = with lib; {
     homepage = "https://github.com/saltstack/pytest-helpers-namespace";

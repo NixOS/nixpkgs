@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0qhxh0z2b3p52v3i0za9mrmjnb1nlvvyi2g23rf88b3xrrm59z33";
   };
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
   checkInputs = [ pytest ];
 
   checkPhase = ''

@@ -17,13 +17,13 @@ assert cudaSupport -> nvidia_x11 != null
 
 buildPythonPackage rec {
   pname = "libgpuarray";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Theano";
     repo = "libgpuarray";
     rev = "v${version}";
-    sha256 = "0zkdwjq3k6ciiyf8y5w663fbsnmzhgy27yvpxfhkpxazw9vg3l5v";
+    sha256 = "0ksil18c9ign4xrv5k323flhvdy6wdxh8szdd3nivv31jc3zsdri";
   };
 
   # requires a GPU

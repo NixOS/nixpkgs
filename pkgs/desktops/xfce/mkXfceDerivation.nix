@@ -48,7 +48,7 @@ let
 
     meta = with lib; {
       homepage = "https://gitlab.xfce.org/${category}/${pname}/about";
-      license = licenses.gpl2; # some libraries are under LGPLv2+
+      license = licenses.gpl2Plus; # some libraries are under LGPLv2+
       platforms = platforms.linux;
     };
   };

@@ -16,10 +16,9 @@
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-  platform = if stdenv.isDarwin then "darwin" else "linux";
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.7.1";
+  version = "1.8.0";
 in buildPythonPackage {
   inherit version;
 

@@ -39,7 +39,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "5.2.0";
+  version = "6.0.0";
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1g0pvx4qbirpcn9mni704y03n3lvkmw2c0rbcwvydyr8ns4xh66b";
+    sha256 = "1f9hz8rf12jm8baa7kda34yl4hyl0xh0c4ap03krfjx23i3img47";
   };
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison meson ninja ]
@@ -101,6 +101,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Otherwise tries to ensure /var/run exists.
+  postPatch = ''
+    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+        qga/meson.build
+  '';
+
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
@@ -108,6 +114,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
+    substituteInPlace configure \
+      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
   '' + optionalString stdenv.hostPlatform.isMusl ''
@@ -119,6 +127,7 @@ stdenv.mkDerivation rec {
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--localstatedir=/var"
       "--sysconfdir=/etc"
     ]
     ++ optional numaSupport "--enable-numa"
@@ -170,11 +179,14 @@ stdenv.mkDerivation rec {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
 
+  # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ eelco qyliss ];
+    platforms = platforms.unix;
   };
 }

@@ -8,6 +8,7 @@
 , enableAbsubmit         ? lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor
 , enableAcousticbrainz   ? true
 , enableAcoustid         ? true
+, enableAura             ? true
 , enableBadfiles         ? true, flac, mp3val
 , enableBeatport         ? true
 , enableBpsync           ? true
@@ -16,11 +17,11 @@
 , enableDiscogs          ? true
 , enableEmbyupdate       ? true
 , enableFetchart         ? true
-, enableGmusic           ? true
 , enableKeyfinder        ? true, keyfinder-cli
 , enableKodiupdate       ? true
 , enableLastfm           ? true
 , enableLoadext          ? true
+, enableLyrics           ? true
 , enableMpd              ? true
 , enablePlaylist         ? true
 , enableReplaygain       ? true
@@ -32,7 +33,6 @@
 
 # External plugins
 , enableAlternatives     ? false
-, enableCheck            ? false, liboggz
 , enableCopyArtifacts    ? false
 , enableExtraFiles       ? false
 
@@ -45,6 +45,7 @@ let
   optionalPlugins = {
     absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
+    aura = enableAura;
     badfiles = enableBadfiles;
     beatport = enableBeatport;
     bpsync = enableBpsync;
@@ -54,12 +55,12 @@ let
     discogs = enableDiscogs;
     embyupdate = enableEmbyupdate;
     fetchart = enableFetchart;
-    gmusic = enableGmusic;
     keyfinder = enableKeyfinder;
     kodiupdate = enableKodiupdate;
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
     loadext = enableLoadext;
+    lyrics = enableLyrics;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     playlist = enablePlaylist;
@@ -72,9 +73,9 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
     "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "unimported" "zero"
@@ -104,13 +105,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-01-29";
+  version = "unstable-2021-04-17";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "04ea754d00e2873ae9aa2d9e07c5cefd790eaee2";
-    sha256 = "sha256-BIa3hnOsBxThbA2WCE4q9eaFNtObr3erZBBqobVOSiQ=";
+    rev = "50163b373f527d1b1f8b2442240ca547e846744e";
+    sha256 = "sha256-l7drav4Qx2JCF+F5OA0s641idcKM3S4Yx2lM2evJQWE=";
   };
 
   propagatedBuildInputs = [
@@ -128,32 +129,31 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.confuse
     pythonPackages.mediafile
     gobject-introspection
-  ] ++ lib.optional enableAbsubmit      essentia-extractor
-    ++ lib.optional enableAcoustid      pythonPackages.pyacoustid
-    ++ lib.optional enableBeatport      pythonPackages.requests_oauthlib
+  ] ++ lib.optional enableAbsubmit         essentia-extractor
+    ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
+    ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
+    ++ lib.optional enableConvert          ffmpeg
+    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
     ++ lib.optional (enableFetchart
-              || enableDeezer
-              || enableEmbyupdate
-              || enableKodiupdate
-              || enableLoadext
-              || enablePlaylist
-              || enableSubsonicplaylist
-              || enableSubsonicupdate
-              || enableAcousticbrainz)
-                                    pythonPackages.requests
-    ++ lib.optional enableCheck         beetsExternalPlugins.check
-    ++ lib.optional enableConvert       ffmpeg
-    ++ lib.optional enableDiscogs       pythonPackages.discogs_client
-    ++ lib.optional enableGmusic        pythonPackages.gmusicapi
-    ++ lib.optional enableKeyfinder     keyfinder-cli
-    ++ lib.optional enableLastfm        pythonPackages.pylast
-    ++ lib.optional enableMpd           pythonPackages.mpd2
-    ++ lib.optional enableSonosUpdate   pythonPackages.soco
-    ++ lib.optional enableThumbnails    pythonPackages.pyxdg
-    ++ lib.optional enableWeb           pythonPackages.flask
-    ++ lib.optional enableAlternatives  beetsExternalPlugins.alternatives
-    ++ lib.optional enableCopyArtifacts beetsExternalPlugins.copyartifacts
-    ++ lib.optional enableExtraFiles    beetsExternalPlugins.extrafiles
+                  || enableDeezer
+                  || enableEmbyupdate
+                  || enableKodiupdate
+                  || enableLoadext
+                  || enablePlaylist
+                  || enableSubsonicplaylist
+                  || enableSubsonicupdate
+                  || enableAcousticbrainz) pythonPackages.requests
+    ++ lib.optional enableKeyfinder        keyfinder-cli
+    ++ lib.optional enableLastfm           pythonPackages.pylast
+    ++ lib.optional enableLyrics           pythonPackages.beautifulsoup4
+    ++ lib.optional enableMpd              pythonPackages.mpd2
+    ++ lib.optional enableSonosUpdate      pythonPackages.soco
+    ++ lib.optional enableThumbnails       pythonPackages.pyxdg
+    ++ lib.optional (enableAura
+                  || enableWeb)            pythonPackages.flask
+    ++ lib.optional enableAlternatives     beetsExternalPlugins.alternatives
+    ++ lib.optional enableCopyArtifacts    beetsExternalPlugins.copyartifacts
+    ++ lib.optional enableExtraFiles       beetsExternalPlugins.extrafiles
   ;
 
   buildInputs = [
@@ -209,6 +209,9 @@ in pythonPackages.buildPythonApplication rec {
     echo echo completion tests passed > test/rsrc/test_completion.sh
 
     sed -i -e 's/len(mf.images)/0/' test/test_zero.py
+
+    # Google Play Music was discontinued
+    rm -r beetsplug/gmusic.py
   '';
 
   postInstall = ''

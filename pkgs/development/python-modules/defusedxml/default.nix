@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "defusedxml";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "183fz8xwclhkirwpvpldyypn47r8lgzfz2mk9jgyg7b37jg5vcc6";
+    sha256 = "1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69";
   };
 
   checkPhase = ''

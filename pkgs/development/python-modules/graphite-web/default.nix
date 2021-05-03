@@ -1,6 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, memcached
+, txamqp
+, django_tagging
+, gunicorn
+, pytz
+, pyparsing
+, cairocffi
+, whisper
+, whitenoise
+, urllib3
+, six
 }:
+
 buildPythonPackage rec {
   pname = "graphite-web";
   version = "1.1.7";
@@ -15,8 +29,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    django django_tagging whisper pycairo cairocffi
-    ldap memcached pytz urllib3 scandir
+    django
+    memcached
+    txamqp
+    django_tagging
+    gunicorn
+    pytz
+    pyparsing
+    cairocffi
+    whisper
+    whitenoise
+    urllib3
+    six
   ];
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
@@ -27,6 +51,8 @@ buildPythonPackage rec {
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
+
+  pythonImportsCheck = [ "graphite" ];
 
   meta = with lib; {
     homepage = "http://graphiteapp.org/";
