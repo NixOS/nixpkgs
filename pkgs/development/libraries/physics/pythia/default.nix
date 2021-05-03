@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A program for the generation of high-energy physics events";
-    license     = lib.licenses.gpl2;
-    homepage    = "http://home.thep.lu.se/~torbjorn/Pythia.html";
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = licenses.gpl2Only;
+    homepage = "http://home.thep.lu.se/~torbjorn/Pythia.html";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }
