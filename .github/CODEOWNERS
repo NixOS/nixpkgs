@@ -84,6 +84,7 @@
 /pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
 /pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
 /pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
 /pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl

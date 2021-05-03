@@ -56,6 +56,7 @@
   - pkgs/development/tools/haskell/**/*
   - pkgs/test/haskell/**/*
   - pkgs/top-level/haskell-packages.nix
+  - pkgs/top-level/release-haskell.nix
 
 "6.topic: kernel":
   - pkgs/build-support/kernel/**/*
