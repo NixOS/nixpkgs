@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.8";
+  version = "2.8.10";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "0yif0ibmlj0bhl7fnhg9yclxg2iyjygmjhffinp5kgqy0vaabkzw";
+    sha256 = "1ay36q1151lvlkzmbibwv84ic90ih2hzgwx34dndxxs034vbxjv8";
     fetchSubmodules = true;
   };
 
