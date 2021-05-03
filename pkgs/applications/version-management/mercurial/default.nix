@@ -67,14 +67,14 @@ in python3Packages.buildPythonApplication rec {
     install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
   '';
 
-  meta = {
+  meta = with lib; {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "https://www.mercurial-scm.org";
     downloadPage = "https://www.mercurial-scm.org/release/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.eelco ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ eelco lukegb ];
     updateWalker = true;
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
