@@ -114,6 +114,8 @@
   ./programs/autojump.nix
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix
+  ./programs/bash/bash-completion.nix
+  ./programs/bash/ls-colors.nix
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
