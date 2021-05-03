@@ -165,6 +165,13 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=zero-length-bounds"
   ];
 
+  patches = [
+    ./0000-fix-ipxe-src.4.10.patch
+    ./0000-fix-install-python.4.10.patch
+    ./0004-makefile-use-efi-ld.4.10.patch
+    ./0005-makefile-fix-efi-mountdir-use.4.10.patch
+  ];
+
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
