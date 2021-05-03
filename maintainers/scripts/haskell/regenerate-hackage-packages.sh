@@ -18,3 +18,8 @@ extractionDerivation='with import ./. {}; runCommand "unpacked-cabal-hashes" { }
 unpacked_hackage="$(nix-build -E "$extractionDerivation" --no-out-link)"
 
 hackage2nix --hackage "$unpacked_hackage" --preferred-versions <(for n in "$unpacked_hackage"/*/preferred-versions; do cat "$n"; echo; done) --nixpkgs "$PWD" --config pkgs/development/haskell-modules/configuration-hackage2nix.yaml
+
+if [[ "${1:-}" == "--do-commit" ]]; then
+   git add pkgs/development/haskell-modules/hackage-packages.nix
+   git commit -m "hackage-packages.nix: Regenerate based on current config"
+fi

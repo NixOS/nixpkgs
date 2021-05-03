@@ -49,3 +49,8 @@ sed -e '/  # Stackage Nightly/,/^$/c \TODO\
 sed -e "/TODO/r $tmpfile" \
     -e "s/TODO/  # Stackage Nightly $version/" \
     -i pkgs/development/haskell-modules/configuration-hackage2nix.yaml
+
+if [[ "${1:-}" == "--do-commit" ]]; then
+   git add pkgs/development/haskell-modules/configuration-hackage2nix.yaml
+   git commit -m "configuration-hackage2nix.yaml: Changing Stackage pin to Nightly $version"
+fi
