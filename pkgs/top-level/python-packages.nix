@@ -615,6 +615,8 @@ in {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
+
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
@@ -3562,6 +3564,8 @@ in {
   kaptan = callPackage ../development/python-modules/kaptan { };
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
+
+  karton-autoit-ripper = callPackage ../development/python-modules/karton-autoit-ripper { };
 
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
