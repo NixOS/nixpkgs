@@ -133,10 +133,6 @@ stdenv.mkDerivation (rec {
   '';
 
   patches = [
-    ./0000-fix-ipxe-src.patch
-    ./0000-fix-install-python.patch
-    ./0004-makefile-use-efi-ld.patch
-    ./0005-makefile-fix-efi-mountdir-use.patch
   ] ++ (config.patches or []);
 
   postPatch = ''
