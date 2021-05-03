@@ -35854,7 +35854,7 @@ with pkgs;
 
   frozen-bubble = callPackage ../games/frozen-bubble { };
 
-  fsg = callPackage ../games/fsg { };
+  funkin = callPackage ../games/funkin { };
 
   gambit-chess = callPackage ../games/gambit { };
 
