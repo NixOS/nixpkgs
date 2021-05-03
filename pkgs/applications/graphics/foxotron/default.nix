@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       Revision 2021 3D Graphics Competition.
     '';
     homepage = "https://github.com/Gargaj/Foxotron";
-    license = licenses.publicDomain;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
   };
