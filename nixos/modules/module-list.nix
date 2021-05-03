@@ -977,6 +977,7 @@
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
+  ./services/web-servers/trafficserver.nix
   ./services/web-servers/ttyd.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix

@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
+, setuptools-scm
 , beancount
 , pytest, sh
 }:
@@ -13,6 +14,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1kjc0axrxpvm828lqq5m2ikq0ls8xksbmm7312zw867gdx56x5aj";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     beancount
