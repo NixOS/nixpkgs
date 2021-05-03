@@ -104,6 +104,12 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+
+    # Work around failing fingerprint auth
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
+      sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
+    })
   ];
 
   nativeBuildInputs = [
