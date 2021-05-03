@@ -23580,7 +23580,7 @@ in
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
-  googleearth-pro = callPackage ../applications/misc/googleearth-pro { };
+  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
