@@ -1085,6 +1085,8 @@ in
 
   audiowaveform = callPackage ../tools/audio/audiowaveform { };
 
+  authenticator = callPackage ../applications/misc/authenticator { };
+
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   autospotting = callPackage ../applications/misc/autospotting { };
@@ -6108,6 +6110,8 @@ in
   martin = callPackage ../servers/martin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  matrix-dendrite = callPackage ../servers/matrix-dendrite { };
 
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
@@ -15312,6 +15316,8 @@ in
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
   libacr38u = callPackage ../tools/security/libacr38u { };
+
+  libadwaita = callPackage ../development/libraries/libadwaita { };
 
   libaec = callPackage ../development/libraries/libaec { };
 
@@ -31274,6 +31280,8 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  xcolor = callPackage ../tools/graphics/xcolor { };
 
   zktree = callPackage ../applications/misc/zktree {};
 }
