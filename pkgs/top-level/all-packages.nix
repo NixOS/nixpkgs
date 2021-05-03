@@ -9934,6 +9934,8 @@ in
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
+  undistract-me = callPackage ../shells/bash/undistract-me { };
+
   dash = callPackage ../shells/dash { };
 
   dasht = callPackage ../tools/misc/dasht { };
