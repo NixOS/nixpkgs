@@ -5,7 +5,7 @@
 }:
 
 let
-  inherit (python3Packages) docutils python;
+  inherit (python3Packages) docutils python fb-re2;
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
@@ -28,6 +28,7 @@ in python3Packages.buildPythonApplication rec {
   } else null;
   cargoRoot = if rustSupport then "rust" else null;
 
+  propagatedBuildInputs = [ fb-re2 ];
   nativeBuildInputs = [ makeWrapper gettext ]
     ++ lib.optionals rustSupport (with rustPlatform; [
          cargoSetupHook
