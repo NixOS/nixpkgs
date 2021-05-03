@@ -5699,6 +5699,8 @@ in {
 
   pylint-flask = callPackage ../development/python-modules/pylint-flask { };
 
+  pylint-flask-sqlalchemy = callPackage ../development/python-modules/pylint-flask-sqlalchemy { };
+
   pylint = callPackage ../development/python-modules/pylint { };
 
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
