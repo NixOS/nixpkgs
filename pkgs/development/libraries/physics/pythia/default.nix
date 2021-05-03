@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "03rpy2bmx67217fh1spfn36x9xrk0igcj56byki77lgj0y5mz21a";
   };
 
-  buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
+  nativeBuildInputs = [ rsync ];
+  buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
