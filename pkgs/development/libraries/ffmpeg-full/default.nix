@@ -132,6 +132,8 @@
 , xvidcore ? null # Xvid encoder, native encoder exists
 , zeromq4 ? null # Message passing
 , zlib ? null
+, vulkan-loader ? null
+, glslang ? null
 #, zvbi ? null # Teletext support
 /*
  *  Developer options
@@ -401,6 +403,8 @@ stdenv.mkDerivation rec {
     (enableFeature (xvidcore != null && gplLicensing) "libxvid")
     (enableFeature (zeromq4 != null) "libzmq")
     (enableFeature (zlib != null) "zlib")
+    (enableFeature (isLinux && vulkan-loader != null) "vulkan")
+    (enableFeature (glslang != null) "libglslang")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
      * Developer flags
@@ -422,12 +426,12 @@ stdenv.mkDerivation rec {
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
-    zeromq4 zlib
+    zeromq4 zlib glslang
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
+    ++ optionals isLinux [ alsaLib libraw1394 libv4l vulkan-loader ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
