@@ -1,0 +1,17 @@
+diff --git a/ulauncher/config.py b/ulauncher/config.py
+index 0ae693b..fafc6b6 100644
+--- a/ulauncher/config.py
++++ b/ulauncher/config.py
+@@ -67,7 +67,11 @@ def get_data_path():
+     try:
+         return paths[0]
+     except:
+-        raise ProjectPathNotFoundError()
++        raise Exception("ProjectPathNotFoundError.\n\n\x1b[1m**Note added by Nixpkgs maintainer**\x1b[m\n" + \
++            "Ulauncher must be installed via nix-env, nix profile, or systemPackages.\n" + \
++            "Otherwise, Ulauncher tries to save /nix/store paths to settings.json,\n" + \
++            "which would break if those paths are later garbage-collected after\nupdating " + \
++            "Ulauncher.\n\nSee: https://github.com/NixOS/nixpkgs/pull/85350#issuecomment-614421246")
+ 
+ 
+ def is_wayland():

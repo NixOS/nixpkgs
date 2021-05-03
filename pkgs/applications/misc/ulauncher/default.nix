@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.9.0";
+  version = "5.10.0";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
+    sha256 = "sha256-9CEfqOU7AT+Tyvhx+eiqUo6g3vnFZ6P3shOTZcTBNCo=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -62,6 +62,12 @@ python3Packages.buildPythonApplication rec {
     websocket_client
   ];
 
+  # Fixes error
+  #     Couldn’t recognize the image file format for file...
+  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
+  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
+  strictDeps = false;
+
   checkInputs = with python3Packages; [
     mock
     pytest
@@ -72,6 +78,7 @@ python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-path.patch
     ./0001-Adjust-get_data_path-for-NixOS.patch
+    ./add-nix-install-note.diff
     ./fix-extensions.patch
   ];
 
