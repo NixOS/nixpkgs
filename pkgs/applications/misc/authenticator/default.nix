@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       ];
     }))
 
-    gst_all_1.gst-plugins-bad
+    (gst_all_1.gst-plugins-bad.override { enableZbar = true; })
     gtk4
     libadwaita
     openssl
