@@ -330,7 +330,7 @@
    </listitem>
    <listitem>
     <para>
-      <literal>vim</literal> switched to Python 3, dropping all Python 2 support.
+      <literal>vim</literal> and <literal>neovim</literal> switched to Python 3, dropping all Python 2 support.
     </para>
    </listitem>
    <listitem>
