@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, makeWrapper
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , guiSupport ? false, tk ? null
 , ApplicationServices
@@ -28,7 +28,7 @@ in python3Packages.buildPythonApplication rec {
   } else null;
   cargoRoot = if rustSupport then "rust" else null;
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper gettext ]
     ++ lib.optionals rustSupport (with rustPlatform; [
          cargoSetupHook
          rust.cargo
