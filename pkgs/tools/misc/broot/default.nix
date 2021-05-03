@@ -4,7 +4,6 @@
 , fetchCrate
 , installShellFiles
 , makeWrapper
-, coreutils
 , libiconv
 , zlib
 , Security
@@ -12,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-2FF/oB341PPGfSlXpLEs4mswjVk+3ty/jNsVJKu+fhs=";
+    sha256 = "sha256-Iz9pXvgPIGUnfbnvk5kYAqlrMlz3I2kLszPe8GwwHVk=";
   };
 
-  cargoHash = "sha256-+UT9cz8OPA1jpFv7HafabxJ3NmLl57K1ODydfcV1FUM";
+  cargoHash = "sha256-eECAaTUgqasuDhLSk8p/CWSQmV8yV30UoMy3GZCRbGE=";
 
   nativeBuildInputs = [
     makeWrapper

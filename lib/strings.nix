@@ -606,7 +606,7 @@ rec {
      This function will fail if the input string is longer than the
      requested length.
 
-     Type: fixedWidthString :: int -> string -> string
+     Type: fixedWidthString :: int -> string -> string -> string
 
      Example:
        fixedWidthString 5 "0" (toString 15)

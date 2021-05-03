@@ -1,0 +1,37 @@
+diff --git a/src/QR-Code-scanner/CMakeLists.txt b/src/QR-Code-scanner/CMakeLists.txt
+index 15e288df..2e9b3305 100644
+--- a/src/QR-Code-scanner/CMakeLists.txt
++++ b/src/QR-Code-scanner/CMakeLists.txt
+@@ -1,11 +1,18 @@
++find_library(QUIRC_LIBRARY quirc REQUIRED)
++find_path(QUIRC_INCLUDE_DIR quirc.h REQUIRED)
++
+ add_library(qrdecoder STATIC
+     Decoder.cpp
+ )
++target_include_directories(qrdecoder
++    PUBLIC
++        ${QUIRC_INCLUDE_DIR}
++)
+ target_link_libraries(qrdecoder
+     PUBLIC
+         Qt5::Gui
+     PRIVATE
+-        quirc
++        ${QUIRC_LIBRARY}
+ )
+ 
+ if(WITH_SCANNER)
+diff --git a/src/QR-Code-scanner/Decoder.cpp b/src/QR-Code-scanner/Decoder.cpp
+index 1bb99140..353ca189 100644
+--- a/src/QR-Code-scanner/Decoder.cpp
++++ b/src/QR-Code-scanner/Decoder.cpp
+@@ -30,7 +30,7 @@
+ 
+ #include <limits>
+ 
+-#include "quirc.h"
++#include <quirc.h>
+ 
+ QrDecoder::QrDecoder()
+     : m_qr(quirc_new())

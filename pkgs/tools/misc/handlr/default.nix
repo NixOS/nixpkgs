@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OtU6sL2Bbbec0gHxk3bl5Inn+ZmNYiHgpSF0gjDuRSg=";
+    sha256 = "sha256-UYcJtBwbUDqDiRoj5PmO+urURfd7S7fSx2XhQRBrKTE=";
   };
 
-  cargoSha256 = "sha256-bX7QWV1R+pLxvghpaV10LeROv4wBVfZhHyrPCIgqETA=";
+  cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
 
   nativeBuildInputs = [ shared-mime-info ];
 

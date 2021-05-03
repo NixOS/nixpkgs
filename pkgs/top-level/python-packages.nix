@@ -615,6 +615,8 @@ in {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
+
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
@@ -1359,6 +1361,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion { };
 
+  click-configfile = callPackage ../development/python-modules/click-configfile { };
+
   click-datetime = callPackage ../development/python-modules/click-datetime { };
 
   click-default-group = callPackage ../development/python-modules/click-default-group { };
@@ -1370,6 +1374,8 @@ in {
   click-log = callPackage ../development/python-modules/click-log { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
+
+  click-spinner = callPackage ../development/python-modules/click-spinner { };
 
   click-repl = callPackage ../development/python-modules/click-repl { };
 
@@ -1404,6 +1410,8 @@ in {
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cloudscraper = callPackage ../development/python-modules/cloudscraper { };
+
+  cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
@@ -3557,6 +3565,8 @@ in {
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
 
+  karton-autoit-ripper = callPackage ../development/python-modules/karton-autoit-ripper { };
+
   karton-classifier = callPackage ../development/python-modules/karton-classifier { };
 
   karton-config-extractor = callPackage ../development/python-modules/karton-config-extractor { };
@@ -5067,7 +5077,7 @@ in {
   poolsense = callPackage ../development/python-modules/poolsense { };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
-    inherit (pkgs.qt5) qtbase;
+    inherit (pkgs.qt5) qtbase qmake;
     inherit (pkgs.libsForQt5) poppler;
   };
 
@@ -5854,6 +5864,8 @@ in {
   pyosmium = callPackage ../development/python-modules/pyosmium {
     inherit (pkgs) lz4;
   };
+
+  pyotgw = callPackage ../development/python-modules/pyotgw { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
 

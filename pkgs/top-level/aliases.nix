@@ -70,6 +70,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bluezFull = bluez; # Added 2019-12-03
+  bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
@@ -849,6 +850,8 @@ mapAliases ({
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPackages; # added 2018-04-25
   kodiPlugins = kodiPackages; # added 2021-03-09;
+  xineLib = xine-lib; # added 2021-04-27
+  xineUI = xine-ui; # added 2021-04-27
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xmpppy = throw "xmpppy has been removed from nixpkgs as it is unmaintained and python2-only";
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";
