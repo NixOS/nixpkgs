@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./busybox-in-store.patch
     (fetchpatch {
+      name = "CVE-2021-28831.patch";
       url = "https://git.busybox.net/busybox/patch/?id=f25d254dfd4243698c31a4f3153d4ac72aa9e9bd";
       sha256 = "0y79flfbk45krwn963nnbqc21a88bsz4k4asqwvcnfk2lkciadxm";
     }) # TODO: Removing when bumping the version
