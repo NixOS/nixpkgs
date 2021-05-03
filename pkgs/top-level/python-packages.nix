@@ -2034,6 +2034,8 @@ in {
     inherit (pkgs) graphviz;
   };
 
+  dotmap = callPackage ../development/python-modules/dotmap { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
@@ -4119,6 +4121,8 @@ in {
 
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 
+  meshtastic = callPackage ../development/python-modules/meshtastic { };
+
   meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
     (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
       setupHook = null;
@@ -5548,6 +5552,8 @@ in {
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
+
+  pygatt = callPackage ../development/python-modules/pygatt { };
 
   pygbm = callPackage ../development/python-modules/pygbm { };
 
@@ -8052,6 +8058,8 @@ in {
   };
 
   tilestache = callPackage ../development/python-modules/tilestache { };
+
+  timeago = callPackage ../development/python-modules/timeago { };
 
   timelib = callPackage ../development/python-modules/timelib { };
 
