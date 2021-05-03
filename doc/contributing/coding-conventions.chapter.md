@@ -44,7 +44,7 @@ not
 { nixpkgs ? { } }
 ```
 
-not
+instead of
 
 ```nix
 [1 2 3]
