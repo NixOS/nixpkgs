@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
-    texlive.bin.core  # for synctex, used by the pdf back-end
+    texlive.texliveBin.core  # for synctex, used by the pdf back-end
   ]
   ++ optionals enableDjvu [ djvulibre ]
   ++ optionals enableEpub [ webkitgtk ]

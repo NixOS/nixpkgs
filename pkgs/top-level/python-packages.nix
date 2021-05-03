@@ -7653,7 +7653,7 @@ in {
   sphinxcontrib-spelling = callPackage ../development/python-modules/sphinxcontrib-spelling { };
 
   sphinxcontrib-tikz = callPackage ../development/python-modules/sphinxcontrib-tikz {
-    texLive = pkgs.texlive.combine { inherit (pkgs.texlive) scheme-small standalone pgfplots; };
+    texLive = pkgs.texlive.buildTexliveCombinedEnv { inherit (pkgs.texlive.texlivePackages) scheme-small standalone pgfplots; };
   };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };

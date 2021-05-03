@@ -1,17 +1,19 @@
 { lib, stdenv, fetchurl
-, texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
+# texlive
+, buildTexliveCombinedEnv, texlivePackages
 }:
 
 # Useful resource covering build options:
 # http://tug.org/texlive/doc/tlbuild.html
 
 let
+  tl = texlivePackages;
   withSystemLibs = map (libname: "--with-system-${libname}");
 
   year = "2020";
@@ -291,7 +293,7 @@ latexindent = perlPackages.buildPerlPackage rec {
   pname = "latexindent";
   inherit (src) version;
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") tl.latexindent.pkgs);
 
   outputs = [ "out" ];
 
@@ -322,7 +324,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") tl.pygmentex.pkgs);
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -358,7 +360,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
 texlinks = stdenv.mkDerivation rec {
   name = "texlinks.sh";
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") tl.texlive-scripts-extra.pkgs);
 
   dontBuild = true;
   doCheck = false;
@@ -444,7 +446,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
+    (buildTexliveCombinedEnv { inherit (tl) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv ];
 

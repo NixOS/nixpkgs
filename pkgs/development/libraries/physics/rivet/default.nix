@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N+3ICilozhAxWJ5DumtJKHfKeQG+o4+Lt1NqXIz4EA0=";
   };
 
-  latex = texlive.combine { inherit (texlive)
+  latex = texlive.buildTexliveCombinedEnv { inherit (texlive.texlivePackages)
     scheme-basic
     collection-pstricks
     collection-fontsrecommended

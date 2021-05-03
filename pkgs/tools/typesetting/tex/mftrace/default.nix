@@ -42,11 +42,11 @@ let self = stdenv.mkDerivation rec {
     wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
-  # experimental texlive.combine support
+  # experimental texlive.buildTexliveCombinedEnv support
   # (note that only the bin/ folder will be combined into texlive)
   passthru.tlType = "bin";
   passthru.pkgs = [ self ] ++
-    (with texlive; kpathsea.pkgs ++ t1utils.pkgs ++ metafont.pkgs);
+    (let tl = texlive.texlivePackages; in tl.kpathsea.pkgs ++ tl.t1utils.pkgs ++ tl.metafont.pkgs);
 
   meta = with lib; {
     description = "Scalable PostScript Fonts for MetaFont";

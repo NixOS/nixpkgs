@@ -1,9 +1,13 @@
 { runCommandNoCC, fetchurl, file, texlive, writeShellScript }:
 
+let
+  inherit (texlive) buildTexliveCombinedEnv;
+  tl = texlive.texlivePackages;
+in
 {
   chktex = runCommandNoCC "texlive-test-chktex" {
     nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-infraonly chktex; })
+      (buildTexliveCombinedEnv { inherit (tl) scheme-infraonly chktex; })
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -40,7 +44,7 @@
 
   # test dvipng's limited capability to render postscript specials via GS
   dvipng.ghostscript = runCommandNoCC "texlive-test-ghostscript" {
-    nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+    nativeBuildInputs = [ file (buildTexliveCombinedEnv { inherit (tl) scheme-small dvipng; }) ];
     input = builtins.toFile "postscript-sample.tex" ''
       \documentclass{minimal}
       \begin{document}

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, python3, libxslt, texlive
 , enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
 
-, tex ? texlive.combine { # satisfy all packages that ./configure mentions
-    inherit (texlive) scheme-basic epstopdf anysize appendix changebar
+, tex ? texlive.buildTexliveCombinedEnv { # satisfy all packages that ./configure mentions
+    inherit (texlive.texlivePackages) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
       multirow overpic pdfpages pdflscape graphics stmaryrd subfigure titlesec wasysym
       # pkgs below don't seem requested by dblatex, but our manual fails without them

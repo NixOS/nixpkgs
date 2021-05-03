@@ -602,7 +602,7 @@ mapAliases ({
   procps-ng = procps; # added 2018-06-08
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
-  pygmentex = texlive.bin.pygmentex; # added 2019-12-15
+  pygmentex = texlive.texliveBin.pygmentex; # added 2019-12-15
   pyload = throw "pyload has been removed from nixpkgs, as it was unmaintained."; # added 2021-03-21
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10

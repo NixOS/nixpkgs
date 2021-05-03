@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
-    texlive.bin.core
+    texlive.texliveBin.core
   ] ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 

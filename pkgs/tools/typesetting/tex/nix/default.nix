@@ -17,9 +17,9 @@ rec {
     assert generatePDF -> !generatePS;
 
     let
-      tex = pkgs.texlive.combine
+      tex = pkgs.texlive.buildTexliveCombinedEnv
         # always include basic stuff you need for LaTeX
-        ({inherit (pkgs.texlive) scheme-basic;} // texPackages);
+        ({inherit (pkgs.texlive.texlivePackages) scheme-basic;} // texPackages);
     in
 
     pkgs.stdenv.mkDerivation {

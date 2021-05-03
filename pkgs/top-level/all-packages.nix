@@ -1067,7 +1067,7 @@ in
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
+    texLive = texlive.buildTexliveCombinedEnv { inherit (texlive.texlivePackages) scheme-small epsf cm-super texinfo; };
     gsl = gsl_1;
   };
 
@@ -3168,14 +3168,14 @@ in
 
   asciidoc-full = appendToName "full" (asciidoc.override {
     inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
+    texlive = texlive.buildTexliveCombinedEnv { inherit (texlive.texlivePackages) scheme-minimal dvipng; };
     w3m = w3m-batch;
     enableStandardFeatures = true;
   });
 
   asciidoc-full-with-plugins = appendToName "full-with-plugins" (asciidoc.override {
     inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
+    texlive = texlive.buildTexliveCombinedEnv { inherit (texlive.texlivePackages) scheme-minimal dvipng; };
     w3m = w3m-batch;
     enableStandardFeatures = true;
     enableExtraPlugins = true;
@@ -11197,13 +11197,13 @@ in
   mint = callPackage ../development/compilers/mint { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme {
-   texLive = texlive.combine { inherit (texlive) scheme-small; };
+   texLive = texlive.combined.scheme-small;
    texinfo = texinfo5;
    xlibsWrapper = null;
   };
 
   mitschemeX11 = mitscheme.override {
-   texLive = texlive.combine { inherit (texlive) scheme-small; };
+   texLive = texlive.combined.scheme-small;
    texinfo = texinfo5;
    enableX11 = true;
   };
@@ -17068,7 +17068,7 @@ in
   });
 
   poppler_min = poppler.override { # TODO: maybe reduce even more
-    # this is currently only used by texlive.bin.
+    # this is currently only used by texlive.texliveBin.
     minimal = true;
     suffix = "min";
   };
@@ -18404,8 +18404,8 @@ in
 
   R = callPackage ../applications/science/math/R {
     # TODO: split docs into a separate output
-    texLive = texlive.combine {
-      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
+    texLive = texlive.buildTexliveCombinedEnv {
+      inherit (texlive.texlivePackages) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
     };
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
@@ -24052,7 +24052,7 @@ in
 
   ipe = libsForQt514.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
-    texlive = texlive.combine { inherit (texlive) scheme-small; };
+    texlive = texlive.combined.scheme-small;
     lua5 = lua5_3;
   };
 
@@ -29506,7 +29506,7 @@ in
   ecm = callPackage ../applications/science/math/ecm { };
 
   eukleides = callPackage ../applications/science/math/eukleides {
-    texLive = texlive.combine { inherit (texlive) scheme-small; };
+    texLive = texlive.combined.scheme-small;
     texinfo = texinfo4;
   };
 
