@@ -6186,6 +6186,8 @@ in
 
   multitail = callPackage ../tools/misc/multitail { };
 
+  mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
+
   mxt-app = callPackage ../misc/mxt-app { };
 
   naabu = callPackage ../tools/security/naabu { };
