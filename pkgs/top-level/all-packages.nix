@@ -16297,6 +16297,8 @@ with pkgs;
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
+  segger-jlink = callPackage ../development/tools/misc/segger-jlink { };
+
   segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
 
   selene = callPackage ../development/tools/selene {
