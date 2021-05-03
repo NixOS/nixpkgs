@@ -1,4 +1,4 @@
-{ lib, stdenv, toPythonModule, fetchpatch, cmake, orocos-kdl, python, sip }:
+{ lib, stdenv, toPythonModule, fetchpatch, cmake, orocos-kdl, python, sip_4 }:
 
 toPythonModule (stdenv.mkDerivation {
   pname = "pykdl";
@@ -18,7 +18,7 @@ toPythonModule (stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ orocos-kdl ];
-  propagatedBuildInputs = [ python sip ];
+  propagatedBuildInputs = [ python sip_4 ];
 
   meta = with lib; {
     description = "Kinematics and Dynamics Library (Python bindings)";

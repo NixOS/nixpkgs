@@ -7524,7 +7524,7 @@ in {
 
   signify = callPackage ../development/python-modules/signify { };
 
-  sip = callPackage ../development/python-modules/sip { };
+  sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sip_5 = callPackage ../development/python-modules/sip/5.x.nix { };
 

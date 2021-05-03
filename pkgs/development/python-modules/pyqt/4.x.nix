@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip, qt4, pkg-config, lndir, dbus, makeWrapper }:
+{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip_4, qt4, pkg-config, lndir, dbus, makeWrapper }:
 
 buildPythonPackage rec {
   pname = "PyQt-x11-gpl";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config lndir makeWrapper qt4 ];
   buildInputs = [ qt4 dbus ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
 
   postInstall = ''
     for i in $out/bin/*; do

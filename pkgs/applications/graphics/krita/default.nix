@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons

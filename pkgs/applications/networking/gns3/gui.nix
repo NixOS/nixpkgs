@@ -24,7 +24,7 @@ in python.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with python.pkgs; [
     sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+    sip_4 (pyqt5.override { withWebSockets = true; }) distro setuptools
   ];
 
   doCheck = false; # Failing
