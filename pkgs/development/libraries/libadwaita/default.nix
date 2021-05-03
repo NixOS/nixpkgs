@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, docbook_xsl
+, docbook-xsl-nons
 , gtk-doc
 , meson
 , ninja
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "unstable-2021-05-01";
 
   outputs = [ "out" "dev" "devdoc" ];
-  outputBin = [ "dev" ];
+  outputBin = "dev";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    docbook_xsl
+    docbook-xsl-nons
     gtk-doc
     meson
     ninja
