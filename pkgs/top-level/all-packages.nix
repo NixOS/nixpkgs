@@ -1117,7 +1117,7 @@ in
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
-  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
+  aws-sam-cli = with python3Packages; toPythonApplication aws-sam-cli;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 

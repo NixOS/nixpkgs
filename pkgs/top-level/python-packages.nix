@@ -651,6 +651,8 @@ in {
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
+  aws-sam-cli = callPackage ../development/python-modules/aws-sam-cli { };
+
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
