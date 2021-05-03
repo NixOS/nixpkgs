@@ -17,23 +17,25 @@ let
     cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${withCommas version}/"
   '';
 
-  buildHaxeLib =
-    { libname
-    , version
-    , sha256
-    , meta
-    , ...
-    } @ attrs:
+  buildHaxeLib = {
+    libname,
+    version,
+    sha256 ? null,
+    src ? null,
+    meta,
+    ...
+  } @ attrs:
+    assert sha256 != null || src != null;
     stdenv.mkDerivation (attrs // {
       name = "${libname}-${version}";
 
       buildInputs = (attrs.buildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
-      src = fetchzip rec {
+      src = attrs.src or (fetchzip rec {
         name = "${libname}-${version}";
         url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
         inherit sha256;
         stripRoot = false;
-      };
+      });
 
       installPhase = attrs.installPhase or ''
         runHook preInstall
