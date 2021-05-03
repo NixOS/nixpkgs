@@ -1085,6 +1085,8 @@ in
 
   audiowaveform = callPackage ../tools/audio/audiowaveform { };
 
+  authenticator = callPackage ../applications/misc/authenticator { };
+
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   autospotting = callPackage ../applications/misc/autospotting { };
@@ -15312,6 +15314,8 @@ in
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
   libacr38u = callPackage ../tools/security/libacr38u { };
+
+  libadwaita = callPackage ../development/libraries/libadwaita { };
 
   libaec = callPackage ../development/libraries/libaec { };
 
