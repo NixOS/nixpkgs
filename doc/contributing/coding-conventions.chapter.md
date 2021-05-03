@@ -24,7 +24,7 @@ A non-exhaustive list of formatting rules follows. When in doubt, the tool is au
 { }
 ```
 
-not
+instead of
 
 ```nix
 []
