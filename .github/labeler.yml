@@ -50,11 +50,12 @@
 
 "6.topic: haskell":
   - doc/languages-frameworks/haskell.section.md
+  - maintainers/scripts/haskell/**/*
   - pkgs/development/compilers/ghc/**/*
   - pkgs/development/haskell-modules/**/*
   - pkgs/development/tools/haskell/**/*
-  - pkgs/top-level/haskell-packages.nix
   - pkgs/test/haskell/**/*
+  - pkgs/top-level/haskell-packages.nix
 
 "6.topic: kernel":
   - pkgs/build-support/kernel/**/*
