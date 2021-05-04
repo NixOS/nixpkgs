@@ -588,7 +588,8 @@ in
             Group = "postgres";
           };
           script = ''
-            set -eu
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
 
             PSQL=${config.services.postgresql.package}/bin/psql
 
@@ -612,7 +613,8 @@ in
             Group = config.services.mysql.group;
           };
           script = ''
-            set -eu
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
 
             db_password="$(<'${cfg.databasePasswordFile}')"
             ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
@@ -647,14 +649,16 @@ in
             serviceConfig = {
               ExecStartPre = let
                 startPreFullPrivileges = ''
-                  set -eu
+                  set -o errexit -o pipefail -o nounset -o errtrace
+                  shopt -s inherit_errexit
 
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.databasePasswordFile}' /run/keycloak/secrets/db_password
                 '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
                 '';
                 startPre = ''
-                  set -eu
+                  set -o errexit -o pipefail -o nounset -o errtrace
+                  shopt -s inherit_errexit
 
                   install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
                   install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
