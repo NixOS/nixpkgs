@@ -3865,7 +3865,7 @@ let
     };
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -3879,7 +3879,7 @@ let
     propagatedBuildInputs = with perlPackages; [ CryptArgon2 CryptPassphrase ];
     meta = {
       description = "An Argon2 encoder for Crypt::Passphrase";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -17787,7 +17787,7 @@ let
     };
     meta = {
       description = "Timing side-channel protected string compare";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
