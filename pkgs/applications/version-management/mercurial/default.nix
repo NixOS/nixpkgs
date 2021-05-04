@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext
+, re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , guiSupport ? false, tk ? null
 , ApplicationServices
@@ -41,7 +42,7 @@ in python3Packages.buildPythonApplication rec {
   } else null;
   cargoRoot = if rustSupport then "rust" else null;
 
-  propagatedBuildInputs = [ fb-re2 ];
+  propagatedBuildInputs = lib.optional re2Support fb-re2;
   nativeBuildInputs = [ makeWrapper gettext ]
     ++ lib.optionals rustSupport (with rustPlatform; [
          cargoSetupHook
