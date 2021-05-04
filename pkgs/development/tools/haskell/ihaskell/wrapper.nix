@@ -4,7 +4,6 @@ let
     self.ihaskell
     (haskell.lib.doJailbreak self.ihaskell-blaze)
     (haskell.lib.doJailbreak self.ihaskell-diagrams)
-    (haskell.lib.doJailbreak self.ihaskell-display)
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
