@@ -667,7 +667,7 @@ rec {
        => false
   */
   isStorePath = x:
-    if isCoercibleToString x then
+    if !(isList x) && isCoercibleToString x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir
