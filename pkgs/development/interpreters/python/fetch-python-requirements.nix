@@ -17,13 +17,12 @@
   # Make sure to re-compute all depending FOD hashes
 , logicVersion
 
-, lib
+, buildPackages
 , cacert
 , curl
-, stdenv
-, buildPackages
+, lib
 , pythonMitmproxy
-, ...
+, stdenv
 }:
 let
 
@@ -97,7 +96,7 @@ let
     else if pythonVersion != interpreterVersion then
       throw ''
         Attempt to use the fetchPythonRequirements package from python ${interpreterVersion},
-        while `pythonVersion = ${pythonVersion}` was passed to it.
+        while `pythonVersion = ${pythonVersion}` was specified.
         Make sure to update the 'outputHash' after changing.
       ''
     else
@@ -119,20 +118,13 @@ let
           "linux_aarch64"
         ];
       };
+
       platforms = if sysToPlatforms ? "${targetSystem}" then sysToPlatforms."${targetSystem}" else throw ''
         'binaryOnly' fetching is currently not supported for target ${targetSystem}.
         You could set 'binaryOnly = false' and execute the build on a ${targetSystem}.
       '';
 
-      pythonAttrName = lib.stringAsChars (x: if x == "." then "" else x) python.libPrefix;
-
-      # Normalize package names:
-      #   "Example_Package[extra]" -> "example-package"
-      normalizedNames = map (req:
-        lib.toLower (lib.replaceStrings [ "_" ] [ "-" ] (lib.elemAt (lib.splitString "[" req) 0))
-      ) requirements;
-
-      # fixed output derivation containing packages,
+      # fixed output derivation containing downloaded packages,
       # each being symlinked from it's normalized name
       # Example:
       #   "$out/werkzeug" will point to "$out/Werkzeug-0.14.1-py2.py3-none-any.whl"
@@ -162,11 +154,6 @@ let
           ')
           echo "selected maximum release date for python packages: $pretty"
 
-          # install specified version of pip first to ensure reproducible resolver logic
-          ${python}/bin/python -m venv .venv
-          .venv/bin/pip install --upgrade pip==${pipVersion}
-          fetcherPip=.venv/bin/pip
-
           # find free port for proxy
           proxyPort=$(python -c '\
           import socket
@@ -182,6 +169,11 @@ let
             --listen-port "$proxyPort" \
             --ignore-hosts '.*files.pythonhosted.org.*'\
             --script ${./filter-pypi-responses.py} &
+
+          # install specified version of pip first to ensure reproducible resolver logic
+          ${python}/bin/python -m venv .venv
+          .venv/bin/pip install --upgrade pip==${pipVersion}
+          fetcherPip=.venv/bin/pip
 
           # wait for proxy to come up
           while sleep 0.5; do
@@ -205,12 +197,14 @@ let
             "${lib.concatStringsSep "\" \"" requirements}"
 
           # create symlinks to allow files being referenced via their normalized package names
+          # Example:
+          #   "$out/werkzeug" will point to "$out/Werkzeug-0.14.1-py2.py3-none-any.whl"
           cd $out
           for f in $(ls $out); do
             if [[ "$f" == *.whl ]]; then
-              pname=$(echo "$f" | cut -d "-" -f 1 | sed -e 's/_/-/' -e 's/\(.*\)/\L\1/')
+              pname=$(echo "$f" | cut -d "-" -f 1 | sed -e 's/_/-/' -e 's/\./-/' -e 's/\(.*\)/\L\1/')
             else
-              pname=''${f%-*}
+              pname=$(echo "''${f%-*}" | sed -e 's/_/-/' -e 's/\./-/' -e 's/\(.*\)/\L\1/')
             fi
             echo "linking $pname to $f"
             ln -s "$f" "$pname"
