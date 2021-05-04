@@ -826,4 +826,19 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
+
+  # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
+  ihaskell = overrideCabal super.ihaskell (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [
+      # ihaskell's cabal file forces building a shared executable,
+      # but without passing --enable-executable-dynamic, the RPATH
+      # contains /build/ and leads to a build failure with nix
+      "--enable-executable-dynamic"
+    ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+      export PATH=$PWD/dist/build/ihaskell:$PATH
+      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+    '';
+  });
 }
