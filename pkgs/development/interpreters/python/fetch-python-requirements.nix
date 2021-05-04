@@ -8,23 +8,42 @@
 # release date is lower than the specified maxDate.
 
 {
-  # this specifies the python version for which the packages should be downloaded
-  python,
-}:
+  # This specifies the python version for which the packages should be downloaded
+  # Pip needs to be executed from that specific python version.
+  # Pip accepts '--python-version', but this works only for wheel packages.
+  python
 
-{
-  lib
+  # Changing this version might affect the result of the fetcher.
+  # Make sure to re-compute all depending FOD hashes
+, logicVersion
+
+, lib
 , cacert
 , curl
 , stdenv
 , buildPackages
-, python3
+, pythonMitmproxy
 , ...
 }:
 let
 
+  # Whenever this fetcher is modified in a way that might change its result,
+  # the change should be hidden behind this logic switch and only enabled,
+  # if `logicVersion = {new_num}` is passed
+  currentLogic = {
+    "1" = {};  # reserved for version 1
+
+    # Example for next version
+    # "2" = {
+    #   pipFlags = "--some --new --flags --for --pip";
+    # };
+
+  }."${logicVersion}";
+
+  interpreterVersion = lib.concatStringsSep "." (lib.sublist 0 2 (lib.splitString "." python.version));
+
   # we use mitmproxy to filter the pypi responses
-  pythonWithMitmproxy = python3.withPackages (ps: [ ps.mitmproxy ps.python-dateutil ]);
+  pythonWithMitmproxy = pythonMitmproxy.withPackages (ps: [ ps.mitmproxy ps.python-dateutil ]);
 
   fetchPythonRequirements = {
     maxDate,        # maximum release date for packages
@@ -39,12 +58,32 @@ let
     # for reference see: https://pip.pypa.io/en/stable/cli/pip_download/
     pipFlags ? [],
 
-    # Throw an error by default to warn the user about the correct usage
+
+    # The following inputs must be static
+    # If unset, an erorr is thrown with usage instructions.
+
+    pipVersion ? throw ''
+      'pipVersion' must be specified for fetchPythonRequirements.
+      This value must be static and not depend on other variables.
+      This prevents the fetcher from being executed with the wrong pip version.
+      If you change this value, make sure to re-compute the outputHash.
+      Example value: "21.1.1"
+    '',
+
+    pythonVersion ? throw ''
+      'pythonVersion' must be specified for fetchPythonRequirements.
+      This value must be static and not depend on other variables.
+      This prevents the fetcher from being executed with the wrong python version.
+      If you change this value, make sure to re-compute the outputHash.
+      Example value: "3.9"
+    '',
+
     targetSystem ? throw ''
       'targetSystem' must be specified for fetchPythonRequirements.
-      Pass only a constant string like for example "x86_64-linux".
-      Do not pass `stdenv.targetPlatform.system` or `builtins.currentSystem`.
+      This value must be static and not depend on other variables.
       This prevents the fetcher from being executed on the wrong platform.
+      If you change this value, make sure to re-compute the outputHash.
+      Example value: 'x86_64-linux'
     '',
   }:
 
@@ -54,6 +93,12 @@ let
       throw ''
         fetchPythonRequirements cannot fetch sdist packages for ${targetSystem} on a ${stdenv.buildPlatform.system}.
         Either build on a ${targetSystem} or set `onlyBinary = true`.
+      ''
+    else if pythonVersion != interpreterVersion then
+      throw ''
+        Attempt to use the fetchPythonRequirements package from python ${interpreterVersion},
+        while `pythonVersion = ${pythonVersion}` was passed to it.
+        Make sure to update the 'outputHash' after changing.
       ''
     else
     let
@@ -81,14 +126,6 @@ let
 
       pythonAttrName = lib.stringAsChars (x: if x == "." then "" else x) python.libPrefix;
 
-      # We need to execute pip from the python version for which we want to download packages.
-      # Pip accepts '--python-version', but this works only for wheel packages.
-      pythonPip = buildPackages."${pythonAttrName}".withPackages (ps: [
-        ps.pip
-        ps.setuptools
-        ps.pkgconfig
-      ]);
-
       # Normalize package names:
       #   "Example_Package[extra]" -> "example-package"
       normalizedNames = map (req:
@@ -107,7 +144,7 @@ let
         outputHashAlgo = "sha256";
         inherit outputHash;
 
-        nativeBuildInputs = [ pythonWithMitmproxy pythonPip curl cacert ];
+        nativeBuildInputs = [ pythonWithMitmproxy curl cacert ];
 
         dontUnpack = true;
         dontInstall = true;
@@ -125,6 +162,11 @@ let
           ')
           echo "selected maximum release date for python packages: $pretty"
 
+          # install specified version of pip first to ensure reproducible resolver logic
+          ${python}/bin/python -m venv .venv
+          .venv/bin/pip install --upgrade pip==${pipVersion}
+          fetcherPip=.venv/bin/pip
+
           # find free port for proxy
           proxyPort=$(python -c '\
           import socket
@@ -136,7 +178,7 @@ let
           # start proxy to filter pypi responses
           # mitmproxy wants HOME set
           # mitmdump == mitmproxy without GUI
-          HOME=$(pwd) mitmdump \
+          HOME=$(pwd) ${pythonWithMitmproxy}/bin/mitmdump \
             --listen-port "$proxyPort" \
             --ignore-hosts '.*files.pythonhosted.org.*'\
             --script ${./filter-pypi-responses.py} &
@@ -149,9 +191,10 @@ let
           mkdir $out
 
           # make pip query pypi through the filtering proxy
-          ${pythonPip}/bin/pip download \
+          $fetcherPip download \
             --no-cache \
             --dest $out \
+            --progress-bar off \
             --proxy http://localhost:$proxyPort \
             --trusted-host pypi.org \
             --trusted-host files.pythonhosted.org \

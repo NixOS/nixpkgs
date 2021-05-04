@@ -58,10 +58,12 @@ let
 
   fetchPypi = callPackage ../development/interpreters/python/fetchpypi.nix {};
 
-  fetchPythonRequirements =
-    callPackage (import ../development/interpreters/python/fetch-python-requirements.nix {
+  fetchPythonRequirements_1 =
+    callPackage ../development/interpreters/python/fetch-python-requirements.nix {
       inherit python;
-    }) {};
+      logicVersion = "1";
+      pythonMitmproxy = pkgs.python3;
+    };
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -112,7 +114,7 @@ in {
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
-  inherit fetchPythonRequirements;
+  inherit fetchPythonRequirements_1;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
