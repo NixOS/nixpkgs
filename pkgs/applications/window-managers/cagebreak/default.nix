@@ -8,20 +8,20 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
-    repo = "cagebreak";
+    repo = pname;
     rev = version;
-    hash = "sha256-F7fqDVbJS6pVgmj6C1/l9PAaz5yzcYpaq6oc6a6v/Qk=";
+    hash = "sha256-HpAjJHu5sxZKof3ydnU3wcP5GpnH6Ax8m1T1vVoq+oI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc pandoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon cairo
-    pango fontconfig pandoc systemd
+    pango fontconfig systemd
     mesa # for libEGL headers
   ];
 
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     "-Dversion_override=${version}"
     "-Dman-pages=true"
   ];
+
+  postPatch = ''
+    sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
+  '';
 
   postInstall = ''
     mkdir -p $contrib/share/cagebreak
