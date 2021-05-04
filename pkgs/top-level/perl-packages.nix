@@ -3683,6 +3683,20 @@ let
     };
   };
 
+  CryptArgon2 = perlPackages.buildPerlModule {
+    pname = "Crypt-Argon2";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.010.tar.gz";
+      sha256 = "3ea1c006f10ef66fd417e502a569df15c4cc1c776b084e35639751c41ce6671a";
+    };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    meta = {
+      description = "Perl interface to the Argon2 key derivation functions";
+      license = stdenv.lib.licenses.cc0;
+    };
+  };
+
   CryptBlowfish = buildPerlPackage {
     pname = "Crypt-Blowfish";
     version = "2.14";
