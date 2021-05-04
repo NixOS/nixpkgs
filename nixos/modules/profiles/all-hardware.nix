@@ -67,6 +67,10 @@ in
 
       # PWM for the backlight
       "pwm-sun4i"
+
+      # Broadcom
+
+      "vc4"
     ] ++ lib.optionals pkgs.stdenv.isAarch64 [
       # Most of the following falls into two categories:
       #  - early KMS / early display
