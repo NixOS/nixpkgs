@@ -2,37 +2,42 @@
 gfortran, clang, cmake, curl, gnumake, hwloc, jre, openblas, hdf5, expat, ncurses,
 readline, qtbase, qmake, qttools, qtwebkit, webkit, which, lp_solve, omniorb, sqlite, libatomic_ops,
 pkgconfig, file, gettext, flex, bison, doxygen, boost, openscenegraph, gnome2,
-ipopt, libuuid, qtxmlpatterns,
-xorg, git, bash, gtk2, makeWrapper, autoreconfHook }:
-
-let
-
-  fakegit = import ./fakegit.nix {inherit stdenv fetchgit bash;} ;
-
-in
+ipopt, libuuid, qtxmlpatterns, omcompiler, omplot,
+xorg, git, bash, gtk2, makeWrapper, symlinkJoin, autoreconfHook, lsb-release }:
 
 mkDerivation rec {
-  pname = "openmodelica";
-  version = "1.13.0";
+  pname = "omedit";
+  version = "1.17.0";
   src = fetchgit (import ./src-main.nix);
 
   nativeBuildInputs = [autoconf automake libtool cmake qttools gfortran clang makeWrapper
     flex bison doxygen
     pkgconfig file
-    autoreconfHook];
+    autoreconfHook lsb-release];
 
   buildInputs = [hwloc curl
     jre openblas hdf5 expat ncurses readline qtbase qtwebkit webkit which lp_solve
     omniorb sqlite libatomic_ops gettext boost
-    ipopt libuuid qtxmlpatterns
+    ipopt libuuid qtxmlpatterns omhome
     openscenegraph gnome2.gtkglext xorg.libXmu git gtk2 makeWrapper];
 
   hardeningDisable = [ "format" ];
 
+  omhome = symlinkJoin {
+    name = "omedithome";
+    paths = [ omcompiler.out omplot.out ];
+  };
+
   enableParallelBuilding = false;
 
+  preAutoreconf = ''
+    cd OMEdit
+    patchShebangs --build
+  '';
+
+  configureFlags = "--with-openmodelicahome=${omhome}";
+
   patchPhase = ''
-    cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
   '';
 
@@ -44,6 +49,14 @@ mkDerivation rec {
         --prefix PATH : "${gnumake}/bin" \
         --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ openblas ]}"
     done
+  '';
+
+  bowlup = ''
+    unpackPhase
+    cd OpenModelica-08fd3f9
+    eval "$patchPhase"
+    autoreconfPhase
+    configurePhase
   '';
 
   meta = with lib; {

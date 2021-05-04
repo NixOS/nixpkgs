@@ -6490,8 +6490,12 @@ in
 
   ucx = callPackage ../development/libraries/ucx {};
 
-  openmodelica = libsForQt5.callPackage ../applications/science/misc/openmodelica { };
-  omcompiler = libsForQt5.callPackage ../applications/science/misc/openmodelica/omcompiler { };
+  mkOpenModelicaDerivation = callPackage ../applications/science/misc/openmodelica/mkderivation { };
+
+  openmodelica = recurseIntoAttrs {
+    omcompiler = callPackage ../applications/science/misc/openmodelica/omcompiler { };
+    omplot = libsForQt5.callPackage ../applications/science/misc/openmodelica/omplot { };
+  };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
