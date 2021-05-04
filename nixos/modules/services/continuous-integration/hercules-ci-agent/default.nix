@@ -68,7 +68,23 @@ in
     # Trusted user allows simplified configuration and better performance
     # when operating in a cluster.
     nix.trustedUsers = [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
-    services.hercules-ci-agent.settings.nixUserIsTrusted = true;
+    services.hercules-ci-agent = {
+      settings = {
+        nixUserIsTrusted = true;
+        labels =
+          let
+            mkIfNotNull = x: mkIf (x != null) x;
+          in
+          {
+            nixos.configurationRevision = mkIfNotNull config.system.configurationRevision;
+            nixos.release = config.system.nixos.release;
+            nixos.label = mkIfNotNull config.system.nixos.label;
+            nixos.codeName = config.system.nixos.codeName;
+            nixos.tags = config.system.nixos.tags;
+            nixos.systemName = mkIfNotNull config.system.name;
+          };
+      };
+    };
 
     users.users.hercules-ci-agent = {
       home = cfg.settings.baseDirectory;

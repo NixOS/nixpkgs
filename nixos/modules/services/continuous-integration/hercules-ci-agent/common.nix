@@ -193,7 +193,18 @@ in
       # even shortly after the previous lookup. This *also* applies to the daemon.
       narinfo-cache-negative-ttl = 0
     '';
-    services.hercules-ci-agent.tomlFile =
-      format.generate "hercules-ci-agent.toml" cfg.settings;
+    services.hercules-ci-agent = {
+      tomlFile =
+        format.generate "hercules-ci-agent.toml" cfg.settings;
+
+      settings.labels = {
+        agent.source =
+          if options.services.hercules-ci-agent.package.highestPrio == (lib.modules.mkOptionDefault { }).priority
+          then "nixpkgs"
+          else lib.mkOptionDefault "override";
+        pkgs.version = pkgs.lib.version;
+        lib.version = lib.version;
+      };
+    };
   };
 }
