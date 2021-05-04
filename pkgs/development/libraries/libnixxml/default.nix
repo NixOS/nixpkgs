@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix, bash}:
 
 stdenv.mkDerivation {
   pname = "libnixxml";
@@ -11,11 +11,15 @@ stdenv.mkDerivation {
     sha256 = "sha256-HKQnCkO1TDs1e0MDil0Roq4YRembqRHQvb7lK3GAftQ=";
   };
 
-  postPatch = ''
+  prePatch = ''
     # Remove broken test
     substituteInPlace tests/draw/Makefile.am \
       --replace "draw-wrong.sh" ""
     rm tests/draw/draw-wrong.sh
+
+    # Fix bash path
+    substituteInPlace scripts/nixexpr2xml.in \
+      --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
   preAutoreconf = ''
@@ -35,6 +39,7 @@ stdenv.mkDerivation {
     libxslt
   ];
   buildInputs = [
+    bash
     libxml2
     gd.dev
     glib
