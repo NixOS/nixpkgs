@@ -841,4 +841,11 @@ self: super: builtins.intersectAttrs super {
       export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
     '';
   });
+
+  # tests need to execute the built executable
+  stutter = overrideCabal super.stutter (drv: {
+    preCheck = ''
+      export PATH=dist/build/stutter:$PATH
+    '' + (drv.preCheck or "");
+  });
 }
