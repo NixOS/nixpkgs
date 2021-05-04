@@ -652,6 +652,8 @@ in
                   set -o errexit -o pipefail -o nounset -o errtrace
                   shopt -s inherit_errexit
 
+                  umask u=rwx,g=,o=
+
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.databasePasswordFile}' /run/keycloak/secrets/db_password
                 '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
@@ -659,6 +661,8 @@ in
                 startPre = ''
                   set -o errexit -o pipefail -o nounset -o errtrace
                   shopt -s inherit_errexit
+
+                  umask u=rwx,g=,o=
 
                   install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
                   install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
