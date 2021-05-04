@@ -1,0 +1,14 @@
+--- a/buildSrc/linux.gradle
++++ b/buildSrc/linux.gradle
+@@ -225,9 +225,9 @@
+ LINUX.glass.glass = [:]
+ LINUX.glass.glass.nativeSource = ft_gtk_launcher.getFiles()
+ LINUX.glass.glass.compiler = compiler
+-LINUX.glass.glass.ccFlags = [cppFlags, "-Werror"].flatten()
++LINUX.glass.glass.ccFlags = [cppFlags, "-Werror", gtk3CCFlags].flatten()
+ LINUX.glass.glass.linker = linker
+-LINUX.glass.glass.linkFlags = IS_STATIC_BUILD? linkFlags : [linkFlags, "-lX11", "-ldl"].flatten()
++LINUX.glass.glass.linkFlags = IS_STATIC_BUILD? linkFlags : [linkFlags, "-lX11", "-ldl", gtk3LinkFlags].flatten()
+ LINUX.glass.glass.lib = "glass"
+ 
+ LINUX.glass.glassgtk2 = [:]

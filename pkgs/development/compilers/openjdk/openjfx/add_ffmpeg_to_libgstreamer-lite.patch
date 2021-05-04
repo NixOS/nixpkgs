@@ -1,0 +1,13 @@
+--- jfx/modules/javafx.media/src/main/native/gstreamer/projects/linux/gstreamer-lite/Makefile	2021-02-23 15:16:56.445630283 +0900
++++ jfx/modules/javafx.media/src/main/native/gstreamer/projects/linux/gstreamer-lite/Makefile.new	2021-02-23 20:01:34.798745570 +0900
+@@ -73,8 +73,8 @@
+            -I$(SRCBASE_DIR)/gst-plugins-good/gst/isomp4   \
+            -I$(SRCBASE_DIR)/gst-plugins-bad/gst-libs
+ 
+-PACKAGES_INCLUDES := $(shell pkg-config --cflags alsa glib-2.0)
+-PACKAGES_LIBS := $(shell pkg-config --libs alsa glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0)
++PACKAGES_INCLUDES := $(shell pkg-config --cflags alsa glib-2.0 libavcodec libavformat)
++PACKAGES_LIBS := $(shell pkg-config --libs alsa glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 libavcodec libavformat)
+ 
+ LDFLAGS = -L$(BUILD_DIR) -lm $(PACKAGES_LIBS) \
+           -z relro \

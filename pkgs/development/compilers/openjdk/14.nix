@@ -4,7 +4,7 @@
 , libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? openjfx-modular-sdk.meta.available, openjfx-modular-sdk
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -66,7 +66,7 @@ let
       "--with-stdc++lib=dynamic"
     ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx-modular-sdk}";
 
     separateDebugInfo = true;
 
