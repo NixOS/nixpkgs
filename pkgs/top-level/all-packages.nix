@@ -13592,6 +13592,8 @@ in
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
+
   replacement = callPackage ../development/tools/misc/replacement { };
 
   retdec = callPackage ../development/tools/analysis/retdec {
