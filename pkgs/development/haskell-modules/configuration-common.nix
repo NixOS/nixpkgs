@@ -1806,4 +1806,8 @@ self: super: {
   ihaskell-display = doJailbreak super.ihaskell-display;
   ihaskell-basic = doJailbreak super.ihaskell-basic;
 
+  # too strict bounds on QuickCheck
+  # https://github.com/HeinrichApfelmus/hyper-haskell/issues/42
+  hyper-extra = doJailbreak super.hyper-extra;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

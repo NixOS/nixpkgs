@@ -7111,8 +7111,6 @@ broken-packages:
   - hylolib
   - hylotab
   - hyloutils
-  - hyper-extra
-  - hyper-haskell-server
   - hyperdrive
   - hyperfunctions
   - hyperion
