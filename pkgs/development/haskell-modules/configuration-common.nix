@@ -1820,4 +1820,12 @@ self: super: {
     extraPrefix = "";
   });
 
+  # https://github.com/ghcjs/jsaddle/issues/123
+  jsaddle = overrideCabal super.jsaddle (drv: {
+    # lift conditional version constraint on ref-tf
+    postPatch = ''
+      sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
+    '' + (drv.postPatch or "");
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
