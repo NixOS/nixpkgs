@@ -79,7 +79,12 @@ let
     haskellPackages = packagePlatforms pkgs.haskellPackages;
     haskell.compiler = packagePlatforms pkgs.haskell.compiler;
 
-    tests.haskell = packagePlatforms pkgs.tests.haskell;
+    tests = let
+      testPlatforms = packagePlatforms pkgs.tests;
+    in {
+      haskell = testPlatforms.haskell;
+      writers = testPlatforms.writers;
+    };
 
     # top-level packages that depend on haskellPackages
     inherit (pkgsPlatforms)
@@ -216,6 +221,7 @@ let
       constituents = accumulateDerivations [
         # haskell specific tests
         jobs.tests.haskell
+        jobs.tests.writers # writeHaskell{,Bin}
         # important top-level packages
         jobs.cabal-install
         jobs.cabal2nix
