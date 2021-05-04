@@ -1,4 +1,4 @@
-# This file defines cabal2nix-latest, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
+# This file defines cabal2nix-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
 { mkDerivation, aeson, ansi-wl-pprint, base, bytestring, Cabal
 , containers, deepseq, directory, distribution-nixpkgs, fetchzip
 , filepath, hackage-db, hopenssl, hpack, language-nix, lens, lib

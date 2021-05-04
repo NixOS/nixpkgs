@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-latest -I nixpkgs=.
+#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable -I nixpkgs=.
 
 # This script is used to regenerate nixpkgs' Haskell package set, using a tool
 # called hackage2nix. hackage2nix looks at
@@ -9,7 +9,7 @@
 # companion tool cabal2nix.
 #
 # Related scripts are update-hackage.sh, for updating the snapshot of the
-# Hackage database used by hackage2nix, and update-cabal2nix-latest.sh,
+# Hackage database used by hackage2nix, and update-cabal2nix-unstable.sh,
 # for updating the version of hackage2nix used to perform this task.
 
 set -euo pipefail
