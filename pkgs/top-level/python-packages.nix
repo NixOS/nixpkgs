@@ -6267,6 +6267,8 @@ in {
   pytest-cache = self.pytestcache; # added 2021-01-04
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
+  pytest-cases = callPackage ../development/python-modules/pytest-cases{ };
+
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
 
   pytest-celery = callPackage ../development/python-modules/pytest-celery { };
