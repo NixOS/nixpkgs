@@ -30,7 +30,8 @@ in rec {
   #  - inline overrideAttrs and make it positional instead of // to reduce allocs
   makeDerivationExtensible = rattrs:
     let
-      r = mkDerivation_ (f0:
+      r = mkDerivation_
+        (f0:
           let
             f = self: super:
               # Convert f0 to an overlay. Legacy is:
@@ -49,7 +50,9 @@ in rec {
                   f0 self super
                 else x;
           in
-            makeDerivationExtensible (self: let super = rattrs self; in super // f self super)) (rattrs r);
+            makeDerivationExtensible
+              (self: let super = rattrs self; in super // f self super))
+        (rattrs r);
     in r;
 
   # Exactly makeDerivationExtensible (_: attrs), but specialized for performance
@@ -66,7 +69,8 @@ in rec {
               f0 self super
             else x;
       in
-        makeDerivationExtensible (self: attrs // f self attrs)) attrs;
+        makeDerivationExtensible (self: attrs // f self attrs))
+      attrs;
 
   removedAttrs = [
     "meta" "passthru" "pos" "overrideAttrs"
