@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tf2pulumi";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "tf2pulumi";
     rev = "v${version}";
-    sha256 = "199c4hd236mfz9c44rpzpbr3w3fjj8pbw656jd9k3v2igzw942c7";
+    sha256 = "0dd44z78iqh9asa2jh9am2z5fbmn0gch7lfij3h9ngia25h5fpsb";
   };
 
-  vendorSha256 = "1cwyag67q0361szfjv1cyi51cg1bbmkpy34y33hn53aa55pkm1fw";
+  vendorSha256 = "17rn0pshfm4mpqxk3klni4qrw4rvz8vi42s5kidblpf576n0vj62";
 
   buildFlagsArray = ''
     -ldflags=-s -w -X=github.com/pulumi/tf2pulumi/version.Version=${src.rev}
