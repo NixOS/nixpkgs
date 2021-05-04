@@ -64,7 +64,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to mine moneroj.
+          Whether to mine monero.
         '';
       };
 
