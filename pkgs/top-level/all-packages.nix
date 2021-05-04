@@ -8456,6 +8456,8 @@ in
 
   snapcast = callPackage ../applications/audio/snapcast { };
 
+  snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
+
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
   };
