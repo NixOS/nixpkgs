@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, appimageTools
 , makeWrapper
 , electron_11
 , openssl
@@ -8,21 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.30";
+  version = "8.0.33-53.BETA";
 
   src = fetchurl {
-    url = "https://onepassword.s3.amazonaws.com/linux/appimage/${pname}-${version}.AppImage";
-    hash = "sha256-j+fp/f8nta+OOuOFU4mmUrGYlVmAqdaXO4rLJ0in+m8=";
+    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+    hash = "sha256-YUYER+UiM1QEDgGl0P9bIT65YVacUnuGtQVkV91teEU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
-  };
-
-  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -35,19 +29,32 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/1password
 
     # Applications files.
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    cp -a {locales,resources} $out/share/${pname}
+    install -Dm0755 -t $out/share/${pname} {1Password-BrowserSupport,1Password-KeyringHelper}
 
     # Desktop file.
-    install -Dt $out/share/applications ${appimageContents}/${pname}.desktop
+    install -Dt $out/share/applications resources/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
     # Icons.
-    cp -a ${appimageContents}/usr/share/icons $out/share
+    cp -a resources/icons $out/share
 
     # Wrap the application with Electron.
     makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/share/${pname}/resources/app.asar" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
+
+    # Set the interpreter for the helper binaries and wrap them with
+    # the runtime libraries.
+    interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+    patchelf --set-interpreter $interp \
+      $out/share/$pname/{1Password-BrowserSupport,1Password-KeyringHelper}
+
+    wrapProgram $out/share/${pname}/1Password-BrowserSupport \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
+
+    wrapProgram $out/share/${pname}/1Password-KeyringHelper \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 

@@ -735,6 +735,7 @@ class Machine:
         shell_path = os.path.join(self.state_dir, "shell")
         self.shell_socket = create_socket(shell_path)
 
+        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
         qemu_options = (
             " ".join(
                 [
@@ -744,7 +745,7 @@ class Machine:
                     "-device virtio-serial",
                     "-device virtconsole,chardev=shell",
                     "-device virtio-rng-pci",
-                    "-serial stdio" if "DISPLAY" in os.environ else "-nographic",
+                    "-serial stdio" if display_available else "-nographic",
                 ]
             )
             + " "

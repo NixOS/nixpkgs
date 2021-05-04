@@ -2999,6 +2999,8 @@ in
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
+  restream = callPackage ../applications/misc/remarkable/restream { };
+
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
@@ -13495,7 +13497,9 @@ in
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
-  mill = callPackage ../development/tools/build-managers/mill { };
+  mill = callPackage ../development/tools/build-managers/mill {
+    jre = jre8;
+  };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
   sbt-with-scala-native = callPackage ../development/tools/build-managers/sbt/scala-native.nix { };
@@ -26465,6 +26469,8 @@ in
   trustedqsl = tqsl; # Alias added 2019-02-10
 
   transcode = callPackage ../applications/audio/transcode { };
+
+  transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
   libtransmission = transmission.override {
