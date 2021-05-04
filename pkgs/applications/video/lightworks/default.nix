@@ -85,7 +85,7 @@ in buildFHSUserEnv {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.antonxy ];
+    maintainers = with lib.maintainers; [ antonxy vojta001 ];
     platforms = [ "x86_64-linux" ];
   };
 }
