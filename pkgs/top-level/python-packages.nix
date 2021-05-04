@@ -1733,6 +1733,8 @@ in {
 
   decorator = callPackage ../development/python-modules/decorator { };
 
+  decopatch = callPackage ../development/python-modules/decopatch { };
+
   deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
