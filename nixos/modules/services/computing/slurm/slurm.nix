@@ -403,9 +403,7 @@ in
       requires = [ "munged.service" "mysql.service" ];
 
       preStart = ''
-        cp ${slurmdbdConf} ${configPath}
-        chmod 600 ${configPath}
-        chown ${cfg.user} ${configPath}
+        install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
         ${optionalString (cfg.dbdserver.storagePassFile != null) ''
           echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
             >> ${configPath}
