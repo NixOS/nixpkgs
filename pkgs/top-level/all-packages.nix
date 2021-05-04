@@ -26424,6 +26424,8 @@ in
 
   lavalauncher = callPackage ../applications/misc/lavalauncher { };
 
+  t-rec = callPackage ../misc/t-rec { };
+
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
