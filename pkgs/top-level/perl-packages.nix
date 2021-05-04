@@ -18860,6 +18860,19 @@ let
     };
   };
 
+  StringCompareConstantTime = buildPerlPackage {
+    pname = "String-Compare-ConstantTime";
+    version = "0.321";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FRACTAL/String-Compare-ConstantTime-0.321.tar.gz";
+      sha256 = "0b26ba2b121d8004425d4485d1d46f59001c83763aa26624dff6220d7735d7f7";
+    };
+    meta = {
+      description = "Timing side-channel protected string compare";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringCRC32 = buildPerlPackage {
     pname = "String-CRC32";
     version = "2";
