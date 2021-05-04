@@ -176,13 +176,13 @@ in rec {
         '';
       };
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
             mkdir -p $out
 
-            cp -r ${self.darwin.darwin-stubs}/usr/lib $out/lib
+            cp -r ${selfDarwin.darwin-stubs}/usr/lib $out/lib
             chmod -R +w $out/lib
             substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
 
@@ -201,7 +201,7 @@ in rec {
           '';
         };
 
-        darwin-stubs = super.darwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
+        darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
 
         dyld = {
           name = "bootstrap-stage0-dyld";
@@ -220,10 +220,10 @@ in rec {
           nativeTools  = false;
           nativeLibc   = false;
           inherit (self) buildPackages coreutils gnugrep;
-          libc         = self.pkgs.darwin.Libsystem;
+          libc         = selfDarwin.Libsystem;
           bintools     = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
         };
-      };
+      });
 
       llvmPackages_7 = {
         clang-unwrapped = stdenv.mkDerivation {
@@ -291,12 +291,12 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (selfDarwin: _: {
         binutils = darwin.binutils.override {
           coreutils = self.coreutils;
-          libc = self.darwin.Libsystem;
+          libc = selfDarwin.Libsystem;
         };
-      };
+      });
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -337,11 +337,11 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin)
           binutils dyld Libsystem xnu configd ICU libdispatch libclosure
           launchd CF darwin-stubs;
-      };
+      });
     };
   in with prevStage; stageFun 2 prevStage {
     extraPreHook = ''
@@ -382,11 +382,11 @@ in rec {
         });
       in { inherit libraries; } // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin)
           dyld Libsystem xnu configd libdispatch libclosure launchd libiconv
           locale darwin-stubs;
-      };
+      });
     };
   in with prevStage; stageFun 3 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -442,14 +442,14 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // rec {
+      darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (darwin) dyld Libsystem libiconv locale darwin-stubs;
 
-        CF = super.darwin.CF.override {
+        CF = superDarwin.CF.override {
           inherit libxml2;
           python3 = prevStage.python3;
         };
-      };
+      });
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -480,11 +480,11 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin) dyld ICU Libsystem libiconv;
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (darwin) binutils binutils-unwrapped cctools;
-      };
+      });
     } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
@@ -537,14 +537,14 @@ in rec {
     ]);
 
     overrides = lib.composeExtensions persistent (self: super: {
+      darwin = super.darwin.overrideScope (_: superDarwin: {
+        inherit (prevStage.darwin) CF darwin-stubs;
+        xnu = superDarwin.xnu.override { inherit (prevStage) python3; };
+      });
+    } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       clang = cc;
       llvmPackages = super.llvmPackages // { clang = cc; };
       inherit cc;
-
-      darwin = super.darwin // {
-        inherit (prevStage.darwin) CF darwin-stubs;
-        xnu = super.darwin.xnu.override { inherit (prevStage) python3; };
-      };
     });
   };
 
