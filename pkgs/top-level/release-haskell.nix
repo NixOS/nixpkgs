@@ -67,9 +67,7 @@ let
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
-  pkgsPlatforms = packagePlatforms pkgs // {
-    gitAndTools = packagePlatforms pkgs.gitAndTools;
-  };
+  pkgsPlatforms = packagePlatforms pkgs;
 
   # names of packages in an attribute set that are maintained
   maintainedPkgNames = set: builtins.attrNames
@@ -110,6 +108,7 @@ let
       fffuu
       futhark
       ghcid
+      git-annex
       git-brunch
       gitit
       glirc
@@ -186,7 +185,6 @@ let
       zsh-git-prompt
       ;
 
-    gitAndTools.git-annex = pkgsPlatforms.gitAndTools.git-annex;
     elmPackages.elm = pkgsPlatforms.elmPackages.elm;
   } // versionedCompilerJobs {
     # Packages which should be checked on more than the
