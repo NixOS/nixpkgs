@@ -2,8 +2,8 @@
 let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell
-    (haskell.lib.doJailbreak self.ihaskell-blaze)
-    (haskell.lib.doJailbreak self.ihaskell-diagrams)
+    self.ihaskell-blaze
+    self.ihaskell-diagrams
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
