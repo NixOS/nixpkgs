@@ -1810,4 +1810,14 @@ self: super: {
   # https://github.com/HeinrichApfelmus/hyper-haskell/issues/42
   hyper-extra = doJailbreak super.hyper-extra;
 
+  # Fixes too strict version bounds on regex libraries
+  # Presumably to be removed at the next release
+  yi-language = appendPatch super.yi-language (pkgs.fetchpatch {
+    url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
+    sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
+    includes = [ "yi-language.cabal" ];
+    stripLen = 2;
+    extraPrefix = "";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
