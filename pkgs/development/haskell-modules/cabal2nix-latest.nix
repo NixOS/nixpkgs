@@ -8,7 +8,7 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "2021-05-01";
+  version = "unstable-2021-05-01";
   src = fetchzip {
     url = "https://github.com/NixOS/cabal2nix/archive/849a3507c849e3e2331efbc5ebe391b70a215ddc.tar.gz";
     sha256 = "0g91d2bd72l3kkykc47a2raymvgw6427n7cg9ayzvrpldkd0silc";

@@ -14,4 +14,4 @@ commit="$(jq -r .commit.sha <<< "$head_info")"
 date="$(date "--date=$(jq -r .commit.commit.committer.date <<< "$head_info")" +%F)"
 # generate nix expression from cabal file, replacing the version with the commit date
 echo '# This file defines cabal2nix-latest, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.' > pkgs/development/haskell-modules/cabal2nix-latest.nix
-cabal2nix "https://github.com/NixOS/cabal2nix/archive/$commit.tar.gz" | sed -e 's/version = ".*"/version = "'"$date"'"/' >> pkgs/development/haskell-modules/cabal2nix-latest.nix
+cabal2nix "https://github.com/NixOS/cabal2nix/archive/$commit.tar.gz" | sed -e 's/version = ".*"/version = "'"unstable-$date"'"/' >> pkgs/development/haskell-modules/cabal2nix-latest.nix
