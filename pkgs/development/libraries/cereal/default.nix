@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     # consequences, depending on the context within which this manifests.
     (fetchpatch {
       name = "CVE-2020-11105.patch";
-      url =
-        "https://github.com/USCiLab/cereal/commit/3e8b9cab82dc4a596dc3bcfe7437946395ad782b.patch";
+      url = "https://github.com/USCiLab/cereal/commit/f27c12d491955c94583512603bf32c4568f20929.patch";
       sha256 = "CIkbJ7bAN0MXBhTXQdoQKXUmY60/wQvsdn99FaWt31w=";
     })
   ];
