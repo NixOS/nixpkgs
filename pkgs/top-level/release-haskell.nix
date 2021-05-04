@@ -86,14 +86,18 @@ let
     # top-level packages that depend on haskellPackages
     inherit (pkgsPlatforms)
       agda
+      arion
       bench
       bustle
       blucontrol
       cabal-install
       cabal2nix
       cachix
+      carp
       cedille
+      client-ip-echo
       darcs
+      dconf2nix
       dhall
       dhall-bash
       dhall-docs
@@ -113,6 +117,8 @@ let
       haskell-ci
       haskell-language-server
       hasura-graphql-engine
+      hci
+      hercules-ci-agent
       hinit
       hedgewars
       hledger
@@ -130,8 +136,11 @@ let
       jl
       koka
       krank
+      lambdabot
+      ldgallery
       madlang
       matterhorn
+      mueval
       neuron-notes
       niv
       nix-delegate
@@ -139,18 +148,22 @@ let
       nix-diff
       nix-linter
       nix-output-monitor
+      nix-script
       nix-tree
       nixfmt
       nota
       ormolu
       pandoc
+      pakcs
       petrinizer
       place-cursor-at
       pinboard-notes-backup
+      pretty-simple
       shake
       shellcheck
       sourceAndTags
       spacecookie
+      spago
       splot
       stack
       stack2nix
@@ -163,14 +176,18 @@ let
       tldr-hs
       tweet-hs
       update-nix-fetchgit
+      uqm
       uuagc
       vaultenv
       wstunnel
       xmobar
       xmonad-with-packages
+      yi
+      zsh-git-prompt
       ;
 
     gitAndTools.git-annex = pkgsPlatforms.gitAndTools.git-annex;
+    elmPackages.elm = pkgsPlatforms.elmPackages.elm;
   } // versionedCompilerJobs {
     # Packages which should be checked on more than the
     # default GHC version. This list can be used to test
