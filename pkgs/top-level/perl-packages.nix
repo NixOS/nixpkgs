@@ -3856,6 +3856,19 @@ let
     };
   };
 
+  CryptPassphrase = buildPerlPackage {
+    pname = "Crypt-Passphrase";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.003.tar.gz";
+      sha256 = "685aa090f8179a86d6896212ccf8ccfde7a79cce857199bb14e2277a10d240ad";
+    };
+    meta = {
+      description = "A module for managing passwords in a cryptographically agile manner";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptPasswdMD5 = buildPerlModule {
     pname = "Crypt-PasswdMD5";
     version = "1.40";
