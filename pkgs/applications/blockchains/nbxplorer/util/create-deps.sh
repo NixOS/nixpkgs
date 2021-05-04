@@ -6,7 +6,7 @@ set -euo pipefail
 # Expects $pkgSrc to contain a single .sln file.
 
 pkgSrc=$1
-depsFile=$2
+depsFile=$(realpath "$2")
 
 sln=$(cd "$pkgSrc"; find * -maxdepth 0 -name '*.sln' | head -1)
 [[ $sln ]] || { echo "No .sln file in $pkgSrc" ; exit 1; }
