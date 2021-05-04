@@ -1,9 +1,24 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
-, wlroots, wayland-protocols, pixman, libxkbcommon
-, cairo , pango, fontconfig, pandoc, systemd, mesa
-, withXwayland ? true, xwayland
+{ lib
+, stdenv
+, fetchFromGitHub
+, cairo
+, fontconfig
+, libxkbcommon
+, makeWrapper
+, mesa
+, meson
+, ninja
 , nixosTests
+, pandoc
+, pango
+, pixman
+, pkg-config
+, scdoc
+, systemd
+, wayland
+, wayland-protocols
+, withXwayland ? true , xwayland
+, wlroots
 }:
 
 stdenv.mkDerivation rec {
@@ -17,20 +32,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-HpAjJHu5sxZKof3ydnU3wcP5GpnH6Ax8m1T1vVoq+oI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc pandoc makeWrapper ];
-
-  buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon cairo
-    pango fontconfig systemd
-    mesa # for libEGL headers
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pandoc
+    pkg-config
+    scdoc
+    wayland
   ];
 
-  outputs = [ "out" "contrib" ];
+  buildInputs = [
+    cairo
+    fontconfig
+    libxkbcommon
+    mesa # for libEGL headers
+    pango
+    pixman
+    systemd
+    wayland
+    wayland-protocols
+    wlroots
+  ];
+
+  outputs = [
+    "out"
+    "contrib"
+  ];
 
   mesonFlags = [
-    "-Dxwayland=${lib.boolToString withXwayland}"
-    "-Dversion_override=${version}"
     "-Dman-pages=true"
+    "-Dversion_override=${version}"
+    "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
   postPatch = ''
