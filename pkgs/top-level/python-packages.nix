@@ -6387,6 +6387,8 @@ in {
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
 
+  pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
+
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
   pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
