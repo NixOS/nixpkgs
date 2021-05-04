@@ -7153,8 +7153,6 @@ broken-packages:
   - ige-mac-integration
   - ignore
   - igraph
-  - ihaskell-basic
-  - ihaskell-display
   - ihaskell-parsec
   - ihaskell-rlangqq
   - ihaskell-widgets

@@ -1801,4 +1801,9 @@ self: super: {
   # https://github.com/diagrams/diagrams-cairo/issues/77
   diagrams-cairo = doJailbreak super.diagrams-cairo;
 
+  # Too strict version bounds on base
+  # https://github.com/gibiansky/IHaskell/issues/1217
+  ihaskell-display = doJailbreak super.ihaskell-display;
+  ihaskell-basic = doJailbreak super.ihaskell-basic;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
