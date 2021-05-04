@@ -1798,4 +1798,8 @@ self: super: {
     passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-latest.sh;
   };
 
+  # Too strict version bounds on base and optparse-applicative
+  # https://github.com/diagrams/diagrams-cairo/issues/77
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

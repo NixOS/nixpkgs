@@ -4103,7 +4103,6 @@ broken-packages:
   - Chart-simple
   - chart-svg
   - chart-svg-various
-  - Chart-tests
   - chart-unit
   - charter
   - chatty-text
@@ -4792,7 +4791,6 @@ broken-packages:
   - diagrams-boolean
   - diagrams-braille
   - diagrams-builder
-  - diagrams-cairo
   - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
@@ -6567,7 +6565,6 @@ broken-packages:
   - hidden-char
   - hie-core
   - hieraclus
-  - hierarchical-clustering-diagrams
   - hierarchical-exceptions
   - hierarchical-spectral-clustering
   - hierarchy
@@ -11874,7 +11871,6 @@ broken-packages:
   - yesod-lucid
   - yesod-mangopay
   - yesod-markdown
-  - yesod-media-simple
   - yesod-page-cursor
   - yesod-paginate
   - yesod-pagination
