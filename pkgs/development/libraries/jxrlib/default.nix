@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "jxrlib";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace '.so' '.dylib'
   '';
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [ python3 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   strictDeps = true;
 
