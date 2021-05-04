@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg     = config.services.monero;
-  dataDir = "/var/lib/monero";
 
   listToConf = option: list:
     concatMapStrings (value: "${option}=${value}\n") list;
@@ -52,6 +51,14 @@ in
     services.monero = {
 
       enable = mkEnableOption "Monero node daemon";
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/monero";
+        description = ''
+          The directory where Monero stores its data files.
+        '';
+      };
 
       mining.enable = mkOption {
         type = types.bool;
@@ -200,7 +207,7 @@ in
     users.users.monero = {
       uid  = config.ids.uids.monero;
       description = "Monero daemon user";
-      home = dataDir;
+      home = cfg.dataDir;
       createHome = true;
     };
 
