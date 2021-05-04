@@ -149,8 +149,9 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
-        (pkgs.python3.withPackages cfg.python.extraPackages);
+      path = (with pkgs; [ curl gawk iproute2 which ])
+        ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
+        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
