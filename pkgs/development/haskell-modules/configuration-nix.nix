@@ -848,4 +848,13 @@ self: super: builtins.intersectAttrs super {
       export PATH=dist/build/stutter:$PATH
     '' + (drv.preCheck or "");
   });
+
+  # Install man page and generate shell completions
+  pinboard-notes-backup = overrideCabal
+    (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup)
+    (drv: {
+      postInstall = ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      '' + (drv.postInstall or "");
+    });
 }
