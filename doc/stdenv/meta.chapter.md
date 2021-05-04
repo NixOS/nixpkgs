@@ -151,7 +151,7 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
 Alternatively, you can specify other derivations as tests. You can make use of
 the optional parameter (here: `self`) to inject the correct package without
 relying on non-local definitions, even in the presence of `overrideAttrs`. This
-means `(mypkg.overrideAttrs f).tests` will be as expected, as long as the
+means `(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
 definition of `tests` does not rely on the original `mypkg` or overrides it in
 all places.
 
