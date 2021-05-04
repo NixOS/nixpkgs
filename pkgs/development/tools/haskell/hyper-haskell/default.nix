@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, jshon, electron_10
+{ lib, stdenvNoCC, fetchFromGitHub, jshon, electron_10
 , runtimeShell, hyper-haskell-server, extra-packages ? [] }:
 
 let
   binPath = lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
   electron = electron_10;
-in stdenv.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "hyper-haskell";
   version = "0.2.3.0";
 
@@ -17,19 +17,21 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = extra-packages;
 
-  buildCommand = ''
+  dontBuild = true;
+
+  installPhase = ''
     mkdir -p $out/bin $out/share/hyper-haskell/worksheets $out/share/applications $out/share/icons/hicolor/scalable/apps $out/share/mime/packages
 
     # Electron app
-    cp -R $src/app $out
+    cp -R app $out
 
     # Desktop Launcher
-    cp $src/resources/hyper-haskell.desktop $out/share/applications/hyper-haskell.desktop
-    cp $src/resources/icons/icon.svg $out/share/icons/hicolor/scalable/apps/hyper-haskell.svg
-    cp $src/resources/shared-mime-info.xml $out/share/mime/packages/hyper-haskell.xml
+    cp resources/hyper-haskell.desktop $out/share/applications/hyper-haskell.desktop
+    cp resources/icons/icon.svg $out/share/icons/hicolor/scalable/apps/hyper-haskell.svg
+    cp resources/shared-mime-info.xml $out/share/mime/packages/hyper-haskell.xml
 
     # install example worksheets with backend set to nix
-    for worksheet in "$src/worksheets/"*.hhs; do
+    for worksheet in "worksheets/"*.hhs; do
       ${jshon}/bin/jshon -e settings -s nix -i packageTool -p < $worksheet > $out/share/hyper-haskell/worksheets/`basename $worksheet`
     done
 
