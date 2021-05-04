@@ -592,8 +592,11 @@ in
 
             PSQL=${config.services.postgresql.package}/bin/psql
 
-            db_password="$(<'${cfg.databasePasswordFile}')"
-            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tAc "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB"
+            create_role="$(mktemp)"
+            trap 'rm -f "$create_role"' ERR EXIT
+
+            echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$(<'${cfg.databasePasswordFile}')' CREATEDB" > "$create_role"
+            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tA --file="$create_role"
             $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
           '';
         };
