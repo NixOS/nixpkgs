@@ -2926,6 +2926,7 @@ package-maintainers:
     # other packages I can help out for
     - systemd
     - fast-logger
+    - flat
     - Euterpea2
     - utc
     - socket
