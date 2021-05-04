@@ -661,7 +661,7 @@ in
       ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage
-        pkgs.replace
+        pkgs.replace-secret
         cfg.package.rake
       ];
       environment = cfg.package.runtimeEnv // {
@@ -688,10 +688,7 @@ in
 
           mkSecretReplacement = file:
             lib.optionalString (file != null) ''
-              (
-                  password=$(<'${file}')
-                  replace-literal -fe '${file}' "$password" /run/discourse/config/discourse.conf
-              )
+              replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
         in ''
           set -o errexit -o pipefail -o nounset -o errtrace
@@ -713,11 +710,12 @@ in
                   cfg.siteSettings
                   "/run/discourse/config/nixos_site_settings.json"
               }
-              install -T -m 0400 -o discourse ${discourseConf} /run/discourse/config/discourse.conf
+              install -T -m 0600 -o discourse ${discourseConf} /run/discourse/config/discourse.conf
               ${mkSecretReplacement cfg.database.passwordFile}
               ${mkSecretReplacement cfg.mail.outgoing.passwordFile}
               ${mkSecretReplacement cfg.redis.passwordFile}
               ${mkSecretReplacement cfg.secretKeyBaseFile}
+              chmod 0400 /run/discourse/config/discourse.conf
           )
 
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
