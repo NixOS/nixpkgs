@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
 , meson, ninja, pkg-config, wayland-protocols
-, pipewire, wayland, systemd, libdrm, iniparser, scdoc, grim }:
+, pipewire, wayland, systemd, libdrm, iniparser, scdoc, grim, slurp }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ grim ]}
+    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ grim slurp ]}
   '';
 
   meta = with lib; {
