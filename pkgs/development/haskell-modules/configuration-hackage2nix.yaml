@@ -2935,6 +2935,8 @@ package-maintainers:
     - yarn2nix
   poscat:
     - hinit
+  bdesham:
+    - pinboard-notes-backup
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
