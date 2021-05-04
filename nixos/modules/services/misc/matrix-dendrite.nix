@@ -154,14 +154,13 @@ in
         RuntimeDirectory = "matrix-dendrite";
         RuntimeDirectoryMode = "0700";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStartPre =
-          if (cfg.environmentFile != null) then ''
-            ${pkgs.envsubst}/bin/envsubst \
-              -i ${configurationYaml} \
-              -o /run/matrix-dendrite/dendrite.yaml
-          '' else ''
-            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/matrix-dendrite/dendrite.yaml
-          '';
+        ExecStartPre = lib.singleton ''
+          ${pkgs.envsubst}/bin/envsubst -no-unset -no-empty \
+            -i ${configurationYaml} \
+            -o /run/matrix-dendrite/dendrite.yaml
+        '' ++ [
+          "${pkgs.coreutils}/bin/chmod a-w /run/matrix-dendrite/dendrite.yaml"
+        ];
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.matrix-dendrite}/bin/dendrite-monolith-server"
           "--config /run/matrix-dendrite/dendrite.yaml"
@@ -174,6 +173,7 @@ in
         ]);
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
+        Umask = "0027";
       };
     };
   };
