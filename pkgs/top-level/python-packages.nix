@@ -8302,6 +8302,8 @@ in {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
+
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
