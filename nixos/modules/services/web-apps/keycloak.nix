@@ -712,4 +712,5 @@ in
       };
 
   meta.doc = ./keycloak.xml;
+  meta.maintainers = [ lib.maintainers.talyz ];
 }
