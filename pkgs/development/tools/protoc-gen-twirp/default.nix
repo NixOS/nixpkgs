@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "protoc-gen-twirp";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "twitchtv";
     repo = "twirp";
     rev = "v${version}";
-    sha256 = "sha256-W7t36F1St0YLPowHaZSboVNnvX7E2Lg5tPWeyeUSabA=";
+    sha256 = "sha256-lwozRwH96nh4Zlf6ggOF+FuUEfxkN38wxygg5HXw/M0=";
   };
 
   goPackagePath = "github.com/twitchtv/twirp";
