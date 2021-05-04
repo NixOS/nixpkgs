@@ -31281,9 +31281,7 @@ in
 
   bottom = callPackage ../tools/system/bottom {};
 
-  cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {
-    wlroots = wlroots_0_12;
-  };
+  cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix { };
 
   psftools = callPackage ../os-specific/linux/psftools {};
 
