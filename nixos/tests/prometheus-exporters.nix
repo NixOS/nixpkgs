@@ -334,13 +334,48 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
+          extraConfig = ''
+            server:
+              listen: 127.0.0.1@53
+
+            template:
+              - id: default
+                global-module: mod-stats
+                dnssec-signing: off
+                zonefile-sync: -1
+                journal-db: /var/lib/knot/journal
+                kasp-db: /var/lib/knot/kasp
+                timer-db: /var/lib/knot/timer
+                zonefile-load: difference
+                storage: ${pkgs.buildEnv {
+                  name = "foo";
+                  paths = [
+                    (pkgs.writeTextDir "test.zone" ''
+                      @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
+                      @       NS      ns1
+                      @       NS      ns2
+                      ns1     A       192.168.0.1
+                    '')
+                  ];
+                }}
+
+            mod-stats:
+              - id: custom
+                edns-presence: on
+                query-type: on
+
+            zone:
+              - domain: test
+                file: test.zone
+                module: mod-stats/custom
+          '';
         };
       };
       exporterTest = ''
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep -q 'knot_server_zone_count 0.0'")
+        succeed("curl -sSf 'localhost:9433' | grep -q 'knot_server_zone_count 1.0'")
       '';
     };
 

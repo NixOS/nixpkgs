@@ -49,6 +49,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda globin elseym ];
+    maintainers = with maintainers; [ globin elseym hexa ];
   };
 }
