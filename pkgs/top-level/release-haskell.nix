@@ -83,12 +83,16 @@ let
 
     tests.haskell = packagePlatforms pkgs.tests.haskell;
 
-    # top-level haskell packages
+    # top-level packages that depend on haskellPackages
     inherit (pkgsPlatforms)
+      agda
       bench
+      bustle
+      blucontrol
       cabal-install
       cabal2nix
       cachix
+      cedille
       darcs
       dhall
       dhall-bash
@@ -97,15 +101,20 @@ let
       dhall-json
       dhall-nix
       dhall-text
+      diagrams-builder
       elm2nix
       fffuu
       futhark
+      ghcid
+      git-brunch
+      gitit
       glirc
       hadolint
       haskell-ci
       haskell-language-server
       hasura-graphql-engine
       hinit
+      hedgewars
       hledger
       hledger-iadd
       hledger-interest
@@ -113,7 +122,12 @@ let
       hledger-web
       hlint
       hpack
+      hyper-haskell
+      hyper-haskell-server-with-packages
       icepeak
+      idris
+      ihaskell
+      jl
       koka
       krank
       madlang
@@ -127,21 +141,33 @@ let
       nix-output-monitor
       nix-tree
       nixfmt
+      nota
+      ormolu
       pandoc
+      petrinizer
       place-cursor-at
+      pinboard-notes-backup
       shake
       shellcheck
+      sourceAndTags
       spacecookie
       splot
       stack
       stack2nix
       stutter
       stylish-haskell
+      taffybar
+      tamarin-prover
       taskell
+      termonad-with-packages
+      tldr-hs
       tweet-hs
       update-nix-fetchgit
       uuagc
+      vaultenv
       wstunnel
+      xmobar
+      xmonad-with-packages
       ;
 
     gitAndTools.git-annex = pkgsPlatforms.gitAndTools.git-annex;
