@@ -9088,7 +9088,6 @@ broken-packages:
   - plot-gtk3
   - Plot-ho-matic
   - plot-lab
-  - plots
   - PlslTools
   - plugins
   - plugins-auto
