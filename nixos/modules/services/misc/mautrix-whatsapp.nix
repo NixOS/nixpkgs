@@ -9,6 +9,17 @@ let
 
   registrationFile = "${dataDir}/whatsapp-registration.yaml";
   settingsFile = format.generate "config.json" cfg.settings;
+
+  startupScript = ''
+    ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
+      | .[0].appservice.hs_token = .[1].hs_token
+      | .[0]' ${settingsFile} ${registrationFile} \
+      > ${dataDir}/config.yml
+
+    ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
+      --config='${dataDir}/config.yml' \
+      --registration='${registrationFile}'
+  '';
 in
 {
   options.services.mautrix-whatsapp = {
@@ -91,6 +102,8 @@ in
         chmod 640 ${registrationFile}
       '';
 
+      script = startupScript;
+
       serviceConfig = {
         Type = "simple";
         #DynamicUser = true;
@@ -107,11 +120,6 @@ in
         Group = "matrix-synapse";
         SupplementaryGroups = "matrix-synapse";
         UMask = 0027;
-
-        ExecStart = ''
-          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
-            --config='${settingsFile}'
-        '';
         Restart = "always";
       };
     };
