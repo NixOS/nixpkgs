@@ -43,13 +43,16 @@ in rec {
               let x = f0 super;
               in
                 if builtins.isFunction x
-                then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
+                then
+                  # Can't reuse `x`, because `self` comes first.
+                  # Looks inefficient, but `f0 super` was a cheap thunk.
+                  f0 self super
                 else x;
           in
             makeDerivationExtensible (self: let super = rattrs self; in super // f self super)) (rattrs r);
     in r;
 
-  # Like makeDerivationExtensible (_: attrs), but specialized for performance
+  # Exactly makeDerivationExtensible (_: attrs), but specialized for performance
   makeDerivationExtensible0 = attrs:
     mkDerivation_ (f0:
       let
@@ -57,7 +60,10 @@ in rec {
           let x = f0 super;
           in
             if builtins.isFunction x
-            then f0 self super # double call looks inefficient, but `f0 super` was a cheap thunk
+            then
+              # Can't reuse `x`, because `self` comes first.
+              # Looks inefficient, but `f0 super` was a cheap thunk.
+              f0 self super
             else x;
       in
         makeDerivationExtensible (self: attrs // f self attrs)) attrs;
