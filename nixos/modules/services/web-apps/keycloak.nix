@@ -537,7 +537,9 @@ in
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {} ''
+      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {
+        nativeBuildInputs = [ cfg.package ];
+      } ''
         export JBOSS_BASE_DIR="$(pwd -P)";
         export JBOSS_MODULEPATH="${cfg.package}/modules";
         export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
@@ -547,11 +549,11 @@ in
 
         mkdir -p {deployments,ssl}
 
-        "${cfg.package}/bin/standalone.sh"&
+        standalone.sh&
 
         attempt=1
         max_attempts=30
-        while ! ${cfg.package}/bin/jboss-cli.sh --connect ':read-attribute(name=server-state)'; do
+        while ! jboss-cli.sh --connect ':read-attribute(name=server-state)'; do
             if [[ "$attempt" == "$max_attempts" ]]; then
                 echo "ERROR: Could not connect to Keycloak after $attempt attempts! Failing.." >&2
                 exit 1
@@ -561,7 +563,7 @@ in
             (( attempt++ ))
         done
 
-        ${cfg.package}/bin/jboss-cli.sh --connect --file=${jbossCliScript} --echo-command
+        jboss-cli.sh --connect --file=${jbossCliScript} --echo-command
 
         cp configuration/standalone.xml $out
       '';
@@ -581,6 +583,7 @@ in
           after = [ "postgresql.service" ];
           before = [ "keycloak.service" ];
           bindsTo = [ "postgresql.service" ];
+          path = [ config.services.postgresql.package ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
@@ -591,14 +594,12 @@ in
             set -o errexit -o pipefail -o nounset -o errtrace
             shopt -s inherit_errexit
 
-            PSQL=${config.services.postgresql.package}/bin/psql
-
             create_role="$(mktemp)"
             trap 'rm -f "$create_role"' ERR EXIT
 
             echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$(<'${cfg.databasePasswordFile}')' CREATEDB" > "$create_role"
-            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tA --file="$create_role"
-            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
+            psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
+            psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
           '';
         };
 
@@ -606,6 +607,7 @@ in
           after = [ "mysql.service" ];
           before = [ "keycloak.service" ];
           bindsTo = [ "mysql.service" ];
+          path = [ config.services.mysql.package ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
@@ -620,7 +622,7 @@ in
             ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
               echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
               echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
-            ) | ${config.services.mysql.package}/bin/mysql -N
+            ) | mysql -N
           '';
         };
 
@@ -639,6 +641,8 @@ in
             bindsTo = databaseServices;
             wantedBy = [ "multi-user.target" ];
             path = with pkgs; [
+              cfg.package
+              openssl
               replace-secret
             ];
             environment = {
@@ -670,13 +674,13 @@ in
                   replace-secret '@db-password@' '/run/keycloak/secrets/db_password' /run/keycloak/configuration/standalone.xml
 
                   export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
-                  ${cfg.package}/bin/add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
+                  add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
                 '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
                   pushd /run/keycloak/ssl/
                   cat /run/keycloak/secrets/ssl_cert_pk_bundle <(echo) /etc/ssl/certs/ca-certificates.crt > allcerts.pem
-                  ${pkgs.openssl}/bin/openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
-                                                     -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
-                                                     -CAfile allcerts.pem -passout pass:notsosecretpassword
+                  openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
+                                 -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
+                                 -CAfile allcerts.pem -passout pass:notsosecretpassword
                   popd
                 '';
               in [
