@@ -2968,7 +2968,6 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ x86_64-darwin ]
   haskell-snake:                                [ x86_64-darwin ]
   hcwiid:                                       [ x86_64-darwin ]
-  hedgewars:                                    [ x86_64-darwin ]
   HFuse:                                        [ x86_64-darwin ]
   hidapi:                                       [ x86_64-darwin ]
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
