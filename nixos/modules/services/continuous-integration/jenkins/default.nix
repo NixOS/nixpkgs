@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.services.jenkins;
+  jenkinsUrl = "http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}";
 in {
   options = {
     services.jenkins = {
@@ -141,14 +142,35 @@ in {
           Additional command line arguments to pass to the Java run time (as opposed to Jenkins).
         '';
       };
+
+      withCli = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to download the CLI for the running jenkins continuous integration server after installation.
+
+          More info about the CLI available at
+          <link xlink:href="https://www.jenkins.io/doc/book/managing/cli">
+          https://www.jenkins.io/doc/book/managing/cli</link> .
+
+          Beware that this significantly slows down the start of the jenkins service.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    # server references the dejavu fonts
-    environment.systemPackages = [
-      pkgs.dejavu_fonts
-    ];
+    environment = {
+      # server references the dejavu fonts
+      systemPackages = [
+        pkgs.dejavu_fonts
+      ];
+
+      variables = {
+        # Make it more convenient to use the `jenkins-cli`.
+        JENKINS_URL = jenkinsUrl;
+      };
+    };
 
     users.groups = optionalAttrs (cfg.group == "jenkins") {
       jenkins.gid = config.ids.gids.jenkins;
@@ -215,10 +237,21 @@ in {
       '';
 
       postStart = ''
-        until [[ $(${pkgs.curl.bin}/bin/curl -L -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
+        until [[ $(${pkgs.curl.bin}/bin/curl -L -s --head -w '\n%{http_code}' ${jenkinsUrl} | tail -n1) =~ ^(200|403)$ ]]; do
           sleep 1
         done
-      '';
+      '' + (lib.optionalString (cfg.withCli) ''
+
+        ${pkgs.curl.bin}/bin/curl -L -s ${jenkinsUrl}/jnlpJars/jenkins-cli.jar -o ${cfg.home}/jenkins-cli.jar
+
+        cat << __EOF__ > ${cfg.home}/jenkins-cli
+        #!/bin/sh
+        exec ${pkgs.jdk11}/bin/java -jar ${cfg.home}/jenkins-cli.jar "\$@"
+        __EOF__
+
+        chmod +x ${cfg.home}/jenkins-cli
+        chown ${cfg.user}:${cfg.group} ${cfg.home}/jenkins-cli*
+      '');
 
       serviceConfig = {
         User = cfg.user;
