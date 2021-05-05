@@ -20262,7 +20262,7 @@ in
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
-    tuxedo-keyboard = callPackage ../os-specific/linux/tuxedo-keyboard { };
+    tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
 
