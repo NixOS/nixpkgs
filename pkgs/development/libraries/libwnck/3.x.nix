@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.worldofpeace ];
+    maintainers = [ ];
   };
 }

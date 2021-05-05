@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple MPRIS indicator button for GNOME Shell";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = gnome3.gnome-shell.meta.platforms;
     homepage = "https://github.com/JasonLG1979/gnome-shell-extension-mpris-indicator-button";
     broken = versionOlder gnome3.gnome-shell.version "3.34";

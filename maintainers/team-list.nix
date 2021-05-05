@@ -66,7 +66,7 @@ with lib.maintainers; {
   };
 
   freedesktop = {
-    members = [ jtojnar worldofpeace ];
+    members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
@@ -89,7 +89,6 @@ with lib.maintainers; {
     members = [
       hedning
       jtojnar
-      worldofpeace
       dasj19
       maxeaubrey
     ];
