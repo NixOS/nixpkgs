@@ -1,10 +1,10 @@
 {stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java }:
 
 stdenv.mkDerivation {
-  name = "DisnixWebService-0.10";
+  name = "DisnixWebService-0.10.1";
   src = fetchurl {
-    url = "https://github.com/svanderburg/DisnixWebService/releases/download/DisnixWebService-0.10/DisnixWebService-0.10.tar.gz";
-    sha256 = "0m451msd127ay09yb8rbflg68szm8s4hh65j99f7s3mz375vc114";
+    url = "https://github.com/svanderburg/DisnixWebService/releases/download/DisnixWebService-0.10.1/DisnixWebService-0.10.1.tar.gz";
+    sha256 = "02jxbgn9a0c9cr6knzp78bp9wiywzczy89wav7yxhg79vff8a1gr";
   };
   buildInputs = [ apacheAnt jdk ];
   PREFIX = ''''${env.out}'';
