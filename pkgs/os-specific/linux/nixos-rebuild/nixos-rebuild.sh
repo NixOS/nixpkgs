@@ -415,14 +415,14 @@ fi
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
+        outLink=$tmpDir/result
         if [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
+            nixBuild '<nixpkgs/nixos>' --out-link $outLink -A system "${extraBuildFlags[@]}"
         else
-            outLink=$tmpDir/result
             nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
               "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
-            pathToConfig="$(readlink -f $outLink)"
         fi
+        pathToConfig="$(readlink -f $outLink)"
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
