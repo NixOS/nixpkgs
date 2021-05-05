@@ -3,11 +3,12 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , pyvcd
 , jinja2
 , importlib-resources
 , importlib-metadata
+, git
 
 # for tests
 , pytestCheckHook
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     sha256 = "0cjs9wgmxa76xqmjhsw4fsb2mhgvd85jgs2mrjxqp6fwp8rlgnl1";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm git ];
 
   propagatedBuildInputs = [
     setuptools
