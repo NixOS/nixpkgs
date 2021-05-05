@@ -18582,6 +18582,8 @@ in
 
   couchpotato = callPackage ../servers/couchpotato {};
 
+  cortextool = callPackage ../servers/monitoring/cortex/cortextool.nix {};
+
   dex-oidc = callPackage ../servers/dex { };
 
   dex2jar = callPackage ../development/tools/java/dex2jar { };
