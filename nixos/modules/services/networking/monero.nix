@@ -205,15 +205,14 @@ in
   config = mkIf cfg.enable {
 
     users.users.monero = {
-      uid  = config.ids.uids.monero;
+      isSystemUser = true;
+      group = "monero";
       description = "Monero daemon user";
       home = cfg.dataDir;
       createHome = true;
     };
 
-    users.groups.monero = {
-      gid = config.ids.gids.monero;
-    };
+    users.groups.monero = { };
 
     systemd.services.monero = {
       description = "monero daemon";
