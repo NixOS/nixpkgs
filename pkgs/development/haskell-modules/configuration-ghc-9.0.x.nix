@@ -101,4 +101,7 @@ self: super: {
   # 5.6 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
   profunctors = super.profunctors_5_6_2;
 
+  # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
+  lens = super.lens_5_0_1;
+
 }
