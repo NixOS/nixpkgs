@@ -26140,7 +26140,9 @@ in
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
-  squeezelite = callPackage ../applications/audio/squeezelite { };
+  squeezelite = callPackage ../applications/audio/squeezelite { audioBackend = "alsa"; };
+
+  squeezelite-pulse = callPackage ../applications/audio/squeezelite { audioBackend = "pulse"; };
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
