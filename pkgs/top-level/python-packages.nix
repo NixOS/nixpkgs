@@ -1771,6 +1771,8 @@ in {
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
+  detectron2 = callPackage ../development/python-modules/detectron2 { };
+
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
@@ -2585,6 +2587,8 @@ in {
 
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
+  fvcore = callPackage ../development/python-modules/fvcore { };
+
   fx2 = callPackage ../development/python-modules/fx2 { };
 
   galario = toPythonModule (pkgs.galario.override {
@@ -3293,6 +3297,8 @@ in {
   invoke = callPackage ../development/python-modules/invoke { };
 
   iocapture = callPackage ../development/python-modules/iocapture { };
+
+  iopath = callPackage ../development/python-modules/iopath { };
 
   iowait = callPackage ../development/python-modules/iowait { };
 
@@ -8755,6 +8761,8 @@ in {
   };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  yacs = callPackage ../development/python-modules/yacs { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
