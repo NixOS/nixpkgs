@@ -1,6 +1,7 @@
 { lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex, libsamplerate }:
+, libzip, rtaudio, rtmidi, speex, libsamplerate, copyDesktopItems, imagemagick
+, libicns, makeDesktopItem }:
 
 let
   # The package repo vendors some of the package dependencies as submodules.
@@ -40,6 +41,18 @@ with lib; stdenv.mkDerivation rec {
   pname = "VCV-Rack";
   version = "1.1.6";
 
+  desktopItems = [ (makeDesktopItem {
+    type = "Application";
+    name = pname;
+    desktopName = "VCV Rack";
+    genericName = "Eurorack simulator";
+    comment = "Create music by patching together virtual synthesizer modules";
+    exec = "Rack";
+    icon = "Rack";
+    categories = "AudioVideo;AudioVideoEditing;Audio;";
+    extraEntries = "Keywords=music;";
+  }) ];
+
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
@@ -74,7 +87,8 @@ with lib; stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ copyDesktopItems imagemagick libicns makeWrapper pkg-config ];
+
   buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = [ "Rack" ];
@@ -87,6 +101,20 @@ with lib; stdenv.mkDerivation rec {
 
     # Override the default global resource file directory
     wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
+
+    # Extract pngs from the Apple icon image and create
+    # the missing ones from the 1024x1024 image.
+    icns2png --extract icon.icns
+    for size in 16 24 32 48 64 128 256 512 1024; do
+      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+      if [ ! -e icon_"$size"x"$size"x32.png ]
+      then
+        convert -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
+      fi
+      install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
+    done;
+
+    copyDesktopItems
   '';
 
   meta = with lib; {
