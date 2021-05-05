@@ -112,7 +112,7 @@ let
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
       };
-      name = mkOpt types.string ''
+      name = mkOpt types.str ''
         Name of the remote read config, which if specified must be unique among remote read configs.
         The name will be used in metrics and logging in place of a generated value to help users distinguish between
         remote read configs.
@@ -174,7 +174,7 @@ let
       write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of remote write relabel configurations.
       '';
-      name = mkOpt types.string ''
+      name = mkOpt types.str ''
         Name of the remote write config, which if specified must be unique among remote write configs.
         The name will be used in metrics and logging in place of a generated value to help users distinguish between
         remote write configs.
