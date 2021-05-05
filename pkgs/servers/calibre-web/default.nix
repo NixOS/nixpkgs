@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.cfg \
+        --replace "singledispatch>=3.4.0.0,<3.5.0.0" "" \
         --replace "requests>=2.11.1,<2.25.0" "requests>=2.11.1,<2.26.0" \
+        --replace "unidecode>=0.04.19,<1.2.0" "unidecode>=0.04.19" \
         --replace "cps = calibreweb:main" "calibre-web = calibreweb:main"
   '';
 
