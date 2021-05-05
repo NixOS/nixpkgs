@@ -1,12 +1,13 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
+{ lib, symlinkJoin, fetchurl, callPackage
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
-, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
+, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat
+, qemu_kvm, qemu-utils, OVMF-secureBoot
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
 , nftablesSupport ? false
+, useQemu ? false
 }:
 
 let
@@ -15,52 +16,52 @@ let
   else
     [ iptables ebtables ];
 
-in
-buildGoPackage rec {
   pname = "lxd";
   version = "4.13";
-
-  goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "0w2r80wf86jijgfxbkv06lgfhz4p2aaidsqd96bx3q1382nrbzcf";
   };
 
-  postPatch = ''
-    substituteInPlace shared/usbid/load.go \
-      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  lxdAgent = callPackage ./lxd-agent.nix {
+    inherit src version;
+  };
+
+  lxdBin = callPackage ./lxd.nix {
+    inherit src version;
+  };
+
+  apparmor_parser = writeShellScriptBin "apparmor_parser" ''
+    exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
   '';
 
-  preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
-  '';
+  binPath = lib.makeBinPath (
+    networkPkgs
+    ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
+    ++ lib.optionals useQemu [ qemu-utils qemu_kvm lxdAgent ]
+    ++ [ apparmor_parser ]
+    ++ [ "$out" ]
+  );
 
-  buildFlags = [ "-tags libsqlite3" ];
+in
+symlinkJoin {
+  name = "${pname}-${version}";
 
-  postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
+  paths = [ lxdBin ];
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
-      ++ [ (writeShellScriptBin "apparmor_parser" ''
-             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-           '') ]
-      )
-    }
+  postBuild = "wrapProgram $out/bin/lxd --prefix PATH : ${binPath}"
+    + lib.optionalString useQemu " --set LXD_OVMF_PATH $out/share/OVMF"
+    + lib.optionalString useQemu ''
 
-    installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
-  '';
+      mkdir -p $out/share/OVMF
 
-  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+      ln -s ${OVMF-secureBoot.fd}/FV/OVMF_CODE.fd $out/share/OVMF/OVMF_CODE.fd
+      ln -s ${OVMF-secureBoot.fd}/FV/OVMF_VARS.fd $out/share/OVMF/OVMF_VARS.fd
+      ln -s ${OVMF-secureBoot.fd}/FV/OVMF_VARS.fd $out/share/OVMF/OVMF_VARS.ms.fd
+    '';
+
+  nativeBuildInputs = [ makeWrapper ];
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
