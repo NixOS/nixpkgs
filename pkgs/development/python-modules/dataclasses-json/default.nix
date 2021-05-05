@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56ec931959ede74b5dedf65cf20772e6a79764d20c404794cce0111c88c085ff";
+    sha256 = "sha256-/hfak0z8TseS6+fpowNDTs9PX42KdwWs+758y9NL8a4=";
   };
 
   propagatedBuildInputs = [
