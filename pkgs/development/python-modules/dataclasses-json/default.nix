@@ -1,18 +1,21 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , stringcase
 , typing-inspect
 , marshmallow-enum
+, python3Packages
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
   version = "0.5.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-/hfak0z8TseS6+fpowNDTs9PX42KdwWs+758y9NL8a4=";
+  src = fetchFromGitHub {
+    owner = "lidatong";
+    repo = "dataclasses-json";
+    rev = "v${version}";
+    sha256 = "sha256-4Jh79aoGQzgjBqHiWrmeyIlU+jPnsBgvdpwyh5tAd4I=";
   };
 
   propagatedBuildInputs = [
@@ -20,6 +23,15 @@ buildPythonPackage rec {
     typing-inspect
     marshmallow-enum
   ];
+
+  checkInputs = with python3Packages; [
+    hypothesis
+    mypy
+    pytest
+  ];
+  # Ignoring the tests/test_annotations test because it fails due to not being
+  # able to find a library stub for 'mypy.main'.
+  checkPhase = "pytest --ignore tests/test_annotations.py";
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
