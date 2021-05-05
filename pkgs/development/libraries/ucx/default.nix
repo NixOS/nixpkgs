@@ -2,17 +2,15 @@
 , numactl, rdma-core, libbfd, libiberty, perl, zlib
 }:
 
-let
-  version = "1.9.0";
-
-in stdenv.mkDerivation {
-  name = "ucx-${version}";
+stdenv.mkDerivation rec {
+  pname = "ucx";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "0i0ji5ivzxjqh3ys1m517ghw3am7cw1hvf40ma7hsq3wznsyx5s1";
+    sha256 = "1j2gfw4anixb5ajgiyn7bcca8pgjvsaf0y0b2xz88s9hdx0h6gs9";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
