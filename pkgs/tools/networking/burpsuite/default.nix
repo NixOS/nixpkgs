@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2020.12.1";
+  version = "2021.2.1";
 
   src = fetchurl {
     name = "burpsuite.jar";
-    url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "AcoPyVXUf2YGfX2/GbtGZeQ4P7zSsYFb9L57trXive0=";
+    url = "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
+    sha256 = "0x6x8jq33144wi5x3cf1887hhbmcvgx29n82l114n5f1kirkavxn";
   };
 
   dontUnpack = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = licenses.unfree;
     platforms = jdk11.meta.platforms;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ bennofs ];
   };
 }
