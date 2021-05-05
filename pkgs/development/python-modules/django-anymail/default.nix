@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
   };
 }
