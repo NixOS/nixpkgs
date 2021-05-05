@@ -19,8 +19,8 @@ let
     sha256Hash = "1ii1zf8mv7xyql56wwkcdj5l4g3zaprdszv6r9md9r5zh78k4ccz";
   };
   latestVersion = { # canary & dev
-    version = "2020.3.1.10"; # "Android Studio Arctic Fox (2020.3.1) Canary 10"
-    sha256Hash = "15xxyjjjy5pnimc66dcwnqb7z4lq7ll4fl401a3br5ca4d1hpgsj";
+    version = "2020.3.1.15"; # "Android Studio Arctic Fox (2020.3.1) Canary 15"
+    sha256Hash = "0k66ibflqwdlgapir5w2v1d4zjwn6464yk2hvlmif9lsfdvd0ivv";
   };
 in {
   # Attributes are named by their corresponding release channels
