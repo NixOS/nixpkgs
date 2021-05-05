@@ -51,6 +51,7 @@ rec {
     tests = [ nixosTests.firefox-esr ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-78-unwrapped";
+      versionSuffix = "esr";
       versionKey = "ffversion";
     };
   };
