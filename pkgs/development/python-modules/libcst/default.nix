@@ -1,21 +1,19 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hypothesis
 , dataclasses
-, hypothesmith
+, fetchFromGitHub
+, hypothesis
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , typing-extensions
 , typing-inspect
-, black
-, isort
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
   version = "0.3.18";
+  disabled = pythonOlder "3.6";
 
   # Some files for tests missing from PyPi
   # https://github.com/Instagram/LibCST/issues/331
@@ -26,25 +24,31 @@ buildPythonPackage rec {
     sha256 = "sha256-19yGaKBLpGASSPv/aSX0kx9lh2JxKExHJDKKtuBbuqI=";
   };
 
-  disabled = pythonOlder "3.6";
+  propagatedBuildInputs = [
+    hypothesis
+    typing-extensions
+    typing-inspect
+    pyyaml
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
 
-  propagatedBuildInputs = [ hypothesis typing-extensions typing-inspect pyyaml ]
-    ++ lib.optional (pythonOlder "3.7") dataclasses;
-
-  checkInputs = [ black hypothesmith isort pytestCheckHook ];
-
-  # can't run tests due to circular dependency on hypothesmith -> licst
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
-    python -m libcst.codegen.generate visitors
-    python -m libcst.codegen.generate return_types
+    # Can't run tests due to circular dependency on hypothesmith -> libcst
+    rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
   '';
+
+  disabledTests = [
+    # No files are generated
+    "test_codemod_formatter_error_input"
+  ];
 
   pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
-    description = "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
+    description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ruuda SuperSandro2000 ];
