@@ -116,18 +116,27 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See <xref linkend="ssec-setup-hooks" /> for details.
+While _derivations_ collect their dependencies by references to store paths of other _derivations_, `mkDerivation`, furthermore deals with _package_ depdencies along four axes: build, host & target platform and wether they are propagated. Details can be found in <xref linkend="chap-cross" />, but, for quick reminder,
+- the machine you are building on is _build_,
+- the machine that you are building for _host_,
+- and the machine that the compiler will produce code for _target_.
 
-Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see <xref linkend="chap-cross" /> for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
+Accordingly:
+- If build, host, and target are all the same, this is called a _native_.
+- If build and host are the same but target is different, this is called a _cross_.
+- If host and target are the same, but build is different, you are using a _cross-compiler_ to build a _native_ for a different system, a _cross-built native_, because target is the machine that the compiler will produce code for, while running on build.
 
-The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
+But even if one is not cross compiling, the platforms imply whether a dependency is needed at run-time or build-time.
 
-The dependency is propagated when it forces some of its other-transitive (non-immediate) downstream dependencies to also take it on as an immediate dependency. Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
+The extension of `PATH` is accomplished by simply adding `dep/bin`, if present. Understandibly, this is only done for dependencies who actually also run ("host") on the new derivation's build platform.
 
-It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. The exact rules for dependency propagation can be given by assigning to each dependency two integers based one how its host and target platforms are offset from the depending derivation’s platforms. Those offsets are given below in the descriptions of each dependency list attribute. Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in sort a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+While Nix perfectly manages transitive dependencies, a _propagated_ depdency is one that (forward-)inserts itself into transitive downstream packages as _direct_ dependency. Therefore eventual downstream's setup-hooks and tooling also affect it. It is important to note for propagated dependencies, since they are "fast-forwarded" to the downstream derviation, that a _cross_ dependency might actually end up as a _native_ dependency.
 
-We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+In order to propagate/flatten a dependency graph of _propagated_ dependencies, we describe their platform-offset to their immediate depending propagated dependency by assigning two integers `h` (host-offset) & `t` (target-offset). We then traverse propagated inputs and fold their offsets as follows:
 
+_Note: the big picture is that propagation must not introduce transitive dependencies involving platforms the depending derivation doesn't know._
+
+We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 
@@ -160,7 +169,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the target offset: `t = h + 1`. That means that:
+In the common case, the target offset of a dependency is the successor to the target offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -169,11 +178,9 @@ let f(h, h + 1, i) = i + (if i <= 0 then h else h)
 let f(h, h + 1, i) = i + h
 ```
 
-This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is simply the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
-
 Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
 
-Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+_Remember, the big picture is that propagation must not introduce transitive dependencies involving platforms the depending derivation doesn't know. The offset bounds implemented in `mapOffset` make sure of that. Discovering a new offset is discovering a new platform, and since those platforms weren't in the derivation specification, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency._
 
 ### Variables specifying dependencies
 #### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
@@ -1207,9 +1214,6 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 
 For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/index.php/DeveloperWiki:Security).
 
-[^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
-[^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
-[^footnote-stdenv-find-inputs-location]: The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
 [^footnote-stdenv-sys-lib-search-path]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
 [^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
 [^footnote-stdenv-per-platform-wrapper]: Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times. As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
