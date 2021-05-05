@@ -2818,6 +2818,7 @@ extra-packages:
   - optparse-applicative < 0.16         # needed for niv-0.2.19
   - refinery == 0.3.*                   # required by hls-tactics-plugin-1.0.0.0
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
+  - sbv == 7.13                         # required for pkgs.petrinizer
 
 package-maintainers:
   peti:
