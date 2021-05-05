@@ -175,6 +175,9 @@ checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshort
 ## submoduleWith should merge all modules in one swoop
 checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+# Should also be able to evaluate the type name (which evaluates freeformType,
+# which evaluates all the modules defined by the type)
+checkConfigOutput "submodule" options.submodule.type.description ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
@@ -268,6 +271,12 @@ checkConfigOutput "a b" config.result ./functionTo/merging-list.nix
 checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
 checkConfigOutput "b a" config.result ./functionTo/list-order.nix
 checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
+
+## Type deprecation
+checkConfigError 'The type `types.simple'\'' of option `simple'\'' defined in .* is deprecated. simple shall not be used' config.simple ./type-deprecation.nix
+checkConfigError 'The type `types.infinite'\'' of option `infinite'\'' defined in .* is deprecated. infinite shall not be used' config.infinite ./type-deprecation.nix
+checkConfigError 'The type `types.left'\'' of option `nested'\'' defined in .* is deprecated. left shall not be used' config.nested ./type-deprecation.nix
+checkConfigError 'The type `types.right'\'' of option `nested'\'' defined in .* is deprecated. right shall not be used' config.nested ./type-deprecation.nix
 
 cat <<EOF
 ====== module tests ======
