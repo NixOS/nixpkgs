@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , meson, ninja, pkg-config, wayland-protocols
-, pipewire, wayland, systemd, libdrm, iniparser, scdoc }:
+, pipewire, wayland, systemd, libdrm, iniparser, scdoc, grim }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6ArUQfWx5rNdpsd8Q22MqlpxLT8GTSsymAf21zGe1KI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols makeWrapper ];
   buildInputs = [ pipewire wayland systemd libdrm iniparser scdoc ];
 
   mesonFlags = [
     "-Dsd-bus-provider=libsystemd"
   ];
+
+  postInstall = ''
+    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ grim ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";

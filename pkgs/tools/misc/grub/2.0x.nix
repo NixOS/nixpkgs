@@ -1,6 +1,8 @@
 { lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
+, fetchpatch
+, pkgsBuildBuild
 , nixosTests
 , fuse # only needed for grub-mount
 , runtimeShell
@@ -55,6 +57,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-bash-completion.patch
+    (fetchpatch {
+      name = "Add-hidden-menu-entries.patch";
+      # https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00089.html
+      url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
+      sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''
