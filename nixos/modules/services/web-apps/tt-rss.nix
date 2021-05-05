@@ -590,8 +590,16 @@ let
               else "";
 
         in ''
-          rm -rf "${cfg.root}/*"
+          # writing permission to wipe the folder
+          chmod -R u+w "${cfg.root}"
+          # so that the glob just after does not fail
+          touch "${cfg.root}/some_file"
+          # wipe the folder
+          rm -r "${cfg.root}"/*
+          # repopulate it, copy is read only
           cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
+          # make directories writable because tt-rss needs it
+          find "${cfg.root}" -type d -execdir chmod ug+w '{}' ';'
           ${optionalString (cfg.pluginPackages != []) ''
             for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
               cp -r "$plugin"/* "${cfg.root}/plugins.local/"
@@ -603,7 +611,6 @@ let
             done
           ''}
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
-          chmod -R 755 "${cfg.root}"
         ''
 
         + (optionalString (cfg.database.type == "pgsql") ''
