@@ -5665,6 +5665,8 @@ in {
 
   pykodi = callPackage ../development/python-modules/pykodi { };
 
+  pykoplenti = callPackage ../development/python-modules/pykoplenti { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
