@@ -8,6 +8,7 @@
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
 , withDebug ? false
+, fetchpatch
 }:
 
 with lib;
@@ -39,6 +40,11 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # cgroups: fix network interfaces detection when using virsh
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/11096.patch";
+      sha256 = "0f2rd7kgbwbyq9wyn085d213ifvivnpl3qlx1gjrg42rkbi4n8jj";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
