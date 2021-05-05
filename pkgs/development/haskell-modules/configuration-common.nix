@@ -1852,4 +1852,12 @@ self: super: {
     doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
   };
 
+  # Fix build failure by picking patch from 8.5,
+  # we need this version of sbv for petrinizer
+  sbv_7_13 = appendPatch super.sbv_7_13
+    (pkgs.fetchpatch {
+      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
+      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
+    });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
