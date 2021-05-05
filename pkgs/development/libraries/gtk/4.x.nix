@@ -46,13 +46,11 @@
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
