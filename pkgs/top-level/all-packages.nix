@@ -25802,6 +25802,8 @@ in
 
   reaper = callPackage ../applications/audio/reaper { };
 
+  recapp = callPackage ../applications/video/recapp { };
+
   recode = callPackage ../tools/text/recode { };
 
   reddsaver = callPackage ../applications/misc/reddsaver {
