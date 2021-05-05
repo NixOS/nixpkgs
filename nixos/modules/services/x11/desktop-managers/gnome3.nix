@@ -284,6 +284,7 @@ in
       services.packagekit.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
+      services.uresourced.enable = true;
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
       xdg.portal.enable = true;
