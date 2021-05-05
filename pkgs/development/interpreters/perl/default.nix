@@ -1,5 +1,13 @@
-{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
-, enableThreading ? true, coreutils, makeWrapper
+{ buildPackages
+, callPackage
+, coreutils
+, enableThreading ? true
+, fetchurl
+, lib
+, makeWrapper
+, packageOverrides ? (self: super: { })
+, pkgs
+, stdenv
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -108,9 +116,9 @@ let
     passthru = rec {
       interpreter = "${perl}/bin/perl";
       libPrefix = "lib/perl5/site_perl";
-      pkgs = callPackage ../../../top-level/perl-packages.nix {
+      pkgs = callPackage ../../perl-modules {
         inherit perl buildPerl;
-        overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
+        overrides = packageOverrides;
       };
       buildEnv = callPackage ./wrapper.nix {
         inherit perl;

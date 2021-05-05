@@ -8,16 +8,16 @@
 { config
 , stdenv, lib, buildPackages, pkgs
 , fetchurl, fetchgit, fetchpatch, fetchFromGitHub
-, perl, overrides, buildPerl, shortenPerlShebang
+, perl, buildPerl, shortenPerlShebang
 }:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
 assert lib.versionAtLeast perl.version "5.30.3";
 let
   inherit (lib) maintainers teams;
-  self = _self // (overrides pkgs);
-  _self = with self; {
+  packages = (self:
 
+with self; {
   inherit perl;
   perlPackages = self;
 
@@ -23962,4 +23962,5 @@ let
   SubExporterUtil = self.SubExporter;
   version = self.Version;
 
-}; in self
+});
+in packages
