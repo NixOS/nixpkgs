@@ -6686,6 +6686,8 @@ in
 
   minetime = callPackage ../applications/office/minetime { };
 
+  minipro = callPackage ../tools/misc/minipro { };
+
   minio-client = callPackage ../tools/networking/minio-client { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
