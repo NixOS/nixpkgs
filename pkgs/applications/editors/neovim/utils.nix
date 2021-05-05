@@ -58,10 +58,11 @@ let
       # add to nvim's 'embedded rc' this:
       #    let g:<key>_host_prog=$out/bin/nvim-<key>
       # Or this:
-      #    let g:loaded_${prog}_provider=1
+      #    let g:loaded_${prog}_provider=0
       # While the latter tells nvim that this provider is not available
       hostprog_check_table = {
         node = withNodeJs;
+        python = false;
         python3 = withPython3;
         ruby = withRuby;
       };
@@ -107,7 +108,7 @@ let
       if withProg then
         "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
       else
-        "let g:loaded_${prog}_provider=1"
+        "let g:loaded_${prog}_provider=0"
     ;
 
   # to keep backwards compatibility
