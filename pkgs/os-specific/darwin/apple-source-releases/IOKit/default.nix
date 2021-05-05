@@ -43,7 +43,7 @@ appleDerivation {
     cp IOKitUser-*/IODataQueueClient.h                                $dest
     cp IOKitUser-*/IOKitLib.h                                         $dest
     cp IOKitUser-*/iokitmig.h                                         $dest
-    cp ${xnu}/Library/PrivateFrameworks/IOKit.framework/Versions/A/Headers/*.h $dest
+    cp ${xnu}/Library/Frameworks/IOKit.framework/Versions/A/Headers/*.h $dest
 
     # audio: complete
     cp IOAudioFamily-*/IOAudioDefines.h          $dest/audio
@@ -128,7 +128,7 @@ appleDerivation {
     # pwr_mgt: complete
     cp IOKitUser-*/pwr_mgt.subproj/IOPMKeys.h                                          $dest/pwr_mgt
     cp IOKitUser-*/pwr_mgt.subproj/IOPMLib.h                                           $dest/pwr_mgt
-    cp ${xnu}/Library/PrivateFrameworks/IOKit.framework/Versions/A/Headers/pwr_mgt/*.h $dest/pwr_mgt
+    cp ${xnu}/Library/Frameworks/IOKit.framework/Versions/A/Headers/pwr_mgt/*.h        $dest/pwr_mgt
     cp IOKitUser-*/pwr_mgt.subproj/IOPMLibPrivate.h                                    $dest/pwr_mgt # Private
 
     # sbp2: complete

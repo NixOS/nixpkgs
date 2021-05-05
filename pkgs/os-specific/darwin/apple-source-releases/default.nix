@@ -170,7 +170,7 @@ let
     installCheckPhase = ''
       cd $out/include
 
-      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in \$out/include" || true)
+      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in $out/include" || true)
 
       if [ -z "$result" ]; then
         echo "Apple header list is matched."
@@ -193,7 +193,8 @@ let
   applePackage' = namePath: version: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
     appleDerivation = appleDerivation' pname version sdkName sha256;
-    callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation; });
+
+    callPackage = pkgs.newScope (pkgs.darwin // packages // { inherit appleDerivation; });
   in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
@@ -272,7 +273,6 @@ let
     objc4           = applePackage "objc4"             "osx-10.12.6"     "1cj1vhbcs9pkmag2ms8wslagicnq9bxi2qjkszmp3ys7z7ccrbwz" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "0jzjxbmxgjzhssqd50z7kq9dlwrv5fsdshh57c0f8mdwcs19bsyx" {};
-    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {};
     hfs             = applePackage "hfs"               "osx-10.12.6"     "1mj3xvqpq1mgd80b6kl1s04knqnap7hccr0gz8rjphalq14rbl5g" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};

@@ -9,15 +9,30 @@ appleDerivation {
 
   nativeBuildInputs = [ cpio ];
 
+  NIX_ENFORCE_PURITY = false;
+
   installPhase = ''
-    export NIX_ENFORCE_PURITY=
+    (cd ${xnu}/include
+      find . -type f -not \( -path "./*_HEADERS*" -or -path "./LIBSYSCALL*" \) \
+        | cpio -pdm --quiet $out/include
 
-    mkdir -p $out/lib $out/include
-
-    # Set up our include directories
-    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | cpio -pdm $out/include)
-    cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
-    cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
+      (cd LIBSYSCALL
+        find . -type f | cpio -pdm --quiet $out/include
+      )
+      # NOTE: here echo is a must to xargs in bootstrap-tools.
+      (cd EXTERNAL_HEADERS && (xargs -n1 echo | cpio -pdm --quiet $out/include) <<<"
+        AssertMacros.h
+        Availability.h
+        AvailabilityInternal.h
+        AvailabilityMacros.h
+      ")
+      (cd LIBSYSCALL_WRAPPERS && (xargs -n1 echo | cpio -pdm --quiet $out/include) <<<"
+        gethostuuid.h
+        libproc.h
+        spawn.h
+        strings.h
+      ")
+    )
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
@@ -86,6 +101,8 @@ appleDerivation {
     EOF
 
     # The startup object files
+    mkdir $out/lib
+
     cp ${Csu}/lib/* $out/lib
 
     cp -vr \
@@ -113,6 +130,9 @@ appleDerivation {
       -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
+    # self-link /usr for using -sysroot
+    ln -s . $out/usr
   '';
 
   appleHeaders = builtins.readFile ./headers.txt;
