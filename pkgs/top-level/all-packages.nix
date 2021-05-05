@@ -7334,6 +7334,8 @@ in
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
+  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
+
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
