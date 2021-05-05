@@ -4,20 +4,18 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.12.1";
+    version = "0.17.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
-      sha256 = "1jlxs4szss2250zp8rz4bislgnzvqhxyp6z48dhx7zaam03hyf0w";
+      sha256 = "7p86mhBg0U8cBZR1P43eBWS9fbMBJ9l5ga0IOedNzm4=";
     };
 
     subPackages = [ "." ];
 
-    vendorSha256 = "03yj2iar63qm10fw3jh9fvz57c2sqcmngb0mj5jkhbnwf8nl7mhc";
-
-    doCheck = false;
+    vendorSha256 = "kPIhG6lsH+0IrYfdlzdv/X/cUQb22Xza9Q6ywjKae/4=";
 
     buildFlagsArray = [
       "-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
