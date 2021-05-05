@@ -2044,6 +2044,8 @@ in {
 
   dpkt = callPackage ../development/python-modules/dpkt { };
 
+  drf-jwt = callPackage ../development/python-modules/drf-jwt { };
+
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
