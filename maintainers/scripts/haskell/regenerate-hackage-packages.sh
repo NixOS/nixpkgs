@@ -1,9 +1,9 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable -I nixpkgs=.
+#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git nix -I nixpkgs=.
 
 # This script is used to regenerate nixpkgs' Haskell package set, using a tool
-# called hackage2nix. hackage2nix looks at
-# pkgs/development/haskell-modules/configuration-hackage2nix.yaml and generates
+# called hackage2nix. hackage2nix looks at the config files in
+# pkgs/development/haskell-modules/configuration-hackage2nix and generates
 # a Nix expression for package version specified there, using the Cabal files
 # from the Hackage database (available under all-cabal-hashes) and its
 # companion tool cabal2nix.
@@ -14,10 +14,18 @@
 
 set -euo pipefail
 
-extractionDerivation='with import ./. {}; runCommand "unpacked-cabal-hashes" { } "tar xf ${all-cabal-hashes} --strip-components=1 --one-top-level=$out"'
-unpacked_hackage="$(nix-build -E "$extractionDerivation" --no-out-link)"
+extraction_derivation='with import ./. {}; runCommand "unpacked-cabal-hashes" { } "tar xf ${all-cabal-hashes} --strip-components=1 --one-top-level=$out"'
+unpacked_hackage="$(nix-build -E "$extraction_derivation" --no-out-link)"
+config_dir=pkgs/development/haskell-modules/configuration-hackage2nix
 
-hackage2nix --hackage "$unpacked_hackage" --preferred-versions <(for n in "$unpacked_hackage"/*/preferred-versions; do cat "$n"; echo; done) --nixpkgs "$PWD" --config pkgs/development/haskell-modules/configuration-hackage2nix.yaml
+hackage2nix \
+   --hackage "$unpacked_hackage" \
+   --preferred-versions <(for n in "$unpacked_hackage"/*/preferred-versions; do cat "$n"; echo; done) \
+   --nixpkgs "$PWD" \
+   --config "$config_dir/main.yaml" \
+   --config "$config_dir/stackage.yaml" \
+   --config "$config_dir/broken.yaml" \
+   --config "$config_dir/transitive-broken.yaml"
 
 if [[ "${1:-}" == "--do-commit" ]]; then
 git add pkgs/development/haskell-modules/hackage-packages.nix
