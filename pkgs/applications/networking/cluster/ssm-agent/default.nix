@@ -63,6 +63,9 @@ buildGoPackage rec {
     substituteInPlace agent/session/shell/shell_unix.go \
         --replace '"script"' '"${util-linux}/bin/script"'
 
+    substituteInPlace agent/appconfig/constants_unix.go \
+        --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
+
     echo "${version}" > VERSION
   '';
 
@@ -94,6 +97,20 @@ buildGoPackage rec {
     mv sessionworker ssm-session-worker
 
     popd
+  '';
+
+  # These templates retain their `.template` extensions on installation. The
+  # amazon-ssm-agent.json.template is required as default configuration when an
+  # amazon-ssm-agent.json isn't present. Here, we retain the template to show
+  # we're using the default configuration.
+
+  # seelog.xml isn't actually required to run, but it does ship as a template
+  # with debian packages, so it's here for reference. Future work in the nixos
+  # module could use this template and substitute a different log level.
+  postInstall = ''
+    mkdir -p $out/etc/amazon/ssm
+    cp go/src/${goPackagePath}/amazon-ssm-agent.json.template $out/etc/amazon/ssm/amazon-ssm-agent.json.template
+    cp go/src/${goPackagePath}/seelog_unix.xml $out/etc/amazon/ssm/seelog.xml.template
   '';
 
   postFixup = ''
