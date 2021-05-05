@@ -964,6 +964,8 @@ in
     ammonite_2_12
     ammonite_2_13;
   ammonite = if scala == scala_2_12 then ammonite_2_12 else ammonite_2_13;
+  inherit (callPackages ../development/tools/ammonite/3.nix {})
+    ammonite_3_00;
 
   amp = callPackage ../applications/editors/amp {};
 
