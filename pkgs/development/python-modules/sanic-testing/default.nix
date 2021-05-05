@@ -20,6 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-hBAq+/BKs0a01M89Nb8HaClqxB+W5PTfjVzef/m9SWs=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'httpx>=0.16, <0.18' 'httpx' \
+      --replace 'httpcore==0.12.*' 'httpcore'
+  '';
+
   propagatedBuildInputs = [ httpx sanic websockets httpcore ];
 
   # `sanic` is explicitly set to null when building `sanic` itself

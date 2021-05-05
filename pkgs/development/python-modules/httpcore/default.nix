@@ -5,24 +5,25 @@
 , h11
 , h2
 , pproxy
+, pytest-asyncio
+, pytest-trio
 , pytestCheckHook
 , pytestcov
 , sniffio
-, uvicorn
 , trustme
-, trio
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.12.3";
+  version = "0.13.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "09hbjc5wzhrnri5y3idxcq329d7jiaxljc7y6npwv9gh9saln109";
+    sha256 = "sha256-KvqBVQUaF3p2oJz0tt3Bkn2JiKEHqrZ3b6I9f0JK5h8=";
   };
 
   propagatedBuildInputs = [
@@ -33,18 +34,19 @@ buildPythonPackage rec {
 
   checkInputs = [
     pproxy
+    pytest-asyncio
+    pytest-trio
     pytestCheckHook
     pytestcov
-    uvicorn
     trustme
-    trio
+    uvicorn
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "--ignore=tests/test_threadsafety.py"
-    "--ignore=tests/sync_tests/test_interfaces.py"
-    "--ignore=tests/sync_tests/test_retries.py"
+    "tests/test_threadsafety.py"
+    "tests/sync_tests/test_interfaces.py"
+    "tests/sync_tests/test_retries.py"
   ];
 
   pythonImportsCheck = [ "httpcore" ];
