@@ -4,7 +4,9 @@
 , isPy27
 , six
 , pytest
+, pytestCheckHook
 , numpy
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,12 @@ buildPythonPackage rec {
     sha256 = "6fe747418461d7b202824a3486ba8f4fa17a9bd0b1eddc743ba1d6d87f03391a";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     six
@@ -25,13 +32,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  # check_distribution incorrectly pulls pytest version
-  checkPhase = ''
-    pytest -k 'not check_distribution'
-  '';
 
   meta = with lib; {
     description = "Pytest plugin with advanced doctest features";
