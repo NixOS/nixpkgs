@@ -1733,6 +1733,8 @@ in {
 
   decorator = callPackage ../development/python-modules/decorator { };
 
+  deemix = callPackage ../development/python-modules/deemix { };
+
   deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
@@ -1740,6 +1742,12 @@ in {
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
+
+  deezer-py = callPackage ../development/python-modules/deezer-py {
+    eventlet = self.eventlet.override {
+      dnspython = self.dnspython_1;
+    };
+  };
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
 
