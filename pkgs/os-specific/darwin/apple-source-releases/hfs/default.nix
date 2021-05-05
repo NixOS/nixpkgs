@@ -41,7 +41,8 @@ appleDerivation {
 
   meta = {
     # Seems nobody wants its binary, so we didn't implement building.
-    broken = !headersOnly;
+    # TODO: nobody wants its headers too, we may drop this package completely.
+    broken = true;
     platforms = lib.platforms.darwin;
   };
 }

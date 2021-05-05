@@ -264,7 +264,6 @@ let
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "077j6ljfh7amqpk2146rr7dsz5vasvr3als830mgv5jzl7l6vz88" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {
       libutil = pkgs.darwin.libutil.override { headersOnly = true; };
-      hfs = pkgs.darwin.hfs.override { headersOnly = true; };
     };
     libutil         = applePackage "libutil"           "osx-10.12.6"     "0lqdxaj82h8yjbjm856jjz9k2d96k0viimi881akfng08xk1246y" {};
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
@@ -273,7 +272,6 @@ let
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "0jzjxbmxgjzhssqd50z7kq9dlwrv5fsdshh57c0f8mdwcs19bsyx" {};
     xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {};
-    hfs             = applePackage "hfs"               "osx-10.12.6"     "1mj3xvqpq1mgd80b6kl1s04knqnap7hccr0gz8rjphalq14rbl5g" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
     basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9" {};
