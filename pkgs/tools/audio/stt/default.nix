@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
-  pname = "deepspeech";
+  pname = "stt";
   version = "0.9.3";
 
   src = fetchurl {
-    url = "https://github.com/mozilla/DeepSpeech/releases/download/v${version}/native_client.amd64.cpu.linux.tar.xz";
-    sha256 = "1qy2gspprcxi76jk06ljp028xl0wkk1m3mqaxyf5qbhhfbvvpfap";
+    url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tf.Linux.tar.xz";
+    sha256 = "0axwys8vis4f0m7d1i2r3dfqlc8p3yj2nisvc7pdi5qs741xgy8w";
   };
   setSourceRoot = "sourceRoot=`pwd`";
 
@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D deepspeech $out/bin/deepspeech
-    install -D deepspeech.h $out/include/deepspeech.h
-    install -D libdeepspeech.so $out/lib/libdeepspeech.so
+    install -D stt $out/bin/stt
+    install -D coqui-stt.h $out/include/coqui-stt.h
+    install -D libstt.so $out/lib/libstt.so
   '';
 
   meta = with lib; {
-    homepage = https://github.com/mozilla/DeepSpeech;
-    description = "Open source embedded (offline, on-device) speech-to-text engine, which can run in real time on broad range of devices";
+    homepage = https://github.com/coqui-ai/STT;
+    description = "Deep learning toolkit for Speech-to-Text, battle-tested in research and production";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rvolosatovs ];
