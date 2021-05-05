@@ -32,9 +32,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
-
-  disabledTestPaths = [ "tests/test_discovery.py" ];
+  disabledTestPaths = [
+    # Requires network access
+    "tests/test_discovery.py"
+  ];
 
   pythonImportsCheck = [ "roombapy" ];
 
