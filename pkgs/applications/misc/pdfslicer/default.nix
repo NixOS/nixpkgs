@@ -6,10 +6,14 @@
 , intltool
 , pkg-config
 , wrapGAppsHook
+, fmt
 , gtkmm3
 , libuuid
+, microsoft_gsl
 , poppler
 , qpdf
+, range-v3
+, spdlog
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +24,12 @@ stdenv.mkDerivation rec {
     owner = "junrrein";
     repo = "pdfslicer";
     rev = "v${version}";
-    fetchSubmodules = true;
     sha256 = "0sja0ddd9c8wjjpzk2ag8q1lxpj09adgmhd7wnsylincqnj2jyls";
   };
+
+  patches = [
+    ./unvendor.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -33,10 +40,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    fmt.dev
     gtkmm3
     libuuid
+    microsoft_gsl
     poppler
     qpdf
+    range-v3
+    spdlog.dev
   ];
 
   meta = with lib; {
