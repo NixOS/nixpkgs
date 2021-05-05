@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit libiconv ];
 
   preCheck = ''
     export HOME=$TMPDIR
