@@ -30,7 +30,7 @@ in
         The path to the TLS certificate.
 
         <programlisting>
-          nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
         </programlisting>
       '';
     };
@@ -42,7 +42,7 @@ in
         The path to the TLS key.
 
         <programlisting>
-          nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
         </programlisting>
       '';
     };
@@ -95,7 +95,7 @@ in
               requests and events.
 
               <programlisting>
-                nix-shell -p matrix-dendrite --command "generate-keys --private-key matrix_key.pem"
+                nix-shell -p dendrite --command "generate-keys --private-key matrix_key.pem"
               </programlisting>
             '';
           };
@@ -136,7 +136,7 @@ in
       message = ''
         If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
-        nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
       '';
     }];
 
@@ -163,7 +163,7 @@ in
             ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/matrix-dendrite/dendrite.yaml
           '';
         ExecStart = lib.strings.concatStringsSep " " ([
-          "${pkgs.matrix-dendrite}/bin/dendrite-monolith-server"
+          "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/matrix-dendrite/dendrite.yaml"
         ] ++ lib.optionals (cfg.httpPort != null) [
           "--http-bind-address :${builtins.toString cfg.httpPort}"
