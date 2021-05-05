@@ -281,7 +281,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
       { name = "fileinfo"; buildInputs = [ pcre' ]; }
       { name = "filter"; buildInputs = [ pcre' ]; }
-      { name = "ftp"; buildInputs = [ openssl ]; }
+      { name = "ftp"; buildInputs = [ openssl ];
+        patchPhase = ''substituteInPlace config.m4 --replace '"$PHP_OPENSSL_DIR"' '"${openssl}"' ''; }
       { name = "gd";
         buildInputs = [ zlib gd ];
         configureFlags = [
