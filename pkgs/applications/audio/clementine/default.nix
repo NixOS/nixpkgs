@@ -34,6 +34,15 @@
 , config
 , makeWrapper
 , gst_plugins
+
+, util-linux
+, libunwind
+, libselinux
+, elfutils
+, libsepol
+, orc
+
+, alsaLib
 }:
 
 let
@@ -66,6 +75,13 @@ let
     cmake
     pkg-config
     makeWrapper
+
+    util-linux
+    libunwind
+    libselinux
+    elfutils
+    libsepol
+    orc
   ];
 
   buildInputs = [
@@ -90,6 +106,8 @@ let
     qttools
     sqlite
     taglib
+
+    alsaLib
   ]
   ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
   ++ lib.optionals (withMTP) [ libmtp ]
