@@ -1840,4 +1840,10 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
+  # GHCi issue on aarch64 prevent doctests from running
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
+  ad = overrideCabal super.ad {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
