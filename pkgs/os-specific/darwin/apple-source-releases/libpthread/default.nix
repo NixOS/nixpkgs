@@ -1,6 +1,6 @@
-{ lib, appleDerivation, libdispatch, xnu }:
+{ lib, appleDerivation', stdenvNoCC, libdispatch, xnu }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   propagatedBuildInputs = [ libdispatch xnu ];
 
   installPhase = ''

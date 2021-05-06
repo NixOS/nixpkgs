@@ -1,4 +1,13 @@
-{ lib, stdenv, appleDerivation, bison, flex }:
+{ lib, appleDerivation, stdenv, bison, flex }:
+
+let
+
+  # Hard to get CC to pull this off without infinite recursion
+  targetTargetPrefix = lib.optionalString
+    (with stdenv; hostPlatform != targetPlatform)
+    (stdenv.targetPlatform.config + "-");
+
+in
 
 appleDerivation {
   nativeBuildInputs = [ bison flex ];
@@ -12,7 +21,7 @@ appleDerivation {
     yacc -d parser.y
     flex --header-file=lexxer.yy.h -o lexxer.yy.c lexxer.l
 
-    cc -std=gnu99 -Os -dead_strip -DMIG_VERSION=\"$pname-$version\" -I. -o migcom *.c
+    $CC -std=gnu99 -Os -dead_strip -DMIG_VERSION=\"$pname-$version\" -I. -o migcom *.c
   '';
 
   installPhase = ''
@@ -29,6 +38,6 @@ appleDerivation {
       --replace 'arch=`/usr/bin/arch`' 'arch=${stdenv.targetPlatform.darwinArch}' \
       --replace '/usr/bin/' "" \
       --replace '/bin/rmdir' "rmdir" \
-      --replace 'C=''${MIGCC}' "C=cc"
+      --replace 'C=''${MIGCC}' "C=${targetTargetPrefix}cc"
   '';
 }

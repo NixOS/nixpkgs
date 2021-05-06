@@ -1,6 +1,6 @@
-{ lib, appleDerivation }:
+{ lib, appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   installPhase = ''
     mkdir -p $out/lib $out/include
     ln -s /usr/lib/dyld $out/lib/dyld
