@@ -252,7 +252,7 @@ let
           + ";"
           + (if ssl && vhost.http3 then ''
           # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 reuseport;
+          listen ${addr}:${toString port} http3;
           # Advertise that HTTP/3 is available
           add_header Alt-Svc 'h3-29=":443"; ma=86400';
           # Sent when QUIC was used
