@@ -6495,6 +6495,7 @@ in
   openmodelica = recurseIntoAttrs {
     omcompiler = callPackage ../applications/science/misc/openmodelica/omcompiler { };
     omplot = libsForQt5.callPackage ../applications/science/misc/openmodelica/omplot { };
+    omsimulator = libsForQt5.callPackage ../applications/science/misc/openmodelica/omsimulator { };
   };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
