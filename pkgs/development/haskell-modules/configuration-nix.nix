@@ -867,6 +867,8 @@ self: super: builtins.intersectAttrs super {
   arbtt = overrideCabal super.arbtt (drv: {
     librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       pkgs.darwin.apple_sdk.frameworks.Foundation
+      pkgs.darwin.apple_sdk.frameworks.Carbon
+      pkgs.darwin.apple_sdk.frameworks.IOKit
     ] ++ (drv.librarySystemDepends or []);
   });
 }
