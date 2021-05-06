@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "3f7122cb3f9d2fd92fb836e2f4b2aa7b839b6c86";
+    rev = version;
     sha256 = "9HPhb7Vyy5DwBW1xeA6sEIBmmOXlky9lPShu6ZoixPw=";
     fetchSubmodules = true;
   };
