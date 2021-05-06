@@ -7451,6 +7451,8 @@ in
 
   pitivi = callPackage ../applications/video/pitivi { };
 
+  prism = callPackage ../applications/video/prism { };
+
   pulumi-bin = callPackage ../tools/admin/pulumi { };
 
   p0f = callPackage ../tools/security/p0f { };
