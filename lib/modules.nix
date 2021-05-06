@@ -299,13 +299,11 @@ rec {
       # a module will resolve strictly the attributes used as argument but
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
-      requiredArgs = builtins.attrNames (lib.functionArgs f);
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
-      extraArgs = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = builtins.addErrorContext (context name)
-          (args.${name} or config._module.args.${name});
-      }) requiredArgs);
+      extraArgs = builtins.mapAttrs (name: _:
+        builtins.addErrorContext (context name)
+          (args.${name} or config._module.args.${name})
+      ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
       # context on the explicited arguments of "args" too. This update
