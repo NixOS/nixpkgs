@@ -1,5 +1,11 @@
 { lib, stdenv, fetchurl, netcat
-, systemd ? null, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null, mongodb-tools ? null, influxdb ? null, supervisor ? null, docker ? null, nginx ? null, s6-rc ? null, xinetd ? null
+
+# Optional packages
+, systemd ? null, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null
+, mongodb ? null, mongodb-tools ? null, influxdb ? null, supervisor ? null, docker ? null
+, nginx ? null, s6-rc ? null, xinetd ? null
+
+# Configuration flags
 , enableApacheWebApplication ? false
 , enableAxis2WebService ? false
 , enableEjabberdDump ? false
