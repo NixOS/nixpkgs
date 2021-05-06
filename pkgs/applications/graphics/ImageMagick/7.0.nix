@@ -2,6 +2,7 @@
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
+, testVersion, imagemagick
 }:
 
 let
@@ -71,6 +72,9 @@ stdenv.mkDerivation rec {
       sed 's|-lgs|-L${lib.getLib ghostscript}/lib -lgs|' -i $la
     done
   '';
+
+  passthru.tests.version =
+    testVersion { package = imagemagick; };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
