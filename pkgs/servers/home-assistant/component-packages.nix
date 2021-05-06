@@ -531,7 +531,7 @@
     "mqtt_statestream" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "msteams" = ps: with ps; [ pymsteams ];
     "mullvad" = ps: with ps; [ mullvad-api ];
-    "mutesync" = ps: with ps; [ ]; # missing inputs: mutesync
+    "mutesync" = ps: with ps; [ mutesync ];
     "mvglive" = ps: with ps; [ PyMVGLive ];
     "my" = ps: with ps; [ aiohttp-cors pillow ];
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
