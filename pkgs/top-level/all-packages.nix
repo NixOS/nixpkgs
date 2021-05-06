@@ -9278,6 +9278,11 @@ in
     openssl = null;
   };
 
+  openconnect_head = callPackage ../tools/networking/openconnect {
+    head = true;
+    openssl = null;
+  };
+
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
