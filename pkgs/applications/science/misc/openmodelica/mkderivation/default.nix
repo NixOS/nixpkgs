@@ -81,7 +81,7 @@ in stdenv.mkDerivation (pkg // {
     myAppendAttr "configureFlags" " " pkg;
 
   preBuildPhases = "skipTargetsPhase " +
-    myAppendAttr "prebuildPhases" " " pkg;
+    myAppendAttr "preBuildPhases" " " pkg;
 
   skipTargetsPhase = ''
     for target in ${concatStringsSep " " deptargets}; do
