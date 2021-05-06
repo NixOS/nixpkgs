@@ -672,15 +672,32 @@ in
     # configuration, where the regular value for the `fileSystems'
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
-    fileSystems = mkVMOverride (
+    fileSystems = let
+      roStore = {
+        device = "store";
+        fsType = "9p";
+        options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
+        neededForBoot = true;
+      };
+    in mkVMOverride (
       cfg.fileSystems //
-      { "/".device = cfg.bootDevice;
-        ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
-          { device = "store";
-            fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
-            neededForBoot = true;
+      { "/" =
+          { device = cfg.bootDevice;
+            autoFormat = true;
+            fsType = "ext4";
           };
+        "/nix/store" = if !cfg.writableStore then roStore else {
+          device = "overlay";
+          fsType = "overlay";
+          options = [
+            "lowerdir=/sysroot/nix/.ro-store"
+            "upperdir=/sysroot/nix/.rw-store/store"
+            "workdir=/sysroot/nix/.rw-store/work"
+            "x-systemd.wants=rw-store.service"
+            "x-systemd.after=rw-store.service"
+          ];
+        };
+        "/nix/.ro-store" = mkIf cfg.writableStore roStore;
         "/tmp" = mkIf config.boot.tmpOnTmpfs
           { device = "tmpfs";
             fsType = "tmpfs";
@@ -714,6 +731,16 @@ in
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });
+    boot.initrd.extraUnits."rw-store.service" = lib.mkIf cfg.writableStore (pkgs.writeText "rw-store.service" ''
+      [Unit]
+      Before=sysroot-nix-store.mount
+      RequiresMountsFor=/sysroot/nix/.rw-store /sysroot/nix/.ro-store
+      DefaultDependencies=no
+      [Service]
+      ExecStart=${pkgs.coreutils}/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/.ro-store /sysroot/nix/store
+      Type=oneshot
+      RemainAfterExit=yes
+    '');
 
     swapDevices = mkVMOverride [ ];
     boot.initrd.luks.devices = mkVMOverride {};
