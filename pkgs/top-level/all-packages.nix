@@ -5955,6 +5955,8 @@ in
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
+  libtorrent-jesec = callPackage ../tools/networking/p2p/libtorrent-jesec { };
+
   libmpack = callPackage ../development/libraries/libmpack { };
 
   libiberty = callPackage ../development/libraries/libiberty { };
