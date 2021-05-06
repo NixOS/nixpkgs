@@ -38,7 +38,7 @@ sed -i "s@version = .*;@version = \"$VERSION\";@g" "$WORKING_NIX"
 
 if diff "$DEFAULT_NIX" "$WORKING_NIX"; then
   echo "WARNING: no changes"
-  exit 1
+  exit 0
 fi
 
 # update sha hash (convenietly provided)
