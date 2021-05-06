@@ -1,5 +1,15 @@
 {
   "LIBGLTF": {"subdir": "libgltf/"},
   "ODFVALIDATOR": {"subdir": "../extern/"},
-  "OFFICEOTRON": {"subdir": "../extern/"}
+  "OFFICEOTRON": {"subdir": "../extern/"},
+  "FONT_NOTO_MORE": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SANS_JP": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SANS_KR": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SANS_SC": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SANS_TC": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SERIF_JP": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SERIF_KR": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SERIF_SC": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_NOTO_SERIF_TC": {"baseurl": "https://noto-website-2.storage.googleapis.com/pkgs", "skip": "building --without-fonts"},
+  "FONT_OPENDYSLEXIC": {"baseurl": "https://github.com/antijingoist/opendyslexic/releases/download/v0.9.10", "skip": "building --without-fonts"}
 }

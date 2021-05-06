@@ -6,4 +6,4 @@ the libreoffice build process needs to download:
 
     nix-shell gen-shell.nix --argstr variant VARIANT --run generate
 
-Where VARIANT is either `still` or `fresh`.
+Where VARIANT is either `still` or `fresh` or `collabora`.

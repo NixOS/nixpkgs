@@ -1,3 +1,7 @@
 source $stdenv/setup
 
-tar --extract --file=$src libreoffice-$version/download.lst -O > $out
+if [ -d "$src" ]; then
+    cp $src/download.lst $out
+else
+    tar --extract --file=$src libreoffice-$version/download.lst -O > $out
+fi

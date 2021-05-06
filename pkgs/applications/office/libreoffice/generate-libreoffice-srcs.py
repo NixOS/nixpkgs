@@ -20,6 +20,10 @@ def main():
     print('[')
 
     for x in packages:
+        if x.get('skip', False):
+            print('skipping {}: {}'.format(x['tarball'], x.get('skip', "(no reason)")),
+                  file=sys.stderr)
+            continue
 
         md5 = x['md5']
         upstream_sha256 = x['sha256']
@@ -52,12 +56,13 @@ def main():
 
 
 def construct_url(x):
+    baseurl = x.get('baseurl', 'https://dev-www.libreoffice.org/src')
     if x['brief']:
-        return 'https://dev-www.libreoffice.org/src/{}{}'.format(
-            x.get('subdir', ''), x['tarball'])
+        return '{}/{}{}'.format(
+            baseurl, x.get('subdir', ''), x['tarball'])
     else:
-        return 'https://dev-www.libreoffice.org/src/{}{}-{}'.format(
-            x.get('subdir', ''), x['md5'], x['tarball'])
+        return '{}/{}{}-{}'.format(
+            baseurl, x.get('subdir', ''), x['md5'], x['tarball'])
 
 
 def download(url, name, hash, hashtype):
