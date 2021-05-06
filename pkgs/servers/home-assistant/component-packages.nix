@@ -495,7 +495,7 @@
     "meraki" = ps: with ps; [ aiohttp-cors ];
     "message_bird" = ps: with ps; [ ]; # missing inputs: messagebird
     "met" = ps: with ps; [ pymetno ];
-    "met_eireann" = ps: with ps; [ ]; # missing inputs: pyMetEireann
+    "met_eireann" = ps: with ps; [ pymeteireann ];
     "meteo_france" = ps: with ps; [ ]; # missing inputs: meteofrance-api
     "meteoalarm" = ps: with ps; [ ]; # missing inputs: meteoalertapi
     "metoffice" = ps: with ps; [ ]; # missing inputs: datapoint
