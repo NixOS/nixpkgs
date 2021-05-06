@@ -5,7 +5,8 @@
 let
   version = "1.0-RC1";
 
-in fetchzip rec {
+in
+fetchzip rec {
   name = "DirBuster-${version}";
 
   url = "mirror://sourceforge/dirbuster/DirBuster%20%28jar%20%2B%20lists%29/${version}/${name}.zip";

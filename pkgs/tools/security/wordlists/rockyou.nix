@@ -7,13 +7,14 @@ stdenv.mkDerivation rec {
   pname = "rockyou";
   version = "0.3-1kali3";
 
-  src = fetchFromGitLab {
-    group = "kalilinux";
-    owner = "packages";
-    repo = "wordlists";
-    rev = "debian/${version}";
-    sha256 = "sha256-viOd8iKLTiHrPF0azICp/F16JrPUfo4kbcGUPD2/cRs=";
-  } + "/rockyou.txt.gz";
+  src = fetchFromGitLab
+    {
+      group = "kalilinux";
+      owner = "packages";
+      repo = "wordlists";
+      rev = "debian/${version}";
+      sha256 = "sha256-viOd8iKLTiHrPF0azICp/F16JrPUfo4kbcGUPD2/cRs=";
+    } + "/rockyou.txt.gz";
 
   unpackCmd = ''
     mkdir src

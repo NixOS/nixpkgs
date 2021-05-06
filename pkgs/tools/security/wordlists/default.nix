@@ -6,26 +6,26 @@
 }:
 
 let
-  _wordlistData =
-    [ { name = "dirbuster"; expressionPath = ./dirbuster.nix; }
-      { name = "nmap"; expressionPath = ./nmap.nix; needsPackage = true; }
-      { name = "rockyou"; expressionPath = ./rockyou.nix; }
-      { name = "seclists"; expressionPath = ./seclists.nix; }
-      { name = "wfuzz"; expressionPath = ./wfuzz.nix; needsPackage = true; }
-    ];
+  _wordlistData = [
+    { name = "dirbuster"; expressionPath = ./dirbuster.nix; }
+    { name = "nmap"; expressionPath = ./nmap.nix; needsPackage = true; }
+    { name = "rockyou"; expressionPath = ./rockyou.nix; }
+    { name = "seclists"; expressionPath = ./seclists.nix; }
+    { name = "wfuzz"; expressionPath = ./wfuzz.nix; needsPackage = true; }
+  ];
 
   scopedWordlists = lib.makeScope pkgs.newScope (self: with self;
     let _packageWithLinkCommandFrom = acc: datum:
       # Some wordlists are based on an already existing `nixpkgs` package; Pass it as parameter of the expression.
-      let parameters = {}
+      let parameters = { }
         // lib.optionalAttrs ((builtins.elem "needsPackage" (builtins.attrNames datum)) && datum.needsPackage) { ${datum.name} = pkgs.${datum.name}; };
       in
-        let p = callPackage datum.expressionPath parameters;
-        in acc // { ${datum.name} = p; };
-    in builtins.foldl' _packageWithLinkCommandFrom {} _wordlistData
+      let p = callPackage datum.expressionPath parameters;
+      in acc // { ${datum.name} = p; };
+    in builtins.foldl' _packageWithLinkCommandFrom { } _wordlistData
   );
-
-in let
+in
+let
   packageConstructor = wordlistPackages:
     symlinkJoin rec {
       pname = "security-wordlists";
@@ -62,7 +62,8 @@ in let
         maintainers = with maintainers; [ pamplemousse ];
       };
     };
-in {
+in
+{
   pkgs = scopedWordlists;
   withLists = f: packageConstructor (f scopedWordlists);
 }
