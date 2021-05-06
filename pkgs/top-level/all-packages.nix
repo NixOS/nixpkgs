@@ -12344,6 +12344,8 @@ in
     alloy5
     alloy;
 
+  altair = callPackage ../development/tools/altair-graphql-client { };
+
   ameba = callPackage ../development/tools/ameba { };
 
   augeas = callPackage ../tools/system/augeas { };
