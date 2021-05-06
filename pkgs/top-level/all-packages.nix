@@ -693,9 +693,7 @@ in
 
   acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
 
-  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
-    ffmpeg = ffmpeg_2;
-  };
+  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter { };
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
@@ -22504,7 +22502,6 @@ in
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
     libjack = libjack2;
-    ffmpeg = ffmpeg_2;
   };
 
   cmusfm = callPackage ../applications/audio/cmusfm { };
@@ -24219,11 +24216,6 @@ in
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
-
-  kino = callPackage ../applications/video/kino {
-    inherit (gnome2) libglade;
-    ffmpeg = ffmpeg_2;
-  };
 
   kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
 
@@ -27596,7 +27588,7 @@ in
 
   airstrike = callPackage ../games/airstrike { };
 
-  alephone = callPackage ../games/alephone { ffmpeg = ffmpeg_2; };
+  alephone = callPackage ../games/alephone { };
   alephone-durandal = callPackage ../games/alephone/durandal { };
   alephone-eternal = callPackage ../games/alephone/eternal { };
   alephone-evil = callPackage ../games/alephone/evil { };
@@ -28462,9 +28454,7 @@ in
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
-  ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_2;
-  };
+  ultrastardx = callPackage ../games/ultrastardx { };
 
   unciv = callPackage ../games/unciv { };
 
