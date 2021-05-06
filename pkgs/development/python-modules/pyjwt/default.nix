@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, cryptography, ecdsa
-, pytestrunner, pytestcov, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, ecdsa
+, pytest-cov
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "PyJWT";
@@ -11,18 +17,17 @@ buildPythonPackage rec {
     sha256 = "a5c70a06e1f33d81ef25eecd50d50bd30e34de1ca8b2b9fa3fe0daaabcf69bf7";
   };
 
-  propagatedBuildInputs = [ cryptography ecdsa ];
+  propagatedBuildInputs = [
+    cryptography
+    ecdsa
+  ];
 
-  checkInputs = [ pytestrunner pytestcov pytest ];
+  checkInputs = [
+    pytest-cov
+    pytestCheckHook
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=4.0.1,<5.0.0" "pytest"
-  '';
-
-  # ecdsa changed internal behavior
-  checkPhase = ''
-    pytest tests -k 'not ec_verify_should_return_false_if_signature_invalid'
-  '';
+  pythonImportsCheck = [ "jwt" ];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
