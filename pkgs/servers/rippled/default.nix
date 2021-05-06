@@ -32,7 +32,7 @@ let
   nudb = fetchgit rec {
     url = "https://github.com/CPPAlliance/NuDB.git";
     rev = "2.0.5";
-    sha256 = "02zbd07qvdjjsm4ivvhxah5n466bncvm6m03vmq0qdbbrlnp6s37";
+    sha256 = "07dwvglhyzpqnhzd33a2vs80wrdxy55a3sirnd739xp1k5v8s2fx";
     leaveDotGit = true;
     fetchSubmodules = true;
     postFetch = "cd $out && git tag ${rev}";
@@ -41,7 +41,7 @@ let
   rocksdb = fetchgit rec {
     url = "https://github.com/facebook/rocksdb.git";
     rev = "v6.7.3";
-    sha256 = "16qb636qs2yxqmz30hmvq8mllf038s80p37b0vyc0bazwlr93d9z";
+    sha256 = "0dzn5jg3i2mnnjj24dn9lzi3aajj5ga2akjf64lybyj481lq445k";
     deepClone = true;
     fetchSubmodules = false;
     leaveDotGit = true;
