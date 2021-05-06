@@ -21080,6 +21080,10 @@ in
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
+  wpa_supplicant_ro_ssids = wpa_supplicant.override {
+    readOnlyModeSSIDs = true;
+  };
+
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
   xf86_input_cmt = callPackage ../os-specific/linux/xf86-input-cmt { };
