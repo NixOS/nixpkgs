@@ -298,7 +298,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all";
         ProtectSystem = "strict";
         RemoveIPC = true;
         ReadWritePaths = let
@@ -308,9 +308,10 @@ in {
           allowPaths = if isList value then value else singleton value;
         in [ "${cfg.configDir}" ] ++ allowPaths;
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
         ] ++ optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
           "AF_BLUETOOTH"
         ];
