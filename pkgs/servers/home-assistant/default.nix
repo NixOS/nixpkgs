@@ -22,24 +22,6 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
-    # Pinned due to API changes in astral>=2.0, required by the sun/moon plugins
-    # https://github.com/home-assistant/core/pull/48573; Remove >= 2021.5
-    (mkOverride "astral" "1.10.1"
-      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
-
-    # Pinned due to API changes in brother>=1.0, remove >= 2021.5
-    (self: super: {
-      brother = super.brother.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.2";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          rev = version;
-          sha256 = "sha256-vIefcL3K3ZbAUxMFM7gbbTFdrnmufWZHcq4OA19SYXE=";
-        };
-      });
-    })
-
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
@@ -59,26 +41,6 @@ let
     (mkOverride "pyjwt" "1.7.1"
       "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd")
 
-    # Pinned due to API changes in pykmtronic>=0.2.0
-    (mkOverride "pykmtronic" "0.0.3"
-      "sha256-8bxn27DU1XUQUxQFJklEge29DHx1DMu7pJG4hVE1jDU=")
-
-    # Pinned due to API changes in pylilterbot>=2021.3.0
-    # https://github.com/home-assistant/core/pull/48300; Remove >= 2021.5
-    (self: super: {
-      pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: rec {
-        version = "2021.2.8";
-        src = fetchFromGitHub {
-          owner = "natekspencer";
-          repo = "pylitterbot";
-          rev = version;
-          sha256 = "142lhijm51v11cd0lhcfdnjdd143jxi2hjsrqdq0rrbbnmj6mymp";
-        };
-        # had no tests before 2021.3.0
-        doCheck = false;
-      });
-    })
-
     # Pinned due to bug in ring-doorbell 0.7.0
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
@@ -94,6 +56,19 @@ let
           rev = version;
           sha256 = "0ykv6r6blbj3fg9fplk9i7xclkv5d93rwvx0fm5s8ms9f2s9ih8z";
         };
+      });
+    })
+
+    # Remove after https://github.com/NixOS/nixpkgs/pull/121854 has passed staging-next
+    (self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.13";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0npsg38d11skv04zvsi90j93f6jdgm8666ds2ri7shr1pz1732hx";
+        };
+        patches = [];
+        propagatedBuildInputs = [ python3.pkgs.greenlet ];
       });
     })
 
@@ -130,7 +105,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.4.6";
+  hassVersion = "2021.5.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -149,7 +124,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1s1slwcqls2prz9kgyhggs8xi3x7ghwdi33j983kvpg0gva7d2f0";
+    sha256 = "1kwx0bq2i76p9gbx5kkzkjxd88vzf2daccm0wf123693isk1nwzs";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -162,8 +137,6 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "pytz>=2021.1" "pytz" \
-      --replace "pyyaml==5.4.1" "pyyaml" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
@@ -453,6 +426,8 @@ in with py.pkgs; buildPythonApplication rec {
     "test_fetching_url_with_verify_ssl"
     # util/test_package.py: AssertionError on package.is_installed('homeassistant>=999.999.999')
     "test_check_package_version_does_not_match"
+    # homeassistant/util/thread.py:51: SystemError
+    "test_executor_shutdown_can_interrupt_threads"
   ];
 
   preCheck = ''

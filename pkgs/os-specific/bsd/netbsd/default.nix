@@ -26,7 +26,8 @@ in lib.makeScopeWithSplicing
   splicePackages
   newScope
   otherSplices
-  {}
+  (_: {})
+  (_: {})
   (self: let
     inherit (self) mkDerivation;
   in {
