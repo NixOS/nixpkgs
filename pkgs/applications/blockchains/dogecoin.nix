@@ -7,13 +7,13 @@
 with lib;
 stdenv.mkDerivation rec {
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.2";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "1gw46q63mjzwvb17ck6p1bap2xpdrap08szw2kjhasa3yvd5swyy";
+    sha256 = "15yjzyvgic96pybadfk37zb032xvra0v37iphbnh15dci2fd934j";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
