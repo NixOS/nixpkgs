@@ -14979,6 +14979,8 @@ in
 
   gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
 
+  gtksourceview5 = callPackage ../development/libraries/gtksourceview/5.x.nix { };
+
   gtksourceviewmm = callPackage ../development/libraries/gtksourceviewmm { };
 
   gtksourceviewmm4 = callPackage ../development/libraries/gtksourceviewmm/4.x.nix { };
