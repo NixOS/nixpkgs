@@ -1,12 +1,35 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin } :
+{ lib, stdenv, fetchurl, pkg-config, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin, systemd } :
 
 assert (openssl != null) == (gnutls == null);
 
-let vpnc = fetchgit {
-  url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
-  rev = "c0122e891f7e033f35f047dad963702199d5cb9e";
-  sha256 = "11b1ls012mb704jphqxjmqrfbbhkdjb64j2q4k8wb5jmja8jnd14";
-};
+let
+
+  vpnc-scripts = stdenv.mkDerivation {
+    pname = "vpnc-scripts";
+    version = "2021-03-31";
+
+    src = fetchgit {
+      url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
+      rev = "8fff06090ed193c4a7285e9a10b42e6679e8ecf3";
+      sha256 = "14bzzpwz7kdmlbx825h6s4jjdml9q6ziyrq8311lp8caql68qdq1";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      substituteInPlace vpnc-script \
+        --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl" \
+        --replace "/usr/bin/busctl" "${systemd}/bin/busctl" \
+        --replace "/sbin/resolvconf" "${systemd}/bin/resolvconf"
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir $out
+      cp vpnc-script $out/
+      runHook postInstall
+    '';
+  };
 
 in stdenv.mkDerivation rec {
   pname = "openconnect";
@@ -22,7 +45,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   configureFlags = [
-    "--with-vpnc-script=${vpnc}/vpnc-script"
+    "--with-vpnc-script=${vpnc-scripts}/vpnc-script"
     "--disable-nls"
     "--without-openssl-version-check"
   ];
