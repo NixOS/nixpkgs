@@ -25302,7 +25302,7 @@ in
   owamp = callPackage ../applications/networking/owamp { };
 
   vieb = callPackage ../applications/networking/browsers/vieb {
-    electron = electron_11;
+    electron = electron_12;
   };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
