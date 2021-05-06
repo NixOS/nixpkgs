@@ -1,6 +1,6 @@
 { fetchurl
-, fetchpatch
-, lib, stdenv
+, lib
+, stdenv
 , meson
 , ninja
 , pkg-config
@@ -30,28 +30,22 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.68.0";
+  version = "1.68.1";
+
+  outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vqsmzy2wmyhmq37y2c6jl0wq4xnicf0z7k6jaxn3aw11sh783ph";
+    sha256 = "0w2cbfpmc6alz7z8ycchhlkn586av5y8zk2xmgwzq10i0k13xyig";
   };
 
   patches = [
-    # Fixes https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/3961.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/58337929c338e7b5c0a35196d783d3b2be542900.patch";
-      sha256 = "QgmU+d838fU5LiS4lhTF+179U1lY1L5tJbYtX/oc68k=";
-    })
-
     # Hard-code various paths
     ./fix-paths.patch
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
   ];
-
-  outputs = [ "out" "dev" "installedTests" ];
 
   nativeBuildInputs = [
     meson
@@ -98,6 +92,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
     ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libgjstesttools/libgjstesttools.so $installedTests/libexec/installed-tests/gjs/libgjstesttools.so
     ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
     ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
