@@ -42,6 +42,11 @@ buildPythonPackage rec {
     pytest-httpx
   ];
 
+  disabledTests = [
+    # fails with pytest-httpx>=0.12.0
+    "test__query_rmv_api_fail"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/cgtobi/PyRMVtransport";
     description = "Get transport information from opendata.rmv.de";

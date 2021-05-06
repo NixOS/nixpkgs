@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "1.2.2";
+  version = "1.3.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37c23166603a3bd134e5f6fc22dbbf8c274d4d24c71418fba292ed2cd7a0bf43";
+    sha256 = "17pcdi69bwdfw2wv3a0fhira5gimw88sp2wf47yqz50z1ckhv2c1";
   };
 
   # relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
-  preConfigure = ''
-    substituteInPlace setup.py --replace 'botocore>=1.17.44,<1.17.45' 'botocore'
+  postPatch = ''
+    substituteInPlace setup.py --replace 'botocore>=1.20.49,<1.20.50' 'botocore'
   '';
 
   propagatedBuildInputs = [ wrapt aiohttp aioitertools botocore ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiobotocore" ];
 
   meta = with lib; {
-    description = "Async client for amazon services using botocore and aiohttp/asyncio.";
+    description = "Python client for amazon services";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiobotocore";
     maintainers = with maintainers; [ teh ];
