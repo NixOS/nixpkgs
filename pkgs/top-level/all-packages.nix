@@ -20583,6 +20583,8 @@ in
 
   kbdlight = callPackage ../os-specific/linux/kbdlight { };
 
+  kinect-audio-setup = callPackage ../os-specific/linux/kinect-audio-setup { };
+
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
