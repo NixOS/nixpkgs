@@ -2,7 +2,8 @@
 , pkg-config, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, util-linux, qt4, qrencode
-, withGui }:
+, withGui, withUpnp ? true, withUtils ? true, withWallet ? true
+, withZmq ? true, zeromq }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -17,12 +18,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook util-linux ];
-  buildInputs = [ openssl db5 openssl protobuf boost zlib miniupnpc libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  buildInputs = [ openssl protobuf boost zlib libevent ]
+    ++ optionals withGui [ qt4 qrencode ]
+    ++ optionals withUpnp [ miniupnpc ]
+    ++ optionals withWallet [ db5 ]
+    ++ optionals withZmq [ zeromq ];
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui" ];
+  configureFlags = [
+    "--with-incompatible-bdb"
+    "--with-boost-libdir=${boost.out}/lib"
+  ] ++ optionals (!withGui) [ "--with-gui=no" ]
+    ++ optionals (!withUpnp) [ "--without-miniupnpc" ]
+    ++ optionals (!withUtils) [ "--without-utils" ]
+    ++ optionals (!withWallet) [ "--disable-wallet" ]
+    ++ optionals (!withZmq) [ "--disable-zmq" ];
 
   meta = {
     description = "Wow, such coin, much shiba, very rich";
