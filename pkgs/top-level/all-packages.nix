@@ -27558,7 +27558,7 @@ in
 
   zcash = callPackage ../applications/blockchains/zcash { stdenv = llvmPackages_11.stdenv; };
 
-  openethereum = callPackage ../applications/blockchains/openethereum { };
+  openethereum = callPackage ../applications/blockchains/openethereum { stdenv = llvmPackages_12.stdenv; };
 
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
