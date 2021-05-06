@@ -9,12 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyJWT";
-  version = "2.0.1";
+  pname = "pyjwt";
+  version = "2.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a5c70a06e1f33d81ef25eecd50d50bd30e34de1ca8b2b9fa3fe0daaabcf69bf7";
+    pname = "PyJWT";
+    inherit version;
+    sha256 = "sha256-+6ROeJi7yhYKKytQH0koJPyDgkhdOm8Rul0MGTfOYTA=";
   };
 
   propagatedBuildInputs = [
