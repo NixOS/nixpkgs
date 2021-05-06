@@ -6,12 +6,12 @@ let
   cfg = config.services.sozu;
   format = pkgs.formats.toml {};
 
-  settings = format.generate "settings.toml" cfg.settings;
-
+  globalSettings = format.generate "global.toml" cfg.global;
+  optionalSettings = format.generate "optional.toml" cfg.optional;
   configFile = pkgs.writeText "config.toml" ''
-    ${fileContents settings}
+    ${fileContents globalSettings}
 
-    ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+    ${fileContents optionalSettings}
   '';
 in
 {
@@ -24,7 +24,7 @@ in
       description = "Sozu package to use.";
     };
 
-    settings = mkOption {
+    global = mkOption {
       default = {};
       description = ''
         Settings that will be parsed into Sozu's <literal>config.toml</literal>.
@@ -117,8 +117,8 @@ in
 
           max_command_buffer_size = mkOption {
             type = types.int;
-            default = cfg.settings.command_buffer_size * 2;
-            example = "163840";
+            default = cfg.global.command_buffer_size * 2;
+            example = 163840;
             description = ''
               Maximum size in bytes of the buffer
               used by the command socket protocol.
@@ -158,7 +158,9 @@ in
 
           max_connections = mkOption {
             type = types.int;
-            default = 10000;
+            # current max file descriptor soft limit is: 1024
+            # the worker needs two file descriptors per client connection
+            default = 1024 / 2;
             example = 500;
             description = ''
               Maximum number of connections to a worker. If it reached that
@@ -253,51 +255,209 @@ in
           };
 
         };
-      };
-    };
 
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Extra configuration for <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md#metrics">metrics</link>, <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md#listeners">listeners</link>,
-        and <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md#applications">applications</link>.
-      '';
-    };
-
-  };
-
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      sozu
-    ];
-
-    users.users.sozu = {
-      description = "Sozu Daemon User";
-      isSystemUser = true;
-    };
-
-    systemd.services.sozu = {
-      description = "Sozu - A HTTP reverse proxy, configurable at runtime, fast and safe, built in Rust.";
-      after = [ "network.target" ];
-      wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        PIDFile = "/run/sozu/sozu.pid";
-        ExecStart = "${cfg.package}/bin/sozu start --config ${configFile}";
-        ExecReload = "${cfg.package}/bin/sozuctl --config ${configFile} reload";
-        Restart = "on-failure";
-        User = "sozu";
-        RuntimeDirectory = "sozu";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
 
     };
 
+    optional = mkOption {
+      default = {};
+      example = {
+        listeners = [
+          # Example for an HTTP (plaintext) listener
+          {
+            # Possible values are http, https or tcp
+            protocol = "http";
+            # Listening address
+            address = "127.0.0.1:8080";
+
+            # Specify a different IP than the one the socket sees, for logs and
+            # forwarded headers
+            public_address = "1.2.3.4:80";
+
+            # Configures the client socket to receive a PROXY protocol header
+            #expect_proxy = false;
+
+            # Path to custom 404 and 503 answers
+            # A 404 response is sent when sozu does not know about the requested domain or path
+            # A 503 response is sent if there are no backend servers available
+            answer_404 = "../lib/assets/404.html";
+            answer_503 = "../lib/assets/503.html";
+
+            # Defines the sticky session cookie's name, if `sticky_session` is
+            # activated format an application. Defaults to "SOZUBALANCEID"
+            sticky_name = "SOZUBALANCEID";
+          }
+
+          # Example for an HTTPS (OpenSSL or rustls based) listener
+          {
+            # Possible values are http, https or tcp
+            protocol = "https";
+            # Listening address
+            address = "127.0.0.1:8443";
+
+            # Specify a different IP than the one the socket sees, for logs and
+            # forwarded headers
+            #public_address = "1.2.3.4:81";
+
+            # Configures the client socket to receive a PROXY protocol header
+            # This option is incompatible with public_addresss
+            #expect_proxy = false;
+
+            # Path to custom 404 and 503 answers
+            # A 404 response is sent when sozu does not know about the
+            # requested domain or path
+            # A 503 response is sent if there are no backend servers available
+            answer_404 = "../lib/assets/404.html";
+            answer_503 = "../lib/assets/503.html";
+
+            # Defines the sticky session cookie's name, if `sticky_session` is
+            # activated format an application. Defaults to "SOZUBALANCEID"
+            sticky_name = "SOZUBALANCEID";
+
+            # Supported TLS versions. Possible values are "SSLv2", "SSLv3",
+            # "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3". Defaults to "TLSv1.2"
+            tls_versions = [ "TLSv1.2" ];
+
+            # Option specific to Openssl based HTTPS listeners
+            #cipher_list = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256";
+
+            # Option specific to rustls based HTTPS listeners
+            rustls_cipher_list = [ "TLS13_CHACHA20_POLY1305_SHA256" ];
+          }
+        ];
+
+        applications = {
+          # Every application has an "application ID", here it is "MyApp".
+          # This is an example of a routing configuration for the HTTP and HTPPS proxies
+          MyApp = {
+            # The protocol option indicates if we will use HTTP or TCP proxying
+            # Possible values are thus "http" and "tcp"
+            # HTTPS proxies will use http here
+            protocol = "http";
+
+            # Per application load balancing algorithm
+            # The possible values are "roundrobin" and "random"
+            # Defaults to "roundrobin"
+            load_balancing_policy = "roundrobin";
+
+            # Force application to redirect http traffic to https
+            #https_redirect = true
+
+            # Frontends configuration:
+            # This specifies the listeners, domains, and certificates that will be configured for an application.
+            # Possible frontend options:
+            # - address: TCP listener.
+            # - hostname: Hostname of the application.
+            # - path_begin = "/api" # Optional. An application can receive requests going to a hostname and path prefix.
+            # - sticky_session = false # Activates sticky sessions for this application.
+            # - https_redirect = false # Activates automatic redirection to HTTPS for this application.
+            frontends = [
+              {
+                address = "0.0.0.0:8080";
+                hostname = "lolcatho.st";
+              }
+
+              {
+                address = "0.0.0.0:8443";
+                hostname = "lolcatho.st";
+                certificate = "../lib/assets/certificate.pem";
+                key = "../lib/assets/key.pem";
+                certificate_chain = "../lib/assets/certificate_chain.pem";
+              }
+            ];
+
+            # Backend configuration:
+            # This indicates the backend servers used by the application.
+            # Possible options:
+            # - addresss: IP and port of the backend server.
+            # - weight: Weight used by the load balancing algorithm.
+            # - sticky-id: Sticky session identifier.
+            backends = [
+              {
+                address = "127.0.0.1:1026";
+              }
+            ];
+          };
+
+          TcpTest = {
+            protocol = "tcp";
+
+            frontends = [
+              {
+                address = "0.0.0.0:8081";
+              }
+            ];
+
+            # Activates the proxy protocol to send IP information to the backend
+            send_proxy = false;
+
+            backends = [
+              {
+                address = "127.0.0.1:4000";
+                weight = 100;
+              }
+              {
+                address = "127.0.0.1:4001";
+                weight = 50;
+              }
+            ];
+          };
+        };
+
+        metrics = {
+          address = "127.0.0.1:8125";
+          # use InfluxDB's statsd protocol flavor to add tags
+          tagged_metrics = false;
+          # metrics key prefix
+          prefix = "sozu";
+        };
+      };
+      type = types.submodule
+        {
+          freeformType = format.type;
+        };
+    };
+
   };
+
+  config = mkIf
+    cfg.enable
+    {
+      environment.systemPackages = with pkgs; [
+        cfg.package
+      ];
+
+      users.groups.sozu = {};
+      users.users.sozu = {
+        description = "Sozu Daemon User";
+        group = "sozu";
+        isSystemUser = true;
+      };
+
+      systemd.services.sozu = {
+        description = "Sozu - A HTTP reverse proxy, configurable at runtime, fast and safe, built in Rust.";
+        after = [ "network.target" ];
+        wants = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig = {
+          PIDFile = "/run/sozu/sozu.pid";
+          ExecStart = "${cfg.package}/bin/sozu start --config ${configFile}";
+          ExecReload = "${cfg.package}/bin/sozuctl --config ${configFile} reload";
+          Restart = "on-failure";
+          User = "sozu";
+          Group = "sozu";
+          RuntimeDirectory = "sozu";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        };
+
+      };
+
+    };
 
   meta = with lib; {
     maintainers = with maintainer; [ netcrns ];
   };
+
 }
