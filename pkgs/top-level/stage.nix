@@ -216,10 +216,9 @@ let
         pkgsStatic = super';
       })] ++ overlays;
       crossOverlays = [ (import ./static.nix) ];
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = stdenv.hostPlatform.parsed // {
+        parsed = stdenv.hostPlatform.parsed // lib.optionalAttrs stdenv.hostPlatform.isLinux {
           abi = {
             gnu = lib.systems.parse.abis.musl;
             gnueabi = lib.systems.parse.abis.musleabi;

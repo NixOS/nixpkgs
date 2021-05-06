@@ -1,6 +1,6 @@
-{ appleDerivation, lib, headersOnly ? true }:
+{ appleDerivation', stdenv, lib, headersOnly ? true }:
 
-appleDerivation {
+appleDerivation' stdenv {
   installPhase = lib.optionalString headersOnly ''
     mkdir -p $out/include/hfs
     cp core/*.h $out/include/hfs

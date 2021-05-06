@@ -44,11 +44,25 @@ in
       extraPackages = [];
       inherit bintools;
     };
-    allowedRequisites =
-      lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
+    allowedRequisites = null;
   };
 
-  stdenvNoLibs = mkStdenvNoLibs stdenv;
+  stdenvNoLibs =
+    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
+    then
+      # We cannot touch binutils or cc themselves, because that will cause
+      # infinite recursion. So instead, we just choose a libc based on the
+      # current platform. That meanse we won't respect whatever compiler was
+      # passed in with the stdenv stage argument.
+      #
+      # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
+      # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
+      # as part of the stage. Then we would never be tempted to override a
+      # later thing to to create an earlier thing (leading to infinite
+      # recursion) and we also would still respect the stage arguments choices
+      # for these things.
+      overrideCC stdenv buildPackages.llvmPackages.clangNoCompilerRt
+    else mkStdenvNoLibs stdenv;
 
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
@@ -10392,8 +10406,10 @@ in
   gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   crossLibcStdenv =
-    if stdenv.hostPlatform.useLLVM or false
-    then overrideCC stdenv buildPackages.llvmPackages_8.lldClangNoLibc
+    /**/ if stdenv.hostPlatform.useLLVM or false
+      then overrideCC stdenv buildPackages.llvmPackages.lldClangNoLibc
+    else if stdenv.hostPlatform.isDarwin
+      then overrideCC stdenv buildPackages.llvmPackages.clangNoLibcNoCompilerRt
     else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
@@ -11710,6 +11726,10 @@ in
     inherit cc bintools libc libcxx extraPackages zlib;
   } // extraArgs; in self);
 
+  wrapCCWithoutLibc = args: wrapCCWith ({
+    bintools = if stdenv.targetPlatform.isDarwin then darwin.binutilsNoLibc else binutilsNoLibc;
+  } // args);
+
   wrapCC = cc: wrapCCWith {
     inherit cc;
   };
@@ -12537,7 +12557,10 @@ in
     bintools = binutils-unwrapped;
     libc =
       /**/ if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
-      else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
+      else if stdenv.targetPlatform.libc == "libSystem" then
+        if stdenv.targetPlatform.useiOSPrebuilt or false
+        then targetPackages.darwin.xcode
+        else null
       else if stdenv.targetPlatform.libc == "nblibc" then targetPackages.netbsdCross.headers
       else null;
   };
@@ -14685,7 +14708,10 @@ in
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
-    else if name == "libSystem" then targetPackages.darwin.xcode
+    else if name == "libSystem" then
+      if stdenv.targetPlatform.useiOSPrebuilt or false
+      then targetPackages.darwin.xcode
+      else targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
