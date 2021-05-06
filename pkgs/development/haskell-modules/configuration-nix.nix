@@ -857,4 +857,10 @@ self: super: builtins.intersectAttrs super {
         install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
       '' + (drv.postInstall or "");
     });
+
+  # TODO(@sternenseemann): can we determine this statically in cabal2nix?
+  FractalArt = super.FractalArt.override
+    (lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+      objc = pkgs.darwin.libojc;
+    });
 }
