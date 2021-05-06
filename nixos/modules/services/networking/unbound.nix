@@ -101,9 +101,10 @@ in {
 
           freeformType = let
             validSettingsPrimitiveTypes = oneOf [ int str bool float ];
-            validSettingsTypes = oneOf [ validSettingsPrimitiveTypes (listOf validSettingsPrimitiveTypes) ];
-            settingsType = (attrsOf validSettingsTypes);
-          in attrsOf (oneOf [ string settingsType (listOf settingsType) ])
+            coercedList = t: coercedTo t singleton (listOf t);
+            validSettingsTypes = coercedList validSettingsPrimitiveTypes;
+            settingsType = coercedList (attrsOf validSettingsTypes);
+          in attrsOf (oneOf [ string settingsType ])
               // { description = ''
                 unbound.conf configuration type. The format consist of an attribute
                 set of settings. Each settings can be either one value, a list of
