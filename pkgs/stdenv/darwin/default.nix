@@ -201,7 +201,7 @@ in rec {
           '';
         };
 
-        darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
+        darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenvNoCC fetchurl; };
 
         dyld = {
           name = "bootstrap-stage0-dyld";

@@ -1,9 +1,9 @@
-{ lib, appleDerivation, xcbuildHook
+{ lib, stdenv, appleDerivation', xcbuildHook
 
 # headersOnly is true when building for libSystem
 , headersOnly ? false }:
 
-appleDerivation {
+appleDerivation' stdenv {
   nativeBuildInputs = lib.optional (!headersOnly) xcbuildHook;
 
   prePatch = ''
