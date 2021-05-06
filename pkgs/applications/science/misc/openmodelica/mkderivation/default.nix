@@ -26,6 +26,7 @@ in stdenv.mkDerivation (pkg // {
   buildInputs = pkg.buildInputs ++ [joinedDeps];
 
   patchPhase = ''
+      patch -p1 < ${./Makefile.in.patch}
       sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qt5.qttools}/bin/lrelease|'
       sed -i OMPlot/Makefile.in -e 's|bindir = @includedir@|includedir = @includedir@|'
       sed -i OMPlot/OMPlot/OMPlotGUI/*.pro -e '/INCLUDEPATH +=/s|$| ../../qwt/src|'
