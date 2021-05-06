@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "15yjzyvgic96pybadfk37zb032xvra0v37iphbnh15dci2fd934j";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ]
+  nativeBuildInputs = [ pkg-config autoreconfHook util-linux ];
+  buildInputs = [ openssl db5 openssl protobuf boost zlib miniupnpc libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-incompatible-bdb"
