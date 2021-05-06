@@ -58,13 +58,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20210407-nightly";
+  version = "20210502-154244-3f7122cb";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "d2419fb99e567e3b260980694cc840a1a3b86922";
-    sha256 = "4tVjrdDlrDPKzcbTYK9vRlzfC9tfvkD+D0aN19A8RWE=";
+    rev = "3f7122cb3f9d2fd92fb836e2f4b2aa7b839b6c86";
+    sha256 = "9HPhb7Vyy5DwBW1xeA6sEIBmmOXlky9lPShu6ZoixPw=";
     fetchSubmodules = true;
   };
 
