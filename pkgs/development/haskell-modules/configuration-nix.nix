@@ -858,15 +858,15 @@ self: super: builtins.intersectAttrs super {
       '' + (drv.postInstall or "");
     });
 
-  # TODO(@sternenseemann): can we determine this statically in cabal2nix?
-  FractalArt = super.FractalArt.override
-    (lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-      objc = pkgs.darwin.libojc;
-    });
+  FractalArt = overrideCabal super.FractalArt (drv: {
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.libobjc
+    ] ++ (drv.librarySystemDepends or []);
+  });
 
   arbtt = overrideCabal super.arbtt (drv: {
-    librarySystemDepends = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       pkgs.darwin.apple_sdk.frameworks.Foundation
-    ] ++ (drv.librarySystemDepends or [])
+    ] ++ (drv.librarySystemDepends or []);
   });
 }
