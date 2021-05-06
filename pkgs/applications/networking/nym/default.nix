@@ -3,8 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, libredirect
-, writeText
 }:
 
 rustPlatform.buildRustPackage rec {
