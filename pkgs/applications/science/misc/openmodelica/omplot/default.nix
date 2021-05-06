@@ -20,13 +20,4 @@ mkOpenModelicaDerivation rec {
     omniorb sqlite libatomic_ops gettext boost
     ipopt libuuid qtxmlpatterns openmodelica.omcompiler
     openscenegraph gnome2.gtkglext xorg.libXmu git gtk2 makeWrapper];
-
-  preInstallPhases = "touchSomeDirs";
-
-  touchSomeDirs = ''
-    for direntry in share/doc/omc/testmodels; do
-      mkdir -p build/$direntry;
-      touch build/$direntry/omdir.plug;
-    done;
-    '';
 }
