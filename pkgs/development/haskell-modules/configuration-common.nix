@@ -373,7 +373,6 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
-  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
@@ -1840,9 +1839,13 @@ self: super: {
     '' + (drv.postPatch or "");
   });
 
-  # GHCi issue on aarch64 prevent doctests from running
+  # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
   ad = overrideCabal super.ad {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta;
+  vinyl = overrideCabal super.vinyl {
     doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
   };
 
