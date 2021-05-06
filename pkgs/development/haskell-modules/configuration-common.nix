@@ -1846,4 +1846,10 @@ self: super: {
     doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
   };
 
+  # Tests need to lookup target triple x86_64-unknown-linux
+  # https://github.com/llvm-hs/llvm-hs/issues/334
+  llvm-hs = overrideCabal super.llvm-hs {
+    doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
