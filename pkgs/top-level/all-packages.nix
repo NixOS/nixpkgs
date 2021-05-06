@@ -7202,8 +7202,8 @@ in
 
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
-  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
-  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { };
+  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
+  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
   openbazaar = callPackage ../applications/networking/openbazaar { };
   openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
@@ -10395,15 +10395,7 @@ in
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccCrossStageStatic = assert stdenv.targetPlatform != stdenv.hostPlatform; let
-    libcCross1 =
-      if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
-      else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
-      else if stdenv.targetPlatform.libc == "nblibc" then netbsd.headers
-      else null;
-    binutils1 = wrapBintoolsWith {
-      bintools = binutils-unwrapped;
-      libc = libcCross1;
-    };
+    libcCross1 = binutilsNoLibc.libc;
     in wrapCCWith {
       cc = gccFun {
         # copy-pasted
@@ -10416,10 +10408,10 @@ in
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
-        targetPackages.stdenv.cc.bintools = binutils1;
+        targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared = false;
       };
-      bintools = binutils1;
+      bintools = binutilsNoLibc;
       libc = libcCross1;
       extraPackages = [];
   };
@@ -12532,6 +12524,14 @@ in
       gold = false;
     };
   });
+  binutilsNoLibc = wrapBintoolsWith {
+    bintools = binutils-unwrapped;
+    libc =
+      /**/ if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
+      else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
+      else if stdenv.targetPlatform.libc == "nblibc" then targetPackages.netbsdCross.headers
+      else null;
+  };
 
   bison = callPackage ../development/tools/parsing/bison { };
 
