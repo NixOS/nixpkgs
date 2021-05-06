@@ -861,6 +861,7 @@ self: super: builtins.intersectAttrs super {
   FractalArt = overrideCabal super.FractalArt (drv: {
     librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       pkgs.darwin.libobjc
+      pkgs.darwin.apple_sdk.frameworks.AppKit
     ] ++ (drv.librarySystemDepends or []);
   });
 
