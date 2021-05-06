@@ -301,6 +301,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "mutesync"
     "nexia"
     "notify"
     "notion"
