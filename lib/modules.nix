@@ -23,6 +23,7 @@ let
     isAttrs
     isBool
     isFunction
+    isList
     isString
     length
     mapAttrs
@@ -188,6 +189,9 @@ rec {
       loadModule = args: fallbackFile: fallbackKey: m:
         if isFunction m || isAttrs m then
           unifyModuleSyntax fallbackFile fallbackKey (applyIfFunction fallbackKey m args)
+        else if isList m then
+          let defs = [{ file = fallbackFile; value = m; }]; in
+          throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else unifyModuleSyntax (toString m) (toString m) (applyIfFunction (toString m) (import m) args);
 
       /*
@@ -515,20 +519,11 @@ rec {
       # yield a value computed from the definitions
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
-      # Issue deprecation warnings recursively over all nested types of the
-      # given type. But don't recurse if a type with the same name was already
-      # visited before in order to prevent infinite recursion. So this only
-      # warns once per type name.
-      # Returns the new set of visited type names
-      recursiveWarn = visited: type:
-        let
-          maybeWarn = warnIf (type.deprecationMessage != null)
-            "The type `types.${type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${type.deprecationMessage}";
-        in
-          if visited ? ${type.name} then visited
-          else lib.foldl' recursiveWarn (maybeWarn visited // { ${type.name} = null; }) (lib.attrValues type.nestedTypes);
+      warnDeprecation =
+        warnIf (opt.type.deprecationMessage != null)
+          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
-    in builtins.seq (recursiveWarn {} opt.type) opt //
+    in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;

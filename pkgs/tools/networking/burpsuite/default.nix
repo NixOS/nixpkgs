@@ -2,12 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2020.12.1";
+  version = "2021.4.2";
 
   src = fetchurl {
     name = "burpsuite.jar";
-    url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "AcoPyVXUf2YGfX2/GbtGZeQ4P7zSsYFb9L57trXive0=";
+    urls = [
+      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+    ];
+    sha256 = "034c9d0a7e0b5e7b1b286949c6b31b475ff2a15e75f1230ccc07e236fc61d2aa";
   };
 
   dontUnpack = true;

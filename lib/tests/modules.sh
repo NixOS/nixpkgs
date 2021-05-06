@@ -272,12 +272,6 @@ checkConfigError 'A definition for option .fun.\[function body\]. is not of type
 checkConfigOutput "b a" config.result ./functionTo/list-order.nix
 checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
 
-## Type deprecation
-checkConfigError 'The type `types.simple'\'' of option `simple'\'' defined in .* is deprecated. simple shall not be used' config.simple ./type-deprecation.nix
-checkConfigError 'The type `types.infinite'\'' of option `infinite'\'' defined in .* is deprecated. infinite shall not be used' config.infinite ./type-deprecation.nix
-checkConfigError 'The type `types.left'\'' of option `nested'\'' defined in .* is deprecated. left shall not be used' config.nested ./type-deprecation.nix
-checkConfigError 'The type `types.right'\'' of option `nested'\'' defined in .* is deprecated. right shall not be used' config.nested ./type-deprecation.nix
-
 cat <<EOF
 ====== module tests ======
 $pass Pass
