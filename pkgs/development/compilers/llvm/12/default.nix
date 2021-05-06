@@ -131,6 +131,8 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+      '' + lib.optionalString (stdenv.targetPlatform.isAndroid && stdenv.targetPlatform.useLLVM) ''
+        echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
@@ -181,16 +183,36 @@ let
       '' + mkExtraBuildCommands0 cc;
     };
 
+    lldClangNoCompilerRtWithLibc = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+      };
+      extraPackages = [ ];
+      extraBuildCommands = mkExtraBuildCommands0 cc;
+    };
+
   });
 
   libraries = lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt ({ inherit llvm_meta; } //
+    compiler-rt-libc = callPackage ./compiler-rt ({ inherit llvm_meta; } //
+      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
+        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoCompilerRtWithLibc;
+      }));
+
+    compiler-rt-no-libc = callPackage ./compiler-rt ({ inherit llvm_meta; } //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt;
       }));
+
+    # N.B. condition is safe because without useLLVM both are the same.
+    compiler-rt = if stdenv.hostPlatform.isAndroid
+      then libraries.compiler-rt-libc
+      else libraries.compiler-rt-no-libc;
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 

@@ -70,6 +70,15 @@ rec {
     useAndroidPrebuilt = true;
   };
 
+  aarch64-android = {
+    config = "aarch64-unknown-linux-android";
+    sdkVer = "30";
+    ndkVer = "21";
+    libc = "bionic";
+    useAndroidPrebuilt = false;
+    useLLVM = true;
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
 
   pogoplug4 = {
