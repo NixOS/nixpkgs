@@ -330,6 +330,7 @@ in with py.pkgs; buildPythonApplication rec {
     "persistent_notification"
     "person"
     "plaato"
+    "plugwise"
     "prometheus"
     "proximity"
     "push"
