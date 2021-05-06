@@ -521,7 +521,7 @@
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
     "motion_blinds" = ps: with ps; [ ]; # missing inputs: motionblinds
-    "motioneye" = ps: with ps; [ ]; # missing inputs: motioneye-client
+    "motioneye" = ps: with ps; [ motioneye-client ];
     "mpchc" = ps: with ps; [ ];
     "mpd" = ps: with ps; [ mpd2 ];
     "mqtt" = ps: with ps; [ aiohttp-cors paho-mqtt ];
