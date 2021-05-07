@@ -1,7 +1,6 @@
 { mkXfceDerivation
 , exo
 , garcon
-, gettext
 , glib
 , gobject-introspection
 , gtk3
@@ -17,9 +16,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.16.2";
+  version = "4.16.3";
 
-  sha256 = "0wy66viwjnp1c0lgf90fp3vyqy0f1m1kbfdym8a0yrv2b6sn3958";
+  sha256 = "085hxllsf792sgi8nn0qjfj5vclbrw2dgrgzl6gy55lxcbhkml9x";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -45,9 +44,6 @@ mkXfceDerivation {
   patches = [ ./xfce4-panel-datadir.patch ];
 
   postPatch = ''
-    for f in $(find . -name \*.sh); do
-      substituteInPlace $f --replace gettext ${gettext}/bin/gettext
-    done
     substituteInPlace plugins/clock/clock.c \
        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
@@ -56,6 +52,6 @@ mkXfceDerivation {
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = {
-    description = "Xfce's panel";
+    description = "Panel for the Xfce desktop environment";
   };
 }
