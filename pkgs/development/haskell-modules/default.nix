@@ -19,17 +19,16 @@ let
     inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
-  commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
-  nixConfiguration = configurationNix { inherit pkgs haskellLib; };
+  extensions = lib.composeManyExtensions [
+    nonHackagePackages
+    (configurationNix { inherit pkgs haskellLib; })
+    (configurationCommon { inherit pkgs haskellLib; })
+    compilerConfig
+    packageSetConfig
+    overrides
+  ];
 
-  extensible-self = makeExtensible
-    (extends overrides
-      (extends packageSetConfig
-        (extends compilerConfig
-          (extends commonConfiguration
-            (extends nixConfiguration
-              (extends nonHackagePackages
-                haskellPackages))))));
+  extensible-self = makeExtensible (extends extensions haskellPackages);
 
 in
 
