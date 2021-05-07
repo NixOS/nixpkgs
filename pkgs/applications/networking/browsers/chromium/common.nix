@@ -20,6 +20,7 @@
 , pipewire
 , libva
 , libdrm, wayland, mesa, libxkbcommon # Ozone
+, curl
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -155,6 +156,7 @@ let
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
+      curl
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
