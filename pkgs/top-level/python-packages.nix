@@ -7613,6 +7613,8 @@ in {
 
   spacy = callPackage ../development/python-modules/spacy { };
 
+  spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
+
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };

@@ -22,7 +22,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ smart_open typer google-cloud-storage ];
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "smart-open>=2.2.0,<4.0.0" "smart-open>=2.2.0"
+    substituteInPlace requirements.txt \
+      --replace "smart-open>=2.2.0,<4.0.0" "smart-open>=2.2.0"
   '';
 
   checkInputs = [ pytestCheckHook mock ];
