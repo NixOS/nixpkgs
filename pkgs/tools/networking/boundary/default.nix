@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src =
     let
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
       };
     in
     fetchsrc version {
-      x86_64-linux = "sha256-4h1Lx+Et1AfX75Cn0YUhV4MkEtzP6ICqAHVKex3PBpg=";
-      aarch64-linux = "sha256-i7gzv8GdDgikPT1tMia4xltEYiIZ/VNRbAiGF2o8oKA=";
-      x86_64-darwin = "sha256-tleIY1loPE61n59Qc9CJeropRUvTBbcIA8xmB1SaMt8=";
+      x86_64-linux = "sha256-DDrsgZlnDF+WlBKyDi1McqcXEe5mAxoq5WW60p5qFQ8=";
+      aarch64-linux = "sha256-z9puhWmWf6G2C9PItKD4KL742UjVyVE/TDIu0gpOKd4=";
+      x86_64-darwin = "sha256-hDZPKi5R0seLbkHe7V4Vm+FarI6HrSZJF9JBJBa9O2Y=";
     };
 
   dontConfigure = true;
