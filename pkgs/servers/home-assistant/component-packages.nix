@@ -660,7 +660,7 @@
     "pushover" = ps: with ps; [ pushover-complete ];
     "pushsafer" = ps: with ps; [ ];
     "pvoutput" = ps: with ps; [ jsonpath xmltodict ];
-    "pvpc_hourly_pricing" = ps: with ps; [ ]; # missing inputs: aiopvpc
+    "pvpc_hourly_pricing" = ps: with ps; [ aiopvpc ];
     "pyload" = ps: with ps; [ ];
     "python_script" = ps: with ps; [ restrictedpython ];
     "qbittorrent" = ps: with ps; [ ]; # missing inputs: python-qbittorrent

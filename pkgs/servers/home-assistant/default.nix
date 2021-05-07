@@ -321,6 +321,7 @@ in with py.pkgs; buildPythonApplication rec {
     "prometheus"
     "proximity"
     "push"
+    "pvpc_hourly_pricing"
     "python_script"
     "random"
     "recorder"

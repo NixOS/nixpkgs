@@ -315,6 +315,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopvpc = callPackage ../development/python-modules/aiopvpc { };
+
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
