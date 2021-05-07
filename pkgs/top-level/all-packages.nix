@@ -5953,6 +5953,8 @@ in
 
   kpcli = callPackage ../tools/security/kpcli { };
 
+  kratos = callPackage ../applications/misc/kratos { };
+
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
