@@ -409,6 +409,7 @@ in with py.pkgs; buildPythonApplication rec {
     "wled"
     "workday"
     "worldclock"
+    "xiaomi_miio"
     "yeelight"
     "zeroconf"
     "zha"
