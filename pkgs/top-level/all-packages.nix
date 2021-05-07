@@ -4388,6 +4388,8 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fancy-motd = callPackage ../tools/system/fancy-motd { };
+
   fastpbkdf2 = callPackage ../development/libraries/fastpbkdf2 { };
 
   fanficfare = callPackage ../tools/text/fanficfare { };
