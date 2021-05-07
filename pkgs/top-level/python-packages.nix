@@ -557,6 +557,8 @@ in {
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
+  asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
+
   async_stagger = callPackage ../development/python-modules/async_stagger { };
 
   asynctest = callPackage ../development/python-modules/asynctest { };
