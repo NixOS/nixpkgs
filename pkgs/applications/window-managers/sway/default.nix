@@ -3,6 +3,7 @@
 , libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=false"
     "-Dsd-bus-provider=libsystemd"
   ];
+
+  passthru.tests.basic = nixosTests.sway;
 
   meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";

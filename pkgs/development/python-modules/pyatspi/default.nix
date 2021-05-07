@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.38.0";
+  version = "2.38.1";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "/4CTEv0ML2HhkcGBoaY4owtXm5G2gs+1oFU1pVJltD0=";
+    sha256 = "0lc1p6p296c9q3lffi03v902jlsj34i7yyl3rcyaq94wwbljg7z4";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,6 +23,7 @@ buildPythonPackage rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}";
+      versionPolicy = "odd-unstable";
     };
   };
 

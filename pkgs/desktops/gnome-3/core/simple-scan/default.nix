@@ -14,6 +14,7 @@
 , gtk3
 , gusb
 , packagekit
+, libhandy
 , libwebp
 , libxml2
 , sane-backends
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "3.38.2";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-qI2AcpaCiIZJzfzfqGkrCjSs3ladwICIjyea/DqcTQs=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-E4EbsqhhnmOkP8Lva3E1ny1cQITG1cizqtYXJLIHUa8=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gusb
     gtk3
+    libhandy
     libwebp
     packagekit
     sane-backends

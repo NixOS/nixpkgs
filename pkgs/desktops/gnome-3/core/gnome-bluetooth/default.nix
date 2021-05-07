@@ -1,28 +1,62 @@
-{ lib, stdenv, fetchurl, gnome3, meson, ninja, pkg-config, gtk3, intltool, glib
-, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3, gsettings-desktop-schemas }:
+{ lib
+, stdenv
+, fetchurl
+, gnome3
+, meson
+, ninja
+, pkg-config
+, gtk3
+, gettext
+, glib
+, udev
+, itstool
+, libxml2
+, wrapGAppsHook
+, libnotify
+, libcanberra-gtk3
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, python3
+, gsettings-desktop-schemas
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.34.3";
+  version = "3.34.5";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "08k4jak4r72pvn5kjhm21planyc514j6c7jjj5lv9nmvvlxqw1ha";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1a9ynlwwkb3wpg293ym517vmrkk63y809mmcv9a21k5yr199x53c";
   };
 
   nativeBuildInputs = [
-    meson ninja intltool itstool pkg-config libxml2 wrapGAppsHook gobject-introspection
-    gtk-doc docbook_xsl docbook_xml_dtd_43 python3
+    meson
+    ninja
+    gettext
+    itstool
+    pkg-config
+    libxml2
+    wrapGAppsHook
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    python3
   ];
+
   buildInputs = [
-    glib gtk3 udev libnotify libcanberra-gtk3
-    gnome3.adwaita-icon-theme gsettings-desktop-schemas
+    glib
+    gtk3
+    udev
+    libnotify
+    libcanberra-gtk3
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
   ];
 
   mesonFlags = [
@@ -46,7 +80,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

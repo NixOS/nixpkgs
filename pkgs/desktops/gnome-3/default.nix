@@ -176,8 +176,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-documents = callPackage ./apps/gnome-documents { };
 
-  gnome-getting-started-docs = callPackage ./apps/gnome-getting-started-docs { };
-
   gnome-logs = callPackage ./apps/gnome-logs { };
 
   gnome-maps = callPackage ./apps/gnome-maps { };
@@ -361,4 +359,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = lib.teams.gnome.members;
 
   mutter328 = throw "Removed as Pantheon is upgraded to mutter334.";
+
+  gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
 })

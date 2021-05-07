@@ -20,11 +20,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "1gfcp3b5nq43xxz5my8vfhfxnnli726j3hzcgwh9fzrzzd9ic3gx";
+    sha256 = "1vjzv8zg9s393xw81klcgbkn4h6j2blzla9iil5kqfrw7wmldskh";
   };
 
   buildInputs = [
@@ -55,6 +55,9 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [ xvfb_run dbus.daemon ];
 
   checkPhase = ''
+    # https://dev.gajim.org/gajim/gajim/-/issues/10478
+    rm test/lib/gajim_mocks.py test/unit/test_gui_interface.py
+
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       ${python3.interpreter} setup.py test

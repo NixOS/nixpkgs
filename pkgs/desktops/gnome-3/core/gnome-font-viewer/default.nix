@@ -1,20 +1,20 @@
 { lib, stdenv, meson, ninja, gettext, fetchurl
-, pkg-config, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme
+, pkg-config, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme, libhandy
 , wrapGAppsHook, gnome3, harfbuzz }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";
-  version = "3.34.0";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12xrsqwmvid7hksiw4zhj4jd1qwxn8w0czskbq4yqfprwn1havxa";
+    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0hpyi0sz3gcqqs9lkwyk8b6hr39m3n27432x98kxr436jj37dk6j";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk3 glib gnome-desktop adwaita-icon-theme harfbuzz ];
+  buildInputs = [ gtk3 glib gnome-desktop adwaita-icon-theme harfbuzz libhandy ];
 
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";

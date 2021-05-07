@@ -21,13 +21,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2020.09.2";
+  version = "2021.01";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hzvv4wia4rk0kvq16y27imq2qd4q5lg3vx99hdcjdb1x3zqqfg0";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "0krzsrv19v3mwhbsm72ica6m3p8ijy0lbd0c3s87yd7pmbwld2c1";
   };
 
   patches = [

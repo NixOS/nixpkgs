@@ -11,14 +11,14 @@ in
 
 buildGoModule rec {
   pname = "teleport";
-  version = "6.1.2";
+  version = "6.1.3";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-4ZaebTTgGrGRQbMfDw1PL/qtDKmHbSY6kPmWyFeIcAU=";
+    sha256 = "sha256-kb7qRPZKXDY0Qy3/72epAGaN2FCOO/XAN8lOoUYkoM0=";
   };
 
   vendorSha256 = null;
@@ -26,6 +26,9 @@ buildGoModule rec {
   subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
 
   nativeBuildInputs = [ zip makeWrapper ];
+
+  # https://github.com/NixOS/nixpkgs/issues/120738
+  patches = [ ./tsh.patch ];
 
   postBuild = ''
     pushd .
@@ -54,8 +57,8 @@ buildGoModule rec {
 
   postInstall = ''
     install -Dm755 -t $client/bin $out/bin/tsh
-    wrapProgram $client/bin/tsh --prefix PATH : ${xdg-utils}/bin
-    wrapProgram $out/bin/tsh --prefix PATH : ${xdg-utils}/bin
+    wrapProgram $client/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    wrapProgram $out/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   doInstallCheck = true;

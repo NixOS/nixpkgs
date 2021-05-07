@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session-ctl";
-  version = "3.38.0";
+  version = "40.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
-    rev = "c20907fea27fa96568b8375a6756c40d0bfb9e40"; # main
-    hash = "sha256-y9/yOH6N8wf93+gPqnqzRzV/lPXYD0M6v7dsLFF8lWo=";
+    rev = version;
+    hash = "sha256-gvBmLx8Qoj1vPsOwaZsd9+pTDvU5D7uUts7ZT1pXwNo=";
   };
 
   nativeBuildInputs = [

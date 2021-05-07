@@ -2,6 +2,7 @@
 , substituteAll
 , fetchurl
 , fetchgit
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -73,6 +74,20 @@ stdenv.mkDerivation rec {
     #"${patchPath}/ubuntu_ibus_configs.patch"
     # https://github.com/elementary/os-patches/blob/6975d1c254cb6ab913b8e2396877203aea8eaa65/debian/patches/elementary-dpms.patch
     ./elementary-dpms.patch
+
+    # Query GWeather DB on the fly instead of caching.
+    # Needed for the next patch to apply.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/merge_requests/175
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/df6c69f028d27b53ac86829e11df103b25ed5a74.patch";
+      sha256 = "bKZkPzN64DXMgitjn0vUzUvKl7ldhN/mNVtPKVmHd0Q=";
+    })
+    # Adjust to libgweather changes.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/217
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/82d88014dfca2df7e081712870e1fb017c16b808.patch";
+      sha256 = "H5k/v+M2bRaswt5nrDJFNn4gS4BdB0UfzdjUCT4yLKg=";
+    })
   ];
 
   nativeBuildInputs = [
