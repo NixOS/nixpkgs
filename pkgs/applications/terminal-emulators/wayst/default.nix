@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple terminal emulator";
+    mainProgram = "wayst";
     homepage = "https://github.com/91861/wayst";
     license = licenses.mit;
     platforms = platforms.linux;
