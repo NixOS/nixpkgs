@@ -10656,7 +10656,6 @@ broken-packages:
   - streaming-sort
   - streaming-utils
   - streaming-with
-  - streamly-archive
   - streamly-fsnotify
   - streamly-lmdb
   - streamproc
