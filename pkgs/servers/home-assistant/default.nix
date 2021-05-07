@@ -204,6 +204,7 @@ in with py.pkgs; buildPythonApplication rec {
     "calendar"
     "camera"
     "cast"
+    "climacell"
     "climate"
     "cloud"
     "comfoconnect"
