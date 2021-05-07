@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.6.09";
 
   src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.amd64.tar.gz";
+    url = "https://code-industry.ru/public/master-pdf-editor-${version}-qt5.amd64.tar.gz";
     sha256 = "0v9j6fwr0xl03kr77vf4wdb06zlplmn4mr3jyzxhvs8a77scmfzb";
   };
 
