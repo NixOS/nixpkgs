@@ -657,10 +657,6 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # spago requires an older version of megaparsec, but it appears to work
-      # fine with newer versions.
-      spagoWithOverrides = doJailbreak super.spago;
-
       docsSearchApp_0_0_10 = pkgs.fetchurl {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
         sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
@@ -681,17 +677,8 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
+      spagoDocs = overrideCabal super.spago (drv: {
         postUnpack = (drv.postUnpack or "") + ''
-          # The source for spago is pulled directly from GitHub.  It uses a
-          # package.yaml file with hpack, not a .cabal file.  In the package.yaml file,
-          # it uses defaults from the master branch of the hspec repo.  It will try to
-          # fetch these at build-time (but it will fail if running in the sandbox).
-          #
-          # The following line modifies the package.yaml to not pull in
-          # defaults from the hspec repo.
-          substituteInPlace "$sourceRoot/package.yaml" --replace 'defaults: hspec/hspec@master' ""
-
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
           # `purescript-docs-search` repo above.  If they cannot be fetched at
@@ -717,9 +704,8 @@ self: super: builtins.intersectAttrs super {
         '';
       });
 
-      # Because of the problem above with pulling in hspec defaults to the
-      # package.yaml file, the tests are disabled.
-      spagoWithoutChecks = dontCheck spagoFixHpack;
+      # Tests require network access.
+      spagoWithoutChecks = dontCheck spagoDocs;
     in
     spagoWithoutChecks;
 
