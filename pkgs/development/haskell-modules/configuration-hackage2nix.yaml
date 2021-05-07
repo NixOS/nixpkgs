@@ -10657,7 +10657,6 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-fsnotify
-  - streamly-lmdb
   - streamproc
   - strelka
   - strict-base-types
