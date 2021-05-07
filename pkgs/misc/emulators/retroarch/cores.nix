@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, libobjc, Foundation
 , buildPackages }:
 
 let
@@ -815,14 +815,18 @@ in with lib.licenses;
 
   play = mkLibRetroCore {
     core = "play";
-    src = fetchRetro {
-      repo = "play-";
-      rev = "884ae3b96c631f235cd18b2643d1f318fa6951fb";
-      sha256 = "0m9pk20jh4y02visgzfw64bpbw93bzs15x3a3bnd19yivm34dbfc";
+    version = "0.36";
+    src = fetchFromGitHub {
+      owner = "jpd002";
+      repo = "Play-";
+      rev = "0.36-1";
+      sha256 = "0rg86jr9lwfc8w28gcl18wshz6rlkglczl6k84i87w1xhzhy0gx7";
+      fetchSubmodules = true;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
-    extraBuildInputs = [ boost ];
+    extraBuildInputs = [ boost ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Foundation ];
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
