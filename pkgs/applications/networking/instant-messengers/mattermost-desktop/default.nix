@@ -68,6 +68,8 @@ in
     buildInputs = [ gtk3 hicolor-icon-theme ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/mattermost-desktop
       cp -R . $out/share/mattermost-desktop
 
@@ -88,6 +90,8 @@ in
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}:$out/share/mattermost-desktop" \
         $out/share/mattermost-desktop/mattermost-desktop
+
+      runHook postInstall
     '';
 
     meta = with lib; {
