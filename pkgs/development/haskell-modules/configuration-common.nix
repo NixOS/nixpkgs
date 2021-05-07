@@ -1313,6 +1313,8 @@ self: super: {
   gi-gtk-hs = self.gi-gtk-hs_0_3_10;
   gi-dbusmenu = self.gi-dbusmenu_0_4_9;
   gi-xlib = self.gi-xlib_2_0_10;
+  gi-gdkx11 = self.gi-gdkx11_3_0_11;
+  gi-dbusmenugtk3 = self.gi-dbusmenugtk3_0_4_10;
 
   # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
