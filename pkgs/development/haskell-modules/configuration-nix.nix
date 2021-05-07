@@ -872,4 +872,10 @@ self: super: builtins.intersectAttrs super {
       pkgs.darwin.apple_sdk.frameworks.IOKit
     ] ++ (drv.librarySystemDepends or []);
   });
+
+  # set more accurate set of platforms instead of maintaining
+  # an ever growing list of platforms to exclude via unsupported-platforms
+  cpuid = overrideCabal super.cpuid {
+    platforms = pkgs.lib.platforms.x86;
+  };
 }
