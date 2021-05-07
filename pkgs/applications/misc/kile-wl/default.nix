@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux; # It's meant for river, a wayland compositor
     maintainers = with maintainers; [ fortuneteller2k ];
+    mainProgram = "kile";
   };
 }
