@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
-    fontconfig makeWrapper tcl.tclPackageHook ];
+    fontconfig makeWrapper ];
 
   configureFlags = [
     "--enable-alternate-scoresdir=scores"
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
 
     # Fix TCL files
     sed -re 's@MediumBlue@LightBlue@g' -i tcltk/tkconq.tcl
+  '';
+
+  postInstall = ''
+    for file in $out/bin/*; do
+      wrapProgram $file --prefix TCLLIBPATH ' ' "${tk}/lib"
+    done
   '';
 
   meta = with lib; {
