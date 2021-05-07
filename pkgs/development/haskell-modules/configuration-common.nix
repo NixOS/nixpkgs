@@ -1881,8 +1881,4 @@ self: super: {
       sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
     });
 
-  # Too strict bounds on ref-tf
-  # https://github.com/travitch/haggle/issues/4
-  haggle = doJailbreak super.haggle;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
