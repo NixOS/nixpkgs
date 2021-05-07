@@ -5474,7 +5474,9 @@ in
 
   hdf5-blosc = callPackage ../development/libraries/hdf5-blosc { };
 
-  hdfview = callPackage ../tools/misc/hdfview { };
+  hdfview = callPackage ../tools/misc/hdfview {
+    hdf5 = hdf5_1_10;
+  };
 
   hecate = callPackage ../applications/editors/hecate { };
 
