@@ -243,6 +243,7 @@ in with py.pkgs; buildPythonApplication rec {
     "deconz"
     "default_config"
     "demo"
+    "denonavr"
     "derivative"
     "device_automation"
     "device_sun_light_trigger"
