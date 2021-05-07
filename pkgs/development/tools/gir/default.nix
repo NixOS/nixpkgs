@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1kn5kgdma9j6dwpmv6jmydak7ajlgdkw9sfkh3q7h8c2a8yikvxr";
   };
 
-  cargoSha256 = "048qhlc4f5khxi7dnakgqkhgww44r6h3mlx2fm7y2wqivr3rj8p1";
+  cargoSha256 = "0sadd0snyqd82y5bwbgfxhbw1jrszwwlz29gq7zb4kbr4j8z3f5n";
 
   meta = with lib; {
     description = "Tool to generate rust bindings and user API for glib-based libraries";

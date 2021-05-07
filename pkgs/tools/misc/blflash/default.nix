@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-+2ncK1ibtQwlBREw4Yiqj4vFvAcZqjkoTBtBdAAUoRg=";
   };
 
-  cargoSha256 = "sha256-tt9jfcoEw/HQ0/qU4lhbqKtIw/lthDTcyf/3HYQNPEY=";
+  cargoSha256 = "sha256-hgymSNivcNT9aXws20sBrk76ToDnCQh/dqfUHBzK1Ls=";
 
   meta = with lib; {
     description = "An bl602 serial flasher written in Rust";

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = ["--features" "bin"];
-  cargoSha256 = "0nxm2k8dx6nxyghvpw44wqfd1n65947v2wqxxvy641hin4d7xzma";
+  cargoSha256 = "08ip6x4kink244majlk595yh551c2ap3ry58wly994mh8wf6ifwb";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

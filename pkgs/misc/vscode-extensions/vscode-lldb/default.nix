@@ -24,7 +24,7 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-HPVbqYsst/iFrHn5wvmWtqeVHOHR7JT8lu+/xZq1lK0=";
+    cargoSha256 = "sha256-vcL/nSGhyE0INQVWxEIpYwXmnOl1soBn+mymZr1FaSM=";
 
     nativeBuildInputs = [ makeWrapper ];
 

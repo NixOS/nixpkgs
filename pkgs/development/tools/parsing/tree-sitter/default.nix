@@ -30,7 +30,7 @@ let
   # 3) run the ./result script that is output by that (it updates ./grammars)
   version = "0.19.3";
   sha256 = "0zd1p9x32bwdc5cdqr0x8i9fpcykk1zczb8zdjawrrr92465d26y";
-  cargoSha256 = "0mlrbl85x1x2ynwrps94mxn95rjj1r7gb3vdivfaxqv1xvp25m41";
+  cargoSha256 = "1n63lxp8rknb5xqp02csj649cxs7d891a520djl3lb4k1finhsjj";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";

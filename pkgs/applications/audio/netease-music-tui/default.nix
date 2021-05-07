@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib openssl ];
 
-  cargoSha256 = "0f06wc7h2zjipifvxsskxvihjf6mykrjrm7yk0zf98ra079bc9g9";
+  cargoSha256 = "1pca0sz4rz8qls6k2vhf70ixhnvgk81c4hbx81q3pv106g5k205f";
 
   meta = with lib; {
     homepage = "https://github.com/betta-cyber/netease-music-tui";

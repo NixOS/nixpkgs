@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  cargoSha256 = "0n8cw70qh8g4hfwfaxwwxbrrx5hm2z037z8kdhvdpqkxljl9189x";
+  cargoSha256 = "1vnrc72g2271i2p847z30kplxmdpi60n3dzpw0s7dahg33g14ai6";
 
   checkPhase = ''
     export HOME=$TMPDIR

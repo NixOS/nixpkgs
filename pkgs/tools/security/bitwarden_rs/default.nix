@@ -25,7 +25,7 @@ in rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoSha256 = "139by5y2ma3v52nabzr5man1qy395rchs2dlivkj9xi829kg4mcr";
+  cargoSha256 = "0vdi792bzqxj8g215r9r5anzs4qhqsm6sjzwpj1l9861bn7j4xsz";
   cargoBuildFlags = [ featuresFlag ];
 
   checkPhase = ''

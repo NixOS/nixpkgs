@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "1fd3swdjx249971ak1bgndm5kh6rlzbfywmydn122lhfi6ry6a03";
   };
-  cargoSha256 = "1fjzcgayyha270bdxl5p6c337nq8zj4h81rk4ih9czyz3yaxga3f";
+  cargoSha256 = "16446ppkvc6l8087x5m5kyy5gk4f7inyj7rzrfysriw4fvqxjsf3";
 
   buildInputs = [ openssl ]
                 ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
       --replace '#![deny(warnings)]' ""
   '';
 
-  cargoSha256 = "1y9jsnxmz51zychmmzp6mi29pb5ks2qww7lk5bshkhp56v51sm8d";
+  cargoSha256 = "1jyycr95gjginx6bzmay9b5dbpnbwdqbv13w1qy58znicsmh3v8a";
 
   # Test tries to build outdated examples
   doCheck = false;

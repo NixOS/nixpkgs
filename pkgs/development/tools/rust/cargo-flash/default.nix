@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bcpv1r4pdpp22w7za7kdy7jl487x3nlwxiz6sqq3iq6wq3j9zj0";
   };
 
-  cargoSha256 = "1pf117fgw9x9diksqv58cw7i0kzmp25yj73y5ll69sk46b6z4j90";
+  cargoSha256 = "1bg9fcysn48qlbm63pjmvvhwpmyb0lgqq4i4vpnygc7ckh15k3f2";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 ];
