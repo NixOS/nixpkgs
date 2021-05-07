@@ -128,7 +128,7 @@ rec {
         let collected = collectModules
           (specialArgs.modulesPath or "")
           (modules ++ [ internalModule ])
-          ({ inherit lib options config; } // specialArgs);
+          ({ inherit lib options config specialArgs; } // specialArgs);
         in mergeModules prefix (reverseList collected);
 
       options = merged.matchedOptions;
