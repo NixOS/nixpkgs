@@ -31176,6 +31176,8 @@ in
     python = python3;
   };
 
+  tsukae = callPackage ../applications/misc/tsukae { };
+
   tsung = callPackage ../applications/networking/tsung {};
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare {};
