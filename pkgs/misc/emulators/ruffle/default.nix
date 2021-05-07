@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/ruffle_desktop --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
-  cargoSha256 = "0pnp5kmij4dwwvmgdv81mqcawcjcgg5gd6cpyf0xalyfjgj8i732";
+  cargoSha256 = "1ad7xf9h3v5h8jv5y304vxy32k52b0x2wkc3yqqf23sxky2sj843";
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

@@ -11,7 +11,7 @@ let
         sha256 = "0k9ipm9ddm1bad7bs7368wzzp6xwrhyfzfpckdax54l4ffqwljcg";
     };
 
-    cargoSha256 = "1cbcplgz28yxshyrp2krp1jphbrcqdw6wxx3rry91p7hiqyibd30";
+    cargoSha256 = "1x8iwgy1irgfkv2yjkxm6479nwbrk82b0c80jm7y4kw0s32r01lg";
 
     inherit target;
 

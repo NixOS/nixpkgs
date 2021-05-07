@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0qjzbcaznnmb0p0r23s82jjbfs5mhhkacg26lf8fq4vvlkr1hsqf";
+  cargoSha256 = "0sxlgy225x8bn48r9jidaw6r00hclvrj2p4prcx802094dhcwknk";
 
   patches = [ ./ignore-rustfmt-test.patch ];
 

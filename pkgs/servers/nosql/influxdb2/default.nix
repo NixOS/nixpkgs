@@ -55,7 +55,7 @@ let
       sha256 = "07jz2nw3zswg9f4p5sb5r4hpg3n4qibjcgs9sk9csns70h5rp9j3";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0y5xjkqpaxp9qq1qj39zw3mnvkbbb9g4fa5cli77nhfwz288xx6h";
+    cargoSha256 = "15xrg7h2jkm0p2nvzza8r6v71w5f3vjilzdahqcd23n2pg5bxgg5";
     nativeBuildInputs = [ llvmPackages.libclang ];
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''

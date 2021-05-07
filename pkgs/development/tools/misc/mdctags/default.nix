@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
     sha256 = "14gryhgh9czlkfk75ml0620c6v8r74i6h3ykkkmc7gx2z8h1jxrb";
   };
 
-  cargoSha256 = "01ap2w755vbr01nfqc5185mr2w9y32g0d4ahc3lw2x3m8qv0bh6x";
+  cargoSha256 = "1kdbrcpvxiq91m5vq33vzjhsp4j3flzrpbj5hmxf0k3al1a7qk1g";
 
   meta = {
     description = "tags for markdown file";

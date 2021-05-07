@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/b3sum";
 
-  cargoSha256 = "0n8hp83hw7g260vmf4qcicpca75faam7k0zmb0k4cdzsar96gdrr";
+  cargoSha256 = "18l6j756s6qfmiy3z2cai7i62wskf04xi7y4dlcv4aiv4sv3nx9r";
 
   cargoPatches = [ ./cargo-lock.patch ];
 
