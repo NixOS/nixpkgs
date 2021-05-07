@@ -4825,6 +4825,8 @@ in {
 
   pathvalidate = callPackage ../development/python-modules/pathvalidate { };
 
+  pathy = callPackage ../development/python-modules/pathy/default.nix { };
+
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
   patool = callPackage ../development/python-modules/patool { };
