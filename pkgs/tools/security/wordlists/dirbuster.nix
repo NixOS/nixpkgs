@@ -1,6 +1,4 @@
-{ fetchzip
-, lib
-}:
+{ fetchzip, lib }:
 
 let
   version = "1.0-RC1";
@@ -10,7 +8,7 @@ fetchzip rec {
   name = "DirBuster-${version}";
 
   url = "mirror://sourceforge/dirbuster/DirBuster%20%28jar%20%2B%20lists%29/${version}/${name}.zip";
-  sha256 = "sha256-nByEKfhJ5TsZjvL4dTcgrSw0kUUPPVQNJOywdlZwiTo=";
+  sha256 = "nByEKfhJ5TsZjvL4dTcgrSw0kUUPPVQNJOywdlZwiTo=";
 
   postFetch = ''
     mkdir -p $out/share/dirbuster

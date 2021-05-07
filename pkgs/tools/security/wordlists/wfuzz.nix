@@ -1,1 +1,0 @@
-{ wfuzz }: wfuzz.wordlists

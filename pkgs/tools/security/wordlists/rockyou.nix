@@ -1,9 +1,9 @@
 { fetchFromGitLab
 , lib
-, stdenv
+, stdenvNoCC
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "rockyou";
   version = "0.3-1kali3";
 

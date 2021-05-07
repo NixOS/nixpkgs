@@ -1,10 +1,10 @@
 { fetchFromGitHub
 , lib
 , nmap
-, stdenv
+, stdenvNoCC
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "nmap";
   version = "unstable-2020-10-19";
 

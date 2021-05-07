@@ -1,9 +1,9 @@
 { fetchFromGitHub
 , lib
-, stdenv
+, stdenvNoCC
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "SecLists";
   version = "unstable-2020-11-11";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "danielmiessler";
     repo = pname;
     rev = "9f4d672e98a837fb1f3d59095df36b63af6987d1";
-    sha256 = "sha256-EoLX4LmftkUZXbwGHLigbgC5bj23UL72k4li42YRzSs=";
+    sha256 = "EoLX4LmftkUZXbwGHLigbgC5bj23UL72k4li42YRzSs=";
   };
 
   installPhase = ''
