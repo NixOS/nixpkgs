@@ -18,13 +18,15 @@ let
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
-    mkExtraBuildCommands = cc: ''
+    mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
       ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+    '';
+    mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
-      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
 
   in {
@@ -147,7 +149,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith {
+    lldClangNoCompilerRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = wrapBintoolsWith {
@@ -157,7 +159,7 @@ let
       extraPackages = [ ];
       extraBuildCommands = ''
         echo "-nostartfiles" >> $out/nix-support/cc-cflags
-      '';
+      '' + mkExtraBuildCommands0 cc;
     };
 
   });
