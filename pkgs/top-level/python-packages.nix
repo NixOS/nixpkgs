@@ -1735,8 +1735,6 @@ in {
 
   debugpy = callPackage ../development/python-modules/debugpy { };
 
-  debut = callPackage ../development/python-modules/debut { };
-
   decorator = callPackage ../development/python-modules/decorator { };
 
   decopatch = callPackage ../development/python-modules/decopatch { };
