@@ -8119,6 +8119,8 @@ in {
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
+  torf = callPackage ../development/python-modules/torf { };
+
   tornado = callPackage ../development/python-modules/tornado { };
 
   # Used by circus and grab-site, 2020-08-29
