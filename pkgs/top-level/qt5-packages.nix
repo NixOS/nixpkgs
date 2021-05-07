@@ -47,6 +47,9 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   inherit kdeFrameworks plasma5 kdeGear qt5;
 
+  # Alias for backwards compatibility. Added 2021-05-07.
+  kdeApplications = lib.warn "kdeApplications was renamed to kdeGear" kdeGear;
+
   ### LIBRARIES
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
