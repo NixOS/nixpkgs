@@ -1885,6 +1885,48 @@ self: super: {
   vinyl = overrideCabal super.vinyl {
     doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
   };
+  BNFC = overrideCabal super.BNFC {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  C-structs = overrideCabal super.C-structs {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  accelerate = overrideCabal super.accelerate {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  focuslist = overrideCabal super.focuslist {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  flight-kml = overrideCabal super.flight-kml {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  exact-real = overrideCabal super.exact-real {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  autoapply = overrideCabal super.autoapply {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  hint = overrideCabal super.hint {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  hgeometry = overrideCabal super.hgeometry {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  headroom = overrideCabal super.headroom {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  haskell-time-range = overrideCabal super.haskell-time-range {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  hsakamai = overrideCabal super.hsakamai {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  hsemail-ns = overrideCabal super.hsemail-ns {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  openapi3 = overrideCabal super.openapi3 {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
 
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
