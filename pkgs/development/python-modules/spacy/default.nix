@@ -16,6 +16,7 @@
 , requests
 , setuptools
 , srsly
+, spacy-legacy
 , thinc
 , wasabi
 }:
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     requests
     setuptools
     srsly
+    spacy-legacy
     thinc
     wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
