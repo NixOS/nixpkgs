@@ -10,7 +10,7 @@
 , gsettings-desktop-schemas
 , gtk3
 , itstool
-, libhandy_0
+, libhandy
 , libnotify
 , libsoup
 , libxml2
@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "3.34.1";
+  version = "40.0";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19y62dj4n5i6v4zpjllxl51dch6ndy8xs45v5aqmmq9xyfrqk5yq";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "+V8/4DGwsBwC95oWWfiJFS03cq4+RN+EA9FGC6Xuw2o=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     gnome3.mutter
     gsettings-desktop-schemas
     gtk3
-    libhandy_0
+    libhandy
     libnotify
     libsoup
   ];
@@ -72,10 +72,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/action/show/Apps/GnomeTweakTool";
+    homepage = "https://wiki.gnome.org/Apps/Tweaks";
     description = "A tool to customize advanced GNOME 3 options";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

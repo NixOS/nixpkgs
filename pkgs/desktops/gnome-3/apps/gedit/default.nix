@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "3.38.1";
+  version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0kc48a399achcz6vlqq0jk0b8ixbrzyv9xb22s5av76m5hyqalq0";
+    url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "149ngl9qw6h59546lir1pa7hvw23ppsnqlj9mfqphmmn5jl99qsm";
   };
 
   nativeBuildInputs = [

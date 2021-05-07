@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
-    sha256 = "0lqzr68n2c6aifw2vbyars91wn1chmgb9xfdk463g4vjqiava3ih";
+    sha256 = "10lqbm1grw0sqasx7i6528cishv5ksdf9zbb3ygxd8c1iwaxzhb9";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -44,7 +44,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.warmplace.ru/soft/sunvox/";
     maintainers = with maintainers; [ puffnfresh ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    # hash mismatch
-    broken = true;
   };
 }

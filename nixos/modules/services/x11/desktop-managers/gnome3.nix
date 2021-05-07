@@ -273,6 +273,7 @@ in
       services.accounts-daemon.enable = true;
       services.dleyna-renderer.enable = mkDefault true;
       services.dleyna-server.enable = mkDefault true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.gnome3.at-spi2-core.enable = true;
       services.gnome3.evolution-data-server.enable = true;
       services.gnome3.gnome-keyring.enable = true;
@@ -365,10 +366,10 @@ in
         gnome-bluetooth
         gnome-color-manager
         gnome-control-center
-        gnome-getting-started-docs
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
+        pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
         pkgs.nixos-artwork.wallpapers.simple-dark-gray
         pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom
         pkgs.gnome-user-docs

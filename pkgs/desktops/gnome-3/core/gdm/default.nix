@@ -42,13 +42,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.38.2.1";
+  version = "40.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yliiBdXr/L2rVqEXFriY4Wrl3/Ia7nnQdgRkRGKOxNo=";
+    url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XtdLc506Iy/7HkoTK8+WW9/pVdmVtSh3NYh3WwLylQ4=";
   };
 
   mesonFlags = [
@@ -90,10 +90,13 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/112
+    # GDM fails to find g-s with the following error in the journal.
+    # gdm-x-session[976]: dbus-run-session: failed to exec 'gnome-session': No such file or directory
+    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/1d28d4b3568381b8590d2235737b924aefd1746c.patch";
-      sha256 = "ZUXKZS4T0o0hzrApxaqcR0txCRv5zBgqeQ9K9fLNX1o=";
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
+      sha256 = "5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
+      revert = true;
     })
 
     # Change hardcoded paths to nix store paths.
