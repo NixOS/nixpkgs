@@ -5,6 +5,7 @@
 , libinput
 , libxcb
 , libxkbcommon
+, pixman
 , wayland
 , wayland-protocols
 , wlroots
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     libinput
     libxcb
     libxkbcommon
+    pixman
     wayland
     wayland-protocols
     wlroots
