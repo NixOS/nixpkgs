@@ -106,5 +106,6 @@ mkDerivation rec {
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "jellyfinmediaplayer";
   };
 }
