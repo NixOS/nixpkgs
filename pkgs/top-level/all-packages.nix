@@ -16711,7 +16711,9 @@ in
 
   libmpc = callPackage ../development/libraries/libmpc { };
 
-  mpich = callPackage ../development/libraries/mpich { };
+  mpich = callPackage ../development/libraries/mpich {
+    ch4backend = libfabric;
+  };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
