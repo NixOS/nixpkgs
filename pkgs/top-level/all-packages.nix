@@ -9764,7 +9764,7 @@ in
 
   xxv = callPackage ../tools/misc/xxv {};
 
-  xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
+  xvfb-run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   xvkbd = callPackage ../tools/X11/xvkbd {};
 
