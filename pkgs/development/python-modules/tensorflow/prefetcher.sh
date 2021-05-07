@@ -1,23 +1,22 @@
 #!/usr/bin/env bash
 
-version=2.1.0
+version="2.4.0"
+
+bucket="https://storage.googleapis.com/tensorflow"
 
 # List of binary wheels for Tensorflow.  The most recent versions can be found
 # on the following page:
 # https://www.tensorflow.org/install/pip?lang=python3#package-location
 url_and_key_list=(
-  "linux_py_27_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp27-cp27mu-manylinux2010_x86_64.whl"
-  "linux_py_27_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp27-cp27mu-manylinux2010_x86_64.whl"
-  "linux_py_35_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp35-cp35m-manylinux2010_x86_64.whl"
-  "linux_py_35_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp35-cp35m-manylinux2010_x86_64.whl"
-  "linux_py_36_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
-  "linux_py_36_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
-  "linux_py_37_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
-  "linux_py_37_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
-  "mac_py_27_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp27-cp27m-macosx_10_9_x86_64.whl"
-  "mac_py_35_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp35-cp35m-macosx_10_6_intel.whl"
-  "mac_py_36_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp36-cp36m-macosx_10_9_x86_64.whl"
-  "mac_py_37_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp37-cp37m-macosx_10_9_x86_64.whl"
+"linux_py_36_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
+"linux_py_37_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
+"linux_py_38_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp38-cp38-manylinux2010_x86_64.whl"
+"linux_py_36_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
+"linux_py_37_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
+"linux_py_38_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp38-cp38-manylinux2010_x86_64.whl"
+"mac_py_36_cpu $bucket/mac/cpu/tensorflow-${version}-cp36-cp36m-macosx_10_14_x86_64.whl"
+"mac_py_37_cpu $bucket/mac/cpu/tensorflow-${version}-cp37-cp37m-macosx_10_14_x86_64.whl"
+"mac_py_38_cpu $bucket/mac/cpu/tensorflow-${version}-cp38-cp38-macosx_10_14_x86_64.whl"
 )
 
 hashfile=binary-hashes.nix
