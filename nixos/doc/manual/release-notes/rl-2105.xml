@@ -5,6 +5,9 @@
          xml:id="sec-release-21.05">
  <title>Release 21.05 (“Okapi”, 2021.05/31)</title>
 
+ <para>
+  Support is planned until the end of December 2021, handing over to 21.11.
+ </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -18,18 +21,80 @@
   </para>
 
   <itemizedlist>
+
    <listitem>
     <para>
-     Support is planned until the end of December 2021, handing over to 21.11.
+     Core version changes:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       gcc: 9.3.0 -> 10.3.0
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       glibc: 2.30 -> 2.32
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        default linux: 5.4 -> 5.10, all supported kernels available
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        mesa: 20.1.7 -> 21.0.1
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>The default Linux kernel was updated to the 5.10 LTS series, coming from the 5.4 LTS series.</para>
     <para>The <package>linux_latest</package> kernel was updated to the 5.12 series. It currently is not officially supported for use with the zfs filesystem. If you use zfs, you should use a different kernel version (either the LTS kernel, or track a specific one). </para>
+    <para>
+     Desktop Environments:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+        Gnome: 3.36 -> 3.40, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.40/">release notes</link>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Plasma5: 5.18.5 -> 5.21.3
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        kdeApplications: 20.08.1 -> 20.12.3
+      </para>
+     </listitem>
+      <listitem>
+       <para>
+         cinnamon: 4.6 -> 4.8.1
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
+
    <listitem>
-    <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
+    <para>
+     Programming Languages and Frameworks:
+    </para>
+    <itemizedlist>
+
+     <listitem>
+      <para>
+       Python optimizations were disabled again. Builds with optimizations enabled
+       are not reproducible. Optimizations can now be enabled with an option.
+      </para>
+     </listitem>
+
+    </itemizedlist>
    </listitem>
+
    <listitem>
     <para>
      <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
@@ -193,6 +258,10 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
+   </listitem>
+
    <listitem>
     <para>
      If you are using <option>services.udev.extraRules</option> to assign
