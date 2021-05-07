@@ -867,4 +867,9 @@ self: super: builtins.intersectAttrs super {
 
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
+
+  # passes the -msse2 flag which only works on x86 platforms
+  hsignal = overrideCabal super.hsignal {
+    platforms = pkgs.lib.platforms.x86;
+  };
 }
