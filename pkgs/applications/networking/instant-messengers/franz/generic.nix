@@ -23,6 +23,7 @@
 , udev
 , libnotify
 , xdg-utils
+, mesa
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXScrnSaver
   ]) ++ [
+    mesa #libgbm
     gtk3
     atk
     glib
