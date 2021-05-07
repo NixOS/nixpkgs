@@ -27640,6 +27640,10 @@ in
 
   fslint = callPackage ../applications/misc/fslint {};
 
+  funkin = callPackage ../games/funkin {
+    haxe = haxe_4_1;
+  };
+
   galaxis = callPackage ../games/galaxis { };
 
   gambatte = callPackage ../games/gambatte { };
