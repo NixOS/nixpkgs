@@ -121,6 +121,8 @@ mapAliases ({
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   coprthr = throw "coprthr has been removed."; # added 2019-12-08
+  couchdb = throw "couchdb was removed from nixpkgs, use couchdb3 instead"; # added 2021-03-03
+  couchdb2 = throw "couchdb2 was removed from nixpkgs, use couchdb3 instead"; # added 2021-03-03
   corebird = throw "corebird was deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
   coredumper = throw "coredumper has been removed: abandoned by upstream."; # added 2019-11-16
   cpp_ethereum = throw "cpp_ethereum has been removed; abandoned upstream."; # added 2020-11-30
@@ -746,6 +748,7 @@ mapAliases ({
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_1_8_5 = throw "spidermonkey_1_8_5 has been removed, because it is based on Firefox 4.0 from 2011."; # added 2021-05-03
   spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
   spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_78 instead."; # added 2019-10-16
   spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21

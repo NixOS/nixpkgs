@@ -12201,7 +12201,6 @@ in
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
-  spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_68 = callPackage ../development/interpreters/spidermonkey/68.nix { };
   spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix { };
 
@@ -18600,15 +18599,6 @@ in
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
-
-  couchdb = callPackage ../servers/http/couchdb {
-    sphinx = python27Packages.sphinx;
-    erlang = erlangR19;
-  };
-
-  couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
-    erlang = erlangR21;
-  };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = erlangR22;
