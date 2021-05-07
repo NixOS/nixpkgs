@@ -272,6 +272,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ipp"
+    "jewish_calendar"
     "kmtronic"
     "knx"
     "kodi"

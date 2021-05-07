@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0y962ykn3rr9gylj0pwpww7bi20lmhvsw6qvxs5bisbn2mih5jpp";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
-  };
-
   nativeBuildInputs = [
     file
     intltool
@@ -28,6 +24,13 @@ stdenv.mkDerivation rec {
     libxklavier
     glib
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
 
   meta = with lib; {
     description = "Keyboard management library";

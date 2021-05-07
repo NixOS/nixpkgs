@@ -70,9 +70,11 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {
-        compcert = compcert.override { version = "3.7"; };
-      };
+      VST = callPackage ../development/coq-modules/VST (with lib.versions;
+        lib.switch coq.coq-version [
+          { case = "8.11"; out = { compcert = compcert.override { coqPackages = self; version = "3.7"; }; }; }
+          { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; }; }; }
+        ] {});
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 

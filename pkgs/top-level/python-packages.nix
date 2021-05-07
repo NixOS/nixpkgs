@@ -2985,6 +2985,8 @@ in {
 
   hachoir = callPackage ../development/python-modules/hachoir { };
 
+  hdate = callPackage ../development/python-modules/hdate { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   halo = callPackage ../development/python-modules/halo { };
@@ -7893,6 +7895,8 @@ in {
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
   tailer = callPackage ../development/python-modules/tailer { };
+
+  tappy = callPackage ../development/python-modules/tappy { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 

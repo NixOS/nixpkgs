@@ -1,15 +1,13 @@
 { stdenv, lib, fetchurl, perl, gfortran
 , openssh, hwloc, autoconf, automake, libtool
-# device options are ch3 or ch4
-, device ? "ch4"
-# backend option are libfabric or ucx
-, ch4backend ? "libfabric"
-, ucx, libfabric
+# either libfabric or ucx work for ch4backend on linux. On darwin, neither of
+# these libraries currently build so this argument is ignored on Darwin.
+, ch4backend
 # Process manager to build
 , withPm ? "hydra:gforker"
 } :
 
-assert (ch4backend == "ucx" || ch4backend == "libfabric");
+assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
@@ -45,8 +43,7 @@ stdenv.mkDerivation  rec {
   enableParallelBuilding = true;
 
   buildInputs = [ perl gfortran openssh hwloc ]
-    ++ lib.optional (ch4backend == "ucx") ucx
-    ++ lib.optional (ch4backend == "libfabric") libfabric;
+    ++ lib.optional (!stdenv.isDarwin) ch4backend;
 
   doCheck = true;
 

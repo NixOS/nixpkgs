@@ -17,6 +17,7 @@
 , desktop-file-utils
 , appstream-glib
 , libpeas
+, libgdata
 , dbus
 , vala
 , wrapGAppsHook
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     callaudiod
     gtk3
     libpeas
+    libgdata # required by some dependency transitively
   ];
 
   checkInputs = [

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , vala
@@ -35,14 +36,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.28";
+  version = "0.4.30";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-HRENhXfVTMo7NCOTFb03xXzLJ91DVWVQdKLSs/2JeQA=";
+    sha256 = "sha256-wRJ4LPQJaWniMhfM36vkIoTjXVQ1/wxD1A5McPrsqN0=";
   };
 
   nativeBuildInputs = [
@@ -103,8 +104,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
-    chmod +x tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh
-    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh tools/xml_insert.sh
+    chmod +x tests/opencl/opencl_test.sh
+    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode

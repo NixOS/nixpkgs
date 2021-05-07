@@ -1,5 +1,4 @@
 { fetchFromGitLab
-, fetchpatch
 , lib
 , python3Packages
 , gobject-introspection
@@ -16,25 +15,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.11";
+  version = "0.11.12";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r4Tn/7CGDny8Aa4kF4PM5ZKMYthMJ7801X3zPdvXh4Q=";
+    sha256 = "sha256-fcEdpht+xKJRTaD3gKoRdf6O2SAPlZHZ61Jy8bdTKjs=";
   };
-
-  patches = [
-    # Switch to poetry-core:
-    # https://gitlab.com/sublime-music/sublime-music/-/merge_requests/60
-    (fetchpatch {
-      name = "use-poetry-core.patch";
-      url = "https://gitlab.com/sublime-music/sublime-music/-/commit/9b0af19dbdfdcc5a0fa23e73bb34c7135a8c2855.patch";
-      sha256 = "sha256-cXG0RvrnBpme6yKWM0nfqMqoK0qPT6spflJ9AaaslVg=";
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection

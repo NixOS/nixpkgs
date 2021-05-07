@@ -1,8 +1,8 @@
 { stdenv, pkgs, lib, writeScript, python3, common-updater-scripts }:
-{ packageName, attrPath ? packageName, versionPolicy ? "odd-unstable", freeze ? false }:
+{ packageName, attrPath ? packageName, versionPolicy ? "tagged", freeze ? false }:
 
 let
-  python = python3.withPackages (p: [ p.requests ]);
+  python = python3.withPackages (p: [ p.requests p.libversion ]);
   upperBoundFlag =
     let
       package = lib.attrByPath (lib.splitString "." attrPath) (throw "Cannot find attribute ‘${attrPath}’.") pkgs;

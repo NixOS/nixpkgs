@@ -26,6 +26,10 @@ buildPythonPackage rec {
     sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
   };
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     dask
     dask-glm
@@ -39,7 +43,6 @@ buildPythonPackage rec {
     scipy
     six
     toolz
-    setuptools-scm
   ];
 
   # has non-standard build from source, and pypi doesn't include tests

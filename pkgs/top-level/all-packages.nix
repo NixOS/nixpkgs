@@ -637,6 +637,8 @@ in
 
   wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
 
+  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
+
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
@@ -5952,6 +5954,8 @@ in
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
+
+  kratos = callPackage ../applications/misc/kratos { };
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
@@ -11668,6 +11672,7 @@ in
     vala_0_46
     vala_0_48
     vala_0_50
+    vala_0_52
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;
@@ -12301,6 +12306,9 @@ in
     inherit (buildPackages.xorg) lndir;
     newlib = newlibCross;
   };
+
+  mspds = callPackage ../development/misc/msp430/mspds { };
+  mspds-bin = callPackage ../development/misc/msp430/mspds/binary.nix { };
 
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
@@ -14856,6 +14864,10 @@ in
 
   glibmm = callPackage ../development/libraries/glibmm { };
 
+  glibmm_2_68 = callPackage ../development/libraries/glibmm/2.68.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
   glib-networking = callPackage ../development/libraries/glib-networking {};
 
   glib-testing = callPackage ../development/libraries/glib-testing { };
@@ -14876,6 +14888,8 @@ in
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
+  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
+
   pango = callPackage ../development/libraries/pango {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
   };
@@ -14885,6 +14899,10 @@ in
   };
 
   pangomm = callPackage ../development/libraries/pangomm {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
+
+  pangomm_2_48 = callPackage ../development/libraries/pangomm/2.48.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
@@ -14928,6 +14946,7 @@ in
 
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
+  gtkmm4 = callPackage ../development/libraries/gtkmm/4.x.nix { };
 
   gtk_engines = callPackage ../development/libraries/gtk-engines { };
 
@@ -14966,6 +14985,8 @@ in
   gtksourceview3 = callPackage ../development/libraries/gtksourceview/3.x.nix { };
 
   gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
+
+  gtksourceview5 = callPackage ../development/libraries/gtksourceview/5.x.nix { };
 
   gtksourceviewmm = callPackage ../development/libraries/gtksourceviewmm { };
 
@@ -16236,7 +16257,10 @@ in
 
   libroxml = callPackage ../development/libraries/libroxml { };
 
-  librsvg = callPackage ../development/libraries/librsvg { };
+  librsvg = callPackage ../development/libraries/librsvg {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
+  };
 
   librsync = callPackage ../development/libraries/librsync { };
 
@@ -16253,6 +16277,8 @@ in
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
+
+  libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
 
   libsigsegv = callPackage ../development/libraries/libsigsegv { };
 
@@ -16713,7 +16739,9 @@ in
 
   libmpc = callPackage ../development/libraries/libmpc { };
 
-  mpich = callPackage ../development/libraries/mpich { };
+  mpich = callPackage ../development/libraries/mpich {
+    ch4backend = libfabric;
+  };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
@@ -17105,6 +17133,8 @@ in
   });
 
   portmidi = callPackage ../development/libraries/portmidi {};
+
+  presage = callPackage ../development/libraries/presage { };
 
   prime-server = callPackage ../development/libraries/prime-server { };
 
@@ -24029,7 +24059,7 @@ in
   });
 
   imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   });
 
   inherit (nodePackages) imapnotify;
@@ -28647,6 +28677,7 @@ in
     freon = callPackage ../desktops/gnome-3/extensions/freon { };
     fuzzy-app-search = callPackage ../desktops/gnome-3/extensions/fuzzy-app-search { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
+    hot-edge = callPackage ../desktops/gnome-3/extensions/hot-edge { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
     material-shell = callPackage ../desktops/gnome-3/extensions/material-shell { };

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "goocanvasmm2";
+      versionPolicy = "odd-unstable";
     };
   };
 
