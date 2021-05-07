@@ -1291,16 +1291,32 @@ self: super: {
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
-  haskell-gi-base = addBuildDepends super.haskell-gi-base [ pkgs.gobject-introspection ];
+  # nixpkgs has bumped gdkpixbuf C lib, so we need gi-gdkpixbuf_2_0_26 to link against that.
+  # This leads to all this bumps which can be removed once stackage has haskell-gi 0.25.
+  haskell-gi = self.haskell-gi_0_25_0;
+  haskell-gi-base = addBuildDepends super.haskell-gi-base_0_25_0 [ pkgs.gobject-introspection ];
+  gi-glib = self.gi-glib_2_0_25;
+  gi-cairo = self.gi-cairo_1_0_25;
+  gi-gobject = self.gi-gobject_2_0_26;
+  gi-atk = self.gi-atk_2_0_23;
+  gi-gio = self.gi-gio_2_0_28;
+  gi-harfbuzz = self.gi-harfbuzz_0_0_4;
+  gi-javascriptcore = self.gi-javascriptcore_4_0_23;
+  gi-pango = self.gi-pango_1_0_24;
+  gi-soup = self.gi-soup_2_4_24;
+  gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_26;
+  gi-gdk = self.gi-gdk_3_0_24;
+  gi-gtk = self.gi-gtk_3_0_37;
+  gi-webkit2 = self.gi-webkit2_4_0_27;
+  gi-cairo-render = doJailbreak super.gi-cairo-render;
+  gi-cairo-connector = doJailbreak super.gi-cairo-connector;
+  gi-gtk-hs = self.gi-gtk-hs_0_3_10;
+  gi-dbusmenu = self.gi-dbusmenu_0_4_9;
+  gi-xlib = self.gi-xlib_2_0_10;
 
-  # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
+  # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
-  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/compare/9727365...f842748.patch";
-    sha256 = "07l4l999lmlx7sqxf7v4f70rmxhx9r0cjblkgc4n0y6jin4iv1cb";
-    stripLen = 2;
-    extraPrefix = "";
-  });
+  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104

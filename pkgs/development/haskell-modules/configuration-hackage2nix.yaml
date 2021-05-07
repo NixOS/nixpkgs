@@ -88,18 +88,18 @@ default-package-overrides:
   # so we need to restrict these to compatible versions
   # Remove these as soon as haskell-gi{,-base} are 0.25.*
   # in Stackage Nightly!
-  - gi-ggit < 1.0.10
-  - gi-girepository < 1.0.24
-  - gi-gst < 1.0.24
-  - gi-gstbase < 1.0.24
-  - gi-gstvideo < 1.0.24
-  - gi-gtksource < 3.0.24
-  - gi-ibus < 1.5.3
-  - gi-notify < 0.7.23
-  - gi-ostree < 1.0.14
-  - gi-pangocairo < 1.0.25
-  - gi-secret < 0.0.13
-  - gi-vte < 2.91.28
+  #- gi-ggit < 1.0.10
+  #- gi-girepository < 1.0.24
+  #- gi-gst < 1.0.24
+  #- gi-gstbase < 1.0.24
+  #- gi-gstvideo < 1.0.24
+  #- gi-gtksource < 3.0.24
+  #- gi-ibus < 1.5.3
+  #- gi-notify < 0.7.23
+  #- gi-ostree < 1.0.14
+  #- gi-pangocairo < 1.0.25
+  #- gi-secret < 0.0.13
+  #- gi-vte < 2.91.28
 
   # Stackage Nightly 2021-05-03
   - abstract-deque ==0.3
@@ -2819,6 +2819,8 @@ extra-packages:
   - refinery == 0.3.*                   # required by hls-tactics-plugin-1.0.0.0
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
+  - gi-gdk == 3.0.24                    # 2021-05-07: For haskell-gi 0.25 without gtk4
+  - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
 
 package-maintainers:
   peti:
@@ -5777,7 +5779,6 @@ broken-packages:
   - ghcup
   - ght
   - gi-cairo-again
-  - gi-gmodule
   - gi-graphene
   - gi-gsk
   - gi-gstaudio
