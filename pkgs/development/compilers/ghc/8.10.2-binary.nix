@@ -212,11 +212,12 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta = {
+  meta = rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [ lostnet ];
   };
 }
