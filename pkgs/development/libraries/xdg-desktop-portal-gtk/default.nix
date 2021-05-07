@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gsettings-desktop-schemas
+    gsettings-desktop-schemas # settings exposed by settings portal
     gtk3
     gnome3.gnome-desktop
-    gnome3.gnome-settings-daemon # schemas needed for settings api (fonts, etc)
+    gnome3.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
   ];
 
   meta = with lib; {

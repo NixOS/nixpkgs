@@ -5,8 +5,6 @@
 , gettext
 , gobject-introspection
 , glib
-, clutter-gtk
-, clutter-gst
 , gnome3
 , gtksourceview4
 , gjs
@@ -40,14 +38,13 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsHook
   ];
+
   buildInputs = [
     glib
     gtk3
     gnome3.evince
     icu
     harfbuzz
-    clutter-gtk
-    clutter-gst
     gjs
     gtksourceview4
     gdk-pixbuf

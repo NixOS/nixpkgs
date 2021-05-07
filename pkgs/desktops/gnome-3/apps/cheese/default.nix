@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , fetchurl
+, fetchpatch
 , wrapGAppsHook
 , gnome-video-effects
 , libcanberra-gtk3
@@ -9,17 +11,13 @@
 , glib
 , clutter-gtk
 , clutter-gst
-, udev
 , gst_all_1
 , itstool
-, libgudev
 , vala
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , appstream-glib
 , libxslt
-, yelp-tools
-, gnome-common
 , gtk-doc
 , adwaita-icon-theme
 , librsvg
@@ -38,37 +36,37 @@ stdenv.mkDerivation rec {
   pname = "cheese";
   version = "3.38.0";
 
+  outputs = [ "out" "man" "devdoc" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "cheese"; attrPath = "gnome3.cheese"; };
-  };
+  patches = [
+    # Fix build with latest Vala or GLib
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/cheese/commit/7cf6268e54620bbbe5e6e61800c50fb0cb4bea57.patch";
+      sha256 = "WJgGNrpZLTahe7Sxr8HdTl+4Mf4VcmJb6DdiInlDcT4=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gettext
-    gnome-common
     gtk-doc
     itstool
     libxml2
-    libxslt
+    libxslt # for xsltproc
     meson
     ninja
     pkg-config
     python3
     vala
     wrapGAppsHook
-    yelp-tools
+    glib # for glib-compile-schemas
   ];
 
   buildInputs = [
@@ -86,12 +84,13 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gtk3
     libcanberra-gtk3
-    libgudev
     librsvg
-    udev
   ];
 
-  outputs = [ "out" "man" "devdoc" ];
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -105,13 +104,18 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "cheese";
+      attrPath = "gnome3.cheese";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

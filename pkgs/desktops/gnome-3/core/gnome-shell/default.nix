@@ -1,5 +1,6 @@
 { fetchurl
 , fetchpatch
+, fetchgit
 , substituteAll
 , lib, stdenv
 , meson
@@ -22,8 +23,7 @@
 , librsvg
 , geoclue2
 , perl
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
+, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -46,6 +46,7 @@
 , mutter
 , evolution-data-server
 , gtk3
+, gtk4
 , sassc
 , systemd
 , pipewire
@@ -66,14 +67,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.38.3";
+  version = "40.0-unstable-2021-05-01";
 
   outputs = [ "out" "devdoc" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-U0W0GMsSqXKVXOXM6u1mYkgAJzNrXFHa6lcwV1tiHO0=";
+  src = fetchgit {
+    url = "https://gitlab.gnome.org/GNOME/gnome-shell.git";
+    rev = "a8a79c03330427808e776c344f7ebc42782a1b5a";
+    sha256 = "ivHV0SRpnBqsdC7fu1Xhtd/BA55O0UdbUyDLy5KHNYs=";
+    fetchSubmodules = true;
   };
+  # src = fetchurl {
+  #   url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+  #   sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
+  # };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -97,6 +104,12 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+
+    # Work around failing fingerprint auth
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
+      sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -105,9 +118,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
-    # Switch to 4.5 in the 40.
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
+    docbook_xml_dtd_45
     gtk-doc
     perl
     wrapGAppsHook
@@ -137,6 +148,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     libical
     gtk3
+    gtk4
     gdm
     geoclue2
     adwaita-icon-theme
@@ -189,7 +201,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # The services need typelibs.
-    for svc in org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
+    for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';

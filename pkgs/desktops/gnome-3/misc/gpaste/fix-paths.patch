@@ -17,7 +17,7 @@
  
 +imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
 +
- const { GPaste } = imports.gi;
+ //const { GPaste } = imports.gi;
  
  const ExtensionUtils = imports.misc.extensionUtils;
 --- a/src/libgpaste/settings/gpaste-settings.c
