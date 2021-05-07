@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;
 
     longDescription = ''
