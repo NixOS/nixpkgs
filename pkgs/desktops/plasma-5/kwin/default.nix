@@ -2,8 +2,8 @@
   mkDerivation, lib, fetchpatch,
   extra-cmake-modules, kdoctools,
 
-  epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
-  xwayland,
+  epoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
+  pipewire, udev, wayland, xcb-util-cursor, xwayland,
 
   qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
   qtvirtualkeyboard, qtx11extras,
@@ -13,7 +13,6 @@
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   krunner, kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons,
   kwindowsystem, kxmlgui, plasma-framework,
-  libcap, libdrm, mesa, pipewire
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -22,9 +21,8 @@ mkDerivation {
   name = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
-    xwayland
-    libcap libdrm mesa pipewire
+    epoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
+    udev wayland xcb-util-cursor xwayland
 
     qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
     qtvirtualkeyboard qtx11extras
