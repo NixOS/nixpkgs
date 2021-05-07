@@ -1424,6 +1424,12 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
+  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1808
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
+
+  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
+  hls-eval-plugin = dontCheck super.hls-eval-plugin;
+
   # 2021-03-19: Too restrictive upper bound on optparse-applicative
   stylish-haskell = doJailbreak super.stylish-haskell;
 

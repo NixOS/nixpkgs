@@ -872,4 +872,30 @@ self: super: builtins.intersectAttrs super {
   hsignal = overrideCabal super.hsignal {
     platforms = pkgs.lib.platforms.x86;
   };
+
+  hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-class-plugin = overrideCabal super.hls-class-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  # Tests have file permissions expections that don‘t work with the nix store.
+  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+  hls-haddock-comments-plugin = overrideCabal super.hls-haddock-comments-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hls-eval-plugin = overrideCabal super.hls-eval-plugin (drv: {
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
 }
