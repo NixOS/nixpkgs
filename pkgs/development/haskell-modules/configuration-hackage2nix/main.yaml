@@ -77,13 +77,6 @@ default-package-overrides:
   - gi-javascriptcore < 4.0.23 #
   - gi-soup < 2.4.24 #
   - gi-webkit2 < 4.0.27 #
-  # To stay hls 1.0 compatible
-  - ghcide < 1.1
-  - hls-retrie-plugin < 1.0.0.1
-  - lsp < 1.2
-  - lsp-types < 1.2
-  - hls-plugin-api < 1.1.0.0
-  - hls-explicit-imports-plugin < 1.0.0.1
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -102,7 +95,6 @@ extra-packages:
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint < 3.3                         # We don‘t have ghc-lib-parser 9.0.X yet.
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
-  - lsp-test < 0.14                     # needed for hls 1.0.0
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
