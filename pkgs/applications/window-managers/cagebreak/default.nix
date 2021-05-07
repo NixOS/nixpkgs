@@ -9,7 +9,6 @@
 , meson
 , ninja
 , nixosTests
-, pandoc
 , pango
 , pixman
 , pkg-config
@@ -23,20 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-HpAjJHu5sxZKof3ydnU3wcP5GpnH6Ax8m1T1vVoq+oI=";
+    hash = "sha256-1IztedN5/I/4TDKHLJ26fSrDsvJ5QAr+cbzS2PQITDE=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     meson
     ninja
-    pandoc
     pkg-config
     scdoc
     wayland
@@ -66,26 +64,27 @@ stdenv.mkDerivation rec {
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
+  # TODO: investigate why is this happening
   postPatch = ''
     sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
   '';
 
   postInstall = ''
-    mkdir -p $contrib/share/cagebreak
-    cp $src/examples/config $contrib/share/cagebreak/config
+    install -d $contrib/share/cagebreak/
+    install -m644 $src/examples/config $contrib/share/cagebreak/
   '';
 
   postFixup = lib.optionalString withXwayland ''
     wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
   '';
 
-  passthru.tests.basic = nixosTests.cagebreak;
-
   meta = with lib; {
-    description = "A Wayland tiling compositor inspired by ratpoison";
     homepage = "https://github.com/project-repo/cagebreak";
+    description = "A Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ berbiche ];
+    platforms = platforms.linux;
   };
+
+  passthru.tests.basic = nixosTests.cagebreak;
 }
