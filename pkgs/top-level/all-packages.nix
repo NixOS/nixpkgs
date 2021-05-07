@@ -17136,7 +17136,9 @@ in
 
   syncserver = callPackage ../servers/syncserver { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    buildGoModule = buildGo116Module;
+  };
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
