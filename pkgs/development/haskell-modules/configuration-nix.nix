@@ -864,4 +864,7 @@ self: super: builtins.intersectAttrs super {
   cpuid = overrideCabal super.cpuid {
     platforms = pkgs.lib.platforms.x86;
   };
+
+  # Pass the correct libarchive into the package.
+  streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 }
