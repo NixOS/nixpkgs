@@ -159,7 +159,7 @@ runCommand
         (add-to-list 'load-path "$out/share/emacs/site-lisp")
         (add-to-list 'exec-path "$out/bin")
         ${optionalString nativeComp ''
-          (add-to-list 'comp-eln-load-path "$out/share/emacs/native-lisp/")
+          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
         # Link subdirs.el from the emacs distribution
@@ -170,7 +170,7 @@ runCommand
 
         ${optionalString nativeComp ''
           $emacs/bin/emacs --batch \
-            --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
+            --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
             -f batch-native-compile "$siteStart" "$subdirs"
         ''}
       '';
