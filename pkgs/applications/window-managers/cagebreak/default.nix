@@ -53,11 +53,6 @@ stdenv.mkDerivation rec {
     wlroots
   ];
 
-  outputs = [
-    "out"
-    "contrib"
-  ];
-
   mesonFlags = [
     "-Dman-pages=true"
     "-Dversion_override=${version}"
@@ -70,8 +65,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -d $contrib/share/cagebreak/
-    install -m644 $src/examples/config $contrib/share/cagebreak/
+    install -d $out/share/cagebreak/
+    install -m644 $src/examples/config $out/share/cagebreak/
   '';
 
   postFixup = lib.optionalString withXwayland ''
