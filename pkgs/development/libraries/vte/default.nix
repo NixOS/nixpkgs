@@ -6,7 +6,7 @@
 , pkg-config
 , meson
 , ninja
-, gnome3
+, gnome
 , glib
 , gtk3
 , gobject-introspection
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

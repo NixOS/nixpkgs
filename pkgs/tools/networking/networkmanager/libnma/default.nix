@@ -7,7 +7,7 @@
 , pkg-config
 , vala
 , networkmanager
-, gnome3
+, gnome
 , isocodes
 , libxml2
 , docbook_xsl
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

@@ -7,7 +7,7 @@
 , gtk3
 , python3
 , wrapGAppsHook
-, gnome3
+, gnome
 , libwnck3
 , gobject-introspection
 , gettext
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gtk3
     libwnck3
   ];
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "dfeet";
       versionPolicy = "none";

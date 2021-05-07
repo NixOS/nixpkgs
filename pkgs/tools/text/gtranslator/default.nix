@@ -17,7 +17,7 @@
 , libdazzle
 , gtk3
 , gtksourceview4
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

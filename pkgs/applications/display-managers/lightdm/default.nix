@@ -20,7 +20,7 @@
 , polkit
 , accountsservice
 , gtk-doc
-, gnome3
+, gnome
 , gobject-introspection
 , vala
 , fetchpatch
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     yelp-tools
-    gnome3.yelp-xsl
+    gnome.yelp-xsl
     gobject-introspection
     gtk-doc
     intltool

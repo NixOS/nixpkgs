@@ -90,7 +90,7 @@ let
 
     # Wait for PR #59372
     # passthru = {
-    #  updateScript = gnome3.updateScript {
+    #  updateScript = gnome.updateScript {
     #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
     #    packageName = pname;
     #  };

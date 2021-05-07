@@ -6,7 +6,7 @@
 , pkg-config
 , wrapGAppsHook
 , gtk3
-, gnome3
+, gnome
 , zbar
 , tiffSupport ? true
 , libraw
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme zbar ]
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme zbar ]
   ++ optional tiffSupport libraw
   ++ optional jpgSupport graphicsmagick;
 

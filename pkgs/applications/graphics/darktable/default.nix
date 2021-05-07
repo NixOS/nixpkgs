@@ -2,7 +2,7 @@
 , cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkg-config, sqlite, libxslt
-, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
+, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome
 , ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
-    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
+    libwebp libsecret gnome.adwaita-icon-theme osm-gps-map pcre isocodes
   ] ++ lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration

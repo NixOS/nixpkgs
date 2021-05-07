@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
-, gnome3, libgee, glib, json-glib, libarchive, libsoup, gobject-introspection }:
+, gnome, libgee, glib, json-glib, libarchive, libsoup, gobject-introspection }:
 
 let
   pname = "libhttpseverywhere";
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "devdoc" ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

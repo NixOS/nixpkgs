@@ -12,7 +12,7 @@
 , gcr
 , gnome-online-accounts
 , gobject-introspection
-, gnome3
+, gnome
 , p11-kit
 , openssl
 , uhttpmock
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # Stable version has not been updated for a long time.
     };

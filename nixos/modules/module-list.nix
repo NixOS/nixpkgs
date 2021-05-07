@@ -339,21 +339,21 @@
   ./services/desktops/malcontent.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/pipewire-media-session.nix
-  ./services/desktops/gnome3/at-spi2-core.nix
-  ./services/desktops/gnome3/chrome-gnome-shell.nix
-  ./services/desktops/gnome3/evolution-data-server.nix
-  ./services/desktops/gnome3/glib-networking.nix
-  ./services/desktops/gnome3/gnome-initial-setup.nix
-  ./services/desktops/gnome3/gnome-keyring.nix
-  ./services/desktops/gnome3/gnome-online-accounts.nix
-  ./services/desktops/gnome3/gnome-online-miners.nix
-  ./services/desktops/gnome3/gnome-remote-desktop.nix
-  ./services/desktops/gnome3/gnome-settings-daemon.nix
-  ./services/desktops/gnome3/gnome-user-share.nix
-  ./services/desktops/gnome3/rygel.nix
-  ./services/desktops/gnome3/sushi.nix
-  ./services/desktops/gnome3/tracker.nix
-  ./services/desktops/gnome3/tracker-miners.nix
+  ./services/desktops/gnome/at-spi2-core.nix
+  ./services/desktops/gnome/chrome-gnome-shell.nix
+  ./services/desktops/gnome/evolution-data-server.nix
+  ./services/desktops/gnome/glib-networking.nix
+  ./services/desktops/gnome/gnome-initial-setup.nix
+  ./services/desktops/gnome/gnome-keyring.nix
+  ./services/desktops/gnome/gnome-online-accounts.nix
+  ./services/desktops/gnome/gnome-online-miners.nix
+  ./services/desktops/gnome/gnome-remote-desktop.nix
+  ./services/desktops/gnome/gnome-settings-daemon.nix
+  ./services/desktops/gnome/gnome-user-share.nix
+  ./services/desktops/gnome/rygel.nix
+  ./services/desktops/gnome/sushi.nix
+  ./services/desktops/gnome/tracker.nix
+  ./services/desktops/gnome/tracker-miners.nix
   ./services/desktops/neard.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/system-config-printer.nix

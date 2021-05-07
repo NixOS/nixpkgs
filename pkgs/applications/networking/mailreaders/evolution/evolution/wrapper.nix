@@ -1,8 +1,8 @@
-{ lib, makeWrapper, symlinkJoin, gnome3, plugins }:
+{ lib, makeWrapper, symlinkJoin, gnome, plugins }:
 
 symlinkJoin {
   name = "evolution-with-plugins";
-  paths = [ gnome3.evolution-data-server ] ++ plugins;
+  paths = [ gnome.evolution-data-server ] ++ plugins;
 
   nativeBuildInputs = [ makeWrapper ];
 

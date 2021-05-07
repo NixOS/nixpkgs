@@ -8,7 +8,7 @@
 , docbook-xsl-nons
 , libxslt
 , gettext
-, gnome3
+, gnome
 , withDblatex ? false, dblatex
 }:
 
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
