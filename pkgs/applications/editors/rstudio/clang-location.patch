@@ -7,7 +7,7 @@ index ec12a3a1ff..8c81b633ae 100644
     // we need to add in the associated libclang headers as
     // they are not discovered / used by default during compilation
 -   FilePath llvmPath = s_libraryPath.parent().parent();
-+   FilePath llvmPath("@clang@");
++   FilePath llvmPath("@libclang@");
     boost::format fmt("%1%/lib/clang/%2%/include");
     fmt % llvmPath.absolutePath() % version.asString();
     std::string includePath = fmt.str();

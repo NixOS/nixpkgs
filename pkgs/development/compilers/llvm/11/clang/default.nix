@@ -1,4 +1,5 @@
-{ lib, stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
+{ lib, stdenv, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+, buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -19,26 +20,31 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python3 lld ]
+    nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 llvm ];
+    buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
+      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
     ];
 
     patches = [
       ./purity.patch
       # https://reviews.llvm.org/D51899
+      ./gnu-install-dirs.patch
     ];
 
     postPatch = ''
@@ -55,12 +61,12 @@ let
         --replace "NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB" FALSE
     '';
 
-    outputs = [ "out" "lib" "python" ];
+    outputs = [ "out" "lib" "dev" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${llvm}/lib/LLVMgold.so ]; then
-        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
+        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
       fi
 
       ln -sv $out/bin/clang $out/bin/cpp
@@ -79,11 +85,14 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
+
+      mkdir -p $dev/bin
+      cp bin/clang-tblgen $dev/bin
     '';
 
     passthru = {
       isClang = true;
-      inherit llvm;
+      inherit libllvm;
     };
 
     meta = {

@@ -1,4 +1,4 @@
-{ callPackage, fetchpatch
+{ callPackage
 # Darwin frameworks
 , Cocoa, CoreMedia
 , ...

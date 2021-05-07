@@ -448,6 +448,40 @@ in
     (mkIf cfg.enable {
       environment.systemPackages    = [ pkgs.fontconfig ];
       environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+      security.apparmor.includes."abstractions/fonts" = ''
+        # fonts.conf
+        r ${pkg.out}/etc/fonts/fonts.conf,
+
+        # fontconfig default config files
+        r ${pkg.out}/etc/fonts/conf.d/*.conf,
+
+        # 00-nixos-cache.conf
+        r ${cacheConf},
+
+        # 10-nixos-rendering.conf
+        r ${renderConf},
+
+        # 50-user.conf
+        ${optionalString cfg.includeUserConf ''
+        r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+        ''}
+
+        # local.conf (indirect priority 51)
+        ${optionalString (cfg.localConf != "") ''
+        r ${localConf},
+        ''}
+
+        # 52-nixos-default-fonts.conf
+        r ${defaultFontsConf},
+
+        # 53-no-bitmaps.conf
+        r ${rejectBitmaps},
+
+        ${optionalString (!cfg.allowType1) ''
+        # 53-nixos-reject-type1.conf
+        r ${rejectType1},
+        ''}
+      '';
     })
     (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];

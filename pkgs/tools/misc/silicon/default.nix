@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     description = "Create beautiful image of your source code";

@@ -699,6 +699,17 @@ environment.systemPackages = [
    </listitem>
    <listitem>
      <para>
+       The <package>kbdKeymaps</package> package was removed since dvp and neo
+       are now included in <package>kbd</package>.
+
+       If you want to use the Programmer Dvorak Keyboard Layout, you have to use
+       <literal>dvorak-programmer</literal> in <option>console.keyMap</option>
+       now instead of <literal>dvp</literal>.
+       In <option>services.xserver.xkbVariant</option> it's still <literal>dvp</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
        The <package>babeld</package> service is now being run as an unprivileged user. To achieve that the module configures
        <literal>skip-kernel-setup true</literal> and takes care of setting forwarding and rp_filter sysctls by itself as well
        as for each interface in <varname>services.babeld.interfaces</varname>.
@@ -907,6 +918,23 @@ environment.systemPackages = [
       When defining a new user, one of <xref linkend="opt-users.users._name_.isNormalUser" /> and <xref linkend="opt-users.users._name_.isSystemUser" /> is now required.
       This is to prevent accidentally giving a UID above 1000 to system users, which could have unexpected consequences, like running user activation scripts for system users.
       Note that users defined with an explicit UID below 500 are exempted from this check, as <xref linkend="opt-users.users._name_.isSystemUser" /> has no effect for those.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>security.apparmor</literal> module,
+     for the <link xlink:href="https://gitlab.com/apparmor/apparmor/-/wikis/Documentation">AppArmor</link>
+     Mandatory Access Control system,
+     has been substantialy improved along with related tools,
+     so that module maintainers can now more easily write AppArmor profiles for NixOS.
+     The most notable change on the user-side is the new option <xref linkend="opt-security.apparmor.policies"/>,
+     replacing the previous <literal>profiles</literal> option
+     to provide a way to disable a profile
+     and to select whether to confine in enforce mode (default)
+     or in complain mode (see <literal>journalctl -b --grep apparmor</literal>).
+     Security-minded users may also want to enable <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>,
+     at the cost of having some of their processes killed
+     when updating to a NixOS version introducing new AppArmor profiles.
     </para>
    </listitem>
    <listitem>

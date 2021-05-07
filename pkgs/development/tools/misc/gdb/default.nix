@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   # GDB have to be built out of tree.
   preConfigure = ''
@@ -72,6 +71,13 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   configureFlags = with lib; [
+    # Set the program prefix to the current targetPrefix.
+    # This ensures that the prefix always conforms to
+    # nixpkgs' expectations instead of relying on the build
+    # system which only receives `config` which is merely a
+    # subset of the platform description.
+    "--program-prefix=${targetPrefix}"
+
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"

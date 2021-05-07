@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jove";
-  version = "4.17.3.6";
+  version = "4.17.3.7";
 
   src = fetchFromGitHub {
     owner = "jonmacs";
     repo = "jove";
     rev = version;
-    sha256 = "sha256-uQRNKV06ipOHrOsvsceqIFGGlRv5qOQy18q0tFkR6Kg=";
+    sha256 = "sha256-fD87FIWZlfJE2tVX+0QaiGGqu+tJFHheXe1guJR/Hxg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

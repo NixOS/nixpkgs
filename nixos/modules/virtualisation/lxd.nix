@@ -97,11 +97,17 @@ in {
     # does a bunch of unrelated things.
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
-    security.apparmor.packages = [ cfg.lxcPackage ];
-    security.apparmor.profiles = [
-      "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
-      "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
-    ];
+    security.apparmor = {
+      packages = [ cfg.lxcPackage ];
+      policies = {
+        "bin.lxc-start".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start
+        '';
+        "lxc-containers".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
+        '';
+      };
+    };
 
     # TODO: remove once LXD gets proper support for cgroupsv2
     # (currently most of the e.g. CPU accounting stuff doesn't work)

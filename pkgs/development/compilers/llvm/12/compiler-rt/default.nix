@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   inherit version;
   src = fetch pname "0d444qihq9jhqnfv003cr704v363va72zl6qaw2algj1c85cva45";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCOMPILER_RT_OS_DIR="
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
-    "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.parsed.cpu.name}"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
@@ -44,15 +42,23 @@ stdenv.mkDerivation rec {
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ] ++ lib.optionals (bareMetal) [
     "-DCOMPILER_RT_OS_DIR=baremetal"
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
+    "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
   ];
 
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-    ./compiler-rt-X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+    ./gnu-install-dirs.patch
+    # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+    # extra `/`.
+    ./normalize-var.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./compiler-rt-armv7l.patch;
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
@@ -78,9 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
-    ln -s "$out/lib"/*/* "$out/lib"
-  '' + lib.optionalString (useLLVM) ''
+  postInstall = lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
