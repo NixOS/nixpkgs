@@ -15,6 +15,7 @@
 , lilv
 , serd
 , sord
+, sqlite
 , sratom
 , suil
 , alsaLib
@@ -130,6 +131,7 @@ stdenv.mkDerivation rec {
     sord
     soundtouch
     soxr
+    sqlite
     sratom
     suil
     twolame

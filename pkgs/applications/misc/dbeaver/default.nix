@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "dbeaver-ce";
+  pname = "dbeaver";
   version = "21.0.4"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {

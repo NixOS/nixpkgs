@@ -315,6 +315,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopvpc = callPackage ../development/python-modules/aiopvpc { };
+
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
@@ -554,6 +556,8 @@ in {
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
 
   async_stagger = callPackage ../development/python-modules/async_stagger { };
 
@@ -2304,6 +2308,11 @@ in {
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
+
+  fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
+    withPython = true;
+    inherit python;
+  });
 
   fastpair = callPackage ../development/python-modules/fastpair { };
 
