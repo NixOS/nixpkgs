@@ -17106,6 +17106,8 @@ in
 
   portmidi = callPackage ../development/libraries/portmidi {};
 
+  presage = callPackage ../development/libraries/presage { };
+
   prime-server = callPackage ../development/libraries/prime-server { };
 
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
