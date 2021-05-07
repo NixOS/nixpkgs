@@ -197,7 +197,19 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      doCheck = false;
+      prePatch = ''
+        # fix encoding problems when patching
+        ${pkgs.dos2unix}/bin/dos2unix hnix.cabal
+      '' + (drv.prePatch or "");
+      patches = [
+        # support ref-tf in hnix 0.12.0.1, can be removed after
+        # https://github.com/haskell-nix/hnix/pull/918
+        ./patches/hnix-ref-tf-0.5-support.patch
+      ] ++ (drv.patches or []);
+    }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -291,7 +303,6 @@ self: super: {
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
   http-link-header = dontCheck super.http-link-header; # non deterministic failure https://hydra.nixos.org/build/75041105
-  ihaskell = dontCheck super.ihaskell;
   influxdb = dontCheck super.influxdb;
   integer-roots = dontCheck super.integer-roots; # requires an old version of smallcheck, will be fixed in > 1.0
   itanium-abi = dontCheck super.itanium-abi;
@@ -362,7 +373,6 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
-  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
@@ -854,9 +864,6 @@ self: super: {
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
-  # hledger-lib requires the latest version of pretty-simple
-  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple; };
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
@@ -1284,16 +1291,34 @@ self: super: {
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
-  haskell-gi-base = addBuildDepends super.haskell-gi-base [ pkgs.gobject-introspection ];
+  # nixpkgs has bumped gdkpixbuf C lib, so we need gi-gdkpixbuf_2_0_26 to link against that.
+  # This leads to all this bumps which can be removed once stackage has haskell-gi 0.25.
+  haskell-gi = self.haskell-gi_0_25_0;
+  haskell-gi-base = addBuildDepends super.haskell-gi-base_0_25_0 [ pkgs.gobject-introspection ];
+  gi-glib = self.gi-glib_2_0_25;
+  gi-cairo = self.gi-cairo_1_0_25;
+  gi-gobject = self.gi-gobject_2_0_26;
+  gi-atk = self.gi-atk_2_0_23;
+  gi-gio = self.gi-gio_2_0_28;
+  gi-harfbuzz = self.gi-harfbuzz_0_0_4;
+  gi-javascriptcore = self.gi-javascriptcore_4_0_23;
+  gi-pango = self.gi-pango_1_0_24;
+  gi-soup = self.gi-soup_2_4_24;
+  gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_26;
+  gi-gdk = self.gi-gdk_3_0_24;
+  gi-gtk = self.gi-gtk_3_0_37;
+  gi-webkit2 = self.gi-webkit2_4_0_27;
+  gi-cairo-render = doJailbreak super.gi-cairo-render;
+  gi-cairo-connector = doJailbreak super.gi-cairo-connector;
+  gi-gtk-hs = self.gi-gtk-hs_0_3_10;
+  gi-dbusmenu = self.gi-dbusmenu_0_4_9;
+  gi-xlib = self.gi-xlib_2_0_10;
+  gi-gdkx11 = self.gi-gdkx11_3_0_11;
+  gi-dbusmenugtk3 = self.gi-dbusmenugtk3_0_4_10;
 
-  # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
+  # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
-  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/compare/9727365...f842748.patch";
-    sha256 = "07l4l999lmlx7sqxf7v4f70rmxhx9r0cjblkgc4n0y6jin4iv1cb";
-    stripLen = 2;
-    extraPrefix = "";
-  });
+  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
@@ -1789,5 +1814,75 @@ self: super: {
     sha256 = "1vmg8mmmnph34x7y0mhkcd5nzky8f1rh10pird750xbkp9zlk099";
     excludes = ["test/buildtest"];
   });
+
+  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
+  pam = super.pam.override { inherit (pkgs) pam; };
+
+  # Too strict version bounds on base:
+  # https://github.com/obsidiansystems/database-id/issues/1
+  database-id-class = doJailbreak super.database-id-class;
+
+  cabal2nix-unstable = overrideCabal super.cabal2nix-unstable {
+    passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
+  };
+
+  # Too strict version bounds on base and optparse-applicative
+  # https://github.com/diagrams/diagrams-cairo/issues/77
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
+  # Too strict version bounds on base
+  # https://github.com/gibiansky/IHaskell/issues/1217
+  ihaskell-display = doJailbreak super.ihaskell-display;
+  ihaskell-basic = doJailbreak super.ihaskell-basic;
+
+  # too strict bounds on QuickCheck
+  # https://github.com/HeinrichApfelmus/hyper-haskell/issues/42
+  hyper-extra = doJailbreak super.hyper-extra;
+
+  # Fixes too strict version bounds on regex libraries
+  # Presumably to be removed at the next release
+  yi-language = appendPatch super.yi-language (pkgs.fetchpatch {
+    url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
+    sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
+    includes = [ "yi-language.cabal" ];
+    stripLen = 2;
+    extraPrefix = "";
+  });
+
+  # https://github.com/ghcjs/jsaddle/issues/123
+  jsaddle = overrideCabal super.jsaddle (drv: {
+    # lift conditional version constraint on ref-tf
+    postPatch = ''
+      sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
+    '' + (drv.postPatch or "");
+  });
+
+  # Doctests fail on aarch64 due to a GHCi linking bug
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
+  ad = overrideCabal super.ad {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta;
+  vinyl = overrideCabal super.vinyl {
+    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
+  };
+
+  # Tests need to lookup target triple x86_64-unknown-linux
+  # https://github.com/llvm-hs/llvm-hs/issues/334
+  llvm-hs = overrideCabal super.llvm-hs {
+    doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
+  };
+
+  # Fix build failure by picking patch from 8.5,
+  # we need this version of sbv for petrinizer
+  sbv_7_13 = appendPatch super.sbv_7_13
+    (pkgs.fetchpatch {
+      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
+      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
+    });
+
+  # Too strict bounds on ref-tf
+  # https://github.com/travitch/haggle/issues/4
+  haggle = doJailbreak super.haggle;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

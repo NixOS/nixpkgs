@@ -8673,9 +8673,7 @@ in
 
   stunnel = callPackage ../tools/networking/stunnel { };
 
-  stutter = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.stutter) (drv: {
-    preCheck = "export PATH=dist/build/stutter:$PATH";
-  });
+  stutter = haskell.lib.justStaticExecutables haskellPackages.stutter;
 
   strongswan    = callPackage ../tools/networking/strongswan { };
   strongswanTNC = strongswan.override { enableTNC = true; };
@@ -23828,14 +23826,7 @@ in
 
   pinboard = with python3Packages; toPythonApplication pinboard;
 
-  pinboard-notes-backup = haskell.lib.overrideCabal
-    (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
-      haskellPackages.pinboard-notes-backup)
-    (drv: {
-      postInstall = ''
-        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
-      '' + (drv.postInstall or "");
-    });
+  pinboard-notes-backup = haskell.lib.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
@@ -26287,9 +26278,7 @@ in
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  taffybar = callPackage ../applications/window-managers/taffybar {};
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 

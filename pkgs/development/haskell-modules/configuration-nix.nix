@@ -657,10 +657,6 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # spago requires an older version of megaparsec, but it appears to work
-      # fine with newer versions.
-      spagoWithOverrides = doJailbreak super.spago;
-
       docsSearchApp_0_0_10 = pkgs.fetchurl {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
         sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
@@ -681,17 +677,8 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
+      spagoDocs = overrideCabal super.spago (drv: {
         postUnpack = (drv.postUnpack or "") + ''
-          # The source for spago is pulled directly from GitHub.  It uses a
-          # package.yaml file with hpack, not a .cabal file.  In the package.yaml file,
-          # it uses defaults from the master branch of the hspec repo.  It will try to
-          # fetch these at build-time (but it will fail if running in the sandbox).
-          #
-          # The following line modifies the package.yaml to not pull in
-          # defaults from the hspec repo.
-          substituteInPlace "$sourceRoot/package.yaml" --replace 'defaults: hspec/hspec@master' ""
-
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
           # `purescript-docs-search` repo above.  If they cannot be fetched at
@@ -717,9 +704,8 @@ self: super: builtins.intersectAttrs super {
         '';
       });
 
-      # Because of the problem above with pulling in hspec defaults to the
-      # package.yaml file, the tests are disabled.
-      spagoWithoutChecks = dontCheck spagoFixHpack;
+      # Tests require network access.
+      spagoWithoutChecks = dontCheck spagoDocs;
     in
     spagoWithoutChecks;
 
@@ -826,4 +812,59 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
+
+  # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
+  ihaskell = overrideCabal super.ihaskell (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [
+      # ihaskell's cabal file forces building a shared executable,
+      # but without passing --enable-executable-dynamic, the RPATH
+      # contains /build/ and leads to a build failure with nix
+      "--enable-executable-dynamic"
+    ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+      export PATH=$PWD/dist/build/ihaskell:$PATH
+      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+    '';
+  });
+
+  # tests need to execute the built executable
+  stutter = overrideCabal super.stutter (drv: {
+    preCheck = ''
+      export PATH=dist/build/stutter:$PATH
+    '' + (drv.preCheck or "");
+  });
+
+  # Install man page and generate shell completions
+  pinboard-notes-backup = overrideCabal
+    (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup)
+    (drv: {
+      postInstall = ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      '' + (drv.postInstall or "");
+    });
+
+  FractalArt = overrideCabal super.FractalArt (drv: {
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.libobjc
+      pkgs.darwin.apple_sdk.frameworks.AppKit
+    ] ++ (drv.librarySystemDepends or []);
+  });
+
+  arbtt = overrideCabal super.arbtt (drv: {
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.Foundation
+      pkgs.darwin.apple_sdk.frameworks.Carbon
+      pkgs.darwin.apple_sdk.frameworks.IOKit
+    ] ++ (drv.librarySystemDepends or []);
+  });
+
+  # set more accurate set of platforms instead of maintaining
+  # an ever growing list of platforms to exclude via unsupported-platforms
+  cpuid = overrideCabal super.cpuid {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # Pass the correct libarchive into the package.
+  streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 }
