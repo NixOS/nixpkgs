@@ -1,38 +1,44 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , boost
-, fastjet
 , gfortran
 , lhapdf
-, python2
-, root
+, ncurses
+, python
+, swig
 , yoda
 , zlib
+, withPython ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  version = "2.3.1pre-2402";
+  version = "2.3.1pre-2411";
 
   src = fetchurl {
-    url = "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz";
-    sha256 = "1h41xnqcz401x3zbs8i2dsb4xlhbv8i5ps0561p6y7gcyridgcbl";
+    urls = [
+      "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz"
+      "https://sid.ethz.ch/debian/fastnlo/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
   };
+
+  nativeBuildInputs = lib.optional withPython autoreconfHook;
 
   buildInputs = [
     boost
-    fastjet
     gfortran
     gfortran.cc.lib
     lhapdf
-    python2
-    root
     yoda
-  ];
+  ] ++ lib.optional withPython python
+    ++ lib.optional (withPython && python.isPy3k) ncurses;
+
   propagatedBuildInputs = [
     zlib
-  ];
+  ] ++ lib.optional withPython swig;
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-yoda=${yoda}"
-  ];
+  ] ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 
