@@ -139,6 +139,7 @@ let
       kipi-plugins = callPackage ./kipi-plugins.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
+      kio-gdrive = callPackage ./kio-gdrive.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
       klettres = callPackage ./klettres.nix {};
