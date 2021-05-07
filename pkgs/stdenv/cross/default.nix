@@ -74,7 +74,7 @@ in lib.init bootStages ++ [
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode || p.isWindows;
                in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails

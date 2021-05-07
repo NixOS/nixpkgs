@@ -14685,7 +14685,28 @@ in
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
-    else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+    else if name == "msvcrt" then
+      if targetPackages.hostPlatform.isMinGW
+      then
+        targetPackages.windows.mingw_w64 or windows.mingw_w64
+      else
+        # Real Windows headers + libs
+        (pkgs.buildEnv {
+          name = "windows-crt-combined";
+          extraOutputsToInstall = [ "out" "dev" ];
+          paths = with targetPackages.windows.sdks; [
+            crtDesktop
+            crtStore
+            ucrt
+            windowsSdkStoreAppLibs
+            windowsSdkDesktopLibs
+          ];
+          postBuild = ''
+            moveToOutput include "$dev"
+          '';
+        }).overrideAttrs (_: {
+          outputs = [ "out" "dev" ];
+        })
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else if name == "nblibc" then targetPackages.netbsdCross.libc
@@ -15971,7 +15992,9 @@ in
 
   libspnav = callPackage ../development/libraries/libspnav { };
 
-  libgsf = callPackage ../development/libraries/libgsf { };
+  libgsf = callPackage ../development/libraries/libgsf {
+    inherit (buildPackages) perl; # TODO figure out what is broken with splicing
+  };
 
   # GNU libc provides libiconv so systems with glibc don't need to build
   # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
@@ -21098,7 +21121,7 @@ in
 
   vndr = callPackage ../development/tools/vndr { };
 
-  windows = callPackages ../os-specific/windows {};
+  windows = callPackage ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 

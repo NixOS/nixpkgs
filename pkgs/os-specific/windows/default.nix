@@ -42,4 +42,6 @@ lib.makeScope newScope (self: with self; {
   wxMSW = callPackage ./wxMSW-2.8 { };
 
   libgnurx = callPackage ./libgnurx { };
+
+  sdks = callPackage ./sdks { };
 })

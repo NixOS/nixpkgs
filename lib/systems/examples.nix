@@ -248,6 +248,16 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  windowsLlvm32 = {
+    config = "i686-pc-windows-msvc";
+    useLLVM = true;
+  };
+
+  windowsLlvm64 = {
+    config = "x86_64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
   # BSDs
 
   amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;

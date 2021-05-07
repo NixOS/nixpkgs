@@ -25,6 +25,8 @@ let
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isWindows) ''
+      echo "-fuse-ld=lld" >> $out/nix-support/cc-cflags
     '';
   in {
 
@@ -55,12 +57,22 @@ let
 
     libclang = tools.clang-unwrapped.lib;
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    clang = if stdenv.cc.isGNU then tools.libstdcxxClang
+      else  if (with stdenv.targetPlatform; isWindows && !isMinGW) then tools.msvcxxrtClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
       libcxx = null;
+      extraPackages = [
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
+    };
+
+    msvcxxrtClang = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
@@ -90,7 +102,10 @@ let
 
     bintools = callPackage ./bintools.nix {};
 
-    lldClang = wrapCCWith rec {
+    lldClang = let
+      enableCxx = with stdenv.targetPlatform; !isWindows || isMinGW;
+      enableCxxExceptions = enableCxx && !stdenv.targetPlatform.isWasm;
+    in if !enableCxx then tools.lldClangNoLibcxx else wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       bintools = wrapBintoolsWith {
@@ -99,13 +114,13 @@ let
       extraPackages = [
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
-      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
+      ] ++ lib.optionals enableCxxExceptions [
         targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = ''
         echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
+      '' + lib.optionalString enableCxxExceptions ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags

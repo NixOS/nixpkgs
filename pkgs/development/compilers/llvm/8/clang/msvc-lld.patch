@@ -1,0 +1,89 @@
+commit 418f133acf9724564ddc30f9ac79c04648e3eb20
+Author: John Ericson <git@JohnEricson.me>
+Date:   Sun Nov 3 13:04:53 2019 -0500
+
+    [Clang][Driver] Don't pun -fuse-ld=lld as -fuse-ld=lld-link with msvc
+    
+    Summary:
+    Besides the Mingw toolchain, there is also the CrossWindows toolchain,
+    which means GNU-style cli but genuine windows headers + libraries. LLD's
+    MinGW driver is as good a fit as binutil's ld, but there is no easy way
+    to select it when lld was being rewritten to lld-link.
+    
+    This makes lld always be the GNU-style one, consistent with the non-msvc
+    case. It's a small breaking change for Windows, but the only
+    straightforward way.
+    
+    It may seem silly to worry about the gnu-style flags, but it is useful
+    for mixing software designed with MinGW in mind with "real" windows
+    software that needs a MSVC C++ ABI, C++ threads, etc.
+    
+    Testing in conjunction with https://github.com/NixOS/nixpkgs/pull/72366,
+    which might be the first fully automated way to cross compile to
+    Windows.  I haven't taught Nixpkgs to wrap clang-cl like it wraps clang,
+    so even for some packages that have separate MSVC and MinGW builds
+    systems (e.g. zlib, opensll), I seem to be having better luck with the
+    MinGW-style builds so am going with that.
+    
+    Backport of D69760 for release 8
+    
+    Subscribers: mstorsjo, cfe-commits
+    
+    Tags: #clang
+    
+    Differential Revision: https://reviews.llvm.org/D69769
+
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index a784e218f1..8185836c65 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -4592,8 +4592,8 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+         break;
+       case llvm::Triple::MSVC:
+       case llvm::Triple::UnknownEnvironment:
+-        if (Args.getLastArgValue(options::OPT_fuse_ld_EQ)
+-                .startswith_lower("bfd"))
++        auto linkerFlavor = Args.getLastArgValue(options::OPT_fuse_ld_EQ);
++        if (linkerFlavor.startswith_lower("bfd") || linkerFlavor.equals_lower("lld"))
+           TC = llvm::make_unique<toolchains::CrossWindowsToolChain>(
+               *this, Target, Args);
+         else
+diff --git a/lib/Driver/ToolChains/MSVC.cpp b/lib/Driver/ToolChains/MSVC.cpp
+index a164fd68e2..1a0da36d06 100644
+--- a/lib/Driver/ToolChains/MSVC.cpp
++++ b/lib/Driver/ToolChains/MSVC.cpp
+@@ -475,13 +475,10 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+ 
+   std::vector<const char *> Environment;
+ 
+-  // We need to special case some linker paths.  In the case of lld, we need to
+-  // translate 'lld' into 'lld-link', and in the case of the regular msvc
++  // We need to special case some linker paths.  In the case of the regular msvc
+   // linker, we need to use a special search algorithm.
+   llvm::SmallString<128> linkPath;
+   StringRef Linker = Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link");
+-  if (Linker.equals_lower("lld"))
+-    Linker = "lld-link";
+ 
+   if (Linker.equals_lower("link")) {
+     // If we're using the MSVC linker, it's not sufficient to just use link
+diff --git a/test/Driver/fuse-ld.c b/test/Driver/fuse-ld.c
+index b043ce624e..9444a33aa7 100644
+--- a/test/Driver/fuse-ld.c
++++ b/test/Driver/fuse-ld.c
+@@ -78,8 +78,13 @@
+ // RUN: %clang %s -### -fuse-ld=lld \
+ // RUN:     -target i686-unknown-windows-msvc 2>&1 \
+ // RUN:   | FileCheck %s --check-prefix CHECK-WINDOWS-MSVC-LLD
+-// CHECK-WINDOWS-MSVC-LLD: "{{.*}}lld-link"
+-// CHECK-WINDOWS-MSVC-LLD-SAME: "-out:{{.*}}"
++// CHECK-WINDOWS-MSVC-LLD: "{{.*}}ld.lld"
++// CHECK-WINDOWS-MSVC-LLD-SAME: "-o"
++
++// RUN: %clang-cl %s -### -fuse-ld=lld \
++// RUN:   | FileCheck %s --check-prefix CHECK-WINDOWS-MSVC-LLD
++// CHECK-cl-WINDOWS-MSVC-LLD: "{{.*}}ld.lld"
++// CHECK-cl-WINDOWS-MSVC-LLD-SAME: "-o"
+ 
+ // RUN: %clang %s -### -fuse-ld=lld-link \
+ // RUN:     -target i686-unknown-windows-msvc 2>&1 \

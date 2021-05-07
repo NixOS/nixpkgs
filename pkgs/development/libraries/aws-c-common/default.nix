@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rGv+fa+UF/f6mY8CmZpkjP98CAcAQCTjL3OI7HsUHcU=";
   };
 
+  # It disables it with MSVC, but CMake doesn't realize that clang for windows,
+  # even with gcc-style flags, has the same semantic restrictions.
+  patches = stdenv.lib.optional
+    (stdenv.hostPlatform.isWindows && stdenv.hostPlatform.useLLVM or false)
+    ./no-fpic.patch;
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ orivej eelco r-burns ];
   };
 }

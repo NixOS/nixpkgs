@@ -156,9 +156,11 @@ stdenv.mkDerivation {
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
       wrap "${targetPrefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
       unset ldInner
-    '') + ''
+    '')
+    # TODO make list below easier to customize without mass rebuild
+    + ''
 
-      for variant in ld.gold ld.bfd ld.lld; do
+      for variant in ld.gold ld.bfd ld.lld${optionalString (targetPlatform.useLLVM or false) " ld64.ldd"}; do
         local underlying=$ldPath/${targetPrefix}$variant
         [[ -e "$underlying" ]] || continue
         wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
@@ -291,7 +293,7 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
-    + optionalString targetPlatform.isAvr ''
+    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows && targetPlatform.useLLVM or false) ''
       hardening_unsupported_flags+=" relro bindnow"
     ''
 

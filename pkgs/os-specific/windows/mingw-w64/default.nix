@@ -1,4 +1,4 @@
-{ lib, stdenv, windows, fetchurl }:
+{ lib, stdenv, windows, fetchurl, fetchpatch }:
 
 let
   version = "6.0.0";
@@ -23,6 +23,15 @@ in stdenv.mkDerivation {
   buildInputs = [ windows.mingw_w64_headers ];
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
+  patches = [
+    # Clang support https://github.com/mstorsjo/llvm-mingw/issues/3
+    (fetchpatch {
+      url = "https://github.com/mirror/mingw-w64/commit/25d51481e344be35d93524965309f514486395c0.diff";
+      sha256 = "09rgzyg95kp5sh1zikcjh0h616ni38n8vzf03x6s8hqj07692y4i";
+    })
+  ];
+
+  enableParallelBuilding = true;
 
   meta = {
     platforms = lib.platforms.windows;

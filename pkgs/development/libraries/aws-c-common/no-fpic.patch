@@ -1,0 +1,14 @@
+diff --git a/nix/store/b1hnbvv9zn3fh1iyhb5xmhw8jpjj241x-source/cmake/AwsCFlags.cmake b/AwsCFlags.cmake
+index 5ceb11cf106..c2ba65546d8 100644
+--- a/cmake/AwsCFlags.cmake
++++ b/cmake/AwsCFlags.cmake
+@@ -64,9 +64,6 @@ function(aws_set_common_properties target)
+         # Avoid exporting symbols we don't intend to export
+         list(APPEND AWS_C_FLAGS -fvisibility=hidden)
+ 
+-        # Always enable position independent code, since this code will always end up in a shared lib
+-        list(APPEND AWS_C_FLAGS -fPIC)
+-
+     endif()
+ 
+     check_include_file(stdint.h HAS_STDINT)

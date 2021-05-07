@@ -12,6 +12,13 @@ stdenv.mkDerivation {
 
   src = fetch "lld" "121xhxrlvwy3k5nf6p1wv31whxlb635ssfkci8z93mwv4ja1xflz";
 
+  patches = [
+    # https://reviews.llvm.org/D68689 backport
+    ./lld-mingw-search-harder.patch
+    # https://reviews.llvm.org/D69768
+    ./lld-mingw-multiple.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
 

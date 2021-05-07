@@ -1,0 +1,73 @@
+commit e043d67f365d01401d6bd8cf3d49926e922c9c93
+Author: John Ericson <git@JohnEricson.me>
+Date:   Sun Nov 3 12:26:55 2019 -0500
+
+    [MinGW] Support --allow-multiple-definition
+    
+    Summary:
+    We want the Clang CrossWindows toolchain to work with ld.lld and ld.bfd
+    alike, and it uses this, so we need to support this.
+    
+    Backport of D69767
+    
+    Subscribers: llvm-commits, mstorsjo
+    
+    Tags: #llvm
+    
+    Differential Revision: https://reviews.llvm.org/D69768
+
+diff --git a/MinGW/Driver.cpp b/MinGW/Driver.cpp
+index def769bb9..2b2af1839 100644
+--- a/MinGW/Driver.cpp
++++ b/MinGW/Driver.cpp
+@@ -146,6 +146,8 @@ bool mingw::link(ArrayRef<const char *> ArgsArr, raw_ostream &Diag) {
+ 
+   if (auto *A = Args.getLastArg(OPT_subs))
+     Add("-subsystem:" + StringRef(A->getValue()));
++  if (Args.hasFlag(OPT_allow_multiple_definition, OPT_no_allow_multiple_definition, false))
++    Add("-force:multiple");
+   if (auto *A = Args.getLastArg(OPT_out_implib))
+     Add("-implib:" + StringRef(A->getValue()));
+   if (auto *A = Args.getLastArg(OPT_stack))
+diff --git a/MinGW/Options.td b/MinGW/Options.td
+index 0cda2447e..0cac9b6ec 100644
+--- a/MinGW/Options.td
++++ b/MinGW/Options.td
+@@ -4,8 +4,18 @@ class F<string name>: Flag<["--", "-"], name>;
+ class J<string name>: Joined<["--", "-"], name>;
+ class S<string name>: Separate<["--", "-"], name>;
+ 
++multiclass B<string name, string help1, string help2> {
++  def NAME: Flag<["--", "-"], name>, HelpText<help1>;
++  def no_ # NAME: Flag<["--", "-"], "no-" # name>, HelpText<help2>;
++}
++
+ def L: JoinedOrSeparate<["-"], "L">, MetaVarName<"<dir>">,
+   HelpText<"Add a directory to the library search path">;
++
++defm allow_multiple_definition: B<"allow-multiple-definition",
++    "Allow multiple definitions",
++    "Do not allow multiple definitions (default)">;
++
+ def dynamicbase: F<"dynamicbase">, HelpText<"Enable ASLR">;
+ def entry: S<"entry">, MetaVarName<"<entry>">,
+   HelpText<"Name of entry point symbol">;
+diff --git a/test/MinGW/driver.test b/test/MinGW/driver.test
+index 3222bb111..3426d6461 100644
+--- a/test/MinGW/driver.test
++++ b/test/MinGW/driver.test
+@@ -37,6 +37,14 @@ RUN: ld.lld -### foo.o -m i386pep -obar.exe | FileCheck -check-prefix=OUT %s
+ RUN: ld.lld -### foo.o -m i386pep -o bar.exe | FileCheck -check-prefix=OUT %s
+ OUT: -out:bar.exe
+ 
++RUN: ld.lld -### foo.o -m i386pep --allow-multiple-definitions | FileCheck -check-prefix=FORCE_MULTIPLE %s
++RUN: ld.lld -### foo.o -m i386pep --no-allow-multiple-definitions --allow-multiple-definitions | FileCheck -check-prefix=FORCE_MULTIPLE %s
++FORCE_MULTIPLE: -force:multiple
++
++RUN: ld.lld -### foo.o -m i386pep --no-allow-multiple-definitions | FileCheck -check-prefix=NO_FORCE_MULTIPLE %s
++RUN: ld.lld -### foo.o -m i386pep --allow-multiple-definitions --no-allow-multiple-definitions | FileCheck -check-prefix=NO_FORCE_MULTIPLE %s
++NO_FORCE_MULTIPLE-NOT: -force:multiple
++
+ RUN: ld.lld -### foo.o -m i386pep --out-implib bar | FileCheck -check-prefix=IMPLIB %s
+ RUN: ld.lld -### foo.o -m i386pep --out-implib=bar | FileCheck -check-prefix=IMPLIB %s
+ IMPLIB: -implib:bar
