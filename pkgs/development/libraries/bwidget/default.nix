@@ -1,4 +1,4 @@
-{ lib, fetchurl, tcl }:
+{ lib, fetchurl, tcl, tk }:
 
 let
   version = "1.9.14";
@@ -13,6 +13,7 @@ in tcl.mkTclDerivation {
   };
 
   dontBuild = true;
+  propagatedBuildInputs = [tk];
 
   installPhase = ''
     mkdir -p "$out/lib/${libPrefix}"
@@ -22,6 +23,7 @@ in tcl.mkTclDerivation {
   meta = {
     homepage = "https://sourceforge.net/projects/tcllib";
     description = "High-level widget set for Tcl/Tk";
+    maintainers = with lib.maintainers; [ agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.linux;
   };
