@@ -63,7 +63,9 @@ in
     dontConfigure = true;
     dontPatchELF = true;
 
-    buildInputs = [ wrapGAppsHook gtk3 hicolor-icon-theme ];
+    nativeBuildInputs = [ wrapGAppsHook ];
+
+    buildInputs = [ gtk3 hicolor-icon-theme ];
 
     installPhase = ''
       mkdir -p $out/share/mattermost-desktop
