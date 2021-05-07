@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
 }

@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
+    maintainers = [ ] ++ teams.gnome.members;
   };
 }
