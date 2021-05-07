@@ -17665,6 +17665,8 @@ in
 
   sphinx = with python3Packages; toPythonApplication sphinx;
 
+  sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
+
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
