@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gordboy/rtl8812au-5.9.3.2";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danielfullmer ];
+    maintainers = with maintainers; [ ];
   };
 }
