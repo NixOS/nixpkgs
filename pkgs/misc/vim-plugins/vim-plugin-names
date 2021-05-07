@@ -277,12 +277,13 @@ keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
-kevinhwang91/rnvimr
+kevinhwang91/rnvimr@main
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
 konfekt/vim-DetectSpellLang
 kosayoda/nvim-lightbulb
+kovisoft/slimv
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
