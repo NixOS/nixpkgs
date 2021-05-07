@@ -8333,6 +8333,12 @@
     githubId = 801525;
     name = "rembo10";
   };
+  remunds = {
+    email = "raban.emunds@gmail.com";
+    github = "remunds";
+    githubId = 61607050;
+    name = "R. Emunds";
+  };
   renatoGarcia = {
     email = "fgarcia.renato@gmail.com";
     github = "renatoGarcia";
