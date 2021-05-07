@@ -10,7 +10,7 @@
 , libxml2
 , brasero
 , libcanberra-gtk3
-, gnome3
+, gnome
 , gst_all_1
 , libmusicbrainz5
 , libdiscid
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gtk3
     brasero
     libcanberra-gtk3
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libmusicbrainz5
     libdiscid
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

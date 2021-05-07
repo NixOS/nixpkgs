@@ -10,7 +10,7 @@
 , cairomm_1_16
 , pangomm_2_48
 , epoxy
-, gnome3
+, gnome
 , makeFontsConf
 , xvfb_run
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}4";
       versionPolicy = "odd-unstable";

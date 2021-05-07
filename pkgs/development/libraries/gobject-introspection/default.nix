@@ -14,7 +14,7 @@
 , python3
 , cctools
 , cairo
-, gnome3
+, gnome
 , substituteAll
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

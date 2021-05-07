@@ -11,7 +11,7 @@
 , pulseaudio
 , glib
 , gtk3
-, gnome3
+, gnome
 , gcr
 , pam
 , systemd
@@ -52,7 +52,7 @@ let
     [ -n "$WLR_BACKENDS" ] || WLR_BACKENDS=drm,libinput
     export WLR_BACKENDS
     exec "${phoc}/bin/phoc" -C "$PHOC_INI" \
-      -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome3.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
+      -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
   '';
 
 in stdenv.mkDerivation rec {
@@ -85,9 +85,9 @@ in stdenv.mkDerivation rec {
     gcr
     networkmanager
     polkit
-    gnome3.gnome-control-center
-    gnome3.gnome-desktop
-    gnome3.gnome-session
+    gnome.gnome-control-center
+    gnome.gnome-desktop
+    gnome.gnome-session
     gtk3
     pam
     systemd
@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share/gsettings-schemas/${gnome3.gnome-shell.name}"
+      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
     )
   '';
 

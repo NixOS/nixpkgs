@@ -4,7 +4,7 @@
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome3
+, gnome
 , gobject-introspection
 , gtk3
 , wrapGAppsHook
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gobject-introspection
     gtk3
     keybinder3

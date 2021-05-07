@@ -13,7 +13,7 @@ with lib;
   # Added 2019-08-09
   imports = [
     (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-documents" "enable" ]
+      [ "services" "gnome" "gnome-documents" "enable" ]
       [ "programs" "gnome-documents" "enable" ])
   ];
 
@@ -41,13 +41,13 @@ with lib;
 
   config = mkIf config.programs.gnome-documents.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-documents ];
+    environment.systemPackages = [ pkgs.gnome.gnome-documents ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-documents ];
+    services.dbus.packages = [ pkgs.gnome.gnome-documents ];
 
-    services.gnome3.gnome-online-accounts.enable = true;
+    services.gnome.gnome-online-accounts.enable = true;
 
-    services.gnome3.gnome-online-miners.enable = true;
+    services.gnome.gnome-online-miners.enable = true;
 
   };
 

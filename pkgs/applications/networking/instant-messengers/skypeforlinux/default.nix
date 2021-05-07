@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon }:
 
@@ -31,7 +31,7 @@ let
     gtk3
     libappindicator-gtk3
 
-    gnome3.gnome-keyring
+    gnome.gnome-keyring
 
     libnotify
     libpulseaudio

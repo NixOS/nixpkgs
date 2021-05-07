@@ -13,7 +13,7 @@
 , gfbgraph
 , glib
 , gnome-online-accounts
-, gnome3
+, gnome
 , gobject-introspection
 , grilo
 , grilo-plugins
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     gfbgraph
     glib
     gnome-online-accounts
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     grilo
     grilo-plugins
     gsettings-desktop-schemas
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
 

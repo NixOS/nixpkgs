@@ -6,7 +6,7 @@
 , docbook_xml_dtd_43
 , fetchurl
 , flatpak
-, gnome3
+, gnome
 , libgit2-glib
 , gobject-introspection
 , glade
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ctags
     flatpak
-    gnome3.devhelp
+    gnome.devhelp
     glade
     libgit2-glib
     libpeas
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript {
+  passthru.updateScript = gnome.updateScript {
     packageName = pname;
     versionPolicy = "odd-unstable";
   };

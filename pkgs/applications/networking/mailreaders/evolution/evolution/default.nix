@@ -24,7 +24,7 @@
 , db
 , gcr
 , sqlite
-, gnome3
+, gnome
 , librsvg
 , gdk-pixbuf
 , libsecret
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     bogofilter
     db
     evolution-data-server
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     glib-networking
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "evolution";
       versionPolicy = "odd-unstable";
     };

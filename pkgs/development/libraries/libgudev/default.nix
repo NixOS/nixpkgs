@@ -6,7 +6,7 @@
 , udev
 , glib
 , gobject-introspection
-, gnome3
+, gnome
 , vala
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome3
+{ lib, stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome
 , mysqlSupport ? false
 , postgresSupport ? false }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

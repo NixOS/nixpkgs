@@ -1,7 +1,7 @@
 { lib, fetchurl, gettext, wrapGAppsHook
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome3
+, python3, gtk3, gobject-introspection, gnome
 , glib-networking
 
 # Test dependencies
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gobject-introspection gtk3 gnome3.adwaita-icon-theme
+    gobject-introspection gtk3 gnome.adwaita-icon-theme
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret

@@ -28,7 +28,7 @@
 , libsoup
 , ffmpeg
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gst_all_1
 , sassc
@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk";
       attrPath = "gtk4";
     };

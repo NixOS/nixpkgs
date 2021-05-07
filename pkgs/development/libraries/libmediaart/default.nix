@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk-pixbuf, gobject-introspection, gnome3, fetchpatch }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk-pixbuf, gobject-introspection, gnome, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libmediaart";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , gettext
-, gnome3
+, gnome
 , itstool
 , libxml2
 , yelp-tools
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

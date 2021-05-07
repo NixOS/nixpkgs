@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome3, gdk-pixbuf }:
+{ fetchurl, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "clutter-gst";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postBuild = "rm -rf $out/share/gtk-doc";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

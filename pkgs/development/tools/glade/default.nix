@@ -15,7 +15,7 @@
 , libxml2
 , docbook-xsl-nons
 , docbook_xml_dtd_42
-, gnome3
+, gnome
 , gdk-pixbuf
 , libxslt
 , gsettings-desktop-schemas
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
     gsettings-desktop-schemas
     gdk-pixbuf
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

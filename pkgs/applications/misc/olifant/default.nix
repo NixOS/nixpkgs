@@ -9,7 +9,7 @@
 , python3
 , libgee
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 , pantheon
 , wrapGAppsHook
 , gtk3
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     glib-networking
-    gnome3.libsoup
+    gnome.libsoup
     gsettings-desktop-schemas
     gtk3
     json-glib

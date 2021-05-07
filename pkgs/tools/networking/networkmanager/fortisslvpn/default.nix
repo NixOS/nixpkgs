@@ -11,7 +11,7 @@
 , ppp
 , libsecret
 , withGnome ? true
-, gnome3
+, gnome
 , fetchpatch
 , libnma
 }:
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-fortisslvpn";
       versionPolicy = "odd-unstable";

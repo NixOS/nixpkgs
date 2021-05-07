@@ -38,7 +38,7 @@
 , chromium
 
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
 , libvaSupport ? true, libva
@@ -88,7 +88,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''

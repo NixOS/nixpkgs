@@ -8,7 +8,7 @@
 , pango
 , glibmm_2_68
 , cairomm_1_16
-, gnome3
+, gnome
 , ApplicationServices
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}_2_48";
       versionPolicy = "odd-unstable";

@@ -14,7 +14,7 @@
 , libobjc
 , rustc
 , cargo
-, gnome3
+, gnome
 , vala
 , gobject-introspection
 , nixosTests
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

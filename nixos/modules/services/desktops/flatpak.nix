@@ -20,7 +20,7 @@ in {
         internal = true;
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.gnome3.gnome-software ]";
+        example = literalExample "[ pkgs.gnome.gnome-software ]";
         description = ''
           Packages that provide an interface for flatpak
           (like gnome-software) that will be automatically available

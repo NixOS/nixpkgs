@@ -4,7 +4,7 @@
 , meson
 , ninja
 , glib
-, gnome3
+, gnome
 , nspr
 , gettext
 , gobject-introspection
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
