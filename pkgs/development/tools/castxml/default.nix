@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    llvm
+    llvm.dev
   ] ++ lib.optionals (withManual || withHTML) [
     sphinx
   ];
 
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${libclang.dev}/lib/clang/${lib.getVersion libclang}/"
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
     "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
     "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     libffi
     libxml2
     zlib
+    libclang
   ];
 
   propagatedBuildInputs = [
