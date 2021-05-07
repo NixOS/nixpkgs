@@ -7,6 +7,7 @@
 , blis
 , catalogue
 , cymem
+, jinja2
 , jsonschema
 , murmurhash
 , numpy
@@ -19,6 +20,9 @@
 , spacy-legacy
 , thinc
 , wasabi
+, packaging
+, pathy
+, pydantic
 }:
 
 buildPythonPackage rec {
@@ -34,6 +38,7 @@ buildPythonPackage rec {
     blis
     catalogue
     cymem
+    jinja2
     jsonschema
     murmurhash
     numpy
@@ -45,6 +50,9 @@ buildPythonPackage rec {
     spacy-legacy
     thinc
     wasabi
+    packaging
+    pathy
+    pydantic
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -62,7 +70,8 @@ buildPythonPackage rec {
       --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
       --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
       --replace "srsly>=1.0.2,<1.1.0" "srsly>=1.0.2,<3.0" \
-      --replace "thinc>=7.4.1,<7.5.0" "thinc>=7.4.1,<8"
+      --replace "thinc>=7.4.1,<7.5.0" "thinc>=7.4.1,<8" \
+      --replace "pydantic>=1.7.1,<1.8.0" "pydantic>=1.7.1,<1.8.3"
   '';
 
   pythonImportsCheck = [ "spacy" ];
