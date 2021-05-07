@@ -637,11 +637,11 @@
     md5name = "a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz";
   }
   {
-    name = "neon-0.31.1.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/neon-0.31.1.tar.gz";
-    sha256 = "c9dfcee723050df37ce18ba449d7707b78e7ab8230f3a4c59d9112e17dc2718d";
+    name = "neon-0.31.2.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/neon-0.31.2.tar.gz";
+    sha256 = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678";
     md5 = "";
-    md5name = "c9dfcee723050df37ce18ba449d7707b78e7ab8230f3a4c59d9112e17dc2718d-neon-0.31.1.tar.gz";
+    md5name = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678-neon-0.31.2.tar.gz";
   }
   {
     name = "nss-3.55-with-nspr-4.27.tar.gz";
