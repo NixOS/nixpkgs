@@ -176,6 +176,7 @@ in with py.pkgs; buildPythonApplication rec {
     # test infrastructure
     asynctest
     pytest-aiohttp
+    pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
@@ -239,6 +240,7 @@ in with py.pkgs; buildPythonApplication rec {
     "folder"
     "folder_watcher"
     "freebox"
+    "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
     "frontend"
