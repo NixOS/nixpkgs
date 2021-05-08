@@ -92,7 +92,7 @@ data Eval = Eval
 
 data Build = Build
    { job :: Text
-   , buildstatus :: Int
+   , buildstatus :: Maybe Int
    , finished :: Int
    , id :: Int
    , nixname :: Text
@@ -155,7 +155,7 @@ getMaintainerMap = do
    get c p i e = readProcess c p i <&> \x -> either (error . (<> "Raw:'" <> x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
 
 -- BuildStates are sorted by subjective importance/concerningness
-data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown Int | Aborted | Unfinished | Success deriving (Show, Eq, Ord)
+data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | Aborted | Unfinished | Success deriving (Show, Eq, Ord)
 
 icon :: BuildState -> Text
 icon = \case
@@ -194,13 +194,14 @@ buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap
    unionSummary (Table l, l') (Table r, r') = (Table $ Map.union l r, l' <> r')
    toSummary Build{finished, buildstatus, job, id, system} = Map.singleton name (Table (Map.singleton (set, Platform system) (BuildResult state id)), maintainers)
      where
+      state :: BuildState
       state = case (finished, buildstatus) of
          (0, _) -> Unfinished
-         (_, 0) -> Success
-         (_, 7) -> Aborted
-         (_, 2) -> DependencyFailed
-         (_, 1) -> Failed
-         (_, 11) -> OutputLimitExceeded
+         (_, Just 0) -> Success
+         (_, Just 7) -> Aborted
+         (_, Just 2) -> DependencyFailed
+         (_, Just 1) -> Failed
+         (_, Just 11) -> OutputLimitExceeded
          (_, i) -> Unknown i
       packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
       splitted = nonEmpty $ Text.splitOn "." packageName
@@ -309,5 +310,5 @@ printMarkBrokenList = do
    (_, _, buildReport) <- readBuildReports
    forM_ buildReport \Build{buildstatus, job} ->
       case (buildstatus, Text.splitOn "." job) of
-         (1, ["haskellPackages", name, "x86_64-linux"]) -> putStrLn $ "  - " <> Text.unpack name
+         (Just 1, ["haskellPackages", name, "x86_64-linux"]) -> putStrLn $ "  - " <> Text.unpack name
          _ -> pure ()
