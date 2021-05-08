@@ -7185,6 +7185,8 @@ in
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
 
+  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
+
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
