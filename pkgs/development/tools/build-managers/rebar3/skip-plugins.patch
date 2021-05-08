@@ -1,0 +1,54 @@
+diff --git a/src/rebar_plugins.erl b/src/rebar_plugins.erl
+index f2d22233..c61fa553 100644
+--- a/src/rebar_plugins.erl
++++ b/src/rebar_plugins.erl
+@@ -106,31 +106,9 @@ handle_plugins(Profile, Plugins, State, Upgrade) ->
+     State3 = rebar_state:set(State2, deps_dir, DepsDir),
+     rebar_state:lock(State3, Locks).
+ 
+-handle_plugin(Profile, Plugin, State, Upgrade) ->
++handle_plugin(_Profile, Plugin, State, _Upgrade) ->
+     try
+-        {Apps, State2} = rebar_prv_install_deps:handle_deps_as_profile(Profile, State, [Plugin], Upgrade),
+-        {no_cycle, Sorted} = rebar_prv_install_deps:find_cycles(Apps),
+-        ToBuild = rebar_prv_install_deps:cull_compile(Sorted, []),
+-
+-        %% Add already built plugin deps to the code path
+-        ToBuildPaths = [rebar_app_info:ebin_dir(A) || A <- ToBuild],
+-        PreBuiltPaths = [Ebin || A <- Apps,
+-                                 Ebin <- [rebar_app_info:ebin_dir(A)],
+-                                 not lists:member(Ebin, ToBuildPaths)],
+-        code:add_pathsa(PreBuiltPaths),
+-
+-        %% Build plugin and its deps
+-        build_plugins(ToBuild, Apps, State2),
+-
+-        %% Add newly built deps and plugin to code path
+-        State3 = rebar_state:update_all_plugin_deps(State2, Apps),
+-        NewCodePaths = [rebar_app_info:ebin_dir(A) || A <- ToBuild],
+-
+-        %% Store plugin code paths so we can remove them when compiling project apps
+-        State4 = rebar_state:update_code_paths(State3, all_plugin_deps, PreBuiltPaths++NewCodePaths),
+-        rebar_paths:set_paths([plugins], State4),
+-
+-        {plugin_providers(Plugin), State4}
++        {plugin_providers(Plugin), State}
+     catch
+         ?WITH_STACKTRACE(C,T,S)
+             ?DEBUG("~p ~p ~p", [C, T, S]),
+@@ -138,15 +116,6 @@ handle_plugin(Profile, Plugin, State, Upgrade) ->
+             {[], State}
+     end.
+ 
+-build_plugins(MustBuildApps, AllApps, State) ->
+-    State1 = rebar_state:deps_to_build(State, MustBuildApps),
+-    State2 = rebar_state:all_deps(State1, AllApps),
+-    State3 = rebar_state:set(State2, deps_dir, ?DEFAULT_PLUGINS_DIR),
+-    {Args, Extra} = rebar_state:command_parsed_args(State),
+-    State4 = rebar_state:command_parsed_args(State3, {[{deps_only, true}|Args], Extra}),
+-    rebar_prv_compile:do(State4),
+-    ok.
+-
+ plugin_providers({Plugin, _, _, _}) when is_atom(Plugin) ->
+     validate_plugin(Plugin);
+ plugin_providers({Plugin, _, _}) when is_atom(Plugin) ->
