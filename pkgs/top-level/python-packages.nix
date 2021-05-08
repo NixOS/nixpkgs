@@ -489,8 +489,6 @@ in {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
-  arrow_1 = callPackage ../development/python-modules/arrow/1.nix { };
-
   arviz = callPackage ../development/python-modules/arviz { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
