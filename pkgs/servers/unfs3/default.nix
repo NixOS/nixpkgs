@@ -29,5 +29,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+
+    # https://github.com/unfs3/unfs3/issues/13
+    broken = true;
   };
 }
