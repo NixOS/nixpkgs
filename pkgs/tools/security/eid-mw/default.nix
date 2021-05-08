@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bfortz ];
+    maintainers = with maintainers; [ bfortz chvp ];
   };
 }
