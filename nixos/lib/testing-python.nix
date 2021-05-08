@@ -83,8 +83,10 @@ rec {
     { testScript
     , enableOCR ? false
     , name ? "unnamed"
-      # Skip linting (mainly intended for faster dev cycles)
+      # Skip linting (not advisable)
     , skipLint ? false
+      # Skip formatting check
+    , skipFormatter ? false
     , passthru ? {}
     , # For meta.position
       pos ? # position used in error messages and for meta.position
@@ -158,7 +160,7 @@ rec {
             mkdir -p $out/bin
 
             echo -n "$testScript" > $out/test-script
-            ${lib.optionalString (!skipLint) ''
+            ${lib.optionalString (!skipLint && !skipFormatter) ''
               ${python3Packages.black}/bin/black --check --diff $out/test-script
             ''}
 
