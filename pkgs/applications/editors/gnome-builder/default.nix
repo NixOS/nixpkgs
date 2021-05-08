@@ -34,7 +34,7 @@
 , webkitgtk
 , wrapGAppsHook
 , dbus
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   outputs = [ "out" "devdoc" ];

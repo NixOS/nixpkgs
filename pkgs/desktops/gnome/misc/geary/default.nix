@@ -29,7 +29,7 @@
 , python3
 , gnutls
 , cacert
-, xvfb_run
+, xvfb-run
 , glibcLocales
 , dbus
 , shared-mime-info
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     dbus
     gnutls # for certtool
     cacert # trust store for glib-networking
-    xvfb_run
+    xvfb-run
     glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
   ];
 

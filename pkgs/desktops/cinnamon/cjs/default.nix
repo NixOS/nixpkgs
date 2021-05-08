@@ -20,7 +20,7 @@
 , meson
 , sysprof
 , dbus
-, xvfb_run
+, xvfb-run
 , ninja
 , makeWrapper
 , which
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   propagatedBuildInputs = [
