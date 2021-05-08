@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, isPy27, pytestCheckHook
-, requests, arrow, logfury, tqdm }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, isPy27
+, arrow, logfury, requests, rst2ansi, tqdm }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.6.0";
+  version = "1.7.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6fjreuMUC056ljddfAidfBbJkvEDndB/dIkx1bF7efs=";
+    sha256 = "1zkjwz2r9jlf31gj5bnw6h9mqapjn8rndxmz7wsr5iaj3wp5fzpi";
   };
 
   postPatch = ''
@@ -22,7 +22,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "b2sdk" ];
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ requests arrow logfury tqdm ];
+  propagatedBuildInputs = [
+    arrow
+    logfury
+    requests
+    rst2ansi
+    tqdm
+  ];
+
+  patches = [
+    # https://github.com/Backblaze/b2-sdk-python/issues/201
+    ./0001-Upgrade-arrow.patch
+  ];
 
   # requires unpackaged dependencies like liccheck
   doCheck = false;
@@ -31,5 +42,6 @@ buildPythonPackage rec {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze).";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;
+    maintainers = [ maintainers.uri-canva ];
   };
 }

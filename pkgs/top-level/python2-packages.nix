@@ -16,7 +16,7 @@ with self; with super; {
 
   application = callPackage ../development/python-modules/application { };
 
-  arrow = callPackage ../development/python-modules/arrow/2.nix { };
+  arrow = callPackage ../development/python-modules/arrow/0.nix { };
 
   ase = callPackage ../development/python-modules/ase/3.17.nix { };
 

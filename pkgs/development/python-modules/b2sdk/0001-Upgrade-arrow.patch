@@ -1,0 +1,22 @@
+From 2490984b0bf5828971c24a4bd94e5f9f02ed01a9 Mon Sep 17 00:00:00 2001
+From: Uri Baghin <uri@canva.com>
+Date: Sat, 8 May 2021 16:14:01 +1000
+Subject: [PATCH] Upgrade arrow.
+
+---
+ requirements.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index 39f861c..73a67e5 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+-arrow>=0.8.0,<1.0.0
++arrow>=1.0.0,<2.0.0
+ importlib-metadata>=2.1.1,<3.0.0; python_version <= '3.5'
+ importlib-metadata>=3.3.0; python_version > '3.5' and python_version < '3.8'
+ logfury>=0.1.2
+-- 
+2.31.1
+

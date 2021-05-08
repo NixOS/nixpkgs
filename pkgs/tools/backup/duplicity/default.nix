@@ -55,16 +55,16 @@ pythonPackages.buildPythonApplication rec {
     cffi
     cryptography
     ecdsa
-    idna
-    pygobject3
     fasteners
+    future
+    idna
     ipaddress
     lockfile
     paramiko
     pyasn1
     pycrypto
     pydrive
-    future
+    pygobject3
   ] ++ lib.optionals (!isPy3k) [
     enum
   ];

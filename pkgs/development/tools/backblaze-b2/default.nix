@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.1.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     rev = "v${version}";
-    sha256 = "1kkpvxqgh5pw4kr8lh5gy9d7960hv9zvajbjiqhj6xgykwbpbgmq";
+    sha256 = "1x2rpvzprar9cbkg5v5s03vk0jy639k0k70jz84q8fs52p1l6ir9";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -19,6 +19,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  patches = [
+    # https://github.com/Backblaze/B2_Command_Line_Tool/issues/687
+    ./0001-Upgrade-arrow.patch
+  ];
 
   disabledTests = [
     "test_files_headers"
