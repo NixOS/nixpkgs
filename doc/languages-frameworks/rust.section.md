@@ -308,6 +308,37 @@ attributes can also be used:
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
 
+If a `Cargo.lock` file is available, you can alternatively use the
+`importCargoLock` function. In contrast to `fetchCargoTarball`, this
+function does not require a hash (unless git dependencies are used)
+and fetches every dependency as a separate fixed-output derivation.
+`importCargoLock` can be used as follows:
+
+```
+cargoDeps = rustPlatform.importCargoLock {
+  lockFile = ./Cargo.lock;
+};
+```
+
+If the `Cargo.lock` file includes git dependencies, then their output
+hashes need to be specified since they are not available through the
+lock file. For example:
+
+```
+cargoDeps = {
+  lockFile = ./Cargo.lock;
+  outputHashes = {
+    "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
+  };
+};
+```
+
+If you do not specify an output hash for a git dependency, building
+`cargoDeps` will fail and inform you of which crate needs to be
+added. To find the correct hash, you can first use `lib.fakeSha256` or
+`lib.fakeHash` as a stub hash. Building `cargoDeps` will then inform
+you of the correct hash.
+
 ### Hooks
 
 `rustPlatform` provides the following hooks to automate Cargo builds:
