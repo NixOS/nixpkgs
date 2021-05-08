@@ -21,6 +21,5 @@ buildGoModule rec {
     license = licenses.mit;
     mainProgram = pname;
     maintainers = with maintainers; [ l3af ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
