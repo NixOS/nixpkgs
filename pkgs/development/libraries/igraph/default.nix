@@ -77,15 +77,17 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
     "-DIGRAPH_GRAPHML_SUPPORT=ON"
-    "-DIGRAPH_ENABLE_LTO=ON"
+    "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
 
-  preCheck = ''
-    # needed to find libigraph.so
+  # needed to find libigraph, and liblas on darwin
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
+  '' else ''
     export LD_LIBRARY_PATH="$PWD/src"
   '';
 

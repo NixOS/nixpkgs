@@ -11,7 +11,7 @@ let
 
   inherit (lib) optionals optionalString;
 
-  version = "1.16.3";
+  version = "1.16.4";
 
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-spjSnekjbKR6Aj44IxO8wtLu0x36cGtgoEEDzoOnGiU=";
+    sha256 = "sha256-rk9rbioWd9MYF5hGVadiB0tTVtpQ+1hyK5kQSHDUNQM=";
   };
 
   # perl is used for testing go vet

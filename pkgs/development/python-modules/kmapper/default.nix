@@ -5,7 +5,7 @@
 , numpy
 , scipy
 , jinja2
-, pytest
+, pytestCheckHook
 , networkx
 , matplotlib
 , python-igraph
@@ -32,17 +32,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     networkx
     matplotlib
     python-igraph
     plotly
     ipywidgets
   ];
-
-  checkPhase = ''
-    pytest test --ignore test/test_drawing.py
-  '';
 
   meta = with lib; {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
