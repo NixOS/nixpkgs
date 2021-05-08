@@ -1,48 +1,23 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
+{ stdenv, lib, fetchFromGitHub, cmake, openssl, qttools
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.11.1";
+  version = "1.13.1.41";
 
   src = fetchFromGitHub {
+    fetchSubmodules = true;
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
-    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
+    sha256 = "sha256-fIbYsInVDWVoIc9J9T1sLOCfG9F+8aL7RwG8xL4GD94=";
   };
 
-  patches = [
-    ./build-tests.patch
-    (fetchpatch {
-      name = "CVE-2020-15117.patch";
-      url = "https://github.com/symless/synergy-core/commit/"
-          + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
-      sha256 = "03q8m5n50fms7fjfjgmqrgy9mrxwi9kkz3f3vlrs2x5h21dl6bmj";
-    })
-  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
+  patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
-  # Since the included gtest and gmock don't support clang and the
-  # segfault when built with gcc9, we replace it with 1.10.0 for
-  # synergy-1.11.0. This should become unnecessary when upstream
-  # updates these dependencies.
-  googletest = fetchFromGitHub {
-    owner = "google";
-    repo = "googletest";
-    rev = "release-1.10.0";
-    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
-  };
-
-  postPatch = ''
-    rm -r ext/*
-    cp -r ${googletest}/googlemock ext/gmock/
-    cp -r ${googletest}/googletest ext/gtest/
-    chmod -R +w ext/
-  '';
-
-  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+  cmakeFlags = [ "-DGIT_SUBMODULE=OFF" ] ++ lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
 
   nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
 
@@ -59,6 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
   '' + lib.optionalString withGUI ''
@@ -73,10 +50,18 @@ stdenv.mkDerivation rec {
     mkdir -p $out/Applications/
     mv bundle/Synergy.app $out/Applications/
     ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
+  '' + ''
+    runHook postInstall
   '';
 
   doCheck = true;
-  checkPhase = "bin/unittests";
+  checkPhase = "
+    runHook preCheck
+
+    bin/unittests
+
+    runHook postCheck
+  ";
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
