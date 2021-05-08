@@ -9,7 +9,7 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 
   imports = [

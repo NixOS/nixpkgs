@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "A simple Mastodon client designed for elementary OS, originally developed by @bleakgrey";
     homepage = "https://github.com/cleac/olifant";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 }

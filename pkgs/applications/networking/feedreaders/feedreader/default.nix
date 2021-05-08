@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A modern desktop application designed to complement existing web-based RSS accounts";
     homepage = "https://jangernert.github.io/FeedReader/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo worldofpeace ];
+    maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
   };
 }

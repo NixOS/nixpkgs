@@ -115,6 +115,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse worldofpeace ];
+    maintainers = with maintainers; [ aaronjanse ];
   };
 }

@@ -36,7 +36,7 @@ mkDerivation rec {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.linux;
   };
 }
