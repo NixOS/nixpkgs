@@ -975,6 +975,12 @@ mapAliases ({
 
   posix_man_pages = man-pages-posix; # Added 2021-04-15
 
+  /* Cleanup before 21.11, Added 2021-05-07 */
+  avian = throw ''
+    The package doesn't compile anymore on NixOS and both development
+    & maintenance is abandoned by upstream.
+  '';
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */

@@ -96,6 +96,15 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  haskell = {
+    members = [
+      maralorn
+      cdepillabout
+      sternenseemann
+    ];
+    scope = "Maintain Haskell packages and infrastructure.";
+  };
+
   home-assistant = {
     members = [
       fab
