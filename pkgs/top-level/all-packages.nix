@@ -7002,6 +7002,8 @@ in
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
 
+  numberstation = callPackage ../applications/misc/numberstation { };
+
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
   miller = callPackage ../tools/text/miller { };
