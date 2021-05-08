@@ -1,5 +1,6 @@
 {stdenv, lib, mkOpenModelicaDerivation, autoconf, automake, libtool,
 gfortran, clang, cmake, curl, hwloc, jre, openblas, hdf5, expat, ncurses,
+libffi, binutils,
 readline, which, lp_solve, omniorb, sqlite, libatomic_ops,
 pkgconfig, file, gettext, flex, bison, doxygen, boost,
 ipopt, libuuid, git, makeWrapper, autoreconfHook}:
@@ -13,8 +14,8 @@ mkOpenModelicaDerivation rec {
 
   nativeBuildInputs = [gfortran flex bison];
 
-  buildInputs = [jre openblas curl readline]; /*hwloc curl
-    jre openblas hdf5 expat ncurses readline which lp_solve
+  buildInputs = [jre openblas curl readline expat libffi binutils]; /*hwloc
+    openblas hdf5 ncurses which lp_solve
     omniorb sqlite libatomic_ops gettext boost
     libuuid];*/
 

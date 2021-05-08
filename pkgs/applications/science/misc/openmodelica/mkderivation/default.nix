@@ -1,4 +1,4 @@
-{stdenv, lib, fetchgit, autoconf, automake, qt5, libtool, cmake, autoreconfHook, openblas, symlinkJoin}: pkg:
+{stdenv, lib, fetchgit, autoconf, automake, libtool, cmake, autoreconfHook, openblas, symlinkJoin}: pkg:
 let 
   inherit (builtins) hasAttr getAttr length;
   inherit (lib) attrByPath concatStringsSep;
@@ -38,25 +38,18 @@ in stdenv.mkDerivation (pkg // {
   version = "1.17.0";
 
   nativeBuildInputs = pkg.nativeBuildInputs ++ [autoconf automake libtool cmake
-  qt5.qmake qt5.qttools autoreconfHook];
+   autoreconfHook];
   buildInputs = pkg.buildInputs ++ [joinedDeps];
 
-  #patch -p1 < ${./configure.ac.patch}
-  patchPhase = ''
-      sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qt5.qttools}/bin/lrelease|'
-      sed -i OMPlot/Makefile.in -e 's|bindir = @includedir@|includedir = @includedir@|'
-      sed -i OMPlot/OMPlot/OMPlotGUI/*.pro -e '/INCLUDEPATH +=/s|$| ../../qwt/src|'
-    '' + ifNoDeps "" '' 
-      
+  patchPhase = ifNoDeps "" ''
       sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
     '' +
     myAppendAttr "patchPhase" "\n" pkg;
 
-  preAutoreconf = "patchShebangs --build" +
+  preAutoreconf = "patchShebangs --build common" +
     myAppendAttr "preAutoreconf" "\n" pkg;
 
   dontUseCmakeConfigure = true;
-  dontUseQmakeConfigure = true;
 
   configurePhase = "export OMBUILDDIR=$PWD/build; ./configure --no-recursion ${configureFlags}; " +
     (if omautoconf then " (cd ${omdir}; ./configure ${configureFlags})" else "");
