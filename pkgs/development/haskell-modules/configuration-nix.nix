@@ -238,6 +238,7 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # Needs help finding LLVM.
