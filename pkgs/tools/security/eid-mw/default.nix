@@ -1,24 +1,36 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, gtk3, nssTools, pcsclite
-, libxml2, libproxy
-, openssl, curl
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
 , makeWrapper
-, substituteAll }:
+, curl
+, gtk3
+, libassuan
+, libbsd
+, libproxy
+, libxml2
+, openssl
+, p11-kit
+, pcsclite
+, nssTools
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
-  version = "4.4.27";
+  version = "5.0.14";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "17lw8iwp7h5cs3db80sysr84ffi333cf2vrhncs9l6hy6glfl2v1";
+    sha256 = "1hyxsbxjjn9hh5p7jlcfb5yplf3n8dg49dfgi8fjp95phis3gbd4";
     repo = "eid-mw";
     owner = "Fedict";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
-  buildInputs = [ gtk3 pcsclite libxml2 libproxy curl openssl ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
+  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
   preConfigure = ''
     mkdir openssl
     ln -s ${openssl.out}/lib openssl
@@ -27,30 +39,29 @@ stdenv.mkDerivation rec {
     export SSL_PREFIX=$(realpath openssl)
     substituteInPlace plugins_tools/eid-viewer/Makefile.in \
       --replace "c_rehash" "openssl rehash"
-    '';
+  '';
+  configureFlags = [ "--disable-pinentry" ];
 
   postPatch = ''
     sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
   '';
 
-  configureFlags = [ "--enable-dialogs=yes" ];
-
   postInstall =
-  let
-    eid-nssdb-in = substituteAll {
-      inherit (stdenv) shell;
-      isExecutable = true;
-      src = ./eid-nssdb.in;
-    };
-  in
-  ''
-    install -D ${eid-nssdb-in} $out/bin/eid-nssdb
-    substituteInPlace $out/bin/eid-nssdb \
-      --replace "modutil" "${nssTools}/bin/modutil"
+    let
+      eid-nssdb-in = substituteAll {
+        inherit (stdenv) shell;
+        isExecutable = true;
+        src = ./eid-nssdb.in;
+      };
+    in
+    ''
+      install -D ${eid-nssdb-in} $out/bin/eid-nssdb
+      substituteInPlace $out/bin/eid-nssdb \
+        --replace "modutil" "${nssTools}/bin/modutil"
 
-    rm $out/bin/about-eid-mw
-    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
-  '';
+      rm $out/bin/about-eid-mw
+      wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
+    '';
 
   enableParallelBuilding = true;
 
