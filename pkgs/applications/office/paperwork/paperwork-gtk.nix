@@ -4,7 +4,7 @@
 , cairo
 , gnome
 , librsvg
-, xvfb_run
+, xvfb-run
 , dbus
 , libnotify
 , wrapGAppsHook
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   nativeBuildInputs = [
     wrapGAppsHook

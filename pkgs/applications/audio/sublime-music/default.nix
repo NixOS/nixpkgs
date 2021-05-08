@@ -5,7 +5,7 @@
 , gtk3
 , pango
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     pytest
     pytest-cov
   ];
-  checkPhase = "${xvfb_run}/bin/xvfb-run pytest";
+  checkPhase = "${xvfb-run}/bin/xvfb-run pytest";
 
   # Also run the python import check for sanity
   pythonImportsCheck = [ "sublime_music" ];

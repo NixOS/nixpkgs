@@ -13,7 +13,7 @@
 , enableGlade ? false
 , glade
 , dbus
-, xvfb_run
+, xvfb-run
 , libxml2
 , gdk-pixbuf
 , librsvg
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
     at-spi2-atk
     at-spi2-core
     librsvg

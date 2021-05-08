@@ -19,7 +19,7 @@
 , harfbuzz
 , makeWrapper
 , which
-, xvfb_run
+, xvfb-run
 , nixosTests
 }:
 
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ] ++ testDeps;
 
   propagatedBuildInputs = [
