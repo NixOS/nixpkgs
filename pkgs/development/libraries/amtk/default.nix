@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, gnome3
+, gnome
 , dbus
 , xvfb_run
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  passthru.updateScript = gnome3.updateScript {
+  passthru.updateScript = gnome.updateScript {
     packageName = pname;
     versionPolicy = "none";
   };

@@ -4,7 +4,7 @@
 , libxml2
 , libxslt
 , itstool
-, gnome3
+, gnome
 , pkg-config
 , meson
 , ninja
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     itstool # build script checks for its presence but I am not sure if anything uses it
-    gnome3.yelp-xsl
+    gnome.yelp-xsl
   ];
 
   pythonPath = [
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

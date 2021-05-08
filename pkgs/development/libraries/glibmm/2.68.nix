@@ -5,7 +5,7 @@
 , gnum4
 , glib
 , libsigcxx30
-, gnome3
+, gnome
 , Cocoa
 , meson
 , ninja
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "glibmm_2_68";
       versionPolicy = "odd-unstable";

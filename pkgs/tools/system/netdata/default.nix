@@ -87,6 +87,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

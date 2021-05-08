@@ -88,7 +88,7 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
   The setup hook [currently](https://github.com/NixOS/nixpkgs/issues/56943) does not work in expressions with `strictDeps` enabled, like Python packages. In those cases, you will need to disable it with `strictDeps = false;`.
   :::
 
-- []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `gnome3.grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGAppsHook`.
+- []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGAppsHook`.
 
 You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs` in `preFixup` hook:
 
@@ -105,7 +105,7 @@ preFixup = ''
 
 ## Updating GNOME packages {#ssec-gnome-updating}
 
-Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome3`. Read the package’s `NEWS` file to see what changed.
+Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome`. Read the package’s `NEWS` file to see what changed.
 
 ## Frequently encountered issues {#ssec-gnome-common-issues}
 

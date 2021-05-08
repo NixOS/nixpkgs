@@ -28,7 +28,7 @@
 , libsoup
 , ffmpeg
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gst_all_1
 , sassc
@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk";
       attrPath = "gtk4";
     };
@@ -236,7 +236,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };

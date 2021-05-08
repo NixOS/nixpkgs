@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, appstream-glib, gnome3 }:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, appstream-glib, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "cantarell-fonts";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputHash = "1sczskw2kv3qy39i9mzw2lkl94a90bjgv5ln9acy5kh4gb2zmy7z";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

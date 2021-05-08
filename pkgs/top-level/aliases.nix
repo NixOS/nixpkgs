@@ -300,6 +300,7 @@ mapAliases ({
   gtk_doc = gtk-doc; # added 2018-02-25
   guileCairo = guile-cairo; # added 2017-09-24
   guileGnome = guile-gnome; # added 2017-09-24
+  gnome3 = gnome; # added 2021-05-07
   guileLint = guile-lint; # added 2017-09-27
   guile_lib = guile-lib; # added 2017-09-24
   guile_ncurses = guile-ncurses; # added 2017-09-24
@@ -970,6 +971,12 @@ mapAliases ({
   zplugin = zinit; # Added 2021-01-30
 
   posix_man_pages = man-pages-posix; # Added 2021-04-15
+
+  /* Cleanup before 21.11, Added 2021-05-07 */
+  avian = throw ''
+    The package doesn't compile anymore on NixOS and both development
+    & maintenance is abandoned by upstream.
+  '';
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:

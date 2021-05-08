@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, gnome3, cmake, pkg-config,
+{ fetchFromGitHub, lib, stdenv, gnome, cmake, pkg-config,
   libappindicator-gtk3, gst_all_1, pcre }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gtkmm
-    gnome3.webkitgtk
+    gnome.gtkmm
+    gnome.webkitgtk
     libappindicator-gtk3
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

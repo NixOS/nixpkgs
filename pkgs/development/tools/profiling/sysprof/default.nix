@@ -16,7 +16,7 @@
 , shared-mime-info
 , systemd
 , wrapGAppsHook
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     wrapGAppsHook
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   buildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

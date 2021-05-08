@@ -12,7 +12,7 @@
 , meson
 , ninja
 , isPy3k
-, gnome3
+, gnome
 }:
 
 buildPythonPackage rec {
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}3";
       versionPolicy = "odd-unstable";

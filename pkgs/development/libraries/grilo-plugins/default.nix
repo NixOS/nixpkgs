@@ -10,7 +10,7 @@
 , librest
 , libarchive
 , libsoup
-, gnome3
+, gnome
 , libxml2
 , lua5_3
 , liboauth
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

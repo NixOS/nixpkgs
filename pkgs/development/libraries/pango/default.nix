@@ -9,7 +9,7 @@
 , gobject-introspection
 , darwin
 , fribidi
-, gnome3
+, gnome
 , gi-docgen
 , makeFontsConf
 , freefont_ttf
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

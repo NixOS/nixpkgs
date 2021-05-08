@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, gnome3
+, gnome
 , glib
 , gtk3
 , wayland
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     wayland
     wayland-protocols
     libxml2

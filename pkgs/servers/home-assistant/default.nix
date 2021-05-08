@@ -361,6 +361,7 @@ in with py.pkgs; buildPythonApplication rec {
     "stream"
     "subaru"
     "sun"
+    "surepetcare"
     "switch"
     "system_health"
     "system_log"

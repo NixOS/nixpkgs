@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome3, gtk3, wrapGAppsHook
+, glibcLocales, gnome, gtk3, wrapGAppsHook
 , gobject-introspection
 }:
 
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     python3
     gobject-introspection
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [

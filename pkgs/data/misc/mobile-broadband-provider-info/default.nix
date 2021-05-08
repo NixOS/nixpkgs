@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnome3, libxslt }:
+{ lib, stdenv, fetchurl, gnome, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "mobile-broadband-provider-info";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

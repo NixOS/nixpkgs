@@ -36,7 +36,7 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, gnome3
+, gnome
 , runtimeShell
 , shared-mime-info
 , gsettings-desktop-schemas
@@ -246,7 +246,7 @@ stdenv.mkDerivation rec {
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      gnome3.adwaita-icon-theme
+      gnome.adwaita-icon-theme
       shared-mime-info
     ]}
     WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [

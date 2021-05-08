@@ -12,7 +12,7 @@
 , gnutls
 , p11-kit
 , libproxy
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

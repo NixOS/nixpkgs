@@ -6,7 +6,7 @@
 , colorama
 , dataclasses
 , ipywidgets
-, poetry
+, poetry-core
 , pygments
 , typing-extensions
 , pytestCheckHook
@@ -14,27 +14,33 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "9.13.0";
+  version = "10.1.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
 
-  # tests not included in pypi tarball
   src = fetchFromGitHub {
     owner = "willmcgugan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0si3rzhg8wfxw4aakkp8sr6nbzfa54rl0w92macd1338q90ha4ly";
+    sha256 = "sha256-HH+k9uiK34yoqu83rknCIe2DpoqJRHkcqABuj8zjzqs=";
   };
-  format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
     CommonMark
     colorama
     ipywidgets
     pygments
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+  ] ++ lib.optional (pythonOlder "3.7") [
+    dataclasses
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "rich" ];
 
   meta = with lib; {

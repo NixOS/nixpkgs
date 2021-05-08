@@ -51,7 +51,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (pkgs.gnome3.removePackagesByName
+      (pkgs.gnome.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 

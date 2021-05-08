@@ -20,7 +20,7 @@
 , dasht
 , direnv
 , fzf
-, gnome3
+, gnome
 , khard
 , languagetool
 , llvmPackages
@@ -515,7 +515,7 @@ self: super: {
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
-    propagatedBuildInputs = [ gnome3.zenity ];
+    propagatedBuildInputs = [ gnome.zenity ];
     meta = {
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
@@ -605,7 +605,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "1c8bwvwd23d7c3bk1ky1i8xgfz10dr8nqqcvp20g8rldjl8p2r08";
+          cargoSha256 = "sha256-Jy8ThtcdPV4fMGcQbJJnibwb3o5iEHNn54831OI9adc=";
         };
       in
       ''

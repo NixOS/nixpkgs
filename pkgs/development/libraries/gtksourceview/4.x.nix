@@ -15,7 +15,7 @@
 , libxml2
 , perl
 , gettext
-, gnome3
+, gnome
 , gobject-introspection
 , dbus
 , xvfb_run
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtksourceview";
       attrPath = "gtksourceview4";
       versionPolicy = "odd-unstable";
