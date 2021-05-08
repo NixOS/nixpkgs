@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "tls_parser" ];
+
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/tls_parser";
     description = "Small library to parse TLS records";
