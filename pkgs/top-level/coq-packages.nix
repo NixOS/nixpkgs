@@ -64,6 +64,7 @@ let
       odd-order = callPackage ../development/coq-modules/odd-order { };
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
+      pocklington = callPackage ../development/coq-modules/pocklington {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
