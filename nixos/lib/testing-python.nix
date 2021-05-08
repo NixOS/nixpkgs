@@ -73,7 +73,9 @@ rec {
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
         '';
 
-      passthru = driver.passthru;
+      passthru = driver.passthru // {
+        inherit driver;
+      };
 
       inherit pos;
     };
