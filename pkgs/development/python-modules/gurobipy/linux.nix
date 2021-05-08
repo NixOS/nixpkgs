@@ -1,6 +1,6 @@
-{ python, gurobi }:
+{ buildPythonPackage, python, gurobi }:
 
-python.pkgs.buildPythonPackage {
+buildPythonPackage {
   pname = "gurobipy";
   version = "9.1.2";
   src = gurobi.src;
