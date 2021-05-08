@@ -1218,6 +1218,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
   };
 
+  diffview-nvim = buildVimPluginFrom2Nix {
+    pname = "diffview-nvim";
+    version = "2021-05-06";
+    src = fetchFromGitHub {
+      owner = "sindrets";
+      repo = "diffview.nvim";
+      rev = "dac6553c175937e8f9b795e1fb4fea9fa7caf555";
+      sha256 = "0p0h1rqzg3gxbwr3d0n2al8lxv307dmfvanvcgiaq3md7xhfm4gf";
+    };
+    meta.homepage = "https://github.com/sindrets/diffview.nvim/";
+  };
+
   direnv-vim = buildVimPluginFrom2Nix {
     pname = "direnv-vim";
     version = "2020-11-20";

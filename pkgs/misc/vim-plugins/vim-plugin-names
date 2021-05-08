@@ -578,6 +578,7 @@ sickill/vim-pasta
 SidOfc/mkdx
 simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
+sindrets/diffview.nvim@main
 SirVer/ultisnips
 sjl/gundo.vim
 sjl/splice.vim
