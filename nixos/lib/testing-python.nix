@@ -148,6 +148,7 @@ rec {
           {
             buildInputs = [ makeWrapper ];
             testScript = testScript';
+            passAsFile = ["testScript"];
             preferLocalBuild = true;
             testName = name;
             passthru = passthru // {
@@ -157,7 +158,7 @@ rec {
           ''
             mkdir -p $out/bin
 
-            echo -n "$testScript" > $out/test-script
+            (echo "# fmt: off"; cat $testScriptPath) > $out/test-script
             ${lib.optionalString (!skipLint) ''
               ${python3Packages.black}/bin/black --check --diff $out/test-script
             ''}
