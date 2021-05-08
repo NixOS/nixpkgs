@@ -4,7 +4,7 @@
 let
   version = "3.15.1";
   owner = "erlang";
-  deps = import ./rebar-deps.nix { inherit fetchHex fetchFromGitHub; };
+  deps = import ./rebar-deps.nix { inherit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
