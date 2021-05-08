@@ -597,6 +597,7 @@ takac/vim-hardtime
 tami5/compe-conjure
 tami5/lispdocs.nvim
 tami5/sql.nvim
+tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
 terryma/vim-expand-region

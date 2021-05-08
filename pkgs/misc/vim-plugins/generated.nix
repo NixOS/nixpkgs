@@ -6940,6 +6940,18 @@ let
     meta.homepage = "https://github.com/jackguo380/vim-lsp-cxx-highlight/";
   };
 
+  vim-lua = buildVimPluginFrom2Nix {
+    pname = "vim-lua";
+    version = "2020-08-05";
+    src = fetchFromGitHub {
+      owner = "tbastos";
+      repo = "vim-lua";
+      rev = "fa810f85437525bcea0fc4ff22c634935721d86d";
+      sha256 = "1fkpfjpmv80lcd7jn95pzxrcbzn8avdywjknd5bn3212ahydg43m";
+    };
+    meta.homepage = "https://github.com/tbastos/vim-lua/";
+  };
+
   vim-maktaba = buildVimPluginFrom2Nix {
     pname = "vim-maktaba";
     version = "2021-04-28";
