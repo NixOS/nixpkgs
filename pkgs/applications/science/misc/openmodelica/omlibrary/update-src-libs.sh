@@ -8,44 +8,17 @@ trap "rm -rf $T" EXIT INT PIPE
 cd $T
 cat >check.nix <<EOF
 with import <nixpkgs> {};
-fetchgit `cat $CWD/../src-main.nix`
+fetchgit `cat $CWD/../mkderivation/src-main.nix`
 EOF
 nix-build check.nix
 cat result/libraries/Makefile.libs
 ) }
 
 getsha256() { (
-T=`mktemp -d`
-trap "rm -rf $T" EXIT INT PIPE
-cd $T
-
-L=`echo $2 | wc -c`
-if expr $L '<' 10 >/dev/null; then
-T=`echo $2 | sed 's@"\(.*\)"@"refs/tags/\1"@'`
-cat >check.nix <<EOF
-with import <nixpkgs> {};
-fetchgit {
-  url = $1;
-  rev = $T;
-  sha256 = "0000000000000000000000000000000000000000000000000000";
-}
-EOF
-SHA=`nix-build check.nix 2>&1 | sed -n 's/.*instead has ‘\(.*\)’.*/\1/g p'`
-echo "{ url = $1; rev = $T; sha256=\"$SHA\"; }"
-else
-cat >check.nix <<EOF
-with import <nixpkgs> {};
-fetchgit {
-  url = $1;
-  rev = $2;
-  sha256 = "0000000000000000000000000000000000000000000000000000";
-}
-EOF
-SHA=`nix-build check.nix 2>&1 | sed -n 's/.*instead has ‘\(.*\)’.*/\1/g p'`
+URL=$(echo "$1" | sed 's/^"\(.*\)"$/\1/')
+REV=$(echo "$2" | sed 's/^"\(.*\)"$/\1/')
+SHA=$(nix run nixpkgs.nix-prefetch-git -c nix-prefetch-git "$URL" "$REV" 2>/dev/null | sed -n 's/.*"sha256": "\(.*\)",/\1/g p')
 echo "{ url = $1; rev = $2; sha256=\"$SHA\"; }"
-fi
-
-# nix-build check.nix
 ) }
 
 OUT=src-libs.nix

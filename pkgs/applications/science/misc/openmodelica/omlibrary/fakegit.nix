@@ -41,11 +41,6 @@ stdenv.mkDerivation {
       GITBRANCH=$3
       REVISION=$4
 
-      L=`echo $REVISION | wc -c`
-      if expr $L '<' 10 >/dev/null; then
-        REVISION=refs/tags/$REVISION
-      fi
-
       REVISION=`echo $REVISION | tr :/ __`
 
       rm -rf $DEST
