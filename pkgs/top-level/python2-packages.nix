@@ -433,6 +433,8 @@ with self; with super; {
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
 
+  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
+
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl/0.5.nix { };
