@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace libcperciva/cpusupport/Build/cpusupport.sh \
       --replace "dirname" "${coreutils}/bin/dirname" \
       --replace "2>/dev/null" "2>stderr.log"
@@ -27,8 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/man/man1
     make install BINDIR=$out/bin MAN1DIR=$out/share/man/man1
+    runHook postInstall
   '';
 
   meta = {
