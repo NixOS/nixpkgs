@@ -1406,7 +1406,6 @@ broken-packages:
   - fraction
   - frag
   - Frames-map-reduce
-  - Frames-streamly
   - franchise
   - fraxl
   - freddy
