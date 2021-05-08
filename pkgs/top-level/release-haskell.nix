@@ -77,8 +77,8 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
 
-  jobs = mapTestOn (recursiveUpdateMany [
-    {
+  jobs = recursiveUpdateMany [
+    (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
 
@@ -194,7 +194,7 @@ let
         ;
 
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
-    }
+    })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
       # default GHC version. This list can be used to test
@@ -266,6 +266,6 @@ let
             (maintainedPkgNames pkgs.haskellPackages));
       };
     }
-  ]);
+  ];
 
 in jobs
