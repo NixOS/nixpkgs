@@ -311,6 +311,8 @@ in {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiopg = callPackage ../development/python-modules/aiopg { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
