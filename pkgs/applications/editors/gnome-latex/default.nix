@@ -13,7 +13,7 @@
 , libgee
 , tepl
 , amtk
-, gnome3
+, gnome
 , glib
 , pkg-config
 , intltool
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     amtk
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  passthru.updateScript = gnome3.updateScript {
+  passthru.updateScript = gnome.updateScript {
     packageName = pname;
     versionPolicy = "odd-unstable";
   };

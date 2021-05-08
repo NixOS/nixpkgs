@@ -13,10 +13,10 @@
 , libxml2
 , perl
 , gettext
-, gnome3
+, gnome
 , gobject-introspection
 , dbus
-, xvfb_run
+, xvfb-run
 , shared-mime-info
 }:
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
     dbus
   ];
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtksourceview";
       attrPath = "gtksourceview5";
       versionPolicy = "odd-unstable";

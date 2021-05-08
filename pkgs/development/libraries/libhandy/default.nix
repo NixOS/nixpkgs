@@ -13,14 +13,14 @@
 , enableGlade ? false
 , glade
 , dbus
-, xvfb_run
+, xvfb-run
 , libxml2
 , gdk-pixbuf
 , librsvg
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
-, gnome3
+, gnome
 , libhandy
 , runCommand
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
     at-spi2-atk
     at-spi2-core
     librsvg
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   } // lib.optionalAttrs (!enableGlade) {

@@ -5,9 +5,9 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, gnome3
+, gnome
 , dbus
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isLinux;
   checkPhase = ''
     export NO_AT_BRIDGE=1
-    ${xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+    ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 
-  passthru.updateScript = gnome3.updateScript {
+  passthru.updateScript = gnome.updateScript {
     packageName = pname;
     versionPolicy = "none";
   };

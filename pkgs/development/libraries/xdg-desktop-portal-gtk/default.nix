@@ -5,7 +5,7 @@
 , libxml2
 , xdg-desktop-portal
 , gtk3
-, gnome3
+, gnome
 , glib
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas # settings exposed by settings portal
     gtk3
-    gnome3.gnome-desktop
-    gnome3.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
+    gnome.gnome-desktop
+    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
   ];
 
   meta = with lib; {

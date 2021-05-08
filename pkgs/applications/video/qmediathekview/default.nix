@@ -1,13 +1,22 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkg-config }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, boost
+, qtbase
+, xz
+, qmake
+, pkg-config
+}:
 
 mkDerivation rec {
   pname = "QMediathekView";
-  version = "2019-01-06";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "adamreichold";
     repo = pname;
-    rev = "e098aaec552ec4e367078bf19953a08067316b4b";
+    rev = "v${version}";
     sha256 = "0i9hac9alaajbra3lx23m0iiq6ww4is00lpbzg5x70agjrwj0nd6";
   };
 
@@ -16,7 +25,7 @@ mkDerivation rec {
       --replace /usr ""
   '';
 
-  buildInputs = [ qtbase qttools xz boost ];
+  buildInputs = [ qtbase xz boost ];
 
   nativeBuildInputs = [ qmake pkg-config ];
 
@@ -28,5 +37,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
+    broken = stdenv.isAarch64;
   };
 }

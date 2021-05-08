@@ -7,7 +7,7 @@
 , ninja
 , python3
   # just for passthru
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

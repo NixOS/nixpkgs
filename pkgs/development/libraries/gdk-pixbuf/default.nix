@@ -15,7 +15,7 @@
 , libtiff
 , libjpeg
 , libpng
-, gnome3
+, gnome
 , gobject-introspection
 , doCheck ? false
 , makeWrapper
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

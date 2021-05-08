@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}3";
       versionPolicy = "odd-unstable";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin vcunat ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

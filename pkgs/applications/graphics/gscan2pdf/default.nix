@@ -4,7 +4,7 @@
   # runtime dependencies
   imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
   # test dependencies
-  xvfb_run, liberation_ttf, file, tesseract }:
+  xvfb-run, liberation_ttf, file, tesseract }:
 
 with lib;
 
@@ -94,7 +94,7 @@ perlPackages.buildPerlPackage rec {
     unpaper
     pdftk
 
-    xvfb_run
+    xvfb-run
     file
     tesseract # tests are expecting tesseract 3.x precisely
   ] ++ (with perlPackages; [

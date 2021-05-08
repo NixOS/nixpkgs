@@ -143,7 +143,7 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
+        % nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus
 
     to run update script for specific package, or
 
@@ -151,7 +151,7 @@ let
 
     to run update script for all packages matching given predicate, or
 
-        % nix-shell maintainers/scripts/update.nix --argstr path gnome3
+        % nix-shell maintainers/scripts/update.nix --argstr path gnome
 
     to run update script for all package under an attribute path.
 

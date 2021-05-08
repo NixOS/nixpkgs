@@ -10,9 +10,9 @@
 , cairomm_1_16
 , pangomm_2_48
 , epoxy
-, gnome3
+, gnome
 , makeFontsConf
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   # Tests require fontconfig.
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}4";
       versionPolicy = "odd-unstable";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin vcunat ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.unix;
   };
 }

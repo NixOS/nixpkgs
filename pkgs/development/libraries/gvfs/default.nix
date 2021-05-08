@@ -23,7 +23,7 @@
 , samba
 , libmtp
 , gnomeSupport ? false
-, gnome3
+, gnome
 , gcr
 , glib-networking
 , gnome-online-accounts
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     # TODO: a ligther version of libsoup to have FTP/HTTP support?
   ] ++ lib.optionals gnomeSupport [
-    gnome3.libsoup
+    gnome.libsoup
     gcr
     glib-networking # TLS support
     gnome-online-accounts
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
+    maintainers = [ ] ++ teams.gnome.members;
   };
 }

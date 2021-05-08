@@ -15,7 +15,7 @@
 , vala
 , gettext
 , perl
-, gnome3
+, gnome
 , gdk-pixbuf
 , zlib
 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

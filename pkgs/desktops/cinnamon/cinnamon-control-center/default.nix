@@ -18,7 +18,7 @@
 , libxklavier
 , networkmanager
 , libwacom
-, gnome3
+, gnome
 , wrapGAppsHook
 , tzdata
 , glibc

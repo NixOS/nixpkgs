@@ -30,7 +30,7 @@
 , libXt
 , libxcb
 , libcanberra
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 

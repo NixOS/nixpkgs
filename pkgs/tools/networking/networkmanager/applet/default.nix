@@ -5,7 +5,7 @@
 , gettext
 , pkg-config
 , networkmanager
-, gnome3
+, gnome
 , libnotify
 , libsecret
 , polkit
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     libappindicator-gtk3
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanagerapplet";
       versionPolicy = "odd-unstable";

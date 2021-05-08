@@ -20,7 +20,7 @@
 , libsoup
 , docbook-xsl-nons
 , docbook_xml_dtd_412
-, gnome3
+, gnome
 , gcr
 , libkrb5
 , gvfs
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
