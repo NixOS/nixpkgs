@@ -2386,6 +2386,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
   };
 
+  lsp-trouble-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-trouble-nvim";
+    version = "2021-05-07";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "lsp-trouble.nvim";
+      rev = "2b27b96c7893ac534ba0cbfc95d52c6c609a0b20";
+      sha256 = "0r70wxpj594j4mglqlrxs8dv9a2mv32dhq3pgp9g69r52pv1c39i";
+    };
+    meta.homepage = "https://github.com/folke/lsp-trouble.nvim/";
+  };
+
   lsp_extensions-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_extensions-nvim";
     version = "2021-02-17";
