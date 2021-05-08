@@ -1899,4 +1899,8 @@ self: super: {
   # https://github.com/travitch/haggle/issues/4
   haggle = doJailbreak super.haggle;
 
+  # Too strict bounds on dimensional
+  # https://github.com/enomsg/science-constants-dimensional/pull/1
+  science-constants-dimensional = doJailbreak super.science-constants-dimensional;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
