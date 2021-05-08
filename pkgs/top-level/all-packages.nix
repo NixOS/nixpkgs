@@ -7849,6 +7849,8 @@ in
 
   qnial = callPackage ../development/interpreters/qnial { };
 
+  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
+
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
@@ -9753,7 +9755,7 @@ in
 
   xxv = callPackage ../tools/misc/xxv {};
 
-  xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
+  xvfb-run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   xvkbd = callPackage ../tools/X11/xvkbd {};
 
@@ -11663,7 +11665,9 @@ in
 
   urn = callPackage ../development/compilers/urn { };
 
-  urweb = callPackage ../development/compilers/urweb { };
+  urweb = callPackage ../development/compilers/urweb {
+    icu = icu67;
+  };
 
   vlang = callPackage ../development/compilers/vlang { };
 
@@ -27562,7 +27566,7 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  ethabi = callPackage ../applications/blockchains/ethabi.nix { };
+  ethabi = callPackage ../applications/blockchains/ethabi { };
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 

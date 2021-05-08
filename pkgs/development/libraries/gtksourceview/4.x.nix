@@ -18,7 +18,7 @@
 , gnome
 , gobject-introspection
 , dbus
-, xvfb_run
+, xvfb-run
 , shared-mime-info
 }:
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
     dbus
   ];
 

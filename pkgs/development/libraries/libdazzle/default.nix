@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ninja, meson, pkg-config, vala, gobject-introspection, libxml2
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, dbus, xvfb_run, glib, gtk3, gnome }:
+, gtk-doc, docbook_xsl, docbook_xml_dtd_43, dbus, xvfb-run, glib, gtk3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libdazzle";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "19abrrjsyjhhl1xflnb0likb9wwzz78fa1mk2b064rpscmz9mafv";
   };
 
-  nativeBuildInputs = [ ninja meson pkg-config vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb_run glib ];
+  nativeBuildInputs = [ ninja meson pkg-config vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb-run glib ];
   buildInputs = [ glib gtk3 ];
 
   mesonFlags = [

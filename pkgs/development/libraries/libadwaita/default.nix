@@ -10,7 +10,7 @@
 , vala
 , gobject-introspection
 , gtk4
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   doCheck = true;

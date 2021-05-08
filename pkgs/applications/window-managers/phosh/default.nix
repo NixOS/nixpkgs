@@ -18,7 +18,7 @@
 , upower
 , wayland
 , dbus
-, xvfb_run
+, xvfb-run
 , phoc
 , feedbackd
 , networkmanager
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   # Temporarily disabled - Test is broken (SIGABRT)

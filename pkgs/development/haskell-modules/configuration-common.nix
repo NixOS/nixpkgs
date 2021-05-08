@@ -1899,4 +1899,6 @@ self: super: {
   # https://github.com/travitch/haggle/issues/4
   haggle = doJailbreak super.haggle;
 
+  phonetic-languages-phonetics-basics = appendPatch super.phonetic-languages-phonetics-basics ./patches/phonetic-languages-phonetics-basics-haddock.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

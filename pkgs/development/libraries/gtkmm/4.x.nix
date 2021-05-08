@@ -12,7 +12,7 @@
 , epoxy
 , gnome
 , makeFontsConf
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   # Tests require fontconfig.

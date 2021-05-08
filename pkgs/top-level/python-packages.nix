@@ -1239,6 +1239,8 @@ in {
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
+  castepxbin = callPackage ../development/python-modules/castepxbin { };
+
   casttube = callPackage ../development/python-modules/casttube { };
 
   catalogue = callPackage ../development/python-modules/catalogue { };
@@ -1734,8 +1736,6 @@ in {
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
-
-  debut = callPackage ../development/python-modules/debut { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -4829,6 +4829,8 @@ in {
 
   pathvalidate = callPackage ../development/python-modules/pathvalidate { };
 
+  pathy = callPackage ../development/python-modules/pathy/default.nix { };
+
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
   patool = callPackage ../development/python-modules/patool { };
@@ -5872,7 +5874,9 @@ in {
 
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
-  pyopencl = callPackage ../development/python-modules/pyopencl { };
+  pyopencl = callPackage ../development/python-modules/pyopencl {
+    mesa_drivers = pkgs.mesa.drivers;
+  };
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
@@ -7618,6 +7622,8 @@ in {
   soupsieve = callPackage ../development/python-modules/soupsieve { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
+  spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 

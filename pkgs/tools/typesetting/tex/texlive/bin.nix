@@ -185,6 +185,12 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
+
+        if [[ "$path" =~ "libs/pplib" ]]; then
+          # TODO: revert for texlive 2022
+          # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
+          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+        fi
       )
     done
   '';

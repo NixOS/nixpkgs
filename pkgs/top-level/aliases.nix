@@ -872,6 +872,7 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   xv = xxv; # added 2020-02-22
+  xvfb_run = xvfb-run; # added 2021-05-07
   yacc = bison; # moved from top-level 2021-03-14
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
