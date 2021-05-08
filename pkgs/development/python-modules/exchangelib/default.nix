@@ -4,7 +4,7 @@
   defusedxml, cached-property, isodate, requests_ntlm, dnspython,
   psutil, requests-mock, pyyaml,
   oauthlib, requests_oauthlib, tzdata,
-  flake8,
+  flake8, backports-zoneinfo
 }:
 
 buildPythonPackage rec {
@@ -27,6 +27,8 @@ buildPythonPackage rec {
     lxml tzlocal tzdata python-dateutil pygments requests-kerberos
     defusedxml cached-property isodate requests_ntlm dnspython
     oauthlib requests_oauthlib
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ];
 
   meta = with lib; {
