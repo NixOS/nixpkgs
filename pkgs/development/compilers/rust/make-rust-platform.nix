@@ -13,7 +13,7 @@ rec {
 
   buildRustPackage = callPackage ../../../build-support/rust {
     inherit cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
-      fetchCargoTarball rustc;
+      fetchCargoTarball importCargoLock rustc;
   };
 
   importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {};

@@ -107,6 +107,54 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+### Importing a `Cargo.lock` file
+
+Using `cargoSha256` or `cargoHash` is tedious when using
+`buildRustPackage` within a project, since it requires that the hash
+is updated after every change to `Cargo.lock`. Therefore,
+`buildRustPackage` also supports vendoring dependencies directly from
+a `Cargo.lock` file using the `cargoLock` argument. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  }
+
+  # ...
+}
+```
+
+This will retrieve the dependencies using fixed-output derivations from
+the specified lockfile.
+
+The output hash of each dependency that uses a git source must be
+specified in the `outputHashes` attribute. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "finalfusion-0.14.0" = "17f4bsdzpcshwh74w5z119xjy2if6l2wgyjy56v621skr2r8y904";
+    };
+  }
+
+  # ...
+}
+```
+
+If you do not specify an output hash for a git dependency, building
+the package will fail and inform you of which crate needs to be
+added. To find the correct hash, you can first use `lib.fakeSha256` or
+`lib.fakeHash` as a stub hash. Building the package (and thus the
+vendored dependencies) will then inform you of the correct hash.
 
 ### Cross compilation
 
