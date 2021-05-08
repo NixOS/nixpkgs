@@ -3,7 +3,7 @@
   lxml, tzlocal, python-dateutil, pygments, requests-kerberos,
   defusedxml, cached-property, isodate, requests_ntlm, dnspython,
   psutil, requests-mock, pyyaml,
-  oauthlib, requests_oauthlib,
+  oauthlib, requests_oauthlib, tzdata,
   flake8,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     flake8
   ];
   propagatedBuildInputs = [
-    lxml tzlocal python-dateutil pygments requests-kerberos
+    lxml tzlocal tzdata python-dateutil pygments requests-kerberos
     defusedxml cached-property isodate requests_ntlm dnspython
     oauthlib requests_oauthlib
   ];

@@ -927,6 +927,8 @@ in {
 
   backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
+  backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
+
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
   banal = callPackage ../development/python-modules/banal { };
