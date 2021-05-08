@@ -20,11 +20,6 @@ stdenv.mkDerivation rec {
       --replace "rm" "${coreutils}/bin/rm"   \
       --replace "2>/dev/null" "2>stderr.log"
 
-    substituteInPlace POSIX/posix-cflags.sh  \
-      --replace "rm" "${coreutils}/bin/rm"   \
-      --replace ">/dev/stderr" ">stderr.log" \
-      --replace "2>/dev/null" "2>stderr.log"
-  '';
 
   installPhase = ''
     runHook preInstall
