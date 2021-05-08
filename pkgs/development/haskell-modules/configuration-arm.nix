@@ -61,6 +61,7 @@ self: super: {
   hsakamai = dontCheck super.hsakamai;
   hsemail-ns = dontCheck super.hsemail-ns;
   openapi3 = dontCheck super.openapi3;
+  strict-writer = dontCheck super.strict-writer;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
