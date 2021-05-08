@@ -26409,6 +26409,8 @@ in
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
+  timew-sync-server = callPackage ../applications/misc/timew-sync-server { };
+
   timg = callPackage ../tools/graphics/timg { };
 
   timidity = callPackage ../tools/misc/timidity { };
