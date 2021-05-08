@@ -3895,6 +3895,8 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
+
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode = callPackage ../development/python-modules/linode { };
@@ -4114,6 +4116,8 @@ in {
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   MDP = callPackage ../development/python-modules/mdp { };
 
@@ -6398,6 +6402,8 @@ in {
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
 
+  pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
+
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
   pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
@@ -8314,6 +8320,8 @@ in {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
