@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "f023d6ac581086b124190cb3dc81dd581a149d216fa4540ac34f9be1e3970b89";
   };
 
-  checkInputs = [ nose mock twisted tornado gevent ];
+  checkInputs = [ gevent mock nose tornado twisted ];
 
   meta = with lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
