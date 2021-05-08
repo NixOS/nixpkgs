@@ -11,9 +11,9 @@ llvmPackages.stdenv.mkDerivation rec {
     sha256 = "1z6c4ym9jmga46cw2arn7zv2drcpmrf3vw139gscxp27n7q2z5md";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
   buildInputs = [
-    llvmPackages.clang-unwrapped
+    llvmPackages.libclang
     llvmPackages.llvm
     llvmPackages.lld
     libxml2
