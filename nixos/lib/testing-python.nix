@@ -32,6 +32,14 @@ rec {
 
       preferLocalBuild = true;
 
+      buildPhase = ''
+        python <<EOF
+        from pydoc import importfile
+        with open('driver-exports', 'w') as fp:
+          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+        EOF
+      '';
+
       doCheck = true;
       checkPhase = ''
         mypy --disallow-untyped-defs \
@@ -50,6 +58,8 @@ rec {
 
           wrapProgram $out/bin/nixos-test-driver \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+
+          install -m 0644 -vD driver-exports $out/nix-support/driver-exports
         '';
     };
 
@@ -161,7 +171,10 @@ rec {
 
             echo -n "$testScript" > $out/test-script
             ${lib.optionalString (!skipLint) ''
-              ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
+              PYFLAKES_BUILTINS="$(
+                echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+                < ${lib.escapeShellArg "${testDriver}/nix-support/driver-exports"}
+              )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
             ''}
 
             ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
@@ -194,6 +207,8 @@ rec {
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
         nodeNames;
+
+      nodeHostNames = map (c: c.config.system.name) (lib.attrValues driver.nodes);
 
     in
     if lib.length invalidNodeNames > 0 then
