@@ -75,10 +75,6 @@ self: super: {
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
-
-    # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
-    # see: https://github.com/psibi/shell-conduit/issues/12
-    doCheck = !pkgs.stdenv.isDarwin;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -117,15 +113,6 @@ self: super: {
   # Jailbreak is necessary for QuickCheck dependency.
   vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
-  conduit-extra = if pkgs.stdenv.isDarwin
-    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
-    else super.conduit-extra;
-
-  # Fix Darwin build.
-  halive = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
-    else super.halive;
-
   # Test suite fails due golden tests checking text representation
   # of normalized dhall expressions, and newer dhall versions format
   # differently.
@@ -133,19 +120,6 @@ self: super: {
     if pkgs.lib.versionOlder "0.5.2" super.hpack-dhall.version
     then throw "Drop dontCheck override for hpack-dhall > 0.5.2"
     else dontCheck super.hpack-dhall;
-
-  barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
-
-  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
-    then dontCheck (overrideCabal super.hakyll (drv: {
-      testToolDepends = [];
-    }))
-    else super.hakyll;
-
-  double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addExtraLibrary super.double-conversion pkgs.libcxx;
 
   inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -311,18 +285,12 @@ self: super: {
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
-  math-functions = if pkgs.stdenv.isDarwin
-    then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
-    else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
   matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
-  mockery = if pkgs.stdenv.isDarwin
-    then overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; }) # darwin doesn't have sub-second resolution https://github.com/hspec/mockery/issues/11
-    else super.mockery;
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
@@ -463,9 +431,8 @@ self: super: {
   # https://github.com/andrewthad/haskell-ip/issues/67
   ip = dontCheck super.ip;
 
-  # https://github.com/ndmitchell/shake/issues/206
-  # https://github.com/ndmitchell/shake/issues/267
-  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
+  # https://github.com/ndmitchell/shake/issues/804
+  shake = dontCheck super.shake;
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
@@ -840,7 +807,6 @@ self: super: {
   # With ghc-8.2.x haddock would time out for unknown reason
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
-  filecache = overrideCabal super.filecache (drv: { doCheck = !pkgs.stdenv.isDarwin; });
 
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
@@ -1154,11 +1120,6 @@ self: super: {
       substituteInPlace hledger-flow.cabal --replace "-static" ""
     '';
   });
-
-  # gtk/gtk3 needs to be told on Darwin to use the Quartz
-  # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
-  gtk3 = appendConfigureFlags super.gtk3 (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
-  gtk = appendConfigureFlags super.gtk (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
@@ -1571,10 +1532,6 @@ self: super: {
 
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
-
-  # Add ApplicationServices on darwin
-  apecs-physics = addPkgconfigDepends super.apecs-physics
-    (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
   # Break out of overspecified constraint on QuickCheck.
   algebraic-graphs = dontCheck super.algebraic-graphs;

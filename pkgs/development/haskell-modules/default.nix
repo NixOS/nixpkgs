@@ -8,6 +8,7 @@
 , configurationCommon ? import ./configuration-common.nix
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
+, configurationDarwin ? import ./configuration-darwin.nix
 }:
 
 let
@@ -23,6 +24,8 @@ let
   isArm = with stdenv.hostPlatform; isAarch64 || isAarch32;
   platformConfigurations = lib.optionals isArm [
     (configurationArm { inherit pkgs haskellLib; })
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (configurationDarwin { inherit pkgs haskellLib; })
   ];
 
   extensions = lib.composeManyExtensions ([
