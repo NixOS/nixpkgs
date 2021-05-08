@@ -10,6 +10,7 @@
 , runCommandNoCC
 , llvmPackages_5
 , glibc
+, ncurses
 }:
 
 let
@@ -38,8 +39,8 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python3 git cmake ];
-    buildInputs = [ libffi llvmPackages_5.llvm zlib ];
+    nativeBuildInputs = [ python3 git cmake llvmPackages_5.llvm.dev ];
+    buildInputs = [ libffi llvmPackages_5.llvm zlib ncurses ];
 
     strictDeps = true;
 
