@@ -411,6 +411,8 @@ in
 
   pkger = callPackage ../development/libraries/pkger { };
 
+  tapview = callPackage ../development/tools/tapview { };
+
   run = callPackage ../development/tools/run { };
 
   mod = callPackage ../development/tools/mod { };
