@@ -11656,7 +11656,9 @@ in
 
   urn = callPackage ../development/compilers/urn { };
 
-  urweb = callPackage ../development/compilers/urweb { };
+  urweb = callPackage ../development/compilers/urweb {
+    icu = icu67;
+  };
 
   vlang = callPackage ../development/compilers/vlang { };
 
