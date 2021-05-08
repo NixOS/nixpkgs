@@ -29,7 +29,7 @@ let
   in [ promise semaphore ]);
 
 in pkgs.mkShell {
-  buildInputs = [
+  packages = [
     pkgs.git
     pkgs.nix
     pkgs.bash

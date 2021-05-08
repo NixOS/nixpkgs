@@ -245,7 +245,7 @@ let
     ps.toolz
   ]);
 in mkShell {
-  buildInputs = [
+  packages = [
     pythonEnv
 
     black

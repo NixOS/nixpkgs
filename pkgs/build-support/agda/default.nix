@@ -1,6 +1,6 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, mkShell, ghcWithPackages, nixosTests }:
+{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
