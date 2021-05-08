@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, six
-, pyjwt
-, requests
-, oauthlib
-, requests_oauthlib
+{ buildPythonPackage
 , fetchPypi
+, flask
+, lib
+, oauthlib
+, pyjwt
+, pytest
+, requests
+, requests_oauthlib
+, six
 }:
 
 buildPythonPackage rec {
@@ -17,8 +19,11 @@ buildPythonPackage rec {
     sha256 = "9e0d70a1fa6f452584de1cb853ae6c11f41233549f7839cfb879f99410f6ad46";
   };
 
-  # package has no tests
-  doCheck = false;
+  checkInputs = [ flask pytest ];
+
+  patchPhase = ''
+    sed -i 's/PyJWT>=1.0.1,<2.0.0/PyJWT>=1.0.1,<3.0.0/g' setup.py
+  '';
 
   propagatedBuildInputs = [ six pyjwt requests oauthlib requests_oauthlib ];
 
