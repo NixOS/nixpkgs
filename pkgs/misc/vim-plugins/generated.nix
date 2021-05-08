@@ -5702,6 +5702,18 @@ let
     meta.homepage = "https://github.com/ryanoasis/vim-devicons/";
   };
 
+  vim-deus = buildVimPluginFrom2Nix {
+    pname = "vim-deus";
+    version = "2021-03-28";
+    src = fetchFromGitHub {
+      owner = "ajmwagar";
+      repo = "vim-deus";
+      rev = "1be965e7bc1c01e7db5e46dcd0e50d32d4eef434";
+      sha256 = "1h0imrxhxw81hkh9xl75rcnx7ll5fry6hcf7flx84n6nawvfzyvm";
+    };
+    meta.homepage = "https://github.com/ajmwagar/vim-deus";
+  };
+
   vim-diminactive = buildVimPluginFrom2Nix {
     pname = "vim-diminactive";
     version = "2017-08-27";
