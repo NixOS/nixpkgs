@@ -47,13 +47,12 @@ let
     name = "hylafax-setup-spool.sh";
     src = ./spool.sh;
     isExecutable = true;
-    inherit (pkgs.stdenv) shell;
-    hylafax = pkgs.hylafaxplus;
     faxuser = "uucp";
     faxgroup = "uucp";
     lockPath = "/var/lock";
     inherit globalConfigPath modemConfigPath;
     inherit (cfg) sendmailPath spoolAreaPath userAccessFile;
+    inherit (pkgs) hylafaxplus runtimeShell;
   };
 
   waitFaxqScript = pkgs.substituteAll {
@@ -63,8 +62,8 @@ let
     src = ./faxq-wait.sh;
     isExecutable = true;
     timeoutSec = toString 10;
-    inherit (pkgs.stdenv) shell;
     inherit (cfg) spoolAreaPath;
+    inherit (pkgs) runtimeShell;
   };
 
   sockets.hylafax-hfaxd = {
