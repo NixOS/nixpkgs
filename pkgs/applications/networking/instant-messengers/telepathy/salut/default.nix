@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Link-local XMPP connection manager for Telepathy";
     platforms = platforms.gnu ++ platforms.linux; # Random choice
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     broken = true;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

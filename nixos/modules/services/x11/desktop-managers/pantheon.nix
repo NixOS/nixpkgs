@@ -43,7 +43,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome3.gpaste ]";
+        example = literalExample "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -142,12 +142,12 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
-      services.gnome3.at-spi2-core.enable = true;
-      services.gnome3.evolution-data-server.enable = true;
-      services.gnome3.glib-networking.enable = true;
-      services.gnome3.gnome-keyring.enable = true;
+      services.gnome.at-spi2-core.enable = true;
+      services.gnome.evolution-data-server.enable = true;
+      services.gnome.glib-networking.enable = true;
+      services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
-      services.gnome3.rygel.enable = mkDefault true;
+      services.gnome.rygel.enable = mkDefault true;
       services.gsignond.enable = mkDefault true;
       services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
       services.udisks2.enable = true;
@@ -177,7 +177,7 @@ in
         desktop-file-utils
         glib
         gnome-menus
-        gnome3.adwaita-icon-theme
+        gnome.adwaita-icon-theme
         gtk3.out
         hicolor-icon-theme
         lightlocker
@@ -213,10 +213,10 @@ in
         elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (gnome3.removePackagesByName [
-        gnome3.geary
-        gnome3.epiphany
-        gnome3.gnome-font-viewer
+      ]) ++ (gnome.removePackagesByName [
+        gnome.geary
+        gnome.epiphany
+        gnome.gnome-font-viewer
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
@@ -265,7 +265,7 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome3.removePackagesByName [
+      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome.removePackagesByName [
         elementary-calculator
         elementary-calendar
         elementary-camera

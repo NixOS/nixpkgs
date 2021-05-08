@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, gnome3
+, gnome
 , gtk3
 , atk
 , gobject-introspection
@@ -124,7 +124,7 @@ in stdenv.mkDerivation rec {
       installed-tests = nixosTests.installed-tests.gjs;
     };
 
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gjs";
     };
   };

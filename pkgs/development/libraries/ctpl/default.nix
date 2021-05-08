@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = "http://ctpl.tuxfamily.org/";
     description = "Template engine library written in C";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
   };
 }

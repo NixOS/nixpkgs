@@ -9,7 +9,7 @@
 , glib
 , bash-completion
 , dbus
-, gnome3
+, gnome
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

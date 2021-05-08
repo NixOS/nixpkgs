@@ -323,10 +323,10 @@ in rec {
         services.xserver.desktopManager.xfce.enable = true;
       });
 
-    gnome3 = makeClosure ({ ... }:
+    gnome = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome3.enable = true;
+        services.xserver.desktopManager.gnome.enable = true;
       });
 
     pantheon = makeClosure ({ ... }:

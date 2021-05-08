@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, vala, pkg-config, glib, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, autoconf, vala, pkg-config, glib, gobject-introspection, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libgee";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

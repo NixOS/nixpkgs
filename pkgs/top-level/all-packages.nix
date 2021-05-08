@@ -794,7 +794,7 @@ in
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
-    inherit (gnome3) zenity;
+    inherit (gnome) zenity;
     inherit (plasma5Packages) kdialog;
   };
 
@@ -3534,7 +3534,7 @@ in
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
-    inherit (gnome3) gnome-common;
+    inherit (gnome) gnome-common;
   };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
@@ -6369,7 +6369,7 @@ in
   libite = callPackage ../development/libraries/libite { };
 
   liblangtag = callPackage ../development/libraries/liblangtag {
-    inherit (gnome3) gnome-common;
+    inherit (gnome) gnome-common;
   };
 
   liblouis = callPackage ../development/libraries/liblouis { };
@@ -15693,7 +15693,7 @@ in
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
-  libgnome-keyring3 = gnome3.libgnome-keyring;
+  libgnome-keyring3 = gnome.libgnome-keyring;
 
   libgnomekbd = callPackage ../development/libraries/libgnomekbd { };
 
@@ -16195,7 +16195,7 @@ in
   libopusenc = callPackage ../development/libraries/libopusenc { };
 
   libosinfo = callPackage ../development/libraries/libosinfo {
-    inherit (gnome3) libsoup;
+    inherit (gnome) libsoup;
   };
 
   libosip = callPackage ../development/libraries/osip {};
@@ -21499,7 +21499,7 @@ in
   kopia = callPackage ../tools/backup/kopia { };
 
   kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
-    inherit (gnome3) adwaita-icon-theme;
+    inherit (gnome) adwaita-icon-theme;
     inherit (libsForQt5.kdeFrameworks) breeze-icons;
   };
 
@@ -22262,7 +22262,7 @@ in
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
-  inherit (gnome3) baobab;
+  inherit (gnome) baobab;
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
@@ -22323,7 +22323,7 @@ in
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
   bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
-    inherit (gnome3) zenity;
+    inherit (gnome) zenity;
     libxkbcommon = libxkbcommon_7;
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
@@ -22867,7 +22867,7 @@ in
     pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
   };
 
-  inherit (gnome3) empathy;
+  inherit (gnome) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
@@ -22881,7 +22881,7 @@ in
 
   epgstation = callPackage ../applications/video/epgstation { };
 
-  inherit (gnome3) epiphany;
+  inherit (gnome) epiphany;
 
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
@@ -22936,8 +22936,8 @@ in
 
   keeweb = callPackage ../applications/misc/keeweb { };
 
-  inherit (gnome3) evince;
-  evolution-data-server = gnome3.evolution-data-server;
+  inherit (gnome) evince;
+  evolution-data-server = gnome.evolution-data-server;
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
@@ -23215,7 +23215,7 @@ in
 
   gtimelog = with python3Packages; toPythonApplication gtimelog;
 
-  inherit (gnome3) gucharmap;
+  inherit (gnome) gucharmap;
 
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
@@ -23491,7 +23491,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  inherit (gnome3) gitg;
+  inherit (gnome) gitg;
 
   gmrun = callPackage ../applications/misc/gmrun {};
 
@@ -23624,7 +23624,7 @@ in
   celluloid = callPackage ../applications/video/celluloid { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
-    inherit (gnome3) gnome-autoar;
+    inherit (gnome) gnome-autoar;
   };
 
   gollum = callPackage ../applications/misc/gollum { };
@@ -24529,7 +24529,7 @@ in
   luppp = callPackage ../applications/audio/luppp { };
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
-    inherit (gnome3) gnome-desktop;
+    inherit (gnome) gnome-desktop;
     wine = wineWowPackages.staging;
   };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
@@ -24678,6 +24678,8 @@ in
   midori = wrapFirefox midori-unwrapped { };
 
   mikmod = callPackage ../applications/audio/mikmod { };
+
+  miniaudicle = callPackage ../applications/audio/miniaudicle { };
 
   minicom = callPackage ../tools/misc/minicom { };
 
@@ -25957,7 +25959,7 @@ in
 
   shutter = callPackage ../applications/graphics/shutter { };
 
-  simple-scan = gnome3.simple-scan;
+  simple-scan = gnome.simple-scan;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -26230,7 +26232,7 @@ in
   surf-display = callPackage ../desktops/surf-display { };
 
   surge = callPackage ../applications/audio/surge {
-    inherit (gnome3) zenity;
+    inherit (gnome) zenity;
     git = gitMinimal;
   };
 
@@ -26537,6 +26539,8 @@ in
   testssl = callPackage ../applications/networking/testssl { };
 
   lavalauncher = callPackage ../applications/misc/lavalauncher { };
+
+  t-rec = callPackage ../misc/t-rec { };
 
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
@@ -27361,7 +27365,7 @@ in
 
   yeetgif = callPackage ../applications/graphics/yeetgif { };
 
-  inherit (gnome3) yelp;
+  inherit (gnome) yelp;
 
   yelp-tools = callPackage ../development/misc/yelp-tools { };
 
@@ -28375,7 +28379,7 @@ in
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit steam-run;
     inherit winetricks;
-    inherit (gnome3) zenity;
+    inherit (gnome) zenity;
   };
 
   sdlpop = callPackage ../games/sdlpop { };
@@ -28647,46 +28651,46 @@ in
 
   gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
 
-  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
+  gnome = recurseIntoAttrs (callPackage ../desktops/gnome { });
 
   gnomeExtensions = recurseIntoAttrs {
-    appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
-    arcmenu = callPackage ../desktops/gnome-3/extensions/arcmenu { };
-    caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
-    clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
-    clock-override = callPackage ../desktops/gnome-3/extensions/clock-override { };
-    dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
-    dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
-    disable-unredirect = callPackage ../desktops/gnome-3/extensions/disable-unredirect { };
-    draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
-    drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
-    dynamic-panel-transparency = callPackage ../desktops/gnome-3/extensions/dynamic-panel-transparency { };
-    easyScreenCast = callPackage ../desktops/gnome-3/extensions/EasyScreenCast { };
-    emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
-    freon = callPackage ../desktops/gnome-3/extensions/freon { };
-    fuzzy-app-search = callPackage ../desktops/gnome-3/extensions/fuzzy-app-search { };
-    gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
-    hot-edge = callPackage ../desktops/gnome-3/extensions/hot-edge { };
-    icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
-    impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
-    material-shell = callPackage ../desktops/gnome-3/extensions/material-shell { };
-    mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
-    night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
-    no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
-    noannoyance = callPackage ../desktops/gnome-3/extensions/noannoyance { };
-    paperwm = callPackage ../desktops/gnome-3/extensions/paperwm { };
-    pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
-    remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
-    sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
-    system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
-    taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
-    tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
-    timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
-    topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
-    unite = callPackage ../desktops/gnome-3/extensions/unite { };
-    window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
-    window-is-ready-remover = callPackage ../desktops/gnome-3/extensions/window-is-ready-remover { };
-    workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
+    appindicator = callPackage ../desktops/gnome/extensions/appindicator { };
+    arcmenu = callPackage ../desktops/gnome/extensions/arcmenu { };
+    caffeine = callPackage ../desktops/gnome/extensions/caffeine { };
+    clipboard-indicator = callPackage ../desktops/gnome/extensions/clipboard-indicator { };
+    clock-override = callPackage ../desktops/gnome/extensions/clock-override { };
+    dash-to-dock = callPackage ../desktops/gnome/extensions/dash-to-dock { };
+    dash-to-panel = callPackage ../desktops/gnome/extensions/dash-to-panel { };
+    disable-unredirect = callPackage ../desktops/gnome/extensions/disable-unredirect { };
+    draw-on-your-screen = callPackage ../desktops/gnome/extensions/draw-on-your-screen { };
+    drop-down-terminal = callPackage ../desktops/gnome/extensions/drop-down-terminal { };
+    dynamic-panel-transparency = callPackage ../desktops/gnome/extensions/dynamic-panel-transparency { };
+    easyScreenCast = callPackage ../desktops/gnome/extensions/EasyScreenCast { };
+    emoji-selector = callPackage ../desktops/gnome/extensions/emoji-selector { };
+    freon = callPackage ../desktops/gnome/extensions/freon { };
+    fuzzy-app-search = callPackage ../desktops/gnome/extensions/fuzzy-app-search { };
+    gsconnect = callPackage ../desktops/gnome/extensions/gsconnect { };
+    hot-edge = callPackage ../desktops/gnome/extensions/hot-edge { };
+    icon-hider = callPackage ../desktops/gnome/extensions/icon-hider { };
+    impatience = callPackage ../desktops/gnome/extensions/impatience { };
+    material-shell = callPackage ../desktops/gnome/extensions/material-shell { };
+    mpris-indicator-button = callPackage ../desktops/gnome/extensions/mpris-indicator-button { };
+    night-theme-switcher = callPackage ../desktops/gnome/extensions/night-theme-switcher { };
+    no-title-bar = callPackage ../desktops/gnome/extensions/no-title-bar { };
+    noannoyance = callPackage ../desktops/gnome/extensions/noannoyance { };
+    paperwm = callPackage ../desktops/gnome/extensions/paperwm { };
+    pidgin-im-integration = callPackage ../desktops/gnome/extensions/pidgin-im-integration { };
+    remove-dropdown-arrows = callPackage ../desktops/gnome/extensions/remove-dropdown-arrows { };
+    sound-output-device-chooser = callPackage ../desktops/gnome/extensions/sound-output-device-chooser { };
+    system-monitor = callPackage ../desktops/gnome/extensions/system-monitor { };
+    taskwhisperer = callPackage ../desktops/gnome/extensions/taskwhisperer { };
+    tilingnome = callPackage ../desktops/gnome/extensions/tilingnome { };
+    timepp = callPackage ../desktops/gnome/extensions/timepp { };
+    topicons-plus = callPackage ../desktops/gnome/extensions/topicons-plus { };
+    unite = callPackage ../desktops/gnome/extensions/unite { };
+    window-corner-preview = callPackage ../desktops/gnome/extensions/window-corner-preview { };
+    window-is-ready-remover = callPackage ../desktops/gnome/extensions/window-is-ready-remover { };
+    workspace-matrix = callPackage ../desktops/gnome/extensions/workspace-matrix { };
 
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
@@ -28695,9 +28699,9 @@ in
     arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
   };
 
-  gnome-connections = callPackage ../desktops/gnome-3/apps/gnome-connections { };
+  gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
 
-  gnome-tour = callPackage ../desktops/gnome-3/core/gnome-tour { };
+  gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
 
   hhexen = callPackage ../games/hhexen { };
 
@@ -28733,7 +28737,7 @@ in
 
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
-  gnome-themes-extra = gnome3.gnome-themes-extra;
+  gnome-themes-extra = gnome.gnome-themes-extra;
 
   rox-filer = callPackage ../desktops/rox/rox-filer {
     gtk = gtk2;
@@ -30840,7 +30844,7 @@ in
   });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
-    inherit (gnome3) zenity;
+    inherit (gnome) zenity;
   };
 
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
@@ -31105,7 +31109,7 @@ in
 
   chrome-export = callPackage ../tools/misc/chrome-export {};
 
-  chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
+  chrome-gnome-shell = callPackage  ../desktops/gnome/extensions/chrome-gnome-shell {};
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
 

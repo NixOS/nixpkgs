@@ -20,7 +20,7 @@
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
-, gnome3
+, gnome
 , libhandy
 , runCommand
 }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   } // lib.optionalAttrs (!enableGlade) {

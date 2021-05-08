@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
 , docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
-, gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
+, gtk-doc, gnome, gjs, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       # Does not seem to use the odd-unstable policy: https://gitlab.gnome.org/GNOME/libsecret/issues/30
       versionPolicy = "none";

@@ -90,7 +90,7 @@ let
 
     # Wait for PR #59372
     # passthru = {
-    #  updateScript = gnome3.updateScript {
+    #  updateScript = gnome.updateScript {
     #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
     #    packageName = pname;
     #  };
@@ -101,7 +101,7 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
+      maintainers = with maintainers; [ antono jtojnar peterhoeg ];
     };
   });
 

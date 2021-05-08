@@ -12,7 +12,7 @@
 , sqlite
 , webkitgtk
 , pkg-config
-, gnome3
+, gnome
 , gst_all_1
 , libgudev
 , libraw
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     librsvg
     librest
     gcr
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libgdata
     libchamplain
     libsecret
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

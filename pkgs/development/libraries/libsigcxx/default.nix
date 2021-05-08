@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "libsigcxx";
       versionPolicy = "odd-unstable";

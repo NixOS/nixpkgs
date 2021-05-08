@@ -6,7 +6,7 @@
 , meson
 , ninja
 , pkg-config
-, gnome3
+, gnome
 , perl
 , gettext
 , gtk3
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = repoName;
       attrPath = "pantheon.${pname}";
     };

@@ -11,7 +11,7 @@
 , gobject-introspection
 , libpeas
 , librsvg
-, gnome3
+, gnome
 , libnotify
 , gsound
 , meson
@@ -52,9 +52,9 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libpeas
     librsvg
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     gsound
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -89,7 +89,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "pitivi";
       versionPolicy = "none"; # we are using dev version, since the stable one is too old
     };

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , msgpack
-, nose
+, pytestCheckHook
 , numpy
 , pydantic
 , pymongo
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
     numpy
     pydantic
     pymongo
@@ -40,12 +40,6 @@ buildPythonPackage rec {
   preCheck = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests -v
-    runHook postCheck
   '';
 
   meta = with lib; {

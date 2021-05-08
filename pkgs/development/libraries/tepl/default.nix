@@ -3,7 +3,7 @@
 , meson
 , ninja
 , amtk
-, gnome3
+, gnome
 , gobject-introspection
 , gtk3
 , gtksourceview4
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # correctly installed or GVfs metadata are not supported on this platform. In
   # the latter case, you should configure Tepl with --disable-gvfs-metadata.
 
-  passthru.updateScript = gnome3.updateScript {
+  passthru.updateScript = gnome.updateScript {
     packageName = pname;
     versionPolicy = "odd-unstable";
   };

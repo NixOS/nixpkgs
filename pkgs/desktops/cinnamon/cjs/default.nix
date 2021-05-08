@@ -7,7 +7,7 @@
 , wrapGAppsHook
 , python3
 , cairo
-, gnome3
+, gnome
 , xapps
 , keybinder3
 , upower
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     glib
 
     # bindings
-    gnome3.caribou
+    gnome.caribou
     keybinder3
     upower
     xapps

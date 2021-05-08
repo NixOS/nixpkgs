@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -194,14 +194,14 @@ stdenv.mkDerivation rec {
     makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     inherit flattenInclude;
-    updateScript = gnome3.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript { packageName = "glib"; };
   };
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -7,7 +7,7 @@
 , intltool
 , wrapGAppsHook
 , libsoup
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libofx
     intltool
     libsoup
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   meta = with lib; {

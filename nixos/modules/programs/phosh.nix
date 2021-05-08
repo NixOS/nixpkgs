@@ -155,8 +155,8 @@ in {
       '';
     };
 
-    services.gnome3.core-shell.enable = true;
-    services.gnome3.core-os-services.enable = true;
+    services.gnome.core-shell.enable = true;
+    services.gnome.core-os-services.enable = true;
     services.xserver.displayManager.sessionPackages = [ pkgs.phosh ];
 
     environment.etc."phosh/phoc.ini".source =

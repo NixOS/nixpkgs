@@ -1,4 +1,4 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome3 }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}";
       versionPolicy = "odd-unstable";

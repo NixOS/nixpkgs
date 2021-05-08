@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome3}:
+{lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome}:
 let
   pname = "rarian";
   version = "0.8.1";

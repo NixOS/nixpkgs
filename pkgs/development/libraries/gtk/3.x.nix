@@ -29,7 +29,7 @@
 , libxkbcommon
 , libxml2
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.isLinux
@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
     };

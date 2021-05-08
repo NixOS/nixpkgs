@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, gnome3
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, gnome
 , webkitgtk, libsoup, libxml2, libarchive }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
