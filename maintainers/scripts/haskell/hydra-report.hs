@@ -11,7 +11,7 @@ The purpose of this script is
 2) print a summary of the state suitable for pasting into a github comment (with ping-maintainers)
 3) print a list of broken packages suitable for pasting into configuration-hackage2nix.yaml
 
-Because step 1) is very expensive and takes roughly ~30 minutes the result is cached in a json file in XDG_CACHE.
+Because step 1) is quite expensive and takes roughly ~5 minutes the result is cached in a json file in XDG_CACHE.
 
 -}
 {-# LANGUAGE BlockArguments #-}
@@ -25,7 +25,7 @@ Because step 1) is very expensive and takes roughly ~30 minutes the result is ca
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 
-import Control.Monad (forM, forM_, (<=<))
+import Control.Monad (forM, forM_, when, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
 import Data.Aeson (
    FromJSON,
@@ -60,10 +60,12 @@ import Network.HTTP.Req (
    GET (GET),
    NoReqBody (NoReqBody),
    defaultHttpConfig,
+   header,
    https,
    jsonResponse,
    req,
    responseBody,
+   responseTimeout,
    runReq,
    (/:),
  )
@@ -83,8 +85,7 @@ newtype JobsetEvalInputs = JobsetEvalInputs {nixpkgs :: Nixpkgs}
    deriving (Generic, ToJSON, FromJSON, Show)
 
 data Eval = Eval
-   { builds :: Seq Int
-   , id :: Int
+   { id :: Int
    , jobsetevalinputs :: JobsetEvalInputs
    }
    deriving (Generic, ToJSON, FromJSON, Show)
@@ -116,16 +117,18 @@ showT :: Show a => a -> Text
 showT = Text.pack . show
 
 getBuildReports :: IO ()
-getBuildReports = runReq defaultHttpConfig $ do
-   -- GET request http response
-   now <- liftIO getCurrentTime
-   r <- req GET (https "hydra.nixos.org" /: "jobset" /: "nixpkgs" /: "haskell-updates" /: "evals") NoReqBody jsonResponse mempty
-   let eval = Seq.lookup 0 . evals $ (responseBody r :: JobsetEvals)
-   eval & maybe (liftIO $ putStrLn "No Evalution found") \eval -> do
-      (buildReports :: Seq Build) <- forM (builds eval) \buildId ->
-         responseBody <$> req GET (https "hydra.nixos.org" /: "build" /: showT buildId) NoReqBody jsonResponse mempty
-      fileName <- liftIO reportFileName
-      liftIO $ encodeFile fileName (eval, now, buildReports)
+getBuildReports = runReq defaultHttpConfig do
+   evalMay <- Seq.lookup 0 . evals <$> myReq (https "hydra.nixos.org" /: "jobset" /: "nixpkgs" /: "haskell-updates" /: "evals") mempty
+   eval@Eval{id} <- maybe (liftIO $ fail "No Evalution found") pure evalMay
+   liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
+   buildReports :: Seq Build <- myReq (https "hydra.nixos.org" /: "eval" /: showT id /: "builds") (responseTimeout 600000000)
+   liftIO do
+      fileName <- reportFileName
+      putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
+      now <- getCurrentTime
+      encodeFile fileName (eval, now, buildReports)
+  where
+   myReq query option = responseBody <$> req GET query NoReqBody jsonResponse (header "User-Agent" "hydra-report.hs/v1 (nixkpgs;maintainers/scripts/haskell)" <> option)
 
 hydraEvalCommand = "hydra-eval-jobs"
 hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
