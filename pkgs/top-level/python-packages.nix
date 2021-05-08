@@ -1239,6 +1239,8 @@ in {
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
+  castepxbin = callPackage ../development/python-modules/castepxbin { };
+
   casttube = callPackage ../development/python-modules/casttube { };
 
   catalogue = callPackage ../development/python-modules/catalogue { };
