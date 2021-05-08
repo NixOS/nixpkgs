@@ -30,12 +30,24 @@
   This is equivalent to running:
 <screen>
 <prompt># </prompt>/nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
-  where <replaceable>N</replaceable> is the number of the NixOS system
-  configuration. To get a list of the available configurations, do:
-<screen>
-<prompt>$ </prompt>ls -l /nix/var/nix/profiles/system-*-link
-<replaceable>...</replaceable>
-lrwxrwxrwx 1 root root 78 Aug 12 13:54 /nix/var/nix/profiles/system-268-link -> /nix/store/202b...-nixos-13.07pre4932_5a676e4-4be1055
-</screen>
+  where <replaceable>N</replaceable> is the number of the previous NixOS generation.
+ </para>
+
+ <para>
+  Third, you can switch to a specific configuration in a running system:
+  <screen>
+   <prompt># </prompt>nixos-rebuild switch --generation <replaceable>N</replaceable></screen>
+  This is equivalent to running:
+  <screen>
+   <prompt># </prompt>/nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
+  where <replaceable>N</replaceable> is the number of the NixOS generation you
+  want to switch to.
+  To get a list of available generations, you can run
+  <screen>
+   <prompt># </prompt>nixos-rebuild list-generations
+   Generation  NixOS version           Kernel  Build-date
+   <replaceable>...</replaceable>
+   99          21.03.20210103.44ac7cb  5.9.9   Sun 2021-01-03 21:00:00
+   100         21.03.20210104.19ab7f1  5.10.4  Mon 2021-01-04 20:21:22  (current)</screen>
  </para>
 </section>

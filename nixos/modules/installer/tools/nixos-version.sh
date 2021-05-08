@@ -12,6 +12,13 @@ case "$1" in
     fi
     echo "@revision@"
     ;;
+  --configurationRevision)
+    if [[ "@configurationRevision@" =~ "@" ]]; then
+      echo "$0: configuration revision is unknown" >&2
+      exit 1
+    fi
+    echo "@configurationRevision@"
+    ;;
   --json)
     cat <<EOF
 @json@
