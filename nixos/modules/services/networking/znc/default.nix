@@ -103,8 +103,8 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/lib/znc/";
-        example = "/home/john/.znc/";
+        default = "/var/lib/znc";
+        example = "/home/john/.znc";
         type = types.path;
         description = ''
           The state directory for ZNC. The config and the modules will be linked
