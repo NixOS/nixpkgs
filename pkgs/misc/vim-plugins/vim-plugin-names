@@ -132,6 +132,7 @@ fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
 folke/lsp-colors.nvim@main
+folke/lsp-trouble.nvim@main
 folke/which-key.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
@@ -188,6 +189,7 @@ hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
+iamcco/markdown-preview.nvim
 ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
@@ -277,7 +279,7 @@ keith/rspec.vim
 keith/swift.vim
 kevinhwang91/nvim-bqf@main
 kevinhwang91/nvim-hlslens@main
-kevinhwang91/rnvimr
+kevinhwang91/rnvimr@main
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
@@ -391,6 +393,7 @@ mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
 mtikekar/vim-bsv
 mzlogin/vim-markdown-toc
+mzlogin/vim-smali
 nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
@@ -575,6 +578,7 @@ sickill/vim-pasta
 SidOfc/mkdx
 simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
+sindrets/diffview.nvim@main
 SirVer/ultisnips
 sjl/gundo.vim
 sjl/splice.vim
@@ -596,6 +600,7 @@ takac/vim-hardtime
 tami5/compe-conjure
 tami5/lispdocs.nvim
 tami5/sql.nvim
+tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
 terryma/vim-expand-region
