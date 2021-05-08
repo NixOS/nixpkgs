@@ -333,6 +333,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rituals_perfume_genie"
     "rmvtransport"
     "roku"
+    "roomba"
     "rss_feed_template"
     "ruckus_unleashed"
     "safe_mode"
