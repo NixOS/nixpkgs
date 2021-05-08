@@ -2675,6 +2675,8 @@ in {
 
   getkey = callPackage ../development/python-modules/getkey { };
 
+  get-video-properties = callPackage ../development/python-modules/get-video-properties { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
