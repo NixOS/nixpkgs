@@ -2,6 +2,7 @@
 , lib
 , fakeroot
 , fetchurl
+, fetchpatch
 , libfaketime
 , substituteAll
 ## runtime dependencies
@@ -68,7 +69,12 @@ stdenv.mkDerivation {
     inherit sha256;
   };
   patches = [
-    ./libtiff-4.2.patch  # adjust configure check to work with libtiff > 4.1
+    # adjust configure check to work with libtiff > 4.1
+    (fetchpatch {
+      name = "libtiff-4.2.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-misc/hylafaxplus/files/hylafaxplus-7.0.2-tiff-4.2.patch?id=82e3eefd5447f36e5bb00068a54b91d8c891ccf6";
+      sha256 = "0hhf4wpgj842gz4nxq8s55vnzmciqkyjjaaxdpqawns2746vx0sw";
+    })
   ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and
