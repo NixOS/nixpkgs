@@ -11,12 +11,16 @@ stdenv.mkDerivation {
     sha256 = "1x3gdcz1gqhi060ngqi0ghryf69v8bn50yrbzfad8bhblvhzzdlf";
   };
 
+  # -Wnarrowing is enabled by default in recent GCC versions,
+  # causing compilation to fail.
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ pcre zlib sqlite ];
 
   meta = with lib; {
     description = "Programming language with macros and syntax at once";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
   };
