@@ -4177,12 +4177,12 @@ let
 
   sonokai = buildVimPluginFrom2Nix {
     pname = "sonokai";
-    version = "2021-05-07";
+    version = "2021-05-08";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "sonokai";
-      rev = "872a1305a580c71f42393034382d5e6cfb7e38bc";
-      sha256 = "01nlmak6sh71ibrq91ygp9djrb336h0b84gc5k32cli7mn3ai285";
+      rev = "11c554bdb70977f508d3a3ccaf87734d7b2c2e17";
+      sha256 = "0xza499wjmf1v6zvc0j2s893rhvii4llk7z4rry991bc3fcbf0md";
     };
     meta.homepage = "https://github.com/sainnhe/sonokai/";
   };
@@ -8007,6 +8007,18 @@ let
       sha256 = "0k4b629jn6xlxyjxdl3cgm06v9dmx967rqnslv5m82c9kscwpyh4";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
+  };
+
+  vim-smali = buildVimPluginFrom2Nix {
+    pname = "vim-smali";
+    version = "2015-11-05";
+    src = fetchFromGitHub {
+      owner = "mzlogin";
+      repo = "vim-smali";
+      rev = "012c21565e6be8f1718ad634aa84730a0a84b42c";
+      sha256 = "1mcdbcfiq5r21q297fxi18c3ah4193j1fnjnbjnrjh20r50wggx8";
+    };
+    meta.homepage = "https://github.com/mzlogin/vim-smali/";
   };
 
   vim-smalls = buildVimPluginFrom2Nix {
