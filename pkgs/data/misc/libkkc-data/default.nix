@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, marisa, libkkc }:
+{ lib, stdenv, fetchurl, python2, libkkc }:
 
 stdenv.mkDerivation rec {
   pname = "libkkc-data";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "16avb50jasq2f1n9xyziky39dhlnlad0991pisk3s11hl1aqfrwy";
   };
 
-  nativeBuildInputs = [ marisa ];
+  nativeBuildInputs = [ python2.pkgs.marisa ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Language model data package for libkkc";

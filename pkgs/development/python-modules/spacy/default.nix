@@ -7,6 +7,7 @@
 , blis
 , catalogue
 , cymem
+, jinja2
 , jsonschema
 , murmurhash
 , numpy
@@ -16,23 +17,28 @@
 , requests
 , setuptools
 , srsly
+, spacy-legacy
 , thinc
 , wasabi
+, packaging
+, pathy
+, pydantic
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.3.5";
+  version = "3.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "315278ab60094643baecd866017c7d4cbd966efd2d517ad0e6c888edf7fa5aef";
+    sha256 = "9f7a09fbad53aac2a3cb7696a902de62b94575a15d249dd5e26a98049328060e";
   };
 
   propagatedBuildInputs = [
     blis
     catalogue
     cymem
+    jinja2
     jsonschema
     murmurhash
     numpy
@@ -41,8 +47,12 @@ buildPythonPackage rec {
     requests
     setuptools
     srsly
+    spacy-legacy
     thinc
     wasabi
+    packaging
+    pathy
+    pydantic
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -60,7 +70,8 @@ buildPythonPackage rec {
       --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
       --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
       --replace "srsly>=1.0.2,<1.1.0" "srsly>=1.0.2,<3.0" \
-      --replace "thinc>=7.4.1,<7.5.0" "thinc>=7.4.1,<8"
+      --replace "thinc>=7.4.1,<7.5.0" "thinc>=7.4.1,<8" \
+      --replace "pydantic>=1.7.1,<1.8.0" "pydantic>=1.7.1,<1.8.3"
   '';
 
   pythonImportsCheck = [ "spacy" ];
@@ -71,6 +82,6 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk sdll ];
+    maintainers = with maintainers; [ sdll ];
   };
 }

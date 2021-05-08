@@ -2,9 +2,9 @@
 , python3Packages
 , gtk3
 , cairo
-, gnome3
+, gnome
 , librsvg
-, xvfb_run
+, xvfb-run
 , dbus
 , libnotify
 , wrapGAppsHook
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libnotify
     librsvg
     gtk3

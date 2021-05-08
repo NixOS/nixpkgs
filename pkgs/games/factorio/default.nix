@@ -42,7 +42,7 @@ let
 
       releaseType=alpha
       version=0.17.74
-      nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+      nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
   '';
@@ -178,7 +178,8 @@ let
     headless = base;
     demo = base // {
 
-      buildInputs = [ makeWrapper libpulseaudio ];
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
         alsaLib

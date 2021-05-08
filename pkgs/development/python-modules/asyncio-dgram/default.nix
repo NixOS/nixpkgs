@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zkmjvq47zw2fsbnzhr5mh9rsazx0z1f8m528ash25jrxsza5crm";
+    sha256 = "sha256-wgcL/BdNjzitkkaGyRUQbW1uv1enLDnHk30YHClK58o=";
   };
 
   # OSError: AF_UNIX path too long

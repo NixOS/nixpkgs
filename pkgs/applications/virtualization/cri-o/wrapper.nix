@@ -27,6 +27,8 @@ in runCommand cri-o.name {
   name = "${cri-o.pname}-wrapper-${cri-o.version}";
   inherit (cri-o) pname version passthru;
 
+  preferLocalBuild = true;
+
   meta = builtins.removeAttrs cri-o.meta [ "outputsToInstall" ];
 
   outputs = [

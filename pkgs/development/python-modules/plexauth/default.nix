@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "plexauth";
-  version = "0.0.5";
+  version = "0.0.6";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "python-plexauth";
     rev = "v${version}";
-    sha256 = "1wbrn22iywl4ccz64r3w3f17k0r7vi2cqkqd2mrdkx5xqhscn9hz";
+    sha256 = "1wy6syz3cgfw28zvigh2br4jabg8rzpi5l0bhfb6vjjc7aam13ag";
   };
 
   propagatedBuildInputs = [ aiohttp ];

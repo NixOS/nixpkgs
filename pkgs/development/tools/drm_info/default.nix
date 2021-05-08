@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "drm_info";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "ascent12";
     repo = "drm_info";
     rev = "v${version}";
-    sha256 = "0s4zp8xz21zcpinbcwdvg48rf0xr7rs0dqri28q093vfmllsk36f";
+    sha256 = "sha256-UTDYLe3QezPCyG9CIp+O+KX716JDTL9mn+OEjjyTwlg=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

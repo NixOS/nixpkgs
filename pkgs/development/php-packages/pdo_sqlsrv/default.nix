@@ -1,4 +1,4 @@
-{ buildPecl, lib, pkgs, php }:
+{ stdenv, buildPecl, lib, libiconv, unixODBC, php }:
 
 buildPecl {
   pname = "pdo_sqlsrv";
@@ -8,7 +8,7 @@ buildPecl {
 
   internalDeps = [ php.extensions.pdo ];
 
-  buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta.maintainers = lib.teams.php.members;
 }

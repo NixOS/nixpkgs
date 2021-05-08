@@ -20,6 +20,7 @@ stdenv.mkDerivation {
       sha256 = "0zp61axx93b7nrbsyhn2x4dnw7n9y6g4rys21hyqxk4khrnc2yr9";
     })
     ./CVE-2016-4912.patch
+    ./CVE-2019-5544.patch
   ];
 
   meta = with lib; {

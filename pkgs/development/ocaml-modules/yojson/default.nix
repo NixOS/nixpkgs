@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
+{ lib, stdenv, fetchzip, ocaml, findlib, dune_2, cppo, easy-format, biniou }:
 let
   pname = "yojson";
   param =
@@ -6,7 +6,7 @@ let
     version = "1.7.0";
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
     sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
-    nativeBuildInputs = [ dune ];
+    nativeBuildInputs = [ dune_2 ];
     extra = {
       installPhase = ''
         dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}

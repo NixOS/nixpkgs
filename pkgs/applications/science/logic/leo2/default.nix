@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wjpmizb181iygnd18lx7p77fwaci2clgzs5ix5j51cc8f3pazmv";
   };
 
-  buildInputs = [ makeWrapper eprover ocaml perl zlib ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ eprover ocaml perl zlib ];
 
   sourceRoot = "leo2/src";
 

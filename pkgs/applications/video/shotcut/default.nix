@@ -21,17 +21,17 @@
 , common-updater-scripts
 }:
 
-assert lib.versionAtLeast mlt.version "6.22.1";
+assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.11.28";
+  version = "21.03.21";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1yr71ihml9wnm7y5pv0gz41l1k6ybd16dk78zxf96kn9b838mzhq";
+    sha256 = "UdeHbNkJ0U9FeTmpbcU4JxiyIHkrlC8ErhtY6zdCZEk=";
   };
 
   enableParallelBuilding = true;

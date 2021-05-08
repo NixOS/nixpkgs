@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "12mjabf5cpp5dgg63s19rlyq3dhhpzzy2sa439yncqzsk7rdg0n3";
   };
 
-  buildInputs = [ python3 texinfo makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 texinfo  ];
 
   inherit python3;
 

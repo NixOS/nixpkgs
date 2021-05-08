@@ -12,7 +12,7 @@
 , vala
 , glib
 , zlib
-, gnome3
+, gnome
 , nixosTests
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

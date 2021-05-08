@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , numpy
 , matplotlib
 , pillow
@@ -43,6 +44,7 @@ buildPythonPackage rec {
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
     license = with licenses; [ mit gpl2 ];
+    broken = pythonAtLeast "3.9";
   };
 
 }

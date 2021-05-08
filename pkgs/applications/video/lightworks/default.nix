@@ -30,7 +30,8 @@ let
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
-    buildInputs = [ dpkg makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ dpkg ];
 
     phases = [ "unpackPhase" "installPhase" ];
     unpackPhase = "dpkg-deb -x ${src} ./";

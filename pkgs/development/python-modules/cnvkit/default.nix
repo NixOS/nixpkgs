@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , fetchpatch
 , rPackages
-, rWrapper
 , buildPythonPackage
 , biopython
 , numpy
@@ -54,11 +53,6 @@ buildPythonPackage rec {
     pomegranate
     rPackages.DNAcopy
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
-  '';
 
   checkInputs = [ R ];
 

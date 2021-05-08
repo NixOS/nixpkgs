@@ -14,7 +14,7 @@
 , SDL2_gfx
 , SDL2_mixer
 , SDL2_net, SDL2_ttf
-, ffmpeg
+, ffmpeg_3
 , sqlite
 , zlib
 , libX11
@@ -26,7 +26,7 @@ let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg
+    sqlite lua zlib libX11 libGLU libGL ffmpeg_3
   ];
 
 in stdenv.mkDerivation rec {

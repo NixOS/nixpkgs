@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Virtual console locking program";
     license = licenses.gpl2;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
 { lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, runtimeShell, libsecret, gtk3, gsettings-desktop-schemas }:
+, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.5.11";
+  version = "3.5.18";
   pname = "standardnotes";
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ let
 
   sha256 = {
     i386-linux = "009fnnd7ysxkyykkbmhvr0vn13b21j1j5mzwdvqdkhm9v3c9rbgj";
-    x86_64-linux = "1fij00d03ky57jlnhf9n2iqvfa4dgmkgawrxd773gg03hdsk7xcf";
+    x86_64-linux = "1zrnvvr9x0s2gp948iajsmgn38xm6x0g2dgxrfjis39rpplsrdww";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {

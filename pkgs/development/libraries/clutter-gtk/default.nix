@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, pkg-config, meson, ninja
-, gobject-introspection, clutter, gtk3, gnome3 }:
+, gobject-introspection, clutter, gtk3, gnome }:
 
 let
   pname = "clutter-gtk";
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   postBuild = "rm -rf $out/share/gtk-doc";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Clutter-GTK";
     homepage = "http://www.clutter-project.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lethalman ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

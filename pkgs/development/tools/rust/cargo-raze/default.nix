@@ -3,17 +3,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";
-  version = "0.2.10";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fznh8jygzyzphw7762qc2jv0370z7qjqk1vkql0g246iqby8pq9";
+    sha256 = "161m4y6i4sgqi9mg3f3348f5cr0m45vhix4a4bcw54wnmhiklnnl";
   };
   sourceRoot = "source/impl";
 
-  cargoSha256 = "1z20xc508a3slc1ii3hy09swvlyib14zwf9akxc0h24d5m48as1c";
+  cargoSha256 = "1vlywdq0bx6b1k3w1grisca0hvv2s4s88yxq7bil8nhm5ghjgxdr";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl libgit2 openssl ]

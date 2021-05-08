@@ -49,6 +49,9 @@ python.pkgs.buildPythonApplication rec {
     ruamel_yaml
   ];
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";

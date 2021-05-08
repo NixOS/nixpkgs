@@ -4,10 +4,10 @@
 
 buildPythonPackage rec {
   pname = "jaraco.collections";
-  version = "3.0.0";
+  version = "3.2.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be570ef4f2e7290b757449395238fa63d70a9255574624e73c5ff9f1ee554721";
+    sha256 = "6d179770493c4f5802395ae5a29e07c66d826dc3cd680ad0b0f0fb9fd6cdf533";
   };
 
   pythonNamespaces = [ "jaraco" ];

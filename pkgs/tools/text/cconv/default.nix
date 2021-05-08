@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-let version = "0.6.3"; in
-  stdenv.mkDerivation {
+{ lib, stdenv, fetchurl, autoreconfHook, libiconv }:
+
+stdenv.mkDerivation rec {
   pname = "cconv";
-  inherit version;
+  version = "0.6.3";
 
   src = fetchurl {
     url = "https://github.com/xiaoyjy/cconv/archive/v${version}.tar.gz";
@@ -10,12 +10,13 @@ let version = "0.6.3"; in
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libiconv ];
 
   meta = with lib; {
     description = "A iconv based simplified-traditional chinese conversion tool";
     homepage = "https://github.com/xiaoyjy/cconv";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.redfish64 ];
   };
 }

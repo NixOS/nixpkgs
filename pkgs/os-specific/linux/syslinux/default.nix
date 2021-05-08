@@ -63,8 +63,8 @@ stdenv.mkDerivation {
     touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
-  nativeBuildInputs = [ nasm perl python3 ];
-  buildInputs = [ libuuid makeWrapper ];
+  nativeBuildInputs = [ nasm perl python3 makeWrapper ];
+  buildInputs = [ libuuid ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];

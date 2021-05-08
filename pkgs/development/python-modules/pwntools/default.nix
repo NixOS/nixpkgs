@@ -2,9 +2,7 @@
 , buildPythonPackage
 , debugger
 , fetchPypi
-, isPy3k
 , Mako
-, makeWrapper
 , packaging
 , pysocks
 , pygments
@@ -20,7 +18,7 @@
 , tox
 , unicorn
 , intervaltree
-, fetchpatch
+, installShellFiles
 }:
 
 buildPythonPackage rec {
@@ -38,6 +36,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
   '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   propagatedBuildInputs = [
     Mako
@@ -59,6 +61,10 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # no setuptools tests for the package
+
+  postInstall = ''
+    installShellCompletion --bash extra/bash_completion.d/shellcraft
+  '';
 
   postFixup = ''
     mkdir -p "$out/bin"

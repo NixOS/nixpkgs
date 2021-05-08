@@ -1,6 +1,7 @@
 { lib, stdenv, fetchsvn, darwin, libtiff
 , libpng, zlib, libwebp, libraw, openexr, openjpeg
-, libjpeg, jxrlib, pkg-config }:
+, libjpeg, jxrlib, pkg-config
+, fixDarwinDylibNames }:
 
 stdenv.mkDerivation {
   pname = "freeimage";
@@ -17,7 +18,12 @@ stdenv.mkDerivation {
   prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
   patches = [ ./unbundle.diff ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.cctools
+    fixDarwinDylibNames
+  ];
   buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 
   postBuild = lib.optionalString (!stdenv.isDarwin) ''
@@ -29,6 +35,10 @@ stdenv.mkDerivation {
 
   preInstall = ''
     mkdir -p $INCDIR $INSTALLDIR
+  ''
+  # Workaround for Makefiles.osx not using ?=
+  + lib.optionalString stdenv.isDarwin ''
+    makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

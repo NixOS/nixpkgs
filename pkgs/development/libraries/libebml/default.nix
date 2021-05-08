@@ -2,19 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libebml";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libebml";
     rev    = "release-${version}";
-    sha256 = "052v4mjynndj9xgfl4lmlsnx9ai0pah0kjyr5fm34l7gj8vhc5s7";
+    sha256 = "1hiilnabar826lfxsaflqjhgsdli6hzzhjv8q2nmw36fvvlyks25";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES"
+    "-DCMAKE_INSTALL_PREFIX="
   ];
 
   meta = with lib; {

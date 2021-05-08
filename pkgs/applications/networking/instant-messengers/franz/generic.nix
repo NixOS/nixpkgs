@@ -22,7 +22,7 @@
 , expat
 , udev
 , libnotify
-, xdg_utils
+, xdg-utils
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
 }

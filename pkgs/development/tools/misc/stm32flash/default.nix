@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "01p396daqw3zh6nijffbfbwyqza33bi2k4q3m5yjzs02xwi99alp";
   };
 
-  buildFlags = [ "CC=cc" ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     # Manually copy, make install copies to /usr/local/bin

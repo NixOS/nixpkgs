@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fqq6irbq1aikhhw08gc9kp0vbk2aminfbvwdlm58cvywyq91bn4";
+    sha256 = "sha256-eWe7oTWl7QfIqq3GfMILi5S8zUi03ER1Mzfr8hqUvgw=";
   };
 
-  cargoSha256 = "073sfv42fbl8rjm3dih1ghs9vq75mjshp66zdzdan2dmmrnw5m9z";
+  cargoSha256 = "sha256-hAUg2mh4VyyjkBRBs5YWi14yeGlMXxt+cdoz5xOS+1A=";
 
   nativeBuildInputs = [ openssl perl pkg-config ];
 

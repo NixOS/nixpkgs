@@ -12,7 +12,7 @@
 , sqlite
 , webkitgtk
 , pkg-config
-, gnome3
+, gnome
 , gst_all_1
 , libgudev
 , libraw
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     librsvg
     librest
     gcr
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libgdata
     libchamplain
     libsecret
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [domenkozar];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

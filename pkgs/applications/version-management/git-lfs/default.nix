@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "git-lfs";
-  version = "2.13.2";
+  version = "2.13.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "0gfpzdya48phwln61746ii78sq55mhzj938lz8x062xkkcsdvbf4";
+    sha256 = "sha256-T4s/xnu5nL6dkEIo7xGywaE+EPH2OnzsaCF9OCGu7WQ=";
   };
 
   goPackagePath = "github.com/git-lfs/git-lfs";

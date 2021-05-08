@@ -123,9 +123,20 @@ in {
             "error log" = "syslog";
           };
         '';
-        };
+      };
+
+      enableAnalyticsReporting = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable reporting of anonymous usage statistics to Netdata Inc. via either
+          Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
+          self-hosted PostHog (in versions 1.29.4 and later).
+          See: <link xlink:href="https://learn.netdata.cloud/docs/agent/anonymous-statistics"/>
+        '';
       };
     };
+  };
 
   config = mkIf cfg.enable {
     assertions =
@@ -138,10 +149,15 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
-        (pkgs.python3.withPackages cfg.python.extraPackages);
+      path = (with pkgs; [ curl gawk iproute2 which ])
+        ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
+        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
+      environment = {
+        PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+      } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
+        DO_NOT_TRACK = "1";
+      };
       serviceConfig = {
-        Environment="PYTHONPATH=${cfg.package}/libexec/netdata/python.d/python_modules";
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
@@ -167,6 +183,9 @@ in {
         ConfigurationDirectory = "netdata";
         ConfigurationDirectoryMode = "0755";
         # Capabilities
+        AmbientCapabilities = [
+          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
+        ];
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
           "CAP_DAC_READ_SEARCH"   # is required for apps plugin
@@ -176,6 +195,8 @@ in {
           "CAP_SYS_PTRACE"        # is required for apps plugin
           "CAP_SYS_RESOURCE"      # is required for ebpf plugin
           "CAP_NET_RAW"           # is required for fping app
+          "CAP_SYS_CHROOT"        # is required for cgroups plugin
+          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
         ];
         # Sandboxing
         ProtectSystem = "full";

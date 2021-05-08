@@ -68,7 +68,10 @@ class GitLabRepo:
         version = self.rev2version(rev)
 
         passthru = {v: self.get_file(v, rev).strip() for v in ['GITALY_SERVER_VERSION', 'GITLAB_PAGES_VERSION',
-                                                               'GITLAB_SHELL_VERSION', 'GITLAB_WORKHORSE_VERSION']}
+                                                               'GITLAB_SHELL_VERSION']}
+
+        passthru["GITLAB_WORKHORSE_VERSION"] = version
+
         return dict(version=self.rev2version(rev),
                     repo_hash=self.get_git_hash(rev),
                     owner=self.owner,
@@ -181,9 +184,6 @@ def update_gitlab_shell():
     gitlab_shell_version = data['passthru']['GITLAB_SHELL_VERSION']
     _call_nix_update('gitlab-shell', gitlab_shell_version)
 
-    repo = GitLabRepo(repo='gitlab-shell')
-    gitlab_shell_dir = pathlib.Path(__file__).parent / 'gitlab-shell'
-
 
 @cli.command('update-gitlab-workhorse')
 def update_gitlab_workhorse():
@@ -192,8 +192,6 @@ def update_gitlab_workhorse():
     gitlab_workhorse_version = data['passthru']['GITLAB_WORKHORSE_VERSION']
     _call_nix_update('gitlab-workhorse', gitlab_workhorse_version)
 
-    repo = GitLabRepo('gitlab-org', 'gitlab-workhorse')
-    gitlab_workhorse_dir = pathlib.Path(__file__).parent / 'gitlab-workhorse'
 
 @cli.command('update-all')
 @click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')

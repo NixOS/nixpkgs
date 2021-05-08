@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "terrascan";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "accurics";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kjis0ylvmv1gvzp5qvi9a7x4611bjv8yx5mb6nkc0a8lscwb4c3";
+    sha256 = "sha256-pQuCVDXO9sXqCayoSAuxnzUBURJN+W2MZlzC/nV0wUc=";
   };
 
-  vendorSha256 = "0yfybzwjvnan4qf5w25k22iwh5hp9v8si93p4jv9bx25rw91swws";
+  vendorSha256 = "sha256-W3RXjjR90nfidkUldKNK0QAmI78SvtgHrZTWMzpqtMs=";
 
   # tests want to download a vulnerable Terraform project
   doCheck = false;

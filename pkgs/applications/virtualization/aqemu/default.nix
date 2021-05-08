@@ -22,5 +22,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

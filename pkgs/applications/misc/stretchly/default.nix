@@ -2,24 +2,20 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_9
+, electron
 , common-updater-scripts
 , writeShellScript
-, jq
 , makeDesktopItem
 }:
 
-let
-  electron = electron_9;
-in
 stdenv.mkDerivation rec {
 
   pname = "stretchly";
-  version = "1.2.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "07v9yk9qgya9ladfgbfkwwnbzvczs1cv6yn3zrg9rviyv8zlqjls";
+    sha256 = "1q0ihp6cd65lnscbr7xj3yyb06qds77r4s6m1xbk5l9vs2rw923d";
   };
 
   icon = fetchurl {

@@ -3,6 +3,10 @@
 with lib;
 
 let
+  package = if cfg.allowAuxiliaryImperativeNetworks
+    then pkgs.wpa_supplicant_ro_ssids
+    else pkgs.wpa_supplicant;
+
   cfg = config.networking.wireless;
   configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
@@ -45,6 +49,16 @@ in {
         type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
+      };
+
+      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+        description = ''
+          Whether to allow configuring networks "imperatively" (e.g. via
+          <package>wpa_supplicant_gui</package>) and declaratively via
+          <xref linkend="opt-networking.wireless.networks" />.
+
+          Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+        '';
       };
 
       networks = mkOption {
@@ -211,9 +225,9 @@ in {
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
 
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
+    environment.systemPackages = [ package ];
 
-    services.dbus.packages = [ pkgs.wpa_supplicant ];
+    services.dbus.packages = [ package ];
     services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
@@ -230,13 +244,17 @@ in {
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
-      path = [ pkgs.wpa_supplicant ];
+      path = [ package ];
 
-      script = ''
+      script = let
+        configStr = if cfg.allowAuxiliaryImperativeNetworks
+          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+          else "-c ${configFile}";
+      in ''
         if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
         then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
         fi
-        iface_args="-s -u -D${cfg.driver} -c ${configFile}"
+        iface_args="-s -u -D${cfg.driver} ${configStr}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=

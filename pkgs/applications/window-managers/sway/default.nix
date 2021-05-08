@@ -2,18 +2,19 @@
 , meson, ninja, pkg-config, wayland, scdoc
 , libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols
+, wlroots, wayland-protocols, libdrm
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.5.1";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1xsa3h8zhf29p0mi90baxpr76jkd9pd1gr97ky8cnjbcs4isj9j0";
+    sha256 = "0vnplva11yafhbijrk68wy7pw0psn9jm0caaymswq1s951xsn1c8";
   };
 
   patches = [
@@ -33,12 +34,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
     pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wlroots wayland-protocols
+    wlroots wayland-protocols libdrm
   ];
 
   mesonFlags = [
     "-Ddefault-wallpaper=false"
+    "-Dsd-bus-provider=libsystemd"
   ];
+
+  passthru.tests.basic = nixosTests.sway;
 
   meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";

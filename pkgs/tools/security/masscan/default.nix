@@ -1,32 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, libpcap }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, libpcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-gH0zOf2kl6cqws1nB3QPtaAjpvNAgbawXRx77bqJTIc=";
+    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
   postInstall = ''
-    mkdir -p $out/share/man/man8
+    installManPage doc/masscan.8
+
     mkdir -p $out/share/{doc,licenses}/masscan
     mkdir -p $out/etc/masscan
 
     cp data/exclude.conf $out/etc/masscan
     cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.html
-    cp doc/masscan.8 $out/share/man/man8/masscan.8
     cp LICENSE $out/share/licenses/masscan/LICENSE
 
     wrapProgram $out/bin/masscan --prefix LD_LIBRARY_PATH : "${libpcap}/lib"

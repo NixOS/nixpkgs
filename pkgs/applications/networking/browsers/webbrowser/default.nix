@@ -41,12 +41,12 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkg-config python2
+    gnum4 makeWrapper perl pkg-config python2 unzip
   ];
 
   buildInputs = [
     alsaLib dbus dbus-glib ffmpeg fontconfig freetype yasm zip jack2 gtk2
-    unzip gnome2.GConf xorg.libXt
+    gnome2.GConf xorg.libXt
   ];
 
   enableParallelBuilding = true;

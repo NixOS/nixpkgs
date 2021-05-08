@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, runtimeShell }:
+{ lib, stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "cmdstan-2.17.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ python ];
+  checkInputs = [ python3 ];
   checkPhase = "python ./runCmdStanTests.py src/test/interface"; # see #5368
 
   installPhase = ''

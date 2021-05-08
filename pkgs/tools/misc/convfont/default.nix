@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lj24yq5gj9hxhy1srk73521q95zyqzkws0q4v271hf5wmqaxa2f";
   };
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install -Dm755 convfont $out/bin/convfont

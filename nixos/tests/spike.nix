@@ -17,6 +17,6 @@ in
     ''
       machine.wait_for_unit("multi-user.target")
       output = machine.succeed("spike -m64 $(which pk) $(which hello)")
-      assert output == "Hello, world!\n"
+      assert "Hello, world!" in output
     '';
 })

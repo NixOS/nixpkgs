@@ -8,12 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "0yd6bl6qw675sxa81nxw6plhpjf9d2ywlm8a5z66zyjf28sl7sds";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+  '';
+
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
   meta = with lib; {
     description = "A library for parsing command line options";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

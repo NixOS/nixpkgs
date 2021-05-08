@@ -2,11 +2,12 @@
 , stdenv
 , rustPlatform
 , fetchCrate
-, pinentry
 , openssl
 , pkg-config
 , makeWrapper
+, installShellFiles
 , Security
+, libiconv
 
 # rbw-fzf
 , withFzf ? false, fzf, perl
@@ -20,27 +21,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "0.5.2";
+  version = "1.2.0";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "1mxl71yz2iy5s6pbp33cwkfzzilkla4qqiskd6jsd5fdlrrwlxqm";
+    sha256 = "14cnqc5cf6qm2g9ypv2pbqbvymawyrqn3fc778labgqg24khqcyq";
   };
 
-  cargoSha256 = "19gznam64s17kha3accgjks5rmd9kpqqgxg3dfrk7fg5v4431007";
+  cargoSha256 = "0izn5bcvk1rx69sjwyfc49nmvw7k0jysqb0bpdpwdliaa06ggl86";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  postPatch = ''
-    substituteInPlace src/pinentry.rs \
-      --replace 'Command::new("pinentry")' 'Command::new("${pinentry}/${pinentry.binaryPath or "bin/pinentry"}")'
-  '' + lib.optionalString withFzf ''
+  postPatch = lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
         --replace fzf ${fzf}/bin/fzf \
@@ -61,7 +60,12 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR="${openssl.out}/lib"
   '';
 
-  postInstall = lib.optionalString withFzf ''
+  postInstall = ''
+    for shell in bash zsh fish; do
+      $out/bin/rbw gen-completions $shell > rbw.$shell
+      installShellCompletion rbw.$shell
+    done
+  '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin
   '' + lib.optionalString withRofi ''
     cp bin/rbw-rofi $out/bin

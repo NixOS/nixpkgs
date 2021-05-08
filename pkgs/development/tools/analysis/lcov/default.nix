@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kvc7fkp45w48f0bxwbxvxkicnjrrydki0hllg294n1wrp80zzyk";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   preBuild = ''
     patchShebangs bin/

@@ -5,7 +5,7 @@
 , callPackage
 
 , python3
-, imagemagick7
+, imagemagick
 , ghostscript
 , optipng
 , tesseract
@@ -65,7 +65,7 @@ let
 
     buildPhase = let
       # Paperless has explicit runtime checks that expect these binaries to be in PATH
-      extraBin = lib.makeBinPath [ imagemagick7 ghostscript optipng tesseract unpaper ];
+      extraBin = lib.makeBinPath [ imagemagick ghostscript optipng tesseract unpaper ];
     in ''
       ${python.interpreter} -m compileall $srcDir
 

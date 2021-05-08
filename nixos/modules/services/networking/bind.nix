@@ -8,32 +8,37 @@ let
 
   bindUser = "named";
 
-  bindZoneOptions = {
-    name = mkOption {
-      type = types.str;
-      description = "Name of the zone.";
-    };
-    master = mkOption {
-      description = "Master=false means slave server";
-      type = types.bool;
-    };
-    file = mkOption {
-      type = types.either types.str types.path;
-      description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
-    };
-    masters = mkOption {
-      type = types.listOf types.str;
-      description = "List of servers for inclusion in stub and secondary zones.";
-    };
-    slaves = mkOption {
-      type = types.listOf types.str;
-      description = "Addresses who may request zone transfers.";
-      default = [];
-    };
-    extraConfig = mkOption {
-      type = types.str;
-      description = "Extra zone config to be appended at the end of the zone section.";
-      default = "";
+  bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
+
+  bindZoneOptions = { name, config, ... }: {
+    options = {
+      name = mkOption {
+        type = types.str;
+        default = name;
+        description = "Name of the zone.";
+      };
+      master = mkOption {
+        description = "Master=false means slave server";
+        type = types.bool;
+      };
+      file = mkOption {
+        type = types.either types.str types.path;
+        description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+      };
+      masters = mkOption {
+        type = types.listOf types.str;
+        description = "List of servers for inclusion in stub and secondary zones.";
+      };
+      slaves = mkOption {
+        type = types.listOf types.str;
+        description = "Addresses who may request zone transfers.";
+        default = [];
+      };
+      extraConfig = mkOption {
+        type = types.str;
+        description = "Extra zone config to be appended at the end of the zone section.";
+        default = "";
+      };
     };
   };
 
@@ -84,7 +89,7 @@ let
                 ${extraConfig}
               };
             '')
-          cfg.zones }
+          (attrValues cfg.zones) }
     '';
 
 in
@@ -153,18 +158,19 @@ in
 
       zones = mkOption {
         default = [];
-        type = types.listOf (types.submodule [ { options = bindZoneOptions; } ]);
+        type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
         description = "
           List of zones we claim authority over.
         ";
-        example = [{
-          name = "example.com";
-          master = false;
-          file = "/var/dns/example.com";
-          masters = ["192.168.0.1"];
-          slaves = [];
-          extraConfig = "";
-        }];
+        example = {
+          "example.com" = {
+            master = false;
+            file = "/var/dns/example.com";
+            masters = ["192.168.0.1"];
+            slaves = [];
+            extraConfig = "";
+          };
+        };
       };
 
       extraConfig = mkOption {

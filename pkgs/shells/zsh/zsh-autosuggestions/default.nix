@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, zsh }:
 
-# To make use of this derivation, use the `programs.zsh.enableAutoSuggestions` option
+# To make use of this derivation, use the `programs.zsh.autosuggestions.enable` option
 
 stdenv.mkDerivation rec {
   pname = "zsh-autosuggestions";

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "Merge YAML data files";
     homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }

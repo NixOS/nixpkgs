@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "08pgjvd2vvmqk3h641x63nxp7wqimb9r30889mkyfh2agc62sjbc";
   };
 
-  buildInputs = [ tcl tk xlibsWrapper makeWrapper ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk xlibsWrapper ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   hardeningDisable = [ "format" ];

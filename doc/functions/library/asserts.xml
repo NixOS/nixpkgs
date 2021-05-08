@@ -103,7 +103,7 @@ stderr> assert failed
    <title>Ensuring a user provided a possible value</title>
 <programlisting><![CDATA[
 let sslLibrary = "bearssl";
-in lib.asserts.assertOneOf "sslLibrary" sslLibrary [ "openssl" "bearssl" ];
+in lib.asserts.assertOneOf "sslLibrary" sslLibrary [ "openssl" "libressl" ];
 => false
 stderr> trace: sslLibrary must be one of "openssl", "libressl", but is: "bearssl"
         ]]></programlisting>

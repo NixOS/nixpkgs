@@ -1,34 +1,43 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , wrapLisp
-, sbcl
+, sbcl_2_0_9
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "clpm";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchgit {
     url = "https://gitlab.common-lisp.net/clpm/clpm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0jivnnp3z148yf4c2nzzr5whz76w5kjhsb97z2vs5maiwf79y2if";
+    sha256 = "04w46yhv31p4cfb84b6qvyfw7x5nx6lzyd4yzhd9x6qvb7p5kmfh";
   };
 
   buildInputs = [
-    (wrapLisp sbcl)
+    (wrapLisp sbcl_2_0_9)
     openssl
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ln -s ${openssl.out}/lib/libcrypto.so.* .
     ln -s ${openssl.out}/lib/libssl.so.* .
     common-lisp.sh --script scripts/build.lisp
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     INSTALL_ROOT=$out sh install.sh
+
+    runHook postInstall
   '';
 
   # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`

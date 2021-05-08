@@ -5,9 +5,10 @@
 , dask
 , numpy, toolz # dask[array]
 , multipledispatch
+, setuptools-scm
 , scipy
 , scikitlearn
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,12 +20,9 @@ buildPythonPackage rec {
     sha256 = "58b86cebf04fe5b9e58092e1c467e32e60d01e11b71fdc628baaa9fc6d1adee5";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools-scm ];
+  checkInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
-
-  checkPhase = ''
-    py.test dask_glm
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-glm/";

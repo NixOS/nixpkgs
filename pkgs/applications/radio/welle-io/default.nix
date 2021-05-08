@@ -43,7 +43,7 @@ in mkDerivation {
     description = "A DAB/DAB+ Software Radio";
     homepage = "https://www.welle.io/";
     maintainers = with maintainers; [ ck3d markuskowa ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;
   };
 }

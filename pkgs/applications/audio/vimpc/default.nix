@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkg-config
-, taglib, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libmpdclient
+, ncurses
+, pcre
+, pkg-config
+, taglib
+, curl
+}:
 
 stdenv.mkDerivation rec {
   version = "0.09.2";
@@ -13,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ mpd_clientlib ncurses pcre taglib curl ];
+  buildInputs = [ libmpdclient ncurses pcre taglib curl ];
 
   postInstall = ''
     mkdir -p $out/etc

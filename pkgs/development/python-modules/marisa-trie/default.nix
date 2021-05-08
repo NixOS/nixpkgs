@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, cython
 , pytestrunner
 , pytest
 , hypothesis
@@ -20,7 +21,11 @@ buildPythonPackage rec {
       --replace "hypothesis==" "hypothesis>="
   '';
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ cython pytestrunner ];
+
+  preBuild = ''
+    ./update_cpp.sh
+  '';
 
   checkInputs = [ pytest hypothesis ];
 

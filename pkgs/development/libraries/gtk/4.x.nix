@@ -1,12 +1,11 @@
 { lib
 , stdenv
+, substituteAll
 , fetchurl
 , pkg-config
 , gettext
 , graphene
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gtk-doc
+, gi-docgen
 , meson
 , ninja
 , python3
@@ -29,7 +28,7 @@
 , libsoup
 , ffmpeg
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gst_all_1
 , sassc
@@ -37,37 +36,44 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , vulkan-loader
 , vulkan-headers
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
 
-assert cupsSupport -> cups != null;
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-4.0";
+    gtk_binary_version = "4.0.0";
+  };
+
+in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.0.2";
+  version = "4.2.1";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
 
   setupHooks = [
-    ./hooks/gtk4-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "115w3mzwm1xsi1q85qvwfm2yxpsjs2rcajgddzbnwhjicyn0frv2";
+    sha256 = "AjFpd13kPwof3gZvvBnXhUXqanViwZFavem4rkpzCeY=";
   };
 
   nativeBuildInputs = [
@@ -79,21 +85,17 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sassc
-  ] ++ setupHooks ++ lib.optionals withGtkDoc [
-    pandoc
-    docbook_xml_dtd_43
-    docbook-xsl-nons
-    gtk-doc
-    # For xmllint
-    libxml2
-  ];
+    gi-docgen
+  ] ++ setupHooks;
 
   buildInputs = [
     libxkbcommon
     epoxy
     json-glib
     isocodes
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     vulkan-headers
+  ] ++ [
     librest
     libsoup
     ffmpeg
@@ -113,7 +115,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals trackerSupport [
     tracker
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -132,18 +134,27 @@ stdenv.mkDerivation rec {
     glib
     graphene
     pango
-    vulkan-loader # TODO: Possibly not used on Darwin
-
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    vulkan-loader
+  ] ++ [
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook.
     gsettings-desktop-schemas
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
-    "-Dtests=false"
-    "-Dtracker3=${lib.boolToString trackerSupport}"
-    "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
+    "-Dgtk_doc=${lib.boolToString x11Support}"
+    "-Dbuild-tests=false"
+    "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
+    "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
+  ] ++ lib.optionals (!cupsSupport) [
+    "-Dprint-cups=disabled"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dvulkan=disabled"
+    "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
+  ] ++ lib.optionals (!x11Support) [
+    "-Dx11-backend=false"
   ];
 
   doCheck = false; # needs X11
@@ -162,18 +173,10 @@ stdenv.mkDerivation rec {
       gdk/gen-gdk-gresources-xml.py
       gtk/gen-gtk-gresources-xml.py
       gtk/gentypefuncs.py
-      docs/reference/gtk/gtk-markdown-to-docbook
     )
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
-  '';
-
-  postBuild =  lib.optionalString withGtkDoc ''
-    # Meson not building `custom_target`s passed to `custom_files` argument of `gnome.gtkdoc` function
-    # as part of the `install` target. We have to build the docs manually first.
-    # https://github.com/mesonbuild/meson/issues/2831
-    ninja g{t,d,s}k4-doc
   '';
 
   preInstall = ''
@@ -193,6 +196,13 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+
+  '' + lib.optionalString x11Support ''
+    # So that DevHelp can find this.
+    # TODO: Remove this with DevHelp 41.
+    mkdir -p "$devdoc/share/devhelp/books"
+    mv "$out/share/doc/"* "$devdoc/share/devhelp/books"
+    rmdir -p --ignore-fail-on-non-empty "$out/share/doc"
   '';
 
   # Wrap demos
@@ -206,7 +216,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk";
       attrPath = "gtk4";
     };
@@ -226,7 +236,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }

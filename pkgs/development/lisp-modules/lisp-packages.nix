@@ -8,7 +8,7 @@ let lispPackages = rec {
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
-    version = "2019-02-16";
+    version = "2021-02-13";
 
     buildSystems = [];
 
@@ -17,15 +17,15 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "0x9b4vf36n2hh102gqgjxg5f5ymxcr9j5khn4rskjdprfgd8d1y9";
+      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
     };
     overrides = x: rec {
       inherit clwrapper;
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "https://beta.quicklisp.org/dist/quicklisp/2020-10-16/distinfo.txt";
-        sha256 = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
+        url = "https://beta.quicklisp.org/dist/quicklisp/2021-02-28/distinfo.txt";
+        sha256 = "sha256:1apc0s07fmm386rj866dbrhrkq3lrbgbd79kwcyp91ix7sza8z3z";
       };
       buildPhase = "true; ";
       postInstall = ''
@@ -124,9 +124,8 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2020-10-23";
+    version = "2021-03-27";
 
-    buildSystems = [ "nyxt" "nyxt-ext" ];
 
     description = "Browser";
 
@@ -143,58 +142,55 @@ let lispPackages = rec {
     };
 
     deps = with pkgs.lispPackages; [
-      alexandria
-      bordeaux-threads
-      chanl
-      cl-annot
-      cl-ansi-text
-      cl-containers
-      cl-css
-      cl-json
-      cl-markup
-      cl-ppcre
-      cl-ppcre-unicode
-      cl-prevalence
-      cl-webkit2
-      closer-mop
-      cluffer
-      dbus
-      dexador
-      enchant
-      fset
-      hu_dot_dwim_dot_defclass-star
-      ironclad
-      local-time
-      log4cl
-      lparallel
-      mk-string-metrics
-      osicat
-      parenscript
-      plump
-      prove-asdf
-      quri
-      serapeum
-      sqlite
-      str
-      swank
-      trivia
-      trivial-clipboard
-      trivial-features
-      trivial-package-local-nicknames
-      trivial-types
-      unix-opts
+            alexandria
+            bordeaux-threads
+            calispel
+            cl-css
+            cl-json
+            cl-markup
+            cl-ppcre
+            cl-ppcre-unicode
+            cl-prevalence
+            closer-mop
+            cl-containers
+            cluffer
+            moptilities
+            dexador
+            enchant
+            file-attributes
+            iolib
+            local-time
+            log4cl
+            mk-string-metrics
+            osicat
+            parenscript
+            quri
+            serapeum
+            str
+            plump
+            swank
+            trivia
+            trivial-clipboard
+            trivial-features
+            trivial-package-local-nicknames
+            trivial-types
+            unix-opts
+            cl-html-diff
+            hu_dot_dwim_dot_defclass-star
+            cl-custom-hash-table
+            fset
+            cl-cffi-gtk
+            cl-webkit2
     ];
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "f744af5233b3636460ce71650de2b0c7dcb9fa8e";
-      sha256 = "1m4jic7nbm2jmxlm8k0zqg62z91g2f2s86by086brgfw056idjmz";
-      # date = 2020-10-23T19:06:04+02:00;
+      rev = "8ef171fd1eb62d168defe4a2d7115393230314d1";
+      sha256 = "sha256:1dz55mdmj68kmllih7ab70nmp0mwzqp9lh3im7kcjfmc1r64irdv";
+      # date = 2021-03-27T09:10:00+00:00;
     };
 
     packageName = "nyxt";
-
-    asdFilesToKeep = [ "nyxt.asd" "nyxt-ext.asd" ];
 
     propagatedBuildInputs = [
       pkgs.libressl.out

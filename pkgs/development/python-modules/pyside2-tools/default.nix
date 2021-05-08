@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     "-DBUILD_TESTS=OFF"
   ];
 
+  dontWrapQtApps = true;
+
   # The upstream build system consists of a `setup.py` whichs builds three
   # different python libraries and calls cmake as a subprocess.  We call cmake
   # directly because that's easier to get working.  However, the `setup.py`

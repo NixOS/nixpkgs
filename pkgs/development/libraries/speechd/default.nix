@@ -2,6 +2,7 @@
 , substituteAll
 , pkg-config
 , fetchurl
+, fetchpatch
 , python3Packages
 , gettext
 , itstool
@@ -39,17 +40,24 @@ let
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0j2lfzkmbsxrrgjw6arzvnfd4jn5pxab28xsk2djssr2ydb9x309";
+    sha256 = "sha256-sGMZ8gHhXlbGKWZTr1vPwwDLNI6XLVF9+LBurHfq4tw=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       utillinux = util-linux;
+    })
+
+    # Fix build with Glib 2.68
+    # https://github.com/brailcom/speechd/pull/462
+    (fetchpatch {
+      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
+      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
     })
   ];
 

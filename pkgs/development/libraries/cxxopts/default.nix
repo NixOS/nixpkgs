@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cxxopts";
-  version = "2.2.1";
+  version = "unstable-2020-12-14";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
     repo = name;
-    rev = "v${version}";
-    sha256 = "0d3y747lsh1wkalc39nxd088rbypxigm991lk3j91zpn56whrpha";
+    rev = "2d8e17c4f88efce80e274cb03eeb902e055a91d3";
+    sha256 = "0pwrac81zfqjs17g3hx8r3ds2xf04npb6mz111qjy4bx17314ib7";
   };
 
   buildInputs = lib.optional enableUnicodeHelp [ icu.dev ];

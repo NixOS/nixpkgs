@@ -15,6 +15,9 @@ buildPythonPackage rec {
     pillow
   ];
 
+  # no tests exectuted
+  doCheck = false;
+
   meta = with lib; {
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";

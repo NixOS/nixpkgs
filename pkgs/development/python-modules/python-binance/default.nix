@@ -1,20 +1,20 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, requests-mock, tox
-, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
+, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted, ujson }:
 
 buildPythonPackage rec {
-  version = "0.7.5";
+  version = "0.7.9";
   pname = "python-binance";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6a96c0e55fc78d45279944515d385b3971300f35c2380ddb82689d676712053";
+    sha256 = "476459d91f6cfe0a37ccac38911643ea6cca632499ad8682e0957a075f73d239";
   };
 
   doCheck = false;  # Tries to test multiple interpreters with tox
   checkInputs = [ pytest requests-mock tox ];
 
-  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ];
+  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ujson ];
 
   meta = {
     description = "Binance Exchange API python implementation for automated trading";

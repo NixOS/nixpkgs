@@ -12,7 +12,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pytest pytest-metadata ];
+  buildInputs = [ pytest ];
+  propagatedBuildInputs = [ pytest-metadata ];
 
   meta = with lib; {
     description = "Plugin for generating HTML reports";

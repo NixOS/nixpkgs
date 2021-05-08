@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

@@ -2,12 +2,12 @@
 , pango, fribidi, harfbuzz, pcre, pkg-config
 , ncursesSupport ? true, ncurses ? null
 , waylandSupport ? true, wayland ? null, wayland-protocols ? null
-, x11Support ? true, xlibs ? null, xorg ? null
+, x11Support ? true, xorg ? null
 }:
 
 assert ncursesSupport -> ncurses != null;
 assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
-assert x11Support -> xlibs != null && xorg != null;
+assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ] ++ optional ncursesSupport ncurses
     ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optionals x11Support [
-      xlibs.libX11 xlibs.libXinerama xlibs.libXft
+      xorg.libX11 xorg.libXinerama xorg.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];
 

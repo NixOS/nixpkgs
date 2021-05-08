@@ -1,21 +1,47 @@
-{ lib, stdenv, fetchurl, pkg-config, gobject-introspection, intltool, vala
-, libcap_ng, libvirt, libxml2
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, gettext
+, gtk-doc
+, docbook-xsl-nons
+, vala
+, libcap_ng
+, libvirt
+, libxml2
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvirt-glib-3.0.0";
+  name = "libvirt-glib-4.0.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "1zpbv4ninc57c9rw4zmmkvvqn7154iv1qfr20kyxn8xplalqrzvz";
+    url = "https://libvirt.org/sources/glib/${name}.tar.xz";
+    sha256 = "hCP3Bp2qR2MHMh0cEeLswoU0DNMsqfwFIHdihD7erL0=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool vala gobject-introspection ];
-  buildInputs = [ libcap_ng libvirt libxml2 gobject-introspection ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gtk-doc
+    docbook-xsl-nons
+    vala
+    gobject-introspection
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    libcap_ng
+    libvirt
+    libxml2
+    gobject-introspection
+  ];
+
   strictDeps = true;
 
   meta = with lib; {

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -20,6 +21,12 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-cov
     pytestCheckHook
+  ];
+
+  # https://github.com/agronholm/cbor2/issues/99
+  disabledTests = lib.optionals stdenv.is32bit [
+    "test_huge_truncated_bytes"
+    "test_huge_truncated_string"
   ];
 
   pythonImportsCheck = [ "cbor2" ];

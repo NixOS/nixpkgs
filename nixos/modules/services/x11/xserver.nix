@@ -251,11 +251,10 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "modesetting" ];
+        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
         example = [
-          "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -650,7 +649,7 @@ in
         xorg.xprop
         xorg.xauth
         pkgs.xterm
-        pkgs.xdg_utils
+        pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
@@ -667,6 +666,7 @@ in
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,
     # the value below is used by default on several other distros.
+    boot.kernel.sysctl."fs.inotify.max_user_instances" = mkDefault 524288;
     boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";

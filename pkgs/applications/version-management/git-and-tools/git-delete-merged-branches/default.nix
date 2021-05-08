@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Command-line tool to delete merged Git branches";
     homepage = "https://pypi.org/project/git-delete-merged-branches/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

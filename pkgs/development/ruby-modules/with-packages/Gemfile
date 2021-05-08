@@ -74,6 +74,7 @@ source 'https://rubygems.org' do
   gem 'jekyll'
   gem 'jmespath'
   gem 'jwt'
+  gem 'kramdown-rfc2629'
   gem 'libv8'
   gem 'libxml-ruby'
   gem 'magic'

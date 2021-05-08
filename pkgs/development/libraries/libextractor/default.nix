@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkg-config, fetchpatch
+, exiv2, libgsf, rpm, pkg-config
 , gstreamerSupport ? true, gst_all_1 ? null
 # ^ Needed e.g. for proper id3 and FLAC support.
 #   Set to `false` to decrease package closure size by about 87 MB (53%).
@@ -20,28 +20,15 @@ assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg_3 != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-1.9";
+  pname = "libextractor";
+  version = "1.11";
 
   src = fetchurl {
-    url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "1zz2zvikvfibxnk1va3kgzs7djsmiqy7bmk8y01vbsf54ryjb3zh";
+    url = "mirror://gnu/libextractor/${pname}-${version}.tar.gz";
+    sha256 = "sha256-FvYzq4dGo4VHxKHaP0WRGSsIJa2DxDNvBXW4WEPYvY8=";
   };
 
-  patches = [
-    ./fix-gcc8-build.patch
-    # Fixes build with exiv2 0.27
-    (fetchpatch {
-      name = "libextractor-exiv2-0.27.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/libextractor-exiv2-0.27.patch?h=packages/libextractor&id=4dc53f7fc69210ae571285dface108ed65d8ee53";
-      sha256 = "0w4gc1q1m1yxsd4hv105nblmif465nw3g5nxzldy0x2rl9mdncg6";
-    })
-    (fetchpatch {
-      name = "CVE-2019-15531.patch";
-      url = "https://git.gnunet.org/libextractor.git/patch/?id=d2b032452241708bee68d02aa02092cfbfba951a";
-      sha256 = "01xhcjbzv6p53wz7y2ii76kb8m9iwvnm4ip9w4a0bpgaxqz4b9fw";
-      excludes = [ "ChangeLog" ];
-    })
-  ] ++ lib.optionals gstreamerSupport [
+  patches = lib.optionals gstreamerSupport [
 
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {
@@ -76,12 +63,11 @@ stdenv.mkDerivation rec {
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.
-  # FIXME: Tests currently fail and the test framework appears to be deeply
-  # broken anyway.
   doCheck = false;
-  #postInstall = "make check";
+  doInstallCheck = true;
+  installCheckPhase = "make check";
 
-  meta = {
+  meta = with lib; {
     description = "Simple library for keyword extraction";
 
     longDescription =
@@ -105,9 +91,9 @@ stdenv.mkDerivation rec {
          additional MIME types are detected.
       '';
 
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.jorsn ];
+    platforms = platforms.linux;
   };
 }

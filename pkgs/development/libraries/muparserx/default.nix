@@ -38,5 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://beltoforion.de/en/muparserx/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
+    # selftest fails
+    broken = stdenv.isDarwin;
   };
 }

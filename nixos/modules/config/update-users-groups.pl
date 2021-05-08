@@ -288,7 +288,7 @@ foreach my $u (values %usersOut) {
     push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
 
-updateFile("/etc/shadow", \@shadowNew, 0600);
+updateFile("/etc/shadow", \@shadowNew, 0640);
 {
     my $uid = getpwnam "root";
     my $gid = getgrnam "shadow";

@@ -6,17 +6,17 @@
 , azure-storage-common
 , msrest
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.7.1";
+  version = "12.8.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c6249f211684929ea6c9d34b5151b06d039775344f0d48fcf479736ed4c11b9e";
+    sha256 = "eb37b50ddfb6e558b29f6c8c03b0666514e55d6170bf4624e7261a3af93c6401";
   };
 
   propagatedBuildInputs = [

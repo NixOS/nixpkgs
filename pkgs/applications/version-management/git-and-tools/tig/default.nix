@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0wxcbfqsk8p84zizy6lf3gp5j122wrf8c7xlipki6nhcfhksn33b";
+    sha256 = "sha256-BXs7aKUYiU5L2OjhhmJ+dkHvNcrnw5qREwOTB6npLnw=";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm -f contrib/config.make-*
+      rm contrib/config.make-*
   '';
 
   enableParallelBuilding = true;
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

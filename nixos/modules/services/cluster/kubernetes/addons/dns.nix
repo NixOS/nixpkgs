@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.6.4";
+  version = "1.7.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -55,9 +55,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:493ee88e1a92abebac67cbd4b5658b4730e0f33512461442d8d9214ea6734a9b";
+        imageDigest = "sha256:4a6e0769130686518325b21b0c1d0688b54e7c79244d48e1b15634e98e40c6ef";
         finalImageTag = version;
-        sha256 = "0fm9zdjavpf5hni8g7fkdd3csjbhd7n7py7llxjc66sbii087028";
+        sha256 = "02r440xcdsgi137k5lmmvp0z5w5fmk8g9mysq5pnysq1wl8sj6mw";
       };
     };
   };
@@ -156,7 +156,6 @@ in {
             health :${toString ports.health}
             kubernetes ${cfg.clusterDomain} in-addr.arpa ip6.arpa {
               pods insecure
-              upstream
               fallthrough in-addr.arpa ip6.arpa
             }
             prometheus :${toString ports.metrics}

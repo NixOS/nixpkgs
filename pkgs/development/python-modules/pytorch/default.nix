@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
+  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -30,8 +30,6 @@
   isPy3k, pythonOlder }:
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || cudatoolkit != null;
-assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
                         in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
@@ -40,6 +38,7 @@ assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
 assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
+  setBool = v: if v then "1" else "0";
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
@@ -74,27 +73,35 @@ let
   # (allowing FBGEMM to be built in pytorch-1.1), and may future proof this
   # derivation.
   brokenArchs = [ "3.0" ]; # this variable is only used as documentation.
-  cuda9ArchList = [
-    "3.5"
-    "5.0"
-    "5.2"
-    "6.0"
-    "6.1"
-    "7.0"
-    "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-               # which leads me to believe this is the final cuda-9-compatible architecture.
-  ];
-  cuda10ArchList = cuda9ArchList ++ [
-    "7.5"
-    "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
-  ];
+
+  cudaCapabilities = rec {
+    cuda9 = [
+      "3.5"
+      "5.0"
+      "5.2"
+      "6.0"
+      "6.1"
+      "7.0"
+      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
+                 # which leads me to believe this is the final cuda-9-compatible architecture.
+    ];
+
+    cuda10 = cuda9 ++ [
+      "7.5"
+      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+    ];
+
+    cuda11 = cuda10 ++ [
+      "8.0"
+      "8.0+PTX"  # < CUDA toolkit 11.0
+      "8.6"
+      "8.6+PTX"  # < CUDA toolkit 11.1
+    ];
+  };
   final_cudaArchList =
     if !cudaSupport || cudaArchList != null
     then cudaArchList
-    else
-      if lib.versions.major cudatoolkit.version == "9"
-      then cuda9ArchList
-      else cuda10ArchList; # the assert above removes any ambiguity here.
+    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -110,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.7.1";
+  version = "1.8.1";
 
   disabled = !isPy3k;
 
@@ -125,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-udpbSL8xnzf20A1pYYNlYjdp8ME8AVaAkMMiw53K6CU=";
+    sha256 = "sha256-HERbvmrfhWwH164GFHU/M0KbhVAuhI5sBZSxCZy8mRk=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -154,16 +161,17 @@ in buildPythonPackage rec {
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
-  BUILD_NAMEDTENSOR = true;
-  BUILD_DOCS = buildDocs;
+  BUILD_NAMEDTENSOR = setBool true;
+  BUILD_DOCS = setBool buildDocs;
 
-  USE_MKL = blas.implementation == "mkl";
+  # We only do an imports check, so do not build tests either.
+  BUILD_TEST = setBool false;
 
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
-  USE_MKLDNN = mklDnnSupport;
-  USE_MKLDNN_CBLAS = mklDnnSupport;
+  USE_MKLDNN = setBool mklDnnSupport;
+  USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -192,7 +200,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -289,12 +297,16 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
+  # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
-    license     = lib.licenses.bsd3;
-    platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    license     = licenses.bsd3;
+    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    # error: use of undeclared identifier 'noU'; did you mean 'no'?
+    broken = stdenv.isDarwin;
   };
 }

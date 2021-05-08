@@ -207,6 +207,7 @@ self: super: builtins.intersectAttrs super {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
+  pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
@@ -226,6 +227,7 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  telegraph = dontCheck super.telegraph;
   typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
@@ -305,7 +307,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome3.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
+      gnome.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -443,9 +445,7 @@ self: super: builtins.intersectAttrs super {
 
   # requires an X11 display in test suite
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-
-  # depends on 'hie' executable
-  lsp-test = dontCheck super.lsp-test;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -657,35 +657,28 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # spago requires an older version of megaparsec, but it appears to work
-      # fine with newer versions.
-      spagoWithOverrides = doJailbreak super.spago;
-
-      # This defines the version of the purescript-docs-search release we are using.
-      # This is defined in the src/Spago/Prelude.hs file in the spago source.
-      docsSearchVersion = "v0.0.10";
-
-      docsSearchAppJsFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+      docsSearchApp_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
         sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
       };
 
-      purescriptDocsSearchFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+      docsSearchApp_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/docs-search-app.js";
+        sha256 = "17qngsdxfg96cka1cgrl3zdrpal8ll6vyhhnazqm4hwj16ywjm02";
+      };
+
+      purescriptDocsSearch_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/purescript-docs-search";
         sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
       };
 
-      spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
-        postUnpack = (drv.postUnpack or "") + ''
-          # The source for spago is pulled directly from GitHub.  It uses a
-          # package.yaml file with hpack, not a .cabal file.  In the package.yaml file,
-          # it uses defaults from the master branch of the hspec repo.  It will try to
-          # fetch these at build-time (but it will fail if running in the sandbox).
-          #
-          # The following line modifies the package.yaml to not pull in
-          # defaults from the hspec repo.
-          substituteInPlace "$sourceRoot/package.yaml" --replace 'defaults: hspec/hspec@master' ""
+      purescriptDocsSearch_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/purescript-docs-search";
+        sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
+      };
 
+      spagoDocs = overrideCabal super.spago (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
           # `purescript-docs-search` repo above.  If they cannot be fetched at
@@ -695,19 +688,24 @@ self: super: builtins.intersectAttrs super {
           # However, they are not actually available in the spago source, so they
           # need to fetched with nix and put in the correct place.
           # https://github.com/spacchetti/spago/issues/510
-          cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
-          cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+          cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+          cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+          cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+          cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
 
           # For some weird reason, on Darwin, the open(2) call to embed these files
           # requires write permissions. The easiest resolution is just to permit that
           # (doesn't cause any harm on other systems).
-          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
+          chmod u+w \
+            "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+            "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
       });
 
-      # Because of the problem above with pulling in hspec defaults to the
-      # package.yaml file, the tests are disabled.
-      spagoWithoutChecks = dontCheck spagoFixHpack;
+      # Tests require network access.
+      spagoWithoutChecks = dontCheck spagoDocs;
     in
     spagoWithoutChecks;
 
@@ -785,7 +783,7 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
       ghc_version = self.ghc.version;
@@ -800,8 +798,73 @@ self: super: builtins.intersectAttrs super {
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  });
+  })) "all-plugins") "all-formatters";
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
+
+  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
+  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
+  hadolint = disableCabalFlag super.hadolint "static";
+
+  # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
+  doctest-driver-gen = dontCheck super.doctest-driver-gen;
+
+  # Tests access internet
+  prune-juice = dontCheck super.prune-juice;
+
+  # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
+  ihaskell = overrideCabal super.ihaskell (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [
+      # ihaskell's cabal file forces building a shared executable,
+      # but without passing --enable-executable-dynamic, the RPATH
+      # contains /build/ and leads to a build failure with nix
+      "--enable-executable-dynamic"
+    ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+      export PATH=$PWD/dist/build/ihaskell:$PATH
+      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+    '';
+  });
+
+  # tests need to execute the built executable
+  stutter = overrideCabal super.stutter (drv: {
+    preCheck = ''
+      export PATH=dist/build/stutter:$PATH
+    '' + (drv.preCheck or "");
+  });
+
+  # Install man page and generate shell completions
+  pinboard-notes-backup = overrideCabal
+    (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup)
+    (drv: {
+      postInstall = ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      '' + (drv.postInstall or "");
+    });
+
+  FractalArt = overrideCabal super.FractalArt (drv: {
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.libobjc
+      pkgs.darwin.apple_sdk.frameworks.AppKit
+    ] ++ (drv.librarySystemDepends or []);
+  });
+
+  arbtt = overrideCabal super.arbtt (drv: {
+    librarySystemDepends = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.Foundation
+      pkgs.darwin.apple_sdk.frameworks.Carbon
+      pkgs.darwin.apple_sdk.frameworks.IOKit
+    ] ++ (drv.librarySystemDepends or []);
+  });
+
+  # set more accurate set of platforms instead of maintaining
+  # an ever growing list of platforms to exclude via unsupported-platforms
+  cpuid = overrideCabal super.cpuid {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # Pass the correct libarchive into the package.
+  streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 }

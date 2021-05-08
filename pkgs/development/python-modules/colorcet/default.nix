@@ -24,7 +24,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nbsmoke
     pytest
     flake8
     pytest-mpl

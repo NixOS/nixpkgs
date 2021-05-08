@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
 buildPythonApplication rec {
   pname = "todoman";
@@ -17,8 +17,11 @@ buildPythonApplication rec {
     sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
     installShellFiles
+    setuptools-scm
   ];
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites

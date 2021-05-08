@@ -9,7 +9,7 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 
   imports = [
@@ -58,7 +58,7 @@ in
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = "Don't install XFCE desktop components (xfdesktop, panel and notification daemon).";
+        description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
@@ -74,8 +74,8 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome3.gnome-themes-extra
-      gnome3.adwaita-icon-theme
+      gnome.gnome-themes-extra
+      gnome.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
@@ -98,6 +98,7 @@ in
       parole
       ristretto
       xfce4-appfinder
+      xfce4-notifyd
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
@@ -119,7 +120,6 @@ in
         xfwm4
         xfwm4-themes
       ] ++ optionals (!cfg.noDesktop) [
-        xfce4-notifyd
         xfce4-panel
         xfdesktop
       ];
@@ -149,9 +149,8 @@ in
     security.polkit.enable = true;
     services.accounts-daemon.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.gnome3.glib-networking.enable = true;
+    services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
-    services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
@@ -166,7 +165,8 @@ in
     # Systemd services
     systemd.packages = with pkgs.xfce; [
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
-    ] ++ optional (!cfg.noDesktop) xfce4-notifyd;
+      xfce4-notifyd
+    ];
 
   };
 }

@@ -18,7 +18,7 @@
 , sqlite
 , libxslt
 , libstemmer
-, gnome3
+, gnome
 , icu
 , libuuid
 , libsoup
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.0.1";
+  version = "3.1.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
+    sha256 = "sha256-Q3bi6YRUBm9E96JC5FuZs7/kwDtn+rGauw7Vhsp0iuc=";
   };
 
   patches = [
@@ -45,11 +45,15 @@ stdenv.mkDerivation rec {
       inherit asciidoc;
     })
 
-    # Fix consistency error with sqlite 3.34
-    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
+    # Add missing build target dependencies to fix parallel building of docs.
+    # TODO: Upstream this.
+    ./fix-docs.patch
+
+    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/401
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
-      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
+      url = "https://gitlab.gnome.org/GNOME/tracker/merge_requests/401.patch";
+      sha256 = "QEf+ciGkkCzanmtGO0aig6nAxd+NxjvuNi4RbNOwZEA=";
     })
   ];
 
@@ -82,8 +86,9 @@ stdenv.mkDerivation rec {
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
+  checkInputs = with python3.pkgs; [
+    pygobject3
+    tappy
   ];
 
   mesonFlags = [
@@ -97,6 +102,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
@@ -127,7 +133,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

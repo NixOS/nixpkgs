@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [
-    "CC=cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
     "INSTALLDIR=$(out)/bin"
   ];
 

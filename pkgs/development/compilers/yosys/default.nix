@@ -1,4 +1,5 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , abc-verifier
 , bash
 , bison
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+3830";
+  version = "0.9+4052";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "b72c29465392c8d260ddf55def169438f7fb64b2";
-    sha256 = "12h3pgj8bjb254q2qaafc3qxwhqdqrx0sxjhgjrfy8cmkdm92dvy";
+    rev    = "687f381b6985d9dda7e11535628e2fafff267af5";
+    sha256 = "15lcj798ckh9zwvdqb5gnvicilsxjyxv01gcviijg310hq62n7vf";
   };
 
   enableParallelBuilding = true;
@@ -103,5 +104,12 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
+    #In file included from kernel/driver.cc:20:
+    #./kernel/yosys.h:42:10: fatal error: 'map' file not found
+    ##include <map>
+
+    #https://github.com/YosysHQ/yosys/issues/681
+    #https://github.com/YosysHQ/yosys/issues/2011
+    broken = stdenv.isDarwin;
   };
 }

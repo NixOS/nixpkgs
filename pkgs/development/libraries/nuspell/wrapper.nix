@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation {
   name = (appendToName "with-dicts" nuspell).name;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''
     makeWrapper ${nuspell}/bin/nuspell $out/bin/nuspell --prefix DICPATH : ${searchPath}
   '';

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings-desktop-schemas, sweethome3dApp }:
+{ lib
+, stdenv
+, fetchcvs
+, makeWrapper
+, makeDesktopItem
+# sweethome3d 6.4.2 does not yet build with jdk 9 and later.
+# this is fixed on trunk (7699?) but let's build with jdk8 until then.
+, jdk8
+# it can run on the latest stable jre fine though
+, jre
+, ant
+, gtk3
+, gsettings-desktop-schemas
+, sweethome3dApp }:
 
 let
 
@@ -23,15 +35,20 @@ let
       categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
-    buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings-desktop-schemas ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ ant jre jdk8 gtk3 gsettings-desktop-schemas ];
 
-    patchPhase = ''
+    postPatch = ''
       sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
       sed -i -e 's,lib/macosx/java3d-1.6/jogl-all.jar,lib/java3d-1.6/jogl-all.jar,g' build.xml
     '';
 
     buildPhase = ''
-      ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk}/lib
+      runHook preBuild
+
+      ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk8}/lib
+
+      runHook postBuild
     '';
 
     installPhase = ''

@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1z2lvfrw9shpvwxva0vf0rk74nj3mmjgxznsgq8r65645fnj5imb";
+    sha256 = "1xajsblk2954crvligvrgwp7q1pj7124xdfnlq9k9q0ya2xc36lx";
   };
 
   nativeBuildInputs = [
@@ -45,9 +45,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "The image viewer and screenshot tool for lxqt";
     homepage = "https://github.com/lxqt/lximage-qt";
-    license = licenses.gpl2;
+    description = "The image viewer and screenshot tool for lxqt";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

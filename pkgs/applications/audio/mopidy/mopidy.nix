@@ -42,7 +42,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://www.mopidy.com/";
     description = ''
       An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, Google Play Music, and more
+      SoundCloud, and more
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];

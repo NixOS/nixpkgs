@@ -4,7 +4,7 @@
 , boost
 , curl
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
 , lame
 , libev
 , libmicrohttpd
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.2";
+  version = "0.96.7";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1vvc8295yadprfqpmk9i43ghymgsqxsg8zfx3p5i86a8xrdhd9vn";
+    sha256 = "1y00vwn1h10cfflxrm5bk271ak9gilhjycgi44hlkkhmf5bdgn35";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     alsaLib
     boost
     curl
-    ffmpeg_3
+    ffmpeg
     lame
     libev
     libmicrohttpd

@@ -9,8 +9,8 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        users.users.testuser = { };
-        users.users.testuser2 = { };
+        users.users.testuser = { isSystemUser = true; };
+        users.users.testuser2 = { isSystemUser = true; };
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
           { name = "testdb3"; schema = ./testdb.sql; }
@@ -44,8 +44,8 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         # Kernel panic - not syncing: Out of memory: compulsory panic_on_oom is enabled
         virtualisation.memorySize = 1024;
 
-        users.users.testuser = { };
-        users.users.testuser2 = { };
+        users.users.testuser = { isSystemUser = true; };
+        users.users.testuser2 = { isSystemUser = true; };
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
           { name = "testdb3"; schema = ./testdb.sql; }
@@ -75,8 +75,8 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        users.users.testuser = { };
-        users.users.testuser2 = { };
+        users.users.testuser = { isSystemUser = true; };
+        users.users.testuser2 = { isSystemUser = true; };
         services.mysql.enable = true;
         services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
           ALTER USER root@localhost IDENTIFIED WITH unix_socket;

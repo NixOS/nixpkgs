@@ -6,18 +6,19 @@
 , pcre
 , qtbase
 , glib
+, perl
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1wf6mhcfgk64isy7bk018szlm18xa3hjjnmhpcy2whnnjfq0jal6";
+    sha256 = "0zhcv6cbdn9fr5lpglz26gzssbxkpi824sgc0g7w3hh1z6nqqf8l";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,10 @@ mkDerivation rec {
     pcre
   ];
 
+  propagatedBuildInputs = [
+    perl # needed by LXQtTranslateDesktop.cmake
+  ];
+
   setupHook = ./setup-hook.sh;
 
   # We're dependent on this macro doing add_definitions in most places
@@ -44,9 +49,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Various packaging tools and scripts for LXQt applications";
     homepage = "https://github.com/lxqt/lxqt-build-tools";
-    license = licenses.lgpl21;
+    description = "Various packaging tools and scripts for LXQt applications";
+    license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

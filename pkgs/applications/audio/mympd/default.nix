@@ -1,36 +1,35 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
-, mpd_clientlib
+, libmpdclient
 , openssl
 , lua5_3
 , libid3tag
 , flac
-, mongoose
+, pcre
 }:
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "6.10.0";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${version}";
-    sha256 = "sha256-QGJti1tKKJlumLgABPmROplF0UVGMWMnyRXLb2cEieQ=";
+    sha256 = "sha256-2V3LbgnJfTIO71quZ+hfLnw/lNLYxXt19jw2Od6BVvM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    mpd_clientlib
+    libmpdclient
     openssl
     lua5_3
     libid3tag
     flac
+    pcre
   ];
 
   cmakeFlags = [

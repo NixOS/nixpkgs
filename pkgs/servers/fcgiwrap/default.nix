@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://nginx.localdomain.pl/wiki/FcgiWrap";
     description = "Simple server for running CGI applications over FastCGI";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
     license = licenses.mit;
   };

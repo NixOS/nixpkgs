@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
   };
 
-  makeFlags = lib.optionals stdenv.cc.isClang [ "CC=cc" "LD=cc" ];
+  makeFlags = lib.optionals stdenv.cc.isClang [ "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install -Dt $out/bin bchunk

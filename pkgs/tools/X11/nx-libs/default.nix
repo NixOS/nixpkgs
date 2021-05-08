@@ -4,12 +4,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
-  version = "3.5.99.25";
+  version = "3.5.99.26";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "01aqdwy0i4nxdyfa24bwnrqjz93q0idihdaqals2yjqpg160nwfc";
+    sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config which
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ jD91mZM2 ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

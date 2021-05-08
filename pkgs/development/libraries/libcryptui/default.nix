@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome3, gtk3, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   pname = "libcryptui";
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

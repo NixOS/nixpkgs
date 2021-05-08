@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "gnuplot";
   version = "0.7";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {

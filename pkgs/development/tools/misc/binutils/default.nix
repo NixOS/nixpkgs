@@ -61,6 +61,7 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    ./CVE-2020-35448.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
        # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
@@ -142,6 +143,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix;
+    isGNU = true;
   };
 
   meta = with lib; {

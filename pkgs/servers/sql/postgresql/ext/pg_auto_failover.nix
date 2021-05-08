@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x19p0b9hv1hkhwjm68cm8gskhnsl7np4si8wl0ablf6kasyl3q7";
+    sha256 = "14bh3cqkdd1z16iy0lmv8a3f8gmmink1nzhf5jhkd0n6g7r65p6d";
   };
 
   buildInputs = [ postgresql openssl zlib readline ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";
     homepage = "https://github.com/citusdata/pg_auto_failover";
+    changelog = "https://github.com/citusdata/pg_auto_failover/raw/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;

@@ -10,10 +10,10 @@
 
 let
   pname = "skein";
-  version = "0.8.0";
+  version = "0.8.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nb64p1hzshgi1kfc2jx1v9vn8b0wzs50460wfra3fsxh0ap66ab";
+    sha256 = "04208b4be9df2dc68ac5b3e3ae51fd9b589add95ea1b67222a8de754d17b1efa";
   };
   skeinJar = callPackage ./skeinjar.nix { inherit src version; };
 in

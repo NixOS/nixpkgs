@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     qtbase qtdeclarative qtquickcontrols2
   ];
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     "-DCMAKE_INCLUDE_PATH=${libjack2}/include/jack;${libpulseaudio.dev}/include/pulse"
     "-DENABLE_JACK=ON"

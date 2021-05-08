@@ -74,7 +74,10 @@ linkend="sec-configuration-syntax"/>, we saw the following structure
    <callout arearefs='module-syntax-1'>
     <para>
      This line makes the current Nix expression a function. The variable
-     <varname>pkgs</varname> contains Nixpkgs, while <varname>config</varname>
+     <varname>pkgs</varname> contains Nixpkgs (by default, it takes the
+     <varname>nixpkgs</varname> entry of <envar>NIX_PATH</envar>, see the <link
+     xlink:href="https://nixos.org/manual/nix/stable/#sec-common-env">Nix
+     manual</link> for further details), while <varname>config</varname>
      contains the full system configuration. This line can be omitted if there
      is no reference to <varname>pkgs</varname> and <varname>config</varname>
      inside the module.

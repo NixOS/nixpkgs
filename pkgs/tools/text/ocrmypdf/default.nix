@@ -7,7 +7,8 @@
 , python3
 , python3Packages
 , qpdf
-, lib, stdenv
+, lib
+, stdenv
 , tesseract4
 , unpaper
 , substituteAll
@@ -29,18 +30,17 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "11.3.3";
+  version = "11.7.3";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "0qv34clid65p11dgqalyk7b7myn5ibiz8i9xxhxkmjblw297p6ak";
+    sha256 = "0gs2w9kl5wwrs0hx2sivq3pdvpf3lkaifblwfbz5g31yl770blji";
   };
 
   nativeBuildInputs = with python3Packages; [
-    pytestrunner
     setuptools
     setuptools-scm-git-archive
     setuptools_scm
@@ -65,8 +65,7 @@ buildPythonApplication rec {
     pytest
     pytest-helpers-namespace
     pytest_xdist
-    pytestcov
-    pytestrunner
+    pytest-cov
     python-xmp-toolkit
     pytestCheckHook
   ] ++ runtimeDeps;
@@ -83,8 +82,9 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = licenses.gpl3;
+    license = with licenses; [ mpl20 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.kiwi ];
+    changelog  = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
 }

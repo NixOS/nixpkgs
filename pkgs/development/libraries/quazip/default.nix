@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "quazip";
-  version = "0.9.1";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "stachenov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11icgwv2xyxhd1hm1add51xv54zwkcqkg85d1xqlgiigvbm196iq";
+    sha256 = "06srglrj6jvy5ngmidlgx03i0d5w91yhi7sf846wql00v8rvhc5h";
   };
 
   buildInputs = [ zlib qtbase ];
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Provides access to ZIP archives from Qt programs";

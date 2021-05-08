@@ -87,6 +87,7 @@ in
         NoNewPrivileges = true;
         NonBlocking = true;
         PrivateDevices = true;
+        ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
         ProtectHostname = true;
@@ -107,8 +108,12 @@ in
         SystemCallFilter = [
           "@system-service"
           "@chown"
+          "~@aio"
+          "~@keyring"
+          "~@memlock"
           "~@resources"
-          "@privileged"
+          "~@setuid"
+          "~@timer"
         ];
       };
     };

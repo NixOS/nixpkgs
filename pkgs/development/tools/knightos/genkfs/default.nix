@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoc }:
+{ lib, stdenv, fetchFromGitHub, asciidoc, cmake, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "genkfs";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f50idd2bb73b05qjmwlirjnhr1bp43zhrgy6z949ab9a7hgaydp";
   };
 
-  nativeBuildInputs = [ asciidoc cmake ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ asciidoc libxslt.bin cmake ];
 
   hardeningDisable = [ "format" ];
 

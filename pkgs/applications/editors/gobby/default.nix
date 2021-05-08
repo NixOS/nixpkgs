@@ -1,18 +1,18 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
 , lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, wrapGAppsHook, yelp-tools
-, gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome3 }:
+, gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome }:
 
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "gobby";
-  version = "unstable-2020-12-29";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "gobby";
     repo = "gobby";
-    rev = "49bfd3c3aa82e6fe9b3d59c3455d7eb4b77379fc";
-    sha256 = "1p2f2rid7c0b9gvmywl3r37sxx57wv3r1rxvs1rwihmf9rkqnfxg";
+    rev = "v${version}";
+    sha256 = "06cbc2y4xkw89jaa0ayhgh7fxr5p2nv3jjs8h2xcbbbgwaw08lk0";
   };
 
   nativeBuildInputs = [ autoconf automake pkg-config intltool itstool yelp-tools wrapGAppsHook ];

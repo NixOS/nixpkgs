@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsaLib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
-, epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
+, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
+, epoxy, gdk-pixbuf, gnome, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     libGLU libGL
     libarchive
     libao
-    unzip
-    xdg_utils
-    gnome3.adwaita-icon-theme
+    xdg-utils
+    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     wrapGAppsHook
+    unzip
   ];
 
   installPhase = ''

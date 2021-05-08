@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
     "--enable-colors256"
   ];
 
-  patches = lib.optional stdenv.hostPlatform.isMusl
+  patches = [
+    (fetchpatch {
+      # Fixes denial of services in encoding.c, remove > 4.8.0
+      name = "CVE-2021-26937.patch";
+      url = "https://salsa.debian.org/debian/screen/-/raw/master/debian/patches/99_CVE-2021-26937.patch";
+      sha256 = "05f3p1c7s83nccwkhmavjzgaysxnvq41c7jffs31ra65kcpabqy0";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
       url = "https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff";
       sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";

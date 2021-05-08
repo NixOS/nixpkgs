@@ -1,0 +1,17 @@
+diff --git a/magic/loader.py b/magic/loader.py
+index 6b2bfcb..69778af 100644
+--- a/magic/loader.py
++++ b/magic/loader.py
+@@ -5,11 +5,7 @@ import glob
+ def load_lib():
+   libmagic = None
+   # Let's try to find magic or magic1
+-  dll = ctypes.util.find_library('magic') \
+-        or ctypes.util.find_library('magic1') \
+-        or ctypes.util.find_library('cygmagic-1') \
+-        or ctypes.util.find_library('libmagic-1') \
+-        or ctypes.util.find_library('msys-magic-1')  # for MSYS2
++  dll = '@libmagic@'
+ 
+   # necessary because find_library returns None if it doesn't find the library
+   if dll:

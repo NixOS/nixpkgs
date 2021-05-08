@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";
-  version = "1.4.43";
+  version = "1.4.72";
 
   src = fetchFromGitHub {
     owner = "NXPmicro";
     repo = "mfgtools";
     rev = "uuu_${version}";
-    sha256 = "1i1mvr6j0mc33axf6cmmsi83apr5rgq0z0sn23qav9r0izpnnh0w";
+    sha256 = "1s3wlz4yb2p8by5p66vr0z72n84mxkrmda63x9yr6pinqinsyrvv";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 libusb1 libzip openssl ];
 
   preConfigure = "echo ${version} > .tarball-version";
+
+  postInstall = ''
+    # rules printed by the following invocation are static,
+    # they come from hardcoded configs in libuuu/config.cpp:48
+    $out/bin/uuu -udev > udev-rules 2>stderr.txt
+    rules_file="$(cat stderr.txt|grep '1: put above udev run into'|sed 's|^.*/||')"
+    install -D udev-rules "$out/lib/udev/rules.d/$rules_file"
+  '';
 
   meta = with lib; {
     description = "Freescale/NXP I.MX chip image deploy tools";

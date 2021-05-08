@@ -21,10 +21,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyramid hawkauthlib tokenlib ];
   buildInputs = [ webtest ];
 
+  pythonImportsCheck = [ "pyramid_hawkauth" ];
+
   meta = with lib; {
     homepage = "https://github.com/mozilla-services/pyramid_hawkauth";
     description = "A Pyramid authentication plugin for HAWK";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

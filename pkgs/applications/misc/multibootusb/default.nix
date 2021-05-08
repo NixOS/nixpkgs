@@ -110,5 +110,6 @@ python36Packages.buildPythonApplication rec {
     homepage = "http://multibootusb.org/";
     license = licenses.gpl2;
     maintainers = []; # Looking for a maintainer!
+    broken = true; # "name 'config' is not defined", added 2021-02-06
   };
 }

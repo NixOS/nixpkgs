@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   libbasename = "libzn_poly";
   libext = stdenv.targetPlatform.extensions.sharedLibrary;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   # Tuning (either autotuning or with hand-written paramters) is possible
   # but not implemented here.

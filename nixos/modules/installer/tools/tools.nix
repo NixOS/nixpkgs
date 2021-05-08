@@ -34,8 +34,9 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
+    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
@@ -87,8 +88,8 @@ in
 
     desktopConfiguration = mkOption {
       internal = true;
-      type = types.str;
-      default = "";
+      type = types.listOf types.lines;
+      default = [];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
@@ -136,6 +137,8 @@ in
         #   keyMap = "us";
         # };
 
+      $xserverConfig
+
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
@@ -160,7 +163,8 @@ in
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   wget vim
+        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        #   wget
         #   firefox
         # ];
 

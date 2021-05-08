@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkg-config, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk, libgee
+{ lib, stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkg-config, libxml2, meson, ninja, gtk3, glib, webkitgtk, libgee
 , gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
 , appstream, desktop-file-utils }:
 

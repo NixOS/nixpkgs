@@ -1,17 +1,18 @@
 { fetchFromGitHub, lib, buildGoModule,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
+  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
+  nixosTests }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.26.0";
+  version = "3.29.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "1z8hiamg3h1fnsmr8j5l9q6c8cd81lqmd00gcmz4spw73pqfxg3r";
+    sha256 = "sha256-76yyqZi+ktcwRXo0ZIcdFJ9YCuHm9Te4AI+4meuhMNA=";
   };
 
-  vendorSha256 = "1kxnpn4py8a2rz1gwg0y3yiwcwphj38pkp2k9z1p85ccm2wblljz";
+  vendorSha256 = "sha256-6cejbCbr0Rn4jWFJ0fxG4v0L0xUM8k16cbACmcQ6m4o=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
@@ -29,6 +30,10 @@ buildGoModule rec {
     wrapProgram $out/bin/buildkite-agent \
       --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.buildkite-agents;
+  };
 
   meta = with lib; {
     description = "Build runner for buildkite.com";

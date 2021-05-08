@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     rev = "15471e75f3d65b93150f414ebcaf59a03054b68d";
   };
 
-  buildInputs = [ gmp which flex bison makeWrapper autoconf automake libtool
-                  jdk perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ gmp which flex bison autoconf automake libtool jdk perl ];
 
   preConfigure = ''
     cd aldor ;

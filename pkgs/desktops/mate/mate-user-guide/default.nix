@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, itstool, libxml2, yelp }:
+{ lib, stdenv, fetchurl, gettext, itstool, libxml2, yelp, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "MATE User Guide";

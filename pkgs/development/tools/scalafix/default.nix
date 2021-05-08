@@ -19,7 +19,8 @@ in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
-  buildInputs = [ jdk makeWrapper deps ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk deps ];
 
   doCheck = true;
 

@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.2.0";
+  version = "11.2.5";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "125y3zdhj353dmmjmssdaib2zp1jg5aiqmvpgkrzhnh5nx2icfv6";
+    sha256 = "sha256-Jv+NSKw/+l+b4lfVGgCZFlcTScO/WAO/d7DtI0FAEV4=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
-      --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
   '';
 
   meta = with lib; {

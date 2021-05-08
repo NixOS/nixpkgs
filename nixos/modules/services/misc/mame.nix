@@ -53,7 +53,7 @@ in
       description = "MAME TUN/TAP Ethernet interface";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.iproute ];
+      path = [ pkgs.iproute2 ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

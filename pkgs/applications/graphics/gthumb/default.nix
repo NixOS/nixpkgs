@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
-, gnome3
+, gnome
 , pkg-config
 , meson
 , ninja
@@ -33,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.10.1";
+  version = "3.11.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0gm7q6n9lnjsdqpx5b0cqjayhzwnplqb6p5pshzhbfp2zqd2g9ss";
+    sha256 = "11bvcimamdcksgqj1ymh54yzhpwc5j8glda8brqqhwq3h2wj0j9d";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     exiv2
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -96,8 +95,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

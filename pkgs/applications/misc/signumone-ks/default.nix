@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper,
-  atk, ffmpeg, gdk-pixbuf, glibc, gtk3, libav_0_8, libXtst }:
+  atk, ffmpeg, gdk-pixbuf, gtk3, libXtst }:
 
 stdenv.mkDerivation rec {
   pname = "signumone-ks";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    atk glibc gdk-pixbuf stdenv.cc.cc ffmpeg
-    libav_0_8 gtk3 libXtst
+    atk gdk-pixbuf ffmpeg
+    gtk3 libXtst
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

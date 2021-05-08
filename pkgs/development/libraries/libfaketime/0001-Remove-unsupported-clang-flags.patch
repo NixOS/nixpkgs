@@ -1,25 +1,13 @@
-From f974fe07de9e6820bb1de50b31e480296d1d97b7 Mon Sep 17 00:00:00 2001
-From: Christian Kampka <christian@kampka.net>
-Date: Wed, 25 Nov 2020 20:09:50 +0100
-Subject: [PATCH] Remove unsupported clang flags
-
----
- src/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/src/Makefile b/src/Makefile
-index f13a6bb..b305150 100644
+index 2af4804..bcff809 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -69,7 +69,7 @@ PREFIX ?= /usr/local
+@@ -80,7 +80,7 @@ PREFIX ?= /usr/local
  LIBDIRNAME ?= /lib/faketime
  PLATFORM ?=$(shell uname)
  
--CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
-+CFLAGS += -std=gnu99 -Wall -Wextra -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
+-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_UTIME -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
++CFLAGS += -std=gnu99 -Wall -Wextra -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_UTIME -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
  ifeq ($(PLATFORM),SunOS)
  CFLAGS += -D__EXTENSIONS__ -D_XOPEN_SOURCE=600
  endif
--- 
-2.28.0
-

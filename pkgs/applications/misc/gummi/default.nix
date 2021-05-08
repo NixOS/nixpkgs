@@ -1,5 +1,5 @@
 { lib, stdenv, pkgs
-, glib, gnome3, gtk3, gtksourceview3, gtkspell3, poppler, texlive
+, glib, gnome, gtk3, gtksourceview3, gtkspell3, poppler, texlive
 , pkg-config, intltool, autoreconfHook, wrapGAppsHook
 }:
 

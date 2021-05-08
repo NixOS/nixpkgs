@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "lawl";
@@ -11,7 +11,10 @@ buildGoModule rec {
     sha256 = "1a4g112h83m55pga8kq2a1wzxpycj59v4bygyjfyi1s09q1y97qg";
   };
 
-  patches = [ ./version.patch ];
+  patches = [
+    # Get version from environment instead of git tags
+    ./version.patch
+  ];
 
   vendorSha256 = null;
 

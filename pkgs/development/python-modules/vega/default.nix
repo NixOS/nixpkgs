@@ -1,5 +1,5 @@
 { lib, buildPythonPackage , fetchPypi, pythonOlder
-, pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
+, jupyter_core, pandas, ipywidgets, jupyter }:
 
 buildPythonPackage rec {
   pname = "vega";
@@ -11,12 +11,11 @@ buildPythonPackage rec {
     sha256 = "f343ceb11add58d24cd320d69e410b111a56c98c9069ebb4ef89c608c4c1950d";
   };
 
-  buildInputs = [ pytest ];
   propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
 
   # currently, recommonmark is broken on python3
   doCheck = false;
-  checkInputs = [ altair ];
+  pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";

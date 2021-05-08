@@ -2,15 +2,16 @@
 , bctoolbox
 , cmake
 , fetchFromGitLab
+, lib
 , libantlr3c
 , mbedtls
-, lib, stdenv
+, stdenv
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.4.21";
+  version = "4.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "0ylv1jsqnfhw23i6p3lfqqzw48lwii8zwkq3y34q0hhnngn26iiw";
+    sha256 = "0d1wf0jv9lb0s6r49i9gz5nrx8jzpkx558hywll7idma9d0mr61p";
   };
 
   nativeBuildInputs = [ antlr3_4 cmake ];

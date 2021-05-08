@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
-  patches = [ ./clean-env.patch ];
-
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config autoconf automake ];
@@ -57,6 +55,11 @@ stdenv.mkDerivation rec {
     # Fix sandbox impurities.
     substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
     substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
+
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    substituteInPlace src/Makefile.in \
+      --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
   '';
 
   configureFlags = [

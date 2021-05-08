@@ -86,7 +86,6 @@ let
                           else if targetPlatform.isWindows then "mcf"
                           else "single"}"
       "--enable-nls"
-      "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
@@ -94,9 +93,6 @@ let
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
-    ] ++ lib.optionals (targetPlatform.libc == "musl") [
-      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-      "--disable-libmpx"
     ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
@@ -147,6 +143,10 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
+    # Support -m32 on powerpc64le
+    ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
+      "--enable-targets=powerpcle-linux"
+
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
     ++ lib.optionals (cloog != null) [
@@ -176,11 +176,15 @@ let
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ lib.optional (targetPlatform.libc == "musl")
+      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+      "--disable-libmpx"
     ++ lib.optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"

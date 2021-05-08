@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "liblxqt";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1rp26g1ygzzy1cm7md326sv99zjz4y12pa402nlf2vrf2lzbwfmk";
+    sha256 = "0n0pjz5wihchfcji8qal0lw8kzvv3im50v1lbwww4ymrgacz9h4l";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,10 @@ mkDerivation rec {
   patches = [ ./fix-application-path.patch ];
 
   postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/119766
+    substituteInPlace lxqtbacklight/linux_backend/driver/libbacklight_backend.c \
+      --replace "pkexec lxqt-backlight_backend" "pkexec $out/bin/lxqt-backlight_backend"
+
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
 

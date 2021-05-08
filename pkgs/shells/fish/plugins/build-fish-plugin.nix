@@ -11,8 +11,6 @@ attrs@{
   buildPhase ? ":",
   preInstall ? "",
   postInstall ? "",
-  # name of the subdirectory in which to store the plugin
-  installPath ? lib.getName pname,
 
   checkInputs ? [],
   # plugin packages to add to the vendor paths of the test fish shell
@@ -26,7 +24,15 @@ attrs@{
   ...
 }:
 
-stdenv.mkDerivation (attrs // {
+let
+  # Do not pass attributes that are only relevant to buildFishPlugin to mkDerivation.
+  drvAttrs = builtins.removeAttrs attrs [
+    "checkPlugins"
+    "checkFunctionDirs"
+  ];
+in
+
+stdenv.mkDerivation (drvAttrs // {
   inherit name;
   inherit unpackPhase configurePhase buildPhase;
 

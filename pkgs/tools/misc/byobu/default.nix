@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ perl makeWrapper gettext ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl gettext ];
   propagatedBuildInputs = [ textual-window-manager screen ];
 
   postPatch = ''

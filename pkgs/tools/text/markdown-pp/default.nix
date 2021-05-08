@@ -1,13 +1,15 @@
-{ fetchFromGitHub, pythonPackages, lib }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-with pythonPackages;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "MarkdownPP";
   version = "1.5.1";
-  propagatedBuildInputs = [ pillow watchdog ];
+  propagatedBuildInputs = with python3.pkgs; [ pillow watchdog ];
   checkPhase = ''
     cd test
-    PATH=$out/bin:$PATH ${python}/bin/${python.executable} test.py
+    PATH=$out/bin:$PATH ${python3}/bin/${python3.executable} test.py
   '';
   src = fetchFromGitHub {
     owner = "jreese";

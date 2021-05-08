@@ -51,6 +51,7 @@ in
 , license
 , enableParallelBuilding ? true
 , maintainers ? null
+, changelog ? null
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
@@ -463,7 +464,12 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !isLibrary then "${setupCommand} install" else ''
+    ${if !isLibrary && buildTarget == "" then "${setupCommand} install"
+      # ^^ if the project is not a library, and no build target is specified, we can just use "install".
+      else if !isLibrary then "${setupCommand} copy ${buildTarget}"
+      # ^^ if the project is not a library, and we have a build target, then use "copy" to install
+      # just the target specified; "install" will error here, since not all targets have been built.
+    else ''
       ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
@@ -642,6 +648,7 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? description)    { inherit description; }
          // optionalAttrs (args ? maintainers)    { inherit maintainers; }
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
+         // optionalAttrs (args ? changelog)      { inherit changelog; }
          ;
 
 }

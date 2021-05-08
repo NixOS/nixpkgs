@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
-  version = "1.13.9";
+  version = "1.13.10";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
     rev = version;
-    sha256 = "0plr2h1qn4ryawbaxf29cfna4wailghhaqy1jcm9kxq6q7b9xqqy";
+    sha256 = "05581j78181p6mwbfpbkp5irnrzsvps1lslgqrh7xbdcmz5b2nxd";
   };
 
   propagatedBuildInputs = [ pyserial pyftdi pyusb pyopenssl ];

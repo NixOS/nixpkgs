@@ -2,7 +2,7 @@
   molinillo = {
     owner = "crystal-lang";
     repo = "crystal-molinillo";
-    rev = "v0.1.0";
-    sha256 = "0rs0w59m6ccsgkdxfy3xv6alxsziy9sy9smz71cz0dnyvlzlnaxj";
+    rev = "v0.2.0";
+    sha256 = "0pzi8pbrjn03zgk3kbha2kqqq0crmr8gy98dr05kisafvbghzwnh";
   };
 }

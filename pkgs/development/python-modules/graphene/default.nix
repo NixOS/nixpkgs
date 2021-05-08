@@ -2,15 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aniso8601
-, iso8601
 , graphql-core
 , graphql-relay
+, promise
 , pytestCheckHook
 , pytest-asyncio
 , pytest-benchmark
 , pytest-mock
 , pytz
 , snapshottest
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,13 @@ buildPythonPackage rec {
     sha256 = "sha256-bVCCLPnV5F8PqLMg3GwcpwpGldrxsU+WryL6gj6y338=";
   };
 
+  # Allow later aniso8601 releases
+  # https://github.com/graphql-python/graphene/pull/1331
+  patches = [ (fetchpatch {
+    url = "https://github.com/graphql-python/graphene/commit/26b16f75b125e35eeb2274b7be503ec29f2e8a45.patch";
+    sha256 = "qm96pNOoxPieEy1CFZpa2Mx010pY3QU/vRyuL0qO3Tk=";
+  }) ];
+
   propagatedBuildInputs = [
     aniso8601
     graphql-core
@@ -31,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    promise
     pytestCheckHook
     pytest-asyncio
     pytest-benchmark
@@ -38,6 +47,8 @@ buildPythonPackage rec {
     pytz
     snapshottest
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphene" ];
 

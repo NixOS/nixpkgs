@@ -1,4 +1,4 @@
-{ buildPecl, fetchpatch, lib, pkgs, pcre' }:
+{ buildPecl, fetchpatch, lib, imagemagick, pkg-config, pcre' }:
 
 buildPecl {
   pname = "imagick";
@@ -19,8 +19,8 @@ buildPecl {
     })
   ];
 
-  configureFlags = [ "--with-imagick=${pkgs.imagemagick7.dev}" ];
-  nativeBuildInputs = [ pkgs.pkg-config ];
+  configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre' ];
 
   meta.maintainers = lib.teams.php.members;

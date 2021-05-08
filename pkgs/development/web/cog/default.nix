@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -8,12 +7,11 @@
 , wayland-protocols
 , libwpe
 , libwpe-fdo
-, glib
 , glib-networking
 , webkitgtk
 , makeWrapper
 , wrapGAppsHook
-, gnome3
+, gnome
 , gdk-pixbuf
 }:
 
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     glib-networking
     gdk-pixbuf
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [

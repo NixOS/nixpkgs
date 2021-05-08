@@ -168,8 +168,7 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ pkg-config makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
@@ -209,7 +208,7 @@ let
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postFixup = ''
         for script in "$out"/bin/*; do

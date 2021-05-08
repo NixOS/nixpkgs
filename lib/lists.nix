@@ -241,7 +241,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") flashplayer').
+     (e.g. `++ optional (system == "i686-linux") firefox').
 
      Type: optional :: bool -> a -> [a]
 

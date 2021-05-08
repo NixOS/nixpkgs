@@ -41,8 +41,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.mxisd;
-        defaultText = "pkgs.mxisd";
+        default = pkgs.ma1sd;
+        defaultText = "pkgs.ma1sd";
         description = "The mxisd/ma1sd package to use";
       };
 

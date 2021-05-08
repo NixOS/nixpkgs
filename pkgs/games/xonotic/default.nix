@@ -62,7 +62,8 @@ let
       sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
-    buildInputs = [ unzip libjpeg zlib libvorbis curl ]
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ libjpeg zlib libvorbis curl ]
       ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsaLib.dev ]
       ++ lib.optional withSDL [ SDL2.dev ];
 

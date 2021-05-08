@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
   };
 
-  buildInputs = [ jre makeWrapper bash ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre bash ];
 
   installPhase = ''
     cp -R $confluentCli confluent-cli

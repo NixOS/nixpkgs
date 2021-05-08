@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "121fjdv5phx1aqk21vx9k9vsc5k1w8s86gp6pamy2y31r2ph7r8y";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
@@ -48,6 +48,6 @@ mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 }

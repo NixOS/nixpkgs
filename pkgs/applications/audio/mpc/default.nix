@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, mpd_clientlib, sphinx, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libmpdclient
+, sphinx
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpc";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qbi0i9cq54rj8z2kapk8x8g1jkw2jz781niwb9i7kw4xfhvy5zx";
   };
 
-  buildInputs = [ mpd_clientlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libmpdclient ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ meson ninja pkg-config sphinx ];
 

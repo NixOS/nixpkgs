@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "code-minimap";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03azqy4i15kfpd0gzjaw2di9xva4xdf95yb65b93z3y9y5wy4krc";
+    sha256 = "sha256-5YNY0MRlKKX6u32Id6J7bIPSHRi44TISoKqpAS9T8ow=";
   };
 
-  cargoSha256 = "1rxrdavj07i7qa5rf1i3aj7zdcp7c6lrg8yiy75r6lm4g98izzww";
+  cargoSha256 = "sha256-87aRZC4OE3UTVToHi5XDBxVqEH4oFeFR4REf69OBkIw=";
 
   meta = with lib; {
     description = "A high performance code minimap render";

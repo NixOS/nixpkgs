@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ircrobots";
-  version = "0.3.6";
+  version = "0.3.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c8h8b78gmnfipppr9dxp7sl6wd9lx4l3pdwykaib1f49dqwavys";
+    sha256 = "06q86dqllxvi3nssfplmjk9yxaybighwh87lrxfpfhl8yy4z68jz";
   };
 
   postPatch = ''

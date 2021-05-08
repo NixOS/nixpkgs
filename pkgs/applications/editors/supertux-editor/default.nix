@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "08y5haclgxvcii3hpdvn1ah8qd0f3n8xgxxs8zryj02b8n7cz3vx";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [mono gtk-sharp-2_0 makeWrapper gnome2.libglade gtk2 ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [mono gtk-sharp-2_0 gnome2.libglade gtk2 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/supertux-editor

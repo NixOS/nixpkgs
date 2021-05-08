@@ -77,6 +77,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs
     cp -a bin $out

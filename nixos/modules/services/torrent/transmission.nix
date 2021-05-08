@@ -402,6 +402,7 @@ in
           mr ${getLib pkgs.util-linuxMinimal.out}/lib/libuuid.so*,
           mr ${getLib pkgs.xz}/lib/liblzma*.so*,
           mr ${getLib pkgs.zlib}/lib/libz*.so*,
+          mr ${getLib pkgs.brotli}/lib/libbrotli*.so*,
 
           r @{PROC}/sys/kernel/random/uuid,
           r @{PROC}/sys/vm/overcommit_memory,

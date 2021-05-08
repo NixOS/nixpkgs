@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
   poppler, imagemagick, openexr, ffmpeg_3, opencolorio, openimageio,
-  qmake4Hook, libpng, libGL, lndir }:
+  qmake4Hook, libpng, libGL, lndir, libraw, openjpeg, libwebp, fetchFromGitHub }:
 
 let
-  minorVersion = "2.1";
-  version = "${minorVersion}.9";
+  minorVersion = "2.3";
+  version = "${minorVersion}.15";
   OpenColorIO-Configs = fetchurl {
-    url = "https://github.com/MrKepzie/OpenColorIO-Configs/archive/Natron-v${minorVersion}.tar.gz";
-    sha256 = "9eec5a02ca80c9cd8e751013cb347ea982fdddd592a4a9215cce462e332dac51";
+    url = "https://github.com/NatronGitHub/OpenColorIO-Configs/archive/Natron-v${minorVersion}.tar.gz";
+    sha256 = "AZK9J+RnMyxOYcAQOAQZj5QciPQ999m6jrtBt5rdpkA=";
   };
   seexpr = stdenv.mkDerivation rec {
     version = "1.0.1";
@@ -20,14 +20,15 @@ let
     nativeBuildInputs = [ cmake ];
     buildInputs = [ libpng flex bison ];
   };
-  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [], buildInputs ? [], preConfigure ? "" }:
+  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [], buildInputs ? [], preConfigure ? "", postPatch ? "" }:
     stdenv.mkDerivation {
-      name = "openfx-${pluginName}-${version}";
+      pname = "openfx-${pluginName}";
+      version = version;
       src = fetchurl {
-        url = "https://github.com/MrKepzie/Natron/releases/download/${version}/openfx-${pluginName}-${version}.tar.xz";
+        url = "https://github.com/NatronGitHub/openfx-${pluginName}/releases/download/Natron-${version}/openfx-${pluginName}-Natron-${version}.tar.xz";
         inherit sha256;
       };
-      inherit nativeBuildInputs buildInputs;
+      inherit nativeBuildInputs buildInputs postPatch;
       preConfigure = ''
         makeFlagsArray+=("CONFIG=release")
         makeFlagsArray+=("PLUGINPATH=$out/Plugins/OFX/Natron")
@@ -42,14 +43,19 @@ let
     url = "https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.h";
     sha256 = "14drdikd0vws3wwpyqq7zzm5z3kg98svv4q4w0hr45q6zh6hs0bq";
   };
+  cimgversion = "89b9d062ec472df3d33989e6d5d2a8b50ba0775c";
   CImgh = fetchurl {
-    url = "https://raw.githubusercontent.com/dtschump/CImg/572c12d82b2f59ece21be8f52645c38f1dd407e6/CImg.h";
-    sha256 = "0n4qfxj8j6rmj4svf68gg2pzg8d1pb74bnphidnf8i2paj6lwniz";
+    url = "https://raw.githubusercontent.com/dtschump/CImg/${cimgversion}/CImg.h";
+    sha256 = "sha256-NbYpZDNj2oZ+wqoEkRwwCjiujdr+iGOLA0Pa0Ynso6U=";
+  };
+  inpainth = fetchurl {
+    url = "https://raw.githubusercontent.com/dtschump/CImg/${cimgversion}/plugins/inpaint.h";
+    sha256 = "sha256-cd28a3VOs5002GkthHkbIUrxZfKuGhqIYO4Oxe/2HIQ=";
   };
   plugins = map buildPlugin [
     ({
       pluginName = "arena";
-      sha256 = "0qba13vn9qdfax7nqlz1ps27zspr5kh795jp1xvbmwjzjzjpkqkf";
+      sha256 = "tUb6myG03mRieUAfgRZfv5Ap+cLvbpNrLMYCGTiAq8c=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         pango librsvg librevenge libcdr opencolorio libxml2 libzip
@@ -65,32 +71,37 @@ let
     })
     ({
       pluginName = "io";
-      sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
+      sha256 = "OQg6a5wNy9TFFySjmgd1subvXRxY/ZnSOCkaoUo+ZaA=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libpng ffmpeg_3 openexr opencolorio openimageio boost libGL
-        seexpr
+        seexpr libraw openjpeg libwebp
       ];
     })
     ({
       pluginName = "misc";
-      sha256 = "02h79jrll0c17azxj16as1mks3lmypm4m3da4mms9sg31l3n82qi";
+      sha256 = "XkdQyWI9ilF6IoP3yuHulNUZRPLX1m4lq/+RbXsrFEQ=";
       buildInputs = [
         libGL
       ];
-      preConfigure = ''
-        cp ${CImgh} CImg/CImg.h
+      postPatch = ''
+        cp '${inpainth}' CImg/Inpaint/inpaint.h
+        patch -p0 -dCImg < CImg/Inpaint/inpaint.h.patch # taken from the Makefile; it gets skipped if the file already exists
+        cp '${CImgh}' CImg/CImg.h
       '';
     })
   ];
 in
 stdenv.mkDerivation {
   inherit version;
-  name = "natron-${version}";
+  pname = "natron";
 
-  src = fetchurl {
-    url = "https://github.com/MrKepzie/Natron/releases/download/${version}/Natron-${version}.tar.xz";
-    sha256 = "1wdc0zqriw2jhlrhzs6af3kagrv22cm086ffnbr1x43mgc9hfhjp";
+  src = fetchFromGitHub {
+    owner = "NatronGitHub";
+    repo = "Natron";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-KuXJmmIsvwl4uqmAxXqWU+273jsdWrCuUSwWn5vuu8M=";
   };
 
   nativeBuildInputs = [ qmake4Hook pkg-config python2Packages.wrapPython ];
@@ -124,6 +135,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

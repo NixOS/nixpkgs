@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+{ lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
 
@@ -18,7 +18,7 @@
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.0.5";
+  version = "4.1.1";
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "02f0r9d3xgs08svkmj8v7lzviyxqnkk4yd3z0wql550xnriki3y5";
+    sha256 = "1nkwq123vvmggcay48snm9qqmrh0bdzpln0l1jnp26niidvplkz2";
   };
 
   postPatch = ''

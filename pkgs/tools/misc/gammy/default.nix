@@ -2,7 +2,7 @@
 
 let
   pname = "gammy";
-  version = "0.9.62";
+  version = "0.9.64";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "Fushko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fyr+khLgaX5xbKCW3pqt6fFvZBHGEVs1BsMireZDxP0=";
+    sha256 = "sha256-NPvkT7jSbDjcZDHpMIOik9fNsz7OJXQ3g9OFxkpA3pk=";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];

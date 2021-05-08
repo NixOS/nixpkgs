@@ -4,7 +4,7 @@
 , autoreconfHook
 , pkg-config
 , gtk3
-, gnome3
+, gnome
 , gtk-engine-murrine
 , optipng
 , inkscape
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.gnome-themes-extra
+    gnome.gnome-themes-extra
     gtk-engine-murrine
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-cinnamon=${cinnamon.cinnamon-common.version}"
-    "--with-gnome-shell=${gnome3.gnome-shell.version}"
+    "--with-gnome-shell=${gnome.gnome-shell.version}"
     "--disable-unity"
   ];
 

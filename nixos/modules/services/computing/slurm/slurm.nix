@@ -274,6 +274,15 @@ in
         '';
       };
 
+      etcSlurm = mkOption {
+        type = types.path;
+        internal = true;
+        default = etcSlurm;
+        description = ''
+          Path to directory with slurm config files. This option is set by default from the
+          Slurm module and is meant to make the Slurm config file available to other modules.
+        '';
+      };
 
     };
 
@@ -308,7 +317,7 @@ in
           #!/bin/sh
           if [ -z "$SLURM_CONF" ]
           then
-            SLURM_CONF="${etcSlurm}/slurm.conf" "$EXE" "\$@"
+            SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
           else
             "$EXE" "\$0"
           fi
@@ -394,9 +403,7 @@ in
       requires = [ "munged.service" "mysql.service" ];
 
       preStart = ''
-        cp ${slurmdbdConf} ${configPath}
-        chmod 600 ${configPath}
-        chown ${cfg.user} ${configPath}
+        install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
         ${optionalString (cfg.dbdserver.storagePassFile != null) ''
           echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
             >> ${configPath}

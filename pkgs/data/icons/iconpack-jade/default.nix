@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iconpack-jade";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bns1f3vv7d7ps08plnhl3432cy2l2mhv85h7n4fifjqqi8bll9x";
+    sha256 = "0pwz3l5i93s84iwkn1jq8a150ma96788a0n41xq2cgy00j8h8xh0";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Icon pack based upon Faenza and Mint-X";
     homepage = "https://github.com/madmaxms/iconpack-jade";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

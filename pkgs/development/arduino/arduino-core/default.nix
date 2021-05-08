@@ -23,6 +23,7 @@
 , glib
 , pango
 , gdk-pixbuf
+, gtk2
 , libpng12
 , expat
 , freetype
@@ -56,7 +57,7 @@ let
     gcc.cc.lib
     gdk-pixbuf
     glib
-    gtk3
+    gtk2
     libpng12
     libusb-compat-0_1
     pango
@@ -115,13 +116,12 @@ stdenv.mkDerivation rec {
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
   # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
   # so 'save as...' works:
-  nativeBuildInputs = [ glib wrapGAppsHook ];
+  nativeBuildInputs = [ glib wrapGAppsHook unzip ];
   buildInputs = [
     jdk
     ant
     libusb-compat-0_1
     libusb1
-    unzip
     zlib
     ncurses5
     readline
@@ -240,7 +240,7 @@ stdenv.mkDerivation rec {
       patchelf --debug \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           --set-rpath "${teensy_libpath}" \
-          $out/share/arduino/hardware/tools/teensy
+          $out/share/arduino/hardware/tools/teensy{,_ports,_reboot,_restart,_serialmon}
     ''}
   '';
 

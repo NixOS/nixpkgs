@@ -1,19 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, argcomplete
+, requests
+, requests-toolbelt
+, pyyaml
+}:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "2.5.0";
+  version = "2.7.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68b42aafd4b620ab2534ff78a52584c7f799e4e55d5ac297eab4263066e6f74b";
+    sha256 = "0z4amj5xhx5zc3h2m0zrkardm3z5ba9qpjx5n6dczyz77r527yg1";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    argcomplete
+    pyyaml
+    requests
+    requests-toolbelt
+  ];
 
-  checkInputs = [ mock httmock pytest responses ];
+  # tests rely on a gitlab instance on a local docker setup
+  doCheck = false;
 
-  disabled = pythonOlder "3.6";
+  pythonImportsCheck = [
+    "gitlab"
+  ];
 
   meta = with lib; {
     description = "Interact with GitLab API";

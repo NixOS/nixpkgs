@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
-  buildInputs = [ makeWrapper libpng perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libpng perl ];
   propagatedBuildInputs = [ perlPackages.LWP ];
 
   patchPhase = ''

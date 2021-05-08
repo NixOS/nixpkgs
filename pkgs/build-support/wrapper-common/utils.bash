@@ -49,6 +49,35 @@ mangleVarBool() {
     done
 }
 
+# Combine a singular value from all roles. If multiple roles are being served,
+# and the value differs in these roles then the request is impossible to
+# satisfy and we abort immediately.
+mangleVarSingle() {
+    local var="$1"
+    shift
+    local -a role_suffixes=("$@")
+
+    local outputVar="${var}_@suffixSalt@"
+    for suffix in "${role_suffixes[@]}"; do
+        local inputVar="${var}${suffix}"
+        if [ -v "$inputVar" ]; then
+            if [ -v "$outputVar" ]; then
+                if [ "${!outputVar}" != "${!inputVar}" ]; then
+                    {
+                        echo "Multiple conflicting values defined for $outputVar"
+                        echo "Existing value is ${!outputVar}"
+                        echo "Attempting to set to ${!inputVar} via $inputVar"
+                    } >&2
+
+                    exit 1
+                fi
+            else
+                declare -gx ${outputVar}="${!inputVar}"
+            fi
+        fi
+    done
+}
+
 skip () {
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2

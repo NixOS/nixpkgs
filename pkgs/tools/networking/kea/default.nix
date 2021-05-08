@@ -12,18 +12,17 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "1.8.2";
+  version = "1.9.6";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0f8x1blfmbcak0cd21jm1zpz4w8iimldhjilwkwgvmmrxnmsfv28";
+    sha256 = "sha256-sEFE5OfYt1mcAnGZCWqYFzIepzKNZZcd2rVhdxv/3sw=";
   };
 
   patches = [ ./dont-create-var.patch ];
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
-    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@(sysconfdir)@' "$out/etc"
   '';
 
   configureFlags = [

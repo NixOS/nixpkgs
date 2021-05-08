@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kbziqm00skj65gpjq6m83hmfk9g3xyx88gai1r80pzsx8g239w1";
+    sha256 = "113i11sgna82i4c4zk66qmbypmnmzh0lzp4kkgqnxxcdvyj00rb8";
   };
 
-  cargoSha256 = "1pdja5jhk036hpgv77xc3fcvra1sw0z5jc1ry53i0r7362lnwapz";
+  cargoSha256 = "12z7y303fmga91daf2w356qiqdqa7b8dz6nrrpnjdf0slyz0w3x4";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
@@ -39,11 +39,14 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
+  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+
   passthru.tests = { inherit (nixosTests) bat; };
 
   meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };

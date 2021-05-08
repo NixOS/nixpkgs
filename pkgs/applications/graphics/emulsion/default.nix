@@ -15,7 +15,6 @@
 , libxcb
 , libxkbcommon
 , wayland
-, xdg_utils
 , AppKit
 , CoreGraphics
 , CoreServices
@@ -64,16 +63,9 @@ rustPlatform.buildRustPackage rec {
     OpenGL
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D $releaseDir/emulsion $out/bin/emulsion
-  '' + lib.optionalString stdenv.isLinux ''
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/emulsion
-  '' + ''
-    runHook postInstall
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/emulsion
   '';
-
-  dontPatchELF = true;
 
   meta = with lib; {
     description = "A fast and minimalistic image viewer";

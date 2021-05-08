@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  buildInputs = [ texinfo groff libxml2 libxslt makeWrapper opensp libiconv ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ texinfo groff libxml2 libxslt opensp libiconv ]
     ++ (with perlPackages; [ perl XMLSAX XMLParser XMLNamespaceSupport ]);
 
   postConfigure = ''

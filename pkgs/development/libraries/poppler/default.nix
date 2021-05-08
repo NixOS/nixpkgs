@@ -10,13 +10,13 @@
 let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "poppler-${suffix}-${version}";
-  version = "20.12.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "21.02.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0dbv1y9i5ahg6namz6gw2d0njnmrigr4a80dbxvnqad4q232banh";
+    sha256 = "sha256-XBR1nJmJHm5HKs7W1fD/Haz4XYDNkCbTZcVcZT7feSw=";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
@@ -61,4 +63,17 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
-}
+} // lib.optionalAttrs stdenv.isDarwin {
+  patches = [
+    # Fix build due to improperly used volatile in poppler-glib.
+    # https://gitlab.freedesktop.org/poppler/poppler/merge_requests/836
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/poppler/poppler/commit/47de887d7658cfd68df44b3acf710971054f957b.patch";
+      sha256 = "uvYibBn2fOEqdotxK0Wpf8KhGYZXrpHdmS4jjlRNCj8=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/poppler/poppler/commit/bdd110b45a38e8a4f80f522892e4c4a9e432abd5.patch";
+      sha256 = "WDUYXX6v5zk7tusz7DGBP58yFzgEvoBlNSLbfk7+QTc=";
+    })
+  ];
+})

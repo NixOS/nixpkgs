@@ -15,7 +15,7 @@ in pkgs.stdenv.mkDerivation {
     xmlformat
   ];
 
-  src = ./.;
+  src = lib.cleanSource ./.;
 
   makeFlags = [
     "PANDOC_LUA_FILTERS_DIR=${pkgs.pandoc-lua-filters}/share/pandoc/filters"

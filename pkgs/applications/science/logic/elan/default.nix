@@ -1,23 +1,45 @@
-{ lib, pkg-config, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+
+let
+  libPath = lib.makeLibraryPath [ gmp ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.10.3";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-YkGfuqtvVfPcxJ8UqD5QidcNEy5brTWGEK4fR64Yz70=";
+    sha256 = "sha256-nK4wvxK5Ne1+4kaMts6pIr5FvXBgXJsGdn68gGEZUdk=";
   };
 
-  cargoSha256 = "sha256-2fYicpoEERwD4OjdpseKQOkDvZlb7NnOZcb6Tu+rQdA=";
+  cargoSha256 = "sha256-ptSbpq1ePNWmdBGfKtqFGfkdimDjU0YEo4F8VPtQMt4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
+  OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
+
+  patches = lib.optionals stdenv.isLinux [
+    # Run patchelf on the downloaded binaries.
+    # This necessary because Lean 4 now dynamically links to GMP.
+    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "$ORIGIN/../lib:${libPath}";
+      } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var libPath
+    '')
+  ];
 
   postInstall = ''
     pushd $out/bin
@@ -26,6 +48,8 @@ rustPlatform.buildRustPackage rec {
       ln -s elan $link
     done
     popd
+
+    wrapProgram $out/bin/elan --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .elan
     export HOME=$(mktemp -d)
@@ -37,7 +61,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

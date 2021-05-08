@@ -1,23 +1,55 @@
-{ lib, stdenv, fetchurl, lzma }:
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config
+, python3
+, icu
+, libuuid
+, xapian
+, xz
+, zstd
+, gtest
+}:
 
 stdenv.mkDerivation rec {
   pname = "zimlib";
-  version = "1.4";
+  version = "6.3.0";
 
-  src = fetchurl {
-    url = "http://www.openzim.org/download/${pname}-${version}.tar.gz";
-    sha256 = "14ra3iq42x53k1nqxb5lsg4gadlkpkgv6cbjjl6305ajmbrghcdq";
+  src = fetchFromGitHub {
+    owner = "openzim";
+    repo = "libzim";
+    rev = version;
+    sha256 = "0iy0f1clhihq277x218ccx3mszgpr3h9l0by48b9ykr115nffw3s";
   };
 
-  buildInputs = [ lzma ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    python3
+  ];
 
-  enableParallelBuilding = true;
+  propagatedBuildInputs = [
+    icu
+    libuuid
+    xapian
+    xz
+    zstd
+  ];
+
+  postPatch = ''
+    patchShebangs scripts
+  '';
+
+  checkInputs = [
+    gtest
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Library for reading and writing ZIM files";
     homepage =  "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ robbinch ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.linux;
   };
 }

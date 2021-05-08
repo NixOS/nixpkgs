@@ -1,7 +1,5 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-# Minimum required macOS version, used both for compatibility as well as reproducability.
-, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -36,15 +34,13 @@ in rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
 
-    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
-
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
-  bootstrapTools = derivation {
+  bootstrapTools = derivation ({
     inherit system;
 
     name    = "bootstrap-tools";
@@ -54,7 +50,11 @@ in rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  };
+  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  });
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
@@ -147,9 +147,6 @@ in rec {
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
-        extraAttrs = {
-          inherit macosVersionMin;
-        };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
           fetchurl = thisStdenv.fetchurlBoot;
@@ -179,13 +176,13 @@ in rec {
         '';
       };
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
             mkdir -p $out
 
-            cp -r ${self.darwin.darwin-stubs}/usr/lib $out/lib
+            cp -r ${selfDarwin.darwin-stubs}/usr/lib $out/lib
             chmod -R +w $out/lib
             substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
 
@@ -204,7 +201,7 @@ in rec {
           '';
         };
 
-        darwin-stubs = super.darwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
+        darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenv fetchurl; };
 
         dyld = {
           name = "bootstrap-stage0-dyld";
@@ -223,10 +220,10 @@ in rec {
           nativeTools  = false;
           nativeLibc   = false;
           inherit (self) buildPackages coreutils gnugrep;
-          libc         = self.pkgs.darwin.Libsystem;
+          libc         = selfDarwin.Libsystem;
           bintools     = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
         };
-      };
+      });
 
       llvmPackages_7 = {
         clang-unwrapped = stdenv.mkDerivation {
@@ -294,12 +291,12 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (selfDarwin: _: {
         binutils = darwin.binutils.override {
           coreutils = self.coreutils;
-          libc = self.darwin.Libsystem;
+          libc = selfDarwin.Libsystem;
         };
-      };
+      });
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -322,7 +319,7 @@ in rec {
         libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
         findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-        libssh2 nghttp2 libkrb5 ninja;
+        libssh2 nghttp2 libkrb5 ninja brotli;
 
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (_: _: {
@@ -340,11 +337,11 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin)
           binutils dyld Libsystem xnu configd ICU libdispatch libclosure
           launchd CF darwin-stubs;
-      };
+      });
     };
   in with prevStage; stageFun 2 prevStage {
     extraPreHook = ''
@@ -359,7 +356,7 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out libcxx libcxxabi llvmPackages_7.compiler-rt
-        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out brotli.lib openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
@@ -385,11 +382,11 @@ in rec {
         });
       in { inherit libraries; } // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin)
           dyld Libsystem xnu configd libdispatch libclosure launchd libiconv
           locale darwin-stubs;
-      };
+      });
     };
   in with prevStage; stageFun 3 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -411,7 +408,7 @@ in rec {
       [ bootstrapTools ] ++
       (with pkgs; [
         xz.bin xz.out bash libcxx libcxxabi llvmPackages_7.compiler-rt
-        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
+        llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out brotli.lib openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
       (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
@@ -445,14 +442,14 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // rec {
+      darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (darwin) dyld Libsystem libiconv locale darwin-stubs;
 
-        CF = super.darwin.CF.override {
+        CF = superDarwin.CF.override {
           inherit libxml2;
           python3 = prevStage.python3;
         };
-      };
+      });
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -483,11 +480,11 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin.overrideScope (_: _: {
         inherit (darwin) dyld ICU Libsystem libiconv;
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (darwin) binutils binutils-unwrapped cctools;
-      };
+      });
     } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
@@ -523,7 +520,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin bootstrapTools;
+      inherit bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [
@@ -533,21 +530,21 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
-      curl.out openssl.out libssh2.out nghttp2.lib libkrb5
+      curl.out brotli.lib openssl.out libssh2.out nghttp2.lib libkrb5
       cc.expand-response-params libxml2.out
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale libtapi
     ]);
 
     overrides = lib.composeExtensions persistent (self: super: {
+      darwin = super.darwin.overrideScope (_: superDarwin: {
+        inherit (prevStage.darwin) CF darwin-stubs;
+        xnu = superDarwin.xnu.override { inherit (prevStage) python3; };
+      });
+    } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       clang = cc;
       llvmPackages = super.llvmPackages // { clang = cc; };
       inherit cc;
-
-      darwin = super.darwin // {
-        inherit (prevStage.darwin) CF darwin-stubs;
-        xnu = super.darwin.xnu.override { inherit (prevStage) python3; };
-      };
     });
   };
 

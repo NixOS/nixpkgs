@@ -236,17 +236,12 @@ rec {
         + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
         + outroSpace + "]"
     else if isFunction v then
-      # functionArgs throws in case of (partially applied) builtins
-      # on nix before commit b2748c6e99239ff6803ba0da76c362790c8be192
-      # which includes current nix stable
-      # TODO remove tryEval workaround when the issue is resolved on nix stable
-      let fna = builtins.tryEval (lib.functionArgs v);
+      let fna = lib.functionArgs v;
           showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
                        (name: hasDefVal: if hasDefVal then name + "?" else name)
-                       fna.value);
-      in if !fna.success || fna.value == {}
-         then "<function>"
-         else "<function, args: {${showFnas}}>"
+                       fna);
+      in if fna == {}    then "<function>"
+                         else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
@@ -312,4 +307,28 @@ rec {
 ${expr "" v}
 </plist>'';
 
+  /* Translate a simple Nix expression to Dhall notation.
+   * Note that integers are translated to Integer and never
+   * the Natural type.
+  */
+  toDhall = { }@args: v:
+    with builtins;
+    let concatItems = lib.strings.concatStringsSep ", ";
+    in if isAttrs v then
+      "{ ${
+        concatItems (lib.attrsets.mapAttrsToList
+          (key: value: "${key} = ${toDhall args value}") v)
+      } }"
+    else if isList v then
+      "[ ${concatItems (map (toDhall args) v)} ]"
+    else if isInt v then
+      "${if v < 0 then "" else "+"}${toString v}"
+    else if isBool v then
+      (if v then "True" else "False")
+    else if isFunction v then
+      abort "generators.toDhall: cannot convert a function to Dhall"
+    else if isNull v then
+      abort "generators.toDhall: cannot convert a null to Dhall"
+    else
+      builtins.toJSON v;
 }

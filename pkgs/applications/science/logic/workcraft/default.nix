@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v71x3fph2j3xrnysvkm7zsgnbxisfbdfgxzvzxxfdg59a6l3xid";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 

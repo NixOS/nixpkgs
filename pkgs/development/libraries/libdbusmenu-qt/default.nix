@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DWITH_DOC=OFF" ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Provides a Qt implementation of the DBusMenu spec";
     inherit homepage;

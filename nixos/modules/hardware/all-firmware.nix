@@ -49,7 +49,7 @@ in {
         rt5677-firmware
         rtl8723bs-firmware
         rtl8761b-firmware
-        rtlwifi_new-firmware
+        rtw88-firmware
         zd1211fw
         alsa-firmware
         sof-firmware

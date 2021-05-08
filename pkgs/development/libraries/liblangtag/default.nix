@@ -35,9 +35,8 @@ stdenv.mkDerivation rec {
     "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias"
   ];
 
-  buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common
-    unzip ];
-  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config ];
+  buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip ];
 
   meta = {
     inherit version;

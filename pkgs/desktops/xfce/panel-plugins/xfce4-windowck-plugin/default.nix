@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, gtk2
-, exo, libxfce4ui, libxfce4util, xfce4-panel, xfconf, xfce4-dev-tools, xfce }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck3, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce }:
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-windowck-plugin";
-  version = "0.4.6";
+  version = "0.4.10";
 
   src = fetchFromGitHub {
-    owner = "cedl38";
+    owner = "invidian";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gwrbjfv4cnlsqh05h42w41z3xs15yjj6j8y9gxvvvvlgzzp4p3g";
+    sha256 = "0l066a174v2c7ly125v9x1fgbg5bnpwdwnjh69v9kp4plp791q4n";
   };
 
   nativeBuildInputs = [
@@ -20,11 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     imagemagick
-    libwnck
-    gtk2
-    exo
+    libwnck3
     libxfce4ui
-    libxfce4util
     xfce4-panel
     xfconf
     xfce4-dev-tools

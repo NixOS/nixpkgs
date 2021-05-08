@@ -26,8 +26,9 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
-, typing
+, typing ? null
 , setuptools
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     pygments
     alabaster
     Babel
+    packaging
     setuptools
     snowballstemmer
     six

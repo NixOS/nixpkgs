@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -15,6 +15,8 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
+# Select whether DYNAMIC_ARCH is enabled or not.
+, dynamicArch ? null
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -25,41 +27,50 @@ let blas64_ = blas64; in
 
 let
   setTarget = x: if target == null then x else target;
+  setDynamicArch = x: if dynamicArch == null then x else dynamicArch;
 
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
       BINARY = 32;
       TARGET = setTarget "ARMV6";
-      DYNAMIC_ARCH = false;
+      DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
 
     armv7l-linux = {
       BINARY = 32;
       TARGET = setTarget "ARMV7";
-      DYNAMIC_ARCH = false;
+      DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
+    };
+
+    aarch64-darwin = {
+      BINARY = 64;
+      TARGET = setTarget "VORTEX";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = false;
+      MACOSX_DEPLOYMENT_TARGET = "11.0";
     };
 
     aarch64-linux = {
       BINARY = 64;
       TARGET = setTarget "ARMV8";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
 
     i686-linux = {
       BINARY = 32;
       TARGET = setTarget "P2";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
 
     x86_64-darwin = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -67,14 +78,14 @@ let
     x86_64-linux = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
     powerpc64le-linux = {
       BINARY = 64;
       TARGET = setTarget "POWER5";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
   };
@@ -115,6 +126,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
   };
+
+  # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
+  # remove this when updating to 0.3.14 or newer
+  patches = [
+    (fetchpatch {
+      name = "label-get_cpu_ftr-as-volatile.patch";
+      url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
+      sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
+    })
+  ];
 
   inherit blas64;
 

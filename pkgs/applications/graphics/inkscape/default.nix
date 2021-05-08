@@ -5,8 +5,10 @@
 , cmake
 , double-conversion
 , fetchurl
+, fetchpatch
 , gettext
 , gdl
+, ghostscript
 , glib
 , glib-networking
 , glibmm
@@ -70,10 +72,23 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
+
+    # Fix build with glib 2.68
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/2790
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/eb24388f1730918edd9565d9e5d09340ec0b3b08.patch";
+      sha256 = "d2FHRWcOzi0Vsr6t0MuLu3rWpvhFKuuvoXd4/NKUSJI=";
+    })
   ];
 
   postPatch = ''
     patchShebangs share/extensions
+    substituteInPlace share/extensions/eps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.py \
+      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
   '';

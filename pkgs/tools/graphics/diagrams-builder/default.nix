@@ -33,7 +33,7 @@ in
 stdenv.mkDerivation {
   name = "diagrams-builder";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = with lib;
     concatStrings (intersperse "\n" (map exeWrapper backends));

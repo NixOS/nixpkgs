@@ -19,7 +19,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.any (lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -96,12 +96,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "9.0.0.20201227";
+  version = "9.0.1";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/9.0.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "1kg227fzg9qq2p7r8xqr99vvnx7ind4clxkydikyzf3vqvaacjfy";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "1y9mi9bq76z04hmggavrn8jwi1gx92bm3zhx6z69ypq6wha068x5";
   };
 
   enableParallelBuilding = true;

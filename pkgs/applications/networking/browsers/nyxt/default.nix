@@ -1,4 +1,4 @@
-{ stdenv, lib, lispPackages, sbcl
+{ stdenv, lib, lispPackages
 , makeWrapper, wrapGAppsHook, gst_all_1
 , glib, gdk-pixbuf, cairo
 , mime-types, pango, gtk3
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lewo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
   };
 }

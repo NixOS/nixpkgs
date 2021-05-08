@@ -76,7 +76,7 @@ let
       };
 
       tags = mkOption {
-        type = types.attrsOf types.str;
+        type = types.attrsOf (types.either types.str (types.listOf types.str));
         default = {};
         example = { queue = "default"; docker = "true"; ruby2 ="true"; };
         description = ''
@@ -230,7 +230,11 @@ in
         ##     don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
-          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
+          tagStr = name: value:
+            if lib.isList value
+            then lib.concatStringsSep "," (builtins.map (v: "${name}=${v}") value)
+            else "${name}=${value}";
+          tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);
         in
           optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
@@ -241,7 +245,7 @@ in
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
             shell="${cfg.shell}"
-            tags="${tagStr}"
+            tags="${tagsStr}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}

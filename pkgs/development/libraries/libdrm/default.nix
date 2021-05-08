@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.104";
+  version = "2.4.105";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1jqvx9c23hgwhq109zqj6vg3ng40pcvh3r1k2fn1a424qasxhsnn";
+    sha256 = "0iiamypwdfiz250ki120nh598r48yyacmnndb4mkximdgi5h478x";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -20,12 +20,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cross-build-nm-path.patch ];
 
-  postPatch = ''
-    for a in */*-symbol-check ; do
-      patchShebangs $a
-    done
-  '';
-
   mesonFlags = [
     "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
@@ -33,7 +27,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     "-Dtegra=true"
     "-Detnaviv=true"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false";
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";

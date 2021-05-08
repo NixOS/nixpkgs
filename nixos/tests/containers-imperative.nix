@@ -1,9 +1,7 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco kampfschlaefer ];
+  meta = {
+    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
@@ -111,6 +109,26 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       with subtest("Stop and start (regression test for #4989)"):
           machine.succeed(f"nixos-container stop {id1}")
+          machine.succeed(f"nixos-container start {id1}")
+
+      # clear serial backlog for next tests
+      machine.succeed("logger eat console backlog 3ea46eb2-7f82-4f70-b810-3f00e3dd4c4d")
+      machine.wait_for_console_text(
+          "eat console backlog 3ea46eb2-7f82-4f70-b810-3f00e3dd4c4d"
+      )
+
+      with subtest("Stop a container early"):
+          machine.succeed(f"nixos-container stop {id1}")
+          machine.succeed(f"nixos-container start {id1} &")
+          machine.wait_for_console_text("Stage 2")
+          machine.succeed(f"nixos-container stop {id1}")
+          machine.wait_for_console_text(f"Container {id1} exited successfully")
+          machine.succeed(f"nixos-container start {id1}")
+
+      with subtest("Stop a container without machined (regression test for #109695)"):
+          machine.systemctl("stop systemd-machined")
+          machine.succeed(f"nixos-container stop {id1}")
+          machine.wait_for_console_text(f"Container {id1} has been shut down")
           machine.succeed(f"nixos-container start {id1}")
 
       with subtest("tmpfiles are present"):

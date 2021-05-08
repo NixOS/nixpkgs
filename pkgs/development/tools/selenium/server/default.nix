@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/share/lib/${pname}-${version}

@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 801d081..6d93128 100644
+--- a/setup.py
++++ b/setup.py
+@@ -19,8 +19,6 @@ setup(
+         'matplotlib',
+         'numpy',
+         'pandas',
+-        'pytest',
+-        'pytest-sugar',
+         'ujson',
+         'xarray',
+     ],

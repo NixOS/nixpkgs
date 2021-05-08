@@ -1,21 +1,25 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, isPy27
-, fetchpatch
-# Mitmproxy requirements
+, pythonOlder
+  # Mitmproxy requirements
+, asgiref
 , blinker
 , brotli
 , certifi
 , click
 , cryptography
 , flask
+, h11
 , h2
 , hyperframe
 , kaitaistruct
 , ldap3
+, msgpack
 , passlib
 , protobuf
+, publicsuffix2
 , pyasn1
 , pyopenssl
 , pyparsing
@@ -26,44 +30,30 @@
 , tornado
 , urwid
 , wsproto
-, publicsuffix2
 , zstandard
-# Additional check requirements
+  # Additional check requirements
 , beautifulsoup4
 , glibcLocales
-, pytest
-, requests
-, asynctest
+, hypothesis
 , parver
 , pytest-asyncio
-, hypothesis
-, asgiref
-, msgpack
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "5.3.0";
-  disabled = isPy27;
+  version = "6.0.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "04y7fxxssrs14i7zl7fwlwrpnms39i7a6m18481sg8vlrkbagxjr";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FyIZKFQtf6qvwo4+NzPa/KOmBCcdGJ3jCqxz26+S2e4=";
   };
-
-  postPatch = ''
-    # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
-  '';
-
-  doCheck = (!stdenv.isDarwin);
-
-  checkPhase = ''
-    export HOME=$(mktemp -d)
-    pytest -k 'not test_get_version' # expects a Git repository
-  '';
 
   propagatedBuildInputs = [
     setuptools
@@ -75,6 +65,7 @@ buildPythonPackage rec {
     click
     cryptography
     flask
+    h11
     h2
     hyperframe
     kaitaistruct
@@ -96,21 +87,39 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
     beautifulsoup4
-    flask
     glibcLocales
     hypothesis
     parver
-    pytest
     pytest-asyncio
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
     requests
   ];
 
+  doCheck = !stdenv.isDarwin;
+
+  postPatch = ''
+    # remove dependency constraints
+    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # Tests require a git repository
+    "test_get_version"
+  ];
+
+  pythonImportsCheck = [ "mitmproxy" ];
+
   meta = with lib; {
     description = "Man-in-the-middle proxy";
-    homepage    = "https://mitmproxy.org/";
-    license     = licenses.mit;
+    homepage = "https://mitmproxy.org/";
+    license = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://github.com/coin3d/soqt";
     license = licenses.bsd3;

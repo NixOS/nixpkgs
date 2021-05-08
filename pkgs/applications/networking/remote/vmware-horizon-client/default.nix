@@ -3,6 +3,7 @@
 , at-spi2-atk
 , atk
 , buildFHSUserEnv
+, cairo
 , dbus
 , fetchurl
 , fontconfig
@@ -52,7 +53,7 @@ let
       url = "https://download3.vmware.com/software/view/viewclients/CART21FQ4/VMware-Horizon-Client-Linux-2012-8.1.0-17349998.tar.gz";
       sha256 = "0afda1f3116e75a4e7f89990d8ee60ccea5f3bb8a2360652162fa11c795724ce";
     };
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
       mkdir ext $out
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
@@ -66,6 +67,9 @@ let
 
       # This libjpeg library interferes with Chromium, so we will be using ours instead.
       rm $out/lib/vmware/libjpeg.*
+
+      # This library causes the program to core-dump occasionally. Use ours instead.
+      rm $out/lib/vmware/view/crtbora/libcairo.*
 
       # Force the default GTK theme (Adwaita) because Horizon is prone to
       # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -84,6 +88,7 @@ let
     targetPkgs = pkgs: [
       at-spi2-atk
       atk
+      cairo
       dbus
       fontconfig
       freetype

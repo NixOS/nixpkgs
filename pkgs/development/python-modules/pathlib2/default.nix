@@ -3,9 +3,9 @@
 , fetchPypi
 , six
 , pythonOlder
-, scandir
+, scandir ? null
 , glibcLocales
-, mock
+, mock ? null
 }:
 
 buildPythonPackage rec {

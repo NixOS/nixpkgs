@@ -6,6 +6,7 @@
 , importlib-metadata
 , matplotlib
 , numpy
+, exdown
 , pytestCheckHook
 }:
 
@@ -32,12 +33,9 @@ buildPythonPackage rec {
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
-  checkInputs = [ pytestCheckHook ];
+
+  checkInputs = [ exdown pytestCheckHook ];
   pythonImportsCheck = [ "dufte" ];
-  pytestFlagsArray = [
-    # we don't have the "exdown" package (yet)
-    "--ignore=test/test_readme.py"
-  ];
 
   meta = with lib; {
     description = "Clean matplotlib plots";

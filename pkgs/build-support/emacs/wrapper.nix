@@ -147,13 +147,19 @@ runCommand
         # Begin the new site-start.el by loading the original, which sets some
         # NixOS-specific paths. Paths are searched in the reverse of the order
         # they are specified in, so user and system profile paths are searched last.
+        #
+        # NOTE: Avoid displaying messages early at startup by binding
+        # inhibit-message to t. This would prevent the Emacs GUI from showing up
+        # prematurely. The messages would still be logged to the *Messages*
+        # buffer.
         rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
         cat >"$siteStart" <<EOF
-        (load-file "$emacs/share/emacs/site-lisp/site-start.el")
+        (let ((inhibit-message t))
+          (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
         (add-to-list 'load-path "$out/share/emacs/site-lisp")
         (add-to-list 'exec-path "$out/bin")
         ${optionalString nativeComp ''
-          (add-to-list 'comp-eln-load-path "$out/share/emacs/native-lisp/")
+          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
         # Link subdirs.el from the emacs distribution
@@ -164,7 +170,7 @@ runCommand
 
         ${optionalString nativeComp ''
           $emacs/bin/emacs --batch \
-            --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
+            --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
             -f batch-native-compile "$siteStart" "$subdirs"
         ''}
       '';

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   paths = [ dwarf-therapist ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   passthru = { inherit dwarf-fortress dwarf-therapist; };
 

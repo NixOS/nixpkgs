@@ -42,7 +42,7 @@ in
       '';
     };
   };
-  serviceOpts = {
+  serviceOpts = mkMerge ([{
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
@@ -54,7 +54,10 @@ in
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
-  };
+  }] ++ [(mkIf config.services.nginx.enable {
+    after = [ "nginx.service" ];
+    requires = [ "nginx.service" ];
+  })]);
   imports = [
     (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
     (mkRemovedOptionModule [ "insecure" ] ''

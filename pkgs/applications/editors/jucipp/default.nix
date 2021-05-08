@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ xnwdd ];
+    # error: token ""1.1"" is not valid in preprocessor expression
+    # TODO: fix pname being different from the attribute name
+    broken = true;
   };
 
   src = fetchgit {

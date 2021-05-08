@@ -12,7 +12,6 @@
 , libxslt
 , xfconf
 , gobject-introspection
-, gvfs
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
@@ -21,9 +20,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "1.8.15";
+  version = "4.16.6";
 
-  sha256 = "1y9d88i0kwl7ak4d65gy3qf4bpkiyaqxd4g6px3v1ykf274k8al8";
+  sha256 = "12zqwazsqdmghy4h2c4fwxha069l07d46i512395y22h7n6655rn";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -35,7 +34,6 @@ let unwrapped = mkXfceDerivation {
     exo
     gdk-pixbuf
     gtk3
-    gvfs
     libX11
     libgudev
     libnotify

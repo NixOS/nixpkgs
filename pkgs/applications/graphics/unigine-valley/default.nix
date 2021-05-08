@@ -38,7 +38,7 @@ in
     sourceRoot = "Unigine_Valley-${version}";
     instPath = "lib/unigine/valley";
 
-    buildInputs = [file makeWrapper];
+    nativeBuildInputs = [file makeWrapper];
 
     libPath = lib.makeLibraryPath [
       stdenv.cc.cc  # libstdc++.so.6

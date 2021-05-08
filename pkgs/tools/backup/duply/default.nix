@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-I1KkblFnZVOCvcWEarGsSXnzlod2+yZ4okaTpckLFbE=";
   };
 
-  buildInputs = [ txt2man makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ txt2man ];
 
   postPatch = "patchShebangs .";
 

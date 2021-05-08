@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "camomile";
   version = "1.0.2";
 
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "yoriyuki";
     repo = pname;

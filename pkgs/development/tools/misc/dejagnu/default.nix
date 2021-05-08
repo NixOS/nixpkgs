@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qfj2wd4qk1yn9yzam6g8nmyxfazcc0knjyyibycb2ainkhp21hd";
   };
 
-  buildInputs = [ expect makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ expect ];
 
   doCheck = true;
 

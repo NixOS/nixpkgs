@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "0.7";
+  version = "2.0";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
     rev    = "liburing-${version}";
-    sha256 = "15z44l7y4c6s6dlf7v8lq4znlsjbja2r4ifbni0l8cdcnq0w3zh3";
+    sha256 = "0has1yd1ns5q5jgcmhrbgwhbwq0wix3p7xv3dyrwdf784p56izkn";
   };
+
+  patches = [
+    # Fix build on 32-bit ARM
+    (fetchpatch {
+      url = "https://github.com/axboe/liburing/commit/808b6c72ab753bda0c300b5683cfd31750d1d49b.patch";
+      sha256 = "1x7a9c5a6rwhfsbjqmhbnwh2aiin6yylckrqdjbzljrprzf11wrd";
+    })
+  ];
 
   separateDebugInfo = true;
   enableParallelBuilding = true;

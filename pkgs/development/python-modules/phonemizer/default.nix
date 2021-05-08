@@ -2,24 +2,21 @@
 , substituteAll
 , buildPythonApplication
 , fetchPypi
-, python3Packages
-, pkgs
 , joblib
 , segments
 , attrs
 , espeak-ng
 , pytestCheckHook
-, pytestrunner
 , pytestcov
 }:
 
 buildPythonApplication rec {
   pname = "phonemizer";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "127n4f10zxq60qd8xvlc1amji4wbghqb90rfp25rzdk716kvgwab";
+    sha256 = "ae252f0bc7633e172b08622f318e7e112cde847e9281d4675ea7210157325146";
   };
 
   postPatch = ''

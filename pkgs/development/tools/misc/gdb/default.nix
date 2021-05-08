@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ] ++ lib.optional (!pythonSupport) "--without-python";
+  ] ++ lib.optional (!pythonSupport) "--without-python"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

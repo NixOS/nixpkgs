@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromSourcehut
 , meson, pkg-config, wayland, ninja
 , cairo, libinput, pango, wayland-protocols, libxkbcommon
 }:
@@ -10,9 +10,11 @@ in stdenv.mkDerivation rec {
   pname = "wshowkeys-unstable";
   inherit version;
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/wshowkeys/archive/${commit}.tar.gz";
-    sha256 = "0iplmw13jmc8d3m307kc047zq8yqwm42kw9fpm270562i3p0qk4d";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "wshowkeys";
+    rev = commit;
+    sha256 = "10kafdja5cwbypspwhvaxjz3hvf51vqjzbgdasl977193cvxgmbs";
   };
 
   nativeBuildInputs = [ meson pkg-config wayland ninja ];

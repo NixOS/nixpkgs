@@ -1,9 +1,10 @@
 { stdenv, lib, fetchurl, iptables, libuuid, pkg-config
-, which, iproute, gnused, coreutils, gawk, makeWrapper
+, which, iproute2, gnused, coreutils, gawk, makeWrapper
+, nixosTests
 }:
 
 let
-  scriptBinEnv = lib.makeBinPath [ which iproute iptables gnused coreutils gawk ];
+  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables gnused coreutils gawk ];
 in
 stdenv.mkDerivation rec {
   name = "miniupnpd-2.1.20190502";
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
       wrapProgram $script --set PATH '${scriptBinEnv}:$PATH'
     done
   '';
+
+  passthru.tests = {
+    bittorrent-integration = nixosTests.bittorrent;
+  };
 
   meta = with lib; {
     homepage = "http://miniupnp.free.fr/";

@@ -35,6 +35,7 @@
 , libXrender
 , libXtst
 , makeWrapper
+, ncurses5
 , nspr
 , nss
 , pciutils
@@ -64,14 +65,17 @@ let
       sha256 = sha256Hash;
     };
 
+    nativeBuildInputs = [ unzip ];
     buildInputs = [
       makeWrapper
-      unzip
     ];
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
+        --set-default JAVA_HOME "$out/jre" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
+        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [
 
           # Checked in studio.sh
@@ -138,11 +142,18 @@ let
           gnome_vfs
           glib
           GConf
-        ]}" \
-        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
-        --set FONTCONFIG_FILE ${fontsConf}
+        ]}"
+
+      # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
+      wrapProgram $out/bin/lldb/bin/LLDBFrontend --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+        ncurses5
+        zlib
+      ]}"
     '';
   };
+
+  # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+  dontPatchShebangs = true;
 
   desktopItem = makeDesktopItem {
     name = drvName;
@@ -161,7 +172,7 @@ let
   fhsEnv = buildFHSUserEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
-      pkgs.ncurses5
+      ncurses5
 
       # Flutter can only search for certs Fedora-way.
       (runCommand "fedoracert" {}

@@ -24,9 +24,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "modeled" ];
+
   meta = with lib; {
     description = "Universal data modeling for Python";
-    homepage = "https://bitbucket.org/userzimmermann/python-modeled";
+    homepage = "https://github.com/modeled/modeled";
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.costrouc ];
   };

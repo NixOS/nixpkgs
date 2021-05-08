@@ -1,16 +1,17 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
 , curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+, bluez
 }:
 
 let
-  version = "4.9.6";
+  version = "4.9.10";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "1w1ak0fi6ljhg2jc4mjqyrbpax3iawrnsaqq6ls7qdzrhi37rggf";
+    sha256 = "12ndhjplz3cwndwzhfc959dc0i6rm2qf3v2d8n9kba8nj63iblfs";
     fetchSubmodules = true;
   });
 
@@ -52,6 +53,8 @@ let
 
     buildInputs = [ qtbase qtlocation libXcomposite ];
 
+    dontWrapQtApps = true;
+
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
     installPhase = ''
@@ -82,6 +85,7 @@ in stdenv.mkDerivation {
     libdc googlemaps
     curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
     qtbase qtconnectivity qtsvg qttools qtwebkit
+    bluez
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
@@ -103,7 +107,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner ];
+    maintainers = with maintainers; [ mguentner adisbladis ];
     platforms = platforms.all;
   };
 }

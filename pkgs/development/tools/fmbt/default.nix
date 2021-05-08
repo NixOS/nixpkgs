@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python, autoreconfHook, pkg-config, makeWrapper
 , flex
-, gettext, libedit, glib, imagemagick, libxml2, boost, gnuplot, graphviz
+, gettext, libedit, glib, imagemagick6, libxml2, boost, gnuplot, graphviz
 , tesseract, gts, libXtst
 }:
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config flex makeWrapper
     python.pkgs.wrapPython ];
 
-  buildInputs = [ python gettext libedit glib imagemagick libxml2 boost
+  buildInputs = [ python gettext libedit glib imagemagick6 libxml2 boost
     gnuplot graphviz tesseract gts
     ];
 

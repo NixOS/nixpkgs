@@ -16,7 +16,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -30,7 +30,7 @@
 , libXt
 , libxcb
 , libcanberra
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       libX11
       libXScrnSaver
       libXcomposite
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,5 +1,5 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null }:
+  lib, version ? null, useDune2 ? false }@args:
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
@@ -7,12 +7,16 @@ with lib; mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
+      { cases = [ (range "8.10" "8.13") "1.12.0" ];             out = "1.5.4"; }
+      { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
       { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
       { cases = [ (range "8.7" "8.11")  (range "1.8" "1.10") ]; out = "1.5.0"; }
       { cases = [ (range "8.7" "8.10")  (range "1.8" "1.10") ]; out = "1.4"; }
       { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
+    "1.5.4".sha256 = "0s4sbh4y88l125hdxahr56325hdhxxdmqmrz7vv8524llyv3fciq";
+    "1.5.3".sha256 = "1462x40y2qydjd2wcg8r6qr8cx3xv4ixzh2h8vp9h7arylkja1qd";
     "1.5.2".sha256 = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
     "1.5.1".sha256 = "13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3";
     "1.5.0".sha256 = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
@@ -24,6 +28,8 @@ with lib; mkCoqDerivation {
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
+  useDune2ifVersion = versions.isGe "1.5.3";
+
   propagatedBuildInputs =
     [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
 
@@ -32,3 +38,4 @@ with lib; mkCoqDerivation {
     license = licenses.cecill-c;
   };
 }
+// optionalAttrs (args?useDune2) { inherit useDune2; }

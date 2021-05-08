@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ ];
 
   meta = with lib; {
     homepage = "https://github.com/liuq/QuadProgpp";
@@ -22,6 +21,6 @@ stdenv.mkDerivation rec {
       Goldfarb-Idnani active-set dual method.
     '';
     maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
   };
 }

@@ -1,5 +1,4 @@
-{ buildEnv
-, fetchurl
+{ fetchurl
 , fontconfig
 , freetype
 , glib
@@ -80,6 +79,7 @@ stdenv.mkDerivation rec {
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
     fontconfig
     freetype
@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
     libXtst
     makeWrapper
     zlib
-    unzip
     shared-mime-info
     webkitgtk
   ];

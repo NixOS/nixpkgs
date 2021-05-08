@@ -1,5 +1,5 @@
 { lib, stdenv
-, python
+, python3
 , libffi
 , git
 , cmake
@@ -38,8 +38,10 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python git cmake ];
+    nativeBuildInputs = [ python3 git cmake ];
     buildInputs = [ libffi llvmPackages_5.llvm zlib ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"

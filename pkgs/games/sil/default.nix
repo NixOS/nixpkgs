@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     stripRoot=false;
   };
 
-  buildInputs = [ makeWrapper ncurses libX11 libXaw libXt libXext libXmu ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ncurses libX11 libXaw libXt libXext libXmu ];
 
   sourceRoot = "source/Sil/src";
 

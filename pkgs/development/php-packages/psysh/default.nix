@@ -1,4 +1,4 @@
-{ mkDerivation, fetchurl, pkgs, lib, php }:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "psysh";
   version = "0.10.4";
@@ -12,7 +12,7 @@ mkDerivation {
   };
 
   phases = [ "installPhase" ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +21,7 @@ mkDerivation {
     wrapProgram $out/bin/psysh --prefix PATH : "${lib.makeBinPath [ php ]}"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
     license = licenses.mit;
     homepage = "https://psysh.org/";

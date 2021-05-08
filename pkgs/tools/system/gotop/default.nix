@@ -2,17 +2,19 @@
 
 buildGoModule rec {
   pname = "gotop";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09cs97fjjxcjxzsl2kh8j607cs5zy2hnrh1pb21pggzhg7dzsz0w";
+    sha256 = "sha256-3t6I4ah9gUmPlIBRL86BdgiUaMNiKNEeoUSRMASz1Yc=";
   };
 
   runVend = true;
-  vendorSha256 = "1mbjl7b49naaqkr2j658j17z9ryf5g3x6q34gvmrm7n9y082ggnz";
+  vendorSha256 = "sha256-GcIaUIuTiSY1aKxRtclfl7hMNaZZx4uoVG7ahjF/4Hs=";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

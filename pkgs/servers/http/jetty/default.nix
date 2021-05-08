@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "jetty";
-  version = "9.4.35.v20201120";
+  version = "9.4.39.v20210325";
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
-    name = "jetty-distribution-${version}.tar.gz";
-    sha256 = "1cpdrqz6wi7fd228lh4ijs82jq51qr5aym6vff464w3y2sd0jbav";
+    sha256 = "0mn3ranh599w946cnykj7sbkj4w7ddpdhly7njmalsgabfbk8qv5";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out
     mv etc lib modules start.ini start.jar $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A Web server and javax.servlet container";
     homepage = "https://www.eclipse.org/jetty/";
-    platforms = lib.platforms.all;
-    license = [ lib.licenses.asl20 lib.licenses.epl10 ];
+    platforms = platforms.all;
+    license = with licenses; [ asl20 epl10 ];
+    maintainers = with maintainers; [ emmanuelrosa ];
   };
 }

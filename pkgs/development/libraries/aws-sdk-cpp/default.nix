@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
 , aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
@@ -25,12 +25,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl s2n zlib
-    aws-c-cal aws-c-common aws-c-event-stream aws-c-io aws-checksums
+    curl openssl s2n-tls zlib
+    aws-c-common aws-c-event-stream aws-checksums
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
+
+  # propagation is needed for Security.framework to be available when linking
+  propagatedBuildInputs = [ aws-c-cal aws-c-io ];
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -62,6 +65,9 @@ stdenv.mkDerivation rec {
   patches = [
     ./cmake-dirs.patch
   ];
+
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";

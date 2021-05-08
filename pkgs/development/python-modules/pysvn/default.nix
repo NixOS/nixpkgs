@@ -23,7 +23,7 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "http://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
+    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
     sha256 = "sRPa4wNyjDmGdF1gTOgLS0pnrdyZwkkH4/9UCdh/R9Q=";
   };
 
@@ -79,5 +79,7 @@ buildPythonPackage rec {
     description = "Python bindings for Subversion";
     homepage = "http://pysvn.tigris.org/";
     license = licenses.asl20;
+    # g++: command not found
+    broken = stdenv.isDarwin;
   };
 }

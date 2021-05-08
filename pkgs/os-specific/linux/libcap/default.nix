@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl
+{ stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -7,14 +7,12 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.46";
+  version = "2.48";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "1d6q447wf0iagiyzhfdqcj4cv0dmzc49i0czwikrcv7s2cad3lsf";
+    sha256 = "sha256-TelZDuCah8KC1Vhzf/tbYXXMv9JtWArdEN9E0PBH9sI=";
   };
-
-  patches = lib.optional isStatic ./no-shared-lib.patch;
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
@@ -31,11 +29,11 @@ stdenv.mkDerivation rec {
     "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
-  ];
+  ] ++ lib.optional isStatic "SHARED=no";
 
   prePatch = ''
     # use full path to bash
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
 
     # set prefixes
     substituteInPlace Make.Rules \

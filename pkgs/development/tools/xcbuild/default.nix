@@ -51,6 +51,7 @@ in stdenv.mkDerivation {
   postInstall = ''
     mv $out/usr/* $out
     rmdir $out/usr
+    cp liblinenoise.* $out/lib/
   '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";

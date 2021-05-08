@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv
+{ fetchFromGitHub, lib, stdenv
 , autoreconfHook, intltool, pkg-config
 , gtk3, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
 

@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , armadillo
-, boost
 , cmake
+, gmp
 , glog
-, gmock
+, gtest
 , openssl
 , gflags
-, gnuradio
+, gnuradio3_8
+, libpcap
 , orc
 , pkg-config
-, pythonPackages
 , uhd
 , log4cpp
 , blas, lapack
@@ -18,7 +19,7 @@
 , protobuf
 }:
 
-stdenv.mkDerivation rec {
+gnuradio3_8.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
   version = "0.0.13";
 
@@ -29,27 +30,32 @@ stdenv.mkDerivation rec {
     sha256 = "0a3k47fl5dizzhbqbrbmckl636lznyjby2d2nz6fz21637hvrnby";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    armadillo
-    boost.dev
-    glog
-    gmock
-    openssl.dev
-    gflags
-    gnuradio
-    orc
-    pythonPackages.Mako
-    pythonPackages.six
+  nativeBuildInputs = [
+    cmake
+    gnuradio3_8.unwrapped.python
+    gnuradio3_8.unwrapped.python.pkgs.Mako
+    gnuradio3_8.unwrapped.python.pkgs.six
+  ];
 
+  buildInputs = [
+    gmp
+    armadillo
+    gnuradio3_8.unwrapped.boost
+    glog
+    gtest
+    openssl
+    gflags
+    orc
     # UHD support is optional, but gnuradio is built with it, so there's
     # nothing to be gained by leaving it out.
-    uhd
+    gnuradio3_8.unwrapped.uhd
     log4cpp
     blas lapack
     matio
     pugixml
     protobuf
+    gnuradio3_8.pkgs.osmosdr
+    libpcap
   ];
 
   cmakeFlags = [

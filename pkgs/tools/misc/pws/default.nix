@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "pws-${(import ./gemset.nix).pws.version}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = ["installPhase"];
 

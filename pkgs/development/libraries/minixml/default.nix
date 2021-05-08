@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A small XML library";
     homepage = "https://www.msweet.org/mxml/";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.goibhniu ];
   };
 }

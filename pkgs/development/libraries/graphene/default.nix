@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "A thin layer of graphic data types";
     homepage = "https://ebassi.github.com/graphene";
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

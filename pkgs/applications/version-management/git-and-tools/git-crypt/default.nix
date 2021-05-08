@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
   };
 
-  nativeBuildInputs = [ libxslt ];
+  nativeBuildInputs = [ libxslt makeWrapper ];
 
-  buildInputs = [ openssl makeWrapper ];
+  buildInputs = [ openssl ];
 
   patchPhase = ''
     substituteInPlace commands.cpp \

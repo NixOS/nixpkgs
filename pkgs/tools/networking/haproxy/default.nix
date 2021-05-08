@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.3.4";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YBSM3+3WsZxAHbzXXM12pTwgvHbEkDK6Mq+YoKXEle0=";
+    sha256 = "sha256-mUbgz8g/KQcrNDHjckYiHPnUqdKKFYwHVxTTRSZvTzU=";
   };
 
   buildInputs = [ openssl zlib ]
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [
     "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o"
-  ] ++ lib.optional stdenv.isDarwin "CC=cc";
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 

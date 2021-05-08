@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
   };
 
-  buildInputs = [ unzip makeWrapper ] ++ (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
 
   installPhase = ''
     mkdir -p "$out/bin"

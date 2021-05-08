@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "uptimed";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    sha256 = "0wnnpjfxnycigqj6hag0n6p5piss8cv40y9jda72d9s4df5n91z8";
+    sha256 = "sha256-X/LnH+EWjXlw8RktfL4ckAUmP2DPV1qlb6Ii4N985cU=";
     rev = "v${version}";
     repo = "uptimed";
     owner = "rpodgorny";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
       which can also easily be used to show your records on a web page.
     '';
     homepage = "https://github.com/rpodgorny/uptimed/";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only lgpl21Plus ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
-
 }

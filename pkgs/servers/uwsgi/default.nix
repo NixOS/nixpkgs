@@ -5,7 +5,7 @@
 , systemd, withSystemd ? stdenv.isLinux
 , libcap, withCap ? stdenv.isLinux
 , python2, python3, ncurses
-, ruby, php, libmysqlclient
+, ruby, php
 }:
 
 let php-embed = php.override {

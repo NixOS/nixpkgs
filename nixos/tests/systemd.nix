@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     environment.systemPackages = [ pkgs.cryptsetup ];
 
-    fileSystems = lib.mkVMOverride {
+    virtualisation.fileSystems = {
       "/test-x-initrd-mount" = {
         device = "/dev/vdb";
         fsType = "ext2";

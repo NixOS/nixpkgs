@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00yld6yinc8s4xv3b8kbvzn2f4rja5dmp6ysv3n4847qn4k60dh7";
   };
 
-  makeFlags = [ "CC=cc" ];      # gcc and/or clang compat
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];      # gcc and/or clang compat
 
   installPhase = ''
     install -D -m ugo=rx connect $out/bin/connect

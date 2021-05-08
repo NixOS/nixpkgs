@@ -4,16 +4,16 @@ let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 buildGoModule rec {
   pname = "stern";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "0fj6a52wb0jv5bz2j2wq3ljnlxnsj9bg3kbzgkz0vh0b63zyn782";
+    sha256 = "sha256-8l/Tr+IxR3yPmt9hI70XuUQ4YEYzRTMLbo8BsngoU60=";
   };
 
-  vendorSha256 = "14nrdaaby74bjbk777hr82p0ybzk3spc59lbrjn9z0q3hc0p4vaf";
+  vendorSha256 = "sha256-pvFT4A7bDBvBf1odyv3z4inw1/IsvOA+++OPbfNjzxM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -31,7 +31,8 @@ stdenv.mkDerivation {
       ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
     '';
 
-  buildInputs = [ unzip ant javac jvm ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ ant javac jvm ];
 
   buildPhase = "ant jar";
   doCheck    = false;

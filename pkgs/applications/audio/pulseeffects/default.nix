@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -9,7 +10,7 @@
 , desktop-file-utils
 , wrapGAppsHook
 , gst_all_1
-, pulseaudio
+, pipewire
 , gtk3
 , glib
 , glibmm
@@ -45,13 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.8.4";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "19sndxvszafbd1l2033g2irpx2jrwi5bpbx8r35047wi0z7djiag";
+    sha256 = "1dicvq17vajk3vr4g1y80599ahkw0dp5ynlany1cfljfjz40s8sx";
   };
 
   nativeBuildInputs = [
@@ -66,14 +67,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pulseaudio
+    pipewire
     glib
     glibmm
     gtk3
     gtkmm3
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base # gst-fft
-    gst_all_1.gst-plugins-good # pulsesrc
+    gst_all_1.gst-plugins-good # spectrum plugin
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
@@ -85,6 +86,15 @@ in stdenv.mkDerivation rec {
     dbus
     fftwFloat
     zita-convolver
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Fix build failure.
+      # https://github.com/wwmm/pulseeffects/pull/934
+      url = "https://github.com/wwmm/pulseeffects/commit/ab7354a6850d23840b4c9af212dbebf4f31a562f.patch";
+      sha256 = "1hd05xn6sp0xs632mqgwk19hl40kh2f69mx5mgzahysrj057w22c";
+    })
   ];
 
   postPatch = ''
@@ -104,10 +114,12 @@ in stdenv.mkDerivation rec {
   BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
+  separateDebugInfo = true;
+
   meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     homepage = "https://github.com/wwmm/pulseeffects";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
     badPlatforms = [ "aarch64-linux" ];

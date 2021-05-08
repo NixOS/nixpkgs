@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeWrapper, xorgserver, getopt
 , xauth, util-linux, which, fontsConf, gawk, coreutils }:
 let
-  xvfb_run = fetchurl {
+  xvfb-run = fetchurl {
     name = "xvfb-run";
     # https://git.archlinux.org/svntogit/packages.git/?h=packages/xorg-server
     url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server&id=9cb733cefa92af3fca608fb051d5251160c9bbff";
@@ -10,10 +10,10 @@ let
 in
 stdenv.mkDerivation {
   name = "xvfb-run";
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''
     mkdir -p $out/bin
-    cp ${xvfb_run} $out/bin/xvfb-run
+    cp ${xvfb-run} $out/bin/xvfb-run
 
     chmod a+x $out/bin/xvfb-run
     patchShebangs $out/bin/xvfb-run

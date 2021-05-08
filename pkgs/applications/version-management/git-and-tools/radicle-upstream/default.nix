@@ -2,12 +2,12 @@
 
 let
   pname = "radicle-upstream";
-  version = "0.1.6";
+  version = "0.2.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://releases.radicle.xyz/radicle-upstream-${version}.AppImage";
-    sha256 =  "1s299rxala6gqj69j5q4d4n5wfdk2zsb4r9qrhml0m79b4f79yar";
+    sha256 =  "sha256-SL6plXZ+o7JchY/t/1702FK57fVjxllHqB8ZOma/43c=";
   };
 
   contents = appimageTools.extractType2 { inherit name src; };

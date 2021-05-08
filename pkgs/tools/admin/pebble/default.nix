@@ -1,6 +1,7 @@
 { buildGoPackage
 , fetchFromGitHub
 , lib
+, nixosTests
 }:
 
 let
@@ -15,6 +16,10 @@ in buildGoPackage {
     repo = pname;
     rev = version;
     sha256 = "1piwzzfqsdx6s2niczzp4mf4r3qn9nfdgpn7882g52cmmm0vzks2";
+  };
+
+  passthru.tests = {
+    smoke-test = nixosTests.acme;
   };
 
   meta = {

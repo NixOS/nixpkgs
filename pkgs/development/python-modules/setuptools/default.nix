@@ -1,4 +1,5 @@
 { stdenv
+, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , python
@@ -13,7 +14,12 @@
 
 let
   pname = "setuptools";
-  version = "50.3.1";
+  version = "54.2.0";
+
+  bootstrap = fetchurl {
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v52.0.0/bootstrap.py";
+    sha256 = "sha256-HzhlnJvMskBfb3kVnYltdnjS63wt1GWd0RK+VQqrJQ8=";
+  };
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -23,7 +29,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "Z4KHB3Pv4wZPou/Vbp1DFDgDp47OTDfVChGP55GtIJE=";
+      sha256 = "sha256-ZHJZiwlWLHP4vf2TLwj/DYB9wjbRp0apVmmjsKCLPq0=";
       name = "${pname}-${version}-source";
     };
 
@@ -32,6 +38,7 @@ let
     ];
 
     buildPhase = ''
+      cp ${bootstrap} bootstrap.py
       ${python.pythonForBuild.interpreter} bootstrap.py
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
 

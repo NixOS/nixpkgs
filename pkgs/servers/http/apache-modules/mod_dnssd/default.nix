@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Provide Zeroconf support via DNS-SD using Avahi";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ ];
   };
 }

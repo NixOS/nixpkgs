@@ -85,7 +85,7 @@ in import ../make-test-python.nix {
     server.succeed('prosodyctl status | grep "Prosody is running"')
 
     server.succeed("create-prosody-users")
-    client.succeed('send-message 2>&1 | grep "XMPP SCRIPT TEST SUCCESS"')
+    client.succeed("send-message")
     server.succeed("delete-prosody-users")
   '';
 }

@@ -1,20 +1,23 @@
 { stdenv, lib, fetchurl, unzip }:
 
 let
-  version = "3.2.63";
+  version = "3.3.115";
   src =
     if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://update.tabnine.com/bundles/${version}/x86_64-apple-darwin/TabNine.zip";
-        sha256 = "0y0wb3jdr2qk4k21c11w8c9a5fl0h2rm1wm7m8hqdywy4lz9ppgy";
-      }
+      fetchurl
+        {
+          url = "https://update.tabnine.com/bundles/${version}/x86_64-apple-darwin/TabNine.zip";
+          sha256 = "104h3b9cvmz2m27a94cfc00xm8wa2p1pvrfs92hrz59hcs8vdldf";
+        }
     else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://update.tabnine.com/bundles/${version}/x86_64-unknown-linux-musl/TabNine.zip";
-        sha256 = "0zzk2w5azk5f0svjxlj2774x01xdflb767xxvbglj4223dgyx2x5";
-      }
+      fetchurl
+        {
+          url = "https://update.tabnine.com/bundles/${version}/x86_64-unknown-linux-musl/TabNine.zip";
+          sha256 = "0rs2vmdz8c9zs53pjbzy27ir0p5v752cpsnqfaqf0ilx7k6fpnnm";
+        }
     else throw "Not supported on ${stdenv.hostPlatform.system}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tabnine";
 
   inherit version src;
@@ -29,6 +32,9 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 TabNine $out/bin/TabNine
+    install -Dm755 TabNine-deep-cloud $out/bin/TabNine-deep-cloud
+    install -Dm755 TabNine-deep-local $out/bin/TabNine-deep-local
+    install -Dm755 WD-TabNine $out/bin/WD-TabNine
   '';
 
   meta = with lib; {

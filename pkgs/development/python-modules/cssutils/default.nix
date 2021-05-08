@@ -1,22 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, mock }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools-scm
+, toml
+, importlib-metadata
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "1.0.2";
+  version = "2.2.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2fcf06467553038e98fea9cfe36af2bf14063eb147a70958cfcaa8f5786acaf";
+    sha256 = "5bef59f6b59bdccbea8e36cb292d2be1b6be1b485fc4a9f5886616f19eb31aaf";
   };
 
-  buildInputs = [ mock ];
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
 
-  # couple of failing tests
-  doCheck = false;
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # access network
+    "test_parseUrl"
+    "encutils"
+  ];
+
+  pythonImportsCheck = [ "cssutils" ];
 
   meta = with lib; {
-    description = "A Python package to parse and build CSS";
-    homepage = "http://cthedot.de/cssutils/";
+    description = "A CSS Cascading Style Sheets library for Python";
+    homepage = "https://github.com/jaraco/cssutils";
+    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

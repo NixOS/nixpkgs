@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, perlPackages, makeWrapper, perl, which, nx-libs
 , util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg
-, nettools, iproute, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
+, nettools, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
 }:
 
 let
@@ -31,7 +31,7 @@ let
 
   binaryDeps = [
     perlEnv which nx-libs util-linux coreutils glibc.bin gawk gnused gnugrep
-    findutils nettools iproute bc procps psmisc lsof pwgen openssh sshfs
+    findutils nettools iproute2 bc procps psmisc lsof pwgen openssh sshfs
     xorg.xauth xorg.xinit xorg.xrandr xorg.xmodmap xorg.xwininfo xorg.fontutil
     xorg.xkbcomp xorg.setxkbmap
   ];

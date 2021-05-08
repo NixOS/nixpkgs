@@ -31,7 +31,7 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = "6V0sM0Z+2xNDgL0wIzJOdaUp2Ol4ejNTk9K/pllVa7g=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/telepresence \

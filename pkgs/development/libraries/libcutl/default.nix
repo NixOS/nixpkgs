@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
   };
 
-  majmin = builtins.head ( builtins.match "([[:digit:]]\.[[:digit:]]+)\.*" "${version}" );
+  majmin = builtins.head ( builtins.match "([[:digit:]]\\.[[:digit:]]+).*" "${version}" );
   src = fetchurl {
     url = "https://codesynthesis.com/download/${pname}/${majmin}/${pname}-${version}.tar.bz2";
     sha256 = "070j2x02m4gm1fn7gnymrkbdxflgzxwl7m96aryv8wp3f3366l8j";

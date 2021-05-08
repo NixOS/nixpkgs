@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "20.1";
+  version = "20.3";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-NU2AhqMVxjPyCocjZg5dzwHpTgAIBluMqdKqn4lnknM=";
+    sha256 = "sha256-hmAksLPQxzB4O+ET+O/pmL/J4FG4+Dt0ulSsgjBWKxw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

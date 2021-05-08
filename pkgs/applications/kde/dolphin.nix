@@ -5,7 +5,7 @@
   kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
-  wayland, qtwayland
+  wayland, qtbase, qtwayland
 }:
 
 mkDerivation {
@@ -13,6 +13,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];
+    broken = lib.versionOlder qtbase.version "5.14";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedUserEnvPkgs = [ baloo ];

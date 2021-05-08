@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/osip/";
     description = "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     inherit version;
   };
 }

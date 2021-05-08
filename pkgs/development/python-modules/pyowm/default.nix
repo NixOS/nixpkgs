@@ -1,30 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests, geojson }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, geojson
+, pysocks
+, pythonOlder
+, requests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.1.1";
+  version = "3.2.0";
+  disabled = pythonOlder "3.7";
 
-  disabled = pythonOlder "3.3";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a7b18297a9189dbe5f6b454b12d61a407e35c7eb9ca75bcabfe5e1c83245290d";
+  src = fetchFromGitHub {
+    owner = "csparpa";
+    repo = pname;
+    rev = version;
+    sha256 = "0sq8rxcgdiayl5gy4qhkvvsdq1d93sbzn0nfg8f1vr8qxh8qkfq4";
   };
 
-  propagatedBuildInputs = [ requests geojson ];
+  propagatedBuildInputs = [
+    geojson
+    pysocks
+    requests
+  ];
 
-  # This may actually break the package.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "requests>=2.18.2,<2.19" "requests"
-  '';
+  checkInputs = [ pytestCheckHook ];
 
-  # No tests in archive
-  doCheck = false;
+  # Run only tests which don't require network access
+  pytestFlagsArray = [ "tests/unit" ];
+
+  pythonImportsCheck = [ "pyowm" ];
 
   meta = with lib; {
-    description = "A Python wrapper around the OpenWeatherMap web API";
+    description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

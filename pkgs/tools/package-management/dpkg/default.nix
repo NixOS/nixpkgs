@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.20.5";
+  version = "1.20.7.1";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1pg0yd1q9l5cx7pr0853yds1n3mh5b28zkw79gjqjzcmjwqkzwpj";
+    sha256 = "sha256-Cq0t5of3l++OvavHuv0W3BSX8c4jvZFG+apz85alY28=";
   };
 
   configureFlags = [
@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     ''
       for i in $out/bin/*; do
         if head -n 1 $i | grep -q perl; then
-          wrapProgram $i --prefix PERL5LIB : $out/${perl.libPrefix}
+          substituteInPlace $i --replace \
+            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
         fi
       done
 

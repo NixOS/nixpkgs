@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_38 }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_78 }:
 
 stdenv.mkDerivation {
   pname = "jsawk";
@@ -10,12 +10,12 @@ stdenv.mkDerivation {
     sha256 = "0z3vdr3c8nvdrrxkjv9b4xg47mdb2hsknxpimw6shgwbigihapyr";
   };
   dontBuild = true;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
-      --prefix PATH : "${spidermonkey_38}/bin"
+      --prefix PATH : "${spidermonkey_78}/bin"
   '';
 
   meta = {

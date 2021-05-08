@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.5.10";
+  version = "1.5.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05a2a3d4adeebc8a465d037999ba8db2cb471a24b41d623d4bcb80aac02ddbc9";
+    sha256 = "b4d87d107bff743aaa805c2b382c3661c4c175cdb159656d4972be2a9cef42cb";
   };
 
   # The version bounds in the setup.py file are unnecessarily restrictive.

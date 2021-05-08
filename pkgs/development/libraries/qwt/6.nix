@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.5";
+  name = "qwt-6.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "0hf0mpca248xlqn7xnzkfj8drf19gdyg5syzklvq8pibxiixwxj0";
+    sha256 = "sha256-mUYNMcEV7kEXsBddiF9HwsWQ14QgbwmBXcBY++Xt4fY=";
   };
 
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Qt widgets for technical applications";

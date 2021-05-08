@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   name = "nixpkgs-lint-1";
 
-  buildInputs = [ makeWrapper perl perlPackages.XMLSimple ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl perlPackages.XMLSimple ];
 
   dontUnpack = true;
   buildPhase = "true";

@@ -6,19 +6,21 @@
 , certifi
 , six
 , backports_ssl_match_hostname
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f59e5153f22e4a0be27b48aece8e45e19c1da294f8c49442b1c9e4d152c5c4c3";
+    sha256 = "3f0ab18d84ef26ba0c9df73ae2a41ba30a46072b447f2e36c740400de4a63d44";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ gevent certifi six backports_ssl_match_hostname ];
+  propagatedBuildInputs = [ gevent certifi six ]
+    ++ lib.optionals (pythonOlder "3.7") [ backports_ssl_match_hostname ];
 
   # Several tests fail that require network
   doCheck = false;

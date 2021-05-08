@@ -68,7 +68,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--impure)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--offline|--impure)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -145,7 +145,7 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix:$PATH" "${maybeSudo[@]}" "$@"
+        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix":'$PATH' "${maybeSudo[@]}" "$@"
     else
         ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi
@@ -212,6 +212,47 @@ nixBuild() {
             exit 1
         fi
   fi
+}
+
+nixFlakeBuild() {
+    if [ -z "$buildHost" ]; then
+        nix build "$@" --out-link "${tmpDir}/result"
+        readlink -f "${tmpDir}/result"
+    else
+        local attr="$1"
+        shift 1
+        local evalArgs=()
+        local buildArgs=()
+        while [ "$#" -gt 0 ]; do
+            local i="$1"; shift 1
+            case "$i" in
+              --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+                evalArgs+=("$i")
+                ;;
+              --update-input)
+                local j="$1"; shift 1
+                evalArgs+=("$i" "$j")
+                ;;
+              --override-input)
+                local j="$1"; shift 1
+                local k="$1"; shift 1
+                evalArgs+=("$i" "$j" "$k")
+                ;;
+              *)
+                buildArgs+=("$i")
+                ;;
+            esac
+        done
+
+        local drv="$(nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildArgs[@]}")"
+        if [ -a "$drv" ]; then
+            NIX_SSHOPTS=$SSHOPTS nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
+        else
+            echo "nix eval failed"
+            exit 1
+        fi
+    fi
 }
 
 
@@ -295,7 +336,7 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix "${flakeFlags[@]}" flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
+    flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
@@ -323,20 +364,6 @@ cleanup() {
     rm -rf "$tmpDir"
 }
 trap cleanup EXIT
-
-
-
-# If the Nix daemon is running, then use it.  This allows us to use
-# the latest Nix from Nixpkgs (below) for expression evaluation, while
-# still using the old Nix (via the daemon) for actual store access.
-# This matters if the new Nix in Nixpkgs has a schema change.  It
-# would upgrade the schema, which should only happen once we actually
-# switch to the new configuration.
-# If --repair is given, don't try to use the Nix daemon, because the
-# flag can only be used directly.
-if [ -z "$repair" ] && systemctl show nix-daemon.socket nix-daemon.service | grep -q ActiveState=active; then
-    export NIX_REMOTE=${NIX_REMOTE-daemon}
-fi
 
 
 # First build Nix, since NixOS may require a newer version than the
@@ -432,10 +459,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
-            outLink=$tmpDir/result
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
-            pathToConfig="$(readlink -f $outLink)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
@@ -443,24 +467,19 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vm" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vm" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vmWithBootLoader" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     else
         showSyntax

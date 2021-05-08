@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zjb6cgk2lpzx6pq1cs5fh65in6b5ccpl1cgfiglgpjc948mnhzv";
   };
 
-  buildInputs = [ makeWrapper jre8 which gawk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre8 which gawk ];
 
 
   installPhase = ''

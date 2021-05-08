@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
+, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
@@ -8,6 +8,7 @@
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
 , withDebug ? false
+, fetchpatch
 }:
 
 with lib;
@@ -15,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.28.0";
+  version = "1.30.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "1266jbfw55r1zh00xi6c90j2fs9hw8hmsb7686rh04l8mffny9f4";
+    sha256 = "0cp6gbn38f1cr0jkr64vvwz005cvnwj3hgfxs147wap9w228k46r";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -36,7 +37,14 @@ in stdenv.mkDerivation rec {
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
+    # required to prevent plugins from relying on /etc
+    # and /var
     ./no-files-in-etc-and-var.patch
+    # cgroups: fix network interfaces detection when using virsh
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/11096.patch";
+      sha256 = "0f2rd7kgbwbyq9wyn085d213ifvivnpl3qlx1gjrg42rkbi4n8jj";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -77,8 +85,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, lzo, zlib, yacc, flex }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, lzo, zlib, bison, flex }:
 
 stdenv.mkDerivation rec {
   name = "vtun-3.0.4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's/-m 755//' -e 's/-o root -g 0//' Makefile.in
     sed -i '/strip/d' Makefile.in
   '';
-  buildInputs = [ lzo openssl zlib yacc flex ];
+  buildInputs = [ lzo openssl zlib bison flex ];
 
   configureFlags = [
     "--with-lzo-headers=${lzo}/include/lzo"

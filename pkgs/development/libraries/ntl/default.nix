@@ -14,11 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   pname = "ntl";
-  version = "11.4.3";
+  version = "11.4.4";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "1lisp3064rch3jaa2wrhy1s9kll7i3ka3d0y6lj6l3l4ckfcrhdp";
+    sha256 = "sha256-nX9uguEaQJ8VHA3i3rCMDXY7r5g0/d/UMr89IY+AIds=";
   };
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
-    "CXX=c++"
+    "CXX=${stdenv.cc.targetPrefix}c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"

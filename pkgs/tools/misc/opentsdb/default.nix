@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ autoconf automake curl jdk nettools python git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/

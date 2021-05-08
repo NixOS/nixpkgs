@@ -11,6 +11,6 @@ bundlerApp {
     description = "A Ruby language server";
     homepage = "https://solargraph.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace nicknovitski angristan ];
+    maintainers = with maintainers; [ nicknovitski angristan ];
   };
 }

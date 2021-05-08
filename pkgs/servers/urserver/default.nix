@@ -9,15 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "urserver";
-  version = "3.6.0.745";
+  version = "3.9.0.2465";
 
   src = fetchurl {
-    url = "https://www.unifiedremote.com/static/builds/server/linux-x64/745/urserver-${version}.tar.gz";
-    sha256 = "1ib9317bg9n4knwnlbrn1wfkyrjalj8js3a6h7zlcl8h8xc0szc8";
+    url = "https://www.unifiedremote.com/static/builds/server/linux-x64/${builtins.elemAt (builtins.splitVersion version) 3}/urserver-${version}.tar.gz";
+    sha256 = "sha256-3DIroodWCMbq1fzPjhuGLk/2fY/qFxFISLzjkjJ4i90=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -25,7 +26,6 @@ stdenv.mkDerivation rec {
     bluez
     libX11
     libXtst
-    makeWrapper
   ];
 
   installPhase = ''

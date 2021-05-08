@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/celluloid-player/celluloid";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

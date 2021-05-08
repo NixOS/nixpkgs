@@ -1,5 +1,5 @@
 { lib, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, dconf, gtk3, python3Packages,
+  findutils, xdg-utils, dconf, gtk3, python3Packages,
   wrapGAppsHook
 }:
 
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.dbus-python
     python3Packages.pygobject3
     python3Packages.pexpect
-    xdg_utils
+    xdg-utils
     findutils
   ];
 

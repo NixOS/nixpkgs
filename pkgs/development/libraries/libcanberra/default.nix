@@ -47,9 +47,8 @@ stdenv.mkDerivation rec {
     gtkModule = "/lib/gtk-2.0/";
   };
 
-  meta = {
+  meta = with lib; {
     description = "An implementation of the XDG Sound Theme and Name Specifications";
-
     longDescription = ''
       libcanberra is an implementation of the XDG Sound Theme and Name
       Specifications, for generating event sounds on free desktops
@@ -57,12 +56,12 @@ stdenv.mkDerivation rec {
       PulseAudio, OSS, GStreamer, null) and is designed to be
       portable.
     '';
-
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
-
-    license = lib.licenses.lgpl2Plus;
-
+    license = licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
+    # canberra-gtk-module.c:28:10: fatal error: 'gdk/gdkx.h' file not found
+    # #include <gdk/gdkx.h>
+    broken = stdenv.isDarwin;
   };
 }

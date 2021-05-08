@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
   };
 
-  buildInputs = [ wxGTK makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ wxGTK ];
 
   preConfigure = "cd src";
 

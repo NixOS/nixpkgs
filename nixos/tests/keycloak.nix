@@ -20,6 +20,7 @@ let
           services.keycloak = {
             enable = true;
             inherit frontendUrl databaseType initialAdminPassword;
+            databaseUsername = "bogus";
             databasePasswordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
           };
           environment.systemPackages = with pkgs; [

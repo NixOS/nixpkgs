@@ -1,7 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, pkgs
 , boto3
 }:
 

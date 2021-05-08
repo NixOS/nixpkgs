@@ -6,7 +6,7 @@
 
 # now defaults to false because some tests can be flaky (clipboard etc)
 , doCheck ? false
-, nodejs ? null, fish ? null, python ? null
+, nodejs ? null, fish ? null, python3 ? null
 }:
 
 with lib;
@@ -19,7 +19,7 @@ let
       ]
     ));
 
-  pyEnv = python.withPackages(ps: [ ps.pynvim ps.msgpack ]);
+  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 
   # FIXME: this is verry messy and strange.
   # see https://github.com/NixOS/nixpkgs/pull/80528

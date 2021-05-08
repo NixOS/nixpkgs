@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "asciigraph";
-  version = "0.5.1";
+  version = "0.5.2";
 
   goPackagePath = "github.com/guptarohit/asciigraph";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "guptarohit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0aqf64b5d5lf9scvxdx5f3p0vvx5s59mrvr6hcjljg1prksah9ns";
+    sha256 = "sha256-iVgJtxt0B6nMA3bieZ1CmZucwLMb5av6Wn5BMDRWfcI=";
   };
 
   meta = with lib; {

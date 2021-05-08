@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libaio ];
 
   dontPatchELF = true;
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc"];
 
   postFixup = ''
     ${lib.optionalString (stdenv.isLinux) ''

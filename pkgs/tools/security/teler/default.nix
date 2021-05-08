@@ -1,20 +1,24 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "teler";
-  version = "1.0.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "teler";
     rev = "v${version}";
-    sha256 = "07pfqgms5cj4y6zm984qjmmw1c8j9yjbgrp2spi9vzk96s3k3qn3";
+    sha256 = "sha256-i4106PtoCJt5CY9ahczZYe9GufBkaZS+9Peh0IY9r1M=";
   };
 
-  vendorSha256 = "06szi2jw3nayd7pljjlww2gsllgnfg8scnjmc6qv5xl6gf797kdz";
+  vendorSha256 = "sha256-TQjwPem+RMuoF5T02CL/CTvBS6W7Q786gTvYUFIvxjE=";
+
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X ktbs.dev/teler/common.Version=${version}")
+  '';
 
   # test require internet access
   doCheck = false;

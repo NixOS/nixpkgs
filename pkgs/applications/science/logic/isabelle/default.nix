@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       sha256 = "1bibabhlsvf6qsjjkgxcpq3cvl1z7r8yfcgqbhbvsiv69n3gyfk3";
     };
 
-  buildInputs = [ perl polyml z3 makeWrapper ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl polyml z3 ]
              ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;

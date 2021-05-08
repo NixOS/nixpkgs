@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1srd6vrqgjlf906zdyxp4bg6gihkxn62cpzyfv0zzpsqsj13iwh1";
   };
 
-  buildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   phases = [ "installPhase" "fixupPhase" ];
 

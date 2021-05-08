@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "vsure";
-  version = "1.6.1";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lsr0wl1dwbzpn68ww348yk6v42bw89nrghz5gjsimrr428zw6qn";
+    sha256 = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
   };
 
   propagatedBuildInputs = [ requests ];

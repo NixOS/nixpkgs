@@ -1,18 +1,11 @@
-{ lib, python3, fetchFromGitHub, nixosTests }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
+}:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "6.0.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1p5n7sw4580pkybywg93p8ddqdj9lhhy72rzswfa801vlidx9qhg";
-        };
-      });
-    };
-  };
-in with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
   version = "1.2.3";
   format = "pyproject";
@@ -24,6 +17,14 @@ in with python.pkgs; buildPythonApplication rec {
     sha256 = "1p6agvp136q6km7gjfv8dpjn6x4ap770lqa40ifblyhw13bsrqlh";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/supakeen/pinnwand/issues/110
+      url = "https://github.com/supakeen/pinnwand/commit/b9e72abb7f25104f5e57248294ed9ae1dbc87240.patch";
+      sha256 = "098acif9ck165398bp7vwfr9g7sj9q3pcdc42z5y63m1nbf8naan";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -31,10 +32,11 @@ in with python.pkgs; buildPythonApplication rec {
   propagatedBuildInputs = [
     click
     docutils
-    tornado
+    pygments
     pygments-better-html
-    toml
     sqlalchemy
+    toml
+    tornado
   ];
 
   checkInputs = [ pytestCheckHook ];

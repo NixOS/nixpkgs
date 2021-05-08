@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
     rev = version;
-    sha256 = "0snljpvbcgikhz610c325dgvayi0k512p3bglck9vvi90wsqx7l1";
+    sha256 = "sha256-t3f+T1QTNbuJnWmD+q0yPgQxXPXvl91lZN17pKUVFlo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu orivej ];
   };

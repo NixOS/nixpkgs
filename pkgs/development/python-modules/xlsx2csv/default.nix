@@ -13,10 +13,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/bitprophet/alabaster";
+    homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jb55 ];
   };
-
 }

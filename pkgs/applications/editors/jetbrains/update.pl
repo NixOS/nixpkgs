@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i perl -p perl perlPackages.LWPProtocolhttps perlPackages.FileSlurp
+#!nix-shell -i perl -p perl perlPackages.LWPProtocolHttps perlPackages.FileSlurp
 
 use strict;
 use List::Util qw(reduce);

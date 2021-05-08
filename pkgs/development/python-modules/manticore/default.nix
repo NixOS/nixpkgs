@@ -57,6 +57,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isLinux) [
     "--ignore=tests/native"
     "--ignore=tests/other/test_locking.py"
+    "--ignore=tests/other/test_state_introspection.py"
   ];
   disabledTests = [
     # failing tests

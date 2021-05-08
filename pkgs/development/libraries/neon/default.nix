@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxml2, pkg-config, perl
+{ lib, stdenv, fetchurl, libxml2, pkg-config
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
 , static ? stdenv.hostPlatform.isStatic
@@ -14,12 +14,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.31.0";
+  version = "0.31.2";
   pname = "neon";
 
   src = fetchurl {
-    url = "http://www.webdav.org/neon/${pname}-${version}.tar.gz";
-    sha256 = "19dx4rsqrck9jl59y4ad9jf115hzh6pz1hcl2dnlfc84hc86ymc0";
+    url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0y46dbhiblcvg8k41bdydr3fivghwk73z040ki5825d24ynf67ng";
   };
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
@@ -37,12 +37,10 @@ stdenv.mkDerivation rec {
 
   passthru = {inherit compressionSupport sslSupport;};
 
-  checkInputs = [ perl ];
-  doCheck = false; # fails, needs the net
-
   meta = with lib; {
     description = "An HTTP and WebDAV client library";
-    homepage = "http://www.webdav.org/neon/";
+    homepage = "https://notroj.github.io/neon/";
+    changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
     platforms = platforms.unix;
     license = licenses.lgpl2;
   };

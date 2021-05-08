@@ -16,7 +16,7 @@
 
 let
   pname = "TeXmacs";
-  version = "1.99.18";
+  version = "1.99.19";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
@@ -26,7 +26,7 @@ mkDerivation {
 
   src = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    sha256 = "0il3fwgw20421aj90wg8kyhkwk6lbgb3bb2g5qamh5lk90yj725i";
+    sha256 = "1izwqb0z4gqiglv57mjswk6sjivny73kd2sxrf3nmj7wr12pn5m8";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

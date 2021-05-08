@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "1arllkiz1hk12hq5b2zpg3f8i9lxl66mil5sdv8gnhflmb37vbv3";
 
-  buildFlagsArray = [ "-ldflags=-X main.GitSha=${src.rev}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X main.GitSha=${src.rev}" ];
 
   doCheck = false;
 

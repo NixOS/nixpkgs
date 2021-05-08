@@ -1,8 +1,8 @@
-diff --git a/src/crypto/x509/root_darwin_amd64.go b/src/crypto/x509/root_darwin_amd64.go
-index ce88de025e..258ecc45d1 100644
---- a/src/crypto/x509/root_darwin_amd64.go
-+++ b/src/crypto/x509/root_darwin_amd64.go
-@@ -10,6 +10,7 @@ import (
+diff --git a/src/crypto/x509/root_darwin.go b/src/crypto/x509/root_darwin.go
+index 05593bb105..a6a11eeec1 100644
+--- a/src/crypto/x509/root_darwin.go
++++ b/src/crypto/x509/root_darwin.go
+@@ -11,6 +11,7 @@ import (
  	"bytes"
  	macOS "crypto/x509/internal/macos"
  	"fmt"
@@ -10,9 +10,9 @@ index ce88de025e..258ecc45d1 100644
  	"os"
  	"strings"
  )
-@@ -25,6 +26,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
- var loadSystemRootsWithCgo func() (*CertPool, error)
-
+@@ -22,6 +23,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ }
+ 
  func loadSystemRoots() (*CertPool, error) {
 +	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
 +		data, err := ioutil.ReadFile(file)
@@ -24,13 +24,21 @@ index ce88de025e..258ecc45d1 100644
 +	}
  	var trustedRoots []*Certificate
  	untrustedRoots := make(map[string]bool)
-
+ 
 diff --git a/src/crypto/x509/root_unix.go b/src/crypto/x509/root_unix.go
-index b48e618a65..195c1ff25a 100644
+index dede825edd..ffb3caf4a4 100644
 --- a/src/crypto/x509/root_unix.go
 +++ b/src/crypto/x509/root_unix.go
-@@ -42,6 +42,13 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
-
+@@ -9,6 +9,7 @@ package x509
+ 
+ import (
+ 	"io/fs"
++	"io/ioutil"
+ 	"os"
+ 	"path/filepath"
+ 	"strings"
+@@ -32,6 +33,13 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ 
  func loadSystemRoots() (*CertPool, error) {
  	roots := NewCertPool()
 +	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
@@ -40,6 +48,7 @@ index b48e618a65..195c1ff25a 100644
 +			return roots, nil
 +		}
 +	}
-
+ 
  	files := certFiles
  	if f := os.Getenv(certFileEnv); f != "" {
+

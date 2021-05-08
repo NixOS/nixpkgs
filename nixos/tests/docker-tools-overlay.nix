@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "docker-tools-overlay";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 ];
+    maintainers = [ lnl7 roberth ];
   };
 
   nodes = {
@@ -30,4 +30,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       # drw------- 99 0 0 100 Apr 14 11:36 /nix/store
       docker.succeed("docker run --rm -u 1000:1000 ${pkgs.dockerTools.examples.bash.imageName} bash --version")
     '';
+
+  # Remove when the formatter has been removed and a linter has been added
+  skipLint = true;
 })

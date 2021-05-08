@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bashInteractive
 , jq
 , makeWrapper
 , p7zip
@@ -7,16 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "1g64f8ms7yz4rzm6xb93agc08kh9sbwkhvq35dpfhvi6v59j3n5m";
+    sha256 = "13n2y9gsgb8hnr64y083x9c90j3b4awcmdn81mqmwcydpby3q848";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ bashInteractive ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -29,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/foldex/r2mod_cli";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.reedrw ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

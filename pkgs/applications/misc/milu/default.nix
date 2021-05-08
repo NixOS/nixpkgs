@@ -22,10 +22,9 @@ stdenv.mkDerivation {
     cp bin/milu $out/bin
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
      glib
-     unzip
      llvmPackages.libclang
   ];
 

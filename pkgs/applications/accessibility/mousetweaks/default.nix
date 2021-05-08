@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, glib, gtk3, gnome3, gsettings-desktop-schemas, wrapGAppsHook
+, glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook
 , libX11, libXtst, libXfixes, libXcursor
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

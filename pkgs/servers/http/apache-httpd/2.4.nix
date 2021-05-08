@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+, nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
+    tests = {
+      acme-integration = nixosTests.acme;
+    };
   };
 
   meta = with lib; {

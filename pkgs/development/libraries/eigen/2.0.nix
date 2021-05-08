@@ -6,19 +6,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "libeigen";
-    repo = "eigen";
+    repo = pname;
     rev = version;
-    sha256 = "0d4knrcz04pxmxaqs5r3wv092950kl1z9wsw87vdzi9kgvc6wl0b";
+    hash = "sha256-C1Bu2H4zxd/2QVzz9AOdoCSRwOYjF41Vr/0S8Fm2kzQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
+    homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = licenses.lgpl3Plus;
-    homepage = "https://eigen.tuxfamily.org";
-    maintainers = with lib.maintainers; [ sander raskin ];
-    branch = "2";
-    platforms = with lib.platforms; unix;
+    maintainers = with maintainers; [ sander raskin ];
+    platforms = platforms.unix;
   };
 }

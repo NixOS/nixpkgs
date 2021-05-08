@@ -22,6 +22,8 @@ buildPythonPackage rec {
     # port binding conflicts
     "test_snitun_single_runner_timeout"
     "test_snitun_single_runner_throttling"
+    # ConnectionResetError: [Errno 54] Connection reset by peer
+    "test_peer_listener_timeout"
   ];
 
   meta = with lib; {

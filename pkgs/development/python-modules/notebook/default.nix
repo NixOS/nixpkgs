@@ -12,7 +12,6 @@
 , tornado
 , ipython_genutils
 , traitlets
-, jupyter
 , jupyter_core
 , jupyter_client
 , nbformat
@@ -28,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.1.5";
+  version = "6.3.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3db37ae834c5f3b6378381229d0e5dfcbfb558d08c8ce646b1ad355147f5e91d";
+    sha256 = "cbc9398d6c81473e9cdb891d2cae9c0d3718fca289dda6d26df5cb660fcadc7d";
   };
 
   LC_ALL = "en_US.utf8";

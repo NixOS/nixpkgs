@@ -4,7 +4,7 @@
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.14.0";
 
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
 
       unpackPhase = ''
         mkdir rainloop

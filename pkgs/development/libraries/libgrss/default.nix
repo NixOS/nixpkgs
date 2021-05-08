@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, vala, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, vala, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome }:
 
 let
   version = "0.7.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

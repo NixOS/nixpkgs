@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkg-config, protobuf, bzip2
+{ lib, stdenv, fetchFromGitHub, libupnp, gpgme, gnome, glib, libssh, pkg-config, protobuf, bzip2
 , libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg_3
 , qtmultimedia, qtx11extras, qttools }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
-    speex libupnp gpgme gnome3.libgnome-keyring glib libssh qtmultimedia qtx11extras qttools
+    speex libupnp gpgme gnome.libgnome-keyring glib libssh qtmultimedia qtx11extras qttools
     protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ffmpeg_3
   ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "http://retroshare.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

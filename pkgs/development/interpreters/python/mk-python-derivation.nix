@@ -104,11 +104,13 @@ else
 let
   inherit (python) stdenv;
 
+  name_ = name;
+
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
 
-    name = namePrefix + name;
+    name = namePrefix + name_;
 
     nativeBuildInputs = [
       python

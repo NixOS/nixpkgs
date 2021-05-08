@@ -12,6 +12,10 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ ansiwrap cryptography ];
 
+  # No tests are available
+  doCheck = false;
+  pythonImportsCheck = [ "av98" ];
+
   meta = with lib; {
     homepage = "https://tildegit.org/solderpunk/AV-98";
     description = "Experimental console client for the Gemini protocol";

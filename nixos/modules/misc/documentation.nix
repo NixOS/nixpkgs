@@ -98,7 +98,7 @@ in
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
-        # which is at ../../../doc/multiple-output.xml
+        # which is at ../../../doc/multiple-output.chapter.md
       };
 
       man.enable = mkOption {

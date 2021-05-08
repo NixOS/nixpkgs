@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , pkg-config
-, ffmpeg_3
+, ffmpeg
 , openssl
 , qtbase
 , zlib
@@ -13,21 +13,21 @@
 }:
 
 let
-  version = "1.15.4";
+  version = "1.16.3";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-Reun5hp7Rnsf6N5yL6iQ1Vbhnz/AKnt/jYRqyOK625o=";
+    hash = "sha256-G2XceMwiFu4fWT4L3HJzDB/rD3eSX6ko6RdVw72QLzg=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-gtBi1IRNF5ASk/ZdzkDmOuEIT9gazNaRNCftqbLEP+M=";
+    hash = "sha256-YUGozP9B6vmWQ4WxctSbezzu+0yLJXNKQk9TwnQF8F0=";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -39,7 +39,7 @@ in mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
-  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+  buildInputs = [ ffmpeg openssl qtbase zlib ];
 
   qtWrapperArgs =
     let

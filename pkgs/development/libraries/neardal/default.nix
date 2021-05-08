@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "12qwg7qiw2wfpaxfg2fjkmj5lls0g33xp6w433g8bnkvwlq4s29g";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake libtool glib readline makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ autoconf automake libtool glib readline ];
 
   preConfigure = ''
     substituteInPlace "ncl/Makefile.am" --replace "noinst_PROGRAMS" "bin_PROGRAMS"

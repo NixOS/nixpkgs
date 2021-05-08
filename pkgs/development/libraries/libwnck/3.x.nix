@@ -16,7 +16,7 @@
 , libstartup_notification
 , gettext
 , gobject-introspection
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -60,9 +60,10 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}${lib.versions.major version}";
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -70,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.worldofpeace ];
+    maintainers = [ ];
   };
 }

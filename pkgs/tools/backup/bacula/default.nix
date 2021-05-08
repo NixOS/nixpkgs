@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bacula";
-  version = "11.0.0";
+  version = "11.0.1";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "JmBTwI/wUEytkhu0SYbTX6/dDQG6xvN2odEYTVpztok=";
+    sha256 = "sha256-Lr2c24hZU8A/Cd8xGA7rfqga67ghz0XJ/cs/z/hSlPU=";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = "http://bacula.org/";
     license     = with licenses; [ agpl3Only bsd2 ];
-    maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
+    maintainers = with maintainers; [ lovek323 eleanor ];
     platforms   = platforms.all;
   };
 }

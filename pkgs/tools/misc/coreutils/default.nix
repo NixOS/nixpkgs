@@ -43,6 +43,9 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
+    # Depends on the mountpoints
+    sed '2i echo Skipping df df-symlink test && exit 77' -i ./tests/df/df-symlink.sh
+
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
     sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
@@ -103,8 +106,7 @@ stdenv.mkDerivation (rec {
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
-    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl)
-    && builtins.storeDir == "/nix/store";
+    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl);
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";

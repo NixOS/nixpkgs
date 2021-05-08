@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, requests, pytestCheckHook, mock }:
+{ buildPythonPackage, fetchPypi, pythonAtLeast, lib, requests, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
   version = "2.4.0";
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
-    homepage = "https://pypi.org/project/google-i18n-address/";
+    homepage = "https://github.com/mirumee/google-i18n-address";
     maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.bsd3;
   };

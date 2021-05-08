@@ -25,6 +25,8 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lsvn_fs-1";
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://github.com/svn-all-fast-export/svn2git";
     description = "A fast-import based converter for an svn repo to git repos";

@@ -21,10 +21,12 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ cmake bison pkg-config rpcsvc-proto ];
+  nativeBuildInputs = [ bison cmake pkg-config ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
-  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
-     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
+     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ]
+     ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
   outputs = [ "out" "static" ];
 

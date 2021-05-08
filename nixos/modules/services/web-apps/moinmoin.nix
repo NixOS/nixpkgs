@@ -211,7 +211,7 @@ in
             environment = let
               penv = python.buildEnv.override {
                 # setuptools: https://github.com/benoitc/gunicorn/issues/1716
-                extraLibs = [ python.pkgs.gevent python.pkgs.setuptools pkg ];
+                extraLibs = [ python.pkgs.eventlet python.pkgs.setuptools pkg ];
               };
             in {
               PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
@@ -233,7 +233,7 @@ in
               ExecStart = ''${python.pkgs.gunicorn}/bin/gunicorn moin_wsgi \
                 --name gunicorn-${wikiIdent} \
                 --workers ${toString cfg.gunicorn.workers} \
-                --worker-class gevent \
+                --worker-class eventlet \
                 --bind unix:/run/moin/${wikiIdent}/gunicorn.sock
               '';
 

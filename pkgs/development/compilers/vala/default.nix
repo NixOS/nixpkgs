@@ -38,6 +38,10 @@ let
 
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
+        "0.50" = ./disable-graphviz-0.46.1.patch;
+
+        "0.52" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -86,7 +90,7 @@ let
 
     # Wait for PR #59372
     # passthru = {
-    #  updateScript = gnome3.updateScript {
+    #  updateScript = gnome.updateScript {
     #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
     #    packageName = pname;
     #  };
@@ -97,7 +101,7 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
+      maintainers = with maintainers; [ antono jtojnar peterhoeg ];
     };
   });
 
@@ -108,8 +112,8 @@ in rec {
   };
 
   vala_0_40 = generic {
-    version = "0.40.18";
-    sha256 = "1f7cdkjdysg4dcri1wbzdddm46amk2s48jkwb5ghpdvhjb4l5j2m";
+    version = "0.40.25";
+    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
   vala_0_44 = generic {
@@ -118,14 +122,24 @@ in rec {
   };
 
   vala_0_46 = generic {
-    version = "0.46.5";
-    sha256 = "07fv895sp9wq74b20qig7hic0r4ynrr5pfaqba02r44xb794fy0s";
+    version = "0.46.13";
+    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
   };
 
   vala_0_48 = generic {
-    version = "0.48.9";
-    sha256 = "1agyrvslv2yh9ikiw7k5nw6j6il1l2zrzfan0pzdpb9xpg9idslw";
+    version = "0.48.17";
+    sha256 = "1wlb4vd7k6hg10s09npglbhfcgjzxkywd4v0l96qhn19m9b8cszj";
   };
 
-  vala = vala_0_48;
+  vala_0_50 = generic {
+    version = "0.50.4";
+    sha256 = "1353j852h04d1x6b4n6lbg3ay40ph0adb9yi25dh74pligx33z2q";
+  };
+
+  vala_0_52 = generic {
+    version = "0.52.2";
+    sha256 = "sha256-OjxGCAO6Zh5RO+PQmEtYPgVHP2AsdfqY6RdVUDcUqXs=";
+  };
+
+  vala = vala_0_52;
 }

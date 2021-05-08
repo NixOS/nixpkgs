@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Mailman archiver plugin for HyperKitty";
     homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ globin peti ];
+    maintainers = with maintainers; [ globin peti qyliss ];
   };
 }

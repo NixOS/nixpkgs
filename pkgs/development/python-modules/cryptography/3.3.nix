@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.3.1"; # Also update the hash in vectors-3.3.nix
+  version = "3.3.2"; # Also update the hash in vectors-3.3.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ribd1vxq9wwz564mg60dzcy699gng54admihjjkgs9dx95pw5vy";
+    sha256 = "1vcvw4lkw1spiq322pm1256kail8nck6bbgpdxx3pqa905wd6q2s";
   };
 
   patches = [ ./cryptography-py27-warning.patch ];

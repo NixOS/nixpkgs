@@ -11,8 +11,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.curl ];
     };
     traefik = { config, pkgs, ... }: {
-      docker-containers.nginx = {
-        extraDockerOptions = [
+      virtualisation.oci-containers.containers.nginx = {
+        extraOptions = [
           "-l" "traefik.enable=true"
           "-l" "traefik.http.routers.nginx.entrypoints=web"
           "-l" "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"

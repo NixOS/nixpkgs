@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phw/peek";
     description = "Simple animated GIF screen recorder with an easy to use interface";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ puffnfresh worldofpeace ];
+    maintainers = with maintainers; [ puffnfresh ];
     platforms = platforms.linux;
   };
 }

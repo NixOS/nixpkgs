@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # fix "unescaped left brace" errors when using intltool in some cases
   patches = [(fetchpatch {
     name = "perl5.26-regex-fixes.patch";
-    url = [
+    urls = [
       "https://sources.debian.org/data/main/i/intltool/0.51.0-5/debian/patches/perl5.26-regex-fixes.patch"
       "https://src.fedoraproject.org/rpms/intltool/raw/d8d2ef29fb122a42a6b6678eb1ec97ae56902af2/f/intltool-perl5.26-regex-fixes.patch"
     ];

@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {
-    url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
+    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = sourceSha256;
   };
 
@@ -57,6 +57,8 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$(pwd)/lib";
   '';
 
+  dontWrapQtApps = true;
+
   # Shared libraries don't work, because of rpath troubles with the current
   # nixpkgs cmake approach. It wants to call a binary at build time, just
   # built and requiring one of the shared objects.
@@ -91,5 +93,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
+    # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
   };
 }

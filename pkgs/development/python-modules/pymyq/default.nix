@@ -1,26 +1,28 @@
 { lib
-, aiodns
 , aiohttp
-, async-timeout
+, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
+, pkce
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymyq";
-  version = "2.0.14";
+  version = "3.0.4";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "arraylabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18825b9c6qk4zcvva79hpg6098z4zqxyapnqmjsli23npw0zh67w";
+    sha256 = "sha256-jeoFlLBjD81Bt6E75rk4U1Ach53KGy23QGx+A6X2rpg=";
   };
 
   propagatedBuildInputs = [
-    aiodns
     aiohttp
-    async-timeout
+    beautifulsoup4
+    pkce
   ];
 
   # Project has no tests

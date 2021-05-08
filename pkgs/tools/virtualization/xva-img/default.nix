@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xva-img";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "eriklax";
     repo = "xva-img";
     rev = version;
-    sha256 = "1w3wrbrlgv7h2gdix2rmrmpjyla365kam5621a1aqjzwjqhjkwyq";
+    sha256 = "sha256-QHCKGsHSMT2P64No1IUCjenm1XZMSgEvsJGJOyHFZS8=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -15,6 +15,8 @@ let
       nativeBuildInputs = [ pkg-config gcc-arm-embedded ];
       buildInputs = [ ncurses readline pcsclite qt5.qtbase ];
 
+      dontWrapQtApps = true;
+
       postPatch = ''
         substituteInPlace client/Makefile --replace '-ltermcap' ' '
         substituteInPlace liblua/Makefile --replace '-ltermcap' ' '

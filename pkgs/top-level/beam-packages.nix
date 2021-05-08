@@ -1,4 +1,4 @@
-{ callPackage, wxGTK30, openssl_1_0_2, buildPackages }:
+{ callPackage, wxGTK30, openssl_1_0_2, buildPackages, wxSupport ? true }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix { };
@@ -11,7 +11,6 @@ rec {
     erlang_odbc = erlangR23_odbc;
     erlang_javac = erlangR23_javac;
     erlang_odbc_javac = erlangR23_odbc_javac;
-    erlang_nox = erlangR23_nox;
 
     # Standard Erlang versions, using the generic builder.
 
@@ -21,6 +20,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR23_odbc = erlangR23.override { odbcSupport = true; };
     erlangR23_javac = erlangR23.override { javacSupport = true; };
@@ -28,7 +28,6 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR23_nox = erlangR23.override { wxSupport = false; };
 
     # R22
     erlangR22 = lib.callErlang ../development/interpreters/erlang/R22.nix {
@@ -36,6 +35,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR22_odbc = erlangR22.override { odbcSupport = true; };
     erlangR22_javac = erlangR22.override { javacSupport = true; };
@@ -43,12 +43,12 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR22_nox = erlangR22.override { wxSupport = false; };
 
     # R21
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR21_odbc = erlangR21.override { odbcSupport = true; };
     erlangR21_javac = erlangR21.override { javacSupport = true; };
@@ -56,12 +56,12 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR21_nox = erlangR21.override { wxSupport = false; };
 
     # R20
     erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix {
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR20_odbc = erlangR20.override { odbcSupport = true; };
     erlangR20_javac = erlangR20.override { javacSupport = true; };
@@ -69,13 +69,13 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR20_nox = erlangR20.override { wxSupport = false; };
 
     # R19
     erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
       wxGTK = wxGTK30;
       openssl = openssl_1_0_2;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR19_odbc = erlangR19.override { odbcSupport = true; };
     erlangR19_javac = erlangR19.override { javacSupport = true; };
@@ -83,13 +83,13 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR19_nox = erlangR19.override { wxSupport = false; };
 
     # R18
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
       openssl = openssl_1_0_2;
       autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
     };
     erlangR18_odbc = erlangR18.override { odbcSupport = true; };
     erlangR18_javac = erlangR18.override { javacSupport = true; };
@@ -97,12 +97,12 @@ rec {
       javacSupport = true;
       odbcSupport = true;
     };
-    erlangR18_nox = erlangR18.override { wxSupport = false; };
 
     # Basho fork, using custom builder.
     erlang_basho_R16B02 =
       lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
         autoconf = buildPackages.autoconf269;
+        inherit wxSupport;
       };
     erlang_basho_R16B02_odbc =
       erlang_basho_R16B02.override { odbcSupport = true; };
@@ -111,7 +111,7 @@ rec {
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR23.elixir`.
     inherit (packages.erlang)
-      elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
+      elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_ls;
 
     inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
   };

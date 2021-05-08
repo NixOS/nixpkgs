@@ -2,6 +2,8 @@
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
+, Foundation
+, testVersion, imagemagick
 }:
 
 let
@@ -12,26 +14,18 @@ let
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
     else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "7.0.10-46";
-    sha256 = "019l1qv8ds8hvyjwi1g21293a7v28bxf8ycnvr9828kpdhf4jxaa";
-    patches = [];
-  };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "7.0.11-8";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    rev = version;
+    sha256 = "sha256-h9hoFXnxuLVQRVtEh83P7efz2KFLLqOXKD6nVJEhqiM=";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -58,7 +52,10 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Foundation
+    ];
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
@@ -80,10 +77,15 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.tests.version =
+    testVersion { package = imagemagick; };
+
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ erictapen ];
     license = licenses.asl20;
+    mainProgram = "magick";
   };
 }

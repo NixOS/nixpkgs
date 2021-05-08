@@ -16,6 +16,10 @@ buildPythonApplication rec {
     gtk3 gobject-introspection
   ];
 
+  # NOTE: gdk-pixbuf setup hook does not run with strictDeps
+  # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
+  strictDeps = false;
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg_3 ]})
   '';

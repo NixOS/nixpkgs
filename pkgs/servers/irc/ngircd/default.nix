@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ngircd";
-  version = "26";
+  version = "26.1";
 
   src = fetchurl {
     url = "https://ngircd.barton.de/pub/ngircd/${pname}-${version}.tar.xz";
-    sha256 = "1ijmv18fa648y7apxb9vp4j9iq6fxq850kz5v36rysaq614cdp2n";
+    sha256 = "sha256-VcFv0mAJ9vxqAH3076yHoC4SL2gGEs2hzibhehjYYlQ=";
   };
 
   configureFlags = [

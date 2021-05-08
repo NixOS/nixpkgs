@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.0.11";
+  version = "4.1.2";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -27,6 +27,7 @@ mkDerivation rec {
   '';
 
   qmakeFlags = [
+    "CONFIG+=StableBuild"
     # Default install tries to copy Qt files into package
     "CONFIG+=QGC_DISABLE_BUILD_SETUP"
     "../qgroundcontrol.pro"
@@ -42,7 +43,7 @@ mkDerivation rec {
     cp -v deploy/qgroundcontrol.desktop $out/share/applications
 
     mkdir -p $out/bin
-    cp -v build/release/QGroundControl "$out/bin/"
+    cp -v build/staging/QGroundControl "$out/bin/"
 
     mkdir -p $out/share/qgroundcontrol
     cp -rv resources/ $out/share/qgroundcontrol
@@ -62,7 +63,7 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14pk1vmcpg2cc5p100chbhnynclcwyqmyb2n2w11vvk0l2c9z1gz";
+    sha256 = "16q0g9b1kyan3qhhp5mmfnrx9h8q7qn83baplbiprqjgpvkxfll4";
     fetchSubmodules = true;
   };
 

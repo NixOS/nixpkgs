@@ -1,7 +1,9 @@
-{ lib, stdenv, ghcWithPackages, makeWrapper, packages ? (x: []) }:
+{ lib, stdenv, haskellPackages, makeWrapper, packages ? (x: []) }:
 
 let
-taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
+  taffybarEnv = haskellPackages.ghc.withPackages (self: [
+    self.taffybar
+  ] ++ packages self);
 in stdenv.mkDerivation {
   name = "taffybar-with-packages-${taffybarEnv.version}";
 
@@ -13,8 +15,5 @@ in stdenv.mkDerivation {
       --set NIX_GHC "${taffybarEnv}/bin/ghc"
   '';
 
-  meta = {
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
-  };
+  inherit (haskellPackages.taffybar) meta;
 }

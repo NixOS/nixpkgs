@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "austinjones";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gyl2dxyhh4d2lpxg9s5cx734sfs1kys5z5hjqfgbiny28hp9sw6";
+    sha256 = "1crj0caimin667f9kz34c0sm77892dmqaf1kxryqakqm75az5wfr";
   };
 
-  cargoSha256 = "1apjzn164kakb2snrq1wfl7grm72hkddi3am6d01h5kkngkp68qm";
+  cargoSha256 = "0c2478c5gblvci0s68pv8386kxhs88dxzcpd2rq6l82bjn7yzymd";
 
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 

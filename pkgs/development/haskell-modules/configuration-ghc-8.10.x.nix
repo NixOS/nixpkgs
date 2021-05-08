@@ -42,20 +42,17 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
-  # hitherto unreleased next version from the '3.2' branch of the upstream git
-  # repository for the time being.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal super.cabal-install (drv: {
-    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
-    version = "3.2.0.0-git";
-    editedCabalFile = null;
-    src = pkgs.fetchgit {
-      url = "git://github.com/haskell/cabal.git";
-      rev = "9bd4cc0591616aeae78e17167338371a2542a475";
-      sha256 = "005q1shh7vqgykkp72hhmswmrfpz761x0q0jqfnl3wqim4xd9dg0";
-    };
+  # cabal-install needs more recent versions of Cabal and random, but an older
+  # version of base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_4_0_0;
+    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    random = dontCheck super.random_1_2_0;  # break infinite recursion
+    hashable = doJailbreak super.hashable;  # allow random 1.2.x
   });
+
+  # cabal-install-parsers is written for Cabal 3.4
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -93,10 +90,4 @@ self: super: {
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
 
-  # Agda 2.6.1.2 only declares a transformers dependency for ghc < 8.10.3.
-  # https://github.com/agda/agda/issues/5109
-  Agda = appendPatch super.Agda (pkgs.fetchpatch {
-    url = "https://github.com/agda/agda/commit/76278c23d447b49f59fac581ca4ac605792aabbc.patch";
-    sha256 = "1g34g8a09j73h89pk4cdmri0nb0qg664hkff45amcr9kyz14a9f3";
-  });
 }

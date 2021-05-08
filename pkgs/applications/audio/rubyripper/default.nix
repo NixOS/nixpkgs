@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
 
   configureFlags = [ "--enable-cli" ];
-  buildInputs = [ ruby cdparanoia makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ruby cdparanoia ];
   postInstall = ''
     wrapProgram "$out/bin/rrip_cli" \
       --prefix PATH : "${ruby}/bin" \

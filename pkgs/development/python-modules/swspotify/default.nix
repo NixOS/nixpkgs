@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

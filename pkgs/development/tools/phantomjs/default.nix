@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
               sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
             };
 
-  buildInputs = lib.optional stdenv.isDarwin unzip;
+  nativeBuildInputs = lib.optional stdenv.isDarwin unzip;
 
   buildPhase = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \

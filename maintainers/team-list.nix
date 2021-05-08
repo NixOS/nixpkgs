@@ -29,6 +29,18 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  beam = {
+    members = [
+      ankhers
+      Br1ght0ne
+      DianaOlympos
+      gleber
+      happysalada
+      yurrriq
+    ];
+    scope = "Maintain BEAM-related packages and modules.";
+  };
+
   cinnamon = {
     members = [
       mkg20001
@@ -44,8 +56,17 @@ with lib.maintainers; {
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
   };
 
+  determinatesystems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      cole-h
+      grahamc
+    ];
+    scope = "Group registration for packages maintained by Determinate Systems.";
+  };
+
   freedesktop = {
-    members = [ jtojnar worldofpeace ];
+    members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
@@ -68,20 +89,50 @@ with lib.maintainers; {
     members = [
       hedning
       jtojnar
-      worldofpeace
       dasj19
+      maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  haskell = {
+    members = [
+      maralorn
+      cdepillabout
+      sternenseemann
+    ];
+    scope = "Maintain Haskell packages and infrastructure.";
+  };
+
+  home-assistant = {
+    members = [
+      fab
+      globin
+      hexa
+      mic92
+    ];
+    scope = "Maintain the Home Assistant ecosystem";
   };
 
   jitsi = {
     members = [
       mmilata
       petabyteboy
-      prusnak
       ryantm
     ];
     scope = "Maintain Jitsi.";
+  };
+
+  kodi = {
+    members = [
+      aanderse
+      cpages
+      edwtjo
+      minijackson
+      peterhoeg
+      sephalon
+    ];
+    scope = "Maintain Kodi and related packages.";
   };
 
   matrix = {
@@ -92,6 +143,7 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
+      mjlbach
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
@@ -122,6 +174,7 @@ with lib.maintainers; {
       timokau
       omasanori
       raskin
+      collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };

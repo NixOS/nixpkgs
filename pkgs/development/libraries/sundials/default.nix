@@ -1,7 +1,6 @@
 { lib, stdenv
 , cmake
 , fetchurl
-, fetchpatch
 , python
 , blas
 , lapack
@@ -13,23 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "5.6.1";
+  version = "5.7.0";
 
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "Frd5mex+fyFXqh0Eyh3kojccqBUOBW0klR0MWJZvKoM=";
+    sha256 = "jW3QlP7Mu41uzEE0DsFqZfq6yC7UQVAj9tfBwjkOovM=";
   };
-
-  patches = [
-    # Fixing an upstream regression in treating cmake prefix directories:
-    # https://github.com/LLNL/sundials/pull/58
-    (fetchpatch {
-      url = "https://github.com/LLNL/sundials/commit/dd32ff9baa05618f36e44aadb420bbae4236ea1e.patch";
-      sha256 = "kToAuma+2iHFyL1v/l29F3+nug4AdK5cPG6IcXv2afc=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
