@@ -156,6 +156,8 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  atuin = callPackage ../tools/misc/atuin { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
