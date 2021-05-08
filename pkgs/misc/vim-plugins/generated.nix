@@ -2470,6 +2470,18 @@ let
     meta.homepage = "https://github.com/mkasa/lushtags/";
   };
 
+  markdown-preview-nvim = buildVimPluginFrom2Nix {
+    pname = "markdown-preview-nvim";
+    version = "2021-03-10";
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "markdown-preview.nvim";
+      rev = "e5bfe9b89dc9c2fbd24ed0f0596c85fd0568b143";
+      sha256 = "0bfkcfjqg2jqm4ss16ks1mfnlnpyg1l4l18g7pagw1dfka14y8fg";
+    };
+    meta.homepage = "https://github.com/iamcco/markdown-preview.nvim/";
+  };
+
   matchit-zip = buildVimPluginFrom2Nix {
     pname = "matchit-zip";
     version = "2010-10-18";
