@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libcperciva/POSIX/posix-l.sh       \
       --replace "rm" "${coreutils}/bin/rm"   \
       --replace "2>/dev/null" "2>stderr.log"
-
+   '';
 
   installPhase = ''
     runHook preInstall
