@@ -1,4 +1,4 @@
-{stdenv, lib, fetchgit, gnumake, qt5, openblas, symlinkJoin}: pkg:
+{stdenv, lib, fetchgit, autoconf, automake, qt5, libtool, cmake, autoreconfHook, openblas, symlinkJoin}: pkg:
 let 
   inherit (builtins) hasAttr getAttr length;
   inherit (lib) attrByPath concatStringsSep;
@@ -14,17 +14,34 @@ let
     paths = pkg.omdeps;
   };
 
+  omautoconf = getAttrDef "omautoconf" false pkg;
+
+
   omtarget = getAttrDef "omtarget" pkg.pname pkg;
+
+  omdir = getAttrDef "omdir" pkg.pname pkg;
 
   deptargets = lib.forEach pkg.omdeps (dep: dep.omtarget);
 
+  configureFlags = ifNoDeps "" "--with-openmodelicahome=${joinedDeps} " +
+    "--with-ombuilddir=$OMBUILDDIR " +
+    "--prefix=$prefix " +
+    myAppendAttr "configureFlags" " " pkg;
+
+  preBuildPhases = ifNoDeps "" "skipTargetsPhase " +
+    myAppendAttr "preBuildPhases" " " pkg;
+
 in stdenv.mkDerivation (pkg // {
+  inherit omtarget configureFlags preBuildPhases;
+
   src = fetchgit (import ./src-main.nix);
   version = "1.17.0";
 
-  nativeBuildInputs = pkg.nativeBuildInputs ++ [qt5.qmake qt5.qttools];
+  nativeBuildInputs = pkg.nativeBuildInputs ++ [autoconf automake libtool cmake
+  qt5.qmake qt5.qttools autoreconfHook];
   buildInputs = pkg.buildInputs ++ [joinedDeps];
 
+  #patch -p1 < ${./configure.ac.patch}
   patchPhase = ''
       sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qt5.qttools}/bin/lrelease|'
       sed -i OMPlot/Makefile.in -e 's|bindir = @includedir@|includedir = @includedir@|'
@@ -41,24 +58,24 @@ in stdenv.mkDerivation (pkg // {
   dontUseCmakeConfigure = true;
   dontUseQmakeConfigure = true;
 
+  configurePhase = "export OMBUILDDIR=$PWD/build; ./configure --no-recursion ${configureFlags}; " +
+    (if omautoconf then " (cd ${omdir}; ./configure ${configureFlags})" else "");
+
   enableParallelBuilding = false;
 
   hardeningDisable = ["format"];
 
-  omtarget = omtarget;
+  skipTargetsPhase = ''
+    for target in ${concatStringsSep " " deptargets}; do
+      touch ''${target}.skip;
+    done
+  '';
+
   makeFlags = "${omtarget}" +
     myAppendAttr "makeFlags" " " pkg;
 
   installFlags = "-i " +
     myAppendAttr "installFlags" " " pkg;
-
-  postFixup = ''
-    for e in $(cd $out/bin && ls); do
-      wrapProgram $out/bin/$e \
-        --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ openblas ]}"
-    done
-  '' + myAppendAttr "postFixup" "\n" pkg;
 
   bowlup = ''
     unpackPhase
@@ -76,16 +93,4 @@ in stdenv.mkDerivation (pkg // {
     platforms   = platforms.linux;
   };
 
-} // ifNoDeps {} {
-  configureFlags = "--with-openmodelicahome=${joinedDeps}" +
-    myAppendAttr "configureFlags" " " pkg;
-
-  preBuildPhases = "skipTargetsPhase " +
-    myAppendAttr "preBuildPhases" " " pkg;
-
-  skipTargetsPhase = ''
-    for target in ${concatStringsSep " " deptargets}; do
-      touch ''${target}.skip;
-    done
-  '';
 })

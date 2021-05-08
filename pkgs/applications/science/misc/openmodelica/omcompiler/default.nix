@@ -7,18 +7,16 @@ ipopt, libuuid, git, makeWrapper, autoreconfHook}:
 mkOpenModelicaDerivation rec {
   pname = "omcompiler";
   omtarget = "omc";
+  omdir = "OMCompiler";
   omdeps = [];
+  omautoconf = true;
 
-  nativeBuildInputs = [autoconf automake libtool cmake gfortran clang makeWrapper
-    flex bison doxygen
-    pkgconfig file
-    autoreconfHook];
+  nativeBuildInputs = [gfortran flex bison];
 
-  buildInputs = [hwloc curl
+  buildInputs = [jre openblas curl readline]; /*hwloc curl
     jre openblas hdf5 expat ncurses readline which lp_solve
     omniorb sqlite libatomic_ops gettext boost
-    ipopt libuuid
-    git makeWrapper];
+    libuuid];*/
 
 #    sed 3rdParty/Ipopt/configure -e 's|for dir in $abs_lib_dir|for dir in -z,origin|'
 #    sed -i ''$(find -name CMakeLists.txt) -e 's|/''${CMAKE_LIBRARY_ARCHITECTURE}||'

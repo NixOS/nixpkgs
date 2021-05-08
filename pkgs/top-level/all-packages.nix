@@ -6496,6 +6496,7 @@ in
     omcompiler = callPackage ../applications/science/misc/openmodelica/omcompiler { };
     omplot = libsForQt5.callPackage ../applications/science/misc/openmodelica/omplot { };
     omsimulator = libsForQt5.callPackage ../applications/science/misc/openmodelica/omsimulator { };
+    omparser = libsForQt5.callPackage ../applications/science/misc/openmodelica/omparser { };
   };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };

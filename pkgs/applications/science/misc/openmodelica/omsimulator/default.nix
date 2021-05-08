@@ -2,20 +2,16 @@
 gfortran, clang, cmake, curl, gnumake, hwloc, jre, openblas, hdf5, expat, ncurses,
 readline, qtbase, qtwebkit, webkit, which, lp_solve, omniorb, sqlite, libatomic_ops,
 pkgconfig, file, gettext, flex, bison, doxygen, boost, openscenegraph, gnome2,
-ipopt, libuuid, qtxmlpatterns,
+ipopt, libuuid, qtxmlpatterns, zlib,
 xorg, git, bash, gtk2, makeWrapper, autoreconfHook,
 openmodelica, mkOpenModelicaDerivation }:
 
 mkOpenModelicaDerivation rec {
   pname = "omsimulator";
+  omdir = "OMSimulator";
   omdeps = [openmodelica.omcompiler];
 
-  nativeBuildInputs = [autoconf automake libtool cmake gfortran clang makeWrapper
-    flex bison doxygen
-    pkgconfig file makeWrapper
-    autoreconfHook];
+  nativeBuildInputs = [pkgconfig];
 
-  buildInputs = [openmodelica.omcompiler
-  curl jre openblas readline
-   ];
+  buildInputs = [readline];
 }
