@@ -23,14 +23,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4";
+  version = "1.4.1";
   pname = "cawbird";
 
   src = fetchFromGitHub {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "sha256:1cjhbjbd4w1i7i63ib6h5wvx2s0v1l6b85wp07pvn3hmsrmis265";
+    sha256 = "0lmrgcj1ky1vhzynl36k6ba3ws089x4qdrnkjk3lbr334kicx9na";
   };
 
   nativeBuildInputs = [
