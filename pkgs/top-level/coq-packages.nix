@@ -36,6 +36,7 @@ let
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
+      goedel = callPackage ../development/coq-modules/goedel {};
       heq = callPackage ../development/coq-modules/heq {};
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
