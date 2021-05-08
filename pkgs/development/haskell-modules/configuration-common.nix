@@ -1946,4 +1946,8 @@ self: super: {
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
 
+  # Tests are flaky on busy machines
+  # https://github.com/merijn/paramtree/issues/4
+  paramtree = dontCheck super.paramtree;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
