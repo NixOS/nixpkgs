@@ -24,6 +24,10 @@ Many Erlang/OTP distributions available in `beam.interpreters` have versions wit
 
 We provide a version of Rebar3, under `rebar3`. We also provide a helper to fetch Rebar3 dependencies from a lockfile under `fetchRebar3Deps`.
 
+We also provide a version on Rebar3 with plugins included, under `rebar3WithPlugins`. This package is a function which takes two arguments: `plugins`, a list of nix derivations to include as plugins (loaded only when specified in `rebar.config`), and `globalPlugins`, which should always be loaded by rebar3. Example: `rebar3WithPlugins { globalPlugins = [beamPackages.pc]; }`.
+
+When adding a new plugin it is important that the `packageName` attribute is the same as the atom used by rebar3 to refer to the plugin.
+
 ### Mix & Erlang.mk {#build-tools-other}
 
 Erlang.mk works exactly as expected. There is a bootstrap process that needs to be run, which is supported by the `buildErlangMk` derivation.
