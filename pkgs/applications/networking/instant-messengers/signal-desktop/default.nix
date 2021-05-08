@@ -10,9 +10,14 @@
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
 # For a full list of available languages:
 # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
+, undmg
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+  pname = "signal-desktop";
+
   customLanguageWrapperArgs = (with lib;
     let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
@@ -22,81 +27,112 @@ let
       then ''
         --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
         --set LC_MESSAGES "${spellcheckerLanguage}"''
-      else "");
-in stdenv.mkDerivation rec {
-  pname = "signal-desktop";
-  version = "5.0.0"; # Please backport all updates to the stable channel.
-  # All releases have a limited lifetime and "expire" 90 days after the release.
-  # When releases "expire" the application becomes unusable until an update is
-  # applied. The expiration date for the current release can be extracted with:
-  # $ grep -a "^{\"buildExpiration" "${signal-desktop}/lib/Signal/resources/app.asar"
-  # (Alternatively we could try to patch the asar archive, but that requires a
-  # few additional steps and might not be the best idea.)
+       else "");
 
-  src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "17hxg61m9kk1kph6ifqy6507kzx5hi6yafr2mj8n0a6c39vc8f9g";
+  x86_64-darwin-version = "5.0.0";
+  x86_64-darwin-sha256 = "09ag5mmpx7vqz5dg2fd89sgj6y89q4kin7rnn5zjsbyig6m6xp0y";
+
+  x86_64-linux-version = "5.0.0";
+  x86_64-linux-sha256 = "17hxg61m9kk1kph6ifqy6507kzx5hi6yafr2mj8n0a6c39vc8f9g";
+
+  version = {
+    x86_64-darwin = x86_64-darwin-version;
+    x86_64-linux = x86_64-linux-version;
+  }.${system} or throwSystem;
+
+  src = {
+    x86_64-darwin = fetchurl {
+      url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
+      sha256 = x86_64-darwin-sha256;
+    };
+    x86_64-linux = fetchurl {
+      url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+      sha256 = x86_64-linux-sha256;
+    };
+  }.${system} or throwSystem;
+
+  meta = {
+    description = "Private, simple, and secure messenger";
+    longDescription = ''
+      Signal Desktop is an Electron application that links with your
+      "Signal Android" or "Signal iOS" app.
+    '';
+    homepage    = "https://signal.org/";
+    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
+    license     = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook
-  ];
+  linux = stdenv.mkDerivation rec {
+    inherit version src meta pname;
+    # Please backport all updates to the stable channel.
+    # All releases have a limited lifetime and "expire" 90 days after the release.
+    # When releases "expire" the application becomes unusable until an update is
+    # applied. The expiration date for the current release can be extracted with:
+    # $ grep -a "^{\"buildExpiration" "${signal-desktop}/lib/Signal/resources/app.asar"
+    # (Alternatively we could try to patch the asar archive, but that requires a
+    # few additional steps and might not be the best idea.)
 
-  buildInputs = [
-    alsaLib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libappindicator-gtk3
-    libnotify
-    libuuid
-    mesa # for libgbm
-    nspr
-    nss
-    pango
-    systemd
-    xorg.libxcb
-  ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+      wrapGAppsHook
+    ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    libnotify
-    libdbusmenu
-  ];
+    buildInputs = [
+      alsaLib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gnome2.GConf
+      gtk3
+      libX11
+      libXScrnSaver
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libappindicator-gtk3
+      libnotify
+      libuuid
+      mesa # for libgbm
+      nspr
+      nss
+      pango
+      systemd
+      xorg.libxcb
+    ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+    runtimeDependencies = [
+      (lib.getLib systemd)
+      libnotify
+      libdbusmenu
+    ];
 
-  dontBuild = true;
-  dontConfigure = true;
-  dontPatchELF = true;
-  # We need to run autoPatchelf manually with the "no-recurse" option, see
-  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
-  dontAutoPatchelf = true;
+    unpackPhase = "dpkg-deb -x $src .";
 
-  installPhase = ''
+    dontBuild = true;
+    dontConfigure = true;
+    dontPatchELF = true;
+    # We need to run autoPatchelf manually with the "no-recurse" option, see
+    # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
+    dontAutoPatchelf = true;
+
+    installPhase = ''
     runHook preInstall
 
     mkdir -p $out/lib
@@ -130,19 +166,23 @@ in stdenv.mkDerivation rec {
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc.node
   '';
 
-  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
-  passthru.tests.application-launch = nixosTests.signal-desktop;
-
-  meta = {
-    description = "Private, simple, and secure messenger";
-    longDescription = ''
-      Signal Desktop is an Electron application that links with your
-      "Signal Android" or "Signal iOS" app.
-    '';
-    homepage    = "https://signal.org/";
-    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
-    platforms   = [ "x86_64-linux" ];
+    # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+    passthru.tests.application-launch = nixosTests.signal-desktop;
   };
-}
+
+  darwin = stdenv.mkDerivation {
+    inherit pname version src meta;
+
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "Signal.app";
+
+    installPhase = ''
+      mkdir -p $out/Applications/Signal.app
+      cp -R . $out/Applications/Signal.app
+    '';
+  };
+
+in if stdenv.isDarwin
+  then darwin
+  else linux
