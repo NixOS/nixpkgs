@@ -178,4 +178,13 @@ with lib.maintainers; {
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };
+
+  serokell = {
+    # Verify additions by checking commit signature from an already existing member of the team.
+    members = [
+      balsoft
+      mkaito
+    ];
+    scope = "Group registration for Serokell employees who collectively maintain packages.";
+  };
 }

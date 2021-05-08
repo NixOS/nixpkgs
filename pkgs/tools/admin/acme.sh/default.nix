@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "A pure Unix shell script implementing ACME client protocol";
     homepage = "https://acme.sh/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.yorickvp ];
+    maintainers = teams.serokell.members;
   };
 }
