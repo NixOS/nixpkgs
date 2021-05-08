@@ -7024,6 +7024,8 @@ in
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  pgbadger = callPackage ../tools/misc/pgbadger { };
+
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
