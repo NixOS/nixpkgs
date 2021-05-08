@@ -26582,7 +26582,7 @@ in
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
-  valentina = libsForQt514.callPackage ../applications/misc/valentina { };
+  valentina = libsForQt512.callPackage ../applications/misc/valentina { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
