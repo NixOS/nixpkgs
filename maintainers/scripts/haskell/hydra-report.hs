@@ -24,8 +24,9 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wall #-}
 
-import Control.Monad (forM, forM_, when, (<=<))
+import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
 import Data.Aeson (
    FromJSON,
@@ -34,9 +35,7 @@ import Data.Aeson (
    eitherDecodeStrict',
    encodeFile,
  )
-import qualified Data.ByteString.Char8 as ByteString
-import Data.Either (fromRight)
-import Data.Foldable (Foldable (toList), fold, foldl')
+import Data.Foldable (Foldable (toList), foldl')
 import Data.Function ((&))
 import Data.Functor ((<&>))
 import Data.List.NonEmpty (NonEmpty, nonEmpty)
@@ -45,7 +44,6 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Monoid (Sum (Sum, getSum))
-import Data.Semigroup (Min (Min, getMin))
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
 import Data.Set (Set)
@@ -72,6 +70,8 @@ import Network.HTTP.Req (
 import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
 import System.Process (readProcess)
+import Prelude hiding (id)
+import qualified Prelude
 
 newtype JobsetEvals = JobsetEvals
    { evals :: Seq Eval
@@ -130,10 +130,15 @@ getBuildReports = runReq defaultHttpConfig do
   where
    myReq query option = responseBody <$> req GET query NoReqBody jsonResponse (header "User-Agent" "hydra-report.hs/v1 (nixkpgs;maintainers/scripts/haskell)" <> option)
 
+hydraEvalCommand :: FilePath
 hydraEvalCommand = "hydra-eval-jobs"
+hydraEvalParams :: [String]
 hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
+handlesCommand :: FilePath
 handlesCommand = "nix-instantiate"
+handlesParams :: [String]
 handlesParams = ["--eval", "--strict", "--json", "-"]
+handlesExpression :: String
 handlesExpression = "with import ./. {}; with lib; zipAttrsWith (_: builtins.head) (mapAttrsToList (_: v: if v ? github then { \"${v.email}\" = v.github; } else {}) (import maintainers/maintainer-list.nix))"
 
 newtype Maintainers = Maintainers {maintainers :: Text} deriving (Generic, ToJSON, FromJSON)
@@ -159,7 +164,7 @@ icon = \case
    OutputLimitExceeded -> ":warning:"
    Unknown x -> "unknown code " <> showT x
    Aborted -> ":no_entry:"
-   Unfinished -> ":hourglas_flowing_sand:"
+   Unfinished -> ":hourglass_flowing_sand:"
    Success -> ":heavy_check_mark:"
 
 platformIcon :: Platform -> Text
@@ -187,7 +192,7 @@ buildSummary :: MaintainerMap -> Seq Build -> StatusSummary
 buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
   where
    unionSummary (Table l, l') (Table r, r') = (Table $ Map.union l r, l' <> r')
-   toSummary Build{finished, buildstatus, job, id, system, nixname} = Map.singleton name (Table (Map.singleton (set, Platform system) (BuildResult state id)), maintainers)
+   toSummary Build{finished, buildstatus, job, id, system} = Map.singleton name (Table (Map.singleton (set, Platform system) (BuildResult state id)), maintainers)
      where
       state = case (finished, buildstatus) of
          (0, _) -> Unfinished
@@ -240,7 +245,7 @@ statusToNumSummary :: StatusSummary -> NumSummary
 statusToNumSummary = fmap getSum . foldMap (fmap Sum . jobTotals)
 
 jobTotals :: (Table Text Platform BuildResult, a) -> Table Platform BuildState Int
-jobTotals (Table mapping, _) = getSum <$> Table (Map.foldMapWithKey (\(set, platform) (BuildResult buildstate _) -> Map.singleton (platform, buildstate) (Sum 1)) mapping)
+jobTotals (Table mapping, _) = getSum <$> Table (Map.foldMapWithKey (\(_, platform) (BuildResult buildstate _) -> Map.singleton (platform, buildstate) (Sum 1)) mapping)
 
 details :: Text -> [Text] -> [Text]
 details summary content = ["<details><summary>" <> summary <> " </summary>", ""] <> content <> ["</details>", ""]
@@ -251,7 +256,7 @@ printBuildSummary
    fetchTime
    summary =
       Text.unlines $
-         header <> totals
+         headline <> totals
             <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
             <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
             <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
@@ -266,10 +271,9 @@ printBuildSummary
          , ""
          ]
             <> printTable "Platform" (\x -> platform x <> " " <> platformIcon x) (\x -> showT x <> " " <> icon x) showT (statusToNumSummary summary)
-      header =
+      headline =
          [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
-         , "*"
-            <> "evaluation ["
+         , "*evaluation ["
             <> showT id
             <> "](https://hydra.nixos.org/eval/"
             <> showT id
@@ -281,14 +285,14 @@ printBuildSummary
             <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
             <> "*"
          ]
-      jobsByState pred = Map.filter (pred . foldl' min Success . fmap state . fst) summary
+      jobsByState predicate = Map.filter (predicate . foldl' min Success . fmap state . fst) summary
       fails = jobsByState (== Failed)
       failedDeps = jobsByState (== DependencyFailed)
       unknownErr = jobsByState (\x -> x > DependencyFailed && x < Aborted)
       withMaintainer = Map.mapMaybe (\(x, m) -> (x,) <$> nonEmpty (Set.toList m))
       withoutMaintainer = Map.mapMaybe (\(x, m) -> if Set.null m then Just x else Nothing)
-      optionalList header list = if null list then mempty else [header] <> list
-      optionalHideableList header list = if null list then mempty else [header] <> details (showT (length list) <> " job(s)") list
+      optionalList heading list = if null list then mempty else [heading] <> list
+      optionalHideableList heading list = if null list then mempty else [heading] <> details (showT (length list) <> " job(s)") list
       maintainedList = showMaintainedBuild <=< Map.toList . withMaintainer
       unmaintainedList = showBuild <=< Map.toList . withoutMaintainer
       showBuild (name, table) = printJob name (table, "")
