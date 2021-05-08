@@ -1905,4 +1905,16 @@ self: super: {
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
 
+  # Test assets missing from sdist
+  # https://github.com/hadolint/language-docker/issues/63
+  language-docker = overrideSrc super.language-docker {
+    src = pkgs.fetchFromGitHub {
+      owner = "hadolint";
+      repo = "language-docker";
+      rev = "refs/tags/${super.language-docker.version}";
+      sha256 = "06263jy538ni31vms5pzggmh64fyk62cv3lxnvkc6gylb94kljb8";
+      name = "language-docker-${super.language-docker.version}-source";
+    };
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
