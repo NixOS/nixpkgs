@@ -13,11 +13,10 @@ let
     # creates hylafax config file,
     # makes sure "Include" is listed *first*
     let
-      mkLines = conf:
-        (lib.concatLists
-        (lib.flip lib.mapAttrsToList conf
-        (k: map (v: "${k}: ${v}")
-      )));
+      mkLines = lib.flip lib.pipe [
+        (lib.mapAttrsToList (key: map (val: "${key}: ${val}")))
+        lib.concatLists
+      ];
       include = mkLines { Include = conf.Include or []; };
       other = mkLines ( conf // { Include = []; } );
     in
