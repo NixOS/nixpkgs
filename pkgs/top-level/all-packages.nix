@@ -2690,6 +2690,8 @@ in
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
+  hottext = callPackage ../tools/text/hottext { };
+
   hopper = qt5.callPackage ../development/tools/analysis/hopper {};
 
   hr = callPackage ../applications/misc/hr { };
