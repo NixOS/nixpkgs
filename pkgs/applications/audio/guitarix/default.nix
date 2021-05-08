@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , avahi
 , bluez
 , boost
@@ -45,8 +46,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "sha256-eX5G4HFI+6ieRvrE7+c6WzqY8HC8qF2z0UPeeBsULIA=";
+    sha256 = "101c2hdpipj3s6rmva5wf3q9hfjv7bkyzi7s8sgaiys8f7h4czkr";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "guitarix-gcc11.patch";
+      url = "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
+      stripLen = 1;
+      sha256 = "1qhlbf18cn6m9jdz3741nrdfqvznjna3daqmn9l10k5nd3asy4il";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
