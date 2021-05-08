@@ -307,7 +307,6 @@ self: super: {
   integer-roots = dontCheck super.integer-roots; # requires an old version of smallcheck, will be fixed in > 1.0
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
-  language-nix = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isi686) then dontCheck super.language-nix else super.language-nix; # aarch64: https://ghc.haskell.org/trac/ghc/ticket/15275
   language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
@@ -852,16 +851,9 @@ self: super: {
     configureFlags = ["--ghc-option=-DU_DEFINE_FALSE_AND_TRUE=1"]; # https://github.com/haskell/text-icu/issues/49
   });
 
-  # aarch64 and armv7l fixes.
-  happy = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
-  servant-docs =
-    let
-      f = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64)
-          then dontCheck
-          else pkgs.lib.id;
-    in doJailbreak (f super.servant-docs); # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
+  # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
+  servant-docs = doJailbreak super.servant-docs;
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
-  swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # hledger-lib requires the latest version of pretty-simple
   hledger-lib = appendPatch super.hledger-lib
@@ -1526,11 +1518,6 @@ self: super: {
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
-  # https://github.com/ekmett/half/issues/35
-  half = if pkgs.stdenv.isAarch64
-    then dontCheck super.half
-    else super.half;
-
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
@@ -1875,58 +1862,6 @@ self: super: {
       sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
     '' + (drv.postPatch or "");
   });
-
-  # Doctests fail on aarch64 due to a GHCi linking bug
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
-  ad = overrideCabal super.ad {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta;
-  vinyl = overrideCabal super.vinyl {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  BNFC = overrideCabal super.BNFC {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  C-structs = overrideCabal super.C-structs {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  accelerate = overrideCabal super.accelerate {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  focuslist = overrideCabal super.focuslist {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  flight-kml = overrideCabal super.flight-kml {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  exact-real = overrideCabal super.exact-real {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  autoapply = overrideCabal super.autoapply {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  hint = overrideCabal super.hint {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  hgeometry = overrideCabal super.hgeometry {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  headroom = overrideCabal super.headroom {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  haskell-time-range = overrideCabal super.haskell-time-range {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  hsakamai = overrideCabal super.hsakamai {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  hsemail-ns = overrideCabal super.hsemail-ns {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
-  openapi3 = overrideCabal super.openapi3 {
-    doCheck = !pkgs.stdenv.hostPlatform.isAarch64;
-  };
 
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
