@@ -9,6 +9,23 @@ let
 
   cfg = config.networking.wireless;
 
+  # Content of wpa_supplicant.conf
+  generatedConfig = concatStringsSep "\n" (
+    (mapAttrsToList mkNetwork cfg.networks)
+    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
+      [ "ctrl_interface=/run/wpa_supplicant"
+        "ctrl_interface_group=${cfg.userControlled.group}"
+        "update_config=1"
+      ])
+    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+
+  configFile =
+    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
+      else "/etc/wpa_supplicant.conf";
+
+  # Creates a network block for wpa_supplicant.conf
   mkNetwork = ssid: opts:
   let
     quote = x: ''"${x}"'';
@@ -34,20 +51,53 @@ let
     }
   '';
 
-  generatedConfig = concatStringsSep "\n" (
-    (mapAttrsToList mkNetwork cfg.networks)
-    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
-      [ "ctrl_interface=/run/wpa_supplicant"
-        "ctrl_interface_group=${cfg.userControlled.group}"
-        "update_config=1"
-      ])
-    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
-    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+  # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
+  mkUnit = iface:
+    let
+      deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
+      configStr = if cfg.allowAuxiliaryImperativeNetworks
+        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+        else "-c ${configFile}";
+    in {
+      description = "WPA Supplicant instance" + optionalString (iface != null) "for interface ${iface}";
 
-  configFile =
-    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
-      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
-      else "/etc/wpa_supplicant.conf";
+      after = deviceUnit;
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
+      requires = deviceUnit;
+      wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
+
+      path = [ package ];
+
+      script =
+      ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
+          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
+
+        iface_args="-s -u -D${cfg.driver} ${configStr}"
+        ${if iface == null then
+        ''
+          # scan and use all available interfaces
+          for i in $(cd /sys/class/net && echo *); do
+            DEVTYPE=
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                args+="''${args:+ -N} -i$i $iface_args"
+              fi
+            fi
+          done
+        '' else
+        ''
+          # use user-supplied interface
+          args="-i${iface} $iface_args"
+        ''}
+        exec wpa_supplicant $args
+      '';
+    };
 
 in {
   options = {
@@ -297,60 +347,25 @@ in {
     });
 
     environment.systemPackages = [ package ];
-
     services.dbus.packages = [ package ];
     services.udev.packages = [ pkgs.crda ];
 
-    # FIXME: start a separate wpa_supplicant instance per interface.
-    systemd.services.wpa_supplicant = let
-      ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
-    in {
-      description = "WPA Supplicant";
+    systemd.services =
+      if cfg.interfaces == []
+        then { wpa_supplicant = mkUnit null; }
+        else listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
 
-      after = lib.concatMap deviceUnit ifaces;
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      requires = lib.concatMap deviceUnit ifaces;
-      wantedBy = [ "multi-user.target" ];
-      stopIfChanged = false;
+    # Restart wpa_supplicant after resuming from sleep
+    powerManagement.resumeCommands = concatStringsSep "\n" (
+      optional (cfg.interfaces == []) "/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant"
+      ++ map (i: "/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant-${i}") cfg.interfaces
+    );
 
-      path = [ package ];
-
-      script = let
-        configStr = if cfg.allowAuxiliaryImperativeNetworks
-          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-          else "-c ${configFile}";
-      in ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
-        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
-        iface_args="-s -u -D${cfg.driver} ${configStr}"
-        ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
-            fi
-          done
-        '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
-        exec wpa_supplicant $args
-      '';
-    };
-
-    powerManagement.resumeCommands = ''
-      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
-    '';
-
-    # Restart wpa_supplicant when a wlan device appears or disappears.
-    services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
+    # Restart wpa_supplicant when a wlan device appears or disappears. This is
+    # only needed when an interface hasn't been specified by the user.
+    services.udev.extraRules = optionalString (cfg.interfaces == []) ''
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", \
+      RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 
