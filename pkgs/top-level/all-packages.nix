@@ -27551,7 +27551,7 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  ethabi = callPackage ../applications/blockchains/ethabi.nix { };
+  ethabi = callPackage ../applications/blockchains/ethabi { };
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
