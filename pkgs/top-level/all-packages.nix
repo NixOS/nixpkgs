@@ -27473,6 +27473,8 @@ in
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
+  chia = callPackage ../applications/blockchains/chia { };
+
   clightning = callPackage ../applications/blockchains/clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
