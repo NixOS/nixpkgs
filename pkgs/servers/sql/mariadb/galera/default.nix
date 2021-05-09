@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # for backwards compatibility
-    ln -s . $out/lib/galera
+    mkdir $out/lib/galera
+    ln -s $out/lib/libgalera_smm.so $out/lib/galera/libgalera_smm.so
   '';
 
   meta = with lib; {
