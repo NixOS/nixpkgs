@@ -5451,6 +5451,8 @@ in {
 
   pycrc = callPackage ../development/python-modules/pycrc { };
 
+  pycron = callPackage ../development/python-modules/pycron { };
+
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
