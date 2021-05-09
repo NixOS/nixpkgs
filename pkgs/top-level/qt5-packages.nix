@@ -121,6 +121,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   mauikit = callPackage ../development/libraries/mauikit { };
 
+  mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
+
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   openbr = callPackage ../development/libraries/openbr { };
