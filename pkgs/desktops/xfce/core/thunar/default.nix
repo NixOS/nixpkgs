@@ -1,5 +1,6 @@
 { mkXfceDerivation
 , lib
+, fetchpatch
 , docbook_xsl
 , exo
 , gdk-pixbuf
@@ -44,6 +45,16 @@ let unwrapped = mkXfceDerivation {
 
   patches = [
     ./thunarx_plugins_directory.patch
+    #  Dont execute files, passed via command line due to security risks, remove >=4.17.3
+    (fetchpatch {
+      url = "https://gitlab.xfce.org/xfce/thunar/-/commit/9165a61f95e43cc0b5abf9b98eee2818a0191e0b.patch";
+      sha256 = "1yi26xyyr6c0xsmrpvlk72v4szlmqhwz83q719afbq5yr3ycyd50";
+    })
+    # Regression: Activating Desktop Icon does not Use Default Application, remove >=4.17.3
+    (fetchpatch {
+      url = "https://gitlab.xfce.org/xfce/thunar/-/commit/3b54d9d7dbd7fd16235e2141c43a7f18718f5664.patch";
+      sha256 = "02xzpirgaq37fzsazzhnb80bqw1r4h71yhdy35pp50vs8wfb9al1";
+    })
   ];
 
   # the desktop file … is in an insecure location»
