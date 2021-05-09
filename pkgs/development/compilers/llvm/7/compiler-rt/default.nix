@@ -21,7 +21,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCOMPILER_RT_OS_DIR="
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
@@ -81,7 +80,9 @@ stdenv.mkDerivation {
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = lib.optionalString (useLLVM) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
+    ln -s "$out/lib"/*/* "$out/lib"
+  '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/linux/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
