@@ -12,8 +12,8 @@ OUT="$DIR/from_md"
 mapfile -t MD_FILES < <(find . -type f -regex '.*\.md$')
 
 for mf in ${MD_FILES[*]}; do
-  mkdir -p $(dirname "$OUT/$mf")
   if [ "${mf: -11}" == ".section.md" ]; then
+    mkdir -p $(dirname "$OUT/$mf")
     pandoc "$mf" -t docbook \
       --extract-media=media \
       -f markdown+smart \
@@ -21,6 +21,7 @@ for mf in ${MD_FILES[*]}; do
   fi
 
   if [ "${mf: -11}" == ".chapter.md" ]; then
+    mkdir -p $(dirname "$OUT/$mf")
     pandoc "$mf" -t docbook \
       --top-level-division=chapter \
       --extract-media=media \
