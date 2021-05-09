@@ -4099,6 +4099,8 @@ in {
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
+  mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
+
   mautrix = callPackage ../development/python-modules/mautrix { };
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
