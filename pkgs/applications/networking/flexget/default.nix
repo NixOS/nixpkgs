@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.116";
+  version = "3.1.121";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "6372b36495ae023bd64ce28ca649feba54b060ed8f0a5f606a4845974e834493";
+    sha256 = "91270a51ed29e4a578c7549ebd01665f4bcf49bf7773a15db27f4ccb13659e00";
   };
 
   postPatch = ''
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     flask-restful
     flask-restx
     flask
+    greenlet
     guessit
     html5lib
     jinja2
