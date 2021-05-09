@@ -383,7 +383,7 @@ with self; with super; {
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
 
-  privacyidea = callPackage ../development/python-modules/privacyidea { };
+  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
