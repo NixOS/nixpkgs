@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0483glwi155ca1wnffwhmwn17d7kwk4hjwmckb8zs197rfqmb55v";
+    sha256 = "1md52xzlrzf99s5q2152s1b7yql2h02ss451g68ky207xz660aj1";
   };
 
   postPatch = ''
