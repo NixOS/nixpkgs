@@ -8592,6 +8592,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  watchgod = callPackage ../development/python-modules/watchgod { };
+
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
