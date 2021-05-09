@@ -9248,7 +9248,7 @@ let
     propagatedBuildInputs = [ Readonly Gtk3 ];
     checkInputs = [ TestDifferences PerlMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
-      ${pkgs.xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+      ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
     '';
     meta = {

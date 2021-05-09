@@ -311,6 +311,8 @@ in {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiopg = callPackage ../development/python-modules/aiopg { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
@@ -384,6 +386,8 @@ in {
   amqp = callPackage ../development/python-modules/amqp { };
 
   amqplib = callPackage ../development/python-modules/amqplib { };
+
+  amqtt = callPackage ../development/python-modules/amqtt { };
 
   android-backup = callPackage ../development/python-modules/android-backup { };
 
@@ -931,6 +935,8 @@ in {
 
   backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
+  backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
+
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
   banal = callPackage ../development/python-modules/banal { };
@@ -1238,6 +1244,8 @@ in {
   case = callPackage ../development/python-modules/case { };
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
+
+  castepxbin = callPackage ../development/python-modules/castepxbin { };
 
   casttube = callPackage ../development/python-modules/casttube { };
 
@@ -1734,8 +1742,6 @@ in {
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
-
-  debut = callPackage ../development/python-modules/debut { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -2342,6 +2348,7 @@ in {
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     pytest = self.pytest_4;
+    hdf5 = pkgs.hdf5_1_10;
   };
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
@@ -3179,6 +3186,10 @@ in {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  i2c-tools = callPackage ../development/python-modules/i2c-tools {
+    inherit (pkgs) i2c-tools;
+  };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
@@ -3886,6 +3897,8 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
+
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode = callPackage ../development/python-modules/linode { };
@@ -4105,6 +4118,8 @@ in {
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   MDP = callPackage ../development/python-modules/mdp { };
 
@@ -4824,6 +4839,8 @@ in {
   pathtools = callPackage ../development/python-modules/pathtools { };
 
   pathvalidate = callPackage ../development/python-modules/pathvalidate { };
+
+  pathy = callPackage ../development/python-modules/pathy/default.nix { };
 
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
@@ -5632,6 +5649,8 @@ in {
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
 
+  pyialarm = callPackage ../development/python-modules/pyialarm { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   PyICU = callPackage ../development/python-modules/pyicu { };
@@ -5864,7 +5883,9 @@ in {
 
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
-  pyopencl = callPackage ../development/python-modules/pyopencl { };
+  pyopencl = callPackage ../development/python-modules/pyopencl {
+    mesa_drivers = pkgs.mesa.drivers;
+  };
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
@@ -6384,6 +6405,8 @@ in {
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
+  pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
@@ -7611,6 +7634,8 @@ in {
 
   spacy = callPackage ../development/python-modules/spacy { };
 
+  spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
+
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
@@ -8299,6 +8324,8 @@ in {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, requests-mock, tox
-, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
+, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted, ujson }:
 
 buildPythonPackage rec {
   version = "0.7.9";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;  # Tries to test multiple interpreters with tox
   checkInputs = [ pytest requests-mock tox ];
 
-  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ];
+  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ujson ];
 
   meta = {
     description = "Binance Exchange API python implementation for automated trading";

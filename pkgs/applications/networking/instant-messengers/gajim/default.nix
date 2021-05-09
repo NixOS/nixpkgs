@@ -5,7 +5,7 @@
 , glib-networking
 
 # Test dependencies
-, xvfb_run, dbus
+, xvfb-run, dbus
 
 # Optional dependencies
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   checkPhase = ''
     # https://dev.gajim.org/gajim/gajim/-/issues/10478

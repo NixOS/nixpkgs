@@ -9,19 +9,19 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "dwm-status";
-  version = "unstable-2021-05-04";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = pname;
-    rev = "c5b1fda78a8175cb53df9d31ae037c58279df810";
-    sha256 = "sha256-dJUQ7vuz9OC6eU00Snbbza63j01ms54sXO1kqheun+8=";
+    rev = version;
+    sha256 = "sha256-Y1J0nCVEmGKgQP+GEtPqK8l3SRuls5yesvJuowLDzUo=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "sha256-zSt6iNZ9hmvAgFEXzqfovRsMryVyFWHm68G7J3SMztY=";
+  cargoSha256 = "sha256-8/vzJXZjSQmefHMo5BXKTRiLy2F3wfIn8VgPMJxtIvY=";
 
   postInstall = lib.optionalString (bins != [])  ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"

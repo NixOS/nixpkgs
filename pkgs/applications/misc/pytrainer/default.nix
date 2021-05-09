@@ -13,7 +13,7 @@
 , tzdata
 , webkitgtk
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 }:
 
 let
@@ -66,7 +66,7 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = [
     glibcLocales
     perl
-    xvfb_run
+    xvfb-run
   ] ++ (with python.pkgs; [
     mysqlclient
     psycopg2

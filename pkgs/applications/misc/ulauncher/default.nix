@@ -14,7 +14,7 @@
 , libappindicator
 , intltool
 , wmctrl
-, xvfb_run
+, xvfb-run
 , librsvg
 }:
 
@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     mock
     pytest
     pytest-mock
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [

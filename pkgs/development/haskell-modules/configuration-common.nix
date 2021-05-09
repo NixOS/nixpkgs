@@ -1859,4 +1859,6 @@ self: super: {
     };
   };
 
+  phonetic-languages-phonetics-basics = appendPatch super.phonetic-languages-phonetics-basics ./patches/phonetic-languages-phonetics-basics-haddock.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
