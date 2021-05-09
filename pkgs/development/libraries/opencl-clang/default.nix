@@ -76,7 +76,7 @@ let
         ./opencl-headers-dir.patch
       ];
 
-      nativeBuildInputs = [ cmake git ];
+      nativeBuildInputs = [ cmake git llvm.dev ];
 
       buildInputs = [ libclang llvm spirv-llvm-translator ];
 
