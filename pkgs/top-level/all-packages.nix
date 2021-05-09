@@ -26244,6 +26244,8 @@ in
 
   scite = callPackage ../applications/editors/scite { };
 
+  scli = with python3Packages; callPackage ../applications/misc/scli { };
+
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome2) libart_lgpl;
   };
