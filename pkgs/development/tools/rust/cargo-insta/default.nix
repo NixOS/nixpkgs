@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, libiconv, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/cargo-insta";
   cargoSha256 = "01fj2j7ibrk5dyrfkmc610lh1p6f6bgzbgivq3dsd64vslhqmabw";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";
