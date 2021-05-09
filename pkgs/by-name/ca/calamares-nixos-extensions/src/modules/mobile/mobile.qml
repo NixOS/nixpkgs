@@ -184,10 +184,10 @@ Page
         timer.start();
     }
     function navNextFeature() {
-        var id = featureIdByScreen[screen] + 1;
+        var id;
 
         /* Skip disabled features */
-        do {
+        for (id = featureIdByScreen[screen] + 1; id < features.length; id++) {
             /* First letter uppercase */
             var name = features[id]["name"];
             var nameUp = name.charAt(0).toUpperCase() + name.slice(1);
@@ -196,7 +196,6 @@ Page
             var configOption = "feature" + nameUp;
             if (config[configOption] === false) {
                 console.log("Skipping feature (disabled in config): " + name);
-                id += 1;
                 continue;
             }
 
@@ -205,12 +204,11 @@ Page
             if (eval("typeof " + funcName) === "function"
                 && eval(funcName + "()")) {
                 console.log("Skipping feature (skip function): " + name);
-                id += 1;
                 continue;
             }
 
             break;
-        } while (id < features.length);
+        }
 
         console.log("Navigating to feature: " + features[id]["name"]);
         return navTo(features[id]["screens"][0]);
