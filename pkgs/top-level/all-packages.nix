@@ -7126,7 +7126,12 @@ in
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
-  nzbhydra2 = callPackage ../servers/nzbhydra2 { };
+  nzbhydra2 = callPackage ../servers/nzbhydra2 {
+    # You need Java (at least 8, at most 15)
+    # https://github.com/theotherp/nzbhydra2/issues/697
+    # https://github.com/theotherp/nzbhydra2/#how-to-run
+    jre = openjdk11;
+  };
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
@@ -7443,6 +7448,8 @@ in
   pick = callPackage ../tools/misc/pick { };
 
   pitivi = callPackage ../applications/video/pitivi { };
+
+  prism = callPackage ../applications/video/prism { };
 
   pulumi-bin = callPackage ../tools/admin/pulumi { };
 

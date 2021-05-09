@@ -17,6 +17,7 @@
 , wrapGAppsHook
 , enableQt ? false
 , qt5
+, nixosTests
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
@@ -100,6 +101,10 @@ in stdenv.mkDerivation {
     }
     EOF
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.bittorrent;
+  };
 
   meta = {
     description = "A fast, easy and free BitTorrent client";

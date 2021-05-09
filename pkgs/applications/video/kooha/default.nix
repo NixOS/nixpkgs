@@ -4,14 +4,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kooha";
-  version = "1.1.2";
+  version = "1.1.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    sha256 = "0jr55b39py9c8dc9rihn7ffx2yh71qqdk6pfn3c2ciiajjs74l17";
+    sha256 = "14lrx6wplvlk3cg3wij88h4ydp3m69pw7lvvzrq3j9qnh431bs36";
   };
 
   buildInputs = [

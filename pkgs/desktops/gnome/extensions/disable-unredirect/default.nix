@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-disable-unredirect";
-  version = "unstable-2021-01-17";
+  version = "unstable-2021-04-13";
 
   src = fetchFromGitHub {
     owner = "kazysmaster";
     repo = "gnome-shell-extension-disable-unredirect";
-    rev = "2ecb2f489ea3316b77d04f03a0c885f322c67e79";
-    sha256 = "1rjyrg8qya0asndxr7189a9npww0rcxk02wkxrxjy7fdp5m89p7y";
+    rev = "2a4c0e6a7a7a5f1aad9907ee2cf43d0725e10c19";
+    sha256 = "06hbyy20xz0bvzg0vs5w4092nyfpg372c86cdm1akcjm72m5sim9";
   };
 
   uuid = "unredirect@vaina.lt";

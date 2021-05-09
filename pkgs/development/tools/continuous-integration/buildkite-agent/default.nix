@@ -1,5 +1,6 @@
 { fetchFromGitHub, lib, buildGoModule,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
+  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
+  nixosTests }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";
   version = "3.29.0";
@@ -29,6 +30,10 @@ buildGoModule rec {
     wrapProgram $out/bin/buildkite-agent \
       --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.buildkite-agents;
+  };
 
   meta = with lib; {
     description = "Build runner for buildkite.com";

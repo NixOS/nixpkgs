@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.0";
+  version = "0.6.0";
   pname = "dask-image";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bf7ea8dcd9d795505b498bd632394720c048f50761e23c574d9a6bacfb27cbb";
+    sha256 = "1zzxrvbm52xn7azkn74pjinlk0jkpdcyl3r5vxxy5lmjnmzlrrpy";
   };
 
   propagatedBuildInputs = [ dask scipy pims ];

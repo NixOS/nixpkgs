@@ -511,7 +511,7 @@ let
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (
-                residue is ""
+                residue == ""
             ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
       '';
     };
@@ -665,10 +665,10 @@ let
             ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
             ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
             assert (
-                ipv4Residue is ""
+                ipv4Residue == ""
             ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
             assert (
-                ipv6Residue is ""
+                ipv6Residue == ""
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
       '';
     };

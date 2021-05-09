@@ -50,7 +50,6 @@ in {
   testScript = ''
     import os
     import re
-    import sys
 
     start_all()
 
