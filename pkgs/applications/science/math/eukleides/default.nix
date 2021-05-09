@@ -48,7 +48,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
   meta = {
     description = "Geometry Drawing Language";
     homepage = "http://www.eukleides.org/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       Eukleides is a computer language devoted to elementary plane
