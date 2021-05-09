@@ -1345,6 +1345,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chiabip158 = callPackage ../development/python-modules/chiabip158 { };
+
   chiapos = callPackage ../development/python-modules/chiapos { };
 
   chiavdf = callPackage ../development/python-modules/chiavdf { };
