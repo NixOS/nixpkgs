@@ -31,7 +31,7 @@ let
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
     tlpdb = with builtins; fromJSON (readFile ./texlive-snapshot.tlpdb.json);
-    orig = tlpdb.schemes // tlpdb.collections // tlpdb.packages;
+    orig = tlpdb.tlpkgs;
     removeSelfDep = lib.mapAttrs
       (n: p: if p ? depends then p // { depends = lib.remove n p.depends; }
                             else p);
@@ -39,7 +39,7 @@ let
       # overrides of texlive.tlpdb
 
       # only *.po for tlmgr
-      texlive-msg-translations = lib.filterAttrs (n: v: n != "run") orig.texlive-msg-translations;
+      texlive-msg-translations = lib.filterAttrs (n: v: n != hashAttr.run) orig.texlive-msg-translations;
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
         depends = (orig.xdvi.depends or [ ]) ++ [ "metafont" ];
@@ -67,27 +67,33 @@ let
     in lib.mapAttrs flatDeps withDeps;
     # TODO: texlive.infra for web2c config?
 
-  flatDeps = pname: attrs:
+  hashAttr = rec {
+    run = "containerchecksum";
+    doc = "doc" + run;
+    source = "src" + run;
+  };
+
+  flatDeps = pname: tlpkg:
     let
-      version = attrs.catalogue-version or attrs.revision;
+      version = tlpkg.cataloguedata.version or (toString tlpkg.revision);
       mkPkgV = tlType: let
-        pkg = attrs // {
-          hash = attrs.${tlType}.hash;
+        pkg = tlpkg // {
+          hash = tlpkg.${hashAttr.${tlType}};
           inherit pname tlType version;
         };
         in mkPkg pkg;
     in {
       # TL pkg contains lists of packages: runtime files, docs, sources, binaries
       pkgs =
-        [( if (attrs ? run) then mkPkgV "run"
+        [( if (tlpkg ? ${hashAttr.run}) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs ? doc) (mkPkgV "doc")
-        ++ lib.optional (attrs ? source) (mkPkgV "source")
+        ++ lib.optional (tlpkg ? ${hashAttr.doc}) (mkPkgV "doc")
+        ++ lib.optional (tlpkg ? ${hashAttr.source}) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgsList attrs.depends;
+        ++ combinePkgsList tlpkg.depends;
     };
 
   snapshot = {
@@ -97,14 +103,14 @@ let
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, hash, postUnpack ? "", relocated ? false, ... }@args:
+  mkPkg = { pname, tlType, revision, version, hash, postUnpack ? "", relocated ? false, ... }@tlpkgV:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
       tlName = urlName + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
-      urls = args.urls or (if args ? url then [ args.url ] else
+      urls = tlpkgV.urls or (if tlpkgV ? url then [ tlpkgV.url ] else
         map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
       # The tarballs on CTAN mirrors for the current release are constantly
@@ -112,7 +118,7 @@ let
       # need to be used instead. Ideally, for the release branches of NixOS we
       # should be switching to the tlnet-final versions
       # (https://tug.org/historic/).
-      urlPrefixes = args.urlPrefixes or [
+      urlPrefixes = tlpkgV.urlPrefixes or [
         # tlnet-final snapshot
         #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
         #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"

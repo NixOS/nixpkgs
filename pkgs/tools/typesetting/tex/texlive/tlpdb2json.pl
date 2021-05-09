@@ -2,8 +2,7 @@
 
 =head1 NAME
 
-F<tlpdb2json.pl> - convert a TeX Live Package Database to a JSON Nix
-expression
+F<tlpdb2json.pl> - convert a TeX Live Package Database to JSON
 
 =head1 SYNOPSIS
 
@@ -12,62 +11,65 @@ expression
 
 =head1 DESCRIPTION
 
-This script converts each package to the attribute set used to create a
-derivation and saves some metadata about the database as follows
-
- {
-  "_meta":{
-   "frozen":false,
-   "release":"2021",
-   "revision":"58792"
-  },
-  "collections":{
-   "collection-basic":{
-   [ ... ]
-  },
-  "packages":{
-   "12many":{
-    "doc":{
-     "hash":"sha512-[ ... ]
-   [ ... ]
-  "schemes":{
-   [ ... ]
-
-Many keys are passed through as they are.  A few keys are converted to a
-native type (e.g. C<relocated> is converted to a boolean. The keys that
-are converted to arrays are pluralised (e.g. C<depend> becomes
-C<depends>). Many keys need special handling, documented below.
+This script converts the package database to a JSON file. The output
+conforms to the TLPDBSINGLE entry of
+L<https://www.tug.org/texlive/devsrc/Master/tlpkg/doc/json-formats.txt>
+except for the changes below.
 
 The script raises an error whenever the database contains something
 unexpected, such as new keys or new postactions. This is to help catch
 changes to the database format in the future.
 
-Metadata such as description and homepage are currently ignored as they
-cannot be used with the current packaging approach.
-
 =over
+
+=item C<tlpkgs>
+
+Instead of a list of packages, C<tlpkgs> is an attribute set of the form
+C<< name -> tlpkg >>. The attribute C<name> is removed from the package.
+I presume this plays better with lazy evaluation.
 
 =item C<category>
 
-The packages of category Scheme and Collection are separated into the
-attribute set C<schemes> and C<collections> to distinguish them from
-C<pkgs>. Note that only schemes and collections can depend on
-collections, and nothing can depend on schemes. The category is omitted
-when equal to 'Package'.
+Omitted when equal to C<Package>.
 
-=item C<postaction>
+=item C<cataloguedata.version>
 
-The C<file> argument of C<postaction script> is added to a list. See
-L<TeXLive::TLUtils/do_post_action> for its semantics.
+Normalized to a valid version number.
 
-=item C<execute add{|Kanji|Mixed}Map fontmap> -> C<maps>
+=item C<(bin|doc|run|src)files>
 
-Font map entries are parsed as C<< fontmap -> type >> hash. See
-L<TeXLive::TLPOBJ/updmap_cfg_lines>.
+Omitted.
 
-=item C<execute AddFormat args> -> C<formats = [ ... %args ... ]>
+=item C<relocated>
 
-=item C<execute AddHyphen args> -> C<hyphens = [ ... %args ... ]>
+Omitted if C<(doc|run|src)files> are all empty.
+
+=item C<(|doc|src)containerchecksum>
+
+Converted to SRI. C<containerchecksum> is omitted if C<runfiles> is
+empty, as in that case the container only has a F<tlpkg/tlobj> file,
+whose content is already in the database.
+
+=item C<postactions>
+
+Only the C<script> actions are saved into the array
+C<postactions.scripts>. See L<TeXLive::TLUtils/do_post_action> for
+their semantics.
+
+=item C<executes>
+
+These are fully parsed and saved into the arrays C<executes.formats>,
+C<execute.hyphens>, C<executes.maps> as follows.
+
+=over
+
+=item C<add{|Kanji|Mixed}Map fontmap> -> C<< fontmap -> type >>
+
+See L<TeXLive::TLPOBJ/updmap_cfg_lines>.
+
+=item C<AddFormat args>
+
+=item C<AddHyphen args>
 
 See L<TeXLive::TLUtils/parse_AddFormat_line>,
 L<TeXLive::TLUtils/parse_AddHyphen_line> for the default values of
@@ -80,26 +82,18 @@ C<fmttriggers> are always dependencies, so we drop them, as Nix already
 rebuilds the formats whenever a dependency is updated. An error is
 raised if this assumption does not hold.
 
-C<mode=disabled> is converted to C<enabled = false>.
+The comma-separated lists that should be used by Nix (such as
+C<synonyms>) are split into lists.
 
-=item C<{bin,doc,run,src}files>
+C<mode=disabled> is converted the boolean C<enabled:false>.
 
-Currently disabled: if the containers have man and info pages, or some
-distribution files (the tlpkg/ folder), corresponding boolean attributes
-C<{bin,doc,run,source}.{man,info}> are set to true. The list of files is
-omitted from the final JSON Nix expression.
+=back
 
-If the C<runfiles> list is empty, then the only file in the container
-is F<tlpkg/tlobj>. Its content is already in the TLPDB, so we omit the
-hash for this container.
+=item Other keys
 
-The container C<src> is translated to C<source> for backward
-compatibility.
-
-=item C<00texlive.config>
-
-The relevant database metadata in the C<00texlive.config> pseudopackage
-is saved into C<meta>.
+All the other keys, including metadata such as description and homepage,
+are currently ignored because either they are irrelevant, or they cannot
+be used with the current packaging approach.
 
 =back
 
@@ -132,23 +126,21 @@ my $omittedPkg = qr/^(00texlive\.(image|installation|installer) # installer
 # === KEYS
 # New keys will cause an error.
 
-# keys for meta attrs that can be passed through as is
-my $metaKeys = qr/^(?:shortdesc
-                     |catalogue-(?:contact-(?:announce|home)|ctan)
-                                  # for meta.{homepage,changelog}
-                   )$/x;
+# as per json-formats.txt, catalogue-* keys go into cataloguedata
+# useful for for meta.{homepage,changelog}
+my $catalogueKeys = qr/^catalogue-(contact-(?:announce|home)|ctan)$/x;
 
 # TODO: review catalogue-alias
 my $omittedKeys = qr/^(?:catalogue
-                       |$metaKeys  # TODO: enable metadata
+                       |shortdesc
+                       |$catalogueKeys  # TODO: enable metadata
                        |catalogue-(?:alias|also
-                                   |(?:contact-(bugs|development|repository|support))
+                                   |(?:contact-(?:bugs|development|repository|support))
                                    |topics)
                        |(?:doc|src)?containersize)$/x;
 
 # passed through as is
 my $verbatimKeys = qr/^(?:category
-                        |revision
                        )$/x;
 
 # === ARGUMENTS FOR AddFormat, AddHyphen
@@ -166,6 +158,7 @@ my $acceptedHyphenArgs = ['name', 'file', 'file_exceptions',
 # === POSTACTIONS
 # see L<TeXLive::TLUtils/do_postaction>
 my $omittedPostactions = qr/file(?:assoc|type)|progid|shortcut/;
+my $acceptedScriptArgs = ['file'];
 
 # === UTILS
 
@@ -200,12 +193,9 @@ sub parse_execute {
     $data{$k} = $v;
   }
 
-  # postaction script file=:
   if ($key eq 'postaction' and $action eq 'script') {
-    my $file = $data{'file'};
-    delete $data{'file'};
-    die "Unexpected arguments in $key $action.\n" if %data;
-    return ('postactions', $file);
+    must_be_subset([keys %data], $acceptedScriptArgs, "Unexpected arguments in $key $action.");
+    return ('scripts', \%data);
   }
 
   elsif ($key eq 'execute' and $action =~ /^Add(Format|Hyphen)$/) {
@@ -272,8 +262,12 @@ while (<>) {
 
     if ($key eq 'relocated') {
       die "Unexpected relocated '$value'." unless $value eq '1';
-      # output only if there are files
-      $relocated = 1;
+      $p{'relocated'} = JSON::PP::true;
+    }
+
+    elsif ($key eq 'revision') {
+      die "Revision '$value' is not a number." unless $value =~ /^[0-9]+$/;
+      $p{'revision'} = 0 + $value;
     }
 
     elsif ($key eq 'longdesc') {
@@ -285,23 +279,13 @@ while (<>) {
       push(@{ $p{'depends'} }, $value) unless $value =~ $omittedPkg;
     }
 
-    elsif ($key =~ /^(|doc|src)containerchecksum$/) {
-      if ($1 eq '') {
-        # output only if there are runfiles
-        $run_checksum = hash_to_sri($value);
-      } else {
-        $p{$1 eq 'src' ? 'source' : $1}{'hash'} = hash_to_sri($value);
-      }
+    elsif ($key =~ /^(?:|doc|src)containerchecksum$/) {
+      $p{$key} = hash_to_sri($value);
     }
 
     elsif ($key =~ /^(run|doc|src|bin)files$/) {
-      $tlType = $1 eq 'src' ? 'source' : $1;
-      if (defined $relocated) {
-        $p{'relocated'} = JSON::PP::true;
-      }
       if ($1 eq 'run') {
-        # found runfiles, output the run checksum
-        $p{'run'}{'hash'} = $run_checksum;
+        $p{'runfiles'} = JSON::PP::true;
       }
       # arch= and size= are irrelevant for Nix
       for my $kv (split(' ', $value)) {
@@ -323,25 +307,25 @@ while (<>) {
 
     elsif ($key eq 'catalogue-license') {
       # TODO: enable metadata
-      # @{ $p{'catalogue-licenses'} } = split(' ', $value);
+      # @{ $p{'catalogue'}{'license'} } = split(' ', $value);
     }
 
     elsif ($key eq 'catalogue-version') {
       # normalize to valid Nix version number
       $value =~ tr!~ !\-_!; $value =~ s/[:\(\),]//g;
       die "Invalid version number '$value' after normalization." unless $value =~ $versionNumber;
-      $p{'catalogue-version'} = $value;
+      $p{'cataloguedata'}{'version'} = $value;
     }
 
     # add(type)Map fontmap -> maps.fontmap = type
     elsif ($key eq 'execute' and
            $value =~ /^add((?:|Kanji|Mixed)Map)\s+(.*)$/) {
-      $p{'maps'}{$2} = $1;
+      $p{'executes'}{'maps'}{$2} = $1;
     }
 
     elsif ($key =~ /^(execute|postaction)$/) {
       my ($type, $data) = parse_execute($key, $value);
-      push(@{ $p{$type} }, $data);
+      push(@{ $p{$1 . 's'}{$type} }, $data);
 
       # check assumption that *all triggers are dependencies*,
       # which means that Nix does not need to implement triggers
@@ -362,46 +346,63 @@ while (<>) {
     }
   }
 
-  if (exists $p{'category'} and $p{'category'} =~ /^(Scheme|Collection)$/) {
-    delete $p{'category'};
-    $db{lc($1) . 's'}{$pname} = \%p;
-  } else {
-    $db{'packages'}{$pname} = \%p;
+  # remove checksum if no runfiles
+  if (!exists $p{'runfiles'}) {
+    delete $p{'containerchecksum'};
   }
+
+  # remove relocated if no files
+  if (!exists $p{'containerchecksum'} and !exists $p{'doccontainerchecksum'} and !exists $p{'srccontainerchecksum'}) {
+    delete $p{'relocated'};
+  }
+
+  # double check that metapackages contain no files
+  if (exists $p{'category'} and $p{'category'} =~ /^(Scheme|Collection)$/) {
+    if (exists $p{'binfiles'}
+        or exists $p{'docfiles'}
+        or exists $p{'runfiles'}
+        or exists $p{'srcfiles'}) {
+      die "Unexpected content in '$pname'.";
+    }
+  }
+
+  # remove *files = true markers
+  for my $key ('bin', 'doc', 'run', 'src') {
+    delete $p{$key . 'files'};
+  }
+
+  # TODO: split at least schemes away from actual packages
+  #if (exists $p{'category'} and $p{'category'} =~ /^(Scheme|Collection)$/) {
+  #  delete $p{'category'};
+  #  $db{lc($1) . 's'}{$pname} = \%p;
+  #} else {
+  $db{'tlpkgs'}{$pname} = \%p;
+  #}
 }
 
 die "Last line is not empty." if $in_package;
 
-# double check that metapackages have no actual content
-for my $cat ('schemes', 'collections') {
-  for my $key (keys %{ $db{$cat} }) {
-    if (exists $db{$cat}{$key}{'bin'}
-        or exists $db{$cat}{$key}{'doc'}
-        or exists $db{$cat}{$key}{'run'}
-        or exists $db{$cat}{$key}{'src'}) {
-      die "Unexpected content in '$key'."; }
-  }
-}
-
 # === DATABASE METADATA
-for my $meta (@{ $db{'packages'}{'00texlive.config'}{'depends'} }) {
+for my $meta (@{ $db{'tlpkgs'}{'00texlive.config'}{'depends'} }) {
   my ($key, $value) = $meta =~ m,^([^/]+)/([^/]+)$,
     or die "Cannot parse '$meta' in 00texlive.config.";
 
   next if $key =~ /^(container_(format|split_(doc_|src_)files)|minrelease)/;
 
-  if ($key =~ /^(release|revision)$/) {
-    # version info
-    $db{'_meta'}{$key} = $value;
+  if ($key eq 'release') {
+    $db{'configs'}{$key} = $value;
+  } elsif ($key eq 'revision') {
+    die "Revision '$value' is not a number." unless $value =~ /^[0-9]+$/;
+    $db{'configs'}{$key} = 0 + $value;
   } elsif ($key eq 'frozen') {
     # final or snapshot?
     die "Unexpected frozen = '$value'." unless $value =~ /^0|1$/;
-    $db{'_meta'}{'frozen'} = $value ? JSON::PP::true : JSON::PP::false;
+    $db{'configs'}{'frozen'} = $value ? JSON::PP::true : JSON::PP::false;
   }
 }
 
 # remove metadata package
-delete $db{'packages'}{'00texlive.config'};
+delete $db{'tlpkgs'}{'00texlive.config'};
 
 # === OUTPUT
 # split output on several lines (indent) and sort the keys (canonical)
