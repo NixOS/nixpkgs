@@ -24977,6 +24977,8 @@ in
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
+  opsdroid = callPackage ../applications/networking/opsdroid { };
+
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };

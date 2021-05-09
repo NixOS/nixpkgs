@@ -1759,6 +1759,8 @@ in {
 
   delegator-py = callPackage ../development/python-modules/delegator-py { };
 
+  delorean = callPackage ../development/python-modules/delorean { };
+
   deltachat = callPackage ../development/python-modules/deltachat { };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
@@ -2673,6 +2675,8 @@ in {
 
   getkey = callPackage ../development/python-modules/getkey { };
 
+  get-video-properties = callPackage ../development/python-modules/get-video-properties { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
@@ -3192,6 +3196,10 @@ in {
   ibis = callPackage ../development/python-modules/ibis { };
 
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };
+
+  ibm-cloud-sdk-core = callPackage ../development/python-modules/ibm-cloud-sdk-core { };
+
+  ibm-watson = callPackage ../development/python-modules/ibm-watson { };
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
@@ -4085,9 +4093,13 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
+
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
+
+  mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
 
   mautrix = callPackage ../development/python-modules/mautrix { };
 
@@ -4223,6 +4235,8 @@ in {
 
   mock-services = callPackage ../development/python-modules/mock-services { };
 
+  mockupdb = callPackage ../development/python-modules/mockupdb { };
+
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
@@ -4257,6 +4271,8 @@ in {
   mortgage = callPackage ../development/python-modules/mortgage { };
 
   moto = callPackage ../development/python-modules/moto { };
+
+  motor = callPackage ../development/python-modules/motor { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
@@ -4683,6 +4699,8 @@ in {
   openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
+
+  opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
@@ -5257,6 +5275,8 @@ in {
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
+  puremagic = callPackage ../development/python-modules/puremagic { };
+
   purl = callPackage ../development/python-modules/purl { };
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
@@ -5430,6 +5450,8 @@ in {
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
   pycrc = callPackage ../development/python-modules/pycrc { };
+
+  pycron = callPackage ../development/python-modules/pycron { };
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
@@ -8316,6 +8338,8 @@ in {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  udatetime = callPackage ../development/python-modules/udatetime { };
+
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
@@ -8567,6 +8591,8 @@ in {
   watchdog = callPackage ../development/python-modules/watchdog {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
