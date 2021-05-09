@@ -3197,6 +3197,8 @@ in {
 
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };
 
+  ibm-cloud-sdk-core = callPackage ../development/python-modules/ibm-cloud-sdk-core { };
+
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
