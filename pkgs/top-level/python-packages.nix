@@ -3633,6 +3633,8 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
+
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
