@@ -8336,6 +8336,8 @@ in {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  udatetime = callPackage ../development/python-modules/udatetime { };
+
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
