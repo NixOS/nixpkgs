@@ -65,6 +65,7 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
+      relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
