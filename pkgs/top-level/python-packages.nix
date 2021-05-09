@@ -3025,6 +3025,8 @@ in {
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
 
+  hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
+
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
   hglib = callPackage ../development/python-modules/hglib { };
