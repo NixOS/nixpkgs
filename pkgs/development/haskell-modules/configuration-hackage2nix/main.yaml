@@ -220,6 +220,7 @@ package-maintainers:
     - gitit
     - yarn-lock
     - yarn2nix
+    - large-hashable
   poscat:
     - hinit
   bdesham:
