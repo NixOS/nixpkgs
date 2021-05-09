@@ -1631,6 +1631,8 @@ in {
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
 
+  cwcwidth = callPackage ../development/python-modules/cwcwidth { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
