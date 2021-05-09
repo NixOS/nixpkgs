@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gevent
 , nose
 , mock
@@ -12,12 +12,20 @@ buildPythonPackage rec {
   pname = "pika";
   version = "1.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f023d6ac581086b124190cb3dc81dd581a149d216fa4540ac34f9be1e3970b89";
+  src = fetchFromGitHub {
+    owner = "pika";
+    repo = "pika";
+    rev = version;
+    sha256 = "sha256-Wog6Wxa8V/zv/bBrFOigZi6KE5qRf82bf1GK2XwvpDI=";
   };
 
-  checkInputs = [ gevent mock nose tornado twisted ];
+  propagatedBuildInputs = [ gevent tornado twisted ];
+  
+  checkInputs = [ nose mock ];
+
+  checkPhase = ''
+    PIKA_TEST_TLS=true nosetests
+  '';
 
   meta = with lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
