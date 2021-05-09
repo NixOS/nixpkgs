@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "http://cryptodev-linux.org/";
     maintainers = with lib.maintainers; [ fortuneteller2k ];
     license = lib.licenses.gpl2Plus;
+    broken = kernel.kernelOlder "4.10" && stdenv.hostPlatform.isAarch64;
     platforms = lib.platforms.linux;
   };
 }
