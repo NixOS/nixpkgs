@@ -128,7 +128,7 @@ getBuildReports = runReq defaultHttpConfig do
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
   where
-   myReq query option = responseBody <$> req GET query NoReqBody jsonResponse (header "User-Agent" "hydra-report.hs/v1 (nixkpgs;maintainers/scripts/haskell)" <> option)
+   myReq query option = responseBody <$> req GET query NoReqBody jsonResponse (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)" <> option)
 
 hydraEvalCommand :: FilePath
 hydraEvalCommand = "hydra-eval-jobs"
