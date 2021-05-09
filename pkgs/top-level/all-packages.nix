@@ -7794,6 +7794,8 @@ in
 
   pycangjie = pythonPackages.pycangjie;
 
+  pycflow2dot = with python.pkgs; toPythonApplication pycflow2dot;
+
   pydb = callPackage ../development/tools/pydb { };
 
   pydf = callPackage ../applications/misc/pydf { };

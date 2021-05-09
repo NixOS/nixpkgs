@@ -5372,6 +5372,10 @@ in {
 
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
+  pycflow2dot = callPackage ../development/python-modules/pycflow2dot {
+    inherit (pkgs) graphviz;
+  };
+
   pychannels = callPackage ../development/python-modules/pychannels { };
 
   pychart = callPackage ../development/python-modules/pychart { };
