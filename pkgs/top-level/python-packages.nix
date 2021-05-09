@@ -4093,6 +4093,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
+
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
