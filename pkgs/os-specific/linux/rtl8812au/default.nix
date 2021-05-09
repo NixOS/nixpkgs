@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danielfullmer ];
+    broken = kernel.kernelOlder "4.10" || kernel.isHardened;
   };
 }
