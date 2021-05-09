@@ -245,7 +245,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
           )
           for line in subject_data.lower().split("\n"):
               if "subject" in line:
-                  print(f"First subject in fullchain.pem: ", line)
+                  print(f"First subject in fullchain.pem: {line}")
                   assert cert_name.lower() in line
                   return
 
