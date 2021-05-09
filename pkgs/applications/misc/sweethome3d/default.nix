@@ -1,19 +1,17 @@
 { lib
 , stdenv
 , fetchurl
-, fetchsvn
 , makeWrapper
 , makeDesktopItem
-# sweethome3d 6.4.2 does not yet build with jdk 9 and later.
-# this is fixed on trunk (7699?) but let's build with jdk8 until then.
+# sweethome3d 6.5.2 does not yet fully build&run with jdk 9 and later?
 , jdk8
-# it can run on the latest stable jre fine though
-, jre
+, jre8
 , ant
 , gtk3
 , gsettings-desktop-schemas
 , p7zip
 , libXxf86vm
+, unzip
 }:
 
 let
@@ -49,7 +47,7 @@ let
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
     '';
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper unzip ];
     buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas ];
 
     buildPhase = ''
@@ -77,7 +75,7 @@ let
       # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
       # exception is thrown on startup.
       # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
-      makeWrapper ${jre}/bin/java $out/bin/$exec \
+      makeWrapper ${jre8}/bin/java $out/bin/$exec \
         --set MESA_GL_VERSION_OVERRIDE 2.1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
@@ -102,14 +100,13 @@ in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "6.4.2";
+    version = "6.5.2";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
-    src = fetchsvn {
-      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
-      sha256 = "13rczayakwb5246hqnp8lnw61p0p7ywr2294bnlp4zwsrz1in9z4";
-      rev = "7504";
+    src = fetchurl {
+      url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
+      sha256 = "1j0xm2vmcxxjmf12k8rfnisq9hd7hqaiyxrfbrbjxis9iq3kycp3";
     };
     desktopName = "Sweet Home 3D";
     icons = {
