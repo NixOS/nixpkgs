@@ -74,6 +74,7 @@ let
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
+      topology = callPackage ../development/coq-modules/topology {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       VST = callPackage ../development/coq-modules/VST (with lib.versions;
