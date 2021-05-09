@@ -1879,4 +1879,23 @@ cat > example_data/acs100k.csv <<EOT
 EOT
     ''; });
 
+  # 2021-05-09: compilation requires patches from master,
+  # remove at next release (current is 0.1.0.4).
+  large-hashable = appendPatches super.large-hashable [
+    # Fix compilation of TH code for GHC >= 8.8
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
+      sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
+      excludes = [
+        ".travis.yml"
+        "stack**"
+      ];
+    })
+    # Fix cpp invocation
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
+      sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
+    })
+  ];
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
