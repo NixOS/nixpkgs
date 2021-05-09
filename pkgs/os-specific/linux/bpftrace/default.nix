@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "0njbixkrpdl9gjnkzg0ybmqsva0ydfda5vms66v8ij7xida2qy07";
+    sha256 = "sha256-DZO47AH506DBVH/AuvOF3JfpRxv/D/lmzVg8WOH9Dqo=";
   };
 
   buildInputs = with llvmPackages;
