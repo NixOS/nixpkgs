@@ -59,7 +59,7 @@ sed -r \
     < "${tmpfile}.new" >> $stackage_config
 
 if [[ "${1:-}" == "--do-commit" ]]; then
-git add $config_file
+git add $stackage_config
 git commit -F - << EOF
 Stackage Nightly: $old_version -> $version
 
