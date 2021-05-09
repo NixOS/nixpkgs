@@ -1864,4 +1864,10 @@ self: super: {
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
 
+  # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
+  # https://github.com/haskell-CI/haskell-ci/issues/507
+  haskell-ci = super.haskell-ci.override {
+    ShellCheck = self.ShellCheck_0_7_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
