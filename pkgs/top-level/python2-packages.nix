@@ -385,6 +385,8 @@ with self; with super; {
 
   privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
+  ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
+
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
   prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
