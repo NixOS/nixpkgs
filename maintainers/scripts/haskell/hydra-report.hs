@@ -155,7 +155,7 @@ getMaintainerMap = do
    get c p i e = readProcess c p i <&> \x -> either (error . (<> "Raw:'" <> x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
 
 -- BuildStates are sorted by subjective importance/concerningness
-data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | Aborted | Unfinished | Success deriving (Show, Eq, Ord)
+data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | TimedOut | Canceled | Unfinished | Success deriving (Show, Eq, Ord)
 
 icon :: BuildState -> Text
 icon = \case
@@ -163,7 +163,8 @@ icon = \case
    DependencyFailed -> ":heavy_exclamation_mark:"
    OutputLimitExceeded -> ":warning:"
    Unknown x -> "unknown code " <> showT x
-   Aborted -> ":no_entry:"
+   TimedOut -> ":hourglass::no_entry_sign:"
+   Canceled -> ":no_entry_sign:"
    Unfinished -> ":hourglass_flowing_sand:"
    Success -> ":heavy_check_mark:"
 
@@ -198,7 +199,8 @@ buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap
       state = case (finished, buildstatus) of
          (0, _) -> Unfinished
          (_, Just 0) -> Success
-         (_, Just 7) -> Aborted
+         (_, Just 4) -> Canceled
+         (_, Just 7) -> TimedOut
          (_, Just 2) -> DependencyFailed
          (_, Just 1) -> Failed
          (_, Just 11) -> OutputLimitExceeded
@@ -289,7 +291,7 @@ printBuildSummary
       jobsByState predicate = Map.filter (predicate . foldl' min Success . fmap state . fst) summary
       fails = jobsByState (== Failed)
       failedDeps = jobsByState (== DependencyFailed)
-      unknownErr = jobsByState (\x -> x > DependencyFailed && x < Aborted)
+      unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
       withMaintainer = Map.mapMaybe (\(x, m) -> (x,) <$> nonEmpty (Set.toList m))
       withoutMaintainer = Map.mapMaybe (\(x, m) -> if Set.null m then Just x else Nothing)
       optionalList heading list = if null list then mempty else [heading] <> list
