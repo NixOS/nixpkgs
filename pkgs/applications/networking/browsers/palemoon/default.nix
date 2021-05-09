@@ -142,6 +142,8 @@ stdenv.mkDerivation rec {
     ac_add_options --enable-jemalloc
     ac_add_options --enable-strip
     ac_add_options --enable-devtools
+    # Missing from build instructions, https://forum.palemoon.org/viewtopic.php?f=5&t=25843#p214767
+    ac_add_options --enable-av1
 
     ac_add_options --disable-eme
     ac_add_options --disable-webrtc
@@ -158,8 +160,6 @@ stdenv.mkDerivation rec {
     export MOZILLA_OFFICIAL=1
 
     ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
-
-    export MOZ_PKG_SPECIAL=gtk$_GTK_VERSION
 
     #
     # NixOS-specific adjustments
