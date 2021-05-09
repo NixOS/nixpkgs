@@ -365,7 +365,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
   '';
-
-  # Remove when the formatter has been removed and a linter has been added
-  skipLint = true;
 })

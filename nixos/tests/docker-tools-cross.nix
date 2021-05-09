@@ -73,7 +73,4 @@ in {
             "docker rmi ${hello2.imageName}",
         )
   '';
-
-  # Remove when the formatter has been removed and a linter has been added
-  skipLint = true;
 })
