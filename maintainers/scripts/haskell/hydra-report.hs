@@ -141,7 +141,7 @@ handlesParams = ["--eval", "--strict", "--json", "-"]
 handlesExpression :: String
 handlesExpression = "with import ./. {}; with lib; zipAttrsWith (_: builtins.head) (mapAttrsToList (_: v: if v ? github then { \"${v.email}\" = v.github; } else {}) (import maintainers/maintainer-list.nix))"
 
-newtype Maintainers = Maintainers {maintainers :: Text} deriving (Generic, ToJSON, FromJSON)
+newtype Maintainers = Maintainers {maintainers :: Maybe Text} deriving (Generic, ToJSON, FromJSON)
 
 type HydraJobs = Map Text Maintainers
 type MaintainerMap = Map Text (NonEmpty Text)
@@ -150,9 +150,9 @@ getMaintainerMap :: IO MaintainerMap
 getMaintainerMap = do
    hydraJobs :: HydraJobs <- get hydraEvalCommand hydraEvalParams "" "Failed to decode hydra-eval-jobs output: "
    handlesMap :: Map Text Text <- get handlesCommand handlesParams handlesExpression "Failed to decode nix output for lookup of github handles: "
-   pure $ hydraJobs & Map.mapMaybe (nonEmpty . mapMaybe (`Map.lookup` handlesMap) . Text.splitOn ", " . maintainers)
+   pure $ hydraJobs & Map.mapMaybe (nonEmpty . mapMaybe (`Map.lookup` handlesMap) . Text.splitOn ", " . fromMaybe "" . maintainers)
   where
-   get c p i e = readProcess c p i <&> \x -> either (error . (<> "Raw:'" <> x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
+   get c p i e = readProcess c p i <&> \x -> either (error . (<> " Raw:'" <> take 1000 x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
 
 -- BuildStates are sorted by subjective importance/concerningness
 data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | TimedOut | Canceled | Unfinished | Success deriving (Show, Eq, Ord)
@@ -231,18 +231,23 @@ printTable name showR showC showE (Table mapping) = joinTable <$> (name : map sh
    rows = toList $ Set.fromList (fst <$> Map.keys mapping)
    cols = toList $ Set.fromList (snd <$> Map.keys mapping)
 
-printJob :: Text -> (Table Text Platform BuildResult, Text) -> [Text]
-printJob name (Table mapping, maintainers) =
+printJob :: Int -> Text -> (Table Text Platform BuildResult, Text) -> [Text]
+printJob evalId name (Table mapping, maintainers) =
    if length sets <= 1
       then map printSingleRow sets
-      else ["- [ ] " <> name <> " " <> maintainers] <> map printRow sets
+      else ["- [ ] " <> makeJobSearchLink "" name <> " " <> maintainers] <> map printRow sets
   where
-   printRow set = "  - " <> printState set <> " " <> (if Text.null set then "toplevel" else set)
-   printSingleRow set = "- [ ] " <> printState set <> " " <> (if Text.null set then "" else set <> ".") <> name <> " " <> maintainers
+   printRow set = "  - " <> printState set <> " " <> makeJobSearchLink set (if Text.null set then "toplevel" else set)
+   printSingleRow set = "- [ ] " <> printState set <> " " <> makeJobSearchLink set (makePkgName set) <> " " <> maintainers
+   makePkgName set = (if Text.null set then "" else set <> ".") <> name
    printState set = Text.intercalate " " $ map (\pf -> maybe "" (label pf) $ Map.lookup (set, pf) mapping) platforms
+   makeJobSearchLink set linkLabel= makeSearchLink evalId linkLabel (makePkgName set <> ".") -- Append '.' to the search query to prevent e.g. "hspec." matching "hspec-golden.x86_64-linux"
    sets = toList $ Set.fromList (fst <$> Map.keys mapping)
    platforms = toList $ Set.fromList (snd <$> Map.keys mapping)
    label pf (BuildResult s i) = "[[" <> platformIcon pf <> icon s <> "]](https://hydra.nixos.org/build/" <> showT i <> ")"
+
+makeSearchLink :: Int -> Text -> Text -> Text
+makeSearchLink evalId linkLabel query = "[" <> linkLabel <> "](" <> "https://hydra.nixos.org/eval/" <> showT evalId <> "?filter=" <> query <> ")"
 
 statusToNumSummary :: StatusSummary -> NumSummary
 statusToNumSummary = fmap getSum . foldMap (fmap Sum . jobTotals)
@@ -273,7 +278,7 @@ printBuildSummary
          [ "#### Build summary"
          , ""
          ]
-            <> printTable "Platform" (\x -> platform x <> " " <> platformIcon x) (\x -> showT x <> " " <> icon x) showT (statusToNumSummary summary)
+            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT (statusToNumSummary summary)
       headline =
          [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
          , "*evaluation ["
@@ -298,8 +303,8 @@ printBuildSummary
       optionalHideableList heading list = if null list then mempty else [heading] <> details (showT (length list) <> " job(s)") list
       maintainedList = showMaintainedBuild <=< Map.toList . withMaintainer
       unmaintainedList = showBuild <=< Map.toList . withoutMaintainer
-      showBuild (name, table) = printJob name (table, "")
-      showMaintainedBuild (name, (table, maintainers)) = printJob name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
+      showBuild (name, table) = printJob id name (table, "")
+      showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
 
 printMaintainerPing :: IO ()
 printMaintainerPing = do
