@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
 
-  enableParallelBuilding = true;
-
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
 
