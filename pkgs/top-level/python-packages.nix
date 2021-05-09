@@ -4235,6 +4235,8 @@ in {
 
   mock-services = callPackage ../development/python-modules/mock-services { };
 
+  mockupdb = callPackage ../development/python-modules/mockupdb { };
+
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
