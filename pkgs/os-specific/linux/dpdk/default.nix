@@ -63,8 +63,6 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ lib.optional mod "kmod";
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
