@@ -4272,6 +4272,8 @@ in {
 
   moto = callPackage ../development/python-modules/moto { };
 
+  motor = callPackage ../development/python-modules/motor { };
+
   moviepy = callPackage ../development/python-modules/moviepy { };
 
   mox3 = callPackage ../development/python-modules/mox3 { };
