@@ -1,8 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, fetchpatch, python, ply }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, fetchpatch
+, python
+, ply
+, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "slimit";
   version = "0.8.1";
+
+  # Unmaintained; last release in 2013, doesn't support python changes
+  # introduced in python3.9
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
