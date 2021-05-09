@@ -508,8 +508,6 @@ stdenv.mkDerivation {
     rm -rf $out/share/doc
   '';
 
-  enableParallelBuilding = true;
-
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes
