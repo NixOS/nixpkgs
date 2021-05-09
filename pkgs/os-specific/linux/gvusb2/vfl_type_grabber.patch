@@ -1,0 +1,13 @@
+diff --git a/gvusb2-v4l2.c b/gvusb2-v4l2.c
+index 4723b52..af1d95e 100644
+--- a/gvusb2-v4l2.c
++++ b/gvusb2-v4l2.c
+@@ -663,7 +663,7 @@ int gvusb2_video_register(struct gvusb2_vid *dev)
+ 		dev->standard);
+ 
+ 	video_set_drvdata(&dev->vdev, dev);
+-	ret = video_register_device(&dev->vdev, VFL_TYPE_VIDEO, -1);
++	ret = video_register_device(&dev->vdev, VFL_TYPE_GRABBER, -1);
+ 	if (ret < 0)
+ 		return ret;
+ 
