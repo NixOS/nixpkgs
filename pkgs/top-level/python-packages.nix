@@ -1091,6 +1091,8 @@ in {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blspy = callPackage ../development/python-modules/blspy { };
+
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
