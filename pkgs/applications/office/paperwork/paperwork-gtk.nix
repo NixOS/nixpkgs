@@ -12,6 +12,7 @@
 , which
 , gettext
 , gobject-introspection
+, gdk-pixbuf
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -60,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     (lib.getBin gettext)
     which
+    gdk-pixbuf # for the setup hook
   ];
 
   buildInputs = [
