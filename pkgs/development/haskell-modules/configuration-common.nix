@@ -1861,4 +1861,7 @@ self: super: {
 
   phonetic-languages-phonetics-basics = appendPatch super.phonetic-languages-phonetics-basics ./patches/phonetic-languages-phonetics-basics-haddock.patch;
 
+  # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
+  tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
