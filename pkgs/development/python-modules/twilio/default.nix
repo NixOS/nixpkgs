@@ -22,6 +22,15 @@ buildPythonPackage rec {
     sha256 = "sha256-vVJuuPxVyOqnplPYrjCjIm5IyIFZvsCMoDLrrHpHK+4=";
   };
 
+  # Remove overly strict version contraints
+  prePatch = ''
+    substituteInPlace setup.py --replace \
+      "PyJWT == 1.7.1" "PyJWT"
+
+    # Remove unit tests that depend on an outdated version of PyJWT
+    rm -r tests/unit/jwt
+  '';
+
   propagatedBuildInputs = [
     pyjwt
     pysocks
