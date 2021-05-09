@@ -6,13 +6,13 @@
 # files.
 
 let
-  version = "2.2.10";
+  version = "2.3.0";
 in stdenv.mkDerivation rec {
   name = "expat-${version}";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${name}.tar.xz";
-    sha256 = "sha256-Xf5Tj4tbY/A+mO2sUg19mmpNIuSC5cltTQb8xUhcJfI=";
+    sha256 = "sha256-yqNPmbbjvOqFAlB+tlSaCoRRCyRKdI37KHJxstR0Z6k=";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.libexpat.org/";
+    homepage = "https://libexpat.github.io/";
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
     license = licenses.mit; # expat version
