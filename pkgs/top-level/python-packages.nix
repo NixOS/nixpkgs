@@ -4700,6 +4700,8 @@ in {
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
+  opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
+
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
