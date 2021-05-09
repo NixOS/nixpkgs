@@ -5275,6 +5275,8 @@ in {
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
+  puremagic = callPackage ../development/python-modules/puremagic { };
+
   purl = callPackage ../development/python-modules/purl { };
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
