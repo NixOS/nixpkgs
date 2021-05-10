@@ -25427,6 +25427,8 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
+    # https://github.com/pdfpc/pdfpc/issues/594
+    vala = vala_0_50;
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
 
