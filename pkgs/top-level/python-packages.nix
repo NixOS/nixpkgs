@@ -1447,6 +1447,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  clvm-rs = callPackage ../development/python-modules/clvm-rs { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
