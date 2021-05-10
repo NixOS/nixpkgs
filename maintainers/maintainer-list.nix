@@ -6306,6 +6306,12 @@
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
   };
+  mdsp = {
+    github = "Mdsp9070";
+    githubId = 44469426;
+    name = "Matheus de Souza Pessanha";
+    email = "matheus_pessanha2001@outlook.com";
+  };
   meatcar = {
     email = "nixpkgs@denys.me";
     github = "meatcar";
@@ -11161,12 +11167,6 @@
     github = "matthewcroughan";
     githubId = 26458780;
     name = "Matthew Croughan";
-  };
-  mdsp = {
-    github = "Mdsp9070";
-    githubId = 44469426;
-    name = "Matheus de Souza Pessanha";
-    email = "matheus_pessanha_2001@outlook.com";
   };
   ngerstle = {
     name = "Nicholas Gerstle";
