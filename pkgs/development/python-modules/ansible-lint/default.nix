@@ -14,6 +14,8 @@
 , enrich
 , python
 , tenacity
+, flaky
+, yamllint
 }:
 
 buildPythonPackage rec {
@@ -34,7 +36,7 @@ buildPythonPackage rec {
 
   buildInputs = [ python ];
 
-  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch tenacity ];
+  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch tenacity flaky yamllint ];
 
   checkInputs = [ pytestCheckHook pytest-xdist git ];
 
@@ -54,19 +56,13 @@ buildPythonPackage rec {
     "test_prerun_reqs_v1"
     "test_prerun_reqs_v2"
     # Assertion error with negative numbers; maybe requieres an ansible update?
-    "test_negative"
-    "test_example"
-    "test_playbook"
     "test_included_tasks"
-    "test_long_line"
 
     "test_get_yaml_files_umlaut"
     "test_run_inside_role_dir"
-    "test_role_handler_positive"
+    "test_custom_kinds"
+    "test_rule_no_handler"
   ];
-
-  # fails to run tests due to issues with temporary directory
-  doCheck = !stdenv.isDarwin;
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
 
