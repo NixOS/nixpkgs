@@ -1631,6 +1631,8 @@ in {
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
 
+  cwcwidth = callPackage ../development/python-modules/cwcwidth { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
@@ -3150,6 +3152,8 @@ in {
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
+
+  humblewx = callPackage ../development/python-modules/humblewx { };
 
   hupper = callPackage ../development/python-modules/hupper { };
 
@@ -6227,6 +6231,8 @@ in {
   pystray = callPackage ../development/python-modules/pystray { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
+
+  pysvg-py3 = callPackage ../development/python-modules/pysvg-py3 { };
 
   pysvn = callPackage ../development/python-modules/pysvn {
     inherit (pkgs) bash subversion apr aprutil expat neon openssl;

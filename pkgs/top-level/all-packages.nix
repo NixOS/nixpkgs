@@ -4155,6 +4155,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
+  timeline = callPackage ../applications/office/timeline/default.nix { };
+
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
 
@@ -13295,6 +13297,8 @@ in
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
+  nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
+
   gn = callPackage ../development/tools/build-managers/gn { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
@@ -22417,6 +22421,8 @@ in
   bviplus = callPackage ../applications/editors/bviplus { };
 
   caerbannog = callPackage ../applications/misc/caerbannog { };
+
+  cardboard = callPackage ../applications/window-managers/cardboard { };
 
   cage = callPackage ../applications/window-managers/cage { };
 

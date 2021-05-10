@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.14.7";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ndqh4bzwim32n8psgsgdd47xmlb45rhvcwla1wm506byb21nk4c";
+    sha256 = "sha256-rio+3S3bA8KfosKAE9Txzftr/q2PVyd8Z9crz1O/ysc=";
   };
 
-  cargoSha256 = "098dzwqwbhcyswm73m880z0w03i7xrq56x79vfyvacw4k27q2zm9";
+  cargoSha256 = "sha256-17bIeK/mPE+rAO/c65IWvMGqAU6sOClJQC8z+O36cmU=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--features=notmuch"
+    "--features=maildir"
   ];
 
   postFixup = ''
