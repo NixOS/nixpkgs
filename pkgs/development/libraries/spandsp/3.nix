@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/freeswitch/spandsp";
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
     maintainers = with lib.maintainers; [ ajs124 ];
     license = lib.licenses.gpl2;
   };
