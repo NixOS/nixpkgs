@@ -288,7 +288,7 @@ unsupported-platforms:
   Raincat:                                      [ x86_64-darwin ]
   reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   reflex-dom-fragment-shader-canvas:            [ x86_64-darwin ]
-  reflex-dom:                                   [ x86_64-darwin ]
+  reflex-dom:                                   [ x86_64-darwin, aarch64-linux ]
   reflex-localize-dom:                          [ x86_64-darwin ]
   rtlsdr:                                       [ x86_64-darwin ]
   rubberband:                                   [ x86_64-darwin ]
