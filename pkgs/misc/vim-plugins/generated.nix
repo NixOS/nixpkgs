@@ -4283,6 +4283,18 @@ let
     meta.homepage = "https://github.com/chrisgeo/sparkup/";
   };
 
+  specs-nvim = buildVimPluginFrom2Nix {
+    pname = "specs-nvim";
+    version = "2021-05-05";
+    src = fetchFromGitHub {
+      owner = "edluffy";
+      repo = "specs.nvim";
+      rev = "a62319a224b73b70af47a48ba076d7ec67b08526";
+      sha256 = "1hs7qp3fr451ziddv08nyygnxx1n6y32fr0y97s9zjc7j13d3nc3";
+    };
+    meta.homepage = "https://github.com/edluffy/specs.nvim/";
+  };
+
   splice-vim = buildVimPluginFrom2Nix {
     pname = "splice-vim";
     version = "2020-01-15";

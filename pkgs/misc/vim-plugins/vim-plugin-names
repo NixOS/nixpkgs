@@ -107,6 +107,7 @@ eagletmt/neco-ghc
 easymotion/vim-easymotion
 editorconfig/editorconfig-vim
 edluffy/hologram.nvim@main
+edluffy/specs.nvim@main
 edwinb/idris2-vim
 ehamberg/vim-cute-python
 eigenfoo/stan-vim
