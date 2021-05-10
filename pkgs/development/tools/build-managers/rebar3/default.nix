@@ -18,8 +18,6 @@ let
       sha256 = "1pcy5m79g0l9l3d8lkbx6cq1w87z1g3sa6wwvgbgraj2v3wkyy5g";
     };
 
-    bootstrapper = ./rebar3-nix-bootstrap;
-
     buildInputs = [ erlang ];
 
     postPatch = ''
@@ -80,7 +78,7 @@ let
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
-      inherit (rebar3) version bootstrapper;
+      inherit (rebar3) version;
       nativeBuildInputs = [ erlang makeWrapper ];
       unpackPhase = "true";
 
