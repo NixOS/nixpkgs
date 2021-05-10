@@ -180,7 +180,7 @@ with lib.maintainers; {
   };
 
   serokell = {
-    # Verify additions by checking commit signature from an already existing member of the team.
+    # Verify additions by approval of an already existing member of the team.
     members = [
       balsoft
       mkaito
