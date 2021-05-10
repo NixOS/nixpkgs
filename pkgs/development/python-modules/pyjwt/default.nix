@@ -29,6 +29,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (lib.versionOlder version "2.0") [
+    # ecdsa changed internal behavior, required if one does 1.7.1 overriding
+    "ec_verify_should_return_false_if_signature_invalid"
+  ];
+
   pythonImportsCheck = [ "jwt" ];
 
   meta = with lib; {
