@@ -311,6 +311,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mobile_app"
     "modbus"
     "moon"
+    "motioneye"
     "mqtt"
     "mqtt_eventstream"
     "mqtt_json"

@@ -4273,6 +4273,8 @@ in {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motioneye-client = callPackage ../development/python-modules/motioneye-client { };
+
   moto = callPackage ../development/python-modules/moto { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
