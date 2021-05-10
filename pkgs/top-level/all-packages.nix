@@ -1344,6 +1344,10 @@ with pkgs;
 
   referencesByPopularity = callPackage ../build-support/references-by-popularity { };
 
+  flattenReferencesGraph = callPackage ../build-support/flatten-references-graph { };
+
+  dockerMakeLayers = callPackage ../build-support/docker/make-layers.nix { };
+
   removeReferencesTo = callPackage ../build-support/remove-references-to {
     inherit (darwin) signingUtils;
   };
