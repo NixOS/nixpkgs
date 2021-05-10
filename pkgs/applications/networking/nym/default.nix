@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nymtech.net";
     license = licenses.asl20;
     maintainers = [ maintainers.ehmry ];
-    platforms = with platforms; intersectLists (linux ++ darwin) (concatLists [ x86 x86_64 aarch64 arm ]);
+    platforms = platforms.all;
   };
 }
