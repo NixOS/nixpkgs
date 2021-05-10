@@ -1,15 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, installShellFiles,
-  qmake, qtbase, qtmultimedia,
-  poppler, mupdf, jbig2dec, openjpeg, gumbo,
+{ lib, stdenv, fetchFromGitHub, installShellFiles,
+  qmake, qtbase, qtmultimedia, wrapQtAppsHook,
+  poppler, mupdf, freetype, jbig2dec, openjpeg, gumbo,
   renderer ? "mupdf" }:
 
 let
   renderers = {
-    mupdf.buildInputs = [ mupdf jbig2dec openjpeg gumbo ];
+    mupdf.buildInputs = [ mupdf freetype jbig2dec openjpeg gumbo ];
     poppler.buildInputs = [ poppler ];
   };
 
-in mkDerivation rec {
+in
+
+stdenv.mkDerivation rec {
   pname = "beamerpresenter";
   version = "0.2.0";
 
@@ -20,7 +22,7 @@ in mkDerivation rec {
     sha256 = "10i5nc5b5syaqvsixam4lmfiz3b5cphbjfgfqavi5jilq769792a";
   };
 
-  nativeBuildInputs = [ qmake installShellFiles ];
+  nativeBuildInputs = [ qmake installShellFiles wrapQtAppsHook ];
   buildInputs = [ qtbase qtmultimedia ] ++ renderers.${renderer}.buildInputs;
 
   qmakeFlags = [ "RENDERER=${renderer}" ];
@@ -33,6 +35,10 @@ in mkDerivation rec {
         --replace "/etc/" "$out/etc/" \
         --replace '$${GUI_CONFIG_PATH}' "$out/etc/xdg/beamerpresenter/gui.json"
     done
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out"/bin/beamerpresenter.app/Contents/MacOS/beamerpresenter
   '';
 
   meta = with lib; {
