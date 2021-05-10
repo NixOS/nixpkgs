@@ -67,7 +67,7 @@ self: super: {
   half = dontCheck super.half;
 
   # https://github.com/factisresearch/large-hashable/issues/17
-  large-hashable = markBroken super.large-hashable;
+  large-hashable = markBroken (dontDistribute super.large-hashable);
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
