@@ -12,13 +12,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    hash = "sha256-IHgoi5VUN3ORbufkruPb6wR7pTekJFQHhhDrnjOWzWM=";
+    hash = "sha256-SrBPqGRIsP0+ZWDe96sqjqCpJoY3Sn3VoPpMw7ellC0=";
   };
 
   patches = [
@@ -26,10 +26,7 @@ buildPythonApplication rec {
     ./steam-run.patch
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ vdf ];
 
@@ -52,7 +49,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ metadark ];
     platforms = platforms.linux;
   };
