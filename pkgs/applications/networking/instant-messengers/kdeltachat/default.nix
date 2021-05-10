@@ -6,6 +6,7 @@
 , pkg-config
 , kirigami2
 , libdeltachat
+, qtimageformats
 , qtmultimedia
 }:
 
@@ -29,6 +30,7 @@ mkDerivation rec {
   buildInputs = [
     kirigami2
     libdeltachat
+    qtimageformats
     qtmultimedia
   ];
 
