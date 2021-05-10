@@ -3,6 +3,7 @@ broken-packages:
   - 3dmodels
   - AAI
   - abcnotation
+  - abeson
   - abides
   - abnf
   - AbortT-transformers
@@ -428,6 +429,8 @@ broken-packages:
   - brotli
   - browscap
   - bsd-sysctl
+  - bson-generic
+  - bson-generics
   - bsparse
   - btree-concurrent
   - buffer
@@ -1388,6 +1391,7 @@ broken-packages:
   - foreign-var
   - forest
   - forest-fire
+  - forex2ledger
   - for-free
   - forger
   - ForkableT
@@ -1524,6 +1528,7 @@ broken-packages:
   - genvalidity-persistent
   - GeocoderOpenCage
   - geodetic-types
+  - geojson-types
   - geom2d
   - GeomPredicates-SSE
   - geo-resolver
@@ -2938,6 +2943,7 @@ broken-packages:
   - MoeDict
   - moesocks
   - mohws
+  - mollie-api-haskell
   - monadacme
   - monad-atom
   - monad-atom-simple
@@ -2981,6 +2987,7 @@ broken-packages:
   - Monatron
   - mondo
   - money
+  - mongodb-queue
   - monitor
   - mono-foldable
   - monoid
@@ -3427,6 +3434,7 @@ broken-packages:
   - persistent-discover
   - persistent-equivalence
   - persistent-migration
+  - persistent-mongoDB
   - persistent-mysql-haskell
   - persistent-odbc
   - persistent-protobuf
@@ -4020,6 +4028,7 @@ broken-packages:
   - selenium
   - selinux
   - semantic-source
+  - Semantique
   - semdoc
   - semialign-extras
   - semibounded-lattices
@@ -4237,9 +4246,11 @@ broken-packages:
   - snaplet-amqp
   - snaplet-css-min
   - snaplet-customauth
+  - snaplet-environments
   - snaplet-fay
   - snaplet-hslogger
   - snaplet-influxdb
+  - snaplet-mongodb-minimalistic
   - snaplet-persistent
   - snaplet-postgresql-simple
   - snaplet-sass
@@ -5209,6 +5220,8 @@ broken-packages:
   - yi-spolsky
   - yoda
   - yst
+  - yu-core
+  - yu-tool
   - yxdb-utils
   - z3-encoding
   - z85

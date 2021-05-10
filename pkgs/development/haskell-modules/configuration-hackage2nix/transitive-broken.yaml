@@ -2209,6 +2209,7 @@ dont-distribute-packages:
  - periodic-server
  - perm
  - PermuteEffects
+ - persistent-audit
  - persistent-hssqlppp
  - persistent-map
  - persona-idp
@@ -2309,6 +2310,7 @@ dont-distribute-packages:
  - progressbar
  - project-m36
  - prologue
+ - prolude
  - prometheus-effect
  - propane
  - proplang
@@ -3272,6 +3274,7 @@ dont-distribute-packages:
  - yoko
  - york-lava
  - yql
+ - yu-launch
  - yuuko
  - zasni-gerna
  - zephyr
