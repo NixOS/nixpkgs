@@ -216,7 +216,7 @@ in {
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."cgroup-network" = {
@@ -224,7 +224,7 @@ in {
       capabilities = "cap_setuid+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."freeipmi.plugin" = {
@@ -232,7 +232,7 @@ in {
       capabilities = "cap_dac_override,cap_fowner+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."perf.plugin" = {
@@ -240,7 +240,7 @@ in {
       capabilities = "cap_sys_admin+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."slabinfo.plugin" = {
@@ -248,7 +248,7 @@ in {
       capabilities = "cap_dac_override+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.pam.loginLimits = [
