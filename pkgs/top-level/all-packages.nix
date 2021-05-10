@@ -14433,6 +14433,15 @@ in
   ffmpeg-normalize = python3Packages.callPackage ../applications/video/ffmpeg-normalize { };
 
   ffms = callPackage ../development/libraries/ffms { };
+  ffms_2_23 = ffms.overrideAttrs (oldAttrs: rec {
+    version = "2.23";
+    src = fetchFromGitHub {
+      owner = "FFMS";
+      repo = "ffms2";
+      rev = version;
+      sha256 = "0dkz5b3gxq5p4xz0qqg6l2sigszrlsinz3skyf0ln4wf3zrvf8m5";
+    };
+  });
 
   fftw = callPackage ../development/libraries/fftw { };
   fftwSinglePrec = fftw.override { precision = "single"; };

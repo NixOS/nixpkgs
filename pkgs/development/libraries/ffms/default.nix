@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    mkdir src/config
+    mkdir -p src/config
   '';
 
   buildInputs = [
