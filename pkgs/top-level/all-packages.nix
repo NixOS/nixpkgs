@@ -3621,6 +3621,8 @@ with pkgs;
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
 
+  clarissa = callPackage ../tools/networking/clarissa { };
+
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
