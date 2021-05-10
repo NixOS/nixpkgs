@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
+    openssl ncurses gnutls readline libjpeg
+    sqlite pcre speex ldns libedit
     libsndfile libtiff
     libuuid
   ]
