@@ -1481,6 +1481,8 @@ in
 
   harvid = callPackage ../tools/video/harvid { };
 
+  hilbish = callPackage ../shells/hilbish { };
+
   hime = callPackage ../tools/inputmethods/hime {};
 
   hinit = haskell.lib.justStaticExecutables haskellPackages.hinit;
