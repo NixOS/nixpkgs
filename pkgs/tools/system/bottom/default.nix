@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.unix;
+    mainProgram = "btm";
   };
 }

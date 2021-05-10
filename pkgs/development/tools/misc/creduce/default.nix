@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, makeWrapper
-, llvm, clang-unwrapped
+, llvm, libclang
 , flex
 , zlib
 , perlPackages
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1b833z0g1hich68kzbkpfc26xb8w2phfl5savy8c6ir9ihwy1a8w";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper llvm.dev ];
   buildInputs = [
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    llvm clang-unwrapped
+    llvm libclang
     flex zlib
   ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
 

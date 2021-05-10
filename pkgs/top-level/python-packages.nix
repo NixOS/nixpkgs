@@ -311,6 +311,8 @@ in {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiopg = callPackage ../development/python-modules/aiopg { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
@@ -384,6 +386,8 @@ in {
   amqp = callPackage ../development/python-modules/amqp { };
 
   amqplib = callPackage ../development/python-modules/amqplib { };
+
+  amqtt = callPackage ../development/python-modules/amqtt { };
 
   android-backup = callPackage ../development/python-modules/android-backup { };
 
@@ -930,6 +934,8 @@ in {
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
 
   backports_weakref = callPackage ../development/python-modules/backports_weakref { };
+
+  backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
@@ -1624,6 +1630,8 @@ in {
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
+
+  cwcwidth = callPackage ../development/python-modules/cwcwidth { };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
@@ -2346,6 +2354,7 @@ in {
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     pytest = self.pytest_4;
+    hdf5 = pkgs.hdf5_1_10;
   };
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
@@ -3148,6 +3157,8 @@ in {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
+  humblewx = callPackage ../development/python-modules/humblewx { };
+
   hupper = callPackage ../development/python-modules/hupper { };
 
   hvac = callPackage ../development/python-modules/hvac { };
@@ -3184,6 +3195,10 @@ in {
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
+
+  i2c-tools = callPackage ../development/python-modules/i2c-tools {
+    inherit (pkgs) i2c-tools;
+  };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
@@ -3896,6 +3911,8 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
+
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode = callPackage ../development/python-modules/linode { };
@@ -4119,6 +4136,8 @@ in {
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   MDP = callPackage ../development/python-modules/mdp { };
 
@@ -5184,7 +5203,9 @@ in {
 
   prison = callPackage ../development/python-modules/prison { };
 
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
+  privacyidea = callPackage ../development/python-modules/privacyidea { };
+
+  pyjwt1 = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
 
@@ -5663,6 +5684,8 @@ in {
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
+
+  pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
@@ -6231,6 +6254,8 @@ in {
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
 
+  pysvg-py3 = callPackage ../development/python-modules/pysvg-py3 { };
+
   pysvn = callPackage ../development/python-modules/pysvn {
     inherit (pkgs) bash subversion apr aprutil expat neon openssl;
   };
@@ -6418,6 +6443,8 @@ in {
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
+  pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
@@ -6678,6 +6705,8 @@ in {
   python-socketio = callPackage ../development/python-modules/python-socketio { };
 
   python-socketio_4 = callPackage ../development/python-modules/python-socketio/4.nix { };
+
+  python-socks = callPackage ../development/python-modules/python-socks { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -8337,6 +8366,8 @@ in {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
   udatetime = callPackage ../development/python-modules/udatetime { };
 

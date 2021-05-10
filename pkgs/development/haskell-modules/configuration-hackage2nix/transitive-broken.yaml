@@ -22,6 +22,7 @@ dont-distribute-packages:
  - approx-rand-test
  - barley
  - bson-mapping
+ - bv-sized-lens
  - clash-prelude-quickcheck
  - click-clack
  - cloudyfs
@@ -79,9 +80,9 @@ dont-distribute-packages:
  - openpgp-crypto-api
  - patch-image
  - perdure
- - persistent-mysql_2_12_1_0
- - persistent-postgresql_2_12_1_1
- - persistent-sqlite_2_12_0_0
+ - persistent-mysql_2_13_0_0
+ - persistent-postgresql_2_13_0_0
+ - persistent-sqlite_2_13_0_0
  - pontarius-mediaserver
  - pontarius-xmpp-extras
  - pontarius-xpmn

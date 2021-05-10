@@ -44,19 +44,10 @@ let
 
         preStart = ''
           ${optionalString (suppl.configFile.path!=null) ''
-            touch -a ${suppl.configFile.path}
-            chmod 600 ${suppl.configFile.path}
+            (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
           ${optionalString suppl.userControlled.enable ''
-            if ! test -e ${suppl.userControlled.socketDir}; then
-                mkdir -m 0770 -p ${suppl.userControlled.socketDir}
-                chgrp ${suppl.userControlled.group} ${suppl.userControlled.socketDir}
-            fi
-
-            if test "$(stat --printf '%G' ${suppl.userControlled.socketDir})" != "${suppl.userControlled.group}"; then
-                echo "ERROR: bad ownership on ${suppl.userControlled.socketDir}" >&2
-                exit 1
-            fi
+            install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
           ''}
         '';
 

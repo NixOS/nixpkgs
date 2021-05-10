@@ -54,7 +54,12 @@ let
     "libsquish"
     # Not packaged to this date
     "sheenbidi"
-  ];
+  ]
+  # Our system angelscript causes linking error on ARM
+  # ld: libangelscript.so: undefined reference to
+  # `CallSystemFunctionNative(asCContext*, asCScriptFunction*, void*, unsigned int*, void*, unsigned long&, void*)'
+  # Bundled angelscript compiles fine
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "angelscript";
 in
 stdenv.mkDerivation rec {
 
@@ -100,15 +105,15 @@ stdenv.mkDerivation rec {
     harfbuzz
     mcpp
     wiiuse
-    angelscript
-  ];
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isAarch64) angelscript;
 
   cmakeFlags = [
     "-DBUILD_RECORDER=OFF" # libopenglrecorder is not in nixpkgs
-    "-DUSE_SYSTEM_ANGELSCRIPT=OFF" # doesn't work with 2.31.2 or 2.32.0
+    # doesn't work with our 2.35.0 on aarch64-linux
+    "-DUSE_SYSTEM_ANGELSCRIPT=${if !stdenv.hostPlatform.isAarch64 then "ON" else "OFF"}"
     "-DCHECK_ASSETS=OFF"
     "-DUSE_SYSTEM_WIIUSE=ON"
-    "-DUSE_SYSTEM_ANGELSCRIPT=ON"
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 

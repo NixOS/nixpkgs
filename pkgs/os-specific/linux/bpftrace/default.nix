@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with llvmPackages;
-    [ llvm clang-unwrapped
+    [ llvm libclang
       kernel elfutils libelf bcc
       libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison ]
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
     # libelf is incompatible with elfutils-libelf
     ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 

@@ -112,6 +112,7 @@ in
     };
 
   testScript = ''
+    from typing import Tuple
     def execute_as(user: str, cmd: str) -> Tuple[int, str]:
         """
         Run a shell command as a specific user.

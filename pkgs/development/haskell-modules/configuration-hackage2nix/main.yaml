@@ -77,13 +77,6 @@ default-package-overrides:
   - gi-javascriptcore < 4.0.23 #
   - gi-soup < 2.4.24 #
   - gi-webkit2 < 4.0.27 #
-  # To stay hls 1.0 compatible
-  - ghcide < 1.1
-  - hls-retrie-plugin < 1.0.0.1
-  - lsp < 1.2
-  - lsp-types < 1.2
-  - hls-plugin-api < 1.1.0.0
-  - hls-explicit-imports-plugin < 1.0.0.1
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -102,7 +95,6 @@ extra-packages:
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint < 3.3                         # We don‘t have ghc-lib-parser 9.0.X yet.
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
-  - lsp-test < 0.14                     # needed for hls 1.0.0
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
@@ -259,7 +251,6 @@ unsupported-platforms:
   gnome-keyring:                                [ x86_64-darwin ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin ]
-  gtk-sni-tray:                                 [ x86_64-darwin ]
   haskell-snake:                                [ x86_64-darwin ]
   hcwiid:                                       [ x86_64-darwin ]
   HFuse:                                        [ x86_64-darwin ]
@@ -268,7 +259,6 @@ unsupported-platforms:
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
   libmodbus:                                    [ x86_64-darwin ]
-  libsystemd-journal:                           [ x86_64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin ]
   libtelnet:                                    [ x86_64-darwin ]
   libzfs:                                       [ x86_64-darwin ]
@@ -302,8 +292,7 @@ unsupported-platforms:
   udev:                                         [ x86_64-darwin ]
   vrpn:                                         [ x86_64-darwin ]
   vulkan:                                       [ i686-linux, armv7l-linux, x86_64-darwin ]
-  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux ]
-  VulkanMemoryAllocator:                        [ x86_64-darwin ]
+  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, x86_64-darwin ]
   vulkan-utils:                                 [ x86_64-darwin ]
   webkit2gtk3-javascriptcore:                   [ x86_64-darwin ]
   Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
