@@ -29,11 +29,6 @@ buildPythonPackage rec {
     sha256 = "sha256-tnuWKEB66bwVuwu3H3mHG99ZP+/msGhMDMRL5fyQgD8=";
   };
 
-  postPatch = ''
-    substituteInPlace src/ansiblelint/file_utils.py \
-      --replace 'raise RuntimeError("Unable to determine file type for %s" % pathex)' 'return "playbook"'
-  '';
-
   buildInputs = [ python ];
 
   propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch tenacity flaky yamllint ];
