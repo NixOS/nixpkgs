@@ -1898,4 +1898,19 @@ EOT
     })
   ];
 
+  bson = overrideCabal super.bson (drv: {
+    # We replace 'network' by 'network-bsd' because cabal2nix cannot correctly that pick up.
+    libraryHaskellDepends = with pkgs.haskellPackages; [
+      base
+      binary
+      bytestring
+      cryptohash-md5
+      data-binary-ieee754
+      mtl
+      network-bsd # network-bsd AND NOT network
+      text
+      time
+    ];
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
