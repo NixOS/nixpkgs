@@ -21,7 +21,7 @@ _addToTclLibPath() {
     if [ -z "${TCLLIBPATH-}" ]; then
         export TCLLIBPATH="$tclPkg"
     else
-        if [[ "$TCLLIBPATH" != *"$tclPkg"* ]]; then
+        if [[ "$TCLLIBPATH" != *"$tclPkg "* && "$TCLLIBPATH" != *"$tclPkg" ]]; then
             export TCLLIBPATH="${TCLLIBPATH} $tclPkg"
         fi
     fi
@@ -53,7 +53,7 @@ wrapTclBins() {
     find "$tclBinsDir" -type f -executable -print |
         while read -r someBin; do
             echo "Adding TCLLIBPATH wrapper for $someBin"
-            wrapProgram "$someBin" --set TCLLIBPATH "$TCLLIBPATH"
+            wrapProgram "$someBin" --prefix TCLLIBPATH ' ' "$TCLLIBPATH"
         done
 }
 
