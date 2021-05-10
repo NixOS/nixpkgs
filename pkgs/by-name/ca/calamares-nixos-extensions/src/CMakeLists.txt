@@ -38,7 +38,7 @@
 #   USE_os          : operating-system-specific modules.
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(calamares-extensions
-    VERSION 1.1.1
+    VERSION 1.1.2
     LANGUAGES CXX
 )
 
