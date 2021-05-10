@@ -13,14 +13,13 @@
 , configurePhase ? null
 , meta ? { }
 , enableDebugInfo ? false
+, mixEnv ? "prod"
 , ...
 }@attrs:
 
 with lib;
 
 let
-
-  debugInfoFlag = lib.optionalString (enableDebugInfo || elixir.debugInfo) "--debug-info";
 
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.name}";
@@ -36,6 +35,10 @@ let
     dontStrip = true;
 
     inherit src;
+
+    MIXENV = mixEnv;
+    MIX_DEBUG = if enableDebugInfo then 1 else 0;
+    HEX_OFFLINE = 1;
 
     setupHook =
       if setupHook == null
@@ -62,9 +65,9 @@ let
       if buildPhase == null
       then ''
         runHook preBuild
-        export HEX_OFFLINE=1
-        export HEX_HOME=`pwd`
-        mix compile ${debugInfoFlag} --no-deps-check
+        export HEX_HOME="$TEMPDIR/hex"
+        export MIX_HOME="$TEMPDIR/mix"
+        mix compile --no-deps-check
         runHook postBuild
       ''
       else buildPhase;
@@ -73,7 +76,6 @@ let
       if installPhase == null
       then ''
         runHook preInstall
-        MIXENV=prod
         if [ -d "_build/shared" ]; then
           MIXENV=shared
         fi
