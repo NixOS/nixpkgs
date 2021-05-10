@@ -725,6 +725,7 @@ in
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../applications/video/aegisub ({
+    ffms = ffms_2_23;
     wxGTK = wxGTK30;
   } // (config.aegisub or {}));
 
