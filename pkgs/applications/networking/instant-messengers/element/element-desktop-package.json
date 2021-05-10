@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "src/electron-main.js",
-  "version": "1.7.26",
+  "version": "1.7.27",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -12,6 +12,9 @@
   "license": "Apache-2.0",
   "files": [],
   "scripts": {
+    "i18n": "matrix-gen-i18n",
+    "prunei18n": "matrix-prune-i18n",
+    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && matrix-gen-i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "mkdirs": "mkdirp packages deploys",
     "fetch": "yarn run mkdirs && node scripts/fetch-package.js",
     "asar-webapp": "asar p webapp webapp.asar",
@@ -31,6 +34,7 @@
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
+    "counterpart": "^0.18.6",
     "electron-store": "^6.0.1",
     "electron-window-state": "^5.0.3",
     "minimist": "^1.2.3",
@@ -48,6 +52,7 @@
     "find-npm-prefix": "^1.0.2",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
+    "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
     "mkdirp": "^1.0.3",
     "needle": "^2.5.0",
     "node-pre-gyp": "^0.15.0",
