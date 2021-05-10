@@ -257,12 +257,12 @@ let
 
   barbar-nvim = buildVimPluginFrom2Nix {
     pname = "barbar-nvim";
-    version = "2021-05-06";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "romgrk";
       repo = "barbar.nvim";
-      rev = "566a7ef96e6e935c6e84ddfb73e3a50a7b196638";
-      sha256 = "0caglapjgnghp9j1vyk162ch66bhcpgidp2radfiayh5mnifpqv2";
+      rev = "1e7347964ceab49c5ed7e1224de328cdd8b90919";
+      sha256 = "00p1h7nznrhjfddxzxamyjkf9cgdjw9f8zhzs366k8gfva5fh4r3";
     };
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
   };
@@ -1220,12 +1220,12 @@ let
 
   diffview-nvim = buildVimPluginFrom2Nix {
     pname = "diffview-nvim";
-    version = "2021-05-08";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "sindrets";
       repo = "diffview.nvim";
-      rev = "daf0134615e488e04223f5bb2377112bf274f481";
-      sha256 = "0njdhp3xp00dh4892b7vvgxwnd70ql1aa099vpy33ra3lzvy6jn0";
+      rev = "272a474abf7d1b64d5dcaf21f80d6fdc7b623ead";
+      sha256 = "14y9gj9054dr2jiz2d1w9y03jh1mp4r04vyabj6nsjk2fg84dz38";
     };
     meta.homepage = "https://github.com/sindrets/diffview.nvim/";
   };
@@ -1499,12 +1499,12 @@ let
 
   friendly-snippets = buildVimPluginFrom2Nix {
     pname = "friendly-snippets";
-    version = "2021-05-09";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "rafamadriz";
       repo = "friendly-snippets";
-      rev = "10135fd89dd433191672b34d7ab2b4bc682bfa5e";
-      sha256 = "09h8vbyyynbiyaiainb0jfbny7cprl7rjpfz5nfl7jq8lsmc0x42";
+      rev = "83de9287ad388f55b7d74f66b8ea5b89bb6abf24";
+      sha256 = "13jp8bg85yyxyl390ymrp6qasg4p6a57x08m2l9ld8wiq33ps6yp";
     };
     meta.homepage = "https://github.com/rafamadriz/friendly-snippets/";
   };
@@ -1847,12 +1847,12 @@ let
 
   hologram-nvim = buildVimPluginFrom2Nix {
     pname = "hologram-nvim";
-    version = "2021-05-01";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "edluffy";
       repo = "hologram.nvim";
-      rev = "31108af1a9a4fc842656c6a319ce3decc3baf8e8";
-      sha256 = "0kgbcggx5kr0h95f2gwpfr1h3wbv73pis8dkmjgmr6gpj70zsk7v";
+      rev = "975e9fbd0c154deb9c4e212490fb31cfa4257c98";
+      sha256 = "0xfwwmzmwj9s67jwr7bpazhbwdqpva7yzy4xsdx1l8pmaszni977";
     };
     meta.homepage = "https://github.com/edluffy/hologram.nvim/";
   };
@@ -2136,12 +2136,12 @@ let
 
   julia-vim = buildVimPluginFrom2Nix {
     pname = "julia-vim";
-    version = "2021-04-26";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "JuliaEditorSupport";
       repo = "julia-vim";
-      rev = "b437dae505b0fbb6aac92a9aad8f4fb68ea1259b";
-      sha256 = "1l2kiaa44hd7x9a0w1x5kwfvqnkkzi9i7qnjnhch083chmjjy13d";
+      rev = "ce59786999f4715b5c806a3a2162a1cfcf5e9cfd";
+      sha256 = "1c9qyx5zd7ynpm2inws7kkig1zvs6j6j2gg5kl63ngvlcsihd0qk";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
   };
@@ -2412,12 +2412,12 @@ let
 
   lsp-trouble-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-trouble-nvim";
-    version = "2021-05-09";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lsp-trouble.nvim";
-      rev = "0c9ca5e10c2e5dd8d8479e864e12383b1d614273";
-      sha256 = "096af9qdz15kqjq9alajjdr6n3r2az2673imyva0mcwpwc007pl5";
+      rev = "1dd72c22403519c160b0c694762091971bcf191e";
+      sha256 = "1831ywvbl51zd8m5rkpq59dw6s55snsyv94n28vl316cm65q28ji";
     };
     meta.homepage = "https://github.com/folke/lsp-trouble.nvim/";
   };
@@ -2460,12 +2460,12 @@ let
 
   lualine-nvim = buildVimPluginFrom2Nix {
     pname = "lualine-nvim";
-    version = "2021-05-09";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "hoob3rt";
       repo = "lualine.nvim";
-      rev = "82826ef66111f1bbdcc6f8e5bc2b19d7e0542229";
-      sha256 = "03wbgqhhyjc7fjhmdmywkirlwy78ziagpvjar4gvjl41rbjn7fgp";
+      rev = "11280b44f2f3812b60e99b7e07e4d37bee418cb0";
+      sha256 = "0ifbkjsgjilczmqn2lpkw4jl648hns06klx07md9y3sc5i5jqjjq";
     };
     meta.homepage = "https://github.com/hoob3rt/lualine.nvim/";
   };
@@ -3240,12 +3240,12 @@ let
 
   nvim-dap = buildVimPluginFrom2Nix {
     pname = "nvim-dap";
-    version = "2021-05-07";
+    version = "2021-05-10";
     src = fetchFromGitHub {
       owner = "mfussenegger";
       repo = "nvim-dap";
-      rev = "f0c43dca363a52acf2b8e5a62363f2def40139f8";
-      sha256 = "0dmzk93d7xpiyvavsg7s3snfrcpnsyl2is87bild6vj9l13hl7pb";
+      rev = "7c6d12132339d7ef4136dabdd316a20e9c7dd8cf";
+      sha256 = "1hjf67pn1brrfyl4lyqg4y7112r8p3ak85iimgb9pqgrifr3xpzm";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
   };
