@@ -99,20 +99,23 @@ re-enter the shell.
 nix-shell generate-shell.nix
 
 Rscript generate-r-packages.R cran  > cran-packages.nix.new
-mv cran-packages.nix.new cran-packages.nix
-
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
-mv bioc-packages.nix.new bioc-packages.nix
-
 Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.nix.new
-mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
-
 Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
+
+sleep 1
+
+mv cran-packages.nix.new cran-packages.nix
+mv bioc-packages.nix.new bioc-packages.nix
+mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
 mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
+`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming, but sometimes a delay is needed for the OS to release locks on the new file. 
 
+If `nix-shell generate-shell.nix` is causing a large number of packages to rebuild from source and taking too long, then any environment with both `R` and `nix-hash` should work as a substitute, as long as the packages `data.table`, `parallel` and `BiocManager` are installed and the `R` version matches master.
+
+If some packages will not evaluate because the `sha256` field is empty, delete the entries and re-run the script above.
 
 ## Testing if the Nix-expression could be evaluated
 

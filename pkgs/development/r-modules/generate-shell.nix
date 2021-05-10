@@ -12,6 +12,7 @@ stdenv.mkDerivation {
       packages = with rPackages; [
         data_table
         parallel
+        BiocManager
       ];
     })
   ];
