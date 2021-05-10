@@ -3,23 +3,18 @@
 { name
 , version
 , src
-, setupHook ? null
 , buildInputs ? []
 , beamDeps ? []
 , postPatch ? ""
 , compilePorts ? false
-, installPhase ? null
-, buildPhase ? null
-, configurePhase ? null
 , meta ? {}
 , enableDebugInfo ? false
+, mixEnv ? "prod"
 , ... }@attrs:
 
 with lib;
 
 let
-
-  debugInfoFlag = lib.optionalString (enableDebugInfo || elixir.debugInfo) "--debug-info";
 
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
@@ -36,53 +31,46 @@ let
 
     inherit src;
 
-    setupHook = if setupHook == null
-    then writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
-    ''
-    else setupHook;
+    MIX_ENV = mixEnv;
+    MIX_DEBUG = if enableDebugInfo then 1 else 0;
+    HEX_OFFLINE = 1;
+
+    setupHook = attrs.setupHook or
+      writeText "setupHook.sh" ''
+        addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
+      '';
 
     inherit buildInputs;
     propagatedBuildInputs = [ hex elixir ] ++ beamDeps;
 
-    configurePhase = if configurePhase == null
-    then ''
+    configurePhase = attrs.configurePhase or ''
       runHook preConfigure
       ${erlang}/bin/escript ${bootstrapper}
       runHook postConfigure
-    ''
-    else configurePhase ;
+    '';
 
+    buildPhase = attrs.buildPhase or ''
+      runHook preBuild
+      export HEX_HOME="$TEMPDIR/hex"
+      export MIX_HOME="$TEMPDIR/mix"
+      mix compile --no-deps-check
+      runHook postBuild
+    '';
 
-    buildPhase = if buildPhase == null
-    then ''
-        runHook preBuild
-        export HEX_OFFLINE=1
-        export HEX_HOME=`pwd`
-        export MIX_ENV=prod
-        export MIX_NO_DEPS=1
-        mix compile ${debugInfoFlag} --no-deps-check
-        runHook postBuild
-    ''
-    else buildPhase;
-
-    installPhase = if installPhase == null
-    then ''
-        runHook preInstall
-        MIXENV=prod
-        if [ -d "_build/shared" ]; then
-          MIXENV=shared
-        fi
-        mkdir -p "$out/lib/erlang/lib/${name}-${version}"
-        for reldir in src ebin priv include; do
-          fd="_build/$MIXENV/lib/${name}/$reldir"
-          [ -d "$fd" ] || continue
-          cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
-          success=1
-        done
-        runHook postInstall
-    ''
-    else installPhase;
+    installPhase = attrs.installPhase or ''
+      runHook preInstall
+      if [ -d "_build/shared" ]; then
+        MIX_ENV=shared
+      fi
+      mkdir -p "$out/lib/erlang/lib/${name}-${version}"
+      for reldir in src ebin priv include; do
+        fd="_build/$MIX_ENV/lib/${name}/$reldir"
+        [ -d "$fd" ] || continue
+        cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
+        success=1
+      done
+      runHook postInstall
+    '';
 
     passthru = {
       packageName = name;

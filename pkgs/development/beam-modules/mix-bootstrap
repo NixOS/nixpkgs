@@ -24,6 +24,7 @@
 
 -record(data, {version
               , erl_libs
+              , mixenv
               , root
               , name}).
 
@@ -48,6 +49,7 @@ fixup_app_name(Path) ->
 gather_required_data_from_the_environment(_) ->
     {ok, #data{ version = guard_env("version")
               , erl_libs = os:getenv("ERL_LIBS", [])
+              , mixenv = os:getenv("MIX_ENV", "prod")
               , root = code:root_dir()
               , name = guard_env("name")}}.
 
@@ -64,9 +66,10 @@ guard_env(Name) ->
     end.
 
 -spec bootstrap_libs(#data{}) -> ok.
-bootstrap_libs(#data{erl_libs = ErlLibs}) ->
+bootstrap_libs(#data{erl_libs = ErlLibs, mixenv = MixEnv}) ->
     io:format("Bootstrapping dependent libraries~n"),
-    Target = "_build/prod/lib/",
+    Target = io_lib:format("_build/~s/lib/", [MixEnv]),
+    io:format("Target is ~s", [Target]),
     Paths = string:tokens(ErlLibs, ":"),
     CopiableFiles =
         lists:foldl(fun(Path, Acc) ->
