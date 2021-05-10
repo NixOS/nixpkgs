@@ -334,6 +334,7 @@ broken-packages:
   - bindings-apr
   - bindings-bfd
   - bindings-cctools
+  - bindings-common
   - bindings-dc1394
   - bindings-eskit
   - bindings-EsounD
@@ -1006,6 +1007,7 @@ broken-packages:
   - diet
   - diff
   - diffcabal
+  - differential
   - DifferentialEvolution
   - diffmap
   - difftodo
@@ -2127,6 +2129,7 @@ broken-packages:
   - houseman
   - hp2any-core
   - hpack-convert
+  - hpapi
   - hpasteit
   - HPath
   - hpc-coveralls
@@ -5232,7 +5235,9 @@ broken-packages:
   - zendesk-api
   - zenhack-prelude
   - zeno
+  - zeromq4-clone-pattern
   - zeromq4-conduit
+  - zeromq4-patterns
   - zeromq-haskell
   - zettelkast
   - ZFS
