@@ -1,10 +1,11 @@
-{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums ? null, version ? null }:
+{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq
+, bignums ? null, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "interval";
   owner = "coqinterval";
   domain = "gitlab.inria.fr";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.8" ;        out = "4.1.1"; }
     { case = range "8.8" "8.12"; out = "4.0.0"; }

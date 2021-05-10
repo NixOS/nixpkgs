@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 with lib;
 
 mkCoqDerivation {
@@ -8,7 +8,7 @@ mkCoqDerivation {
   release."8.12.0".rev    = "v8.12.0";
   release."8.12.0".sha256 = "sha256-0xBrw9+4g14niYdNqp0nx00fPJoSSnaDSDEaIVpPfjs=";
 
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.7"; out = "8.12.0"; }
   ] null;

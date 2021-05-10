@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, mathcomp, equations, paramcoq, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp, equations, paramcoq, version ? null, origin ? null }:
 with lib;
 
 mkCoqDerivation {
@@ -8,7 +8,7 @@ mkCoqDerivation {
   release."0.3".rev    = "v0.3";
   release."0.3".sha256 = "sha256-rXP/vJqVEg2tN/I9LWV13YQ1+C7M6lzGu3oI+7pSZzg=";
 
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.11"; out = "0.3"; }
   ] null;

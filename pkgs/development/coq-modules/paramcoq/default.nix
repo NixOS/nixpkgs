@@ -1,8 +1,8 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "paramcoq";
-  inherit version;
+  inherit version origin;
   defaultVersion = if versions.range "8.7" "8.13" coq.coq-version
     then "1.1.2+coq${coq.coq-version}" else null;
   displayVersion = { paramcoq = "1.1.2"; };

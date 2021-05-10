@@ -1,10 +1,10 @@
-{ lib, mkCoqDerivation, coq, ssreflect, version ? null }:
+{ lib, mkCoqDerivation, coq, ssreflect, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
 
   pname = "coq-haskell";
   owner = "jwiegley";
-  inherit version;
+  inherit version origin;
   defaultVersion = if versions.range "8.5" "8.8" coq.coq-version then "20171215" else null;
   release."20171215".rev    = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
   release."20171215".sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";

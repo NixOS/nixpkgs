@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, which, autoconf,
-  coq, ssreflect, version ? null }:
+  coq, ssreflect, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "coquelicot";
   owner = "coquelicot";
   domain = "gitlab.inria.fr";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.8" ;        out = "3.2.0"; }
     { case = range "8.8" "8.13"; out = "3.1.0"; }

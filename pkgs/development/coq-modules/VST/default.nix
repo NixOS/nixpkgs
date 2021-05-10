@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, compcert, version ? null }:
+{ lib, mkCoqDerivation, coq, compcert, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "coq${coq.coq-version}-VST";
@@ -6,7 +6,7 @@ with lib; mkCoqDerivation {
   displayVersion = { coq = false; };
   owner = "PrincetonUniversity";
   repo = "VST";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.12" "8.13"; out = "2.7.1"; }
     { case = "8.11"; out = "2.6"; }

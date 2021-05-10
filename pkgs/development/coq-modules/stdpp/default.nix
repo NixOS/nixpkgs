@@ -1,8 +1,8 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation rec {
   pname = "stdpp";
-  inherit version;
+  inherit version origin;
   domain = "gitlab.mpi-sws.org";
   owner = "iris";
   defaultVersion = with versions; switch coq.coq-version [

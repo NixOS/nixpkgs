@@ -1,10 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
   pname = "bignums";
   owner = "coq";
   displayVersion = { bignums = ""; };
-  inherit version;
+  inherit version origin;
   defaultVersion = if versions.isGe "8.5" coq.coq-version
     then "${coq.coq-version}.0" else null;
 

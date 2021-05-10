@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, mathcomp, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp, version ? null, origin ? null }:
 with lib;
 
 mkCoqDerivation {
@@ -8,7 +8,7 @@ mkCoqDerivation {
   release."1.2.3".rev    = "v1.2.3";
   release."1.2.3".sha256 = "sha256-gwKfUa74fIP7j+2eQgnLD7AswjCtOFGHGaIWb4qI0n4=";
 
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch mathcomp.version [
     { case = pred.inter (isGe "1.11.0") (isLt "1.13"); out = "1.2.3"; }
   ] null;

@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, ssreflect, equations, version ? null }:
+{ lib, mkCoqDerivation, coq, ssreflect, equations, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation {
 
@@ -10,7 +10,7 @@ with lib; mkCoqDerivation {
   release."20180709".rev    = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
   release."20180709".sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
 
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.8" "8.9"; out = "20190414"; }
     { case = range "8.6" "8.7"; out = "20180709"; }

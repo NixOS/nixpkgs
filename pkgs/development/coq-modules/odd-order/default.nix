@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, mathcomp, version ? null }:
+{ lib, mkCoqDerivation, mathcomp, version ? null, origin ? null }:
 with lib;
 
 mkCoqDerivation {
@@ -8,7 +8,7 @@ mkCoqDerivation {
   release."1.12.0".rev    = "mathcomp-odd-order.1.12.0";
   release."1.12.0".sha256 = "sha256-omsfdc294CxKAHNMMeqJCcVimvyRCHgxcQ4NJOWSfNM=";
 
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch mathcomp.character.version [
     { case = pred.union (isGe "1.10.0") (isEq "dev"); out = "1.12.0"; }
   ] null;

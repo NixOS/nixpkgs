@@ -1,10 +1,10 @@
-{ lib, mkCoqDerivation, coq, mathcomp-algebra, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp-algebra, version ? null, origin ? null }:
 
 with lib; mkCoqDerivation rec {
   pname = "mathcomp-zify";
   repo = "mczify";
   owner = "math-comp";
-  inherit version;
+  inherit version origin;
 
   defaultVersion = with versions;
      switch [ coq.coq-version mathcomp-algebra.version ] [

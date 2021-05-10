@@ -1,9 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null , paco, coq-ext-lib }:
+{ lib, mkCoqDerivation, coq, paco, coq-ext-lib
+  , version ? null, origin ? null}:
 
 with lib; mkCoqDerivation rec {
   pname = "InteractionTrees";
   owner = "DeepSpec";
-  inherit version;
+  inherit version origin;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.10" "8.13";  out = "4.0.0"; }
   ] null;

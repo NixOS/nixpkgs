@@ -1,11 +1,11 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null, useDune2 ? false }@args:
+  lib, version ? null, origin ? null, useDune2 ? false }@args:
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
   owner = "math-comp";
-  inherit version;
+  inherit version origin;
   defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
       { cases = [ (range "8.10" "8.13") "1.12.0" ];             out = "1.5.4"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
