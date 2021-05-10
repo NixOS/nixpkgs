@@ -665,6 +665,8 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  awscrt = callPackage ../development/python-modules/awscrt { };
+
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
 
   awslambdaric = callPackage ../development/python-modules/awslambdaric { };
@@ -6733,6 +6735,8 @@ in {
   pytmx = callPackage ../development/python-modules/pytmx { };
 
   pytoml = callPackage ../development/python-modules/pytoml { };
+
+  pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
   pytools = callPackage ../development/python-modules/pytools { };
 
