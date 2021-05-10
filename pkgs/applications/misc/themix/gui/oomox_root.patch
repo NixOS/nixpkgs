@@ -1,0 +1,15 @@
+diff --git a/oomox_gui/config.py b/oomox_gui/config.py
+index 4bfd874c..5a43b3dd 100644
+--- a/oomox_gui/config.py
++++ b/oomox_gui/config.py
+@@ -3,7 +3,9 @@ import os
+ 
+ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+ 
+-OOMOX_ROOT_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../"))
++OOMOX_ROOT_DIR = os.getenv("OOMOX_ROOT")
++if not OOMOX_ROOT_DIR:
++    OOMOX_ROOT_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../"))
+ 
+ COLORS_DIR = os.path.join(
+     OOMOX_ROOT_DIR, "colors/"

@@ -1,0 +1,15 @@
+diff --git a/change_color.sh b/change_color.sh
+index f1c72574..39155b07 100755
+--- a/change_color.sh
++++ b/change_color.sh
+@@ -209,8 +209,10 @@ rm -fr "$DEST_PATH"
+ mkdir -p "$DEST_PATH"
+ echo -e "\nBuilding theme at $DEST_PATH\n"
+ cp -r "$SRC_PATH/src/index.theme" "$DEST_PATH"
++chmod +w "$DEST_PATH/index.theme"
+ for FILEPATH in "${PATHLIST[@]}"; do
+ 	cp -r "$SRC_PATH/$FILEPATH" "$DEST_PATH"
++	chmod -R +w "$DEST_PATH/$(basename $FILEPATH)"
+ done
+ 
+ 
