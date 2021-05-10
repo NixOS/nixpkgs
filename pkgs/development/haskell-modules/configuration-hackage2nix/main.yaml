@@ -260,6 +260,7 @@ unsupported-platforms:
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
+  large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin ]
   libtelnet:                                    [ x86_64-darwin ]
