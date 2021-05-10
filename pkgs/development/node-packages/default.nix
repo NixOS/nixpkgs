@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv }:
+{ pkgs, nodejs, stdenv, fetchFromGitHub }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -207,6 +207,26 @@ let
         ]}
       '';
     };
+
+    netlify-cli =
+      let
+        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
+          version = "0.11.14";
+
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            sha256 = "sha256-N7WNam0zF1t++nLVhuxXSDGV/JaFtlFhufp+etinvmM=";
+          };
+
+        });
+      in
+      super.netlify-cli.override {
+        preRebuild = ''
+          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
+        '';
+      };
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
