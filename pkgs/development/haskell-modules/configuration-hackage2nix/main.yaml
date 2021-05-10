@@ -359,3 +359,22 @@ dont-distribute-packages:
   - tensorflow-mnist
   - yices-easy
   - yices-painless
+
+  # These packages don‘t build because they use removed webkitgtk24x-gtk3.
+  - dialog
+  - ghcjs-dom-webkit
+  - gi-webkit
+  - hs-mesos
+  - jsaddle-webkitgtk
+  - jsc
+  - lambdacat
+  - manatee-all
+  - manatee-browser
+  - manatee-reader
+  - markup-preview
+  - spike
+  - web-browser-in-haskell
+  - webkit
+  - webkitgtk3
+  - webkitgtk3-javascriptcore
+  - websnap
