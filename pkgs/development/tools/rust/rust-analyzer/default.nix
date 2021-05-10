@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake, fetchpatch
 , libiconv
 , useMimalloc ? false
 , doCheck ? true
@@ -6,15 +6,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-04-19";
-  cargoSha256 = "sha256-CXkI3CQ/v6RBMM2Dpp2u+qnRwba+nqzeaPSJGBiQUoY=";
+  version = "2021-05-10";
+  cargoSha256 = "sha256-PUecBFdYIJFZa5IwwNnuXOkuxtyrzWhxy3C+2jv/hvU=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-W/cUwZEvlUXzqQ/futeNFwDWR/cTL/RLZaW2srIs83Q=";
+    sha256 = "sha256-oz6FqRMEUUTS4X2XhpWjp2JIgl1A6wQv2OU8auwUoVM=";
   };
+
+  patchFlags = [ "-Rp1" ];
+  patches = [
+    # Revert updates which require rust 1.52.0.
+    # We currently have rust 1.51.0 in nixpkgs.
+    # https://github.com/rust-analyzer/rust-analyzer/pull/8718
+    (fetchpatch {
+      url = "https://github.com/rust-analyzer/rust-analyzer/pull/8718/commits/607d8a2f61e56fabb7a3bc5132592917fcdca970.patch";
+      sha256 = "sha256-ekbeTx+q4QMgQ55SsaeWTBh4Gm87/FuaVIfUIZeDHqw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/rust-analyzer/rust-analyzer/pull/8718/commits/6a16ec52aa0d91945577c99cdf421b303b59301e.patch";
+      sha256 = "sha256-W1pBE1qP8pepQWDKxdSWytsc9I2SVutf1YHOPfrLK7E=";
+    })
+  ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
 
