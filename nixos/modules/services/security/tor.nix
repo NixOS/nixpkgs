@@ -715,7 +715,7 @@ in
               (submodule {
                 options = {
                   onion = mkOption {
-                    type = strMatching "[a-z2-7]{16}(\\.onion)?";
+                    type = strMatching "[a-z2-7]{16}\\.onion";
                     description = "Onion address.";
                     example = "xxxxxxxxxxxxxxxx.onion";
                   };
