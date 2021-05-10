@@ -8850,6 +8850,18 @@ let
     meta.homepage = "https://github.com/dag/vim2hs/";
   };
 
+  vim_current_word = buildVimPluginFrom2Nix {
+    pname = "vim_current_word";
+    version = "2021-01-27";
+    src = fetchFromGitHub {
+      owner = "dominikduda";
+      repo = "vim_current_word";
+      rev = "84ae9300de73cf878c805a6228a58d408b6b829d";
+      sha256 = "0k0wq3aqrbwrqyfz36qdqzyq7cw16d34yvw0gvzyg7iany0z0r6r";
+    };
+    meta.homepage = "https://github.com/dominikduda/vim_current_word/";
+  };
+
   vimacs = buildVimPluginFrom2Nix {
     pname = "vimacs";
     version = "2016-03-24";
