@@ -7160,6 +7160,8 @@ in {
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
+  rtoml = callPackage ../development/python-modules/rtoml { };
+
   Rtree = callPackage ../development/python-modules/Rtree {
     inherit (pkgs) libspatialindex;
   };
