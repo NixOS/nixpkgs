@@ -7,7 +7,6 @@ dont-distribute-packages:
  - 4Blocks
  - a50
  - abcBridge
- - abeson
  - AbortT-monadstf
  - AbortT-mtl
  - accelerate-arithmetic
@@ -36,8 +35,6 @@ dont-distribute-packages:
  - AERN-Real-Interval
  - AERN-RnToRm
  - AERN-RnToRm-Plot
- - aeson-bson
- - AesonBson
  - aeson-native
  - afv
  - agda-server
@@ -299,10 +296,6 @@ dont-distribute-packages:
  - bronyradiogermany-streaming
  - brotli-conduit
  - brotli-streams
- - bson-generic
- - bson-generics
- - bson-lens
- - bson-mapping
  - b-tree
  - btree
  - buchhaltung
@@ -354,6 +347,7 @@ dont-distribute-packages:
  - casadi-bindings-snopt-interface
  - cash
  - cassandra-cql
+ - cassandra-thrift
  - cassy
  - casui
  - categorical-algebra
@@ -392,6 +386,7 @@ dont-distribute-packages:
  - chp-transformers
  - chr-core
  - chr-lang
+ - chromatin
  - chu2
  - chunks
  - ciphersaber2
@@ -549,7 +544,6 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
- - currency-codes
  - cursedcsv
  - cv-combinators
  - cypher
@@ -856,7 +850,6 @@ dont-distribute-packages:
  - follower
  - foo
  - Forestry
- - forex2ledger
  - formal
  - FormalGrammars
  - format
@@ -931,12 +924,14 @@ dont-distribute-packages:
  - generics-mrsop-gdiff
  - genesis
  - genesis-test
+ - GenI
  - geniconvert
  - geni-gui
+ - geniserver
+ - geni-util
  - GenSmsPdu
  - GenussFold
  - geodetic
- - geojson-types
  - geolite-csv
  - getemx
  - ghc-imported-from
@@ -1036,7 +1031,6 @@ dont-distribute-packages:
  - graph-visit
  - greencard-lib
  - gridbounds
- - gridfs
  - gridland
  - grid-proto
  - GrowlNotify
@@ -1331,6 +1325,7 @@ dont-distribute-packages:
  - hinze-streams
  - hipbot
  - HipmunkPlayground
+ - Hipmunk-Utils
  - hipsql-client
  - hipsql-server
  - hirt
@@ -1370,6 +1365,7 @@ dont-distribute-packages:
  - hogre-examples
  - Holumbus-Distribution
  - Holumbus-MapReduce
+ - Holumbus-Searchengine
  - Holumbus-Storage
  - holy-project
  - hommage
@@ -1440,6 +1436,7 @@ dont-distribute-packages:
  - hsc3-sf-hsndfile
  - hsc3-unsafe
  - hsc3-utils
+ - hscassandra
  - hscope
  - hsdev
  - Hsed
@@ -1776,6 +1773,8 @@ dont-distribute-packages:
  - leksah
  - leksah-server
  - lens-utils
+ - levmar
+ - levmar-chart
  - lex-applicative
  - lgtk
  - lha
@@ -1927,6 +1926,7 @@ dont-distribute-packages:
  - MC-Fold-DP
  - mcmc
  - mcmc-samplers
+ - mDNSResponder-client
  - mealy
  - mediabus-fdk-aac
  - mediabus-rtp
@@ -1978,7 +1978,6 @@ dont-distribute-packages:
  - modular-prelude-classy
  - modulo
  - mole
- - mollie-api-haskell
  - MonadCatchIO-mtl
  - MonadCatchIO-mtl-foreign
  - MonadCatchIO-transformers-foreign
@@ -1991,8 +1990,6 @@ dont-distribute-packages:
  - Monaris
  - Monatron-IO
  - monetdb-mapi
- - mongoDB
- - mongodb-queue
  - mongrel2-handler
  - monky
  - Monocle
@@ -2034,6 +2031,7 @@ dont-distribute-packages:
  - multisetrewrite
  - murder
  - murmurhash3
+ - musicbrainz-email
  - music-graphics
  - music-parts
  - music-pitch
@@ -2208,10 +2206,8 @@ dont-distribute-packages:
  - periodic-server
  - perm
  - PermuteEffects
- - persistent-audit
  - persistent-hssqlppp
  - persistent-map
- - persistent-mongoDB
  - persona-idp
  - peyotls
  - peyotls-codec
@@ -2236,7 +2232,6 @@ dont-distribute-packages:
  - pipes-files
  - pipes-illumina
  - pipes-key-value-csv
- - pipes-mongodb
  - pipes-p2p
  - pipes-p2p-examples
  - pisigma
@@ -2311,11 +2306,11 @@ dont-distribute-packages:
  - progressbar
  - project-m36
  - prologue
- - prolude
  - prometheus-effect
  - propane
  - proplang
  - prosidyc
+ - proteome
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
@@ -2504,6 +2499,8 @@ dont-distribute-packages:
  - rfc-servant
  - rhythm-game-tutorial
  - rib
+ - ribosome-root
+ - ribosome-test
  - ridley-extras
  - rio-process-pool
  - riot
@@ -2612,7 +2609,6 @@ dont-distribute-packages:
  - SelectSequencesFromMSA
  - selenium-server
  - self-extract
- - Semantique
  - semi-iso
  - semiring
  - semiring-num
@@ -2733,14 +2729,12 @@ dont-distribute-packages:
  - snaplet-actionlog
  - snaplet-auth-acid
  - snaplet-coffee
- - snaplet-environments
  - snaplet-hasql
  - snaplet-haxl
  - snaplet-hdbc
  - snaplet-lss
  - snaplet-mandrill
  - snaplet-mongoDB
- - snaplet-mongodb-minimalistic
  - snaplet-mysql-simple
  - snaplet-oauth
  - snaplet-postmark
@@ -2773,6 +2767,7 @@ dont-distribute-packages:
  - sounddelay
  - soundgen
  - source-code-server
+ - SourceGraph
  - sparkle
  - sparrow
  - sparsebit
@@ -2822,6 +2817,7 @@ dont-distribute-packages:
  - starrover2
  - stateful-mtl
  - static-closure
+ - statsd-client
  - statsdi
  - STLinkUSB
  - STM32-Zombie
@@ -3273,12 +3269,7 @@ dont-distribute-packages:
  - yoko
  - york-lava
  - yql
- - yu-auth
- - yu-core
- - yu-launch
- - yu-tool
  - yuuko
- - yu-utils
  - zasni-gerna
  - zephyr
  - zerobin

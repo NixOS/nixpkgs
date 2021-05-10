@@ -5223,3 +5223,15 @@ broken-packages:
   - ztar
   - Zwaluw
   - zxcvbn-dvorak
+  - ordered
+  - Hipmunk
+  - hxt-cache
+  - Graphalyze
+  - ribosome
+  - Thrift
+  - bindings-levmar
+  - network-msg
+  - reflex-dom-helper
+  - network-metrics
+  - ats-pkg
+  - digest-pure
