@@ -16721,10 +16721,10 @@ let
 
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
-    version = "3.021";
+    version = "3.022";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.021.tar.gz";
-      sha256 = "1hc22s5gdspr5nyfmix3cwdzcw7z66pcqxy422ksmbninbzv4z93";
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
+      sha256 = "0cfafyci5xar567z82w0vcjrwa6inf1a9ydszgkz51bi1ilj8as8";
     };
     checkInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
