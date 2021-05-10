@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , rust
+, libiconv
 , Security
 }:
 
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-2eOWhxKZ+YPj5oKTe5g7PyeakiSNnPz27dK150GAcVQ=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   cargoSha256 = "sha256-QmchuY+4R7w0zMOdReH1m8idl9RI1hHE9VtbwT2K9YM=";
 
