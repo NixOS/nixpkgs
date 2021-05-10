@@ -2,13 +2,7 @@
 , asio, boost, check, openssl, cmake
 }:
 
-let
-  galeraLibs = buildEnv {
-    name = "galera-lib-inputs-united";
-    paths = [ openssl.out boost check ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mariadb-galera";
   version = "26.4.8";
 
@@ -29,7 +23,8 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     # for backwards compatibility
-    ln -s . $out/lib/galera
+    mkdir $out/lib/galera
+    ln -s $out/lib/libgalera_smm.so $out/lib/galera/libgalera_smm.so
   '';
 
   meta = with lib; {
