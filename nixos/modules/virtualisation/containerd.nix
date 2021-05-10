@@ -54,6 +54,9 @@ in
         LimitNOFILE = "infinity";
         TasksMax = "infinity";
         OOMScoreAdjust = "-999";
+
+        StateDirectory = "containerd";
+        RuntimeDirectory = "containerd";
       };
     };
   };
