@@ -13,17 +13,18 @@
 , wcmatch
 , enrich
 , python
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.0.2";
+  version = "5.0.8";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vgt/KqNozTPaON/I19SybBZuo7bbl3Duq5dTBTMlj44=";
+    sha256 = "sha256-tnuWKEB66bwVuwu3H3mHG99ZP+/msGhMDMRL5fyQgD8=";
   };
 
   postPatch = ''
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   buildInputs = [ python ];
 
-  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch ];
+  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch tenacity ];
 
   checkInputs = [ pytestCheckHook pytest-xdist git ];
 
