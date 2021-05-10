@@ -41,6 +41,7 @@ cl-emb
 cl-fad
 cl-fuse
 cl-fuse-meta-fs
+cl-gobject-introspection
 cl-hooks
 cl-html-diff
 cl-html5-parser

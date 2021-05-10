@@ -6,37 +6,41 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-04-27";
+  version = "unstable-2021-05-07";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
-    rev = "0c8e718d95a6a621b9cba0caa9158915e567b076";
-    sha256 = "1jjh0dzxi7hy4mg8vag6ipfwb9qxm5lfc07njp1mx6m81nq76ybk";
+    rev = "7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d";
+    sha256 = "1z5qjid73lfn654f2k74nwgvpr88fpdfpbzhihybx9cyy1mqfz7j";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ xwayland wayland-protocols wlroots pixman
+  buildInputs = [ wayland-protocols wlroots pixman
     libxkbcommon pixman udev libevdev libX11 libGL
   ];
+
+  dontConfigure = true;
 
   preBuild = ''
     export HOME=$TMPDIR
   '';
   installPhase = ''
+    runHook preInstall
     zig build -Drelease-safe -Dxwayland -Dman-pages --prefix $out install
+    runHook postInstall
   '';
 
-  nativeBuildInputs = [ zig wayland scdoc pkg-config ];
+  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
 
+  # Builder patch install dir into river to get default config
+  # When installFlags is removed, river becomes half broken
+  # see https://github.com/ifreund/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    description = "A dynamic tiling wayland compositor";
-    longDescription = ''
-      river is a dynamic tiling wayland compositor that takes inspiration from dwm and bspwm.
-    '';
     homepage = "https://github.com/ifreund/river";
+    description = "A dynamic tiling wayland compositor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ branwright1 ];

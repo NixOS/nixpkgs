@@ -4351,6 +4351,8 @@ in {
 
   mutatormath = callPackage ../development/python-modules/mutatormath { };
 
+  mutesync = callPackage ../development/python-modules/mutesync { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
@@ -5715,6 +5717,8 @@ in {
 
   pykodi = callPackage ../development/python-modules/pykodi { };
 
+  pykoplenti = callPackage ../development/python-modules/pykoplenti { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
@@ -5814,6 +5818,8 @@ in {
   pyment = callPackage ../development/python-modules/pyment { };
 
   pymetar = callPackage ../development/python-modules/pymetar { };
+
+  pymeteireann = callPackage ../development/python-modules/pymeteireann { };
 
   pymetno = callPackage ../development/python-modules/pymetno { };
 

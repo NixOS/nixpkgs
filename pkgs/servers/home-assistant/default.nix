@@ -38,8 +38,17 @@ let
     })
 
     # Pinned due to API changes in pyjwt>=2.0
-    (mkOverride "pyjwt" "1.7.1"
-      "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd")
+    (self: super: {
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.7.1";
+        src = oldAttrs.src.override {
+          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
+        };
+        disabledTests = [
+          "test_ec_verify_should_return_false_if_signature_invalid"
+        ];
+      });
+    })
 
     # Pinned due to bug in ring-doorbell 0.7.0
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
@@ -193,6 +202,7 @@ in with py.pkgs; buildPythonApplication rec {
     "accuweather"
     "airly"
     "analytics"
+    "androidtv"
     "alert"
     "api"
     "auth"
@@ -296,6 +306,7 @@ in with py.pkgs; buildPythonApplication rec {
     "media_player"
     "media_source"
     "met"
+    "met_eireann"
     "minecraft_server"
     "mobile_app"
     "modbus"
@@ -306,6 +317,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "mutesync"
     "nexia"
     "notify"
     "notion"

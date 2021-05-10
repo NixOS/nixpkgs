@@ -276,4 +276,5 @@ $out/lib/common-lisp/query-fs"
     (extraLispDeps (with quicklisp-to-nix-packages; [cl-syslog]));
   md5 = ifLispNotIn ["sbcl" "ccl" "gcl"]
     (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
+  cl-gobject-introspection = addNativeLibs (with pkgs; [glib gobject-introspection]);
 }

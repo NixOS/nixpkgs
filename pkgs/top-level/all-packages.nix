@@ -808,6 +808,8 @@ in
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  xcd = callPackage ../tools/misc/xcd { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
@@ -1478,6 +1480,8 @@ in
   hakrawler = callPackage ../tools/security/hakrawler { };
 
   harvid = callPackage ../tools/video/harvid { };
+
+  hilbish = callPackage ../shells/hilbish { };
 
   hime = callPackage ../tools/inputmethods/hime {};
 
@@ -10620,6 +10624,14 @@ in
     profiledCompiler = false;
   });
 
+  gfortran11 = wrapCC (gcc11.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   libgccjit = gcc.cc.override {
     name = "libgccjit";
     langFortran = false;
@@ -10663,6 +10675,15 @@ in
   });
 
   gnat10 = wrapCC (gcc10.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat6;
+  });
+
+  gnat11 = wrapCC (gcc11.cc.override {
     name = "gnat";
     langC = true;
     langCC = false;
@@ -17654,7 +17675,9 @@ in
 
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
-  sofia_sip = callPackage ../development/libraries/sofia-sip { };
+  sofia_sip = callPackage ../development/libraries/sofia-sip {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
 
   soil = callPackage ../development/libraries/soil {
     inherit (darwin.apple_sdk.frameworks) Carbon;
@@ -25438,6 +25461,8 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
+    # https://github.com/pdfpc/pdfpc/issues/594
+    vala = vala_0_50;
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
 
@@ -26216,14 +26241,7 @@ in
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
-  stumpwm = callPackage ../applications/window-managers/stumpwm {
-    version = "latest";
-  };
-
-  stumpwm-git = stumpwm.override {
-    version = "git";
-    inherit sbcl lispPackages;
-  };
+  stumpwm = lispPackages.stumpwm;
 
   sublime = callPackage ../applications/editors/sublime/2 { };
 
@@ -26442,6 +26460,8 @@ in
   };
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
+
+  timew-sync-server = callPackage ../applications/misc/timew-sync-server { };
 
   timg = callPackage ../tools/graphics/timg { };
 

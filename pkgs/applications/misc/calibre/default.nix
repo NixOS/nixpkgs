@@ -25,11 +25,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.16.1";
+  version = "5.17.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-lTXCW0MGNOezecaGO9c2JGU4ylwpPmBaMXTY3nLNcrE=";
+    hash = "sha256-rdiBL3Y3q/0wFfWGE4jGkWakgV8hA9HjDcKXso6tVrs=";
   };
 
   patches = [
@@ -114,7 +114,6 @@ mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${python3Packages.sip}/bin/sip
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
