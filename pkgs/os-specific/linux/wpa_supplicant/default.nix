@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
 , dbus, readline ? null, pcsclite ? null
+
+, readOnlyModeSSIDs ? false
 }:
 
 with lib;
@@ -43,6 +45,9 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/cgit/hostap/patch/?id=a0541334a6394f8237a4393b7372693cd7e96f15";
       sha256 = "1gbhlz41x1ar1hppnb76pqxj6vimiypy7c4kq6h658637s4am3xg";
     })
+  ] ++ lib.optionals readOnlyModeSSIDs [
+    # Allow read-only networks
+    ./0001-Implement-read-only-mode-for-ssids.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -134,7 +139,7 @@ stdenv.mkDerivation rec {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;
   };
 }

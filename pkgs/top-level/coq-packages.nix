@@ -36,9 +36,11 @@ let
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
+      goedel = callPackage ../development/coq-modules/goedel {};
       heq = callPackage ../development/coq-modules/heq {};
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
+      hydra-battles = callPackage ../development/coq-modules/hydra-battles {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
@@ -63,6 +65,7 @@ let
       odd-order = callPackage ../development/coq-modules/odd-order { };
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
+      pocklington = callPackage ../development/coq-modules/pocklington {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
@@ -70,9 +73,11 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {
-        compcert = compcert.override { version = "3.7"; };
-      };
+      VST = callPackage ../development/coq-modules/VST (with lib.versions;
+        lib.switch coq.coq-version [
+          { case = "8.11"; out = { compcert = compcert.override { coqPackages = self; version = "3.7"; }; }; }
+          { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; }; }; }
+        ] {});
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 
@@ -122,9 +127,7 @@ in rec {
   coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages_8_12 = mkCoqPackages coq_8_12;
   coqPackages_8_13 = mkCoqPackages coq_8_13;
-  coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_11
-  );
+  coqPackages = recurseIntoAttrs coqPackages_8_11;
   coq = coqPackages.coq;
 
 }

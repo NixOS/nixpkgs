@@ -24,7 +24,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "snap7"
-    "snap7.six"
     "snap7.util"
   ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
+, goffice, gnome, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
 
@@ -20,15 +20,16 @@ in stdenv.mkDerivation rec {
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    goffice gtk3 gnome3.adwaita-icon-theme
+    goffice gtk3 gnome.adwaita-icon-theme
     python pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

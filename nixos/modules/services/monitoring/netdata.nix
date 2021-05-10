@@ -149,8 +149,9 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
-        (pkgs.python3.withPackages cfg.python.extraPackages);
+      path = (with pkgs; [ curl gawk iproute2 which ])
+        ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
+        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
@@ -182,6 +183,9 @@ in {
         ConfigurationDirectory = "netdata";
         ConfigurationDirectoryMode = "0755";
         # Capabilities
+        AmbientCapabilities = [
+          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
+        ];
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
           "CAP_DAC_READ_SEARCH"   # is required for apps plugin
@@ -191,6 +195,8 @@ in {
           "CAP_SYS_PTRACE"        # is required for apps plugin
           "CAP_SYS_RESOURCE"      # is required for ebpf plugin
           "CAP_NET_RAW"           # is required for fping app
+          "CAP_SYS_CHROOT"        # is required for cgroups plugin
+          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
         ];
         # Sandboxing
         ProtectSystem = "full";

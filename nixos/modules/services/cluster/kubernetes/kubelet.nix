@@ -142,7 +142,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {

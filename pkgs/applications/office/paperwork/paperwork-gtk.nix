@@ -2,9 +2,9 @@
 , python3Packages
 , gtk3
 , cairo
-, gnome3
+, gnome
 , librsvg
-, xvfb_run
+, xvfb-run
 , dbus
 , libnotify
 , wrapGAppsHook
@@ -12,6 +12,7 @@
 , which
 , gettext
 , gobject-introspection
+, gdk-pixbuf
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,17 +54,18 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   nativeBuildInputs = [
     wrapGAppsHook
     gobject-introspection
     (lib.getBin gettext)
     which
+    gdk-pixbuf # for the setup hook
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libnotify
     librsvg
     gtk3

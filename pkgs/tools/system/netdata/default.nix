@@ -8,6 +8,7 @@
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
 , withDebug ? false
+, fetchpatch
 }:
 
 with lib;
@@ -15,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.29.3";
+  version = "1.30.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-GWIQZEC5agJ+Zw7l58IIAJhXP6dxirCmWVBJulzBO5Q=";
+    sha256 = "0cp6gbn38f1cr0jkr64vvwz005cvnwj3hgfxs147wap9w228k46r";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -39,6 +40,11 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # cgroups: fix network interfaces detection when using virsh
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/11096.patch";
+      sha256 = "0f2rd7kgbwbyq9wyn085d213ifvivnpl3qlx1gjrg42rkbi4n8jj";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -81,6 +87,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

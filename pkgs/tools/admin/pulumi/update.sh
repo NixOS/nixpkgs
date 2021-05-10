@@ -3,31 +3,32 @@
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="2.24.1"
+VERSION="3.1.0"
 
 # Grab latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    "auth0=1.10.0"
-    "aws=3.36.0"
-    "cloudflare=2.14.2"
-    "consul=2.9.1"
-    "datadog=2.17.1"
-    "digitalocean=3.7.0"
-    "docker=2.9.1"
-    "gcp=4.19.0"
-    "github=3.4.0"
-    "gitlab=3.8.1"
-    "hcloud=0.7.1"
-    "kubernetes=2.8.3"
-    "mailgun=2.5.1"
-    "mysql=2.5.1"
-    "openstack=2.17.1"
+    "auth0=2.0.0"
+    "aws=4.0.0"
+    "cloudflare=3.0.0"
+    "consul=3.0.0"
+    "datadog=3.0.0"
+    "digitalocean=4.0.0"
+    "docker=3.0.0"
+    "gcp=5.0.0"
+    "github=4.0.0"
+    "gitlab=4.0.0"
+    "hcloud=1.0.0"
+    "kubernetes=3.0.0"
+    "linode=3.0.0"
+    "mailgun=3.0.0"
+    "mysql=3.0.0"
+    "openstack=3.0.0"
     "packet=3.2.2"
-    "postgresql=2.9.0"
-    "random=3.1.1"
-    "vault=3.5.1"
-    "vsphere=2.13.1"
+    "postgresql=3.0.0"
+    "random=4.0.0"
+    "vault=4.0.0"
+    "vsphere=3.0.0"
 )
 
 function genMainSrc() {

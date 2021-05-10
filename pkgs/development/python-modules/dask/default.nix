@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , bokeh
 , buildPythonPackage
 , fetchpatch
@@ -77,9 +78,7 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
-  disabledTests = [
-    "test_annotation_pack_unpack"
-    "test_annotations_blockwise_unpack"
+  disabledTests = lib.optionals stdenv.isDarwin [
     # this test requires features of python3Packages.psutil that are
     # blocked in sandboxed-builds
     "test_auto_blocksize_csv"

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modules, baseModules, ... }:
+{ config, lib, pkgs, modules, baseModules, specialArgs, ... }:
 
 with lib;
 
@@ -13,7 +13,7 @@ let
   # !!! fix this
   children = mapAttrs (childName: childConfig:
       (import ../../../lib/eval-config.nix {
-        inherit baseModules;
+        inherit baseModules specialArgs;
         system = config.nixpkgs.initialSystem;
         modules =
            (optionals childConfig.inheritParentConfig modules)

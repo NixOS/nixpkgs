@@ -1,7 +1,7 @@
 { lib, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3
+, gsettings-desktop-schemas, libosinfo, gnome
 , gtksourceview4, docutils
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
@@ -11,11 +11,11 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "virt-manager";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
-    sha256 = "0al34lxlywqnj98hdm72a38zk8ns91wkqgrc3h1mhv1kikd8pjfc";
+    url = "https://releases.pagure.org/virt-manager/${pname}-${version}.tar.gz";
+    sha256 = "11kvpzcmyir91qz0dsnk7748jbb4wr8mrc744w117qc91pcy6vrb";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;

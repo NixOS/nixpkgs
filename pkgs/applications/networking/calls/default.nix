@@ -17,10 +17,11 @@
 , desktop-file-utils
 , appstream-glib
 , libpeas
+, libgdata
 , dbus
 , vala
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -65,11 +66,12 @@ stdenv.mkDerivation rec {
     callaudiod
     gtk3
     libpeas
+    libgdata # required by some dependency transitively
   ];
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

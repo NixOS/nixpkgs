@@ -21,7 +21,7 @@ common =
   , storeDir
   , stateDir
   , confDir
-  , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+  , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
   , pname, version, suffix ? "", src
@@ -215,13 +215,13 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210326_dd77f71";
+    suffix = "pre20210503_6d2553a";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "dd77f71afe6733e9790dd001125c423cb648b7ce";
-      sha256 = "rVHzrsCtdiWjyLuHnDplG2mx+7dw5VyzZ9ReXxuCvHY=";
+      rev = "6d2553ae1496288554e871c530836428f405fd67";
+      sha256 = "sha256-YeSeyOKhBAXHlkzo4mwYr8QIjIP9AgdpJ7YdhqOO2CA=";
     };
 
     inherit storeDir stateDir confDir boehmgc;

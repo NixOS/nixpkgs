@@ -114,6 +114,9 @@
   ./programs/autojump.nix
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix
+  ./programs/bash/bash-completion.nix
+  ./programs/bash/ls-colors.nix
+  ./programs/bash/undistract-me.nix
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
@@ -130,6 +133,7 @@
   ./programs/droidcam.nix
   ./programs/environment.nix
   ./programs/evince.nix
+  ./programs/feedbackd.nix
   ./programs/file-roller.nix
   ./programs/firejail.nix
   ./programs/fish.nix
@@ -163,6 +167,7 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
+  ./programs/phosh.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
@@ -334,21 +339,21 @@
   ./services/desktops/malcontent.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/pipewire-media-session.nix
-  ./services/desktops/gnome3/at-spi2-core.nix
-  ./services/desktops/gnome3/chrome-gnome-shell.nix
-  ./services/desktops/gnome3/evolution-data-server.nix
-  ./services/desktops/gnome3/glib-networking.nix
-  ./services/desktops/gnome3/gnome-initial-setup.nix
-  ./services/desktops/gnome3/gnome-keyring.nix
-  ./services/desktops/gnome3/gnome-online-accounts.nix
-  ./services/desktops/gnome3/gnome-online-miners.nix
-  ./services/desktops/gnome3/gnome-remote-desktop.nix
-  ./services/desktops/gnome3/gnome-settings-daemon.nix
-  ./services/desktops/gnome3/gnome-user-share.nix
-  ./services/desktops/gnome3/rygel.nix
-  ./services/desktops/gnome3/sushi.nix
-  ./services/desktops/gnome3/tracker.nix
-  ./services/desktops/gnome3/tracker-miners.nix
+  ./services/desktops/gnome/at-spi2-core.nix
+  ./services/desktops/gnome/chrome-gnome-shell.nix
+  ./services/desktops/gnome/evolution-data-server.nix
+  ./services/desktops/gnome/glib-networking.nix
+  ./services/desktops/gnome/gnome-initial-setup.nix
+  ./services/desktops/gnome/gnome-keyring.nix
+  ./services/desktops/gnome/gnome-online-accounts.nix
+  ./services/desktops/gnome/gnome-online-miners.nix
+  ./services/desktops/gnome/gnome-remote-desktop.nix
+  ./services/desktops/gnome/gnome-settings-daemon.nix
+  ./services/desktops/gnome/gnome-user-share.nix
+  ./services/desktops/gnome/rygel.nix
+  ./services/desktops/gnome/sushi.nix
+  ./services/desktops/gnome/tracker.nix
+  ./services/desktops/gnome/tracker-miners.nix
   ./services/desktops/neard.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/system-config-printer.nix
@@ -509,6 +514,7 @@
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-appservice-irc.nix
+  ./services/misc/matrix-dendrite.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
@@ -632,6 +638,7 @@
   ./services/network-filesystems/xtreemfs.nix
   ./services/network-filesystems/ceph.nix
   ./services/networking/3proxy.nix
+  ./services/networking/adguardhome.nix
   ./services/networking/amuled.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
@@ -974,6 +981,7 @@
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
+  ./services/web-servers/trafficserver.nix
   ./services/web-servers/ttyd.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix

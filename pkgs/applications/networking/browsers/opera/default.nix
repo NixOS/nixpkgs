@@ -30,6 +30,7 @@
 , libnotify
 , libpulseaudio
 , libuuid
+, libxshmfence
 , mesa
 , nspr
 , nss
@@ -49,11 +50,11 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "opera";
-  version = "68.0.3618.63";
+  version = "76.0.4017.94";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    sha256 = "1643043ywz94x2yr7xyw7krfq53iwkr8qxlbydzq6zb2zina7jxd";
+    sha256 = "sha256-vjSfzkl1jIQ9P1ARDa0eOuD8CmKHIEZ+IwMB2wIVjE8=";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -94,6 +95,7 @@ in stdenv.mkDerivation rec {
     libnotify
     libuuid
     libxcb
+    libxshmfence
     mesa
     nspr
     nss

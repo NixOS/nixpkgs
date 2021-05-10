@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
-, darwin, installShellFiles
+, installShellFiles
+, CoreFoundation, CoreServices, Security, AppKit, libiconv
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -16,20 +17,20 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.71";
+  version = "0.2.72";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "sha256-dXFnM8085XVzUwk1e3SoO+O+z9lJ40htJzHBGRQ95XY=";
+    sha256 = "sha256-YEmEaf0ob2ulmQghwDYi0RtGuTdRHCoLdPnuVjxvlxE=";
   };
 
-  cargoSha256 = "sha256-VwxIH/n1DjZsMOLAREclqanb4q7QEOZ35KWWciyrnyQ=";
+  cargoSha256 = "sha256-mcWQzfMc2cJjp0EFcfG7SAM70ItwEC/N13UDiRiI3ys=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
   buildInputs =
-    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    if stdenv.isDarwin then [ libiconv CoreFoundation CoreServices Security AppKit ]
     else [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (

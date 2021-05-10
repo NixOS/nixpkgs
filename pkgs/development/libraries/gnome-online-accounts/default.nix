@@ -20,7 +20,7 @@
 , libsoup
 , docbook-xsl-nons
 , docbook_xml_dtd_412
-, gnome3
+, gnome
 , gcr
 , libkrb5
 , gvfs
@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.38.1";
+  version = "3.40.0";
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-th7P++MC3GXX+349PJFEwHGGeMhxsGgoEDGnSYpY7E4=";
+    sha256 = "sha256-GuUWypfmfbovpDKnj6wSBuNeKJIfIyipY+01u/p4znU=";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
     "-Dgtk_doc=true"
-    "-Dlastfm=true"
     "-Dman=true"
     "-Dmedia_server=true"
   ];
@@ -90,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

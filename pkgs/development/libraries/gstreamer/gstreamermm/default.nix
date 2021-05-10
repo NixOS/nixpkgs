@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, file, glibmm, gst_all_1, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, file, glibmm, gst_all_1, gnome }:
 stdenv.mkDerivation rec {
   pname = "gstreamermm";
   version = "1.10.0";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      versionPolicy = "none"; # Unpredictable version stability
+    updateScript = gnome.updateScript {
+      packageName = "gst_all_1.gstreamermm";
+      versionPolicy = "odd-unstable";
     };
   };
 

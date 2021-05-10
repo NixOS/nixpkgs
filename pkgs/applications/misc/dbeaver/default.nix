@@ -2,7 +2,6 @@
 , stdenv
 , copyDesktopItems
 , fetchFromGitHub
-, fetchpatch
 , makeDesktopItem
 , makeWrapper
 , fontconfig
@@ -18,19 +17,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "dbeaver-ce";
-  version = "21.0.3"; # When updating also update fetchedMavenDeps.sha256
+  pname = "dbeaver";
+  version = "21.0.4"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-ItM8t+gqE0ccuuimfEMUddykl+xt2eZIBd3MbpreRwA=";
+    sha256 = "sha256-jV7Pe4MsLQnIrkDnlI2SrPzSjiDHM59GbMy4G7oeQK8=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
     name = "dbeaver-${version}-maven-deps";
-    inherit src patches;
+    inherit src;
 
     buildInputs = [
       maven
@@ -51,17 +50,8 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-rsK/B39ogNu5nC41OfyAsLiwBz4gWyH+8Fj7E6+rOng=";
+    outputHash = "sha256-RspJTWVM0ZpAz4yDeKsG7wSHZ//bi3SSV5c0gbsqZKY=";
   };
-
-  patches = [
-    # Fix eclipse-color-theme URL (https://github.com/dbeaver/dbeaver/pull/12133)
-    # After April 15, 2021 eclipse-color-theme.github.com no longer redirects to eclipse-color-theme.github.io
-    (fetchpatch {
-      url = "https://github.com/dbeaver/dbeaver/commit/65d65e2c2c711cc87fddcec425a6915aa80f4ced.patch";
-      sha256 = "sha256-pxOcRYkV/5o+tHcRhHDZ1TmZSHMnKBmkNTVAlIf9nUE=";
-    })
-  ];
 
   nativeBuildInputs = [
     copyDesktopItems

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, glib, librest, gnome-online-accounts
-, gnome3, libsoup, json-glib, gobject-introspection
+, gnome, libsoup, json-glib, gobject-introspection
 , gtk-doc, pkgs, docbook-xsl-nons, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +35,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -1,4 +1,4 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_3, freeglut
+{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
@@ -29,7 +29,7 @@ mkDerivation rec {
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
     llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
-    ffmpeg_3 freeglut physfs
+    ffmpeg freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 
@@ -102,6 +102,6 @@ mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
-    inherit (ghc.meta) platforms;
+    inherit (fpc.meta) platforms;
   };
 }

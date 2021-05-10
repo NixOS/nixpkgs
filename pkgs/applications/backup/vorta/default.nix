@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , wrapQtAppsHook
+, borgbackup
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,7 +31,10 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [ borgbackup ]}
+    )
   '';
 
   meta = with lib; {

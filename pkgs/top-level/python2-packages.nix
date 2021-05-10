@@ -178,6 +178,8 @@ with self; with super; {
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
 
+  importlib-resources = callPackage ../development/python-modules/importlib-resources/2.nix { };
+
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel/4.nix { };
@@ -381,7 +383,9 @@ with self; with super; {
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
 
-  privacyidea = callPackage ../development/python-modules/privacyidea { };
+  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
+
+  ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
@@ -430,6 +434,8 @@ with self; with super; {
   };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
+
+  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
@@ -603,8 +609,6 @@ with self; with super; {
   tornado = callPackage ../development/python-modules/tornado/5.nix { };
 
   traitlets = callPackage ../development/python-modules/traitlets/4.nix { };
-
-  trollius = callPackage ../development/python-modules/trollius { };
 
   ttystatus = callPackage ../development/python-modules/ttystatus { };
 

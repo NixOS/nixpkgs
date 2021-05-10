@@ -79,8 +79,8 @@ self: super: {
 
   # Apply patches from head.hackage.
   alex = appendPatch (dontCheck super.alex) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/alex-3.2.5.patch";
-    sha256 = "0q8x49k3jjwyspcmidwr6b84s4y43jbf4wqfxfm6wz8x2dxx6nwh";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
+    sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
   });
   doctest = dontCheck (doJailbreak super.doctest_0_18_1);
   generic-deriving = appendPatch (doJailbreak super.generic-deriving) (pkgs.fetchpatch {
@@ -97,5 +97,11 @@ self: super: {
 
   # The test suite seems pretty broken.
   base64-bytestring = dontCheck super.base64-bytestring;
+
+  # 5.6 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
+  profunctors = super.profunctors_5_6_2;
+
+  # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
+  lens = super.lens_5_0_1;
 
 }

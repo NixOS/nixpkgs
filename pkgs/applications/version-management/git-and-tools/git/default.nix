@@ -14,6 +14,7 @@
 , withpcre2 ? true
 , sendEmailSupport
 , darwin
+, nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
@@ -334,6 +335,9 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
+  passthru.tests = {
+    buildbot-integration = nixosTests.buildbot;
+  };
 
   meta = {
     homepage = "https://git-scm.com/";

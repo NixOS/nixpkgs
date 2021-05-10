@@ -17,6 +17,7 @@
 , wrapGAppsHook
 , enableQt ? false
 , qt5
+, nixosTests
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
@@ -73,6 +74,10 @@ in stdenv.mkDerivation {
   ;
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+
+  passthru.tests = {
+    smoke-test = nixosTests.bittorrent;
+  };
 
   meta = {
     description = "A fast, easy and free BitTorrent client";

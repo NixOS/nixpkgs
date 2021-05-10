@@ -147,7 +147,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       # If Alice can talk to Carol, then Bob's outbound peering and Carol's
       # local peering have succeeded and everybody is connected.
       alice.wait_until_succeeds(f"ping -c 1 {carol_ip6}")
-      alice.succeed(f"ping -c 1 ${bobIp6}")
+      alice.succeed("ping -c 1 ${bobIp6}")
 
       bob.succeed("ping -c 1 ${aliceIp6}")
       bob.succeed(f"ping -c 1 {carol_ip6}")

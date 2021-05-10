@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , glib
 , gnome2
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
 , libpulseaudio
@@ -90,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.23.71";
+  version = "1.24.82";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "17ajn1vx5xwlp2yvjf1hr8vw3b7hiribv5gaipyb37zrhkff241h";
+    sha256 = "iWUJ5yLWWQvg510Atf+Pd9ya/1NnMNW2Sp/RVFn4PCc=";
   };
 
   dontConfigure = true;
@@ -104,11 +104,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gsettings-desktop-schemas gnome.adwaita-icon-theme ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $out/bin
 
       cp -R usr/share $out
@@ -148,6 +150,8 @@ stdenv.mkDerivation rec {
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+      runHook postInstall
   '';
 
   installCheckPhase = ''

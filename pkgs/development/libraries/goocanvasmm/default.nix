@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, goocanvas2, gtkmm3, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, goocanvas2, gtkmm3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "goocanvasmm";
@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "goocanvasmm2";
+      versionPolicy = "odd-unstable";
     };
   };
 

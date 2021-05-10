@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll, intltool, pkg-config, fetchpatch, dbus
-, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
+, gnome, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager";
     };
@@ -106,7 +106,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ phreedom domenkozar obadz ]);
     platforms = platforms.linux;
   };
 }

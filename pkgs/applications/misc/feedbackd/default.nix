@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d
+    sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
+  '';
+
   meta = with lib; {
     description = "A daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";

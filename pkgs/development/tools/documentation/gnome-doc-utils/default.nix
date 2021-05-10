@@ -1,4 +1,4 @@
-{ lib, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome3
+{ lib, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome
 , python2Packages }:
 
 python2Packages.buildPythonApplication rec {
@@ -24,7 +24,7 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = [ libxml2Python ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

@@ -116,6 +116,6 @@ stdenv.mkDerivation rec {
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }

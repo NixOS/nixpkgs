@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "The FTP Client that drives you anywhere";
     homepage    = "https://github.com/Alecaddd/taxi";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.linux;
   };
 }

@@ -6,7 +6,7 @@
 , docbook_xml_dtd_43
 , fetchurl
 , flatpak
-, gnome3
+, gnome
 , libgit2-glib
 , gobject-introspection
 , glade
@@ -34,16 +34,16 @@
 , webkitgtk
 , wrapGAppsHook
 , dbus
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.38.2";
+  version = "3.40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jFNco64yoZC1TZbTIHGVf+wBYYQHo2JRiMZFHngzYTs=";
+    sha256 = "16kikslvcfjqj4q3j857mq9i8cyd965b3lvfzcwijc91x3ylr15j";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ctags
     flatpak
-    gnome3.devhelp
+    gnome.devhelp
     glade
     libgit2-glib
     libpeas
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   outputs = [ "out" "devdoc" ];
@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
     "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
@@ -135,7 +134,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+    versionPolicy = "odd-unstable";
+  };
 
   meta = with lib; {
     description = "An IDE for writing GNOME-based software";

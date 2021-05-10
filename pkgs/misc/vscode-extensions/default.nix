@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
+{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -444,8 +444,8 @@ let
           mktplcRef = {
             name = "github-vscode-theme";
             publisher = "github";
-            version = "4.0.2";
-            sha256 = "06mysdwjh7km874rrk0xc0xxaqx15b4a7x1i8dly440h8w3ng5bs";
+            version = "4.1.1";
+            sha256 = "14wz2b0bn1rnmpj28c0mivz2gacla2dgg8ncv7qfx9bsxhf95g68";
           };
           meta = with lib; {
             description = "GitHub theme for VS Code";
@@ -496,8 +496,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.211";
-          sha256 = "1di2v1bhlhl1yi9rrmbq0r9gypiydl8xvj24yw64vsnkqs9yxbp3";
+          version = "0.0.213";
+          sha256 = "0fj7vvaqdldhbzm9dqh2plqlhg34jv5khd690xd87h418sv8rk95";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -702,9 +702,15 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = let
+        raw-package = callPackage ./python {
+          extractNuGet = callPackage ./python/extract-nuget.nix { };
+        };
+      in
+        buildEnv {
+          name = "vscode-extension-ms-python-python-full";
+          paths = [ raw-package self.ms-toolsai.jupyter ];
+        };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -715,6 +721,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter";
+          publisher = "ms-toolsai";
+          version = "2021.5.745244803";
+          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
+        };
+        meta = {
+          license = lib.licenses.unfree;
         };
       };
 

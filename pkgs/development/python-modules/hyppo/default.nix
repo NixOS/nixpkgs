@@ -6,6 +6,8 @@
 , numpy
 , scikitlearn
 , scipy
+, matplotlib
+, seaborn
 }:
 
 buildPythonPackage rec {
@@ -28,8 +30,12 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "--ignore=docs" ];
+  checkInputs = [ pytestCheckHook pytestcov matplotlib seaborn ];
+  disabledTestPaths = [
+    "docs"
+    "benchmarks"
+    "examples"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";

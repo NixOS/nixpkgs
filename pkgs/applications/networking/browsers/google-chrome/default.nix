@@ -38,7 +38,7 @@
 , chromium
 
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
 , libvaSupport ? true, libva
@@ -88,7 +88,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''
@@ -146,7 +146,7 @@ in stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --add-flags ${escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,crashpad_handler,nacl_helper}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done

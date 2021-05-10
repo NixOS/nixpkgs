@@ -32,6 +32,14 @@ rec {
 
       preferLocalBuild = true;
 
+      buildPhase = ''
+        python <<EOF
+        from pydoc import importfile
+        with open('driver-exports', 'w') as fp:
+          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+        EOF
+      '';
+
       doCheck = true;
       checkPhase = ''
         mypy --disallow-untyped-defs \
@@ -50,12 +58,19 @@ rec {
 
           wrapProgram $out/bin/nixos-test-driver \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+
+          install -m 0644 -vD driver-exports $out/nix-support/driver-exports
         '';
     };
 
   # Run an automated test suite in the given virtual network.
-  # `driver' is the script that runs the network.
-  runTests = driver:
+  runTests = {
+    # the script that runs the network
+    driver,
+    # a source position in the format of builtins.unsafeGetAttrPos
+    # for meta.position
+    pos,
+  }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -68,7 +83,11 @@ rec {
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
         '';
 
-      passthru = driver.passthru;
+      passthru = driver.passthru // {
+        inherit driver;
+      };
+
+      inherit pos;
     };
 
 
@@ -79,6 +98,11 @@ rec {
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , passthru ? {}
+    , # For meta.position
+      pos ? # position used in error messages and for meta.position
+        (if t.meta.description or null != null
+          then builtins.unsafeGetAttrPos "description" t.meta
+          else builtins.unsafeGetAttrPos "testScript" t)
     , ...
     } @ t:
     let
@@ -134,7 +158,7 @@ rec {
         in
         lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
           {
-            buildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeWrapper ];
             testScript = testScript';
             preferLocalBuild = true;
             testName = name;
@@ -147,7 +171,10 @@ rec {
 
             echo -n "$testScript" > $out/test-script
             ${lib.optionalString (!skipLint) ''
-              ${python3Packages.black}/bin/black --check --diff $out/test-script
+              PYFLAKES_BUILTINS="$(
+                echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+                < ${lib.escapeShellArg "${testDriver}/nix-support/driver-exports"}
+              )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
             ''}
 
             ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
@@ -174,12 +201,14 @@ rec {
       driver = mkDriver null;
       driverInteractive = mkDriver pkgs.qemu;
 
-      test = passMeta (runTests driver);
+      test = passMeta (runTests { inherit driver pos; });
 
       nodeNames = builtins.attrNames driver.nodes;
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
         nodeNames;
+
+      nodeHostNames = map (c: c.config.system.name) (lib.attrValues driver.nodes);
 
     in
     if lib.length invalidNodeNames > 0 then
