@@ -1451,6 +1451,8 @@ in {
 
   clvm-rs = callPackage ../development/python-modules/clvm-rs { };
 
+  clvm-tools = callPackage ../development/python-modules/clvm-tools { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
