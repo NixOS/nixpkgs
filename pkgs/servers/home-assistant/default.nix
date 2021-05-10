@@ -182,17 +182,17 @@ in with py.pkgs; buildPythonApplication rec {
   doCheck = stdenv.isLinux;
 
   checkInputs = [
-    # test infrastructure
-    asynctest
+    # test infrastructure (selectively from requirement_test.txt)
     pytest-aiohttp
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     requests-mock
-    # component dependencies
-    pyotp
+    jsonpickle
     respx
+    # required by tests/auth/mfa_modules
+    pyotp
   ] ++ lib.concatMap (component: getPackages component py.pkgs) componentTests;
 
   # We can reasonably test components that don't communicate with any network
@@ -334,6 +334,7 @@ in with py.pkgs; buildPythonApplication rec {
     "persistent_notification"
     "person"
     "plaato"
+    "plugwise"
     "prometheus"
     "proximity"
     "push"
