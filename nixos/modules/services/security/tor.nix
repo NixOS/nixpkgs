@@ -726,6 +726,12 @@ in
                 };
               })
             ]);
+            example = [
+              {
+                onion = "xxxxxxxxxxxxxxxx.onion";
+                auth = "xxxxxxxxxxxxxxxxxxxxxx";
+              }
+            ];
           };
           options.HiddenServiceNonAnonymousMode = optionBool "HiddenServiceNonAnonymousMode";
           options.HiddenServiceStatistics = optionBool "HiddenServiceStatistics";
