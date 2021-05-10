@@ -216,6 +216,7 @@ broken-packages:
   - atom-msp430
   - atomo
   - atp-haskell
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attempt
@@ -342,6 +343,7 @@ broken-packages:
   - bindings-hamlib
   - bindings-hdf5
   - bindings-K8055
+  - bindings-levmar
   - bindings-libftdi
   - bindings-libg15
   - bindings-libpci
@@ -1008,6 +1010,7 @@ broken-packages:
   - digestive-foundation-lucid
   - digestive-functors-aeson
   - digestive-functors-happstack
+  - digest-pure
   - DigitalOcean
   - digitalocean-kzs
   - digits
@@ -1647,6 +1650,7 @@ broken-packages:
   - grakn
   - grapefruit-frp
   - Graph500
+  - Graphalyze
   - graphbuilder
   - graphene
   - graphics-drawingcombinators
@@ -2026,6 +2030,7 @@ broken-packages:
   - hinterface
   - hipchat-hs
   - hipe
+  - Hipmunk
   - hipsql-api
   - hircules
   - Hish
@@ -2316,6 +2321,7 @@ broken-packages:
   - hwsl2
   - hx
   - HXQ
+  - hxt-cache
   - hxt-pickle-utils
   - hyakko
   - hydra-hs
@@ -3111,6 +3117,8 @@ broken-packages:
   - network-dns
   - networked-game
   - network-house
+  - network-metrics
+  - network-msg
   - network-msgpack-rpc
   - network-packet-linux
   - network-server
@@ -3147,6 +3155,7 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
+  - nix-tools
   - nkjp
   - nlp-scores
   - nm
@@ -3266,6 +3275,7 @@ broken-packages:
   - orc
   - orchestrate
   - OrchestrateDB
+  - ordered
   - order-statistics
   - ordinal
   - Ordinary
@@ -3362,6 +3372,7 @@ broken-packages:
   - partly
   - passage
   - passman
+  - passman-core
   - PasswordGenerator
   - passwords
   - pasta
@@ -3777,6 +3788,9 @@ broken-packages:
   - refined-http-api-data
   - reflection-extras
   - reflex-basic-host
+  - reflex-dom-contrib
+  - reflex-dom-helper
+  - reflex-dom-helpers
   - reflex-dom-retractable
   - reflex-dom-svg
   - reflex-dynamic-containers
@@ -3784,6 +3798,7 @@ broken-packages:
   - reflex-gadt-api
   - reflex-gi-gtk
   - reflex-gloss
+  - reflex-jsx
   - reflex-libtelnet
   - reflex-orphans
   - reflex-sdl2
@@ -3868,6 +3883,7 @@ broken-packages:
   - rfc-prelude
   - rhbzquery
   - ribbit
+  - ribosome
   - RichConditional
   - ridley
   - riemann
@@ -4603,12 +4619,14 @@ broken-packages:
   - threepenny-gui-contextmenu
   - threepenny-gui-flexbox
   - thrift
+  - Thrift
   - throttled-io-loop
   - th-sccs
   - th-tc
   - th-to-exp
   - th-traced
   - thumbnail-plus
+  - tianbar
   - TicTacToe
   - tictactoe3d
   - tidal-midi
@@ -5223,15 +5241,3 @@ broken-packages:
   - ztar
   - Zwaluw
   - zxcvbn-dvorak
-  - ordered
-  - Hipmunk
-  - hxt-cache
-  - Graphalyze
-  - ribosome
-  - Thrift
-  - bindings-levmar
-  - network-msg
-  - reflex-dom-helper
-  - network-metrics
-  - ats-pkg
-  - digest-pure

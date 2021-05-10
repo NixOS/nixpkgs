@@ -302,6 +302,7 @@ dont-distribute-packages:
  - buildbox-tools
  - buildwrapper
  - bulletproofs
+ - bulmex
  - burnt-explorer
  - bus-pirate
  - buster-gtk
@@ -629,6 +630,7 @@ dont-distribute-packages:
  - diagrams-html5
  - diagrams-pandoc
  - diagrams-pgf
+ - diagrams-reflex
  - diagrams-wx
  - DifferenceLogic
  - difference-monoid
@@ -2182,6 +2184,7 @@ dont-distribute-packages:
  - parse-help
  - parsestar
  - partial-lens
+ - passman-cli
  - patch-image
  - patterns
  - pcap-enumerator
