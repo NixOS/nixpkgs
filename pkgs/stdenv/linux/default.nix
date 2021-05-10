@@ -159,7 +159,8 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-stage0-${localSystem.libc}";
+        pname = "bootstrap-stage0-${localSystem.libc}";
+        version = "bootstrap";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib

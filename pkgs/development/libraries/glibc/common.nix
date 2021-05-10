@@ -32,7 +32,7 @@
 , python3Minimal
 }:
 
-{ name
+{ pname
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
@@ -50,7 +50,7 @@ assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version;
+  version = version + patchSuffix;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   inherit (stdenv) is64bit;
@@ -186,15 +186,11 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
-
-  passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}";
-
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
     inherit sha256;
