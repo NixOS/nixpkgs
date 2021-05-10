@@ -4347,6 +4347,8 @@ in {
 
   mutatormath = callPackage ../development/python-modules/mutatormath { };
 
+  mutesync = callPackage ../development/python-modules/mutesync { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
