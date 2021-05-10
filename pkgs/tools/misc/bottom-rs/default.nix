@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1kgm8lc92lrg09fa2l2ajp92jkfn5n4glpgrvh6xyhhzd4pmgd9w";
+  cargoSha256 = "0nyzg6pg69bf9vvc3r5lnhmkb9s1508c1gqcra3y43zffdlwml1y";
 
   meta = with lib; {
     description = "Fantastic (maybe) CLI for translating between bottom and human-readable text";
