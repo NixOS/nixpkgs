@@ -202,6 +202,7 @@ in with py.pkgs; buildPythonApplication rec {
     "accuweather"
     "airly"
     "analytics"
+    "androidtv"
     "alert"
     "api"
     "auth"
