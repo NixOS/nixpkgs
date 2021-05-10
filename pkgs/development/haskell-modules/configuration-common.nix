@@ -1898,4 +1898,10 @@ EOT
     })
   ];
 
+  # BSON defaults to requiring network instead of network-bsd which is
+  # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
+  bson = appendConfigureFlag (super.bson.override {
+    network = self.network-bsd;
+  }) "-f-_old_network";
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
