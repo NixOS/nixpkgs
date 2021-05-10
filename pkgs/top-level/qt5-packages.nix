@@ -53,6 +53,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   alkimia = callPackage ../development/libraries/alkimia { };
 
+  applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
+
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
   dxflib = callPackage ../development/libraries/dxflib {};
