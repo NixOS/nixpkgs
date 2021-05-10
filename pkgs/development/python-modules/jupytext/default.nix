@@ -44,7 +44,9 @@ buildPythonPackage rec {
     jupyter_client
     notebook
   ];
-  # pre-commit tests require a Git repository.
+  # Tests that use a Jupyter notebook require $HOME to be writable.
+  HOME = "$TMPDIR";
+  # Pre-commit tests expect the source directory to be a Git repository.
   pytestFlagsArray = [ "--ignore-glob='tests/test_pre_commit_*.py'" ];
   pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
 
