@@ -5809,6 +5809,8 @@ in {
 
   pymetar = callPackage ../development/python-modules/pymetar { };
 
+  pymeteireann = callPackage ../development/python-modules/pymeteireann { };
+
   pymetno = callPackage ../development/python-modules/pymetno { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
