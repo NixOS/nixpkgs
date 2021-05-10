@@ -13769,6 +13769,22 @@ let
     };
   };
 
+  MojoliciousPluginSyslog = buildPerlPackage {
+    pname = "Mojolicious-Plugin-Syslog";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Syslog-0.04.tar.gz";
+      sha256 = "807d06b88304675a2bb9181bab123a0e16d3cf2f6a5753a168090ed88085a492";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-syslog";
+      description = "A plugin for enabling a Mojolicious app to log to syslog";
+      license = lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoliciousPluginTextExceptions = buildPerlPackage {
     pname = "Mojolicious-Plugin-TextExceptions";
     version = "0.02";
