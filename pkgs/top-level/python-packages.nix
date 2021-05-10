@@ -1507,6 +1507,8 @@ in {
 
   compiledb = callPackage ../development/python-modules/compiledb { };
 
+  concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
+
   conda = callPackage ../development/python-modules/conda { };
 
   ConfigArgParse = self.configargparse; # added 2021-03-18
