@@ -6,8 +6,19 @@ This is the changelog for Calamares-Extensions. For each release, the major
 changes and contributors are listed. Note that Calamares-Extensions does not
 have a historical changelog -- this log starts with version 1.0.0.
 
+# 1.1.2 (2021-05-14)
 
-# 1.1.1 (2021-02-23) #
+This release contains contributions from (alphabetically by first name):
+ - Oliver Smith
+
+Changes and new modules in this release:
+ - New *os-* modules are intended for OS-specific work. They don't
+   do anything concrete yet, though.
+ - The *mobile* module has new features thanks to Oliver, with
+   keyboard selection (numeric / alpha) for PIN / password entry among them.
+
+
+# 1.1.1 (2021-02-23)
 
 This release contains contributions from (alphabetically by first name):
  - Oliver Smith
@@ -22,7 +33,7 @@ Changes and new modules in this release:
  - *mobile* wait screen has been re-worded.
 
 
-# 1.1.0 (2021-01-04) #
+# 1.1.0 (2021-01-04)
 
 This release contains contributions from (alphabetically by first name):
  - Oliver Smith
@@ -32,7 +43,7 @@ Changes and new modules in this release:
  - *mobile* module SSH daemon can be disabled
 
 
-# 1.0.0 (2020-12-05) #
+# 1.0.0 (2020-12-05)
 
 This release contains contributions from (alphabetically by first name):
  - Oliver Smith
