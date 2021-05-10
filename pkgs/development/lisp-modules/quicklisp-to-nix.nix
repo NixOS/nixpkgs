@@ -3520,6 +3520,20 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-gobject-introspection" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-gobject-introspection" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-gobject-introspection.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
   "cl-fuse-meta-fs" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-fuse-meta-fs" or (x: {}))
@@ -3879,7 +3893,9 @@ let quicklisp-to-nix-packages = rec {
            "lack-component" = quicklisp-to-nix-packages."lack-component";
            "lack-middleware-backtrace" = quicklisp-to-nix-packages."lack-middleware-backtrace";
            "lack-util" = quicklisp-to-nix-packages."lack-util";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "uiop" = quicklisp-to-nix-packages."uiop";
+           "usocket" = quicklisp-to-nix-packages."usocket";
        }));
 
 
