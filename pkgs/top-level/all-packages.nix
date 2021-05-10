@@ -6130,8 +6130,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  matrix-dendrite = callPackage ../servers/matrix-dendrite { };
-
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
@@ -18647,6 +18645,8 @@ in
   };
 
   couchpotato = callPackage ../servers/couchpotato {};
+
+  dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
 
