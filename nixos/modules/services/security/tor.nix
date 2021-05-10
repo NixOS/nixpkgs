@@ -170,7 +170,7 @@ let
     else if k == "ServerTransportPlugin" then
       optionalString (v.transports != []) "${concatStringsSep "," v.transports} exec ${v.exec}"
     else if k == "HidServAuth" then
-      concatMapStringsSep "\n${k} " (settings: settings.onion + " " settings.auth) v
+      v.onion + " " + v.auth
     else generators.mkValueStringDefault {} v;
   genTorrc = settings:
     generators.toKeyValue {
