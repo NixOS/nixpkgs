@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bottom-software-foundation/bottom-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ winterqt ];
-    platforms = platforms.all;
   };
 }
