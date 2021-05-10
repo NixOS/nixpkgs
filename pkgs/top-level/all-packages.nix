@@ -16001,9 +16001,9 @@ in
     else libiconvReal;
 
   glibcIconv = libc: let
-    inherit (builtins.parseDrvName libc.name) name version;
+    inherit (libc) pname version;
     libcDev = lib.getDev libc;
-  in runCommand "${name}-iconv-${version}" {} ''
+  in runCommand "${pname}-iconv-${version}" {} ''
     mkdir -p $out/include
     ln -sv ${libcDev}/include/iconv.h $out/include
   '';
