@@ -808,6 +808,8 @@ in
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  xcd = callPackage ../tools/misc/xcd { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
