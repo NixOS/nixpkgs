@@ -4,7 +4,7 @@
 
 # Add a directory to TCLLIBPATH, provided that it exists
 _addToTclLibPath() {
-    local -r tclPkg="$1"
+    local tclPkg="$1"
     if [ -z "$tclPkg" ]; then
         return
     fi
