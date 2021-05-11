@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, DiskArbitration
+, Foundation
+, IOKit
+, installShellFiles
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
@@ -17,7 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    DiskArbitration
+    Foundation
+    IOKit
+    libiconv
+  ];
 
   cargoSha256 = "sha256-m2UVpsVTEmf6fgE1CFRE6+3097bKnkrMKtY3fAOjS2E=";
 

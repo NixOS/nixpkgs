@@ -31341,7 +31341,9 @@ in
 
   treefmt = callPackage ../development/tools/treefmt { };
 
-  bottom = callPackage ../tools/system/bottom {};
+  bottom = callPackage ../tools/system/bottom {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
+  };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix { };
 
