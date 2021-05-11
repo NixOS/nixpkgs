@@ -1,8 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   patches = [ ./ignore-networking-tests.patch ];
   checkType = "debug";
@@ -36,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nymtech.net";
     license = licenses.asl20;
     maintainers = [ maintainers.ehmry ];
-    platforms = with platforms; intersectLists (linux ++ darwin) (concatLists [ x86 x86_64 aarch64 arm ]);
+    platforms = platforms.all;
   };
 }

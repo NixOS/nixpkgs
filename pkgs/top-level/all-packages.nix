@@ -7146,7 +7146,9 @@ in
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nym = callPackage ../applications/networking/nym { };
+  nym = callPackage ../applications/networking/nym {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
