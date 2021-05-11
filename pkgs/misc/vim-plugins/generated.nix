@@ -4127,6 +4127,18 @@ let
     meta.homepage = "https://github.com/osyo-manga/shabadou.vim/";
   };
 
+  Shade-nvim = buildVimPluginFrom2Nix {
+    pname = "Shade-nvim";
+    version = "2021-04-29";
+    src = fetchFromGitHub {
+      owner = "sunjon";
+      repo = "Shade.nvim";
+      rev = "0196387bba50b8d36cec99cd6483583ff2dedb42";
+      sha256 = "0831k71gm8rpl54x63v7mgp9i1fgxydp2wig3yyd98dc7z9d8f48";
+    };
+    meta.homepage = "https://github.com/sunjon/Shade.nvim/";
+  };
+
   ShowMultiBase = buildVimPluginFrom2Nix {
     pname = "ShowMultiBase";
     version = "2010-10-18";
