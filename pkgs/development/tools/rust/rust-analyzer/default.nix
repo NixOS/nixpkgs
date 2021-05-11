@@ -16,18 +16,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-oz6FqRMEUUTS4X2XhpWjp2JIgl1A6wQv2OU8auwUoVM=";
   };
 
-  patchFlags = [ "-Rp1" ];
   patches = [
     # Revert updates which require rust 1.52.0.
     # We currently have rust 1.51.0 in nixpkgs.
     # https://github.com/rust-analyzer/rust-analyzer/pull/8718
     (fetchpatch {
       url = "https://github.com/rust-analyzer/rust-analyzer/pull/8718/commits/607d8a2f61e56fabb7a3bc5132592917fcdca970.patch";
-      sha256 = "sha256-ekbeTx+q4QMgQ55SsaeWTBh4Gm87/FuaVIfUIZeDHqw=";
+      sha256 = "sha256-g1yyq/XSwGxftnqSW1bR5UeMW4gW28f4JciGvwQ/n08=";
+      revert = true;
     })
     (fetchpatch {
       url = "https://github.com/rust-analyzer/rust-analyzer/pull/8718/commits/6a16ec52aa0d91945577c99cdf421b303b59301e.patch";
-      sha256 = "sha256-W1pBE1qP8pepQWDKxdSWytsc9I2SVutf1YHOPfrLK7E=";
+      sha256 = "sha256-n7Ew/0fG8zPaMFCi8FVLjQZwJSaczI/QoehC6pDLrAk=";
+      revert = true;
     })
   ];
 
