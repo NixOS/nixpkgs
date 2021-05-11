@@ -1,21 +1,19 @@
 { lib
-, stdenv
-, fetchPypi
 , buildPythonPackage
 , isPy27
-, ansible
-, pyyaml
-, ruamel-yaml
-, rich
-, pytestCheckHook
-, pytest-xdist
-, git
-, wcmatch
-, enrich
+, fetchPypi
 , python
-, tenacity
+, ansible
+, enrich
 , flaky
+, pyyaml
+, rich
+, ruamel-yaml
+, tenacity
+, wcmatch
 , yamllint
+, pytest-xdist
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,9 +29,35 @@ buildPythonPackage rec {
 
   buildInputs = [ python ];
 
-  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch tenacity flaky yamllint ];
+  propagatedBuildInputs = [
+    ansible
+    enrich
+    flaky
+    pyyaml
+    rich
+    ruamel-yaml
+    tenacity
+    wcmatch
+    yamllint
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist git ];
+  checkInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--numprocesses" "auto"
+  ];
+
+  postPatch = ''
+    # fixes test_get_yaml_files_umlaut and test_run_inside_role_dir
+    substituteInPlace src/ansiblelint/file_utils.py \
+      --replace 'os.path.join(root, name)' 'os.path.normpath(os.path.join(root, name))'
+    # fixes test_custom_kinds
+    substituteInPlace src/ansiblelint/file_utils.py \
+      --replace "if name.endswith('.yaml') or name.endswith('.yml')" ""
+  '';
 
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
@@ -44,19 +68,15 @@ buildPythonPackage rec {
     export PATH=$PATH:$PWD/src/ansiblelint
     ln -rs src/ansiblelint/__main__.py src/ansiblelint/ansible-lint
     patchShebangs src/ansiblelint/__main__.py
+
+    # create symlink like in the git repo so test_included_tasks does not fail
+    ln -s ../roles examples/playbooks/roles
   '';
 
   disabledTests = [
     # requires network
     "test_prerun_reqs_v1"
     "test_prerun_reqs_v2"
-    # Assertion error with negative numbers; maybe requieres an ansible update?
-    "test_included_tasks"
-
-    "test_get_yaml_files_umlaut"
-    "test_run_inside_role_dir"
-    "test_custom_kinds"
-    "test_rule_no_handler"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
