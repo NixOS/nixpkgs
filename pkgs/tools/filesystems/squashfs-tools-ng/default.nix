@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config
-, lz4, lzo, xz, zlib, zstd
+, bzip2, lz4, lzo, xz, zlib, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ doxygen graphviz pkg-config perl ];
-  buildInputs = [ zlib xz lz4 lzo zstd ];
+  buildInputs = [ bzip2 zlib xz lz4 lzo zstd ];
 
   meta = with lib; {
     homepage = "https://github.com/AgentD/squashfs-tools-ng";
