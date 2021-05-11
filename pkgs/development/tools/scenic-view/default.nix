@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk, gradle_latest, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
 let
-  # The default one still uses jdk8 (#89731)
-  gradle = (gradleGen.override (old: { java = jdk; })).gradle_latest;
+  gradle = gradle_latest.override { inherit jdk; };
 
   pname = "scenic-view";
   version = "11.0.2";
