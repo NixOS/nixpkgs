@@ -3,32 +3,27 @@
 { name
 , version
 , src
-, buildInputs ? []
-, beamDeps ? []
+, buildInputs ? [ ]
+, beamDeps ? [ ]
+, propagatedBuildInputs ? [ ]
 , postPatch ? ""
 , compilePorts ? false
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
-, ... }@attrs:
+, ...
+}@attrs:
 
 with lib;
-
 let
-
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
-  bootstrapper = ./mix-bootstrap;
-
-  pkg = self: stdenv.mkDerivation ( attrs // {
+  pkg = self: stdenv.mkDerivation (attrs // {
     name = "${name}-${version}";
     inherit version;
-
-    dontStrip = true;
-
     inherit src;
 
     MIX_ENV = mixEnv;
@@ -37,15 +32,28 @@ let
 
     setupHook = attrs.setupHook or
       writeText "setupHook.sh" ''
-        addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
-      '';
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
+    '';
 
-    inherit buildInputs;
-    propagatedBuildInputs = [ hex elixir ] ++ beamDeps;
+    buildInputs = buildInputs ++ [ elixir hex ];
+    propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
     configurePhase = attrs.configurePhase or ''
       runHook preConfigure
-      ${erlang}/bin/escript ${bootstrapper}
+
+      mkdir -p _build/$MIX_ENV/lib
+
+      while read -d ':' lib
+      do
+        for dir in $(ls $lib)
+        do
+          echo $lib
+          dest=$(echo "$dir" | cut -d '-' -f1)
+          [[ $MIX_DEBUG -eq 1 ]] && echo "Linking $lib/$dir to _build/$MIX_ENV/lib/$dest"
+          ln -s $lib/$dir _build/$MIX_ENV/lib/$dest
+        done
+      done <<< "$ERL_LIBS:"
+
       runHook postConfigure
     '';
 
@@ -77,5 +85,6 @@ let
       env = shell self;
       inherit beamDeps;
     };
-});
-in fix pkg
+  });
+in
+fix pkg
