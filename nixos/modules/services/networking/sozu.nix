@@ -27,7 +27,7 @@ in
     global = mkOption {
       default = {};
       description = ''
-        Settings that will be parsed into Sozu's <literal>config.toml</literal>.
+        Global settings that will be parsed into Sozu's <literal>config.toml</literal>.
         Documentation <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md">here</link>.
       '';
       type = types.submodule {
@@ -261,6 +261,11 @@ in
     };
 
     optional = mkOption {
+      description = ''
+        Optional settings that will be parsed into Sozu's <literal>config.toml</literal>.
+        Documentation <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md">here</link>.
+        Also see example.
+      '';
       default = {};
       example = {
         listeners = [
