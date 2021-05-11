@@ -4,6 +4,9 @@
 , nix-update-script
 , pkg-config
 , openssl
+, stdenv
+, libiconv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +31,9 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs = [ openssl ];
+  buildInputs = if stdenv.isDarwin
+    then [ libiconv Security ]
+    else [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
