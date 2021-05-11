@@ -42,15 +42,15 @@ let
       inherit llvm_meta;
     };
 
-    # `llvm` historically had the binaries. But this migration
-    # technique also impedes `lib.get*`. Perhaps we will revisit it.
-    llvm = tools.libllvm.out;
+    # `llvm` historically had the binaries.  When choosing an output explicitly,
+    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputUnspecified = true; };
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out;
+    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
 
     # disabled until recommonmark supports sphinx 3
     #Llvm-manpages = lowPrio (tools.libllvm.override {
