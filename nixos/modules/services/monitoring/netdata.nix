@@ -8,6 +8,7 @@ let
   wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+    ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
@@ -25,6 +26,10 @@ let
     web = {
       "web files owner" = "root";
       "web files group" = "root";
+    };
+    "plugin:cgroups" = {
+      "script to get cgroup network interfaces" = "${wrappedPlugins}/libexec/netdata/plugins.d/cgroup-network";
+      "use unified cgroups" = "yes";
     };
   };
   mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
@@ -183,9 +188,6 @@ in {
         ConfigurationDirectory = "netdata";
         ConfigurationDirectoryMode = "0755";
         # Capabilities
-        AmbientCapabilities = [
-          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
-        ];
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
           "CAP_DAC_READ_SEARCH"   # is required for apps plugin
@@ -214,7 +216,15 @@ in {
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
+    };
+
+    security.wrappers."cgroup-network" = {
+      source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
+      capabilities = "cap_setuid+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."freeipmi.plugin" = {
@@ -222,7 +232,7 @@ in {
       capabilities = "cap_dac_override,cap_fowner+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rwx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."perf.plugin" = {
@@ -230,7 +240,7 @@ in {
       capabilities = "cap_sys_admin+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.wrappers."slabinfo.plugin" = {
@@ -238,7 +248,7 @@ in {
       capabilities = "cap_dac_override+ep";
       owner = cfg.user;
       group = cfg.group;
-      permissions = "u+rx,g+rx,o-rx";
+      permissions = "u+rx,g+x,o-rwx";
     };
 
     security.pam.loginLimits = [

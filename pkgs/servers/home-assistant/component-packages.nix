@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.5.1";
+  version = "2021.5.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -375,7 +375,7 @@
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
-    "ialarm" = ps: with ps; [ ]; # missing inputs: pyialarm
+    "ialarm" = ps: with ps; [ pyialarm ];
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ iaqualink ];
     "icloud" = ps: with ps; [ pyicloud ];

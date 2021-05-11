@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.44";
+  version = "0.0.45";
 
   disabled = !isPy3k;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "amelchio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "108818mkb037zs4ikilrskfppcbmqslsm6zaxmy8pphjh7c299mz";
+    sha256 = "0wzmrd9ja5makvsgf0ckil99wr8vw91dml8fi9miiq4la0100q0n";
   };
 
   propagatedBuildInputs = [ ifaddr requests xmltodict ];
