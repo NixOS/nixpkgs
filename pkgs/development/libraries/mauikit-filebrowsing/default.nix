@@ -4,22 +4,20 @@
 , cmake
 , extra-cmake-modules
 , kconfig
-, kcoreaddons
-, ki18n
-, qtbase
-, qtquickcontrols2
+, kio
+, mauikit
 }:
 
 mkDerivation rec {
-  pname = "mauikit";
+  pname = "mauikit-filebrowsing";
   version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
-    repo = "mauikit";
+    repo = "mauikit-filebrowsing";
     rev = "v${version}";
-    sha256 = "1jz0a65bbznjg7aaq19rdyp956wn6xc1x4xigfkhj6mwsvnb49av";
+    sha256 = "1m56lil7w884wn8qycl7y55abvw2vanfy8c4g786200p6acsh3kl";
   };
 
   nativeBuildInputs = [
@@ -29,16 +27,14 @@ mkDerivation rec {
 
   buildInputs = [
     kconfig
-    kcoreaddons
-    ki18n
-    qtquickcontrols2
+    kio
+    mauikit
   ];
 
   meta = with lib; {
-    homepage = "https://mauikit.org/";
-    description = "Free and modular front-end framework for developing fast and compelling user experiences";
+    homepage = "https://invent.kde.org/maui/mauikit-filebrowsing";
+    description = "MauiKit File Browsing utilities and controls";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
-    broken = versionOlder qtbase.version "5.14.0";
   };
 }
