@@ -189,13 +189,12 @@ let
         libunwind = libraries.libunwind;
       }));
 
-    openmp = callPackage ./openmp.nix {};
-
     libunwind = callPackage ./libunwind ({} //
       (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
         stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
       }));
 
+    openmp = callPackage ./openmp.nix {};
   });
 
 in { inherit tools libraries; } // libraries // tools

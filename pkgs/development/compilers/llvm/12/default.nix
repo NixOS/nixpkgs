@@ -236,7 +236,6 @@ let
     });
 
     openmp = callPackage ./openmp { inherit llvm_meta; };
-
   });
 
 in { inherit tools libraries; } // libraries // tools
