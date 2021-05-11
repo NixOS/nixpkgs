@@ -21779,7 +21779,7 @@ let
     };
   };
 
-  TextBibTeX = buildPerlModule {
+  TextBibTeX = buildPerlModule ({
     pname = "Text-BibTeX";
     version = "0.88";
     buildInputs = [ CaptureTiny ConfigAutoConf ExtUtilsLibBuilder ];
@@ -21802,7 +21802,10 @@ let
       description = "Interface to read and parse BibTeX files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
-  };
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    # libbtparse.so: cannot open shared object file (aarch64 only)
+    patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
+  });
 
   TextBrew = buildPerlPackage {
     pname = "Text-Brew";
