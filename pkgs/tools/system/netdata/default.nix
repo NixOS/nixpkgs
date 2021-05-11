@@ -56,6 +56,8 @@ in stdenv.mkDerivation rec {
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/cgroup-network \
+       $out/libexec/netdata/plugins.d/cgroup-network.org
     mv $out/libexec/netdata/plugins.d/perf.plugin \
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
