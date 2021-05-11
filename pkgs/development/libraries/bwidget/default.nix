@@ -1,11 +1,8 @@
 { lib, fetchurl, tcl, tk }:
 
-let
-  version = "1.9.14";
-  libPrefix = "bwidget${version}";
-in tcl.mkTclDerivation {
+tcl.mkTclDerivation rec {
   pname = "bwidget";
-  inherit version;
+  version = "1.9.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/bwidget-${version}.tar.gz";
