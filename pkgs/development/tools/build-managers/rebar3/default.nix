@@ -1,10 +1,11 @@
 { lib, stdenv, fetchFromGitHub,
-  fetchHex, erlang, makeWrapper }:
+  fetchHex, erlang, makeWrapper,
+  writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
   version = "3.15.1";
   owner = "erlang";
-  deps = import ./rebar-deps.nix { inherit fetchHex; };
+  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
@@ -63,6 +64,31 @@ let
       license = lib.licenses.asl20;
     };
 
+    passthru.updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -ox errexit
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          git
+          gnused
+          nix
+          (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
+        ]
+      }
+      latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      if [ "$latest" != "${version}" ]; then
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
+        update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
+        tmpdir=$(mktemp -d)
+        cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
+        (cd "$tmpdir" && rebar3 nix lock -o "$nix_path/rebar-deps.nix")
+      else
+        echo "rebar3 is already up-to-date"
+      fi
+    '';
   };
   rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
     let
