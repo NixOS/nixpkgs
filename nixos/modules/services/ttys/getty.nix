@@ -106,7 +106,7 @@ in
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
 
-    systemd.services."getty@" =
+    systemd.services."autovt@" =
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM")

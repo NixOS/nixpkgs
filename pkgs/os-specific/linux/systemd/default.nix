@@ -113,7 +113,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.6";
+  version = "248";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -124,7 +124,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
+    sha256 = "1cr8li6viimd11f15k91n9fms43dbbdl16y859rz60hw7ggmln05";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -142,15 +142,14 @@ stdenv.mkDerivation {
     ./0008-Fix-hwdb-paths.patch
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-inherit-systemd-environment-when-calling-generators.patch
-    ./0013-add-rootprefix-to-lookup-dir-paths.patch
-    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-pkg-config-derive-prefix-from-prefix.patch
+    ./0011-inherit-systemd-environment-when-calling-generators.patch
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0016-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0017-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0018-pkg-config-derive-prefix-from-prefix.patch
   ];
 
   postPatch = ''
@@ -215,6 +214,13 @@ stdenv.mkDerivation {
 
         # journalctl --grep requires libpcre so lets provide it
         { name = "libpcre2-8.so.0"; pkg = pcre2; }
+
+        # unclear
+        { name = "libfido2.so.1"; pkg = null; }
+        { name = "libfido2.so.1"; pkg = null; }
+        { name = "libtss2-esys.so.0"; pkg = null; }
+        { name = "libtss2-rc.so.0"; pkg = null; }
+        { name = "libtss2-mu.so.0"; pkg = null; }
       ];
 
       patchDlOpen = dl:
@@ -308,6 +314,7 @@ stdenv.mkDerivation {
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Dlocalstatedir=${placeholder "out"}/var"
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
@@ -318,6 +325,7 @@ stdenv.mkDerivation {
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
+    "-Dlog-trace=true"
     "-Ddebug-shell=${bashInteractive}/bin/bash"
     "-Dglib=${lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
@@ -446,7 +454,7 @@ stdenv.mkDerivation {
         --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
-    substituteInPlace src/journal/catalog.c \
+    substituteInPlace ./src/libsystemd/sd-journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 

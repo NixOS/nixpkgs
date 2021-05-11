@@ -1,0 +1,39 @@
+From ddfd23c2d5f2b483dab97d66bdd80189a66cabab Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Fri, 2 Nov 2018 21:15:42 +0100
+Subject: [PATCH 11/18] inherit systemd environment when calling generators.
+
+Systemd generators need access to the environment configured in
+stage-2-init.sh since it schedules fsck and mkfs executions based on
+being able to find an appropriate binary for the target filesystem.
+
+With this commit I am altering the systemd behaviour since upstream
+tries to gather environments with that they call
+"environment-generators" and then seems to pass that on to all the other
+executables that are being called from managers.
+---
+ src/core/manager.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/core/manager.c b/src/core/manager.c
+index 629966ea60..5d4361703b 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -4128,7 +4128,13 @@ static int manager_run_generators(Manager *m) {
+ 
+         RUN_WITH_UMASK(0022)
+                 (void) execute_directories((const char* const*) paths, DEFAULT_TIMEOUT_USEC, NULL, NULL,
+-                                           (char**) argv, m->transient_environment,
++                                           // On NixOS we must propagate PATH to generators so they are
++                                           // able to find binaries such as `fsck.${fstype}` and
++                                           // `mkfs.${fstype}`. That is why the last argument of the
++                                           // function (envp) is set to NULL. This propagates systemd's
++                                           // environment (e.g. PATH) that was setup
++                                           // before calling systemd from stage-2-init.sh.
++                                           (char**) argv, /* NixOS: use inherited env */ NULL,
+                                            EXEC_DIR_PARALLEL | EXEC_DIR_IGNORE_ERRORS | EXEC_DIR_SET_SYSTEMD_EXEC_PID);
+ 
+         r = 0;
+-- 
+2.29.3
+
