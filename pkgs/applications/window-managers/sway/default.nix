@@ -4,6 +4,8 @@
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
 , nixosTests
+# Used by the NixOS module:
+, isNixOS ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +28,10 @@ stdenv.mkDerivation rec {
       inherit swaybg;
     })
   ];
+
+  postPatch = lib.optionalString isNixOS ''
+    echo -e '\ninclude /etc/sway/config.d/*' >> config.in
+  '';
 
   nativeBuildInputs = [
     meson ninja pkg-config wayland scdoc
