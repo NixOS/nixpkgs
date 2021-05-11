@@ -1545,6 +1545,18 @@ let
     meta.homepage = "https://github.com/shumphrey/fugitive-gitlab.vim/";
   };
 
+  fwatch-nvim = buildVimPluginFrom2Nix {
+    pname = "fwatch-nvim";
+    version = "2021-04-26";
+    src = fetchFromGitHub {
+      owner = "rktjmp";
+      repo = "fwatch.nvim";
+      rev = "5fd6bff00d7fa432cdc847819563dad90bcf649d";
+      sha256 = "1jc3kv0w3767593p9capif3p0msf8ac5xal170757ghfiy2jhsp9";
+    };
+    meta.homepage = "https://github.com/rktjmp/fwatch.nvim/";
+  };
+
   fzf-lsp-nvim = buildVimPluginFrom2Nix {
     pname = "fzf-lsp-nvim";
     version = "2021-02-04";
