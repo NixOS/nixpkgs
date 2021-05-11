@@ -1473,6 +1473,18 @@ let
     meta.homepage = "https://github.com/ncm2/float-preview.nvim/";
   };
 
+  floating-nvim = buildVimPluginFrom2Nix {
+    pname = "floating-nvim";
+    version = "2021-05-08";
+    src = fetchFromGitHub {
+      owner = "fhill2";
+      repo = "floating.nvim";
+      rev = "c47af010aa8e88758995858f0ed2771a99cd3e98";
+      sha256 = "0cvs6c903bq4jk4l197vvdrk8q85rl7z7iy7cvd5m4k7yd937r50";
+    };
+    meta.homepage = "https://github.com/fhill2/floating.nvim/";
+  };
+
   floobits-neovim = buildVimPluginFrom2Nix {
     pname = "floobits-neovim";
     version = "2018-08-01";
