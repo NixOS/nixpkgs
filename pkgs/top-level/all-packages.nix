@@ -253,6 +253,8 @@ in
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  evans = callPackage ../development/tools/evans { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
