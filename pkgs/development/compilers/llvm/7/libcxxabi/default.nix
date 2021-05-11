@@ -1,45 +1,40 @@
 { lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
+, standalone ? stdenv.hostPlatform.useLLVM or false
+, withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
+  # on musl the shared objects don't build
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation {
-  pname = "libc++abi";
+  pname = "libcxxabi";
   inherit version;
 
-  src = fetch "libcxxabi" "1azcf31mxw59hb1x17xncnm3dyw90ylh8rqx462lvypqh3nr6c8l";
+  src = fetch "libcxxabi" "1zcqxsdjhawgz1cvpk07y3jl6fg9p3ay4nl69zsirqb2ghgyhhb2";
 
   outputs = [ "out" "dev" ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    mv libcxx-* libcxx
     unpackFile ${llvm.src}
-    mv llvm-* llvm
+    cmakeFlagsArray=($cmakeFlagsArray -DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*) )
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
-  '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./wasm.patch}
+    patch -p1 -d $(ls -d libcxx-*) -i ${../../libcxx-0001-musl-hacks.patch}
   '';
 
   patches = [
-    ./no-threads.patch
     ./gnu-install-dirs.patch
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional withLibunwind libunwind;
 
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = lib.optionals standalone [
     "-DLLVM_ENABLE_LIBCXX=ON"
+  ] ++ lib.optionals (standalone && withLibunwind) [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared) [
-    "-DLIBCXXABI_ENABLE_SHARED=OFF"
-  ];
+  ] ++ lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
   installPhase = if stdenv.isDarwin
     then ''
@@ -57,11 +52,10 @@ stdenv.mkDerivation {
     else ''
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.a $out/lib
+      ${lib.optionalString enableShared "install -m 644 lib/libc++abi.so.1.0 $out/lib"}
       install -m 644 ../include/cxxabi.h $out/include
-    '' + lib.optionalString enableShared ''
-      install -m 644 lib/libc++abi.so.1.0 $out/lib
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
+      ${lib.optionalString enableShared "ln -s libc++abi.so.1.0 $out/lib/libc++abi.so"}
+      ${lib.optionalString enableShared "ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1"}
     '';
 
   meta = {
@@ -69,6 +63,6 @@ stdenv.mkDerivation {
     description = "A new implementation of low level support for a standard C++ library";
     license = with lib.licenses; [ ncsa mit ];
     maintainers = with lib.maintainers; [ vlstill ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
   };
 }

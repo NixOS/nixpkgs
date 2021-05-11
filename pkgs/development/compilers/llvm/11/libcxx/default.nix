@@ -1,39 +1,42 @@
-{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+{ lib, stdenv, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation {
-  pname = "libc++";
+  pname = "libcxx";
   inherit version;
 
-  src = fetch "libcxx" "0d2bj5i6mk4caq7skd5nsdmz8c2m5w5anximl5wz3x32p08zz089";
+  src = fetch "libcxx" "1rgqsqpgi0vkga5d7hy0iyfsqgzfz7q1xy7afdfa1snp1qjks8xv";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
-    export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
+    mv libcxxabi-* libcxxabi
+    unpackFile ${llvm.src}
+    mv llvm-* llvm
   '';
 
   outputs = [ "out" "dev" ];
 
   patches = [
+    (fetchpatch {
+      # Backported from LLVM 12, avoids clashes with commonly used "block.h" header.
+      url = "https://github.com/llvm/llvm-project/commit/19bc9ea480b60b607a3e303f20c7a3a2ea553369.patch";
+      sha256 = "sha256-aWa66ogmPkG0xHzSfcpD0qZyZQcNKwLV44js4eiun78=";
+      stripLen = 1;
+    })
     ./gnu-install-dirs.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
-  preConfigure = ''
-    # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
-    cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$LIBCXXABI_INCLUDE_DIR")
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python3
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  nativeBuildInputs = [ cmake python3 ]
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ libcxxabi ];
 
   cmakeFlags = [
-    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
-    "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"

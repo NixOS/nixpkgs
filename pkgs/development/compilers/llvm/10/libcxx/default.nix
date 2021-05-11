@@ -1,10 +1,12 @@
-{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
-  pname = "libc++";
+  pname = "libcxx";
   inherit version;
 
-  src = fetch "libcxx" "0rzw4qvxp6qx4l4h9amrq02gp7hbg8lw4m0sy3k60f50234gnm3n";
+  src = fetch "libcxx" "0v78bfr6h2zifvdqnj2wlfk4pvxzrqn3hg1v6lqk3y12bx9p9xny";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -15,13 +17,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
-  ];
-
-  prePatch = ''
-    substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
-  '';
+  ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   preConfigure = ''
     # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
@@ -30,7 +26,7 @@ stdenv.mkDerivation {
     patchShebangs utils/cat_files.py
   '';
   nativeBuildInputs = [ cmake ]
-    ++ lib.optional stdenv.hostPlatform.isMusl python3
+    ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python3
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ libcxxabi ];
@@ -39,7 +35,13 @@ stdenv.mkDerivation {
     "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
+  ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ lib.optional stdenv.hostPlatform.isWasm [
+      "-DLIBCXX_ENABLE_THREADS=OFF"
+      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   passthru = {
     isLLVM = true;
@@ -49,6 +51,6 @@ stdenv.mkDerivation {
     homepage = "https://libcxx.llvm.org/";
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with lib.licenses; [ ncsa mit ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
   };
 }

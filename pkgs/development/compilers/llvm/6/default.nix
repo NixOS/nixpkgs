@@ -92,9 +92,9 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libc++ {};
+    libcxx = callPackage ./libcxx {};
 
-    libcxxabi = callPackage ./libc++abi {};
+    libcxxabi = callPackage ./libcxxabi {};
 
     openmp = callPackage ./openmp.nix {};
   });

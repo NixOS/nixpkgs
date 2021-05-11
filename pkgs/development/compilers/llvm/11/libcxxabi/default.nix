@@ -3,23 +3,24 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "libc++abi";
+  pname = "libcxxabi";
   inherit version;
 
-  src = fetch "libcxxabi" "1b4aiaa8cirx52vk2p5kfk57qmbqf1ipb4nqnjhdgqps9jm7iyg8";
+  src = fetch "libcxxabi" "1azcf31mxw59hb1x17xncnm3dyw90ylh8rqx462lvypqh3nr6c8l";
 
   outputs = [ "out" "dev" ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
+    mv libcxx-* libcxx
     unpackFile ${llvm.src}
-    cmakeFlags+=" -DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    mv llvm-* llvm
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d $(ls -d libcxx-*) -i ${../../libcxx-0001-musl-hacks.patch}
+    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d $(ls -d llvm-*) -i ${./wasm.patch}
+    patch -p1 -d llvm -i ${./wasm.patch}
   '';
 
   patches = [
