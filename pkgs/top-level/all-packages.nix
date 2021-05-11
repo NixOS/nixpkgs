@@ -156,7 +156,9 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  atuin = callPackage ../tools/misc/atuin { };
+  atuin = callPackage ../tools/misc/atuin {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   fiche = callPackage ../servers/fiche { };
 
