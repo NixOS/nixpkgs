@@ -35,6 +35,8 @@ let
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
       mixRelease = callPackage ./mix-release.nix { };
 
+      erlang-ls = callPackage ./erlang-ls { };
+
       # BEAM-based languages.
       elixir = elixir_1_11;
 
