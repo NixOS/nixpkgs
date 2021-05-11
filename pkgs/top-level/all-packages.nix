@@ -810,6 +810,8 @@ in
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  tnat64 = callPackage ../tools/networking/tnat64 { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
