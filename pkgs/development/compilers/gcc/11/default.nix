@@ -72,6 +72,11 @@ let majorVersion = "11";
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
+      ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
+        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
+        sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
+      })
+
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
