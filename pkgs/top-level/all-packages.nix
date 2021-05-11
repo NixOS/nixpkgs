@@ -11469,6 +11469,9 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
