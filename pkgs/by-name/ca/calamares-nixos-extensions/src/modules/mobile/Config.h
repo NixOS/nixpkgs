@@ -140,22 +140,22 @@ private:
     QString m_userPassword;
     bool m_userPasswordNumeric;
 
-    /* ssh server + credetials */
-    bool m_featureSshd;
+    /* ssh server + credentials */
+    bool m_featureSshd = false;
     QString m_sshdUsername;
     QString m_sshdPassword;
-    bool m_isSshEnabled;
+    bool m_isSshEnabled = false;
 
     /* full disk encryption */
-    QString m_fdePassword = "";
+    QString m_fdePassword;
     bool m_isFdeEnabled = false;
 
     /* filesystem selection */
-    bool m_featureFsType;
+    bool m_featureFsType = false;
     QString m_defaultFs;
     QString m_fsType;
     // Index of the currently selected filesystem in UI.
-    int m_fsIndex;
+    int m_fsIndex = -1;
     QStringList m_fsList;
 
     /* partition job */
