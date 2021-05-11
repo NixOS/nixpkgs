@@ -7690,6 +7690,8 @@ in {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
+  sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
+
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
