@@ -64,6 +64,7 @@ in buildPythonPackage {
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
+    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
     license = licenses.unfree; # Includes CUDA and Intel MKL.
     platforms = platforms.linux;
     maintainers = with maintainers; [ danieldk ];
