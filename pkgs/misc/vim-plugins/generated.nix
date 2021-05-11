@@ -183,6 +183,18 @@ let
     meta.homepage = "https://github.com/vmchale/ats-vim/";
   };
 
+  aurora = buildVimPluginFrom2Nix {
+    pname = "aurora";
+    version = "2021-05-10";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "aurora";
+      rev = "bf185b9c5aaaad7cfd20f29f92d3b77164f8f1e7";
+      sha256 = "17ir0daw3rsfgprgvrskip2r19g15z05spdk14dz105nrgv4hh4y";
+    };
+    meta.homepage = "https://github.com/ray-x/aurora/";
+  };
+
   auto-git-diff = buildVimPluginFrom2Nix {
     pname = "auto-git-diff";
     version = "2019-09-23";
