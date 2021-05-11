@@ -406,8 +406,8 @@ let
       };
       metricProvider = {
         systemd.services.prometheus-lnd-exporter.serviceConfig.DynamicUser = false;
-        services.bitcoind.enable = true;
-        services.bitcoind.extraConfig = ''
+        services.bitcoind.main.enable = true;
+        services.bitcoind.main.extraConfig = ''
           rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
           bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
           bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
@@ -1021,7 +1021,7 @@ let
         # Note: this does not connect the test environment to the Tor network.
         # Client, relay, bridge or exit connectivity are disabled by default.
         services.tor.enable = true;
-        services.tor.controlPort = 9051;
+        services.tor.settings.ControlPort = 9051;
       };
       exporterTest = ''
         wait_for_unit("tor.service")
