@@ -11,10 +11,9 @@ tcl.mkTclDerivation rec {
   };
 
   # required in order for tclx to properly detect tclx.tcl at runtime
-  postInstall =
-    let tclXPkg = "tclx${version}";
-        tclXLib = "$prefix/lib/${tclXPkg}";
-     in "ln -s ${tclXLib} ${tclXLib}/${tclXPkg}";
+  postInstall = ''
+    ln -s $prefix/lib/${tclXPkg} $prefix/lib/tclx${version}/tclx${version}
+  '';
 
   meta = {
     homepage = "http://tclx.sourceforge.net/";
