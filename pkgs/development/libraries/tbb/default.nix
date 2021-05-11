@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+}:
 
-with lib; stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2020_U3";
+  version = "2020.3";
 
   src = fetchFromGitHub {
-    owner = "01org";
-    repo = "tbb";
-    rev = version;
-    sha256 = "sha256-prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
+    owner = "oneapi-src";
+    repo = "oneTBB";
+    rev = "v${version}";
+    sha256 = "prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
   };
 
-  nativeBuildInputs = optional stdenv.isDarwin fixDarwinDylibNames;
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    ./glibc-struct-mallinfo.patch
+  ];
 
-  makeFlags = optional (compiler != null) "compiler=${compiler}"
-    ++ optional (stdver != null) "stdver=${stdver}";
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
+  makeFlags = lib.optionals stdenv.cc.isClang [
+    "compiler=clang"
+  ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -29,9 +40,7 @@ with lib; stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
-  meta = {
+  meta = with lib; {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
     license = licenses.asl20;
@@ -43,7 +52,7 @@ with lib; stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice dizfer ];
   };
 }
