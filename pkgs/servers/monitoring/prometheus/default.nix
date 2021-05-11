@@ -1,16 +1,18 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests
+{ stdenv, lib, go, buildGoModule, fetchFromGitHub, mkYarnPackage, nixosTests
 , fetchpatch
 }:
 
 let
-  version = "2.23.0";
+  version = "2.26.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-UQ1r8271EiZDU/h2zta6toMRfk2GjXol8GexYL9n+BE=";
+    sha256 = "06zr10zx3f526wcxj77smcl8wk55mhlnikd0b8vbjl9yyb0qc5mz";
   };
+
+  goPackagePath = "github.com/prometheus/prometheus";
 
   webui = mkYarnPackage {
     src = "${src}/web/ui/react-app";
@@ -25,19 +27,13 @@ let
     installPhase = "mv build $out";
     distPhase = "true";
   };
-in buildGoPackage rec {
+in buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  goPackagePath = "github.com/prometheus/prometheus";
+  vendorSha256 = "0h14pmk74lxj7z39jb4xwvx3whwkaxn9686y23sgrpkra5sk6dbm";
 
-  patches = [
-    # Fix https://github.com/prometheus/prometheus/issues/8144
-    (fetchpatch {
-      url = "https://github.com/prometheus/prometheus/commit/8b64b70fe4a5aa2877c95aa12c6798b12d3ff7ec.patch";
-      sha256 = "sha256-RuXT5pBXv8z6WoE59KNGh+OXr1KGLGWs/n0Hjf4BuH8=";
-    })
-  ];
+  excludedPackages = [ "documentation/prometheus-mixin" ];
 
   postPatch = ''
     ln -s ${webui.node_modules} web/ui/react-app/node_modules
@@ -59,8 +55,10 @@ in buildGoPackage rec {
     ''
   ];
 
+  # only run this in the real build, not during the vendor build
+  # this should probably be fixed in buildGoModule
   preBuild = ''
-    make -C go/src/${goPackagePath} assets
+    if [ -d vendor ]; then make assets; fi
   '';
 
   preInstall = ''
