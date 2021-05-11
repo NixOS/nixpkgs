@@ -5,11 +5,11 @@
 # Add a directory to TCLLIBPATH, provided that it exists
 _addToTclLibPath() {
     local tclPkg="$1"
-    if [ -z "$tclPkg" ]; then
+    if [[ -z "$tclPkg" ]]; then
         return
     fi
 
-    if [ ! -d "$tclPkg" ]; then
+    if [[ ! -d "$tclPkg" ]]; then
         >&2 echo "can't add $tclPkg to TCLLIBPATH; that directory doesn't exist"
         exit 1
     fi
@@ -18,7 +18,7 @@ _addToTclLibPath() {
         tclPkg="{$tclPkg}"
     fi
 
-    if [ -z "${TCLLIBPATH-}" ]; then
+    if [[ -z "${TCLLIBPATH-}" ]]; then
         export TCLLIBPATH="$tclPkg"
     else
         if [[ "$TCLLIBPATH" != *"$tclPkg "* && "$TCLLIBPATH" != *"$tclPkg" ]]; then
@@ -30,7 +30,7 @@ _addToTclLibPath() {
 # Locate any directory containing an installed pkgIndex file
 findInstalledTclPkgs() {
     local -r newLibDir="${!outputLib}/lib"
-    if [ ! -d "$newLibDir" ]; then
+    if [[ ! -d "$newLibDir" ]]; then
         >&2 echo "Assuming no loadable tcl packages installed ($newLibDir does not exist)"
         return
     fi
@@ -39,13 +39,13 @@ findInstalledTclPkgs() {
 
 # Wrap any freshly-installed binaries and set up their TCLLIBPATH
 wrapTclBins() {
-    if [ -z "${TCLLIBPATH-}" ]; then
+    if [[ -z "${TCLLIBPATH-}" ]]; then
         echo "skipping automatic Tcl binary wrapping (nothing to do)"
         return
     fi
 
     local -r tclBinsDir="${!outputBin}/bin"
-    if [ ! -d "$tclBinsDir" ]; then
+    if [[ ! -d "$tclBinsDir" ]]; then
         echo "No outputBin found, not using any TCLLIBPATH wrapper"
         return
     fi
