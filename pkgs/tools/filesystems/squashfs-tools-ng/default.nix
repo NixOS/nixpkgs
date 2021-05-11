@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ doxygen graphviz pkg-config perl ];
   buildInputs = [ bzip2 zlib xz lz4 lzo zstd ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://github.com/AgentD/squashfs-tools-ng";
     license = licenses.gpl3Plus;
