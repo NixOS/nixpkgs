@@ -47,7 +47,6 @@ let
       do
         for dir in $(ls $lib)
         do
-          echo $lib
           dest=$(echo "$dir" | cut -d '-' -f1)
           [[ $MIX_DEBUG -eq 1 ]] && echo "Linking $lib/$dir to _build/$MIX_ENV/lib/$dest"
           ln -s $lib/$dir _build/$MIX_ENV/lib/$dest
