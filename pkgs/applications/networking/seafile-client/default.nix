@@ -14,7 +14,7 @@ mkDerivation rec {
   };
 
   patches = [
-    # Fix #122505
+    # Fix compilation failure with "error: template with C linkage", fixes #122505
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_glib2.diff?h=seafile-client&id=7be253aaa2bdb6771721f45aa08bc875c8001c5a";
       name = "fix_build_with_glib2.diff";
@@ -38,6 +38,6 @@ mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ eduardosm ];
   };
 }
