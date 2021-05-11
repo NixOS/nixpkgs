@@ -2,7 +2,7 @@
   mkDerivation, lib, substituteAll,
   extra-cmake-modules, kdoctools,
   kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
-  kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews, knotifications,
+  ki18n, kiconthemes, kinit, kio, kitemviews, knotifications,
   kservice, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
   mobile-broadband-provider-info, modemmanager-qt, networkmanager-qt,
   openconnect, openvpn, plasma-framework, qca-qt5, qtbase, qtdeclarative,
@@ -13,7 +13,7 @@ mkDerivation {
   name = "plasma-nm";
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
-    kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
+    kdeclarative ki18n kio kwindowsystem plasma-framework
     qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
     kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
     mobile-broadband-provider-info modemmanager-qt networkmanager-qt openconnect
