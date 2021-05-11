@@ -11585,6 +11585,9 @@ in
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
+  rustup-toolchain-install-master = callPackage ../development/tools/rust/rustup-toolchain-install-master {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
