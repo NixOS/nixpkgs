@@ -4277,6 +4277,8 @@ in {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motioneye-client = callPackage ../development/python-modules/motioneye-client { };
+
   moto = callPackage ../development/python-modules/moto { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
@@ -7221,6 +7223,8 @@ in {
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+
+  rtoml = callPackage ../development/python-modules/rtoml { };
 
   Rtree = callPackage ../development/python-modules/Rtree {
     inherit (pkgs) libspatialindex;

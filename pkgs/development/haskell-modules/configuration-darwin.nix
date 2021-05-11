@@ -161,4 +161,11 @@ self: super: {
     ] ++ (drv.librarySystemDepends or []);
   });
 
+  HTF = overrideCabal super.HTF (drv: {
+    # GNU find is not prefixed in stdenv
+    postPatch = ''
+      substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
+    '' + (drv.postPatch or "");
+  });
+
 }

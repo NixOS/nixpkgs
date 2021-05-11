@@ -156,6 +156,8 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  atuin = callPackage ../tools/misc/atuin { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
@@ -6119,8 +6121,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  matrix-dendrite = callPackage ../servers/matrix-dendrite { };
-
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
@@ -9456,7 +9456,9 @@ in
 
   tre = callPackage ../development/libraries/tre { };
 
-  tremor-rs = callPackage ../tools/misc/tremor-rs { };
+  tremor-rs = callPackage ../tools/misc/tremor-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ts = callPackage ../tools/system/ts { };
 
@@ -11862,7 +11864,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    rebar rebar3
+    rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages
     relxExe;
 
@@ -18660,6 +18662,8 @@ in
   };
 
   couchpotato = callPackage ../servers/couchpotato {};
+
+  dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
 
