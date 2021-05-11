@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (rec {
   name = "poppler-${suffix}-${version}";
-  version = "21.02.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "21.05.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "sha256-XBR1nJmJHm5HKs7W1fD/Haz4XYDNkCbTZcVcZT7feSw=";
+    sha256 = "sha256-2v1Te2gPrRIVvED8U9HzjoRJ18GFvGDVqJ4dJskNvYw=";
   };
 
   nativeBuildInputs = [
