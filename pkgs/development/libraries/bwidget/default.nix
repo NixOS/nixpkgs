@@ -13,7 +13,7 @@ in tcl.mkTclDerivation {
   };
 
   dontBuild = true;
-  propagatedBuildInputs = [tk];
+  propagatedBuildInputs = [ tk ];
 
   installPhase = ''
     mkdir -p "$out/lib/${libPrefix}"
