@@ -4,9 +4,11 @@ let
   template-bootstrap3 = pkgs.stdenv.mkDerivation {
     name = "bootstrap3";
     # Download the theme from the dokuwiki site
-    src = pkgs.fetchurl {
-      url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-      sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
+    src = pkgs.fetchFromGitHub {
+      owner = "giterlizzi";
+      repo = "dokuwiki-template-bootstrap3";
+      rev = "v2019-05-22";
+      sha256 = "WOaWTZ+vHcg72d1AQ6yxsO5Am5MapuaBNYjy8N1pV9M=";
     };
     # We need unzip to build this package
     nativeBuildInputs = [ pkgs.unzip ];

@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, coreutils, gawk }:
+{ lib, stdenv, fetchFromGitHub, coreutils, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "txt2man";
   version = "1.7.1";
 
-  src = fetchurl {
-    url = "https://github.com/mvertes/txt2man/archive/${pname}-${version}.tar.gz";
-    sha256 = "0ka3krmblsprv0v6h6wnm8lv08w30z0ynfnbwns6alks5gx1p6sd";
+  src = fetchFromGitHub {
+    owner = "mvertes";
+    repo = "txt2man";
+    rev = "${pname}-${version}";
+    sha256 = "Aqi5PNNaaM/tr9A/7vKeafYKYIs/kHbwHzE7+R/9r9s=";
   };
 
   preConfigure = ''

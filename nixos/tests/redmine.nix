@@ -15,9 +15,11 @@ let
         package = pkgs.redmine;
         database.type = type;
         plugins = {
-          redmine_env_auth = pkgs.fetchurl {
-            url = "https://github.com/Intera/redmine_env_auth/archive/0.7.zip";
-            sha256 = "1xb8lyarc7mpi86yflnlgyllh9hfwb9z304f19dx409gqpia99sc";
+          redmine_env_auth = pkgs.fetchFromGitHub {
+            owner = "Intera";
+            repo = "redmine_env_auth";
+            rev = "0.7";
+            sha256 = "ptiXR2MUmf+9d4lUW2LmToP4brhdONB4cNi+rY86CCQ=";
           };
         };
         themes = {

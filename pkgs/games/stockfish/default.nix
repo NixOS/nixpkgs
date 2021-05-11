@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchFromGitHub }:
 
 with lib;
 
@@ -26,9 +26,11 @@ stdenv.mkDerivation {
   pname = "stockfish";
   inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";
-    sha256 = "16980aicm5i6i9252239q4f9bcxg1gnqkv6nphrmpz4drg8i3v6i";
+  src = fetchFromGitHub {
+    owner = "official-stockfish";
+    repo = "Stockfish";
+    rev = "sf_${version}";
+    sha256 = "YlBg3cC2hnZOhnWXoNpkrcQZhAakq3EvCcHZcvmqnm0=";
   };
 
   # This addresses a linker issue with Darwin
