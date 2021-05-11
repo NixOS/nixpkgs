@@ -12,7 +12,7 @@ tcl.mkTclDerivation rec {
 
   # required in order for tclx to properly detect tclx.tcl at runtime
   postInstall = ''
-    ln -s $prefix/lib/${tclXPkg} $prefix/lib/tclx${version}/tclx${version}
+    ln -s $prefix/lib/tclx${version} $prefix/lib/tclx${version}/tclx${version}
   '';
 
   meta = {
