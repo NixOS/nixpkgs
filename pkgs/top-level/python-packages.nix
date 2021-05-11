@@ -8647,6 +8647,8 @@ in {
 
   websockify = callPackage ../development/python-modules/websockify { };
 
+  webssh = disabledIf (!isPy3k) (callPackage ../development/python-modules/webssh { });
+
   webtest = callPackage ../development/python-modules/webtest { };
 
   webthing = callPackage ../development/python-modules/webthing { };
