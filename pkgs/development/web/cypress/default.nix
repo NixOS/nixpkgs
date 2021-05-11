@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "13a69fq7p9mclcdyph2idy79gwqdizfay9paxxmxz3m754c1b1wx";
+    sha256 = "158bpk4czfv2kkh1al1bb42jb0h3mbx9r72dk6crr2gg0bhabn8m";
   };
 
   passthru.updateScript = ./update.sh;
