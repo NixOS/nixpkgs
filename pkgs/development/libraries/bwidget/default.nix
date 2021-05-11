@@ -16,8 +16,8 @@ in tcl.mkTclDerivation {
   propagatedBuildInputs = [ tk ];
 
   installPhase = ''
-    mkdir -p "$out/lib/${libPrefix}"
-    cp -R *.tcl lang images "$out/lib/${libPrefix}"
+    mkdir -p "$out/lib/bwidget${version}"
+    cp -R *.tcl lang images "$out/lib/bwidget${version}"
   '';
 
   meta = {
