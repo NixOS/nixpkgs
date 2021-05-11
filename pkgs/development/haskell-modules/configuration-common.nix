@@ -1783,10 +1783,6 @@ self: super: {
   ihaskell-display = doJailbreak super.ihaskell-display;
   ihaskell-basic = doJailbreak super.ihaskell-basic;
 
-  # too strict bounds on QuickCheck
-  # https://github.com/HeinrichApfelmus/hyper-haskell/issues/42
-  hyper-extra = doJailbreak super.hyper-extra;
-
   # Fixes too strict version bounds on regex libraries
   # Presumably to be removed at the next release
   yi-language = appendPatch super.yi-language (pkgs.fetchpatch {
@@ -1843,8 +1839,6 @@ self: super: {
       name = "language-docker-${super.language-docker.version}-source";
     };
   };
-
-  phonetic-languages-phonetics-basics = appendPatch super.phonetic-languages-phonetics-basics ./patches/phonetic-languages-phonetics-basics-haddock.patch;
 
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
