@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   qtbase,
   kcmutils, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons,
-  kdeclarative, kdelibs4support, ki18n, kiconthemes, kio, kirigami2, kpackage,
+  kdeclarative, ki18n, kiconthemes, kio, kirigami2, kpackage,
   kservice, kwayland, kwidgetsaddons, kxmlgui, libraw1394, libGLU, pciutils,
   solid, systemsettings
 }:
@@ -13,7 +13,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons
-    kdeclarative kdelibs4support ki18n kiconthemes kio kirigami2 kpackage
+    kdeclarative ki18n kiconthemes kio kirigami2 kpackage
     kservice kwayland kwidgetsaddons kxmlgui libraw1394 libGLU pciutils solid systemsettings
   ];
   preFixup = ''
