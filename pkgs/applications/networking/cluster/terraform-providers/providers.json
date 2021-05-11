@@ -498,6 +498,7 @@
   },
   "keycloak": {
     "owner": "mrparkers",
+    "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
     "repo": "terraform-provider-keycloak",
     "rev": "v3.0.0",
     "sha256": "1q9vzmj9c7mznv6al58d3rs5kk1fh28k1qccx46hcbk82z52da3a",
