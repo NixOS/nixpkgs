@@ -183,6 +183,8 @@ let
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
+    color = callPackage ../development/ocaml-modules/color { };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
