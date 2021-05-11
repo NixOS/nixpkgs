@@ -97,6 +97,13 @@ let
     sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
   };
 
+  # Necessary so that Blu-ray ISO playback works as expected.
+  libudfread = builtins.fetchTarball {
+    name = "libudfread";
+    url = "https://mirrors.kodi.tv/build-deps/sources/libudfread-1.1.0.tar.gz";
+    sha256 = "1ijlg9lsic5f2nrsqxlwqprhrdcqk0n1abfvsxgm6hyrzfni91zj";
+  };
+
   kodi_platforms = lib.optional gbmSupport "gbm"
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
@@ -177,6 +184,8 @@ in stdenv.mkDerivation {
       "-Dlibdvdcss_URL=${libdvdcss}"
       "-Dlibdvdnav_URL=${libdvdnav}"
       "-Dlibdvdread_URL=${libdvdread}"
+      "-DENABLE_INTERNAL_UDFREAD=ON"
+      "-DUDFREAD_URL=${libudfread}"
       "-DGIT_VERSION=${kodiReleaseDate}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
