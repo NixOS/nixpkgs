@@ -1934,6 +1934,8 @@ in
 
   buildpack = callPackage ../development/tools/buildpack { };
 
+  bottom-rs = callPackage ../tools/misc/bottom-rs { };
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
@@ -11538,7 +11540,9 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-msrv = callPackage ../development/tools/rust/cargo-msrv { };
+  cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -20304,7 +20308,6 @@ in
 
     nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
-    nvidia_x11_legacy304   = nvidiaPackages.legacy_304;
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
     nvidia_x11_beta        = nvidiaPackages.beta;

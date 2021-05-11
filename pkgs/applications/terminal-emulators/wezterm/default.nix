@@ -58,13 +58,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20210407-nightly";
+  version = "20210502-154244-3f7122cb";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "d2419fb99e567e3b260980694cc840a1a3b86922";
-    sha256 = "4tVjrdDlrDPKzcbTYK9vRlzfC9tfvkD+D0aN19A8RWE=";
+    rev = version;
+    sha256 = "9HPhb7Vyy5DwBW1xeA6sEIBmmOXlky9lPShu6ZoixPw=";
     fetchSubmodules = true;
   };
 
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     echo ${version} > .tag
   '';
 
-  cargoSha256 = "sha256-UaXeeuRuQk+CWF936mEAaWTjZuTSRPmxbQ/9E2oZIqg=";
+  cargoSha256 = "sha256-cbZg2wc3G2ffMQBB6gd0vBbow5GRbXaj8Xh5ga1cMxU=";
 
   nativeBuildInputs = [
     pkg-config
