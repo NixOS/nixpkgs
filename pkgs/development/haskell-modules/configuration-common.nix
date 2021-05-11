@@ -1037,9 +1037,6 @@ self: super: {
   # Has tasty < 1.2 requirement, but works just fine with 1.2
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
-  # Requires dhall >= 1.23.0
-  ats-pkg = dontCheck (super.ats-pkg.override { dhall = self.dhall_1_29_0; });
-
   # fake a home dir and capture generated man page
   ats-format = overrideCabal super.ats-format (old : {
     preConfigure = "export HOME=$PWD";
@@ -1067,18 +1064,6 @@ self: super: {
 
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
-
-  nix-tools = super.nix-tools.overrideScope (self: super: {
-    # Needs https://github.com/peti/hackage-db/pull/9
-    hackage-db = super.hackage-db.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        owner = "ElvishJerricco";
-        repo = "hackage-db";
-        rev = "84ca9fc75ad45a71880e938e0d93ea4bde05f5bd";
-        sha256 = "0y3kw1hrxhsqmyx59sxba8npj4ya8dpgjljc21gkgdvdy9628q4c";
-      };
-    });
-  });
 
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
@@ -1863,5 +1848,45 @@ self: super: {
 
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
+
+  # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
+  # https://github.com/haskell-CI/haskell-ci/issues/507
+  haskell-ci = super.haskell-ci.override {
+    ShellCheck = self.ShellCheck_0_7_1;
+  };
+
+  Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
+    # https://github.com/adamConnerSax/Frames-streamly/issues/1
+    patchPhase = ''
+cat > example_data/acs100k.csv <<EOT
+"YEAR","REGION","STATEFIP","DENSITY","METRO","PUMA","PERWT","SEX","AGE","RACE","RACED","HISPAN","HISPAND","CITIZEN","LANGUAGE","LANGUAGED","SPEAKENG","EDUC","EDUCD","GRADEATT","GRADEATTD","EMPSTAT","EMPSTATD","INCTOT","INCSS","POVERTY"
+2006,32,1,409.6,3,2300,87.0,1,47,1,100,0,0,0,1,100,3,6,65,0,0,1,12,36000,0,347
+EOT
+    ''; });
+
+  # 2021-05-09: compilation requires patches from master,
+  # remove at next release (current is 0.1.0.4).
+  large-hashable = appendPatches super.large-hashable [
+    # Fix compilation of TH code for GHC >= 8.8
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
+      sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
+      excludes = [
+        ".travis.yml"
+        "stack**"
+      ];
+    })
+    # Fix cpp invocation
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
+      sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
+    })
+  ];
+
+  # BSON defaults to requiring network instead of network-bsd which is
+  # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
+  bson = appendConfigureFlag (super.bson.override {
+    network = self.network-bsd;
+  }) "-f-_old_network";
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
