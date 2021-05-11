@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libGLU, libGL, unzip, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
+{ lib, stdenv, fetchzip, libGLU, libGL, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
 
 let
   common = import ./common.nix { inherit fetchzip; };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DIRRLICHT_BUILD_TOOLS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake unzip ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ OpenGL Cocoa IOKit ];
 
   meta = {

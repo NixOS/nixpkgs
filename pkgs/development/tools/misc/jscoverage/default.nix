@@ -1,4 +1,4 @@
-{ autoconf, fetchurl, makedepend, perl, python3, lib, stdenv, unzip, zip }:
+{ autoconf, fetchurl, makedepend, perl, python3, lib, stdenv, zip }:
 
 stdenv.mkDerivation rec {
   name = "jscoverage-0.5.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ./jsfalse_to_null.patch
   ];
 
-  nativeBuildInputs = [ unzip perl python3 zip ];
+  nativeBuildInputs = [ perl python3 zip ];
 
   strictDeps = true;
 
