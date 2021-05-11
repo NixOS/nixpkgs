@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "1wgv19b6y4fp5x1z54psaaialji2rckl5vdh156kyw47k9r5krya";
+    sha256 = "sha256-K9e1M9Lae7RWY8amLkftDS8Zigd/WNxzDEY7eXNjZ0k=";
   };
 
   nativeBuildInputs = [ pkg-config protobuf ];
