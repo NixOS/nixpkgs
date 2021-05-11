@@ -13,7 +13,7 @@ let
   generateConfig = extraLabels: {
     metrics = (map (path: {
       name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
-      path = "$.${path}";
+      path = "{ .${path} }";
       labels = extraLabels;
     }) [
       "actions.'add header'"
