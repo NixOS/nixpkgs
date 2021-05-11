@@ -302,7 +302,7 @@ let
         url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
           metrics = [
-            { name = "json_test_metric"; path = "$.test"; }
+            { name = "json_test_metric"; path = "{ .test }"; }
           ];
         });
       };
