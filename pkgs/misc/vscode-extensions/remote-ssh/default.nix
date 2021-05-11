@@ -11,7 +11,7 @@ let
   # patch runs on remote machine hence use of which
   # links to local node if version is 12
   patch = ''
-    f="/home/''$USER/.vscode-server/bin/''$COMMIT_ID/node"
+    f="$(getent passwd $USER | cut -d: -f6)/.vscode-server/bin/$COMMIT_ID/node"
     localNodePath=''$(which node)
     if [ -x "''$localNodePath" ]; then
       localNodeVersion=''$(node -v)
