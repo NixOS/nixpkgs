@@ -1,4 +1,4 @@
-{stdenv, lib, fetchgit, autoconf, automake, libtool, cmake, autoreconfHook, openblas, symlinkJoin}: pkg:
+{stdenv, lib, fetchgit, autoconf, automake, libtool, cmake, autoreconfHook, symlinkJoin}: pkg:
 let 
   inherit (builtins) hasAttr getAttr length;
   inherit (lib) attrByPath concatStringsSep;

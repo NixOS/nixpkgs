@@ -6499,6 +6499,7 @@ in
     omparser = callPackage ../applications/science/misc/openmodelica/omparser { };
     omedit = libsForQt5.callPackage ../applications/science/misc/openmodelica/omedit { };
     omlibrary = callPackage ../applications/science/misc/openmodelica/omlibrary { };
+    combined = callPackage ../applications/science/misc/openmodelica/combined { };
   };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
