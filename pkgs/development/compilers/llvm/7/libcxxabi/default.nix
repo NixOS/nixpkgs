@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
+{ lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
   # on musl the shared objects don't build
@@ -58,11 +58,15 @@ stdenv.mkDerivation {
       ${lib.optionalString enableShared "ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1"}
     '';
 
-  meta = {
+  meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";
-    description = "A new implementation of low level support for a standard C++ library";
-    license = with lib.licenses; [ ncsa mit ];
-    maintainers = with lib.maintainers; [ vlstill ];
-    platforms = lib.platforms.unix;
+    description = "Provides C++ standard library support";
+    longDescription = ''
+      libc++abi is a new implementation of low level support for a standard C++ library.
+    '';
+    # "All of the code in libc++abi is dual licensed under the MIT license and
+    # the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
+    maintainers = llvm_meta.maintainers ++ [ lib.maintainers.vlstill ];
   };
 }

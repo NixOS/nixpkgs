@@ -1,4 +1,4 @@
-{ lib, stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
 
 let
 
@@ -89,4 +89,20 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
+
+  meta = llvm_meta // {
+    homepage = "https://compiler-rt.llvm.org/";
+    description = "Compiler runtime libraries";
+    longDescription = ''
+      The compiler-rt project provides highly tuned implementations of the
+      low-level code generator support routines like "__fixunsdfdi" and other
+      calls generated when a target doesn't have a short sequence of native
+      instructions to implement a core IR operation. It also provides
+      implementations of run-time libraries for dynamic testing tools such as
+      AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
+    '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
+  };
 }

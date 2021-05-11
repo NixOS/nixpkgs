@@ -8,18 +8,7 @@ stdenv.mkDerivation {
 
   src = fetch "libcxxabi" "1cbmzspwjlr8f6sp73pw6ivf4dpg6rpc61by0q1m2zca2k6yif3a";
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
-
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared) [
-    "-DLIBCXXABI_ENABLE_SHARED=OFF"
-  ];
+  outputs = [ "out" "dev" ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
@@ -33,6 +22,23 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d llvm -i ${./wasm.patch}
   '';
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+    "-DLLVM_ENABLE_LIBCXX=ON"
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+    "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optionals (!enableShared) [
+    "-DLIBCXXABI_ENABLE_SHARED=OFF"
+  ];
 
   installPhase = if stdenv.isDarwin
     then ''

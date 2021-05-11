@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
 , buildLlvmTools
 , fetch
 , cmake
@@ -7,11 +7,11 @@
 , version
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch "lld" "121xhxrlvwy3k5nf6p1wv31whxlb635ssfkci8z93mwv4ja1xflz";
+  src = fetch pname "121xhxrlvwy3k5nf6p1wv31whxlb635ssfkci8z93mwv4ja1xflz";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -28,10 +28,16 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "lib" "dev" ];
 
-  meta = {
-    description = "The LLVM Linker";
-    homepage    = "https://lld.llvm.org/";
-    license     = lib.licenses.ncsa;
-    platforms   = lib.platforms.all;
+  meta = llvm_meta // {
+    homepage = "https://lld.llvm.org/";
+    description = "The LLVM linker";
+    longDescription = ''
+      LLD is a linker from the LLVM project that is a drop-in replacement for
+      system linkers and runs much faster than them. It also provides features
+      that are useful for toolchain developers.
+      The linker supports ELF (Unix), PE/COFF (Windows), Mach-O (macOS), and
+      WebAssembly in descending order of completeness. Internally, LLD consists
+      of several different linkers.
+    '';
   };
 }

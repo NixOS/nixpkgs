@@ -96,7 +96,6 @@ let
 
     lld = callPackage ./lld {
       inherit llvm_meta;
-      libunwind = libraries.libunwind;
     };
 
     lldb = callPackage ./lldb {
@@ -222,24 +221,31 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    libcxxabi = callPackage ./libcxxabi ({ inherit llvm_meta; } //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-        libunwind = libraries.libunwind;
-      }));
+    libcxxabi = callPackage ./libcxxabi {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    libunwind = callPackage ./libunwind ({
+    libunwind = callPackage ./libunwind {
+      inherit llvm_meta;
       inherit (buildLlvmTools) llvm;
-    } // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-      stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-    });
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    openmp = callPackage ./openmp { inherit llvm_meta; };
+    openmp = callPackage ./openmp {
+      inherit llvm_meta;
+    };
   });
 
 in { inherit tools libraries; } // libraries // tools

@@ -17,6 +17,12 @@ let
 
   clang-tools-extra_src = fetch "clang-tools-extra" "06n1yp638rh24xdxv9v2df0qajxbjz4w59b7dd4ky36drwmpi4yh";
 
+  llvm_meta = {
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
+    platforms   = lib.platforms.all;
+  };
+
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
     mkExtraBuildCommands0 = cc: ''
@@ -32,14 +38,16 @@ let
 
   in {
 
-    libllvm = callPackage ./llvm { };
+    libllvm = callPackage ./llvm {
+      inherit llvm_meta;
+    };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm.out // { outputUnspecified = true; };
 
     libclang = callPackage ./clang {
-      inherit clang-tools-extra_src;
+      inherit clang-tools-extra_src llvm_meta;
     };
 
     clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
@@ -83,9 +91,13 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {};
+    lld = callPackage ./lld {
+      inherit llvm_meta;
+    };
 
-    lldb = callPackage ./lldb {};
+    lldb = callPackage ./lldb {
+      inherit llvm_meta;
+    };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be
@@ -181,12 +193,14 @@ let
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRtWithLibc
                else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt
                else stdenv;
@@ -201,23 +215,30 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx ({} //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    libcxxabi = callPackage ./libcxxabi ({} //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-        libunwind = libraries.libunwind;
-      }));
+    libcxxabi = callPackage ./libcxxabi {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    libunwind = callPackage ./libunwind ({} //
-      (lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-        stdenv = overrideCC stdenv buildLlvmTools.lldClangNoLibcxx;
-      }));
+    libunwind = callPackage ./libunwind {
+      inherit llvm_meta;
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoLibcxx
+               else stdenv;
+    };
 
-    openmp = callPackage ./openmp.nix {};
+    openmp = callPackage ./openmp {
+      inherit llvm_meta;
+    };
   });
 
 in { inherit tools libraries; } // libraries // tools
