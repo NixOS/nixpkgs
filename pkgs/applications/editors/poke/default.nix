@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional guiSupport makeWrapper;
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optionals guiSupport [tk tcl.tclPackageHook tcllib]
+  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
