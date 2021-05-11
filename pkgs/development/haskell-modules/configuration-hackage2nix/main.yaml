@@ -81,7 +81,8 @@ default-package-overrides:
   # e. g. https://github.com/diagrams/diagrams-core/issues/115
   # We can keep this pin presumably until base 4.15
   - monoid-extras < 0.6
-  - ghcide == 1.2.*                     # 2021-05-11: Pin ghcide for hls 1.1.0
+  - ghcide == 1.2.*                     # 2021-05-11: Pin for hls 1.1.0
+  - hls-plugin-api == 1.1.0.0           # 2021-05-11: Pin for hls 1.1.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
