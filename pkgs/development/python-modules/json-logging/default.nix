@@ -30,10 +30,8 @@ buildPythonPackage rec {
   ];
 
   # - Quart is not packaged for Nixpkgs.
-  # - FastAPI is broken, see #112701 and tiangolo/fastapi#2335.
-  checkInputs = [ wheel flask /*quart*/ sanic /*fastapi*/ uvicorn requests pytestCheckHook ];
-  disabledTests = [ "quart" "fastapi" ];
-  disabledTestPaths = [ "tests/test_fastapi.py" ];
+  checkInputs = [ wheel flask /*quart*/ sanic fastapi uvicorn requests pytestCheckHook ];
+  disabledTests = [ "quart" ];
   # Tests spawn servers and try to connect to them.
   __darwinAllowLocalNetworking = true;
 
