@@ -9,10 +9,10 @@ biocVersion <-  as.numeric(as.character(max(biocVersion[biocVersion$R == getRver
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
-                  , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
-                  , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
-                  , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
-                  )
+                 , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
+                 , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
+                 , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
+                   )
 
 mirrorType <- commandArgs(trailingOnly=TRUE)[1]
 stopifnot(mirrorType %in% names(mirrorUrls))
@@ -33,7 +33,7 @@ nixPrefetch <- function(name, version) {
     as.character(readFormatted$V6[ prevV ])
 
   else {
-    # avoid nix-prefetch-url because it often fails to fetch/hash large files
+                                        # avoid nix-prefetch-url because it often fails to fetch/hash large files
     url <- paste0(mirrorUrl, name, "_", version, ".tar.gz")
     tmp <- tempfile(pattern=paste0(name, "_", version), fileext=".tar.gz")
     cmd <- paste0("wget -q -O '", tmp, "' '", url, "'")
@@ -46,26 +46,26 @@ nixPrefetch <- function(name, version) {
 }
 
 escapeName <- function(name) {
-    switch(name, "import" = "r_import", "assert" = "r_assert", name)
+  switch(name, "import" = "r_import", "assert" = "r_assert", name)
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- escapeName(name)
-    attr <- gsub(".", "_", name, fixed=TRUE)
-    options(warn=5)
-    depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
-                    , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
-                    , if (is.na(linkingTo)) "" else gsub("[ \t\n]+", "", linkingTo)
-                    , sep=","
-                    )
-    depends <- unlist(strsplit(depends, split=",", fixed=TRUE))
-    depends <- lapply(depends, gsub, pattern="([^ \t\n(]+).*", replacement="\\1")
-    depends <- lapply(depends, gsub, pattern=".", replacement="_", fixed=TRUE)
-    depends <- depends[depends %in% knownPackages]
-    depends <- lapply(depends, escapeName)
-    depends <- paste(depends)
-    depends <- paste(sort(unique(depends)), collapse=" ")
-    paste0("  ", attr, " = derive2 { name=\"", name, "\"; version=\"", version, "\"; sha256=\"", sha256, "\"; depends=[", depends, "]; };")
+  name <- escapeName(name)
+  attr <- gsub(".", "_", name, fixed=TRUE)
+  options(warn=5)
+  depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
+                 , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
+                 , if (is.na(linkingTo)) "" else gsub("[ \t\n]+", "", linkingTo)
+                 , sep=","
+                   )
+  depends <- unlist(strsplit(depends, split=",", fixed=TRUE))
+  depends <- lapply(depends, gsub, pattern="([^ \t\n(]+).*", replacement="\\1")
+  depends <- lapply(depends, gsub, pattern=".", replacement="_", fixed=TRUE)
+  depends <- depends[depends %in% knownPackages]
+  depends <- lapply(depends, escapeName)
+  depends <- paste(depends)
+  depends <- paste(sort(unique(depends)), collapse=" ")
+  paste0("  ", attr, " = derive2 { name=\"", name, "\"; version=\"", version, "\"; sha256=\"", sha256, "\"; depends=[", depends, "]; };")
 }
 
 clusterExport(cl, c("nixPrefetch","readFormatted", "mirrorUrl", "knownPackages"))
