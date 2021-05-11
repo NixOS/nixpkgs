@@ -4,12 +4,13 @@ let
 
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
+  haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl;
 
 in
 
 stdenv.mkDerivation {
-  pname = "compiler-rt";
+  pname = "compiler-rt" + lib.optionalString (haveLibc) "-libc";
   inherit version;
   src = fetch "compiler-rt" "1n48p8gjarihkws0i2bay5w9bdwyxyxxbpwyng7ba58jb30dlyq5";
 
@@ -29,14 +30,15 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals (useLLVM || bareMetal) [
+  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+  ] ++ lib.optionals (useLLVM && !haveLibc) [
+    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ] ++ lib.optionals (bareMetal) [
@@ -83,10 +85,9 @@ stdenv.mkDerivation {
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM) ''
-    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/linux/crtbegin.o
-    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
-    ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
-    ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
-
 }
