@@ -30,19 +30,19 @@ let
 
     libllvm = callPackage ./llvm { };
 
-    # `llvm` historically had the binaries. But this migration
-    # technique also impedes `lib.get*`. Perhaps we will revisit it.
-    llvm = tools.libllvm.out;
+    # `llvm` historically had the binaries.  When choosing an output explicitly,
+    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputUnspecified = true; };
 
     libllvm-polly = callPackage ./llvm { enablePolly = true; };
 
-    llvm-polly = tools.libllvm-polly.lib;
+    llvm-polly = tools.libllvm-polly.lib // { outputUnspecified = true; };
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src;
     };
 
-    clang-unwrapped = tools.libclang.out;
+    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;

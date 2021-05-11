@@ -22,5 +22,6 @@ buildGoModule {
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Gonzih ];
+    broken = true;
   };
 }

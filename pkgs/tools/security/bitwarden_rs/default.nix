@@ -1,6 +1,6 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
-, Security, CoreServices
+, libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
 let
@@ -19,7 +19,7 @@ in rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ Security CoreServices ]
+    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 

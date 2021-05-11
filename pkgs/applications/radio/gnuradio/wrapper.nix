@@ -96,7 +96,7 @@ let
     ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
       # 3.7 builds with qt4
-      (if unwrapped.versionAttr.major == "3.8" then
+      (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
         [
           "--prefix" "QT_PLUGIN_PATH" ":"
           "${

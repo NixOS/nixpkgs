@@ -253,6 +253,8 @@ in
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  evans = callPackage ../development/tools/evans { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
@@ -809,6 +811,8 @@ in
   quich = callPackage ../tools/misc/quich { } ;
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
+
+  tnat64 = callPackage ../tools/networking/tnat64 { };
 
   xcd = callPackage ../tools/misc/xcd { };
 
@@ -27232,6 +27236,8 @@ in
 
   picom = callPackage ../applications/window-managers/picom {};
 
+  xd = callPackage ../applications/networking/p2p/xd {};
+
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
   xdg-dbus-proxy = callPackage ../development/libraries/xdg-dbus-proxy { };
@@ -30137,8 +30143,9 @@ in
     kops_1_16
     kops_1_17
     kops_1_18
+    kops_1_19
     ;
-  kops = kops_1_18;
+  kops = kops_1_19;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
