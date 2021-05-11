@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
