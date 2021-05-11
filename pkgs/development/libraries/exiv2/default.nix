@@ -45,6 +45,57 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Exiv2/exiv2/commit/306c8a6fd4ddd70e76043ab255734720829a57e8.patch";
       sha256 = "0D/omxYxBPGUu3uSErlf48dc6Ukwc2cEN9/J3e7a9eU=";
     })
+    # https://github.com/Exiv2/exiv2/pull/1523
+    (fetchpatch {
+      name = "CVE-2021-3482_1.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/22ea582c6b74ada30bec3a6b15de3c3e52f2b4da.patch";
+      sha256 = "0z9hcywjzb2q3yh3kkvjcg70rz3l7vgqjhk1h9wn291ys0jc2yxm";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3482_2.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/cac151ec052d44da3dc779e9e4028e581acb128a.patch";
+      sha256 = "1jyh0almvbg47c7i46hk9vg05v1r6mzc89xc7y6d8zcrvhyra0wk";
+    })
+
+    # https://github.com/Exiv2/exiv2/pull/1534
+    (fetchpatch {
+      name = "CVE-2021-29457.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/13e5a3e02339b746abcaee6408893ca2fd8e289d.patch";
+      sha256 = "19nkdpn7jdm1rp8na68djzrl6rxdl1n5n4974ypazpmqr04x0j79";
+    })
+    # https://github.com/Exiv2/exiv2/pull/1539
+    (fetchpatch {
+      name = "CVE-2021-29458_1.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/0a91b56616404f7b29ca28deb01ce18b767d1871.patch";
+      sha256 = "0ryjp2pzlj5h79q67y7az91yhmdqhdpgdg3mlc2qdamsqdp29m2b";
+    })
+    (fetchpatch {
+      name = "CVE-2021-29458_2.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/c92ac88cb0ebe72a5a17654fe6cecf411ab1e572.patch";
+      sha256 = "1g7xm7mkr01lvd4d0hikswxbdmb5q2ihw4ddxhc0shsg3lkv3zqp";
+    })
+    (fetchpatch {
+      name = "CVE-2021-29458_3.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/9b7a19f957af53304655ed1efe32253a1b11a8d0.patch";
+      sha256 = "0a8xqmh97q7gj727yz4gbrzh5jsmlg2a45fjfl3wychpwbn7dqlc";
+    })
+    (fetchpatch {
+      name = "CVE-2021-29458_4.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/fadb68718eb1bff3bd3222bd26ff3328f5306730.patch";
+      sha256 = "1hx6jf17if4afrz9halky7rlpvmgvysd46bby3zk6hipv8s8bk6h";
+    })
+    (fetchpatch {
+      name = "CVE-2021-29458_5.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/06d2db6e5fd2fcca9c060e95fc97f8a5b5d4c22d.patch";
+      sha256 = "1mh4ww2rj3a2kd0i2510zgv2n72wd0p3j1xd735ndp85fzvw4n3z";
+    })
+    # https://github.com/Exiv2/exiv2/pull/1581
+    (fetchpatch {
+      name = "CVE-2021-29470_1.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/6527e4f5979ced22d509e27d87d51287046f2008.patch";
+      sha256 = "0djh19xvn7p9bn06flznjw3xsjpmn10cdxwqq9xgh5k4f6ic4fz1";
+    })
+    ./CVE-2021-29470_2.patch  # rebased on top of v0.27.3
   ];
 
   nativeBuildInputs = [
