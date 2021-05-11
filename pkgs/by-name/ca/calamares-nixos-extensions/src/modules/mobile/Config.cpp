@@ -25,6 +25,9 @@ Config::setConfigurationMap( const QVariantMap& cfgMap )
     m_userInterface = getString( cfgMap, "userInterface", "(unknown)" );
     m_version = getString( cfgMap, "version", "(unknown)" );
     m_username = getString( cfgMap, "username", "user" );
+    m_userPasswordNumeric = getBool( cfgMap, "userPasswordNumeric", true );
+
+    m_builtinVirtualKeyboard = getBool( cfgMap, "builtinVirtualKeyboard", true );
 
     m_featureSshd = getBool( cfgMap, "featureSshd", true );
     m_featureFsType = getBool( cfgMap, "featureFsType", false );

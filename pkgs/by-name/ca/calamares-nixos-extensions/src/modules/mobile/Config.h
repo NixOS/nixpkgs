@@ -10,6 +10,9 @@
 class Config : public QObject
 {
     Q_OBJECT
+    /* installer UI */
+    Q_PROPERTY( bool builtinVirtualKeyboard READ builtinVirtualKeyboard CONSTANT FINAL )
+
     /* welcome */
     Q_PROPERTY( QString osName READ osName CONSTANT FINAL )
     Q_PROPERTY( QString arch READ arch CONSTANT FINAL )
@@ -20,6 +23,7 @@ class Config : public QObject
     /* default user */
     Q_PROPERTY( QString username READ username CONSTANT FINAL )
     Q_PROPERTY( QString userPassword READ userPassword WRITE setUserPassword NOTIFY userPasswordChanged )
+    Q_PROPERTY( bool userPasswordNumeric READ userPasswordNumeric CONSTANT FINAL )
 
     /* ssh server + credentials */
     Q_PROPERTY( bool featureSshd READ featureSshd CONSTANT FINAL )
@@ -58,6 +62,9 @@ public:
     void setConfigurationMap( const QVariantMap& );
     Calamares::JobList createJobs();
 
+    /* installer UI */
+    bool builtinVirtualKeyboard() { return m_builtinVirtualKeyboard; }
+
     /* welcome */
     QString osName() const { return m_osName; }
     QString arch() const { return m_arch; }
@@ -69,6 +76,7 @@ public:
     QString username() const { return m_username; }
     QString userPassword() const { return m_userPassword; }
     void setUserPassword( const QString& userPassword );
+    bool userPasswordNumeric() const { return m_userPasswordNumeric; }
 
     /* ssh server + credetials */
     bool featureSshd() { return m_featureSshd; }
@@ -117,6 +125,9 @@ public:
     QString cmdSshdUseradd() const { return m_cmdSshdUseradd; }
 
 private:
+    /* installer UI */
+    bool m_builtinVirtualKeyboard;
+
     /* welcome */
     QString m_osName;
     QString m_arch;
@@ -127,6 +138,7 @@ private:
     /* default user */
     QString m_username;
     QString m_userPassword;
+    bool m_userPasswordNumeric;
 
     /* ssh server + credetials */
     bool m_featureSshd;

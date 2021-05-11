@@ -19,7 +19,7 @@ Page
         "welcome": null, /* titlebar disabled */
         "install_target": "Installation target",
         "install_target_confirm": "Warning",
-        "default_pin": "Lockscreen PIN",
+        "user_pass": "User password",
         "ssh_confirm": "SSH server",
         "ssh_credentials": "SSH credentials",
         "fs_selection": "Root filesystem",
@@ -33,8 +33,8 @@ Page
          "screens": ["welcome"]},
         {"name": "installTarget",
          "screens": ["install_target", "install_target_confirm"]},
-        {"name": "userPin",
-         "screens": ["default_pin"]},
+        {"name": "userPassword",
+         "screens": ["user_pass"]},
         {"name": "sshd",
          "screens": ["ssh_confirm", "ssh_credentials"]},
         {"name": "fsType",
@@ -46,7 +46,7 @@ Page
     ]
     property var featureIdByScreen: (function() {
         /* Put "features" above into an index of screen name -> feature id:
-         * featureIdByScreen = {"welcome": 0, "default_pin": 1, ...} */
+         * featureIdByScreen = {"welcome": 0, "user_pass": 1, ...} */
         var ret = {};
         for (var i=0; i<features.length; i++) {
             for (var j=0; j<features[i]["screens"].length; j++) {
@@ -55,8 +55,8 @@ Page
         }
         return ret;
     }())
-    /* Only allow characters, that can be typed in with the initramfs on-screen keyboard
-     * (osk-sdl: see src/keyboard.cpp). FIXME: make configurable, but keep this as default? */
+    /* Only allow characters, that can be typed in with osk-sdl
+     * (src/keyboard.cpp). Details in big comment in validatePassword(). */
      property var allowed_chars:
         /* layer 0 */ "abcdefghijklmnopqrstuvwxyz" +
         /* layer 1 */ "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -142,6 +142,7 @@ Page
     InputPanel {
         id: inputPanel
         y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+        visible: config.builtinVirtualKeyboard
         anchors.left: parent.left
         anchors.right: parent.right
     }
@@ -183,10 +184,10 @@ Page
         timer.start();
     }
     function navNextFeature() {
-        var id = featureIdByScreen[screen] + 1;
+        var id;
 
         /* Skip disabled features */
-        do {
+        for (id = featureIdByScreen[screen] + 1; id < features.length; id++) {
             /* First letter uppercase */
             var name = features[id]["name"];
             var nameUp = name.charAt(0).toUpperCase() + name.slice(1);
@@ -195,7 +196,6 @@ Page
             var configOption = "feature" + nameUp;
             if (config[configOption] === false) {
                 console.log("Skipping feature (disabled in config): " + name);
-                id += 1;
                 continue;
             }
 
@@ -204,10 +204,11 @@ Page
             if (eval("typeof " + funcName) === "function"
                 && eval(funcName + "()")) {
                 console.log("Skipping feature (skip function): " + name);
-                id += 1;
                 continue;
             }
-        } while(false);
+
+            break;
+        }
 
         console.log("Navigating to feature: " + features[id]["name"]);
         return navTo(features[id]["screens"][0]);
@@ -252,7 +253,7 @@ Page
         return true;
     }
 
-    /* Input validation: user-screens (default_pin, ssh_credentials) */
+    /* Input validation: user-screens (user_pass, ssh_credentials) */
     function validatePin(userPin, userPinRepeat, errorText) {
         var pin = userPin.text;
         var repeat = userPinRepeat.text;
@@ -388,11 +389,21 @@ Page
         if (pass == "")
             return validationFailure(errorText);
 
+        /* This function gets called for the FDE password and for the user
+         * password. As of writing, all distributions shipping the mobile
+         * module are using osk-sdl to type in the FDE password after the
+         * installation, and another keyboard after booting up, to type in the
+         * user password. The osk-sdl password has the same keys as
+         * squeekboard's default layout, and other keyboards should be able to
+         * type these characters in as well. For now, verify that the password
+         * only contains characters that can be typed in by osk-sdl. If you
+         * need this to be more sophisticated, feel free to submit patches to
+         * make this more configurable. */
         if (!check_chars(pass))
             return validationFailure(errorText,
                                      "The password must only contain" +
-                                     " these characters, others cannot be" +
-                                     " typed in at boot time:\n" +
+                                     " these characters, others can possibly" +
+                                     " not be typed in after installation:\n" +
                                      "\n" +
                                      allowed_chars_multiline());
 
