@@ -9,9 +9,7 @@ let
   baseInterp =
     stdenv.mkDerivation {
       pname = "tcl";
-      inherit version;
-
-      inherit src;
+      inherit version src;
 
       outputs = [ "out" "man" ];
 
