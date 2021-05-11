@@ -7201,6 +7201,16 @@
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
+  nixbitcoin = {
+    email = "nixbitcoin@i2pmail.org";
+    github = "nixbitcoin";
+    githubId = 45737139;
+    name = "nixbitcoindev";
+    keys = [{
+      longkeyid = "rsa4096/0xDD11F9AD5308B3BA";
+      fingerprint = "577A 3452 7F3E 2A85 E80F  E164 DD11 F9AD 5308 B3BA";
+    }];
+  };
   nixinator = {
     email = "33lockdown33@protonmail.com";
     github = "nixinator";
