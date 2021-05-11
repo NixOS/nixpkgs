@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
   };
 
-  patches = [ ./bochs-2.6.11-glibc-2.26.patch ./fix-build-smp.patch ];
+  patches = [
+    ./bochs-2.6.11-glibc-2.26.patch
+    ./fix-build-smp.patch
+    ./bochs_fix_narrowing_conv_warning.patch
+  ];
 
   buildInputs =
   [ pkg-config libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]

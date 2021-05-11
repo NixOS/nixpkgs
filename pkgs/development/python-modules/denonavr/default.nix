@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.10.6";
+  version = "0.10.7";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "scarface-4711";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jcbjExcyZSE+qVPuYiMmuneugDMBoYz4apY/lz4JnMI=";
+    sha256 = "sha256-IGfU9nnlfZf8U6pCzG7cegmqxmDNONom0U14PZHHaYY=";
   };
 
   propagatedBuildInputs = [

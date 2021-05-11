@@ -4291,6 +4291,8 @@ in {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motioneye-client = callPackage ../development/python-modules/motioneye-client { };
+
   moto = callPackage ../development/python-modules/moto { };
 
   motor = callPackage ../development/python-modules/motor { };
@@ -4366,6 +4368,8 @@ in {
   mutagen = callPackage ../development/python-modules/mutagen { };
 
   mutatormath = callPackage ../development/python-modules/mutatormath { };
+
+  mutesync = callPackage ../development/python-modules/mutesync { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
 
@@ -5432,6 +5436,10 @@ in {
 
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
+  pycflow2dot = callPackage ../development/python-modules/pycflow2dot {
+    inherit (pkgs) graphviz;
+  };
+
   pychannels = callPackage ../development/python-modules/pychannels { };
 
   pychart = callPackage ../development/python-modules/pychart { };
@@ -5737,6 +5745,8 @@ in {
 
   pykodi = callPackage ../development/python-modules/pykodi { };
 
+  pykoplenti = callPackage ../development/python-modules/pykoplenti { };
+
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
@@ -5836,6 +5846,8 @@ in {
   pyment = callPackage ../development/python-modules/pyment { };
 
   pymetar = callPackage ../development/python-modules/pymetar { };
+
+  pymeteireann = callPackage ../development/python-modules/pymeteireann { };
 
   pymetno = callPackage ../development/python-modules/pymetno { };
 
@@ -7237,6 +7249,8 @@ in {
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+
+  rtoml = callPackage ../development/python-modules/rtoml { };
 
   Rtree = callPackage ../development/python-modules/Rtree {
     inherit (pkgs) libspatialindex;

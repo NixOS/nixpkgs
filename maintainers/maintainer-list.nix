@@ -7429,6 +7429,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onsails = {
+    email = "andrey@onsails.com";
+    github = "onsails";
+    githubId = 107261;
+    name = "Andrey Kuznetsov";
+  };
   onny = {
     email = "onny@project-insanity.org";
     github = "onny";

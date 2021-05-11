@@ -30,7 +30,18 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--features=notmuch"
     "--features=maildir"
+    "--features=pulseaudio"
   ];
+
+  prePatch = ''
+    substituteInPlace src/util.rs \
+      --replace "/usr/share/i3status-rust" "$out/share"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share
+    cp -R files/* $out/share
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/i3status-rs --prefix PATH : "${ethtool}/bin"

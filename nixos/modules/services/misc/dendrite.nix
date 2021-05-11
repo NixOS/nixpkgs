@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.services.matrix-dendrite;
+  cfg = config.services.dendrite;
   settingsFormat = pkgs.formats.yaml { };
   configurationYaml = settingsFormat.generate "dendrite.yaml" cfg.settings;
-  workingDir = "/var/lib/matrix-dendrite";
+  workingDir = "/var/lib/dendrite";
 in
 {
-  options.services.matrix-dendrite = {
+  options.services.dendrite = {
     enable = lib.mkEnableOption "matrix.org dendrite";
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
@@ -24,31 +24,31 @@ in
     };
     tlsCert = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      example = "/var/lib/matrix-dendrite/server.cert";
+      example = "/var/lib/dendrite/server.cert";
       default = null;
       description = ''
         The path to the TLS certificate.
 
         <programlisting>
-          nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
         </programlisting>
       '';
     };
     tlsKey = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      example = "/var/lib/matrix-dendrite/server.key";
+      example = "/var/lib/dendrite/server.key";
       default = null;
       description = ''
         The path to the TLS key.
 
         <programlisting>
-          nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
         </programlisting>
       '';
     };
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      example = "/var/lib/matrix-dendrite/registration_secret";
+      example = "/var/lib/dendrite/registration_secret";
       default = null;
       description = ''
         Environment file as defined in <citerefentry>
@@ -62,7 +62,7 @@ in
 
         <programlisting>
           # snippet of dendrite-related config
-          services.matrix-dendrite.settings.client_api.registration_shared_secret = "$REGISTRATION_SHARED_SECRET";
+          services.dendrite.settings.client_api.registration_shared_secret = "$REGISTRATION_SHARED_SECRET";
         </programlisting>
 
         <programlisting>
@@ -95,7 +95,7 @@ in
               requests and events.
 
               <programlisting>
-                nix-shell -p matrix-dendrite --command "generate-keys --private-key matrix_key.pem"
+                nix-shell -p dendrite --command "generate-keys --private-key matrix_key.pem"
               </programlisting>
             '';
           };
@@ -136,11 +136,11 @@ in
       message = ''
         If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
-        nix-shell -p matrix-dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
       '';
     }];
 
-    systemd.services.matrix-dendrite = {
+    systemd.services.dendrite = {
       description = "Dendrite Matrix homeserver";
       after = [
         "network.target"
@@ -149,22 +149,22 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        StateDirectory = "matrix-dendrite";
+        StateDirectory = "dendrite";
         WorkingDirectory = workingDir;
-        RuntimeDirectory = "matrix-dendrite";
+        RuntimeDirectory = "dendrite";
         RuntimeDirectoryMode = "0700";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStartPre =
           if (cfg.environmentFile != null) then ''
             ${pkgs.envsubst}/bin/envsubst \
               -i ${configurationYaml} \
-              -o /run/matrix-dendrite/dendrite.yaml
+              -o /run/dendrite/dendrite.yaml
           '' else ''
-            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/matrix-dendrite/dendrite.yaml
+            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
           '';
         ExecStart = lib.strings.concatStringsSep " " ([
-          "${pkgs.matrix-dendrite}/bin/dendrite-monolith-server"
-          "--config /run/matrix-dendrite/dendrite.yaml"
+          "${pkgs.dendrite}/bin/dendrite-monolith-server"
+          "--config /run/dendrite/dendrite.yaml"
         ] ++ lib.optionals (cfg.httpPort != null) [
           "--http-bind-address :${builtins.toString cfg.httpPort}"
         ] ++ lib.optionals (cfg.httpsPort != null) [

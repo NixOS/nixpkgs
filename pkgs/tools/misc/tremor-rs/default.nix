@@ -1,5 +1,5 @@
 { lib, rustPlatform, pkg-config, cmake, llvmPackages, openssl, fetchFromGitHub
-, installShellFiles }:
+, installShellFiles, stdenv, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   # TODO export TREMOR_PATH($out/lib) variable
   postInstall = ''
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Early stage event processing system for unstructured data with rich support for structural pattern matching, filtering and transformation";
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ humancalico ];
   };
 }

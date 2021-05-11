@@ -104,6 +104,7 @@ extra-packages:
   - gi-gdk == 3.0.24                    # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
+  - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
 
 package-maintainers:
   peti:
@@ -219,20 +220,22 @@ package-maintainers:
     - gitit
     - yarn-lock
     - yarn2nix
+    - large-hashable
   poscat:
     - hinit
   bdesham:
     - pinboard-notes-backup
 
 unsupported-platforms:
+  Allure:                                       [ x86_64-darwin ]
   alsa-mixer:                                   [ x86_64-darwin ]
   alsa-pcm:                                     [ x86_64-darwin ]
   alsa-seq:                                     [ x86_64-darwin ]
   AWin32Console:                                [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   barbly:                                       [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   bdcs-api:                                     [ x86_64-darwin ]
-  bindings-sane:                                [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
+  bindings-sane:                                [ x86_64-darwin ]
   cut-the-crap:                                 [ x86_64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
@@ -242,8 +245,9 @@ unsupported-platforms:
   Euterpea:                                     [ x86_64-darwin ]
   freenect:                                     [ x86_64-darwin ]
   FTGL:                                         [ x86_64-darwin ]
-  gi-dbusmenugtk3:                              [ x86_64-darwin ]
+  ghcjs-dom-hello:                              [ x86_64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin ]
+  gi-dbusmenugtk3:                              [ x86_64-darwin ]
   gi-ggit:                                      [ x86_64-darwin ]
   gi-ibus:                                      [ x86_64-darwin ]
   gi-ostree:                                    [ x86_64-darwin ]
@@ -256,8 +260,12 @@ unsupported-platforms:
   HFuse:                                        [ x86_64-darwin ]
   hidapi:                                       [ x86_64-darwin ]
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  hpapi:                                        [ x86_64-darwin ]
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
+  jsaddle-webkit2gtk:                           [ x86_64-darwin ]
+  LambdaHack:                                   [ x86_64-darwin ]
+  large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin ]
   libtelnet:                                    [ x86_64-darwin ]
@@ -266,10 +274,10 @@ unsupported-platforms:
   lio-fs:                                       [ x86_64-darwin ]
   logging-facade-journald:                      [ x86_64-darwin ]
   midi-alsa:                                    [ x86_64-darwin ]
-  mpi-hs:                                       [ aarch64-linux, x86_64-darwin ]
   mpi-hs-binary:                                [ aarch64-linux, x86_64-darwin ]
   mpi-hs-cereal:                                [ aarch64-linux, x86_64-darwin ]
   mpi-hs-store:                                 [ aarch64-linux, x86_64-darwin ]
+  mpi-hs:                                       [ aarch64-linux, x86_64-darwin ]
   mplayer-spot:                                 [ aarch64-linux ]
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
@@ -279,7 +287,9 @@ unsupported-platforms:
   posix-api:                                    [ x86_64-darwin ]
   Raincat:                                      [ x86_64-darwin ]
   reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
-  reflex-dom:                                   [ x86_64-darwin ]
+  reflex-dom-fragment-shader-canvas:            [ x86_64-darwin, aarch64-linux ]
+  reflex-dom:                                   [ x86_64-darwin, aarch64-linux ]
+  reflex-localize-dom:                          [ x86_64-darwin, aarch64-linux ]
   rtlsdr:                                       [ x86_64-darwin ]
   rubberband:                                   [ x86_64-darwin ]
   sbv:                                          [ aarch64-linux ]
@@ -290,21 +300,22 @@ unsupported-platforms:
   termonad:                                     [ x86_64-darwin ]
   tokyotyrant-haskell:                          [ x86_64-darwin ]
   udev:                                         [ x86_64-darwin ]
+  verifiable-expressions:                       [ aarch64-linux ]
   vrpn:                                         [ x86_64-darwin ]
+  vulkan-utils:                                 [ x86_64-darwin ]
   vulkan:                                       [ i686-linux, armv7l-linux, x86_64-darwin ]
   VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, x86_64-darwin ]
-  vulkan-utils:                                 [ x86_64-darwin ]
   webkit2gtk3-javascriptcore:                   [ x86_64-darwin ]
   Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-dhcp-server:                            [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-extras:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
-  Win32:                                        [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-junction-point:                         [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-notify:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-security:                               [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
-  Win32-services:                               [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   Win32-services-wrapper:                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32-services:                               [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
+  Win32:                                        [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   xattr:                                        [ x86_64-darwin ]
   xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
   XInput:                                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
@@ -358,69 +369,26 @@ dont-distribute-packages:
   - yices-easy
   - yices-painless
 
-  # these packages don't evaluate because they have broken (system) dependencies
-  - XML
-  - comark
-  - couch-simple
+  # These packages don‘t build because they use deprecated webkit versions.
   - diagrams-hsqml
-  - diagrams-reflex
   - dialog
-  - fltkhs-demos
-  - fltkhs-fluid-demos
-  - fltkhs-hello-world
-  - fltkhs-themes
-  - ghcjs-dom-hello
   - ghcjs-dom-webkit
-  - gi-javascriptcore
   - gi-webkit
-  - gi-webkit2
-  - gi-webkit2webextension
-  - gsmenu
-  - haste-gapi
-  - haste-perch
-  - hbro
-  - hplayground
   - hs-mesos
   - hsqml
   - hsqml-datamodel
-  - hsqml-datamodel-vinyl
-  - hsqml-datemodel-vinyl
   - hsqml-demo-manic
-  - hsqml-demo-morris
-  - hsqml-demo-notes
   - hsqml-demo-notes
   - hsqml-demo-samples
-  - hsqml-morris
-  - hsqml-morris
   - hstorchat
-  - imprevu-happstack
-  - jsaddle-webkit2gtk
   - jsaddle-webkitgtk
   - jsc
   - lambdacat
-  - leksah
   - manatee-all
   - manatee-browser
   - manatee-reader
   - markup-preview
-  - nomyx-api
-  - nomyx-core
-  - nomyx-language
-  - nomyx-library
-  - nomyx-server
-  - passman-cli
-  - passman-core
-  - reflex-dom-colonnade
-  - reflex-dom-contrib
-  - reflex-dom-fragment-shader-canvas
-  - reflex-dom-helpers
-  - reflex-jsx
-  - sneathlane-haste
   - spike
-  - tianbar
-  - trasa-reflex
-  - treersec
-  - wai-middleware-brotli
   - web-browser-in-haskell
   - webkit
   - webkitgtk3

@@ -95,6 +95,7 @@ digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dmix/elvish.vim
+dominikduda/vim_current_word
 dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
@@ -106,6 +107,8 @@ eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
 editorconfig/editorconfig-vim
+edluffy/hologram.nvim@main
+edluffy/specs.nvim@main
 edwinb/idris2-vim
 ehamberg/vim-cute-python
 eigenfoo/stan-vim
@@ -128,6 +131,7 @@ fatih/vim-go
 fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
+fhill2/floating.nvim
 fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
@@ -517,6 +521,7 @@ raghur/fruzzy
 raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
+ray-x/aurora
 rbgrouleff/bclose.vim
 rbong/vim-flog
 rhysd/committia.vim
@@ -527,6 +532,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
+rktjmp/fwatch.nvim@main
 rktjmp/lush.nvim@main
 rmagatti/auto-session@main
 rodjek/vim-puppet
@@ -593,6 +599,7 @@ steelsojka/completion-buffers
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
+sunjon/Shade.nvim
 svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls

@@ -38,8 +38,17 @@ let
     })
 
     # Pinned due to API changes in pyjwt>=2.0
-    (mkOverride "pyjwt" "1.7.1"
-      "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd")
+    (self: super: {
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.7.1";
+        src = oldAttrs.src.override {
+          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
+        };
+        disabledTests = [
+          "test_ec_verify_should_return_false_if_signature_invalid"
+        ];
+      });
+    })
 
     # Pinned due to bug in ring-doorbell 0.7.0
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
@@ -105,7 +114,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.5.1";
+  hassVersion = "2021.5.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -124,7 +133,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0bipjfkz4zqhy84jgrn3qxvs4nxya3j08lcsq3xa31xfz8wnpxwj";
+    sha256 = "1v1ah0kdkhx0pkma2qnk56iv00r2lb4i3sfpwlcr64gfkpzpakv8";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -173,17 +182,17 @@ in with py.pkgs; buildPythonApplication rec {
   doCheck = stdenv.isLinux;
 
   checkInputs = [
-    # test infrastructure
-    asynctest
+    # test infrastructure (selectively from requirement_test.txt)
     pytest-aiohttp
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     requests-mock
-    # component dependencies
-    pyotp
+    jsonpickle
     respx
+    # required by tests/auth/mfa_modules
+    pyotp
   ] ++ lib.concatMap (component: getPackages component py.pkgs) componentTests;
 
   # We can reasonably test components that don't communicate with any network
@@ -193,6 +202,7 @@ in with py.pkgs; buildPythonApplication rec {
     "accuweather"
     "airly"
     "analytics"
+    "androidtv"
     "alert"
     "api"
     "auth"
@@ -296,16 +306,19 @@ in with py.pkgs; buildPythonApplication rec {
     "media_player"
     "media_source"
     "met"
+    "met_eireann"
     "minecraft_server"
     "mobile_app"
     "modbus"
     "moon"
+    "motioneye"
     "mqtt"
     "mqtt_eventstream"
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "mutesync"
     "nexia"
     "notify"
     "notion"
@@ -321,6 +334,7 @@ in with py.pkgs; buildPythonApplication rec {
     "persistent_notification"
     "person"
     "plaato"
+    "plugwise"
     "prometheus"
     "proximity"
     "push"
