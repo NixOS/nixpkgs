@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
+, nix-update-script
 , pkg-config
-, gnome
 , itstool
 , gtk3
 , wrapGAppsHook
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.13";
+  version = "3.22.16";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "05k84bbgrrxchxg08l1jjcz384kpjdmxd24g0wnf731aa9zcnp5k";
+    sha256 = "0arjnm5kgnb4pir53hlm94iym80d0srs256sm2hwhwwc5fr1w79i";
   };
 
   nativeBuildInputs = [
@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
+    updateScript = nix-update-script {
       attrPath = "gnome.${pname}";
     };
   };
