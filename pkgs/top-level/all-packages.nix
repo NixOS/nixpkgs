@@ -2419,6 +2419,8 @@ in
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
 
+  earthly = callPackage ../development/tools/earthly { };
+
   earlybird = callPackage ../tools/security/earlybird { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
