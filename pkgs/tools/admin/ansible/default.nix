@@ -5,6 +5,7 @@ rec {
 
   ansible_2_10 = python3Packages.toPythonApplication python3Packages.ansible-base;
 
+  # End of support 2021/10/02, End of life 2021/12/31
   ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
 
   ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
