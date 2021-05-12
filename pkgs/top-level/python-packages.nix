@@ -4375,6 +4375,8 @@ in {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
+  mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
+
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
