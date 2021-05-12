@@ -311,10 +311,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/external",
     "repo": "terraform-provider-external",
-    "rev": "v2.0.0",
-    "sha256": "16wciz08gicicsirij2ql0gy8dg0372jjsqmaigkl2n07mqz2b6a",
+    "rev": "v2.1.0",
+    "sha256": "0xc3mj0d4yrr1952c5ywrx19ny1k2475grka9v2w7szdy6p2rkk5",
     "vendorSha256": null,
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "fastly": {
     "owner": "terraform-providers",
