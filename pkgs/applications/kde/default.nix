@@ -30,6 +30,9 @@ still shows most of the available features is in `./gwenview.nix`.
 }:
 
 let
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -45,10 +48,13 @@ let
 
         outputs = args.outputs or [ "out" ];
 
-        meta = {
-          platforms = lib.platforms.linux;
-          homepage = "http://www.kde.org";
-        } // (args.meta or {});
+        meta =
+          let meta = args.meta or {}; in
+          meta // {
+            homepage = meta.homepage or "http://www.kde.org";
+            platforms = meta.platforms or lib.platforms.linux;
+            broken = meta.broken or broken;
+          };
       });
 
   packages = self: with self;

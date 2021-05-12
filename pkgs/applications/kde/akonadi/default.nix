@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam, substituteAll,
   extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
   boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
   kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mariadb, qttools,
@@ -33,8 +33,7 @@ mkDerivation {
     ''-DNIXPKGS_POSTGRES_PG_CTL=\"\"''
     ''-DNIXPKGS_POSTGRES_PG_UPGRADE=\"\"''
     ''-DNIXPKGS_POSTGRES_INITDB=\"\"''
+    ''-DNIX_OUT=\"${placeholder "out"}\"''
+    ''-I${lib.getDev kio}/include/KF5''  # Fixes: kio_version.h: No such file or directory
   ];
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -DNIX_OUT=\"$out\""
-  '';
 }

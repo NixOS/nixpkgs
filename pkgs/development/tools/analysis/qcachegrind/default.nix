@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   postInstall = ''
      mkdir -p $out/bin
      cp -p converters/dprof2calltree $out/bin/dprof2calltree
-     cp -p converters/hotshot2calltree.cmake $out/bin/hotshot2calltree
+     cp -p converters/hotshot2calltree.in $out/bin/hotshot2calltree
      cp -p converters/memprof2calltree $out/bin/memprof2calltree
      cp -p converters/op2calltree $out/bin/op2calltree
      cp -p converters/pprof2calltree $out/bin/pprof2calltree

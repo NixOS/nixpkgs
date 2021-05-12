@@ -100,6 +100,18 @@
       Now nginx uses the zlib-ng library by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
+     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
+     notes</link> for details.
+    </para>
+    <para>
+     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
+     in keeping with the new name. The old name remains for compatibility, but
+     it is deprecated.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
