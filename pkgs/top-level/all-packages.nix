@@ -9422,7 +9422,9 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
-  xplr = callPackage ../applications/misc/xplr {};
+  xplr = callPackage ../applications/misc/xplr {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
