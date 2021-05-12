@@ -4,7 +4,7 @@
 , pbr
 , pretend
 , pyelftools
-, pytest
+, pytestCheckHook
 , pythonAtLeast
 }:
 
@@ -27,18 +27,23 @@ buildPythonPackage rec {
     pyelftools
   ];
 
+  # integration tests require docker and networking
+  disabledTestPaths = [ "tests/integration" ];
+
   checkInputs = [
     pretend
-    pytest
+    pytestCheckHook
   ];
 
-  # integration tests require docker and networking
-  checkPhase = "pytest --ignore=tests/integration";
 
   meta = with lib; {
-    description = "Cross-distribution Linux wheels";
-    homepage = https://github.com/pypa/auditwheel;
-    license = licenses.mit;
+    description = "Auditing and relabeling cross-distribution Linux wheels";
+    homepage = "https://github.com/pypa/auditwheel";
+    license = with licenses; [
+      mit  # auditwheel and nibabel
+      bsd2  # from https://github.com/matthew-brett/delocate
+      bsd3  # from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-projects/pax-utils/lddtree.py
+    ];
     maintainers = with maintainers; [ davhau ];
   };
 }
