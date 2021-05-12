@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , substituteAll
 , meson
 , pkg-config
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Picked from upstream 'main' branch for Darwin support.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/f452e41264387dee4fd737cbf1af58b34b53941b.patch";
+      sha256 = "00mk32a01vgn31sm3wk4p8mfwvqv3xv02rxvdj1ygnzgb1ac62r7";
+    })
     (substituteAll {
       src = ./0001-add-placeholder-for-nm.patch;
       nm = "${stdenv.cc.targetPrefix}nm";
