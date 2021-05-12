@@ -180,16 +180,25 @@ package-maintainers:
   terlar:
     - nix-diff
   maralorn:
-    - reflex-dom
+    - arbtt
     - cabal-fmt
-    - shh
-    - neuron
-    - releaser
-    - taskwarrior
+    - generic-optics
+    - ghcup
     - haskell-language-server
-    - shake-bench
+    - hedgehog
+    - hmatrix
     - iCalendar
+    - neuron
+    - optics
+    - reflex-dom
+    - releaser
+    - req
+    - shake-bench
+    - shh
+    - snap
     - stm-containers
+    - streamly
+    - taskwarrior
   sorki:
     - cayenne-lpp
     - data-stm32
