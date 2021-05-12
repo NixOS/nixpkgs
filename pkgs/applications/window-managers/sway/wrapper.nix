@@ -14,6 +14,7 @@ let
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
+       export XDG_CURRENT_DESKTOP=sway
        ${extraSessionCommands}
        export _SWAY_WRAPPER_ALREADY_EXECUTED=1
      fi

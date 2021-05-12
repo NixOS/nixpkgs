@@ -155,7 +155,7 @@ getMaintainerMap = do
    get c p i e = readProcess c p i <&> \x -> either (error . (<> " Raw:'" <> take 1000 x <> "'") . (e <>)) Prelude.id . eitherDecodeStrict' . encodeUtf8 . Text.pack $ x
 
 -- BuildStates are sorted by subjective importance/concerningness
-data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | TimedOut | Canceled | Unfinished | Success deriving (Show, Eq, Ord)
+data BuildState = Failed | DependencyFailed | OutputLimitExceeded | Unknown (Maybe Int) | TimedOut | Canceled | HydraFailure | Unfinished | Success deriving (Show, Eq, Ord)
 
 icon :: BuildState -> Text
 icon = \case
@@ -166,6 +166,7 @@ icon = \case
    TimedOut -> ":hourglass::no_entry_sign:"
    Canceled -> ":no_entry_sign:"
    Unfinished -> ":hourglass_flowing_sand:"
+   HydraFailure -> ":construction:"
    Success -> ":heavy_check_mark:"
 
 platformIcon :: Platform -> Text
@@ -199,10 +200,11 @@ buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap
       state = case (finished, buildstatus) of
          (0, _) -> Unfinished
          (_, Just 0) -> Success
+         (_, Just 1) -> Failed
+         (_, Just 2) -> DependencyFailed
+         (_, Just 3) -> HydraFailure
          (_, Just 4) -> Canceled
          (_, Just 7) -> TimedOut
-         (_, Just 2) -> DependencyFailed
-         (_, Just 1) -> Failed
          (_, Just 11) -> OutputLimitExceeded
          (_, i) -> Unknown i
       packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)

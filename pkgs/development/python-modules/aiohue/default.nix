@@ -22,12 +22,13 @@ buildPythonPackage rec {
     "aiohue.discovery"
   ];
 
-  # has no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "asyncio package to talk to Philips Hue";
-    homepage = "https://github.com/balloob/aiohue";
-    license = licenses.asl20;
+    description = "Python package to talk to Philips Hue";
+    homepage = "https://github.com/home-assistant-libs/aiohue";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,5 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
+let
+  # The web client verifies, that the server version is a valid datetime string:
+  # https://github.com/minio/minio/blob/3a0e7347cad25c60b2e51ff3194588b34d9e424c/browser/app/js/web.js#L51-L53
+  #
+  # Example:
+  #   versionToTimestamp "2021-04-22T15-44-28Z"
+  #   => "2021-04-22T15:44:28Z"
+  versionToTimestamp = version:
+    let
+      splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
+    in
+    builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+in
 buildGoModule rec {
   pname = "minio";
   version = "2021-04-22T15-44-28Z";
@@ -18,7 +31,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   patchPhase = ''
-    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/Version.*/Version = \"${versionToTimestamp version}\"/g" cmd/build-constants.go
     sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
     sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
   '';
