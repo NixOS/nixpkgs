@@ -30,6 +30,9 @@ let
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
 
+    # stripping does not have any effect on beam files
+    dontStrip = true;
+
     setupHook = attrs.setupHook or
       writeText "setupHook.sh" ''
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
