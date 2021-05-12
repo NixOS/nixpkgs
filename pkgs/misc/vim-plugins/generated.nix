@@ -3863,6 +3863,18 @@ let
     meta.homepage = "https://github.com/python-mode/python-mode/";
   };
 
+  QFEnter = buildVimPluginFrom2Nix {
+    pname = "QFEnter";
+    version = "2020-10-09";
+    src = fetchFromGitHub {
+      owner = "yssl";
+      repo = "QFEnter";
+      rev = "df0a75b287c210f98ae353a12bbfdaf73d858beb";
+      sha256 = "0gdp7nmjlp8ng2rp2v66d8bincnkwrqqpbggb079f0f9szrqlp54";
+    };
+    meta.homepage = "https://github.com/yssl/QFEnter/";
+  };
+
   quick-scope = buildVimPluginFrom2Nix {
     pname = "quick-scope";
     version = "2020-12-28";
