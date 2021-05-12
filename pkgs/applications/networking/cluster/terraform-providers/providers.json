@@ -663,10 +663,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/null",
     "repo": "terraform-provider-null",
-    "rev": "v3.0.0",
-    "sha256": "0r1kvsc96922i85hdvf1pk8aicxjr6bc69gc63qi21hrl0jpvr7r",
+    "rev": "v3.1.0",
+    "sha256": "0s6j2py9bb3knrn0f8aga8ypkxj6v5ns08k7zgw26h3wwdxwyd12",
     "vendorSha256": null,
-    "version": "3.0.0"
+    "version": "3.1.0"
   },
   "nutanix": {
     "owner": "terraform-providers",
