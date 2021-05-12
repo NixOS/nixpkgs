@@ -4125,6 +4125,8 @@ in {
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
 
+  mdformat = callPackage ../development/python-modules/mdformat { };
+
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   MDP = callPackage ../development/python-modules/mdp { };
