@@ -8866,6 +8866,8 @@ in {
 
   yanc = callPackage ../development/python-modules/yanc { };
 
+  yangson = callPackage ../development/python-modules/yangson { };
+
   yapf = callPackage ../development/python-modules/yapf { };
 
   yappi = callPackage ../development/python-modules/yappi { };
