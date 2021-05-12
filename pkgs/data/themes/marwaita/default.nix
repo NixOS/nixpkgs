@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "9.1";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
