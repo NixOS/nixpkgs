@@ -4183,6 +4183,7 @@ broken-packages:
   - simple-ui
   - simple-units
   - simple-vec3
+  - simplexmq
   - simple-zipper
   - singleton-dict
   - singletons-th
