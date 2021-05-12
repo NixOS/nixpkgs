@@ -176,9 +176,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/cloudinit",
     "repo": "terraform-provider-cloudinit",
-    "rev": "v1.0.0",
-    "sha256": "0i926f4xkfydd2bxmim69xrvi9ymn1vrc66zl117axzsmy9200zx",
-    "version": "1.0.0"
+    "rev": "v2.2.0",
+    "sha256": "0yv52hz60whmqfwv2a6f9f1fpszcyzs78hhz3lq4imz9dv5bd29z",
+    "vendorSha256": null,
+    "version": "2.2.0"
   },
   "cloudscale": {
     "owner": "terraform-providers",
