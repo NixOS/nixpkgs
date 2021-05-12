@@ -9045,6 +9045,8 @@ in
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
+  ttp = with python3.pkgs; toPythonApplication ttp;
+
   chaps = callPackage ../tools/security/chaps { };
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
