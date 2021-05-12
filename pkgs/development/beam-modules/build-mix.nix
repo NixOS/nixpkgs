@@ -66,6 +66,8 @@ let
       for reldir in src ebin priv include; do
         fd="_build/$MIX_ENV/lib/${name}/$reldir"
         [ -d "$fd" ] || continue
+
+        # Some builds produce symlinks. They must be followed with -H flag.
         cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
       done
       runHook postInstall
