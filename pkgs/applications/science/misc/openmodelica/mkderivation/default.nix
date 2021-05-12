@@ -1,83 +1,111 @@
-{stdenv, lib, fetchgit, autoconf, automake, libtool, cmake, autoreconfHook, symlinkJoin}: pkg:
+# mkOpenModelicaDerivation is an mkDerivation function for packages
+# from OpenModelica suite.
+
+{stdenv, lib, fetchgit, autoconf, automake, libtool, cmake, autoreconfHook, symlinkJoin}:
+pkg:
+
 let 
-  inherit (builtins) hasAttr getAttr length;
+  inherit (builtins) hasAttr getAttr length elemAt;
   inherit (lib) attrByPath concatStringsSep;
 
-  getAttrDef = attr: default: x: attrByPath [attr] default x;
-  myAppendAttr = attr: sep: x: if hasAttr attr x then sep + (getAttr attr x) else "";
 
+  # A few helpers functions:
+
+  # getAttrDef is just a getAttr with default fallback
+  getAttrDef = attr: default: x: attrByPath [attr] default x;
+
+  # getAttr-like helper for optional append to string:
+  # "Hello" + appendByAttr "a" " " {a = "world";} = "Hello world"
+  # "Hello" + appendByAttr "a" " " {} = "Hello"
+  appendByAttr = attr: sep: x: if hasAttr attr x then sep + (getAttr attr x) else "";
+
+  # Partially applied "if"
   ifNoDeps = def: x:
     if length pkg.omdeps == 0 then def else x;
 
-  joinedDeps = symlinkJoin {
-    name = pkg.pname + "-omhome";
-    paths = pkg.omdeps;
-  };
 
+  # Dependencies of current OpenModelica-target joined in one file tree.
+  # Return the dep itself in case it is a single one.
+  joinedDeps =
+    if length pkg.omdeps == 1
+    then elemAt pkg.omdeps 0
+    else symlinkJoin {
+           name = pkg.pname + "-omhome";
+           paths = pkg.omdeps;
+         };
+
+  # Should we run ./configure for the target pkg?
   omautoconf = getAttrDef "omautoconf" false pkg;
 
-
+  # Name of the make target
   omtarget = getAttrDef "omtarget" pkg.pname pkg;
 
+  # Directory of target sources
   omdir = getAttrDef "omdir" pkg.pname pkg;
 
-  deptargets = lib.forEach pkg.omdeps (dep: dep.omtarget);
-
-  configureFlags = ifNoDeps "" "--with-openmodelicahome=${joinedDeps} " +
-    "--with-ombuilddir=$OMBUILDDIR " +
-    "--prefix=$prefix " +
-    myAppendAttr "configureFlags" " " pkg;
-
-  preBuildPhases = ifNoDeps "" "skipTargetsPhase " +
-    myAppendAttr "preBuildPhases" " " pkg;
-
-in stdenv.mkDerivation (pkg // {
-  inherit omtarget configureFlags preBuildPhases;
-
-  src = fetchgit (import ./src-main.nix);
-  version = "1.17.0";
-
-  nativeBuildInputs = pkg.nativeBuildInputs ++ [autoconf automake libtool cmake
-   autoreconfHook];
-  buildInputs = pkg.buildInputs ++ [joinedDeps];
-
+  # Simple to to m4 configuration scripts
   patchPhase = ifNoDeps "" ''
       sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
     '' +
-    myAppendAttr "patchPhase" "\n" pkg;
+    appendByAttr "patchPhase" "\n" pkg;
 
+  # Update shebangs in the scripts before running configuration.
   preAutoreconf = "patchShebangs --build common" +
-    myAppendAttr "preAutoreconf" "\n" pkg;
+    appendByAttr "preAutoreconf" "\n" pkg;
 
-  dontUseCmakeConfigure = true;
+  # We use configure flags twice, let's bind them:
+  configureFlags = ifNoDeps "" "--with-openmodelicahome=${joinedDeps} " +
+    "--with-ombuilddir=$OMBUILDDIR " +
+    "--prefix=$prefix " +
+    appendByAttr "configureFlags" " " pkg;
 
+  # Our own configurePhase that accounts for omautoconf
   configurePhase = "export OMBUILDDIR=$PWD/build; ./configure --no-recursion ${configureFlags}; " +
     (if omautoconf then " (cd ${omdir}; ./configure ${configureFlags})" else "");
 
-  enableParallelBuilding = false;
+  # Targets that we want to build ourselves:
+  deptargets = lib.forEach pkg.omdeps (dep: dep.omtarget);
 
-  hardeningDisable = ["format"];
-
+  # ... so we ask openmodelica makefile to skip those targets.
   skipTargetsPhase = ''
     for target in ${concatStringsSep " " deptargets}; do
       touch ''${target}.skip;
     done
   '';
 
+  # skipTargetsPhase is our own, so we notify the builder about it.
+  preBuildPhases = ifNoDeps "" "skipTargetsPhase " +
+    appendByAttr "preBuildPhases" " " pkg;
+
   makeFlags = "${omtarget}" +
-    myAppendAttr "makeFlags" " " pkg;
+    appendByAttr "makeFlags" " " pkg;
 
   installFlags = "-i " +
-    myAppendAttr "installFlags" " " pkg;
+    appendByAttr "installFlags" " " pkg;
 
-  bowlup = ''
-    unpackPhase
-    cd OpenModelica-08fd3f9
-    eval "$patchPhase"
-    autoreconfPhase
-    configurePhase
-  '';
-  
+
+in stdenv.mkDerivation (pkg // {
+  inherit omtarget;
+  inherit patchPhase;
+  inherit preAutoreconf;
+  inherit configureFlags configurePhase;
+  inherit skipTargetsPhase preBuildPhases;
+  inherit makeFlags installFlags;
+
+  src = fetchgit (import ./src-main.nix);
+  version = "1.17.0";
+
+  nativeBuildInputs = pkg.nativeBuildInputs ++
+    [autoconf automake libtool cmake autoreconfHook];
+
+  buildInputs = pkg.buildInputs ++ [joinedDeps];
+
+  dontUseCmakeConfigure = true;
+
+  enableParallelBuilding = false;
+
+  hardeningDisable = ["format"];
+
   meta = with lib; {
     description = "An open-source Modelica-based modeling and simulation environment";
     homepage    = "https://openmodelica.org";
@@ -85,5 +113,4 @@ in stdenv.mkDerivation (pkg // {
     maintainers = with maintainers; [ smironov ];
     platforms   = platforms.linux;
   };
-
 })
