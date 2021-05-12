@@ -513,6 +513,15 @@
     "sha256": "1vcx612bz2p0rjsrx11j6fdc0f0q2jm5m3xl94wrpx9jjb7aczvc",
     "version": "1.0.0"
   },
+  "kubectl": {
+    "owner": "gavinbunney",
+    "provider-source-address": "registry.terraform.io/gavinbunney/kubectl",
+    "repo": "terraform-provider-kubectl",
+    "rev": "v1.10.0",
+    "sha256": "1w8g47dh77i7bhvxwysn7ldrcxl999sivxc7ws71ly5mnsljhhz0",
+    "vendorSha256": "1qrw2mg8ik2n6xlrnbcrgs9zhr9mwh1niv47kzhbp3mxvj5vdskk",
+    "version": "1.10.0"
+  },
   "kubernetes": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
