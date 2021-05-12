@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
+, nix-update-script
 , pkg-config
-, gnome
 , itstool
 , gtk3
 , wrapGAppsHook
@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
+    updateScript = nix-update-script {
       attrPath = "gnome.${pname}";
     };
   };
