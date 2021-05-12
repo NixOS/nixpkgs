@@ -53,13 +53,14 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, addOpenGLRunpath
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.0";
+  version = "2.32.1";
 
   outputs = [ "out" "dev" ];
 
@@ -67,13 +68,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1w3b0w8izp0i070grhv19j631sdcd0mcqnjnax13k8mdx7dg8zcx";
+    sha256 = "05v9hgpkc6mi2klrd8nqql1n8xzq8rgdz3hvyy369xkhgwqifq8k";
   };
 
   patches = lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
+      inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
   ];
