@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
+, ansible-collections
 , cryptography
 , jinja2
 , junit-xml
@@ -41,6 +42,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    # depend on ansible-collections instead of the other way around
+    ansible-collections
     # from requirements.txt
     cryptography
     jinja2
