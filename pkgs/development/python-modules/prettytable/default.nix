@@ -4,6 +4,8 @@
 , glibcLocales
 , setuptools_scm
 , wcwidth
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,7 +20,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  propagatedBuildInputs = [
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   preCheck = ''
     export LANG="en_US.UTF-8"
