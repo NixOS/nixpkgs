@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, patchelf
 , pbr
 , pretend
 , pyelftools
@@ -35,6 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  makeWrapperArgs = [
+    ''--prefix PATH : ${patchelf}/bin''
+  ];
 
   meta = with lib; {
     description = "Auditing and relabeling cross-distribution Linux wheels";
