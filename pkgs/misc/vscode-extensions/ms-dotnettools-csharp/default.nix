@@ -7,14 +7,12 @@
 , icu
 , stdenv
 , openssl
-, mono6
+, mono
 }:
 
 let
   # Get as close as possible as the `package.json` required version.
   # This is what drives omnisharp.
-  mono = mono6;
-
   rtDepsSrcsFromJson = builtins.fromJSON (builtins.readFile ./rt-deps-bin-srcs.json);
 
   rtDepsBinSrcs = builtins.mapAttrs (k: v:
@@ -114,7 +112,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     declare omnisharp_dir="$PWD/${omnisharp.installPath}"
     unzip_to "${omnisharp.bin-src}" "$omnisharp_dir"
     rm "$omnisharp_dir/bin/mono"
-    ln -s -T "${mono6}/bin/mono" "$omnisharp_dir/bin/mono"
+    ln -s -T "${mono}/bin/mono" "$omnisharp_dir/bin/mono"
     chmod a+x "$omnisharp_dir/run"
     touch "$omnisharp_dir/install.Lock"
 
