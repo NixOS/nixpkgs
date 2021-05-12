@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi-search, kbookmarks, kcalutils, kcmutils, kcompletion, kconfig,
-  kconfigwidgets, kcoreaddons, kdelibs4support, libkdepim,
+  kconfigwidgets, kcoreaddons, libkdepim,
   kdepim-runtime, kguiaddons, ki18n, kiconthemes, kinit, kio, kldap,
   kmail-account-wizard, kmailtransport, knotifications, knotifyconfig,
   kontactinterface, kparts, kpty, kservice, ktextwidgets, ktnef, kwallet,
@@ -20,7 +20,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi-search kbookmarks kcalutils kcmutils kcompletion kconfig
-    kconfigwidgets kcoreaddons kdelibs4support kguiaddons ki18n
+    kconfigwidgets kcoreaddons kguiaddons ki18n
     kiconthemes kinit kio kldap kmail-account-wizard kmailtransport libkdepim
     knotifications knotifyconfig kontactinterface kparts kpty kservice
     ktextwidgets ktnef kwidgetsaddons kwindowsystem kxmlgui libgravatar

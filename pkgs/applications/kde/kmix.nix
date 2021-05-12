@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kglobalaccel, kxmlgui, kcoreaddons, kdelibs4support,
+  kglobalaccel, kxmlgui, kcoreaddons,
   plasma-framework, libpulseaudio, alsaLib, libcanberra_kde
 }:
 
@@ -13,7 +13,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    alsaLib kglobalaccel kxmlgui kcoreaddons kdelibs4support
+    alsaLib kglobalaccel kxmlgui kcoreaddons
     libcanberra_kde libpulseaudio plasma-framework
   ];
   cmakeFlags = [ "-DKMIX_KF5_BUILD=1" ];

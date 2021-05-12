@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   exiv2, lcms2,
-  baloo, kactivities, kdelibs4support, kio, kipi-plugins, libkdcraw, libkipi,
+  baloo, kactivities, kio, kipi-plugins, kitemmodels, kparts, libkdcraw, libkipi,
   phonon, qtimageformats, qtsvg, qtx11extras, kinit
 }:
 
@@ -14,7 +14,8 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    baloo exiv2 kactivities kdelibs4support kio libkdcraw lcms2 libkipi phonon
+    baloo kactivities kio kitemmodels kparts libkdcraw libkipi phonon
+    exiv2 lcms2
     qtimageformats qtsvg qtx11extras
   ];
   propagatedUserEnvPkgs = [ kipi-plugins libkipi (lib.getBin kinit) ];
