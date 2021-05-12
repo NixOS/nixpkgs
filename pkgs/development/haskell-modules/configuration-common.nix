@@ -174,15 +174,6 @@ self: super: {
   hnix = generateOptparseApplicativeCompletion "hnix"
     (overrideCabal super.hnix (drv: {
       doCheck = false;
-      prePatch = ''
-        # fix encoding problems when patching
-        ${pkgs.dos2unix}/bin/dos2unix hnix.cabal
-      '' + (drv.prePatch or "");
-      patches = [
-        # support ref-tf in hnix 0.12.0.1, can be removed after
-        # https://github.com/haskell-nix/hnix/pull/918
-        ./patches/hnix-ref-tf-0.5-support.patch
-      ] ++ (drv.patches or []);
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
