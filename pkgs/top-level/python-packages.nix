@@ -605,8 +605,6 @@ in {
 
   audiotools = callPackage ../development/python-modules/audiotools { };
 
-  auditwheel = callPackage ../development/python-modules/auditwheel { };
-
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
   };
