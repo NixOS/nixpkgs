@@ -50,6 +50,9 @@ let
     # Logs directory and mode
     LogsDirectory = "mastodon";
     LogsDirectoryMode = "0750";
+    # Proc filesystem
+    ProcSubset = "pid";
+    ProtectProc = "invisible";
     # Access write directories
     UMask = "0027";
     # Capabilities
@@ -74,6 +77,7 @@ let
     MemoryDenyWriteExecute = false;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    RemoveIPC = true;
     PrivateMounts = true;
     # System Call Filtering
     SystemCallArchitectures = "native";
