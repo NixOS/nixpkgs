@@ -2,7 +2,7 @@
 
 let
   pname = "octant-desktop";
-  version = "0.19.0";
+  version = "0.20.0";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -15,8 +15,8 @@ let
   src = fetchurl {
     url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/Octant-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-1XFb0zuyOy8XEUd9hoexItjq4assuWlWIzqw7pZxHx0=";
-      x86_64-darwin = "sha256-e3v5BFX7wnx4sAQrOq+dBIDVPJYzQZKKvKjSX+dis2U=";
+      x86_64-linux = "sha256-mPD5qa/IYsakjcoPnWVpkmhgkhnRK0qTGQ6hanzDt/Y=";
+      x86_64-darwin = "sha256-nxpwBRUeLSPqNEFjF8hKzRhA2ahqh/KyAitnSxYdyJ8=";
     }.${system};
   };
 
