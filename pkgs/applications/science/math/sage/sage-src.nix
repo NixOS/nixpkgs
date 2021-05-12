@@ -24,14 +24,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.3.rc4";
+  version = "9.3";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-LDY07By2j6JagkgT9zeDJ93+m2/oXXEnDRTDzmR8ftk=";
+    sha256 = "sha256-l9DX8jcDdKA7GJ6xU+nBsmlZxrcZ9ZUAJju621ooBEo=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
