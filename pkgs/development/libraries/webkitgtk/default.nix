@@ -53,6 +53,7 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, addOpenGLRunpath
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
+      inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
   ];
