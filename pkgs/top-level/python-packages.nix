@@ -6887,6 +6887,8 @@ in {
 
   pyx = callPackage ../development/python-modules/pyx { };
 
+  pyxb = callPackage ../development/python-modules/pyxb { };
+
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
