@@ -5304,6 +5304,8 @@ in {
 
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
 
+  py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
+
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
