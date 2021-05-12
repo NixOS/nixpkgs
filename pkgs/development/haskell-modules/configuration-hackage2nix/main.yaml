@@ -85,6 +85,8 @@ default-package-overrides:
   - ghcide == 1.2.*
   - hls-plugin-api == 1.1.0.0
   - hls-explicit-imports-plugin < 1.0.0.2
+  # 2021-05-12: remove once versions >= 5.0.0 is in stackage
+  - futhark < 0.19.5
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
