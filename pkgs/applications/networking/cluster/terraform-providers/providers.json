@@ -70,10 +70,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/aws",
     "repo": "terraform-provider-aws",
-    "rev": "v3.27.0",
-    "sha256": "0hn55mpg64bibf10m7x7wpfkipvlm8q4avgqcf0rf8rmprwvdlxd",
-    "vendorSha256": "0ph106bqsy988s20adf6gyc5jfvvy9zsj74lkbciwx7mvw5f514s",
-    "version": "3.27.0"
+    "rev": "v3.39.0",
+    "sha256": "05clqnrgh8ydwnsb1bacg9is7pzwqz5ncr806xgvryxybp8lz2jg",
+    "vendorSha256": "104cmwlzrcggb6fd1h7igy30g8542mzzzb6i54ldn5s1dahhprmb",
+    "version": "3.39.0"
   },
   "azuread": {
     "owner": "hashicorp",
