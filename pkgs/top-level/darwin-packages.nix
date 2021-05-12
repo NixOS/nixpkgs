@@ -2,6 +2,7 @@
 , buildPackages, pkgs, targetPackages
 , pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
 , stdenv, splicePackages, newScope
+, preLibcCrossHeaders
 }:
 
 let
@@ -52,7 +53,7 @@ impure-cmds // apple-source-releases // {
   };
 
   binutilsNoLibc = pkgs.wrapBintoolsWith {
-    libc = null;
+    libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
   };
 

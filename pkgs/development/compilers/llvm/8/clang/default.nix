@@ -1,4 +1,4 @@
-{ lib, stdenv, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -107,11 +107,20 @@ let
       inherit libllvm;
     };
 
-    meta = {
-      description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = "https://llvm.org/";
-      license     = lib.licenses.ncsa;
-      platforms   = lib.platforms.all;
+    meta = llvm_meta // {
+      homepage = "https://clang.llvm.org/";
+      description = "A C language family frontend for LLVM";
+      longDescription = ''
+        The Clang project provides a language front-end and tooling
+        infrastructure for languages in the C language family (C, C++, Objective
+        C/C++, OpenCL, CUDA, and RenderScript) for the LLVM project.
+        It aims to deliver amazingly fast compiles, extremely useful error and
+        warning messages and to provide a platform for building great source
+        level tools. The Clang Static Analyzer and clang-tidy are tools that
+        automatically find bugs in your code, and are great examples of the sort
+        of tools that can be built using the Clang frontend as a library to
+        parse C/C++ code.
+      '';
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
@@ -130,6 +139,8 @@ let
 
     doCheck = false;
 
-    meta.description = "man page for Clang ${version}";
+    meta = llvm_meta // {
+      description = "man page for Clang ${version}";
+    };
   });
 in self

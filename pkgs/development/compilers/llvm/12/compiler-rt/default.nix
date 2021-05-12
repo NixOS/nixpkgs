@@ -9,7 +9,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "compiler-rt" + lib.optionalString (haveLibc) "-libc";
   inherit version;
   src = fetch "compiler-rt" "0d444qihq9jhqnfv003cr704v363va72zl6qaw2algj1c85cva45";
@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     ./normalize-var.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
-
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

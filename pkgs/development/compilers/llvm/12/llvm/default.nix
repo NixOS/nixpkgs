@@ -205,6 +205,8 @@ in stdenv.mkDerivation (rec {
     make docs-llvm-man
   '';
 
+  propagatedBuildInputs = [];
+
   installPhase = ''
     make -C docs install
   '';

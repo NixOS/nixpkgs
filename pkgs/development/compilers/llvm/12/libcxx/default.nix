@@ -15,7 +15,13 @@ stdenv.mkDerivation {
     mv llvm-* llvm
   '';
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    ../../libcxx-0001-musl-hacks.patch
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py

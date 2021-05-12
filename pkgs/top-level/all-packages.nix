@@ -10345,14 +10345,17 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then ../development/compilers/gcc/6
-    else ../development/compilers/gcc/10);
-  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then gcc6 else
-      # aarch64-darwin doesn't support earlier gcc
-      if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then gcc11
-      else if stdenv.targetPlatform.isAarch64 then gcc9 else gcc10;
+  inherit (let
+      num =
+        if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
+        else if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then 11
+        else if stdenv.targetPlatform.isAarch64 then 9
+        else 10;
+      numS = toString num;
+    in {
+      gcc = pkgs.${"gcc${numS}"};
+      gccFun = callPackage (../development/compilers/gcc + "/${numS}");
+    }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
   wrapNonDeterministicGcc = stdenv: ccWrapper:
@@ -10430,7 +10433,7 @@ in
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false
-    then overrideCC stdenv buildPackages.llvmPackages_8.lldClangNoLibc
+    then overrideCC stdenv buildPackages.llvmPackages.lldClangNoLibc
     else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
@@ -11175,19 +11178,16 @@ in
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
 
-  llvmPackages = with targetPlatform;
-    if isDarwin then
-      llvmPackages_7
-    else if isFreeBSD then
-      llvmPackages_7
-    else if isAndroid then
-      llvmPackages_12
-    else if isLinux then
-      llvmPackages_7
-    else if isWasm then
-      llvmPackages_8
-    else
-      llvmPackages_latest;
+  llvmPackages = let
+    choose = platform:
+      /**/ if platform.isDarwin then "7"
+      else if platform.isFreeBSD then "7"
+      else if platform.isAndroid then "12"
+      else if platform.isLinux then "7"
+      else if platform.isWasm then "8"
+      else "latest";
+    minSupported = lib.min (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
+  in pkgs.${"llvmPackages_${minSupported}"};
 
   llvmPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
@@ -12602,11 +12602,7 @@ in
   });
   binutilsNoLibc = wrapBintoolsWith {
     bintools = binutils-unwrapped;
-    libc =
-      /**/ if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
-      else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
-      else if stdenv.targetPlatform.libc == "nblibc" then targetPackages.netbsdCross.headers
-      else null;
+    libc = preLibcCrossHeaders;
   };
 
   bison = callPackage ../development/tools/parsing/bison { };
@@ -14741,6 +14737,13 @@ in
     stdenv = crossLibcStdenv;
   };
 
+  # These are used when buiding compiler-rt / libgcc, prior to building libc.
+  preLibcCrossHeaders = let
+    inherit (stdenv.targetPlatform) libc;
+  in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
+    else if libc == "nblibc" then targetPackages.netbsdCross.headers
+    else null;
+
   # We can choose:
   libcCrossChooser = name:
     # libc is hackily often used from the previous stage. This `or`
@@ -14755,8 +14758,10 @@ in
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
-    else if name == "libSystem" then targetPackages.darwin.xcode
+    else if name == "libSystem" then
+      if stdenv.targetPlatform.useiOSPrebuilt
+      then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
+      else throw "don't yet have a `targetPackages.darwin.LibsystemCross`"
     else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
