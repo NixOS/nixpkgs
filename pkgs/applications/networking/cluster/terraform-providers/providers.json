@@ -402,10 +402,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
-    "rev": "v2.0.2",
-    "sha256": "119zvlkwa7ygwsjxxdl7z8cqb0c4m6gy21356jnsasf4c3557rrb",
+    "rev": "v2.1.2",
+    "sha256": "1385r9wk6mpb9fj53bkq586v8lw2310dim3kgj3pkrc1fssvwj0z",
     "vendorSha256": null,
-    "version": "2.0.2"
+    "version": "2.1.2"
   },
   "heroku": {
     "owner": "terraform-providers",
