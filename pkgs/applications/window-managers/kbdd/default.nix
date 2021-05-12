@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wedens ];
   };
