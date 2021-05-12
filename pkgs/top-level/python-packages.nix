@@ -8273,6 +8273,8 @@ in {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ttp = callPackage ../development/python-modules/ttp { };
+
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
