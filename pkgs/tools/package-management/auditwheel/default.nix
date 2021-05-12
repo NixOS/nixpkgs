@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    ''--prefix PATH : ${patchelf}/bin''
+    "--prefix" "PATH" ":" (lib.makeBinPath [ patchelf ])
   ];
 
   meta = with lib; {
