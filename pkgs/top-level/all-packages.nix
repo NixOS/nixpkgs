@@ -3589,6 +3589,8 @@ with pkgs;
 
   clarissa = callPackage ../tools/networking/clarissa { };
 
+  clar-oui = callPackage ../tools/networking/clarissa/oui.nix { };
+
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
