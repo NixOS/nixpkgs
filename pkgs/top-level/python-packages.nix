@@ -3583,6 +3583,8 @@ in {
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
+  jxmlease = callPackage ../development/python-modules/jxmlease { };
+
   k5test = callPackage ../development/python-modules/k5test {
     inherit (pkgs) krb5Full findutils which;
   };
