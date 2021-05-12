@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, gettext, pkg-config, wxGTK30-gtk3,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK30-gtk3,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "2.4.2";
+  version = "2.4.3";
 
-  src = fetchurl {
-    url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
-    sha256 = "1kry3xphrdccx8znfm9pw5872c5w0ri7cknlad4qcps54b25nnzk";
+  src = fetchFromGitHub {
+    owner = "vslavik";
+    repo = "poedit";
+    rev = "v${version}-oss";
+    sha256 = "02xf2w3d2lnr3vqmil9vvg9pir7d21x4zrj9xwpgb7dhs0gimj0x";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
@@ -41,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dasj19 ];
   };
 }

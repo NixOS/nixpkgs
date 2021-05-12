@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src
-    zcat Payload | cpio -i
+    zcat op.pkg/Payload | cpio -i
   '';
 
   installPhase = ''

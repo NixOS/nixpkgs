@@ -156,7 +156,9 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  atuin = callPackage ../tools/misc/atuin { };
+  atuin = callPackage ../tools/misc/atuin {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   fiche = callPackage ../servers/fiche { };
 
@@ -2412,6 +2414,8 @@ in
   dyncall = callPackage ../development/libraries/dyncall { };
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
+
+  earthly = callPackage ../development/tools/earthly { };
 
   earlybird = callPackage ../tools/security/earlybird { };
 
@@ -28467,6 +28471,8 @@ in
     nativeOnly = true;
   }).run;
 
+  steam-tui = callPackage ../games/steam-tui { };
+
   steamcmd = steamPackages.steamcmd;
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
@@ -30876,7 +30882,7 @@ in
   vimb = wrapFirefox vimb-unwrapped { };
 
   vips = callPackage ../tools/graphics/vips {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
   nip2 = callPackage ../tools/graphics/nip2 { };
 

@@ -7,7 +7,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.43.0";
+  version = "2.45.0";
 
   outputs = [ "out" "dev" ];
 
@@ -15,17 +15,18 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-N7EvpcJjtK3INHK7PgoiEVIMq9zGcHKMeI+/dwZ3bNs=";
+    sha256 = "0aqf48zl7825v7x8c3x5w4d17m4qq377f1mn6xyqzf9b0dnk4i1j";
   };
 
   buildInputs = [
     libusb1
     gcc.cc.lib
   ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optional enablePython pythonPackages.python;
+    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
 
   patches = lib.optionals enablePython [
     ./py_sitepackage_dir.patch
+    ./py_pybind11_no_external_download.patch
   ];
 
   nativeBuildInputs = [
