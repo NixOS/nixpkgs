@@ -804,7 +804,7 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
-  auditwheel = python3Packages.callPackage ../tools/package-management/auditwheel { };
+  auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
