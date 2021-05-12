@@ -521,7 +521,7 @@ in {
         RuntimeDirectory = "mastodon-streaming";
         RuntimeDirectoryMode = "0750";
         # System Call Filtering
-        SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "pipe" "pipe2" ];
+        SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@memlock" "@resources" ])) "pipe" "pipe2" ];
       } // cfgService;
     };
 
