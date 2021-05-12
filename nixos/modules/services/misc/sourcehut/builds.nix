@@ -190,6 +190,8 @@ in
       "builds.sr.ht".redis = mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/3";
       # The shell used for ssh
       "builds.sr.ht".shell = mkDefault "runner-shell";
+      # Register the builds.sr.ht dispatcher
+      "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys"} = mkDefault "${user}:${user}";
 
       # Location for build logs, images, and control command
     } // lib.attrsets.optionalAttrs scfg.enableWorker {

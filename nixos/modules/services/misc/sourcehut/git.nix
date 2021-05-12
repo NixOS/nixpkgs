@@ -179,12 +179,9 @@ in
       # value. When someone tries to log in as this user, this program is executed
       # and is expected to omit an AuthorizedKeys file.
       #
-      # Discard of the string context is in order to allow derivation-dervied strings.
+      # Discard of the string context is in order to allow derivation-derived strings.
       # This is safe if the relevant package is installed which will be the case if the setting is utilized.
-      #
-      # Uncomment the relevant lines to enable the various sr.ht dispatchers.
       "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.gitsrht}/bin/gitsrht-keys"} = mkDefault "${user}:${user}";
-      "git.sr.ht::dispatch".${builtins.unsafeDiscardStringContext "${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys"} = mkDefault "buildsrht:buildsrht";
     };
 
     services.nginx.virtualHosts."git.${cfg.originBase}" = {
