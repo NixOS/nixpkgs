@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.carlosdagos ];
   };
