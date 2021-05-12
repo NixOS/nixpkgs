@@ -6,13 +6,13 @@
 
 buildPythonPackage {
   pname = "tlsh";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = "f2bb7a97cfb0f9418a750ba92c182d1091e6c159";
-    sha256 = "1kxfhdwqjd4pjdlr1gjh2am8mxpaqmfq7rrxkjfi0mbisl1krkwb";
+    rev = "b2ff80316a66bbb6f4560df12bdf5d00461f491f";
+    sha256 = "1hrg0c0nlgaapgn1x3pa4f18512vjfigcj3xzm1829icwj49ybz4";
   };
 
   nativeBuildInputs = [ cmake ];
