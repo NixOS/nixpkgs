@@ -6609,8 +6609,9 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
-  mangohud = callPackage ../tools/graphics/mangohud/combined.nix {
+  mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+    mangohud32 = pkgsi686Linux.mangohud;
   };
 
   manix = callPackage ../tools/nix/manix {
