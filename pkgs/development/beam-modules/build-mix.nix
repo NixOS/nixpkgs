@@ -43,31 +43,6 @@ let
     buildInputs = buildInputs ++ [ elixir hex ];
     propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
-    configurePhase = attrs.configurePhase or ''
-      runHook preConfigure
-
-      mkdir -p _build/$MIX_ENV/lib
-
-      while read -d ':' lib
-      do
-        for dir in $(ls $lib)
-        do
-          # Strip version number for directory name if it exists, so naming of
-          # all libs matches what mix's expectation.
-          dest=$(echo "$dir" | cut -d '-' -f1)
-
-          [[ $MIX_DEBUG -eq 1 ]] && echo "Linking $lib/$dir to _build/$MIX_ENV/lib/$dest"
-
-          # Symlink libs to _build so that mix can find them when compiling.
-          # This is what allows mix to compile the package without searching
-          # for dependencies over the network.
-          ln -s $lib/$dir _build/$MIX_ENV/lib/$dest
-        done
-      done <<< "$ERL_LIBS:"
-
-      runHook postConfigure
-    '';
-
     buildPhase = attrs.buildPhase or ''
       runHook preBuild
       export HEX_HOME="$TEMPDIR/hex"
