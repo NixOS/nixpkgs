@@ -9003,6 +9003,8 @@ in
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
+  torf-cli = callPackage ../tools/misc/torf-cli { };
+
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
