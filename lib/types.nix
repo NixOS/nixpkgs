@@ -270,6 +270,8 @@ rec {
         s32 = sign 32 4294967296;
       };
 
+    niceness = types.ints.between (-20) 19;
+
     # Alias of u16 for a port number
     port = ints.u16;
 

@@ -68,7 +68,7 @@ in
       };
       daemonNiceLevel = mkOption {
         description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
-        type = types.ints.between (-20) 19;
+        type = types.niceness;
         default = 10;
       };
       ioSchedulingClass = mkOption {

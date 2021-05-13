@@ -50,7 +50,7 @@ in
     };
 
     daemonNiceLevel = mkOption {
-      type = types.ints.between (-20) 19;
+      type = types.niceness;
       default = 0;
       description = ''
         Daemon process priority for FAHClient.

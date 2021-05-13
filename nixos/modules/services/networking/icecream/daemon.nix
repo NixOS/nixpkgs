@@ -76,7 +76,7 @@ in {
       };
 
       daemonNiceLevel = mkOption {
-        type = types.int;
+        type = types.niceness;
         default = 5;
         description = ''
           The level of niceness to use.

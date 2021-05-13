@@ -29,7 +29,7 @@ in
       };
 
       daemonNiceLevel = mkOption {
-        type = types.int;
+        type = types.niceness;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };

@@ -35,7 +35,7 @@ in {
       };
 
       daemonNiceLevel = mkOption {
-        type = types.int;
+        type = types.niceness;
         default = 0;
         description = ''
           Daemon process priority for bee.
