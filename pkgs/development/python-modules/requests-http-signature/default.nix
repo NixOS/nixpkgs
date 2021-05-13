@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , requests
+, cryptography
 , python
 }:
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0y96wsbci296m1rcxx0ybx8r44rdvyb59p1jl27p7rgz7isr3kx1";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests cryptography ];
 
   checkPhase = ''
     ${python.interpreter} test/test.py

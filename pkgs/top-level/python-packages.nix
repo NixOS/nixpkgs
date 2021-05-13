@@ -1928,8 +1928,6 @@ in {
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
 
-  django_pipeline = callPackage ../development/python-modules/django-pipeline { };
-
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
   django-postgresql-netfields = callPackage ../development/python-modules/django-postgresql-netfields { };
@@ -2566,6 +2564,8 @@ in {
   fpdf = callPackage ../development/python-modules/fpdf { };
 
   fpylll = callPackage ../development/python-modules/fpylll { };
+
+  fpyutils = callPackage ../development/python-modules/fpyutils { };
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
@@ -4123,7 +4123,11 @@ in {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+  md-toc = callPackage ../development/python-modules/md-toc { };
+
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  mdformat = callPackage ../development/python-modules/mdformat { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
@@ -4368,6 +4372,10 @@ in {
   myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
+
+  mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
+
+  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
@@ -5299,6 +5307,8 @@ in {
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
+
+  py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 

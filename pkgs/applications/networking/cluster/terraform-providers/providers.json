@@ -76,28 +76,31 @@
     "version": "3.27.0"
   },
   "azuread": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azuread",
     "repo": "terraform-provider-azuread",
-    "rev": "v0.10.0",
-    "sha256": "0i9xrsqgh1024189hihm2nqrcy2pcyf1bwxnamwmwph5cas6hfb3",
-    "version": "0.10.0"
+    "rev": "v1.4.0",
+    "sha256": "13y0h8af37gfsjhccbfsnj6kqcn61lr1znmsxipjr5h9ka5lc209",
+    "vendorSha256": null,
+    "version": "1.4.0"
   },
   "azurerm": {
     "owner": "terraform-providers",
     "provider-source-address": "registry.terraform.io/hashicorp/azurerm",
     "repo": "terraform-provider-azurerm",
-    "rev": "v2.13.0",
-    "sha256": "0aj19vy1flpb2233rxaypjcfimjr1wfqri1m3p15dy1r108q84r7",
-    "version": "2.13.0"
+    "rev": "v2.58.0",
+    "sha256": "1zy3q5d63pz2rdczcs9xnxzasb2jbzhyg8nbk2r252mdnhx6h9vh",
+    "vendorSha256": null,
+    "version": "2.58.0"
   },
   "azurestack": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azurestack",
     "repo": "terraform-provider-azurestack",
-    "rev": "v0.9.0",
-    "sha256": "1msm7jwzry0vmas3l68h6p0migrsm6d18zpxcncv197m8xbvg324",
-    "version": "0.9.0"
+    "rev": "v0.10.0",
+    "sha256": "0lcwrp6n3l1nink06wq2nrirs6k3wwjmya1w06x14pvqqdj1d5c8",
+    "vendorSha256": null,
+    "version": "0.10.0"
   },
   "baiducloud": {
     "owner": "terraform-providers",
@@ -495,6 +498,7 @@
   },
   "keycloak": {
     "owner": "mrparkers",
+    "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
     "repo": "terraform-provider-keycloak",
     "rev": "v3.0.0",
     "sha256": "1q9vzmj9c7mznv6al58d3rs5kk1fh28k1qccx46hcbk82z52da3a",

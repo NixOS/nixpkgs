@@ -156,7 +156,9 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  atuin = callPackage ../tools/misc/atuin { };
+  atuin = callPackage ../tools/misc/atuin {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   fiche = callPackage ../servers/fiche { };
 
@@ -803,6 +805,8 @@ in
   };
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
+
+  auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
@@ -2417,6 +2421,8 @@ in
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
 
+  earthly = callPackage ../development/tools/earthly { };
+
   earlybird = callPackage ../tools/security/earlybird { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
@@ -3654,7 +3660,9 @@ in
 
   cfssl = callPackage ../tools/security/cfssl { };
 
-  chafa = callPackage ../tools/misc/chafa { };
+  chafa = callPackage ../tools/misc/chafa {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
@@ -6203,6 +6211,8 @@ in
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  minipro = callPackage ../tools/misc/minipro { };
+
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
@@ -6455,6 +6465,8 @@ in
   libnids = callPackage ../tools/networking/libnids { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
+
+  libtorrent-jesec = callPackage ../tools/networking/p2p/libtorrent-jesec { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
 
@@ -8173,6 +8185,8 @@ in
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
+
+  rtorrent-jesec = callPackage ../tools/networking/p2p/rtorrent-jesec { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
@@ -11868,6 +11882,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
+    erlang-ls
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages
     relxExe;
@@ -25108,6 +25123,8 @@ in
 
   ptex = callPackage ../development/libraries/ptex {};
 
+  pyright = nodePackages.pyright;
+
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
   qemacs = callPackage ../applications/editors/qemacs { };
@@ -26349,7 +26366,9 @@ in
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {};
+  taffybar = callPackage ../applications/window-managers/taffybar {
+    inherit (haskellPackages) ghcWithPackages taffybar;
+  };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
@@ -28440,6 +28459,8 @@ in
   steam-run-native = (steam.override {
     nativeOnly = true;
   }).run;
+
+  steam-tui = callPackage ../games/steam-tui { };
 
   steamcmd = steamPackages.steamcmd;
 
@@ -30852,7 +30873,7 @@ in
   vimb = wrapFirefox vimb-unwrapped { };
 
   vips = callPackage ../tools/graphics/vips {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
   nip2 = callPackage ../tools/graphics/nip2 { };
 

@@ -20,8 +20,18 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib ] ++ lib.optionals transcodingSupport [ ffmpeg ];
+  buildInputs = [ taglib alsaLib ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
+
+  # TODO(Profpatsch): write a test for transcoding support,
+  # since it is prone to break
+  postPatch = lib.optionalString transcodingSupport ''
+    substituteInPlace \
+      server/encode/encode.go \
+      --replace \
+        '"ffmpeg"' \
+        '"${lib.getBin ffmpeg}/bin/ffmpeg"'
+  '';
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";

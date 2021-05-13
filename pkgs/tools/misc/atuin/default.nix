@@ -1,6 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, libiconv
+, Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0vy6q3hjp374lyg00zxim8aplh83iq3f4rrmpz5vnpwbag1fdql3";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";

@@ -1,30 +1,42 @@
-{ lib, stdenv, fetchgit, emacs }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
-  name = "sunrise-commander-6r435";
+stdenv.mkDerivation rec {
+  pname = "sunrise-commander";
+  version = "0.0.0-unstable=2021-04-23";
 
-  src = fetchgit {
-    url = "https://github.com/escherdragon/sunrise-commander.git";
-    rev = "7a44ca7abd9fe79f87934c78d00dc2a91419a4f1";
-    sha256 = "2909beccc9daaa79e70876ac6547088c2459b624c364dda1886fe4d7adc7708b";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "db880fbea03d2db00db1398c91918c3c6f0392e3";
+    hash = "sha256-IGHCKYQaGUapaA9vxq0xO58KCpBPOiQpHqrEaHK0usE=";
   };
 
-  buildInputs = [ emacs ];
+  buildInputs = [
+    emacs
+  ];
 
   buildPhase = ''
-    emacs -L . --batch -f batch-byte-compile *.el
+    runHook preBuild
+    emacs -q --no-splash --directory=. --batch --file=batch-byte-compile *.el
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/emacs/site-lisp
     install *.el* $out/share/emacs/site-lisp
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://github.com/sunrise-commander/sunrise-commander/";
     description = "Two-pane file manager for Emacs based on Dired and inspired by MC";
-    homepage = "http://www.emacswiki.org/emacs/Sunrise_Commander";
-    license = lib.licenses.gpl3Plus;
-
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.all;
   };
 }

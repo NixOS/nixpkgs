@@ -16,18 +16,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FKhSFqFZhqzrXrJcBc0YBNHoUq0/1+ULZ9sE+LyNQTI=";
+    sha256 = "sha256-aNStR86biNHwyg3dSI+CGib3XFhL5ZJ55d29E2K9qd0=";
   };
-  cargoSha256 = "sha256-Pp322D7YtdpeNnKWcE78tvLh5nFNcrh9oGYX2eCiPzI=";
+  cargoSha256 = "sha256-JXjiI+fTB0YlnhKO6QfGl4YOEQNfpuWsza2TsM9fwIk=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
+
+  buildAndTestSubdir = "cli";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv libobjc Security CoreServices Metal Foundation ];
 
@@ -51,9 +53,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
-    # remove test plugin and test server
-    rm -r $out/lib $out/bin/test_server $out/bin/denort
-
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \

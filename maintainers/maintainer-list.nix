@@ -1322,6 +1322,12 @@
     github = "bmilanov";
     githubId = 30090366;
   };
+  bmwalters = {
+    name = "Bradley Walters";
+    email = "oss@walters.app";
+    github = "bmwalters";
+    githubId = 4380777;
+  };
   bobakker = {
     email = "bobakk3r@gmail.com";
     github = "bobakker";
@@ -6379,6 +6385,12 @@
       longkeyid = "rsa2048/0x77BFE531397EDE94";
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
+  };
+  mdsp = {
+    github = "Mdsp9070";
+    githubId = 44469426;
+    name = "Matheus de Souza Pessanha";
+    email = "matheus_pessanha2001@outlook.com";
   };
   meatcar = {
     email = "nixpkgs@denys.me";
