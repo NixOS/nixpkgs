@@ -209,7 +209,8 @@ in
 
   config = mkIf cfg.enable {
 
-    networking.resolvconf.useLocalResolver = mkDefault true;
+    # Set resolver to default to local when the user does not specify nameservers.
+    networking.resolvconf.useLocalResolver = mkDefault config.networking.nameservers == [];
 
     users.users.${bindUser} =
       {
