@@ -106,8 +106,10 @@ let
         PrivateDevices = true;  # breaks /dev/tty...
         PrivateNetwork = true;
         PrivateTmp = true;
+        #ProtectClock = true;  # breaks /dev/tty... (why?)
         ProtectControlGroups = true;
         #ProtectHome = true;  # breaks custom spool dirs
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         #ProtectSystem = "strict";  # breaks custom spool dirs
