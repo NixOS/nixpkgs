@@ -4,12 +4,12 @@
 
 mkDerivation rec {
   pname = "seafile-client";
-  version = "8.0.1";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    rev = "b4b944921c7efef13a93d693c45c997943899dec";
+    rev = "b7b944921c7efef13a93d693c45c997943899dec";
     sha256 = "2vV+6ZXjVg81JVLfWeD0UK+RdmpBxBU2Ozx790WFSyw=";
   };
 
