@@ -1,6 +1,5 @@
 { fetchurl
 , fetchpatch
-, fetchgit
 , substituteAll
 , lib, stdenv
 , meson
@@ -67,20 +66,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "40.0-unstable-2021-05-01";
+  version = "40.1";
 
   outputs = [ "out" "devdoc" ];
 
-  src = fetchgit {
-    url = "https://gitlab.gnome.org/GNOME/gnome-shell.git";
-    rev = "a8a79c03330427808e776c344f7ebc42782a1b5a";
-    sha256 = "ivHV0SRpnBqsdC7fu1Xhtd/BA55O0UdbUyDLy5KHNYs=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-9j4r7Zm9iVjPMT2F9EoBjVn4UqBbqfKap8t0S+xvprc=";
   };
-  # src = fetchurl {
-  #   url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-  #   sha256 = "sha256-vOcfQC36qcXiab9lv0iiI0PYlubPmiw0ZpOS1/v2hHg=";
-  # };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
