@@ -209,7 +209,7 @@ in
 
   config = mkIf cfg.enable {
 
-    networking.resolvconf.useLocalResolver = true;
+    networking.resolvconf.useLocalResolver = mkDefault true;
 
     users.users.${bindUser} =
       {
