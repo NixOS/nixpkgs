@@ -60,8 +60,9 @@ let
       };
     });
 
-    bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
       name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
     });
 
     fast-cli = super."fast-cli-1.x".override {

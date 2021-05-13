@@ -3654,7 +3654,9 @@ in
 
   cfssl = callPackage ../tools/security/cfssl { };
 
-  chafa = callPackage ../tools/misc/chafa { };
+  chafa = callPackage ../tools/misc/chafa {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
@@ -6196,6 +6198,8 @@ in
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  minipro = callPackage ../tools/misc/minipro { };
+
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
@@ -6448,6 +6452,8 @@ in
   libnids = callPackage ../tools/networking/libnids { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
+
+  libtorrent-jesec = callPackage ../tools/networking/p2p/libtorrent-jesec { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
 
@@ -8166,6 +8172,8 @@ in
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
+
+  rtorrent-jesec = callPackage ../tools/networking/p2p/rtorrent-jesec { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
@@ -11887,6 +11895,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
+    erlang-ls
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages
     relxExe;
@@ -25137,6 +25146,8 @@ in
   prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
 
   ptex = callPackage ../development/libraries/ptex {};
+
+  pyright = nodePackages.pyright;
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
 

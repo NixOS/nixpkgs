@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/steam-tui $out/bin/.steam-tui-unwrapped
     cat > $out/bin/steam-tui <<EOF
     #!${runtimeShell}
-    exec steam-run $out/bin/.steam-tui-unwrapped '$@'
+    export PATH=${steamcmd}/bin:\$PATH
+    exec ${steam-run-native}/bin/steam-run $out/bin/.steam-tui-unwrapped '\$@'
     EOF
     chmod +x $out/bin/steam-tui
   '';
