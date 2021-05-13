@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/davmail
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --prefix PATH : ${jre}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 libXtst ]}
+    runHook postInstall
   '';
 
   meta = with lib; {
