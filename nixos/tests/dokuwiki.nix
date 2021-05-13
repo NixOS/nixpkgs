@@ -33,18 +33,23 @@ let
 in {
   name = "dokuwiki";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [
+      _1000101
+      onny
+    ];
   };
   machine = { ... }: {
-    services.dokuwiki."site1.local" = {
-      aclUse = false;
-      superUser = "admin";
-    };
-    services.dokuwiki."site2.local" = {
-      usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-      superUser = "admin";
-      templates = [ template-bootstrap3 ];
-      plugins = [ plugin-icalevents ];
+    services.dokuwiki.sites = {
+      "site1.local" = {
+        aclUse = false;
+        superUser = "admin";
+      };
+      "site2.local" = {
+        usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
+        superUser = "admin";
+        templates = [ template-bootstrap3 ];
+        plugins = [ plugin-icalevents ];
+      };
     };
     networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
   };
