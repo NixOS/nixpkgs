@@ -7335,6 +7335,12 @@
     githubId = 1839979;
     name = "Niklas Thörne";
   };
+  nullx76 = {
+    email = "nix@xirion.net";
+    github = "NULLx76";
+    githubId = 1809198;
+    name = "Victor Roest";
+  };
   numinit = {
     email = "me@numin.it";
     github = "numinit";
