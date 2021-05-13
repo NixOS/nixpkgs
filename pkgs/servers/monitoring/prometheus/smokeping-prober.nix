@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 let
-  baseVersion = "0.3.1";
-  commit = "9ba85274dcc21bf8132cbe3b3dccfcb4aab57d9f";
+  baseVersion = "0.4.2";
+  commit = "722200c4adbd6d1e5d847dfbbd9dec07aa4ca38d";
 in
 buildGoModule rec {
   pname = "smokeping_prober";
@@ -24,9 +24,9 @@ buildGoModule rec {
     rev = commit;
     owner = "SuperQ";
     repo = "smokeping_prober";
-    sha256 = "sha256:19596di2gzcvlcwiypsncq4zwbyb6d1r6wxsfi59wax3423i7ndg";
+    sha256 = "1lpcjip6qxhalldgm6i2kgbajfqy3vwfyv9jy0jdpii13lv6mzlz";
   };
-  vendorSha256 = "sha256:1b2v3v3kn0m7dvjxbs8q0gw6zingksdqhm5g1frx0mymqk0lg889";
+  vendorSha256 = "0p2jmlxpvpaqc445j39b4z4i3mnjrm25khv3sq6ylldcgfd31vz8";
 
   doCheck = true;
 
