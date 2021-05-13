@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "inotify-simple";
-  version = "1.2.1";
+  version = "1.3.5";
 
   src = fetchPypi {
     pname = "inotify_simple";
     inherit version;
-    sha256 = "132craajflksgxxwjawj73nn1ssv8jn58j3k5vvyiq03avbz4sfv";
+    sha256 = "hED/5JxK6BqN9Xwa4etLa/p6y4MAmb+z4wWzgwBcwSg=";
   };
 
   # The package has no tests
