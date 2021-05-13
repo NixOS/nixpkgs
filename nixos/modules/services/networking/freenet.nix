@@ -12,6 +12,9 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "freenet" "nice" ] [ "services" "freenet" "daemonNiceLevel" ])
+  ];
 
   ### configuration
 
@@ -25,7 +28,7 @@ in
         description = "Enable the Freenet daemon";
       };
 
-      nice = mkOption {
+      daemonNiceLevel = mkOption {
         type = types.int;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
@@ -47,7 +50,7 @@ in
       serviceConfig.User = "freenet";
       serviceConfig.UMask = "0007";
       serviceConfig.WorkingDirectory = varDir;
-      serviceConfig.Nice = cfg.nice;
+      serviceConfig.Nice = cfg.daemonNiceLevel;
     };
 
     users.users.freenet = {
