@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     maintainers = [ maintainers.hinton ];
     platforms = platforms.all;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
