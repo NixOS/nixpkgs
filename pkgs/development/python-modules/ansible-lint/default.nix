@@ -51,6 +51,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # Both patches are addressed in https://github.com/ansible-community/ansible-lint/pull/1549
+    # and should be removed once merged upstream
+
     # fixes test_get_yaml_files_umlaut and test_run_inside_role_dir
     substituteInPlace src/ansiblelint/file_utils.py \
       --replace 'os.path.join(root, name)' 'os.path.normpath(os.path.join(root, name))'
