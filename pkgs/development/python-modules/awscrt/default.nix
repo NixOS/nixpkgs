@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "0.11.13";
 
   buildInputs = lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Security ]);
+    (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
 
   # Required to suppress -Werror
   # https://github.com/NixOS/nixpkgs/issues/39687
