@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus mpl20 ] ;
     maintainers = [ maintainers.afranchuk ];
   };
 }
