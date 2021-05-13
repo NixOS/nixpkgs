@@ -42,16 +42,16 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    make cleanall -C support/xhpast
-    make xhpast -C support/xhpast
+    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    make xhpast   -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/libexec
-    make install -C support/xhpast
-    make cleanall -C support/xhpast
+    make install  -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
     cp -R . $out/libexec/arcanist
 
     ${makeArcWrapper "arc"}
