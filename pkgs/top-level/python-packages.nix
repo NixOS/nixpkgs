@@ -3577,6 +3577,8 @@ in {
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
+  inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
+
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   intake = callPackage ../development/python-modules/intake { };
