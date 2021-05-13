@@ -1,6 +1,8 @@
 { lib
+, bzip2
 , patchelf
 , python3
+, gnutar
 , unzip
 }:
 
@@ -38,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ patchelf unzip ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ bzip2 gnutar patchelf unzip ])
   ];
 
   meta = with lib; {
