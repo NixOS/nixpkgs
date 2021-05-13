@@ -96,6 +96,7 @@ let
 
     lld = callPackage ./lld {
       inherit llvm_meta;
+      inherit (libraries) libunwind;
     };
 
     lldb = callPackage ./lldb {
