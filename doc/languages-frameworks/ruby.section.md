@@ -106,7 +106,7 @@ let
     name = "gems-for-some-project";
     gemdir = ./.;
   };
-in mkShell { buildInputs = [ gems gems.wrappedRuby ]; }
+in mkShell { packages = [ gems gems.wrappedRuby ]; }
 ```
 
 With this file in your directory, you can run `nix-shell` to build and use the gems. The important parts here are `bundlerEnv` and `wrappedRuby`.
