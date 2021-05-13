@@ -5,11 +5,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "18ksld775balh0yx2icj7fya9fvjkfgvwznvccdlmhi3zidg550h";
+    sha256 = "sha256-pUPOYqgJKntQZRRodcyYeFNLCdxKhT8sK1bi3jl6b0s=";
   };
 
   preConfigure = ''
