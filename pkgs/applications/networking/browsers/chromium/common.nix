@@ -7,7 +7,7 @@
 , xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, python3Packages, perl, pkg-config
+, python2, python3, perl, pkg-config
 , nspr, systemd, libkrb5
 , util-linux, alsaLib
 , bison, gperf
@@ -43,16 +43,12 @@ with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  # TODO: Python 3 support is incomplete and "python3 ../../build/util/python2_action.py"
-  # currently doesn't work due to mixed Python 2/3 dependencies:
-  pythonPackages = if chromiumVersionAtLeast "93"
-    then python3Packages
-    else python2Packages;
-  forcePython3Patch = (githubPatch
-    # Reland #8 of "Force Python 3 to be used in build."":
-    "a2d3c362802d9e6b62f895fcda75a3695b77b1b8"
-    "1r9spr2wmjk9x9l3m1gzn6692mlvbxdz0r5hlr5rfwiwr900rxi2"
-  );
+  python2WithPackages = python2.withPackages(ps: with ps; [
+    ply jinja2 setuptools
+  ]);
+  python3WithPackages = python3.withPackages(ps: with ps; [
+    ply jinja2 setuptools
+  ]);
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -138,10 +134,12 @@ let
     };
 
     nativeBuildInputs = [
+      ninja pkg-config
+      python2WithPackages perl nodejs
+      gnutar which
       llvmPackages.lldClang.bintools
-      ninja which pythonPackages.python perl pkg-config
-      pythonPackages.ply pythonPackages.jinja2 nodejs
-      gnutar pythonPackages.setuptools
+    ] ++ lib.optionals (chromiumVersionAtLeast "92") [
+      python3WithPackages
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -174,8 +172,6 @@ let
     postPatch = lib.optionalString (chromiumVersionAtLeast "91") ''
       # Required for patchShebangs (unsupported):
       chmod -x third_party/webgpu-cts/src/tools/deno
-    '' + optionalString (chromiumVersionAtLeast "92") ''
-      patch -p1 --reverse < ${forcePython3Patch}
     '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
@@ -313,7 +309,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      python build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python2}/bin/python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
