@@ -2727,6 +2727,8 @@ in {
 
   glasgow = callPackage ../development/python-modules/glasgow { };
 
+  glcontext = callPackage ../development/python-modules/glcontext { };
+
   glob2 = callPackage ../development/python-modules/glob2 { };
 
   globre = callPackage ../development/python-modules/globre { };

@@ -1,9 +1,9 @@
-{ pkgs ? import ../../../../. {} }:
+{ pkgs ? import ../../../../. { } }:
 
 with pkgs;
 
 mkShell {
-  buildInputs = [
+  packages = [
     common-updater-scripts
     curl
     dotnetCorePackages.sdk_5_0

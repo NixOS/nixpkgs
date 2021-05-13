@@ -41,10 +41,16 @@ buildPythonPackage rec {
   disabledTests = [
     # requires FAISS (not in Nixpkgs)
     "test_accuracy_calculator_and_faiss"
+    "test_global_embedding_space_tester"
+    "test_with_same_parent_label_tester"
     # require network access:
     "test_get_nearest_neighbors"
     "test_tuplestoweights_sampler"
     "test_untrained_indexer"
+    "test_metric_loss_only"
+    "test_pca"
+    # flaky
+    "test_distributed_classifier_loss_and_miner"
   ];
 
   meta = {
