@@ -16,6 +16,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ llvmPackages.libclang v8 ]
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
+  postPatch = ''
+    # Remove #[deny(warnings)] which is equivalent to -Werror in C.
+    # Prevents build failures when upgrading rustc, which may give more warnings.
+    substituteInPlace src/lib.rs \
+      --replace "#![deny(warnings)]" ""
+  '';
+
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
     export V8_SOURCE="${v8}"
