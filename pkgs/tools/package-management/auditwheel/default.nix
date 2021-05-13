@@ -20,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     pyelftools
+    setuptools
   ];
 
   # integration tests require docker and networking
@@ -29,6 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     pretend
     pytestCheckHook
   ];
+
+  # ensure that there are no undeclared deps
+  postCheck = ''
+    PATH= PYTHONPATH= $out/bin/auditwheel --version > /dev/null
+  '';
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ patchelf ])
