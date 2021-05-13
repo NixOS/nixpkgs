@@ -7713,12 +7713,6 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
-  pesterhazy = {
-    email = "pesterhazy@gmail.com";
-    github = "pesterhazy";
-    githubId = 106328;
-    name = "Paulus Esterhazy";
-  };
   petabyteboy = {
     email = "milan@petabyte.dev";
     github = "petabyteboy";

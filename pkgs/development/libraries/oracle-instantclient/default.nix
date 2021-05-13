@@ -123,7 +123,7 @@ in stdenv.mkDerivation {
     '';
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ pesterhazy flokli ];
+    maintainers = with maintainers; [ flokli ];
     hydraPlatforms = [];
   };
 }
