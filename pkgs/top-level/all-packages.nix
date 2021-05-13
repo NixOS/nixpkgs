@@ -11198,6 +11198,8 @@ in
   llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
+    # This returns the minimum suported version for the platform. The
+    # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then "7"
       else if platform.isFreeBSD then "7"
@@ -11205,7 +11207,10 @@ in
       else if platform.isLinux then "7"
       else if platform.isWasm then "8"
       else "latest";
-    minSupported = lib.min (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
+    # We take the "max of the mins". Why? Since those are lower bounds of the
+    # supported version set, this is like intersecting those sets and then
+    # taking the min bound of that.
+    minSupported = lib.max (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
   in pkgs.${"llvmPackages_${minSupported}"};
 
   llvmPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/llvm/5 {
