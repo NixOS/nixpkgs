@@ -132,6 +132,6 @@ stdenv.mkDerivation rec {
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
     license = with licenses; [ gpl2Plus mpl20 ] ;
-    maintainers = [ maintainers.afranchuk ];
+    maintainers = with maintainers; [ afranchuk rnhmjoj ];
   };
 }
