@@ -14616,6 +14616,8 @@ in
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
 
+  geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
+
   geocode-glib = callPackage ../development/libraries/geocode-glib {};
 
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
