@@ -33,6 +33,9 @@ in
       # SCSI support (incomplete).
       "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr"
 
+      # SD card support (incomplete)
+      "sdhci"
+
       # USB support, especially for booting from USB CD-ROM
       # drives.
       "uas"
