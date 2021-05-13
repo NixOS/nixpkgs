@@ -13,7 +13,7 @@
 , xorg
 # runtime dependencies
 , cups
-# runtime dependencies for GTK+ Look and Feel
+# runtimes dependencies for GTK+ Look and Feel
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
