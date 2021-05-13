@@ -1,8 +1,29 @@
 diff --git a/Makefile b/Makefile
-index 005d60d..f69c7fe 100644
+index 005d60d..0718f7e 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -41,6 +41,7 @@ install:
+@@ -24,23 +24,24 @@ endif
+ all: ebook2cw
+ 
+ ebook2cw: ebook2cw.c codetables.h
+-	gcc ebook2cw.c -pedantic -Wall -lm $(LDFLAGS) $(CFLAGS) -o ebook2cw
++	$(CC) ebook2cw.c -pedantic -Wall -lm $(LDFLAGS) $(CFLAGS) -o ebook2cw
+ 	msgfmt -o po/de.mo po/de.po
+ 
+ cgi: ebook2cw.c codetables.h
+-	gcc -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -D CGI -o cw.cgi
++	$(CC) -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -D CGI -o cw.cgi
+ 
+ cgibuffered: ebook2cw.c codetables.h
+-	gcc -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -D CGI -D CGIBUFFERED -o cw.cgi
++	$(CC) -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -D CGI -D CGIBUFFERED -o cw.cgi
+ 
+ static:
+-	gcc -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -o ebook2cw
++	$(CC) -static ebook2cw.c $(LDFLAGS) -lm $(CFLAGS) -o ebook2cw
+ 
+ install:
+ 	install -d -v                      $(DESTDIR)/share/man/man1/
  	install -d -v                      $(DESTDIR)/bin/
  	install -d -v                      $(DESTDIR)/share/doc/ebook2cw/
  	install -d -v                      $(DESTDIR)/share/doc/ebook2cw/examples/
