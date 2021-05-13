@@ -25,8 +25,8 @@ in
         description = "Enable the Freenet daemon";
       };
 
-      nice = mkOption {
-        type = types.int;
+      daemonNiceLevel = mkOption {
+        type = types.ints.between (-20) 19;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };
@@ -47,7 +47,7 @@ in
       serviceConfig.User = "freenet";
       serviceConfig.UMask = "0007";
       serviceConfig.WorkingDirectory = varDir;
-      serviceConfig.Nice = cfg.nice;
+      serviceConfig.Nice = cfg.daemonNiceLevel;
     };
 
     users.users.freenet = {
