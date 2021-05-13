@@ -42,6 +42,12 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+  disabledTests = [
+    # this test is flaky on darwin because it depends on the resolution of filesystem mtimes
+    # https://github.com/cldf/csvw/blob/45584ad63ff3002a9b3a8073607c1847c5cbac58/tests/test_db.py#L257
+    "test_write_file_exists"
+  ];
+
   meta = with lib; {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
