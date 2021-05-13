@@ -26366,7 +26366,9 @@ in
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {};
+  taffybar = callPackage ../applications/window-managers/taffybar {
+    inherit (haskellPackages) ghcWithPackages taffybar;
+  };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
