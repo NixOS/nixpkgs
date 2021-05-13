@@ -84,11 +84,25 @@ in
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = [ "--full-if-older-than" "1M" ];
+      example = [ "--backend-retry-delay" "100" ];
       description = ''
         Extra command-line flags passed to duplicity. See
         <citerefentry><refentrytitle>duplicity</refentrytitle>
         <manvolnum>1</manvolnum></citerefentry>.
+      '';
+    };
+
+    fullIfOlderThan = mkOption {
+      type = types.str;
+      default = "never";
+      example = "1M";
+      description = ''
+        If <literal>"never"</literal> (the default) always do incremental
+        backups (the first backup will be a full backup, of course).  If
+        <literal>"always"</literal> always do full backups.  Otherwise, this
+        must be a string representing a duration. Full backups will be made
+        when the latest full backup is older than this duration. If this is not
+        the case, an incremental backup is performed.
       '';
     };
 
@@ -112,6 +126,16 @@ in
           associated incremental sets).
         '';
       };
+      maxIncr = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 1;
+        description = ''
+          If non-null, delete incremental sets of all backups sets that are
+          older than the count:th last full backup (in other words, keep only
+          old full backups and not their increments).
+        '';
+      };
     };
   };
 
@@ -133,10 +157,12 @@ in
             ${dup} cleanup ${target} --force ${extra}
             ${lib.optionalString (cfg.cleanup.maxAge != null) "${dup} remove-older-than ${lib.escapeShellArg cfg.cleanup.maxAge} ${target} --force ${extra}"}
             ${lib.optionalString (cfg.cleanup.maxFull != null) "${dup} remove-all-but-n-full ${toString cfg.cleanup.maxFull} ${target} --force ${extra}"}
-            exec ${dup} incr ${lib.escapeShellArgs (
+            ${lib.optionalString (cfg.cleanup.maxIncr != null) "${dup} remove-all-incr-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
+            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${lib.escapeShellArgs (
               [ cfg.root cfg.targetUrl ]
               ++ concatMap (p: [ "--include" p ]) cfg.include
               ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
+              ++ (lib.optionals (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ])
               )} ${extra}
           '';
         serviceConfig = {
