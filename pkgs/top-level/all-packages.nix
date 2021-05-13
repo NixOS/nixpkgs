@@ -806,6 +806,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  auditwheel = callPackage ../tools/package-management/auditwheel { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
@@ -26375,7 +26377,9 @@ in
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {};
+  taffybar = callPackage ../applications/window-managers/taffybar {
+    inherit (haskellPackages) ghcWithPackages taffybar;
+  };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 

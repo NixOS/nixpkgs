@@ -233,6 +233,10 @@ package-maintainers:
     - hinit
   bdesham:
     - pinboard-notes-backup
+  rvl:
+    - taffybar
+    - arbtt
+    - lentil
 
 unsupported-platforms:
   Allure:                                       [ x86_64-darwin ]

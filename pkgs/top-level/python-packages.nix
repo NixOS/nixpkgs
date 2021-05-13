@@ -2567,6 +2567,8 @@ in {
 
   fpylll = callPackage ../development/python-modules/fpylll { };
 
+  fpyutils = callPackage ../development/python-modules/fpyutils { };
+
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
@@ -4123,7 +4125,11 @@ in {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+  md-toc = callPackage ../development/python-modules/md-toc { };
+
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  mdformat = callPackage ../development/python-modules/mdformat { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
@@ -4370,6 +4376,10 @@ in {
   myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
+
+  mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
+
+  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
