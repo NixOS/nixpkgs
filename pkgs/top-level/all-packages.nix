@@ -25132,6 +25132,8 @@ in
 
   ptex = callPackage ../development/libraries/ptex {};
 
+  pyright = nodePackages.pyright;
+
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
   qemacs = callPackage ../applications/editors/qemacs { };
