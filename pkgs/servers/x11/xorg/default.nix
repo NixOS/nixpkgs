@@ -846,11 +846,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXfixes = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "libXfixes-5.0.3";
+    name = "libXfixes-6.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2";
-      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
+      url = "mirror://xorg/individual/lib/libXfixes-6.0.0.tar.bz2";
+      sha256 = "0k2v4i4r24y3kdr5ici1qqhp69djnja919xfqp54c2rylm6s5hd7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
