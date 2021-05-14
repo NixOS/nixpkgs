@@ -23022,7 +23022,7 @@ in
   # A build without gui components and other utilites not needed for end user
   # libraries
   gnuradioMinimal = gnuradio.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio.unwrapped.override {
       volk = volk.override {
         # So it will not reference python
@@ -23052,7 +23052,7 @@ in
   # A build without gui components and other utilites not needed if gnuradio is
   # used as a c++ library.
   gnuradio3_8Minimal = gnuradio3_8.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio3_8.unwrapped.override {
       volk = volk.override {
         enableModTool = false;
@@ -23081,7 +23081,7 @@ in
   # A build without gui components and other utilites not needed if gnuradio is
   # used as a c++ library.
   gnuradio3_7Minimal = gnuradio3_7.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio3_7.unwrapped.override {
       volk = volk.override {
         enableModTool = false;
