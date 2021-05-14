@@ -22794,7 +22794,8 @@ in
 
   dmrconfig = callPackage ../applications/radio/dmrconfig { };
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
+  dmtx-utils = callPackage ../tools/graphics/dmtx-utils {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
