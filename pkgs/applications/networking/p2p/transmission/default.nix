@@ -79,7 +79,8 @@ in stdenv.mkDerivation {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   postInstall = ''
-    install -D -m 644 /dev/stdin $apparmor/bin.transmission-daemon <<EOF
+    mkdir $apparmor
+    cat >$apparmor/bin.transmission-daemon <<EOF
     include <tunables/global>
     $out/bin/transmission-daemon {
       include <abstractions/base>
