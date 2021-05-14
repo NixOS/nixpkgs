@@ -15,6 +15,21 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+
+# `-f true` to force bootlogd to fork itself. bootlogd will only fork once it's ready to consume logs.  Otherwise it could skip the first few lines.
+# `-p` ensures required mount points are mounted.
+# `-l` logs to /dev/kmsg too
+# `-l ...` is monitored, and logging will start once the file is made available.
+bootlogd -f true -p -k -l /run/log/stage-1-init.log
+
+
+# Print a greeting.
+# When changing this, verify `tests/boot-stage1.nix` still works.
+info
+info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info
+
+
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
     for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
@@ -69,11 +84,6 @@ EOF
 trap 'fail' 0
 
 
-# Print a greeting.
-info
-info "[1;32m<<< NixOS Stage 1 >>>[0m"
-info
-
 # Make several required directories.
 mkdir -p /etc/udev
 touch /etc/fstab # to shut up mount
@@ -119,22 +129,10 @@ specialMount() {
 }
 source @earlyMountScript@
 
-# Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
-mkdir -p /tmp
-mkfifo /tmp/stage-1-init.log.fifo
-logOutFd=8 && logErrFd=9
-eval "exec $logOutFd>&1 $logErrFd>&2"
-if test -w /dev/kmsg; then
-    tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
-        if test -n "$line"; then
-            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
-        fi
-    done &
-else
-    mkdir -p /run/log
-    tee -i < /tmp/stage-1-init.log.fifo /run/log/stage-1-init.log &
-fi
-exec > /tmp/stage-1-init.log.fifo 2>&1
+
+# Kick-off bootlogd's log
+mkdir -p /run/log
+touch /run/log/stage-1-init.log
 
 
 # Process the kernel command line.
@@ -587,10 +585,6 @@ fi
 # Stop udevd.
 udevadm control --exit
 
-# Reset the logging file descriptors.
-# Do this just before pkill, which will kill the tee process.
-exec 1>&$logOutFd 2>&$logErrFd
-eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2. But keep storage daemons like unionfs-fuse.
