@@ -24,6 +24,12 @@ public:
 
     virtual Calamares::JobResult run() = 0;
 
+    /** @brief Check that the (configured) source file exists.
+     *
+     * Returns @c true if it's a file and readable.
+     */
+    bool checkSourceExists() const;
+
 Q_SIGNALS:
     // Progress?
 
@@ -32,6 +38,7 @@ protected:
     QString m_destination;
 };
 
+// Implementation in FSArchiverRunner.cpp
 class FSArchiverRunner : public Runner
 {
 public:
@@ -40,6 +47,7 @@ public:
     Calamares::JobResult run() override;
 };
 
+// Implementation in Unsquash.cpp
 class UnsquashRunner : public Runner
 {
 public:
