@@ -95,9 +95,7 @@ let
     lldClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-      };
+      inherit (tools) bintools;
       extraPackages = [
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
