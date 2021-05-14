@@ -24,7 +24,7 @@
 with lib;
 
 qtModule {
-  name = "qtwebengine";
+  pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
