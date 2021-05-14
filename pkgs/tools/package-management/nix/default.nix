@@ -196,18 +196,11 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.10";
+    version = "2.3.11";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
+      sha256 = "89a8d7995305a78b1561e6670bbf1879c791fc4904eb094bc4f180775a61c128";
     };
-
-    patches = [(
-      fetchpatch {
-        url = "https://github.com/NixOS/nix/pull/4316.patch";
-        sha256 = "0bqlm4n9sac9prgr9xlfng92arisp1hiqvc9pfh4fibsppkgdfc5";
-      }
-    )];
 
     inherit storeDir stateDir confDir boehmgc;
   });
