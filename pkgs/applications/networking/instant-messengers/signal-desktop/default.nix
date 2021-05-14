@@ -117,9 +117,15 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # Required for $SQLCIPHER_LIB which contains "/build/" inside the path:
+  noAuditTmpdir = true;
+
   preFixup = ''
+    export SQLCIPHER_LIB="$out/lib/Signal/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+    test -x "$SQLCIPHER_LIB" # To ensure the location hasn't changed
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      --prefix LD_PRELOAD : "$SQLCIPHER_LIB"
       ${customLanguageWrapperArgs}
     )
 
