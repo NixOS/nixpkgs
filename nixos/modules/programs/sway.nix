@@ -31,6 +31,7 @@ let
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
+    isNixOS = true;
   };
 in {
   options.programs.sway = {
@@ -120,8 +121,11 @@ in {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
-        #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
-        #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
+        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+          # Import the most important environment variables into the D-Bus and systemd
+          # user environments (e.g. required for screen sharing and Pinentry prompts):
+          exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+        '';
       };
     };
     security.pam.services.swaylock = {};
