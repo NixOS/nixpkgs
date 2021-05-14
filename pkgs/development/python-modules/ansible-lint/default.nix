@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
-, python
+, setuptools-scm
 , ansible
 , enrich
 , flaky
@@ -27,7 +27,9 @@ buildPythonPackage rec {
     sha256 = "sha256-tnuWKEB66bwVuwu3H3mHG99ZP+/msGhMDMRL5fyQgD8=";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     ansible
