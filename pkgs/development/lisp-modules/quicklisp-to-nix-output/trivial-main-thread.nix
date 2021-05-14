@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-main-thread";
   version = "20190710-git";
 
-  description = "Compatibility library to run things in the main thread.";
+  description = "Compatibility library to run things in the main thread";
 
   deps = [ args."alexandria" args."array-utils" args."bordeaux-threads" args."dissect" args."simple-tasks" args."trivial-features" ];
 

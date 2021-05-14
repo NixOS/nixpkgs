@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A compilation-free, always up-to-date encryption library for Python that works on Windows, OS X, Linux and BSD.";
+    description = "A compilation-free, always up-to-date encryption library for Python that works on Windows, OS X, Linux and BSD";
     homepage = "https://www.snowflake.com/";
     license = licenses.mit;
   };

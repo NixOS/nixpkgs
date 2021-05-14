@@ -4,7 +4,7 @@ rec {
   baseName = "clack-handler-hunchentoot";
   version = "clack-20210411-git";
 
-  description = "Clack handler for Hunchentoot.";
+  description = "Clack handler for Hunchentoot";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."clack-socket" args."flexi-streams" args."hunchentoot" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 

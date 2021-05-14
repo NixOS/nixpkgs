@@ -4,7 +4,7 @@ rec {
   baseName = "cl-reexport";
   version = "20210228-git";
 
-  description = "Reexport external symbols in other packages.";
+  description = "Reexport external symbols in other packages";
 
   deps = [ args."alexandria" ];
 

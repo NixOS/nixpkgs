@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A Python library for extracting MPQ (MoPaQ) files.";
+    description = "A Python library for extracting MPQ (MoPaQ) files";
     homepage = "https://github.com/eagleflo/mpyq";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ danharaj ];

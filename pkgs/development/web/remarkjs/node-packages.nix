@@ -3620,7 +3620,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "JavaScript test spies, stubs and mocks.";
+      description = "JavaScript test spies, stubs and mocks";
       homepage = "https://sinonjs.org/";
       license = "BSD-3-Clause";
     };

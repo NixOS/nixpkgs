@@ -4,7 +4,7 @@ rec {
   baseName = "alexandria";
   version = "20210411-git";
 
-  description = "Alexandria is a collection of portable public domain utilities.";
+  description = "Alexandria is a collection of portable public domain utilities";
 
   deps = [ ];
 

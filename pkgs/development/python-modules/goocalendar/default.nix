@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A calendar widget for GTK using PyGoocanvas.";
+    description = "A calendar widget for GTK using PyGoocanvas";
     homepage = "https://goocalendar.tryton.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.udono ];

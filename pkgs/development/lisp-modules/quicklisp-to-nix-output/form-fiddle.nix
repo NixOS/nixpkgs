@@ -4,7 +4,7 @@ rec {
   baseName = "form-fiddle";
   version = "20190710-git";
 
-  description = "A collection of utilities to destructure lambda forms.";
+  description = "A collection of utilities to destructure lambda forms";
 
   deps = [ args."documentation-utils" args."trivial-indent" ];
 

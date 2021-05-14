@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://typer.tiangolo.com/";
-    description = "Typer, build great CLIs. Easy to code. Based on Python type hints.";
+    description = "Typer, build great CLIs. Easy to code. Based on Python type hints";
     license = licenses.mit;
     maintainers = [ maintainers.winpat ];
   };

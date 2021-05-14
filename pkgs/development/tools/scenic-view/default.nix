@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications";
     longDescription = ''
       A JavaFX application designed to make it simple to understand the current state of your application scenegraph
       and to also easily manipulate properties of the scenegraph without having to keep editing your code.

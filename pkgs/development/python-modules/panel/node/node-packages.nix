@@ -543,7 +543,7 @@ let
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A high level dashboarding library for python visualization libraries.";
+      description = "A high level dashboarding library for python visualization libraries";
       license = "BSD-3-Clause";
     };
     production = true;

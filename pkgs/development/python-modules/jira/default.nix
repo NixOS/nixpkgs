@@ -28,7 +28,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   meta = with lib; {
-    description = "This library eases the use of the JIRA REST API from Python.";
+    description = "This library eases the use of the JIRA REST API from Python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ globin ];
   };

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Anbox ashmem and binder drivers.";
+    description = "Anbox ashmem and binder drivers";
     homepage = "https://github.com/anbox/anbox-modules";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

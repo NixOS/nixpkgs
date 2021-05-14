@@ -4,7 +4,7 @@ rec {
   baseName = "html-encode";
   version = "1.2";
 
-  description = "A library for encoding text in various web-savvy encodings.";
+  description = "A library for encoding text in various web-savvy encodings";
 
   deps = [ ];
 

@@ -4,7 +4,7 @@ rec {
   baseName = "wookie";
   version = "20191130-git";
 
-  description = "An evented webserver for Common Lisp.";
+  description = "An evented webserver for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."blackbird" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chunga" args."cl-async" args."cl-async-base" args."cl-async-ssl" args."cl-async-util" args."cl-fad" args."cl-libuv" args."cl-ppcre" args."cl-utilities" args."do-urlencode" args."fast-http" args."fast-io" args."flexi-streams" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" args."xsubseq" ];
 

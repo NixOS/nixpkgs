@@ -4,7 +4,7 @@ rec {
   baseName = "lfarm-client";
   version = "lfarm-20150608-git";
 
-  description = "Client component of lfarm, a library for distributing work across machines.";
+  description = "Client component of lfarm, a library for distributing work across machines";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-store" args."flexi-streams" args."lfarm-common" args."lparallel" args."split-sequence" args."trivial-gray-streams" args."usocket" ];
 

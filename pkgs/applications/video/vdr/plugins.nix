@@ -120,7 +120,7 @@ in {
 
     meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-markad";
-      description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
+      description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];
@@ -195,7 +195,7 @@ in {
 
     meta = with lib; {
       homepage = "https://github.com/FernetMenta/vdr-plugin-vnsiserver";
-      description = "VDR plugin to handle KODI clients.";
+      description = "VDR plugin to handle KODI clients";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];

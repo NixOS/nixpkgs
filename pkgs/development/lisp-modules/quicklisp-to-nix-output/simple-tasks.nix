@@ -4,7 +4,7 @@ rec {
   baseName = "simple-tasks";
   version = "20190710-git";
 
-  description = "A very simple task scheduling framework.";
+  description = "A very simple task scheduling framework";
 
   deps = [ args."alexandria" args."array-utils" args."bordeaux-threads" args."dissect" ];
 

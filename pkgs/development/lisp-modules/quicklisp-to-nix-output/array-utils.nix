@@ -4,7 +4,7 @@ rec {
   baseName = "array-utils";
   version = "20201220-git";
 
-  description = "A few utilities for working with arrays.";
+  description = "A few utilities for working with arrays";
 
   deps = [ ];
 

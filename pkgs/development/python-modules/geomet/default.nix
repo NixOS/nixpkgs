@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/geomet/geomet";
     license = licenses.asl20;
-    description = "Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa.";
+    description = "Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa";
     maintainers = with maintainers; [ turion ris ];
   };
 }

@@ -4,7 +4,7 @@ rec {
   baseName = "introspect-environment";
   version = "20200715-git";
 
-  description = "Small interface to portable but nonstandard introspection of CL environments.";
+  description = "Small interface to portable but nonstandard introspection of CL environments";
 
   deps = [ ];
 

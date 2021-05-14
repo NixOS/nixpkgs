@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A fast, extensible Markdown parser in pure Python.";
+    description = "A fast, extensible Markdown parser in pure Python";
     homepage = "https://github.com/miyuchina/mistletoe";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];

@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "buildnode-test" ];
 
-  description = "Tool for building up an xml dom nicely.";
+  description = "Tool for building up an xml dom nicely";
 
   deps = [ args."alexandria" args."babel" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
 

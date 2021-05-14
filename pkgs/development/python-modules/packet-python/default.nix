@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A Python client for the Packet API.";
+    description = "A Python client for the Packet API";
     homepage    = "https://github.com/packethost/packet-python";
     license     = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ dipinhora ];

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false; # requires external service
 
   meta = with lib; {
-    description = "Simple integration of Flask and WTForms.";
+    description = "Simple integration of Flask and WTForms";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];
     homepage = "https://github.com/lepture/flask-wtf/";

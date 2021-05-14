@@ -45,7 +45,7 @@ buildPythonPackage rec {
   postCheck = "popd";
 
   meta = with lib; {
-    description = "A python graph library implemented in Rust.";
+    description = "A python graph library implemented in Rust";
     homepage = "https://retworkx.readthedocs.io/en/latest/index.html";
     downloadPage = "https://github.com/Qiskit/retworkx/releases";
     changelog = "https://github.com/Qiskit/retworkx/releases/tag/${version}";

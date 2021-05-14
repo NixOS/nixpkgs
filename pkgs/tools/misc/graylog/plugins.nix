@@ -238,7 +238,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-spaceweather";
-      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
+      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate";
     };
   };
   twiliosms = glPlugin rec {

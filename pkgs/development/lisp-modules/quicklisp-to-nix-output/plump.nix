@@ -4,7 +4,7 @@ rec {
   baseName = "plump";
   version = "20210411-git";
 
-  description = "An XML / XHTML / HTML parser that aims to be as lenient as possible.";
+  description = "An XML / XHTML / HTML parser that aims to be as lenient as possible";
 
   deps = [ args."array-utils" args."documentation-utils" args."trivial-indent" ];
 

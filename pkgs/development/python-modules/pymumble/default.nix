@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymumble_py3" ];
 
   meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
+    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot";
     homepage = "https://github.com/azlux/pymumble";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thelegy infinisil ];

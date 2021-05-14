@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "caldav" ];
 
   meta = with lib; {
-    description = "This project is a CalDAV (RFC4791) client library for Python.";
+    description = "This project is a CalDAV (RFC4791) client library for Python";
     homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];

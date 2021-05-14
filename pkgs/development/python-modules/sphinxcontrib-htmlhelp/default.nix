@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "sphinxcontrib-htmlhelp is a sphinx extension which ...";
+    description = "sphinxcontrib-htmlhelp is a sphinx extension which ..";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;
   };

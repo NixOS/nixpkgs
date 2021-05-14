@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "xkeyboard-test" ];
 
-  description = "XKeyboard is X11 extension for clx of the same name.";
+  description = "XKeyboard is X11 extension for clx of the same name";
 
   deps = [ args."clx" ];
 

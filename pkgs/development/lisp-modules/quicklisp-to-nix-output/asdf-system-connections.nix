@@ -4,7 +4,7 @@ rec {
   baseName = "asdf-system-connections";
   version = "20170124-git";
 
-  description = "Allows for ASDF system to be connected so that auto-loading may occur.";
+  description = "Allows for ASDF system to be connected so that auto-loading may occur";
 
   deps = [ ];
 

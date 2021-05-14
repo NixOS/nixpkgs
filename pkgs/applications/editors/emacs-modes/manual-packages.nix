@@ -60,7 +60,7 @@
     postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
 
     meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
+      description = "Standalone package providing the agda-input method without building Agda";
       inherit (pkgs.haskellPackages.Agda.meta) homepage license;
     };
   };
@@ -124,7 +124,7 @@
 
     meta = {
       inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
+      description = "Major mode for the LLVM assembler language";
     };
   };
 
@@ -188,7 +188,7 @@
     postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
 
     meta = {
-      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
+      description = "Standalone package providing ott-mode without building ott and with compiled bytecode";
       inherit (pkgs.haskellPackages.Agda.meta) homepage license;
     };
   };

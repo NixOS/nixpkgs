@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The kivy garden installation script, split into its own package for convenient use in buildozer.";
+    description = "The kivy garden installation script, split into its own package for convenient use in buildozer";
     homepage = "https://pypi.python.org/pypi/kivy-garden";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];

@@ -4,7 +4,7 @@ rec {
   baseName = "cl_plus_ssl";
   version = "cl+ssl-20210411-git";
 
-  description = "Common Lisp interface to OpenSSL.";
+  description = "Common Lisp interface to OpenSSL";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."uiop" args."usocket" ];
 

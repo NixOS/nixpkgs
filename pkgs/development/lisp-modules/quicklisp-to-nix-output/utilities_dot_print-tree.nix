@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "utilities.print-tree/test" ];
 
-  description = "This system provides simple facilities for printing tree structures.";
+  description = "This system provides simple facilities for printing tree structures";
 
   deps = [ args."alexandria" args."fiveam" args."uiop" ];
 

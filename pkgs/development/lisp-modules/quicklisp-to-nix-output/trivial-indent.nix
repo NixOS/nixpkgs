@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-indent";
   version = "20191007-git";
 
-  description = "A very simple library to allow indentation hints for SWANK.";
+  description = "A very simple library to allow indentation hints for SWANK";
 
   deps = [ ];
 

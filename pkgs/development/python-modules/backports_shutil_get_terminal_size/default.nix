@@ -27,7 +27,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
+    description = "A backport of the get_terminal_size function from Python 3.3’s shutil";
     homepage = "https://github.com/chrippa/backports.shutil_get_terminal_size";
     license = with licenses; [ mit ];
     maintainers = teams.sage.members;

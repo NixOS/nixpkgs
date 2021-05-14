@@ -4,7 +4,7 @@ rec {
   baseName = "cl-difflib";
   version = "20130128-git";
 
-  description = "A Lisp library for computing differences between sequences.";
+  description = "A Lisp library for computing differences between sequences";
 
   deps = [ ];
 

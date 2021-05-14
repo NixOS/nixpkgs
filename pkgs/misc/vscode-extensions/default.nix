@@ -357,7 +357,7 @@ let
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
-          description = "File-specific icons in VSCode for improved visual grepping.";
+          description = "File-specific icons in VSCode for improved visual grepping";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=file-icons.file-icons";
           homepage = "https://github.com/file-icons/vscode";
           license = licenses.mit;

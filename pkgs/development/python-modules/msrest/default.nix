@@ -45,7 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "The runtime library 'msrest' for AutoRest generated Python clients.";
+    description = "The runtime library 'msrest' for AutoRest generated Python clients";
     homepage = "https://github.com/Azure/msrest-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ bendlas jonringer maxwilson ];

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "06ljy213x9lhvqjysz9cjhrrg0ns07qkz27pxd8rih0mk6cck45g";
 
   meta = with lib; {
-    description = "Tagref helps you refer to other locations in your codebase.";
+    description = "Tagref helps you refer to other locations in your codebase";
     homepage = "https://github.com/stepchowfun/tagref";
     license = licenses.mit;
     maintainers = [ maintainers.yusdacra ];

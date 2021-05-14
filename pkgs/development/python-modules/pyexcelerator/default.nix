@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "library for generating Excel 97/2000/XP/2003 and OpenOffice Calc compatible spreadsheets.";
+    description = "library for generating Excel 97/2000/XP/2003 and OpenOffice Calc compatible spreadsheets";
     homepage = "https://sourceforge.net/projects/pyexcelerator";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ womfoo ];

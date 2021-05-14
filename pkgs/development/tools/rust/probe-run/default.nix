@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libusb1 ];
 
   meta = with lib; {
-    description = "Run embedded programs just like native ones.";
+    description = "Run embedded programs just like native ones";
     homepage = "https://github.com/knurling-rs/probe-run";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ hoverbear ];

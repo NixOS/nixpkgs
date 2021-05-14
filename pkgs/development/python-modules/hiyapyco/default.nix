@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple python lib allowing hierarchical overlay of config files in YAML syntax, offering different merge methods and variable interpolation based on jinja2.";
+    description = "A simple python lib allowing hierarchical overlay of config files in YAML syntax, offering different merge methods and variable interpolation based on jinja2";
     homepage = "https://github.com/zerwes/hiyapyco";
     license = licenses.gpl3;
     maintainers = with maintainers; [ veehaitch ];

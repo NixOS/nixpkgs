@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distributed" ];
 
   meta = with lib; {
-    description = "Distributed computation in Python.";
+    description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     platforms = platforms.x86; # fails on aarch64

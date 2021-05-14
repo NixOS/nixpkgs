@@ -1410,7 +1410,7 @@ let
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A recorder that can record Matrix rooms you are a member of (including E2E-encrypted rooms).";
+      description = "A recorder that can record Matrix rooms you are a member of (including E2E-encrypted rooms)";
       license = "MIT";
     };
     production = true;

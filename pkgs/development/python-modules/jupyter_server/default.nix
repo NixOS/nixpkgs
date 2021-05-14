@@ -74,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications.";
+    description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.elohmeier ];

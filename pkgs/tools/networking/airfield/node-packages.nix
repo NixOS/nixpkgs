@@ -677,7 +677,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A fast django-like templating engine for node.js and browsers.";
+      description = "A fast django-like templating engine for node.js and browsers";
     };
     production = true;
     bypassCache = true;
@@ -716,7 +716,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A high performance Redis client.";
+      description = "A high performance Redis client";
       homepage = "https://github.com/NodeRedis/node-redis";
       license = "MIT";
     };
@@ -818,7 +818,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Simplified HTTP request client.";
+      description = "Simplified HTTP request client";
       homepage = "https://github.com/request/request#readme";
       license = "Apache-2.0";
     };

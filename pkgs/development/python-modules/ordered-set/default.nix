@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A MutableSet that remembers its order, so that every entry has an index.";
+    description = "A MutableSet that remembers its order, so that every entry has an index";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };

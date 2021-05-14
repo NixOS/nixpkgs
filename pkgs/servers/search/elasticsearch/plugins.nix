@@ -93,7 +93,7 @@ in {
     };
     meta = with lib; {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2";
-      description = "The EC2 discovery plugin uses the AWS API for unicast discovery.";
+      description = "The EC2 discovery plugin uses the AWS API for unicast discovery";
       license = licenses.asl20;
     };
   };
@@ -127,7 +127,7 @@ in {
     };
     meta = with lib; {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3";
-      description = "The S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore.";
+      description = "The S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore";
       license = licenses.asl20;
     };
   };
@@ -144,7 +144,7 @@ in {
     };
     meta = with lib; {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs";
-      description = "The GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore.";
+      description = "The GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore";
       license = licenses.asl20;
     };
   };

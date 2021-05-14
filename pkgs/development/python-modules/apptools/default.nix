@@ -41,7 +41,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Set of packages that Enthought has found useful in creating a number of applications.";
+    description = "Set of packages that Enthought has found useful in creating a number of applications";
     homepage = "https://github.com/enthought/apptools";
     maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;

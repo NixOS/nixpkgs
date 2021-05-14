@@ -55,7 +55,7 @@ gcc9Stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Package management library.";
+    description = "Package management library";
     homepage = "https://github.com/rpm-software-management/libdnf";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;

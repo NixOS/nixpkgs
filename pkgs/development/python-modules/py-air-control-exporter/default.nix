@@ -19,7 +19,7 @@ buildPythonPackage rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
 
   meta = with lib; {
-    description = "Exports Air Quality Metrics to Prometheus.";
+    description = "Exports Air Quality Metrics to Prometheus";
     homepage = "https://github.com/urbas/py-air-control-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];

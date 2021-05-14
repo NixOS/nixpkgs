@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyyaml ] ++ lib.optionals isPy27 [ enum34 pathlib ] ;
 
   meta = with lib; {
-    description = "Confuse is a configuration library for Python that uses YAML.";
+    description = "Confuse is a configuration library for Python that uses YAML";
     homepage = "https://github.com/beetbox/confuse";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

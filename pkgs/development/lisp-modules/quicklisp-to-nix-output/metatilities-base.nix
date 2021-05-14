@@ -4,7 +4,7 @@ rec {
   baseName = "metatilities-base";
   version = "20191227-git";
 
-  description = "These are metabang.com's Common Lisp basic utilities.";
+  description = "These are metabang.com's Common Lisp basic utilities";
 
   deps = [ ];
 

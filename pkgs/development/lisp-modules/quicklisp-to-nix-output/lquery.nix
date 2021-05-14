@@ -4,7 +4,7 @@ rec {
   baseName = "lquery";
   version = "20201220-git";
 
-  description = "A library to allow jQuery-like HTML/DOM manipulation.";
+  description = "A library to allow jQuery-like HTML/DOM manipulation";
 
   deps = [ args."array-utils" args."clss" args."documentation-utils" args."form-fiddle" args."plump" args."trivial-indent" ];
 

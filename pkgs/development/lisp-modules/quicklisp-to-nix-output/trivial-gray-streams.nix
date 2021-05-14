@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-gray-streams";
   version = "20210124-git";
 
-  description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).";
+  description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams)";
 
   deps = [ ];
 

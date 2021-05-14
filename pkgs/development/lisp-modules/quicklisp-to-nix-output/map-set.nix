@@ -4,7 +4,7 @@ rec {
   baseName = "map-set";
   version = "20190307-hg";
 
-  description = "Set-like data structure.";
+  description = "Set-like data structure";
 
   deps = [ ];
 

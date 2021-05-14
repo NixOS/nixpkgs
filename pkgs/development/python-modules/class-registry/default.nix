@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Factory+Registry pattern for Python classes.";
+    description = "Factory+Registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kevincox ];

@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Read and write image data from and to TIFF files.";
+    description = "Read and write image data from and to TIFF files";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.lebastr ];
     license = licenses.bsd3;

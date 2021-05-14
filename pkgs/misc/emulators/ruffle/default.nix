@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0pnp5kmij4dwwvmgdv81mqcawcjcgg5gd6cpyf0xalyfjgj8i732";
 
   meta = with lib; {
-    description = "An Adobe Flash Player emulator written in the Rust programming language.";
+    description = "An Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ govanify ];

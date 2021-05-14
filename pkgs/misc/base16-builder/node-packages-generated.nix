@@ -1639,7 +1639,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Base16 Builder is a nimble command-line tool that generates themes for your favourite programs.";
+      description = "Base16 Builder is a nimble command-line tool that generates themes for your favourite programs";
       homepage = "https://github.com/base16-builder/base16-builder#readme";
       license = "MIT";
     };

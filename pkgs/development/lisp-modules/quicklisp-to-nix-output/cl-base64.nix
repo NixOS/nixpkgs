@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "cl-base64/test" ];
 
-  description = "Base64 encoding and decoding with URI support.";
+  description = "Base64 encoding and decoding with URI support";
 
   deps = [ args."kmrcl" args."ptester" ];
 

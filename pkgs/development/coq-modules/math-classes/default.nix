@@ -11,7 +11,7 @@ with lib; mkCoqDerivation {
 
   meta = {
     homepage = "https://math-classes.github.io";
-    description = "A library of abstract interfaces for mathematical structures in Coq.";
+    description = "A library of abstract interfaces for mathematical structures in Coq";
     maintainers = with maintainers; [ siddharthist jwiegley ];
   };
 }

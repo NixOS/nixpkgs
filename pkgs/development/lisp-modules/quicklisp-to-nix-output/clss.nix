@@ -4,7 +4,7 @@ rec {
   baseName = "clss";
   version = "20191130-git";
 
-  description = "A DOM tree searching engine based on CSS selectors.";
+  description = "A DOM tree searching engine based on CSS selectors";
 
   deps = [ args."array-utils" args."documentation-utils" args."plump" args."trivial-indent" ];
 

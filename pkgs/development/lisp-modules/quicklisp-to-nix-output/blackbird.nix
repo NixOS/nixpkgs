@@ -4,7 +4,7 @@ rec {
   baseName = "blackbird";
   version = "20160531-git";
 
-  description = "A promise implementation for Common Lisp.";
+  description = "A promise implementation for Common Lisp";
 
   deps = [ args."vom" ];
 

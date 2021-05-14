@@ -4,7 +4,7 @@ rec {
   baseName = "clunit2";
   version = "20201016-git";
 
-  description = "CLUnit is a Common Lisp unit testing framework.";
+  description = "CLUnit is a Common Lisp unit testing framework";
 
   deps = [ ];
 

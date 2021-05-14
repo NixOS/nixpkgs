@@ -4,7 +4,7 @@ rec {
   baseName = "cl-libuv";
   version = "20200610-git";
 
-  description = "Low-level libuv bindings for Common Lisp.";
+  description = "Low-level libuv bindings for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."trivial-features" ];
 

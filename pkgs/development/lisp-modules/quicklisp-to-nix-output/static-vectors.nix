@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "static-vectors/test" ];
 
-  description = "Create vectors allocated in static memory.";
+  description = "Create vectors allocated in static memory";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."fiveam" args."trivial-features" ];
 

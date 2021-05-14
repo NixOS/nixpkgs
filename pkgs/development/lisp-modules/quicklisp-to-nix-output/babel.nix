@@ -4,7 +4,7 @@ rec {
   baseName = "babel";
   version = "20200925-git";
 
-  description = "Babel, a charset conversion library.";
+  description = "Babel, a charset conversion library";
 
   deps = [ args."alexandria" args."trivial-features" ];
 

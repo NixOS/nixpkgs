@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
+    description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3";
     homepage = "https://github.com/dask/s3fs/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];

@@ -46,7 +46,7 @@ in
     '';
 
     meta = with lib; {
-      description ="Use any remote machine with a SSH server as your development environment.";
+      description ="Use any remote machine with a SSH server as your development environment";
       license = licenses.unfree;
       maintainers = with maintainers; [
         tbenst

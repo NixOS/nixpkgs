@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1cp8cyrd7ab8r2j28b69c2p3ysix5b9hpsqk07cmzgqwwml0qj12";
 
   meta = with lib; {
-    description = "A CLI tool for Linux to copy a partition from one disk to another and more.";
+    description = "A CLI tool for Linux to copy a partition from one disk to another and more";
     homepage = "https://github.com/cecton/gptman";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ akshgpt7 ];

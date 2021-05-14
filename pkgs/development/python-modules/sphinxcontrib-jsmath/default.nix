@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "sphinxcontrib-jsmath is a sphinx extension which renders display math in HTML via JavaScript.";
+    description = "sphinxcontrib-jsmath is a sphinx extension which renders display math in HTML via JavaScript";
     homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;
   };
