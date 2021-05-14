@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.cc.isClang openmp;
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}c++"
+    "CC=${stdenv.cc.targetPrefix}c++" # remove once https://github.com/weizhongli/cdhit/pull/114 is merged
     "PREFIX=$(out)/bin"
   ];
 
