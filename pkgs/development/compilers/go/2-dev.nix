@@ -39,12 +39,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go2-unstable";
-  version = "2021-03-22";
+  version = "2021-04-13";
 
   src = fetchgit {
     url = https://go.googlesource.com/go;
-    rev = "a4b4db4cdeefb7b4ea5adb09073dd123846b3588";
-    sha256 = "sha256:1wqqnywcrfazydi5wcg04s6zgsfh4m879vxfgacgrnigd23ynhvr";
+    rev = "9cd52cf2a93a958e8e001aea36886e7846c91f2f";
+    sha256 = "sha256:0hybm93y4i4j7bs86y7h73nc1wqnspkq75if7n1032zf9bs8sm96";
   };
 
   # perl is used for testing go vet
