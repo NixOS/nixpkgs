@@ -50,3 +50,24 @@ Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
 This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
+
+## `writeDirectReferencesToFile` {#trivial-builder-writeDirectReferencesToFile}
+
+Writes the set of references to the output file, that is, their immediate dependencies.
+
+This produces the equivalent of `nix-store -q --references`.
+
+For example,
+
+```nix
+writeDirectReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+```
+
+produces an output path `/nix/store/<hash>-runtime-references` containing
+
+```nix
+/nix/store/<hash>-hello-2.10
+```
+
+but none of `hello`'s dependencies, because those are not referenced directly
+by `hi`'s output.
