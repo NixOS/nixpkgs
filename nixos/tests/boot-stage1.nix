@@ -156,6 +156,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.fail("kill -0 $(< /run/canary2.pid)")
     machine.succeed('pgrep -a -f "^@canary3$"')
     machine.succeed('pgrep -a -f "^kcanary$"')
+
+    # Checks the boot log includes the earliest output
+    # First and third lines are empty, the second line is the "banner".
+    machine.succeed('head -n2 /run/log/stage-1-init.log | tail -n1 | grep "<<< NixOS Stage 1 >>>"')
+    # Checks the early boot log is in /dev/kmsg
+    machine.succeed('dmesg | grep "<<< NixOS Stage 1 >>>"')
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ aszlig ];
