@@ -19,9 +19,12 @@ let
           virtualisation.memorySize = 1024;
           services.keycloak = {
             enable = true;
-            inherit frontendUrl databaseType initialAdminPassword;
-            databaseUsername = "bogus";
-            databasePasswordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
+            inherit frontendUrl initialAdminPassword;
+            database = {
+              type = databaseType;
+              username = "bogus";
+              passwordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
+            };
           };
           environment.systemPackages = with pkgs; [
             xmlstarlet
