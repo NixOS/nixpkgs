@@ -115,17 +115,17 @@
      </para>
 
      <para>
-       For HTTPS support, a TLS certificate and private key is
-       required. They should be <link
+       HTTPS support requires a TLS/SSL certificate and a private key,
+       both <link
        xlink:href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">PEM
-       formatted</link> and concatenated into a single file. The path
-       to this file should be configured in
-       <xref linkend="opt-services.keycloak.certificatePrivateKeyBundle" />.
+       formatted</link>. Their paths should be set through <xref
+       linkend="opt-services.keycloak.sslCertificate" /> and <xref
+       linkend="opt-services.keycloak.sslCertificateKey" />.
      </para>
 
      <warning>
        <para>
-         The path should be provided as a string, not a Nix path,
+         The paths should be provided as a strings, not a Nix paths,
          since Nix paths are copied into the world readable Nix store.
        </para>
      </warning>
@@ -195,7 +195,8 @@ services.keycloak = {
   <link linkend="opt-services.keycloak.initialAdminPassword">initialAdminPassword</link> = "e6Wcm0RrtegMEHl";  # change on first login
   <link linkend="opt-services.keycloak.frontendUrl">frontendUrl</link> = "https://keycloak.example.com/auth";
   <link linkend="opt-services.keycloak.forceBackendUrlToFrontendUrl">forceBackendUrlToFrontendUrl</link> = true;
-  <link linkend="opt-services.keycloak.certificatePrivateKeyBundle">certificatePrivateKeyBundle</link> = "/run/keys/ssl_cert";
+  <link linkend="opt-services.keycloak.sslCertificate">sslCertificate</link> = "/run/keys/ssl_cert";
+  <link linkend="opt-services.keycloak.sslCertificateKey">sslCertificateKey</link> = "/run/keys/ssl_key";
   <link linkend="opt-services.keycloak.database.passwordFile">database.passwordFile</link> = "/run/keys/db_password";
 };
 </programlisting>

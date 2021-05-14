@@ -85,13 +85,26 @@ in
       '';
     };
 
-    certificatePrivateKeyBundle = lib.mkOption {
+    sslCertificate = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/ssl_cert";
       description = ''
-        The path to a PEM formatted bundle of the private key and
-        certificate to use for TLS connections.
+        The path to a PEM formatted certificate to use for TLS/SSL
+        connections.
+
+        This should be a string, not a Nix path, since Nix paths are
+        copied into the world-readable Nix store.
+      '';
+    };
+
+    sslCertificateKey = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/keys/ssl_key";
+      description = ''
+        The path to a PEM formatted private key to use for TLS/SSL
+        connections.
 
         This should be a string, not a Nix path, since Nix paths are
         copied into the world-readable Nix store.
@@ -329,7 +342,7 @@ in
             });
           };
         })
-        (lib.optionalAttrs (cfg.certificatePrivateKeyBundle != null) {
+        (lib.optionalAttrs (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
           "socket-binding-group=standard-sockets"."socket-binding=https".port = cfg.httpsPort;
           "core-service=management"."security-realm=UndertowRealm"."server-identity=ssl" = {
             keystore-path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
@@ -662,8 +675,9 @@ in
                   umask u=rwx,g=,o=
 
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.database.passwordFile}' /run/keycloak/secrets/db_password
-                '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
-                  install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
+                '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+                  install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificate}' /run/keycloak/secrets/ssl_cert
+                  install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificateKey}' /run/keycloak/secrets/ssl_key
                 '';
                 startPre = ''
                   set -o errexit -o pipefail -o nounset -o errtrace
@@ -678,10 +692,13 @@ in
 
                   export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
                   add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
-                '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
+                '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
                   pushd /run/keycloak/ssl/
-                  cat /run/keycloak/secrets/ssl_cert_pk_bundle <(echo) /etc/ssl/certs/ca-certificates.crt > allcerts.pem
-                  openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
+                  cat /run/keycloak/secrets/ssl_cert <(echo) \
+                      /run/keycloak/secrets/ssl_key <(echo) \
+                      /etc/ssl/certs/ca-certificates.crt \
+                      > allcerts.pem
+                  openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert -inkey /run/keycloak/secrets/ssl_key -chain \
                                  -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
                                  -CAfile allcerts.pem -passout pass:notsosecretpassword
                   popd
