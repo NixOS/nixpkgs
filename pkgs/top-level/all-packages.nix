@@ -5750,6 +5750,8 @@ in
 
   netifd = callPackage ../tools/networking/netifd {};
 
+  ipinfo = callPackage ../tools/networking/ipinfo {};
+
   ipscan = callPackage ../tools/security/ipscan { };
 
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
