@@ -1,5 +1,7 @@
-{ buildFHSUserEnv, makeDesktopItem, writeScript, stdenv, lib, requireFile, unstick,
-  supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ] }:
+{ buildFHSUserEnv, makeDesktopItem, writeScript, stdenv, lib, requireFile, unstick
+, supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
+, postInstall ? ""
+}:
 
 let
   deviceIds = {
@@ -82,6 +84,8 @@ let
         --mode unattended --installdir $out --accept_eula 1
 
       rm -r $out/uninstall $out/logs
+
+      ${postInstall}
     '';
 
     meta = {
