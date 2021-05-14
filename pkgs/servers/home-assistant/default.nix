@@ -397,6 +397,7 @@ in with py.pkgs; buildPythonApplication rec {
     "uptime"
     "vacuum"
     "verisure"
+    "version"
     "vesync"
     "weather"
     "webhook"
