@@ -160,6 +160,8 @@ stdenv.mkDerivation rec {
   buildInputs = extraInputs;
 
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs configure make/*.pl
 
     # configure is executed twice, once to set the extras
@@ -183,6 +185,8 @@ stdenv.mkDerivation rec {
       --module-dir  ${placeholder "lib"}/lib/inspircd \
       --runtime-dir /var/run \
       --script-dir  ${placeholder "bin"}/share/inspircd \
+
+    runHook postConfigure
   '';
 
   postInstall = ''
