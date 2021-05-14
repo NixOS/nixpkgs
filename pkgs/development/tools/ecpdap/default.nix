@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, libusb1, AppKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ecpdap";
@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [ libusb1 ]
+    ++ lib.optional stdenv.isDarwin AppKit;
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d

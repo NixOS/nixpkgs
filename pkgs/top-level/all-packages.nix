@@ -22896,7 +22896,9 @@ in
     jdk = jdk11;
   });
 
-  ecpdap = callPackage ../development/tools/ecpdap { };
+  ecpdap = callPackage ../development/tools/ecpdap {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
