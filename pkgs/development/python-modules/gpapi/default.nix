@@ -18,6 +18,8 @@ buildPythonPackage rec {
     sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
   };
 
+  # package doesn't contain unit tests
+  # scripts in ./test require networking
   doCheck = false;
 
   pythonImportsCheck = [ "gpapi.googleplay" ];
