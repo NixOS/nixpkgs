@@ -17262,8 +17262,6 @@ in
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
-  pybind11 = pythonPackages.pybind11;
-
   pylode = callPackage ../misc/pylode {};
 
   python-qt = callPackage ../development/libraries/python-qt {
