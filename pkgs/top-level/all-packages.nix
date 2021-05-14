@@ -5861,6 +5861,8 @@ in
 
   jq = callPackage ../development/tools/jq { };
 
+  jiq = callPackage ../development/tools/misc/jiq { };
+
   jql = callPackage ../development/tools/jql { };
 
   jo = callPackage ../development/tools/jo { };
