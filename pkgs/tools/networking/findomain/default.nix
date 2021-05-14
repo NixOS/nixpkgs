@@ -4,6 +4,7 @@
 , rustPlatform
 , installShellFiles
 , perl
+, libiconv
 , Security
 }:
 
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-FDiIM1LlWEFmiIvebdCsznkB7egspNKhY6xUXB838g8=";
 
   nativeBuildInputs = [ installShellFiles perl ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     installManPage ${pname}.1
