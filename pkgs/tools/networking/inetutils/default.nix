@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "SUIDMODE=" ];
 
   postInstall = ''
-    install -D -m 644 /dev/stdin $apparmor/bin.ping <<EOF
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
     $out/bin/ping {
       include <abstractions/base>
       include <abstractions/consoles>
