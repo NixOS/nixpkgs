@@ -411,6 +411,8 @@ in with py.pkgs; buildPythonApplication rec {
     "zone"
     "zwave"
     "zwave_js"
+  ] ++ lib.optionals (builtins.any (s: s == stdenv.hostPlatform.system) debugpy.meta.platforms) [
+    "debugpy"
   ];
 
   pytestFlagsArray = [
