@@ -57,6 +57,9 @@ in stdenv.mkDerivation (rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    # Force a test to evaluate the saved benchmark for a CPU for which LLVM has
+    # an execution model. See NixOS/nixpkgs#119673.
+    ../../exegesis-force-bdver2.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
