@@ -4127,6 +4127,18 @@ final: prev:
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
   };
 
+  sad-vim = buildVimPluginFrom2Nix {
+    pname = "sad-vim";
+    version = "2019-02-18";
+    src = fetchFromGitHub {
+      owner = "hauleth";
+      repo = "sad.vim";
+      rev = "2f5b33b239a566ffedaa81cee3051bb613482d1e";
+      sha256 = "11kxnrp3b6qc2rcp5jdqjb7cxh6lqy09v3yh7dk4kd51jkgxqbn4";
+    };
+    meta.homepage = "https://github.com/hauleth/sad.vim/";
+  };
+
   salt-vim = buildVimPluginFrom2Nix {
     pname = "salt-vim";
     version = "2017-07-01";
