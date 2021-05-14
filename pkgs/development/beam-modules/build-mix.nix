@@ -35,6 +35,9 @@ let
 
     # add to ERL_LIBS so other modules can find at runtime.
     # http://erlang.org/doc/man/code.html#code-path
+    # Mix also searches the code path when compiling with the --no-deps-check
+    # flag, which is why there is no complicated booterstrapper like the one
+    # used by buildRebar3.
     setupHook = attrs.setupHook or
       writeText "setupHook.sh" ''
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
@@ -54,22 +57,21 @@ let
     installPhase = attrs.installPhase or ''
       runHook preInstall
 
-      # Some packages will use _build/shared instead of honoring the $MIX_ENV
-      # variable.
-      if [ -d "_build/shared" ]; then
-        MIX_ENV=shared
-      fi
-
       # This uses the install path convention established by nixpkgs maintainers
-      # for all beam packages. There is no magic here.
+      # for all beam packages. Changing this will break compatibility with other
+      # builder functions like buildRebar3 and buildErlangMk.
       mkdir -p "$out/lib/erlang/lib/${name}-${version}"
-      for reldir in src ebin priv include; do
-        fd="_build/$MIX_ENV/lib/${name}/$reldir"
-        [ -d "$fd" ] || continue
 
-        # Some builds produce symlinks. They must be followed with -H flag.
-        cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
+      # Some packages like db_connectionn will use _build/shared instead of
+      # honoring the $MIX_ENV variable.
+      for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do   
+        if test -d $reldir ; then
+          # Some builds produce symlinks (eg: phoenix priv dircetory). They must
+          # be followed with -H flag.
+          cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
+        fi
       done
+
       runHook postInstall
     '';
 
