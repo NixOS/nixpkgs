@@ -3,7 +3,7 @@
 , isPy27
 , fetchPypi
 , setuptools-scm
-, ansible
+, ansible-base
 , enrich
 , flaky
 , pyyaml
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    ansible
+    ansible-base
     enrich
     flaky
     pyyaml
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible-base ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     "test_prerun_reqs_v2"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-base ]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/ansible-community/ansible-lint";
