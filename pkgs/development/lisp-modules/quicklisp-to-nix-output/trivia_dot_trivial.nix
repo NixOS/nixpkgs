@@ -4,9 +4,7 @@ rec {
   baseName = "trivia_dot_trivial";
   version = "trivia-20210411-git";
 
-  description = "Base level system of Trivia with a trivial optimizer.
- Systems that intend to enhance Trivia should depend on this package, not the TRIVIA system,
- in order to avoid the circular dependency.";
+  description = "Base level system of Trivia with a trivial optimizer";
 
   deps = [ args."alexandria" args."closer-mop" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivial-cltl2" ];
 

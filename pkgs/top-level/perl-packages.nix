@@ -22592,7 +22592,7 @@ let
       sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
     };
     meta = {
-      description = "Variable ties made much easier: much, much, much easier.";
+      description = "Variable ties made much easier: much, much, much easier";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

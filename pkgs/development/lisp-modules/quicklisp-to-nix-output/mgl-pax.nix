@@ -6,8 +6,7 @@ rec {
 
   parasites = [ "mgl-pax/test" ];
 
-  description = "Exploratory programming tool and documentation
-  generator.";
+  description = "Exploratory programming tool and documentation generator";
 
   deps = [ args."_3bmd" args."_3bmd-ext-code-blocks" args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."colorize" args."esrap" args."html-encode" args."ironclad" args."named-readtables" args."pythonic-string-reader" args."split-sequence" args."swank" args."trivial-features" args."trivial-with-current-source-form" ];
 
