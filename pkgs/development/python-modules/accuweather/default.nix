@@ -11,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.1.1";
+  version = "0.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fjOwa13hxY8/gCM6TCAFWVmEY1oZyqKyc6o3OSsxHpY=";
+    sha256 = "sha256-Swe8vegRcyaeG4n/8aeGFLrXkwcLM/Al53yD6oD/0GA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pytest-runner" ""
-    substituteInPlace pytest.ini \
+    substituteInPlace setup.cfg \
       --replace "--cov --cov-report term-missing" ""
   '';
 
