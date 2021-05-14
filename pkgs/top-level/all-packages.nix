@@ -2012,6 +2012,8 @@ in
     boost = pkgs.boost.override { python = python3; };
   };
 
+  calendar-cli = callPackage ../tools/networking/calendar-cli { };
+
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
