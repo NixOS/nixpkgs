@@ -140,7 +140,7 @@ fi
 ### Get version number for this release
 #
 #
-V=$( cd "$BUILDDIR" && make show-version | grep ^CALAMARES_VERSION | sed s/^[A-Z_]*=// )
+V=$( cmake -DVERSION_STYLE=short -P CMakeLists.txt )
 test -n "$V" || { echo "Could not obtain version in $BUILDDIR ." ; exit 1 ; }
 
 ### Create signed tag
