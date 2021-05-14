@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -49,6 +50,9 @@ buildPythonPackage {
   # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
   disabledTests = [
     "test_fetch_data_files"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # https://github.com/pydicom/pydicom/issues/1386
+    "test_array"
   ];
 
   meta = with lib; {

@@ -2012,6 +2012,8 @@ in
     boost = pkgs.boost.override { python = python3; };
   };
 
+  calendar-cli = callPackage ../tools/networking/calendar-cli { };
+
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -5849,6 +5851,8 @@ in
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jq = callPackage ../development/tools/jq { };
+
+  jiq = callPackage ../development/tools/misc/jiq { };
 
   jql = callPackage ../development/tools/jql { };
 
@@ -19351,6 +19355,7 @@ in
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };

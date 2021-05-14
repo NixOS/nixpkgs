@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
-    description = "Two-pane file manager for Emacs based on Dired and inspired by MC";
+    description = "Orthodox (two-pane) file manager for Emacs";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.all;
