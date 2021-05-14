@@ -8,10 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pSGmKLHGc+Eb9OG27k1rYOMn/2BiRejrBajARjEgsUA=";
   };
 
+  # fails to configure with clang because of some gcc-only -Werror flags
+  preConfigure = ''
+    substituteInPlace configure --replace "-Werror" "";
+  '';
+
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  buildInputs = [ glib pkg-config gtk2 hamlib ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ glib gtk2 hamlib ];
 
   meta = with lib; {
     description = "An amateur radio logging program";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://www.nongnu.org/xlog";
     maintainers = [ maintainers.mafo ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }
