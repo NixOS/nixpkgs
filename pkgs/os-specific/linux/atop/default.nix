@@ -1,4 +1,14 @@
-{lib, stdenv, fetchurl, zlib, ncurses}:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, ncurses
+, findutils
+, systemd
+, python3
+  # makes the package unfree via pynvml
+, withAtopgpu ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "atop";
@@ -9,31 +19,52 @@ stdenv.mkDerivation rec {
     sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
   };
 
-  buildInputs = [zlib ncurses];
+  nativeBuildInputs = if withAtopgpu then [ python3.pkgs.wrapPython ] else [ ];
+  buildInputs = [ zlib ncurses ] ++ (if withAtopgpu then [ python3 ] else [ ]);
+  pythonPath = if withAtopgpu then [ python3.pkgs.pynvml ] else [ ];
 
   makeFlags = [
-    "SCRPATH=$out/etc/atop"
-    "LOGPATH=/var/log/atop"
-    "INIPATH=$out/etc/rc.d/init.d"
-    "SYSDPATH=$out/lib/systemd/system"
-    "CRNPATH=$out/etc/cron.d"
-    "DEFPATH=$out/etc/default"
-    "ROTPATH=$out/etc/logrotate.d"
+    "DESTDIR=$(out)"
+    "BINPATH=/bin"
+    "SBINPATH=/bin"
+    "MAN1PATH=/share/man/man1"
+    "MAN5PATH=/share/man/man5"
+    "MAN8PATH=/share/man/man8"
+    "SYSDPATH=/lib/systemd/system"
+    "PMPATHD=/lib/systemd/system-sleep"
   ];
 
+  patches = [
+    ./atop-pm.sh.patch
+    ./atop-rotate.service.patch
+    ./atop.service.patch
+    ./atopacct.service.patch
+  ] ++ (if withAtopgpu then [ ./atopgpu.service.patch ] else [ ]);
+
   preConfigure = ''
-    sed -e "s@/usr/@$out/@g" -i $(find . -type f )
-    sed -e "/mkdir.*LOGPATH/s@mkdir@echo missing dir @" -i Makefile
-    sed -e "/touch.*LOGPATH/s@touch@echo should have created @" -i Makefile
+    for f in *.{sh,service}; do
+      findutils=${findutils} systemd=${systemd} substituteAllInPlace "$f"
+    done
+
     sed -e 's/chown/true/g' -i Makefile
-    sed -e '/chkconfig/d' -i Makefile
     sed -e 's/chmod 04711/chmod 0711/g' -i Makefile
   '';
 
   installTargets = [ "systemdinstall" ];
   preInstall = ''
-    mkdir -p "$out"/{bin,sbin}
+    mkdir -p $out/bin
   '';
+  postInstall = ''
+    # remove extra files we don't need
+    rm -rf $out/{var,etc}
+    rm -rf $out/bin/atop{sar,}-${version}
+  '' + (if withAtopgpu then ''
+    wrapPythonPrograms
+  '' else ''
+    rm $out/lib/systemd/system/atopgpu.service
+    rm $out/bin/atopgpud
+    rm $out/share/man/man8/atopgpud.8
+  '');
 
   meta = with lib; {
     platforms = platforms.linux;

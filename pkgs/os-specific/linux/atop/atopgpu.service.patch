@@ -1,0 +1,9 @@
+--- a/atopgpu.service
++++ b/atopgpu.service
+@@ -6,5 +6,5 @@
+
+ [Service]
+-ExecStart=/usr/sbin/atopgpud
++ExecStart=@out@/bin/atopgpud
+ Type=oneshot
+ RemainAfterExit=yes

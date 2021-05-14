@@ -1,0 +1,13 @@
+--- a/atop-pm.sh
++++ b/atop-pm.sh
+@@ -2,8 +2,8 @@
+
+ case "$1" in
+-	pre)	/usr/bin/systemctl stop atop
++	pre)	@systemd@/bin/systemctl stop atop
+ 		exit 0
+ 		;;
+-	post)	/usr/bin/systemctl start atop
++	post)	@systemd@/bin/systemctl start atop
+ 		exit 0
+ 		;;

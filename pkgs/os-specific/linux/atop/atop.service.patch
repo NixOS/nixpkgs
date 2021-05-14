@@ -1,0 +1,14 @@
+--- a/atop.service
++++ b/atop.service
+@@ -9,7 +9,8 @@
+ Environment=LOGPATH=/var/log/atop
+-EnvironmentFile=/etc/default/atop
++EnvironmentFile=-/etc/default/atop
+ ExecStartPre=/bin/sh -c 'test -n "$LOGINTERVAL" -a "$LOGINTERVAL" -eq "$LOGINTERVAL"'
+ ExecStartPre=/bin/sh -c 'test -n "$LOGGENERATIONS" -a "$LOGGENERATIONS" -eq "$LOGGENERATIONS"'
+-ExecStart=/bin/sh -c 'exec /usr/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
+-ExecStartPost=/usr/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
++ExecStartPre=/bin/sh -c 'mkdir -p "${LOGPATH}"'
++ExecStart=/bin/sh -c 'exec @out@/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
++ExecStartPost=@findutils@/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
+ KillSignal=SIGUSR2
