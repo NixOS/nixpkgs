@@ -48,7 +48,22 @@ in
       lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
 
-  stdenvNoLibs = mkStdenvNoLibs stdenv;
+  stdenvNoLibs =
+    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
+    then
+      # We cannot touch binutils or cc themselves, because that will cause
+      # infinite recursion. So instead, we just choose a libc based on the
+      # current platform. That means we won't respect whatever compiler was
+      # passed in with the stdenv stage argument.
+      #
+      # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
+      # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
+      # as part of the stage. Then we would never be tempted to override a
+      # later thing to to create an earlier thing (leading to infinite
+      # recursion) and we also would still respect the stage arguments choices
+      # for these things.
+      overrideCC stdenv buildPackages.llvmPackages.clangNoCompilerRt
+    else mkStdenvNoLibs stdenv;
 
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
@@ -10451,8 +10466,8 @@ in
   gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   crossLibcStdenv =
-    if stdenv.hostPlatform.useLLVM or false
-    then overrideCC stdenv buildPackages.llvmPackages.lldClangNoLibc
+    if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
+    then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
     else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
@@ -11198,6 +11213,8 @@ in
   llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
+    # This returns the minimum suported version for the platform. The
+    # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then "7"
       else if platform.isFreeBSD then "7"
@@ -11205,7 +11222,10 @@ in
       else if platform.isLinux then "7"
       else if platform.isWasm then "8"
       else "latest";
-    minSupported = lib.min (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
+    # We take the "max of the mins". Why? Since those are lower bounds of the
+    # supported version set, this is like intersecting those sets and then
+    # taking the min bound of that.
+    minSupported = lib.max (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
   in pkgs.${"llvmPackages_${minSupported}"};
 
   llvmPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/llvm/5 {
@@ -12623,6 +12643,37 @@ in
   binutilsNoLibc = wrapBintoolsWith {
     bintools = binutils-unwrapped;
     libc = preLibcCrossHeaders;
+  };
+
+  # Here we select the default bintools implementations to be used.  Note when
+  # cross compiling these are used not for this stage but the *next* stage.
+  # That is why we choose using this stage's target platform / next stage's
+  # host platform.
+  #
+  # Because this is the *next* stages choice, it's a bit non-modular to put
+  # here. In theory, bootstraping is supposed to not be a chain but at tree,
+  # where each stage supports many "successor" stages, like multiple possible
+  # futures. We don't have a better alternative, but with this downside in
+  # mind, please be judicious when using this attribute. E.g. for building
+  # things in *this* stage you should use probably `stdenv.cc.bintools` (from a
+  # default or alternate `stdenv`), at build time, and try not to "force" a
+  # specific bintools at runtime at all.
+  #
+  # In other words, try to only use this in wrappers, and only use those
+  # wrappers from the next stage.
+  bintools-unwrapped = let
+    inherit (stdenv.targetPlatform) linker;
+  in     if linker == "lld"     then llvmPackages.bintools-unwrapped
+    else if linker == "cctools" then darwin.binutils-unwrapped
+    else if linker == "bfd"     then binutils-unwrapped
+    else if linker == "gold"    then binutils-unwrapped
+    else null;
+  bintoolsNoLibc = wrapBintoolsWith {
+    bintools = bintools-unwrapped;
+    libc = preLibcCrossHeaders;
+  };
+  bintools = wrapBintoolsWith {
+    bintools = bintools-unwrapped;
   };
 
   bison = callPackage ../development/tools/parsing/bison { };
@@ -14760,8 +14811,8 @@ in
   # These are used when buiding compiler-rt / libgcc, prior to building libc.
   preLibcCrossHeaders = let
     inherit (stdenv.targetPlatform) libc;
-  in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
-    else if libc == "nblibc" then targetPackages.netbsdCross.headers
+  in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
+    else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
     else null;
 
   # We can choose:
@@ -18697,7 +18748,8 @@ in
 
   clickhouse = callPackage ../servers/clickhouse {
     # upstream requires llvm10 as of v20.11.4.13
-    inherit (llvmPackages_10) clang-unwrapped lld lldClang llvm;
+    inherit (llvmPackages_10) clang-unwrapped lld llvm;
+    llvm-bintools = llvmPackages_10.bintools;
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
