@@ -105,6 +105,22 @@ in {
       '';
     };
 
+    defaultWallpaper = mkOption {
+      type = with types; nullOr path;
+      default = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath;
+
+      defaultText = literalExample ''
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath;
+      '';
+
+      example = literalExample ''
+        null;
+      '';
+
+      description = ''
+        Default wallpaper. Set to `null` to not install a default wallpaper.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -126,6 +142,12 @@ in {
           # user environments (e.g. required for screen sharing and Pinentry prompts):
           exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
         '';
+      } // lib.optionalAttrs (cfg.defaultWallpaper != null) {
+        "sway/config.d/wallpaper.conf".source = pkgs.writeText "wallpaper.conf" ''
+          # Set the default wallpaper
+          output '*' background "/etc/sway/wallpaper" fill
+        '';
+        "sway/wallpaper".source = cfg.defaultWallpaper;
       };
     };
     security.pam.services.swaylock = {};
