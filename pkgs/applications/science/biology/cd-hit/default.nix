@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, zlib, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, zlib, perl, perlPackages, openmp }:
 
 stdenv.mkDerivation rec {
   version = "4.8.1";
@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ perl perlPackages.TextNSP perlPackages.PerlMagick ];
 
   nativeBuildInputs = [ zlib makeWrapper ];
+  buildInputs = lib.optional stdenv.cc.isClang openmp;
 
-  makeFlags = [ "PREFIX=$(out)/bin" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}c++"
+    "PREFIX=$(out)/bin"
+  ];
 
   preInstall = "mkdir -p $out/bin";
 
