@@ -345,6 +345,19 @@ unsupported-platforms:
   xmobar:                                       [ x86_64-darwin ]
   xmonad-extras:                                [ x86_64-darwin ]
   xmonad-volume:                                [ x86_64-darwin ]
+  # No specific Darwin support.
+  honk:                                         [ x86_64-darwin ]
+  Unixutils-shadow:                             [ x86_64-darwin ]
+  # Linux-only by design.
+  follow-file:                                  [ x86_64-darwin ]
+  hinotify-bytestring:                          [ x86_64-darwin ]
+  linux-evdev:                                  [ x86_64-darwin ]
+  linux-file-extents:                           [ x86_64-darwin ]
+  linux-inotify:                                [ x86_64-darwin ]
+  linux-mount:                                  [ x86_64-darwin ]
+  linux-namespaces:                             [ x86_64-darwin ]
+  netlink:                                      [ x86_64-darwin ]
+  parport:                                      [ x86_64-darwin ]
 
 dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.
