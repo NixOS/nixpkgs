@@ -5,7 +5,7 @@
 , python
 , numpy
 , qiskit-terra
-, scikitlearn
+, scikit-learn
 , scipy
   # Optional package inputs
 , withVisualization ? false
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     qiskit-terra
-    scikitlearn
+    scikit-learn
     scipy
   ] ++ lib.optionals (withCvx) [ cvxpy ]
   ++ lib.optionals (withVisualization) [ matplotlib ]
