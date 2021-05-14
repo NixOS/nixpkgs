@@ -4,6 +4,8 @@
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
 , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
 , extraOptions ? [] # E.g.: [ "--verbose" ]
+# Used by the NixOS module:
+, isNixOS ? false
 }:
 
 assert extraSessionCommands != "" -> withBaseWrapper;
@@ -11,6 +13,7 @@ assert extraSessionCommands != "" -> withBaseWrapper;
 with lib;
 
 let
+  sway = sway-unwrapped.override { inherit isNixOS; };
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
@@ -20,16 +23,16 @@ let
      fi
      if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
        export DBUS_SESSION_BUS_ADDRESS
-       exec ${sway-unwrapped}/bin/sway "$@"
+       exec ${sway}/bin/sway "$@"
      else
-       exec ${dbus}/bin/dbus-run-session ${sway-unwrapped}/bin/sway "$@"
+       exec ${dbus}/bin/dbus-run-session ${sway}/bin/sway "$@"
      fi
    '';
 in symlinkJoin {
-  name = "sway-${sway-unwrapped.version}";
+  name = "sway-${sway.version}";
 
   paths = (optional withBaseWrapper baseWrapper)
-    ++ [ sway-unwrapped ];
+    ++ [ sway ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
@@ -49,5 +52,5 @@ in symlinkJoin {
 
   passthru.providedSessions = [ "sway" ];
 
-  inherit (sway-unwrapped) meta;
+  inherit (sway) meta;
 }

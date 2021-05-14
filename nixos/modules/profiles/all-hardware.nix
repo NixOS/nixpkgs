@@ -37,6 +37,9 @@ in
       # drives.
       "uas"
 
+      # SD cards.
+      "sdhci_pci"
+
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 
