@@ -64,7 +64,7 @@ let
 
       # Some packages like db_connectionn will use _build/shared instead of
       # honoring the $MIX_ENV variable.
-      for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do   
+      for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
         if test -d $reldir ; then
           # Some builds produce symlinks (eg: phoenix priv dircetory). They must
           # be followed with -H flag.
