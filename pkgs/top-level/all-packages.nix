@@ -9639,6 +9639,8 @@ in
 
   wpgtk = callPackage ../tools/X11/wpgtk { };
 
+  wrap = callPackage ../tools/text/wrap { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
