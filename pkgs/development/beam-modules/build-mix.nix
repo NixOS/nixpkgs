@@ -62,7 +62,7 @@ let
       # builder functions like buildRebar3 and buildErlangMk.
       mkdir -p "$out/lib/erlang/lib/${name}-${version}"
 
-      # Some packages like db_connectionn will use _build/shared instead of
+      # Some packages like db_connection will use _build/shared instead of
       # honoring the $MIX_ENV variable.
       for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
         if test -d $reldir ; then
