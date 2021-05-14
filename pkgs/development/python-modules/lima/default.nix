@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Lightweight Marshalling of Python 3 Objects.";
+    description = "Lightweight Marshalling of Python 3 Objects";
     homepage = "https://github.com/b6d/lima";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];

@@ -10,7 +10,7 @@ rec {
   crates.aho_corasick."0.6.4" = deps: { features?(features_.aho_corasick."0.6.4" deps {}) }: buildRustCrate {
     crateName = "aho-corasick";
     version = "0.6.4";
-    description = "Fast multiple substring searching with finite state machines.";
+    description = "Fast multiple substring searching with finite state machines";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "189v919mp6rzzgjp1khpn4zlq8ls81gh43x1lmc8kbkagdlpq888";
     libName = "aho_corasick";
@@ -251,7 +251,7 @@ rec {
   crates.byteorder."1.2.3" = deps: { features?(features_.byteorder."1.2.3" deps {}) }: buildRustCrate {
     crateName = "byteorder";
     version = "1.2.3";
-    description = "Library for reading/writing numbers in big-endian and little-endian.";
+    description = "Library for reading/writing numbers in big-endian and little-endian";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1xghv5f5rydzsam8lnfqhfk090i8a1knb77ikbs0ik44bvrw2ij3";
     features = mkFeatures (features."byteorder"."1.2.3" or {});
@@ -526,7 +526,7 @@ rec {
   crates.failure."0.1.1" = deps: { features?(features_.failure."0.1.1" deps {}) }: buildRustCrate {
     crateName = "failure";
     version = "0.1.1";
-    description = "Experimental error handling abstraction.";
+    description = "Experimental error handling abstraction";
     authors = [ "Without Boats <boats@mozilla.com>" ];
     sha256 = "0gf9cmkm9kc163sszgjksqp5pcgj689lnf2104nn4h4is18nhigk";
     dependencies = mapFeatures features ([
@@ -693,7 +693,7 @@ rec {
   crates.kernel32_sys."0.2.2" = deps: { features?(features_.kernel32_sys."0.2.2" deps {}) }: buildRustCrate {
     crateName = "kernel32-sys";
     version = "0.2.2";
-    description = "Contains function definitions for the Windows API library kernel32. See winapi for types and constants.";
+    description = "Contains function definitions for the Windows API library kernel32. See winapi for types and constants";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1lrw1hbinyvr6cp28g60z97w32w8vsk6pahk64pmrv2fmby8srfj";
     libName = "kernel32";
@@ -722,7 +722,7 @@ rec {
   crates.lazy_static."0.2.11" = deps: { features?(features_.lazy_static."0.2.11" deps {}) }: buildRustCrate {
     crateName = "lazy_static";
     version = "0.2.11";
-    description = "A macro for declaring lazily evaluated statics in Rust.";
+    description = "A macro for declaring lazily evaluated statics in Rust";
     authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
     sha256 = "1x6871cvpy5b96yv4c7jvpq316fp5d4609s9py7qk6cd6x9k34vm";
     dependencies = mapFeatures features ([
@@ -754,7 +754,7 @@ rec {
   crates.lazy_static."1.0.0" = deps: { features?(features_.lazy_static."1.0.0" deps {}) }: buildRustCrate {
     crateName = "lazy_static";
     version = "1.0.0";
-    description = "A macro for declaring lazily evaluated statics in Rust.";
+    description = "A macro for declaring lazily evaluated statics in Rust";
     authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
     sha256 = "0wfvqyr2nvx2mbsrscg5y7gfa9skhb8p72ayanl8vl49pw24v4fh";
     dependencies = mapFeatures features ([
@@ -808,7 +808,7 @@ rec {
   crates.memchr."2.0.1" = deps: { features?(features_.memchr."2.0.1" deps {}) }: buildRustCrate {
     crateName = "memchr";
     version = "2.0.1";
-    description = "Safe interface to memchr.";
+    description = "Safe interface to memchr";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" "bluss" ];
     sha256 = "0ls2y47rjwapjdax6bp974gdp06ggm1v8d1h69wyydmh1nhgm5gr";
     dependencies = mapFeatures features ([
@@ -883,7 +883,7 @@ rec {
   crates.owning_ref."0.3.3" = deps: { features?(features_.owning_ref."0.3.3" deps {}) }: buildRustCrate {
     crateName = "owning_ref";
     version = "0.3.3";
-    description = "A library for creating references that carry their owner with them.";
+    description = "A library for creating references that carry their owner with them";
     authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
     sha256 = "13ivn0ydc0hf957ix0f5si9nnplzzykbr70hni1qz9m19i9kvmrh";
     dependencies = mapFeatures features ([
@@ -904,7 +904,7 @@ rec {
   crates.parking_lot."0.5.5" = deps: { features?(features_.parking_lot."0.5.5" deps {}) }: buildRustCrate {
     crateName = "parking_lot";
     version = "0.5.5";
-    description = "More compact and efficient implementations of the standard synchronization primitives.";
+    description = "More compact and efficient implementations of the standard synchronization primitives";
     authors = [ "Amanieu d'Antras <amanieu@gmail.com>" ];
     sha256 = "0balxl593apy0l70z6dzk6c0r9707hgw2c9yav5asjc87dj6fx7l";
     dependencies = mapFeatures features ([
@@ -945,7 +945,7 @@ rec {
   crates.parking_lot_core."0.2.14" = deps: { features?(features_.parking_lot_core."0.2.14" deps {}) }: buildRustCrate {
     crateName = "parking_lot_core";
     version = "0.2.14";
-    description = "An advanced API for creating custom synchronization primitives.";
+    description = "An advanced API for creating custom synchronization primitives";
     authors = [ "Amanieu d'Antras <amanieu@gmail.com>" ];
     sha256 = "0giypb8ckkpi34p14nfk4b19c7przj4jxs95gs7x2v5ncmi0y286";
     dependencies = mapFeatures features ([
@@ -1192,7 +1192,7 @@ rec {
   crates.regex_syntax."0.5.6" = deps: { features?(features_.regex_syntax."0.5.6" deps {}) }: buildRustCrate {
     crateName = "regex-syntax";
     version = "0.5.6";
-    description = "A regular expression parser.";
+    description = "A regular expression parser";
     authors = [ "The Rust Project Developers" ];
     sha256 = "10vf3r34bgjnbrnqd5aszn35bjvm8insw498l1vjy8zx5yms3427";
     dependencies = mapFeatures features ([
@@ -1213,7 +1213,7 @@ rec {
   crates.regex_syntax."0.6.0" = deps: { features?(features_.regex_syntax."0.6.0" deps {}) }: buildRustCrate {
     crateName = "regex-syntax";
     version = "0.6.0";
-    description = "A regular expression parser.";
+    description = "A regular expression parser";
     authors = [ "The Rust Project Developers" ];
     sha256 = "1zlaq3y1zbiqilxbh0471bizcs4p14b58nqr815w3ssyam169cy6";
     dependencies = mapFeatures features ([
@@ -1447,7 +1447,7 @@ rec {
   crates.systemfd."0.3.0" = deps: { features?(features_.systemfd."0.3.0" deps {}) }: buildRustCrate {
     crateName = "systemfd";
     version = "0.3.0";
-    description = "A convenient helper for passing sockets into another process.  Best to be combined with listenfd and cargo-watch.";
+    description = "A convenient helper for passing sockets into another process.  Best to be combined with listenfd and cargo-watch";
     authors = [ "Armin Ronacher <armin.ronacher@active-4.com>" ];
     sha256 = "0dpckgb0afyzhbv8lccgzmw5yczpfcdsdlqsfncn1vcxvcf0yb5i";
     dependencies = mapFeatures features ([
@@ -1508,7 +1508,7 @@ rec {
   crates.termion."1.5.1" = deps: { features?(features_.termion."1.5.1" deps {}) }: buildRustCrate {
     crateName = "termion";
     version = "1.5.1";
-    description = "A bindless library for manipulating terminals.";
+    description = "A bindless library for manipulating terminals";
     authors = [ "ticki <Ticki@users.noreply.github.com>" "gycos <alexandre.bury@gmail.com>" "IGI-111 <igi-111@protonmail.com>" ];
     sha256 = "02gq4vd8iws1f3gjrgrgpajsk2bk43nds5acbbb4s8dvrdvr8nf1";
     dependencies = (if !(kernel == "redox") then mapFeatures features ([
@@ -1537,7 +1537,7 @@ rec {
   crates.termios."0.2.2" = deps: { features?(features_.termios."0.2.2" deps {}) }: buildRustCrate {
     crateName = "termios";
     version = "0.2.2";
-    description = "Safe bindings for the termios library.";
+    description = "Safe bindings for the termios library";
     authors = [ "David Cuddeback <david.cuddeback@gmail.com>" ];
     sha256 = "0hjy4idvcapx9i6qbhf5536aqnf6rqk2aaj424sfwy7qhv6xmcx3";
     dependencies = mapFeatures features ([
@@ -1650,7 +1650,7 @@ rec {
   crates.unreachable."1.0.0" = deps: { features?(features_.unreachable."1.0.0" deps {}) }: buildRustCrate {
     crateName = "unreachable";
     version = "1.0.0";
-    description = "An unreachable code optimization hint in stable rust.";
+    description = "An unreachable code optimization hint in stable rust";
     authors = [ "Jonathan Reem <jonathan.reem@gmail.com>" ];
     sha256 = "1am8czbk5wwr25gbp2zr007744fxjshhdqjz9liz7wl4pnv3whcf";
     dependencies = mapFeatures features ([
@@ -1671,7 +1671,7 @@ rec {
   crates.utf8_ranges."1.0.0" = deps: { features?(features_.utf8_ranges."1.0.0" deps {}) }: buildRustCrate {
     crateName = "utf8-ranges";
     version = "1.0.0";
-    description = "Convert ranges of Unicode codepoints to UTF-8 byte ranges.";
+    description = "Convert ranges of Unicode codepoints to UTF-8 byte ranges";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "0rzmqprwjv9yp1n0qqgahgm24872x6c0xddfym5pfndy7a36vkn0";
   };
@@ -1779,7 +1779,7 @@ rec {
   crates.void."1.0.2" = deps: { features?(features_.void."1.0.2" deps {}) }: buildRustCrate {
     crateName = "void";
     version = "1.0.2";
-    description = "The uninhabited void type for use in statically impossible cases.";
+    description = "The uninhabited void type for use in statically impossible cases";
     authors = [ "Jonathan Reem <jonathan.reem@gmail.com>" ];
     sha256 = "0h1dm0dx8dhf56a83k68mijyxigqhizpskwxfdrs1drwv2cdclv3";
     features = mkFeatures (features."void"."1.0.2" or {});
@@ -1801,7 +1801,7 @@ rec {
   crates.winapi."0.2.8" = deps: { features?(features_.winapi."0.2.8" deps {}) }: buildRustCrate {
     crateName = "winapi";
     version = "0.2.8";
-    description = "Types and constants for WinAPI bindings. See README for list of crates providing function bindings.";
+    description = "Types and constants for WinAPI bindings. See README for list of crates providing function bindings";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
@@ -1816,7 +1816,7 @@ rec {
   crates.winapi."0.3.4" = deps: { features?(features_.winapi."0.3.4" deps {}) }: buildRustCrate {
     crateName = "winapi";
     version = "0.3.4";
-    description = "Raw FFI bindings for all of Windows API.";
+    description = "Raw FFI bindings for all of Windows API";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1qbrf5dcnd8j36cawby5d9r5vx07r0l4ryf672pfncnp8895k9lx";
     build = "build.rs";
@@ -1844,7 +1844,7 @@ rec {
   crates.winapi_build."0.1.1" = deps: { features?(features_.winapi_build."0.1.1" deps {}) }: buildRustCrate {
     crateName = "winapi-build";
     version = "0.1.1";
-    description = "Common code for build.rs in WinAPI -sys crates.";
+    description = "Common code for build.rs in WinAPI -sys crates";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
@@ -1860,7 +1860,7 @@ rec {
   crates.winapi_i686_pc_windows_gnu."0.4.0" = deps: { features?(features_.winapi_i686_pc_windows_gnu."0.4.0" deps {}) }: buildRustCrate {
     crateName = "winapi-i686-pc-windows-gnu";
     version = "0.4.0";
-    description = "Import libraries for the i686-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.";
+    description = "Import libraries for the i686-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "05ihkij18r4gamjpxj4gra24514can762imjzlmak5wlzidplzrp";
     build = "build.rs";
@@ -1876,7 +1876,7 @@ rec {
   crates.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: { features?(features_.winapi_x86_64_pc_windows_gnu."0.4.0" deps {}) }: buildRustCrate {
     crateName = "winapi-x86_64-pc-windows-gnu";
     version = "0.4.0";
-    description = "Import libraries for the x86_64-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.";
+    description = "Import libraries for the x86_64-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0n1ylmlsb8yg1v583i4xy0qmqg42275flvbc51hdqjjfjcl9vlbj";
     build = "build.rs";

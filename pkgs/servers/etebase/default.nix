@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
-    description = "An Etebase (EteSync 2.0) server so you can run your own.";
+    description = "An Etebase (EteSync 2.0) server so you can run your own";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ felschr ];
     broken = stdenv.isDarwin;

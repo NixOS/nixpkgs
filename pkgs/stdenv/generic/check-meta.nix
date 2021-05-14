@@ -202,7 +202,7 @@ let
 
   metaTypes = with lib.types; rec {
     # These keys are documented
-    description = str;
+    description = strMatching "|.*[^.]"; # empty or not ending in a period
     mainProgram = str;
     longDescription = str;
     branch = str;

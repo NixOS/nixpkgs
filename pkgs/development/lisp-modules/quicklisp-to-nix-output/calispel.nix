@@ -6,8 +6,7 @@ rec {
 
   parasites = [ "calispel-test" ];
 
-  description = "Thread-safe message-passing channels, in the style of
-the occam programming language.";
+  description = "Thread-safe message-passing channels, in the style of the occam programming language";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."eager-future2" args."jpl-queues" args."jpl-util" ];
 

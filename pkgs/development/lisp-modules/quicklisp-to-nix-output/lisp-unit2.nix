@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "lisp-unit2-test" ];
 
-  description = "Common Lisp library that supports unit testing.";
+  description = "Common Lisp library that supports unit testing";
 
   deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."named-readtables" args."symbol-munger" ];
 

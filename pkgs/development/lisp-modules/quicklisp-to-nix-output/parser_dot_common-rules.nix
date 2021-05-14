@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "parser.common-rules/test" ];
 
-  description = "Provides common parsing rules that are useful in many grammars.";
+  description = "Provides common parsing rules that are useful in many grammars";
 
   deps = [ args."alexandria" args."anaphora" args."esrap" args."fiveam" args."let-plus" args."split-sequence" args."trivial-with-current-source-form" ];
 

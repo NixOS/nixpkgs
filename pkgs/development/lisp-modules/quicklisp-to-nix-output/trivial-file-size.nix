@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "trivial-file-size/tests" ];
 
-  description = "Stat a file's size.";
+  description = "Stat a file's size";
 
   deps = [ args."fiveam" args."uiop" ];
 

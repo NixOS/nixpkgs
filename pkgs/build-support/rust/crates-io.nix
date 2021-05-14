@@ -9,7 +9,7 @@ rec {
   crates.aho_corasick."0.6.10" = deps: { features?(features_.aho_corasick."0.6.10" deps {}) }: buildRustCrate {
     crateName = "aho-corasick";
     version = "0.6.10";
-    description = "Fast multiple substring searching with finite state machines.";
+    description = "Fast multiple substring searching with finite state machines";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "0bhasxfpmfmz1460chwsx59vdld05axvmk1nbp3sd48xav3d108p";
     libName = "aho_corasick";
@@ -111,7 +111,7 @@ rec {
   crates.arrayvec."0.4.10" = deps: { features?(features_.arrayvec."0.4.10" deps {}) }: buildRustCrate {
     crateName = "arrayvec";
     version = "0.4.10";
-    description = "A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.";
+    description = "A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString";
     authors = [ "bluss" ];
     sha256 = "0qbh825i59w5wfdysqdkiwbwkrsy7lgbd4pwbyb8pxx8wc36iny8";
     dependencies = mapFeatures features ([
@@ -558,7 +558,7 @@ rec {
   crates.carnix."0.10.0" = deps: { features?(features_.carnix."0.10.0" deps {}) }: buildRustCrate {
     crateName = "carnix";
     version = "0.10.0";
-    description = "Generate Nix expressions from Cargo.lock files (in order to use Nix as a build system for crates).";
+    description = "Generate Nix expressions from Cargo.lock files (in order to use Nix as a build system for crates)";
     authors = [ "pe@pijul.org <pe@pijul.org>" ];
     sha256 = "0hrp22yvrqnhaanr0ckrwihx9j3irhzd2cmb19sp49ksdi25d8ri";
     crateBin =
@@ -969,7 +969,7 @@ rec {
   crates.cloudabi."0.0.3" = deps: { features?(features_.cloudabi."0.0.3" deps {}) }: buildRustCrate {
     crateName = "cloudabi";
     version = "0.0.3";
-    description = "Low level interface to CloudABI. Contains all syscalls and related types.";
+    description = "Low level interface to CloudABI. Contains all syscalls and related types";
     authors = [ "Nuxi (https://nuxi.nl/) and contributors" ];
     sha256 = "1z9lby5sr6vslfd14d6igk03s7awf91mxpsfmsp3prxbxlk0x7h5";
     libPath = "cloudabi.rs";
@@ -1049,7 +1049,7 @@ rec {
   crates.dirs."1.0.5" = deps: { features?(features_.dirs."1.0.5" deps {}) }: buildRustCrate {
     crateName = "dirs";
     version = "1.0.5";
-    description = "A tiny low-level library that provides platform-specific standard locations of directories for config, cache and other data on Linux, Windows, macOS and Redox by leveraging the mechanisms defined by the XDG base/user directory specifications on Linux, the Known Folder API on Windows, and the Standard Directory guidelines on macOS.";
+    description = "A tiny low-level library that provides platform-specific standard locations of directories for config, cache and other data on Linux, Windows, macOS and Redox by leveraging the mechanisms defined by the XDG base/user directory specifications on Linux, the Known Folder API on Windows, and the Standard Directory guidelines on macOS";
     authors = [ "Simon Ochsenreither <simon@ochsenreither.de>" ];
     sha256 = "1py68zwwrhlj5vbz9f9ansjmhc8y4gs5bpamw9ycmqz030pprwf3";
     dependencies = (if kernel == "redox" then mapFeatures features ([
@@ -1304,7 +1304,7 @@ rec {
   crates.failure."0.1.5" = deps: { features?(features_.failure."0.1.5" deps {}) }: buildRustCrate {
     crateName = "failure";
     version = "0.1.5";
-    description = "Experimental error handling abstraction.";
+    description = "Experimental error handling abstraction";
     authors = [ "Without Boats <boats@mozilla.com>" ];
     sha256 = "1msaj1c0fg12dzyf4fhxqlx1gfx41lj2smdjmkc9hkrgajk2g3kx";
     dependencies = mapFeatures features ([
@@ -1561,7 +1561,7 @@ rec {
   crates.itertools."0.8.0" = deps: { features?(features_.itertools."0.8.0" deps {}) }: buildRustCrate {
     crateName = "itertools";
     version = "0.8.0";
-    description = "Extra iterator adaptors, iterator methods, free functions, and macros.";
+    description = "Extra iterator adaptors, iterator methods, free functions, and macros";
     authors = [ "bluss" ];
     sha256 = "0xpz59yf03vyj540i7sqypn2aqfid08c4vzyg0l6rqm08da77n7n";
     dependencies = mapFeatures features ([
@@ -1645,7 +1645,7 @@ rec {
   crates.lazy_static."1.3.0" = deps: { features?(features_.lazy_static."1.3.0" deps {}) }: buildRustCrate {
     crateName = "lazy_static";
     version = "1.3.0";
-    description = "A macro for declaring lazily evaluated statics in Rust.";
+    description = "A macro for declaring lazily evaluated statics in Rust";
     authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
     sha256 = "1vv47va18ydk7dx5paz88g3jy1d3lwbx6qpxkbj8gyfv770i4b1y";
     dependencies = mapFeatures features ([
@@ -1868,7 +1868,7 @@ rec {
   crates.memchr."2.2.0" = deps: { features?(features_.memchr."2.2.0" deps {}) }: buildRustCrate {
     crateName = "memchr";
     version = "2.2.0";
-    description = "Safe interface to memchr.";
+    description = "Safe interface to memchr";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" "bluss" ];
     sha256 = "11vwg8iig9jyjxq3n1cq15g29ikzw5l7ar87md54k1aisjs0997p";
     dependencies = mapFeatures features ([
@@ -2640,7 +2640,7 @@ rec {
   crates.regex_syntax."0.6.5" = deps: { features?(features_.regex_syntax."0.6.5" deps {}) }: buildRustCrate {
     crateName = "regex-syntax";
     version = "0.6.5";
-    description = "A regular expression parser.";
+    description = "A regular expression parser";
     authors = [ "The Rust Project Developers" ];
     sha256 = "0aaaba1fan2qfyc31wzdmgmbmyirc27zgcbz41ba5wm1lb2d8kli";
     dependencies = mapFeatures features ([
@@ -3615,7 +3615,7 @@ rec {
   crates.utf8_ranges."1.0.2" = deps: { features?(features_.utf8_ranges."1.0.2" deps {}) }: buildRustCrate {
     crateName = "utf8-ranges";
     version = "1.0.2";
-    description = "Convert ranges of Unicode codepoints to UTF-8 byte ranges.";
+    description = "Convert ranges of Unicode codepoints to UTF-8 byte ranges";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1my02laqsgnd8ib4dvjgd4rilprqjad6pb9jj9vi67csi5qs2281";
   };
@@ -3740,7 +3740,7 @@ rec {
   crates.winapi_util."0.1.2" = deps: { features?(features_.winapi_util."0.1.2" deps {}) }: buildRustCrate {
     crateName = "winapi-util";
     version = "0.1.2";
-    description = "A dumping ground for high level safe wrappers over winapi.";
+    description = "A dumping ground for high level safe wrappers over winapi";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "07jj7rg7nndd7bqhjin1xphbv8kb5clvhzpqpxkvm3wl84r3mj1h";
     dependencies = (if kernel == "windows" then mapFeatures features ([
@@ -3815,7 +3815,7 @@ rec {
   crates.aho_corasick."0.7.3" = deps: { features?(features_.aho_corasick."0.7.3" deps {}) }: buildRustCrate {
     crateName = "aho-corasick";
     version = "0.7.3";
-    description = "Fast multiple substring searching.";
+    description = "Fast multiple substring searching";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "0dn42fbdms4brigqphxrvzbjd1s4knyjlzky30kgvpnrcl4sqqdv";
     libName = "aho_corasick";
@@ -3966,7 +3966,7 @@ rec {
   crates.bstr."0.1.2" = deps: { features?(features_.bstr."0.1.2" deps {}) }: buildRustCrate {
     crateName = "bstr";
     version = "0.1.2";
-    description = "A string type that is not required to be valid UTF-8.";
+    description = "A string type that is not required to be valid UTF-8";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1m30sssr8qghgf5fg17vvlrcr5mbbnv8fixzzfvzk3nan4bxyckf";
     dependencies = mapFeatures features ([
@@ -4044,7 +4044,7 @@ rec {
   crates.byteorder."1.3.1" = deps: { features?(features_.byteorder."1.3.1" deps {}) }: buildRustCrate {
     crateName = "byteorder";
     version = "1.3.1";
-    description = "Library for reading/writing numbers in big-endian and little-endian.";
+    description = "Library for reading/writing numbers in big-endian and little-endian";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1dd46l7fvmxfq90kh6ip1ghsxzzcdybac8f0mh2jivsdv9vy8k4w";
     build = "build.rs";
@@ -4916,7 +4916,7 @@ rec {
   crates.docopt."1.1.0" = deps: { features?(features_.docopt."1.1.0" deps {}) }: buildRustCrate {
     crateName = "docopt";
     version = "1.1.0";
-    description = "Command line argument parsing.";
+    description = "Command line argument parsing";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     edition = "2018";
     sha256 = "1xjvfw8398qcxwhdmak1bw2j6zn125ch24dmrmghv50vnlbb997x";
@@ -5125,7 +5125,7 @@ rec {
   crates.fs2."0.4.3" = deps: { features?(features_.fs2."0.4.3" deps {}) }: buildRustCrate {
     crateName = "fs2";
     version = "0.4.3";
-    description = "Cross-platform file locks and file duplication.";
+    description = "Cross-platform file locks and file duplication";
     authors = [ "Dan Burkert <dan@danburkert.com>" ];
     sha256 = "1crj36rhhpk3qby9yj7r77w7sld0mzab2yicmphbdkfymbmp3ldp";
     dependencies = (if (kernel == "linux" || kernel == "darwin") then mapFeatures features ([
@@ -5376,7 +5376,7 @@ rec {
   crates.hex."0.3.2" = deps: { features?(features_.hex."0.3.2" deps {}) }: buildRustCrate {
     crateName = "hex";
     version = "0.3.2";
-    description = "Encoding and decoding data into/from hexadecimal representation.";
+    description = "Encoding and decoding data into/from hexadecimal representation";
     authors = [ "KokaKiwi <kokakiwi@kokakiwi.net>" ];
     sha256 = "0hs0xfb4x67y4ss9mmbjmibkwakbn3xf23i21m409bw2zqk9b6kz";
     features = mkFeatures (features."hex"."0.3.2" or {});
@@ -5568,7 +5568,7 @@ rec {
   crates.itertools."0.7.11" = deps: { features?(features_.itertools."0.7.11" deps {}) }: buildRustCrate {
     crateName = "itertools";
     version = "0.7.11";
-    description = "Extra iterator adaptors, iterator methods, free functions, and macros.";
+    description = "Extra iterator adaptors, iterator methods, free functions, and macros";
     authors = [ "bluss" ];
     sha256 = "0gavmkvn2c3cwfwk5zl5p7saiqn4ww227am5ykn6pgfm7c6ppz56";
     dependencies = mapFeatures features ([
@@ -5627,7 +5627,7 @@ rec {
   crates.kernel32_sys."0.2.2" = deps: { features?(features_.kernel32_sys."0.2.2" deps {}) }: buildRustCrate {
     crateName = "kernel32-sys";
     version = "0.2.2";
-    description = "Contains function definitions for the Windows API library kernel32. See winapi for types and constants.";
+    description = "Contains function definitions for the Windows API library kernel32. See winapi for types and constants";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1lrw1hbinyvr6cp28g60z97w32w8vsk6pahk64pmrv2fmby8srfj";
     libName = "kernel32";
@@ -5883,7 +5883,7 @@ rec {
   crates.lock_api."0.1.5" = deps: { features?(features_.lock_api."0.1.5" deps {}) }: buildRustCrate {
     crateName = "lock_api";
     version = "0.1.5";
-    description = "Wrappers to create fully-featured Mutex and RwLock types. Compatible with no_std.";
+    description = "Wrappers to create fully-featured Mutex and RwLock types. Compatible with no_std";
     authors = [ "Amanieu d'Antras <amanieu@gmail.com>" ];
     sha256 = "132sidr5hvjfkaqm3l95zpcpi8yk5ddd0g79zf1ad4v65sxirqqm";
     dependencies = mapFeatures features ([
@@ -6069,7 +6069,7 @@ rec {
   crates.ndarray."0.12.1" = deps: { features?(features_.ndarray."0.12.1" deps {}) }: buildRustCrate {
     crateName = "ndarray";
     version = "0.12.1";
-    description = "An n-dimensional array for general elements and for numerics. Lightweight array views and slicing; views support chunking and splitting.";
+    description = "An n-dimensional array for general elements and for numerics. Lightweight array views and slicing; views support chunking and splitting";
     authors = [ "bluss" "Jim Turner" ];
     sha256 = "13708k97kdjfj6g4z1yapjln0v4m7zj0114h8snw44fj79l00346";
     build = "build.rs";
@@ -6193,7 +6193,7 @@ rec {
   crates.num_cpus."1.10.0" = deps: { features?(features_.num_cpus."1.10.0" deps {}) }: buildRustCrate {
     crateName = "num_cpus";
     version = "1.10.0";
-    description = "Get the number of CPUs on a machine.";
+    description = "Get the number of CPUs on a machine";
     authors = [ "Sean McArthur <sean@seanmonstar.com>" ];
     sha256 = "1411jyxy1wd8d59mv7cf6ynkvvar92czmwhb9l2c1brdkxbbiqn7";
     dependencies = mapFeatures features ([
@@ -6214,7 +6214,7 @@ rec {
   crates.once_cell."0.1.8" = deps: { features?(features_.once_cell."0.1.8" deps {}) }: buildRustCrate {
     crateName = "once_cell";
     version = "0.1.8";
-    description = "Single assignment cells and lazy static values without macros.";
+    description = "Single assignment cells and lazy static values without macros";
     authors = [ "Aleksey Kladov <aleksey.kladov@gmail.com>" ];
     sha256 = "1n1da1x3cf3qbq9a925pimy6i0r12gcicwqjxc63nfb2bnzkg074";
     dependencies = mapFeatures features ([
@@ -6242,7 +6242,7 @@ rec {
   crates.opener."0.3.2" = deps: { features?(features_.opener."0.3.2" deps {}) }: buildRustCrate {
     crateName = "opener";
     version = "0.3.2";
-    description = "Open a file or link using the system default program.";
+    description = "Open a file or link using the system default program";
     authors = [ "Brian Bowman <seeker14491@gmail.com>" ];
     sha256 = "1ql2snax07n3xxn4nz9r6d95rhrri66qy5s5zl9jfsdbs193hzcm";
     dependencies = mapFeatures features ([
@@ -6399,7 +6399,7 @@ rec {
   crates.parking_lot."0.7.1" = deps: { features?(features_.parking_lot."0.7.1" deps {}) }: buildRustCrate {
     crateName = "parking_lot";
     version = "0.7.1";
-    description = "More compact and efficient implementations of the standard synchronization primitives.";
+    description = "More compact and efficient implementations of the standard synchronization primitives";
     authors = [ "Amanieu d'Antras <amanieu@gmail.com>" ];
     sha256 = "1qpb49xd176hqqabxdb48f1hvylfbf68rpz8yfrhw0x68ys0lkq1";
     dependencies = mapFeatures features ([
@@ -6450,7 +6450,7 @@ rec {
   crates.parking_lot_core."0.4.0" = deps: { features?(features_.parking_lot_core."0.4.0" deps {}) }: buildRustCrate {
     crateName = "parking_lot_core";
     version = "0.4.0";
-    description = "An advanced API for creating custom synchronization primitives.";
+    description = "An advanced API for creating custom synchronization primitives";
     authors = [ "Amanieu d'Antras <amanieu@gmail.com>" ];
     sha256 = "1mzk5i240ddvhwnz65hhjk4cq61z235g1n8bd7al4mg6vx437c16";
     dependencies = mapFeatures features ([
@@ -6967,7 +6967,7 @@ rec {
   crates.regex_syntax."0.6.6" = deps: { features?(features_.regex_syntax."0.6.6" deps {}) }: buildRustCrate {
     crateName = "regex-syntax";
     version = "0.6.6";
-    description = "A regular expression parser.";
+    description = "A regular expression parser";
     authors = [ "The Rust Project Developers" ];
     sha256 = "1cjrdc3affa3rjfaxkp91xnf9k0fsqn9z4xqc280vv39nvrl8p8b";
     dependencies = mapFeatures features ([
@@ -7589,7 +7589,7 @@ rec {
   crates.typenum."1.10.0" = deps: { features?(features_.typenum."1.10.0" deps {}) }: buildRustCrate {
     crateName = "typenum";
     version = "1.10.0";
-    description = "Typenum is a Rust library for type-level numbers evaluated at compile time. It currently supports bits, unsigned integers, and signed integers. It also provides a type-level array of type-level numbers, but its implementation is incomplete.";
+    description = "Typenum is a Rust library for type-level numbers evaluated at compile time. It currently supports bits, unsigned integers, and signed integers. It also provides a type-level array of type-level numbers, but its implementation is incomplete";
     authors = [ "Paho Lurie-Gregg <paho@paholg.com>" "Andre Bogus <bogusandre@gmail.com>" ];
     sha256 = "1v2cgg0mlzkg5prs7swysckgk2ay6bpda8m83c2sn3z77dcsx3bc";
     build = "build/main.rs";
@@ -7645,7 +7645,7 @@ rec {
   crates.walkdir."2.2.7" = deps: { features?(features_.walkdir."2.2.7" deps {}) }: buildRustCrate {
     crateName = "walkdir";
     version = "2.2.7";
-    description = "Recursively walk a directory.";
+    description = "Recursively walk a directory";
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "0wq3v28916kkla29yyi0g0xfc16apwx24py68049kriz3gjlig03";
     dependencies = mapFeatures features ([
@@ -7678,7 +7678,7 @@ rec {
   crates.winapi."0.2.8" = deps: { features?(features_.winapi."0.2.8" deps {}) }: buildRustCrate {
     crateName = "winapi";
     version = "0.2.8";
-    description = "Types and constants for WinAPI bindings. See README for list of crates providing function bindings.";
+    description = "Types and constants for WinAPI bindings. See README for list of crates providing function bindings";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
@@ -7693,7 +7693,7 @@ rec {
   crates.winapi."0.3.7" = deps: { features?(features_.winapi."0.3.7" deps {}) }: buildRustCrate {
     crateName = "winapi";
     version = "0.3.7";
-    description = "Raw FFI bindings for all of Windows API.";
+    description = "Raw FFI bindings for all of Windows API";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1k51gfkp0zqw7nj07y443mscs46icmdhld442s2073niap0kkdr8";
     build = "build.rs";
@@ -7727,7 +7727,7 @@ rec {
   crates.winapi_build."0.1.1" = deps: { features?(features_.winapi_build."0.1.1" deps {}) }: buildRustCrate {
     crateName = "winapi-build";
     version = "0.1.1";
-    description = "Common code for build.rs in WinAPI -sys crates.";
+    description = "Common code for build.rs in WinAPI -sys crates";
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
@@ -7743,7 +7743,7 @@ rec {
   crates.adler32."1.0.3" = deps: { features?(features_.adler32."1.0.3" deps {}) }: buildRustCrate {
     crateName = "adler32";
     version = "1.0.3";
-    description = "Minimal Adler32 implementation for Rust.";
+    description = "Minimal Adler32 implementation for Rust";
     authors = [ "Remi Rampin <remirampin@gmail.com>" ];
     sha256 = "1z3mvjgw02mbqk98kizzibrca01d5wfkpazsrp3vkkv3i56pn6fb";
   };

@@ -19,7 +19,7 @@ with lib; mkCoqDerivation {
   extraInstallFlags = [ "VFILES=structures.v" ];
 
   meta = {
-    description = "Coq plugin embedding ELPI.";
+    description = "Coq plugin embedding ELPI";
     maintainers = [ maintainers.cohencyril ];
     license = licenses.lgpl21;
   };

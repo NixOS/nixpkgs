@@ -4,7 +4,7 @@ rec {
   baseName = "str";
   version = "cl-20210411-git";
 
-  description = "Modern, consistent and terse Common Lisp string manipulation library.";
+  description = "Modern, consistent and terse Common Lisp string manipulation library";
 
   deps = [ args."cl-change-case" args."cl-ppcre" args."cl-ppcre-unicode" args."cl-unicode" args."flexi-streams" ];
 

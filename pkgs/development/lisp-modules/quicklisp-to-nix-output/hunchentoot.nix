@@ -9,7 +9,7 @@ rec {
   description = "Hunchentoot is a HTTP server based on USOCKET and
   BORDEAUX-THREADS.  It supports HTTP 1.1, serves static files, has a
   simple framework for user-defined handlers and can be extended
-  through subclassing.";
+  through subclassing";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."cxml-stp" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."swank" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" args."xpath" ];
 

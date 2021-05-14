@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-clipboard";
   version = "20210228-git";
 
-  description = "trivial-clipboard let access system clipboard.";
+  description = "trivial-clipboard let access system clipboard";
 
   deps = [ args."uiop" ];
 

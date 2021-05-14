@@ -4,7 +4,7 @@ rec {
   baseName = "hu_dot_dwim_dot_asdf";
   version = "20200925-darcs";
 
-  description = "Various ASDF extensions such as attached test and documentation system, explicit development support, etc.";
+  description = "Various ASDF extensions such as attached test and documentation system, explicit development support, etc";
 
   deps = [ args."uiop" ];
 

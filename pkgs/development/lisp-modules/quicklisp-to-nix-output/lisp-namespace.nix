@@ -4,7 +4,7 @@ rec {
   baseName = "lisp-namespace";
   version = "20171130-git";
 
-  description = "Provides LISP-N --- extensible namespaces in Common Lisp.";
+  description = "Provides LISP-N --- extensible namespaces in Common Lisp";
 
   deps = [ args."alexandria" ];
 

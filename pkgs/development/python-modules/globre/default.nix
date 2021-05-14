@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/metagriffin/globre";
-    description = "A python glob-like regular expression generation library.";
+    description = "A python glob-like regular expression generation library";
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl3;
   };

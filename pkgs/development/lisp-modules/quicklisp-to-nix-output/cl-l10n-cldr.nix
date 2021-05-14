@@ -4,7 +4,7 @@ rec {
   baseName = "cl-l10n-cldr";
   version = "20120909-darcs";
 
-  description = "The necessary CLDR files for cl-l10n packaged in a QuickLisp friendly way.";
+  description = "The necessary CLDR files for cl-l10n packaged in a QuickLisp friendly way";
 
   deps = [ ];
 

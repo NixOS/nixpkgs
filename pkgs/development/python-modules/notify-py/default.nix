@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "notifypy" ];
 
   meta = with lib; {
-    description = " Python Module for sending cross-platform desktop notifications on Windows, macOS, and Linux.";
+    description = " Python Module for sending cross-platform desktop notifications on Windows, macOS, and Linux";
     homepage = "https://github.com/ms7m/notify-py/";
     license = licenses.mit;
     maintainers = with maintainers; [ austinbutler ];

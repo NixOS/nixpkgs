@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A pixel-level image comparison library.";
+    description = "A pixel-level image comparison library";
     homepage = "https://github.com/whtsky/pixelmatch-py";
     license = licenses.isc;
     maintainers = with maintainers; [ petabyteboy ];

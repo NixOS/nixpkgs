@@ -4,7 +4,7 @@ rec {
   baseName = "dissect";
   version = "20200427-git";
 
-  description = "A lib for introspecting the call stack and active restarts.";
+  description = "A lib for introspecting the call stack and active restarts";
 
   deps = [ ];
 

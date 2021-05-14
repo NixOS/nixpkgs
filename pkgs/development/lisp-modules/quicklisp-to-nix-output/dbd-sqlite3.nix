@@ -4,7 +4,7 @@ rec {
   baseName = "dbd-sqlite3";
   version = "cl-dbi-20210228-git";
 
-  description = "Database driver for SQLite3.";
+  description = "Database driver for SQLite3";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."closer-mop" args."dbi" args."iterate" args."split-sequence" args."sqlite" args."trivial-features" args."trivial-garbage" ];
 

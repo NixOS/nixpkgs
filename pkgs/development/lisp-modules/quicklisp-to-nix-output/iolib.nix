@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "iolib/multiplex" "iolib/os" "iolib/pathnames" "iolib/sockets" "iolib/streams" "iolib/syscalls" "iolib/trivial-sockets" "iolib/zstreams" ];
 
-  description = "I/O library.";
+  description = "I/O library";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."idna" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."iolib_dot_grovel" args."split-sequence" args."swap-bytes" args."trivial-features" ];
 

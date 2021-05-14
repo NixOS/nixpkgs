@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://builtoncement.com/";
-    description = "A CLI Application Framework for Python.";
+    description = "A CLI Application Framework for Python";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.bsd3;
   };

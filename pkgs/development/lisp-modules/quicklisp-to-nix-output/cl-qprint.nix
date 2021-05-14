@@ -4,7 +4,7 @@ rec {
   baseName = "cl-qprint";
   version = "20150804-git";
 
-  description = "Encode and decode quoted-printable encoded strings.";
+  description = "Encode and decode quoted-printable encoded strings";
 
   deps = [ args."flexi-streams" args."trivial-gray-streams" ];
 

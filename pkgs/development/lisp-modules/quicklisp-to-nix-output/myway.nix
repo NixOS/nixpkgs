@@ -4,7 +4,7 @@ rec {
   baseName = "myway";
   version = "20200325-git";
 
-  description = "Sinatra-compatible routing library.";
+  description = "Sinatra-compatible routing library";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."map-set" args."quri" args."split-sequence" args."trivial-features" ];
 

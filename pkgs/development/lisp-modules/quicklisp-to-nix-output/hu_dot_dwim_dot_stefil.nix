@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "hu.dwim.stefil/test" ];
 
-  description = "A Simple Test Framework In Lisp.";
+  description = "A Simple Test Framework In Lisp";
 
   deps = [ args."alexandria" ];
 

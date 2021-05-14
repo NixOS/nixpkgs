@@ -4,7 +4,7 @@ rec {
   baseName = "metabang-bind";
   version = "20200218-git";
 
-  description = "Bind is a macro that generalizes multiple-value-bind, let, let*, destructuring-bind, structure and slot accessors, and a whole lot more.";
+  description = "Bind is a macro that generalizes multiple-value-bind, let, let*, destructuring-bind, structure and slot accessors, and a whole lot more";
 
   deps = [ ];
 

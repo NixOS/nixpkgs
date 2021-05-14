@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "fiasco-self-tests" ];
 
-  description = "A Common Lisp test framework that treasures your failures, logical continuation of Stefil.";
+  description = "A Common Lisp test framework that treasures your failures, logical continuation of Stefil";
 
   deps = [ args."alexandria" args."trivial-gray-streams" ];
 

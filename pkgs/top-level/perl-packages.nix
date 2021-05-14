@@ -215,7 +215,7 @@ let
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.gmp Alienm4 DevelChecklib IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
     meta = {
-      description = "Alien package for the GNU Multiple Precision library.";
+      description = "Alien package for the GNU Multiple Precision library";
       license = with lib.licenses; [ lgpl3Plus ];
     };
   };
@@ -6215,7 +6215,7 @@ let
        sha256 = "1x9jzy3l7gwikj57swzl94qsq03j9na9h1m69azzs7d7ghph58wd";
      };
      meta = {
-       description = "Detect perl's global phase on older perls.";
+       description = "Detect perl's global phase on older perls";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -8119,7 +8119,7 @@ let
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
     meta = {
-      description = "Memory mapping made simple and safe.";
+      description = "Memory mapping made simple and safe";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8275,7 +8275,7 @@ let
       sha256 = "fe89cbb427e0e05f1cd97c2dd6d3866ac6b21bc7a85734ede159bdc35479552a";
     };
     meta = {
-      description = "Perl extension for filesystem disk space information.";
+      description = "Perl extension for filesystem disk space information";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8385,7 +8385,7 @@ let
       sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
     };
     meta = {
-      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
+      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8443,7 +8443,7 @@ let
        sha256 = "16v61rn0yimpv5kp6b20z2f1c93n5kpsyjvr0gq4w2dc43gfvc8w";
      };
      meta = {
-       description = "Extended globs.";
+       description = "Extended globs";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -9977,7 +9977,7 @@ let
       sha256 = "0z4mgb8mc6l5nfsm3ihndjqgpk43q39x1kq9hryy6v8hxkwrscrk";
     };
     meta = {
-      description = "WebDAV client library.";
+      description = "WebDAV client library";
     };
     propagatedBuildInputs = [ XMLDOM ];
   };
@@ -11635,7 +11635,7 @@ let
      propagatedBuildInputs = [ ConstFast MooXStrictConstructor MooXTypesMooseLike ParamsValidate namespaceautoclean ];
      buildInputs = [ TestDifferences TestException TestHexDifferences TestNoWarnings ];
      meta = {
-       description = "Locale::MO::File - Write or read gettext MO files.";
+       description = "Locale::MO::File - Write or read gettext MO files";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -13136,7 +13136,7 @@ let
        sha256 = "1fff81awg9agfawf3wxx0gpf6vgav8w920rmxsbjg30z75943lli";
      };
      meta = {
-       description = "Micro Objects. Mo is less.";
+       description = "Micro Objects. Mo is less";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/ingydotnet/mo-pm";
      };
@@ -14122,7 +14122,7 @@ let
      propagatedBuildInputs = [ Moo strictures ];
      buildInputs = [ TestFatal ];
      meta = {
-       description = "Make your Moo-based object constructors blow up on unknown attributes.";
+       description = "Make your Moo-based object constructors blow up on unknown attributes";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -14340,7 +14340,7 @@ let
     };
     propagatedBuildInputs = [ EnvSanctify FileHomeDir PerlDestructLevel XMLTwig ];
     meta = {
-      description = "Generate suppressions, analyse and test any command with valgrind.";
+      description = "Generate suppressions, analyse and test any command with valgrind";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "http://search.cpan.org/dist/Test-Valgrind/";
     };
@@ -15162,7 +15162,7 @@ let
     propagatedBuildInputs = [ LWPProtocolHttps Moose ParamsValidate XMLSimple ];
     buildInputs = [ TestException ];
     meta = {
-      description = "Perl interface to the Amazon Elastic Compute Cloud (EC2) environment.";
+      description = "Perl interface to the Amazon Elastic Compute Cloud (EC2) environment";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -15699,7 +15699,7 @@ let
       sed -i 's|$scp = "scp";|$scp = "${pkgs.openssh}/bin/scp";|' SCP.pm
     '';
     meta = {
-      description = "Simple wrappers around ssh and scp commands.";
+      description = "Simple wrappers around ssh and scp commands";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ NetSSH StringShellQuote ];
@@ -15834,7 +15834,7 @@ let
       sed -i 's|$ssh = "ssh";|$ssh = "${pkgs.openssh}/bin/ssh";|' SSH.pm
     '';
     meta = {
-      description = "Simple wrappers around ssh commands.";
+      description = "Simple wrappers around ssh commands";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17309,7 +17309,7 @@ let
     };
     propagatedBuildInputs = [ PPI Readonly ];
     meta = {
-      description = "Parse Perl string literals and string-literal-like things.";
+      description = "Parse Perl string literals and string-literal-like things";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -18426,7 +18426,7 @@ let
       sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
     };
     meta = with lib; {
-      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      description = "Linux/POSIX emulation of Win32::SerialPort functions";
       license = with licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -18557,7 +18557,7 @@ let
        sha256 = "0675v45bbsh7vr7kpf36xs2q79g02iq1kmfw22h20xdk4rzqvkqx";
      };
      meta = {
-       description = "Porters stemming algorithm for norwegian.";
+       description = "Porters stemming algorithm for norwegian";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -18570,7 +18570,7 @@ let
        sha256 = "0agwc12jk5kmabnpsplw3wf4ii5w1zb159cpin44x3srb0sr5apg";
      };
      meta = {
-       description = "Porters stemming algorithm for swedish.";
+       description = "Porters stemming algorithm for swedish";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
@@ -19111,7 +19111,7 @@ let
     };
     meta = with lib; {
       # https://metacpan.org/pod/String::Interpolate
-      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine.";
+      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine";
       license = licenses.gpl1Plus;
     };
     propagatedBuildInputs = [ PadWalker SafeHole ];
@@ -20116,7 +20116,7 @@ let
       sha256 = "f2e491796061205b08688802b287792d7d803b08972339fb1070ba05612af885";
     };
     meta = {
-      description = "Perl extension for displaying a progress indicator on a terminal.";
+      description = "Perl extension for displaying a progress indicator on a terminal";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22592,7 +22592,7 @@ let
       sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
     };
     meta = {
-      description = "Variable ties made much easier: much, much, much easier..";
+      description = "Variable ties made much easier: much, much, much easier";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23467,7 +23467,7 @@ let
     propagatedBuildInputs = [ X11Protocol ];
     buildInputs = [ EncodeHanExtra ModuleUtil ];
     meta = {
-      description = "Miscellaneous helpers for X11::Protocol connections.";
+      description = "Miscellaneous helpers for X11::Protocol connections";
       license = with lib.licenses; [ gpl1Plus gpl3Plus ];
       homepage = "http://user42.tuxfamily.org/x11-protocol-other/index.html";
     };

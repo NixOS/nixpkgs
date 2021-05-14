@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatic error monitoring for django, flask, etc.";
+    description = "Automatic error monitoring for django, flask, etc";
     homepage = "https://www.bugsnag.com";
     license = licenses.mit;
     platforms = platforms.unix;

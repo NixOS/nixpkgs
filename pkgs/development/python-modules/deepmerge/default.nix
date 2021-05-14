@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "deepmerge" ];
 
   meta = with lib; {
-    description = "A toolset to deeply merge python dictionaries.";
+    description = "A toolset to deeply merge python dictionaries";
     homepage = "http://deepmerge.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

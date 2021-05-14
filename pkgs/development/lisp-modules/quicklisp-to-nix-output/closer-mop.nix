@@ -4,7 +4,7 @@ rec {
   baseName = "closer-mop";
   version = "20210411-git";
 
-  description = "Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations.";
+  description = "Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations";
 
   deps = [ ];
 

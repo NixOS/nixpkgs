@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/lepture/authlib";
-    description = "The ultimate Python library in building OAuth and OpenID Connect servers. JWS,JWE,JWK,JWA,JWT included.";
+    description = "The ultimate Python library in building OAuth and OpenID Connect servers. JWS,JWE,JWK,JWA,JWT included";
     maintainers = with maintainers; [ flokli ];
     license = licenses.bsd3;
   };

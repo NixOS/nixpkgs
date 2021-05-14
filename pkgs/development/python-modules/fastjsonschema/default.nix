@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Fast JSON schema validator for Python.";
+    description = "Fast JSON schema validator for Python";
     homepage = "https://horejsek.github.io/python-fastjsonschema/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ drewrisinger ];

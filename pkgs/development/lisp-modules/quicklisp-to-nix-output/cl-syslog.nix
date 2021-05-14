@@ -4,7 +4,7 @@ rec {
   baseName = "cl-syslog";
   version = "20190202-git";
 
-  description = "Common Lisp syslog interface.";
+  description = "Common Lisp syslog interface";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."global-vars" args."local-time" args."split-sequence" args."trivial-features" args."usocket" ];
 

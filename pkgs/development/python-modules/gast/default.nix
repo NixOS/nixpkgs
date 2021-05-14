@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
   checkInputs = [ astunparse ] ;
   meta = with lib; {
-    description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module.";
+    description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];
   };

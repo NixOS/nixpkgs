@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "trivial-utf-8/doc" "trivial-utf-8/tests" ];
 
-  description = "A small library for doing UTF-8-based input and output.";
+  description = "A small library for doing UTF-8-based input and output";
 
   deps = [ args."mgl-pax" ];
 

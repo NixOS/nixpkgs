@@ -41,7 +41,7 @@ ansicolors = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/kikito/ansicolors.lua";
-    description = "Library for color Manipulation.";
+    description = "Library for color Manipulation";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 };
@@ -140,7 +140,7 @@ busted = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "http://olivinelabs.com/busted/";
-    description = "Elegant Lua unit testing.";
+    description = "Elegant Lua unit testing";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 };
@@ -241,7 +241,7 @@ cqueues = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "http://25thandclement.com/~william/projects/cqueues.html";
-    description = "Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix.";
+    description = "Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix";
     maintainers = with maintainers; [ vcunat ];
     license.fullName = "MIT/X11";
   };
@@ -382,7 +382,7 @@ ldbus = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/daurnimator/ldbus";
-    description = "A Lua library to access dbus.";
+    description = "A Lua library to access dbus";
     license.fullName = "MIT/X11";
   };
 };
@@ -530,7 +530,7 @@ lpty = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "http://www.tset.de/lpty/";
-    description = "A simple facility for lua to control other programs via PTYs.";
+    description = "A simple facility for lua to control other programs via PTYs";
     license.fullName = "MIT";
   };
 };
@@ -547,7 +547,7 @@ lrexlib-gnu = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/rrthomas/lrexlib";
-    description = "Regular expression library binding (GNU flavour).";
+    description = "Regular expression library binding (GNU flavour)";
     license.fullName = "MIT/X11";
   };
 };
@@ -564,7 +564,7 @@ lrexlib-pcre = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/rrthomas/lrexlib";
-    description = "Regular expression library binding (PCRE flavour).";
+    description = "Regular expression library binding (PCRE flavour)";
     maintainers = with maintainers; [ vyp ];
     license.fullName = "MIT/X11";
   };
@@ -582,7 +582,7 @@ lrexlib-posix = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/rrthomas/lrexlib";
-    description = "Regular expression library binding (POSIX flavour).";
+    description = "Regular expression library binding (POSIX flavour)";
     license.fullName = "MIT/X11";
   };
 };
@@ -704,7 +704,7 @@ lua-resty-http = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/ledgetech/lua-resty-http";
-    description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua.";
+    description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua";
     maintainers = with maintainers; [ bbigras ];
     license.fullName = "2-clause BSD";
   };
@@ -722,7 +722,7 @@ lua-resty-jwt = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/cdbattags/lua-resty-jwt";
-    description = "JWT for ngx_lua and LuaJIT.";
+    description = "JWT for ngx_lua and LuaJIT";
     maintainers = with maintainers; [ bbigras ];
     license.fullName = "Apache License Version 2";
   };
@@ -830,7 +830,7 @@ lua-zlib = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/brimworks/lua-zlib";
-    description = "Simple streaming interface to zlib for Lua.";
+    description = "Simple streaming interface to zlib for Lua";
     maintainers = with maintainers; [ koral ];
     license.fullName = "MIT";
   };
@@ -848,7 +848,7 @@ lua_cliargs = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/amireh/lua_cliargs";
-    description = "A command-line argument parser.";
+    description = "A command-line argument parser";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 };
@@ -1112,7 +1112,7 @@ luaossl = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "http://25thandclement.com/~william/projects/luaossl.html";
-    description = "Most comprehensive OpenSSL module in the Lua universe.";
+    description = "Most comprehensive OpenSSL module in the Lua universe";
     maintainers = with maintainers; [ vcunat ];
     license.fullName = "MIT/X11";
   };
@@ -1171,7 +1171,7 @@ luasec = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/brunoos/luasec/wiki";
-    description = "A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket.";
+    description = "A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket";
     maintainers = with maintainers; [ flosse ];
     license.fullName = "MIT";
   };
@@ -1257,7 +1257,7 @@ luasystem = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "http://olivinelabs.com/luasystem/";
-    description = "Platform independent system calls for Lua.";
+    description = "Platform independent system calls for Lua";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 };
@@ -1309,7 +1309,7 @@ lua-yajl = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/brimworks/lua-yajl";
-    description = "Integrate the yajl JSON library with Lua.";
+    description = "Integrate the yajl JSON library with Lua";
     maintainers = with maintainers; [ pstn ];
     license.fullName = "MIT/X11";
   };
@@ -1379,7 +1379,7 @@ markdown = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/mpeterv/markdown";
-    description = "Markdown text-to-html markup system.";
+    description = "Markdown text-to-html markup system";
     license.fullName = "MIT/X11";
   };
 };
@@ -1492,7 +1492,7 @@ rapidjson = buildLuarocksPackage {
 
   meta = with lib; {
     homepage = "https://github.com/xpol/lua-rapidjson";
-    description = "Json module based on the very fast RapidJSON.";
+    description = "Json module based on the very fast RapidJSON";
     license.fullName = "MIT";
   };
 };

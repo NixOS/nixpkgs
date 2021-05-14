@@ -4,7 +4,7 @@ rec {
   baseName = "dbd-mysql";
   version = "cl-dbi-20210228-git";
 
-  description = "Database driver for MySQL.";
+  description = "Database driver for MySQL";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-mysql" args."closer-mop" args."dbi" args."split-sequence" args."trivial-features" ];
 

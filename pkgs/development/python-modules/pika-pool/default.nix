@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/bninja/pika-pool";
     license = licenses.bsdOriginal;
-    description = "Pools for pikas.";
+    description = "Pools for pikas";
   };
 }

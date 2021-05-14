@@ -4,7 +4,7 @@ rec {
   baseName = "cl-speedy-queue";
   version = "20150302-git";
 
-  description = "cl-speedy-queue is a portable, non-consing, optimized queue implementation.";
+  description = "cl-speedy-queue is a portable, non-consing, optimized queue implementation";
 
   deps = [ ];
 

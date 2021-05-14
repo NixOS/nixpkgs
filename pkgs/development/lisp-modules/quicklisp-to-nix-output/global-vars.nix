@@ -4,7 +4,7 @@ rec {
   baseName = "global-vars";
   version = "20141106-git";
 
-  description = "Define efficient global variables.";
+  description = "Define efficient global variables";
 
   deps = [ ];
 

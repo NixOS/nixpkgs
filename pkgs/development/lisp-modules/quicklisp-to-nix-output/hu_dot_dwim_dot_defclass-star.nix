@@ -4,7 +4,7 @@ rec {
   baseName = "hu_dot_dwim_dot_defclass-star";
   version = "stable-git";
 
-  description = "Simplify class like definitions with defclass* and friends.";
+  description = "Simplify class like definitions with defclass* and friends";
 
   deps = [ args."hu_dot_dwim_dot_asdf" ];
 

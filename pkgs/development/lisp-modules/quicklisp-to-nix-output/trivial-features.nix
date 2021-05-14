@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-features";
   version = "20210411-git";
 
-  description = "Ensures consistent *FEATURES* across multiple CLs.";
+  description = "Ensures consistent *FEATURES* across multiple CLs";
 
   deps = [ ];
 

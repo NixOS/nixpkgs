@@ -4,7 +4,7 @@ rec {
   baseName = "parse-declarations-1_dot_0";
   version = "parse-declarations-20101006-darcs";
 
-  description = "Library to parse and rebuild declarations.";
+  description = "Library to parse and rebuild declarations";
 
   deps = [ ];
 

@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "utilities.print-items/test" ];
 
-  description = "A protocol for flexible and composable printing.";
+  description = "A protocol for flexible and composable printing";
 
   deps = [ args."alexandria" args."fiveam" ];
 

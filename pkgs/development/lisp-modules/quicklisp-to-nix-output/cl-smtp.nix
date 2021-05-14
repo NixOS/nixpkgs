@@ -4,7 +4,7 @@ rec {
   baseName = "cl-smtp";
   version = "20210228-git";
 
-  description = "Common Lisp smtp client.";
+  description = "Common Lisp smtp client";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl_plus_ssl" args."cl-base64" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 

@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "cl-async-base" "cl-async-util" ];
 
-  description = "Asynchronous operations for Common Lisp.";
+  description = "Asynchronous operations for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."uiop" args."vom" ];
 

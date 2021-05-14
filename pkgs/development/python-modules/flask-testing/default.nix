@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_testing" ];
 
   meta = with lib; {
-    description = "Flask unittest integration.";
+    description = "Flask unittest integration";
     homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];

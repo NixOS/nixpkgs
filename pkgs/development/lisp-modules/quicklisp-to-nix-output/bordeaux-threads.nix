@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "bordeaux-threads/test" ];
 
-  description = "Bordeaux Threads makes writing portable multi-threaded apps simple.";
+  description = "Bordeaux Threads makes writing portable multi-threaded apps simple";
 
   deps = [ args."alexandria" args."fiveam" ];
 

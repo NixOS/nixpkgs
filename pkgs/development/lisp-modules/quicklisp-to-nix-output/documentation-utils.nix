@@ -4,7 +4,7 @@ rec {
   baseName = "documentation-utils";
   version = "20190710-git";
 
-  description = "A few simple tools to help you with documenting your library.";
+  description = "A few simple tools to help you with documenting your library";
 
   deps = [ args."trivial-indent" ];
 

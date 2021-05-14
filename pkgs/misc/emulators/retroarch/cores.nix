@@ -774,7 +774,7 @@ in with lib.licenses;
       rev = "8fe07c62a364d0af1e22b7f75e839d42872dae7f";
       sha256 = "0p3fpldw6w4n4l60bv55c17vhqwq4q39fp36h8iqmnj7c32c61kf";
     };
-    description = "Parallel Mupen64plus rewrite for libretro.";
+    description = "Parallel Mupen64plus rewrite for libretro";
     license = gpl2;
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";

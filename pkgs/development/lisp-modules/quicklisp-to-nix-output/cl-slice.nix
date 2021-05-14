@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "cl-slice-tests" ];
 
-  description = "DSL for array slices in Common Lisp.";
+  description = "DSL for array slices in Common Lisp";
 
   deps = [ args."alexandria" args."anaphora" args."clunit" args."let-plus" ];
 

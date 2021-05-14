@@ -4,7 +4,7 @@ rec {
   baseName = "vom";
   version = "20160825-git";
 
-  description = "A tiny logging utility.";
+  description = "A tiny logging utility";
 
   deps = [ ];
 

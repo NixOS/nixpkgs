@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
+    description = "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage    = "https://github.com/crossbario/txaio";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];

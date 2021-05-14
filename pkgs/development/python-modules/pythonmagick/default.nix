@@ -38,6 +38,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "http://www.imagemagick.org/script/api.php";
     license = licenses.imagemagick;
-    description = "PythonMagick provides object oriented bindings for the ImageMagick Library.";
+    description = "PythonMagick provides object oriented bindings for the ImageMagick Library";
   };
 }

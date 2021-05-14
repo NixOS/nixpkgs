@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://linuxaudio.github.io/new-session-manager/";
-    description = "A session manager designed for audio applications.";
+    description = "A session manager designed for audio applications";
     maintainers = [ maintainers._6AA4FD ];
     license = licenses.gpl3Plus;
     platforms = ["x86_64-linux"];

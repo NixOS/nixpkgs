@@ -4,8 +4,7 @@ rec {
   baseName = "jpl-queues";
   version = "0.1";
 
-  description = "A few different kinds of queues, with optional
-multithreading synchronization.";
+  description = "A few different kinds of queues, with optional multithreading synchronization";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."jpl-util" ];
 

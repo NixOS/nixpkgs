@@ -64659,7 +64659,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The command line interface for Antora.";
+      description = "The command line interface for Antora";
       homepage = "https://antora.org";
       license = "MPL-2.0";
     };
@@ -64975,7 +64975,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The default site generator pipeline for producing and publishing static documentation sites with Antora.";
+      description = "The default site generator pipeline for producing and publishing static documentation sites with Antora";
       homepage = "https://antora.org";
       license = "MPL-2.0";
     };
@@ -65142,7 +65142,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A secure and free password manager for all of your devices.";
+      description = "A secure and free password manager for all of your devices";
       homepage = "https://bitwarden.com";
       license = "GPL-3.0";
     };
@@ -67279,7 +67279,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Use Azure AD SSO to log into the AWS CLI.";
+      description = "Use Azure AD SSO to log into the AWS CLI";
       homepage = "https://github.com/sportradar/aws-azure-login#readme";
       license = "MIT";
     };
@@ -70352,7 +70352,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Input method extension for coc.nvim on mac.";
+      description = "Input method extension for coc.nvim on mac";
       license = "MIT";
     };
     production = true;
@@ -71664,7 +71664,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Python extension for coc.nvim, forked from vscode-python.";
+      description = "Python extension for coc.nvim, forked from vscode-python";
       homepage = "https://github.com/neoclide/coc-python#readme";
       license = "MIT";
     };
@@ -71705,7 +71705,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Rust language support - code completion, Intellisense, refactoring, reformatting, errors, snippets. A client for the Rust Language Server, built by the RLS team.";
+      description = "Rust language support - code completion, Intellisense, refactoring, reformatting, errors, snippets. A client for the Rust Language Server, built by the RLS team";
       homepage = "https://github.com/neoclide/coc-rls#readme";
       license = "MIT";
     };
@@ -73865,7 +73865,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Create Cycle.js with no build configuration.";
+      description = "Create Cycle.js with no build configuration";
       homepage = "https://github.com/cyclejs-community/create-cycle-app#readme";
       license = "ISC";
     };
@@ -73963,7 +73963,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Create React apps with no build configuration.";
+      description = "Create React apps with no build configuration";
       homepage = "https://github.com/facebook/create-react-app#readme";
       license = "MIT";
     };
@@ -73981,7 +73981,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Create React Native apps with no build configuration.";
+      description = "Create React Native apps with no build configuration";
       homepage = "https://github.com/expo/create-react-native-app";
       license = "BSD-3-Clause";
     };
@@ -74660,7 +74660,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Dat is the package manager for data. Easily share and version control data.";
+      description = "Dat is the package manager for data. Easily share and version control data";
       homepage = "https://datproject.org";
       license = "BSD-3-Clause";
     };
@@ -74816,7 +74816,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A language server for Dockerfiles powered by NodeJS, TypeScript, and VSCode technologies.";
+      description = "A language server for Dockerfiles powered by NodeJS, TypeScript, and VSCode technologies";
       homepage = "https://github.com/rcjsuen/dockerfile-language-server-nodejs#readme";
       license = "MIT";
     };
@@ -75586,7 +75586,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Query for information about values in elm source files.";
+      description = "Query for information about values in elm source files";
       homepage = "https://github.com/ElmCast/elm-oracle#readme";
       license = "BSD-3-Clause";
     };
@@ -75955,7 +75955,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "EmojiOne is a complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG formats provided for the emoji images.";
+      description = "EmojiOne is a complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG formats provided for the emoji images";
       homepage = "https://www.emojione.com";
     };
     production = true;
@@ -77635,7 +77635,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "DTV Software in Japan.";
+      description = "DTV Software in Japan";
       homepage = "https://github.com/l3tnun/EPGStation#readme";
       license = "MIT";
     };
@@ -77820,7 +77820,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "An AST-based pattern checker for JavaScript.";
+      description = "An AST-based pattern checker for JavaScript";
       homepage = "https://eslint.org";
       license = "MIT";
     };
@@ -78009,7 +78009,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Package builder for esy.";
+      description = "Package builder for esy";
       license = "MIT";
     };
     production = true;
@@ -82344,7 +82344,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Fabulously kill processes. Cross-platform.";
+      description = "Fabulously kill processes. Cross-platform";
       homepage = "https://github.com/sindresorhus/fkill-cli#readme";
       license = "MIT";
     };
@@ -84348,7 +84348,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A gitmoji client for using emojis on commit messages.";
+      description = "A gitmoji client for using emojis on commit messages";
       homepage = "https://github.com/carloscuesta/gitmoji-cli#readme";
       license = "MIT";
     };
@@ -85710,7 +85710,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The streaming build system.";
+      description = "The streaming build system";
       homepage = "https://gulpjs.com";
       license = "MIT";
     };
@@ -86097,7 +86097,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A robust HTML entities encoder/decoder with full Unicode support.";
+      description = "A robust HTML entities encoder/decoder with full Unicode support";
       homepage = "https://mths.be/he";
       license = "MIT";
     };
@@ -86128,7 +86128,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Highly configurable, well-tested, JavaScript-based HTML minifier.";
+      description = "Highly configurable, well-tested, JavaScript-based HTML minifier";
       homepage = "https://kangax.github.io/html-minifier/";
       license = "MIT";
     };
@@ -87150,7 +87150,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A tool for creating and developing Ionic Framework mobile apps.";
+      description = "A tool for creating and developing Ionic Framework mobile apps";
       homepage = "https://ionicframework.com";
       license = "MIT";
     };
@@ -88374,7 +88374,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "An API documentation generator for JavaScript.";
+      description = "An API documentation generator for JavaScript";
       homepage = "https://github.com/jsdoc/jsdoc#readme";
       license = "Apache-2.0";
     };
@@ -88532,7 +88532,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).";
+      description = "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03)";
       homepage = "https://github.com/whitlockjc/json-refs";
       license = "MIT";
     };
@@ -89073,7 +89073,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Fast math typesetting for the web.";
+      description = "Fast math typesetting for the web";
       homepage = "https://katex.org";
       license = "MIT";
     };
@@ -89236,7 +89236,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Spectacular Test Runner for JavaScript.";
+      description = "Spectacular Test Runner for JavaScript";
       homepage = "http://karma-runner.github.io/";
       license = "MIT";
     };
@@ -90617,7 +90617,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A tool for managing JavaScript projects with multiple packages.";
+      description = "A tool for managing JavaScript projects with multiple packages";
       homepage = "https://github.com/lerna/lerna#readme";
       license = "MIT";
     };
@@ -91508,7 +91508,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Live Markdown previews for your favourite editor.";
+      description = "Live Markdown previews for your favourite editor";
       homepage = "https://github.com/shime/livedown";
       license = "MIT";
     };
@@ -93065,7 +93065,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Bot to publish twitter, tumblr or rss posts to an mastodon account.";
+      description = "Bot to publish twitter, tumblr or rss posts to an mastodon account";
       homepage = "https://github.com/yogthos/mastodon-bot";
       license = "MIT";
     };
@@ -93121,7 +93121,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Meeting room kiosk app for displaying meeting room schedules and booking rooms in your organization. Built against Google Apps, but other sources can be defined.";
+      description = "Meeting room kiosk app for displaying meeting room schedules and booking rooms in your organization. Built against Google Apps, but other sources can be defined";
       homepage = "https://bitbucket.org/aahmed/meat";
     };
     production = true;
@@ -93548,7 +93548,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Japanese DTV Tuner Server Service.";
+      description = "Japanese DTV Tuner Server Service";
       homepage = "https://github.com/Chinachu/Mirakurun";
       license = "Apache-2.0";
     };
@@ -97157,7 +97157,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Simple monitor script for use during development of a node.js app.";
+      description = "Simple monitor script for use during development of a node.js app";
       homepage = "https://nodemon.io";
       license = "MIT";
     };
@@ -99584,7 +99584,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A bidirectional runtime wikitext parser. Converts back and forth between wikitext and HTML/XML DOM with RDFa.";
+      description = "A bidirectional runtime wikitext parser. Converts back and forth between wikitext and HTML/XML DOM with RDFa";
       homepage = "https://github.com/wikimedia/parsoid#readme";
       license = "GPL-2.0+";
     };
@@ -100334,7 +100334,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Streaming torrent client for node.js with web ui.";
+      description = "Streaming torrent client for node.js with web ui";
       homepage = "https://github.com/asapach/peerflix-server#readme";
       license = "MIT";
     };
@@ -100562,7 +100562,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Production process manager for Node.JS applications with a built-in load balancer.";
+      description = "Production process manager for Node.JS applications with a built-in load balancer";
       homepage = "http://pm2.keymetrics.io/";
       license = "AGPL-3.0";
     };
@@ -100608,7 +100608,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A T-SQL formatting utility in JS, transpiled from the C# library of the same name.";
+      description = "A T-SQL formatting utility in JS, transpiled from the C# library of the same name";
       homepage = "https://github.com/TaoK/poor-mans-t-sql-formatter-npm-cli#readme";
       license = "AGPL-3.0";
     };
@@ -103251,7 +103251,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A set of complementary tools to React, including the JSX transformer.";
+      description = "A set of complementary tools to React, including the JSX transformer";
       homepage = "https://facebook.github.io/react";
       license = "BSD-3-Clause";
     };
@@ -104554,7 +104554,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A pure JavaScript implementation of Sass.";
+      description = "A pure JavaScript implementation of Sass";
       homepage = "https://github.com/sass/dart-sass";
       license = "MIT";
     };
@@ -104576,7 +104576,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The semantic version parser used by npm.";
+      description = "The semantic version parser used by npm";
       homepage = "https://github.com/npm/node-semver#readme";
       license = "ISC";
     };
@@ -109293,7 +109293,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A mighty, modern CSS linter.";
+      description = "A mighty, modern CSS linter";
       homepage = "https://stylelint.io";
       license = "MIT";
     };
@@ -110052,7 +110052,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The Swagger command-line. Provides Swagger utilities and project lifecycle support.";
+      description = "The Swagger command-line. Provides Swagger utilities and project lifecycle support";
       homepage = "https://github.com/swagger-api/swagger-node#readme";
       license = "Apache 2.0";
     };
@@ -110265,7 +110265,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Programmer for TECK keyboards.";
+      description = "Programmer for TECK keyboards";
       homepage = "https://github.com/m-ou-se/teck-programmer";
       license = "GPL-3.0+";
     };
@@ -110541,7 +110541,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The pluggable linting tool for text and markdown.";
+      description = "The pluggable linting tool for text and markdown";
       homepage = "https://github.com/textlint/textlint/";
       license = "MIT";
     };
@@ -110563,7 +110563,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Latex plugin for [textlint](https://github.com/textlint/textlint &#34;textlint&#34;).";
+      description = "Latex plugin for [textlint](https://github.com/textlint/textlint &#34;textlint&#34;)";
       homepage = "https://github.com/elzup/textlint-plugin-latex";
       license = "MIT";
     };
@@ -110592,7 +110592,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule check that abbreviations within parentheses.";
+      description = "textlint rule check that abbreviations within parentheses";
       homepage = "https://github.com/azu/textlint-rule-abbr-within-parentheses";
       license = "MIT";
     };
@@ -111108,7 +111108,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule that specify the maximum word count of a sentence.";
+      description = "textlint rule that specify the maximum word count of a sentence";
       homepage = "https://github.com/azu/textlint-rule-en-max-word-count";
       license = "MIT";
     };
@@ -111166,7 +111166,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule that limit maxinum comma(,) count of sentence.";
+      description = "textlint rule that limit maxinum comma(,) count of sentence";
       homepage = "https://github.com/azu/textlint-rule-max-comma#readme";
       license = "MIT";
     };
@@ -111205,7 +111205,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule that check no start with duplicated conjunction.";
+      description = "textlint rule that check no start with duplicated conjunction";
       homepage = "https://github.com/textlint-rule/textlint-rule-no-start-duplicated-conjunction";
       license = "MIT";
     };
@@ -111254,7 +111254,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule that check with or without period in list item.";
+      description = "textlint rule that check with or without period in list item";
       homepage = "https://github.com/textlint-rule/textlint-rule-period-in-list-item";
       license = "MIT";
     };
@@ -111361,7 +111361,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "textlint rule that check unexpanded acronym word.";
+      description = "textlint rule that check unexpanded acronym word";
       homepage = "https://github.com/textlint-rule/textlint-rule-unexpanded-acronym";
       license = "MIT";
     };
@@ -112374,7 +112374,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "undollar strips the dollar sign from the beginning of the terminal command you just copied from StackOverflow when you were searching for what arguments to pass to `tar` (`xzf`? `xvfJ`? Or was it `xvf`? You never seem to remember).";
+      description = "undollar strips the dollar sign from the beginning of the terminal command you just copied from StackOverflow when you were searching for what arguments to pass to `tar` (`xzf`? `xvfJ`? Or was it `xvf`? You never seem to remember)";
       homepage = "https://github.com/ImFeelingDucky/undollar#readme";
       license = "MIT";
     };
@@ -112845,7 +112845,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Command line utilities for server-side Vega.";
+      description = "Command line utilities for server-side Vega";
       homepage = "https://github.com/vega/vega#readme";
       license = "BSD-3-Clause";
     };
@@ -112892,7 +112892,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Vega-Lite is a concise high-level language for interactive visualization.";
+      description = "Vega-Lite is a concise high-level language for interactive visualization";
       homepage = "https://vega.github.io/vega-lite/";
       license = "BSD-3-Clause";
     };
@@ -114359,7 +114359,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A simple CLI for scaffolding Vue.js projects.";
+      description = "A simple CLI for scaffolding Vue.js projects";
       homepage = "https://github.com/vuejs/vue-cli#readme";
       license = "MIT";
     };
@@ -115984,7 +115984,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Packs CommonJs/AMD modules for the browser. Allows to split your codebase into multiple bundles, which can be loaded on demand. Support loaders to preprocess files, i.e. json, jsx, es7, css, less, ... and your custom stuff.";
+      description = "Packs CommonJs/AMD modules for the browser. Allows to split your codebase into multiple bundles, which can be loaded on demand. Support loaders to preprocess files, i.e. json, jsx, es7, css, less, ... and your custom stuff";
       homepage = "https://github.com/webpack/webpack";
       license = "MIT";
     };
@@ -116635,7 +116635,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Serves a webpack app. Updates the browser on changes.";
+      description = "Serves a webpack app. Updates the browser on changes";
       homepage = "https://github.com/webpack/webpack-dev-server#readme";
       license = "MIT";
     };
@@ -117018,7 +117018,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "WebTorrent, the streaming torrent client. For the command line.";
+      description = "WebTorrent, the streaming torrent client. For the command line";
       homepage = "https://webtorrent.io";
       license = "MIT";
     };
@@ -117238,7 +117238,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "📦🐈 Fast, reliable, and secure dependency management.";
+      description = "📦🐈 Fast, reliable, and secure dependency management";
       homepage = "https://github.com/yarnpkg/yarn#readme";
       license = "BSD-2-Clause";
     };

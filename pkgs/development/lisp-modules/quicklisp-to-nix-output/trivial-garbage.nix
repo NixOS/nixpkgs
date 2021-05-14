@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "trivial-garbage/tests" ];
 
-  description = "Portable finalizers, weak hash-tables and weak pointers.";
+  description = "Portable finalizers, weak hash-tables and weak pointers";
 
   deps = [ args."rt" ];
 

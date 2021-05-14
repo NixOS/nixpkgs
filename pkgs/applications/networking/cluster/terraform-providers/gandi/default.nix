@@ -18,7 +18,7 @@ buildGoPackage rec {
   postBuild = "mv go/bin/terraform-provider-gandi{,_v${version}}";
 
   meta = with lib; {
-    description = "Terraform provider for the Gandi LiveDNS service.";
+    description = "Terraform provider for the Gandi LiveDNS service";
     homepage = "https://github.com/tiramiseb/terraform-provider-gandi";
     license = licenses.mpl20;
     maintainers = with maintainers; [ manveru ];

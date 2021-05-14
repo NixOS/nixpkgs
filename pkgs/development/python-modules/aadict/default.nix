@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/metagriffin/aadict";
-    description = "An auto-attribute dict (and a couple of other useful dict functions).";
+    description = "An auto-attribute dict (and a couple of other useful dict functions)";
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl3;
   };

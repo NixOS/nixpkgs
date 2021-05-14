@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    description = "Home Assistant cloud integration by Nabu Casa, inc.";
+    description = "Home Assistant cloud integration by Nabu Casa, inc";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

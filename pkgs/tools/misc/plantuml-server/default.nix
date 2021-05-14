@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A web application to generate UML diagrams on-the-fly.";
+    description = "A web application to generate UML diagrams on-the-fly";
     homepage = "https://plantuml.com/";
     license = licenses.gpl3;
     platforms = platforms.all;

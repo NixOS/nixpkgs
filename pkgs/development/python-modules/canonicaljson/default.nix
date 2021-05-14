@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/matrix-org/python-canonicaljson";
-    description = "Encodes objects and arrays as RFC 7159 JSON.";
+    description = "Encodes objects and arrays as RFC 7159 JSON";
     license = licenses.asl20;
   };
 }

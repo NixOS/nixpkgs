@@ -4,7 +4,7 @@ rec {
   baseName = "jpl-util";
   version = "cl-20151031-git";
 
-  description = "Sundry utilities for J.P. Larocque.";
+  description = "Sundry utilities for J.P. Larocque";
 
   deps = [ ];
 

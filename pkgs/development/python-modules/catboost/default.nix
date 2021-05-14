@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "catboost" ];
 
   meta = with lib; {
-    description = "High-performance library for gradient boosting on decision trees.";
+    description = "High-performance library for gradient boosting on decision trees";
     longDescription = ''
       A fast, scalable, high performance Gradient Boosting on Decision Trees
       library, used for ranking, classification, regression and other machine

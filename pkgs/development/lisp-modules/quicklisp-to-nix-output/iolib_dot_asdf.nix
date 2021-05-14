@@ -4,7 +4,7 @@ rec {
   baseName = "iolib_dot_asdf";
   version = "iolib-v0.8.3";
 
-  description = "A few ASDF component classes.";
+  description = "A few ASDF component classes";
 
   deps = [ args."alexandria" ];
 

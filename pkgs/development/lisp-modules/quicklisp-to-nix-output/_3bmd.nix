@@ -4,7 +4,7 @@ rec {
   baseName = "_3bmd";
   version = "20210411-git";
 
-  description = "markdown processor in CL using esrap parser.";
+  description = "markdown processor in CL using esrap parser";
 
   deps = [ args."alexandria" args."esrap" args."split-sequence" args."trivial-with-current-source-form" ];
 

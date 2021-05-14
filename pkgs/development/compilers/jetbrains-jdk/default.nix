@@ -11,7 +11,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
   };
   patches = [];
   meta = with lib; {
-    description = "An OpenJDK fork to better support Jetbrains's products.";
+    description = "An OpenJDK fork to better support Jetbrains's products";
     longDescription = ''
      JetBrains Runtime is a runtime environment for running IntelliJ Platform
      based products on Windows, Mac OS X, and Linux. JetBrains Runtime is

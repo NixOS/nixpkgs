@@ -25,7 +25,7 @@ buildPythonPackage {
   propagatedBuildInputs = [ gflags ];
 
   meta = with lib; {
-    description = "Checks JavaScript files against Google's style guide.";
+    description = "Checks JavaScript files against Google's style guide";
     homepage = "https://developers.google.com/closure/utilities/";
     license = with licenses; [ asl20 ];
   };

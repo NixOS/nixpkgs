@@ -4,7 +4,7 @@ rec {
   baseName = "sqlite";
   version = "cl-20190813-git";
 
-  description = "CL-SQLITE package is an interface to the SQLite embedded relational database engine.";
+  description = "CL-SQLITE package is an interface to the SQLite embedded relational database engine";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."iterate" args."trivial-features" ];
 

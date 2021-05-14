@@ -12327,7 +12327,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A tool that allows you analyse your Elm code and identifies deficiencies and best practices.";
+      description = "A tool that allows you analyse your Elm code and identifies deficiencies and best practices";
       license = "MIT";
     };
     production = true;
@@ -12753,7 +12753,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Elm offline documentation previewer with hot reloading.";
+      description = "Elm offline documentation previewer with hot reloading";
       homepage = "https://github.com/dmy/elm-doc-preview#readme";
       license = "BSD-3-Clause";
     };
@@ -12835,7 +12835,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Implementation of an elm language server in node.";
+      description = "Implementation of an elm language server in node";
       homepage = "https://github.com/elm-tooling/elm-language-server#readme";
       license = "MIT";
     };
@@ -13017,7 +13017,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Run elm-test suites.";
+      description = "Run elm-test suites";
       homepage = "https://github.com/rtfeldman/node-test-runner#readme";
       license = "BSD-3-Clause";
     };
@@ -15186,7 +15186,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A second level of optimization for the Javascript that the Elm Compiler produces.";
+      description = "A second level of optimization for the Javascript that the Elm Compiler produces";
       homepage = "https://github.com/mdgriffith/elm-optimize-level-2#readme";
       license = "BSD-3-Clause";
     };

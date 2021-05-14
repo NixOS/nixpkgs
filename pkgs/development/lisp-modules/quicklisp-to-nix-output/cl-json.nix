@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "cl-json.test" ];
 
-  description = "JSON in Lisp. JSON (JavaScript Object Notation) is a lightweight data-interchange format.";
+  description = "JSON in Lisp. JSON (JavaScript Object Notation) is a lightweight data-interchange format";
 
   deps = [ args."fiveam" ];
 

@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "clx/test" ];
 
-  description = "An implementation of the X Window System protocol in Lisp.";
+  description = "An implementation of the X Window System protocol in Lisp";
 
   deps = [ args."fiasco" ];
 

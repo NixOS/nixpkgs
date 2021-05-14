@@ -4,9 +4,7 @@ rec {
   baseName = "cl-unification";
   version = "20200925-git";
 
-  description = "The CL-UNIFICATION system.
-
-The system contains the definitions for the 'unification' machinery.";
+  description = "The CL-UNIFICATION system";
 
   deps = [ ];
 

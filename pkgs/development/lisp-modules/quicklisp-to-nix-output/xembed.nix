@@ -4,7 +4,7 @@ rec {
   baseName = "xembed";
   version = "clx-20191130-git";
 
-  description = "An implementation of the XEMBED protocol that integrates with CLX.";
+  description = "An implementation of the XEMBED protocol that integrates with CLX";
 
   deps = [ args."clx" ];
 

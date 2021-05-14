@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Nix build file generator for Rust crates.";
+    description = "A Nix build file generator for Rust crates";
     longDescription = ''
       Crate2nix generates Nix files from Cargo.toml/lock files
       so that you can build every crate individually in a Nix sandbox.

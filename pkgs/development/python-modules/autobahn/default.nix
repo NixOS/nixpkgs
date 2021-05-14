@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "WebSocket and WAMP in Python for Twisted and asyncio.";
+    description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage    = "https://crossbar.io/autobahn";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];

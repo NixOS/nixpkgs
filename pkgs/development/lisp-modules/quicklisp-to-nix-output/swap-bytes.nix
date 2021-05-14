@@ -6,7 +6,7 @@ rec {
 
   parasites = [ "swap-bytes/test" ];
 
-  description = "Optimized byte-swapping primitives.";
+  description = "Optimized byte-swapping primitives";
 
   deps = [ args."fiveam" args."trivial-features" ];
 

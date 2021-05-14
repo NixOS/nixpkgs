@@ -4,7 +4,7 @@ rec {
   baseName = "marshal";
   version = "cl-20210411-git";
 
-  description = "marshal: Simple (de)serialization of Lisp datastructures.";
+  description = "marshal: Simple (de)serialization of Lisp datastructures";
 
   deps = [ ];
 

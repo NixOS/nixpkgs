@@ -4,7 +4,7 @@ rec {
   baseName = "trivial-mimes";
   version = "20200715-git";
 
-  description = "Tiny library to detect mime types in files.";
+  description = "Tiny library to detect mime types in files";
 
   deps = [ ];
 
