@@ -14967,7 +14967,9 @@ in
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
-  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
+  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   pango = callPackage ../development/libraries/pango {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
