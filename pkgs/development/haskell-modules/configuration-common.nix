@@ -1918,4 +1918,8 @@ EOT
     network = self.network-bsd;
   }) "-f-_old_network";
 
+  # 2021-05-14: Testsuite is failing.
+  # https://github.com/kcsongor/generic-lens/issues/133
+  generic-optics = dontCheck super.generic-optics;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

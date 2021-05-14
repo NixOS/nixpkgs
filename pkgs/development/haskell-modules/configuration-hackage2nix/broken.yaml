@@ -1510,7 +1510,6 @@ broken-packages:
   - generic-lens-labels
   - generic-lucid-scaffold
   - generic-maybe
-  - generic-optics
   - generic-override-aeson
   - generic-pretty
   - genericserialize
