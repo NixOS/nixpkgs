@@ -269,12 +269,12 @@ let
 
   barbar-nvim = buildVimPluginFrom2Nix {
     pname = "barbar-nvim";
-    version = "2021-05-11";
+    version = "2021-05-13";
     src = fetchFromGitHub {
       owner = "romgrk";
       repo = "barbar.nvim";
-      rev = "78ab34de8c77e2e230502945bd4d156af5d54ab8";
-      sha256 = "0smbf73i0ingvagxyjk6lb6g2axr6mgqk74c8w27504bnvay7y0w";
+      rev = "fa07efc01700896f1b52d11a237e16aacebac443";
+      sha256 = "sha256-JTnk0KKlL5Zmo042oNhQmoHABfjQJgx6jSGsCt7zIPQ=";
     };
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
   };
