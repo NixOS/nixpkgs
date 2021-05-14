@@ -147,17 +147,21 @@ test -n "$V" || { echo "Could not obtain version in $BUILDDIR ." ; exit 1 ; }
 #
 # This is the signing key ID associated with the GitHub account adriaandegroot,
 # which is used to create all "verified" tags in the Calamares repo.
+#
 KEY_ID="CFDDC96F12B1915C"
 git tag -u "$KEY_ID" -m "Release v$V" "v$V" || { echo "Could not sign tag v$V." ; exit 1 ; }
 
 ### Create the tarball
 #
+# Create the tarball, compute SHA256 for later reporting, and
+# sign the tarball so the signature can be uploaded separately.
 #
 TAR_V="$TARBALL_PREFIX-$V"
 TAR_FILE="$TAR_V.tar.gz"
 git archive -o "$TAR_FILE" --prefix "$TAR_V/" "v$V" || { echo "Could not create tarball." ; exit 1 ; }
 test -f "$TAR_FILE" || { echo "Tarball was not created." ; exit 1 ; }
 SHA256=$(sha256sum "$TAR_FILE" | cut -d" " -f1)
+gpg -s -u $KEY_ID --detach --armor $TAR_FILE  # Sign the tarball
 
 ### Build the tarball
 #
@@ -183,7 +187,6 @@ rm -rf "$TMPDIR"  # From tarball
 cat <<EOF
 # Next steps for this release:
   git push origin v$V
-  gpg -s -u $KEY_ID --detach --armor $TAR_FILE  # Sign the tarball
   # Upload tarball $TAR_FILE and the signature $TAR_FILE.asc
   # Announce via https://github.com/calamares/$PROJECT_NAME/releases/new
   # SHA256: $SHA256
