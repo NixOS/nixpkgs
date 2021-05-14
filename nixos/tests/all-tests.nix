@@ -90,6 +90,7 @@ in
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   deluge = handleTest ./deluge.nix {};
+  dendrite = handleTest ./dendrite.nix {};
   dhparams = handleTest ./dhparams.nix {};
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
