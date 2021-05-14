@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , autoreconfHook, pkg-config, wrapGAppsHook
 , glib, gtk3, expat, gnome-doc-utils, which
 , at-spi2-core, dbus
@@ -18,6 +18,14 @@ stdenv.mkDerivation {
     rev = "9ab12462e51d17a38c0ddc7f7ffe1cb5fe83b627";
     sha256 = "1r9xn966nx3pv2bidd6i3pxmprvlw6insnsb38zabmac609h9d9s";
   };
+
+  patches = [
+    # https://github.com/dasher-project/dasher/issues/180
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dasher/commit/5eed251f9bb0bae10e2efe177e1054346c7347d1.patch";
+      sha256 = "sha256-wMmU1AY0ZL3u3k1IfUzg6ZyGdpNd7A8sWf8levf7rqY=";
+    })
+  ];
 
   prePatch = ''
     # tries to invoke git for something, probably fetching the ref
