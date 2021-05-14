@@ -397,6 +397,8 @@ in with py.pkgs; buildPythonApplication rec {
     "uptime"
     "vacuum"
     "verisure"
+    "version"
+    "vesync"
     "weather"
     "webhook"
     "websocket_api"
@@ -411,6 +413,8 @@ in with py.pkgs; buildPythonApplication rec {
     "zone"
     "zwave"
     "zwave_js"
+  ] ++ lib.optionals (builtins.any (s: s == stdenv.hostPlatform.system) debugpy.meta.platforms) [
+    "debugpy"
   ];
 
   pytestFlagsArray = [

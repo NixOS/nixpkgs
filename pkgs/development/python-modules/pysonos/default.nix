@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.45";
+  version = "0.0.46";
 
   disabled = !isPy3k;
 
@@ -23,10 +23,14 @@ buildPythonPackage rec {
     owner = "amelchio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wzmrd9ja5makvsgf0ckil99wr8vw91dml8fi9miiq4la0100q0n";
+    sha256 = "sha256-5vQBSKDgzwdWkyGduq2cWa7Eq5l01gbs236H2Syc/Dc=";
   };
 
-  propagatedBuildInputs = [ ifaddr requests xmltodict ];
+  propagatedBuildInputs = [
+    ifaddr
+    requests
+    xmltodict
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -38,10 +42,10 @@ buildPythonPackage rec {
     "test_desc_from_uri" # test requires network access
   ];
 
-  meta = {
-    homepage = "https://github.com/amelchio/pysonos";
+  meta = with lib; {
     description = "A SoCo fork with fixes for Home Assistant";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ juaningan ];
+    homepage = "https://github.com/amelchio/pysonos";
+    license = licenses.mit;
+    maintainers = with maintainers; [ juaningan ];
   };
 }

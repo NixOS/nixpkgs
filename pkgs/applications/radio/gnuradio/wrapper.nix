@@ -4,7 +4,7 @@
 , unwrapped
 # If it's a minimal build, we don't want to wrap it with lndir and
 # wrapProgram..
-, wrap ? true
+, doWrap ? true
 # For the wrapper
 , makeWrapper
 # For lndir
@@ -138,7 +138,7 @@ let
     ;
     pkgs = packages;
   };
-  self = if wrap then
+  self = if doWrap then
     stdenv.mkDerivation {
       inherit name passthru;
       buildInputs = [
