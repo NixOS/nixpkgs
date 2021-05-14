@@ -30,8 +30,6 @@ let
 
     hardeningDisable = lib.optional stdenvNoCC.buildPlatform.isDarwin "format";
 
-    sourceRoot = lib.optionalString stdenvNoCC.hostPlatform.isAndroid ".";
-
     makeFlags = [
       "SHELL=bash"
       # Avoid use of runtime build->host compilers for checks. These

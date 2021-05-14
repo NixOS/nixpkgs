@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchurl, fetchzip, pkgs
+{ stdenvNoCC, lib, fetchzip, pkgs
 }:
 let
 
@@ -28,9 +28,10 @@ let
 
   kernelHeaders = pkgs.makeLinuxHeaders {
     version = "android-common-11-5.4";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://android.googlesource.com/kernel/common/+archive/48ffcbf0b9e7f0280bfb8c32c68da0aaf0fdfef6.tar.gz";
-      sha256 = "0ksm1243zm9hsv0a6q9v15jabf2rivsn14kmnm2qw6zk3mjd4jvv";
+      sha256 = "1y7cmlmcr5vdqydd9n785s139yc4aylc3zhqa59xsylmkaf5habk";
+      stripRoot = false;
     };
   };
 
@@ -39,12 +40,11 @@ stdenvNoCC.mkDerivation rec {
   pname = "bionic-prebuilt";
   version = "ndk-release-r23";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://android.googlesource.com/platform/bionic/+archive/00e8ce1142d8823b0d2fc8a98b40119b0f1f02cd.tar.gz";
-    sha256 = "0cfkwdcb2c9nnlmkx0inbsja3cyiha71nj92lm66m5an70zc3b8q";
+    sha256 = "10z5mp4w0acvjvgxv7wlqa7m70hcyarmjdlfxbd9rwzf4mrsr8d1";
+    stripRoot = false;
   };
-
-  sourceRoot = ".";
 
   NIX_DONT_SET_RPATH = true;
 
