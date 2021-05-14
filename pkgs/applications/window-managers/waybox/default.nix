@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "waybox";
-  version = "unstable-2020-05-01";
+  version = "unstable-2021-04-07";
 
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = pname;
-    rev = "93811898f0eea3035145f593938d49d5af759b46";
-    sha256 = "IOdKOqAQD87Rs3td8NVEgMnRF6kQSuQ64UVqeVqMBSM=";
+    rev = "309ccd2faf08079e698104b19eff32b3a255b947";
+    sha256 = "0kzss266jf1kgwnhk42vaakbmn269nphlq9xjsapp6mhccd9qz8v";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
