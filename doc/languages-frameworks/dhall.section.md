@@ -362,15 +362,15 @@ If we try to rebuild that expression the build will fail:
 ```
 $ nix build --file ./example.nix dhallPackages.true
 builder for '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed with exit code 1; last 10 log lines:
-  
+
   Dhall was compiled without the 'with-http' flag.
-  
+
   The requested URL was: https://prelude.dhall-lang.org/v19.0.0/package.dhall
-  
-  
+
+
   4│       https://prelude.dhall-lang.org/v19.0.0/package.dhall
   5│         sha256:eb693342eb769f782174157eba9b5924cf8ac6793897fc36a31ccbd6f56dafe2
-  
+
   /nix/store/rsab4y99h14912h4zplqx2iizr5n4rc2-true.dhall:4:7
 [1 built (1 failed), 0.0 MiB DL]
 error: build of '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed
