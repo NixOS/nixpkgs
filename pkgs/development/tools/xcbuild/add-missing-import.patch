@@ -1,0 +1,10 @@
+--- source_orig/Libraries/plist/Sources/Format/Encoding.cpp	1970-01-01 01:00:01.000000000 +0100
++++ source/Libraries/plist/Sources/Format/Encoding.cpp	2021-05-15 14:39:14.135561458 +0200
+@@ -10,6 +10,7 @@
+ #include <plist/Format/unicode.h>
+ 
+ #include <cassert>
++#include <cstdlib>
+ 
+ #if defined(__linux__)
+ #include <endian.h>
