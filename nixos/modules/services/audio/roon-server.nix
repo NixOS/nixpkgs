@@ -5,7 +5,8 @@ with lib;
 let
   name = "roon-server";
   cfg = config.services.roon-server;
-in {
+in
+{
   options = {
     services.roon-server = {
       enable = mkEnableOption "Roon Server";
@@ -61,7 +62,7 @@ in {
     };
 
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
     users.users.${cfg.user} =
       if cfg.user == "roon-server" then {
         isSystemUser = true;
@@ -69,6 +70,6 @@ in {
         group = cfg.group;
         extraGroups = [ "audio" ];
       }
-      else {};
+      else { };
   };
 }

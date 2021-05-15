@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost, eigen
-, freeimage, freetype, libGLU, libGL, SDL2, alsaLib, libarchive
-, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, curl
+, boost
+, eigen
+, freeimage
+, freetype
+, libGLU
+, libGL
+, SDL2
+, alsaLib
+, libarchive
+, fetchpatch
+}:
 
 stdenv.mkDerivation {
   pname = "emulationstation";

@@ -27,10 +27,12 @@ buildPythonPackage rec {
 
   # Allow later aniso8601 releases
   # https://github.com/graphql-python/graphene/pull/1331
-  patches = [ (fetchpatch {
-    url = "https://github.com/graphql-python/graphene/commit/26b16f75b125e35eeb2274b7be503ec29f2e8a45.patch";
-    sha256 = "qm96pNOoxPieEy1CFZpa2Mx010pY3QU/vRyuL0qO3Tk=";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/graphql-python/graphene/commit/26b16f75b125e35eeb2274b7be503ec29f2e8a45.patch";
+      sha256 = "qm96pNOoxPieEy1CFZpa2Mx010pY3QU/vRyuL0qO3Tk=";
+    })
+  ];
 
   propagatedBuildInputs = [
     aniso8601

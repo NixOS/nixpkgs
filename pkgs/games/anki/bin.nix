@@ -34,31 +34,34 @@ let
   };
 in
 
-if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-  name = "anki";
+if stdenv.isLinux then
+  buildFHSUserEnv
+    (appimageTools.defaultFhsEnvArgs // {
+      name = "anki";
 
-  runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
-    exec ${unpacked}/bin/anki
-  '';
+      runScript = writeShellScript "anki-wrapper.sh" ''
+        # Wayland support is broken, disable via ENV variable
+        export QT_QPA_PLATFORM=xcb
+        exec ${unpacked}/bin/anki
+      '';
 
-  inherit meta;
-}) else stdenv.mkDerivation {
-  inherit pname version;
+      inherit meta;
+    }) else
+  stdenv.mkDerivation {
+    inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "0vvgiybq1ygq7cly1r4ircgzg2cpprindr7nnlbnrmandjy2kw49";
-  };
+    src = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
+      sha256 = "0vvgiybq1ygq7cly1r4ircgzg2cpprindr7nnlbnrmandjy2kw49";
+    };
 
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
+    nativeBuildInputs = [ undmg ];
+    sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/Applications/
-    cp -a Anki.app $out/Applications/
-  '';
+    installPhase = ''
+      mkdir -p $out/Applications/
+      cp -a Anki.app $out/Applications/
+    '';
 
-  inherit meta;
-}
+    inherit meta;
+  }

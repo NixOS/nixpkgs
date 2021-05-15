@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, libpng
+, cairo
+, freetype
+, json_c
+, fontconfig
+, gtkmm3
+, pangomm
+, glew
+, libGLU
+, xorg
+, pcre
+, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
   pname = "solvespace";
@@ -13,12 +29,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config cmake wrapGAppsHook
+    pkg-config
+    cmake
+    wrapGAppsHook
   ];
   buildInputs = [
-    zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew libGLU
-    xorg.libpthreadstubs xorg.libXdmcp pcre
+    zlib
+    libpng
+    cairo
+    freetype
+    json_c
+    fontconfig
+    gtkmm3
+    pangomm
+    glew
+    libGLU
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    pcre
   ];
 
   preConfigure = ''

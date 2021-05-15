@@ -32,10 +32,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv Lagrange.app $out/Applications
-  '' else null;
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv Lagrange.app $out/Applications
+    '' else null;
 
   passthru = {
     updateScript = nix-update-script {

@@ -1,68 +1,112 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python37, retroarch
-, alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
-, ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
-, buildPackages }:
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchpatch
+, cmake
+, pkg-config
+, makeWrapper
+, python27
+, python37
+, retroarch
+, alsaLib
+, fluidsynth
+, curl
+, hidapi
+, libGLU
+, gettext
+, glib
+, gtk2
+, portaudio
+, SDL
+, SDL_net
+, SDL2
+, SDL2_image
+, libGL
+, ffmpeg_3
+, pcre
+, libevdev
+, libpng
+, libjpeg
+, libzip
+, udev
+, libvorbis
+, snappy
+, which
+, hexdump
+, miniupnpc
+, sfml
+, xorg
+, zlib
+, nasm
+, libpcap
+, boost
+, icu
+, openssl
+, buildPackages
+}:
 
 let
 
-  d2u = lib.replaceChars ["-"] ["_"];
+  d2u = lib.replaceChars [ "-" ] [ "_" ];
 
   mkLibRetroCore = { core, src, description, license, broken ? false, ... }@a:
-  lib.makeOverridable stdenv.mkDerivation ((rec {
+    lib.makeOverridable stdenv.mkDerivation ((rec {
 
-    name = "libretro-${a.core}-${version}";
-    version = "2020-03-06";
-    inherit (a) src;
+      name = "libretro-${a.core}-${version}";
+      version = "2020-03-06";
+      inherit (a) src;
 
-    buildInputs = [ zlib ] ++ a.extraBuildInputs or [];
-    nativeBuildInputs = [ makeWrapper ] ++ a.extraNativeBuildInputs or [];
+      buildInputs = [ zlib ] ++ a.extraBuildInputs or [ ];
+      nativeBuildInputs = [ makeWrapper ] ++ a.extraNativeBuildInputs or [ ];
 
-    makefile = "Makefile.libretro";
-    makeFlags = [
-      "platform=${{
+      makefile = "Makefile.libretro";
+      makeFlags = [
+        "platform=${{
         linux = "unix";
         darwin = "osx";
         windows = "win";
       }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
-      "ARCH=${{
+        "ARCH=${{
         armv7l = "arm";
         armv6l = "arm";
         i686 = "x86";
       }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
-    ] ++ (a.makeFlags or []);
+      ] ++ (a.makeFlags or [ ]);
 
-    installPhase = ''
-      COREDIR="$out/lib/retroarch/cores"
-      mkdir -p $out/bin
-      mkdir -p $COREDIR
-      mv ${d2u a.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR
-      makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-        --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
-    '';
+      installPhase = ''
+        COREDIR="$out/lib/retroarch/cores"
+        mkdir -p $out/bin
+        mkdir -p $COREDIR
+        mv ${d2u a.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR
+        makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
+          --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+      '';
 
-    passthru = {
-      inherit (a) core;
-      libretroCore = "/lib/retroarch/cores";
-    };
+      passthru = {
+        inherit (a) core;
+        libretroCore = "/lib/retroarch/cores";
+      };
 
-    meta = with lib; {
-      inherit (a) description license;
-      broken = a.broken or false;
-      homepage = "https://www.libretro.com/";
-      maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
-      platforms = platforms.unix;
-    };
-  }) // builtins.removeAttrs a ["core" "src" "description" "license" "makeFlags"]);
+      meta = with lib; {
+        inherit (a) description license;
+        broken = a.broken or false;
+        homepage = "https://www.libretro.com/";
+        maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
+        platforms = platforms.unix;
+      };
+    }) // builtins.removeAttrs a [ "core" "src" "description" "license" "makeFlags" ]);
 
   fetchRetro = { repo, rev, sha256 }:
-  fetchgit {
-    inherit rev sha256;
-    url = "https://github.com/libretro/${repo}.git";
-    fetchSubmodules = true;
-  };
+    fetchgit {
+      inherit rev sha256;
+      url = "https://github.com/libretro/${repo}.git";
+      fetchSubmodules = true;
+    };
 
-in with lib.licenses;
+in
+with lib.licenses;
 
 {
 
@@ -137,9 +181,10 @@ in with lib.licenses;
     description = "Port of Mednafen's PC Engine core to libretro";
     license = gpl2;
     makefile = "Makefile";
-  }; in der.override {
-    name = "beetle-pce-fast-${der.version}";
-  };
+  }; in
+    der.override {
+      name = "beetle-pce-fast-${der.version}";
+    };
 
   beetle-pcfx = mkLibRetroCore rec {
     core = "mednafen-pcfx";
@@ -164,9 +209,10 @@ in with lib.licenses;
     license = gpl2;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
-  }); in der.override {
-    name = "beetle-psx-${der.version}";
-  };
+  }); in
+    der.override {
+      name = "beetle-psx-${der.version}";
+    };
 
   beetle-psx-hw = let der = (mkLibRetroCore {
     core = "mednafen-psx-hw";
@@ -180,9 +226,10 @@ in with lib.licenses;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
-  }); in der.override {
-    name = "beetle-psx-hw-${der.version}";
-  };
+  }); in
+    der.override {
+      name = "beetle-psx-hw-${der.version}";
+    };
 
   beetle-saturn = let der = (mkLibRetroCore {
     core = "mednafen-saturn";
@@ -196,9 +243,10 @@ in with lib.licenses;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
-  }); in der.override {
-    name = "beetle-saturn-${der.version}";
-  };
+  }); in
+    der.override {
+      name = "beetle-saturn-${der.version}";
+    };
 
   beetle-saturn-hw = let der = (mkLibRetroCore {
     core = "mednafen-saturn-hw";
@@ -213,9 +261,10 @@ in with lib.licenses;
     makefile = "Makefile";
     makeFlags = [ "HAVE_OPENGL=1" "HAVE_HW=1" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
-  }); in der.override {
-    name = "beetle-saturn-${der.version}";
-  };
+  }); in
+    der.override {
+      name = "beetle-saturn-${der.version}";
+    };
 
   beetle-supergrafx = mkLibRetroCore rec {
     core = "mednafen-supergrafx";
@@ -264,18 +313,19 @@ in with lib.licenses;
     license = gpl2;
   };
 
-  bsnes-mercury = let bname = "bsnes-mercury"; in mkLibRetroCore {
-    core = bname + "-accuracy";
-    src = fetchRetro {
-      repo = bname;
-      rev = "4a382621da58ae6da850f1bb003ace8b5f67968c";
-      sha256 = "0z8psz24nx8497vpk2wya9vs451rzzw915lkw3qiq9bzlzg9r2wv";
+  bsnes-mercury = let bname = "bsnes-mercury"; in
+    mkLibRetroCore {
+      core = bname + "-accuracy";
+      src = fetchRetro {
+        repo = bname;
+        rev = "4a382621da58ae6da850f1bb003ace8b5f67968c";
+        sha256 = "0z8psz24nx8497vpk2wya9vs451rzzw915lkw3qiq9bzlzg9r2wv";
+      };
+      description = "Fork of bsnes with HLE DSP emulation restored";
+      license = gpl3;
+      makefile = "Makefile";
+      postBuild = "cd out";
     };
-    description = "Fork of bsnes with HLE DSP emulation restored";
-    license = gpl3;
-    makefile = "Makefile";
-    postBuild = "cd out";
-  };
 
   citra = mkLibRetroCore rec {
     core = "citra";
@@ -314,7 +364,7 @@ in with lib.licenses;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
     preBuild = "cd desmume/src/frontend/libretro";
     makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-             ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
+      ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
   };
 
   desmume2015 = mkLibRetroCore rec {
@@ -328,7 +378,7 @@ in with lib.licenses;
     license = gpl2;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
     makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-             ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
+      ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
     preBuild = "cd desmume";
   };
 
@@ -344,9 +394,14 @@ in with lib.licenses;
 
     extraNativeBuildInputs = [ cmake curl pkg-config ];
     extraBuildInputs = [
-      libGLU libGL pcre sfml
-      gettext hidapi
-      libevdev udev
+      libGLU
+      libGL
+      pcre
+      sfml
+      gettext
+      hidapi
+      libevdev
+      udev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
     makefile = "Makefile";
     cmakeFlags = [
@@ -809,7 +864,7 @@ in with lib.licenses;
     extraBuildInputs = [ libpng SDL ];
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
     dontAddPrefix = true;
-    configurePlatforms = [];
+    configurePlatforms = [ ];
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 

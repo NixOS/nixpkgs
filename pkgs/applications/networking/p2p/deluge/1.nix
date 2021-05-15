@@ -18,17 +18,25 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
-    libtorrent-rasterbar.dev libtorrent-rasterbar.python setuptools
+    pyGtkGlade
+    twisted
+    Mako
+    chardet
+    pyxdg
+    pyopenssl
+    service-identity
+    libtorrent-rasterbar.dev
+    libtorrent-rasterbar.python
+    setuptools
   ];
 
   nativeBuildInputs = [ intltool ];
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp -R deluge/data/pixmaps $out/share/
-     cp -R deluge/data/icons $out/share/
-     cp deluge/data/share/applications/deluge.desktop $out/share/applications
+    mkdir -p $out/share/applications
+    cp -R deluge/data/pixmaps $out/share/
+    cp -R deluge/data/icons $out/share/
+    cp deluge/data/share/applications/deluge.desktop $out/share/applications
   '';
 
   meta = with lib; {

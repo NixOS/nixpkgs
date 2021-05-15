@@ -1,7 +1,12 @@
 { fetchzip, lib }:
 
 # gitlab example
-{ owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null
+{ owner
+, repo
+, rev
+, domain ? "gitlab.com"
+, name ? "source"
+, group ? null
 , ... # For hash agility
 } @ args:
 
@@ -11,12 +16,13 @@ let
   slug = concatStringsSep "/"
     ((optional (group != null) group) ++ [ owner repo ]);
 
-  escapedSlug = replaceStrings ["." "/"] ["%2E" "%2F"] slug;
-  escapedRev = replaceStrings ["+" "%" "/"] ["%2B" "%25" "%2F"] rev;
+  escapedSlug = replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
+  escapedRev = replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
 in
 
-fetchzip ({
-  inherit name;
-  url = "https://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
-  meta.homepage = "https://${domain}/${slug}/";
-} // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; }
+fetchzip
+  ({
+    inherit name;
+    url = "https://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
+    meta.homepage = "https://${domain}/${slug}/";
+  } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; }

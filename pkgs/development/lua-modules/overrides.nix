@@ -1,11 +1,11 @@
-{ pkgs,  ... }:
+{ pkgs, ... }:
 self: super:
 with super;
 {
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = super.bit32.override({
+  bit32 = super.bit32.override ({
     # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
     # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
     # more
@@ -14,7 +14,7 @@ with super;
     ];
   });
 
-  busted = super.busted.override({
+  busted = super.busted.override ({
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
@@ -25,14 +25,15 @@ with super;
     '';
   });
 
-  cqueues = super.cqueues.override(rec {
+  cqueues = super.cqueues.override (rec {
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
       rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
-    in "${date}-${rev}";
+    in
+    "${date}-${rev}";
     nativeBuildInputs = [
       pkgs.gnum4
     ];
@@ -43,26 +44,27 @@ with super;
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
-    postConfigure = let inherit (super.cqueues) pname; in ''
-      # 'all' target auto-detects correct Lua version, which is fine for us as
-      # we only have the right one available :)
-      sed -Ei ''${rockspecFilename} \
-        -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
-        -e 's|build_target = "[^"]+"|build_target = "all"|' \
-        -e 's|version = "[^"]+"|version = "${version}"|'
-      specDir=$(dirname ''${rockspecFilename})
-      cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
-      rockspecFilename="$specDir/${pname}-${version}.rockspec"
-    '';
+    postConfigure = let inherit (super.cqueues) pname; in
+      ''
+        # 'all' target auto-detects correct Lua version, which is fine for us as
+        # we only have the right one available :)
+        sed -Ei ''${rockspecFilename} \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|build_target = "[^"]+"|build_target = "all"|' \
+          -e 's|version = "[^"]+"|version = "${version}"|'
+        specDir=$(dirname ''${rockspecFilename})
+        cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
+        rockspecFilename="$specDir/${pname}-${version}.rockspec"
+      '';
   });
 
-  cyrussasl = super.cyrussasl.override({
+  cyrussasl = super.cyrussasl.override ({
     externalDeps = [
       { name = "LIBSASL"; dep = pkgs.cyrus_sasl; }
     ];
   });
 
-  http = super.http.override({
+  http = super.http.override ({
     patches = [
       (pkgs.fetchpatch {
         name = "invalid-state-progression.patch";
@@ -71,23 +73,23 @@ with super;
       })
     ];
     /* TODO: separate docs derivation? (pandoc is heavy)
-    nativeBuildInputs = [ pandoc ];
-    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+      nativeBuildInputs = [ pandoc ];
+      makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
   });
 
-  ldbus = super.ldbus.override({
+  ldbus = super.ldbus.override ({
     extraVariables = {
-      DBUS_DIR="${pkgs.dbus.lib}";
-      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+      DBUS_DIR = "${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR = "${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR = "${pkgs.dbus.dev}/include/dbus-1.0";
     };
     buildInputs = with pkgs; [
       dbus
     ];
   });
 
-  ljsyscall = super.ljsyscall.override(rec {
+  ljsyscall = super.ljsyscall.override (rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
     src = pkgs.fetchFromGitHub {
@@ -106,7 +108,7 @@ with super;
     propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
   });
 
-  lgi = super.lgi.override({
+  lgi = super.lgi.override ({
     nativeBuildInputs = [
       pkgs.pkg-config
     ];
@@ -123,35 +125,35 @@ with super;
     ];
   });
 
-  lrexlib-gnu = super.lrexlib-gnu.override({
+  lrexlib-gnu = super.lrexlib-gnu.override ({
     buildInputs = [
       pkgs.gnulib
     ];
   });
 
-  lrexlib-pcre = super.lrexlib-pcre.override({
+  lrexlib-pcre = super.lrexlib-pcre.override ({
     externalDeps = [
       { name = "PCRE"; dep = pkgs.pcre; }
     ];
   });
 
-  lrexlib-posix = super.lrexlib-posix.override({
+  lrexlib-posix = super.lrexlib-posix.override ({
     buildInputs = [
       pkgs.glibc.dev
     ];
   });
 
-  ltermbox = super.ltermbox.override( {
+  ltermbox = super.ltermbox.override ({
     disabled = !isLua51 || isLuaJIT;
   });
 
-  lua-iconv = super.lua-iconv.override({
+  lua-iconv = super.lua-iconv.override ({
     buildInputs = [
       pkgs.libiconv
     ];
   });
 
-  lua-lsp = super.lua-lsp.override({
+  lua-lsp = super.lua-lsp.override ({
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
@@ -159,18 +161,18 @@ with super;
     '';
   });
 
-  lua-zlib = super.lua-zlib.override({
+  lua-zlib = super.lua-zlib.override ({
     buildInputs = [
       pkgs.zlib.dev
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
-  luadbi-mysql = super.luadbi-mysql.override({
+  luadbi-mysql = super.luadbi-mysql.override ({
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR="${pkgs.libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+      MYSQL_INCDIR = "${pkgs.libmysqlclient.dev}/include/mysql";
+      MYSQL_LIBDIR = "${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
       pkgs.mysql.client
@@ -178,19 +180,19 @@ with super;
     ];
   });
 
-  luadbi-postgresql = super.luadbi-postgresql.override({
+  luadbi-postgresql = super.luadbi-postgresql.override ({
     buildInputs = [
       pkgs.postgresql
     ];
   });
 
-  luadbi-sqlite3 = super.luadbi-sqlite3.override({
+  luadbi-sqlite3 = super.luadbi-sqlite3.override ({
     externalDeps = [
       { name = "SQLITE"; dep = pkgs.sqlite; }
     ];
   });
 
-  luaevent = super.luaevent.override({
+  luaevent = super.luaevent.override ({
     propagatedBuildInputs = [
       luasocket
     ];
@@ -200,7 +202,7 @@ with super;
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
-  luaexpat = super.luaexpat.override({
+  luaexpat = super.luaexpat.override ({
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
@@ -211,10 +213,11 @@ with super;
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
   # but are in luajitPackages?
-  luaffi = super.luaffi.override({
+  luaffi = super.luaffi.override ({
     # The packaged .src.rock version is pretty old, and doesn't work with Lua 5.3
     src = pkgs.fetchFromGitHub {
-      owner = "facebook"; repo = "luaffifb";
+      owner = "facebook";
+      repo = "luaffifb";
       rev = "532c757e51c86f546a85730b71c9fef15ffa633d";
       sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
     };
@@ -222,44 +225,44 @@ with super;
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
 
-  luaossl = super.luaossl.override({
+  luaossl = super.luaossl.override ({
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
   });
 
-  luasec = super.luasec.override({
+  luasec = super.luasec.override ({
     externalDeps = [
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
   });
 
-  luasql-sqlite3 = super.luasql-sqlite3.override({
+  luasql-sqlite3 = super.luasql-sqlite3.override ({
     externalDeps = [
       { name = "SQLITE"; dep = pkgs.sqlite; }
     ];
   });
 
-  luasystem = super.luasystem.override({
+  luasystem = super.luasystem.override ({
     buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });
 
-  luazip = super.luazip.override({
+  luazip = super.luazip.override ({
     buildInputs = [
       pkgs.zziplib
     ];
   });
 
-  lua-yajl = super.lua-yajl.override({
+  lua-yajl = super.lua-yajl.override ({
     buildInputs = [
       pkgs.yajl
     ];
   });
 
-  luuid = super.luuid.override(old: {
+  luuid = super.luuid.override (old: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }
     ];
@@ -275,21 +278,22 @@ with super;
     patches = [
       ./luuid.patch
     ];
-    postConfigure = let inherit (super.luuid) version pname; in ''
-      sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
-    '';
+    postConfigure = let inherit (super.luuid) version pname; in
+      ''
+        sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
+      '';
     disabled = luaOlder "5.1" || (luaAtLeast "5.4");
   });
 
-  luv = super.luv.override({
+  luv = super.luv.override ({
     # Use system libuv instead of building local and statically linking
     # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
     # is not possible with luarocks and the current luv rockspec
     # While at it, remove bundled libuv source entirely to be sure.
     # We may wish to drop bundled lua submodules too...
     preBuild = ''
-     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
-     rm -rf deps/libuv
+      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+      rm -rf deps/libuv
     '';
 
     buildInputs = [ pkgs.libuv ];
@@ -311,20 +315,20 @@ with super;
     };
   });
 
-  lyaml = super.lyaml.override({
+  lyaml = super.lyaml.override ({
     buildInputs = [
       pkgs.libyaml
     ];
   });
 
-  mpack = super.mpack.override({
+  mpack = super.mpack.override ({
     buildInputs = [ pkgs.libmpack ];
     # the rockspec doesn't use the makefile so you may need to export more flags
     USE_SYSTEM_LUA = "yes";
     USE_SYSTEM_MPACK = "yes";
   });
 
-  rapidjson = super.rapidjson.override({
+  rapidjson = super.rapidjson.override ({
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   #};
 
   src = fetchmtn {
-    dbs = ["mtn://code.monotone.ca/guitone"];
+    dbs = [ "mtn://code.monotone.ca/guitone" ];
     selector = "3a728afdbd3943b1d86c2a249b1e2ede7bf64c27";
     sha256 = "01vs8m00phs5pl75mjkpdarynfpkqrg0qf4rsn95czi3q6nxiaq5";
     branch = "net.venge.monotone.guitone";

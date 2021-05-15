@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, bison, flex, which, perl
-, sensord ? false, rrdtool ? null
+{ lib
+, stdenv
+, fetchzip
+, bison
+, flex
+, which
+, perl
+, sensord ? false
+, rrdtool ? null
 }:
 
 assert sensord -> rrdtool != null;
@@ -7,7 +14,7 @@ assert sensord -> rrdtool != null;
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
   version = "3.6.0";
-  dashedVersion = lib.replaceStrings ["."] ["-"] version;
+  dashedVersion = lib.replaceStrings [ "." ] [ "-" ] version;
 
   src = fetchzip {
     url = "https://github.com/lm-sensors/lm-sensors/archive/V${dashedVersion}.tar.gz";
@@ -16,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex which ];
   buildInputs = [ perl ]
-   ++ lib.optional sensord rrdtool;
+    ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

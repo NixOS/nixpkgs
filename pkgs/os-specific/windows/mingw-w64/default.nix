@@ -2,7 +2,8 @@
 
 let
   version = "6.0.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
 

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , removeReferencesTo
@@ -34,9 +35,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = if version == "2.2.6"
-             then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "1vpk0b2vq830f8fvf9z8qjsm5k141i7pi8djbinpnr78pi4dj7r6";
+    sha256 =
+      if version == "2.2.6"
+      then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
+      else "1vpk0b2vq830f8fvf9z8qjsm5k141i7pi8djbinpnr78pi4dj7r6";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -54,8 +56,9 @@ stdenv.mkDerivation rec {
     # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
     ++ optionals stdenv.isLinux [ acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
-      configd apple_sdk.frameworks.ApplicationServices
-    ]);
+    configd
+    apple_sdk.frameworks.ApplicationServices
+  ]);
 
   propagatedBuildInputs = [ gmp ];
 
@@ -69,10 +72,10 @@ stdenv.mkDerivation rec {
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
   ] ++ optional (libusb1 != null) "--enable-libusb"
-    ++ optional (gnutls != null) "--enable-ssl"
-    ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper"
-    ++ optional stdenv.isDarwin "--disable-launchd";
+  ++ optional (gnutls != null) "--enable-ssl"
+  ++ optional (avahi != null) "--enable-avahi"
+  ++ optional (libpaper != null) "--enable-libpaper"
+  ++ optional stdenv.isDarwin "--disable-launchd";
 
   # AR has to be an absolute path
   preConfigure = ''
@@ -94,7 +97,8 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags =
-    [ # Don't try to write in /var at build time.
+    [
+      # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
       "LOGDIR=$(TMPDIR)/dummy"
       "REQUESTS=$(TMPDIR)/dummy"
@@ -113,40 +117,40 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-      libexec=${if stdenv.isDarwin then "libexec/cups" else "lib/cups"}
-      moveToOutput $libexec "$out"
+    libexec=${if stdenv.isDarwin then "libexec/cups" else "lib/cups"}
+    moveToOutput $libexec "$out"
 
-      # $lib contains references to $out/share/cups.
-      # CUPS is working without them, so they are not vital.
-      find "$lib" -type f -exec grep -q "$out" {} \; \
-           -printf "removing references from %p\n" \
-           -exec remove-references-to -t "$out" {} +
+    # $lib contains references to $out/share/cups.
+    # CUPS is working without them, so they are not vital.
+    find "$lib" -type f -exec grep -q "$out" {} \; \
+         -printf "removing references from %p\n" \
+         -exec remove-references-to -t "$out" {} +
 
-      # Delete obsolete stuff that conflicts with cups-filters.
-      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    # Delete obsolete stuff that conflicts with cups-filters.
+    rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
-      moveToOutput bin/cups-config "$dev"
-      sed -e "/^cups_serverbin=/s|$lib|$out|" \
-          -i "$dev/bin/cups-config"
+    moveToOutput bin/cups-config "$dev"
+    sed -e "/^cups_serverbin=/s|$lib|$out|" \
+        -i "$dev/bin/cups-config"
 
-      # Rename systemd files provided by CUPS
-      for f in "$out"/lib/systemd/system/*; do
-        substituteInPlace "$f" \
-          --replace "$lib/$libexec" "$out/$libexec" \
-          --replace "org.cups.cupsd" "cups" \
-          --replace "org.cups." ""
+    # Rename systemd files provided by CUPS
+    for f in "$out"/lib/systemd/system/*; do
+      substituteInPlace "$f" \
+        --replace "$lib/$libexec" "$out/$libexec" \
+        --replace "org.cups.cupsd" "cups" \
+        --replace "org.cups." ""
 
-        if [[ "$f" =~ .*cupsd\..* ]]; then
-          mv "$f" "''${f/org\.cups\.cupsd/cups}"
-        else
-          mv "$f" "''${f/org\.cups\./}"
-        fi
-      done
-    '' + optionalString stdenv.isLinux ''
-      # Use xdg-open when on Linux
-      substituteInPlace "$out"/share/applications/cups.desktop \
-        --replace "Exec=htmlview" "Exec=xdg-open"
-    '';
+      if [[ "$f" =~ .*cupsd\..* ]]; then
+        mv "$f" "''${f/org\.cups\.cupsd/cups}"
+      else
+        mv "$f" "''${f/org\.cups\./}"
+      fi
+    done
+  '' + optionalString stdenv.isLinux ''
+    # Use xdg-open when on Linux
+    substituteInPlace "$out"/share/applications/cups.desktop \
+      --replace "Exec=htmlview" "Exec=xdg-open"
+  '';
 
   meta = {
     homepage = "https://cups.org/";

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
-, libdrm, libva, libX11, libXext, libXfixes, wayland
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libdrm
+, libva
+, libX11
+, libXext
+, libXfixes
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +17,9 @@ stdenv.mkDerivation rec {
   version = "2.11.1";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "libva-utils";
-    rev    = version;
+    owner = "intel";
+    repo = "libva-utils";
+    rev = version;
     sha256 = "1arp5r0csahjbbsmdmf0dzpgwcpps9s2hlh68lgg6n5n85zkd4b5";
   };
 

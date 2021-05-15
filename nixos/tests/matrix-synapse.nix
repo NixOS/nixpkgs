@@ -1,9 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... } : let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
 
 
-  runWithOpenSSL = file: cmd: pkgs.runCommand file {
-    buildInputs = [ pkgs.openssl ];
-  } cmd;
+  runWithOpenSSL = file: cmd: pkgs.runCommand file
+    {
+      buildInputs = [ pkgs.openssl ];
+    }
+    cmd;
 
 
   ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
@@ -26,7 +29,8 @@ import ./make-test-python.nix ({ pkgs, ... } : let
       -days 365
   '';
 
-in {
+in
+{
 
   name = "matrix-synapse";
   meta = with pkgs.lib; {

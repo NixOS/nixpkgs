@@ -12,7 +12,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    gnused xorg.xprop rlwrap ncurses
+    gnused
+    xorg.xprop
+    rlwrap
+    ncurses
   ];
 
   patches = [

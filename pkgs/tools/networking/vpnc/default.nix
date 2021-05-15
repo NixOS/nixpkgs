@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ nettools ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [libgcrypt perl openssl ];
+  buildInputs = [ libgcrypt perl openssl ];
 
   preConfigure = ''
     sed -i 's|^#OPENSSL|OPENSSL|g' Makefile

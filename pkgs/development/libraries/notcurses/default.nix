@@ -1,6 +1,14 @@
-{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg, readline,
-  fetchFromGitHub, lib,
-  multimediaSupport ? true
+{ stdenv
+, cmake
+, pkg-config
+, pandoc
+, libunistring
+, ncurses
+, ffmpeg
+, readline
+, fetchFromGitHub
+, lib
+, multimediaSupport ? true
 }:
 let
   version = "2.2.4";
@@ -21,9 +29,9 @@ stdenv.mkDerivation {
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
   src = fetchFromGitHub {
-    owner  = "dankamongmen";
-    repo   = "notcurses";
-    rev    = "v${version}";
+    owner = "dankamongmen";
+    repo = "notcurses";
+    rev = "v${version}";
     sha256 = "sha256-FScs6eQxhRMEyPDSD+50RO1B6DIAo+KnvHP3RO2oAnw=";
   };
 

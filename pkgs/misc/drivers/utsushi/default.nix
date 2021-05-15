@@ -1,6 +1,20 @@
-{ lib, stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost , gtkmm2 , imagemagick, sane-backends
-, tesseract4, udev, libusb1, gnum4 }:
+{ lib
+, stdenv
+, writeScriptBin
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, autoconf-archive
+, libxslt
+, boost
+, gtkmm2
+, imagemagick
+, sane-backends
+, tesseract4
+, udev
+, libusb1
+, gnum4
+}:
 
 
 let
@@ -10,7 +24,8 @@ let
       [ -r .rev ] && cat .rev || true
     fi
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "utsushi";
   version = "unstable-2021-01-01";
 

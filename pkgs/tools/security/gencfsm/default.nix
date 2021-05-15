@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkg-config
-, encfs, libsecret , glib , libgee, gtk3, vala, wrapGAppsHook, xorg
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, encfs
+, libsecret
+, glib
+, libgee
+, gtk3
+, vala
+, wrapGAppsHook
+, xorg
 , gobject-introspection
 }:
 

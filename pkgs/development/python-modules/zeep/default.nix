@@ -15,7 +15,7 @@
 , pytz
 , tornado
 , aiohttp
-# test dependencies
+  # test dependencies
 , freezegun
 , mock
 , pretend
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   };
 
   patches = [
-    ( fetchpatch {
-        url = "https://github.com/mvantellingen/python-zeep/pull/1006/commits/ba7edd6bf2b31023b31e8f17c161e1d6d5af3d29.patch";
-        sha256 = "1j0jd5hmh457im9sbawaqf6pnfy36fhr9wqdim8wk5da9ixr0ajs";
-     })
+    (fetchpatch {
+      url = "https://github.com/mvantellingen/python-zeep/pull/1006/commits/ba7edd6bf2b31023b31e8f17c161e1d6d5af3d29.patch";
+      sha256 = "1j0jd5hmh457im9sbawaqf6pnfy36fhr9wqdim8wk5da9ixr0ajs";
+    })
   ];
 
   propagatedBuildInputs = [

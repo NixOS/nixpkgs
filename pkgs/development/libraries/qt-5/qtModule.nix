@@ -15,10 +15,10 @@ in
 mkDerivation (args // {
   name = "${name}-${version}";
   inherit src;
-  patches = args.patches or patches.${name} or [];
+  patches = args.patches or patches.${name} or [ ];
 
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ perl self.qmake ];
+  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
@@ -57,5 +57,5 @@ mkDerivation (args // {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
-  } // (args.meta or {});
+  } // (args.meta or { });
 })

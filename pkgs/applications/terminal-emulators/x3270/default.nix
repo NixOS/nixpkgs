@@ -1,15 +1,30 @@
-{ lib, stdenv, fetchurl, openssl, m4, expat
-, libX11, libXt, libXaw, libXmu, bdftopcf, mkfontdir
-, fontadobe100dpi, fontadobeutopia100dpi, fontbh100dpi
-, fontbhlucidatypewriter100dpi, fontbitstream100dpi
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, m4
+, expat
+, libX11
+, libXt
+, libXaw
+, libXmu
+, bdftopcf
+, mkfontdir
+, fontadobe100dpi
+, fontadobeutopia100dpi
+, fontbh100dpi
+, fontbhlucidatypewriter100dpi
+, fontbitstream100dpi
 , tcl
-, ncurses }:
+, ncurses
+}:
 
 let
   majorVersion = "4";
   minorVersion = "0";
   versionSuffix = "ga9";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "x3270";
   version = "${majorVersion}.${minorVersion}${versionSuffix}";
 
@@ -27,9 +42,17 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ];
   buildInputs = [
     expat
-    libX11 libXt libXaw libXmu bdftopcf mkfontdir
-    fontadobe100dpi fontadobeutopia100dpi fontbh100dpi
-    fontbhlucidatypewriter100dpi fontbitstream100dpi
+    libX11
+    libXt
+    libXaw
+    libXmu
+    bdftopcf
+    mkfontdir
+    fontadobe100dpi
+    fontadobeutopia100dpi
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbitstream100dpi
     tcl
     ncurses
     expat

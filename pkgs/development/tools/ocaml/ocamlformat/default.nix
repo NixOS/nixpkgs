@@ -3,8 +3,8 @@
 let mkOCamlformat = callPackage ./generic.nix; in
 
 # Older versions should be removed when their usage decrease
-# This script scraps Github looking for OCamlformat's options and versions usage:
-#  https://gist.github.com/Julow/110dc94308d6078225e0665e3eccd433
+  # This script scraps Github looking for OCamlformat's options and versions usage:
+  #  https://gist.github.com/Julow/110dc94308d6078225e0665e3eccd433
 
 rec {
   ocamlformat_0_11_0 = mkOCamlformat {

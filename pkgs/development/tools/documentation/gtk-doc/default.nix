@@ -9,7 +9,8 @@
 , libxslt
 , gettext
 , gnome
-, withDblatex ? false, dblatex
+, withDblatex ? false
+, dblatex
 }:
 
 python3.pkgs.buildPythonApplication rec {

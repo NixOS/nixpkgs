@@ -23,8 +23,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free software for Hantek and compatible (Voltcraft/Darkwire/Protek/Acetech) USB digital signal oscilloscopes";
-    homepage    = "https://github.com/OpenHantek/OpenHantek6022";
-    license     = licenses.gpl3;
+    homepage = "https://github.com/OpenHantek/OpenHantek6022";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ baracoder ];
     platforms = qtbase.meta.platforms;
   };

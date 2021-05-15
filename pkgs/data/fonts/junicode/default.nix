@@ -3,7 +3,8 @@
 let
   pname = "junicode";
   version = "1.002";
-in fetchzip {
+in
+fetchzip {
   name = "${pname}-${version}";
 
   url = "mirror://sourceforge/junicode/junicode/junicode-${version}/junicode-${version}.zip";

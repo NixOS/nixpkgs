@@ -1,12 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, vala, gnome, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
-, glib, librsvg, libxml2, gettext, itstool, libgee, libgnome-games-support
-, meson, ninja, python3
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, vala
+, gnome
+, gtk3
+, wrapGAppsHook
+, appstream-glib
+, desktop-file-utils
+, glib
+, librsvg
+, libxml2
+, gettext
+, itstool
+, libgee
+, libgnome-games-support
+, meson
+, ninja
+, python3
 }:
 
 let
   pname = "gnome-klotski";
   version = "3.38.2";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -15,8 +33,17 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config vala meson ninja python3 wrapGAppsHook
-    gettext itstool libxml2 appstream-glib desktop-file-utils
+    pkg-config
+    vala
+    meson
+    ninja
+    python3
+    wrapGAppsHook
+    gettext
+    itstool
+    libxml2
+    appstream-glib
+    desktop-file-utils
     gnome.adwaita-icon-theme
   ];
   buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support ];

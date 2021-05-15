@@ -8,7 +8,8 @@ let
     setLocal('${cfg.listenAddress}:${toString cfg.listenPort}')
     ${cfg.extraConfig}
   '';
-in {
+in
+{
   options = {
     services.dnsdist = {
       enable = mkEnableOption "dnsdist domain name server";

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -48,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://sheffieldml.github.io/GPy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
-    broken = stdenv.isDarwin;  # See inscrutable error message here: https://github.com/NixOS/nixpkgs/pull/107653#issuecomment-751527547
+    broken = stdenv.isDarwin; # See inscrutable error message here: https://github.com/NixOS/nixpkgs/pull/107653#issuecomment-751527547
   };
 }

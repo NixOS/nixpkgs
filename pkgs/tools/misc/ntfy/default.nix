@@ -16,8 +16,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    requests ruamel_yaml appdirs
-    sleekxmpp dns
+    requests
+    ruamel_yaml
+    appdirs
+    sleekxmpp
+    dns
     emoji
     psutil
     matrix-client

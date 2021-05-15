@@ -1,4 +1,6 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib
+, fetchPypi
+, buildPythonPackage
 , gviz-api
 , protobuf
 , werkzeug

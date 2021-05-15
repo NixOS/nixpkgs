@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, django-picklefield, arrow
-, blessed, django, future }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django-picklefield
+, arrow
+, blessed
+, django
+, future
+}:
 
 buildPythonPackage rec {
   pname = "django-q";
@@ -11,7 +18,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django-picklefield arrow blessed django future
+    django-picklefield
+    arrow
+    blessed
+    django
+    future
   ];
 
   doCheck = false;

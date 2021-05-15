@@ -1,14 +1,35 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper
-, curly, fmt, bos, cmdliner, re, rresult, logs
-, odoc, opam-format, opam-core, opam-state, yojson
-, opam, git, findlib, mercurial, bzip2, gnutar, coreutils
-, alcotest, mdx
+{ lib
+, buildDunePackage
+, fetchurl
+, makeWrapper
+, curly
+, fmt
+, bos
+, cmdliner
+, re
+, rresult
+, logs
+, odoc
+, opam-format
+, opam-core
+, opam-state
+, yojson
+, opam
+, git
+, findlib
+, mercurial
+, bzip2
+, gnutar
+, coreutils
+, alcotest
+, mdx
 }:
 
 # don't include dune as runtime dep, so user can
 # choose between dune and dune_2
 let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
-in buildDunePackage rec {
+in
+buildDunePackage rec {
   pname = "dune-release";
   version = "1.4.0";
 
@@ -20,8 +41,20 @@ in buildDunePackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson ];
+  buildInputs = [
+    curly
+    fmt
+    cmdliner
+    re
+    opam-format
+    opam-state
+    opam-core
+    rresult
+    logs
+    odoc
+    bos
+    yojson
+  ];
   checkInputs = [ alcotest mdx ] ++ runtimeInputs;
   doCheck = true;
 

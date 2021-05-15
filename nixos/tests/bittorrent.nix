@@ -69,7 +69,7 @@ in
       networking.nat.externalInterface = "eth1";
       networking.firewall.enable = true;
       networking.firewall.trustedInterfaces = [ "eth2" ];
-      networking.interfaces.eth0.ipv4.addresses = [];
+      networking.interfaces.eth0.ipv4.addresses = [ ];
       networking.interfaces.eth1.ipv4.addresses = [
         { address = externalRouterAddress; prefixLength = 24; }
       ];
@@ -91,7 +91,7 @@ in
       environment.systemPackages = [ pkgs.miniupnpc ];
 
       virtualisation.vlans = [ 2 ];
-      networking.interfaces.eth0.ipv4.addresses = [];
+      networking.interfaces.eth0.ipv4.addresses = [ ];
       networking.interfaces.eth1.ipv4.addresses = [
         { address = internalClient1Address; prefixLength = 24; }
       ];
@@ -103,7 +103,7 @@ in
       imports = [ transmissionConfig ];
 
       virtualisation.vlans = [ 1 ];
-      networking.interfaces.eth0.ipv4.addresses = [];
+      networking.interfaces.eth0.ipv4.addresses = [ ];
       networking.interfaces.eth1.ipv4.addresses = [
         { address = externalClient2Address; prefixLength = 24; }
       ];
@@ -112,53 +112,53 @@ in
   };
 
   testScript = { nodes, ... }: ''
-      start_all()
+    start_all()
 
-      # Wait for network and miniupnpd.
-      router.wait_for_unit("network-online.target")
-      router.wait_for_unit("miniupnpd")
+    # Wait for network and miniupnpd.
+    router.wait_for_unit("network-online.target")
+    router.wait_for_unit("miniupnpd")
 
-      # Create the torrent.
-      tracker.succeed("mkdir ${download-dir}/data")
-      tracker.succeed(
-          "cp ${file} ${download-dir}/data/test.tar.bz2"
-      )
-      tracker.succeed(
-          "transmission-create ${download-dir}/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
-      )
-      tracker.succeed("chmod 644 /tmp/test.torrent")
+    # Create the torrent.
+    tracker.succeed("mkdir ${download-dir}/data")
+    tracker.succeed(
+        "cp ${file} ${download-dir}/data/test.tar.bz2"
+    )
+    tracker.succeed(
+        "transmission-create ${download-dir}/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
+    )
+    tracker.succeed("chmod 644 /tmp/test.torrent")
 
-      # Start the tracker.  !!! use a less crappy tracker
-      tracker.wait_for_unit("network-online.target")
-      tracker.wait_for_unit("opentracker.service")
-      tracker.wait_for_open_port(6969)
+    # Start the tracker.  !!! use a less crappy tracker
+    tracker.wait_for_unit("network-online.target")
+    tracker.wait_for_unit("opentracker.service")
+    tracker.wait_for_open_port(6969)
 
-      # Start the initial seeder.
-      tracker.succeed(
-          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir ${download-dir}/data"
-      )
+    # Start the initial seeder.
+    tracker.succeed(
+        "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir ${download-dir}/data"
+    )
 
-      # Now we should be able to download from the client behind the NAT.
-      tracker.wait_for_unit("httpd")
-      client1.wait_for_unit("network-online.target")
-      client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
-      client1.wait_for_file("${download-dir}/test.tar.bz2")
-      client1.succeed(
-          "cmp ${download-dir}/test.tar.bz2 ${file}"
-      )
+    # Now we should be able to download from the client behind the NAT.
+    tracker.wait_for_unit("httpd")
+    client1.wait_for_unit("network-online.target")
+    client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
+    client1.wait_for_file("${download-dir}/test.tar.bz2")
+    client1.succeed(
+        "cmp ${download-dir}/test.tar.bz2 ${file}"
+    )
 
-      # Bring down the initial seeder.
-      # tracker.stop_job("transmission")
+    # Bring down the initial seeder.
+    # tracker.stop_job("transmission")
 
-      # Now download from the second client.  This can only succeed if
-      # the first client created a NAT hole in the router.
-      client2.wait_for_unit("network-online.target")
-      client2.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
-      )
-      client2.wait_for_file("${download-dir}/test.tar.bz2")
-      client2.succeed(
-          "cmp ${download-dir}/test.tar.bz2 ${file}"
-      )
-    '';
+    # Now download from the second client.  This can only succeed if
+    # the first client created a NAT hole in the router.
+    client2.wait_for_unit("network-online.target")
+    client2.succeed(
+        "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
+    )
+    client2.wait_for_file("${download-dir}/test.tar.bz2")
+    client2.succeed(
+        "cmp ${download-dir}/test.tar.bz2 ${file}"
+    )
+  '';
 })

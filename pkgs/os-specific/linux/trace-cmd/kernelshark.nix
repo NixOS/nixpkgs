@@ -4,8 +4,8 @@ mkDerivation rec {
   version = "1.2";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "kernelshark-v${version}";
+    url = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    rev = "kernelshark-v${version}";
     sha256 = "0wzzm2imk9n94v96v6sbvbff6j47lz4qj0snhiyv3nj3slg0anvh";
   };
 
@@ -37,9 +37,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
-    homepage    = "https://kernelshark.org/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://kernelshark.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ basvandijk ];
   };
 }

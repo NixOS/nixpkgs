@@ -1,16 +1,17 @@
-{lib, stdenv, fetchurl, ocaml, perl}:
+{ lib, stdenv, fetchurl, ocaml, perl }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="ekrhyper";
-    version="1_4_21022014";
-    name="${baseName}-${version}";
-    hash="14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
-    url="http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/ekrh_1_4_21022014.tar.gz";
-    sha256="14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
-  };
+    rec {
+      baseName = "ekrhyper";
+      version = "1_4_21022014";
+      name = "${baseName}-${version}";
+      hash = "14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
+      url = "http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/ekrh_1_4_21022014.tar.gz";
+      sha256 = "14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
+    };
   buildInputs = [
-    ocaml perl
+    ocaml
+    perl
   ];
 in
 stdenv.mkDerivation {
@@ -25,8 +26,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Automated first-order theorem prover";
-    license = lib.licenses.gpl2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

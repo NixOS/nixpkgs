@@ -1,7 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
-, buildAndroidndk, androidndk, targetAndroidndkPkgs
+, runCommand
+, wrapBintoolsWith
+, wrapCCWith
+, buildAndroidndk
+, androidndk
+, targetAndroidndkPkgs
 }:
 
 let
@@ -53,13 +58,14 @@ in
 
 rec {
   # Misc tools
-  binaries = runCommand "ndk-toolchain-binutils" {
-    pname = "ndk-toolchain-binutils";
-    inherit (androidndk) version;
-    isClang = true; # clang based cc, but bintools ld
-    nativeBuildInputs = [ makeWrapper ];
-    propagatedBuildInputs = [ androidndk ];
-  } ''
+  binaries = runCommand "ndk-toolchain-binutils"
+    {
+      pname = "ndk-toolchain-binutils";
+      inherit (androidndk) version;
+      isClang = true; # clang based cc, but bintools ld
+      nativeBuildInputs = [ makeWrapper ];
+      propagatedBuildInputs = [ androidndk ];
+    } ''
     mkdir -p $out/bin
 
     # llvm toolchain
@@ -103,7 +109,7 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries = runCommand "bionic-prebuilt" {} ''
+  libraries = runCommand "bionic-prebuilt" { } ''
     mkdir -p $out
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
     chmod +w $out/include

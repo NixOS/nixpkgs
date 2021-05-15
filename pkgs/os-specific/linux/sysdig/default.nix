@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles
-, luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kernel
+, installShellFiles
+, luajit
+, ncurses
+, perl
+, jsoncpp
+, libb64
+, openssl
+, curl
+, jq
+, gcc
+, elfutils
+, tbb
+, protobuf
+, grpc
 }:
 
 with lib;
@@ -16,7 +33,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl installShellFiles ];
   buildInputs = [
-    luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb protobuf grpc
+    luajit
+    ncurses
+    jsoncpp
+    libb64
+    openssl
+    curl
+    jq
+    gcc
+    elfutils
+    tbb
+    protobuf
+    grpc
   ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -64,8 +92,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = with licenses; [ asl20 gpl2 mit ];
-    maintainers = [maintainers.raskin];
-    platforms = ["x86_64-linux"] ++ platforms.darwin;
+    maintainers = [ maintainers.raskin ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     broken = kernel != null && versionOlder kernel.version "4.14";
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";

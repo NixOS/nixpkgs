@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, addOpenGLRunpath
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, addOpenGLRunpath
 , cudatoolkit
 , cutensor_cudatoolkit
 }:

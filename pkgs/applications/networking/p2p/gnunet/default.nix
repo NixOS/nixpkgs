@@ -1,7 +1,30 @@
-{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
-, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson, libsodium }:
+{ lib
+, stdenv
+, fetchurl
+, adns
+, curl
+, gettext
+, gmp
+, gnutls
+, libextractor
+, libgcrypt
+, libgnurl
+, libidn
+, libmicrohttpd
+, libtool
+, libunistring
+, makeWrapper
+, ncurses
+, pkg-config
+, libxml2
+, sqlite
+, zlib
+, libpulseaudio
+, libopus
+, libogg
+, jansson
+, libsodium
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
@@ -16,9 +39,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
-    adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
-    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
-    sqlite zlib libpulseaudio libopus libogg jansson
+    adns
+    curl
+    gmp
+    gnutls
+    libextractor
+    libgcrypt
+    libgnurl
+    libidn
+    libmicrohttpd
+    libunistring
+    libxml2
+    ncurses
+    gettext
+    libsodium
+    sqlite
+    zlib
+    libpulseaudio
+    libopus
+    libogg
+    jansson
   ];
 
   preConfigure = ''

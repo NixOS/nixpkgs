@@ -8,6 +8,6 @@ args@{ repository ? "library", imageName, tag, ... }:
 
 generic-fetcher ({
   fetcher = "hocker-config";
-  name    = "${repository}_${imageName}_${tag}-config.json";
-  tag     = "unused";
+  name = "${repository}_${imageName}_${tag}-config.json";
+  tag = "unused";
 } // args)

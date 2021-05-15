@@ -1,8 +1,21 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kdelibs4support, libgcrypt, libktorrent, qca-qt5, qgpgme,
-  kcmutils, kcompletion, kcoreaddons, knotifyconfig, kparts, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kdelibs4support
+, libgcrypt
+, libktorrent
+, qca-qt5
+, qgpgme
+, kcmutils
+, kcompletion
+, kcoreaddons
+, knotifyconfig
+, kparts
+, kwallet
+, kwidgetsaddons
+, kwindowsystem
+, kxmlgui
 }:
 
 mkDerivation {
@@ -11,8 +24,20 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   buildInputs = [
-    kdelibs4support libgcrypt libktorrent qca-qt5 qgpgme
-    kcmutils kcompletion kcoreaddons knotifyconfig kparts kwallet kwidgetsaddons kwindowsystem kxmlgui
+    kdelibs4support
+    libgcrypt
+    libktorrent
+    qca-qt5
+    qgpgme
+    kcmutils
+    kcompletion
+    kcoreaddons
+    knotifyconfig
+    kparts
+    kwallet
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
   ];
 
   meta = with lib; {

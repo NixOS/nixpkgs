@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib, libX11, libpng}:
+{ lib, stdenv, fetchurl, zlib, libX11, libpng }:
 
 stdenv.mkDerivation {
   name = "ploticus-2.42";

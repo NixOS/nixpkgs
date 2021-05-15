@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut
-, libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+{ lib
+, stdenv
+, fetchurl
+, ocamlPackages
+, libGLU
+, libGL
+, freeglut
+, libmysqlclient
+, mpfr
+, gmp
+, libtiff
+, libjpeg
+, libpng
+, giflib
 }:
 
 stdenv.mkDerivation {
@@ -10,10 +22,25 @@ stdenv.mkDerivation {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ freeglut libGLU libGL libmysqlclient mpfr gmp
-    libtiff libjpeg libpng giflib ]
+  buildInputs = [
+    freeglut
+    libGLU
+    libGL
+    libmysqlclient
+    mpfr
+    gmp
+    libtiff
+    libjpeg
+    libpng
+    giflib
+  ]
   ++ (with ocamlPackages; [
-    ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl
+    ocaml
+    findlib
+    ocaml_mysql
+    lablgl
+    camlimages_4_0
+    mlgmpidl
   ]);
 
   installPhase = ''

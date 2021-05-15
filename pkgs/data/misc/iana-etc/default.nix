@@ -2,7 +2,8 @@
 
 let
   version = "20210225";
-in fetchzip {
+in
+fetchzip {
   name = "iana-etc-${version}";
   url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
   sha256 = "sha256-NVvZG3EJEYOXFDTBXD5m9sg/8msyMiBMkiZr+ZxWZ/g=";

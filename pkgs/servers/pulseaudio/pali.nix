@@ -52,7 +52,7 @@
 , # Whether to build only the library.
   libOnly ? false
 
-# Building from Git source
+  # Building from Git source
 , fromGit ? true
 
 , CoreServices
@@ -160,13 +160,13 @@ stdenv.mkDerivation rec {
     "-Dsystemd=disabled"
     "-Dudev=disabled"
   ] ++ lib.optional libOnly "-Dwebrtc-aec=disabled"
-    ++ lib.optional (!x11Support) "-Dx11=disabled"
-    ++ lib.optional (!bluetoothSupport) "-Dbluez5=false"
-    ++ lib.optional (!airtunesSupport) "-Dopenssl=disabled"
-    ++ lib.optional (!jackaudioSupport) "-Djack=disabled"
-    ++ lib.optional (!remoteControlSupport) "-Dlirc=disabled"
-    ++ lib.optional (!zeroconfSupport) "-Davahi=disabled"
-    ++ lib.optional (!doCheck) "-Dtests=false";
+  ++ lib.optional (!x11Support) "-Dx11=disabled"
+  ++ lib.optional (!bluetoothSupport) "-Dbluez5=false"
+  ++ lib.optional (!airtunesSupport) "-Dopenssl=disabled"
+  ++ lib.optional (!jackaudioSupport) "-Djack=disabled"
+  ++ lib.optional (!remoteControlSupport) "-Dlirc=disabled"
+  ++ lib.optional (!zeroconfSupport) "-Davahi=disabled"
+  ++ lib.optional (!doCheck) "-Dtests=false";
 
   # To create ~/.config/pulse
   preCheck = ''

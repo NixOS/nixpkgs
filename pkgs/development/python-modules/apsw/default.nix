@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
-, sqlite, isPyPy }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, sqlite
+, isPyPy
+}:
 
 buildPythonPackage rec {
   pname = "apsw";

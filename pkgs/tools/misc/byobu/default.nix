@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, ncurses, python3, perl, textual-window-manager
-, gettext, vim, bc, screen }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, ncurses
+, python3
+, perl
+, textual-window-manager
+, gettext
+, vim
+, bc
+, screen
+}:
 
 let
   pythonEnv = python3.withPackages (ps: with ps; [ snack ]);

@@ -5,7 +5,7 @@ collectd.overrideAttrs (oldAttrs: {
   name = "libcollectdclient-${collectd.version}";
   buildInputs = [ ];
 
-  configureFlags = (oldAttrs.configureFlags or []) ++ [
+  configureFlags = (oldAttrs.configureFlags or [ ]) ++ [
     "--disable-daemon"
     "--disable-all-plugins"
   ];

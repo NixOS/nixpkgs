@@ -121,13 +121,13 @@ in
           mysql = 3306;
         };
       in
-        lib.mkOption {
-          type = lib.types.port;
-          default = dbPorts.${cfg.databaseType};
-          description = ''
-            Port of the database to connect to.
-          '';
-        };
+      lib.mkOption {
+        type = lib.types.port;
+        default = dbPorts.${cfg.databaseType};
+        description = ''
+          Port of the database to connect to.
+        '';
+      };
 
     databaseUseSSL = lib.mkOption {
       type = lib.types.bool;
@@ -265,27 +265,28 @@ in
       createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.databaseType == "postgresql";
       createLocalMySQL = databaseActuallyCreateLocally && cfg.databaseType == "mysql";
 
-      mySqlCaKeystore = pkgs.runCommandNoCC "mysql-ca-keystore" {} ''
+      mySqlCaKeystore = pkgs.runCommandNoCC "mysql-ca-keystore" { } ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.databaseCaCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
-      keycloakConfig' = builtins.foldl' lib.recursiveUpdate {
-        "interface=public".inet-address = cfg.bindAddress;
-        "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
-        "subsystem=keycloak-server"."spi=hostname" = {
-          "provider=default" = {
-            enabled = true;
-            properties = {
-              inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
+      keycloakConfig' = builtins.foldl' lib.recursiveUpdate
+        {
+          "interface=public".inet-address = cfg.bindAddress;
+          "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
+          "subsystem=keycloak-server"."spi=hostname" = {
+            "provider=default" = {
+              enabled = true;
+              properties = {
+                inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
+              };
             };
           };
-        };
-        "subsystem=datasources"."data-source=KeycloakDS" = {
-          max-pool-size = "20";
-          user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.databaseUsername;
-          password = "@db-password@";
-        };
-      } [
+          "subsystem=datasources"."data-source=KeycloakDS" = {
+            max-pool-size = "20";
+            user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.databaseUsername;
+            password = "@db-password@";
+          };
+        } [
         (lib.optionalAttrs (cfg.databaseType == "postgresql") {
           "subsystem=datasources" = {
             "jdbc-driver=postgresql" = {
@@ -423,39 +424,40 @@ in
                 let
                   match = (builtins.match ''"\$\{.*}"'' string);
                 in
-                  if match != null then
-                    "expression " + string
-                  else
-                    string;
+                if match != null then
+                  "expression " + string
+                else
+                  string;
 
               writeAttribute = attribute: value:
                 let
                   type = builtins.typeOf value;
                 in
-                  if type == "set" then
-                    let
-                      names = builtins.attrNames value;
-                    in
-                      builtins.foldl' (text: name: text + (writeAttribute "${attribute}.${name}" value.${name})) "" names
-                  else if value == null then ''
-                    if (outcome == success) of ${path}:read-attribute(name="${attribute}")
-                        ${path}:undefine-attribute(name="${attribute}")
+                if type == "set" then
+                  let
+                    names = builtins.attrNames value;
+                  in
+                  builtins.foldl' (text: name: text + (writeAttribute "${attribute}.${name}" value.${name})) "" names
+                else if value == null then ''
+                  if (outcome == success) of ${path}:read-attribute(name="${attribute}")
+                      ${path}:undefine-attribute(name="${attribute}")
+                  end-if
+                ''
+                else if builtins.elem type [ "string" "path" "bool" ] then
+                  let
+                    value' = if type == "bool" then lib.boolToString value else ''"${value}"'';
+                  in
+                  ''
+                    if (result != ${prefixExpression value'}) of ${path}:read-attribute(name="${attribute}")
+                      ${path}:write-attribute(name=${attribute}, value=${value'})
                     end-if
                   ''
-                  else if builtins.elem type [ "string" "path" "bool" ] then
-                    let
-                      value' = if type == "bool" then lib.boolToString value else ''"${value}"'';
-                    in ''
-                      if (result != ${prefixExpression value'}) of ${path}:read-attribute(name="${attribute}")
-                        ${path}:write-attribute(name=${attribute}, value=${value'})
-                      end-if
-                    ''
-                  else throw "Unsupported type '${type}' for path '${path}'!";
+                else throw "Unsupported type '${type}' for path '${path}'!";
             in
-              lib.concatStrings
-                (lib.mapAttrsToList
-                  (attribute: value: (writeAttribute attribute value))
-                  set);
+            lib.concatStrings
+              (lib.mapAttrsToList
+                (attribute: value: (writeAttribute attribute value))
+                set);
 
 
           /* Produces an argument list for the JBoss `add()` function,
@@ -480,16 +482,16 @@ in
                 let
                   type = builtins.typeOf value;
                 in
-                  if type == "set" then
-                    "${attribute} = { " + (makeArgList value) + " }"
-                  else if builtins.elem type [ "string" "path" "bool" ] then
-                    "${attribute} = ${if type == "bool" then lib.boolToString value else ''"${value}"''}"
-                  else if value == null then
-                    ""
-                  else
-                    throw "Unsupported type '${type}' for attribute '${attribute}'!";
+                if type == "set" then
+                  "${attribute} = { " + (makeArgList value) + " }"
+                else if builtins.elem type [ "string" "path" "bool" ] then
+                  "${attribute} = ${if type == "bool" then lib.boolToString value else ''"${value}"''}"
+                else if value == null then
+                  ""
+                else
+                  throw "Unsupported type '${type}' for attribute '${attribute}'!";
             in
-              lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
+            lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
 
 
           /* Recurses into the `attrs` attrset, beginning at the path
@@ -505,39 +507,40 @@ in
                 let
                   value = lib.getAttrFromPath (path ++ [ name ]) attrs;
                 in
-                  if (builtins.match ".*([=]).*" name) == [ "=" ] then
-                    if builtins.isAttrs value || value == null then
-                      true
-                    else
-                      throw "Parsing path '${lib.concatStringsSep "." (path ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                if (builtins.match ".*([=]).*" name) == [ "=" ] then
+                  if builtins.isAttrs value || value == null then
+                    true
                   else
-                    false;
+                    throw "Parsing path '${lib.concatStringsSep "." (path ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                else
+                  false;
               jbossPath = "/" + (lib.concatStringsSep "/" path);
               nodeValue = lib.getAttrFromPath path attrs;
-              children = if !builtins.isAttrs nodeValue then {} else nodeValue;
+              children = if !builtins.isAttrs nodeValue then { } else nodeValue;
               subPaths = builtins.filter isPath (builtins.attrNames children);
               jbossAttrs = lib.filterAttrs (name: _: !(isPath name)) children;
             in
-              state // {
-                text = state.text + (
-                  if nodeValue != null then ''
-                    if (outcome != success) of ${jbossPath}:read-resource()
-                        ${jbossPath}:add(${makeArgList jbossAttrs})
-                    end-if
-                  '' + (writeAttributes jbossPath jbossAttrs)
-                  else ''
-                    if (outcome == success) of ${jbossPath}:read-resource()
-                        ${jbossPath}:remove()
-                    end-if
-                  '') + (builtins.foldl' recurse { text = ""; inherit path; } subPaths).text;
-              };
+            state // {
+              text = state.text + (
+                if nodeValue != null then ''
+                  if (outcome != success) of ${jbossPath}:read-resource()
+                      ${jbossPath}:add(${makeArgList jbossAttrs})
+                  end-if
+                '' + (writeAttributes jbossPath jbossAttrs)
+                else ''
+                  if (outcome == success) of ${jbossPath}:read-resource()
+                      ${jbossPath}:remove()
+                  end-if
+                ''
+              ) + (builtins.foldl' recurse { text = ""; inherit path; } subPaths).text;
+            };
         in
-          (recurse { text = ""; path = []; } null).text;
+        (recurse { text = ""; path = [ ]; } null).text;
 
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {} ''
+      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" { } ''
         export JBOSS_BASE_DIR="$(pwd -P)";
         export JBOSS_MODULEPATH="${cfg.package}/modules";
         export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
@@ -566,80 +569,84 @@ in
         cp configuration/standalone.xml $out
       '';
     in
-      lib.mkIf cfg.enable {
+    lib.mkIf cfg.enable {
 
-        assertions = [
-          {
-            assertion = (cfg.databaseUseSSL && cfg.databaseType == "postgresql") -> (cfg.databaseCaCert != null);
-            message = "A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL";
-          }
-        ];
+      assertions = [
+        {
+          assertion = (cfg.databaseUseSSL && cfg.databaseType == "postgresql") -> (cfg.databaseCaCert != null);
+          message = "A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL";
+        }
+      ];
 
-        environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ];
 
-        systemd.services.keycloakPostgreSQLInit = lib.mkIf createLocalPostgreSQL {
-          after = [ "postgresql.service" ];
-          before = [ "keycloak.service" ];
-          bindsTo = [ "postgresql.service" ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            User = "postgres";
-            Group = "postgres";
-          };
-          script = ''
-            set -eu
-
-            PSQL=${config.services.postgresql.package}/bin/psql
-
-            db_password="$(<'${cfg.databasePasswordFile}')"
-            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tAc "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB"
-            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
-          '';
+      systemd.services.keycloakPostgreSQLInit = lib.mkIf createLocalPostgreSQL {
+        after = [ "postgresql.service" ];
+        before = [ "keycloak.service" ];
+        bindsTo = [ "postgresql.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "postgres";
+          Group = "postgres";
         };
+        script = ''
+          set -eu
 
-        systemd.services.keycloakMySQLInit = lib.mkIf createLocalMySQL {
-          after = [ "mysql.service" ];
-          before = [ "keycloak.service" ];
-          bindsTo = [ "mysql.service" ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            User = config.services.mysql.user;
-            Group = config.services.mysql.group;
-          };
-          script = ''
-            set -eu
+          PSQL=${config.services.postgresql.package}/bin/psql
 
-            db_password="$(<'${cfg.databasePasswordFile}')"
-            ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
-              echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-              echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
-            ) | ${config.services.mysql.package}/bin/mysql -N
-          '';
+          db_password="$(<'${cfg.databasePasswordFile}')"
+          $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tAc "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB"
+          $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
+        '';
+      };
+
+      systemd.services.keycloakMySQLInit = lib.mkIf createLocalMySQL {
+        after = [ "mysql.service" ];
+        before = [ "keycloak.service" ];
+        bindsTo = [ "mysql.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = config.services.mysql.user;
+          Group = config.services.mysql.group;
         };
+        script = ''
+          set -eu
 
-        systemd.services.keycloak =
-          let
-            databaseServices =
-              if createLocalPostgreSQL then [
-                "keycloakPostgreSQLInit.service" "postgresql.service"
-              ]
-              else if createLocalMySQL then [
-                "keycloakMySQLInit.service" "mysql.service"
-              ]
-              else [ ];
-          in {
-            after = databaseServices;
-            bindsTo = databaseServices;
-            wantedBy = [ "multi-user.target" ];
-            environment = {
-              JBOSS_LOG_DIR = "/var/log/keycloak";
-              JBOSS_BASE_DIR = "/run/keycloak";
-              JBOSS_MODULEPATH = "${cfg.package}/modules";
-            };
-            serviceConfig = {
-              ExecStartPre = let
+          db_password="$(<'${cfg.databasePasswordFile}')"
+          ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
+            echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+            echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
+      };
+
+      systemd.services.keycloak =
+        let
+          databaseServices =
+            if createLocalPostgreSQL then [
+              "keycloakPostgreSQLInit.service"
+              "postgresql.service"
+            ]
+            else if createLocalMySQL then [
+              "keycloakMySQLInit.service"
+              "mysql.service"
+            ]
+            else [ ];
+        in
+        {
+          after = databaseServices;
+          bindsTo = databaseServices;
+          wantedBy = [ "multi-user.target" ];
+          environment = {
+            JBOSS_LOG_DIR = "/var/log/keycloak";
+            JBOSS_BASE_DIR = "/run/keycloak";
+            JBOSS_MODULEPATH = "${cfg.package}/modules";
+          };
+          serviceConfig = {
+            ExecStartPre =
+              let
                 startPreFullPrivileges = ''
                   set -eu
 
@@ -666,33 +673,34 @@ in
                                                      -CAfile allcerts.pem -passout pass:notsosecretpassword
                   popd
                 '';
-              in [
+              in
+              [
                 "+${pkgs.writeShellScript "keycloak-start-pre-full-privileges" startPreFullPrivileges}"
                 "${pkgs.writeShellScript "keycloak-start-pre" startPre}"
               ];
-              ExecStart = "${cfg.package}/bin/standalone.sh";
-              User = "keycloak";
-              Group = "keycloak";
-              DynamicUser = true;
-              RuntimeDirectory = map (p: "keycloak/" + p) [
-                "secrets"
-                "configuration"
-                "deployments"
-                "data"
-                "ssl"
-                "log"
-                "tmp"
-              ];
-              RuntimeDirectoryMode = 0700;
-              LogsDirectory = "keycloak";
-              AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-            };
+            ExecStart = "${cfg.package}/bin/standalone.sh";
+            User = "keycloak";
+            Group = "keycloak";
+            DynamicUser = true;
+            RuntimeDirectory = map (p: "keycloak/" + p) [
+              "secrets"
+              "configuration"
+              "deployments"
+              "data"
+              "ssl"
+              "log"
+              "tmp"
+            ];
+            RuntimeDirectoryMode = 0700;
+            LogsDirectory = "keycloak";
+            AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           };
+        };
 
-        services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
-        services.mysql.enable = lib.mkDefault createLocalMySQL;
-        services.mysql.package = lib.mkIf createLocalMySQL pkgs.mysql;
-      };
+      services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
+      services.mysql.enable = lib.mkDefault createLocalMySQL;
+      services.mysql.package = lib.mkIf createLocalMySQL pkgs.mysql;
+    };
 
   meta.doc = ./keycloak.xml;
 }

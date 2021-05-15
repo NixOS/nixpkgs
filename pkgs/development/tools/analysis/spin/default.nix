@@ -1,14 +1,24 @@
-{ stdenv, lib, fetchurl, makeWrapper, bison, gcc
-, withISpin ? true, tk, swarm, graphviz }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, bison
+, gcc
+, withISpin ? true
+, tk
+, swarm
+, graphviz
+}:
 
 let
   binPath = lib.makeBinPath [ gcc ];
   ibinPath = lib.makeBinPath [ gcc tk swarm graphviz tk ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "spin";
   version = "6.4.9";
-  url-version = lib.replaceChars ["."] [""] version;
+  url-version = lib.replaceChars [ "." ] [ "" ] version;
 
   src = fetchurl {
     # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.

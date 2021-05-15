@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, cached-property
+, frozendict
+, pystache
+, pyyaml
+, pytest
+, pytestrunner
 }:
 
 buildPythonPackage rec {

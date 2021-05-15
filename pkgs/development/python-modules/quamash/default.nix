@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   checkPhase = ''
-     pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
+    pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
   '';
 
   meta = with lib; {

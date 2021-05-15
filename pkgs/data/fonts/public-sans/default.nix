@@ -2,7 +2,8 @@
 
 let
   version = "1.008";
-in fetchzip {
+in
+fetchzip {
   name = "public-sans-${version}";
 
   url = "https://github.com/uswds/public-sans/releases/download/v${version}/public-sans-v${version}.zip";

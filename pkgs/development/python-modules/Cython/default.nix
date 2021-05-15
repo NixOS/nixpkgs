@@ -12,7 +12,7 @@
 }:
 
 let
-  excludedTests = []
+  excludedTests = [ ]
     ++ [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
@@ -24,7 +24,8 @@ let
     ++ lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
   ;
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "Cython";
   version = "0.29.22";
 
@@ -37,7 +38,8 @@ in buildPythonPackage rec {
     pkg-config
   ];
   checkInputs = [
-    numpy ncurses
+    numpy
+    ncurses
   ];
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
@@ -72,7 +74,7 @@ in buildPythonPackage rec {
   # Temporary solution
   doCheck = false;
 
-#   doCheck = !stdenv.isDarwin;
+  #   doCheck = !stdenv.isDarwin;
 
 
   meta = {

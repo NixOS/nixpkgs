@@ -1,4 +1,6 @@
-{ mkDerivation, lib, fetchurl
+{ mkDerivation
+, lib
+, fetchurl
 , cmake
 , qtbase
 }:

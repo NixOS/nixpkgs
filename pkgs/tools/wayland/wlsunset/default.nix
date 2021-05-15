@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, ninja, wayland, scdoc
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, pkg-config
+, ninja
+, wayland
+, scdoc
 , wayland-protocols
 }:
 

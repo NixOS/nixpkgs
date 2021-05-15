@@ -15,7 +15,7 @@ let
     };
   };
 in
-  runCommand "test" {} ''
-    ${hello-logging}/bin/hello &>/dev/stdout | grep "Hello, world!"
-    touch $out
-  ''
+runCommand "test" { } ''
+  ${hello-logging}/bin/hello &>/dev/stdout | grep "Hello, world!"
+  touch $out
+''

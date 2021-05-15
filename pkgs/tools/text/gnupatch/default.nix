@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, ed, autoreconfHook
+{ lib
+, stdenv
+, fetchurl
+, ed
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
-  checkInputs = [ed];
+  checkInputs = [ ed ];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

@@ -6,9 +6,9 @@ buildGoPackage rec {
   goPackagePath = name;
 
   src = fetchFromGitHub {
-    owner  = "FiloSottile";
-    repo   = "captive-browser";
-    rev    = "08450562e58bf9564ee98ad64ef7b2800e53338f";
+    owner = "FiloSottile";
+    repo = "captive-browser";
+    rev = "08450562e58bf9564ee98ad64ef7b2800e53338f";
     sha256 = "17icgjg7h0xm8g4yy38qjhsvlz9pmlmj9kydz01y2nyl0v02i648";
   };
 

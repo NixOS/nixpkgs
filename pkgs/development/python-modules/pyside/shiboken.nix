@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonPackage
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
 , cmake
 , isPy35
 , isPy36

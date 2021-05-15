@@ -5,10 +5,10 @@
 , fetchpatch
 , extra-cmake-modules
 
-# common deps
+  # common deps
 , karchive
 
-# client deps
+  # client deps
 , qtbase
 , qtkeychain
 , qtmultimedia
@@ -16,20 +16,20 @@
 , qttools
 , libsecret
 
-# optional client deps
+  # optional client deps
 , giflib
 , kdnssd
 , libvpx
 , miniupnpc
 , qtx11extras # kis
 
-# optional server deps
+  # optional server deps
 , libmicrohttpd
 , libsodium
 , withSystemd ? stdenv.isLinux
 , systemd ? null
 
-# options
+  # options
 , buildClient ? true
 , buildServer ? true
 , buildServerGui ? true # if false builds a headless server
@@ -67,7 +67,8 @@ let
   boolToFlag = bool:
     if bool then "ON" else "OFF";
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "drawpile";
   version = "2.1.17";
 
@@ -83,7 +84,8 @@ in mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/drawpile/Drawpile/commit/ed1a75deb113da2d1df91a28f557509c4897130e.diff";
       sha256 = "sha256-54wabH5F3Hf+6vv9rpCwCRdhjSaUFtuF/mE1/U+CpOA=";
-      name = "mhdfix.patch"; })
+      name = "mhdfix.patch";
+    })
   ];
 
   nativeBuildInputs = [ extra-cmake-modules ];
@@ -91,9 +93,9 @@ in mkDerivation rec {
   buildInputs = [
     karchive
   ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  ++ optionals buildClient clientDeps
+  ++ optionals buildServer serverDeps
+  ++ optionals enableKisTablet kisDeps;
 
   cmakeFlags = [
     "-Wno-dev"

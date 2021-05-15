@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, betamax, requests_toolbelt }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, betamax
+, requests_toolbelt
+}:
 
 buildPythonPackage rec {
   pname = "betamax-matchers";

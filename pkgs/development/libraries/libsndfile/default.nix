@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
-, Carbon, AudioToolbox
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autogen
+, flac
+, libogg
+, libopus
+, libvorbis
+, pkg-config
+, python3
+, Carbon
+, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
@@ -33,10 +44,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
-    homepage    = "https://libsndfile.github.io/libsndfile/";
-    license     = licenses.lgpl2Plus;
+    homepage = "https://libsndfile.github.io/libsndfile/";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

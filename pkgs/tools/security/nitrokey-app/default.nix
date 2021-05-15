@@ -1,5 +1,16 @@
-{ lib, stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkg-config
-, qtbase, qttranslations, qtsvg, wrapQtAppsHook }:
+{ lib
+, stdenv
+, bash-completion
+, cmake
+, fetchFromGitHub
+, hidapi
+, libusb1
+, pkg-config
+, qtbase
+, qttranslations
+, qtsvg
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "nitrokey-app";
@@ -29,15 +40,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = with lib; {
-    description      = "Provides extra functionality for the Nitrokey Pro and Storage";
-    longDescription  = ''
-       The nitrokey-app provides a QT system tray widget with wich you can
-       access the extra functionality of a Nitrokey Storage or Nitrokey Pro.
-       See https://www.nitrokey.com/ for more information.
+    description = "Provides extra functionality for the Nitrokey Pro and Storage";
+    longDescription = ''
+      The nitrokey-app provides a QT system tray widget with wich you can
+      access the extra functionality of a Nitrokey Storage or Nitrokey Pro.
+      See https://www.nitrokey.com/ for more information.
     '';
-    homepage         = "https://github.com/Nitrokey/nitrokey-app";
+    homepage = "https://github.com/Nitrokey/nitrokey-app";
     repositories.git = "https://github.com/Nitrokey/nitrokey-app.git";
-    license          = licenses.gpl3;
-    maintainers      = with maintainers; [ kaiha fpletz ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ kaiha fpletz ];
   };
 }

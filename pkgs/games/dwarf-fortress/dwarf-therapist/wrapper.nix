@@ -1,8 +1,9 @@
 { pkgs, stdenv, dwarf-therapist, dwarf-fortress, makeWrapper }:
 
 let
-  platformSlug = if stdenv.targetPlatform.is32bit then
-    "linux32" else "linux64";
+  platformSlug =
+    if stdenv.targetPlatform.is32bit then
+      "linux32" else "linux64";
   inifile = "linux/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
 
 in

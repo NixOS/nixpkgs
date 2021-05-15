@@ -1,5 +1,17 @@
-{ fetchgit, lib, stdenv, gmp, which, flex, bison, makeWrapper
-, autoconf, automake, libtool, jdk, perl }:
+{ fetchgit
+, lib
+, stdenv
+, gmp
+, which
+, flex
+, bison
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, jdk
+, perl
+}:
 
 stdenv.mkDerivation {
   name = "aldor-1.2.0";

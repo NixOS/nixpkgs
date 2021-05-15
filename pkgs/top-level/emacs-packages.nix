@@ -49,21 +49,22 @@ let
     inherit lib;
   };
 
-in makeScope pkgs'.newScope (self: makeOverridable ({
-  pkgs ? pkgs'
-  , lib ? pkgs.lib
-  , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
-  , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
-  , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
-  , orgPackages ? mkOrgPackages { inherit lib; } self
-  , manualPackages ? mkManualPackages { inherit pkgs lib; } self
-}: ({}
-  // elpaPackages // { inherit elpaPackages; }
-  // melpaStablePackages // { inherit melpaStablePackages; }
-  // melpaPackages // { inherit melpaPackages; }
-  // orgPackages // { inherit orgPackages; }
-  // manualPackages // { inherit manualPackages; }
-  // {
+in
+makeScope pkgs'.newScope (self: makeOverridable
+  ({ pkgs ? pkgs'
+   , lib ? pkgs.lib
+   , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
+   , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
+   , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
+   , orgPackages ? mkOrgPackages { inherit lib; } self
+   , manualPackages ? mkManualPackages { inherit pkgs lib; } self
+   }: ({ }
+    // elpaPackages // { inherit elpaPackages; }
+    // melpaStablePackages // { inherit melpaStablePackages; }
+    // melpaPackages // { inherit melpaPackages; }
+    // orgPackages // { inherit orgPackages; }
+    // manualPackages // { inherit manualPackages; }
+    // {
 
     inherit emacs;
 
@@ -78,7 +79,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
     emacsWithPackages = emacsWithPackages { inherit pkgs lib; } self;
     withPackages = emacsWithPackages { inherit pkgs lib; } self;
 
-  }// {
+  } // {
 
     # Package specific priority overrides goes here
 
@@ -87,4 +88,5 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
     inherit (melpaStablePackages) telega;
 
   })
-) {})
+  )
+{ })

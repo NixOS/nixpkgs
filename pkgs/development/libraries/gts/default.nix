@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    glib  # required to satisfy AM_PATH_GLIB_2_0
+    glib # required to satisfy AM_PATH_GLIB_2_0
   ];
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];

@@ -31,20 +31,22 @@ rec {
 
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
-  cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
-    # Filter out version control software files/directories
-    (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
-    # Filter out editor backup / swap files.
-    lib.hasSuffix "~" baseName ||
-    match "^\\.sw[a-z]$" baseName != null ||
-    match "^\\..*\\.sw[a-z]$" baseName != null ||
+  cleanSourceFilter = name: type:
+    let baseName = baseNameOf (toString name); in
+      ! (
+        # Filter out version control software files/directories
+        (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+        # Filter out editor backup / swap files.
+        lib.hasSuffix "~" baseName ||
+        match "^\\.sw[a-z]$" baseName != null ||
+        match "^\\..*\\.sw[a-z]$" baseName != null ||
 
-    # Filter out generates files.
-    lib.hasSuffix ".o" baseName ||
-    lib.hasSuffix ".so" baseName ||
-    # Filter out nix-build result symlinks
-    (type == "symlink" && lib.hasPrefix "result" baseName)
-  );
+        # Filter out generates files.
+        lib.hasSuffix ".o" baseName ||
+        lib.hasSuffix ".so" baseName ||
+        # Filter out nix-build result symlinks
+        (type == "symlink" && lib.hasPrefix "result" baseName)
+      );
 
   # Filters a source tree removing version control files and directories using cleanSourceWith
   #
@@ -88,7 +90,8 @@ rec {
       origSrc = if isFiltered then src.origSrc else src;
       filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
       name' = if name != null then name else if isFiltered then src.name else "source";
-    in {
+    in
+    {
       inherit origSrc;
       filter = filter';
       outPath = builtins.path { filter = filter'; path = origSrc; name = name'; };
@@ -103,7 +106,8 @@ rec {
     let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
-    in lib.cleanSourceWith {
+    in
+    lib.cleanSourceWith {
       filter = (path: type:
         let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
         in lib.any (re: match re relPath != null) regexes);
@@ -125,53 +129,63 @@ rec {
   # Example: commitIdFromGitRepo <nixpkgs/.git>
   commitIdFromGitRepo =
     let readCommitFromFile = file: path:
-        let fileName       = toString path + "/" + file;
-            packedRefsName = toString path + "/packed-refs";
-            absolutePath   = base: path:
-              if lib.hasPrefix "/" path
-              then path
-              else toString (/. + "${base}/${path}");
-        in if pathIsRegularFile path
-           # Resolve git worktrees. See gitrepository-layout(5)
-           then
-             let m   = match "^gitdir: (.*)$" (lib.fileContents path);
-             in if m == null
-                then throw ("File contains no gitdir reference: " + path)
-                else
-                  let gitDir      = absolutePath (dirOf path) (lib.head m);
-                      commonDir'' = if pathIsRegularFile "${gitDir}/commondir"
-                                    then lib.fileContents "${gitDir}/commondir"
-                                    else gitDir;
-                      commonDir'  = lib.removeSuffix "/" commonDir'';
-                      commonDir   = absolutePath gitDir commonDir';
-                      refFile     = lib.removePrefix "${commonDir}/" "${gitDir}/${file}";
-                  in readCommitFromFile refFile commonDir
+      let
+        fileName = toString path + "/" + file;
+        packedRefsName = toString path + "/packed-refs";
+        absolutePath = base: path:
+          if lib.hasPrefix "/" path
+          then path
+          else toString (/. + "${base}/${path}");
+      in
+      if pathIsRegularFile path
+      # Resolve git worktrees. See gitrepository-layout(5)
+      then
+        let m = match "^gitdir: (.*)$" (lib.fileContents path);
+        in
+        if m == null
+        then throw ("File contains no gitdir reference: " + path)
+        else
+          let
+            gitDir = absolutePath (dirOf path) (lib.head m);
+            commonDir'' =
+              if pathIsRegularFile "${gitDir}/commondir"
+              then lib.fileContents "${gitDir}/commondir"
+              else gitDir;
+            commonDir' = lib.removeSuffix "/" commonDir'';
+            commonDir = absolutePath gitDir commonDir';
+            refFile = lib.removePrefix "${commonDir}/" "${gitDir}/${file}";
+          in
+          readCommitFromFile refFile commonDir
 
-           else if pathIsRegularFile fileName
-           # Sometimes git stores the commitId directly in the file but
-           # sometimes it stores something like: «ref: refs/heads/branch-name»
-           then
-             let fileContent = lib.fileContents fileName;
-                 matchRef    = match "^ref: (.*)$" fileContent;
-             in if  matchRef == null
-                then fileContent
-                else readCommitFromFile (lib.head matchRef) path
+      else if pathIsRegularFile fileName
+      # Sometimes git stores the commitId directly in the file but
+      # sometimes it stores something like: «ref: refs/heads/branch-name»
+      then
+        let
+          fileContent = lib.fileContents fileName;
+          matchRef = match "^ref: (.*)$" fileContent;
+        in
+        if matchRef == null
+        then fileContent
+        else readCommitFromFile (lib.head matchRef) path
 
-           else if pathIsRegularFile packedRefsName
-           # Sometimes, the file isn't there at all and has been packed away in the
-           # packed-refs file, so we have to grep through it:
-           then
-             let fileContent = readFile packedRefsName;
-                 matchRef = match "([a-z0-9]+) ${file}";
-                 isRef = s: isString s && (matchRef s) != null;
-                 # there is a bug in libstdc++ leading to stackoverflow for long strings:
-                 # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
-                 refs = filter isRef (split "\n" fileContent);
-             in if refs == []
-                then throw ("Could not find " + file + " in " + packedRefsName)
-                else lib.head (matchRef (lib.head refs))
+      else if pathIsRegularFile packedRefsName
+      # Sometimes, the file isn't there at all and has been packed away in the
+      # packed-refs file, so we have to grep through it:
+      then
+        let
+          fileContent = readFile packedRefsName;
+          matchRef = match "([a-z0-9]+) ${file}";
+          isRef = s: isString s && (matchRef s) != null;
+          # there is a bug in libstdc++ leading to stackoverflow for long strings:
+          # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
+          refs = filter isRef (split "\n" fileContent);
+        in
+        if refs == [ ]
+        then throw ("Could not find " + file + " in " + packedRefsName)
+        else lib.head (matchRef (lib.head refs))
 
-           else throw ("Not a .git directory: " + path);
+      else throw ("Not a .git directory: " + path);
     in readCommitFromFile "HEAD";
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);

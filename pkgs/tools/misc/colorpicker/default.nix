@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Ancurio";
-    repo  = "colorpicker";
-    rev   = "287676947e6e3b5b0cee784aeb1638cf22f0ce17";
+    repo = "colorpicker";
+    rev = "287676947e6e3b5b0cee784aeb1638cf22f0ce17";
     sha256 = "1kj1dpb79llrfpszraaz6r7ci114zqi5rmqxwsvq2dnnpjxyi29r";
   };
 

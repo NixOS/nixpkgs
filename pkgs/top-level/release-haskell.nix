@@ -27,14 +27,16 @@ let
   # it to a list of derivations suitable to be passed
   # to `releaseTools.aggregate` as constituents.
   accumulateDerivations = jobList:
-    lib.concatMap (
-      attrs:
+    lib.concatMap
+      (
+        attrs:
         if lib.isDerivation attrs
         then [ attrs ]
         else if lib.isAttrs attrs
         then accumulateDerivations (lib.attrValues attrs)
-        else []
-    ) jobList;
+        else [ ]
+      )
+      jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
@@ -57,13 +59,17 @@ let
   # combinations. See `jobs` below for an example.
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
-      (lib.mapAttrs (
-        ghc: jobs:
-        lib.filterAttrs (
-          jobName: platforms:
-          lib.elem ghc (config."${jobName}" or [])
-        ) jobs
-      ) compilerPlatforms);
+      (lib.mapAttrs
+        (
+          ghc: jobs:
+            lib.filterAttrs
+              (
+                jobName: platforms:
+                  lib.elem ghc (config."${jobName}" or [ ])
+              )
+              jobs
+        )
+        compilerPlatforms);
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
@@ -71,23 +77,27 @@ let
 
   # names of packages in an attribute set that are maintained
   maintainedPkgNames = set: builtins.attrNames
-    (lib.filterAttrs (
-      _: v: builtins.length (v.meta.maintainers or []) > 0
-    ) set);
+    (lib.filterAttrs
+      (
+        _: v: builtins.length (v.meta.maintainers or [ ]) > 0
+      )
+      set);
 
-  recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
+  recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate { };
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
 
-      tests = let
-        testPlatforms = packagePlatforms pkgs.tests;
-      in {
-        haskell = testPlatforms.haskell;
-        writers = testPlatforms.writers;
-      };
+      tests =
+        let
+          testPlatforms = packagePlatforms pkgs.tests;
+        in
+        {
+          haskell = testPlatforms.haskell;
+          writers = testPlatforms.writers;
+        };
 
       # top-level packages that depend on haskellPackages
       inherit (pkgsPlatforms)
@@ -268,4 +278,5 @@ let
     }
   ];
 
-in jobs
+in
+jobs

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export LD=$CC
   '' # Fixed on master, remove with 2.11
-     + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, ounit, qcheck
-# Optionally enable tests; test script use OCaml-4.01+ features
+{ stdenv
+, lib
+, fetchzip
+, ocaml
+, findlib
+, ocamlbuild
+, ounit
+, qcheck
+  # Optionally enable tests; test script use OCaml-4.01+ features
 , doCheck ? lib.versionAtLeast (lib.getVersion ocaml) "4.01"
 }:
 
@@ -16,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild ounit qcheck ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out"
-  + lib.optionalString doCheck " --enable-tests";
+    + lib.optionalString doCheck " --enable-tests";
   buildPhase = "ocaml setup.ml -build";
   inherit doCheck;
   checkPhase = "ocaml setup.ml -test";
@@ -26,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/rgrinberg/stringext";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "Extra string functions for OCaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vbgl ];

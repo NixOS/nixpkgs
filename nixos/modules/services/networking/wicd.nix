@@ -24,7 +24,7 @@ with lib;
 
   config = mkIf config.networking.wicd.enable {
 
-    environment.systemPackages = [pkgs.wicd];
+    environment.systemPackages = [ pkgs.wicd ];
 
     systemd.services.wicd = {
       after = [ "network-pre.target" ];
@@ -35,6 +35,6 @@ with lib;
     };
 
     services.dbus.enable = true;
-    services.dbus.packages = [pkgs.wicd];
+    services.dbus.packages = [ pkgs.wicd ];
   };
 }

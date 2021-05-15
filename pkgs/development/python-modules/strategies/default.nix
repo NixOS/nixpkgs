@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, multipledispatch, toolz
+{ lib
+, buildPythonPackage
+, fetchPypi
+, multipledispatch
+, toolz
 , pytest
 }:
 
@@ -17,8 +20,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python library for control flow programming";
-    homepage    = "https://github.com/logpy/strategies";
-    license     = lib.licenses.mit;
+    homepage = "https://github.com/logpy/strategies";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ suhr ];
   };
 }

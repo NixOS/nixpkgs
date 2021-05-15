@@ -2,7 +2,8 @@
 
 let
   version = "2.138";
-in fetchzip {
+in
+fetchzip {
   name = "roboto-${version}";
 
   url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";

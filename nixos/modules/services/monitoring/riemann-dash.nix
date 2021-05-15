@@ -18,7 +18,8 @@ let
     exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
 
-in {
+in
+{
 
   options = {
 

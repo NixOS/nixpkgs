@@ -2,17 +2,17 @@
 
 let
 
-patch-base = "https://github.com/LukeSmithxyz/kjv/commit/";
+  patch-base = "https://github.com/LukeSmithxyz/kjv/commit/";
 
-add-apocrypha = fetchpatch {
-  url = patch-base + "b92b7622285d10464f9274f11e740bef90705bbc.patch";
-  sha256 = "0n4sj8p9m10fcair4msc129jxkkx5whqzhjbr5k4lfgp6nb1zk8k";
-};
+  add-apocrypha = fetchpatch {
+    url = patch-base + "b92b7622285d10464f9274f11e740bef90705bbc.patch";
+    sha256 = "0n4sj8p9m10fcair4msc129jxkkx5whqzhjbr5k4lfgp6nb1zk8k";
+  };
 
-add-install-target = fetchpatch {
-  url = patch-base + "f4ad73539eb73f1890f4b791d8d38dd95900a4a4.patch";
-  sha256 = "1yzj72i5fkzn2i4wl09q6jx7nwn2h4jwm49fc23nxfwchzar9m1q";
-};
+  add-install-target = fetchpatch {
+    url = patch-base + "f4ad73539eb73f1890f4b791d8d38dd95900a4a4.patch";
+    sha256 = "1yzj72i5fkzn2i4wl09q6jx7nwn2h4jwm49fc23nxfwchzar9m1q";
+  };
 
 in
 

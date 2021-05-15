@@ -25,7 +25,7 @@ let
     '';
 
 
-  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  pkgs2storeContents = l: map (x: { object = x; symlink = "none"; }) l;
 
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
@@ -44,12 +44,13 @@ in
 
   # Include only the en_US locale.  This saves 75 MiB or so compared to
   # the full glibcLocales package.
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "en_US/ISO-8859-1" ];
 
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages =
-    [ pkgs.w3m # needed for the manual anyway
+    [
+      pkgs.w3m # needed for the manual anyway
       pkgs.ddrescue
       pkgs.ccrypt
       pkgs.cryptsetup # needed for dm-crypt volumes
@@ -118,7 +119,8 @@ in
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
   fileSystems.fake =
-    { mountPoint = "/";
+    {
+      mountPoint = "/";
       device = "/dev/something";
     };
 
@@ -146,13 +148,16 @@ in
   # in the Nix store of the tarball.
   tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
   tarball.contents = [
-    { source = kernelParams;
+    {
+      source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+    {
+      source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
       target = "/boot/" + config.system.boot.loader.kernelFile;
     }
-    { source = pkgs.ubootSheevaplug;
+    {
+      source = pkgs.ubootSheevaplug;
       target = "/boot/uboot";
     }
   ];
@@ -161,7 +166,7 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
+  systemd.services.openssh.wantedBy = lib.mkOverride 50 [ ];
 
   # cpufrequtils fails to build on non-pc
   powerManagement.enable = false;

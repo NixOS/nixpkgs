@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, freetype, SDL2, SDL2_mixer, openal, zlib, libpng, python2, libvorbis
-, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, freetype
+, SDL2
+, SDL2_mixer
+, openal
+, zlib
+, libpng
+, python2
+, libvorbis
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "gemrb";

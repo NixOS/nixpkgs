@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, autoreconfHook
-, libtirpc, rpcsvc-proto, avahi, libxml2
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, libtirpc
+, rpcsvc-proto
+, avahi
+, libxml2
 }:
 
 stdenv.mkDerivation rec {

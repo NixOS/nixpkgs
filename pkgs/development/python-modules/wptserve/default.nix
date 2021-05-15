@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six, h2
+, six
+, h2
 , isPy3k
 }:
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A webserver intended for web browser testing";
-    homepage =  "https://wptserve.readthedocs.org/";
+    homepage = "https://wptserve.readthedocs.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raskin ];
   };

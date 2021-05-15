@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchFromGitHub, alcotest, cppo
-, ocaml-migrate-parsetree, ppx_tools_versioned, reason, yojson }:
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, alcotest
+, cppo
+, ocaml-migrate-parsetree
+, ppx_tools_versioned
+, reason
+, yojson
+}:
 
 buildDunePackage rec {
   pname = "graphql_ppx";

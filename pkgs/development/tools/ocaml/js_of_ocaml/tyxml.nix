@@ -1,6 +1,9 @@
-{ buildDunePackage, js_of_ocaml-compiler
+{ buildDunePackage
+, js_of_ocaml-compiler
 , js_of_ocaml-ppx
-, js_of_ocaml, reactivedata, tyxml
+, js_of_ocaml
+, reactivedata
+, tyxml
 }:
 
 buildDunePackage {

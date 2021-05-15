@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libX11}:
+{ stdenv, lib, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation rec {
   version = "0.2.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  configureFlags = [ "--disable-debug"];
+  configureFlags = [ "--disable-debug" ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

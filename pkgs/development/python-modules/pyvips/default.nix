@@ -1,5 +1,14 @@
-{ buildPythonPackage, fetchPypi, pytestrunner, pytestCheckHook, glib, vips, cffi
-, pkg-config, pkgconfig, lib }:
+{ buildPythonPackage
+, fetchPypi
+, pytestrunner
+, pytestCheckHook
+, glib
+, vips
+, cffi
+, pkg-config
+, pkgconfig
+, lib
+}:
 
 buildPythonPackage rec {
   pname = "pyvips";

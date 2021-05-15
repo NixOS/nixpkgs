@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gengetopt, m4, gnupg
-, git, perl, autoconf, automake, help2man, boehmgc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gengetopt
+, m4
+, gnupg
+, git
+, perl
+, autoconf
+, automake
+, help2man
+, boehmgc
+}:
 
 stdenv.mkDerivation rec {
   pname = "mmv";

@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchzip, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
-, glew, libXrandr, libXrender, udev, xcbutilimage
-, IOKit, Foundation, AppKit, OpenAL
+{ lib
+, stdenv
+, fetchzip
+, cmake
+, libX11
+, freetype
+, libjpeg
+, openal
+, flac
+, libvorbis
+, glew
+, libXrandr
+, libXrender
+, udev
+, xcbutilimage
+, IOKit
+, Foundation
+, AppKit
+, OpenAL
 }:
 
 let
@@ -22,10 +38,12 @@ stdenv.mkDerivation {
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
     ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
 
-  cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
-                 "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
-                 "-DSFML_BUILD_FRAMEWORKS=no"
-                 "-DSFML_USE_SYSTEM_DEPS=yes" ];
+  cmakeFlags = [
+    "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
+    "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
+    "-DSFML_BUILD_FRAMEWORKS=no"
+    "-DSFML_USE_SYSTEM_DEPS=yes"
+  ];
 
   meta = with lib; {
     homepage = "https://www.sfml-dev.org/";

@@ -20,7 +20,9 @@ buildPythonPackage rec {
   checkInputs = [ nose rednose ];
 
   propagatedBuildInputs = [
-    paramiko lxml selectors2
+    paramiko
+    lxml
+    selectors2
   ];
 
   checkPhase = ''

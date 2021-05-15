@@ -1,6 +1,14 @@
-{ stdenv, lib, src, pkg-config, tcl, libXft, patches ? []
-, enableAqua ? stdenv.isDarwin, darwin
-, ... }:
+{ stdenv
+, lib
+, src
+, pkg-config
+, tcl
+, libXft
+, patches ? [ ]
+, enableAqua ? stdenv.isDarwin
+, darwin
+, ...
+}:
 
 stdenv.mkDerivation {
   name = "tk-${tcl.version}";
@@ -29,7 +37,7 @@ stdenv.mkDerivation {
     "--enable-threads"
     "--with-tcl=${tcl}/lib"
   ] ++ lib.optional stdenv.is64bit "--enable-64bit"
-    ++ lib.optional enableAqua "--enable-aqua";
+  ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);

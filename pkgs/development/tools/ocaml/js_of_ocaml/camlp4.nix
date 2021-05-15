@@ -1,5 +1,8 @@
-{ buildDunePackage, fetchFromGitHub, js_of_ocaml-compiler
-, camlp4, ocsigen_deriving
+{ buildDunePackage
+, fetchFromGitHub
+, js_of_ocaml-compiler
+, camlp4
+, ocsigen_deriving
 }:
 
 buildDunePackage rec {

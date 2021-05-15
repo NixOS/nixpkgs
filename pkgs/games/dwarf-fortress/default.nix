@@ -52,44 +52,47 @@ let
   };
 
   # A map of names to each Dwarf Fortress package we know about.
-  df-games = lib.listToAttrs (map (dfVersion: {
-    name = versionToName dfVersion;
-    value =
-      let
-        # I can't believe this syntax works. Spikes of Nix code indeed...
-        dwarf-fortress = callPackage ./game.nix {
-          inherit dfVersion;
-          inherit dwarf-fortress-unfuck;
+  df-games = lib.listToAttrs (map
+    (dfVersion: {
+      name = versionToName dfVersion;
+      value =
+        let
+          # I can't believe this syntax works. Spikes of Nix code indeed...
+          dwarf-fortress = callPackage ./game.nix {
+            inherit dfVersion;
+            inherit dwarf-fortress-unfuck;
+          };
+
+          # unfuck is linux-only right now, we will only use it there.
+          dwarf-fortress-unfuck =
+            if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+            else null;
+
+          twbt = callPackage ./twbt { inherit dfVersion; };
+
+          dfhack = callPackage ./dfhack {
+            inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+            inherit dfVersion twbt;
+            stdenv = gccStdenv;
+          };
+
+          dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
+            inherit dwarf-fortress;
+            dwarf-therapist = dwarf-therapist-original;
+          };
+        in
+        callPackage ./wrapper {
+          inherit (self) themes;
+
+          dwarf-fortress = dwarf-fortress;
+          twbt = twbt;
+          dfhack = dfhack;
+          dwarf-therapist = dwarf-therapist;
+
+          jdk = pkgs.jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
         };
-
-        # unfuck is linux-only right now, we will only use it there.
-        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
-                                else null;
-
-        twbt = callPackage ./twbt { inherit dfVersion; };
-
-        dfhack = callPackage ./dfhack {
-          inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
-          inherit dfVersion twbt;
-          stdenv = gccStdenv;
-        };
-
-        dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
-          inherit dwarf-fortress;
-          dwarf-therapist = dwarf-therapist-original;
-        };
-      in
-      callPackage ./wrapper {
-        inherit (self) themes;
-
-        dwarf-fortress = dwarf-fortress;
-        twbt = twbt;
-        dfhack = dfhack;
-        dwarf-therapist = dwarf-therapist;
-
-        jdk = pkgs.jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-      };
-  }) (lib.attrNames self.df-hashes));
+    })
+    (lib.attrNames self.df-hashes));
 
   self = rec {
     df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
@@ -119,4 +122,5 @@ let
     cla-theme = themes.cla;
   };
 
-in self // df-games
+in
+self // df-games

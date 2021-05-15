@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
 
-  checkInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
+  checkInputs = [ pandas nose ]; # as of 0.13.5, it depends explicitly on nose, rather than pytest.
 
   meta = with lib; {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";

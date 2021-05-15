@@ -1,5 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, multipath-tools, lsof, util-linux
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pykickstart
+, pyparted
+, pyblock
+, pyudev
+, six
+, libselinux
+, multipath-tools
+, lsof
+, util-linux
 }:
 
 buildPythonPackage rec {
@@ -27,7 +37,11 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev libselinux
+    pykickstart
+    pyparted
+    pyblock
+    pyudev
+    libselinux
     six
   ];
 

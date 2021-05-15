@@ -1,16 +1,15 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg     = config.services.namecoind;
+  cfg = config.services.namecoind;
   dataDir = "/var/lib/namecoind";
-  useSSL  = (cfg.rpc.certificate != null) && (cfg.rpc.key != null);
-  useRPC  = (cfg.rpc.user != null) && (cfg.rpc.password != null);
+  useSSL = (cfg.rpc.certificate != null) && (cfg.rpc.key != null);
+  useRPC = (cfg.rpc.user != null) && (cfg.rpc.password != null);
 
   listToConf = option: list:
-    concatMapStrings (value :"${option}=${value}\n") list;
+    concatMapStrings (value: "${option}=${value}\n") list;
 
   configFile = pkgs.writeText "namecoin.conf" (''
     server=1
@@ -150,37 +149,37 @@ in
   config = mkIf cfg.enable {
 
     users.users.namecoin = {
-      uid  = config.ids.uids.namecoin;
+      uid = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
       home = dataDir;
       createHome = true;
     };
 
     users.groups.namecoin = {
-      gid  = config.ids.gids.namecoin;
+      gid = config.ids.gids.namecoin;
     };
 
     systemd.services.namecoind = {
       description = "Namecoind daemon";
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       startLimitIntervalSec = 120;
       startLimitBurst = 5;
       serviceConfig = {
-        User  = "namecoin";
+        User = "namecoin";
         Group = "namecoin";
-        ExecStart  = "${pkgs.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
-        ExecStop   = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
+        ExecStart = "${pkgs.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
+        ExecStop = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Nice = "10";
         PrivateTmp = true;
-        TimeoutStopSec     = "60s";
-        TimeoutStartSec    = "2s";
-        Restart            = "always";
+        TimeoutStopSec = "60s";
+        TimeoutStartSec = "2s";
+        Restart = "always";
       };
 
-      preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''
+      preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat") ''
         # check wallet file permissions
         if [ "$(stat --printf '%u' ${cfg.wallet})" != "${toString config.ids.uids.namecoin}" \
            -o "$(stat --printf '%g' ${cfg.wallet})" != "${toString config.ids.gids.namecoin}" \

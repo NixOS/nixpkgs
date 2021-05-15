@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, bash-completion, cmake, pkg-config
-, libdrm, libpciaccess, llvmPackages, ncurses
+{ lib
+, stdenv
+, fetchgit
+, bash-completion
+, cmake
+, pkg-config
+, libdrm
+, libpciaccess
+, llvmPackages
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -33,5 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
- };
+  };
 }

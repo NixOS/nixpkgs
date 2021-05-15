@@ -52,13 +52,15 @@ let
     };
   };
 
-  nodes = builtins.listToAttrs (map (dbName:
-    nameValuePair dbName (mkMerge [
-    baseGrafanaConf
-    (extraNodeConfs.${dbName} or {})
-  ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
+  nodes = builtins.listToAttrs (map
+    (dbName:
+      nameValuePair dbName (mkMerge [
+        baseGrafanaConf
+        (extraNodeConfs.${dbName} or { })
+      ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
 
-in {
+in
+{
   name = "grafana";
 
   meta = with maintainers; {

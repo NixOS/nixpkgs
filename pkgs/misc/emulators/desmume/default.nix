@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, pkg-config, libtool, intltool
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libtool
+, intltool
 , libXmu
 , lua
 , tinyxml
-, agg, alsaLib, soundtouch, openal
+, agg
+, alsaLib
+, soundtouch
+, openal
 , desktop-file-utils
-, gtk2, gtkglext, libglade
-, libGLU, libpcap, SDL, zziplib }:
+, gtk2
+, gtkglext
+, libglade
+, libGLU
+, libpcap
+, SDL
+, zziplib
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -28,16 +42,34 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
-  [ pkg-config libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade
-    libGLU libpcap SDL zziplib tinyxml ];
+    [
+      pkg-config
+      libtool
+      intltool
+      libXmu
+      lua
+      agg
+      alsaLib
+      soundtouch
+      openal
+      desktop-file-utils
+      gtk2
+      gtkglext
+      libglade
+      libGLU
+      libpcap
+      SDL
+      zziplib
+      tinyxml
+    ];
 
   configureFlags = [
-    "--disable-glade"  # Failing on compile step
+    "--disable-glade" # Failing on compile step
     "--enable-openal"
     "--enable-glx"
     "--enable-hud"
-    "--enable-wifi" ];
+    "--enable-wifi"
+  ];
 
   meta = {
     description = "An open-source Nintendo DS emulator";

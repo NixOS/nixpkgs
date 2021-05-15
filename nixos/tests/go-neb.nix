@@ -11,20 +11,20 @@ import ./make-test-python.nix ({ pkgs, ... }:
         enable = true;
         baseUrl = "http://localhost";
         config = {
-          clients = [ {
+          clients = [{
             UserId = "@test:localhost";
             AccessToken = "changeme";
             HomeServerUrl = "http://localhost";
             Sync = false;
             AutoJoinRooms = false;
             DisplayName = "neverbeseen";
-          } ];
-          services = [ {
+          }];
+          services = [{
             ID = "wikipedia_service";
             Type = "wikipedia";
             UserID = "@test:localhost";
             Config = { };
-          } ];
+          }];
         };
       };
     };

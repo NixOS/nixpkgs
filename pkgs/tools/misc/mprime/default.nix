@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     # a suitable prime. http://www.mersenne.org/legal/#EULA
     license = licenses.unfree;
     # Untested on linux-32 and osx. Works in theory.
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

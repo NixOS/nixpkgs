@@ -16,9 +16,9 @@ let
     buildInputs = [ openssl zlib snappy lzo ];
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
-    dontFixCmake       =                     lib.versionAtLeast version "3.5";
+    dontFixCmake = lib.versionAtLeast version "3.5";
     NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
-    preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
+    preConfigure = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
 
     postPatch = ''
       sed -ie 's!/bin/echo!echo!' 3rdParty/V8/v*/gypfiles/*.gypi
@@ -44,7 +44,8 @@ let
       maintainers = [ maintainers.flosse ];
     };
   };
-in {
+in
+{
   arangodb_3_3 = common {
     version = "3.3.24";
     sha256 = "18175789j4y586qvpcsaqxmw7d6vc3s29qm1fja5c7wzimx6ilyp";

@@ -1,7 +1,19 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
-# nss_3_53 is used instead of the latest due to a number of issues:
-# https://github.com/lsh123/xmlsec/issues?q=is%3Aissue+is%3Aopen+nss
-, openssl, nss_3_53, lib, runCommandCC, writeText }:
+{ stdenv
+, fetchurl
+, libxml2
+, gnutls
+, libxslt
+, pkg-config
+, libgcrypt
+, libtool
+  # nss_3_53 is used instead of the latest due to a number of issues:
+  # https://github.com/lsh123/xmlsec/issues?q=is%3Aissue+is%3Aopen+nss
+, openssl
+, nss_3_53
+, lib
+, runCommandCC
+, writeText
+}:
 
 lib.fix (self:
 let
@@ -33,9 +45,9 @@ stdenv.mkDerivation {
   doCheck = true;
   checkInputs = [ nss_3_53.tools ];
   preCheck = ''
-  substituteInPlace tests/testrun.sh \
-    --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-    --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    substituteInPlace tests/testrun.sh \
+      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
   '';
 
   # enable deprecated soap headers required by lasso

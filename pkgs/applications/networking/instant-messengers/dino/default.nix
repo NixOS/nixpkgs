@@ -1,9 +1,26 @@
-{ lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
+{ lib
+, stdenv
+, fetchFromGitHub
+, vala
+, cmake
+, ninja
+, wrapGAppsHook
+, pkg-config
+, gettext
+, gobject-introspection
+, gnome
+, glib
+, gdk-pixbuf
+, gtk3
+, glib-networking
+, xorg
+, libXdmcp
+, libxkbcommon
+, libnotify
+, libsoup
+, libgee
+, librsvg
+, libsignal-protocol-c
 , fetchpatch
 , libgcrypt
 , epoxy
@@ -14,7 +31,7 @@
 , pcre
 , qrencode
 , icu
- }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "dino";

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , libXScrnSaver
 , makeWrapper
 , fetchurl
@@ -108,7 +109,7 @@ let
     '';
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
-  )
+stdenv.mkDerivation (
+  (common stdenv.hostPlatform) //
+  (if stdenv.isDarwin then darwin else linux)
+)

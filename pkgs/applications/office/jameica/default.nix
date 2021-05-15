@@ -6,10 +6,11 @@ let
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
-  swtSystem = if stdenv.hostPlatform.system == "i686-linux" then "linux"
-  else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-  else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
-  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  swtSystem =
+    if stdenv.hostPlatform.system == "i686-linux" then "linux"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "jameica";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
-                ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   src = fetchFromGitHub {
     owner = "willuhn";

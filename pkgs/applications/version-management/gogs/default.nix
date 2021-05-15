@@ -1,5 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh, pam
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+, bash
+, gzip
+, openssh
+, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
@@ -32,8 +39,8 @@ buildGoModule rec {
   buildFlags = [ "-tags" ];
 
   buildFlagsArray =
-    (  optional sqliteSupport "sqlite"
-    ++ optional pamSupport "pam");
+    (optional sqliteSupport "sqlite"
+      ++ optional pamSupport "pam");
 
   postInstall = ''
 

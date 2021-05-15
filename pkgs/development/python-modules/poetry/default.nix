@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pythonOlder
+, fetchpatch
 , cachecontrol
 , cachy
 , cleo

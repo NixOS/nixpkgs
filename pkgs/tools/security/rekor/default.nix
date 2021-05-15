@@ -25,7 +25,8 @@ let
         maintainers = with maintainers; [ lesuisse ];
       };
     };
-in {
+in
+{
   rekor-cli = generic {
     pname = "rekor-cli";
     subPackages = [ "cmd/cli" ];

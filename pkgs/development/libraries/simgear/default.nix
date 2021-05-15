@@ -1,6 +1,28 @@
-{ lib, stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
-, libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
-, openscenegraph, openal, expat, cmake, apr, xz
+{ lib
+, stdenv
+, fetchurl
+, plib
+, freeglut
+, xorgproto
+, libX11
+, libXext
+, libXi
+, libICE
+, libSM
+, libXt
+, libXmu
+, libGLU
+, libGL
+, boost
+, zlib
+, libjpeg
+, freealut
+, openscenegraph
+, openal
+, expat
+, cmake
+, apr
+, xz
 , curl
 }:
 let
@@ -17,9 +39,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
-                  libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
-                  openscenegraph openal expat apr curl xz ];
+  buildInputs = [
+    plib
+    freeglut
+    xorgproto
+    libX11
+    libXext
+    libXi
+    libICE
+    libSM
+    libXt
+    libXmu
+    libGLU
+    libGL
+    boost
+    zlib
+    libjpeg
+    freealut
+    openscenegraph
+    openal
+    expat
+    apr
+    curl
+    xz
+  ];
 
   meta = with lib; {
     description = "Simulation construction toolkit";

@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, simplejson, typing-extensions, python-dateutil, pytz, pytest-mock, sphinx
-, dateparser, pytestcov, pytestCheckHook
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, simplejson
+, typing-extensions
+, python-dateutil
+, pytz
+, pytest-mock
+, sphinx
+, dateparser
+, pytestcov
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {

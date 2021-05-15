@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libelf, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libelf
+, zlib
 , fetchpatch
 }:
 
@@ -10,14 +14,15 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
 
   src = fetchFromGitHub {
-    owner  = "libbpf";
-    repo   = "libbpf";
-    rev    = "v${version}";
+    owner = "libbpf";
+    repo = "libbpf";
+    rev = "v${version}";
     sha256 = "0ilnnm4q22f8fagwp8kb37licy4ks861i2iqh2djsypqhnxvx3fv";
   };
 
   patches = [
-    (fetchpatch { # included upstream for > 0.1.0
+    (fetchpatch {
+      # included upstream for > 0.1.0
       name = "link-zlib.patch";
       url = "https://github.com/libbpf/libbpf/commit/8b14cb43ff837.diff";
       sha256 = "17mvjrs7s727drz013a8qlyj0345ldi2kph6pazcmxv6kl1qrz2z";
@@ -46,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Upstream mirror of libbpf";
-    homepage    = "https://github.com/libbpf/libbpf";
-    license     = with licenses; [ lgpl21 /* or */ bsd2 ];
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

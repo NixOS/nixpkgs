@@ -23,7 +23,7 @@ buildGoPackage rec {
       functionality,  such   as  user-friendly  help   output,  remote
       includes,  and   eventually  more.   It  otherwise  acts   as  a
       pass-through to standard make.
-      '';
+    '';
     license = licenses.mit;
     maintainers = [ maintainers.gabesoft ];
   };

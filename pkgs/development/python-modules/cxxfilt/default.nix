@@ -13,12 +13,14 @@ buildPythonPackage rec {
     sha256 = "ef6810e76d16c95c11b96371e2d8eefd1d270ec03f9bcd07590e8dcc2c69e92b";
   };
 
-  postPatch = let
-    libstdcpp = "${lib.getLib gcc-unwrapped}/lib/libstdc++${stdenv.hostPlatform.extensions.sharedLibrary}";
-  in ''
-    substituteInPlace cxxfilt/__init__.py \
-      --replace "find_any_library('stdc++', 'c++')" '"${libstdcpp}"'
-  '';
+  postPatch =
+    let
+      libstdcpp = "${lib.getLib gcc-unwrapped}/lib/libstdc++${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in
+    ''
+      substituteInPlace cxxfilt/__init__.py \
+        --replace "find_any_library('stdc++', 'c++')" '"${libstdcpp}"'
+    '';
 
   # no tests
   doCheck = false;

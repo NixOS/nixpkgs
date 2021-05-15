@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, bison, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
-, libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
-, darwin, writeScriptBin, cups, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, bison
+, flex
+, fontconfig
+, freetype
+, gperf
+, icu
+, openssl
+, libjpeg
+, libpng
+, perl
+, python
+, ruby
+, sqlite
+, qtwebkit
+, qmake
+, qtbase
+, darwin
+, writeScriptBin
+, cups
+, makeWrapper
 }:
 
 let
@@ -14,7 +34,8 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "phantomjs";
   version = "2.1.1";
 
@@ -27,12 +48,31 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [
-    bison flex fontconfig freetype gperf icu openssl
-    libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    bison
+    flex
+    fontconfig
+    freetype
+    gperf
+    icu
+    openssl
+    libjpeg
+    libpng
+    perl
+    python
+    ruby
+    sqlite
+    qtwebkit
+    qtbase
     makeWrapper
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AGL ApplicationServices AppKit Cocoa OpenGL
-    darwin.libobjc fakeClang cups
+    AGL
+    ApplicationServices
+    AppKit
+    Cocoa
+    OpenGL
+    darwin.libobjc
+    fakeClang
+    cups
   ]);
 
   patches = [

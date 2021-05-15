@@ -14,7 +14,8 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xed";
   version = "12.0.1";
 
@@ -38,9 +39,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Intel X86 Encoder Decoder (Intel XED)";
-    homepage    = "https://intelxed.github.io/";
-    license     = licenses.apsl20;
-    platforms   = platforms.unix;
+    homepage = "https://intelxed.github.io/";
+    license = licenses.apsl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
   };
 }

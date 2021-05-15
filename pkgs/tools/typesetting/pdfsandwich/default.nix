@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp -p pdfsandwich.1.gz $out/man/man1
   '';
 
-meta = with lib; {
+  meta = with lib; {
     description = "OCR tool for scanned PDFs";
     homepage = "http://www.tobias-elze.de/pdfsandwich/";
     license = licenses.gpl2;

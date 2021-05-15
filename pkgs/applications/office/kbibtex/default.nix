@@ -1,14 +1,14 @@
 { lib
 , mkDerivation
 , fetchurl
-# build-time
+  # build-time
 , extra-cmake-modules
 , shared-mime-info
-# Qt
+  # Qt
 , qtxmlpatterns
 , qtwebengine
 , qca-qt5
-# KDE
+  # KDE
 , ki18n
 , kxmlgui
 , kio
@@ -21,7 +21,7 @@
 , kdoctools
 , kwallet
 , kcrash
-# other
+  # other
 , poppler
 , bibutils
 }:
@@ -61,7 +61,10 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ bibutils ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ bibutils ]}"
   ];
 
   meta = with lib; {

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.programs.sysdig;
-in {
+in
+{
   options.programs.sysdig.enable = mkEnableOption "sysdig";
 
   config = mkIf cfg.enable {

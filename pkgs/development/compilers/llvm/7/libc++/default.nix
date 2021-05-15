@@ -1,4 +1,11 @@
-{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, fetch
+, cmake
+, python3
+, libcxxabi
+, fixDarwinDylibNames
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -30,14 +37,14 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isMusl python3
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ libcxxabi ] ;
+  buildInputs = [ libcxxabi ];
 
   cmakeFlags = [
     "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
-  ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
+  ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   passthru = {
     isLLVM = true;

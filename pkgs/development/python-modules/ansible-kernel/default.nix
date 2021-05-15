@@ -34,12 +34,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
 
   postPatch = ''
-   # remove when merged
-   # https://github.com/ansible/ansible-jupyter-kernel/pull/82
-   touch LICENSE.md
+    # remove when merged
+    # https://github.com/ansible/ansible-jupyter-kernel/pull/82
+    touch LICENSE.md
 
-   # remove custom install
-   sed -i "s/cmdclass={'install': Installer},//" setup.py
+    # remove custom install
+    sed -i "s/cmdclass={'install': Installer},//" setup.py
   '';
 
   # tests hang with launched kernel

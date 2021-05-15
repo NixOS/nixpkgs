@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ django django-ranged-response six pillow ]
-  ++ lib.optional withTTS flite;
+    ++ lib.optional withTTS flite;
 
   meta = with lib; {
     description = "An extremely simple, yet highly customizable Django application to add captcha images to any Django form";

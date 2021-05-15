@@ -89,7 +89,7 @@ let
     inherit sage-with-env;
   };
 
-  sage-src = callPackage ./sage-src.nix {};
+  sage-src = callPackage ./sage-src.nix { };
 
   pythonRuntimeDeps = with python3.pkgs; [
     sagelib
@@ -109,10 +109,11 @@ let
     pillow
   ];
 
-  pythonEnv = python3.buildEnv.override {
-    extraLibs = pythonRuntimeDeps;
-    ignoreCollisions = true;
-  } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
+  pythonEnv = python3.buildEnv.override
+    {
+      extraLibs = pythonRuntimeDeps;
+      ignoreCollisions = true;
+    } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
 
   arb = pkgs.arb.override { inherit flint; };
 

@@ -27,8 +27,8 @@ python2.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Automatic Video Library Manager for TV Shows";
     longDescription = "It watches for new episodes of your favorite shows, and when they are posted it does its magic.";
-    license     = licenses.gpl3;
-    homepage    = "https://sickrage.github.io";
+    license = licenses.gpl3;
+    homepage = "https://sickrage.github.io";
     maintainers = with maintainers; [ sterfield ];
   };
 }

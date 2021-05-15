@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "signal-desktop";
@@ -8,48 +8,50 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   machine = { ... }:
 
-  {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+    {
+      imports = [
+        ./common/user-account.nix
+        ./common/x11.nix
+      ];
 
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = with pkgs; [ signal-desktop file ];
-    virtualisation.memorySize = 1024;
-  };
+      services.xserver.enable = true;
+      test-support.displayManager.auto.user = "alice";
+      environment.systemPackages = with pkgs; [ signal-desktop file ];
+      virtualisation.memorySize = 1024;
+    };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
-    start_all()
-    machine.wait_for_x()
+  testScript = { nodes, ... }:
+    let
+      user = nodes.machine.config.users.users.alice;
+    in
+    ''
+      start_all()
+      machine.wait_for_x()
 
-    # start signal desktop
-    machine.execute("su - alice -c signal-desktop &")
+      # start signal desktop
+      machine.execute("su - alice -c signal-desktop &")
 
-    # Wait for the Signal window to appear. Since usually the tests
-    # are run sandboxed and therfore with no internet, we can not wait
-    # for the message "Link your phone ...". Nor should we wait for
-    # the "Failed to connect to server" message, because when manually
-    # running this test it will be not sandboxed.
-    machine.wait_for_text("Signal")
-    machine.wait_for_text("File Edit View Window Help")
-    machine.screenshot("signal_desktop")
+      # Wait for the Signal window to appear. Since usually the tests
+      # are run sandboxed and therfore with no internet, we can not wait
+      # for the message "Link your phone ...". Nor should we wait for
+      # the "Failed to connect to server" message, because when manually
+      # running this test it will be not sandboxed.
+      machine.wait_for_text("Signal")
+      machine.wait_for_text("File Edit View Window Help")
+      machine.screenshot("signal_desktop")
 
-    # Test if the database is encrypted to prevent these issues:
-    # - https://github.com/NixOS/nixpkgs/issues/108772
-    # - https://github.com/NixOS/nixpkgs/pull/117555
-    print(machine.succeed("su - alice -c 'file ~/.config/Signal/sql/db.sqlite'"))
-    # TODO: The DB should be encrypted and the following should be machine.fail
-    # instead of machine.succeed but the DB is currently unencrypted and we
-    # want to notice if this isn't the case anymore as the transition to a
-    # encrypted DB can cause data loss!:
-    machine.succeed(
-        "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep -i sqlite"
-    )
-  '';
+      # Test if the database is encrypted to prevent these issues:
+      # - https://github.com/NixOS/nixpkgs/issues/108772
+      # - https://github.com/NixOS/nixpkgs/pull/117555
+      print(machine.succeed("su - alice -c 'file ~/.config/Signal/sql/db.sqlite'"))
+      # TODO: The DB should be encrypted and the following should be machine.fail
+      # instead of machine.succeed but the DB is currently unencrypted and we
+      # want to notice if this isn't the case anymore as the transition to a
+      # encrypted DB can cause data loss!:
+      machine.succeed(
+          "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep -i sqlite"
+      )
+    '';
 })

@@ -1,7 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , python37Packages
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
 , intltool
 , gtk3
 , gexiv2
@@ -58,7 +62,7 @@ buildPythonApplication rec {
     requests
     setuptools
   ] ++ lib.optional fehSupport feh
-    ++ lib.optional imagemagickSupport imagemagick;
+  ++ lib.optional imagemagickSupport imagemagick;
 
   meta = with lib; {
     homepage = "https://github.com/varietywalls/variety";

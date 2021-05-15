@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , python
 , pygobject2
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   patches = lib.singleton (fetchurl {
     name = "libnotify07.patch";
     url = "https://src.fedoraproject.org/cgit/notify-python.git/plain/"
-        + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
+      + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
     sha256 = "1lqdli13mfb59xxbq4rbq1f0znh6xr17ljjhwmzqb79jl3dig12z";
   });
 

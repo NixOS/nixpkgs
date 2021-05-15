@@ -4,7 +4,7 @@
 , lightyear
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "tomladris";
   version = "2017-11-14";
 

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, qmake, mkDerivation,
-  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio, ffmpeg-full,
-  CoreFoundation }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, qmake
+, mkDerivation
+, qtmultimedia
+, wrapQtAppsHook
+, frei0r
+, opencolorio
+, ffmpeg-full
+, CoreFoundation
+}:
 
 mkDerivation rec {
   pname = "olive-editor";

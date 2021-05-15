@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
   ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps"
-    ++ lib.optional withSeccomp "--enable-libseccomp";
+  ++ lib.optional withSeccomp "--enable-libseccomp";
 
   buildInputs = [ libcap openssl perl ]
     ++ lib.optional withSeccomp libseccomp

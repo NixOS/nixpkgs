@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, sqlite, wxGTK30-gtk3, libusb1, soapysdr
-, mesa_glu, libX11, gnuplot, fltk
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, sqlite
+, wxGTK30-gtk3
+, libusb1
+, soapysdr
+, mesa_glu
+, libX11
+, gnuplot
+, fltk
+}:
 
 stdenv.mkDerivation rec {
   pname = "limesuite";

@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://typora.io";
     license = licenses.unfree;
     maintainers = with maintainers; [ jensbin ];
-    platforms = [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

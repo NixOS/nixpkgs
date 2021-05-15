@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    fuse icu libxml2 libuuid
+    fuse
+    icu
+    libxml2
+    libuuid
   ];
 
   meta = with lib; {

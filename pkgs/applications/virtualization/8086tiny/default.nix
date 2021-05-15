@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, localBios ? true, nasm ? null
-, sdlSupport ? true, SDL ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, localBios ? true
+, nasm ? null
+, sdlSupport ? true
+, SDL ? null
+}:
 
 assert sdlSupport -> (SDL != null);
 
@@ -17,8 +22,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with lib;
-  optionals localBios [ nasm ]
-  ++  optionals sdlSupport [ SDL ];
+    optionals localBios [ nasm ]
+    ++ optionals sdlSupport [ SDL ];
 
   bios = localBios;
 

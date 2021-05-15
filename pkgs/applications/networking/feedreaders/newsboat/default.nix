@@ -1,5 +1,21 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, stfl
+, sqlite
+, curl
+, gettext
+, pkg-config
+, libxml2
+, json_c
+, ncurses
+, asciidoctor
+, libiconv
+, Security
+, Foundation
+, makeWrapper
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
@@ -60,10 +76,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://newsboat.org/";
+    homepage = "https://newsboat.org/";
     description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

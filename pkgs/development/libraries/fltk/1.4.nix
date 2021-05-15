@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, xorgproto, libXi
-, freeglut, libGLU, libGL, libjpeg, zlib, libXft, libpng
-, libtiff, freetype, Cocoa, AGL, GLUT
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xlibsWrapper
+, xorgproto
+, libXi
+, freeglut
+, libGLU
+, libGL
+, libjpeg
+, zlib
+, libXft
+, libpng
+, libtiff
+, freetype
+, Cocoa
+, AGL
+, GLUT
 }:
 
 let
@@ -24,8 +40,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ xorgproto ]
     ++ (if stdenv.isDarwin
-        then [ freetype libtiff ]
-        else [ xlibsWrapper libXi freeglut ]);
+  then [ freetype libtiff ]
+  else [ xlibsWrapper libXi freeglut ]);
 
   configureFlags = [
     "--enable-gl"

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , freeglut
 , libGL
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A user interface library using OpenGL";
-    license = licenses.zlib ;
+    license = licenses.zlib;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

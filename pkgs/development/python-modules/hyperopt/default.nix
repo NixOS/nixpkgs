@@ -1,6 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage
-, cloudpickle, numpy, future, networkx
-, six, tqdm, scipy, pymongo
+{ lib
+, fetchPypi
+, buildPythonPackage
+, cloudpickle
+, numpy
+, future
+, networkx
+, six
+, tqdm
+, scipy
+, pymongo
 }:
 
 buildPythonPackage rec {
@@ -21,9 +29,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed Asynchronous Hyperparameter Optimization";
-    homepage    = "http://hyperopt.github.com/hyperopt/";
-    license     = licenses.bsd2;
-    platforms   = platforms.unix;
+    homepage = "http://hyperopt.github.com/hyperopt/";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

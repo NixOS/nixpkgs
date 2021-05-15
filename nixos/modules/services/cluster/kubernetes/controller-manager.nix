@@ -8,8 +8,8 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] ["services" "kubernetes" "controllerManager" "bindAddress"])
-    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "port" ] ["services" "kubernetes" "controllerManager" "insecurePort"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] [ "services" "kubernetes" "controllerManager" "bindAddress" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "port" ] [ "services" "kubernetes" "controllerManager" "insecurePort" ])
   ];
 
   ###### interface

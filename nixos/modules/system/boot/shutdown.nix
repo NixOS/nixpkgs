@@ -7,7 +7,8 @@ with lib;
   # This unit saves the value of the system clock to the hardware
   # clock on shutdown.
   systemd.services.save-hwclock =
-    { description = "Save Hardware Clock";
+    {
+      description = "Save Hardware Clock";
 
       wantedBy = [ "shutdown.target" ];
 

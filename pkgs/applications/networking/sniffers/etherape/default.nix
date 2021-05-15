@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool, gtk3, libpcap, goocanvas2,
-popt, itstool, libxml2 }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libtool
+, gtk3
+, libpcap
+, goocanvas2
+, popt
+, itstool
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   name = "etherape-0.9.19";
@@ -10,7 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ itstool pkg-config (lib.getBin libxml2) ];
   buildInputs = [
-    libtool gtk3 libpcap goocanvas2 popt
+    libtool
+    gtk3
+    libpcap
+    goocanvas2
+    popt
   ];
 
   meta = with lib; {

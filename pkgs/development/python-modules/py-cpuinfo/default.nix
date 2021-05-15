@@ -12,10 +12,10 @@ buildPythonPackage rec {
   version = "7.0.0";
 
   src = fetchFromGitHub {
-     owner = "workhorsy";
-     repo = pname;
-     rev = "v${version}";
-     sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
+    owner = "workhorsy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
   };
 
   patches = [

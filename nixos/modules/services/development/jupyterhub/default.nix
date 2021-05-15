@@ -6,10 +6,11 @@ let
 
   cfg = config.services.jupyterhub;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
+  kernels = (pkgs.jupyter-kernel.create {
+    definitions =
+      if cfg.kernels != null
       then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
+      else pkgs.jupyter-kernel.default;
   });
 
   jupyterhubConfig = pkgs.writeText "jupyterhub_config.py" ''
@@ -26,7 +27,8 @@ let
 
     ${cfg.extraConfig}
   '';
-in {
+in
+{
   meta.maintainers = with maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
@@ -67,8 +69,8 @@ in {
         this is a python file.
       '';
       example = literalExample ''
-         c.SystemdSpawner.mem_limit = '8G'
-         c.SystemdSpawner.cpu_limit = 2.0
+        c.SystemdSpawner.mem_limit = '8G'
+        c.SystemdSpawner.cpu_limit = 2.0
       '';
     };
 
@@ -106,7 +108,7 @@ in {
     };
 
     kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ../jupyter/kernel-options.nix {
+      type = types.nullOr (types.attrsOf (types.submodule (import ../jupyter/kernel-options.nix {
         inherit lib;
       })));
 
@@ -170,7 +172,7 @@ in {
   };
 
   config = mkMerge [
-    (mkIf cfg.enable  {
+    (mkIf cfg.enable {
       systemd.services.jupyterhub = {
         description = "Jupyterhub development server";
 

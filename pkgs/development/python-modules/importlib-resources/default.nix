@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     importlib-metadata
   ] ++ lib.optional (pythonOlder "3.4") singledispatch
-    ++ lib.optional (pythonOlder "3.5") typing
+  ++ lib.optional (pythonOlder "3.5") typing
   ;
 
   checkPhase = ''

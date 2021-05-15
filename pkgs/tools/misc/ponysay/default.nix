@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 texinfo  ];
+  buildInputs = [ python3 texinfo ];
 
   inherit python3;
 

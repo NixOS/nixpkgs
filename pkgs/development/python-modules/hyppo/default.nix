@@ -2,7 +2,9 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
-, pytestCheckHook , pytestcov , numba
+, pytestCheckHook
+, pytestcov
+, numba
 , numpy
 , scikitlearn
 , scipy

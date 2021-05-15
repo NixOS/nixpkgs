@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , colorama
 , hypothesis
 , poetry-core
@@ -7,7 +9,8 @@
 }:
 
 let
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "isort";
   version = "5.6.4";
   format = "pyproject";

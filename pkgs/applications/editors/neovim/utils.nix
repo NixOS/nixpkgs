@@ -19,20 +19,19 @@ let
   # Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
   # anymore, $MYVIMRC wont be set etc
   makeNeovimConfig =
-    {
-    withPython2 ? false
-    /* the function you would have passed to python.withPackages */
+    { withPython2 ? false
+      /* the function you would have passed to python.withPackages */
     , extraPython2Packages ? (_: [ ])
     , withPython3 ? true
-    /* the function you would have passed to python3.withPackages */
+      /* the function you would have passed to python3.withPackages */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
 
-    # same values as in vimUtils.vimrcContent
+      # same values as in vimUtils.vimrcContent
     , configure ? { }
 
-    # for forward compability, when adding new environments, haskell etc.
+      # for forward compability, when adding new environments, haskell etc.
     , ...
     }@args:
     let
@@ -74,19 +73,29 @@ let
         let
           binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
 
-          flags = lib.concatLists (lib.mapAttrsToList (
+          flags = lib.concatLists (lib.mapAttrsToList
+            (
               prog: withProg: [
-                "--cmd" (genProviderSettings prog withProg)
+                "--cmd"
+                (genProviderSettings prog withProg)
               ]
             )
             hostprog_check_table);
         in
         [
-          "--argv0" "$0" "--add-flags" (lib.escapeShellArgs flags)
+          "--argv0"
+          "$0"
+          "--add-flags"
+          (lib.escapeShellArgs flags)
         ] ++ lib.optionals withRuby [
-          "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+          "--set"
+          "GEM_HOME"
+          "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
-          "--suffix" "PATH" ":" binPath
+          "--suffix"
+          "PATH"
+          ":"
+          binPath
         ];
 
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
@@ -104,27 +113,27 @@ let
       inherit rubyEnv;
     };
 
-    genProviderSettings = prog: withProg:
-      if withProg then
-        "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
-      else
-        "let g:loaded_${prog}_provider=0"
-    ;
+  genProviderSettings = prog: withProg:
+    if withProg then
+      "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
+    else
+      "let g:loaded_${prog}_provider=0"
+  ;
 
   # to keep backwards compatibility
-  legacyWrapper = neovim: {
-    extraMakeWrapperArgs ? ""
-    , withPython ? false
-    /* the function you would have passed to python.withPackages */
-    , extraPythonPackages ? (_: [])
-    /* the function you would have passed to python.withPackages */
-    , withPython3 ? true,  extraPython3Packages ? (_: [])
-    , withNodeJs ? false
-    , withRuby ? true
-    , vimAlias ? false
-    , viAlias ? false
-    , configure ? {}
-  }:
+  legacyWrapper = neovim: { extraMakeWrapperArgs ? ""
+                          , withPython ? false
+                            /* the function you would have passed to python.withPackages */
+                          , extraPythonPackages ? (_: [ ])
+                            /* the function you would have passed to python.withPackages */
+                          , withPython3 ? true
+                          , extraPython3Packages ? (_: [ ])
+                          , withNodeJs ? false
+                          , withRuby ? true
+                          , vimAlias ? false
+                          , viAlias ? false
+                          , configure ? { }
+                          }:
     let
       /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
       compatFun = funOrList: (if builtins.isList funOrList then
@@ -141,12 +150,15 @@ let
     assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
 
     wrapNeovimUnstable neovim (res // {
-      wrapperArgs = lib.escapeShellArgs (
-        res.wrapperArgs ++ lib.optionals (configure != {}) [
-          "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
-        ]) + " " + extraMakeWrapperArgs
+      wrapperArgs = lib.escapeShellArgs
+        (
+          res.wrapperArgs ++ lib.optionals (configure != { }) [
+            "--add-flags"
+            "-u ${writeText "init.vim" res.neovimRcContent}"
+          ]
+        ) + " " + extraMakeWrapperArgs
       ;
-  });
+    });
 in
 {
   inherit makeNeovimConfig;

@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, boost, gmp
-, tcl-8_5, tk-8_5
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, boost
+, gmp
+, tcl-8_5
+, tk-8_5
 , emacs
 }:
 
@@ -24,7 +29,8 @@ stdenv.mkDerivation {
   src = binaries.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
+    [
+      stdenv.cc.cc
       boost
       gmp
       tcl-8_5
@@ -75,6 +81,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     platforms = attrNames binaries;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

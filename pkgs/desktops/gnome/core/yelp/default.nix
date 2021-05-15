@@ -1,7 +1,19 @@
-{ lib, stdenv, gettext, fetchurl, webkitgtk, pkg-config, gtk3, glib
-, gnome, sqlite
-, itstool, libxml2, libxslt, gst_all_1
-, wrapGAppsHook }:
+{ lib
+, stdenv
+, gettext
+, fetchurl
+, webkitgtk
+, pkg-config
+, gtk3
+, glib
+, gnome
+, sqlite
+, itstool
+, libxml2
+, libxslt
+, gst_all_1
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "yelp";
@@ -14,10 +26,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext itstool wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib webkitgtk sqlite
-    libxml2 libxslt gnome.yelp-xsl
+    gtk3
+    glib
+    webkitgtk
+    sqlite
+    libxml2
+    libxslt
+    gnome.yelp-xsl
     gnome.adwaita-icon-theme
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   passthru = {

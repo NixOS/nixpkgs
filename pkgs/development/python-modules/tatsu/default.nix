@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytestrunner, pytestCheckHook, pytest-mypy
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, colorama
+, regex
+, pytestrunner
+, pytestCheckHook
+, pytest-mypy
 }:
 
 buildPythonPackage rec {

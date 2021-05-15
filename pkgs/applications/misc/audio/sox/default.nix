@@ -1,17 +1,36 @@
-{ config, lib, stdenv, fetchurl, pkg-config, CoreAudio
-, enableAlsa ? true, alsaLib ? null
-, enableLibao ? true, libao ? null
-, enableLame ? config.sox.enableLame or false, lame ? null
-, enableLibmad ? true, libmad ? null
-, enableLibogg ? true, libogg ? null, libvorbis ? null
-, enableOpusfile ? true, opusfile ? null
-, enableFLAC ? true, flac ? null
-, enablePNG ? true, libpng ? null
-, enableLibsndfile ? true, libsndfile ? null
-, enableWavpack ? true, wavpack ? null
-# amrnb and amrwb are unfree, disabled by default
-, enableAMR ? false, amrnb ? null, amrwb ? null
-, enableLibpulseaudio ? true, libpulseaudio ? null
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, CoreAudio
+, enableAlsa ? true
+, alsaLib ? null
+, enableLibao ? true
+, libao ? null
+, enableLame ? config.sox.enableLame or false
+, lame ? null
+, enableLibmad ? true
+, libmad ? null
+, enableLibogg ? true
+, libogg ? null
+, libvorbis ? null
+, enableOpusfile ? true
+, opusfile ? null
+, enableFLAC ? true
+, flac ? null
+, enablePNG ? true
+, libpng ? null
+, enableLibsndfile ? true
+, libsndfile ? null
+, enableWavpack ? true
+, wavpack ? null
+  # amrnb and amrwb are unfree, disabled by default
+, enableAMR ? false
+, amrnb ? null
+, amrwb ? null
+, enableLibpulseaudio ? true
+, libpulseaudio ? null
 }:
 
 with lib;

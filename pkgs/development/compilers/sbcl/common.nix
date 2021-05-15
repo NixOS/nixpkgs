@@ -1,6 +1,10 @@
 { version, sha256 }:
 
-{ lib, stdenv, fetchurl, writeText, sbclBootstrap
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
 , disableImmobileSpace ? false
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [texinfo];
+  buildInputs = [ texinfo ];
 
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -43,19 +47,19 @@ stdenv.mkDerivation rec {
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
   ''
   + (if purgeNixReferences
-    then
-      # This is the default location to look for the core; by default in $out/lib/sbcl
-      ''
-        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
-          -i src/runtime/runtime.c
-      ''
-    else
-      # Fix software version retrieval
-      ''
-        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
-          src/code/run-program.lisp
-      ''
-    );
+  then
+  # This is the default location to look for the core; by default in $out/lib/sbcl
+    ''
+      sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+        -i src/runtime/runtime.c
+    ''
+  else
+  # Fix software version retrieval
+    ''
+      sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
+        src/code/run-program.lisp
+    ''
+  );
 
 
   preBuild = ''

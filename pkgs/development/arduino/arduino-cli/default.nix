@@ -32,10 +32,11 @@ let
 
   };
 
-# buildFHSUserEnv is needed because the arduino-cli downloads compiler
-# toolchains from the internet that have their interpreters pointed at
-# /lib64/ld-linux-x86-64.so.2
-in buildFHSUserEnv {
+  # buildFHSUserEnv is needed because the arduino-cli downloads compiler
+  # toolchains from the internet that have their interpreters pointed at
+  # /lib64/ld-linux-x86-64.so.2
+in
+buildFHSUserEnv {
   inherit (pkg) name meta;
 
   runScript = "${pkg.outPath}/bin/arduino-cli";

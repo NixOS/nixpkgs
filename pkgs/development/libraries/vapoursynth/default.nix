@@ -1,9 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
-, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
-, zimg, libass, python3, libiconv
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, runCommandCC
+, runCommand
+, vapoursynth
+, writeText
+, patchelf
+, buildEnv
+, zimg
+, libass
+, python3
+, libiconv
 , ApplicationServices
-, ocrSupport ? false, tesseract
-, imwriSupport ? true, imagemagick
+, ocrSupport ? false
+, tesseract
+, imwriSupport ? true
+, imagemagick
 }:
 
 with lib;
@@ -13,9 +28,9 @@ stdenv.mkDerivation rec {
   version = "R53";
 
   src = fetchFromGitHub {
-    owner  = "vapoursynth";
-    repo   = "vapoursynth";
-    rev    = version;
+    owner = "vapoursynth";
+    repo = "vapoursynth";
+    rev = version;
     sha256 = "0qcsfkpkry0cmvi60khjwvfz4fqhy23nqmn4pb9qrwll26sn9dcr";
   };
 
@@ -25,14 +40,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [
-    zimg libass
+    zimg
+    libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
   ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
-    ++ optional ocrSupport   tesseract
-    ++ optional imwriSupport imagemagick;
+  ++ optional ocrSupport tesseract
+  ++ optional imwriSupport imagemagick;
 
   configureFlags = [
-    (optionalString (!ocrSupport)   "--disable-ocr")
+    (optionalString (!ocrSupport) "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
 
@@ -58,9 +74,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A video processing framework with the future in mind";
-    homepage    = "http://www.vapoursynth.com/";
-    license     = licenses.lgpl21;
-    platforms   = platforms.x86_64;
+    homepage = "http://www.vapoursynth.com/";
+    license = licenses.lgpl21;
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
   };
 

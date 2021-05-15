@@ -1,11 +1,19 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, mpi
-} :
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
+, blas
+, gfortran
+, openssh
+, mpi
+}:
 
 let
   version = "5.8";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "globalarrays";
   inherit version;
 

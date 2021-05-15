@@ -1,5 +1,11 @@
-{ buildPythonApplication, fetchurl, lib
-, dateutil, argcomplete, argh, psycopg2, boto3
+{ buildPythonApplication
+, fetchurl
+, lib
+, dateutil
+, argcomplete
+, argh
+, psycopg2
+, boto3
 }:
 
 buildPythonApplication rec {

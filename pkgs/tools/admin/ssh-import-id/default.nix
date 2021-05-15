@@ -4,7 +4,7 @@
 , requests
 , distro
 , makeWrapper
-, extraHandlers ? []
+, extraHandlers ? [ ]
 }:
 
 buildPythonPackage rec {

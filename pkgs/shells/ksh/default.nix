@@ -1,14 +1,22 @@
-{ lib, stdenv, meson, ninja, fetchFromGitHub, which, python3, fetchpatch
-, libiconv }:
+{ lib
+, stdenv
+, meson
+, ninja
+, fetchFromGitHub
+, which
+, python3
+, fetchpatch
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "ksh";
   version = "2020.0.0";
 
   src = fetchFromGitHub {
-    owner  = "att";
-    repo   = "ast";
-    rev    = version;
+    owner = "att";
+    repo = "ast";
+    rev = version;
     sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
   };
 

@@ -16,7 +16,8 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "remarkjs";
 
   version = "0.7.0";
@@ -62,7 +63,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://remarkjs.com";
     description = "A simple, in-browser, markdown-driven slideshow tool";
-    maintainers = [];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     broken = true;

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ i3ipc ];
 
-  doCheck = false;  # project has no test
+  doCheck = false; # project has no test
   pythonImportsCheck = [ "i3_balance_workspace" ];
 
   meta = {

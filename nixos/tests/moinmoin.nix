@@ -4,7 +4,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   machine =
     { ... }:
-    { services.moinmoin.enable = true;
+    {
+      services.moinmoin.enable = true;
       services.moinmoin.wikis.ExampleWiki.superUsers = [ "admin" ];
       services.moinmoin.wikis.ExampleWiki.webHost = "localhost";
 

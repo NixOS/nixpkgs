@@ -1,4 +1,5 @@
-{ lib, appimageTools, fetchurl }: let
+{ lib, appimageTools, fetchurl }:
+let
   pname = "flexoptix-app";
   version = "5.9.0";
   name = "${pname}-${version}";
@@ -18,7 +19,8 @@
     inherit name src;
   };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   multiPkgs = null; # no 32bit needed

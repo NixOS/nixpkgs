@@ -39,7 +39,7 @@ buildPythonPackage rec {
   # which is too complicated to setup here
   doCheck = false;
 
-  pythonImportsCheck =  [
+  pythonImportsCheck = [
     "asciimatics.effects"
     "asciimatics.renderers"
     "asciimatics.scene"

@@ -1,6 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib
+, fetchPypi
+, buildPythonPackage
 , psutil
-, pytest }:
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "PyPrind";

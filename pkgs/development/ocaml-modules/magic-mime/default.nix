@@ -13,14 +13,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   buildInputs = [ findlib ];
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   createFindlibDestdir = true;
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-magic-mime";
     description = "Convert file extensions to MIME types";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };

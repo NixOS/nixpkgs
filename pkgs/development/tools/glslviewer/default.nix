@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, glfw, pkg-config, libXrandr, libXdamage
-, libXext, libXrender, libXinerama, libXcursor, libXxf86vm, libXi
-, libX11, libGLU, python3Packages, ensureNewerSourcesForZipFilesHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, glfw
+, pkg-config
+, libXrandr
+, libXdamage
+, libXext
+, libXrender
+, libXinerama
+, libXcursor
+, libXxf86vm
+, libXi
+, libX11
+, libGLU
+, python3Packages
+, ensureNewerSourcesForZipFilesHook
 , Cocoa
 }:
 
@@ -17,11 +31,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
   buildInputs = [
-    glfw libGLU glfw libXrandr libXdamage
-    libXext libXrender libXinerama libXcursor libXxf86vm
-    libXi libX11
+    glfw
+    libGLU
+    glfw
+    libXrandr
+    libXdamage
+    libXext
+    libXrender
+    libXinerama
+    libXcursor
+    libXxf86vm
+    libXi
+    libX11
   ] ++ (with python3Packages; [ python setuptools wrapPython ])
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  ++ lib.optional stdenv.isDarwin Cocoa;
   pythonPath = with python3Packages; [ pyyaml requests ];
 
   # Makefile has /usr/local/bin hard-coded for 'make install'

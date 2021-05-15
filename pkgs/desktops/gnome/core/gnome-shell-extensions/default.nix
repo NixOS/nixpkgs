@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
-, gnome, gnome-menus, substituteAll }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, gettext
+, pkg-config
+, spidermonkey_68
+, glib
+, gnome
+, gnome-menus
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";

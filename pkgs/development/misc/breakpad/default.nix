@@ -5,7 +5,8 @@ let
     rev = "d9ad2969b369a9f1c455fef92d04c7628f7f9eb8";
     sha256 = "952dv+ZE1ge/WF5RyHmEqht+AofoRHKAeFmGasVF9BA=";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "breakpad";
 
   version = "unstable-3b3469e";

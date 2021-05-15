@@ -21,7 +21,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
   propagatedBuildInputs = [ hglib ];
 
-  doCheck = false;  # too many assumptions
+  doCheck = false; # too many assumptions
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/hgsvn";

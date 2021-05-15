@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "6.2.0";
 
   src = fetchFromGitHub {
-    owner  = "cdown";
-    repo   = "clipmenu";
-    rev    = version;
+    owner = "cdown";
+    repo = "clipmenu";
+    rev = version;
     sha256 = "sha256-nvctEwyho6kl4+NXi76jT2kG7nchmI2a7mgxlgjXA5A=";
   };
 

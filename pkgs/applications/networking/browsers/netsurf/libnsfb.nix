@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config
-, uilib, SDL
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, uilib
+, SDL
 , buildsystem
 }:
 

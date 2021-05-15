@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     "INSTALL=cp"
   ];
 
-  patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
+  patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [ ];
 
   buildInputs = lib.optional enableNLS libnatspec
     ++ lib.optional stdenv.isCygwin libiconv;

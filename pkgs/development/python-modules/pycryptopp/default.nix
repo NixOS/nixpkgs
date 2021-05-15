@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pycryptopp";
   version = "0.7.1.869544967005693312591928092448767568728501330214";
-  disabled = isPy3k;  # see https://bitbucket.org/pypy/pypy/issue/1190/
+  disabled = isPy3k; # see https://bitbucket.org/pypy/pypy/issue/1190/
 
   src = fetchPypi {
     inherit pname version;

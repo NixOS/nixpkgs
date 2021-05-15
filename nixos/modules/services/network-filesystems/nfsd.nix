@@ -141,7 +141,8 @@ in
     environment.etc.exports.source = exports;
 
     systemd.services.nfs-server =
-      { enable = true;
+      {
+        enable = true;
         wantedBy = [ "multi-user.target" ];
 
         preStart =
@@ -151,7 +152,8 @@ in
       };
 
     systemd.services.nfs-mountd =
-      { enable = true;
+      {
+        enable = true;
         restartTriggers = [ exports ];
 
         preStart =

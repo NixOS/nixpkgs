@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ./make-test-python.nix ({ pkgs, lib, ... }:
+let
 
   # We'll need to be able to trade cert files between nodes via scp.
   inherit (import ./ssh-keys.nix pkgs)
@@ -38,8 +39,8 @@ in
         services.nebula.networks.smoke = {
           isLighthouse = true;
           firewall = {
-            outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
-            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+            outbound = [{ port = "any"; proto = "any"; host = "any"; }];
+            inbound = [{ port = "any"; proto = "any"; host = "any"; }];
           };
         };
       };
@@ -56,8 +57,8 @@ in
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
           firewall = {
-            outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
-            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+            outbound = [{ port = "any"; proto = "any"; host = "any"; }];
+            inbound = [{ port = "any"; proto = "any"; host = "any"; }];
           };
         };
       };
@@ -74,8 +75,8 @@ in
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
           firewall = {
-            outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
-            inbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
+            outbound = [{ port = "any"; proto = "any"; host = "any"; }];
+            inbound = [{ port = "any"; proto = "any"; host = "lighthouse"; }];
           };
         };
       };
@@ -93,8 +94,8 @@ in
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
           firewall = {
-            outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
-            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+            outbound = [{ port = "any"; proto = "any"; host = "lighthouse"; }];
+            inbound = [{ port = "any"; proto = "any"; host = "any"; }];
           };
         };
       };
@@ -112,112 +113,114 @@ in
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
           firewall = {
-            outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
-            inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
+            outbound = [{ port = "any"; proto = "any"; host = "lighthouse"; }];
+            inbound = [{ port = "any"; proto = "any"; host = "any"; }];
           };
         };
       };
 
   };
 
-  testScript = let
+  testScript =
+    let
 
-    setUpPrivateKey = name: ''
-    ${name}.succeed(
-        "mkdir -p /root/.ssh",
-        "chown 700 /root/.ssh",
-        "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
-        "chown 600 /root/.ssh/id_snakeoil",
-    )
-    '';
+      setUpPrivateKey = name: ''
+        ${name}.succeed(
+            "mkdir -p /root/.ssh",
+            "chown 700 /root/.ssh",
+            "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
+            "chown 600 /root/.ssh/id_snakeoil",
+        )
+      '';
 
-    # From what I can tell, StrictHostKeyChecking=no is necessary for ssh to work between machines.
-    sshOpts = "-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/root/.ssh/id_snakeoil";
+      # From what I can tell, StrictHostKeyChecking=no is necessary for ssh to work between machines.
+      sshOpts = "-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/root/.ssh/id_snakeoil";
 
-    restartAndCheckNebula = name: ip: ''
-      ${name}.systemctl("restart nebula@smoke.service")
-      ${name}.succeed("ping -c5 ${ip}")
-    '';
+      restartAndCheckNebula = name: ip: ''
+        ${name}.systemctl("restart nebula@smoke.service")
+        ${name}.succeed("ping -c5 ${ip}")
+      '';
 
-    # Create a keypair on the client node, then use the public key to sign a cert on the lighthouse.
-    signKeysFor = name: ip: ''
-      lighthouse.wait_for_unit("sshd.service")
-      ${name}.wait_for_unit("sshd.service")
-      ${name}.succeed(
-          "mkdir -p /etc/nebula",
-          "nebula-cert keygen -out-key /etc/nebula/${name}.key -out-pub /etc/nebula/${name}.pub",
-          "scp ${sshOpts} /etc/nebula/${name}.pub 192.168.1.1:/tmp/${name}.pub",
-      )
+      # Create a keypair on the client node, then use the public key to sign a cert on the lighthouse.
+      signKeysFor = name: ip: ''
+        lighthouse.wait_for_unit("sshd.service")
+        ${name}.wait_for_unit("sshd.service")
+        ${name}.succeed(
+            "mkdir -p /etc/nebula",
+            "nebula-cert keygen -out-key /etc/nebula/${name}.key -out-pub /etc/nebula/${name}.pub",
+            "scp ${sshOpts} /etc/nebula/${name}.pub 192.168.1.1:/tmp/${name}.pub",
+        )
+        lighthouse.succeed(
+            'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /tmp/${name}.pub -out-crt /tmp/${name}.crt',
+        )
+        ${name}.succeed(
+            "scp ${sshOpts} 192.168.1.1:/tmp/${name}.crt /etc/nebula/${name}.crt",
+            "scp ${sshOpts} 192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
+        )
+      '';
+
+    in
+    ''
+      start_all()
+
+      # Create the certificate and sign the lighthouse's keys.
+      ${setUpPrivateKey "lighthouse"}
       lighthouse.succeed(
-          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /tmp/${name}.pub -out-crt /tmp/${name}.crt',
+          "mkdir -p /etc/nebula",
+          'nebula-cert ca -name "Smoke Test" -out-crt /etc/nebula/ca.crt -out-key /etc/nebula/ca.key',
+          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "lighthouse" -groups "lighthouse" -ip "10.0.100.1/24" -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key',
       )
-      ${name}.succeed(
-          "scp ${sshOpts} 192.168.1.1:/tmp/${name}.crt /etc/nebula/${name}.crt",
-          "scp ${sshOpts} 192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
-      )
+
+      # Reboot the lighthouse and verify that the nebula service comes up on boot.
+      # Since rebooting takes a while, we'll just restart the service on the other nodes.
+      lighthouse.shutdown()
+      lighthouse.start()
+      lighthouse.wait_for_unit("nebula@smoke.service")
+      lighthouse.succeed("ping -c5 10.0.100.1")
+
+      # Create keys for node2's nebula service and test that it comes up.
+      ${setUpPrivateKey "node2"}
+      ${signKeysFor "node2" "10.0.100.2/24"}
+      ${restartAndCheckNebula "node2" "10.0.100.2"}
+
+      # Create keys for node3's nebula service and test that it comes up.
+      ${setUpPrivateKey "node3"}
+      ${signKeysFor "node3" "10.0.100.3/24"}
+      ${restartAndCheckNebula "node3" "10.0.100.3"}
+
+      # Create keys for node4's nebula service and test that it comes up.
+      ${setUpPrivateKey "node4"}
+      ${signKeysFor "node4" "10.0.100.4/24"}
+      ${restartAndCheckNebula "node4" "10.0.100.4"}
+
+      # Create keys for node4's nebula service and test that it does not come up.
+      ${setUpPrivateKey "node5"}
+      ${signKeysFor "node5" "10.0.100.5/24"}
+      node5.fail("systemctl status nebula@smoke.service")
+      node5.fail("ping -c5 10.0.100.5")
+
+      # The lighthouse can ping node2 and node3 but not node5
+      lighthouse.succeed("ping -c3 10.0.100.2")
+      lighthouse.succeed("ping -c3 10.0.100.3")
+      lighthouse.fail("ping -c3 10.0.100.5")
+
+      # node2 can ping the lighthouse, but not node3 because of its inbound firewall
+      node2.succeed("ping -c3 10.0.100.1")
+      node2.fail("ping -c3 10.0.100.3")
+
+      # node3 can ping the lighthouse and node2
+      node3.succeed("ping -c3 10.0.100.1")
+      node3.succeed("ping -c3 10.0.100.2")
+
+      # node4 can ping the lighthouse but not node2 or node3
+      node4.succeed("ping -c3 10.0.100.1")
+      node4.fail("ping -c3 10.0.100.2")
+      node4.fail("ping -c3 10.0.100.3")
+
+      # node2 can ping node3 now that node3 pinged it first
+      node2.succeed("ping -c3 10.0.100.3")
+      # node4 can ping node2 if node2 pings it first
+      node2.succeed("ping -c3 10.0.100.4")
+      node4.succeed("ping -c3 10.0.100.2")
     '';
-
-  in ''
-    start_all()
-
-    # Create the certificate and sign the lighthouse's keys.
-    ${setUpPrivateKey "lighthouse"}
-    lighthouse.succeed(
-        "mkdir -p /etc/nebula",
-        'nebula-cert ca -name "Smoke Test" -out-crt /etc/nebula/ca.crt -out-key /etc/nebula/ca.key',
-        'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "lighthouse" -groups "lighthouse" -ip "10.0.100.1/24" -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key',
-    )
-
-    # Reboot the lighthouse and verify that the nebula service comes up on boot.
-    # Since rebooting takes a while, we'll just restart the service on the other nodes.
-    lighthouse.shutdown()
-    lighthouse.start()
-    lighthouse.wait_for_unit("nebula@smoke.service")
-    lighthouse.succeed("ping -c5 10.0.100.1")
-
-    # Create keys for node2's nebula service and test that it comes up.
-    ${setUpPrivateKey "node2"}
-    ${signKeysFor "node2" "10.0.100.2/24"}
-    ${restartAndCheckNebula "node2" "10.0.100.2"}
-
-    # Create keys for node3's nebula service and test that it comes up.
-    ${setUpPrivateKey "node3"}
-    ${signKeysFor "node3" "10.0.100.3/24"}
-    ${restartAndCheckNebula "node3" "10.0.100.3"}
-
-    # Create keys for node4's nebula service and test that it comes up.
-    ${setUpPrivateKey "node4"}
-    ${signKeysFor "node4" "10.0.100.4/24"}
-    ${restartAndCheckNebula "node4" "10.0.100.4"}
-
-    # Create keys for node4's nebula service and test that it does not come up.
-    ${setUpPrivateKey "node5"}
-    ${signKeysFor "node5" "10.0.100.5/24"}
-    node5.fail("systemctl status nebula@smoke.service")
-    node5.fail("ping -c5 10.0.100.5")
-
-    # The lighthouse can ping node2 and node3 but not node5
-    lighthouse.succeed("ping -c3 10.0.100.2")
-    lighthouse.succeed("ping -c3 10.0.100.3")
-    lighthouse.fail("ping -c3 10.0.100.5")
-
-    # node2 can ping the lighthouse, but not node3 because of its inbound firewall
-    node2.succeed("ping -c3 10.0.100.1")
-    node2.fail("ping -c3 10.0.100.3")
-
-    # node3 can ping the lighthouse and node2
-    node3.succeed("ping -c3 10.0.100.1")
-    node3.succeed("ping -c3 10.0.100.2")
-
-    # node4 can ping the lighthouse but not node2 or node3
-    node4.succeed("ping -c3 10.0.100.1")
-    node4.fail("ping -c3 10.0.100.2")
-    node4.fail("ping -c3 10.0.100.3")
-
-    # node2 can ping node3 now that node3 pinged it first
-    node2.succeed("ping -c3 10.0.100.3")
-    # node4 can ping node2 if node2 pings it first
-    node2.succeed("ping -c3 10.0.100.4")
-    node4.succeed("ping -c3 10.0.100.2")
-  '';
 })

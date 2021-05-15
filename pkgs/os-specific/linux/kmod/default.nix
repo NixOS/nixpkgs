@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkg-config
-, libxslt, xz, elf-header
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libxslt
+, xz
+, elf-header
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
 
@@ -7,7 +13,8 @@ let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kmod";
   version = "27";
 

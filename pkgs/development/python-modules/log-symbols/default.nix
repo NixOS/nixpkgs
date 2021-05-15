@@ -3,7 +3,8 @@
 , fetchPypi
 , isPy27
 , pytestCheckHook
-, lib }:
+, lib
+}:
 
 buildPythonPackage rec {
   pname = "log_symbols";

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl
-, perl, flex, bison, python3
+{ lib
+, stdenv
+, fetchurl
+, perl
+, flex
+, bison
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "4.110";
 
   src = fetchurl {
-    url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
+    url = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
     sha256 = "sha256-Rxb+AFhmGinWtZyvjnRxsu3b3tbtRO3njcHGUJTs/sw=";
   };
 
@@ -28,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
-    license     = licenses.lgpl3;
-    platforms   = platforms.unix;
+    homepage = "https://www.veripool.org/wiki/verilator";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

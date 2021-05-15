@@ -19,7 +19,9 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kwindowsystem plasma-framework qtx11extras
+    kwindowsystem
+    plasma-framework
+    qtx11extras
   ];
 
   nativeBuildInputs = [

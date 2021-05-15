@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python, cmake, pkg-config
-, bison, flex, twisted
+{ lib
+, stdenv
+, fetchurl
+, boost
+, zlib
+, libevent
+, openssl
+, python
+, cmake
+, pkg-config
+, bison
+, flex
+, twisted
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -14,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [ cmake pkg-config bison flex ];
   buildInputs = [ boost zlib libevent openssl ]

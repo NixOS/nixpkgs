@@ -22,7 +22,8 @@
 , pcre
 , pkg-config
 , pugixml
-, lib, stdenv
+, lib
+, stdenv
 , swig
 , vips
 }:
@@ -57,8 +58,8 @@ stdenv.mkDerivation rec {
     expat
     fftw
     fftwFloat
-    gtkmm2  # Could be build with gtk3 but proper UI theme is missing and therefore not very usable with gtk3
-            # See: https://discuss.pixls.us/t/help-needed-for-gtk3-theme/5803
+    gtkmm2 # Could be build with gtk3 but proper UI theme is missing and therefore not very usable with gtk3
+    # See: https://discuss.pixls.us/t/help-needed-for-gtk3-theme/5803
     lcms2
     lensfun
     libexif

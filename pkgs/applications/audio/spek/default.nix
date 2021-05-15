@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # needed for autoreconfHook
-  AUTOPOINT="intltoolize --automake --copy";
+  AUTOPOINT = "intltoolize --automake --copy";
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
 

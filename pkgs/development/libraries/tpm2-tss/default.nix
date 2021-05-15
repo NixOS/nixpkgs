@@ -1,7 +1,21 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
-, openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, doxygen
+, perl
+, openssl
+, json_c
+, curl
+, libgcrypt
+, cmocka
+, uthash
+, ibm-sw-tpm2
+, iproute2
+, procps
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +30,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    doxygen
+    perl
   ];
   buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
-    cmocka uthash ibm-sw-tpm2 iproute2 procps which
+    cmocka
+    uthash
+    ibm-sw-tpm2
+    iproute2
+    procps
+    which
   ];
 
   preAutoreconf = "./bootstrap";

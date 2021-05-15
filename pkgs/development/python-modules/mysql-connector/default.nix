@@ -2,7 +2,8 @@
 
 let
   py = python;
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "mysql-connector";
   version = "8.0.24";
 

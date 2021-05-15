@@ -1,5 +1,15 @@
-{ fetchurl, lib, stdenv, pkg-config, fuse, openssl, asciidoc
-, docbook_xml_dtd_45, docbook_xsl , libxml2, libxslt }:
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, fuse
+, openssl
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
   name = "httpfs2-0.1.5";
@@ -10,8 +20,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkg-config fuse openssl
-      asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
+    [
+      pkg-config
+      fuse
+      openssl
+      asciidoc
+      docbook_xml_dtd_45
+      docbook_xsl
+      libxml2
+      libxslt
     ];
 
   installPhase =

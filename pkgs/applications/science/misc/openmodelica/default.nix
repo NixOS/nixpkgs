@@ -1,7 +1,44 @@
-{lib, stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
-hwloc, jre, lapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
-lp_solve, omniorb, sqlite, libatomic_ops, pkg-config, file, gettext, flex, bison,
-doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
+{ lib
+, stdenv
+, fetchgit
+, fetchsvn
+, autoconf
+, automake
+, libtool
+, gfortran
+, clang
+, cmake
+, gnumake
+, hwloc
+, jre
+, lapack
+, blas
+, hdf5
+, expat
+, ncurses
+, readline
+, qt4
+, webkitgtk
+, which
+, lp_solve
+, omniorb
+, sqlite
+, libatomic_ops
+, pkg-config
+, file
+, gettext
+, flex
+, bison
+, doxygen
+, boost
+, openscenegraph
+, gnome2
+, xorg
+, git
+, bash
+, gtk2
+, makeWrapper
+}:
 
 let
 
@@ -14,11 +51,43 @@ stdenv.mkDerivation {
 
   src = fetchgit (import ./src-main.nix);
 
-  buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
-    hwloc jre lapack blas hdf5 expat ncurses readline qt4 webkitgtk which
-    lp_solve omniorb sqlite libatomic_ops pkg-config file gettext flex bison
-    doxygen boost openscenegraph gnome2.gtkglext xorg.libXmu
-    git gtk2 makeWrapper];
+  buildInputs = [
+    autoconf
+    cmake
+    automake
+    libtool
+    gfortran
+    clang
+    gnumake
+    hwloc
+    jre
+    lapack
+    blas
+    hdf5
+    expat
+    ncurses
+    readline
+    qt4
+    webkitgtk
+    which
+    lp_solve
+    omniorb
+    sqlite
+    libatomic_ops
+    pkg-config
+    file
+    gettext
+    flex
+    bison
+    doxygen
+    boost
+    openscenegraph
+    gnome2.gtkglext
+    xorg.libXmu
+    git
+    gtk2
+    makeWrapper
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -44,10 +113,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "An open-source Modelica-based modeling and simulation environment";
-    homepage    = "https://openmodelica.org";
-    license     = licenses.gpl3;
+    homepage = "https://openmodelica.org";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.linux;
-    broken      = true;
+    platforms = platforms.linux;
+    broken = true;
   };
 }

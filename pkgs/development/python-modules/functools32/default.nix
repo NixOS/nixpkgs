@@ -4,7 +4,8 @@
 , isPy3k
 }:
 
-if isPy3k then null else buildPythonPackage rec {
+if isPy3k then null else
+buildPythonPackage rec {
   pname = "functools32";
   version = "3.2.3-2";
 

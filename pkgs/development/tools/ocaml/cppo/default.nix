@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocamlbuild
 , buildDunePackage
 }:
 
@@ -19,47 +25,48 @@ in
 
 if lib.versionAtLeast ocaml.version "4.02" then
 
-buildDunePackage rec {
-  inherit pname;
-  version = "1.6.7";
+  buildDunePackage
+  rec {
+    inherit pname;
+    version = "1.6.7";
 
-  useDune2 = true;
+    useDune2 = true;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-community/cppo/releases/download/v${version}/cppo-v${version}.tbz";
-    sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
-  };
+    src = fetchurl {
+      url = "https://github.com/ocaml-community/cppo/releases/download/v${version}/cppo-v${version}.tbz";
+      sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
+    };
 
-  doCheck = true;
+    doCheck = true;
 
-  inherit meta;
-}
+    inherit meta;
+  }
 
 else
 
-let version = "1.5.0"; in
+  let version = "1.5.0"; in
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+    name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
-  };
+    src = fetchFromGitHub {
+      owner = "mjambon";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+    };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+    buildInputs = [ ocaml findlib ocamlbuild ];
 
-  inherit meta;
+    inherit meta;
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+    makeFlags = [ "PREFIX=$(out)" ];
 
-  preBuild = ''
-    mkdir $out/bin
-  '';
+    preBuild = ''
+      mkdir $out/bin
+    '';
 
-}
+  }

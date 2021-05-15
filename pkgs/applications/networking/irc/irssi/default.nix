@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage    = "https://irssi.org";
+    homepage = "https://irssi.org";
     description = "A terminal based IRC client";
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lovek323 ];
-    license     = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

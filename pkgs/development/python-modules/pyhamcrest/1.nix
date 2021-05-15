@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytest
 , six
 }:
 buildPythonPackage rec {
@@ -14,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ mock pytest ];
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # pypi tarball does not include tests
+  doCheck = false; # pypi tarball does not include tests
 
   meta = with lib; {
     homepage = "https://github.com/hamcrest/PyHamcrest";

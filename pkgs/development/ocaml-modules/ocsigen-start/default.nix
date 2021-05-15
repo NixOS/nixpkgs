@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocsigen-toolkit
+, pgocaml_ppx
+, safepass
+, yojson
 , cohttp-lwt-unix
 , resource-pooling
 }:
@@ -13,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./templates-dir.patch ];
 
   postPatch = ''
-  substituteInPlace "src/os_db.ml" --replace "citext" "text"
+    substituteInPlace "src/os_db.ml" --replace "citext" "text"
   '';
 
   createFindlibDestdir = true;
@@ -28,9 +36,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocsigen.org/ocsigen-start";
     description = "Eliom application skeleton";
-    longDescription =''
-     An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
-      '';
+    longDescription = ''
+      An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
+    '';
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkg-config, systemd
-, tlsSupport ? false }:
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, openssl
+, sqlite
+, pkg-config
+, systemd
+, tlsSupport ? false
+}:
 
 assert tlsSupport -> openssl != null;
 
@@ -17,7 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ sqlite systemd ] ++ lib.optional tlsSupport openssl;
 
-  outputs = [ "out"
+  outputs = [
+    "out"
     "mod_example"
     "mod_welcome"
     "mod_logging"

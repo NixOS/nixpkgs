@@ -1,6 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, buildPackages
+, installShellFiles
 , makeWrapper
-, enableCmount ? true, fuse, macfuse-stubs
+, enableCmount ? true
+, fuse
+, macfuse-stubs
 }:
 
 buildGoModule rec {

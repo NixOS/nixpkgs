@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.services.auto-cpufreq;
-in {
+in
+{
   options = {
     services.auto-cpufreq = {
       enable = mkEnableOption "auto-cpufreq daemon";

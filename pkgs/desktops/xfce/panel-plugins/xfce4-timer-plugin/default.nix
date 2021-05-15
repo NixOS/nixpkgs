@@ -5,7 +5,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-timer-plugin";
+  pname = "xfce4-timer-plugin";
   version = "1.7.1";
 
   src = fetchurl {

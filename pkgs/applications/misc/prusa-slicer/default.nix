@@ -1,6 +1,35 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, makeDesktopItem
+, pkg-config
+, wrapGAppsHook
+, boost
+, cereal
+, cgal_5
+, curl
+, dbus
+, eigen
+, expat
+, glew
+, glib
+, gmp
+, gtest
+, gtk3
+, hicolor-icon-theme
+, ilmbase
+, libpng
+, mpfr
+, nlopt
+, openvdb
+, pcre
+, qhull
+, systemd
+, tbb
+, wxGTK31-gtk3
+, xorg
 }:
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";

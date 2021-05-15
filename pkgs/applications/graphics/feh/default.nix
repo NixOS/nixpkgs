@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perl
-, enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, xorg
+, imlib2
+, libjpeg
+, libpng
+, curl
+, libexif
+, jpegexiforient
+, perl
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin
+}:
 
 with lib;
 
@@ -21,9 +31,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}" "exif=1"
+    "PREFIX=${placeholder "out"}"
+    "exif=1"
   ] ++ optional stdenv.isDarwin "verscmp=0"
-    ++ optional enableAutoreload "inotify=1";
+  ++ optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''

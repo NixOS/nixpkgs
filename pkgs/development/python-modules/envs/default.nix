@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, jinja2, click, terminaltables
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, jinja2
+, click
+, terminaltables
 }:
 
 buildPythonPackage rec {

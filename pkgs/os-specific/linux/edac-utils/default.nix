@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
-, sysfsutils, dmidecode, kmod }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, makeWrapper
+, sysfsutils
+, dmidecode
+, kmod
+}:
 
 stdenv.mkDerivation {
   name = "edac-utils-2015-01-07";

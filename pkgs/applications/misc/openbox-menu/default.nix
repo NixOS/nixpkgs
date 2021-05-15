@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.romildo ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

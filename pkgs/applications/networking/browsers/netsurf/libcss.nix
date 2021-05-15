@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, perl
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -19,14 +23,15 @@ stdenv.mkDerivation rec {
     perl
     libparserutils
     libwapcaplet
-    buildsystem ];
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  NIX_CFLAGS_COMPILE= [ "-Wno-error=implicit-fallthrough" "-Wno-error=maybe-uninitialized" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" "-Wno-error=maybe-uninitialized" ];
 
   meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";

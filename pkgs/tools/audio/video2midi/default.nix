@@ -6,7 +6,8 @@ let
     enablePython = true;
     enableFfmpeg = true;
   });
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
   version = "0.4.0.2";
 

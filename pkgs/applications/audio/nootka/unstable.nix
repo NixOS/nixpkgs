@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, cmake
-, alsaLib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch
-, qtbase, qtdeclarative, qtquickcontrols2
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, alsaLib
+, fftwSinglePrec
+, libjack2
+, libpulseaudio
+, libvorbis
+, soundtouch
+, qtbase
+, qtdeclarative
+, qtquickcontrols2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +23,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    alsaLib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch
-    qtbase qtdeclarative qtquickcontrols2
+    alsaLib
+    fftwSinglePrec
+    libjack2
+    libpulseaudio
+    libvorbis
+    soundtouch
+    qtbase
+    qtdeclarative
+    qtquickcontrols2
   ];
 
   dontWrapQtApps = true;

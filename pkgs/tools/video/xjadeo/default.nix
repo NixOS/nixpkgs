@@ -1,5 +1,18 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg, freetype, libGLU
-, libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, ffmpeg
+, freetype
+, libGLU
+, libjack2
+, liblo
+, libX11
+, libXv
+, pkg-config
+, portmidi
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";

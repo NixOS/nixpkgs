@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
     "-DUSE_EXTERNAL_YAML=OFF"
   ] ++ optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
+  ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
 
   postInstall = ''
     mkdir -p $bin/bin; mv $out/bin $bin/

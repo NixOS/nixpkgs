@@ -1,10 +1,34 @@
-{ lib, config, stdenv, fetchFromGitHub, symlinkJoin, wrapGAppsHook, cmake, boost172
-, pkg-config, flex, bison, libpng, libtiff, zlib, python3, embree, openexr
-, openimagedenoise, openimageio, tbb, c-blosc, gtk3, pcre, doxygen
-# OpenCL Support
-, withOpenCL ? true, ocl-icd
-# Cuda Support
-, withCuda ? config.cudaSupport or false, cudatoolkit }:
+{ lib
+, config
+, stdenv
+, fetchFromGitHub
+, symlinkJoin
+, wrapGAppsHook
+, cmake
+, boost172
+, pkg-config
+, flex
+, bison
+, libpng
+, libtiff
+, zlib
+, python3
+, embree
+, openexr
+, openimagedenoise
+, openimageio
+, tbb
+, c-blosc
+, gtk3
+, pcre
+, doxygen
+  # OpenCL Support
+, withOpenCL ? true
+, ocl-icd
+  # Cuda Support
+, withCuda ? config.cudaSupport or false
+, cudatoolkit
+}:
 
 let
   boostWithPython = boost172.override {
@@ -17,7 +41,8 @@ let
   pythonVersion = (lib.versions.major python3.version)
     + (lib.versions.minor python3.version);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "luxcorerender";
   version = "2.4";
 
@@ -46,7 +71,7 @@ in stdenv.mkDerivation rec {
     openimageio.dev
     openimageio.out
   ] ++ lib.optionals withOpenCL [ ocl-icd ]
-    ++ lib.optionals withCuda [ cudatoolkit ];
+  ++ lib.optionals withCuda [ cudatoolkit ];
 
   cmakeFlags = [ "-DPYTHON_V=${pythonVersion}" ]
     ++ lib.optional (!withOpenCL) "-DLUXRAYS_DISABLE_OPENCL=1"

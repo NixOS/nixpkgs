@@ -1,7 +1,23 @@
-{ mkDerivation, fetchFromGitHub, fetchpatch
-, aeson, aeson-pretty, attoparsec, base, bytestring, conduit, conduit-extra
-, containers, exceptions, mtl, optparse-simple, parsec, scientific, lib
-, text, unordered-containers, vector
+{ mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, aeson
+, aeson-pretty
+, attoparsec
+, base
+, bytestring
+, conduit
+, conduit-extra
+, containers
+, exceptions
+, mtl
+, optparse-simple
+, parsec
+, scientific
+, lib
+, text
+, unordered-containers
+, vector
 }:
 mkDerivation rec {
   pname = "jl";
@@ -23,12 +39,31 @@ mkDerivation rec {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson attoparsec base bytestring containers exceptions mtl parsec
-    scientific text unordered-containers vector
+    aeson
+    attoparsec
+    base
+    bytestring
+    containers
+    exceptions
+    mtl
+    parsec
+    scientific
+    text
+    unordered-containers
+    vector
   ];
   executableHaskellDepends = [
-    aeson aeson-pretty base bytestring conduit conduit-extra containers
-    mtl optparse-simple text vector
+    aeson
+    aeson-pretty
+    base
+    bytestring
+    conduit
+    conduit-extra
+    containers
+    mtl
+    optparse-simple
+    text
+    vector
   ];
   license = lib.licenses.bsd3;
   description = "Functional sed for JSON";

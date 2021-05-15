@@ -1,8 +1,33 @@
-{ buildPythonPackage, python, tornado, pycrypto, pycurl, pytz
-, pillow, derpconf, python_magic, libthumbor, webcolors
-, piexif, futures, statsd, thumborPexif, fetchFromGitHub, isPy3k, lib
-, mock, raven, nose, yanc, remotecv, pyssim, cairosvg, preggy, opencv3
-, pkgs, coreutils, substituteAll
+{ buildPythonPackage
+, python
+, tornado
+, pycrypto
+, pycurl
+, pytz
+, pillow
+, derpconf
+, python_magic
+, libthumbor
+, webcolors
+, piexif
+, futures
+, statsd
+, thumborPexif
+, fetchFromGitHub
+, isPy3k
+, lib
+, mock
+, raven
+, nose
+, yanc
+, remotecv
+, pyssim
+, cairosvg
+, preggy
+, opencv3
+, pkgs
+, coreutils
+, substituteAll
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,7 @@
 
 let
 
-  inherit (kakouneUtils.override {}) buildKakounePluginFrom2Nix;
+  inherit (kakouneUtils.override { }) buildKakounePluginFrom2Nix;
 
   plugins = callPackage ./generated.nix {
     inherit buildKakounePluginFrom2Nix overrides;

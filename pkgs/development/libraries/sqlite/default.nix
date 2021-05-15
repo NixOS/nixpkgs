@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, interactive ? false
+, readline ? null
+, ncurses ? null
 , python3Packages
 }:
 

@@ -13,14 +13,15 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cacert
-    (python3.withPackages(ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       matrix-nio
       magic
       markdown
       pillow
       urllib3
       aiofiles
-    ]))];
+    ]))
+  ];
 
   installPhase = ''
     runHook preInstall

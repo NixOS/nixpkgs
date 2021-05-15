@@ -1,6 +1,12 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, logs, lwt, mirage-flow
-, alcotest, mirage-flow-combinators
+{ lib
+, fetchurl
+, buildDunePackage
+, cstruct
+, logs
+, lwt
+, mirage-flow
+, alcotest
+, mirage-flow-combinators
 }:
 
 buildDunePackage rec {

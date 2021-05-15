@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libGL, libGLU, libXmu, cmake, ninja,
-  pkg-config, fontconfig, freetype, expat, freeimage, vtk, gl2ps, tbb,
-  OpenCL, Cocoa
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libGL
+, libGLU
+, libXmu
+, cmake
+, ninja
+, pkg-config
+, fontconfig
+, freetype
+, expat
+, freeimage
+, vtk
+, gl2ps
+, tbb
+, OpenCL
+, Cocoa
 }:
 
 with lib;
@@ -17,10 +33,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [
-    libGL libGLU libXmu freetype fontconfig expat freeimage vtk
-    gl2ps tbb
+    libGL
+    libGLU
+    libXmu
+    freetype
+    fontconfig
+    expat
+    freeimage
+    vtk
+    gl2ps
+    tbb
   ]
-    ++ optionals stdenv.isDarwin [OpenCL Cocoa]
+  ++ optionals stdenv.isDarwin [ OpenCL Cocoa ]
   ;
 
   cmakeFlags = [
@@ -30,7 +54,7 @@ stdenv.mkDerivation rec {
     "-DOCE_WITH_GL2PS=ON"
     "-DOCE_MULTITHREAD_LIBRARY=TBB"
   ]
-  ++ optionals stdenv.isDarwin ["-DOCE_OSX_USE_COCOA=ON" "-DOCE_WITH_OPENCL=ON"];
+  ++ optionals stdenv.isDarwin [ "-DOCE_OSX_USE_COCOA=ON" "-DOCE_WITH_OPENCL=ON" ];
 
   patches = [
     # Use fontconfig instead of hardcoded directory list

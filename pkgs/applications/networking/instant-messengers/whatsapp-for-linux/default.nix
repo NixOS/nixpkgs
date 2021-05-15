@@ -1,5 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, gnome, cmake, pkg-config,
-  libappindicator-gtk3, gst_all_1, pcre }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, gnome
+, cmake
+, pkg-config
+, libappindicator-gtk3
+, gst_all_1
+, pcre
+}:
 
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";

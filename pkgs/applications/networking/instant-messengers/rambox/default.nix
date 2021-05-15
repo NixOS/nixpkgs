@@ -2,7 +2,8 @@
 
 let
   mkRambox = opts: callPackage (import ./rambox.nix opts) { };
-in mkRambox rec {
+in
+mkRambox rec {
   pname = "rambox";
   version = "0.7.7";
 
@@ -22,7 +23,7 @@ in mkRambox rec {
     homepage = "https://rambox.pro";
     license = licenses.mit;
     maintainers = with maintainers; [ gnidorah ma27 ];
-    platforms = ["i686-linux" "x86_64-linux"];
-    hydraPlatforms = [];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    hydraPlatforms = [ ];
   };
 }

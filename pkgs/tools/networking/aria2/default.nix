@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, openssl
+, c-ares
+, libxml2
+, sqlite
+, zlib
+, libssh2
+, cppunit
+, sphinx
 , Security
 }:
 

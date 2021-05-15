@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ocaml, findlib, easy-format}:
+{ lib, stdenv, fetchurl, ocaml, findlib, easy-format }:
 let
   pname = "biniou";
   version = "1.0.9";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

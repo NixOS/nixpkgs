@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, perl
+{ lib
+, stdenv
+, fetchurl
+, perl
 , ghostscript #for postscript and html output
-, psutils, netpbm #for html output
+, psutils
+, netpbm #for html output
 , buildPackages
 , autoreconfHook
 , pkg-config

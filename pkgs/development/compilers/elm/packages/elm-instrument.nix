@@ -1,8 +1,33 @@
-{ mkDerivation, fetchpatch, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, Cabal, cmark, containers, directory, elm-format
-, fetchgit, filepath, free, HUnit, indents, json, mtl
-, optparse-applicative, parsec, process, QuickCheck, quickcheck-io
-, split, lib, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
+{ mkDerivation
+, fetchpatch
+, ansi-terminal
+, ansi-wl-pprint
+, base
+, binary
+, bytestring
+, Cabal
+, cmark
+, containers
+, directory
+, elm-format
+, fetchgit
+, filepath
+, free
+, HUnit
+, indents
+, json
+, mtl
+, optparse-applicative
+, parsec
+, process
+, QuickCheck
+, quickcheck-io
+, split
+, lib
+, tasty
+, tasty-golden
+, tasty-hunit
+, tasty-quickcheck
 , text
 }:
 mkDerivation {
@@ -27,14 +52,40 @@ mkDerivation {
   isExecutable = true;
   setupHaskellDepends = [ base Cabal directory filepath process ];
   libraryHaskellDepends = [
-    ansi-terminal ansi-wl-pprint base binary bytestring containers
-    directory filepath free indents json mtl optparse-applicative
-    parsec process split text
+    ansi-terminal
+    ansi-wl-pprint
+    base
+    binary
+    bytestring
+    containers
+    directory
+    filepath
+    free
+    indents
+    json
+    mtl
+    optparse-applicative
+    parsec
+    process
+    split
+    text
   ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [
-    base cmark containers elm-format HUnit mtl parsec QuickCheck
-    quickcheck-io split tasty tasty-golden tasty-hunit tasty-quickcheck
+    base
+    cmark
+    containers
+    elm-format
+    HUnit
+    mtl
+    parsec
+    QuickCheck
+    quickcheck-io
+    split
+    tasty
+    tasty-golden
+    tasty-hunit
+    tasty-quickcheck
     text
   ];
   homepage = "https://elm-lang.org";

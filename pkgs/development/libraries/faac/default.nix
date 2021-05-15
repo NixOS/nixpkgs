@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, mp4v2Support ? true, mp4v2 ? null
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, mp4v2Support ? true
+, mp4v2 ? null
 , drmSupport ? false # Digital Radio Mondiale
 }:
 
@@ -30,8 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
-    license     = licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

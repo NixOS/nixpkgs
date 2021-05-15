@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ipdb";
   version = "0.13.7";
-  disabled = isPyPy || isPy27;  # setupterm: could not find terminfo database
+  disabled = isPyPy || isPy27; # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;

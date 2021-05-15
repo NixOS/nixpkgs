@@ -4,7 +4,7 @@ let
   platform =
     if stdenv.hostPlatform.system == "x86_64-linux" then "64bit"
     else if stdenv.hostPlatform.system == "i686-linux" then "32bit"
-         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   libPath = lib.makeLibraryPath [ cups ];
 in

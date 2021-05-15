@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rtpPath ? "share/vim-plugins"
 , vim
 }:
@@ -9,19 +10,19 @@ rec {
       overrideAttrs = f: buildVimPlugin (attrs // f attrs);
     };
 
-  buildVimPlugin = attrs@{
-    name ? "${attrs.pname}-${attrs.version}",
-    namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
-    path ? lib.getName name,
-    addonInfo ? null,
-    ...
-  }:
+  buildVimPlugin =
+    attrs@{ name ? "${attrs.pname}-${attrs.version}"
+    , namePrefix ? "vimplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ""
+    , buildPhase ? ""
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? lib.getName name
+    , addonInfo ? null
+    , ...
+    }:
     addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
 
@@ -55,6 +56,6 @@ rec {
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     buildPhase = ":";
-    configurePhase =":";
+    configurePhase = ":";
   } // attrs);
 }

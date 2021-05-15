@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, makeWrapper, jre}:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 stdenv.mkDerivation rec {
   version = "1.28.1";
   pname = "zipkin-server";
@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand =
-  ''
-    mkdir -p $out/share/java
-    cp ${src} $out/share/java/zipkin-server-${version}-exec.jar
-    mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/zipkin-server \
-      --add-flags "-cp $out/share/java/zipkin-server-${version}-exec.jar org.springframework.boot.loader.JarLauncher"
-  '';
+    ''
+      mkdir -p $out/share/java
+      cp ${src} $out/share/java/zipkin-server-${version}-exec.jar
+      mkdir -p $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/zipkin-server \
+        --add-flags "-cp $out/share/java/zipkin-server-${version}-exec.jar org.springframework.boot.loader.JarLauncher"
+    '';
   meta = with lib; {
     description = "Zipkin distributed tracing system";
     homepage = "https://zipkin.io/";

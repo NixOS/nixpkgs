@@ -1,4 +1,4 @@
-{ stdenv, lib, hunspell, makeWrapper, dicts ? [] }:
+{ stdenv, lib, hunspell, makeWrapper, dicts ? [ ] }:
 with lib;
 let
   searchPath = makeSearchPath "share/hunspell" dicts;
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   buildCommand = ''
     makeWrapper ${hunspell.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${searchPath}
   '';
-  meta = removeAttrs hunspell.meta ["outputsToInstall"];
+  meta = removeAttrs hunspell.meta [ "outputsToInstall" ];
 }

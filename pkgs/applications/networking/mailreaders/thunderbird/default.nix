@@ -58,14 +58,21 @@
 
 , debugBuild ? false
 
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
-, waylandSupport ? true, libdrm
-, libxkbcommon, calendarSupport ? true
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
+, gtk3Support ? true
+, gtk2
+, gtk3
+, wrapGAppsHook
+, waylandSupport ? true
+, libdrm
+, libxkbcommon
+, calendarSupport ? true
 
-# Use official trademarked branding.  Permission obtained at:
-# https://github.com/NixOS/nixpkgs/pull/94880#issuecomment-675907971
+  # Use official trademarked branding.  Permission obtained at:
+  # https://github.com/NixOS/nixpkgs/pull/94880#issuecomment-675907971
 , enableOfficialBranding ? true
 }:
 
@@ -141,11 +148,11 @@ stdenv.mkDerivation rec {
     zip
     zlib
   ] ++ lib.optional alsaSupport alsaLib
-    ++ lib.optional gtk3Support gtk3
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optionals waylandSupport [ libxkbcommon libdrm ];
+  ++ lib.optional gtk3Support gtk3
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ];
 
-  NIX_CFLAGS_COMPILE =[
+  NIX_CFLAGS_COMPILE = [
     "-I${glib.dev}/include/gio-unix-2.0"
     "-I${nss_3_53.dev}/include/nss"
   ];
@@ -201,53 +208,56 @@ stdenv.mkDerivation rec {
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
   '';
 
-  configureFlags = let
-    toolkitSlug = if gtk3Support then
-      "3${lib.optionalString waylandSupport "-wayland"}"
-    else
-      "2";
-    toolkitValue = "cairo-gtk${toolkitSlug}";
-  in [
-    "--enable-application=comm/mail"
+  configureFlags =
+    let
+      toolkitSlug =
+        if gtk3Support then
+          "3${lib.optionalString waylandSupport "-wayland"}"
+        else
+          "2";
+      toolkitValue = "cairo-gtk${toolkitSlug}";
+    in
+    [
+      "--enable-application=comm/mail"
 
-    "--with-system-icu"
-    "--with-system-jpeg"
-    "--with-system-libevent"
-    "--with-system-nspr"
-    "--with-system-nss"
-    "--with-system-png" # needs APNG support
-    "--with-system-zlib"
-    "--with-system-webp"
-    "--with-system-libvpx"
+      "--with-system-icu"
+      "--with-system-jpeg"
+      "--with-system-libevent"
+      "--with-system-nspr"
+      "--with-system-nss"
+      "--with-system-png" # needs APNG support
+      "--with-system-zlib"
+      "--with-system-webp"
+      "--with-system-libvpx"
 
-    "--enable-rust-simd"
-    "--enable-crashreporter"
-    "--enable-default-toolkit=${toolkitValue}"
-    "--enable-js-shell"
-    "--enable-necko-wifi"
-    "--enable-system-ffi"
-    "--enable-system-pixman"
+      "--enable-rust-simd"
+      "--enable-crashreporter"
+      "--enable-default-toolkit=${toolkitValue}"
+      "--enable-js-shell"
+      "--enable-necko-wifi"
+      "--enable-system-ffi"
+      "--enable-system-pixman"
 
-    "--disable-tests"
-    "--disable-updater"
-    "--enable-jemalloc"
-  ] ++ (if debugBuild then [
-    "--enable-debug"
-    "--enable-profiling"
-  ] else [
-    "--disable-debug"
-    "--enable-release"
-    "--disable-debug-symbols"
-    "--enable-optimize"
-    "--enable-strip"
-  ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
-  ] ++ lib.optional alsaSupport "--enable-alsa"
-  ++ lib.optional calendarSupport "--enable-calendar"
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
-  ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
+      "--disable-tests"
+      "--disable-updater"
+      "--enable-jemalloc"
+    ] ++ (if debugBuild then [
+      "--enable-debug"
+      "--enable-profiling"
+    ] else [
+      "--disable-debug"
+      "--enable-release"
+      "--disable-debug-symbols"
+      "--enable-optimize"
+      "--enable-strip"
+    ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+      # on i686-linux: --with-libclang-path is not available in this configuration
+      "--with-libclang-path=${llvmPackages.libclang}/lib"
+      "--with-clang-path=${llvmPackages.clang}/bin/clang"
+    ] ++ lib.optional alsaSupport "--enable-alsa"
+    ++ lib.optional calendarSupport "--enable-calendar"
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
 
   enableParallelBuilding = true;
 

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libgnome, libgnomeui, vte
-, curl, cdparanoia, libid3tag, ncurses, libtool }:
+{ lib
+, stdenv
+, fetchurl
+, gtk2
+, glib
+, pkg-config
+, libgnome
+, libgnomeui
+, vte
+, curl
+, cdparanoia
+, libid3tag
+, ncurses
+, libtool
+}:
 
 stdenv.mkDerivation rec {
   name = "grip-4.2.0";
@@ -10,8 +23,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 glib libgnome libgnomeui vte curl cdparanoia
-    libid3tag ncurses libtool ];
+  buildInputs = [
+    gtk2
+    glib
+    libgnome
+    libgnomeui
+    vte
+    curl
+    cdparanoia
+    libid3tag
+    ncurses
+    libtool
+  ];
 
   hardeningDisable = [ "format" ];
 

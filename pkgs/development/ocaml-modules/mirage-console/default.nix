@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage
-, lwt, mirage-device, mirage-flow
+{ lib
+, fetchurl
+, buildDunePackage
+, lwt
+, mirage-device
+, mirage-flow
 }:
 
 buildDunePackage rec {

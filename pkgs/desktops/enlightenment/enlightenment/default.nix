@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -13,8 +14,10 @@
 , xkeyboard_config
 , udisks2
 
-, bluetoothSupport ? true, bluez5
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, bluetoothSupport ? true
+, bluez5
+, pulseSupport ? !stdenv.isDarwin
+, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {

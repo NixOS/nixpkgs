@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  outputs = [ "out" "man"];
+  outputs = [ "out" "man" ];
   postInstall = ''
     install -D --mode=444 man/j.1 man/jump.1 -t $man/man/man1/
 

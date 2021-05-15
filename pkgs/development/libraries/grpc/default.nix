@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
-, abseil-cpp, libnsl
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, zlib
+, c-ares
+, pkg-config
+, re2
+, openssl
+, protobuf
+, abseil-cpp
+, libnsl
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +37,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
-    [ "-DgRPC_ZLIB_PROVIDER=package"
+    [
+      "-DgRPC_ZLIB_PROVIDER=package"
       "-DgRPC_CARES_PROVIDER=package"
       "-DgRPC_RE2_PROVIDER=package"
       "-DgRPC_SSL_PROVIDER=package"

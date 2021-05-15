@@ -1,4 +1,4 @@
-{lib, rustPlatform, fetchFromGitHub, fetchurl, SDL2, makeWrapper, makeDesktopItem}:
+{ lib, rustPlatform, fetchFromGitHub, fetchurl, SDL2, makeWrapper, makeDesktopItem }:
 
 let
   desktopFile = makeDesktopItem {

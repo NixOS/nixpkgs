@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "freeswitch";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ misuzu ];

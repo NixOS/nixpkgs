@@ -13,7 +13,13 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = with python3Packages; [ setuptools setuptools_scm salt ];
   checkInputs = with python3Packages; [
-    pytest mock pyzmq pytest-rerunfailures pytestcov cherrypy tornado
+    pytest
+    mock
+    pyzmq
+    pytest-rerunfailures
+    pytestcov
+    cherrypy
+    tornado
   ];
 
   meta = with lib; {

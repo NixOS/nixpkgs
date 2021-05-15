@@ -21,7 +21,7 @@ in
       };
 
       dates = mkOption {
-        default = ["03:45"];
+        default = [ "03:45" ];
         type = types.listOf types.str;
         description = ''
           Specification (in the format described by
@@ -39,7 +39,8 @@ in
   config = {
 
     systemd.services.nix-optimise =
-      { description = "Nix Store Optimiser";
+      {
+        description = "Nix Store Optimiser";
         # No point this if the nix daemon (and thus the nix store) is outside
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";

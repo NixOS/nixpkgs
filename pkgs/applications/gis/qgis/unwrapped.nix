@@ -1,8 +1,40 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
-, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
-, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
-, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
-, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, flex
+, bison
+, proj
+, geos
+, xlibsWrapper
+, sqlite
+, gsl
+, qwt
+, fcgi
+, python3Packages
+, libspatialindex
+, libspatialite
+, postgresql
+, txt2tags
+, openssl
+, libzip
+, hdf5
+, netcdf
+, exiv2
+, protobuf
+, qtbase
+, qtsensors
+, qca-qt5
+, qtkeychain
+, qscintilla
+, qtserialport
+, qtxmlpatterns
+, withGrass ? true
+, grass
+, withWebKit ? true
+, qtwebkit
+}:
 with lib;
 let
   pythonBuildInputs = with python3Packages; [
@@ -23,7 +55,8 @@ let
     owslib
     six
   ];
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "3.16.6";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
@@ -66,8 +99,8 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
   ] ++ lib.optional withGrass grass
-    ++ lib.optional withWebKit qtwebkit
-    ++ pythonBuildInputs;
+  ++ lib.optional withWebKit qtwebkit
+  ++ pythonBuildInputs;
 
   nativeBuildInputs = [ cmake flex bison ninja ];
 
@@ -85,7 +118,7 @@ in mkDerivation rec {
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+  ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
   meta = {
     description = "A Free and Open Source Geographic Information System";

@@ -1,15 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, unzip
 , zlib
-, enablePython ? false, pythonPackages
-, enableGtk2 ? false, gtk2
-, enableJPEG ? true, libjpeg
-, enablePNG ? true, libpng
-, enableTIFF ? true, libtiff
-, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableFfmpeg ? false, ffmpeg_3
-, enableGStreamer ? false, gst_all_1
-, enableEigen ? true, eigen
-, Cocoa, QTKit
+, enablePython ? false
+, pythonPackages
+, enableGtk2 ? false
+, gtk2
+, enableJPEG ? true
+, libjpeg
+, enablePNG ? true
+, libpng
+, enableTIFF ? true
+, libtiff
+, enableEXR ? (!stdenv.isDarwin)
+, openexr
+, ilmbase
+, enableFfmpeg ? false
+, ffmpeg_3
+, enableGStreamer ? false
+, gst_all_1
+, enableEigen ? true
+, eigen
+, Cocoa
+, QTKit
 }:
 
 let
@@ -29,7 +45,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ # Don't include a copy of the CMake status output in the
+    [
+      # Don't include a copy of the CMake status output in the
       # build. This causes a runtime dependency on GCC.
       ./no-build-info.patch
     ];
@@ -42,7 +59,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs =
-       [ zlib ]
+    [ zlib ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
@@ -53,7 +70,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
-    ;
+  ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
@@ -77,7 +94,7 @@ stdenv.mkDerivation rec {
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
   '';
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

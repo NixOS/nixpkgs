@@ -3,22 +3,24 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   meta = with lib.maintainers; { maintainers = [ nequissimus ]; };
 
   nodes.client = { nodes, ... }:
-      let user = nodes.client.config.users.users.alice;
-      in {
-        imports = [ ./common/user-account.nix ./common/x11.nix ];
+    let user = nodes.client.config.users.users.alice;
+    in
+    {
+      imports = [ ./common/user-account.nix ./common/x11.nix ];
 
-        environment.systemPackages = [ pkgs.minecraft ];
+      environment.systemPackages = [ pkgs.minecraft ];
 
-        nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowUnfree = true;
 
-        test-support.displayManager.auto.user = user.name;
-      };
+      test-support.displayManager.auto.user = user.name;
+    };
 
   enableOCR = true;
 
   testScript = { nodes, ... }:
     let user = nodes.client.config.users.users.alice;
-    in ''
+    in
+    ''
       client.wait_for_x()
       client.execute("su - alice -c minecraft-launcher &")
       client.wait_for_text("Create a new Microsoft account")

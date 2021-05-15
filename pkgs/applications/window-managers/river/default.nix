@@ -1,7 +1,19 @@
-{ lib, stdenv ,fetchFromGitHub
-, zig, wayland, pkg-config, scdoc
-, xwayland, wayland-protocols, wlroots
-, libxkbcommon, pixman, udev, libevdev, libX11, libGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, zig
+, wayland
+, pkg-config
+, scdoc
+, xwayland
+, wayland-protocols
+, wlroots
+, libxkbcommon
+, pixman
+, udev
+, libevdev
+, libX11
+, libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +28,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ wayland-protocols wlroots pixman
-    libxkbcommon pixman udev libevdev libX11 libGL
+  buildInputs = [
+    wayland-protocols
+    wlroots
+    pixman
+    libxkbcommon
+    pixman
+    udev
+    libevdev
+    libX11
+    libGL
   ];
 
   dontConfigure = true;

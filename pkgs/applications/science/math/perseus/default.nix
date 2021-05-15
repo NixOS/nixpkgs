@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.sas.upenn.edu/~vnanda/perseus/index.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [erikryb];
+    maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;
   };
 }

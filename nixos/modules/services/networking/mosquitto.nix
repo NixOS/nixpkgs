@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -26,8 +26,10 @@ let
     ${cfg.extraConf}
   '';
 
-  userAcl = (concatStringsSep "\n\n" (mapAttrsToList (n: c:
-    "user ${n}\n" + (concatStringsSep "\n" c.acl)) cfg.users
+  userAcl = (concatStringsSep "\n\n" (mapAttrsToList
+    (n: c:
+      "user ${n}\n" + (concatStringsSep "\n" c.acl))
+    cfg.users
   ));
 
   aclFile = pkgs.writeText "mosquitto.acl" ''
@@ -210,12 +212,18 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = mapAttrsToList (name: cfg: {
-      assertion = length (filter (s: s != null) (with cfg; [
-        password passwordFile hashedPassword hashedPasswordFile
-      ])) <= 1;
-      message = "Cannot set more than one password option";
-    }) cfg.users;
+    assertions = mapAttrsToList
+      (name: cfg: {
+        assertion = length
+          (filter (s: s != null) (with cfg; [
+            password
+            passwordFile
+            hashedPassword
+            hashedPasswordFile
+          ])) <= 1;
+        message = "Cannot set more than one password option";
+      })
+      cfg.users;
 
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
@@ -253,7 +261,7 @@ in
         ProtectSystem = "strict";
         ReadWritePaths = [
           cfg.dataDir
-          "/tmp"  # mosquitto_passwd creates files in /tmp before moving them
+          "/tmp" # mosquitto_passwd creates files in /tmp before moving them
         ];
         ReadOnlyPaths = with cfg.ssl; lib.optionals (enable) [
           certfile
@@ -262,7 +270,7 @@ in
         ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"  # for sd_notify() call
+          "AF_UNIX" # for sd_notify() call
           "AF_INET"
           "AF_INET6"
         ];
@@ -281,16 +289,19 @@ in
         rm -f ${cfg.dataDir}/passwd
         touch ${cfg.dataDir}/passwd
       '' + concatStringsSep "\n" (
-        mapAttrsToList (n: c:
-          if c.hashedPasswordFile != null then
-            "echo '${n}:'$(cat '${c.hashedPasswordFile}') >> ${cfg.dataDir}/passwd"
-          else if c.passwordFile != null then
-            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} $(cat '${c.passwordFile}')"
-          else if c.hashedPassword != null then
-            "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
-          else optionalString (c.password != null)
-            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
-        ) cfg.users);
+        mapAttrsToList
+          (n: c:
+            if c.hashedPasswordFile != null then
+              "echo '${n}:'$(cat '${c.hashedPasswordFile}') >> ${cfg.dataDir}/passwd"
+            else if c.passwordFile != null then
+              "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} $(cat '${c.passwordFile}')"
+            else if c.hashedPassword != null then
+              "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
+            else
+              optionalString (c.password != null)
+                "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
+          )
+          cfg.users);
     };
 
     users.users.mosquitto = {

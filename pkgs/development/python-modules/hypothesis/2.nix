@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, attrs
+, coverage
+, enum34
+, pexpect
+, doCheck ? true
+, pytest
+, pytest_xdist
+, flaky
+, mock
 , sortedcontainers
 }:
 buildPythonPackage rec {

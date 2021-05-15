@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
-  mkdir -p $out/share
-  cp -r * $out/share
-  mkdir $out/bin
-  makeWrapper $out/share/workcraft $out/bin/workcraft \
-    --set JAVA_HOME "${jre}" \
-    --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
+    mkdir -p $out/share
+    cp -r * $out/share
+    mkdir $out/bin
+    makeWrapper $out/share/workcraft $out/bin/workcraft \
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
   '';
 
   meta = {

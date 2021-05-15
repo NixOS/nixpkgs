@@ -1,4 +1,8 @@
-{ lib, fetchurl, buildDunePackage, cppo, ppx_deriving
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, ppx_deriving
 , ppxlib
 }:
 

@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, xorg, pkg-config
-, cmake, libevdev
-, gtkSupport ? true, gtk3, pcre, glib, wrapGAppsHook
-, fltkSupport ? true, fltk
-, qtSupport ? true, qt5
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorg
+, pkg-config
+, cmake
+, libevdev
+, gtkSupport ? true
+, gtk3
+, pcre
+, glib
+, wrapGAppsHook
+, fltkSupport ? true
+, fltk
+, qtSupport ? true
+, qt5
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 {
@@ -6,7 +6,7 @@ with lib;
 
   options.services.hadoop = {
     coreSite = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       example = literalExample ''
         {
@@ -17,7 +17,7 @@ with lib;
     };
 
     hdfsSite = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       example = literalExample ''
         {
@@ -28,7 +28,7 @@ with lib;
     };
 
     mapredSite = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       example = literalExample ''
         {
@@ -39,7 +39,7 @@ with lib;
     };
 
     yarnSite = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       example = literalExample ''
         {
@@ -60,12 +60,14 @@ with lib;
 
 
   config = mkMerge [
-    (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users) {
-      users.groups.hadoop = {
-        gid = config.ids.gids.hadoop;
-      };
-    })
+    (mkIf
+      (builtins.hasAttr "yarn" config.users.users ||
+        builtins.hasAttr "hdfs" config.users.users)
+      {
+        users.groups.hadoop = {
+          gid = config.ids.gids.hadoop;
+        };
+      })
 
   ];
 }

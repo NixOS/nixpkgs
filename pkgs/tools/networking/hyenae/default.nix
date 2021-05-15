@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libdnet, pkg-config, libpcap}:
+{ lib, stdenv, fetchurl, libdnet, pkg-config, libpcap }:
 
 stdenv.mkDerivation {
   name = "hyenae-0.36-1";
@@ -11,13 +11,13 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libdnet libpcap];
+  buildInputs = [ libdnet libpcap ];
 
   meta = {
     description = "";
     homepage = "https://sourceforge.net/projects/hyenae/";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

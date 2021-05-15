@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compiler for the Standard ML '97 programming language";
-    homepage    = "http://www.smlnj.org";
-    license     = lib.licenses.free;
-    platforms   = lib.platforms.darwin;
+    homepage = "http://www.smlnj.org";
+    license = lib.licenses.free;
+    platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.jwiegley ];
   };
 }

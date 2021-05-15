@@ -34,7 +34,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       services.nginx.virtualHosts.localhost = {
-        root = pkgs.runCommand "testdir" {} ''
+        root = pkgs.runCommand "testdir" { } ''
           mkdir "$out"
           echo hello world > "$out/index.html"
         '';
@@ -44,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       specialisation.etagSystem.configuration = {
         services.nginx.virtualHosts.localhost = {
-          root = lib.mkForce (pkgs.runCommand "testdir2" {} ''
+          root = lib.mkForce (pkgs.runCommand "testdir2" { } ''
             mkdir "$out"
             echo content changed > "$out/index.html"
           '');
@@ -52,7 +52,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       specialisation.justReloadSystem.configuration = {
-        services.nginx.virtualHosts."1.my.test".listen = [ { addr = "127.0.0.1"; port = 8080; }];
+        services.nginx.virtualHosts."1.my.test".listen = [{ addr = "127.0.0.1"; port = 8080; }];
       };
 
       specialisation.reloadRestartSystem.configuration = {
@@ -66,64 +66,66 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     };
   };
 
-  testScript = { nodes, ... }: let
-    etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
-    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
-    reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";
-    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
-  in ''
-    url = "http://localhost/index.html"
+  testScript = { nodes, ... }:
+    let
+      etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
+      justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
+      reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";
+      reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
+    in
+    ''
+      url = "http://localhost/index.html"
 
 
-    def check_etag():
-        etag = webserver.succeed(
-            f'curl -v {url} 2>&1 | sed -n -e "s/^< etag: *//ip"'
-        ).rstrip()
-        http_code = webserver.succeed(
-            f"curl -w '%{{http_code}}' --head --fail -H 'If-None-Match: {etag}' {url}"
-        )
-        assert http_code.split("\n")[-1] == "304"
+      def check_etag():
+          etag = webserver.succeed(
+              f'curl -v {url} 2>&1 | sed -n -e "s/^< etag: *//ip"'
+          ).rstrip()
+          http_code = webserver.succeed(
+              f"curl -w '%{{http_code}}' --head --fail -H 'If-None-Match: {etag}' {url}"
+          )
+          assert http_code.split("\n")[-1] == "304"
 
-        return etag
+          return etag
 
 
-    webserver.wait_for_unit("nginx")
-    webserver.wait_for_open_port(80)
+      webserver.wait_for_unit("nginx")
+      webserver.wait_for_open_port(80)
 
-    with subtest("check ETag if serving Nix store paths"):
-        old_etag = check_etag()
-        webserver.succeed(
-            "${etagSystem}/bin/switch-to-configuration test >&2"
-        )
-        webserver.sleep(1)
-        new_etag = check_etag()
-        assert old_etag != new_etag
+      with subtest("check ETag if serving Nix store paths"):
+          old_etag = check_etag()
+          webserver.succeed(
+              "${etagSystem}/bin/switch-to-configuration test >&2"
+          )
+          webserver.sleep(1)
+          new_etag = check_etag()
+          assert old_etag != new_etag
 
-    with subtest("config is reloaded on nixos-rebuild switch"):
-        webserver.succeed(
-            "${justReloadSystem}/bin/switch-to-configuration test >&2"
-        )
-        webserver.wait_for_open_port(8080)
-        webserver.fail("journalctl -u nginx | grep -q -i stopped")
-        webserver.succeed("journalctl -u nginx | grep -q -i reloaded")
+      with subtest("config is reloaded on nixos-rebuild switch"):
+          webserver.succeed(
+              "${justReloadSystem}/bin/switch-to-configuration test >&2"
+          )
+          webserver.wait_for_open_port(8080)
+          webserver.fail("journalctl -u nginx | grep -q -i stopped")
+          webserver.succeed("journalctl -u nginx | grep -q -i reloaded")
 
-    with subtest("restart when nginx package changes"):
-        webserver.succeed(
-            "${reloadRestartSystem}/bin/switch-to-configuration test >&2"
-        )
-        webserver.wait_for_unit("nginx")
-        webserver.succeed("journalctl -u nginx | grep -q -i stopped")
+      with subtest("restart when nginx package changes"):
+          webserver.succeed(
+              "${reloadRestartSystem}/bin/switch-to-configuration test >&2"
+          )
+          webserver.wait_for_unit("nginx")
+          webserver.succeed("journalctl -u nginx | grep -q -i stopped")
 
-    with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
-        webserver.fail(
-            "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-        )
-        webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
-        webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
-        # just to make sure operation is idempotent. During development I had a situation
-        # when first time it shows error, but stops showing it on subsequent rebuilds
-        webserver.fail(
-            "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-        )
-  '';
+      with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
+          webserver.fail(
+              "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
+          )
+          webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
+          webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
+          # just to make sure operation is idempotent. During development I had a situation
+          # when first time it shows error, but stops showing it on subsequent rebuilds
+          webserver.fail(
+              "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
+          )
+    '';
 })

@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , CoreServices ? null
-, buildPackages }:
+, buildPackages
+}:
 
 let version = "4.30"; in
 
@@ -39,7 +42,7 @@ stdenv.mkDerivation {
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

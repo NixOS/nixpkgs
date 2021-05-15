@@ -2,7 +2,8 @@
 
 let
   version = "5.2";
-in fetchzip {
+in
+fetchzip {
   name = "fira-code-${version}";
 
   url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";

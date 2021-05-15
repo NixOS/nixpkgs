@@ -10,9 +10,11 @@
 , icu
 , curl
 , outputsSupport ? true # outputs screen
-, visualizerSupport ? false, fftw ? null # visualizer screen
+, visualizerSupport ? false
+, fftw ? null # visualizer screen
 , clockSupport ? true # clock screen
-, taglibSupport ? true, taglib ? null # tag editor
+, taglibSupport ? true
+, taglib ? null # tag editor
 }:
 
 assert visualizerSupport -> (fftw != null);
@@ -43,10 +45,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A featureful ncurses based MPD client inspired by ncmpc";
-    homepage    = "https://rybczak.net/ncmpcpp/";
-    changelog   = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
-    license     = licenses.gpl2Plus;
+    homepage = "https://rybczak.net/ncmpcpp/";
+    changelog = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jfrankenau koral lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

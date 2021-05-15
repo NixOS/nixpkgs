@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, pytest }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "pytest-ordering";
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ftobia/pytest-ordering";
     description = "Pytest plugin to run your tests in a specific order";
     license = licenses.mit;
-    broken = true;  # See https://github.com/NixOS/nixpkgs/pull/122264
+    broken = true; # See https://github.com/NixOS/nixpkgs/pull/122264
     maintainers = with maintainers; [ eadwu ];
   };
 }

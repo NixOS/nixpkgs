@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, bash
+, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
@@ -37,7 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = lib.attrsets.mapAttrsToList
-    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}")
+    {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
       PROGRAMS_LINK_SHARED = !static;

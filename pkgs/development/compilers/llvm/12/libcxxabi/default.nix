@@ -1,4 +1,13 @@
-{ lib, stdenv, llvm_meta, cmake, python3, fetch, libcxx, libunwind, llvm, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, python3
+, fetch
+, libcxx
+, libunwind
+, llvm
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -34,7 +43,8 @@ stdenv.mkDerivation {
     patch -p1 -d llvm -i ${./libcxxabi-wasm.patch}
   '';
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

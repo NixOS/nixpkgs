@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libiconv, libogg
-, ffmpeg, glibcLocales, perl, perlPackages }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libiconv
+, libogg
+, ffmpeg
+, glibcLocales
+, perl
+, perlPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "opustags";

@@ -1,7 +1,38 @@
-{ lib, stdenv, cmake, fetchurl, gnumake, makeWrapper, pkg-config, fetchpatch
-, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
-, glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
-, libXmu, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, gnumake
+, makeWrapper
+, pkg-config
+, fetchpatch
+, autopanosiftc
+, boost
+, cairo
+, enblend-enfuse
+, exiv2
+, fftw
+, flann
+, gettext
+, glew
+, ilmbase
+, lcms2
+, lensfun
+, libjpeg
+, libpng
+, libtiff
+, libX11
+, libXi
+, libXmu
+, libGLU
+, libGL
+, openexr
+, panotools
+, perlPackages
+, sqlite
+, vigra
+, wxGTK
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +52,30 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
-    libpng libtiff libX11 libXi libXmu libGLU libGL openexr panotools sqlite vigra
-    wxGTK zlib
+    boost
+    cairo
+    exiv2
+    fftw
+    flann
+    gettext
+    glew
+    ilmbase
+    lcms2
+    lensfun
+    libjpeg
+    libpng
+    libtiff
+    libX11
+    libXi
+    libXmu
+    libGLU
+    libGL
+    openexr
+    panotools
+    sqlite
+    vigra
+    wxGTK
+    zlib
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];

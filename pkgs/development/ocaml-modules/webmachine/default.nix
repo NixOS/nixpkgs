@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, cohttp, dispatch, ptime
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, cohttp
+, dispatch
+, ptime
 , ounit
 }:
 

@@ -1,7 +1,21 @@
-{
-  lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules,
-  zlib, boost, libunwind, elfutils, sparsehash, zstd,
-  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, zlib
+, boost
+, libunwind
+, elfutils
+, sparsehash
+, zstd
+, qtbase
+, kio
+, kitemmodels
+, threadweaver
+, kconfigwidgets
+, kcoreaddons
+, kdiagram
 }:
 
 mkDerivation rec {
@@ -17,8 +31,19 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    zlib boost libunwind elfutils sparsehash zstd
-    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
+    zlib
+    boost
+    libunwind
+    elfutils
+    sparsehash
+    zstd
+    qtbase
+    kio
+    kitemmodels
+    threadweaver
+    kconfigwidgets
+    kcoreaddons
+    kdiagram
   ];
 
   meta = with lib; {

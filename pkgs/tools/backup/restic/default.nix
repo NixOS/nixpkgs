@@ -1,5 +1,12 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
-, nixosTests, rclone }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, nixosTests
+, rclone
+}:
 
 buildGoModule rec {
   pname = "restic";

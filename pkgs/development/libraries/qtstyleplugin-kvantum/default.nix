@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
-, libX11, libXext, qttools, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtsvg
+, qtx11extras
+, kwindowsystem
+, libX11
+, libXext
+, qttools
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +24,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake qttools wrapQtAppsHook
+    qmake
+    qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
+    qtbase
+    qtsvg
+    qtx11extras
+    kwindowsystem
+    libX11
+    libXext
   ];
 
   sourceRoot = "source/Kvantum";

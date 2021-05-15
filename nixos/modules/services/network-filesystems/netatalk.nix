@@ -8,16 +8,17 @@ let
 
   extmapFile = pkgs.writeText "extmap.conf" cfg.extmap;
 
-  afpToString = x: if builtins.typeOf x == "bool"
-                   then boolToString x
-                   else toString x;
+  afpToString = x:
+    if builtins.typeOf x == "bool"
+    then boolToString x
+    else toString x;
 
   volumeConfig = name:
     let vol = getAttr name cfg.volumes; in
     "[${name}]\n " + (toString (
-       map
-         (key: "${key} = ${afpToString (getAttr key vol)}\n")
-         (attrNames vol)
+      map
+        (key: "${key} = ${afpToString (getAttr key vol)}\n")
+        (attrNames vol)
     ));
 
   afpConf = ''[Global]
@@ -88,7 +89,7 @@ in
             Lines of configuration to add to the <literal>[Homes]</literal> section.
             See <literal>man apf.conf</literal> for more information.
           '';
-         };
+        };
       };
 
       volumes = mkOption {
@@ -136,9 +137,9 @@ in
         GuessMainPID = "no";
         PIDFile = "/run/lock/netatalk";
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 0755 -p /var/lib/netatalk/CNID";
-        ExecStart  = "${pkgs.netatalk}/sbin/netatalk -F ${afpConfFile}";
+        ExecStart = "${pkgs.netatalk}/sbin/netatalk -F ${afpConfFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP  $MAINPID";
-        ExecStop   = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
+        ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         Restart = "always";
         RestartSec = 1;
       };

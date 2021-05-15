@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl
-, buildPackages, bison, flex, pkg-config
-, db, iptables, libelf, libmnl
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, bison
+, flex
+, pkg-config
+, db
+, iptables
+, libelf
+, libmnl
 }:
 
 stdenv.mkDerivation rec {

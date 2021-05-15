@@ -9,7 +9,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    psutil matplotlib
+    psutil
+    matplotlib
   ];
 
   checkInputs = [

@@ -1,4 +1,10 @@
-{ stdenv, lib, buildEnv, pkgsi686Linux, fetchFromGitHub, python27Packages, graphviz
+{ stdenv
+, lib
+, buildEnv
+, pkgsi686Linux
+, fetchFromGitHub
+, python27Packages
+, graphviz
 , includeGUI ? true
 , includeProtocols ? true
 }:
@@ -65,16 +71,16 @@ let
     '';
   };
 in
-  buildEnv {
-    name = "scyther-${version}";
-    inherit meta;
-    paths = [ cli ] ++ lib.optional includeGUI gui;
-    pathsToLink = [ "/bin" ];
+buildEnv {
+  name = "scyther-${version}";
+  inherit meta;
+  paths = [ cli ] ++ lib.optional includeGUI gui;
+  pathsToLink = [ "/bin" ];
 
-    postBuild = ''
-      rm "$out/bin/scyther-linux"
-    '' + lib.optionalString includeProtocols ''
-      mkdir -p "$out/protocols"
-      cp -rv ${src}/protocols/* "$out/protocols"
-    '';
-  }
+  postBuild = ''
+    rm "$out/bin/scyther-linux"
+  '' + lib.optionalString includeProtocols ''
+    mkdir -p "$out/protocols"
+    cp -rv ${src}/protocols/* "$out/protocols"
+  '';
+}

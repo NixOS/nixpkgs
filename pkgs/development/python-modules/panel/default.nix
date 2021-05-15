@@ -12,8 +12,9 @@
 }:
 
 let
-  node = callPackage ./node {};
-in buildPythonPackage rec {
+  node = callPackage ./node { };
+in
+buildPythonPackage rec {
   pname = "panel";
   version = "0.11.3";
 

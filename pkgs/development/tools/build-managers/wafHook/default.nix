@@ -1,6 +1,7 @@
 { lib, stdenv, pkgs, makeSetupHook, waf }:
 
-makeSetupHook {
+makeSetupHook
+{
   substitutions = {
     inherit waf;
     crossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)

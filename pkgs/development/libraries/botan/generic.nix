@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
-# Passed by version specific builders
-, baseVersion, revision, sha256
+{ lib
+, stdenv
+, fetchurl
+, python3
+, bzip2
+, zlib
+, gmp
+, openssl
+, boost
+  # Passed by version specific builders
+, baseVersion
+, revision
+, sha256
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , postPatch ? null
@@ -17,8 +27,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "Botan-${version}.${sourceExtension}";
     urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
-       "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
+      "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
+      "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
     ];
     inherit sha256;
   };

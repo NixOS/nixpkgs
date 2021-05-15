@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , hypothesis
 , setuptools_scm
 , six
@@ -67,7 +70,7 @@ buildPythonPackage rec {
     GitPython
     notebook
     jinja2
-    ];
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";

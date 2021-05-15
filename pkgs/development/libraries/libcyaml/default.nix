@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , libyaml
 }:
 

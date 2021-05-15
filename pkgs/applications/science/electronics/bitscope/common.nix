@@ -7,7 +7,8 @@
 , gtk2-x11
 , makeWrapper
 , pango
-, lib, stdenv
+, lib
+, stdenv
 , xorg
 }:
 
@@ -29,7 +30,7 @@ let
       maintainers = with maintainers; [
         vidbina
       ];
-    } // (attrs.meta or {});
+    } // (attrs.meta or { });
 
     buildInputs = [
       dpkg
@@ -58,7 +59,9 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
-in buildFHSUserEnv {
-  name = "${attrs.toolName}-${attrs.version}";
-  runScript = "${pkg.outPath}/bin/${attrs.toolName}";
-} // { inherit (pkg) meta name; }
+in
+buildFHSUserEnv
+  {
+    name = "${attrs.toolName}-${attrs.version}";
+    runScript = "${pkg.outPath}/bin/${attrs.toolName}";
+  } // { inherit (pkg) meta name; }

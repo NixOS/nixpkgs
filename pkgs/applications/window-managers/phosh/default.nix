@@ -55,7 +55,8 @@ let
       -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "phosh";
   version = "0.10.2";
 
@@ -144,7 +145,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 

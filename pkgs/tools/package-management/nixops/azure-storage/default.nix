@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ azure-common dateutil requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+    ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   postInstall = ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py

@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv, pa_ounit}:
+{ lib, buildOcaml, fetchurl, type_conv, pa_ounit }:
 
 buildOcaml rec {
   name = "pa_bench";

@@ -11,7 +11,8 @@ let
     doCheck = false;
   };
   wrappedPython = python3.withPackages (_: [ threaded_servers ]);
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "quickserve";
   version = "2018";
 

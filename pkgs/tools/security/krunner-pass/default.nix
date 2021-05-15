@@ -1,6 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules
-, kauth, krunner
-, pass, pass-otp ? null }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, extra-cmake-modules
+, kauth
+, krunner
+, pass
+, pass-otp ? null
+}:
 
 mkDerivation rec {
   pname = "krunner-pass";
@@ -13,9 +21,11 @@ mkDerivation rec {
     sha256 = "032fs2174ls545kjixbhzyd65wgxkw4s5vg8b20irc5c9ak3pxm0";
   };
 
-  buildInputs  = [
-    kauth krunner
-    pass pass-otp
+  buildInputs = [
+    kauth
+    krunner
+    pass
+    pass-otp
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

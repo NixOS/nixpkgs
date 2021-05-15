@@ -22,7 +22,8 @@ let
   serverConfig = pkgs.writeText "server.properties" serverProperties;
   logConfig = pkgs.writeText "log4j.properties" cfg.log4jProperties;
 
-in {
+in
+{
 
   options.services.apache-kafka = {
     enable = mkOption {
@@ -90,7 +91,7 @@ in {
 
     jvmOptions = mkOption {
       description = "Extra command line options for the JVM running Kafka.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
@@ -117,7 +118,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.apache-kafka = {
       uid = config.ids.uids.apache-kafka;

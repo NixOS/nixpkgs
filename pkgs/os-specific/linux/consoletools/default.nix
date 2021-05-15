@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ];
 
-  makeFlags = [ "DESTDIR=$(out)"];
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   installFlags = [ "PREFIX=\"\"" ];
 

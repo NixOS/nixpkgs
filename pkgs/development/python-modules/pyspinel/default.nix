@@ -1,10 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, future, pyserial, ipaddress
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, future
+, pyserial
+, ipaddress
 }:
 
 buildPythonPackage rec {
   pname = "pyspinel";
-  version = "unstable-2020-06-19";  # no versioned release since 2018
+  version = "unstable-2020-06-19"; # no versioned release since 2018
   disabled = isPy27;
 
   src = fetchFromGitHub {

@@ -18,9 +18,9 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   src = fetchFromGitHub {
-    owner  = "stared";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "stared";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "164v65qglgyg38q9ajnas99rp14mvrk5hn8x76b8iy81vszmx1c0";
   };
 

@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, moreutils, jq, git, zip, rsync, pkg-config, yarn, python2
-, nodejs-12_x, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, runCommand
+, moreutils
+, jq
+, git
+, zip
+, rsync
+, pkg-config
+, yarn
+, python2
+, nodejs-12_x
+, libsecret
+, xorg
+, ripgrep
+, AppKit
+, Cocoa
+, Security
+, cctools
+}:
 
 let
   system = stdenv.hostPlatform.system;
@@ -9,9 +28,10 @@ let
   nodejs = nodejs-12_x;
   python = python2;
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "code-server";
   version = "3.8.0";
   commit = "c4610f7829701aadb045d450013b84491c30580d";
@@ -46,7 +66,7 @@ in stdenv.mkDerivation rec {
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    phases = ["unpackPhase" "buildPhase"];
+    phases = [ "unpackPhase" "buildPhase" ];
     nativeBuildInputs = [ yarn' git ];
     buildPhase = ''
       export HOME=$PWD
@@ -70,19 +90,31 @@ in stdenv.mkDerivation rec {
 
   # Extract the Node.js source code which is used to compile packages with
   # native bindings
-  nodeSources = runCommand "node-sources" {} ''
+  nodeSources = runCommand "node-sources" { } ''
     tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv node-* $out
   '';
 
   nativeBuildInputs = [
-    nodejs yarn' python pkg-config zip makeWrapper git rsync jq moreutils
+    nodejs
+    yarn'
+    python
+    pkg-config
+    zip
+    makeWrapper
+    git
+    rsync
+    jq
+    moreutils
   ];
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa Security cctools
-    ];
+    AppKit
+    Cocoa
+    Security
+    cctools
+  ];
 
   patches = [
     # remove download of coder-cloud agent

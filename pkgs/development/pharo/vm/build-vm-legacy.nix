@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
 , bash
@@ -14,7 +15,8 @@
 , cairo
 , libuuid
 , makeWrapper
-, ... }:
+, ...
+}:
 
 { name, src, ... }:
 
@@ -28,12 +30,33 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
 
-  buildInputs = [ bash glibc openssl libGLU libGL freetype
-                  xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  buildInputs = [
+    bash
+    glibc
+    openssl
+    libGLU
+    libGL
+    freetype
+    xorg.libX11
+    xorg.libICE
+    xorg.libSM
+    alsaLib
+    cairo
+    pharo-share
+  ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ cairo libGLU libGL freetype openssl libuuid alsaLib
-      xorg.libICE xorg.libSM ];
+    [
+      cairo
+      libGLU
+      libGL
+      freetype
+      openssl
+      libuuid
+      alsaLib
+      xorg.libICE
+      xorg.libSM
+    ];
 
   preConfigure = ''
     cd build/
@@ -91,7 +114,7 @@ stdenv.mkDerivation rec {
     # Pharo VM sources are packaged separately for darwin (OS X)
     platforms = lib.filter
       (system: with lib.systems.elaborate { inherit system; };
-         isUnix && !isDarwin)
+      isUnix && !isDarwin)
       lib.platforms.mesaPlatforms;
   };
 }

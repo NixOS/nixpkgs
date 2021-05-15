@@ -1,10 +1,13 @@
 { elk6Version
 , enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
-, util-linux, gnugrep, coreutils
+, util-linux
+, gnugrep
+, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -37,7 +40,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre_headless util-linux ]
-             ++ optional enableUnfree zlib;
+    ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out

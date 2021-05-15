@@ -31,7 +31,13 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
+    dcm2niix
+    nibabel
+    pydicom
+    nipype
+    dcmstack
+    etelemetry
+    filelock
   ];
 
   checkInputs = [ dcm2niix pytest mock ];

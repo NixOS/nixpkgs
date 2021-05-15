@@ -75,8 +75,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
-    "--ignore=cirq/contrib/"  # requires external (unpackaged) python packages, so untested.
+    "--ignore=dev_tools" # Only needed when developing new code, which is out-of-scope
+    "--ignore=cirq/contrib/" # requires external (unpackaged) python packages, so untested.
     "--benchmark-disable" # Don't need to run benchmarks when packaging.
   ];
   disabledTests = lib.optionals stdenv.isAarch64 [

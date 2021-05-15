@@ -14,9 +14,9 @@ let
 
     meta = {
       description = "OtpKeyProv is a key provider based on one-time passwords";
-      homepage    = "https://keepass.info/plugins.html#otpkeyprov";
-      platforms   = with lib.platforms; linux;
-      license     = lib.licenses.gpl2;
+      homepage = "https://keepass.info/plugins.html#otpkeyprov";
+      platforms = with lib.platforms; linux;
+      license = lib.licenses.gpl2;
       maintainers = [ lib.maintainers.ente ];
     };
 
@@ -28,5 +28,5 @@ let
     '';
   };
 in
-  # Mono is required to compile plugin at runtime, after loading.
-  buildEnv { name = drv.name; paths = [ mono drv ]; }
+# Mono is required to compile plugin at runtime, after loading.
+buildEnv { name = drv.name; paths = [ mono drv ]; }

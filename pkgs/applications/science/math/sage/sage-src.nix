@@ -13,7 +13,7 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, ...}@args: (
+  fetchSageDiff = { base, name, rev, sha256, ... }@args: (
     fetchpatch ({
       inherit name sha256;
       url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";

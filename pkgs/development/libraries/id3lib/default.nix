@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib}:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation {
   name = "id3lib-3.8.3";

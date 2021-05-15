@@ -1,4 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pycodestyle
+, glibcLocales
 , toml
 }:
 
@@ -15,7 +19,7 @@ buildPythonPackage rec {
 
   # One test fails:
   # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
-#   doCheck = false;
+  #   doCheck = false;
 
   checkInputs = [ glibcLocales ];
 

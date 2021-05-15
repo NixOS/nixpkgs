@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
 , python3Packages
 , wrapGAppsHook
@@ -34,11 +36,25 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   pythonPath = with python3Packages;
-    [ pygobject3  ];
+    [ pygobject3 ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython];
-  buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
-    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+  nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython ];
+  buildInputs = [
+    atk
+    dbus
+    evemu
+    frame
+    gdk-pixbuf
+    gobject-introspection
+    grail
+    gtk3
+    libX11
+    libXext
+    libXi
+    libXtst
+    pango
+    python3Packages.python
+    xorgserver
   ];
 
   patchPhase = ''

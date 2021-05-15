@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.logkeys;
-in {
+in
+{
   options.services.logkeys = {
     enable = mkEnableOption "logkeys service";
 

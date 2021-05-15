@@ -1,7 +1,22 @@
-{ stdenv, fetchurl, itstool, intltool, pkg-config
-, libxml2, gnome2, atk, gtk2, glib
-, mono, mono-addins, dbus-sharp-2_0, dbus-sharp-glib-2_0, gnome-sharp, gtk-sharp-2_0
-, makeWrapper, lib}:
+{ stdenv
+, fetchurl
+, itstool
+, intltool
+, pkg-config
+, libxml2
+, gnome2
+, atk
+, gtk2
+, glib
+, mono
+, mono-addins
+, dbus-sharp-2_0
+, dbus-sharp-glib-2_0
+, gnome-sharp
+, gtk-sharp-2_0
+, makeWrapper
+, lib
+}:
 
 let
   version = "1.15.9";
@@ -17,10 +32,21 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ itstool intltool
-    libxml2 gnome2.GConf atk gtk2
-    mono mono-addins dbus-sharp-2_0 dbus-sharp-glib-2_0 gnome-sharp gtk-sharp-2_0
-    makeWrapper ];
+  buildInputs = [
+    itstool
+    intltool
+    libxml2
+    gnome2.GConf
+    atk
+    gtk2
+    mono
+    mono-addins
+    dbus-sharp-2_0
+    dbus-sharp-glib-2_0
+    gnome-sharp
+    gtk-sharp-2_0
+    makeWrapper
+  ];
 
   postInstall = ''
     makeWrapper "${mono}/bin/mono" "$out/bin/tomboy" \

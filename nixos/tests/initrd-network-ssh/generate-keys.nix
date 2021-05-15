@@ -1,8 +1,9 @@
-with import ../../.. {};
+with import ../../.. { };
 
-runCommand "gen-keys" {
-    buildInputs = [ openssh ];
-  }
+runCommand "gen-keys"
+{
+  buildInputs = [ openssh ];
+}
   ''
     mkdir $out
     ssh-keygen -q -t ed25519 -N "" -f $out/ssh_host_ed25519_key

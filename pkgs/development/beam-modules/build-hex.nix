@@ -1,9 +1,12 @@
 { lib, buildRebar3, fetchHex }:
 
-{ name, version, sha256
+{ name
+, version
+, sha256
 , builder ? buildRebar3
 , hexPkg ? name
-, ... }@attrs:
+, ...
+}@attrs:
 
 with lib;
 
@@ -17,4 +20,4 @@ let
     };
   });
 in
-  fix pkg
+fix pkg

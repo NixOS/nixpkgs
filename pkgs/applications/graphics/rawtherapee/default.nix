@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, pixman, libpthreadstubs, gtkmm3, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
-, lensfun, librsvg
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, pixman
+, libpthreadstubs
+, gtkmm3
+, libXau
+, libXdmcp
+, lcms2
+, libiptcdata
+, libcanberra-gtk3
+, fftw
+, expat
+, pcre
+, libsigcxx
+, wrapGAppsHook
+, lensfun
+, librsvg
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +34,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    pixman libpthreadstubs gtkmm3 libXau libXdmcp
-    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun librsvg
+    pixman
+    libpthreadstubs
+    gtkmm3
+    libXau
+    libXdmcp
+    lcms2
+    libiptcdata
+    libcanberra-gtk3
+    fftw
+    expat
+    pcre
+    libsigcxx
+    lensfun
+    librsvg
   ];
 
   cmakeFlags = [

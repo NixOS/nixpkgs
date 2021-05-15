@@ -337,34 +337,35 @@ let
         users.users.kea = {
           isSystemUser = true;
         };
-        users.groups.kea = {};
+        users.groups.kea = { };
 
         systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6.service" ];
 
-        systemd.services.kea-dhcp6 = let
-          configFile = pkgs.writeText "kea-dhcp6.conf" (builtins.toJSON {
-            Dhcp6 = {
-              "control-socket" = {
-                "socket-type" = "unix";
-                "socket-name" = "/run/kea/kea-dhcp6.sock";
+        systemd.services.kea-dhcp6 =
+          let
+            configFile = pkgs.writeText "kea-dhcp6.conf" (builtins.toJSON {
+              Dhcp6 = {
+                "control-socket" = {
+                  "socket-type" = "unix";
+                  "socket-name" = "/run/kea/kea-dhcp6.sock";
+                };
               };
-            };
-          });
-        in
-        {
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+            });
+          in
+          {
+            after = [ "network.target" ];
+            wantedBy = [ "multi-user.target" ];
 
-          serviceConfig = {
-            DynamicUser = false;
-            User = "kea";
-            Group = "kea";
-            ExecStart = "${pkgs.kea}/bin/kea-dhcp6 -c ${configFile}";
-            StateDirectory = "kea";
-            RuntimeDirectory = "kea";
-            UMask = "0007";
+            serviceConfig = {
+              DynamicUser = false;
+              User = "kea";
+              Group = "kea";
+              ExecStart = "${pkgs.kea}/bin/kea-dhcp6 -c ${configFile}";
+              StateDirectory = "kea";
+              RuntimeDirectory = "kea";
+              UMask = "0007";
+            };
           };
-        };
       };
       exporterTest = ''
         wait_for_unit("kea-dhcp6.service")

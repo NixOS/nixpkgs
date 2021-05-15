@@ -56,7 +56,8 @@ let
       sha256 = "sha256-39pvfcg4fvf7DAbAPzEHA1ja1LFL6r88nEwNYwaDC8w=";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "yabridge";
   version = "3.1.0";
 
@@ -119,7 +120,8 @@ in stdenv.mkDerivation rec {
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
 
     # Requires CMake and is unnecessary
     "-Dtomlplusplus:GENERATE_CMAKE_CONFIG=disabled"

@@ -1,5 +1,12 @@
-{ lib, fetchzip, makeWrapper, makeDesktopItem, stdenv
-, gtk3, libXtst, glib, zlib
+{ lib
+, fetchzip
+, makeWrapper
+, makeDesktopItem
+, stdenv
+, gtk3
+, libXtst
+, glib
+, zlib
 }:
 
 let
@@ -17,7 +24,8 @@ let
   };
 
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tla-toolbox";
   version = "1.7.1";
   src = fetchzip {

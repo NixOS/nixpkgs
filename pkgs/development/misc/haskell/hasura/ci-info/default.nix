@@ -1,5 +1,14 @@
-{ mkDerivation, aeson, aeson-casing, base, fetchgit, hashable
-, hpack, lib, template-haskell, text, th-lift-instances
+{ mkDerivation
+, aeson
+, aeson-casing
+, base
+, fetchgit
+, hashable
+, hpack
+, lib
+, template-haskell
+, text
+, th-lift-instances
 , unordered-containers
 }:
 mkDerivation {
@@ -12,8 +21,14 @@ mkDerivation {
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
-    aeson aeson-casing base hashable template-haskell text
-    th-lift-instances unordered-containers
+    aeson
+    aeson-casing
+    base
+    hashable
+    template-haskell
+    text
+    th-lift-instances
+    unordered-containers
   ];
   libraryToolDepends = [ hpack ];
   prePatch = "hpack";

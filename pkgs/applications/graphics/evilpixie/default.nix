@@ -20,7 +20,8 @@ let
     mimeType = "image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/x-pcx;image/x-targa;image/x-tga;";
   };
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "evilpixie";
   version = "0.2.1";
 

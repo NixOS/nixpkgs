@@ -23,4 +23,4 @@ buildLinux (args // {
     description = linux_zen.meta.description + " (Same as linux_zen but less aggressive release schedule)";
   };
 
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

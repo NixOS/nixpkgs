@@ -39,7 +39,7 @@ in
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = self: [];
+        default = self: [ ];
         example = literalExample ''
           epkgs: [
             epkgs.emms

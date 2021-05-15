@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Functional programming language with dependent types";
-    homepage    = "http://www.ats-lang.org";
-    license     = lib.licenses.gpl3Plus;
+    homepage = "http://www.ats-lang.org";
+    license = lib.licenses.gpl3Plus;
     # TODO: it looks like ATS requires gcc specifically. Someone with more knowledge
     # will need to experiment.
-    platforms   = lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

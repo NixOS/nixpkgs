@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, setuptools_scm, toml
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, setuptools_scm
+, toml
 , more-itertools
 , pytestCheckHook
 }:

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   rm test/asizeof/test_asizeof.py
+    rm test/asizeof/test_asizeof.py
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;

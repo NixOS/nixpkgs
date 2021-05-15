@@ -36,9 +36,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A parser for HCL2 written in Python using Lark";
     longDescription = ''
-    A parser for HCL2 written in Python using Lark.
-    This parser only supports HCL2 and isn't backwards compatible with HCL v1.
-    It can be used to parse any HCL2 config file such as Terraform.
+      A parser for HCL2 written in Python using Lark.
+      This parser only supports HCL2 and isn't backwards compatible with HCL v1.
+      It can be used to parse any HCL2 config file such as Terraform.
     '';
     # Although this is the main homepage from PyPi but it is also a homepage
     # of another PyPi package (python-hcl2). But these two are different.

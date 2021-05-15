@@ -1,5 +1,10 @@
-{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, attrs, atpublic }:
+{ lib
+, isPy3k
+, fetchFromGitHub
+, buildPythonPackage
+, attrs
+, atpublic
+}:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
@@ -15,7 +20,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    atpublic attrs
+    atpublic
+    attrs
   ];
 
   # Tests need network access

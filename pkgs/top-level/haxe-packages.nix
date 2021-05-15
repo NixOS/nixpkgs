@@ -4,7 +4,7 @@ let
   self = haxePackages;
   haxePackages = with self; {
 
-    withCommas = lib.replaceChars ["."] [","];
+    withCommas = lib.replaceChars [ "." ] [ "," ];
 
     # simulate "haxelib dev $libname ."
     simulateHaxelibDev = libname: ''
@@ -20,17 +20,17 @@ let
       cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${withCommas version}/"
     '';
 
-    buildHaxeLib = {
-      libname,
-      version,
-      sha256,
-      meta,
-      ...
-    } @ attrs:
+    buildHaxeLib =
+      { libname
+      , version
+      , sha256
+      , meta
+      , ...
+      } @ attrs:
       stdenv.mkDerivation (attrs // {
         name = "${libname}-${version}";
 
-        buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
+        buildInputs = (attrs.buildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
         src = fetchzip rec {
           name = "${libname}-${version}";
           url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
@@ -96,24 +96,27 @@ let
       meta.description = "Extern definitions for node.js 4.x";
     };
 
-    hxnodejs_6 = let
-      libname = "hxnodejs";
-      version = "6.9.0";
-    in stdenv.mkDerivation {
-      name = "${libname}-${version}";
-      src = fetchFromGitHub {
-        owner = "HaxeFoundation";
-        repo = "hxnodejs";
-        rev = "cf80c6a";
-        sha256 = "0mdiacr5b2m8jrlgyd2d3vp1fha69lcfb67x4ix7l7zfi8g460gs";
+    hxnodejs_6 =
+      let
+        libname = "hxnodejs";
+        version = "6.9.0";
+      in
+      stdenv.mkDerivation {
+        name = "${libname}-${version}";
+        src = fetchFromGitHub {
+          owner = "HaxeFoundation";
+          repo = "hxnodejs";
+          rev = "cf80c6a";
+          sha256 = "0mdiacr5b2m8jrlgyd2d3vp1fha69lcfb67x4ix7l7zfi8g460gs";
+        };
+        installPhase = installLibHaxe { inherit libname version; };
+        meta = {
+          homepage = "http://lib.haxe.org/p/${libname}";
+          license = lib.licenses.bsd2;
+          platforms = lib.platforms.all;
+          description = "Extern definitions for node.js 6.9";
+        };
       };
-      installPhase = installLibHaxe { inherit libname version; };
-      meta = {
-        homepage = "http://lib.haxe.org/p/${libname}";
-        license = lib.licenses.bsd2;
-        platforms = lib.platforms.all;
-        description = "Extern definitions for node.js 6.9";
-      };
-    };
   };
-in self
+in
+self

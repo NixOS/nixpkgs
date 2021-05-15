@@ -4,7 +4,8 @@ let
   pname = "rst2html5";
   version = "1.10.6";
   format = "wheel";
-in python3Packages.buildPythonPackage {
+in
+python3Packages.buildPythonPackage {
   inherit pname version format;
 
   src = python3Packages.fetchPypi {
@@ -13,7 +14,7 @@ in python3Packages.buildPythonPackage {
   };
 
   propagatedBuildInputs = with python3Packages;
-  [ docutils genshi pygments beautifulsoup4 ];
+    [ docutils genshi pygments beautifulsoup4 ];
 
   meta = with lib;{
     homepage = "https://pypi.org/project/rst2html5/";

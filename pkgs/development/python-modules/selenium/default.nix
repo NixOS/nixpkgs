@@ -31,10 +31,11 @@ buildPythonPackage rec {
     sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };
 
-  buildInputs = [xorg.libX11];
+  buildInputs = [ xorg.libX11 ];
 
   propagatedBuildInputs = [
-    geckodriver urllib3
+    geckodriver
+    urllib3
   ];
 
   patchPhase = lib.optionalString stdenv.isLinux ''

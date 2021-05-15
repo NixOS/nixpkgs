@@ -1,11 +1,33 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info,
-  akonadi-import-wizard, akonadi-notes, calendarsupport, eventviews,
-  incidenceeditor, kcalendarcore, kcalutils, kconfig, kdbusaddons, kdeclarative,
-  kholidays, ki18n, kmime, ktexteditor, ktnef, libgravatar,
-  libksieve, mailcommon, mailimporter, messagelib, poppler, prison, kpkpass,
-  kitinerary, kontactinterface
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, shared-mime-info
+, akonadi-import-wizard
+, akonadi-notes
+, calendarsupport
+, eventviews
+, incidenceeditor
+, kcalendarcore
+, kcalutils
+, kconfig
+, kdbusaddons
+, kdeclarative
+, kholidays
+, ki18n
+, kmime
+, ktexteditor
+, ktnef
+, libgravatar
+, libksieve
+, mailcommon
+, mailimporter
+, messagelib
+, poppler
+, prison
+, kpkpass
+, kitinerary
+, kontactinterface
 }:
 
 mkDerivation {
@@ -16,10 +38,30 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
-    akonadi-import-wizard akonadi-notes calendarsupport eventviews
-    incidenceeditor kcalendarcore kcalutils kconfig kdbusaddons kdeclarative
-    kholidays ki18n kmime ktexteditor ktnef libgravatar
-    libksieve mailcommon mailimporter messagelib poppler prison kpkpass
-    kitinerary kontactinterface
+    akonadi-import-wizard
+    akonadi-notes
+    calendarsupport
+    eventviews
+    incidenceeditor
+    kcalendarcore
+    kcalutils
+    kconfig
+    kdbusaddons
+    kdeclarative
+    kholidays
+    ki18n
+    kmime
+    ktexteditor
+    ktnef
+    libgravatar
+    libksieve
+    mailcommon
+    mailimporter
+    messagelib
+    poppler
+    prison
+    kpkpass
+    kitinerary
+    kontactinterface
   ];
 }

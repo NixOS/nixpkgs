@@ -1,12 +1,23 @@
-{ lib, buildPythonApplication, fetchPypi
-, python-slugify, requests, urllib3, six, setuptools }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, python-slugify
+, requests
+, urllib3
+, six
+, setuptools
+}:
 
 buildPythonApplication rec {
   pname = "transifex-client";
   version = "0.13.9";
 
   propagatedBuildInputs = [
-    urllib3 requests python-slugify six setuptools
+    urllib3
+    requests
+    python-slugify
+    six
+    setuptools
   ];
 
   src = fetchPypi {

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, openldap, perl}:
+{ lib, stdenv, fetchurl, openldap, perl }:
 
 stdenv.mkDerivation {
   name = "nss_ldap-265";

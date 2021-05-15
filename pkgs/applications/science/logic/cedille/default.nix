@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ alex happy ];
-  buildInputs = [ Agda (ghcWithPackages (ps: [ps.ieee])) ];
+  buildInputs = [ Agda (ghcWithPackages (ps: [ ps.ieee ])) ];
 
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE =

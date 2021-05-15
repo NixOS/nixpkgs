@@ -5,9 +5,11 @@
 
 # for the curious, "tod" means "Touch OEM Drivers" meaning it can load
 # external .so's.
-libfprint.overrideAttrs ({ postPatch ? "", mesonFlags ? [], ... }: let
+libfprint.overrideAttrs ({ postPatch ? "", mesonFlags ? [ ], ... }:
+let
   version = "1.90.7+git20210222+tod1";
-in  {
+in
+{
   pname = "libfprint-tod";
   inherit version;
 

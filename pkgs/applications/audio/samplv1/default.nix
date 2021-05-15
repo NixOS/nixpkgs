@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchurl, pkg-config, libjack2
-, alsaLib, liblo, libsndfile, lv2, qtbase, qttools
+{ mkDerivation
+, lib
+, fetchurl
+, pkg-config
+, libjack2
+, alsaLib
+, liblo
+, libsndfile
+, lv2
+, qtbase
+, qttools
 , rubberband
 }:
 

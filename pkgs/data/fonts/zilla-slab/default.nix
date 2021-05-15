@@ -2,7 +2,8 @@
 
 let
   version = "1.002";
-in fetchzip {
+in
+fetchzip {
   name = "zilla-slab-${version}";
 
   url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";

@@ -1,11 +1,21 @@
-{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, libxml2
-, version, hashes }:
+{ lib
+, stdenv
+, fetchurl
+, curl
+, tzdata
+, autoPatchelfHook
+, fixDarwinDylibNames
+, libxml2
+, version
+, hashes
+}:
 
 let
   inherit (stdenv) hostPlatform;
   OS = if stdenv.hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
   ARCH = toString hostPlatform.parsed.cpu.name;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ldc-bootstrap";
   inherit version;
 

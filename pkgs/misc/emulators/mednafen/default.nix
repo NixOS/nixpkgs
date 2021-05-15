@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, freeglut, libGLU, libGL, libcdio, libjack2
-, libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib, alsaLib }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, freeglut
+, libGLU
+, libGL
+, libcdio
+, libjack2
+, libsamplerate
+, libsndfile
+, libX11
+, SDL2
+, SDL2_net
+, zlib
+, alsaLib
+}:
 
 stdenv.mkDerivation rec {
   pname = "mednafen";
@@ -14,7 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    libGLU libGL
+    libGLU
+    libGL
     libcdio
     libjack2
     alsaLib

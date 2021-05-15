@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, automake, autoconf, readline
-, libX11, bluez, SDL2
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, readline
+, libX11
+, bluez
+, SDL2
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake readline libX11 SDL2 bluez
+    autoconf
+    automake
+    readline
+    libX11
+    SDL2
+    bluez
   ];
 
   preConfigure = "cd src;autoconf";

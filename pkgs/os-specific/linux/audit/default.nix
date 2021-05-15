@@ -1,8 +1,15 @@
-{
-  lib, stdenv, buildPackages, fetchurl, fetchpatch,
-  runCommand,
-  autoconf, automake, libtool,
-  enablePython ? false, python ? null,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, runCommand
+, autoconf
+, automake
+, libtool
+, enablePython ? false
+, python ? null
+,
 }:
 
 assert enablePython -> python != null;
@@ -37,20 +44,20 @@ stdenv.mkDerivation rec {
   #         https://github.com/linux-audit/audit-userspace/pull/25
   #       is available with the next release.
   patches = [ ./patches/weak-symbols.patch ]
-  ++ lib.optional stdenv.hostPlatform.isMusl [
+    ++ lib.optional stdenv.hostPlatform.isMusl [
     (
       let patch = fetchpatch {
-            url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
-            name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
-            sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
-          };
+        url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
+        name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
+        sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
+      };
       in
-        runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" {} ''
-          cp ${patch} $out
-          substituteInPlace $out --replace \
-              '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
-              '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
-        ''
+      runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" { } ''
+        cp ${patch} $out
+        substituteInPlace $out --replace \
+            '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
+            '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
+      ''
     )
   ];
 

@@ -11,7 +11,8 @@
 , coreutils
 , gawk
 , xdg-utils
-, systemd }:
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "teams";

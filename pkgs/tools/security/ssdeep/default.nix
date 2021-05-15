@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program for calculating fuzzy hashes";
-    homepage    = "http://www.ssdeep.sf.net";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
+    homepage = "http://www.ssdeep.sf.net";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

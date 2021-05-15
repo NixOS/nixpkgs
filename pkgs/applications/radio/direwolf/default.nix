@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsaLib, espeak, glibc, gpsd
-, hamlib, perl, python3, udev }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, alsaLib
+, espeak
+, glibc
+, gpsd
+, hamlib
+, perl
+, python3
+, udev
+}:
 
 with lib;
 
@@ -19,8 +30,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    espeak gpsd hamlib perl python3
-  ] ++ (optionals stdenv.isLinux [alsaLib udev]);
+    espeak
+    gpsd
+    hamlib
+    perl
+    python3
+  ] ++ (optionals stdenv.isLinux [ alsaLib udev ]);
 
   patches = [
     ./udev-fix.patch

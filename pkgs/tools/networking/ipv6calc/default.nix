@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, getopt, ip2location-c, openssl, perl
-, libmaxminddb ? null, geolite-legacy ? null }:
+{ lib
+, stdenv
+, fetchurl
+, getopt
+, ip2location-c
+, openssl
+, perl
+, libmaxminddb ? null
+, geolite-legacy ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
@@ -31,8 +39,8 @@ stdenv.mkDerivation rec {
     "--disable-dynamic-load"
     "--enable-shared"
   ] ++ lib.optional (libmaxminddb != null) "--enable-mmdb"
-    ++ lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-    ++ lib.optional (ip2location-c != null) "--enable-ip2location";
+  ++ lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+  ++ lib.optional (ip2location-c != null) "--enable-ip2location";
 
   enableParallelBuilding = true;
 

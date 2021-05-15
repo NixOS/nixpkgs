@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gtk2, pkg-config}:
+{ lib, stdenv, fetchurl, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "xoscope-2.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Oscilloscope through the sound card";
     homepage = "http://xoscope.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

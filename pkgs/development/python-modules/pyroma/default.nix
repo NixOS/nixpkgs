@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, docutils, pygments, setuptools
+{ lib
+, buildPythonPackage
+, fetchPypi
+, docutils
+, pygments
+, setuptools
 }:
 
 buildPythonPackage rec {

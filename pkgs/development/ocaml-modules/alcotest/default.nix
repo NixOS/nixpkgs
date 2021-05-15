@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, uuidm, re, stdlib-shims, uutf
+{ lib
+, buildDunePackage
+, fetchurl
+, astring
+, cmdliner
+, fmt
+, uuidm
+, re
+, stdlib-shims
+, uutf
 }:
 
 buildDunePackage rec {

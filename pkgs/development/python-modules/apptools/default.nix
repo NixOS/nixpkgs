@@ -1,7 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage
-, fetchpatch, configobj, six, traitsui
-, pytestCheckHook, tables, pandas
-, pythonOlder, importlib-resources
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, configobj
+, six
+, traitsui
+, pytestCheckHook
+, tables
+, pandas
+, pythonOlder
+, importlib-resources
 }:
 
 buildPythonPackage rec {

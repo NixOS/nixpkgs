@@ -5,29 +5,31 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = ["installPhase"];
+  phases = [ "installPhase" ];
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "${name}-gems";
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "${name}-gems";
 
-      inherit ruby;
+        inherit ruby;
 
-      gemdir = ./.;
-    };
-  in ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/pws $out/bin/pws \
-      --set PATH '"${xsel}/bin/:$PATH"'
-  '';
+        gemdir = ./.;
+      };
+    in
+    ''
+      mkdir -p $out/bin
+      makeWrapper ${env}/bin/pws $out/bin/pws \
+        --set PATH '"${xsel}/bin/:$PATH"'
+    '';
 
   passthru.updateScript = bundlerUpdateScript "pws";
 
   meta = with lib; {
     description = "Command-line password safe";
-    homepage    = "https://github.com/janlelis/pws";
-    license     = licenses.mit;
+    homepage = "https://github.com/janlelis/pws";
+    license = licenses.mit;
     maintainers = with maintainers; [ swistak35 nicknovitski ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

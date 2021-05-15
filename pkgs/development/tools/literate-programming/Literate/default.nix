@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A literate programming tool for any language";
-    homepage    = "http://literate.zbyedidia.webfactional.com/";
+    homepage = "http://literate.zbyedidia.webfactional.com/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl, iosevka, unzip
+{ stdenv
+, lib
+, fetchurl
+, iosevka
+, unzip
 , variant ? ""
 }:
 
@@ -8,7 +12,8 @@ let
   variantHashes = import ./variants.nix;
   validVariants = map (lib.removePrefix "iosevka-")
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "${name}-bin";
   version = "5.0.5";
 

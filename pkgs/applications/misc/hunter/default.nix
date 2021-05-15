@@ -1,5 +1,16 @@
-{ lib, stdenv, pkg-config, rustPlatform, fetchFromGitHub, fetchpatch
-, makeWrapper, glib, gst_all_1, CoreServices, IOKit, Security }:
+{ lib
+, stdenv
+, pkg-config
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, glib
+, gst_all_1
+, CoreServices
+, IOKit
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hunter";

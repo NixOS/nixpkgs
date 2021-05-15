@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
 }:
@@ -6,7 +8,7 @@
 stdenv.mkDerivation rec {
   pname = "crypto++";
   version = "8.4.0";
-  underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
+  underscoredVersion = lib.strings.replaceStrings [ "." ] [ "_" ] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   buildFlags =
-       lib.optional enableStatic "static"
+    lib.optional enableStatic "static"
     ++ lib.optional enableShared "shared"
     ++ [ "libcryptopp.pc" ];
   enableParallelBuilding = true;

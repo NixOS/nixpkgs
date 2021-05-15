@@ -9,7 +9,8 @@ let
     # sqlite driver is already shipped with python by default
   ];
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.9.0";
   disabled = pythonOlder "3.7";

@@ -1,6 +1,8 @@
 { mkDerivation
 , extra-cmake-modules
-, aspell, qtbase, qttools
+, aspell
+, qtbase
+, qttools
 }:
 
 mkDerivation {

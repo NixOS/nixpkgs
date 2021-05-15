@@ -1,7 +1,20 @@
-{ lib, buildDunePackage
-, checkseum, cmdliner, git-unix, git-cohttp-unix, yaml, fpath
-, irmin, irmin-fs, irmin-git, irmin-graphql, irmin-http
-, irmin-pack, irmin-watcher, irmin-test, cacert
+{ lib
+, buildDunePackage
+, checkseum
+, cmdliner
+, git-unix
+, git-cohttp-unix
+, yaml
+, fpath
+, irmin
+, irmin-fs
+, irmin-git
+, irmin-graphql
+, irmin-http
+, irmin-pack
+, irmin-watcher
+, irmin-test
+, cacert
 }:
 
 buildDunePackage rec {
@@ -13,13 +26,24 @@ buildDunePackage rec {
   useDune2 = true;
 
   propagatedBuildInputs = [
-    checkseum cmdliner git-unix yaml fpath
-    irmin irmin-fs irmin-git irmin-graphql irmin-http
-    irmin-pack irmin-watcher git-cohttp-unix
+    checkseum
+    cmdliner
+    git-unix
+    yaml
+    fpath
+    irmin
+    irmin-fs
+    irmin-git
+    irmin-graphql
+    irmin-http
+    irmin-pack
+    irmin-watcher
+    git-cohttp-unix
   ];
 
   checkInputs = [
-    irmin-test cacert
+    irmin-test
+    cacert
   ];
 
   doCheck = true;

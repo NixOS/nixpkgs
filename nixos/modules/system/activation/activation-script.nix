@@ -18,7 +18,8 @@ let
   });
 
   path = with pkgs; map getBin
-    [ coreutils
+    [
+      coreutils
       gnugrep
       findutils
       getent
@@ -30,13 +31,16 @@ let
 
   scriptType = with types;
     let scriptOptions =
-      { deps = mkOption
-          { type = types.listOf types.str;
+      {
+        deps = mkOption
+          {
+            type = types.listOf types.str;
             default = [ ];
             description = "List of dependencies. The script will run after these.";
           };
         text = mkOption
-          { type = types.lines;
+          {
+            type = types.lines;
             description = "The content of the script.";
           };
       };
@@ -51,7 +55,7 @@ in
   options = {
 
     system.activationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExample ''
         { stdio.text =
@@ -116,7 +120,7 @@ in
     };
 
     system.userActivationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExample ''
         { plasmaSetup = {
@@ -199,7 +203,8 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
-    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
+    system.activationScripts.usrbinenv =
+      if config.environment.usrbinenv != null
       then ''
         mkdir -m 0755 -p /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp

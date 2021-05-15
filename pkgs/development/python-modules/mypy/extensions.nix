@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
-    homepage    = "http://www.mypy-lang.org";
-    license     = licenses.mit;
+    homepage = "http://www.mypy-lang.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 ];
   };
 }

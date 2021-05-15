@@ -8,7 +8,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   machine =
     { ... }:
-    { services.atd.enable = true;
+    {
+      services.atd.enable = true;
       users.users.alice = { isNormalUser = true; };
     };
 

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib, ncurses, fuse}:
+{ lib, stdenv, fetchurl, zlib, ncurses, fuse }:
 
 stdenv.mkDerivation rec {
   name = "wiimms-iso-tools";

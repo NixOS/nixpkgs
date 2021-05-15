@@ -1,6 +1,13 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub
-, poetry, pygls, pyparsing
-, cmake, pytest, pytest-datadir
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, poetry
+, pygls
+, pyparsing
+, cmake
+, pytest
+, pytest-datadir
 , fetchpatch
 }:
 

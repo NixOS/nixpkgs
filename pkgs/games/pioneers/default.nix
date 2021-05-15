@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , intltool
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Addicting game based on The Settlers of Catan";
-    homepage = "http://pio.sourceforge.net/";  # https does not work
+    homepage = "http://pio.sourceforge.net/"; # https does not work
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;

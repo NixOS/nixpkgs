@@ -2,7 +2,8 @@
 
 let
   binPath = lib.makeBinPath [ cdrtools ];
-in symlinkJoin {
+in
+symlinkJoin {
   name = "brasero-${brasero-original.version}";
 
   paths = [ brasero-original ];

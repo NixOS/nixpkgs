@@ -1,8 +1,15 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  breeze-icons, karchive, kcoreaddons, kconfigwidgets, ki18n, kitemviews,
-  qtbase, qtsvg, qttools,
+{ mkDerivation
+, extra-cmake-modules
+, breeze-icons
+, karchive
+, kcoreaddons
+, kconfigwidgets
+, ki18n
+, kitemviews
+, qtbase
+, qtsvg
+, qttools
+,
 }:
 
 mkDerivation {
@@ -12,7 +19,12 @@ mkDerivation {
   ];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    breeze-icons karchive kcoreaddons kconfigwidgets ki18n kitemviews
+    breeze-icons
+    karchive
+    kcoreaddons
+    kconfigwidgets
+    ki18n
+    kitemviews
   ];
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
 }

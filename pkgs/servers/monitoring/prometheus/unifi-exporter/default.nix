@@ -7,7 +7,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/mdlayher/unifi_exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "mdlayher";
     repo = "unifi_exporter";

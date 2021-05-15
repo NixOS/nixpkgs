@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = dotnetCorePackages.aspnetcore_3_1.meta.platforms;
     maintainers = with maintainers; [ gnidorah ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

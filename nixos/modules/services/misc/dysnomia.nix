@@ -1,4 +1,4 @@
-{pkgs, lib, config, ...}:
+{ pkgs, lib, config, ... }:
 
 with lib;
 
@@ -6,13 +6,15 @@ let
   cfg = config.dysnomia;
 
   printProperties = properties:
-    concatMapStrings (propertyName:
-      let
-        property = properties.${propertyName};
-      in
-      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
-      else "${propertyName}=\"${toString property}\"\n"
-    ) (builtins.attrNames properties);
+    concatMapStrings
+      (propertyName:
+        let
+          property = properties.${propertyName};
+        in
+        if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
+        else "${propertyName}=\"${toString property}\"\n"
+      )
+      (builtins.attrNames properties);
 
   properties = pkgs.stdenv.mkDerivation {
     name = "dysnomia-properties";
@@ -43,7 +45,7 @@ let
     '';
   };
 
-  linkMutableComponents = {containerName}:
+  linkMutableComponents = { containerName }:
     ''
       mkdir ${containerName}
 
@@ -103,32 +105,32 @@ in
 
       properties = mkOption {
         description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
-        default = {};
+        default = { };
       };
 
       containers = mkOption {
         description = "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
-        default = {};
+        default = { };
       };
 
       components = mkOption {
         description = "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
-        default = {};
+        default = { };
       };
 
       extraContainerProperties = mkOption {
         description = "An attribute set providing additional container settings in addition to the default properties";
-        default = {};
+        default = { };
       };
 
       extraContainerPaths = mkOption {
         description = "A list of paths containing additional container configurations that are added to the search folders";
-        default = [];
+        default = [ ];
       };
 
       extraModulePaths = mkOption {
         description = "A list of paths containing additional modules that are added to the search folders";
-        default = [];
+        default = [ ];
       };
 
       enableLegacyModules = mkOption {
@@ -175,7 +177,8 @@ in
         dysnomia.enableLegacyModules = false;
 
         In a future version of Dysnomia (and NixOS) the legacy option will go away!
-      '' true;
+      ''
+        true;
     });
 
     dysnomia.properties = {
@@ -205,43 +208,54 @@ in
       ++ optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
     };
 
-    dysnomia.containers = lib.recursiveUpdate ({
-      process = {};
-      wrapper = {};
-    }
-    // lib.optionalAttrs (config.services.httpd.enable) { apache-webapplication = {
-      documentRoot = config.services.httpd.virtualHosts.localhost.documentRoot;
-    }; }
-    // lib.optionalAttrs (config.services.tomcat.axis2.enable) { axis2-webservice = {}; }
-    // lib.optionalAttrs (config.services.ejabberd.enable) { ejabberd-dump = {
-      ejabberdUser = config.services.ejabberd.user;
-    }; }
-    // lib.optionalAttrs (config.services.mysql.enable) { mysql-database = {
-        mysqlPort = config.services.mysql.port;
-        mysqlSocket = "/run/mysqld/mysqld.sock";
-      } // lib.optionalAttrs cfg.enableAuthentication {
-        mysqlUsername = "root";
-      };
-    }
-    // lib.optionalAttrs (config.services.postgresql.enable) { postgresql-database = {
-      } // lib.optionalAttrs (cfg.enableAuthentication) {
-        postgresqlUsername = "postgres";
-      };
-    }
-    // lib.optionalAttrs (config.services.tomcat.enable) { tomcat-webapplication = {
-      tomcatPort = 8080;
-    }; }
-    // lib.optionalAttrs (config.services.mongodb.enable) { mongo-database = {}; }
-    // lib.optionalAttrs (config.services.influxdb.enable) {
-      influx-database = {
-        influxdbUsername = config.services.influxdb.user;
-        influxdbDataDir = "${config.services.influxdb.dataDir}/data";
-        influxdbMetaDir = "${config.services.influxdb.dataDir}/meta";
-      };
-    }
-    // lib.optionalAttrs (config.services.svnserve.enable) { subversion-repository = {
-      svnBaseDir = config.services.svnserve.svnBaseDir;
-    }; }) cfg.extraContainerProperties;
+    dysnomia.containers = lib.recursiveUpdate
+      ({
+        process = { };
+        wrapper = { };
+      }
+      // lib.optionalAttrs (config.services.httpd.enable) {
+        apache-webapplication = {
+          documentRoot = config.services.httpd.virtualHosts.localhost.documentRoot;
+        };
+      }
+      // lib.optionalAttrs (config.services.tomcat.axis2.enable) { axis2-webservice = { }; }
+      // lib.optionalAttrs (config.services.ejabberd.enable) {
+        ejabberd-dump = {
+          ejabberdUser = config.services.ejabberd.user;
+        };
+      }
+      // lib.optionalAttrs (config.services.mysql.enable) {
+        mysql-database = {
+          mysqlPort = config.services.mysql.port;
+          mysqlSocket = "/run/mysqld/mysqld.sock";
+        } // lib.optionalAttrs cfg.enableAuthentication {
+          mysqlUsername = "root";
+        };
+      }
+      // lib.optionalAttrs (config.services.postgresql.enable) {
+        postgresql-database = { } // lib.optionalAttrs (cfg.enableAuthentication) {
+          postgresqlUsername = "postgres";
+        };
+      }
+      // lib.optionalAttrs (config.services.tomcat.enable) {
+        tomcat-webapplication = {
+          tomcatPort = 8080;
+        };
+      }
+      // lib.optionalAttrs (config.services.mongodb.enable) { mongo-database = { }; }
+      // lib.optionalAttrs (config.services.influxdb.enable) {
+        influx-database = {
+          influxdbUsername = config.services.influxdb.user;
+          influxdbDataDir = "${config.services.influxdb.dataDir}/data";
+          influxdbMetaDir = "${config.services.influxdb.dataDir}/meta";
+        };
+      }
+      // lib.optionalAttrs (config.services.svnserve.enable) {
+        subversion-repository = {
+          svnBaseDir = config.services.svnserve.svnBaseDir;
+        };
+      })
+      cfg.extraContainerProperties;
 
     boot.extraSystemdUnitPaths = [ "/etc/systemd-mutable/system" ];
 

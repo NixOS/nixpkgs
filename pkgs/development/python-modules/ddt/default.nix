@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six, pyyaml, mock
+, six
+, pyyaml
+, mock
 , pytestCheckHook
 , enum34
 , isPy3k

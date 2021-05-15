@@ -41,7 +41,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = literalExample ''
         {
           homeassistant = config.services.home-assistant.enable;

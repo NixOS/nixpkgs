@@ -20,7 +20,7 @@ buildGoPackage rec {
     description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
     homepage = "https://github.com/coreos/flannel";
-    maintainers = with maintainers; [johanot offline];
+    maintainers = with maintainers; [ johanot offline ];
     platforms = with platforms; linux;
   };
 }

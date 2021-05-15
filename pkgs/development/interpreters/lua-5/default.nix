@@ -13,7 +13,8 @@ let
     name = "lua-arch.patch";
   };
 
-in rec {
+in
+rec {
   lua5_4 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "4"; patch = "2"; };
     hash = "0ksj5zpj74n0jkamy3di1p6l10v4gjnd2zjnb453qc6px6bhsmqi";
@@ -24,7 +25,7 @@ in rec {
     ];
   };
 
-  lua5_4_compat = lua5_4.override({
+  lua5_4_compat = lua5_4.override ({
     compat = true;
   });
 
@@ -45,7 +46,7 @@ in rec {
     '';
   };
 
-  lua5_3_compat = lua5_3.override({
+  lua5_3_compat = lua5_3.override ({
     compat = true;
   });
 
@@ -56,7 +57,7 @@ in rec {
     patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch52 ];
   };
 
-  lua5_2_compat = lua5_2.override({
+  lua5_2_compat = lua5_2.override ({
     compat = true;
   });
 

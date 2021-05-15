@@ -5,7 +5,7 @@
 , gobject-introspection
 , libcanberra-gtk3
 , poppler_gi
- }:
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";

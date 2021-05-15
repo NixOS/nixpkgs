@@ -5,7 +5,7 @@
 , setuptools_scm
 , importlib-metadata
 , packaging
-# Check Inputs
+  # Check Inputs
 , pytestCheckHook
 , numpy
 , matplotlib

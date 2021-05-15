@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool];
+  buildInputs = [ autoconf automake libtool ];
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "A C++ library for arithmetic and algebraic computations";
     license = lib.licenses.cecill-b;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

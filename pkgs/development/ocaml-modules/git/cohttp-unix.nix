@@ -1,5 +1,13 @@
-{ buildDunePackage, git, git-cohttp
-, cohttp-lwt-unix, cohttp-lwt, fmt, lwt, result, rresult, uri
+{ buildDunePackage
+, git
+, git-cohttp
+, cohttp-lwt-unix
+, cohttp-lwt
+, fmt
+, lwt
+, result
+, rresult
+, uri
 }:
 
 buildDunePackage {
@@ -8,7 +16,15 @@ buildDunePackage {
   inherit (git) version src minimumOCamlVersion useDune2;
 
   propagatedBuildInputs = [
-    git git-cohttp cohttp-lwt-unix cohttp-lwt fmt lwt result rresult uri
+    git
+    git-cohttp
+    cohttp-lwt-unix
+    cohttp-lwt
+    fmt
+    lwt
+    result
+    rresult
+    uri
   ];
 
   meta = git.meta // {

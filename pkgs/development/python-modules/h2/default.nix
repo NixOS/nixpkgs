@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, enum34, hpack, hyperframe, pytestCheckHook, hypothesis }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, enum34
+, hpack
+, hyperframe
+, pytestCheckHook
+, hypothesis
+}:
 
 buildPythonPackage rec {
   pname = "h2";

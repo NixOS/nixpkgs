@@ -47,9 +47,10 @@ let
     dontBuild = true;
     installPhase =
       let so =
-            if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
-            else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
-      in ''
+        if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
+        else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
+      in
+      ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}
         install -m644 -t $out/include/ ${bass.h}
@@ -63,4 +64,5 @@ let
     };
   };
 
-in lib.mapAttrs dropBass allBass
+in
+lib.mapAttrs dropBass allBass

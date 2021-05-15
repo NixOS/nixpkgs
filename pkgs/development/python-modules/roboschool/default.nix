@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  NIX_CFLAGS_COMPILE="-I ${python}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I ${python}/include/${python.libPrefix}";
 
   patches = [
     # Remove kwarg that was removed in upstream gym

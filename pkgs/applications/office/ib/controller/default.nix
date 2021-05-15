@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
     fi
     EOF
     chmod u+x $out/bin/ib-gw-c
-    '';
+  '';
 
 
   meta = with lib; {

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
-, dyncall , nanomsg, python37Packages }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boxfort
+, cmake
+, libcsptr
+, pkg-config
+, gettext
+, dyncall
+, nanomsg
+, python37Packages
+}:
 
 stdenv.mkDerivation rec {
   version = "2.3.3";

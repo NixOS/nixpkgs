@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , fonttools
-, pytest, pytestrunner
+, pytest
+, pytestrunner
 }:
 
 buildPythonPackage rec {

@@ -11,7 +11,8 @@ in
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "cwm";
+      {
+        name = "cwm";
         start =
           ''
             cwm &

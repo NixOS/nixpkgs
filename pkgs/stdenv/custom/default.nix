@@ -1,5 +1,9 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
 }:
 
 assert crossSystem == localSystem;
@@ -11,7 +15,8 @@ let
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
-in bootStages ++ [
+in
+bootStages ++ [
 
   # Additional stage, built using custom stdenv
   (vanillaPackages: {

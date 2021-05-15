@@ -21,7 +21,7 @@ let
 
       extraOptions = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra SSL configuration options.";
       };
 
@@ -311,7 +311,7 @@ let
         description = ''
           Timout after which the room is destroyed or unlocked if not
           configured, in seconds
-       '';
+        '';
       };
       tombstones = mkOption {
         type = types.bool;
@@ -339,7 +339,7 @@ let
       vcard_muc = mkOption {
         type = types.bool;
         default = true;
-      description = "Adds the ability to set vCard for Multi User Chat rooms";
+        description = "Adds the ability to set vCard for Multi User Chat rooms";
       };
 
       # Extra parameters. Defaulting to prosody default values.
@@ -517,7 +517,7 @@ in
 
       disco_items = mkOption {
         type = types.listOf (types.submodule discoOpts);
-        default = [];
+        default = [ ];
         description = "List of discoverable items you want to advertise.";
       };
 
@@ -596,7 +596,7 @@ in
 
       s2sInsecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "insecure.example.com" ];
         description = ''
           Some servers have invalid or self-signed certificates. You can list
@@ -608,7 +608,7 @@ in
 
       s2sSecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "jabber.org" ];
         description = ''
           Even if you leave s2s_secure_auth disabled, you can still require valid
@@ -621,13 +621,13 @@ in
 
       extraModules = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Enable custom modules";
       };
 
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "Addtional path in which to look find plugins/modules";
       };
 
@@ -645,9 +645,9 @@ in
       muc = mkOption {
         type = types.listOf (types.submodule mucOpts);
         default = [ ];
-        example = [ {
+        example = [{
           domain = "conference.my-xmpp-example-host.org";
-        } ];
+        }];
         description = "Multi User Chat (MUC) configuration";
       };
 
@@ -681,7 +681,7 @@ in
 
       admins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "admin1@example.com" "admin2@example.com" ];
         description = "List of administrators of the current host";
       };
@@ -707,8 +707,9 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = let
-      genericErrMsg = ''
+    assertions =
+      let
+        genericErrMsg = ''
 
           Having a server not XEP-0423-compliant might make your XMPP
           experience terrible. See the NixOS manual for further
@@ -717,34 +718,41 @@ in
           If you know what you're doing, you can disable this warning by
           setting config.services.prosody.xmppComplianceSuite to false.
       '';
-      errors = [
-        { assertion = (builtins.length cfg.muc > 0) || !cfg.xmppComplianceSuite;
-          message = ''
-            You need to setup at least a MUC domain to comply with
-            XEP-0423.
-          '' + genericErrMsg;}
-        { assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
-          message = ''
-            You need to setup the uploadHttp module through
-            config.services.prosody.uploadHttp to comply with
-            XEP-0423.
-          '' + genericErrMsg;}
-      ];
-    in errors;
+        errors = [
+          {
+            assertion = (builtins.length cfg.muc > 0) || !cfg.xmppComplianceSuite;
+            message = ''
+              You need to setup at least a MUC domain to comply with
+              XEP-0423.
+            '' + genericErrMsg;
+          }
+          {
+            assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
+            message = ''
+              You need to setup the uploadHttp module through
+              config.services.prosody.uploadHttp to comply with
+              XEP-0423.
+            '' + genericErrMsg;
+          }
+        ];
+      in
+      errors;
 
     environment.systemPackages = [ cfg.package ];
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems = if (cfg.uploadHttp != null)
-            then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}]
-            else [];
+        httpDiscoItems =
+          if (cfg.uploadHttp != null)
+          then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint"; }]
+          else [ ];
         mucDiscoItems = builtins.foldl'
-            (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
-            []
-            cfg.muc;
+          (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint"; }] ++ acc)
+          [ ]
+          cfg.muc;
         discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
-      in ''
+      in
+      ''
 
       pidfile = "/run/prosody/prosody.pid"
 

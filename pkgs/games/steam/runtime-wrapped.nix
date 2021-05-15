@@ -1,4 +1,9 @@
-{ stdenv, steamArch, lib, perl, pkgs, steam-runtime
+{ stdenv
+, steamArch
+, lib
+, perl
+, pkgs
+, steam-runtime
 , runtimeOnly ? false
 }:
 
@@ -19,14 +24,16 @@ let
 
   allPkgs = overridePkgs ++ [ steam-runtime ];
 
-  gnuArch = if steamArch == "amd64" then "x86_64-linux-gnu"
-            else if steamArch == "i386" then "i386-linux-gnu"
-            else abort "Unsupported architecture";
+  gnuArch =
+    if steamArch == "amd64" then "x86_64-linux-gnu"
+    else if steamArch == "i386" then "i386-linux-gnu"
+    else abort "Unsupported architecture";
 
   libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
   bins = [ "bin" "usr/bin" ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "steam-runtime-wrapped";
 
   nativeBuildInputs = [ perl ];

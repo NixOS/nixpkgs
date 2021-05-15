@@ -5,9 +5,9 @@ buildPythonPackage rec {
   version = "13.0.0-2";
 
   src = fetchFromGitHub {
-    owner  = "mikekap";
-    repo   = pname;
-    rev    = version;
+    owner = "mikekap";
+    repo = pname;
+    rev = version;
     sha256 = "0p9brbiwyg98q52y0gfyps52xv57fwqfpq0mn18p1xc1imip3h2b";
   };
 

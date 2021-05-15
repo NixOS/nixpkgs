@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
-, gst_all_1, glib-networking, gobject-introspection
+{ lib
+, stdenv
+, fetchFromGitHub
+, pythonPackages
+, wrapGAppsHook
+, gst_all_1
+, glib-networking
+, gobject-introspection
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -26,13 +32,13 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = [
     gobject-introspection
   ] ++ (with pythonPackages; [
-      gst-python
-      pygobject3
-      pykka
-      requests
-      setuptools
-      tornado
-    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
+    gst-python
+    pygobject3
+    pykka
+    requests
+    setuptools
+    tornado
+  ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
 
   # There are no tests
@@ -46,6 +52,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

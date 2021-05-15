@@ -48,7 +48,7 @@ let
     doCheck = true;
     dontInstall = true;
 
-    pythonEnv      = python.withPackages (_: runtimePackages);
+    pythonEnv = python.withPackages (_: runtimePackages);
     pythonCheckEnv = python.withPackages (_: (runtimePackages ++ checkPackages));
 
     unpackPhase = ''
@@ -63,21 +63,23 @@ let
         --replace "localhost:8080" "http://localhost:8080"
     '';
 
-    buildPhase = let
-      # Paperless has explicit runtime checks that expect these binaries to be in PATH
-      extraBin = lib.makeBinPath [ imagemagick ghostscript optipng tesseract unpaper ];
-    in ''
-      ${python.interpreter} -m compileall $srcDir
+    buildPhase =
+      let
+        # Paperless has explicit runtime checks that expect these binaries to be in PATH
+        extraBin = lib.makeBinPath [ imagemagick ghostscript optipng tesseract unpaper ];
+      in
+      ''
+        ${python.interpreter} -m compileall $srcDir
 
-      makeWrapper $pythonEnv/bin/python $out/bin/paperless \
-        --set PATH ${extraBin} --add-flags $out/share/paperless/manage.py
+        makeWrapper $pythonEnv/bin/python $out/bin/paperless \
+          --set PATH ${extraBin} --add-flags $out/share/paperless/manage.py
 
-      # A shell snippet that can be sourced to setup a paperless env
-      cat > $out/share/paperless/setup-env.sh <<EOF
-      export PATH="$pythonEnv/bin:${extraBin}''${PATH:+:}$PATH"
-      export paperlessSrc=$out/share/paperless
-      EOF
-    '';
+        # A shell snippet that can be sourced to setup a paperless env
+        cat > $out/share/paperless/setup-env.sh <<EOF
+        export PATH="$pythonEnv/bin:${extraBin}''${PATH:+:}$PATH"
+        export paperlessSrc=$out/share/paperless
+        EOF
+      '';
 
     checkPhase = ''
       source $out/share/paperless/setup-env.sh
@@ -93,7 +95,7 @@ let
     '';
 
     passthru = {
-      withConfig = callPackage ./withConfig.nix {};
+      withConfig = callPackage ./withConfig.nix { };
       inherit python runtimePackages checkPackages tesseract;
     };
 
@@ -106,18 +108,19 @@ let
   };
 
   python = python3.override {
-    packageOverrides = self: super: let
-      customPkgs = import ./python-modules super fetchFromGitHub; in
-    {
-      pyocr = pyocrWithUserTesseract super;
+    packageOverrides = self: super:
+      let
+        customPkgs = import ./python-modules super fetchFromGitHub; in
+      {
+        pyocr = pyocrWithUserTesseract super;
 
-      # Paperless is incompatible with factory_boy >= 3
-      factory_boy = customPkgs.factory_boy_2_12_0;
+        # Paperless is incompatible with factory_boy >= 3
+        factory_boy = customPkgs.factory_boy_2_12_0;
 
-      # These are pre-release versions, hence they are private to this pkg
-      django-filter = self.callPackage ./python-modules/django-filter.nix {};
-      django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix {};
-    };
+        # These are pre-release versions, hence they are private to this pkg
+        django-filter = self.callPackage ./python-modules/django-filter.nix { };
+        django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix { };
+      };
   };
 
   runtimePackages = with python.pkgs; [
@@ -155,14 +158,14 @@ let
     let
       pyocr = pyPkgs.pyocr.override { inherit tesseract; };
     in
-      if pyocr.outPath == pyPkgs.pyocr.outPath then
-        pyocr
-      else
-        # The user has provided a custom tesseract derivation that might be
-        # missing some languages that are required for PyOCR's tests. Disable them to
-        # avoid build errors.
-        pyocr.overridePythonAttrs (attrs: {
-          doCheck = false;
-        });
+    if pyocr.outPath == pyPkgs.pyocr.outPath then
+      pyocr
+    else
+    # The user has provided a custom tesseract derivation that might be
+    # missing some languages that are required for PyOCR's tests. Disable them to
+    # avoid build errors.
+      pyocr.overridePythonAttrs (attrs: {
+        doCheck = false;
+      });
 in
-  paperless
+paperless

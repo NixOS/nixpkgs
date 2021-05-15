@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, valgrind
+, fetchpatch
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -28,9 +32,9 @@ stdenv.mkDerivation rec {
     "BUILD_SHARED=${if enableShared then "yes" else "no"}"
     "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
   ]
-    # TODO make full dictionary
-    ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
-    ;
+  # TODO make full dictionary
+  ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+  ;
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";

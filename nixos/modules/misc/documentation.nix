@@ -21,7 +21,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
+          modules = [{ nixpkgs.localSystem = config.nixpkgs.localSystem; }] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = {
             pkgs = scrubDerivations "pkgs" pkgs;
@@ -37,38 +37,41 @@ let
             else value
           )
           pkgSet;
-      in scrubbedEval.options;
+      in
+      scrubbedEval.options;
   };
 
 
-  nixos-help = let
-    helpScript = pkgs.writeShellScriptBin "nixos-help" ''
-      # Finds first executable browser in a colon-separated list.
-      # (see how xdg-open defines BROWSER)
-      browser="$(
-        IFS=: ; for b in $BROWSER; do
-          [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
-        done
-      )"
-      if [ -z "$browser" ]; then
-        browser="$(type -P xdg-open || true)"
+  nixos-help =
+    let
+      helpScript = pkgs.writeShellScriptBin "nixos-help" ''
+        # Finds first executable browser in a colon-separated list.
+        # (see how xdg-open defines BROWSER)
+        browser="$(
+          IFS=: ; for b in $BROWSER; do
+            [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
+          done
+        )"
         if [ -z "$browser" ]; then
-          browser="${pkgs.w3m-nographics}/bin/w3m"
+          browser="$(type -P xdg-open || true)"
+          if [ -z "$browser" ]; then
+            browser="${pkgs.w3m-nographics}/bin/w3m"
+          fi
         fi
-      fi
-      exec "$browser" ${manual.manualHTMLIndex}
-    '';
+        exec "$browser" ${manual.manualHTMLIndex}
+      '';
 
-    desktopItem = pkgs.makeDesktopItem {
-      name = "nixos-manual";
-      desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
-      icon = "nix-snowflake";
-      exec = "nixos-help";
-      categories = "System";
-    };
+      desktopItem = pkgs.makeDesktopItem {
+        name = "nixos-manual";
+        desktopName = "NixOS Manual";
+        genericName = "View NixOS documentation in a web browser";
+        icon = "nix-snowflake";
+        exec = "nixos-help";
+        categories = "System";
+      };
 
-    in pkgs.symlinkJoin {
+    in
+    pkgs.symlinkJoin {
       name = "nixos-help";
       paths = [
         helpScript
@@ -81,7 +84,7 @@ in
 {
   imports = [
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
   ];
 
@@ -211,14 +214,14 @@ in
             name = "man-paths";
             paths = config.environment.systemPackages;
             pathsToLink = [ "/share/man" ];
-            extraOutputsToInstall = ["man"];
+            extraOutputsToInstall = [ "man" ];
             ignoreCollisions = true;
           };
           manualCache = pkgs.runCommandLocal "man-cache" { }
-          ''
-            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
-          '';
+            ''
+              echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+              ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+            '';
         in
         ''
           # Manual pages paths for NixOS
@@ -256,13 +259,13 @@ in
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
+      environment.systemPackages = [ ]
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
-           ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
+        ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
 
       services.getty.helpLine = mkIf cfg.doc.enable (
-          "\nRun 'nixos-help' for the NixOS manual."
+        "\nRun 'nixos-help' for the NixOS manual."
       );
     })
 

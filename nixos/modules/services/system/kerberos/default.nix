@@ -1,4 +1,4 @@
-{config, lib, ...}:
+{ config, lib, ... }:
 
 let
   inherit (lib) mkOption mkIf types length attrNames;
@@ -13,8 +13,8 @@ let
       };
       access = mkOption {
         type = types.either
-          (types.listOf (types.enum ["add" "cpw" "delete" "get" "list" "modify"]))
-          (types.enum ["all"]);
+          (types.listOf (types.enum [ "add" "cpw" "delete" "get" "list" "modify" ]))
+          (types.enum [ "all" ]);
         default = "all";
         description = "The changes the principal is allowed to make.";
       };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, util-linux, coreutils}:
+{ lib, stdenv, fetchurl, util-linux, coreutils }:
 
 stdenv.mkDerivation rec {
   version = "6.42";

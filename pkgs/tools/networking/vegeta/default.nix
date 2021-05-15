@@ -5,9 +5,9 @@ buildGoPackage rec {
   version = "12.8.4";
 
   src = fetchFromGitHub {
-    owner  = "tsenart";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "tsenart";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0sw10k4g370c544dgw2c1sqdnxryld8lf6c1wnyknrm3zsfzn1hl";
   };
 

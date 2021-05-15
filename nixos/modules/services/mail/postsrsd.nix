@@ -6,7 +6,8 @@ let
 
   cfg = config.services.postsrsd;
 
-in {
+in
+{
 
   ###### interface
 
@@ -32,7 +33,7 @@ in {
       };
 
       separator = mkOption {
-        type = types.enum ["-" "=" "+"];
+        type = types.enum [ "-" "=" "+" ];
         default = "=";
         description = "First separator character in generated addresses";
       };
@@ -63,7 +64,7 @@ in {
 
       excludeDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Origin domains to exclude from rewriting in addition to primary domain";
       };
 

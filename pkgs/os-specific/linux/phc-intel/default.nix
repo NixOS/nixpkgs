@@ -6,7 +6,8 @@ assert lib.versionAtLeast kernel.version "4.10";
 let
   release = "0.4.0";
   revbump = "rev25"; # don't forget to change forum download id...
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
   version = "${release}-${revbump}";
 

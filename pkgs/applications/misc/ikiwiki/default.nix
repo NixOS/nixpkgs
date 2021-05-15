@@ -1,12 +1,29 @@
-{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
-, gitSupport ? false, git ? null
-, docutilsSupport ? false, python ? null, docutils ? null
-, monotoneSupport ? false, monotone ? null
-, bazaarSupport ? false, breezy ? null
-, cvsSupport ? false, cvs ? null, cvsps ? null
-, subversionSupport ? false, subversion ? null
-, mercurialSupport ? false, mercurial ? null
-, extraUtils ? []
+{ lib
+, stdenv
+, fetchurl
+, perlPackages
+, gettext
+, makeWrapper
+, PerlMagick
+, which
+, highlight
+, gitSupport ? false
+, git ? null
+, docutilsSupport ? false
+, python ? null
+, docutils ? null
+, monotoneSupport ? false
+, monotone ? null
+, bazaarSupport ? false
+, breezy ? null
+, cvsSupport ? false
+, cvs ? null
+, cvsps ? null
+, subversionSupport ? false
+, subversion ? null
+, mercurialSupport ? false
+, mercurial ? null
+, extraUtils ? [ ]
 }:
 
 assert docutilsSupport -> (python != null && docutils != null);
@@ -30,17 +47,38 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ which highlight ]
-    ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-          TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-          RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
-          NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
-    ++ lib.optionals docutilsSupport [python docutils]
-    ++ lib.optionals gitSupport [git]
-    ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [breezy]
-    ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
-    ++ lib.optionals subversionSupport [subversion]
-    ++ lib.optionals mercurialSupport [mercurial];
+    ++ (with perlPackages; [
+    perl
+    TextMarkdown
+    URI
+    HTMLParser
+    HTMLScrubber
+    HTMLTemplate
+    TimeDate
+    gettext
+    makeWrapper
+    DBFile
+    CGISession
+    CGIFormBuilder
+    LocaleGettext
+    RpcXML
+    XMLSimple
+    PerlMagick
+    YAML
+    YAMLLibYAML
+    HTMLTree
+    AuthenPassphrase
+    NetOpenIDConsumer
+    LWPxParanoidAgent
+    CryptSSLeay
+  ])
+    ++ lib.optionals docutilsSupport [ python docutils ]
+    ++ lib.optionals gitSupport [ git ]
+    ++ lib.optionals monotoneSupport [ monotone ]
+    ++ lib.optionals bazaarSupport [ breezy ]
+    ++ lib.optionals cvsSupport [ cvs cvsps perlPackages.Filechdir ]
+    ++ lib.optionals subversionSupport [ subversion ]
+    ++ lib.optionals mercurialSupport [ mercurial ];
 
   # A few markdown tests fail, but this is expected when using Text::Markdown
   # instead of Text::Markdown::Discount.

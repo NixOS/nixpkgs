@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = ["meshio"];
+  pythonImportsCheck = [ "meshio" ];
 
   meta = with lib; {
     homepage = "https://github.com/nschloe/meshio";

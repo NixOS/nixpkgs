@@ -1,9 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake,
-  mesa, libGLU, glfw,
-  libX11, libXi, libXcursor, libXrandr, libXinerama,
-  alsaSupport ? stdenv.hostPlatform.isLinux, alsaLib,
-  pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio,
-  includeEverything ? true
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, mesa
+, libGLU
+, glfw
+, libX11
+, libXi
+, libXcursor
+, libXrandr
+, libXinerama
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsaLib
+, pulseSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, includeEverything ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +39,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    mesa libGLU glfw libX11 libXi libXcursor libXrandr libXinerama
+    mesa
+    libGLU
+    glfw
+    libX11
+    libXi
+    libXcursor
+    libXrandr
+    libXinerama
   ] ++ lib.optional alsaSupport alsaLib
-    ++ lib.optional pulseSupport libpulseaudio;
+  ++ lib.optional pulseSupport libpulseaudio;
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
   cmakeFlags = [

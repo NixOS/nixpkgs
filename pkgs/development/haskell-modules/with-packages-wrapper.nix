@@ -1,4 +1,10 @@
-{ lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+{ lib
+, stdenv
+, ghc
+, llvmPackages
+, packages
+, symlinkJoin
+, makeWrapper
 , withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
@@ -31,32 +37,33 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 #   fi
 
 let
-  isGhcjs       = ghc.isGhcjs or false;
-  isHaLVM       = ghc.isHaLVM or false;
+  isGhcjs = ghc.isGhcjs or false;
+  isHaLVM = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-  ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghcCommand}-${ghc.version}";
-  docDir        = "$out/share/doc/ghc/html";
+  ghcCommandCaps = lib.toUpper ghcCommand';
+  libDir =
+    if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
+    else "$out/lib/${ghcCommand}-${ghc.version}";
+  docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
-  hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
+  paths = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
+  hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-  llvm          = lib.makeBinPath
-                  ([ llvmPackages.llvm ]
-                   ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
+  llvm = lib.makeBinPath
+    ([ llvmPackages.llvm ]
+      ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
-if paths == [] && !withLLVM then ghc else
+if paths == [ ] && !withLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
-  paths = paths ++ [ghc];
+  paths = paths ++ [ ghc ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     # wrap compiler executables with correct env variables

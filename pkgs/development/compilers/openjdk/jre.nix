@@ -31,9 +31,10 @@ let
     passthru = {
       home = "${jre}";
       tests = [
-        (callPackage ./tests/test_jre_minimal.nix {})
-        (callPackage ./tests/test_jre_minimal_with_logging.nix {})
+        (callPackage ./tests/test_jre_minimal.nix { })
+        (callPackage ./tests/test_jre_minimal_with_logging.nix { })
       ];
     };
   };
-in jre
+in
+jre

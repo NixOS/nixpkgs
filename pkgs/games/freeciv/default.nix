@@ -1,16 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
-, zlib, bzip2, curl, xz, gettext, libiconv
-, sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk3
-, qtClient ? false, qt5
-, server ? true, readline
-, enableSqlite ? true, sqlite
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, lua5_3
+, pkg-config
+, python3
+, zlib
+, bzip2
+, curl
+, xz
+, gettext
+, libiconv
+, sdlClient ? true
+, SDL
+, SDL_mixer
+, SDL_image
+, SDL_ttf
+, SDL_gfx
+, freetype
+, fluidsynth
+, gtkClient ? false
+, gtk3
+, qtClient ? false
+, qt5
+, server ? true
+, readline
+, enableSqlite ? true
+, sqlite
 }:
 
 let
   inherit (lib) optional optionals;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freeciv";
   version = "2.6.4";
 
@@ -34,7 +57,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
     ++ optionals gtkClient [ gtk3 ]
-    ++ optionals qtClient  [ qt5.qtbase ]
+    ++ optionals qtClient [ qt5.qtbase ]
     ++ optional server readline
     ++ optional enableSqlite sqlite;
 
@@ -43,12 +66,12 @@ in stdenv.mkDerivation rec {
   configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
     ++ optionals qtClient [
-      "--enable-client=qt"
-      "--with-qt5-includes=${qt5.qtbase.dev}/include"
-    ]
+    "--enable-client=qt"
+    "--with-qt5-includes=${qt5.qtbase.dev}/include"
+  ]
     ++ optional enableSqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
-    ++ optional (!server)    "--disable-server";
+    ++ optional (!server) "--disable-server";
 
   enableParallelBuilding = true;
 

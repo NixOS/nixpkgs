@@ -1,9 +1,9 @@
-{
-  lib, stdenv,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
-  shared ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, cmake
+, shared ? true
 }:
 let
   inherit (lib) optional;

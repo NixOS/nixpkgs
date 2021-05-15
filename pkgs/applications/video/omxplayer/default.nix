@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl
-, raspberrypifw, pcre, boost, freetype, zlib
+{ lib
+, stdenv
+, fetchurl
+, raspberrypifw
+, pcre
+, boost
+, freetype
+, zlib
 }:
 
 let
@@ -11,7 +17,7 @@ let
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
 
-    configurePlatforms = [];
+    configurePlatforms = [ ];
     configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [

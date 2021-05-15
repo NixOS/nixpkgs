@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , fetchurl
 , pkg-config
@@ -10,12 +11,14 @@
 , python3
 , desktop-file-utils
 , wrapGAppsHook
-, gnome }:
+, gnome
+}:
 
 let
   pname = "gnome-power-manager";
   version = "3.32.0";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

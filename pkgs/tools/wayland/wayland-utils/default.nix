@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl
-, meson, pkg-config, ninja
-, wayland, wayland-protocols
+{ lib
+, stdenv
+, fetchurl
+, meson
+, pkg-config
+, ninja
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi,
-  six, pytest, pytestrunner, pytestcov, coverage
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, pytest
+, pytestrunner
+, pytestcov
+, coverage
 }:
 buildPythonPackage rec {
   pname = "libais";

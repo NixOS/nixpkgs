@@ -1,8 +1,25 @@
-{ stdenv, lib, fetchurl, makeWrapper, writeText
-, fpc, gtk2, glib, pango, atk, gdk-pixbuf
-, libXi, xorgproto, libX11, libXext
-, gdb, gnumake, binutils
-, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, writeText
+, fpc
+, gtk2
+, glib
+, pango
+, atk
+, gdk-pixbuf
+, libXi
+, xorgproto
+, libX11
+, libXext
+, gdb
+, gnumake
+, binutils
+, withQt ? false
+, qtbase ? null
+, libqt5pas ? null
+, wrapQtAppsHook ? null
 }:
 
 # TODO:
@@ -16,8 +33,10 @@ let
   majorMinorPatch = v:
     builtins.concatStringsSep "." (lib.take 3 (lib.splitVersion v));
 
-  overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v:
-    "const ${k} = '${v}';") {
+  overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (k: v:
+      "const ${k} = '${v}';")
+    {
       # this is technically the SVN revision but as we don't have that replace
       # it with the version instead of showing "Unknown"
       RevisionStr = version;
@@ -39,9 +58,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # we need gtk2 unconditionally as that is the default target when building applications with lazarus
-    fpc gtk2 glib libXi xorgproto
-    libX11 libXext pango atk
-    stdenv.cc gdk-pixbuf
+    fpc
+    gtk2
+    glib
+    libXi
+    xorgproto
+    libX11
+    libXext
+    pango
+    atk
+    stdenv.cc
+    gdk-pixbuf
   ]
   ++ lib.optionals withQt [ libqt5pas qtbase ];
 
@@ -87,20 +114,22 @@ stdenv.mkDerivation rec {
       --replace '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 
-  postInstall = let
-    ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
-  in ''
-    wrapProgram $out/bin/startlazarus \
-      --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
-      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
-      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
-      --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
-  '';
+  postInstall =
+    let
+      ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
+    in
+    ''
+      wrapProgram $out/bin/startlazarus \
+        --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
+        --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
+        --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+        --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
+    '';
 
   meta = with lib; {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
-    license = licenses.gpl2Plus ;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

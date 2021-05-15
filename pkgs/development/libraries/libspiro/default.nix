@@ -1,4 +1,4 @@
-{lib, stdenv, pkg-config, autoreconfHook, fetchFromGitHub }:
+{ lib, stdenv, pkg-config, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libspiro";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage}:
+{ lib, buildGoModule, fetchFromGitHub, callPackage }:
 
 buildGoModule rec {
   pname = "croc";
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   passthru = {
     tests = {
-      local-relay = callPackage ./test-local-relay.nix {};
+      local-relay = callPackage ./test-local-relay.nix { };
     };
   };
   meta = with lib; {

@@ -1,5 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, poppler, pkg-config, libunarr
-, libGLU, qtdeclarative, qtgraphicaleffects, qtmultimedia, qtquickcontrols
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, qmake
+, poppler
+, pkg-config
+, libunarr
+, libGLU
+, qtdeclarative
+, qtgraphicaleffects
+, qtmultimedia
+, qtquickcontrols
 , qtscript
 }:
 

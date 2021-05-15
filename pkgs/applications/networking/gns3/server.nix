@@ -11,7 +11,8 @@ let
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
-in python.pkgs.buildPythonPackage {
+in
+python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
 
@@ -28,9 +29,21 @@ in python.pkgs.buildPythonPackage {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    aiohttp-cors
+    yarl
+    aiohttp
+    multidict
+    setuptools
+    jinja2
+    psutil
+    zipstream
+    sentry-sdk
+    jsonschema
+    distro
+    async_generator
+    aiofiles
+    prompt_toolkit
+    py-cpuinfo
   ];
 
   # Requires network access

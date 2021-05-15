@@ -54,5 +54,5 @@ let
   };
 
 in
-  if stdenv.isDarwin then self
-  else perl.pkgs.toPerlModule self
+if stdenv.isDarwin then self
+else perl.pkgs.toPerlModule self

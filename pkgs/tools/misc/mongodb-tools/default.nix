@@ -20,7 +20,8 @@ let
   ];
   version = "4.2.0";
 
-in buildGoPackage {
+in
+buildGoPackage {
   pname = "mongo-tools";
   inherit version;
 

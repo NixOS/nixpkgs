@@ -8,7 +8,7 @@ lib.appendToName "with-packages" (symlinkJoin {
 
   inherit (idris) name;
 
-  paths = paths ++ [idris] ;
+  paths = paths ++ [ idris ];
 
   buildInputs = [ makeWrapper ];
 

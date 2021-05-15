@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
-# Remove gcc and python references
+  # Remove gcc and python references
 , removeReferencesTo
 , pkg-config
 , volk
@@ -27,26 +28,26 @@
 , libunwind
 , cppzmq
 , zeromq
-# Needed only if qt-gui is disabled, from some reason
+  # Needed only if qt-gui is disabled, from some reason
 , icu
-# GUI related
+  # GUI related
 , gtk3
 , pango
 , gobject-introspection
 , cairo
 , qt5
 , libsForQt5
-# Features available to override, the list of them is in featuresInfo. They
-# are all turned on by default.
-, features ? {}
-# If one wishes to use a different src or name for a very custom build
-, overrideSrc ? {}
+  # Features available to override, the list of them is in featuresInfo. They
+  # are all turned on by default.
+, features ? { }
+  # If one wishes to use a different src or name for a very custom build
+, overrideSrc ? { }
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "1";
-  patch = "0";
-}
+    major = "3.9";
+    minor = "1";
+    patch = "0";
+  }
 , fetchSubmodules ? false
 }:
 
@@ -66,9 +67,9 @@ let
         log4cpp
         mpir
       ]
-        # when gr-qtgui is disabled, icu needs to be included, otherwise
-        # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+      # when gr-qtgui is disabled, icu needs to be included, otherwise
+      # building with boost 1.7x fails
+      ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -150,7 +151,7 @@ let
       cmakeEnableFlag = "GR_DTV";
     };
     gr-audio = {
-      runtime = []
+      runtime = [ ]
         ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
@@ -219,11 +220,11 @@ let
       overrideSrc
       fetchFromGitHub
       fetchSubmodules
-    ;
+      ;
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared) hasFeature;# function
 in
 
 stdenv.mkDerivation rec {
@@ -239,7 +240,7 @@ stdenv.mkDerivation rec {
     dontWrapPythonPrograms
     dontWrapQtApps
     meta
-  ;
+    ;
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
@@ -252,14 +253,14 @@ stdenv.mkDerivation rec {
     # From some reason, if these are not set, libcodec2 and gsm are not
     # detected properly.
     ++ lib.optionals (hasFeature "gr-vocoder" features) [
-      "-DLIBCODEC2_FOUND=TRUE"
-      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
-      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
-      "-DLIBCODEC2_HAS_FREEDV_API=ON"
-      "-DLIBGSM_FOUND=TRUE"
-      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
-      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
-    ]
+    "-DLIBCODEC2_FOUND=TRUE"
+    "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
+    "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
+    "-DLIBCODEC2_HAS_FREEDV_API=ON"
+    "-DLIBGSM_FOUND=TRUE"
+    "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
+    "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
+  ]
   ;
 
   postInstall = shared.postInstall
@@ -268,9 +269,9 @@ stdenv.mkDerivation rec {
     # reference, pybind's path is not properly set. See:
     # https://github.com/gnuradio/gnuradio/issues/4380
     + lib.optionalString (!hasFeature "python-support" features) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
-      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
-    ''
+    ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+    ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+    ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+  ''
   ;
 }

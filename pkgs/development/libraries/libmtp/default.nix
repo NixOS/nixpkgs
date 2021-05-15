@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, gettext, libtool, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, gettext
+, libtool
+, pkg-config
 , libusb1
 , libiconv
 }:
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
       libmtp is an implementation of Microsoft's Media Transfer Protocol (MTP)
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
-      '';
+    '';
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };

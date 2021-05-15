@@ -9,7 +9,8 @@
 , makeWrapper
 , cryptsetup
 , squashfsTools
-, buildGoPackage}:
+, buildGoPackage
+}:
 
 with lib;
 

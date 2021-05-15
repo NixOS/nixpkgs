@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, libpcap, texinfo
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libpcap
+, texinfo
 , iptables
-, gnupgSupport ? true, gnupg, gpgme # Increases dependencies!
-, wgetSupport ? true, wget
+, gnupgSupport ? true
+, gnupg
+, gpgme # Increases dependencies!
+, wgetSupport ? true
+, wget
 , buildServer ? true
-, buildClient ? true }:
+, buildClient ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwknop";

@@ -3,7 +3,8 @@
 let
   pname = "chrysalis";
   version = "0.7.9";
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   name = "${pname}-${version}-binary";
 
   src = fetchurl {

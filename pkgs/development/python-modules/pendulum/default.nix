@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
 , dateutil
 , importlib-metadata
 , poetry
@@ -23,8 +26,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [ dateutil pytzdata ]
-  ++ lib.optional (pythonOlder "3.5") typing
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    ++ lib.optional (pythonOlder "3.5") typing
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # No tests
   doCheck = false;

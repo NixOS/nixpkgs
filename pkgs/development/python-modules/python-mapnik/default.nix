@@ -16,7 +16,8 @@ let
     inherit python boost;
   };
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "python-mapnik";
   version = "unstable-2020-02-24";
 
@@ -29,14 +30,16 @@ in buildPythonPackage rec {
 
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
-  preBuild = let
-    pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
-  in ''
-    export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
-    export BOOST_THREAD_LIB="boost_thread"
-    export BOOST_SYSTEM_LIB="boost_system"
-    export PYCAIRO=true
-  '';
+  preBuild =
+    let
+      pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
+    in
+    ''
+      export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
+      export BOOST_THREAD_LIB="boost_thread"
+      export BOOST_SYSTEM_LIB="boost_system"
+      export PYCAIRO=true
+    '';
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
@@ -66,7 +69,7 @@ in buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Mapnik";
     homepage = "https://mapnik.org";
-    license  = licenses.lgpl21;
+    license = licenses.lgpl21;
   };
 
 }

@@ -19,8 +19,8 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
 in
 { name ? "cargo-deps"
 , src ? null
-, srcs ? []
-, patches ? []
+, srcs ? [ ]
+, patches ? [ ]
 , sourceRoot ? ""
 , hash ? ""
 , sha256 ? ""
@@ -32,7 +32,8 @@ let hash_ =
   if hash != "" then { outputHashAlgo = null; outputHash = hash; }
   else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
   else throw "fetchCargoTarball requires a hash for ${name}";
-in stdenv.mkDerivation ({
+in
+stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
 
@@ -82,5 +83,7 @@ in stdenv.mkDerivation ({
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 } // (builtins.removeAttrs args [
-  "name" "sha256" "cargoUpdateHook"
+  "name"
+  "sha256"
+  "cargoUpdateHook"
 ]))

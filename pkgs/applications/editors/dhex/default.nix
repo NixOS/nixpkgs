@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A themeable hex editor with diff mode";
     homepage = "http://www.dettus.net/dhex/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [qknight];
+    maintainers = with lib.maintainers; [ qknight ];
     platforms = with lib.platforms; linux;
   };
 }

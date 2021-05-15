@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles, fetchpatch }:
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, openldap
+, libkrb5
+, db
+, gettext
+, pam
+, fixDarwinDylibNames
+, autoreconfHook
+, enableLdap ? false
+, buildPackages
+, pruneLibtoolFiles
+, fetchpatch
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -9,7 +22,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls =
-      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
+      [
+        "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
         "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
         "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
       ];

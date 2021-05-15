@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.hadoop;
   hadoopConf = import ./conf.nix { hadoop = cfg; pkgs = pkgs; };
@@ -59,15 +59,17 @@ with lib;
         };
       };
     })
-    (mkIf (
+    (mkIf
+      (
         cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled
-    ) {
-      users.users.hdfs = {
-        description = "Hadoop HDFS user";
-        group = "hadoop";
-        uid = config.ids.uids.hdfs;
-      };
-    })
+      )
+      {
+        users.users.hdfs = {
+          description = "Hadoop HDFS user";
+          group = "hadoop";
+          uid = config.ids.uids.hdfs;
+        };
+      })
 
   ];
 }

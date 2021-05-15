@@ -20,4 +20,4 @@ let
     ${common-updater-scripts}/bin/update-source-version "$attrPath" "$version"
   '';
 in
-  [ updateScript attrPath ]
+[ updateScript attrPath ]

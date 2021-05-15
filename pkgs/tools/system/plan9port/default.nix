@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
 , darwin ? null
 , xorgproto ? null
 , libX11
@@ -13,7 +16,7 @@ stdenv.mkDerivation {
   pname = "plan9port";
   version = "2020-01-08";
 
-  src =  fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
     rev = "cc3d97d52a72d7eaceb5b636bcdf81c3e19f7a2e";
@@ -49,10 +52,18 @@ stdenv.mkDerivation {
   buildInputs = [
     perl
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorgproto libX11 libXext libXt fontconfig
+    xorgproto
+    libX11
+    libXext
+    libXt
+    fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon Cocoa IOKit Metal QuartzCore
+    Carbon
+    Cocoa
+    IOKit
+    Metal
+    QuartzCore
   ]);
 
   builder = ./builder.sh;
@@ -87,8 +98,12 @@ stdenv.mkDerivation {
       from their native Plan 9 environment to Unix-like operating systems.
     '';
     license = licenses.lpl-102;
-    maintainers = with maintainers; [ AndersonTorres bbarker
-                                      ftrvxmtrx kovirobi ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      bbarker
+      ftrvxmtrx
+      kovirobi
+    ];
     platforms = platforms.unix;
   };
 }

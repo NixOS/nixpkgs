@@ -2,7 +2,8 @@
 
 let
   rev = "9e6b19ff15bc19fba5da1707ba18e7f160e5ed07";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "libsnark-pre${version}";
   version = lib.substring 0 8 rev;
 
@@ -13,9 +14,9 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     inherit rev;
-    owner           = "scipr-lab";
-    repo            = "libsnark";
-    sha256          = "13f02qp2fmfhvxlp4xi69m0l8r5nq913l2f0zwdk7hl46lprfdca";
+    owner = "scipr-lab";
+    repo = "libsnark";
+    sha256 = "13f02qp2fmfhvxlp4xi69m0l8r5nq913l2f0zwdk7hl46lprfdca";
     fetchSubmodules = true;
   };
 

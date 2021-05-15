@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   version = "2.3.1";
   pname = "libsieve";

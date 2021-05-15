@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchFromGitHub }:
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "disfetch";

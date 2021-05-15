@@ -3,7 +3,7 @@
 let
   tests = {
     bad-shebang = stdenv.mkDerivation {
-      name         = "bad-shebang";
+      name = "bad-shebang";
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/bin
@@ -30,7 +30,9 @@ let
       };
     };
   };
-in runCommand "patch-shebangs-test" {
+in
+runCommand "patch-shebangs-test"
+{
   passthru = { inherit (tests) bad-shebang ignores-nix-store; };
   meta.platforms = lib.platforms.all;
 } ''

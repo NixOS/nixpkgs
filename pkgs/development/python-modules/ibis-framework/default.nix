@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27, pythonAtLeast
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, isPy27
+, pythonAtLeast
 , graphviz
 , multipledispatch
 , numpy

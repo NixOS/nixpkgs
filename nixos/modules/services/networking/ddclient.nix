@@ -34,7 +34,7 @@ with lib;
     (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
       (config:
         let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
+        in if value != "" then [ value ] else [ ]))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
   ];
 

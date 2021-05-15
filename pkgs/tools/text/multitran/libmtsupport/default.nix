@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl} :
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "libmtsupport-0.0.1alpha2";

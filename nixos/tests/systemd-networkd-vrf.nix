@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ./make-test-python.nix ({ pkgs, lib, ... }:
+let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-in {
+in
+{
   name = "systemd-networkd-vrf";
   meta.maintainers = with lib.maintainers; [ ma27 ];
 

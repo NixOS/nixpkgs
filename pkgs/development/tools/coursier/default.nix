@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
-, coreutils, git, gnused, nix, nixfmt }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+, writeScript
+, common-updater-scripts
+, coreutils
+, git
+, gnused
+, nix
+, nixfmt
+}:
 
 let
   version = "2.0.16";
@@ -11,7 +22,8 @@ let
   };
 
   repo = "git@github.com:coursier/coursier.git";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit version;
 
   pname = "coursier";

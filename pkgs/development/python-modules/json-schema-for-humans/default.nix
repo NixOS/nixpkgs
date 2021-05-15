@@ -1,5 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pbr, click, dataclasses-json, htmlmin, jinja2, markdown2, pygments, pytz, pyyaml, requests, pytestCheckHook, beautifulsoup4, tox
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pbr
+, click
+, dataclasses-json
+, htmlmin
+, jinja2
+, markdown2
+, pygments
+, pytz
+, pyyaml
+, requests
+, pytestCheckHook
+, beautifulsoup4
+, tox
 }:
 
 buildPythonPackage rec {
@@ -15,8 +29,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
   propagatedBuildInputs = [
-    click dataclasses-json htmlmin jinja2 markdown2
-    pygments pytz pyyaml requests
+    click
+    dataclasses-json
+    htmlmin
+    jinja2
+    markdown2
+    pygments
+    pytz
+    pyyaml
+    requests
   ];
 
   preBuild = ''
@@ -28,8 +49,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
-    homepage    = "https://github.com/coveooss/json-schema-for-humans";
-    license     = licenses.asl20;
+    homepage = "https://github.com/coveooss/json-schema-for-humans";
+    license = licenses.asl20;
     maintainers = with maintainers; [ astro ];
   };
 }

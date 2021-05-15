@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib}:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cramfsswap";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c6lbx1inkbcvvhh3y6fvfaq3w7d1zv7psgpjs5f3zjk1jysi9qd";
   };
 
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   installPhase = ''
     install --target $out/bin -D cramfsswap

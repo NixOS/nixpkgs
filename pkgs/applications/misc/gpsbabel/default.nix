@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
     # Floating point behavior on i686 causes test failures. Preventing
     # extended precision fixes this problem.
     ++ lib.optionals stdenv.isi686 [
-      "CFLAGS=-ffloat-store" "CXXFLAGS=-ffloat-store"
-    ];
+    "CFLAGS=-ffloat-store"
+    "CXXFLAGS=-ffloat-store"
+  ];
 
   enableParallelBuilding = true;
 
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
 
     rm -v testo.d/alantrl.test
   ''
-    # The raymarine and gtm tests fail on i686 despite -ffloat-store.
+  # The raymarine and gtm tests fail on i686 despite -ffloat-store.
   + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
-    # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
+  # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
   + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
-    # The arc-project test fails on aarch64.
+  # The arc-project test fails on aarch64.
   + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with lib; {

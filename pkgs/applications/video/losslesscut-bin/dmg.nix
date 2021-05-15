@@ -12,7 +12,8 @@ let
     name = nameSource;
     sha256 = "0xa1avbwar7x7kv5yn2ldca4vj3nwaz0dhjm3bcdy59q914xn3dj";
   };
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ undmg ];

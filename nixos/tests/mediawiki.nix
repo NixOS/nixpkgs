@@ -4,7 +4,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   machine =
     { ... }:
-    { services.mediawiki.enable = true;
+    {
+      services.mediawiki.enable = true;
       services.mediawiki.virtualHost.hostName = "localhost";
       services.mediawiki.virtualHost.adminAddr = "root@example.com";
       services.mediawiki.passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";

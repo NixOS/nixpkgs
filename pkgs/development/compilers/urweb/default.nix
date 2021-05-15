@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, file, openssl, mlton
-, libmysqlclient, postgresql, sqlite, gcc, icu
+{ lib
+, stdenv
+, fetchurl
+, file
+, openssl
+, mlton
+, libmysqlclient
+, postgresql
+, sqlite
+, gcc
+, icu
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced purely-functional web programming language";
-    homepage    = "http://www.impredicative.com/ur/";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
+    homepage = "http://www.impredicative.com/ur/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.thoughtpolice lib.maintainers.sheganinans ];
   };
 }

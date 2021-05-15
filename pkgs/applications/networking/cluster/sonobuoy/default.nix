@@ -9,7 +9,8 @@ buildGoModule rec {
 
   buildFlagsArray =
     let t = "github.com/vmware-tanzu/sonobuoy";
-    in ''
+    in
+    ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=v${version}
            -X ${t}/pkg/buildinfo.GitSHA=${rev}

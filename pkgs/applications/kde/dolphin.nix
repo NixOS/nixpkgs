@@ -1,11 +1,32 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  baloo, baloo-widgets, kactivities, kbookmarks, kcmutils,
-  kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
-  kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
-  kparts, ktexteditor, kwindowsystem, phonon, solid,
-  wayland, qtbase, qtwayland
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, baloo
+, baloo-widgets
+, kactivities
+, kbookmarks
+, kcmutils
+, kcompletion
+, kconfig
+, kcoreaddons
+, kdelibs4support
+, kdbusaddons
+, kfilemetadata
+, ki18n
+, kiconthemes
+, kinit
+, kio
+, knewstuff
+, knotifications
+, kparts
+, ktexteditor
+, kwindowsystem
+, phonon
+, solid
+, wayland
+, qtbase
+, qtwayland
 }:
 
 mkDerivation {
@@ -18,11 +39,30 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedUserEnvPkgs = [ baloo ];
   propagatedBuildInputs = [
-    baloo baloo-widgets kactivities kbookmarks kcmutils kcompletion kconfig
-    kcoreaddons kdelibs4support kdbusaddons kfilemetadata ki18n kiconthemes
-    kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
-    phonon solid
-    wayland qtwayland
+    baloo
+    baloo-widgets
+    kactivities
+    kbookmarks
+    kcmutils
+    kcompletion
+    kconfig
+    kcoreaddons
+    kdelibs4support
+    kdbusaddons
+    kfilemetadata
+    ki18n
+    kiconthemes
+    kinit
+    kio
+    knewstuff
+    knotifications
+    kparts
+    ktexteditor
+    kwindowsystem
+    phonon
+    solid
+    wayland
+    qtwayland
   ];
   outputs = [ "out" "dev" ];
   # We need the RPATH for linking, because the `libkdeinit5_dolphin.so` links

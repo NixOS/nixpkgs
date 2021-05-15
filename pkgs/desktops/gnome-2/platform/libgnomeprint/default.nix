@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gtk2, gettext, libxml2, intltool, libart_lgpl
-, libgnomecups, bison, flex }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gtk2
+, gettext
+, libxml2
+, intltool
+, libart_lgpl
+, libgnomecups
+, bison
+, flex
+}:
 
 stdenv.mkDerivation rec {
   name = "libgnomeprint-2.18.8";

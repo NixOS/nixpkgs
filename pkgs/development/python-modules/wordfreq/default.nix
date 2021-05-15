@@ -16,12 +16,12 @@ buildPythonPackage rec {
   version = "2.5";
   disabled = isPy27;
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "LuminosoInsight";
     repo = "wordfreq";
     rev = "v${version}";
     sha256 = "09wzraddbdw3781pk2sxlz8knax9jrcl24ymz54wx6sk0gvq95i7";
-   };
+  };
 
   propagatedBuildInputs = [
     regex
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library for looking up the frequencies of words in many languages, based on many sources of data";
-    homepage =  "https://github.com/LuminosoInsight/wordfreq/";
+    homepage = "https://github.com/LuminosoInsight/wordfreq/";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

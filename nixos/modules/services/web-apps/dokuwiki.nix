@@ -57,7 +57,7 @@ let
     '';
   };
 
-  siteOpts = { config, lib, name, ...}: {
+  siteOpts = { config, lib, name, ... }: {
     options = {
       enable = mkEnableOption "DokuWiki web application.";
 
@@ -146,7 +146,7 @@ let
           login:passwordhash:Real Name:email:groups,comma,separated
           Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
           Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
-          '';
+        '';
         example = "/var/lib/dokuwiki/${name}/users.auth.php";
       };
 
@@ -177,56 +177,56 @@ let
 
       plugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
-              List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
-              <note><para>These plugins need to be packaged before use, see example.</para></note>
+          List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
+          <note><para>These plugins need to be packaged before use, see example.</para></note>
         '';
         example = ''
-              # Let's package the icalevents plugin
-              plugin-icalevents = pkgs.stdenv.mkDerivation {
-                name = "icalevents";
-                # Download the plugin from the dokuwiki site
-                src = pkgs.fetchurl {
-                  url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
-                  sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
-                };
-                sourceRoot = ".";
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
+          # Let's package the icalevents plugin
+          plugin-icalevents = pkgs.stdenv.mkDerivation {
+            name = "icalevents";
+            # Download the plugin from the dokuwiki site
+            src = pkgs.fetchurl {
+              url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
+              sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
+            };
+            sourceRoot = ".";
+            # We need unzip to build this package
+            nativeBuildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
+          };
 
-              # And then pass this theme to the plugin list like this:
-              plugins = [ plugin-icalevents ];
+          # And then pass this theme to the plugin list like this:
+          plugins = [ plugin-icalevents ];
         '';
       };
 
       templates = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
-              List of path(s) to respective template(s) which are copied from the 'tpl' directory.
-              <note><para>These templates need to be packaged before use, see example.</para></note>
+          List of path(s) to respective template(s) which are copied from the 'tpl' directory.
+          <note><para>These templates need to be packaged before use, see example.</para></note>
         '';
         example = ''
-              # Let's package the bootstrap3 theme
-              template-bootstrap3 = pkgs.stdenv.mkDerivation {
-                name = "bootstrap3";
-                # Download the theme from the dokuwiki site
-                src = pkgs.fetchurl {
-                  url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-                  sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
+          # Let's package the bootstrap3 theme
+          template-bootstrap3 = pkgs.stdenv.mkDerivation {
+            name = "bootstrap3";
+            # Download the theme from the dokuwiki site
+            src = pkgs.fetchurl {
+              url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
+              sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
+            };
+            # We need unzip to build this package
+            nativeBuildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
+          };
 
-              # And then pass this theme to the template list like this:
-              templates = [ template-bootstrap3 ];
+          # And then pass this theme to the template list like this:
+          templates = [ template-bootstrap3 ];
         '';
       };
 
@@ -249,9 +249,10 @@ let
       nginx = mkOption {
         type = types.submodule (
           recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+            { }
         );
-        default = {};
+        default = { };
         example = {
           serverAliases = [
             "wiki.\${config.networking.domain}"
@@ -272,110 +273,121 @@ in
   options = {
     services.dokuwiki = mkOption {
       type = types.attrsOf (types.submodule siteOpts);
-      default = {};
+      default = { };
       description = "Sepcification of one or more dokuwiki sites to serve.";
     };
   };
 
   # implementation
 
-  config = mkIf (eachSite != {}) {
+  config = mkIf (eachSite != { }) {
 
     warnings = mapAttrsToList (hostName: cfg: mkIf (cfg.superUser == null) "Not setting services.dokuwiki.${hostName} superUser will impair your ability to administer DokuWiki") eachSite;
 
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-    [{
-      assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory if aclUse true";
-    }
-    {
-      assertion = cfg.usersFile != null -> cfg.aclUse != false;
-      message = "services.dokuwiki.${hostName}.aclUse must must be true if usersFile is not null";
-    }
-    ]) eachSite);
+    assertions = flatten (mapAttrsToList
+      (hostName: cfg:
+        [{
+          assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
+          message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory if aclUse true";
+        }
+          {
+            assertion = cfg.usersFile != null -> cfg.aclUse != false;
+            message = "services.dokuwiki.${hostName}.aclUse must must be true if usersFile is not null";
+          }])
+      eachSite);
 
-    services.phpfpm.pools = mapAttrs' (hostName: cfg: (
-      nameValuePair "dokuwiki-${hostName}" {
-        inherit user;
-        inherit group;
-        phpEnv = {
-          DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
-          DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
-        } // optionalAttrs (cfg.usersFile != null) {
-          DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
-        } //optionalAttrs (cfg.aclUse) {
-          DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
-        };
+    services.phpfpm.pools = mapAttrs'
+      (hostName: cfg: (
+        nameValuePair "dokuwiki-${hostName}" {
+          inherit user;
+          inherit group;
+          phpEnv = {
+            DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
+            DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
+          } // optionalAttrs (cfg.usersFile != null) {
+            DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
+          } // optionalAttrs (cfg.aclUse) {
+            DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
+          };
 
-        settings = {
-          "listen.mode" = "0660";
-          "listen.owner" = user;
-          "listen.group" = group;
-        } // cfg.poolConfig;
-      })) eachSite;
+          settings = {
+            "listen.mode" = "0660";
+            "listen.owner" = user;
+            "listen.group" = group;
+          } // cfg.poolConfig;
+        }
+      ))
+      eachSite;
 
     services.nginx = {
       enable = true;
-      virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
-        root = mkForce "${pkg hostName cfg}/share/dokuwiki";
-        extraConfig = lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
+      virtualHosts = mapAttrs
+        (hostName: cfg: mkMerge [
+          cfg.nginx
+          {
+            root = mkForce "${pkg hostName cfg}/share/dokuwiki";
+            extraConfig = lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
 
-        locations."~ /(conf/|bin/|inc/|install.php)" = {
-          extraConfig = "deny all;";
-        };
+            locations."~ /(conf/|bin/|inc/|install.php)" = {
+              extraConfig = "deny all;";
+            };
 
-        locations."~ ^/data/" = {
-          root = "${cfg.stateDir}";
-          extraConfig = "internal;";
-        };
+            locations."~ ^/data/" = {
+              root = "${cfg.stateDir}";
+              extraConfig = "internal;";
+            };
 
-        locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
-          extraConfig = "expires 365d;";
-        };
+            locations."~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
 
-        locations."/" = {
-          priority = 1;
-          index = "doku.php";
-          extraConfig = "try_files $uri $uri/ @dokuwiki;";
-        };
+            locations."/" = {
+              priority = 1;
+              index = "doku.php";
+              extraConfig = "try_files $uri $uri/ @dokuwiki;";
+            };
 
-        locations."@dokuwiki" = {
-          extraConfig = ''
-              # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
-              rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
-              rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
-              rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
-              rewrite ^/(.*) /doku.php?id=$1&$args last;
-          '';
-        };
+            locations."@dokuwiki" = {
+              extraConfig = ''
+                # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
+                rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
+                rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
+                rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
+                rewrite ^/(.*) /doku.php?id=$1&$args last;
+              '';
+            };
 
-        locations."~ \\.php$" = {
-          extraConfig = ''
-              try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
-              ${lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
-          '';
-        };
-      }]) eachSite;
+            locations."~ \\.php$" = {
+              extraConfig = ''
+                try_files $uri $uri/ /doku.php;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param REDIRECT_STATUS 200;
+                fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
+                ${lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
+              '';
+            };
+          }
+        ])
+        eachSite;
     };
 
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d ${cfg.stateDir}/attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/cache 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/index 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/locks 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
-    ] ++ lib.optional (cfg.aclFile != null) "C ${cfg.aclFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/acl.auth.php.dist"
-    ++ lib.optional (cfg.usersFile != null) "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
-    ) eachSite);
+    systemd.tmpfiles.rules = flatten (mapAttrsToList
+      (hostName: cfg: [
+        "d ${cfg.stateDir}/attic 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/cache 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/index 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/locks 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/media 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/media_attic 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/media_meta 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
+        "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
+      ] ++ lib.optional (cfg.aclFile != null) "C ${cfg.aclFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/acl.auth.php.dist"
+      ++ lib.optional (cfg.usersFile != null) "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
+      )
+      eachSite);
 
     users.users.${user} = {
       group = group;

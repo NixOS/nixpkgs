@@ -6,9 +6,10 @@ let
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
   version = "3.44.4";
-  underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
+  underscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nss";
   inherit version;
 
@@ -47,29 +48,31 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "cd nss";
 
-  makeFlags = let
-    # NSS's build systems expects aarch32 to be called arm; if we pass in armv6l/armv7l, it
-    # fails with a linker error
-    cpu = if stdenv.hostPlatform.isAarch32 then "arm" else stdenv.hostPlatform.parsed.cpu.name;
-  in [
-    "NSPR_INCLUDE_DIR=${nspr.dev}/include"
-    "NSPR_LIB_DIR=${nspr.out}/lib"
-    "NSDISTMODE=copy"
-    "BUILD_OPT=1"
-    "SOURCE_PREFIX=\$(out)"
-    "NSS_ENABLE_ECC=1"
-    "USE_SYSTEM_ZLIB=1"
-    "NSS_USE_SYSTEM_SQLITE=1"
-    "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
-    # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
-    "OS_TEST=${cpu}"
-    "CPU_ARCH=${cpu}"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=1"
-    "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
-  ] ++ lib.optional stdenv.is64bit "USE_64=1"
+  makeFlags =
+    let
+      # NSS's build systems expects aarch32 to be called arm; if we pass in armv6l/armv7l, it
+      # fails with a linker error
+      cpu = if stdenv.hostPlatform.isAarch32 then "arm" else stdenv.hostPlatform.parsed.cpu.name;
+    in
+    [
+      "NSPR_INCLUDE_DIR=${nspr.dev}/include"
+      "NSPR_LIB_DIR=${nspr.out}/lib"
+      "NSDISTMODE=copy"
+      "BUILD_OPT=1"
+      "SOURCE_PREFIX=\$(out)"
+      "NSS_ENABLE_ECC=1"
+      "USE_SYSTEM_ZLIB=1"
+      "NSS_USE_SYSTEM_SQLITE=1"
+      "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
+      # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
+      "OS_TEST=${cpu}"
+      "CPU_ARCH=${cpu}"
+    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=1"
+      "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
+    ] ++ lib.optional stdenv.is64bit "USE_64=1"
     ++ lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -112,28 +115,30 @@ in stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
   '';
 
-  postFixup = let
-    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-    nss = if isCross then buildPackages.nss.tools else "$out";
-  in ''
-    for libname in freebl3 nssdbm3 softokn3
-    do '' +
+  postFixup =
+    let
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      nss = if isCross then buildPackages.nss.tools else "$out";
+    in
+    ''
+      for libname in freebl3 nssdbm3 softokn3
+      do '' +
     (if stdenv.isDarwin
-     then ''
-       libfile="$out/lib/lib$libname.dylib"
-       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
-     '' else ''
-       libfile="$out/lib/lib$libname.so"
-       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
-     '') + ''
-        ${nss}/bin/shlibsign -v -i "$libfile"
-    done
+    then ''
+      libfile="$out/lib/lib$libname.dylib"
+      DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+    '' else ''
+      libfile="$out/lib/lib$libname.so"
+      LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+    '') + ''
+          ${nss}/bin/shlibsign -v -i "$libfile"
+      done
 
-    moveToOutput bin "$tools"
-    moveToOutput bin/nss-config "$dev"
-    moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
-    rm -f "$out"/lib/*.a
-  '';
+      moveToOutput bin "$tools"
+      moveToOutput bin/nss-config "$dev"
+      moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
+      rm -f "$out"/lib/*.a
+    '';
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/NSS";

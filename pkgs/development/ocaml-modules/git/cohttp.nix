@@ -1,7 +1,19 @@
-{ buildDunePackage, git
-, cohttp, cohttp-lwt, fmt, lwt, result, rresult, uri
-, alcotest, alcotest-lwt, bigstringaf, cstruct, logs
-, mirage-flow, ke
+{ buildDunePackage
+, git
+, cohttp
+, cohttp-lwt
+, fmt
+, lwt
+, result
+, rresult
+, uri
+, alcotest
+, alcotest-lwt
+, bigstringaf
+, cstruct
+, logs
+, mirage-flow
+, ke
 }:
 
 buildDunePackage rec {
@@ -10,7 +22,14 @@ buildDunePackage rec {
   inherit (git) version minimumOCamlVersion src useDune2;
 
   propagatedBuildInputs = [
-    git cohttp cohttp-lwt fmt lwt result rresult uri
+    git
+    cohttp
+    cohttp-lwt
+    fmt
+    lwt
+    result
+    rresult
+    uri
   ];
 
   meta = git.meta // {

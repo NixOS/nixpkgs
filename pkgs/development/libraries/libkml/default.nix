@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , boost
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
-  # Darwin tests require rpath for libs in build dir
+    # Darwin tests require rpath for libs in build dir
   ] ++ lib.optional stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];

@@ -1,6 +1,30 @@
-{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
-, libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
-, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
+{ lib
+, stdenv
+, fetchurl
+, glibc
+, libGLU
+, libGL
+, freetype
+, glib
+, libSM
+, libICE
+, libXi
+, libXv
+, libXrender
+, libXrandr
+, libXfixes
+, libXcursor
+, libXinerama
+, libXext
+, libX11
+, zlib
+, fontconfig
+, dpkg
+, libproxy
+, libxml2
+, gst_all_1
+, dbus
+}:
 
 let
   arch =
@@ -20,7 +44,8 @@ let
     libICE
     libXi
     libXv
-    libGLU libGL
+    libGLU
+    libGL
     libXrender
     libXrandr
     libXfixes
@@ -56,7 +81,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x ${src} ./
   '';
 
-  installPhase =''
+  installPhase = ''
     mkdir $out
     mv usr/* $out/
     rmdir usr

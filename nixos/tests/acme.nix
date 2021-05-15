@@ -3,19 +3,21 @@ let
 
   dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
 
-  dnsScript = {pkgs, nodes}: let
-    dnsAddress = dnsServerIP nodes;
-  in pkgs.writeShellScript "dns-hook.sh" ''
-    set -euo pipefail
-    echo '[INFO]' "[$2]" 'dns-hook.sh' $*
-    if [ "$1" = "present" ]; then
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
-    else
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
-    fi
-  '';
+  dnsScript = { pkgs, nodes }:
+    let
+      dnsAddress = dnsServerIP nodes;
+    in
+    pkgs.writeShellScript "dns-hook.sh" ''
+      set -euo pipefail
+      echo '[INFO]' "[$2]" 'dns-hook.sh' $*
+      if [ "$1" = "present" ]; then
+        ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
+      else
+        ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
+      fi
+    '';
 
-  documentRoot = pkgs: pkgs.runCommand "docroot" {} ''
+  documentRoot = pkgs: pkgs.runCommand "docroot" { } ''
     mkdir -p "$out"
     echo hello world > "$out/index.html"
   '';
@@ -25,7 +27,8 @@ let
     locations."/".root = documentRoot pkgs;
   };
 
-in import ./make-test-python.nix ({ lib, ... }: {
+in
+import ./make-test-python.nix ({ lib, ... }: {
   name = "acme";
   meta.maintainers = lib.teams.acme.members;
 
@@ -78,25 +81,27 @@ in import ./make-test-python.nix ({ lib, ... }: {
       };
 
       # Test that account creation is collated into one service
-      specialisation.account-creation.configuration = { nodes, pkgs, lib, ... }: let
-        email = "newhostmaster@example.test";
-        caDomain = nodes.acme.config.test-support.acme.caDomain;
-        # Exit 99 to make it easier to track if this is the reason a renew failed
-        testScript = ''
-          test -e accounts/${caDomain}/${email}/account.json || exit 99
-        '';
-      in {
-        security.acme.email = lib.mkForce email;
-        systemd.services."b.example.test".preStart = testScript;
-        systemd.services."c.example.test".preStart = testScript;
+      specialisation.account-creation.configuration = { nodes, pkgs, lib, ... }:
+        let
+          email = "newhostmaster@example.test";
+          caDomain = nodes.acme.config.test-support.acme.caDomain;
+          # Exit 99 to make it easier to track if this is the reason a renew failed
+          testScript = ''
+            test -e accounts/${caDomain}/${email}/account.json || exit 99
+          '';
+        in
+        {
+          security.acme.email = lib.mkForce email;
+          systemd.services."b.example.test".preStart = testScript;
+          systemd.services."c.example.test".preStart = testScript;
 
-        services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
-          enableACME = true;
+          services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
+            enableACME = true;
+          };
+          services.nginx.virtualHosts."c.example.test" = (vhostBase pkgs) // {
+            enableACME = true;
+          };
         };
-        services.nginx.virtualHosts."c.example.test" = (vhostBase pkgs) // {
-          enableACME = true;
-        };
-      };
 
       # Cert config changes will not cause the nginx configuration to change.
       # This tests that the reload service is correctly triggered.
@@ -186,7 +191,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
     };
 
     # The client will be used to curl the webserver to validate configuration
-    client = {nodes, lib, pkgs, ...}: {
+    client = { nodes, lib, pkgs, ... }: {
       imports = [ commonConfig ];
       networking.nameservers = lib.mkForce [ (dnsServerIP nodes) ];
 
@@ -195,15 +200,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
     };
   };
 
-  testScript = {nodes, ...}:
+  testScript = { nodes, ... }:
     let
       caDomain = nodes.acme.config.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
-    # this is because a oneshot goes from inactive => activating => inactive, and never
-    # reaches the active state. Targets do not have this issue.
+      # this is because a oneshot goes from inactive => activating => inactive, and never
+      # reaches the active state. Targets do not have this issue.
 
     ''
       import time

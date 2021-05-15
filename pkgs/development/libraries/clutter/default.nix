@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
-, gobject-introspection, gtk3, gnome, libinput, libgudev, libxkbcommon
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libGLU
+, libGL
+, libX11
+, libXext
+, libXfixes
+, libXdamage
+, libXcomposite
+, libXi
+, libxcb
+, cogl
+, pango
+, atk
+, json-glib
+, gobject-introspection
+, gtk3
+, gnome
+, libinput
+, libgudev
+, libxkbcommon
 }:
 
 let
@@ -20,8 +40,24 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs =
-    [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
+    [
+      libX11
+      libGL
+      libGLU
+      libXext
+      libXfixes
+      libXdamage
+      libXcomposite
+      libXi
+      cogl
+      pango
+      atk
+      json-glib
+      gobject-introspection
+      libxcb
+      libinput
+      libgudev
+      libxkbcommon
     ];
 
   configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK

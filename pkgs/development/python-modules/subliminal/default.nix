@@ -35,14 +35,29 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile_cache stevedore chardet pysrt six
-    appdirs rarfile pytz
+    guessit
+    babelfish
+    enzyme
+    beautifulsoup4
+    requests
+    click
+    dogpile_cache
+    stevedore
+    chardet
+    pysrt
+    six
+    appdirs
+    rarfile
+    pytz
   ] ++ lib.optional (!isPy3k) futures;
 
   checkInputs = [
-    sympy vcrpy pytest pytest-flakes
-    pytestcov pytestrunner
+    sympy
+    vcrpy
+    pytest
+    pytest-flakes
+    pytestcov
+    pytestrunner
   ];
 
   # https://github.com/Diaoul/subliminal/pull/963

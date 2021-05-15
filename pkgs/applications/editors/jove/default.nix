@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , groff
 , ncurses
 , makeWrapper
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "jove";

@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_interface, cffi
-, sphinx, manuel
+, zope_interface
+, cffi
+, sphinx
+, manuel
 }:
 
 buildPythonPackage rec {

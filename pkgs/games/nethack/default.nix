@@ -1,7 +1,22 @@
-{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
+{ stdenv
+, lib
+, fetchurl
+, coreutils
+, ncurses
+, gzip
+, flex
+, bison
 , less
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
+, x11Mode ? false
+, qtMode ? false
+, libXaw
+, libXext
+, libXpm
+, bdftopcf
+, mkfontdir
+, pkg-config
+, qt5
 }:
 
 let
@@ -11,18 +26,20 @@ let
   unixHint =
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"
-    else if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isLinux then "linux"
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
   binPath = lib.makeBinPath [ coreutils less ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "3.6.6";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  name =
+    if x11Mode then "nethack-x11-${version}"
+    else if qtMode then "nethack-qt-${version}"
+    else "nethack-${version}";
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
@@ -30,16 +47,19 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ]
-                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
-                ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
+    ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
+    ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
-                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
-                      ++ lib.optionals qtMode [
-                           pkg-config mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
-                           bdftopcf
-                         ];
+    ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
+    ++ lib.optionals qtMode [
+    pkg-config
+    mkfontdir
+    qt5.qtbase.dev
+    qt5.qtmultimedia.dev
+    qt5.wrapQtAppsHook
+    bdftopcf
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

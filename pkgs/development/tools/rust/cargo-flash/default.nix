@@ -1,6 +1,10 @@
 { lib
-, rustPlatform, fetchFromGitHub
-, libusb1, pkg-config, rustfmt }:
+, rustPlatform
+, fetchFromGitHub
+, libusb1
+, pkg-config
+, rustfmt
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";

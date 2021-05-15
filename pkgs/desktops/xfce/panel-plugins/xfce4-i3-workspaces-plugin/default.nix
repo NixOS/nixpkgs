@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, gtk3
-, libxfce4ui, libxfce4util, xfconf, xfce4-dev-tools, xfce4-panel
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, intltool
+, gtk3
+, libxfce4ui
+, libxfce4util
+, xfconf
+, xfce4-dev-tools
+, xfce4-panel
 , i3ipc-glib
 }:
 
@@ -27,7 +36,7 @@ stdenv.mkDerivation rec {
     xfce4-dev-tools
     xfce4-panel
     i3ipc-glib
-   ];
+  ];
 
   preConfigure = ''
     ./autogen.sh

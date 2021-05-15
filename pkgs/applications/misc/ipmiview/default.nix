@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeDesktopItem
 , makeWrapper
@@ -9,7 +10,8 @@
 , gcc-unwrapped
 , iputils
 , psmisc
-, xorg }:
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
@@ -24,16 +26,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildPhase = with xorg;
     let
-      stunnelBinary = if stdenv.hostPlatform.system == "x86_64-linux" then "linux/stunnel64"
-      else if stdenv.hostPlatform.system == "i686-linux" then "linux/stunnel32"
-      else throw "IPMIView is not supported on this platform";
+      stunnelBinary =
+        if stdenv.hostPlatform.system == "x86_64-linux" then "linux/stunnel64"
+        else if stdenv.hostPlatform.system == "i686-linux" then "linux/stunnel32"
+        else throw "IPMIView is not supported on this platform";
     in
-  ''
-    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
-    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
-    patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
-  '';
+    ''
+      patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
+      patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
+      patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
+    '';
 
   desktopItem = makeDesktopItem rec {
     name = "IPMIView";

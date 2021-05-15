@@ -13,7 +13,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [
-    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtxmlpatterns
+    qtwebsockets
+    qtx11extras
   ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {

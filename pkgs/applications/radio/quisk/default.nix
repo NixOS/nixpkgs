@@ -1,5 +1,11 @@
-{ lib, python38Packages, fetchPypi
-, fftw, alsaLib, pulseaudio, wxPython_4_0 }:
+{ lib
+, python38Packages
+, fetchPypi
+, fftw
+, alsaLib
+, pulseaudio
+, wxPython_4_0
+}:
 
 python38Packages.buildPythonApplication rec {
   pname = "quisk";

@@ -16,10 +16,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage    = "https://github.com/golang/protobuf";
+    homepage = "https://github.com/golang/protobuf";
     description = " Go bindings for protocol buffer";
     maintainers = with maintainers; [ lewo ];
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

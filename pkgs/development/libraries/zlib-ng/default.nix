@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
 , withZlibCompat ? false
 }:
 
@@ -26,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "zlib data compression library for the next generation systems";
-    homepage    = "https://github.com/zlib-ng/zlib-ng";
-    license     = licenses.zlib;
-    platforms   = platforms.all;
+    homepage = "https://github.com/zlib-ng/zlib-ng";
+    license = licenses.zlib;
+    platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
   };
 }

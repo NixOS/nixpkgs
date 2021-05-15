@@ -1,5 +1,15 @@
-{ lib, stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, qt5, requireFile, unzip, wine
+{ lib
+, stdenv
+, multiStdenv
+, cmake
+, fetchFromGitHub
+, file
+, libX11
+, makeWrapper
+, qt5
+, requireFile
+, unzip
+, wine
 }:
 
 let
@@ -87,6 +97,6 @@ multiStdenv.mkDerivation {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

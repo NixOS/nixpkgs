@@ -17,7 +17,8 @@ let
     fileValidation = false;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   version = "2.4";
 

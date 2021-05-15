@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, boost, python2}:
+{ lib, stdenv, fetchurl, cmake, boost, python2 }:
 
 let version = "1.8.2"; in
 

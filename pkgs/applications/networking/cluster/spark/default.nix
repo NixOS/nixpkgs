@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
-, RSupport? true, R
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, jre
+, pythonPackages
+, coreutils
+, hadoop
+, RSupport ? true
+, R
 }:
 
 with lib;
@@ -10,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.4.4";
 
   src = fetchzip {
-    url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+    url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
     sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
   };
 
@@ -46,11 +54,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description      = "Apache Spark is a fast and general engine for large-scale data processing";
-    homepage         = "http://spark.apache.org";
-    license          = lib.licenses.asl20;
-    platforms        = lib.platforms.all;
-    maintainers      = with maintainers; [ thoughtpolice offline kamilchm ];
+    description = "Apache Spark is a fast and general engine for large-scale data processing";
+    homepage = "http://spark.apache.org";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ thoughtpolice offline kamilchm ];
     repositories.git = "git://git.apache.org/spark.git";
   };
 }

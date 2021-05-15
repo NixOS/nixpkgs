@@ -1,6 +1,17 @@
-{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkg-config, gcc
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, enablePython ? false, pythonPackages ? null }:
+{ stdenv
+, config
+, lib
+, fetchFromGitHub
+, cmake
+, libusb1
+, ninja
+, pkg-config
+, gcc
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, enablePython ? false
+, pythonPackages ? null
+}:
 
 assert cudaSupport -> cudatoolkit != null;
 assert enablePython -> pythonPackages != null;
@@ -22,7 +33,7 @@ stdenv.mkDerivation rec {
     libusb1
     gcc.cc.lib
   ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
+  ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ]);
 
   patches = lib.optionals enablePython [
     ./py_sitepackage_dir.patch
@@ -48,7 +59,7 @@ stdenv.mkDerivation rec {
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
-  postInstall = lib.optionalString enablePython  ''
+  postInstall = lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 

@@ -1,5 +1,6 @@
 { lib
-, buildPythonPackage, fetchPypi
+, buildPythonPackage
+, fetchPypi
 , requests
 }:
 

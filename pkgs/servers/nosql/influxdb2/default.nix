@@ -73,7 +73,8 @@ let
         --replace /out $out
     '';
   };
-in buildGoModule {
+in
+buildGoModule {
   pname = "influxdb";
   version = version;
   src = src;

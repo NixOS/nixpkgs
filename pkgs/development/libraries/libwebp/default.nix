@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
-#, wicSupport ? true # Windows Imaging Component
+, openglSupport ? false
+, freeglut ? null
+, libGL ? null
+, libGLU ? null # OpenGL (required for vwebp)
+, pngSupport ? true
+, libpng ? null # PNG image format
+, jpegSupport ? true
+, libjpeg ? null # JPEG image format
+, tiffSupport ? true
+, libtiff ? null # TIFF image format
+, gifSupport ? true
+, giflib ? null # GIF image format
+  #, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
 , experimentalSupport ? false # Experimental code
@@ -30,9 +41,9 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner  = "webmproject";
-    repo   = pname;
-    rev    = version;
+    owner = "webmproject";
+    repo = pname;
+    rev = version;
     sha256 = "1kl6qqa29ygqb2fpv140y59v539gdqx4vcf3mlaxhca2bks98qgm";
   };
 

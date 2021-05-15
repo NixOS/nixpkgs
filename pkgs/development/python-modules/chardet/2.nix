@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, pytestrunner, hypothesis }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pytest
+, pytestrunner
+, hypothesis
+}:
 
 buildPythonPackage rec {
   pname = "chardet";

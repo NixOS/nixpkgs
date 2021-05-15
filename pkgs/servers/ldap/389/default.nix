@@ -1,5 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, doxygen, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net-snmp, libkrb5, pcre, perlPackages, libevent, openssl, python3
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, doxygen
+, perl
+, pam
+, nspr
+, nss
+, openldap
+, db
+, cyrus_sasl
+, svrcore
+, icu
+, net-snmp
+, libkrb5
+, pcre
+, perlPackages
+, libevent
+, openssl
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +34,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [
-    perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net-snmp libkrb5 pcre libevent openssl python3
+    perl
+    pam
+    nspr
+    nss
+    openldap
+    db
+    cyrus_sasl
+    svrcore
+    icu
+    net-snmp
+    libkrb5
+    pcre
+    libevent
+    openssl
+    python3
   ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
 
   patches = [

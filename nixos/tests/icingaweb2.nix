@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
         modules = {
           doc.enable = true;
-          migrate.enable =  true;
+          migrate.enable = true;
           setup.enable = true;
           test.enable = true;
           translation.enable = true;

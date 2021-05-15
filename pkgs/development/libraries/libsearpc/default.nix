@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3Packages
-, glib, jansson }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, python3Packages
+, glib
+, jansson
+}:
 
 stdenv.mkDerivation rec {
   version = "3.2.0";

@@ -1,6 +1,22 @@
-{ pkgs, lib, stdenv, fetchurl, fetchgit, tzdata, iana-etc, runCommand
-, perl, which, pkg-config, patch, procps, pcre, cacert, Security, Foundation
-, mailcap, runtimeShell
+{ pkgs
+, lib
+, stdenv
+, fetchurl
+, fetchgit
+, tzdata
+, iana-etc
+, runCommand
+, perl
+, which
+, pkg-config
+, patch
+, procps
+, pcre
+, cacert
+, Security
+, Foundation
+, mailcap
+, runtimeShell
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
@@ -13,7 +29,7 @@ let
 
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
-  goBootstrap = runCommand "go-bootstrap" {} ''
+  goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out
     cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
@@ -178,16 +194,18 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CC_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CXX_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
 
-  GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -197,7 +215,7 @@ stdenv.mkDerivation rec {
   # Some tests assume things like home directories and users exists
   GO_BUILDER_NAME = "nix";
 
-  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   postConfigure = ''
     export GOCACHE=$TMPDIR/go-cache

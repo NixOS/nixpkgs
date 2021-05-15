@@ -7,19 +7,23 @@ stdenv.mkDerivation rec {
 
   dirname = "Isabelle${version}";
 
-  src = if stdenv.isDarwin
-    then fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-      sha256 = "1sfr5filsaqj93g5y4p9n8g5652dhr4whj25x4lifdxr2pp560xx";
-    }
-    else fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-      sha256 = "1bibabhlsvf6qsjjkgxcpq3cvl1z7r8yfcgqbhbvsiv69n3gyfk3";
-    };
+  src =
+    if stdenv.isDarwin
+    then
+      fetchurl
+        {
+          url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+          sha256 = "1sfr5filsaqj93g5y4p9n8g5652dhr4whj25x4lifdxr2pp560xx";
+        }
+    else
+      fetchurl {
+        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+        sha256 = "1bibabhlsvf6qsjjkgxcpq3cvl1z7r8yfcgqbhbvsiv69n3gyfk3";
+      };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl polyml z3 ]
-             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
+    ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -53,12 +57,12 @@ stdenv.mkDerivation rec {
     for comp in contrib/jdk* contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
-    '' + (if ! stdenv.isLinux then "" else ''
+  '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
-    '');
+  '');
 
   installPhase = ''
     mkdir -p $out/bin

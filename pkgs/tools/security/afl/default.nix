@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
-, clang, llvm, which, libcgroup
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, makeWrapper
+, clang
+, llvm
+, which
+, libcgroup
 }:
 
 let
   afl-qemu = callPackage ./qemu.nix { inherit afl; };
-  qemu-exe-name = if stdenv.hostPlatform.system == "x86_64-linux" then "qemu-x86_64"
+  qemu-exe-name =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "qemu-x86_64"
     else if stdenv.hostPlatform.system == "i686-linux" then "qemu-i386"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
   afl = stdenv.mkDerivation rec {
@@ -73,10 +81,11 @@ let
         also useful for seeding other, more labor or resource-intensive
         testing regimes down the road.
       '';
-      homepage    = "https://lcamtuf.coredump.cx/afl/";
-      license     = lib.licenses.asl20;
-      platforms   = ["x86_64-linux" "i686-linux"];
+      homepage = "https://lcamtuf.coredump.cx/afl/";
+      license = lib.licenses.asl20;
+      platforms = [ "x86_64-linux" "i686-linux" ];
       maintainers = with lib.maintainers; [ thoughtpolice ris ];
     };
   };
-in afl
+in
+afl

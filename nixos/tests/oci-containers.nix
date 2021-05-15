@@ -1,5 +1,5 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 , lib ? pkgs.lib
 }:
@@ -22,7 +22,7 @@ let
           containers.nginx = {
             image = "nginx-container";
             imageFile = pkgs.dockerTools.examples.nginx;
-            ports = ["8181:80"];
+            ports = [ "8181:80" ];
           };
         };
       };
@@ -37,7 +37,7 @@ let
   };
 
 in
-lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; }) {} [
+lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; }) { } [
   "docker"
   "podman"
 ]

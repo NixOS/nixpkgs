@@ -1,6 +1,16 @@
-{ lib, buildDunePackage, fetchurl
-, bos, fpath, rresult, ptime, mirage-crypto, x509, astring, logs
-, cacert, alcotest
+{ lib
+, buildDunePackage
+, fetchurl
+, bos
+, fpath
+, rresult
+, ptime
+, mirage-crypto
+, x509
+, astring
+, logs
+, cacert
+, alcotest
 }:
 
 buildDunePackage rec {
@@ -20,7 +30,7 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    cacert    # for /etc/ssl/certs/ca-bundle.crt
+    cacert # for /etc/ssl/certs/ca-bundle.crt
     alcotest
   ];
 

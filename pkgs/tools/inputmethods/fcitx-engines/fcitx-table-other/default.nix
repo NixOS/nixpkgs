@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ fcitx gettext ];
 
   preInstall = ''
-   substituteInPlace tables/cmake_install.cmake \
-      --replace ${fcitx} $out
+    substituteInPlace tables/cmake_install.cmake \
+       --replace ${fcitx} $out
   '';
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-table-other";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
-    description   = "Provides some other tables for Fcitx";
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-table-other";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
+    description = "Provides some other tables for Fcitx";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

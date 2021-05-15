@@ -1,5 +1,12 @@
-{ lib, fetchPypi, buildPythonPackage
-, lazy-object-proxy, six, wrapt, enum34, singledispatch, backports_functools_lru_cache
+{ lib
+, fetchPypi
+, buildPythonPackage
+, lazy-object-proxy
+, six
+, wrapt
+, enum34
+, singledispatch
+, backports_functools_lru_cache
 , pytest
 }:
 

@@ -1,6 +1,13 @@
-{ lib, stdenv
-, fetchurl, autoconf, gfortran
-, libelf, libiberty, zlib, libbfd, libopcodes
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, gfortran
+, libelf
+, libiberty
+, zlib
+, libbfd
+, libopcodes
 , buildPackages
 }:
 

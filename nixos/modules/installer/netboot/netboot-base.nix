@@ -7,7 +7,8 @@ with lib;
 
 {
   imports =
-    [ ./netboot.nix
+    [
+      ./netboot.nix
 
       # Profiles of this basic netboot media
       ../../profiles/all-hardware.nix

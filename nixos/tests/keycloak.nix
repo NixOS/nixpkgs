@@ -52,16 +52,18 @@ let
             enabled = true;
             realm = "test-realm";
             clients = [ client ];
-            users = [(
-              user // {
-                enabled = true;
-                credentials = [{
-                  type = "password";
-                  temporary = false;
-                  value = password;
-                }];
-              }
-            )];
+            users = [
+              (
+                user // {
+                  enabled = true;
+                  credentials = [{
+                    type = "password";
+                    temporary = false;
+                    value = password;
+                  }];
+                }
+              )
+            ];
           };
 
           realmDataJson = pkgs.writeText "realm-data.json" (builtins.toJSON realm);
@@ -78,7 +80,8 @@ let
               empty
             end
           '';
-        in ''
+        in
+        ''
           keycloak.start()
           keycloak.wait_for_unit("keycloak.service")
           keycloak.wait_until_succeeds("curl -sSf ${frontendUrl}")

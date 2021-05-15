@@ -13,8 +13,8 @@ buildGoModule {
   version = "2021-04-18";
 
   src = fetchgit {
-    url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "468cde90ca58421d63f4dfeaebcf8bb3fccb4127";
+    url = "https://boringssl.googlesource.com/boringssl";
+    rev = "468cde90ca58421d63f4dfeaebcf8bb3fccb4127";
     sha256 = "0gaqcbvp6r5fq265mckmg0i0rjab0bhxkxcvfxp3ar5dm7q88w39";
   };
 
@@ -51,7 +51,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";
-    homepage    = "https://boringssl.googlesource.com";
+    homepage = "https://boringssl.googlesource.com";
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];
   };

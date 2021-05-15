@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit }:
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   name = "win-pvdrivers-git-20150701";
   version = "20150701";
 
@@ -12,13 +12,13 @@ stdenv.mkDerivation  {
 
   buildPhase =
     let unpack = x: "tar xf $src/${x}.tar; mkdir -p x86/${x} amd64/${x}; cp ${x}/x86/* x86/${x}/.; cp ${x}/x64/* amd64/${x}/.";
-    in lib.concatStringsSep "\n" (map unpack ["xenbus" "xeniface" "xenvif" "xennet" "xenvbd"]);
+    in lib.concatStringsSep "\n" (map unpack [ "xenbus" "xeniface" "xenvif" "xennet" "xenvbd" ]);
 
   installPhase = ''
     mkdir -p $out
     cp -r x86 $out/.
     cp -r amd64 $out/.
-    '';
+  '';
 
   meta = with lib; {
     description = "Xen Subproject: Windows PV Driver";

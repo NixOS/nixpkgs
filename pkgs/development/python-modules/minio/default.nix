@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchPypi
 , configparser
 , faker
 , future

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   patches = [ ./0001-Fix-build-with-unbound-1.6.1.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [git gperf pcre unbound libev tokyocabinet bash libsrs2];
+  buildInputs = [ git gperf pcre unbound libev tokyocabinet bash libsrs2 ];
 
   postUnpack = ''
     cp -Rp ${libCommonSrc}/* ${srcRoot}/common;

@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, numpy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "emcee";

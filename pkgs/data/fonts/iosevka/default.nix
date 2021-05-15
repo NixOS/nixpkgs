@@ -1,4 +1,8 @@
-{ stdenv, lib, nodejs, nodePackages, remarshal
+{ stdenv
+, lib
+, nodejs
+, nodePackages
+, remarshal
 , ttfautohint-nox
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
@@ -42,7 +46,8 @@
   # '';
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
-, set ? null }:
+, set ? null
+}:
 
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
@@ -76,7 +81,7 @@ stdenv.mkDerivation rec {
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan
-      then builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
+    then builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
     else privateBuildPlan;
 
   inherit extraParameters;

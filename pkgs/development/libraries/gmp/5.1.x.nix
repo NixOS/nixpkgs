@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, m4
+{ lib
+, stdenv
+, fetchurl
+, m4
 , cxx ? true
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -8,7 +11,8 @@ let inherit (lib) optional; in
 let self = stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
 
-  src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
+  src = fetchurl {
+    # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
     sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
@@ -37,8 +41,8 @@ let self = stdenv.mkDerivation rec {
     # broken on multicore CPUs). Avoid this impurity.
     "--build=${stdenv.buildPlatform.config}"
   ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
-    ;
+  ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+  ;
 
   doCheck = true;
 
@@ -78,4 +82,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = [ maintainers.peti ];
   };
 };
-  in self
+in self

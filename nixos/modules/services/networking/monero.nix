@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg     = config.services.monero;
+  cfg = config.services.monero;
 
   listToConf = option: list:
     concatMapStrings (value: "${option}=${value}\n") list;
@@ -216,11 +216,11 @@ in
 
     systemd.services.monero = {
       description = "monero daemon";
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User  = "monero";
+        User = "monero";
         Group = "monero";
         ExecStart = "${pkgs.monero}/bin/monerod --config-file=${configFile} --non-interactive";
         Restart = "always";
@@ -230,9 +230,9 @@ in
 
     assertions = singleton {
       assertion = cfg.mining.enable -> cfg.mining.address != "";
-      message   = ''
-       You need a Monero address to receive mining rewards:
-       specify one using option monero.mining.address.
+      message = ''
+        You need a Monero address to receive mining rewards:
+        specify one using option monero.mining.address.
       '';
     };
 

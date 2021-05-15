@@ -5,7 +5,8 @@
 , mediastreamer
 , openh264
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

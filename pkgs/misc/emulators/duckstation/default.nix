@@ -1,5 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, SDL2, qtbase
-, wrapQtAppsHook, qttools, ninja, gtk3 }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, SDL2
+, qtbase
+, wrapQtAppsHook
+, qttools
+, ninja
+, gtk3
+}:
 mkDerivation rec {
   pname = "duckstation";
   version = "unstable-2020-12-29";

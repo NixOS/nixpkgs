@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # ImportError: cannot import name '_typeconv'
   doCheck = false;
 
-  meta =  with lib; {
+  meta = with lib; {
     homepage = "http://numba.pydata.org/";
     license = licenses.bsd2;
     description = "Compiling Python code using LLVM";

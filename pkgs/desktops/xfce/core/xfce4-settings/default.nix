@@ -1,6 +1,16 @@
-{ mkXfceDerivation, exo, garcon, gtk3, glib
-, libnotify, libxfce4ui, libxfce4util, libxklavier
-, upower, xfconf, xf86inputlibinput }:
+{ mkXfceDerivation
+, exo
+, garcon
+, gtk3
+, glib
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxklavier
+, upower
+, xfconf
+, xf86inputlibinput
+}:
 
 mkXfceDerivation {
   category = "xfce";

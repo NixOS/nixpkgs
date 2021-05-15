@@ -1,5 +1,16 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
-, setuptools, wxPython_4_0, billiard, gnureadline }:
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchPypi
+, matplotlib
+, numpy
+, pymavlink
+, pyserial
+, setuptools
+, wxPython_4_0
+, billiard
+, gnureadline
+}:
 
 buildPythonApplication rec {
   pname = "MAVProxy";

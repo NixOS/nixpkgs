@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "The continuous merge workflow";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = [maintainers.mic92];
+    maintainers = [ maintainers.mic92 ];
   };
 }

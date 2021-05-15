@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-     pkg-config
-     ncurses
+    pkg-config
+    ncurses
   ];
 
   meta = {

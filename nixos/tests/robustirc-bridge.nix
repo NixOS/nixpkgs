@@ -7,18 +7,20 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   nodes =
-    { bridge =
-      { services.robustirc-bridge = {
-          enable = true;
-          extraFlags = [
-            "-listen localhost:6667"
-            "-network example.com"
-          ];
+    {
+      bridge =
+        {
+          services.robustirc-bridge = {
+            enable = true;
+            extraFlags = [
+              "-listen localhost:6667"
+              "-network example.com"
+            ];
+          };
         };
-      };
     };
 
-    testScript =
+  testScript =
     ''
       start_all()
 

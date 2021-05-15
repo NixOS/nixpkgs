@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
-, glib, wayland, libxkbcommon, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, cairo
+, pango
+, pkg-config
+, wayland-protocols
+, glib
+, wayland
+, libxkbcommon
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {

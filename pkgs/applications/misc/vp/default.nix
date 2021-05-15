@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image ];
 
-  NIX_CFLAGS_COMPILE="-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
 
   meta = with lib; {
     homepage = "https://brlcad.org/~erik/";
     description = "SDL based picture viewer/slideshow";
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
   };
 }

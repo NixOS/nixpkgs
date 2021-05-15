@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, isPy3k, olm
-, cffi, future, typing }:
+{ lib
+, buildPythonPackage
+, isPy3k
+, olm
+, cffi
+, future
+, typing
+}:
 
 buildPythonPackage {
   pname = "python-olm";

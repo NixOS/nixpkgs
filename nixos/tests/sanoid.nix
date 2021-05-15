@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
   inherit (import ./ssh-keys.nix pkgs)
     snakeOilPrivateKey snakeOilPublicKey;
 
@@ -7,7 +8,8 @@ import ./make-test-python.nix ({ pkgs, ... }: let
     boot.supportedFilesystems = [ "zfs" ];
     environment.systemPackages = [ pkgs.parted ];
   };
-in {
+in
+{
   name = "sanoid";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lopsided98 ];

@@ -103,22 +103,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services.calibre-web = let
-      appDb = "/var/lib/${cfg.dataDir}/app.db";
-      gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
-      calibreWebCmd = "${pkgs.calibre-web}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+    systemd.services.calibre-web =
+      let
+        appDb = "/var/lib/${cfg.dataDir}/app.db";
+        gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
+        calibreWebCmd = "${pkgs.calibre-web}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
-      settings = concatStringsSep ", " (
-        [
-          "config_port = ${toString cfg.listen.port}"
-          "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
-          "config_allow_reverse_proxy_header_login = ${if cfg.options.reverseProxyAuth.enable then "1" else "0"}"
-          "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
-        ]
-        ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
-        ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-      );
-    in
+        settings = concatStringsSep ", " (
+          [
+            "config_port = ${toString cfg.listen.port}"
+            "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
+            "config_allow_reverse_proxy_header_login = ${if cfg.options.reverseProxyAuth.enable then "1" else "0"}"
+            "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
+          ]
+          ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+        );
+      in
       {
         description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
         after = [ "network.target" ];
@@ -157,7 +158,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "calibre-web") {
-      calibre-web = {};
+      calibre-web = { };
     };
   };
 

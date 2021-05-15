@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi,
-  nose, pytz, six, versiontools
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, pytz
+, six
+, versiontools
 }:
 
 buildPythonPackage rec {
@@ -20,8 +25,8 @@ buildPythonPackage rec {
   buildInputs = [ nose versiontools ];
   propagatedBuildInputs = [ pytz six ];
 
-# ERROR: test_image_path_from_directory (tests.tests.TestImageHelpers)
-# ERROR: test_image_stream (tests.tests.TestImageHelpers)
+  # ERROR: test_image_path_from_directory (tests.tests.TestImageHelpers)
+  # ERROR: test_image_stream (tests.tests.TestImageHelpers)
   doCheck = false;
 
   checkPhase = ''

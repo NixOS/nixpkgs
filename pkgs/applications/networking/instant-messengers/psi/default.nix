@@ -1,6 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca-qt5, libXScrnSaver, hunspell
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qttools
+, qtwebengine
+, libidn
+, qca-qt5
+, libXScrnSaver
+, hunspell
 }:
 
 mkDerivation rec {
@@ -18,8 +28,14 @@ mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qtwebengine
-    libidn qca-qt5 libXScrnSaver hunspell
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebengine
+    libidn
+    qca-qt5
+    libXScrnSaver
+    hunspell
   ];
 
   meta = with lib; {

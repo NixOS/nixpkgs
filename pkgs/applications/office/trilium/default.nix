@@ -31,7 +31,8 @@ let
     sha256 = "1f8csjgqq4yw1qcnlrfy5ysarazmvj2fnmnxj4sr1xjbfa78y2rr";
   };
 
-in {
+in
+{
 
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";

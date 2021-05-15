@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, six
-, wcwidth, pytest, mock, glibcLocales
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, six
+, wcwidth
+, pytest
+, mock
+, glibcLocales
 }:
 
 buildPythonPackage rec {

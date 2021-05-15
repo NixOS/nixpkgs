@@ -10,9 +10,11 @@
 , libmicrohttpd
 , ncurses
 , pulseaudio
-, lib, stdenv
+, lib
+, stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? stdenv.isLinux
+, systemd
 }:
 
 stdenv.mkDerivation rec {

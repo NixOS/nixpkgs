@@ -1,4 +1,8 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
 , fetchPypi
 , libmaxminddb
 , ipaddress

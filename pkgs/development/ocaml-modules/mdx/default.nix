@@ -1,7 +1,22 @@
-{ lib, fetchurl, buildDunePackage, opaline, ocaml
+{ lib
+, fetchurl
+, buildDunePackage
+, opaline
+, ocaml
 , alcotest
-, astring, cmdliner, cppo, fmt, logs, ocaml-version, odoc, ocaml_lwt, re, result, csexp
-, pandoc}:
+, astring
+, cmdliner
+, cppo
+, fmt
+, logs
+, ocaml-version
+, odoc
+, ocaml_lwt
+, re
+, result
+, csexp
+, pandoc
+}:
 
 buildDunePackage rec {
   pname = "mdx";

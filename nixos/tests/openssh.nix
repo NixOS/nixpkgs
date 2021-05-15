@@ -1,8 +1,9 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
 let inherit (import ./ssh-keys.nix pkgs)
-      snakeOilPrivateKey snakeOilPublicKey;
-in {
+  snakeOilPrivateKey snakeOilPublicKey;
+in
+{
   name = "openssh";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig eelco ];
@@ -16,7 +17,7 @@ in {
       {
         services.openssh.enable = true;
         security.pam.services.sshd.limits =
-          [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
+          [{ domain = "*"; item = "memlock"; type = "-"; value = 1024; }];
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
@@ -28,7 +29,7 @@ in {
       {
         services.openssh = { enable = true; startWhenNeeded = true; };
         security.pam.services.sshd.limits =
-          [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
+          [{ domain = "*"; item = "memlock"; type = "-"; value = 1024; }];
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
@@ -39,7 +40,8 @@ in {
 
       {
         services.openssh = {
-          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          enable = true;
+          listenAddresses = [{ addr = "127.0.0.1"; port = 22; }];
         };
       };
 
@@ -48,7 +50,9 @@ in {
 
       {
         services.openssh = {
-          enable = true; startWhenNeeded = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          enable = true;
+          startWhenNeeded = true;
+          listenAddresses = [{ addr = "127.0.0.1"; port = 22; }];
         };
       };
 

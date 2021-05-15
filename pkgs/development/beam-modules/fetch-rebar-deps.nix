@@ -1,7 +1,10 @@
 { lib, stdenv, rebar3 }:
 
-{ name, version, sha256, src
-, meta ? {}
+{ name
+, version
+, sha256
+, src
+, meta ? { }
 }:
 
 with lib;

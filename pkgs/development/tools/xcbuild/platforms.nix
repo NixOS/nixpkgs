@@ -285,7 +285,7 @@ let
 
 in
 
-runCommand "Platforms" {} ''
+runCommand "Platforms" { } ''
   platform=$out/${xcodePlatform}.platform
 
   install -D ${writeText "Info.plist" (toPlist {} Info)} $platform/Info.plist

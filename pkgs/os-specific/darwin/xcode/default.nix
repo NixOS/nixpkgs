@@ -2,25 +2,26 @@
 
 let requireXcode = version: sha256:
   let
-    xip = "Xcode_" + version +  ".xip";
+    xip = "Xcode_" + version + ".xip";
     # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
-    unxip = if buildPlatform.isDarwin
-            then ''
-              open -W ${xip}
-              rm -rf ${xip}
-            ''
-            else ''
-              xar -xf ${xip}
-              rm -rf ${xip}
-              pbzx -n Content | cpio -i
-              rm Content Metadata
-            '';
+    unxip =
+      if buildPlatform.isDarwin
+      then ''
+        open -W ${xip}
+        rm -rf ${xip}
+      ''
+      else ''
+        xar -xf ${xip}
+        rm -rf ${xip}
+        pbzx -n Content | cpio -i
+        rm Content Metadata
+      '';
     app = requireFile rec {
-      name     = "Xcode.app";
-      url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
+      name = "Xcode.app";
+      url = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
       hashMode = "recursive";
       inherit sha256;
-      message  = ''
+      message = ''
         Unfortunately, we cannot download ${name} automatically.
         Please go to ${url}
         to download it yourself, and add it to the Nix store by running the following commands.
@@ -38,9 +39,11 @@ let requireXcode = version: sha256:
       platforms = platforms.darwin ++ platforms.linux;
     };
 
-  in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
+  in
+  app.overrideAttrs (oldAttrs: oldAttrs // { inherit meta; });
 
-in lib.makeExtensible (self: {
+in
+lib.makeExtensible (self: {
   xcode_8_1 = requireXcode "8.1" "18xjvfipwzia66gm3r9p770xdd4r375vak7chw5vgqnv9yyjiq2n";
   xcode_8_2 = requireXcode "8.2" "13nd1zsfqcp9hwp15hndr0rsbb8rgprrz7zr2ablj4697qca06m2";
   xcode_9_1 = requireXcode "9.1" "0ab1403wy84ys3yn26fj78cazhpnslmh3nzzp1wxib3mr1afjvic";

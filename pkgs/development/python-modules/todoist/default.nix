@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, fetchpatch, pythonOlder, typing
+{ lib
+, fetchPypi
+, buildPythonPackage
+, requests
+, fetchpatch
+, pythonOlder
+, typing
 }:
 
 buildPythonPackage rec {

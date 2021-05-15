@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, pkg-config, meson, ninja, python3, vala
-, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, pkg-config
+, meson
+, ninja
+, python3
+, vala
+, gtk3
+, libgee
+, libsoup
+, libsecret
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
@@ -43,9 +58,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The FTP Client that drives you anywhere";
-    homepage    = "https://github.com/Alecaddd/taxi";
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/Alecaddd/taxi";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -29,9 +29,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    dateutil
+    pytz
+    regex
+    tzlocal
     # extra_requires
-    hijri-converter convertdate
+    hijri-converter
+    convertdate
   ];
 
   checkInputs = [

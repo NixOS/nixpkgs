@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
-  gettext }:
+{ lib
+, fetchFromGitHub
+, buildDotnetPackage
+, dotnetPackages
+, gtksharp
+, gettext
+}:
 
 let
   mono-addins = dotnetPackages.MonoAddins;
@@ -37,23 +42,25 @@ buildDotnetPackage rec {
       "Mono\\.Addins\\.Setup"
     ];
 
-    stripVersion = name: file: let
+    stripVersion = name: file:
+      let
         match = ''<Reference Include="${name}([ ,][^"]*)?"'';
         replace = ''<Reference Include="${name}"'';
-      in "sed -i -re 's/${match}/${replace}/g' ${file}\n";
+      in
+      "sed -i -re 's/${match}/${replace}/g' ${file}\n";
 
     # Map all possible pairs of two lists
     map2 = f: listA: listB: concatMap (a: map (f a) listB) listA;
     concatMap2Strings = f: listA: listB: concatStrings (map2 f listA listB);
   in
-    concatMap2Strings stripVersion versionedNames csprojFiles
-    + ''
-      # For some reason there is no Microsoft.Common.tasks file
-      # in ''${mono}/lib/mono/3.5 .
-      substituteInPlace Pinta.Install.proj \
-        --replace 'ToolsVersion="3.5"' 'ToolsVersion="4.0"' \
-        --replace "/usr/local" "$out"
-    '';
+  concatMap2Strings stripVersion versionedNames csprojFiles
+  + ''
+    # For some reason there is no Microsoft.Common.tasks file
+    # in ''${mono}/lib/mono/3.5 .
+    substituteInPlace Pinta.Install.proj \
+      --replace 'ToolsVersion="3.5"' 'ToolsVersion="4.0"' \
+      --replace "/usr/local" "$out"
+  '';
 
   makeWrapperArgs = [
     "--prefix MONO_GAC_PREFIX : ${gtksharp}"

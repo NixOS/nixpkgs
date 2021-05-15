@@ -1,11 +1,29 @@
-{ pname, version, src, branchName
-, stdenv, lib, fetchFromGitHub, fetchpatch, wrapQtAppsHook
-, cmake, pkg-config
-, libpulseaudio, libjack2, alsaLib, sndio
-, vulkan-loader, vulkan-headers
-, qtbase, qtwebengine, qttools
-, nlohmann_json, rapidjson
-, zlib, zstd, libzip, lz4
+{ pname
+, version
+, src
+, branchName
+, stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, wrapQtAppsHook
+, cmake
+, pkg-config
+, libpulseaudio
+, libjack2
+, alsaLib
+, sndio
+, vulkan-loader
+, vulkan-headers
+, qtbase
+, qtwebengine
+, qttools
+, nlohmann_json
+, rapidjson
+, zlib
+, zstd
+, libzip
+, lz4
 , glslang
 , boost173
 , catch2
@@ -21,11 +39,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    libpulseaudio libjack2 alsaLib sndio
-    vulkan-loader vulkan-headers
-    qtbase qtwebengine qttools
-    nlohmann_json rapidjson
-    zlib zstd libzip lz4
+    libpulseaudio
+    libjack2
+    alsaLib
+    sndio
+    vulkan-loader
+    vulkan-headers
+    qtbase
+    qtwebengine
+    qttools
+    nlohmann_json
+    rapidjson
+    zlib
+    zstd
+    libzip
+    lz4
     glslang
     boost173
     catch2
@@ -37,7 +65,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (fetchpatch { # Without this, yuzu tries to read version info from .git which is not present.
+    (fetchpatch {
+      # Without this, yuzu tries to read version info from .git which is not present.
       url = "https://raw.githubusercontent.com/pineappleEA/Pineapple-Linux/28cbf656e3188b80eda0031d0b2713708ecd630f/inject-git-info.patch";
       sha256 = "1zxh5fwdr7jl0aagb3yfwd0995vyyk54f0f748f7c4rqvg6867fd";
     })
@@ -80,7 +109,8 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl2Plus
       # Icons
-      cc-by-nd-30 cc0
+      cc-by-nd-30
+      cc0
     ];
     maintainers = with maintainers; [ ivar joshuafern ];
     platforms = platforms.linux;

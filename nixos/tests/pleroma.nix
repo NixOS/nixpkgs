@@ -14,17 +14,17 @@
 
   Notes:
   - We need a fully functional TLS setup without having any access to
-    the internet. We do that by issuing a self-signed cert, add this
-    self-cert to the hosts pki trust store and finally spoof the
-    hostnames using /etc/hosts.
+  the internet. We do that by issuing a self-signed cert, add this
+  self-cert to the hosts pki trust store and finally spoof the
+  hostnames using /etc/hosts.
   - For this NixOS test, we *had* to store some DB-related and
-    pleroma-related secrets to the store. Keep in mind the store is
-    world-readable, it's the worst place possible to store *any*
-    secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
+  pleroma-related secrets to the store. Keep in mind the store is
+  world-readable, it's the worst place possible to store *any*
+  secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
 */
 
 import ./make-test-python.nix ({ pkgs, ... }:
-  let
+let
   send-toot = pkgs.writeScriptBin "send-toot" ''
     set -eux
     # toot is using the requests library internally. This library
@@ -176,18 +176,21 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
      If https://github.com/ihabunek/toot/pull/180 gets merged at some
      point, feel free to remove this patch. */
-  custom-toot = pkgs.toot.overrideAttrs(old:{
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
-      sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
-    }) ];
+  custom-toot = pkgs.toot.overrideAttrs (old: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
+        sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
+      })
+    ];
   });
 
   hosts = nodes: ''
     ${nodes.pleroma.config.networking.primaryIPAddress} pleroma.nixos.test
     ${nodes.client.config.networking.primaryIPAddress} client.nixos.test
   '';
-  in {
+in
+{
   name = "pleroma";
   nodes = {
     client = { nodes, pkgs, config, ... }: {

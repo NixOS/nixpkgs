@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake}:
+{ lib, stdenv, fetchurl, cmake }:
 
 let
   patch = fetchurl {

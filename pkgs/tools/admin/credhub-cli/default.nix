@@ -14,8 +14,8 @@ buildGoModule rec {
   patches = [
     # Fix test with Go 1.15
     (fetchpatch {
-        url = "https://github.com/cloudfoundry-incubator/credhub-cli/commit/4bd1accd513dc5e163e155c4b428878ca0bcedbc.patch";
-        sha256 = "180n3q3d19aw02q7xsn7dxck18jgndz5garj2mb056cwa7mmhw0j";
+      url = "https://github.com/cloudfoundry-incubator/credhub-cli/commit/4bd1accd513dc5e163e155c4b428878ca0bcedbc.patch";
+      sha256 = "180n3q3d19aw02q7xsn7dxck18jgndz5garj2mb056cwa7mmhw0j";
     })
   ];
 

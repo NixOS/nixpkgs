@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy pyopengl pyqt5 scipy ];
 
-  doCheck = false;  # tries to create windows (QApps) on collection, which fails (probably due to no display)
+  doCheck = false; # tries to create windows (QApps) on collection, which fails (probably due to no display)
 
   pythonImportsCheck = [ "pyqtgraph" ];
 

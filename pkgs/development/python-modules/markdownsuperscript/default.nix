@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, markdown,
-  pytest, pytestrunner, pytestcov, coverage }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, markdown
+, pytest
+, pytestrunner
+, pytestcov
+, coverage
+}:
 
 buildPythonPackage rec {
   pname = "MarkdownSuperscript";

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, lua, pkg-config, nixosTests
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
-, tlsSupport ? true, openssl
+{ lib
+, stdenv
+, fetchurl
+, lua
+, pkg-config
+, nixosTests
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, systemd
+, tlsSupport ? true
+, openssl
 }:
 
 stdenv.mkDerivation rec {

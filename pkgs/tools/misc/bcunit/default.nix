@@ -1,6 +1,7 @@
 { cmake
 , fetchFromGitLab
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

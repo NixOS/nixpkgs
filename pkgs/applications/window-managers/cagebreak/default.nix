@@ -16,7 +16,8 @@
 , systemd
 , wayland
 , wayland-protocols
-, withXwayland ? true , xwayland
+, withXwayland ? true
+, xwayland
 , wlroots
 }:
 

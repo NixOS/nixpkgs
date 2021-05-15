@@ -1,6 +1,12 @@
-{ lib, stdenv, buildPackages
-, fetchurl, pkg-config, ncurses, gzip
-, sslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, ncurses
+, gzip
+, sslSupport ? true
+, openssl ? null
 , nukeReferences
 }:
 

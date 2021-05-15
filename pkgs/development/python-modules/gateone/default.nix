@@ -14,14 +14,14 @@ buildPythonPackage {
 
   src = pkgs.fetchFromGitHub {
     rev = "1d0e8037fbfb7c270f3710ce24154e24b7031bea";
-    owner= "liftoff";
+    owner = "liftoff";
     repo = "GateOne";
     sha256 = "1ghrawlqwv7wnck6alqpbwy9mpv0y21cw2jirrvsxaracmvgk6vv";
   };
 
-  propagatedBuildInputs = [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
+  propagatedBuildInputs = [ tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh ];
 
-  postInstall=''
+  postInstall = ''
     cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone
   '';
 

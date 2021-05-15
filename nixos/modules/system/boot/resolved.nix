@@ -5,7 +5,7 @@ let
   cfg = config.services.resolved;
 
   dnsmasqResolve = config.services.dnsmasq.enable &&
-                   config.services.dnsmasq.resolveLocalQueries;
+    config.services.dnsmasq.resolveLocalQueries;
 
 in
 {
@@ -131,7 +131,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.networking.useHostResolvConf;
+      {
+        assertion = !config.networking.useHostResolvConf;
         message = "Using host resolv.conf is not supported with systemd-resolved";
       }
     ];

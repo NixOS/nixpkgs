@@ -31,13 +31,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = let
+  postPatch =
+    let
       # This evaluates to a string containing:
       #
       #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
       #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
       shar_sub = "\${SHAR}";
-    in ''
+    in
+    ''
       substituteInPlace tests/shar-1 --replace '${shar_sub}' '${shar_sub} -s submitter'
       substituteInPlace tests/shar-2 --replace '${shar_sub}' '${shar_sub} -s submitter'
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://www.gnu.org/software/sharutils/";
     license = licenses.gpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

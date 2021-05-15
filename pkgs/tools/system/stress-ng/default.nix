@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+{ lib
+, stdenv
+, fetchurl
+, attr
+, judy
+, keyutils
+, libaio
+, libapparmor
+, libbsd
+, libcap
+, libgcrypt
+, lksctp-tools
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +29,13 @@ stdenv.mkDerivation rec {
   # All platforms inputs then Linux-only ones
   buildInputs = [ judy libbsd libgcrypt zlib ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools
-    ];
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"

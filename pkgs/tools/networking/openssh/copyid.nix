@@ -1,6 +1,7 @@
 { runCommandNoCC, openssh }:
 
-runCommandNoCC "ssh-copy-id-${openssh.version}" {
+runCommandNoCC "ssh-copy-id-${openssh.version}"
+{
   meta = openssh.meta // {
     description = "A tool to copy SSH public keys to a remote machine";
     priority = (openssh.meta.priority or 0) - 1;

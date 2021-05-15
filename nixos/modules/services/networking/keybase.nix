@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.services.keybase;
 
-in {
+in
+{
 
   ###### interface
 

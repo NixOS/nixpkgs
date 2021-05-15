@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, python, ensureNewerSourcesForZipFilesHook
-# optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
+{ lib
+, stdenv
+, fetchFromGitLab
+, python
+, ensureNewerSourcesForZipFilesHook
+  # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
 , withTools ? null
 }:
 let
@@ -31,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Meta build system";
-    homepage    = "https://waf.io";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://waf.io";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
   };
 }

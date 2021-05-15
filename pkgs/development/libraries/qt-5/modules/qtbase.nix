@@ -1,30 +1,67 @@
-{
-  stdenv, lib,
-  src, patches, version, qtCompatVersion,
-
-  coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3,
-  which,
-  # darwin support
-  darwin, libiconv,
-
-  dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
-  libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng,
-  libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
-  zlib,
-
-  # optional dependencies
-  cups ? null, libmysqlclient ? null, postgresql ? null,
-  withGtk3 ? false, dconf ? null, gtk3 ? null,
-
-  # options
-  libGLSupported ? !stdenv.isDarwin,
-  libGL,
-  buildExamples ? false,
-  buildTests ? false,
-  debug ? false,
-  developerBuild ? false,
-  decryptSslTraffic ? false
+{ stdenv
+, lib
+, src
+, patches
+, version
+, qtCompatVersion
+, coreutils
+, bison
+, flex
+, gdb
+, gperf
+, lndir
+, perl
+, pkg-config
+, python3
+, which
+, # darwin support
+  darwin
+, libiconv
+, dbus
+, fontconfig
+, freetype
+, glib
+, harfbuzz
+, icu
+, libX11
+, libXcomposite
+, libXcursor
+, libXext
+, libXi
+, libXrender
+, libinput
+, libjpeg
+, libpng
+, libxcb
+, libxkbcommon
+, libxml2
+, libxslt
+, openssl
+, pcre16
+, pcre2
+, sqlite
+, udev
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, zlib
+, # optional dependencies
+  cups ? null
+, libmysqlclient ? null
+, postgresql ? null
+, withGtk3 ? false
+, dconf ? null
+, gtk3 ? null
+, # options
+  libGLSupported ? !stdenv.isDarwin
+, libGL
+, buildExamples ? false
+, buildTests ? false
+, debug ? false
+, developerBuild ? false
+, decryptSslTraffic ? false
 }:
 
 assert withGtk3 -> dconf != null;
@@ -45,34 +82,66 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs =
     [
-      libxml2 libxslt openssl sqlite zlib
+      libxml2
+      libxslt
+      openssl
+      sqlite
+      zlib
 
       # Text rendering
-      harfbuzz icu
+      harfbuzz
+      icu
 
       # Image formats
-      libjpeg libpng
+      libjpeg
+      libpng
       (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
-        [
-          # TODO: move to buildInputs, this should not be propagated.
-          AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
-          CoreLocation CoreServices DiskArbitration Foundation OpenGL
-          darwin.libobjc libiconv MetalKit IOKit
-        ]
+      [
+        # TODO: move to buildInputs, this should not be propagated.
+        AGL
+        AppKit
+        ApplicationServices
+        Carbon
+        Cocoa
+        CoreAudio
+        CoreBluetooth
+        CoreLocation
+        CoreServices
+        DiskArbitration
+        Foundation
+        OpenGL
+        darwin.libobjc
+        libiconv
+        MetalKit
+        IOKit
+      ]
       else
         [
-          dbus glib udev
+          dbus
+          glib
+          udev
 
           # Text rendering
-          fontconfig freetype
+          fontconfig
+          freetype
 
           # X11 libs
-          libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-          xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+          libX11
+          libXcomposite
+          libXext
+          libXi
+          libXrender
+          libxcb
+          libxkbcommon
+          xcbutil
+          xcbutilimage
+          xcbutilkeysyms
+          xcbutilrenderutil
+          xcbutilwm
         ]
         ++ lib.optional libGLSupported libGL
     );
@@ -80,10 +149,10 @@ stdenv.mkDerivation {
   buildInputs =
     [ python3 ]
     ++ lib.optionals (!stdenv.isDarwin)
-    (
-      [ libinput ]
-      ++ lib.optional withGtk3 gtk3
-    )
+      (
+        [ libinput ]
+        ++ lib.optional withGtk3 gtk3
+      )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (libmysqlclient != null) libmysqlclient
@@ -145,8 +214,8 @@ stdenv.mkDerivation {
               substituteInPlace ./mkspecs/common/mac.conf \
                   --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
         ''
-        # Note on the above: \x27 is a way if including a single-quote
-        # character in the sed string arguments.
+      # Note on the above: \x27 is a way if including a single-quote
+      # character in the sed string arguments.
       else
         lib.optionalString libGLSupported
           ''
@@ -204,11 +273,11 @@ stdenv.mkDerivation {
     ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-    ++ lib.optionals withGtk3 [
-         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-       ]
-    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+  ++ lib.optionals withGtk3 [
+    ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+    ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+  ]
+  ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
   prefixKey = "-prefix ";
 
@@ -240,20 +309,22 @@ stdenv.mkDerivation {
       "-widgets"
       "-opengl desktop"
       "-icu"
-      "-L" "${icu.out}/lib"
-      "-I" "${icu.dev}/include"
+      "-L"
+      "${icu.out}/lib"
+      "-I"
+      "${icu.dev}/include"
       "-pch"
     ]
     ++ lib.optional debugSymbols "-debug"
     ++ lib.optionals (compareVersion "5.11.0" < 0)
-    [
-      "-qml-debug"
-    ]
+      [
+        "-qml-debug"
+      ]
     ++ lib.optionals (compareVersion "5.9.0" < 0)
-    [
-      "-c++11"
-      "-no-reduce-relocations"
-    ]
+      [
+        "-c++11"
+        "-no-reduce-relocations"
+      ]
     ++ lib.optionals developerBuild [
       "-developer-build"
       "-no-warnings-are-errors"
@@ -279,18 +350,26 @@ stdenv.mkDerivation {
 
     ++ [
       "-system-zlib"
-      "-L" "${zlib.out}/lib"
-      "-I" "${zlib.dev}/include"
+      "-L"
+      "${zlib.out}/lib"
+      "-I"
+      "${zlib.dev}/include"
       "-system-libjpeg"
-      "-L" "${libjpeg.out}/lib"
-      "-I" "${libjpeg.dev}/include"
+      "-L"
+      "${libjpeg.out}/lib"
+      "-I"
+      "${libjpeg.dev}/include"
       "-system-harfbuzz"
-      "-L" "${harfbuzz.out}/lib"
-      "-I" "${harfbuzz.dev}/include"
+      "-L"
+      "${harfbuzz.out}/lib"
+      "-I"
+      "${harfbuzz.dev}/include"
       "-system-pcre"
       "-openssl-linked"
-      "-L" "${openssl.out}/lib"
-      "-I" "${openssl.dev}/include"
+      "-L"
+      "${openssl.out}/lib"
+      "-I"
+      "${openssl.dev}/include"
       "-system-sqlite"
       ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
       ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
@@ -320,12 +399,18 @@ stdenv.mkDerivation {
         ++ [
           "-xcb"
           "-qpa xcb"
-          "-L" "${libX11.out}/lib"
-          "-I" "${libX11.out}/include"
-          "-L" "${libXext.out}/lib"
-          "-I" "${libXext.out}/include"
-          "-L" "${libXrender.out}/lib"
-          "-I" "${libXrender.out}/include"
+          "-L"
+          "${libX11.out}/lib"
+          "-I"
+          "${libX11.out}/include"
+          "-L"
+          "${libXext.out}/lib"
+          "-I"
+          "${libXext.out}/include"
+          "-L"
+          "${libXrender.out}/lib"
+          "-I"
+          "${libXrender.out}/include"
 
           "-libinput"
 
@@ -351,12 +436,16 @@ stdenv.mkDerivation {
           "-xkbcommon-evdev"
         ]
         ++ lib.optionals (cups != null) [
-          "-L" "${cups.lib}/lib"
-          "-I" "${cups.dev}/include"
+          "-L"
+          "${cups.lib}/lib"
+          "-I"
+          "${cups.dev}/include"
         ]
         ++ lib.optionals (libmysqlclient != null) [
-          "-L" "${libmysqlclient}/lib"
-          "-I" "${libmysqlclient}/include"
+          "-L"
+          "${libmysqlclient}/lib"
+          "-I"
+          "${libmysqlclient}/include"
         ]
     );
 

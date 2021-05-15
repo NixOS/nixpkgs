@@ -15,14 +15,14 @@ rec {
 
   packageName = "stumpwm";
 
-  asdFilesToKeep = ["stumpwm.asd"];
+  asdFilesToKeep = [ "stumpwm.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256
-    0rrhmryfgbjrl04ww107pvm4lzm620xp7a5kwhqbh5d7hpbdk49j URL
-    http://beta.quicklisp.org/archive/stumpwm/2021-04-11/stumpwm-20210411-git.tgz
-    MD5 4497670e2aac3038ed5fb87121ff1b7a NAME stumpwm FILENAME stumpwm DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
-     (NAME clx FILENAME clx))
-    DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20210411-git SIBLINGS
+  0rrhmryfgbjrl04ww107pvm4lzm620xp7a5kwhqbh5d7hpbdk49j URL
+  http://beta.quicklisp.org/archive/stumpwm/2021-04-11/stumpwm-20210411-git.tgz
+  MD5 4497670e2aac3038ed5fb87121ff1b7a NAME stumpwm FILENAME stumpwm DEPS
+  ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
+   (NAME clx FILENAME clx))
+  DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20210411-git SIBLINGS
     (stumpwm-tests) PARASITES NIL) */

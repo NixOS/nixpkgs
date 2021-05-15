@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "wmderland";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ takagiy ];
@@ -21,15 +21,17 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         RemainAfterExit = true;
         user = "alice";
       };
-      script = let
-        config = pkgs.writeText "config" ''
-             set $Mod = Mod1
-             bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
+      script =
+        let
+          config = pkgs.writeText "config" ''
+            set $Mod = Mod1
+            bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
+          '';
+        in
+        ''
+          mkdir -p $HOME/.config/wmderland
+          cp ${config} $HOME/.config/wmderland/config
         '';
-      in ''
-        mkdir -p $HOME/.config/wmderland
-        cp ${config} $HOME/.config/wmderland/config
-      '';
     };
   };
 

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, ncurses, libconfuse
-, libnl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, ncurses
+, libconfuse
+, libnl
+}:
 
 stdenv.mkDerivation rec {
   pname = "bmon";

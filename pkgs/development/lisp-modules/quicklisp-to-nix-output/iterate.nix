@@ -17,13 +17,13 @@ rec {
 
   packageName = "iterate";
 
-  asdFilesToKeep = ["iterate.asd"];
+  asdFilesToKeep = [ "iterate.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iterate DESCRIPTION
-    Jonathan Amsterdam's iterator/gatherer/accumulator facility SHA256
-    1bd6m1lxmd6an75z7j61sms4v54bfxmg1n1w7zd7fm2kb15vai46 URL
-    http://beta.quicklisp.org/archive/iterate/2021-02-28/iterate-20210228-git.tgz
-    MD5 16a4d7811ffc0f4a1cc45257c4cefd1d NAME iterate FILENAME iterate DEPS NIL
-    DEPENDENCIES NIL VERSION 20210228-git SIBLINGS NIL PARASITES
+  Jonathan Amsterdam's iterator/gatherer/accumulator facility SHA256
+  1bd6m1lxmd6an75z7j61sms4v54bfxmg1n1w7zd7fm2kb15vai46 URL
+  http://beta.quicklisp.org/archive/iterate/2021-02-28/iterate-20210228-git.tgz
+  MD5 16a4d7811ffc0f4a1cc45257c4cefd1d NAME iterate FILENAME iterate DEPS NIL
+  DEPENDENCIES NIL VERSION 20210228-git SIBLINGS NIL PARASITES
     (iterate/tests)) */

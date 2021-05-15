@@ -23,8 +23,16 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    paramiko peewee pyqt5 python-dateutil APScheduler psutil qdarkstyle
-    secretstorage appdirs setuptools
+    paramiko
+    peewee
+    pyqt5
+    python-dateutil
+    APScheduler
+    psutil
+    qdarkstyle
+    secretstorage
+    appdirs
+    setuptools
   ];
 
   # QT setup in tests broken.

@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license     = lib.licenses.gpl3;
-    homepage    = "https://yoda.hepforge.org";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    homepage = "https://yoda.hepforge.org";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

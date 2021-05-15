@@ -1,8 +1,31 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests
-, fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git
-, util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
-, gifsicle, libpsl, redis, postgresql, which, brotli, procps
-, nodePackages, v8
+{ stdenv
+, makeWrapper
+, runCommandNoCC
+, lib
+, nixosTests
+, fetchFromGitHub
+, bundlerEnv
+, ruby
+, replace
+, gzip
+, gnutar
+, git
+, util-linux
+, gawk
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, nodePackages
+, v8
 }:
 
 let
@@ -25,8 +48,8 @@ let
 
     # Misc required system utils
     which
-    procps       # For ps and kill
-    util-linux   # For renice
+    procps # For ps and kill
+    util-linux # For renice
     gawk
 
     # Image optimization
@@ -45,9 +68,10 @@ let
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
 
-  rake = runCommandNoCC "discourse-rake" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
+  rake = runCommandNoCC "discourse-rake"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+    } ''
     mkdir -p $out/bin
     makeWrapper ${rubyEnv}/bin/rake $out/bin/discourse-rake \
         ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
@@ -64,31 +88,34 @@ let
       let
         gems = import ./rubyEnv/gemset.nix;
       in
-        gems // {
-          mini_racer = gems.mini_racer // {
-            buildInputs = [ v8 ];
-            dontBuild = false;
-            # The Ruby extension makefile generator assumes the source
-            # is C, when it's actually C++ ¯\_(ツ)_/¯
-            postPatch = ''
-              substituteInPlace ext/mini_racer_extension/extconf.rb \
-                --replace '" -std=c++0x"' \
-                          '" -x c++ -std=c++0x"'
-            '';
-          };
-          mini_suffix = gems.mini_suffix // {
-            propagatedBuildInputs = [ libpsl ];
-            dontBuild = false;
-            # Use our libpsl instead of the vendored one, which isn't
-            # available for aarch64
-            postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.so
-            '';
-          };
+      gems // {
+        mini_racer = gems.mini_racer // {
+          buildInputs = [ v8 ];
+          dontBuild = false;
+          # The Ruby extension makefile generator assumes the source
+          # is C, when it's actually C++ ¯\_(ツ)_/¯
+          postPatch = ''
+            substituteInPlace ext/mini_racer_extension/extconf.rb \
+              --replace '" -std=c++0x"' \
+                        '" -x c++ -std=c++0x"'
+          '';
         };
+        mini_suffix = gems.mini_suffix // {
+          propagatedBuildInputs = [ libpsl ];
+          dontBuild = false;
+          # Use our libpsl instead of the vendored one, which isn't
+          # available for aarch64
+          postPatch = ''
+            cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.so
+          '';
+        };
+      };
 
     groups = [
-      "default" "assets" "development" "test"
+      "default"
+      "assets"
+      "development"
+      "test"
     ];
   };
 
@@ -159,7 +186,9 @@ let
     inherit version src;
 
     buildInputs = [
-      rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler
+      rubyEnv
+      rubyEnv.wrappedRuby
+      rubyEnv.bundler
     ];
 
     patches = [
@@ -231,4 +260,5 @@ let
       tests = nixosTests.discourse;
     };
   };
-in discourse
+in
+discourse

@@ -22,10 +22,12 @@ buildPythonPackage rec {
     sha256 = "88aa9b89974f6a7726499a2608fa7ded216d84c69e78114ab2ef996a45709487";
   };
 
-  patches = [ (substituteAll {
-    src = ./clipboard-make-which-substitutable.patch;
-    which = "${which}/bin/which";
-  })];
+  patches = [
+    (substituteAll {
+      src = ./clipboard-make-which-substitutable.patch;
+      which = "${which}/bin/which";
+    })
+  ];
 
   propagatedBuildInputs = [
     curtsies

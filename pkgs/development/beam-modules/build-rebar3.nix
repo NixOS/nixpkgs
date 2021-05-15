@@ -1,18 +1,29 @@
-{ stdenv, writeText, erlang, rebar3WithPlugins, openssl, libyaml,
-  pc, lib }:
+{ stdenv
+, writeText
+, erlang
+, rebar3WithPlugins
+, openssl
+, libyaml
+, pc
+, lib
+}:
 
-{ name, version
+{ name
+, version
 , src
 , setupHook ? null
-, buildInputs ? [], beamDeps ? [], buildPlugins ? []
+, buildInputs ? [ ]
+, beamDeps ? [ ]
+, buildPlugins ? [ ]
 , postPatch ? ""
 , compilePorts ? false
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
-, ... }@attrs:
+, ...
+}@attrs:
 
 with lib;
 
@@ -21,13 +32,13 @@ let
 
   rebar3 = rebar3WithPlugins {
     plugins = buildPlugins;
-    globalPlugins = (if compilePorts then [pc] else []);
+    globalPlugins = (if compilePorts then [ pc ] else [ ]);
   };
 
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   customPhases = filterAttrs
     (_: v: v != null)
@@ -45,7 +56,7 @@ let
     inherit src;
 
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     postPatch = ''
@@ -90,4 +101,4 @@ let
     };
   } // customPhases);
 in
-  fix pkg
+fix pkg

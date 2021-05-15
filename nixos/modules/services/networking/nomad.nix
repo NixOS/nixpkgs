@@ -51,7 +51,7 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
@@ -62,7 +62,7 @@ in
 
       settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.

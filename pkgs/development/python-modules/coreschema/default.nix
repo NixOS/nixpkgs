@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  jinja2,
-  pytest,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, jinja2
+, pytest
+,
 }:
 
 buildPythonPackage rec {

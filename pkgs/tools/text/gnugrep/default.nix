@@ -62,5 +62,5 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 
-  passthru = {inherit pcre;};
+  passthru = { inherit pcre; };
 }

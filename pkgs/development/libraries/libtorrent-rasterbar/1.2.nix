@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, ncurses, SystemConfiguration
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, automake
+, autoconf
+, zlib
+, boost
+, openssl
+, libtool
+, python
+, libiconv
+, ncurses
+, SystemConfiguration
 }:
 
 let
@@ -9,7 +21,8 @@ let
   # for the bindings, if overridden
   boostPython = boost.override { enablePython = true; inherit python; };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, gettext, libxslt, docbook_xsl_ns
-, libcap, libidn2
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxslt
+, docbook_xsl_ns
+, libcap
+, libidn2
 }:
 
 let
@@ -9,7 +17,8 @@ let
     fullName = "AS-IS, SUN MICROSYSTEMS license";
     url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "iputils";
   inherit version;
 
@@ -28,8 +37,8 @@ in stdenv.mkDerivation rec {
     "-Dsystemdunitdir=etc/systemd/system"
     "-DINSTALL_SYSTEMD_UNITS=true"
   ]
-    # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
-    ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
+  # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
+  ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
   nativeBuildInputs = [ meson ninja pkg-config gettext libxslt.bin docbook_xsl_ns ];
   buildInputs = [ libcap ]

@@ -2,7 +2,8 @@
 
 let
   version = "1.002";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "anonymousPro-${version}";
 
   url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";

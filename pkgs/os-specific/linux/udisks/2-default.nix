@@ -1,8 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkg-config, gettext, gnused
-, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
-, expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
-, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
-, xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, substituteAll
+, libtool
+, pkg-config
+, gettext
+, gnused
+, gtk-doc
+, acl
+, systemd
+, glib
+, libatasmart
+, polkit
+, coreutils
+, bash
+, which
+, expat
+, libxslt
+, docbook_xsl
+, util-linux
+, mdadm
+, libgudev
+, libblockdev
+, parted
+, gobject-introspection
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, autoconf
+, automake
+, xfsprogs
+, f2fs-tools
+, dosfstools
+, e2fsprogs
+, btrfs-progs
+, exfat
+, nilfs-utils
+, ntfs3g
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +67,17 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./force-path.patch;
       path = lib.makeBinPath [
-        btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
-        xfsprogs ntfs3g parted util-linux
+        btrfs-progs
+        coreutils
+        dosfstools
+        e2fsprogs
+        exfat
+        f2fs-tools
+        nilfs-utils
+        xfsprogs
+        ntfs3g
+        parted
+        util-linux
       ];
     })
 
@@ -46,18 +89,35 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf automake pkg-config libtool gettext which gobject-introspection
-    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
+    autoconf
+    automake
+    pkg-config
+    libtool
+    gettext
+    which
+    gobject-introspection
+    gtk-doc
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    docbook_xsl
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace udisks/udisksclient.c \
-        --replace 'defined( __GNUC_PREREQ)' 1 \
-        --replace '__GNUC_PREREQ(4,6)' 1
+    substituteInPlace udisks/udisksclient.c \
+      --replace 'defined( __GNUC_PREREQ)' 1 \
+      --replace '__GNUC_PREREQ(4,6)' 1
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat
+    libgudev
+    libblockdev
+    acl
+    systemd
+    glib
+    libatasmart
+    polkit
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";

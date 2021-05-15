@@ -6,7 +6,7 @@ with lib; mkCoqDerivation {
   inherit version;
   defaultVersion = if versions.isGe "8.7" coq.version then "20190812" else null;
 
-  release."20190812".rev    = "1.0.0";
+  release."20190812".rev = "1.0.0";
   release."20190812".sha256 = "0nv5mdgrd075dpd8bc7h0xc5i95v0pkm0bfyq5rj6ii1s54dwcjl";
 
   propagatedBuildInputs = [ mathcomp.algebra ];

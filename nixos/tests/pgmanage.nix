@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ... } :
+import ./make-test-python.nix ({ pkgs, ... }:
 let
-  role     = "test";
+  role = "test";
   password = "secret";
-  conn     = "local";
+  conn = "local";
 in
 {
   name = "pgmanage";

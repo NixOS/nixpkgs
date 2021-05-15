@@ -11,9 +11,9 @@ stdenv.mkDerivation ({
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
+  configureFlags = [ "-no-tk" "-x11lib" xlibsWrapper ];
   buildFlags = [ "world" "bootstrap" "world.opt" ];
-  buildInputs = [xlibsWrapper ncurses];
+  buildInputs = [ xlibsWrapper ncurses ];
   installTargets = "install installopt";
   patchPhase = ''
     CAT=$(type -tp cat)

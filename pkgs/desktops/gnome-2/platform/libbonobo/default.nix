@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, flex, bison, pkg-config, glib, libxml2, popt
-, intltool, ORBit2, procps }:
+{ stdenv
+, fetchurl
+, flex
+, bison
+, pkg-config
+, glib
+, libxml2
+, popt
+, intltool
+, ORBit2
+, procps
+}:
 
 stdenv.mkDerivation rec {
   name = "libbonobo-${minVer}.1";

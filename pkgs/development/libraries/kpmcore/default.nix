@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt, qtbase
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, extra-cmake-modules
+, qca-qt5
+, kauth
+, kio
+, polkit-qt
+, qtbase
 , util-linux
 }:
 

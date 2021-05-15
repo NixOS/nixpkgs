@@ -23,7 +23,8 @@ buildPythonPackage rec {
     sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
   };
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       # Can be removed in next release after 0.7.1
       # See https://github.com/astropy/reproject/issues/246
       url = "https://github.com/astropy/reproject/pull/243.patch";

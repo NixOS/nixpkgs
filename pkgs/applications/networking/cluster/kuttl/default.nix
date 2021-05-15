@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   name = "kuttl";
@@ -7,9 +7,9 @@ buildGoModule rec {
   cli = "kubectl-kuttl";
 
   src = fetchFromGitHub {
-    owner  = "kudobuilder";
-    repo   = "kuttl";
-    rev    = "v${version}";
+    owner = "kudobuilder";
+    repo = "kuttl";
+    rev = "v${version}";
     sha256 = "sha256:1cji0py2340mvcpplwq3licdkzjx7q5f27fdjjxvbhrgksnyw6hs";
   };
 

@@ -6,11 +6,12 @@ let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
   settingsFile = "${dataDir}/config.json";
 
-in {
+in
+{
   options = {
     services.mautrix-telegram = {
       enable = mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
@@ -21,7 +22,7 @@ in {
         default = {
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
-            database_opts = {};
+            database_opts = { };
             hostname = "0.0.0.0";
             port = 8080;
             address = "http://localhost:${toString port}";
@@ -30,8 +31,8 @@ in {
           bridge = {
             permissions."*" = "relaybot";
             relaybot.whitelist = [ ];
-            double_puppet_server_map = {};
-            login_shared_secret_map = {};
+            double_puppet_server_map = { };
+            login_shared_secret_map = { };
           };
 
           logging = {

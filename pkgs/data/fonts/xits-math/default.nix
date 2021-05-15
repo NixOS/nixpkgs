@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages}:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "xits-math";

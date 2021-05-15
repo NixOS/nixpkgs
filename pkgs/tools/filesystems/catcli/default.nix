@@ -1,7 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildPythonApplication
-, docopt, anytree
+, docopt
+, anytree
 }:
 
 buildPythonApplication rec {

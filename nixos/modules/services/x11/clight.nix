@@ -7,11 +7,11 @@ let
 
   toConf = v:
     if builtins.isFloat v then toString v
-    else if isInt v       then toString v
-    else if isBool v      then boolToString v
-    else if isString v    then ''"${escape [''"''] v}"''
-    else if isList v      then "[ " + concatMapStringsSep ", " toConf v + " ]"
-    else if isAttrs v     then "\n{\n" + convertAttrs v + "\n}"
+    else if isInt v then toString v
+    else if isBool v then boolToString v
+    else if isString v then ''"${escape [''"''] v}"''
+    else if isList v then "[ " + concatMapStringsSep ", " toConf v + " ]"
+    else if isAttrs v then "\n{\n" + convertAttrs v + "\n}"
     else abort "clight.toConf: unexpected type (v = ${v})";
 
   getSep = v:
@@ -26,7 +26,8 @@ let
     (filterAttrs
       (_: value: value != null)
       cfg.settings));
-in {
+in
+{
   options.services.clight = {
     enable = mkOption {
       type = types.bool;
@@ -55,19 +56,21 @@ in {
       };
     };
 
-    settings = let
-      validConfigTypes = with types; oneOf [ int str bool float ];
-      collectionTypes = with types; oneOf [ validConfigTypes (listOf validConfigTypes) ];
-    in mkOption {
-      type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
-      default = {};
-      example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
-      description = ''
-        Additional configuration to extend clight.conf. See
-        <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
-        sample configuration file.
-      '';
-    };
+    settings =
+      let
+        validConfigTypes = with types; oneOf [ int str bool float ];
+        collectionTypes = with types; oneOf [ validConfigTypes (listOf validConfigTypes) ];
+      in
+      mkOption {
+        type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
+        default = { };
+        example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
+        description = ''
+          Additional configuration to extend clight.conf. See
+          <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
+          sample configuration file.
+        '';
+      };
   };
 
   config = mkIf cfg.enable {

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, m4, perl, xz}:
+{ lib, stdenv, fetchurl, m4, perl, xz }:
 
 stdenv.mkDerivation rec {
   name = "autoconf-2.13";

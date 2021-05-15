@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python, which
-, libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, pkg-config
+, libixp_hg
+, txt2tags
+, dash
+, python
+, which
+, libX11
+, libXrender
+, libXext
+, libXinerama
+, libXrandr
+, libXft
+}:
 
 stdenv.mkDerivation rec {
   rev = "2823";
@@ -30,8 +45,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ libixp_hg txt2tags dash python which
-                  libX11 libXrender libXext libXinerama libXrandr libXft ];
+  buildInputs = [
+    libixp_hg
+    txt2tags
+    dash
+    python
+    which
+    libX11
+    libXrender
+    libXext
+    libXinerama
+    libXrandr
+    libXft
+  ];
 
   # For some reason including mercurial in buildInputs did not help
   makeFlags = [ "WMII_HGVERSION=hg${rev}" ];

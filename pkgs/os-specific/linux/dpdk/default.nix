@@ -1,15 +1,28 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , kernel
 , fetchurl
-, pkg-config, meson, ninja
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
-, doxygen, python3
-, shared ? false }:
+, pkg-config
+, meson
+, ninja
+, libbsd
+, numactl
+, libbpf
+, zlib
+, libelf
+, jansson
+, openssl
+, libpcap
+, doxygen
+, python3
+, shared ? false
+}:
 
 let
   mod = kernel != null;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
   version = "20.05";
 
@@ -69,7 +82,7 @@ in stdenv.mkDerivation rec {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej ];
   };
 }

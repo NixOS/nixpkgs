@@ -10,7 +10,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    logilab_common six
+    logilab_common
+    six
   ];
 
 

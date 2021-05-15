@@ -10,10 +10,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses ];
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/mbert/elvis/commit/076cf4ad5cc993be0c6195ec0d5d57e5ad8ac1eb.patch";
-    sha256 = "0yzkc1mxjwg09mfmrk20ksa0vfnb2x83ndybwvawq4xjm1qkcahc";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mbert/elvis/commit/076cf4ad5cc993be0c6195ec0d5d57e5ad8ac1eb.patch";
+      sha256 = "0yzkc1mxjwg09mfmrk20ksa0vfnb2x83ndybwvawq4xjm1qkcahc";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace configure \

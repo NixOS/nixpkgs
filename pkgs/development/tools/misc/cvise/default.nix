@@ -1,6 +1,15 @@
-{ lib, buildPythonApplication, fetchFromGitHub, cmake, flex
-, clang-unwrapped, llvm, unifdef
-, pebble, psutil, pytestCheckHook, pytest-flake8
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, cmake
+, flex
+, clang-unwrapped
+, llvm
+, unifdef
+, pebble
+, psutil
+, pytestCheckHook
+, pytest-flake8
 }:
 
 buildPythonApplication rec {

@@ -1,6 +1,11 @@
 { lib
-, buildPythonPackage, fetchPypi
-, numpy, scipy, cython, six, decorator
+, buildPythonPackage
+, fetchPypi
+, numpy
+, scipy
+, cython
+, six
+, decorator
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   pname = "pyodbc";
   version = "4.0.30";
-  disabled = isPyPy;  # use pypypdbc instead
+  disabled = isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;

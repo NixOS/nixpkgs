@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeDesktopItem
 
-# Common run-time dependencies
+  # Common run-time dependencies
 , zlib
 
-# libxul run-time dependencies
+  # libxul run-time dependencies
 , atk
 , cairo
 , dbus
@@ -27,13 +28,13 @@
 , libpulseaudio
 , apulse
 
-# Media support (implies audio support)
+  # Media support (implies audio support)
 , mediaSupport ? true
 , ffmpeg
 
 , gmp
 
-# Wrapper runtime
+  # Wrapper runtime
 , coreutils
 , glibcLocales
 , gnome
@@ -41,16 +42,16 @@
 , shared-mime-info
 , gsettings-desktop-schemas
 
-# Hardening
+  # Hardening
 , graphene-hardened-malloc
-# crashes with intel driver
+  # crashes with intel driver
 , useHardenedMalloc ? false
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
+  # Whether to disable multiprocess support to work around crashing tabs
+  # TODO: fix the underlying problem instead of this terrible work-around
 , disableContentSandbox ? true
 
-# Extra preferences
+  # Extra preferences
 , extraPrefs ? ""
 }:
 
@@ -403,7 +404,7 @@ stdenv.mkDerivation rec {
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 cap KarlJoad ];
     mainProgram = "tor-browser";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

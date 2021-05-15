@@ -7,17 +7,18 @@ let
   cfg = config.services.ntopng;
   redisCfg = config.services.redis;
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "ntopng.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "ntopng.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "ntopng.conf" ''
-      ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
-      --http-port=${toString cfg.http-port}
-      --redis=localhost:${toString redisCfg.port}
-      ${cfg.extraConfig}
-    '';
+      pkgs.writeText "ntopng.conf" ''
+        ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
+        --http-port=${toString cfg.http-port}
+        --redis=localhost:${toString redisCfg.port}
+        ${cfg.extraConfig}
+      '';
 
 in
 

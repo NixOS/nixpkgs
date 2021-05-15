@@ -8,8 +8,8 @@
 }:
 
 /*
-To use aditional parts libraries
-set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
+  To use aditional parts libraries
+  set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
 let

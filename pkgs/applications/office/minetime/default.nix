@@ -12,7 +12,7 @@ let
     inherit name;
     src = appimage;
   };
-  patched = runCommandNoCC "minetime-patchelf" {} ''
+  patched = runCommandNoCC "minetime-patchelf" { } ''
     cp -av ${extracted} $out
 
     x=$out/resources/app.asar.unpacked/services/scheduling/dist/MinetimeSchedulingService

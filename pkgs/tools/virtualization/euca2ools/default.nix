@@ -2,7 +2,8 @@
 
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;
-in buildPythonApplication {
+in
+buildPythonApplication {
   pname = "euca2ools";
   version = "2.1.4";
 

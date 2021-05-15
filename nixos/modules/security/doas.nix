@@ -69,7 +69,7 @@ in
     };
 
     extraRules = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Define specific rules to be set in the
         <filename>/etc/doas.conf</filename> file. More specific rules should
@@ -151,7 +151,7 @@ in
 
             setEnv = mkOption {
               type = with types; listOf str;
-              default = [];
+              default = [ ];
               description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
@@ -170,13 +170,13 @@ in
 
             users = mkOption {
               type = with types; listOf (either str int);
-              default = [];
+              default = [ ];
               description = "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
-              default = [];
+              default = [ ];
               description = "The groups / GIDs this rule should apply for.";
             };
 

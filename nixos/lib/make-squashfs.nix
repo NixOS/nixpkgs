@@ -1,8 +1,10 @@
-{ stdenv, squashfsTools, closureInfo
+{ stdenv
+, squashfsTools
+, closureInfo
 
 , # The root directory of the squashfs filesystem is filled with the
   # closures of the Nix store paths listed here.
-  storeContents ? []
+  storeContents ? [ ]
 , # Compression parameters.
   # For zstd compression you can use "zstd -Xcompression-level 6".
   comp ? "xz -Xdict-size 100%"

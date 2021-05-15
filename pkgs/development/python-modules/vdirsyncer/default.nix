@@ -27,7 +27,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    click click-log click-threading
+    click
+    click-log
+    click-threading
     requests_toolbelt
     requests
     requests_oauthlib # required for google oauth sync

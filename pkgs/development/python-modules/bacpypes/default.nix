@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub
-, wheel, pytestCheckHook, pytestrunner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchFromGitHub
+, wheel
+, pytestCheckHook
+, pytestrunner
+}:
 
 buildPythonPackage rec {
   version = "0.18.1";

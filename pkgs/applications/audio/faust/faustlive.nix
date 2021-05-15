@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvm
+, qt48Full
+, qrencode
+, libmicrohttpd_0_9_70
+, libjack2
+, alsaLib
+, faust
+, curl
+, bc
+, coreutils
+, which
+, libsndfile
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +28,19 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd_0_9_70 libjack2 alsaLib faust curl
-    bc coreutils which libsndfile pkg-config
+    llvm
+    qt48Full
+    qrencode
+    libmicrohttpd_0_9_70
+    libjack2
+    alsaLib
+    faust
+    curl
+    bc
+    coreutils
+    which
+    libsndfile
+    pkg-config
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

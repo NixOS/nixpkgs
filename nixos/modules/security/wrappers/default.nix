@@ -7,7 +7,7 @@ let
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? program then v else v // {program=n;}))
+      (n: v: (if v ? program then v else v // { program = n; }))
       wrappers);
 
   securityWrapper = pkgs.callPackage ./wrapper.nix {
@@ -19,35 +19,35 @@ let
     { program
     , capabilities
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , permissions ? "u+rx,g+x,o+x"
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
-    ''
-      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "${source}" > $wrapperDir/${program}.real
+      assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
+      ''
+        cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
+        echo -n "${source}" > $wrapperDir/${program}.real
 
-      # Prevent races
-      chmod 0000 $wrapperDir/${program}
-      chown ${owner}.${group} $wrapperDir/${program}
+        # Prevent races
+        chmod 0000 $wrapperDir/${program}
+        chown ${owner}.${group} $wrapperDir/${program}
 
-      # Set desired capabilities on the file plus cap_setpcap so
-      # the wrapper program can elevate the capabilities set on
-      # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
+        # Set desired capabilities on the file plus cap_setpcap so
+        # the wrapper program can elevate the capabilities set on
+        # its file into the Ambient set.
+        ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
 
-      # Set the executable bit
-      chmod ${permissions} $wrapperDir/${program}
-    '';
+        # Set the executable bit
+        chmod ${permissions} $wrapperDir/${program}
+      '';
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
     { program
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , setuid ? false
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
@@ -66,24 +66,30 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? capabilities)
-          then mkSetcapProgram
-                 ({ owner = "root";
-                    group = "root";
-                  } // s)
-          else if
-             (s ? setuid && s.setuid) ||
-             (s ? setgid && s.setgid) ||
-             (s ? permissions)
-          then mkSetuidProgram s
-          else mkSetuidProgram
-                 ({ owner  = "root";
-                    group  = "root";
-                    setuid = true;
-                    setgid = false;
-                    permissions = "u+rx,g+x,o+x";
-                  } // s)
-      ) programs;
+      (s:
+        if (s ? capabilities)
+        then
+          mkSetcapProgram
+            ({
+              owner = "root";
+              group = "root";
+            } // s)
+        else if
+          (s ? setuid && s.setuid) ||
+          (s ? setgid && s.setgid) ||
+          (s ? permissions)
+        then mkSetuidProgram s
+        else
+          mkSetuidProgram
+            ({
+              owner = "root";
+              group = "root";
+              setuid = true;
+              setgid = false;
+              permissions = "u+rx,g+x,o+x";
+            } // s)
+      )
+      programs;
 in
 {
   imports = [
@@ -96,7 +102,7 @@ in
   options = {
     security.wrappers = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
       example = lib.literalExample
         ''
           { sendmail.source = "/nix/store/.../bin/sendmail";
@@ -138,9 +144,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overriden.

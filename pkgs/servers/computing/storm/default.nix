@@ -1,8 +1,13 @@
-{ stdenv, lib, fetchurl, zip, unzip
-, jdk, python
+{ stdenv
+, lib
+, fetchurl
+, zip
+, unzip
+, jdk
+, python
 , confFile ? ""
-, extraLibraryPaths ? []
-, extraJars ? []
+, extraLibraryPaths ? [ ]
+, extraJars ? [ ]
 }:
 
 stdenv.mkDerivation rec {

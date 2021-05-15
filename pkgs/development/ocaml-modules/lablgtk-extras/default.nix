@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with lib.maintainers; [ vbgl ];
     homepage = "http://gtk-extras.forge.ocamlcore.org/";
     description = "A collection of libraries and modules useful when developing OCaml/LablGtk2 applications";

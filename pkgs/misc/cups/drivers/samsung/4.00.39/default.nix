@@ -17,7 +17,8 @@
 # to see what will break when upgrading. Consider a new versioned attribute.
 let
   cups' = lib.getLib cups;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "samsung-UnifiedLinuxDriver";
   version = "4.00.39";
 
@@ -39,6 +40,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.samsung.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    broken = true;   # libscmssc.so and libmfp.so can't find their library dependencies at run-time
+    broken = true; # libscmssc.so and libmfp.so can't find their library dependencies at run-time
   };
 }

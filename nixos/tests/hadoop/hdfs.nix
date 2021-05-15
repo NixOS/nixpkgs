@@ -1,6 +1,6 @@
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ ... }: {
   nodes = {
-    namenode = {pkgs, ...}: {
+    namenode = { pkgs, ... }: {
       services.hadoop = {
         package = pkgs.hadoop_3_1;
         hdfs.namenode.enabled = true;
@@ -18,7 +18,7 @@ import ../make-test-python.nix ({...}: {
         8020 # namenode.rpc-address
       ];
     };
-    datanode = {pkgs, ...}: {
+    datanode = { pkgs, ... }: {
       services.hadoop = {
         package = pkgs.hadoop_3_1;
         hdfs.datanode.enabled = true;

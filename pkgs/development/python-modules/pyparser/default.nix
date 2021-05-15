@@ -1,4 +1,6 @@
-{ buildPythonPackage, lib, fetchFromBitbucket
+{ buildPythonPackage
+, lib
+, fetchFromBitbucket
 , parse
 }:
 

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi,
-  m2r, setuptools_scm, six, attrs }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, m2r
+, setuptools_scm
+, six
+, attrs
+}:
 
 buildPythonPackage rec {
   version = "20.2.0";

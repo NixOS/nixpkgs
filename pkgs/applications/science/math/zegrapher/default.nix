@@ -1,8 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , qmake
 , wrapQtAppsHook
-, boost }:
+, boost
+}:
 
 stdenv.mkDerivation rec {
   pname = "zegrapher";

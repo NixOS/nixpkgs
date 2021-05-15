@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
-, stompclient, python-daemon, redis, pid, pytest, six, click, coverage
-, sqlalchemy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, stompclient
+, python-daemon
+, redis
+, pid
+, pytest
+, six
+, click
+, coverage
+, sqlalchemy
+}:
 
 buildPythonPackage rec {
   pname = "CoilMQ";

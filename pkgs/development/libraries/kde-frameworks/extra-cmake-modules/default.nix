@@ -7,7 +7,7 @@ mkDerivation {
     ./nix-lib-path.patch
   ];
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = [ "out" ]; # this package has no runtime components
 
   propagatedBuildInputs = [ cmake pkg-config ];
 

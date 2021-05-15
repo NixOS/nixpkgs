@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   pname = "arduino-mk";
 
   src = fetchFromGitHub {
-    owner  = "sudar";
-    repo   = "Arduino-Makefile";
-    rev    = version;
+    owner = "sudar";
+    repo = "Arduino-Makefile";
+    rev = version;
     sha256 = "0flpl97d2231gp51n3y4qvf3y1l8xzafi1sgpwc305vwc2h4dl2x";
   };
 

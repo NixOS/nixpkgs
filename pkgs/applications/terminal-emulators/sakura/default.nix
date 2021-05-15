@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
 , pkg-config
@@ -46,5 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ astsmtl codyopel AndersonTorres ];
     platforms = platforms.linux;
- };
+  };
 }

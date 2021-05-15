@@ -1,13 +1,22 @@
-{ lib, stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkg-config, perl, texinfo, yasm
-/*
- *  Licensing options (yes some are listed twice, filters and such are not listed)
- */
+{ lib
+, stdenv
+, ffmpeg
+, addOpenGLRunpath
+, fetchurl
+, fetchpatch
+, pkg-config
+, perl
+, texinfo
+, yasm
+  /*
+   *  Licensing options (yes some are listed twice, filters and such are not listed)
+   */
 , gplLicensing ? true # GPL: fdkaac,openssl,frei0r,cdio,samba,utvideo,vidstab,x265,x265,xavs,avid,zvbi,x11grab
 , version3Licensing ? true # (L)GPL3: libvmaf,opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
 , nonfreeLicensing ? false # NONFREE: openssl,fdkaac,blackmagic-design-desktop-video
-/*
- *  Build options
- */
+  /*
+   *  Build options
+   */
 , smallBuild ? false # Optimize for size instead of speed
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime (disable to compile natively)
 , grayBuild ? true # Full grayscale support
@@ -18,16 +27,16 @@
 , networkBuild ? true # Network support
 , pixelutilsBuild ? true # Pixel utils in libavutil
 , enableLto ? false # build with link-time optimization
-/*
- *  Program options
- */
+  /*
+   *  Program options
+   */
 , ffmpegProgram ? true # Build ffmpeg executable
 , ffplayProgram ? true # Build ffplay executable
 , ffprobeProgram ? true # Build ffprobe executable
 , qtFaststartProgram ? true # Build qt-faststart executable
-/*
- *  Library options
- */
+  /*
+   *  Library options
+   */
 , avcodecLibrary ? true # Build avcodec library
 , avdeviceLibrary ? true # Build avdevice library
 , avfilterLibrary ? true # Build avfilter library
@@ -37,25 +46,26 @@
 , postprocLibrary ? true # Build postproc library
 , swresampleLibrary ? true # Build swresample library
 , swscaleLibrary ? true # Build swscale library
-/*
- *  Documentation options
- */
+  /*
+   *  Documentation options
+   */
 , htmlpagesDocumentation ? false # HTML documentation pages
 , manpagesDocumentation ? true # Man documentation pages
 , podpagesDocumentation ? false # POD documentation pages
 , txtpagesDocumentation ? false # Text documentation pages
-/*
- *  External libraries options
- */
+  /*
+   *  External libraries options
+   */
 , alsaLib ? null # Alsa in/output support
-#, avisynth ? null # Support for reading AviSynth scripts
+  #, avisynth ? null # Support for reading AviSynth scripts
 , bzip2 ? null
 , celt ? null # CELT decoder
-#, crystalhd ? null # Broadcom CrystalHD hardware acceleration
+  #, crystalhd ? null # Broadcom CrystalHD hardware acceleration
 , dav1d ? null # AV1 decoder (focused on speed and correctness)
-#, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
-, fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
-#, flite ? null # Flite (voice synthesis) support
+  #, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
+, fdkaacExtlib ? false
+, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
+  #, flite ? null # Flite (voice synthesis) support
 , fontconfig ? null # Needed for drawtext filter
 , freetype ? null # Needed for drawtext filter
 , frei0r ? null # frei0r video filtering
@@ -63,7 +73,7 @@
 , game-music-emu ? null # Game Music Emulator
 , gnutls ? null
 , gsm ? null # GSM de/encoder
-#, ilbc ? null # iLBC de/encoder
+  #, ilbc ? null # iLBC de/encoder
 , libjack2 ? null # Jack audio (only version 2 is supported in this build)
 , ladspaH ? null # LADSPA audio filtering
 , lame ? null # LAME MP3 encoder
@@ -72,14 +82,15 @@
 , libbluray ? null # BluRay reading
 , libbs2b ? null # bs2b DSP library
 , libcaca ? null # Textual display (ASCII art)
-#, libcdio-paranoia ? null # Audio CD grabbing
-, libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
+  #, libcdio-paranoia ? null # Audio CD grabbing
+, libdc1394 ? null
+, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
 , libiconv ? null
-#, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
+  #, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
 , libmfx ? null # Hardware acceleration vis libmfx
 , libmodplug ? null # ModPlug support
 , libmysofa ? null # HRTF support via SOFAlizer
-#, libnut ? null # NUT (de)muxer, native (de)muser exists
+  #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
 , librsvg ? null # SVG protocol
@@ -100,31 +111,35 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , xz ? null # xz-utils
-, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64
+, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
-#, opencl ? null # OpenCL code
+  #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
-#, opencv ? null # Video filtering
-, openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
-#, openh264 ? null # H.264/AVC encoder
+  #, opencv ? null # Video filtering
+, openglExtlib ? false
+, libGL ? null
+, libGLU ? null # OpenGL rendering
+  #, openh264 ? null # H.264/AVC encoder
 , openjpeg ? null # JPEG 2000 de/encoder
-, opensslExtlib ? false, openssl ? null
+, opensslExtlib ? false
+, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
 , rav1e ? null # AV1 encoder (focused on speed and safety)
 , svt-av1 ? null # AV1 encoder/decoder (focused on speed and correctness)
 , rtmpdump ? null # RTMP[E] support
-#, libquvi ? null # Quvi input support
+  #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
-#, schroedinger ? null # Dirac de/encoder
+  #, schroedinger ? null # Dirac de/encoder
 , SDL2 ? null
-#, shine ? null # Fixed-point MP3 encoder
+  #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
 , srt ? null # Secure Reliable Transport (SRT) protocol
-#, twolame ? null # MP2 encoder
-#, utvideo ? null # Ut Video de/encoder
+  #, twolame ? null # MP2 encoder
+  #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
-#, vo-aacenc ? null # AAC encoder
+  #, vo-aacenc ? null # AAC encoder
 , vo-amrwbenc ? null # AMR-WB encoder
 , wavpack ? null # Wavpack encoder
 , x264 ? null # H.264/AVC encoder
@@ -133,18 +148,22 @@
 , xvidcore ? null # Xvid encoder, native encoder exists
 , zeromq4 ? null # Message passing
 , zlib ? null
-#, zvbi ? null # Teletext support
-/*
- *  Developer options
- */
+  #, zvbi ? null # Teletext support
+  /*
+   *  Developer options
+   */
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
 , strippingDeveloper ? false
-/*
- *  Darwin frameworks
- */
-, Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
+  /*
+   *  Darwin frameworks
+   */
+, Cocoa
+, CoreAudio
+, CoreServices
+, AVFoundation
+, MediaToolbox
 , VideoDecodeAcceleration
 }:
 
@@ -187,9 +206,9 @@ let
   inherit (lib) optional optionals optionalString enableFeature;
 in
 
-/*
- *  Licensing dependencies
- */
+  /*
+   *  Licensing dependencies
+   */
 assert version3Licensing -> gplLicensing;
 assert nonfreeLicensing -> gplLicensing && version3Licensing;
 /*
@@ -205,22 +224,22 @@ assert isDarwin -> !nvenc;
  *  Program dependencies
  */
 assert ffmpegProgram -> avcodecLibrary
-                     && avfilterLibrary
-                     && avformatLibrary
-                     && swresampleLibrary;
+  && avfilterLibrary
+  && avformatLibrary
+  && swresampleLibrary;
 assert ffplayProgram -> avcodecLibrary
-                     && avformatLibrary
-                     && swscaleLibrary
-                     && swresampleLibrary
-                     && SDL2 != null;
+  && avformatLibrary
+  && swscaleLibrary
+  && swresampleLibrary
+  && SDL2 != null;
 assert ffprobeProgram -> avcodecLibrary && avformatLibrary;
 /*
  *  Library dependencies
  */
 assert avcodecLibrary -> avutilLibrary; # configure flag since 0.6
 assert avdeviceLibrary -> avformatLibrary
-                       && avcodecLibrary
-                       && avutilLibrary; # configure flag since 0.6
+  && avcodecLibrary
+  && avutilLibrary; # configure flag since 0.6
 assert avformatLibrary -> avcodecLibrary && avutilLibrary; # configure flag since 0.6
 assert avresampleLibrary -> avutilLibrary;
 assert postprocLibrary -> avutilLibrary;
@@ -264,7 +283,7 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureFlags = [
     "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
@@ -288,13 +307,15 @@ stdenv.mkDerivation rec {
     (enableFeature swscaleAlphaBuild "swscale-alpha")
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
-    (if multithreadBuild then (
-       if isCygwin then
-         "--disable-pthreads --enable-w32threads"
-       else # Use POSIX threads by default
-         "--enable-pthreads --disable-w32threads")
-     else
-       "--disable-pthreads --disable-w32threads")
+    (if multithreadBuild then
+      (
+        if isCygwin then
+          "--disable-pthreads --enable-w32threads"
+        else # Use POSIX threads by default
+          "--enable-pthreads --disable-w32threads"
+      )
+    else
+      "--disable-pthreads --disable-w32threads")
     "--disable-os2threads" # We don't support OS/2
     (enableFeature networkBuild "network")
     (enableFeature pixelutilsBuild "pixelutils")
@@ -319,10 +340,11 @@ stdenv.mkDerivation rec {
     /*
      *  Documentation flags
      */
-    (enableFeature (htmlpagesDocumentation
-          || manpagesDocumentation
-          || podpagesDocumentation
-          || txtpagesDocumentation) "doc")
+    (enableFeature
+      (htmlpagesDocumentation
+        || manpagesDocumentation
+        || podpagesDocumentation
+        || txtpagesDocumentation) "doc")
     (enableFeature htmlpagesDocumentation "htmlpages")
     (enableFeature manpagesDocumentation "manpages")
     (enableFeature podpagesDocumentation "podpages")
@@ -347,7 +369,7 @@ stdenv.mkDerivation rec {
     (enableFeature (gnutls != null) "gnutls")
     (enableFeature (gsm != null) "libgsm")
     #(enableFeature (ilbc != null) "libilbc")
-    (enableFeature (ladspaH !=null) "ladspa")
+    (enableFeature (ladspaH != null) "ladspa")
     (enableFeature (lame != null) "libmp3lame")
     (enableFeature (libaom != null) "libaom")
     (enableFeature (libass != null) "libass")
@@ -428,22 +450,78 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
-    bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
-    libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
-    libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
-    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
-    zeromq4 zlib
+    bzip2
+    celt
+    dav1d
+    fontconfig
+    freetype
+    frei0r
+    fribidi
+    game-music-emu
+    gnutls
+    gsm
+    libjack2
+    ladspaH
+    lame
+    libaom
+    libass
+    libbluray
+    libbs2b
+    libcaca
+    libdc1394
+    libmodplug
+    libmysofa
+    libogg
+    libopus
+    librsvg
+    libssh
+    libtheora
+    libvdpau
+    libvorbis
+    libvpx
+    libwebp
+    libX11
+    libxcb
+    libXv
+    libXext
+    xz
+    openal
+    openjpeg
+    libpulseaudio
+    rav1e
+    svt-av1
+    rtmpdump
+    opencore-amr
+    samba
+    SDL2
+    soxr
+    speex
+    srt
+    vid-stab
+    vo-amrwbenc
+    wavpack
+    x264
+    x265
+    xavs
+    xvidcore
+    zeromq4
+    zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
-    ++ optionals nonfreeLicensing [ fdk_aac openssl ]
-    ++ optional ((isLinux || isFreeBSD) && libva != null) libva
-    ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
-    ++ optional nvenc nv-codec-headers
-    ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
-                                   MediaToolbox VideoDecodeAcceleration
-                                   libiconv ];
+  ++ optionals nonfreeLicensing [ fdk_aac openssl ]
+  ++ optional ((isLinux || isFreeBSD) && libva != null) libva
+  ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
+  ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
+  ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
+  ++ optional nvenc nv-codec-headers
+  ++ optionals stdenv.isDarwin [
+    Cocoa
+    CoreServices
+    CoreAudio
+    AVFoundation
+    MediaToolbox
+    VideoDecodeAcceleration
+    libiconv
+  ];
 
   buildFlags = [ "all" ]
     ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable

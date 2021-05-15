@@ -486,15 +486,18 @@ rec {
 
   select = platform:
     # x86
-    /**/ if platform.isx86 then pc
+    /**/
+    if platform.isx86 then pc
 
     # ARM
-    else if platform.isAarch32 then let
-      version = platform.parsed.cpu.version or null;
-      in     if version == null then pc
-        else if lib.versionOlder version "6" then sheevaplug
-        else if lib.versionOlder version "7" then raspberrypi
-        else armv7l-hf-multiplatform
+    else if platform.isAarch32 then
+      let
+        version = platform.parsed.cpu.version or null;
+      in
+      if version == null then pc
+      else if lib.versionOlder version "6" then sheevaplug
+      else if lib.versionOlder version "7" then raspberrypi
+      else armv7l-hf-multiplatform
     else if platform.isAarch64 then aarch64-multiplatform
 
     else if platform.isRiscV then riscv-multiplatform

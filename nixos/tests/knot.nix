@@ -1,27 +1,27 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   common = {
     networking.firewall.enable = false;
     networking.useDHCP = false;
   };
   exampleZone = pkgs.writeTextDir "example.com.zone" ''
-      @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
-      @       NS      ns1
-      @       NS      ns2
-      ns1     A       192.168.0.1
-      ns1     AAAA    fd00::1
-      ns2     A       192.168.0.2
-      ns2     AAAA    fd00::2
-      www     A       192.0.2.1
-      www     AAAA    2001:DB8::1
-      sub     NS      ns.example.com.
+    @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
+    @       NS      ns1
+    @       NS      ns2
+    ns1     A       192.168.0.1
+    ns1     AAAA    fd00::1
+    ns2     A       192.168.0.2
+    ns2     AAAA    fd00::2
+    www     A       192.0.2.1
+    www     AAAA    2001:DB8::1
+    sub     NS      ns.example.com.
   '';
   delegatedZone = pkgs.writeTextDir "sub.example.com.zone" ''
-      @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
-      @       NS      ns1.example.com.
-      @       NS      ns2.example.com.
-      @       A       192.0.2.2
-      @       AAAA    2001:DB8::2
+    @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
+    @       NS      ns1.example.com.
+    @       NS      ns2.example.com.
+    @       A       192.0.2.2
+    @       AAAA    2001:DB8::2
   '';
 
   knotZonesEnv = pkgs.buildEnv {
@@ -35,7 +35,8 @@ let
         algorithm: hmac-sha256
         secret: zOYgOgnzx3TGe5J5I/0kxd7gTcxXhLYMEq3Ek3fY37s=
   '';
-in {
+in
+{
   name = "knot";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
@@ -169,42 +170,44 @@ in {
     };
   };
 
-  testScript = { nodes, ... }: let
-    master4 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv4.addresses).address;
-    master6 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv6.addresses).address;
+  testScript = { nodes, ... }:
+    let
+      master4 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv4.addresses).address;
+      master6 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv6.addresses).address;
 
-    slave4 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv4.addresses).address;
-    slave6 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv6.addresses).address;
-  in ''
-    import re
+      slave4 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv4.addresses).address;
+      slave6 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv6.addresses).address;
+    in
+    ''
+      import re
 
-    start_all()
+      start_all()
 
-    client.wait_for_unit("network.target")
-    master.wait_for_unit("knot.service")
-    slave.wait_for_unit("knot.service")
-
-
-    def test(host, query_type, query, pattern):
-        out = client.succeed(f"khost -t {query_type} {query} {host}").strip()
-        client.log(f"{host} replied with: {out}")
-        assert re.search(pattern, out), f'Did not match "{pattern}"'
+      client.wait_for_unit("network.target")
+      master.wait_for_unit("knot.service")
+      slave.wait_for_unit("knot.service")
 
 
-    for host in ("${master4}", "${master6}", "${slave4}", "${slave6}"):
-        with subtest(f"Interrogate {host}"):
-            test(host, "SOA", "example.com", r"start of authority.*noc\.example\.com\.")
-            test(host, "A", "example.com", r"has no [^ ]+ record")
-            test(host, "AAAA", "example.com", r"has no [^ ]+ record")
+      def test(host, query_type, query, pattern):
+          out = client.succeed(f"khost -t {query_type} {query} {host}").strip()
+          client.log(f"{host} replied with: {out}")
+          assert re.search(pattern, out), f'Did not match "{pattern}"'
 
-            test(host, "A", "www.example.com", r"address 192.0.2.1$")
-            test(host, "AAAA", "www.example.com", r"address 2001:db8::1$")
 
-            test(host, "NS", "sub.example.com", r"nameserver is ns\d\.example\.com.$")
-            test(host, "A", "sub.example.com", r"address 192.0.2.2$")
-            test(host, "AAAA", "sub.example.com", r"address 2001:db8::2$")
+      for host in ("${master4}", "${master6}", "${slave4}", "${slave6}"):
+          with subtest(f"Interrogate {host}"):
+              test(host, "SOA", "example.com", r"start of authority.*noc\.example\.com\.")
+              test(host, "A", "example.com", r"has no [^ ]+ record")
+              test(host, "AAAA", "example.com", r"has no [^ ]+ record")
 
-            test(host, "RRSIG", "www.example.com", r"RR set signature is")
-            test(host, "DNSKEY", "example.com", r"DNSSEC key is")
-  '';
+              test(host, "A", "www.example.com", r"address 192.0.2.1$")
+              test(host, "AAAA", "www.example.com", r"address 2001:db8::1$")
+
+              test(host, "NS", "sub.example.com", r"nameserver is ns\d\.example\.com.$")
+              test(host, "A", "sub.example.com", r"address 192.0.2.2$")
+              test(host, "AAAA", "sub.example.com", r"address 2001:db8::2$")
+
+              test(host, "RRSIG", "www.example.com", r"RR set signature is")
+              test(host, "DNSKEY", "example.com", r"DNSSEC key is")
+    '';
 })

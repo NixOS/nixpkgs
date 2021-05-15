@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   versionMajor = "0.36";
   versionMinor = "3";
-  moduleName   = "vte";
+  moduleName = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 

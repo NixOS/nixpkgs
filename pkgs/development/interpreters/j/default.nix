@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, libedit
+, bc
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
     "unknown";
   variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
 
-  j64x="j${bits}${variant}";
+  j64x = "j${bits}${variant}";
 
   doCheck = true;
 

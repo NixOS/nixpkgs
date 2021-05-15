@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   pname = "theft";
 
   src = fetchFromGitHub {
-    owner  = "silentbicycle";
-    repo   = "theft";
-    rev    = "v${version}";
+    owner = "silentbicycle";
+    repo = "theft";
+    rev = "v${version}";
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C library for property-based testing";
-    homepage    = "https://github.com/silentbicycle/theft/";
-    platforms   = platforms.unix;
-    license     = licenses.isc;
+    homepage = "https://github.com/silentbicycle/theft/";
+    platforms = platforms.unix;
+    license = licenses.isc;
     maintainers = with maintainers; [ kquick thoughtpolice ];
   };
 }

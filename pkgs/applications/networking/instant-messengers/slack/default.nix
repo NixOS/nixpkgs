@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , dpkg
 , undmg
@@ -53,18 +54,20 @@ let
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
-  src = let
-    base = "https://downloads.slack-edge.com";
-  in {
-    x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = x86_64-darwin-sha256;
-    };
-    x86_64-linux = fetchurl {
-      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = x86_64-linux-sha256;
-    };
-  }.${system} or throwSystem;
+  src =
+    let
+      base = "https://downloads.slack-edge.com";
+    in
+      {
+        x86_64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+          sha256 = x86_64-darwin-sha256;
+        };
+        x86_64-linux = fetchurl {
+          url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+          sha256 = x86_64-linux-sha256;
+        };
+      }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Desktop client for Slack";
@@ -124,7 +127,7 @@ let
     ] + ":${stdenv.cc.cc.lib}/lib64";
 
     buildInputs = [
-      gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+      gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
     nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
@@ -177,6 +180,7 @@ let
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux

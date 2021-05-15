@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/luceneplusplus/LucenePlusPlus/"
-        + "archive/rel_${version}.tar.gz";
+      + "archive/rel_${version}.tar.gz";
     sha256 = "032yb35b381ifm7wb8cy2m3yndklnxyi5cgprjh48jqy641z46bc";
   };
 

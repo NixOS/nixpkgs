@@ -223,13 +223,14 @@ in
     /* If PAM *and* SSH are enabled, then don't do anything special.
     If PAM isn't used, set the default SSH-only options. */
     services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
-    if cfg.pam.enable then "UseDNS no" else ''
-      # Duo Security configuration
-      ForceCommand ${config.security.wrapperDir}/login_duo
-      PermitTunnel no
-      ${optionalString (!cfg.allowTcpForwarding) ''
-        AllowTcpForwarding no
-      ''}
-    '');
+      if cfg.pam.enable then "UseDNS no" else ''
+        # Duo Security configuration
+        ForceCommand ${config.security.wrapperDir}/login_duo
+        PermitTunnel no
+        ${optionalString (!cfg.allowTcpForwarding) ''
+          AllowTcpForwarding no
+        ''}
+      ''
+    );
   };
 }

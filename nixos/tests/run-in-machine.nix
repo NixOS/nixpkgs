@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -20,4 +20,5 @@ let
     "$output/bin/hello" > "$out"
   '';
 
-in test // { inherit test; } # To emulate behaviour of makeTest
+in
+test // { inherit test; } # To emulate behaviour of makeTest

@@ -1,5 +1,16 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, python3, bash, vala_0_48
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+{ lib
+, stdenv
+, pkg-config
+, fetchFromGitHub
+, python3
+, bash
+, vala_0_48
+, dockbarx
+, gtk2
+, xfce
+, pythonPackages
+, wafHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";

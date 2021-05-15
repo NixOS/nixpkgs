@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
-, python3, util-linux, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, gfortran
+, gnused
+, python3
+, util-linux
+, which
 
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 let
   version = "1.16.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libxsmm";
   inherit version;
 
@@ -30,13 +38,15 @@ in stdenv.mkDerivation {
 
   dontConfigure = true;
 
-  makeFlags = let
-    static = if enableStatic then "1" else "0";
-  in [
-    "OMP=1"
-    "PREFIX=$(out)"
-    "STATIC=${static}"
-  ];
+  makeFlags =
+    let
+      static = if enableStatic then "1" else "0";
+    in
+    [
+      "OMP=1"
+      "PREFIX=$(out)"
+      "STATIC=${static}"
+    ];
 
   prePatch = ''
     patchShebangs .

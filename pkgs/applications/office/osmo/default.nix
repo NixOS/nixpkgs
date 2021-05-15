@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk3, libxml2, gettext, libical, libnotify
-, libarchive, gspell, webkitgtk, libgringotts, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, libxml2
+, gettext
+, libical
+, libnotify
+, libarchive
+, gspell
+, webkitgtk
+, libgringotts
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "osmo";
@@ -11,8 +24,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
-  buildInputs = [ gtk3 libxml2 libical libnotify libarchive
-    gspell webkitgtk libgringotts ];
+  buildInputs = [
+    gtk3
+    libxml2
+    libical
+    libnotify
+    libarchive
+    gspell
+    webkitgtk
+    libgringotts
+  ];
 
   meta = with lib; {
     description = "A handy personal organizer";

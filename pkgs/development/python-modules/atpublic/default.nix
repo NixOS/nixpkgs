@@ -1,4 +1,8 @@
-{ lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
+{ lib
+, isPy3k
+, pythonOlder
+, fetchPypi
+, buildPythonPackage
 , pytest
 , pytestcov
 , sybil
@@ -20,7 +24,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest pytestcov sybil
+    pytest
+    pytestcov
+    sybil
   ];
 
   checkPhase = ''

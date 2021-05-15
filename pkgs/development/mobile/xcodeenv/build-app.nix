@@ -1,4 +1,4 @@
-{stdenv, lib, composeXcodeWrapper}:
+{ stdenv, lib, composeXcodeWrapper }:
 { name
 , src
 , sdkVersion ? "13.1"
@@ -30,12 +30,14 @@ let
 
   _target = if target == null then name else target;
 
-  _configuration = if configuration == null
+  _configuration =
+    if configuration == null
     then
       if release then "Release" else "Debug"
     else configuration;
 
-  _sdk = if sdk == null
+  _sdk =
+    if sdk == null
     then
       if release then "iphoneos" + sdkVersion else "iphonesimulator" + sdkVersion
     else sdk;
@@ -53,7 +55,7 @@ let
   extraArgs = removeAttrs args ([ "name" "scheme" "xcodeFlags" "release" "certificateFile" "certificatePassword" "provisioningProfile" "signMethod" "generateIPA" "generateXCArchive" "enableWirelessDistribution" "installURL" "bundleId" "version" ] ++ builtins.attrNames xcodewrapperFormalArgs);
 in
 stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
+  name = lib.replaceChars [ " " ] [ "" ] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
   buildPhase = ''
     # Be sure that the Xcode wrapper has priority over everything else.
     # When using buildInputs this does not seem to be the case.

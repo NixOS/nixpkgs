@@ -2,7 +2,8 @@
 
 let
   inherit (pythonPackages) python;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pyunbound";
   version = "1.9.3";
 
@@ -39,7 +40,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace _unbound.la \
       --replace "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}" \
       --replace "libdir=\'$PWD/${python.sitePackages}\'" "libdir=\'$out/${python.sitePackages}\'"
-    '';
+  '';
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf pyunbound-install lib" ];
 
@@ -52,7 +53,7 @@ in stdenv.mkDerivation rec {
     # We don't need anything else
     rm -fR $out/bin $out/share $out/include $out/etc/unbound
     patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so
-    '';
+  '';
 
   meta = with lib; {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";

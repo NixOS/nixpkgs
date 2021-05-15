@@ -1,6 +1,11 @@
 { fetchurl
-, base, back, gsmakeDerivation, gui, gorm
-, gnumake, gdb
+, base
+, back
+, gsmakeDerivation
+, gui
+, gorm
+, gnumake
+, gdb
 }:
 let
   version = "0.6.2";

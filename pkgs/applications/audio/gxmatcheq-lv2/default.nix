@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 xorgproto cairo lv2
+    xorg.libX11
+    xorgproto
+    cairo
+    lv2
   ];
 
   # error: format not a string literal and no format arguments [-Werror=format-security]

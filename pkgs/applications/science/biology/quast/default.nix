@@ -34,13 +34,13 @@ pythonPackages.buildPythonApplication rec {
       --prefix="$out"
   '';
 
-   postFixup = ''
-   for file in $(find $out -type f -type f -perm /0111); do
-       old_rpath=$(patchelf --print-rpath $file) && \
-       patchelf --set-rpath $old_rpath:${stdenv.cc.cc.lib}/lib $file || true
-   done
-   # Link to the master program
-   ln -s $out/bin/quast.py $out/bin/quast
+  postFixup = ''
+    for file in $(find $out -type f -type f -perm /0111); do
+        old_rpath=$(patchelf --print-rpath $file) && \
+        patchelf --set-rpath $old_rpath:${stdenv.cc.cc.lib}/lib $file || true
+    done
+    # Link to the master program
+    ln -s $out/bin/quast.py $out/bin/quast
   '';
 
   dontPatchELF = true;

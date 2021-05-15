@@ -88,13 +88,13 @@ let
   '';
 
   set_XDG_CONFIG_HOME = ''
-      # Set the default XDG_CONFIG_HOME if it is unset.
-      # Per the XDG Base Directory Specification:
-      # https://specifications.freedesktop.org/basedir-spec/latest
-      # 1. Never export this variable! If it is unset, then child processes are
-      # expected to set the default themselves.
-      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+    # Set the default XDG_CONFIG_HOME if it is unset.
+    # Per the XDG Base Directory Specification:
+    # https://specifications.freedesktop.org/basedir-spec/latest
+    # 1. Never export this variable! If it is unset, then child processes are
+    # expected to set the default themselves.
+    # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
   startplasma =
@@ -184,11 +184,13 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the Plasma 5 Desktop Environment.
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.plasma5.enable = true;
-      ''];
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the Plasma 5 Desktop Environment.
+          services.xserver.displayManager.sddm.enable = true;
+          services.xserver.desktopManager.plasma5.enable = true;
+        ''
+      ];
 
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -236,7 +238,7 @@ in
           kidletime
           kimageformats
           kinit
-          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
+          kirigami2 # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -301,7 +303,8 @@ in
           breeze-icons
           pkgs.hicolor-icon-theme
 
-          kde-gtk-config breeze-gtk
+          kde-gtk-config
+          breeze-gtk
 
           qtvirtualkeyboard
 

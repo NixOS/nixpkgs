@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
 , hwloc
@@ -16,13 +17,14 @@ let
   # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
   # AVX2_128 AVX_512 AVX_512_KNL MIC ARM_NEON ARM_NEON_ASIMD
   SIMD = x: if (cpuAcceleration != null) then x else
-    if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
-    if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
-    if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
-    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON" else
-    "None";
+  if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
+  if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
+  if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
+  if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON" else
+  "None";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gromacs";
   version = "2020.4";
 
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fftw perl hwloc ]
-  ++ (lib.optionals mpiEnabled [ mpi ]);
+    ++ (lib.optionals mpiEnabled [ mpi ]);
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"

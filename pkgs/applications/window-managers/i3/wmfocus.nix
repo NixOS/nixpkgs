@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, rustPlatform
-, xorg, python3, pkg-config, cairo, libxkbcommon }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, xorg
+, python3
+, pkg-config
+, cairo
+, libxkbcommon
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wmfocus";

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, openssl ? null, libpcap ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, openssl ? null
+, libpcap ? null
 }:
 
 with lib;

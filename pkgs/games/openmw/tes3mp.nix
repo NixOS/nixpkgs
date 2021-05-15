@@ -39,7 +39,8 @@ let
       sha256 = "1wk7jmwm55rhlqqcyvqsxdmwvl70bysl9azh4kd9n57qlmgk3zmw";
     };
   });
-in openmw.overrideAttrs (oldAttrs: rec {
+in
+openmw.overrideAttrs (oldAttrs: rec {
   version = "2019-11-19";
   name = "openmw-tes3mp-${version}";
 

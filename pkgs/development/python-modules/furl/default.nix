@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-     # see https://github.com/gruns/furl/issues/121
+    # see https://github.com/gruns/furl/issues/121
     "join"
   ];
 

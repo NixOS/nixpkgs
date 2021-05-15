@@ -17,10 +17,10 @@ buildGoModule rec {
 
   # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
   # postInstall = ''
-  # 	for shell in bash zsh; do
-  # 		$out/bin/kubespy completion $shell > kubespy.$shell
-  # 		installShellCompletion kubespy.$shell
-  # 	done
+  #   for shell in bash zsh; do
+  #     $out/bin/kubespy completion $shell > kubespy.$shell
+  #     installShellCompletion kubespy.$shell
+  #   done
   # '';
 
   meta = with lib; {

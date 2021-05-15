@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, python3}:
+{ lib, stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation {
   name = "doclifter-2.19";

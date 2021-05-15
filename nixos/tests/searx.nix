@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "searx";
@@ -18,16 +18,19 @@ import ./make-test-python.nix ({ pkgs, ...} :
       '';
 
       settings.server =
-        { port = "8080";
+        {
+          port = "8080";
           bind_address = "0.0.0.0";
           secret_key = "@SEARX_SECRET_KEY@";
         };
       settings.engines = [
-        { name = "wolframalpha";
+        {
+          name = "wolframalpha";
           api_key = "@WOLFRAM_API_KEY@";
           engine = "wolframalpha_api";
         }
-        { name = "startpage";
+        {
+          name = "startpage";
           shortcut = "start";
         }
       ];

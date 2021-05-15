@@ -1,16 +1,19 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , networkExpr
 }:
 
 let
-  nodes = builtins.mapAttrs (vm: module: {
-    _file = "${networkExpr}@node-${vm}";
-    imports = [ module ];
-  }) (import networkExpr);
+  nodes = builtins.mapAttrs
+    (vm: module: {
+      _file = "${networkExpr}@node-${vm}";
+      imports = [ module ];
+    })
+    (import networkExpr);
 in
 
-with import ../../../../lib/testing-python.nix {
+with import ../../../../lib/testing-python.nix
+{
   inherit system;
   pkgs = import ../../../../.. { inherit system config; };
 };

@@ -7,7 +7,7 @@ let
 
   src = fetchurl {
     url = "https://releases.radicle.xyz/radicle-upstream-${version}.AppImage";
-    sha256 =  "sha256-SL6plXZ+o7JchY/t/1702FK57fVjxllHqB8ZOma/43c=";
+    sha256 = "sha256-SL6plXZ+o7JchY/t/1702FK57fVjxllHqB8ZOma/43c=";
   };
 
   contents = appimageTools.extractType2 { inherit name src; };
@@ -28,8 +28,8 @@ let
 in
 
 # FIXME: a dependency of the `proxy` component of radicle-upstream (radicle-macros
-# v0.1.0) uses unstable rust features, making a from source build impossible at
-# this time. See this PR for discussion: https://github.com/NixOS/nixpkgs/pull/105674
+  # v0.1.0) uses unstable rust features, making a from source build impossible at
+  # this time. See this PR for discussion: https://github.com/NixOS/nixpkgs/pull/105674
 appimageTools.wrapType2 {
   inherit name src;
 

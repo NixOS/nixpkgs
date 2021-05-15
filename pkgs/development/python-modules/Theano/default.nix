@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -10,16 +11,18 @@
 , scipy
 , six
 , libgpuarray
-, cudaSupport ? false, cudatoolkit
-, cudnnSupport ? false, cudnn
+, cudaSupport ? false
+, cudatoolkit
+, cudnnSupport ? false
+, cudnn
 , nvidia_x11
 }:
 
 assert cudnnSupport -> cudaSupport;
 
 assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
-                   && cudnn != null;
+  && cudatoolkit != null
+  && cudnn != null;
 
 let
   wrapped = command: buildTop: buildInputs:
@@ -40,12 +43,13 @@ let
     if stdenv.cc.isClang then "clang++" else
     throw "Unknown C++ compiler";
   cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    lib.optional cudaSupport libgpuarray_
-      ++ lib.optional cudnnSupport cudnn );
+    (lib.optional cudaSupport libgpuarray_
+      ++ lib.optional cudnnSupport cudnn);
 
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "Theano";
   version = "1.0.5";
 

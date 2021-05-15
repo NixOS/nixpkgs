@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, lvm2, libgcrypt, libuuid, pkg-config, popt
-, enablePython ? true, python ? null
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libgcrypt
+, libuuid
+, pkg-config
+, popt
+, enablePython ? true
+, python ? null
 }:
 
 assert enablePython -> python != null;
@@ -22,11 +31,11 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--enable-cryptsetup-reencrypt" ]
-                ++ lib.optional enablePython "--enable-python";
+    ++ lib.optional enablePython "--enable-python";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lvm2 libgcrypt libuuid popt ]
-             ++ lib.optional enablePython python;
+    ++ lib.optional enablePython python;
 
   meta = with lib; {
     homepage = "http://code.google.com/p/cryptsetup/";

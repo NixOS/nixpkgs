@@ -1,10 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, extra-cmake-modules
+{ mkDerivation
+, lib
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
 , ki18n
 , kitemmodels
 , oathToolkit
 , qgpgme
 , plasma-framework
-, qt5 }:
+, qt5
+}:
 
 mkDerivation rec {
   pname = "plasma-pass";
@@ -18,7 +23,7 @@ mkDerivation rec {
     sha256 = "1w2mzxyrh17x7da62b6sg1n85vnh1q77wlrfxwfb1pk77y59rlf1";
   };
 
-  buildInputs  = [
+  buildInputs = [
     ki18n
     kitemmodels
     oathToolkit

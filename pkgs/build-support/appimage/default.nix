@@ -27,11 +27,12 @@ rec {
     ];
   };
 
-  extract = { name, src }: pkgs.runCommand "${name}-extracted" {
+  extract = { name, src }: pkgs.runCommand "${name}-extracted"
+    {
       buildInputs = [ appimage-exec ];
     } ''
-      appimage-exec.sh -x $out ${src}
-    '';
+    appimage-exec.sh -x $out ${src}
+  '';
 
   # for compatibility, deprecated
   extractType1 = extract;

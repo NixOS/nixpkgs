@@ -31,7 +31,7 @@ let
     ];
 
     meta = commonMeta // args.meta;
-  } // (removeAttrs args ["meta"]));
+  } // (removeAttrs args [ "meta" ]));
 
   utils = {
     msrtool = generic {
@@ -89,13 +89,16 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let
-        binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
+      postFixup =
+        let
+          binPath = [ coreutils acpica-tools iasl gnugrep gnused file ];
+        in
+        "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };
 
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = lib.attrValues utils;

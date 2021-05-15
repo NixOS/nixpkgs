@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k,
-  six, txaio, twisted, zope_interface, cffi,
-  mock, pytest, cryptography, pynacl
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, six
+, txaio
+, twisted
+, zope_interface
+, cffi
+, mock
+, pytest
+, cryptography
+, pynacl
 }:
 buildPythonPackage rec {
   pname = "autobahn";
@@ -27,8 +37,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio.";
-    homepage    = "https://crossbar.io/autobahn";
-    license     = licenses.mit;
+    homepage = "https://crossbar.io/autobahn";
+    license = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
   };
 }

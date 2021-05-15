@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "apache-felix";
@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1yk04q8rfbbabacbhmrsw5ywr96496x1cz4icdqimb1cfxixv1q0";
   };
   buildCommand =
-  ''
-    tar xfvz $src
-    cd felix-framework-*
-    mkdir -p $out
-    cp -av * $out
-  '';
+    ''
+      tar xfvz $src
+      cd felix-framework-*
+      mkdir -p $out
+      cp -av * $out
+    '';
   meta = with lib; {
     description = "An OSGi gateway";
     homepage = "https://felix.apache.org";

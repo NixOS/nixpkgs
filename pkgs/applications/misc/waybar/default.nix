@@ -14,15 +14,28 @@
 , scdoc
 , spdlog
 , gtk-layer-shell
-, howard-hinnant-date, cmake
-, traySupport  ? true,  libdbusmenu-gtk3
-, pulseSupport ? true,  libpulseaudio
-, sndioSupport ? true,  sndio
-, nlSupport    ? true,  libnl
-, udevSupport  ? true,  udev
-, swaySupport  ? true,  sway
-, mpdSupport   ? true,  libmpdclient
-, withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
+, howard-hinnant-date
+, cmake
+, traySupport ? true
+, libdbusmenu-gtk3
+, pulseSupport ? true
+, libpulseaudio
+, sndioSupport ? true
+, sndio
+, nlSupport ? true
+, libnl
+, udevSupport ? true
+, udev
+, swaySupport ? true
+, sway
+, mpdSupport ? true
+, libmpdclient
+, withMediaPlayer ? false
+, glib
+, gobject-introspection
+, python3
+, python38Packages
+, playerctl
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +50,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config scdoc wrapGAppsHook cmake
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wrapGAppsHook
+    cmake
   ] ++ lib.optional withMediaPlayer gobject-introspection;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
@@ -49,13 +67,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = with lib;
     [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
-    ++ optional  traySupport  libdbusmenu-gtk3
-    ++ optional  pulseSupport libpulseaudio
-    ++ optional  sndioSupport sndio
-    ++ optional  nlSupport    libnl
-    ++ optional  udevSupport  udev
-    ++ optional  swaySupport  sway
-    ++ optional  mpdSupport   libmpdclient;
+    ++ optional traySupport libdbusmenu-gtk3
+    ++ optional pulseSupport libpulseaudio
+    ++ optional sndioSupport sndio
+    ++ optional nlSupport libnl
+    ++ optional udevSupport udev
+    ++ optional swaySupport sway
+    ++ optional mpdSupport libmpdclient;
 
   mesonFlags = (lib.mapAttrsToList
     (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
@@ -73,11 +91,11 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = lib.optional withMediaPlayer ''
-      cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
+    cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
-      wrapProgram $out/bin/waybar-mediaplayer.py \
-        --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
-    '';
+    wrapProgram $out/bin/waybar-mediaplayer.py \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
+  '';
 
   meta = with lib; {
     description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";

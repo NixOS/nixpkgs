@@ -1,5 +1,15 @@
-{ lib, fetchFromGitHub, installShellFiles, rustPlatform, rustfmt, xorg
-, pkg-config, llvmPackages, clang, protobuf, python3 }:
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, rustPlatform
+, rustfmt
+, xorg
+, pkg-config
+, llvmPackages
+, clang
+, protobuf
+, python3
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";

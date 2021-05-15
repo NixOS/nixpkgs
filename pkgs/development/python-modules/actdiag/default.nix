@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, docutils, blockdiag, reportlab }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, docutils
+, blockdiag
+, reportlab
+}:
 
 buildPythonPackage rec {
   pname = "actdiag";

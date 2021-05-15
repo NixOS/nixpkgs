@@ -18,7 +18,8 @@ let
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.mit;
   };
-in {
+in
+{
 
   plik = buildGoModule {
     pname = "plik";

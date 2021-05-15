@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_tools
-, cstruct, ounit, mmap
+{ lib
+, buildDunePackage
+, fetchurl
+, ppx_cstruct
+, ppx_tools
+, cstruct
+, ounit
+, mmap
 }:
 
 buildDunePackage rec {

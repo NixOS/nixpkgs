@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, fonttools, fs, pyclipper, defcon, fontpens
-, setuptools_scm, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fonttools
+, fs
+, pyclipper
+, defcon
+, fontpens
+, setuptools_scm
+, pytest
 }:
 
 buildPythonPackage rec {

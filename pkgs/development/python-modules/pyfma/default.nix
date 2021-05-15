@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Fused multiply-add for Python";
     homepage = "https://github.com/nschloe/pyfma";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc];
+    maintainers = [ maintainers.costrouc ];
   };
 }

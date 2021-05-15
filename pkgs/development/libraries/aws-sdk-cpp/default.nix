@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
-, aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
-, CoreAudio, AudioToolbox
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, openssl
+, s2n-tls
+, zlib
+, aws-c-cal
+, aws-c-common
+, aws-c-event-stream
+, aws-c-io
+, aws-checksums
+, CoreAudio
+, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
-  apis ? ["*"]
+  apis ? [ "*" ]
 , # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true
 }:
@@ -25,12 +37,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
-    curl openssl s2n-tls zlib
-    aws-c-common aws-c-event-stream aws-checksums
-  ] ++ lib.optionals (stdenv.isDarwin &&
-                        ((builtins.elem "text-to-speech" apis) ||
-                         (builtins.elem "*" apis)))
-         [ CoreAudio AudioToolbox ];
+    curl
+    openssl
+    s2n-tls
+    zlib
+    aws-c-common
+    aws-c-event-stream
+    aws-checksums
+  ] ++ lib.optionals
+    (stdenv.isDarwin &&
+      ((builtins.elem "text-to-speech" apis) ||
+        (builtins.elem "*" apis)))
+    [ CoreAudio AudioToolbox ];
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-c-cal aws-c-io ];
@@ -43,7 +61,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTING=OFF"
     "-DCURL_HAS_H2=1"
     "-DCURL_HAS_TLS_PROXY=1"
-  ] ++ lib.optional (apis != ["*"])
+  ] ++ lib.optional (apis != [ "*" ])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
   # fix build with gcc9, can be removed after bumping to current version

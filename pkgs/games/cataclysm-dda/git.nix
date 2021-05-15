@@ -1,5 +1,12 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
+{ lib
+, callPackage
+, CoreFoundation
+, fetchFromGitHub
+, pkgs
+, wrapCDDA
+, attachPkgs
+, tiles ? true
+, Cocoa
 , debug ? false
 , useXdgDir ? false
 , version ? "2019-11-22"
@@ -28,7 +35,7 @@ let
 
     meta = common.meta // {
       maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ rardiol ];
+        common.meta.maintainers ++ [ rardiol ];
     };
   });
 in

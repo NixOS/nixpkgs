@@ -1,11 +1,45 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
-, qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
-, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
-# Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy
-, at-spi2-core, libXtst, libthai, libdatrie
+{ mkDerivation
+, lib
+, fetchurl
+, fetchpatch
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
+, removeReferencesTo
+, qtbase
+, qtimageformats
+, gtk3
+, libsForQt5
+, enchant2
+, lz4
+, xxHash
+, dee
+, ffmpeg
+, openalSoft
+, minizip
+, libopus
+, alsaLib
+, libpulseaudio
+, range-v3
+, tl-expected
+, hunspell
+, glibmm
+, webkitgtk
+  # Transitive dependencies:
+, pcre
+, xorg
+, util-linux
+, libselinux
+, libsepol
+, epoxy
+, at-spi2-core
+, libXtst
+, libthai
+, libdatrie
 , xdg-utils
 }:
 
@@ -19,13 +53,14 @@ with lib;
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix {};
+  tg_owt = callPackage ./tg_owt.nix { };
   webviewPatch = fetchpatch {
     url = "https://raw.githubusercontent.com/archlinux/svntogit-community/013eff77a13b6c2629a04e07a4d09dbe60c8ca48/trunk/fix-webview-includes.patch";
     sha256 = "0112zaysf3f02dd4bgqc5hwg66h1bfj8r4yjzb06sfi0pl9vl96l";
   };
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "telegram-desktop";
   version = "2.7.4";
 
@@ -50,13 +85,39 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
-    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    qtbase
+    qtimageformats
+    gtk3
+    libsForQt5.kwayland
+    libsForQt5.libdbusmenu
+    enchant2
+    lz4
+    xxHash
+    dee
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsaLib
+    libpulseaudio
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
-    at-spi2-core libXtst libthai libdatrie
+    pcre
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    util-linux
+    libselinux
+    libsepol
+    epoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
   ];
 
   cmakeFlags = [

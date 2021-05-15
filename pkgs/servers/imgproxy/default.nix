@@ -1,5 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection
-, stdenv, libunwind }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, vips
+, gobject-introspection
+, stdenv
+, libunwind
+}:
 
 buildGoModule rec {
   pname = "imgproxy";

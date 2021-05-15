@@ -23,4 +23,4 @@ buildLinux (args // {
     description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
   };
 
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

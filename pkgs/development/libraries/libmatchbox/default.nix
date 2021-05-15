@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg}:
+{ lib, stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "libmatchbox";

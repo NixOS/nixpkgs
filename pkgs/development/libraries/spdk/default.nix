@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , fetchpatch
@@ -18,7 +19,8 @@ let
     url = "https://review.spdk.io/gerrit/plugins/gitiles/spdk/spdk/+/6acb9a58755856fb9316baf9dbbb7239dc6b9446%5E%21/?format=TEXT";
     sha256 = "18q0956fkjw19r29hp16x4pygkfv01alj9cld2wlqqyfgp41nhn0";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "spdk";
   version = "20.04.1";
 
@@ -43,7 +45,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
+    cunit
+    dpdk
+    libaio
+    libbsd
+    libuuid
+    numactl
+    openssl
+    ncurses
   ];
 
   postPatch = ''
@@ -61,7 +70,7 @@ in stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
   };
 }

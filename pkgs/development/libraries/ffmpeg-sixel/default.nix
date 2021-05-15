@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel, yasm
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libsixel
+, yasm
 }:
 
 stdenv.mkDerivation {

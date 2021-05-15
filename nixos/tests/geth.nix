@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "geth";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [bachp ];
+    maintainers = with maintainers; [ bachp ];
   };
 
   machine = { ... }: {

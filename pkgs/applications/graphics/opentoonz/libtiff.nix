@@ -8,7 +8,8 @@
 
 { fetchFromGitHub, libtiff }:
 let source = import ./source.nix { inherit fetchFromGitHub; };
-in libtiff.overrideAttrs (old: {
+in
+libtiff.overrideAttrs (old: {
   inherit (source) src;
   version = source.versions.libtiff + "-opentoonz";
   postUnpack = (old.postUnpack or "") + ''

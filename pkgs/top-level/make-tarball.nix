@@ -4,7 +4,7 @@
 
 { nixpkgs
 , officialRelease
-, pkgs ? import nixpkgs.outPath {}
+, pkgs ? import nixpkgs.outPath { }
 , nix ? pkgs.nix
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
 }:

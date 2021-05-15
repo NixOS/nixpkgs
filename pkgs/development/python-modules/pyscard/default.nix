@@ -14,15 +14,16 @@ buildPythonPackage rec {
     sha256 = "0yap0p8mp6dx58n3nina6ryhc2cysaj75sq98wf3qybf33cxjr5k";
   };
 
-  postPatch = if withApplePCSC then ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
-                "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-  '' else ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "libpcsclite.so.1" \
-                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-  '';
+  postPatch =
+    if withApplePCSC then ''
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
+                  "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+    '' else ''
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "libpcsclite.so.1" \
+                  "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
     "-I ${lib.getDev pcsclite}/include/PCSC";

@@ -1,16 +1,56 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll
-# If open-watcom-bin is not passed, VirtualBox will fall back to use
-# the shipped alternative sources (assembly).
+{ config
+, stdenv
+, fetchurl
+, lib
+, iasl
+, dev86
+, pam
+, libxslt
+, libxml2
+, wrapQtAppsHook
+, libX11
+, xorgproto
+, libXext
+, libXcursor
+, libXmu
+, libIDL
+, SDL
+, libcap
+, libGL
+, libpng
+, glib
+, lvm2
+, libXrandr
+, libXinerama
+, libopus
+, qtbase
+, qtx11extras
+, qttools
+, qtsvg
+, qtwayland
+, pkg-config
+, which
+, docbook_xsl
+, docbook_xml_dtd_43
+, alsaLib
+, curl
+, libvpx
+, nettools
+, dbus
+, substituteAll
+  # If open-watcom-bin is not passed, VirtualBox will fall back to use
+  # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
-, makeself, perl
-, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
-, pythonBindings ? false, python3 ? null
-, extensionPack ? null, fakeroot ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, makeself
+, perl
+, javaBindings ? true
+, jdk ? null # Almost doesn't affect closure size
+, pythonBindings ? false
+, python3 ? null
+, extensionPack ? null
+, fakeroot ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -34,7 +74,8 @@ let
     };
     NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
   });
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
@@ -52,9 +93,30 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
-      libXmu libpng libopus python ]
+    [
+      iasl'
+      dev86
+      libxslt
+      libxml2
+      xorgproto
+      libX11
+      libXext
+      libXcursor
+      libIDL
+      libcap
+      glib
+      lvm2
+      alsaLib
+      curl
+      libvpx
+      pam
+      makeself
+      perl
+      libXmu
+      libpng
+      libopus
+      python
+    ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
@@ -89,24 +151,24 @@ in stdenv.mkDerivation {
   '';
 
   patches =
-     optional enableHardening ./hardened.patch
-  ++ [ ./extra_symbols.patch ]
-     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
-     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
-     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
-     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
-     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
-     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
-     # the user's icon theme can be loaded.
-  ++ optional (!headless && enableHardening) (substituteAll {
+    optional enableHardening ./hardened.patch
+    ++ [ ./extra_symbols.patch ]
+    # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+    # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+    # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+    # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+    # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+    # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+    # the user's icon theme can be loaded.
+    ++ optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
-  ++ [
-    # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
-    ./linux-5-11.patch
-    ./qtx11extras.patch
-  ];
+    ++ [
+      # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
+      ./linux-5-11.patch
+      ./qtx11extras.patch
+    ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -222,7 +284,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;       # for guest additions
+    inherit version; # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
     updateScript = ./update.sh;
   };

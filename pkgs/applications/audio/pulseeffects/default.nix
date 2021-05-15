@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , meson
@@ -44,7 +45,8 @@ let
     rubberband # pitch shifting
     zam-plugins # maximizer
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pulseeffects";
   version = "5.0.3";
 
@@ -76,7 +78,11 @@ in stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base # gst-fft
     gst_all_1.gst-plugins-good # spectrum plugin
     gst_all_1.gst-plugins-bad
-    lilv lv2 serd sord sratom
+    lilv
+    lv2
+    serd
+    sord
+    sratom
     libbs2b
     libebur128
     libsamplerate

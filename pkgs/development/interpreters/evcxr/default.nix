@@ -17,17 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
   buildInputs = lib.optional stdenv.isDarwin Security;
-  postInstall = let
-    wrap = exe: ''
-      wrapProgram $out/bin/${exe} \
-        --prefix PATH : ${lib.makeBinPath [ cargo gcc ]} \
-        --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
+  postInstall =
+    let
+      wrap = exe: ''
+        wrapProgram $out/bin/${exe} \
+          --prefix PATH : ${lib.makeBinPath [ cargo gcc ]} \
+          --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
+      '';
+    in
+    ''
+      ${wrap "evcxr"}
+      ${wrap "evcxr_jupyter"}
+      rm $out/bin/testing_runtime
     '';
-  in ''
-    ${wrap "evcxr"}
-    ${wrap "evcxr_jupyter"}
-    rm $out/bin/testing_runtime
-  '';
 
   meta = with lib; {
     description = "An evaluation context for Rust";

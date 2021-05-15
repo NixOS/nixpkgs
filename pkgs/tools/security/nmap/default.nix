@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
-, pcre, liblinear, libssh2
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libpcap
+, pkg-config
+, openssl
+, lua5_3
+, pcre
+, liblinear
+, libssh2
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
@@ -20,7 +29,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./zenmap.patch ]
-    ++ optionals stdenv.cc.isClang [(
+    ++ optionals stdenv.cc.isClang [
+    (
       # Fixes a compile error due an ambiguous reference to bind(2) in
       # nping/EchoServer.cc, which is otherwise resolved to std::bind.
       # https://github.com/nmap/nmap/pull/1363
@@ -29,7 +39,8 @@ stdenv.mkDerivation rec {
         includes = [ "nping/EchoServer.cc" ];
         sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
       }
-    )];
+    )
+  ];
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
@@ -48,13 +59,18 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  pythonPath = with python2.pkgs; optionals graphicalSupport  [
-    pygtk pysqlite pygobject2 pycairo
+  pythonPath = with python2.pkgs; optionals graphicalSupport [
+    pygtk
+    pysqlite
+    pygobject2
+    pycairo
   ];
 
   nativeBuildInputs = [ pkg-config ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
   buildInputs = [ pcre liblinear libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
-    python2 libX11 gtk2
+    python2
+    libX11
+    gtk2
   ]);
 
   postInstall = optionalString graphicalSupport ''
@@ -69,9 +85,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A free and open source utility for network discovery and security auditing";
-    homepage    = "http://www.nmap.org";
-    license     = licenses.gpl2;
-    platforms   = platforms.all;
+    homepage = "http://www.nmap.org";
+    license = licenses.gpl2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice fpletz ];
   };
 }

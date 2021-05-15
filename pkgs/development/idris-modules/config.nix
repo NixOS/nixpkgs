@@ -6,7 +6,7 @@
 , test
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "config";
   version = "2017-11-06";
 

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
+{ lib, stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";

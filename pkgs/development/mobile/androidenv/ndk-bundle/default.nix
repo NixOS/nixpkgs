@@ -1,11 +1,27 @@
-{ lib, pkgs, pkgsHostHost, makeWrapper, autoPatchelfHook
-, deployAndroidPackage, package, os, platform-tools
+{ lib
+, pkgs
+, pkgsHostHost
+, makeWrapper
+, autoPatchelfHook
+, deployAndroidPackage
+, package
+, os
+, platform-tools
 }:
 
 let
-  runtime_paths = lib.makeBinPath (with pkgsHostHost; [
-    coreutils file findutils gawk gnugrep gnused jdk python3 which
-  ]) + ":${platform-tools}/platform-tools";
+  runtime_paths = lib.makeBinPath
+    (with pkgsHostHost; [
+      coreutils
+      file
+      findutils
+      gawk
+      gnugrep
+      gnused
+      jdk
+      python3
+      which
+    ]) + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage {
   inherit package os;

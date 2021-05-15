@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, python2, libxml2}:
+{ lib, stdenv, fetchurl, python2, libxml2 }:
 
 assert libxml2.pythonSupport == true;
 

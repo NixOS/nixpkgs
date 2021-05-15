@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -66,10 +67,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage    = "https://github.com/intel/intel-graphics-compiler";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ gloaming ];
   };
 }

@@ -1,17 +1,34 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
-, cairo, gd, libcerf, pango, readline, zlib
-, withTeXLive ? false, texlive
-, withLua ? false, lua
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, texinfo
+, cairo
+, gd
+, libcerf
+, pango
+, readline
+, zlib
+, withTeXLive ? false
+, texlive
+, withLua ? false
+, lua
 , libX11 ? null
 , libXt ? null
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false
+, wxGTK ? null
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
-, withQt ? false, mkDerivation, qttools, qtbase, qtsvg
+, withQt ? false
+, mkDerivation
+, qttools
+, qtbase
+, qtsvg
 }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
@@ -57,7 +74,7 @@ in
        --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '' + lib.optionalString (stdenv.isDarwin && withQt) ''
-     wrapQtApp $out/bin/gnuplot
+    wrapQtApp $out/bin/gnuplot
   '';
 
   enableParallelBuilding = true;

@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
 , mock
 , purl
 , requests

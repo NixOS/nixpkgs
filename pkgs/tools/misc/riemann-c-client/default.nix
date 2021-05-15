@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file , protobufc }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, protobufc }:
 
 stdenv.mkDerivation rec {
   name = "riemann-c-client-1.10.4";

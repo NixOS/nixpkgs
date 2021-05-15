@@ -1,6 +1,25 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53, boost
-, zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
-, withGui, python3, jemalloc, zeromq4 }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkg-config
+, cmake
+, openssl
+, db53
+, boost
+, zlib
+, miniupnpc
+, qtbase ? null
+, qttools ? null
+, util-linux
+, protobuf
+, qrencode
+, libevent
+, withGui
+, python3
+, jemalloc
+, zeromq4
+}:
 
 with lib;
 
@@ -19,9 +38,20 @@ mkDerivation rec {
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
-                  miniupnpc util-linux protobuf libevent ]
-                  ++ optionals withGui [ qtbase qttools qrencode ];
+  buildInputs = [
+    openssl
+    db53
+    boost
+    zlib
+    python3
+    jemalloc
+    zeromq4
+    miniupnpc
+    util-linux
+    protobuf
+    libevent
+  ]
+  ++ optionals withGui [ qtbase qttools qrencode ];
 
   cmakeFlags = optionals (!withGui) [
     "-DBUILD_BITCOIN_QT=OFF"
@@ -34,7 +64,7 @@ mkDerivation rec {
 
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";
-    longDescription= ''
+    longDescription = ''
       Bitcoin ABC is the name of open source software which enables the use of Bitcoin.
       It is designed to facilite a hard fork to increase Bitcoin's block size limit.
       "ABC" stands for "Adjustable Blocksize Cap".

@@ -32,20 +32,20 @@ if !buildTests then ''
   runHook postInstall
 '' else
 # for tests we just put them all in the output. No execution.
-''
-  runHook preInstall
+  ''
+    runHook preInstall
 
-  mkdir -p $out/tests
-  if [ -e target/bin ]; then
-    find target/bin/ -type f -executable -exec cp {} $out/tests \;
-  fi
-  if [ -e target/lib ]; then
-    find target/lib/ -type f \! -name '*.rlib' \
-      -a \! -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' \
-      -a \! -name '*.d' \
-      -executable \
-      -print0 | xargs --no-run-if-empty --null install --target $out/tests;
-  fi
+    mkdir -p $out/tests
+    if [ -e target/bin ]; then
+      find target/bin/ -type f -executable -exec cp {} $out/tests \;
+    fi
+    if [ -e target/lib ]; then
+      find target/lib/ -type f \! -name '*.rlib' \
+        -a \! -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' \
+        -a \! -name '*.d' \
+        -executable \
+        -print0 | xargs --no-run-if-empty --null install --target $out/tests;
+    fi
 
-  runHook postInstall
-''
+    runHook postInstall
+  ''

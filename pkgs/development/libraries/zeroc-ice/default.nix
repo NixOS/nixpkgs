@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, bzip2, expat, openssl, lmdb
-, darwin, libiconv, Security
+{ stdenv
+, lib
+, fetchFromGitHub
+, bzip2
+, expat
+, openssl
+, lmdb
+, darwin
+, libiconv
+, Security
 , cpp11 ? false
 }:
 
@@ -19,7 +27,8 @@ let
     installFlags = [ "PREFIX=$(out)" ];
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zeroc-ice";
   version = "3.7.2";
 

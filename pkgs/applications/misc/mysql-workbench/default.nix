@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , substituteAll
 , cmake
@@ -43,7 +44,8 @@
 
 let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mysql-workbench";
   version = "8.0.21";
 

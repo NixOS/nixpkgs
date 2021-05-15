@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 
 , cmake
@@ -16,8 +17,9 @@
 , poppler
 , portaudio
 , zlib
-# plugins
-, withLua ? true, lua
+  # plugins
+, withLua ? true
+, lua
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +35,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
   buildInputs =
-    [ glib
+    [
+      glib
       gsettings-desktop-schemas
       gtk3
       libsndfile
@@ -52,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
-    homepage    = "https://xournalpp.github.io/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://xournalpp.github.io/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ andrew-d sikmir ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

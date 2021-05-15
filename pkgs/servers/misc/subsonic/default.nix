@@ -34,5 +34,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  phases = ["unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" ];
 }

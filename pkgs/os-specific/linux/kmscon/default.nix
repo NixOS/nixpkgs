@@ -1,11 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libtsm
 , systemd
 , libxkbcommon
 , libdrm
-, libGLU, libGL
+, libGLU
+, libGL
 , pango
 , pixman
 , pkg-config
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU libGL
+    libGLU
+    libGL
     libdrm
     libtsm
     libxkbcommon

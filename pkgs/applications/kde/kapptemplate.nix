@@ -10,7 +10,7 @@ mkDerivation {
 
   pname = "kapptemplate";
 
-  nativeBuildInputs = [ extra-cmake-modules cmake  ];
+  nativeBuildInputs = [ extra-cmake-modules cmake ];
 
   buildInputs = [ kactivities qtbase ];
 

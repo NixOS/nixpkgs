@@ -1,6 +1,21 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
-, attrs, click, cligj, click-plugins, six, munch, enum34
-, pytest, boto3, mock, giflib, pytz
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pythonOlder
+, attrs
+, click
+, cligj
+, click-plugins
+, six
+, munch
+, enum34
+, pytest
+, boto3
+, mock
+, giflib
+, pytz
 , gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
 , certifi
 }:

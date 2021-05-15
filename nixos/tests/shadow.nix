@@ -3,7 +3,8 @@ let
   password2 = "helloworld";
   password3 = "bazqux";
   password4 = "asdf123";
-in import ./make-test-python.nix ({ pkgs, ... }: {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "shadow";
   meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 

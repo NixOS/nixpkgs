@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, pkg-config, texinfo, libiconv, gdbm, openssl, zlib
-, mbedtls, cacert }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, texinfo
+, libiconv
+, gdbm
+, openssl
+, zlib
+, mbedtls
+, cacert
+}:
 
 stdenv.mkDerivation rec {
   pname = "gauche-bootstrap";

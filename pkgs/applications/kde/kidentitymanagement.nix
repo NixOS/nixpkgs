@@ -1,8 +1,16 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kcompletion, kcoreaddons, kemoticons, kiconthemes, kio, kpimtextedit,
-  ktextwidgets, kxmlgui
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, kcompletion
+, kcoreaddons
+, kemoticons
+, kiconthemes
+, kio
+, kpimtextedit
+, ktextwidgets
+, kxmlgui
 }:
 
 mkDerivation {
@@ -13,7 +21,12 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcompletion kemoticons kiconthemes kio ktextwidgets kxmlgui
+    kcompletion
+    kemoticons
+    kiconthemes
+    kio
+    ktextwidgets
+    kxmlgui
   ];
   propagatedBuildInputs = [ kcoreaddons kpimtextedit ];
   outputs = [ "out" "dev" ];

@@ -92,7 +92,7 @@ with lib;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        SystemCallFilter= "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
+        SystemCallFilter = "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
         # needed in case we bind to port < 1024
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
@@ -106,7 +106,7 @@ with lib;
     };
 
     users.groups = optionalAttrs (cfg.group == "haproxy") {
-      haproxy = {};
+      haproxy = { };
     };
   };
 }

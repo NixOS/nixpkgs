@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, qt4, cmake, libjpeg, libtiff, boost }:
+{ lib, stdenv, fetchurl, qt4, cmake, libjpeg, libtiff, boost }:
 
 stdenv.mkDerivation {
   name = "scantailor-0.9.12.1";

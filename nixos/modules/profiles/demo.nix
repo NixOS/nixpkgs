@@ -4,7 +4,8 @@
   imports = [ ./graphical.nix ];
 
   users.users.demo =
-    { isNormalUser = true;
+    {
+      isNormalUser = true;
       description = "Demo user account";
       extraGroups = [ "wheel" ];
       password = "demo";

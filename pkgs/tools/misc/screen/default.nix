@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
-  configureFlags= [
+  configureFlags = [
     "--enable-telnet"
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ''; # "
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isLinux pam
-                            ++ lib.optional stdenv.isDarwin utmp;
+    ++ lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 

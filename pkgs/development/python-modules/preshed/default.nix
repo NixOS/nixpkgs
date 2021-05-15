@@ -17,9 +17,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cython
-   cymem
-   murmurhash
+    cython
+    cymem
+    murmurhash
   ];
 
   checkInputs = [
@@ -35,5 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/preshed";
     license = licenses.mit;
     maintainers = with maintainers; [ sdll ];
-    };
+  };
 }

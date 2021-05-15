@@ -1,12 +1,25 @@
-{ lib, fetchFromGitHub, makeDesktopItem, makeWrapper, imagemagick
-, python3Packages, wrapGAppsHook, protonvpn-cli, gtk3, pango
-, gobject-introspection, libnotify, libappindicator-gtk3
-, procps, openvpn }:
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, imagemagick
+, python3Packages
+, wrapGAppsHook
+, protonvpn-cli
+, gtk3
+, pango
+, gobject-introspection
+, libnotify
+, libappindicator-gtk3
+, procps
+, openvpn
+}:
 
 let
   extraPath = lib.makeBinPath [ procps openvpn ];
 
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "protonvpn-linux-gui";
   version = "2.1.1";
 
@@ -40,17 +53,17 @@ in python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook makeWrapper imagemagick ];
 
   propagatedBuildInputs = (with python3Packages; [
-      pygobject3
-      pycairo
-      requests
-      configparser
-    ]) ++ [
-      protonvpn-cli
-      gtk3
-      gobject-introspection
-      libnotify
-      libappindicator-gtk3
-    ];
+    pygobject3
+    pycairo
+    requests
+    configparser
+  ]) ++ [
+    protonvpn-cli
+    gtk3
+    gobject-introspection
+    libnotify
+    libappindicator-gtk3
+  ];
 
   prePatch = ''
     # if pkexec is used, we want to have more time to enter password

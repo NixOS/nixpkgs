@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python3Packages
+, makeWrapper
+, gettext
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
-, guiSupport ? false, tk ? null
+, rustSupport ? stdenv.hostPlatform.isLinux
+, rustPlatform
+, guiSupport ? false
+, tk ? null
 , ApplicationServices
 }:
 
 let
   inherit (python3Packages) docutils python fb-re2;
 
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "mercurial";
   version = "5.8";
 
@@ -34,21 +43,24 @@ in python3Packages.buildPythonApplication rec {
 
   passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-  cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "1kc2giqvfwsdl5fb0qmz96ws1gdrs3skfdzvpiif2i8f7r4nqlhd";
-    sourceRoot = "${pname}-${version}/rust";
-  } else null;
+  cargoDeps =
+    if rustSupport then
+      rustPlatform.fetchCargoTarball
+        {
+          inherit src;
+          name = "${pname}-${version}";
+          sha256 = "1kc2giqvfwsdl5fb0qmz96ws1gdrs3skfdzvpiif2i8f7r4nqlhd";
+          sourceRoot = "${pname}-${version}/rust";
+        } else null;
   cargoRoot = if rustSupport then "rust" else null;
 
   propagatedBuildInputs = lib.optional re2Support fb-re2;
   nativeBuildInputs = [ makeWrapper gettext ]
     ++ lib.optionals rustSupport (with rustPlatform; [
-         cargoSetupHook
-         rust.cargo
-         rust.rustc
-       ]);
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
   buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 

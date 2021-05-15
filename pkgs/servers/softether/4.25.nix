@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchurl
-, openssl, readline, ncurses, zlib
-, dataDir ? "/var/lib/softether" }:
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, readline
+, ncurses
+, zlib
+, dataDir ? "/var/lib/softether"
+}:
 
 let
-  os = if stdenv.isLinux then "1"
-       else if stdenv.isFreeBSD then "2"
-       else if stdenv.isSunOS then "3"
-       else if stdenv.isDarwin then "4"
-       else if stdenv.isOpenBSD then "5"
-       else "";
+  os =
+    if stdenv.isLinux then "1"
+    else if stdenv.isFreeBSD then "2"
+    else if stdenv.isSunOS then "3"
+    else if stdenv.isDarwin then "4"
+    else if stdenv.isOpenBSD then "5"
+    else "";
   cpuBits = if stdenv.is64bit then "2" else "1";
 
 in
@@ -27,20 +34,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl readline ncurses zlib ];
 
   preConfigure = ''
-      echo "${os}
-      ${cpuBits}
-      " | ./configure
-      rm configure
+    echo "${os}
+    ${cpuBits}
+    " | ./configure
+    rm configure
   '';
 
   buildPhase = ''
-      mkdir -p $out/bin
-      sed -i \
-          -e "/INSTALL_BINDIR=/s|/usr/bin|/bin|g" \
-          -e "/_DIR=/s|/usr|${dataDir}|g" \
-          -e "s|\$(INSTALL|$out/\$(INSTALL|g" \
-          -e "/echo/s|echo $out/|echo |g" \
-          Makefile
+    mkdir -p $out/bin
+    sed -i \
+        -e "/INSTALL_BINDIR=/s|/usr/bin|/bin|g" \
+        -e "/_DIR=/s|/usr|${dataDir}|g" \
+        -e "s|\$(INSTALL|$out/\$(INSTALL|g" \
+        -e "/echo/s|echo $out/|echo |g" \
+        Makefile
   '';
 
   meta = with lib; {

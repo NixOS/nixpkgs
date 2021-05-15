@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison, curl,
-  pam, popt, libiconv, libuuid, openssl_1_0_2, cyrus_sasl, sqlite, tdb, libxml2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, perl
+, flex
+, bison
+, curl
+, pam
+, popt
+, libiconv
+, libuuid
+, openssl_1_0_2
+, cyrus_sasl
+, sqlite
+, tdb
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "pbis-open";
@@ -13,13 +31,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool perl flex bison
+    autoconf
+    automake
+    libtool
+    perl
+    flex
+    bison
   ];
 
   # curl must be placed after openssl_1_0_2, because it pulls openssl 1.1 dependency.
   buildInputs = [
-    pam popt libiconv libuuid openssl_1_0_2 cyrus_sasl
-    curl sqlite popt tdb libxml2 /*libglade2 for gtk*/
+    pam
+    popt
+    libiconv
+    libuuid
+    openssl_1_0_2
+    cyrus_sasl
+    curl
+    sqlite
+    popt
+    tdb
+    libxml2 /*libglade2 for gtk*/
   ];
 
   postPatch = ''

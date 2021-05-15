@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
@@ -206,7 +207,8 @@ let
 
       runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
 
-    in stdenv.mkDerivation ((faust2ApplBase args) // {
+    in
+    stdenv.mkDerivation ((faust2ApplBase args) // {
 
       nativeBuildInputs = [ makeWrapper ];
 
@@ -218,4 +220,5 @@ let
 
     });
 
-in faust
+in
+faust

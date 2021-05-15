@@ -1,7 +1,11 @@
 { composeAndroidPackages, stdenv, lib, ant, jdk, gnumake, gawk }:
 
 { name
-, release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
+, release ? false
+, keyStore ? null
+, keyAlias ? null
+, keyStorePassword ? null
+, keyAliasPassword ? null
 , antFlags ? ""
 , ...
 }@args:
@@ -16,7 +20,7 @@ let
   extraArgs = removeAttrs args ([ "name" ] ++ builtins.attrNames androidSdkFormalArgs);
 in
 stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
+  name = lib.replaceChars [ " " ] [ "" ] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
   ANDROID_HOME = "${androidsdk}/libexec/android-sdk";
   buildInputs = [ jdk ant ];
   buildPhase = ''

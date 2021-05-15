@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
+{ stdenv
+, lib
+, fetchFromGitHub
+, kernel
+, writeScript
+, coreutils
+, gnugrep
+, jq
+, curl
+, common-updater-scripts
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {

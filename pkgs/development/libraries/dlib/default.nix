@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libpng, libjpeg
-, guiSupport ? false, libX11
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libpng
+, libjpeg
+, guiSupport ? false
+, libX11
 
   # see http://dlib.net/compile.html
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
@@ -14,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev ="v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cEbw01w4KgSG3JTvTE/qruo7i4/L++m02HW+0VNmSSQ=";
   };
 
@@ -25,7 +32,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
-    "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
+    "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}"
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;

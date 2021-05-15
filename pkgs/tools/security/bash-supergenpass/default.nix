@@ -1,10 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , makeWrapper
 , openssl
 , coreutils
-, gnugrep }:
+, gnugrep
+}:
 
 stdenv.mkDerivation {
   pname = "bash-supergenpass";

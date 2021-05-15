@@ -15,7 +15,8 @@
 , ghcjsSrc
 }:
 
-runCommand "configured-ghcjs-src" {
+runCommand "configured-ghcjs-src"
+{
   nativeBuildInputs = [
     perl
     autoconf

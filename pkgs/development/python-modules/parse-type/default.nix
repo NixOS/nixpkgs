@@ -1,7 +1,12 @@
-{ lib, fetchPypi
-, buildPythonPackage, pythonOlder
-, pytest, pytestrunner
-, parse, six, enum34
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, pytest
+, pytestrunner
+, parse
+, six
+, enum34
 }:
 
 buildPythonPackage rec {

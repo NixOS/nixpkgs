@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
+, gettext
+, util-linux
+, open-isns
+, openssl
+, kmod
+, perl
+, systemd
+, pkgconf
 }:
 
 stdenv.mkDerivation rec {

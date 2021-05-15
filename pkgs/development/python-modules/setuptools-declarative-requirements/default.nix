@@ -1,5 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, pypiserver, pytestCheckHook
-, setuptools-scm, virtualenv }:
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pypiserver
+, pytestCheckHook
+, setuptools-scm
+, virtualenv
+}:
 
 buildPythonPackage rec {
   pname = "setuptools-declarative-requirements";

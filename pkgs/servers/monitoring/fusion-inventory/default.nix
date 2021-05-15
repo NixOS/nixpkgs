@@ -1,5 +1,13 @@
-{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute2, nettools
-, fetchFromGitHub, makeWrapper
+{ lib
+, perlPackages
+, nix
+, dmidecode
+, pciutils
+, usbutils
+, iproute2
+, nettools
+, fetchFromGitHub
+, makeWrapper
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -23,7 +31,7 @@ perlPackages.buildPerlPackage rec {
       --replace /sbin/ip ${iproute2}/sbin/ip
   '';
 
-  buildTools = [];
+  buildTools = [ ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = (with perlPackages; [
     CGI

@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ ... } :
+import ./make-test-python.nix ({ ... }:
 
 let
-  server = { pkgs, ... } : {
+  server = { pkgs, ... }: {
     networking.firewall.allowedTCPPorts = [ 3334 ];
     boot.initrd.postDeviceCommands = ''
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
@@ -10,8 +10,10 @@ let
     virtualisation.emptyDiskImages = [ 4096 ];
 
     virtualisation.fileSystems =
-      { "/data" =
-          { device = "/dev/disk/by-label/data";
+      {
+        "/data" =
+          {
+            device = "/dev/disk/by-label/data";
             fsType = "ext4";
           };
       };
@@ -27,7 +29,7 @@ let
     };
   };
 
-  client = { lib, ... } : {
+  client = { lib, ... }: {
     networking.firewall.enable = true;
 
     services.orangefs.client = {
@@ -39,7 +41,8 @@ let
     };
   };
 
-in {
+in
+{
   name = "orangefs";
 
   nodes = {

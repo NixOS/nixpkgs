@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl, cmake, curl, Accelerate, CoreGraphics, CoreVideo
-, fftwSinglePrec, netcdf, pcre, gdal, blas, lapack, glibc, ghostscript, dcw-gmt
-, gshhg-gmt }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, curl
+, Accelerate
+, CoreGraphics
+, CoreVideo
+, fftwSinglePrec
+, netcdf
+, pcre
+, gdal
+, blas
+, lapack
+, glibc
+, ghostscript
+, dcw-gmt
+, gshhg-gmt
+}:
 
 /* The onus is on the user to also install:
-    - ffmpeg for webm or mp4 output
-    - graphicsmagick for gif output
+  - ffmpeg for webm or mp4 output
+  - graphicsmagick for gif output
 */
 
 stdenv.mkDerivation rec {
@@ -19,15 +35,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl gdal netcdf pcre dcw-gmt gshhg-gmt ]
     ++ (if stdenv.isDarwin then [
-      Accelerate
-      CoreGraphics
-      CoreVideo
-    ] else [
-      glibc
-      fftwSinglePrec
-      blas
-      lapack
-    ]);
+    Accelerate
+    CoreGraphics
+    CoreVideo
+  ] else [
+    glibc
+    fftwSinglePrec
+    blas
+    lapack
+  ]);
 
   propagatedBuildInputs = [ ghostscript ];
 

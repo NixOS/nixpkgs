@@ -16,8 +16,8 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Python bindings for FoundationDB";
-    homepage    = "https://www.foundationdb.org";
-    license     = with licenses; [ asl20 ];
+    homepage = "https://www.foundationdb.org";
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

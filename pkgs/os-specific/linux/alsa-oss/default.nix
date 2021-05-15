@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
+{ lib, stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-oss";

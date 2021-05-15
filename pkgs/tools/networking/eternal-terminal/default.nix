@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , gflags
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jpm1ilr1qfz55y4mqp75v4q433qla5jhi1b8nsmx48srs7f0j2q";
   };
 
-  cmakeFlags= [
+  cmakeFlags = [
     "-DDISABLE_VCPKG=TRUE"
     "-DDISABLE_SENTRY=TRUE"
     "-DDISABLE_CRASH_LOG=TRUE"

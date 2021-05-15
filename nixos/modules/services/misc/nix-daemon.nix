@@ -13,7 +13,7 @@ let
   isNix23 = versionAtLeast nixVersion "2.3pre";
 
   makeNixBuildUser = nr: {
-    name  = "nixbld${toString nr}";
+    name = "nixbld${toString nr}";
     value = {
       description = "Nix build user ${toString nr}";
 
@@ -59,14 +59,15 @@ let
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
-            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
-              echo "Ignore nix.checkConfig when cross-compiling"
-            '' else ''
-              echo "Checking that Nix can read nix.conf..."
-              ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
-            '')
-      );
+        if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+          echo "Ignore nix.checkConfig when cross-compiling"
+        '' else ''
+          echo "Checking that Nix can read nix.conf..."
+          ln -s $out ./nix.conf
+          NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
+        ''
+      )
+    );
 
 in
 
@@ -92,7 +93,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.either types.int (types.enum ["auto"]);
+        type = types.either types.int (types.enum [ "auto" ]);
         default = "auto";
         example = 64;
         description = ''
@@ -109,10 +110,10 @@ in
         default = false;
         example = true;
         description = ''
-         If set to true, Nix automatically detects files in the store that have
-         identical contents, and replaces them with hard links to a single copy.
-         This saves disk space. If set to false (the default), you can still run
-         nix-store --optimise to get rid of duplicate files.
+          If set to true, Nix automatically detects files in the store that have
+          identical contents, and replaces them with hard links to a single copy.
+          This saves disk space. If set to false (the default), you can still run
+          nix-store --optimise to get rid of duplicate files.
         '';
       };
 
@@ -131,7 +132,7 @@ in
       };
 
       useSandbox = mkOption {
-        type = types.either types.bool (types.enum ["relaxed"]);
+        type = types.either types.bool (types.enum [ "relaxed" ]);
         default = true;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
@@ -147,7 +148,7 @@ in
 
       sandboxPaths = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "/dev" "/proc" ];
         description =
           ''
@@ -216,7 +217,7 @@ in
             };
             systems = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
               description = ''
                 The system types the build machine can execute derivations on.
@@ -271,7 +272,7 @@ in
             };
             mandatoryFeatures = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "big-parallel" ];
               description = ''
                 A list of features mandatory for this builder. The builder will
@@ -282,7 +283,7 @@ in
             };
             supportedFeatures = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "kvm" "big-parallel" ];
               description = ''
                 A list of features supported by this builder. The builder will
@@ -292,7 +293,7 @@ in
             };
           };
         }));
-        default = [];
+        default = [ ];
         description = ''
           This option lists the machines to be used if distributed builds are
           enabled (see <option>nix.distributedBuilds</option>).
@@ -306,7 +307,7 @@ in
       envVars = mkOption {
         type = types.attrs;
         internal = true;
-        default = {};
+        default = { };
         description = "Environment variables used by Nix.";
       };
 
@@ -443,10 +444,11 @@ in
       registry = mkOption {
         type = types.attrsOf (types.submodule (
           let
-            inputAttrs = types.attrsOf (types.oneOf [types.str types.int types.bool types.package]);
+            inputAttrs = types.attrsOf (types.oneOf [ types.str types.int types.bool types.package ]);
           in
           { config, name, ... }:
-          { options = {
+          {
+            options = {
               from = mkOption {
                 type = inputAttrs;
                 example = { type = "indirect"; id = "nixpkgs"; };
@@ -478,15 +480,16 @@ in
             config = {
               from = mkDefault { type = "indirect"; id = name; };
               to = mkIf (config.flake != null)
-                ({ type = "path";
-                   path = config.flake.outPath;
-                 } // lib.filterAttrs
-                   (n: v: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                   config.flake);
+                ({
+                  type = "path";
+                  path = config.flake.outPath;
+                } // lib.filterAttrs
+                  (n: v: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                  config.flake);
             };
           }
         ));
-        default = {};
+        default = { };
         description = ''
           A system-wide flake registry.
         '';
@@ -505,7 +508,8 @@ in
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
     environment.systemPackages =
-      [ nix
+      [
+        nix
         pkgs.nix-info
       ]
       ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
@@ -520,19 +524,22 @@ in
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
     environment.etc."nix/machines" =
-      { enable = cfg.buildMachines != [];
+      {
+        enable = cfg.buildMachines != [ ];
         text =
-          concatMapStrings (machine:
-            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
-            + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
-            + toString (machine.speedFactor)
-            + " "
-            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
-            + " "
-            + concatStringsSep "," machine.mandatoryFeatures
-            + "\n"
-          ) cfg.buildMachines;
+          concatMapStrings
+            (machine:
+              "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+              + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
+              + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
+              + toString (machine.speedFactor)
+              + " "
+              + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
+              + " "
+              + concatStringsSep "," machine.mandatoryFeatures
+              + "\n"
+            )
+            cfg.buildMachines;
       };
 
     systemd.packages = [ nix ];
@@ -540,7 +547,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.util-linux config.programs.ssh.package ]
+      {
+        path = [ nix pkgs.util-linux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
@@ -550,7 +558,8 @@ in
         unitConfig.RequiresMountsFor = "/nix/store";
 
         serviceConfig =
-          { Nice = cfg.daemonNiceLevel;
+          {
+            Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
@@ -560,7 +569,8 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = cfg.nixPath;
+      {
+        NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit =

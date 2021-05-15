@@ -1,5 +1,9 @@
-{lib, buildPythonPackage, fetchPypi
-, geoip, nose}:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, geoip
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "GeoIP";

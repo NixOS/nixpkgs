@@ -69,7 +69,7 @@ python3.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/bridgecrewio/checkov";
     description = "Static code analysis tool for infrastructure-as-code";
     longDescription = ''
-    Prevent cloud misconfigurations during build-time for Terraform, Cloudformation, Kubernetes, Serverless framework and other infrastructure-as-code-languages with Checkov by Bridgecrew.
+      Prevent cloud misconfigurations during build-time for Terraform, Cloudformation, Kubernetes, Serverless framework and other infrastructure-as-code-languages with Checkov by Bridgecrew.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ anhdle14 ];

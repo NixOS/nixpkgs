@@ -31,7 +31,9 @@ let
     exec = "ut2004";
   };
 
-in runCommand "ut2004" {
+in
+runCommand "ut2004"
+{
   nativeBuildInputs = [ makeWrapper ];
 } ''
   mkdir -p $out/bin

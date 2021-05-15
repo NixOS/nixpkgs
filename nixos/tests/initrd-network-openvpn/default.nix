@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ lib, ...}:
+import ../make-test-python.nix ({ lib, ... }:
 
 {
   name = "initrd-network-openvpn";
@@ -13,7 +13,7 @@ import ../make-test-python.nix ({ lib, ...}:
         <secret>
         ${lib.readFile ./shared.key}
         </secret>
-        '';
+      '';
 
     in
     {
@@ -42,9 +42,9 @@ import ../make-test-python.nix ({ lib, ...}:
             # This command does not fork to keep the VM in the state where
             # only the initramfs is loaded
             preLVMCommands =
-            ''
-              /bin/nc -p 1234 -lke /bin/echo TESTVALUE
-            '';
+              ''
+                /bin/nc -p 1234 -lke /bin/echo TESTVALUE
+              '';
 
             network = {
               enable = true;
@@ -75,8 +75,10 @@ import ../make-test-python.nix ({ lib, ...}:
             enable = true;
             internalInterfaces = [ "tun0" ];
             externalInterface = "eth2";
-            forwardPorts = [ { destination = "10.8.0.2:1234";
-                               sourcePort = 12345; } ];
+            forwardPorts = [{
+              destination = "10.8.0.2:1234";
+              sourcePort = 12345;
+            }];
           };
 
           # Trust tun0 and allow the VPN Server to be reached
@@ -87,13 +89,13 @@ import ../make-test-python.nix ({ lib, ...}:
 
           # Minimal OpenVPN server configuration
           services.openvpn.servers.testserver =
-          {
-            config = ''
-              dev tun0
-              ifconfig 10.8.0.1 10.8.0.2
-              ${secretblock}
-            '';
-          };
+            {
+              config = ''
+                dev tun0
+                ifconfig 10.8.0.1 10.8.0.2
+                ${secretblock}
+              '';
+            };
         };
 
       # Client that resides in the "external" VLAN
@@ -102,7 +104,7 @@ import ../make-test-python.nix ({ lib, ...}:
         {
           virtualisation.vlans = [ 2 ];
         };
-  };
+    };
 
 
   testScript =

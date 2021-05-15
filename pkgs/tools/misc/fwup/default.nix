@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     xz
     zlib
   ]
-    ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     DiskArbitration
   ];
 

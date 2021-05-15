@@ -2,7 +2,8 @@
 
 let
   version = "1.10.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "avro-c";
   inherit version;
 

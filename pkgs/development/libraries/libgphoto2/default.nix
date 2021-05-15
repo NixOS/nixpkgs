@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gettext
 , libusb1
 , libtool
 , libexif
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c7fBl6GBLAU+RL5WFC4PL+n/nEHZUfqIJ9qq1+qNNCg=";
   };
 
-  patches = [];
+  patches = [ ];
 
   nativeBuildInputs = [
     autoreconfHook

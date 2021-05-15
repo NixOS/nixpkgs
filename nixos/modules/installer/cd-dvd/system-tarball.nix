@@ -50,21 +50,22 @@ in
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
     tarball.storeContents =
-      [ { object = config.system.build.toplevel;
-          symlink = "/run/current-system";
-        }
-      ];
+      [{
+        object = config.system.build.toplevel;
+        symlink = "/run/current-system";
+      }];
 
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
     tarball.contents =
-      [ { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
-          target = "/boot/" + config.system.boot.loader.initrdFile;
-        }
-        { source = versionFile;
+      [{
+        source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+        target = "/boot/" + config.system.boot.loader.initrdFile;
+      }
+        {
+          source = versionFile;
           target = "/nixos-version.txt";
-        }
-      ];
+        }];
 
     # Create the tarball
     system.build.tarball = import ../../../lib/make-system-tarball.nix {

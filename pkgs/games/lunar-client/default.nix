@@ -23,7 +23,8 @@ let
     name = "lunar-client.AppImage";
     sha256 = "1pmblnnvs5jv5v7y5nnxr3liw9xfp5h6l44x7pln8kr9zg85dzma";
   };
-in appimageTools.wrapType1 rec {
+in
+appimageTools.wrapType1 rec {
   inherit name src;
 
   extraInstallCommands = ''

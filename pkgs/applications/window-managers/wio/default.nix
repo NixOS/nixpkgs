@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchgit
+{ lib
+, stdenv
+, fetchgit
 , meson
 , ninja
 , pkg-config

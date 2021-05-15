@@ -13,14 +13,14 @@ let
 
   suffix = {
     aarch64-linux = "linux-arm64";
-    x86_64-linux  = "linux-x86_64";
+    x86_64-linux = "linux-x86_64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     sha256 = {
       aarch64-linux = "51ea8a5210f008d13a729ac42085563b5e8b971b17ed766f84d69d76dcb2db0c";
-      x86_64-linux  = "9219168a504356152b3b807e1e7282e21952461d277596c6b82ddfe81ac2419c";
+      x86_64-linux = "9219168a504356152b3b807e1e7282e21952461d277596c6b82ddfe81ac2419c";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

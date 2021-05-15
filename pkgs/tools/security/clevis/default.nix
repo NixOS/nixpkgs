@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc
-, makeWrapper, jansson, jose, cryptsetup, curl, libpwquality, luksmeta
-, coreutils, tpm2-tools
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, asciidoc
+, makeWrapper
+, jansson
+, jose
+, cryptsetup
+, curl
+, libpwquality
+, luksmeta
+, coreutils
+, tpm2-tools
 }:
 
 stdenv.mkDerivation rec {

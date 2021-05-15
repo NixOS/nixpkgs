@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, python-language-server, isort
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-language-server
+, isort
 }:
 
 buildPythonPackage rec {
@@ -17,7 +20,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    isort python-language-server
+    isort
+    python-language-server
   ];
 
   meta = with lib; {

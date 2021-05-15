@@ -1,5 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, expat, glib, curl, libxml2, python3, rpm
-, openssl, sqlite, file, xz, pcre, bash-completion, zstd, zchunk, libmodulemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, bzip2
+, expat
+, glib
+, curl
+, libxml2
+, python3
+, rpm
+, openssl
+, sqlite
+, file
+, xz
+, pcre
+, bash-completion
+, zstd
+, zchunk
+, libmodulemd
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +26,9 @@ stdenv.mkDerivation rec {
   version = "0.17.1";
 
   src = fetchFromGitHub {
-    owner  = "rpm-software-management";
-    repo   = "createrepo_c";
-    rev    = version;
+    owner = "rpm-software-management";
+    repo = "createrepo_c";
+    rev = version;
     sha256 = "G2xioH9XWntHFmUfTN2s2mdtIqgTTLKr5jZflwpaC8Q=";
   };
 
@@ -33,9 +52,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C implementation of createrepo";
-    homepage    = "https://rpm-software-management.github.io/createrepo_c/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "https://rpm-software-management.github.io/createrepo_c/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];
   };
 }

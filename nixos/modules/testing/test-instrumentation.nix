@@ -11,7 +11,8 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
   config = {
 
     systemd.services.backdoor =
-      { wantedBy = [ "multi-user.target" ];
+      {
+        wantedBy = [ "multi-user.target" ];
         requires = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
         after = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
         script =
@@ -58,7 +59,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         # TODO: refactor such that test-instrumentation can import qemu-vm
         #       or declare virtualisation.qemu.console option in a module that's always imported
         consoles = [ qemuSerialDevice ];
-        package  = lib.mkDefault pkgs.qemu_test;
+        package = lib.mkDefault pkgs.qemu_test;
       };
     };
 

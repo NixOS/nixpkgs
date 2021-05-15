@@ -5,7 +5,7 @@
 , fpc
 , libX11
 
-# GTK2/3
+  # GTK2/3
 , pango
 , cairo
 , glib
@@ -15,12 +15,12 @@
 , gdk-pixbuf
 , python3
 
-# Qt5
+  # Qt5
 , libqt5pas
 , qt5
 
 , widgetset ? "qt5"
-# See https://github.com/Alexey-T/CudaText-lexers
+  # See https://github.com/Alexey-T/CudaText-lexers
 , additionalLexers ? [ "Nix" ]
 }:
 
@@ -65,9 +65,12 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
-  buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    cp -r --no-preserve=mode ${dep} ${name}
-  '') deps) + ''
+  buildPhase = lib.concatStringsSep "\n"
+    (lib.mapAttrsToList
+      (name: dep: ''
+        cp -r --no-preserve=mode ${dep} ${name}
+      '')
+      deps) + ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
@@ -90,14 +93,16 @@ stdenv.mkDerivation rec {
 
     install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
     install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
-  '' + lib.concatMapStringsSep "\n" (lexer: ''
-    if [ -d "CudaText-lexers/${lexer}" ]; then
-      install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
-    else
-      echo "${lexer} lexer not found"
-      exit 1
-    fi
-  '') additionalLexers;
+  '' + lib.concatMapStringsSep "\n"
+    (lexer: ''
+      if [ -d "CudaText-lexers/${lexer}" ]; then
+        install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+      else
+        echo "${lexer} lexer not found"
+        exit 1
+      fi
+    '')
+    additionalLexers;
 
   meta = with lib; {
     description = "Cross-platform code editor";

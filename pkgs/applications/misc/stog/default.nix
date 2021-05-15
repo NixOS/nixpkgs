@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, ocaml, findlib, ocf, ptime,
-  uutf, uri, ppx_blob, xtmpl, ocaml_lwt, higlo, omd
+{ lib
+, stdenv
+, fetchFromGitLab
+, ocaml
+, findlib
+, ocf
+, ptime
+, uutf
+, uri
+, ppx_blob
+, xtmpl
+, ocaml_lwt
+, higlo
+, omd
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "XML documents and web site compiler";
     homepage = "https://www.good-eris.net/stog";
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [ regnat ];
   };
 }

@@ -1,6 +1,16 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
-, qtbase, qtquickcontrols, qtquickcontrols2, qtkeychain, qtmultimedia, qttools
-, libquotient, libsecret
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtquickcontrols
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
 }:
 
 mkDerivation rec {
@@ -26,14 +36,15 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/bin/quaternion.app $out/Applications
-    rmdir $out/bin || :
-  '' else ''
-    substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-      --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv $out/bin/quaternion.app $out/Applications
+      rmdir $out/bin || :
+    '' else ''
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
+        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+    '';
 
   meta = with lib; {
     description =

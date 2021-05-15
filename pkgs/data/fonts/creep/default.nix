@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libfaketime
-, fonttosfnt, mkfontscale
+{ lib
+, stdenv
+, fetchFromGitHub
+, libfaketime
+, fonttosfnt
+, mkfontscale
 }:
 
 stdenv.mkDerivation rec {

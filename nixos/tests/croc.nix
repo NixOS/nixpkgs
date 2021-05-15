@@ -4,7 +4,8 @@ let
     environment.systemPackages = [ pkgs.croc ];
   };
   pass = pkgs.writeText "pass" "PassRelay";
-in {
+in
+{
   name = "croc";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ hax404 julm ];

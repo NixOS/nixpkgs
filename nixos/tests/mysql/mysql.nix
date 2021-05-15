@@ -1,4 +1,4 @@
-import ./../make-test-python.nix ({ pkgs, ...} : {
+import ./../make-test-python.nix ({ pkgs, ... }: {
   name = "mysql";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -27,12 +27,13 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.package = pkgs.mysql57;
       };
 
@@ -62,12 +63,13 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.package = pkgs.mysql80;
       };
 
@@ -90,12 +92,13 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.settings = {
           mysqld = {
             plugin-load-add = [ "ha_rocksdb.so" ];

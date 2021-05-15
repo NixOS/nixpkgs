@@ -25,7 +25,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = lib.optional isPy36 dataclasses;
 
-  buildInputs = [ libX11 libXinerama libXrandr];
+  buildInputs = [ libX11 libXinerama libXrandr ];
 
   meta = with lib; {
     description = "Fetch location and size of physical screens";

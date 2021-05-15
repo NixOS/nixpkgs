@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  doCheck = false;  # too much transient errors to bother
+  doCheck = false; # too much transient errors to bother
 
   # unfortunately, it needs /etc/protocol to be present to not fail
   #pythonImportsCheck = [ "eventlet" ];

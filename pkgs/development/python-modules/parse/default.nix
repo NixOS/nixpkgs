@@ -1,5 +1,7 @@
-{ lib, fetchPypi
-, buildPythonPackage, python
+{ lib
+, fetchPypi
+, buildPythonPackage
+, python
 }:
 buildPythonPackage rec {
   pname = "parse";

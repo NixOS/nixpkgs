@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, itk4, Cocoa }:
 
 stdenv.mkDerivation rec {
-  pname   = "c3d";
+  pname = "c3d";
   version = "unstable-2020-10-05";
 
   src = fetchFromGitHub {

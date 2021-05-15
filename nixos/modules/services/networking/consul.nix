@@ -177,7 +177,7 @@ in
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
           ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
+          (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
           ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
@@ -230,26 +230,24 @@ in
       };
     }
 
-    (mkIf (cfg.alerts.enable) {
-      systemd.services.consul-alerts = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "consul.service" ];
+      (mkIf (cfg.alerts.enable) {
+        systemd.services.consul-alerts = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "consul.service" ];
 
-        path = [ cfg.package ];
+          path = [ cfg.package ];
 
-        serviceConfig = {
-          ExecStart = ''
-            ${cfg.alerts.package}/bin/consul-alerts start \
-              --alert-addr=${cfg.alerts.listenAddr} \
-              --consul-addr=${cfg.alerts.consulAddr} \
-              ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
-              ${optionalString cfg.alerts.watchEvents "--watch-events"}
-          '';
-          User = if cfg.dropPrivileges then "consul" else null;
-          Restart = "on-failure";
+          serviceConfig = {
+            ExecStart = ''
+              ${cfg.alerts.package}/bin/consul-alerts start \
+                --alert-addr=${cfg.alerts.listenAddr} \
+                --consul-addr=${cfg.alerts.consulAddr} \
+                ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
+                ${optionalString cfg.alerts.watchEvents "--watch-events"}
+            '';
+            User = if cfg.dropPrivileges then "consul" else null;
+            Restart = "on-failure";
+          };
         };
-      };
-    })
-
-  ]);
+      })]);
 }

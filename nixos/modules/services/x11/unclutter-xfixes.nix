@@ -4,7 +4,8 @@ with lib;
 
 let cfg = config.services.unclutter-xfixes;
 
-in {
+in
+{
   options.services.unclutter-xfixes = {
 
     enable = mkOption {
@@ -35,7 +36,7 @@ in {
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter-xfixes command.";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "exclude-root" "ignore-scrolling" "fork" ];
     };
   };

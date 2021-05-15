@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, librest, gnome-online-accounts
-, gnome, libsoup, json-glib, gobject-introspection
-, gtk-doc, pkgs, docbook-xsl-nons, autoconf, automake, libtool }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, librest
+, gnome-online-accounts
+, gnome
+, libsoup
+, json-glib
+, gobject-introspection
+, gtk-doc
+, pkgs
+, docbook-xsl-nons
+, autoconf
+, automake
+, libtool
+}:
 
 stdenv.mkDerivation rec {
   pname = "gfbgraph";
@@ -14,8 +29,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config gobject-introspection gtk-doc
-    docbook-xsl-nons autoconf automake libtool
+    pkg-config
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    autoconf
+    automake
+    libtool
   ];
   buildInputs = [ glib gnome-online-accounts ];
   propagatedBuildInputs = [ libsoup json-glib librest ];

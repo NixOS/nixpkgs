@@ -3,7 +3,8 @@
 , rustPlatform
 , fetchFromGitHub
 , xz
-, autoPatchelfHook }:
+, autoPatchelfHook
+}:
 
 let
   assets = import ./assets.nix {

@@ -23,7 +23,8 @@ in
     {
       router =
         { pkgs, nodes, ... }:
-        { virtualisation.vlans = [ 1 2 ];
+        {
+          virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
           networking.nat.internalInterfaces = [ "eth2" ];
           networking.nat.externalInterface = "eth1";
@@ -47,7 +48,8 @@ in
 
       client1 =
         { pkgs, nodes, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 pkgs.netcat ];
+        {
+          environment.systemPackages = [ pkgs.miniupnpc_2 pkgs.netcat ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway = internalRouterAddress;
           networking.interfaces.eth1.ipv4.addresses = [
@@ -65,7 +67,8 @@ in
 
       client2 =
         { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 ];
+        {
+          environment.systemPackages = [ pkgs.miniupnpc_2 ];
           virtualisation.vlans = [ 1 ];
           networking.interfaces.eth1.ipv4.addresses = [
             { address = externalClient2Address; prefixLength = 24; }

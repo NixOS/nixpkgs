@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, curl, zlib, glib, xorg, dbus, fontconfig, libGL,
-  freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, curl
+, zlib
+, glib
+, xorg
+, dbus
+, fontconfig
+, libGL
+, freetype
+, xkeyboard_config
+, makeDesktopItem
+, makeWrapper
+}:
 
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
@@ -30,7 +43,7 @@ stdenv.mkDerivation rec {
     categories = "Development;IDE;";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc

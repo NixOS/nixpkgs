@@ -8,7 +8,8 @@ let
   genesisFile = pkgs.writeText "genesis.json" (builtins.toJSON cfg.genesis);
   staticNodesFile = pkgs.writeText "static-nodes.json" (builtins.toJSON cfg.staticNodes);
 
-in {
+in
+{
   options = {
 
     services.quorum = {
@@ -40,7 +41,7 @@ in {
 
       staticNodes = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "enode://dd333ec28f0a8910c92eb4d336461eea1c20803eed9cf2c056557f986e720f8e693605bba2f4e8f289b1162e5ac7c80c914c7178130711e393ca76abc1d92f57@0.0.0.0:30303?discport=0" ];
         description = "List of validator nodes.";
       };
@@ -95,7 +96,7 @@ in {
         };
       };
 
-     ws = {
+      ws = {
         enable = mkOption {
           type = types.bool;
           default = true;
@@ -120,12 +121,12 @@ in {
           description = "API's offered over the WS-RPC interface.";
         };
 
-       origins = mkOption {
+        origins = mkOption {
           type = types.str;
           default = "*";
           description = "Origins from which to accept websockets requests";
-       };
-     };
+        };
+      };
 
       genesis = mkOption {
         type = types.nullOr types.attrs;
@@ -160,7 +161,7 @@ in {
           }'';
         description = "Blockchain genesis settings.";
       };
-     };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -224,6 +225,6 @@ in {
       home = dataDir;
       isSystemUser = true;
     };
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
   };
 }

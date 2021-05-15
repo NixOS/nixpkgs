@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, zlib, python2}:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "strelka";

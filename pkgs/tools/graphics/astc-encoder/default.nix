@@ -20,13 +20,13 @@ with rec {
 
   # CMake Build flags for the selected ISAs. For a list of flags, see
   # https://github.com/ARM-software/astc-encoder/blob/main/Docs/Building.md
-  isaFlags = map ( isa: "-DISA_${isa}=ON" ) isas;
+  isaFlags = map (isa: "-DISA_${isa}=ON") isas;
 
   # The suffix of the binary to link as 'astcenc'
   mainBinary = builtins.replaceStrings
-    [ "AVX2" "SSE41"  "SSE2" "NEON" "NONE" ]
+    [ "AVX2" "SSE41" "SSE2" "NEON" "NONE" ]
     [ "avx2" "sse4.1" "sse2" "neon" "none" ]
-    ( builtins.head isas );
+    (builtins.head isas);
 };
 
 gccStdenv.mkDerivation rec {

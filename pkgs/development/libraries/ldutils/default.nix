@@ -26,8 +26,8 @@ mkDerivation rec {
     qmake
   ];
 
-  LDUTILS_LIB=placeholder "out";
-  LDUTILS_INCLUDE=placeholder "out";
+  LDUTILS_LIB = placeholder "out";
+  LDUTILS_INCLUDE = placeholder "out";
 
   meta = with lib; {
     description = "Headers and link library for other ldutils projects";

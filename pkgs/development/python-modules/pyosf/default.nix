@@ -19,10 +19,10 @@ buildPythonPackage rec {
   };
 
   preBuild = "export HOME=$TMP";
-  buildInputs = [ pytestrunner ];  # required via `setup_requires`
+  buildInputs = [ pytestrunner ]; # required via `setup_requires`
   propagatedBuildInputs = [ requests ];
 
-  doCheck = false;  # requires network access
+  doCheck = false; # requires network access
   pythonImportsCheck = [ "pyosf" ];
 
   meta = with lib; {

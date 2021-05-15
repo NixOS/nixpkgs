@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests
-, websocket_client, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, websocket_client
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";

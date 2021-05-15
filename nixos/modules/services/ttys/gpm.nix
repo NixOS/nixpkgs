@@ -41,7 +41,8 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.gpm =
-      { description = "Console Mouse Daemon";
+      {
+        description = "Console Mouse Daemon";
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-input-mice.device" ];

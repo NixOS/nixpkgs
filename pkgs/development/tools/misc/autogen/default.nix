@@ -9,37 +9,44 @@ stdenv.mkDerivation rec {
     sha256 = "16mlbdys8q4ckxlvxyhwkdnh1ay9f6g0cyp1kylkpalgnik398gq";
   };
 
-  patches = let
-    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
-      url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
+  patches =
+    let
+      dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
+        url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
           + "/debian/patches/${pname}.diff?inline=false";
-      inherit name sha256;
-    };
-  in [
-    (dp {
-      pname = "20_no_Werror";
-      sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
-    })
-    (dp {
-      pname = "30_ag_macros.m4_syntax_error";
-      sha256 = "1z8vmbwbkz3505wd33i2xx91mlf8rwsa7klndq37nw821skxwyh3";
-    })
-    (dp {
-      pname = "31_allow_overriding_AGexe_for_crossbuild";
-      sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
-    })
-  ];
+        inherit name sha256;
+      };
+    in
+    [
+      (dp {
+        pname = "20_no_Werror";
+        sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
+      })
+      (dp {
+        pname = "30_ag_macros.m4_syntax_error";
+        sha256 = "1z8vmbwbkz3505wd33i2xx91mlf8rwsa7klndq37nw821skxwyh3";
+      })
+      (dp {
+        pname = "31_allow_overriding_AGexe_for_crossbuild";
+        sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
+      })
+    ];
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkg-config perl autoreconfHook/*patches applied*/
+    which
+    pkg-config
+    perl
+    autoreconfHook /*patches applied*/
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
-    buildPackages.buildPackages.autogen buildPackages.texinfo
+    buildPackages.buildPackages.autogen
+    buildPackages.texinfo
   ];
   buildInputs = [
-    guile libxml2
+    guile
+    libxml2
   ];
 
   preConfigure = ''

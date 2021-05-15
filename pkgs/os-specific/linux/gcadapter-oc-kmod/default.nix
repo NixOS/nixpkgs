@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , kernel
 , kmod
@@ -6,7 +7,8 @@
 
 let
   kerneldir = "lib/modules/${kernel.modDirVersion}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gcadapter-oc-kmod";
   version = "1.4";
 

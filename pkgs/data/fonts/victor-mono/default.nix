@@ -3,7 +3,8 @@
 let
   pname = "victor-mono";
   version = "1.4.1";
-in fetchFromGitHub rec {
+in
+fetchFromGitHub rec {
   name = "${pname}-${version}";
 
   owner = "rubjo";

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-build-idris-package  {
+build-idris-package {
   name = "tf-random";
   version = "2020-01-15";
 

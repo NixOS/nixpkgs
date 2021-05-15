@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, requests, requests_oauthlib, six
-, pytest, pytestcache, pytestcov, responses, mock
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, requests_oauthlib
+, six
+, pytest
+, pytestcache
+, pytestcov
+, responses
+, mock
 }:
 
 buildPythonPackage rec {

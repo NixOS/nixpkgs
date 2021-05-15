@@ -15,9 +15,9 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "sha256-o64r4TBDpICnVZMIX2jKQjoJkA/jAviJkvI/xJ4ToM8=";
   };
-   patchPhase = ''
-     substituteInPlace main.go --replace 0.0.0 ${version}
-   '';
+  patchPhase = ''
+    substituteInPlace main.go --replace 0.0.0 ${version}
+  '';
 
   meta = with lib; {
     description = "Docker Build Wrapper";

@@ -12,7 +12,7 @@
 , dbus
 , xvfb-run
 , wrapGAppsHook
-# , fetchPypi
+  # , fetchPypi
 }:
 
 buildPythonPackage {

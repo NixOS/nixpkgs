@@ -1,7 +1,24 @@
-{ lib, stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkg-config, gtksourceview, pango, gettext, dconf
-, makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
-, texinfo, ssw, python3
+{ lib
+, stdenv
+, fetchurl
+, libxml2
+, readline
+, zlib
+, perl
+, cairo
+, gtk3
+, gsl
+, pkg-config
+, gtksourceview
+, pango
+, gettext
+, dconf
+, makeWrapper
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, texinfo
+, ssw
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +31,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config texinfo python3 ];
-  buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
-    gtksourceview pango gettext
-    makeWrapper gsettings-desktop-schemas hicolor-icon-theme ssw
+  buildInputs = [
+    libxml2
+    readline
+    zlib
+    perl
+    cairo
+    gtk3
+    gsl
+    gtksourceview
+    pango
+    gettext
+    makeWrapper
+    gsettings-desktop-schemas
+    hicolor-icon-theme
+    ssw
   ];
 
   doCheck = false;

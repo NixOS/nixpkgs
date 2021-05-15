@@ -1,13 +1,13 @@
 { mkDerivation
-  , lib
-  , fetchFromGitHub
+, lib
+, fetchFromGitHub
 
-  , cmake
-  , pkg-config
-  , qtbase
-  , qttools
-  , qtx11extras
-  , qttranslations
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, qtx11extras
+, qttranslations
 }:
 
 mkDerivation rec {
@@ -28,7 +28,9 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    qtbase qttools qtx11extras
+    qtbase
+    qttools
+    qtx11extras
   ];
 
   postPatch = ''

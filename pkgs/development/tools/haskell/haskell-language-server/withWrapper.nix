@@ -1,5 +1,9 @@
-{ lib, supportedGhcVersions ? [ "884" "8104" ], stdenv, haskellPackages
-, haskell }:
+{ lib
+, supportedGhcVersions ? [ "884" "8104" ]
+, stdenv
+, haskellPackages
+, haskell
+}:
 #
 # The recommended way to override this package is
 #
@@ -14,28 +18,32 @@ let
     concatStringsSep "." (take 2 (splitString "." packages.ghc.version));
   tunedHls = hsPkgs:
     haskell.lib.justStaticExecutables
-    (haskell.lib.overrideCabal hsPkgs.haskell-language-server (old: {
-      postInstall = ''
-        remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.shake.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-jquery.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-dgtable.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-flot.data} $out/bin/haskell-language-server
-      '';
-    }));
+      (haskell.lib.overrideCabal hsPkgs.haskell-language-server (old: {
+        postInstall = ''
+          remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
+          remove-references-to -t ${hsPkgs.shake.data} $out/bin/haskell-language-server
+          remove-references-to -t ${hsPkgs.js-jquery.data} $out/bin/haskell-language-server
+          remove-references-to -t ${hsPkgs.js-dgtable.data} $out/bin/haskell-language-server
+          remove-references-to -t ${hsPkgs.js-flot.data} $out/bin/haskell-language-server
+        '';
+      }));
   targets = version:
     let packages = getPackages version;
-    in [
+    in
+    [
       "haskell-language-server-${packages.ghc.version}"
       "haskell-language-server-${getMajorVersion packages}"
     ];
   makeSymlinks = version:
-    concatMapStringsSep "\n" (x:
-      "ln -s ${
+    concatMapStringsSep "\n"
+      (x:
+        "ln -s ${
         tunedHls (getPackages version)
-      }/bin/haskell-language-server $out/bin/${x}") (targets version);
+      }/bin/haskell-language-server $out/bin/${x}")
+      (targets version);
   pkg = tunedHls haskellPackages;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "haskell-language-server";
   version = haskellPackages.haskell-language-server.version;
   buildCommand = ''

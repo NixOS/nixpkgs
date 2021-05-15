@@ -1,19 +1,19 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 let
   fakeReply = pkgs.writeText "namecoin-reply.json" ''
-  { "error": null,
-    "id": 1,
-    "result": {
-      "address": "T31q8ucJ4dI1xzhxQ5QispfECld5c7Xw",
-      "expired": false,
-      "expires_in": 2248,
-      "height": 438155,
-      "name": "d/test",
-      "txid": "db61c0b2540ba0c1a2c8cc92af703a37002e7566ecea4dbf8727c7191421edfb",
-      "value": "{\"ip\": \"1.2.3.4\", \"email\": \"root@test.bit\",\"info\": \"Fake record\"}",
-      "vout": 0
+    { "error": null,
+      "id": 1,
+      "result": {
+        "address": "T31q8ucJ4dI1xzhxQ5QispfECld5c7Xw",
+        "expired": false,
+        "expires_in": 2248,
+        "height": 438155,
+        "name": "d/test",
+        "txid": "db61c0b2540ba0c1a2c8cc92af703a37002e7566ecea4dbf8727c7191421edfb",
+        "value": "{\"ip\": \"1.2.3.4\", \"email\": \"root@test.bit\",\"info\": \"Fake record\"}",
+        "vout": 0
+      }
     }
-  }
   '';
 
   # Disabled because DNSSEC does not currently validate,
@@ -53,9 +53,9 @@ in
     services.ncdns = {
       enable = true;
       dnssec.enable = dnssec;
-      identity.hostname   = "example.com";
+      identity.hostname = "example.com";
       identity.hostmaster = "root@example.com";
-      identity.address    = "1.0.0.1";
+      identity.address = "1.0.0.1";
     };
 
     services.pdns-recursor = {

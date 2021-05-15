@@ -22,7 +22,8 @@ let
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
   pname = "libtorch";
 
@@ -56,54 +57,56 @@ in stdenv.mkDerivation {
       --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in lib.optionalString stdenv.isLinux ''
-    find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      echo "setting rpath for $lib..."
-      patchelf --set-rpath "${rpath}:$out/lib" "$lib"
-      ${lib.optionalString cudaSupport ''
-        addOpenGLRunpath "$lib"
-      ''}
-    done
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change @rpath/libshm.dylib $out/lib/libshm.dylib $out/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch_python.dylib
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+    in
+    lib.optionalString stdenv.isLinux ''
+      find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+        echo "setting rpath for $lib..."
+        patchelf --set-rpath "${rpath}:$out/lib" "$lib"
+        ${lib.optionalString cudaSupport ''
+          addOpenGLRunpath "$lib"
+        ''}
+      done
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change @rpath/libshm.dylib $out/lib/libshm.dylib $out/lib/libtorch_python.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch_python.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_python.dylib
+      install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libtorch_python.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch_python.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch_cpu.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_cpu.dylib
-    install_name_tool -change @rpath/libtensorpipe.dylib $out/lib/libtensorpipe.dylib $out/lib/libtorch_cpu.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch_cpu.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_cpu.dylib
+      install_name_tool -change @rpath/libtensorpipe.dylib $out/lib/libtensorpipe.dylib $out/lib/libtorch_cpu.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_observers.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_observers.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_observers.dylib
+      install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_observers.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_observers.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
+      install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_module_test_dynamic.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_detectron_ops.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libcaffe2_detectron_ops.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libcaffe2_detectron_ops.dylib
+      install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libcaffe2_detectron_ops.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libcaffe2_detectron_ops.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libshm.dylib
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libshm.dylib
-    install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libshm.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libshm.dylib
+      install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libshm.dylib
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libshm.dylib
+      install_name_tool -change @rpath/libtorch.dylib $out/lib/libtorch.dylib $out/lib/libshm.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libshm.dylib
 
-    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_global_deps.dylib
-    install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch_global_deps.dylib
-  '';
+      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_global_deps.dylib
+      install_name_tool -change @rpath/libtorch_cpu.dylib $out/lib/libtorch_cpu.dylib $out/lib/libtorch_global_deps.dylib
+    '';
 
   outputs = [ "out" "dev" ];
 

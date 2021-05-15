@@ -1,7 +1,25 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
-, withGUI ? true, wrapQtAppsHook }:
+{ stdenv
+, lib
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, openssl
+, qttools
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreServices
+, ScreenSaver
+, xlibsWrapper
+, libX11
+, libXi
+, libXtst
+, libXrandr
+, xinput
+, avahi-compat
+, withGUI ? true
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
@@ -19,7 +37,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "CVE-2020-15117.patch";
       url = "https://github.com/symless/synergy-core/commit/"
-          + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
+        + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
       sha256 = "03q8m5n50fms7fjfjgmqrgy9mrxwi9kkz3f3vlrs2x5h21dl6bmj";
     })
   ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
@@ -53,9 +71,19 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGUI [
     qttools
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+    ApplicationServices
+    Carbon
+    Cocoa
+    CoreServices
+    ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    xlibsWrapper
+    libX11
+    libXi
+    libXtst
+    libXrandr
+    xinput
+    avahi-compat
   ];
 
   installPhase = ''

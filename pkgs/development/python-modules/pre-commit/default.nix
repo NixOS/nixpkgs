@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
@@ -39,7 +42,7 @@ buildPythonPackage rec {
     toml
     virtualenv
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata
-    ++ lib.optional (pythonOlder "3.7") importlib-resources;
+  ++ lib.optional (pythonOlder "3.7") importlib-resources;
 
   # slow and impure
   doCheck = false;

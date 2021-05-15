@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, future, six, ecdsa, rsa
-, pycrypto, pytestcov, pytestrunner, cryptography
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, six
+, ecdsa
+, rsa
+, pycrypto
+, pytestcov
+, pytestrunner
+, cryptography
 , pytestCheckHook
 }:
 

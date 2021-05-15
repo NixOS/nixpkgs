@@ -1,5 +1,13 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
-, dateparser, humanize, pendulum, ruamel_yaml, tzlocal }:
+{ lib
+, fetchPypi
+, fetchpatch
+, buildPythonPackage
+, dateparser
+, humanize
+, pendulum
+, ruamel_yaml
+, tzlocal
+}:
 
 buildPythonPackage rec {
   pname = "maya";

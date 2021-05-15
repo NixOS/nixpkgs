@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, which
+, unzip
+, libicns
+, imagemagick
+, jdk
+, perl
+, python
 }:
 
 let

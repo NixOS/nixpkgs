@@ -15,49 +15,52 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  mkDerive = {mkHomepage, mkUrls}: args:
-      lib.makeOverridable ({
-        name, version, sha256,
-        depends ? [],
-        doCheck ? true,
-        requireX ? false,
-        broken ? false,
-        hydraPlatforms ? R.meta.hydraPlatforms
-      }: buildRPackage {
-    name = "${name}-${version}";
-    src = fetchurl {
-      inherit sha256;
-      urls = mkUrls (args // { inherit name version; });
-    };
-    inherit doCheck requireX;
-    propagatedBuildInputs = depends;
-    nativeBuildInputs = depends;
-    meta.homepage = mkHomepage (args // { inherit name; });
-    meta.platforms = R.meta.platforms;
-    meta.hydraPlatforms = hydraPlatforms;
-    meta.broken = broken;
-  });
+  mkDerive = { mkHomepage, mkUrls }: args:
+    lib.makeOverridable ({ name
+                         , version
+                         , sha256
+                         , depends ? [ ]
+                         , doCheck ? true
+                         , requireX ? false
+                         , broken ? false
+                         , hydraPlatforms ? R.meta.hydraPlatforms
+                         }: buildRPackage {
+      name = "${name}-${version}";
+      src = fetchurl {
+        inherit sha256;
+        urls = mkUrls (args // { inherit name version; });
+      };
+      inherit doCheck requireX;
+      propagatedBuildInputs = depends;
+      nativeBuildInputs = depends;
+      meta.homepage = mkHomepage (args // { inherit name; });
+      meta.platforms = R.meta.platforms;
+      meta.hydraPlatforms = hydraPlatforms;
+      meta.broken = broken;
+    });
 
   # Templates for generating Bioconductor and CRAN packages
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
-                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
-                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
+    mkHomepage = { name, biocVersion, ... }: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkUrls = { name, version, biocVersion }: [
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz"
+    ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = { name, version, biocVersion }: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = { name, version, biocVersion }: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
-    mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = { name, snapshot, ... }: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
+    mkUrls = { name, version, snapshot }: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
   };
 
   # Overrides package definitions with nativeBuildInputs.
@@ -75,11 +78,13 @@ let
   #   });
   # }
   overrideNativeBuildInputs = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (name: value:
+        (builtins.getAttr name old).overrideDerivation (attrs: {
+          nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definitions with buildInputs.
   # For example,
@@ -96,11 +101,13 @@ let
   #   });
   # }
   overrideBuildInputs = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
-        buildInputs = attrs.buildInputs ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (name: value:
+        (builtins.getAttr name old).overrideDerivation (attrs: {
+          buildInputs = attrs.buildInputs ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definitions with new R dependencies.
   # For example,
@@ -118,12 +125,14 @@ let
   #   });
   # }
   overrideRDepends = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
-        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (name: value:
+        (builtins.getAttr name old).overrideDerivation (attrs: {
+          nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+          propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definition requiring X running to install.
   # For example,
@@ -141,14 +150,16 @@ let
   # }
   overrideRequireX = packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          requireX = true;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            requireX = true;
+          };
+        })
+        packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   # Overrides package definition to skip check.
   # For example,
@@ -166,14 +177,16 @@ let
   # }
   overrideSkipCheck = packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          doCheck = false;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            doCheck = false;
+          };
+        })
+        packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   # Overrides package definition to mark it broken.
   # For example,
@@ -191,14 +204,16 @@ let
   # }
   overrideBroken = packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          broken = true;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            broken = true;
+          };
+        })
+        packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   defaultOverrides = old: new:
     let old0 = old; in
@@ -210,7 +225,8 @@ let
       old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
       old6 = old5 // (overrideBroken brokenPackages old5);
       old = old6;
-    in old // (otherOverrides old new);
+    in
+    old // (otherOverrides old new);
 
   # Recursive override pattern.
   # `_self` is a collection of packages;
@@ -218,10 +234,10 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = { inherit buildRPackage; } //
-          import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
-          import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
-          import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; };
+    import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
+    import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
+    import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
+    import ./cran-packages.nix { inherit self; derive = deriveCran; };
 
   # tweaks for the individual packages and "in self" follow
 
@@ -250,7 +266,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkg-config ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
-    data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.lapack ];
@@ -388,7 +404,7 @@ let
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
-    clustermq = [  pkgs.pkg-config ];
+    clustermq = [ pkgs.pkg-config ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     RcppEigen = [ pkgs.libiconv ];
@@ -642,8 +658,8 @@ let
   ];
 
   packagesToSkipCheck = [
-    "Rmpi"     # tries to run MPI processes
-    "pbdMPI"   # tries to run MPI processes
+    "Rmpi" # tries to run MPI processes
+    "pbdMPI" # tries to run MPI processes
     "data_table" # fails to rename shared library before check
   ];
 
@@ -653,14 +669,16 @@ let
 
   otherOverrides = old: new: {
     stringi = old.stringi.overrideDerivation (attrs: {
-      postInstall = let
-        icuName = "icudt52l";
-        icuSrc = pkgs.fetchzip {
-          url = "http://static.rexamine.com/packages/${icuName}.zip";
-          sha256 = "0hvazpizziq5ibc9017i1bb45yryfl26wzfsv05vk9mc1575r6xj";
-          stripRoot = false;
-        };
-        in ''
+      postInstall =
+        let
+          icuName = "icudt52l";
+          icuSrc = pkgs.fetchzip {
+            url = "http://static.rexamine.com/packages/${icuName}.zip";
+            sha256 = "0hvazpizziq5ibc9017i1bb45yryfl26wzfsv05vk9mc1575r6xj";
+            stripRoot = false;
+          };
+        in
+        ''
           ${attrs.postInstall or ""}
           cp ${icuSrc}/${icuName}.dat $out/library/stringi/libs
         '';
@@ -670,7 +688,7 @@ let
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
-        '';
+      '';
     });
 
     rzmq = old.rzmq.overrideDerivation (attrs: {
@@ -745,7 +763,7 @@ let
     jqr = old.jqr.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
@@ -770,7 +788,8 @@ let
 
     RVowpalWabbit = old.RVowpalWabbit.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.out}/lib"
+        "--with-boost=${pkgs.boost.dev}"
+        "--with-boost-libdir=${pkgs.boost.out}/lib"
       ];
     });
 
@@ -780,7 +799,7 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      MYSQL_DIR="${pkgs.libmysqlclient}";
+      MYSQL_DIR = "${pkgs.libmysqlclient}";
       preConfigure = ''
         patchShebangs configure
       '';
@@ -823,7 +842,8 @@ let
     Rserve = old.Rserve.overrideDerivation (attrs: {
       patches = [ ./patches/Rserve.patch ];
       configureFlags = [
-        "--with-server" "--with-client"
+        "--with-server"
+        "--with-client"
       ];
     });
 
@@ -849,32 +869,32 @@ let
     acs = old.acs.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     gdtools = old.gdtools.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
       NIX_LDFLAGS = "-lfontconfig -lfreetype";
     });
 
     magick = old.magick.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     libgeos = old.libgeos.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     protolite = old.protolite.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     rpanel = old.rpanel.overrideDerivation (attrs: {
@@ -889,25 +909,25 @@ let
         export INCLUDE_DIR=${pkgs.postgresql}/include
         export LIB_DIR=${pkgs.postgresql.lib}/lib
         patchShebangs configure
-        '';
+      '';
     });
 
     OpenMx = old.OpenMx.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     odbc = old.odbc.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     x13binary = old.x13binary.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     geojsonio = old.geojsonio.overrideDerivation (attrs: {
@@ -921,7 +941,7 @@ let
     mongolite = old.mongolite.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
@@ -952,4 +972,4 @@ let
 
   };
 in
-  self
+self

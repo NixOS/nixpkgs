@@ -2,7 +2,7 @@
 , runCommand
 , makeWrapper
 , lib
-, extraPackages ? []
+, extraPackages ? [ ]
 , buildah
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
@@ -29,7 +29,9 @@ let
     iptables
   ] ++ extraPackages);
 
-in runCommand buildah.name {
+in
+runCommand buildah.name
+{
   name = "${buildah.pname}-wrapper-${buildah.version}";
   inherit (buildah) pname version;
 

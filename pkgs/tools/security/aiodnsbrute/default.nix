@@ -24,10 +24,10 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-     aiodns
-     click
-     tqdm
-     uvloop
+    aiodns
+    click
+    tqdm
+    uvloop
   ];
 
   # no tests present

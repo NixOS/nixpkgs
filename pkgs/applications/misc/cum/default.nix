@@ -12,7 +12,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    alembic beautifulsoup4 click natsort requests sqlalchemy
+    alembic
+    beautifulsoup4
+    click
+    natsort
+    requests
+    sqlalchemy
   ];
 
   # tests seem to fail for `config` not being defined,

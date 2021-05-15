@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkg-config, unixtools
-, dbus, libcap, polkit, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, unixtools
+, dbus
+, libcap
+, polkit
+, systemd
 }:
 
 stdenv.mkDerivation rec {

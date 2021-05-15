@@ -17,6 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "A simple terminal clock written in Rust";
     homepage = "https://github.com/valebes/rsClock";
     license = licenses.mit;
-    maintainers = with maintainers; [valebes];
+    maintainers = with maintainers; [ valebes ];
   };
 }

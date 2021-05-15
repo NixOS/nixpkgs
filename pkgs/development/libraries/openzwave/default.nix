@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
-, systemd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, doxygen
+, fontconfig
+, graphviz-nox
+, libxml2
+, pkg-config
+, which
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "openzwave";
@@ -40,8 +49,8 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
-  FONTCONFIG_PATH="${fontconfig.out}/etc/fonts/";
+  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \

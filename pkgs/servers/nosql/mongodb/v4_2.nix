@@ -8,7 +8,8 @@ let
     inherit CoreFoundation;
     inherit cctools;
   };
-in buildMongoDB {
+in
+buildMongoDB {
   version = "4.2.8";
   sha256 = "13yvhi1258skdni00bh6ph609whqsmhiimhyqy1gs2liwdvh5278";
   patches =

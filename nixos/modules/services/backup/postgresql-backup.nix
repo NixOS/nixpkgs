@@ -33,12 +33,13 @@ let
       startAt = cfg.startAt;
     };
 
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -57,7 +58,7 @@ in {
       };
 
       backupAll = mkOption {
-        default = cfg.databases == [];
+        default = cfg.databases == [ ];
         defaultText = "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
@@ -70,7 +71,7 @@ in {
       };
 
       databases = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of database names to dump.
@@ -102,7 +103,7 @@ in {
   config = mkMerge [
     {
       assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
+        assertion = cfg.backupAll -> cfg.databases == [ ];
         message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
       }];
     }
@@ -116,13 +117,16 @@ in {
         postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = listToAttrs (map (db:
-        let
-          cmd = "${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db}";
-        in {
-          name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db cmd;
-        }) cfg.databases);
+      systemd.services = listToAttrs (map
+        (db:
+          let
+            cmd = "${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db}";
+          in
+          {
+            name = "postgresqlBackup-${db}";
+            value = postgresqlBackupService db cmd;
+          })
+        cfg.databases);
     })
   ];
 

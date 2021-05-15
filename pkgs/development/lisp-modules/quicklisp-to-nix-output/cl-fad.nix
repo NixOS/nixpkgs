@@ -17,15 +17,15 @@ rec {
 
   packageName = "cl-fad";
 
-  asdFilesToKeep = ["cl-fad.asd"];
+  asdFilesToKeep = [ "cl-fad.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-fad DESCRIPTION Portable pathname library SHA256
-    17vkvkwg4wpyny5x2nsazgpip5nxxahsjngaxjyrj5z15d4lkrm0 URL
-    http://beta.quicklisp.org/archive/cl-fad/2021-01-24/cl-fad-20210124-git.tgz
-    MD5 aa8705a0dd8ca1b43d8c76a177efdf74 NAME cl-fad FILENAME cl-fad DEPS
-    ((NAME alexandria FILENAME alexandria)
-     (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME cl-ppcre FILENAME cl-ppcre) (NAME unit-test FILENAME unit-test))
-    DEPENDENCIES (alexandria bordeaux-threads cl-ppcre unit-test) VERSION
+  17vkvkwg4wpyny5x2nsazgpip5nxxahsjngaxjyrj5z15d4lkrm0 URL
+  http://beta.quicklisp.org/archive/cl-fad/2021-01-24/cl-fad-20210124-git.tgz
+  MD5 aa8705a0dd8ca1b43d8c76a177efdf74 NAME cl-fad FILENAME cl-fad DEPS
+  ((NAME alexandria FILENAME alexandria)
+   (NAME bordeaux-threads FILENAME bordeaux-threads)
+   (NAME cl-ppcre FILENAME cl-ppcre) (NAME unit-test FILENAME unit-test))
+  DEPENDENCIES (alexandria bordeaux-threads cl-ppcre unit-test) VERSION
     20210124-git SIBLINGS NIL PARASITES (cl-fad-test)) */

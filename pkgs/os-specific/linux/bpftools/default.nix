@@ -1,7 +1,14 @@
-{ lib, stdenv
-, libopcodes, libbfd, libelf, readline
-, linuxPackages_latest, zlib
-, python3, bison, flex
+{ lib
+, stdenv
+, libopcodes
+, libbfd
+, libelf
+, readline
+, linuxPackages_latest
+, zlib
+, python3
+, bison
+, flex
 }:
 
 stdenv.mkDerivation {
@@ -31,8 +38,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Debugging/program analysis tools for the eBPF subsystem";
-    license     = [ licenses.gpl2 licenses.bsd2 ];
-    platforms   = platforms.linux;
+    license = [ licenses.gpl2 licenses.bsd2 ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -25,14 +25,18 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     # cranelift+jit works everywhere, see:
     # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
-    "--features" "cranelift,jit"
+    "--features"
+    "cranelift,jit"
     # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+    "--manifest-path"
+    "lib/cli/Cargo.toml"
+    "--bin"
+    "wasmer"
   ];
 
   cargoTestFlags = [
-    "--features" "test-cranelift,test-jit"
+    "--features"
+    "test-cranelift,test-jit"
   ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

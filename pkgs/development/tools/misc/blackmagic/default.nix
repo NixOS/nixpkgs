@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
-, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkg-config
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, gcc-arm-embedded
+, libftdi1
+, libusb-compat-0_1
+, pkg-config
 , python3
 }:
 
@@ -28,7 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    gcc-arm-embedded pkg-config
+    gcc-arm-embedded
+    pkg-config
     python3
   ];
 

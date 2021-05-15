@@ -1,8 +1,8 @@
 /*
 
-This file is for options that NixOS and nix-darwin have in common.
+  This file is for options that NixOS and nix-darwin have in common.
 
-Platform-specific code is in the respective default.nix files.
+  Platform-specific code is in the respective default.nix files.
 
  */
 

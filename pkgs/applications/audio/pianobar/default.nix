@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libao json_c libgcrypt ffmpeg curl
+    libao
+    json_c
+    libgcrypt
+    ffmpeg
+    curl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

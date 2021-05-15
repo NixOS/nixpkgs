@@ -1,5 +1,10 @@
-{ buildPythonPackage, fetchPypi
-, cookies, mock, requests, six }:
+{ buildPythonPackage
+, fetchPypi
+, cookies
+, mock
+, requests
+, six
+}:
 
 buildPythonPackage rec {
   pname = "responses";

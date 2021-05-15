@@ -1,14 +1,14 @@
 import ./make-test-python.nix (
   {
     nodes = {
-      router = {config, pkgs, ...}: {
+      router = { config, pkgs, ... }: {
         config = {
           # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
           boot.kernel.sysctl = {
             "net.ipv6.conf.all.forwarding" = true;
           };
           networking.interfaces.eth1 = {
-            ipv6.addresses = [ { address = "fd00:dead:beef:dead::1"; prefixLength = 64; } ];
+            ipv6.addresses = [{ address = "fd00:dead:beef:dead::1"; prefixLength = 64; }];
           };
           services.corerad = {
             enable = true;
@@ -36,7 +36,7 @@ import ./make-test-python.nix (
           };
         };
       };
-      client = {config, pkgs, ...}: {
+      client = { config, pkgs, ... }: {
         # Use IPv6 SLAAC from router advertisements, and install rdisc6 so we can
         # trigger one immediately.
         config = {

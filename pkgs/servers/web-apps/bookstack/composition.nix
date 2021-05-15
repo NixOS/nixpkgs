@@ -1,6 +1,9 @@
-{pkgs ? import <nixpkgs> {
+{ pkgs ? import <nixpkgs> {
     inherit system;
-  }, system ? builtins.currentSystem, noDev ? false}:
+  }
+, system ? builtins.currentSystem
+, noDev ? false
+}:
 
 let
   composerEnv = import ./composer-env.nix {

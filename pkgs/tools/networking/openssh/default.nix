@@ -1,7 +1,8 @@
 { callPackage, fetchurl, fetchpatch, autoreconfHook }:
 let
-  common = opts: callPackage (import ./common.nix opts) {};
-in {
+  common = opts: callPackage (import ./common.nix opts) { };
+in
+{
 
   openssh = common rec {
     pname = "openssh";

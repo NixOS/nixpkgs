@@ -1,4 +1,4 @@
-{ lib, stdenv, ncurses, customConfig ? null, name, src, patches ? [] }:
+{ lib, stdenv, ncurses, customConfig ? null, name, src, patches ? [ ] }:
 stdenv.mkDerivation {
 
   inherit name src patches;

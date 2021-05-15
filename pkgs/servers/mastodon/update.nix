@@ -1,5 +1,15 @@
-{ pkgs, stdenv, lib, makeWrapper, yarn2nix, bundix, coreutils,
-  diffutils, nix-prefetch-github, gnused, jq }:
+{ pkgs
+, stdenv
+, lib
+, makeWrapper
+, yarn2nix
+, bundix
+, coreutils
+, diffutils
+, nix-prefetch-github
+, gnused
+, jq
+}:
 stdenv.mkDerivation rec {
   name = "mastodon-update-script";
   installPhase = ''

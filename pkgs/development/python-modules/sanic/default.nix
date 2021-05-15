@@ -1,7 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, doCheck ? true
-, aiofiles, httptools, multidict, sanic-routing, ujson, uvloop, websockets
-, pytestCheckHook, beautifulsoup4, gunicorn, uvicorn, sanic-testing
-, pytest-benchmark, pytest-sanic, pytest-sugar, pytestcov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, doCheck ? true
+, aiofiles
+, httptools
+, multidict
+, sanic-routing
+, ujson
+, uvloop
+, websockets
+, pytestCheckHook
+, beautifulsoup4
+, gunicorn
+, uvicorn
+, sanic-testing
+, pytest-benchmark
+, pytest-sanic
+, pytest-sugar
+, pytestcov
 }:
 
 buildPythonPackage rec {
@@ -26,12 +42,25 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    sanic-routing httptools uvloop ujson aiofiles websockets multidict
+    sanic-routing
+    httptools
+    uvloop
+    ujson
+    aiofiles
+    websockets
+    multidict
   ];
 
   checkInputs = [
-    sanic-testing gunicorn pytestcov beautifulsoup4 pytest-sanic pytest-sugar
-    pytest-benchmark pytestCheckHook uvicorn
+    sanic-testing
+    gunicorn
+    pytestcov
+    beautifulsoup4
+    pytest-sanic
+    pytest-sugar
+    pytest-benchmark
+    pytestCheckHook
+    uvicorn
   ];
 
   inherit doCheck;

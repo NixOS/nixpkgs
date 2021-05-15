@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchgit, jre, coreutils, gradle_6, git, perl
-, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, fetchgit
+, jre
+, coreutils
+, gradle_6
+, git
+, perl
+, makeWrapper
+}:
 
 let
   pname = "signald";
@@ -48,7 +57,8 @@ let
     outputHash = "0w8ixp1l0ch1jc2dqzxdx3ljlh17hpgns2ba7qvj43nr4prl71l7";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname src version postPatch patches;
 
   buildPhase = ''

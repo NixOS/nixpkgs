@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
-    lib.optionals (enableGui) [ gtk2 ]
+  lib.optionals (enableGui) [ gtk2 ]
   ;
 
   configureScript = "./build.sh";
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
     "--disable-malloc"
   ]
-    ++ lib.optionals (!enableGui) [ "--topless" ]
+  ++ lib.optionals (!enableGui) [ "--topless" ]
   ;
 
   hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];

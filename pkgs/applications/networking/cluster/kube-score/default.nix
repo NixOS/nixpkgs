@@ -15,8 +15,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
-    homepage    = "https://github.com/zegl/kube-score";
-    license     = licenses.mit;
+    homepage = "https://github.com/zegl/kube-score";
+    license = licenses.mit;
     maintainers = [ maintainers.j4m3s ];
   };
 }

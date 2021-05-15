@@ -2,9 +2,10 @@
 let
   jdk = libreoffice.jdk;
 in
-(runCommand libreoffice.name {
-  inherit dbus libreoffice jdk bash;
-} ''
+(runCommand libreoffice.name
+  {
+    inherit dbus libreoffice jdk bash;
+  } ''
   mkdir -p "$out/bin"
   ln -s "${libreoffice}/share" "$out/share"
   substituteAll "${./wrapper.sh}" "$out/bin/soffice"

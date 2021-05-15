@@ -11,7 +11,8 @@ let
     "virtio"
     "xen"
   ];
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
@@ -65,7 +66,7 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
     maintainers = [ maintainers.ehmry ];
-    platforms = builtins.map ({arch, os}: "${arch}-${os}")
+    platforms = builtins.map ({ arch, os }: "${arch}-${os}")
       (cartesianProductOfSets {
         arch = [ "aarch64" "x86_64" ];
         os = [ "freebsd" "genode" "linux" "openbsd" ];

@@ -3,7 +3,7 @@ pkgs: with pkgs.lib;
 rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) { } ''
     cp ${filePath} $out
   '';
 
@@ -15,13 +15,13 @@ rec {
 
   # Check whenever `b` depends on `a` as a fileSystem
   fsBefore = a: b: a.mountPoint == b.device
-                || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
+    || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+    replaceChars [ "/" "-" " " ] [ "-" "\\x2d" "\\x20" ]
+      (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:
@@ -64,8 +64,9 @@ rec {
         else if isList item then
           imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
-          [];
-    in listToAttrs (flatten (recurse "" item));
+          [ ];
+    in
+    listToAttrs (flatten (recurse "" item));
 
   /* Takes an attrset and a file path and generates a bash snippet that
      outputs a JSON file at the file path with all instances of
@@ -123,21 +124,22 @@ rec {
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
-    in ''
+    in
+    ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
     ''
     + concatStringsSep
-        "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
-               (attrNames secrets))
+      "\n"
+      (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' '"
     + concatStringsSep
       " | "
       (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
+        (attrNames secrets))
     + ''
       ' <<'EOF'
       ${builtins.toJSON set}

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
 
 stdenv.mkDerivation {
   name = "gnet-2.0.8";

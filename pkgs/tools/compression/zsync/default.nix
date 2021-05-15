@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "zsync-0.6.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "http://zsync.moria.org.uk/";
     description = "File distribution system using the rsync algorithm";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; all;
   };
 }

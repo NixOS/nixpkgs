@@ -11,5 +11,5 @@
   sha256 = "1y9m2ma3n4h7sf2lg788vjw6pkfyi0fa7gzc870faqv326n6x2jr";
 }) // {
   # the schema is huge (> 7GB), we don't get any benefit from building int on hydra
-  meta.hydraPlatforms = [];
+  meta.hydraPlatforms = [ ];
 }

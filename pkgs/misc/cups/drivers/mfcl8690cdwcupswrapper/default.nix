@@ -1,5 +1,14 @@
-{ coreutils, dpkg, fetchurl, gnugrep, gnused, makeWrapper,
-mfcl8690cdwlpr, perl, lib, stdenv}:
+{ coreutils
+, dpkg
+, fetchurl
+, gnugrep
+, gnused
+, makeWrapper
+, mfcl8690cdwlpr
+, perl
+, lib
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwcupswrapper";
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
 
     ln $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw $out/lib/cups/filter
     ln $dir/cupswrapper/brother_mfcl8690cdw_printer_en.ppd $out/share/cups/model
-    '';
+  '';
 
   meta = {
     description = "Brother MFC-L8690CDW CUPS wrapper driver";

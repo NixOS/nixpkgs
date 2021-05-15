@@ -3,12 +3,19 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp
+, libtasn1
+, openssl
+, fuse
+, glib
+, libseccomp
 , libtpms
-, unixtools, expect, socat
+, unixtools
+, expect
+, socat
 , gnutls
 , perl
-, python3, python3Packages
+, python3
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -40,15 +47,21 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config unixtools.netstat expect socat
+    pkg-config
+    unixtools.netstat
+    expect
+    socat
     perl # for pod2man
     autoreconfHook
     python3
   ];
   buildInputs = [
     libtpms
-    openssl libtasn1 libseccomp
-    fuse glib
+    openssl
+    libtasn1
+    libseccomp
+    fuse
+    glib
     gnutls
     python3.pkgs.wrapPython
   ];

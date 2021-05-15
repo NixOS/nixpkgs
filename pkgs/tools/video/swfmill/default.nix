@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libxslt, freetype, libpng, libxml2
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxslt
+, freetype
+, libpng
+, libxml2
 }:
 
 stdenv.mkDerivation rec {

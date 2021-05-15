@@ -13,7 +13,7 @@ rec {
     type = "tileset";
   };
 
-  wrapCDDA = callPackage ./wrapper.nix {};
+  wrapCDDA = callPackage ./wrapper.nix { };
 
   # Required to fix `pkgs` and `withMods` attrs after applying `overrideAttrs`.
   #
@@ -34,13 +34,13 @@ rec {
   #     in
   #     goodExample.x  # returns "hello"
   attachPkgs = pkgs: super:
-  let
-    self = super.overrideAttrs (old: {
-      passthru = old.passthru // {
-        pkgs = pkgs.override { build = self; };
-        withMods = wrapCDDA self;
-      };
-    });
-  in
-  self;
+    let
+      self = super.overrideAttrs (old: {
+        passthru = old.passthru // {
+          pkgs = pkgs.override { build = self; };
+          withMods = wrapCDDA self;
+        };
+      });
+    in
+    self;
 }

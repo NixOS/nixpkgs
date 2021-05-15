@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix
-, nixfmt, writeScript, nixosTests, jq, cacert, curl }:
+{ lib
+, stdenv
+, fetchurl
+, common-updater-scripts
+, coreutils
+, git
+, gnused
+, nix
+, nixfmt
+, writeScript
+, nixosTests
+, jq
+, cacert
+, curl
+}:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";

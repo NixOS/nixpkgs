@@ -1,12 +1,11 @@
-{
-  lib
-  , buildPythonPackage
-  , fetchPypi
-  , jinja2
-  , kubernetes
-  , ruamel-yaml
-  , six
-  , python-string-utils
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, kubernetes
+, ruamel-yaml
+, six
+, python-string-utils
 }:
 
 buildPythonPackage rec {
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   # tries to connect to the network
   doCheck = false;
-  pythonImportsCheck = ["openshift"];
+  pythonImportsCheck = [ "openshift" ];
 
   meta = with lib; {
     description = "Python client for the OpenShift API";

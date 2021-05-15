@@ -1,18 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
-, ps, dnsutils # dig is recommended for multiple categories
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, perlPackages
+, makeWrapper
+, ps
+, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
-, withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
-, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
-, binutils, tree, upower, pciutils
-, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
+, withRecommendedSystemPrograms ? withRecommends
+, util-linuxMinimal
+, dmidecode
+, file
+, hddtemp
+, iproute2
+, ipmitool
+, usbutils
+, kmod
+, lm_sensors
+, smartmontools
+, binutils
+, tree
+, upower
+, pciutils
+, withRecommendedDisplayInformationPrograms ? withRecommends
+, glxinfo
+, xorg
 }:
 
 let
   prefixPath = programs:
     "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower pciutils
+    util-linuxMinimal
+    dmidecode
+    file
+    hddtemp
+    iproute2
+    ipmitool
+    usbutils
+    kmod
+    lm_sensors
+    smartmontools
+    binutils
+    tree
+    upower
+    pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
@@ -20,7 +52,8 @@ let
   programs = [ ps dnsutils ] # Core programs
     ++ recommendedSystemPrograms
     ++ recommendedDisplayInformationPrograms;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "inxi";
   version = "3.3.04-1";
 

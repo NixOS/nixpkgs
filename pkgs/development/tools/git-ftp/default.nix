@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     make install-all prefix=$out
   '';
 
-  buildInputs = [pandoc man];
+  buildInputs = [ pandoc man ];
 
   meta = with lib; {
     description = "Git powered FTP client written as shell script";

@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoreconfHook
-, alsaLib, python, SDL }:
+, alsaLib
+, python
+, SDL
+}:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";

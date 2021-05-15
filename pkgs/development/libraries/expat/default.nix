@@ -7,7 +7,8 @@
 
 let
   version = "2.2.10";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "expat-${version}";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib, ncurses}:
+{ lib, stdenv, fetchurl, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "atop";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
   };
 
-  buildInputs = [zlib ncurses];
+  buildInputs = [ zlib ncurses ];
 
   makeFlags = [
     "SCRPATH=$out/etc/atop"

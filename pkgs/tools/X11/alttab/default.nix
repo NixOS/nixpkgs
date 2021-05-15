@@ -1,5 +1,19 @@
-{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config, procps, ronn,
-libpng, uthash , which, xnee, xorg, python3Packages }:
+{ lib
+, stdenv
+, coreutils
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, procps
+, ronn
+, libpng
+, uthash
+, which
+, xnee
+, xorg
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";

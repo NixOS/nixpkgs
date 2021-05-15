@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, fetchpatch, bison, flex}:
+{ lib, stdenv, fetchurl, fetchpatch, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "iasl";

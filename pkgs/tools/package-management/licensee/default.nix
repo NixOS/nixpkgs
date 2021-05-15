@@ -9,9 +9,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "A Ruby Gem to detect under what license a project is distributed";
-    homepage    = "https://licensee.github.io/licensee/";
-    license     = licenses.mit;
+    homepage = "https://licensee.github.io/licensee/";
+    license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

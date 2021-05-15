@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, fetchsvn, bash }:
 
 let
-  mkscript = path : text : ''
+  mkscript = path: text: ''
     mkdir -pv `dirname ${path}`
     cat > ${path} <<"EOF"
     #!${bash}/bin/bash
@@ -12,9 +12,10 @@ let
     chmod +x ${path}
   '';
 
-  hashname = r: let
-    rpl = lib.replaceChars [":" "/"] ["_" "_"];
-  in
+  hashname = r:
+    let
+      rpl = lib.replaceChars [ ":" "/" ] [ "_" "_" ];
+    in
     (rpl r.url) + "-" + (rpl r.rev);
 
 in

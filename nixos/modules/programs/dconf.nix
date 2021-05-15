@@ -12,11 +12,13 @@ let
       mkdir -p $out/db
     '' + (
       concatStringsSep "\n" (
-        mapAttrsToList (
-          name: path: ''
-            ln -s ${path} $out/profile/${name}
-          ''
-        ) cfg.profiles
+        mapAttrsToList
+          (
+            name: path: ''
+              ln -s ${path} $out/profile/${name}
+            ''
+          )
+          cfg.profiles
       )
     ) + ''
       ${pkgs.dconf}/bin/dconf update $out/db
@@ -32,14 +34,14 @@ in
 
       profiles = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = "Set of dconf profile files, installed at <filename>/etc/dconf/profiles/<replaceable>name</replaceable></filename>.";
         internal = true;
       };
 
       packages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = "A list of packages which provide dconf profiles and databases in <filename>/etc/dconf</filename>.";
       };
     };
@@ -47,8 +49,8 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc.dconf = mkIf (cfg.profiles != {} || cfg.packages != []) {
+  config = mkIf (cfg.profiles != { } || cfg.enable) {
+    environment.etc.dconf = mkIf (cfg.profiles != { } || cfg.packages != [ ]) {
       source = cfgDir;
     };
 

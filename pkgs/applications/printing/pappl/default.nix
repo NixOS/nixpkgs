@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , avahi
 , cups
 , gnutls
@@ -6,7 +8,8 @@
 , libpng
 , libusb1
 , pkg-config
-, withPAMSupport ? true, pam
+, withPAMSupport ? true
+, pam
 , zlib
 }:
 

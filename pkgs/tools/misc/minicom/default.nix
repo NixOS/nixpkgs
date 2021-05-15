@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkg-config
-, lrzsz, ncurses, libiconv }:
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, lrzsz
+, ncurses
+, libiconv
+}:
 
 stdenv.mkDerivation {
   pname = "minicom";
@@ -7,8 +15,8 @@ stdenv.mkDerivation {
 
   # The repository isn't tagged properly, so we need to use commit refs
   src = fetchgit {
-    url    = "https://salsa.debian.org/minicom-team/minicom.git";
-    rev    = "6ea8033b6864aa35d14fb8b87e104e4f783635ce";
+    url = "https://salsa.debian.org/minicom-team/minicom.git";
+    rev = "6ea8033b6864aa35d14fb8b87e104e4f783635ce";
     sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
   };
 

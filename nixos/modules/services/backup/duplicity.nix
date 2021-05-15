@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -7,10 +7,12 @@ let
 
   stateDirectory = "/var/lib/duplicity";
 
-  localTarget = if hasPrefix "file://" cfg.targetUrl
+  localTarget =
+    if hasPrefix "file://" cfg.targetUrl
     then removePrefix "file://" cfg.targetUrl else null;
 
-in {
+in
+{
   options.services.duplicity = {
     enable = mkEnableOption "backups with duplicity";
 
@@ -24,7 +26,7 @@ in {
 
     include = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "/home" ];
       description = ''
         List of paths to include into the backups. See the FILE SELECTION
@@ -35,7 +37,7 @@ in {
 
     exclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of paths to exclude from backups. See the FILE SELECTION section in
         <citerefentry><refentrytitle>duplicity</refentrytitle>
@@ -82,7 +84,7 @@ in {
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "--full-if-older-than" "1M" ];
       description = ''
         Extra command-line flags passed to duplicity. See
@@ -130,7 +132,7 @@ in {
     assertions = singleton {
       # Duplicity will fail if the last file selection option is an include. It
       # is not always possible to detect but this simple case can be caught.
-      assertion = cfg.include != [] -> cfg.exclude != [] || cfg.extraFlags != [];
+      assertion = cfg.include != [ ] -> cfg.exclude != [ ] || cfg.extraFlags != [ ];
       message = ''
         Duplicity will fail if you only specify included paths ("Because the
         default is to include all files, the expression is redundant. Exiting

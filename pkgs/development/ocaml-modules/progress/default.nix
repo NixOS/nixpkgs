@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, mtime, terminal_size, alcotest, astring, fmt
+{ lib
+, buildDunePackage
+, fetchurl
+, mtime
+, terminal_size
+, alcotest
+, astring
+, fmt
 }:
 
 buildDunePackage rec {

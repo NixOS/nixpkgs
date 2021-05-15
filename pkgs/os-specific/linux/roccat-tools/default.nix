@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
-, dbus, dbus-glib, libgaminggear, libgudev, lua
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, gettext
+, dbus
+, dbus-glib
+, libgaminggear
+, libgudev
+, lua
 , harfbuzz
 }:
 

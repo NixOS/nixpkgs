@@ -1,5 +1,17 @@
-{ fetchurl, lib, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
-, cmake, makeWrapper, libjpeg, python }:
+{ fetchurl
+, lib
+, stdenv
+, libxml2
+, freetype
+, libGLU
+, libGL
+, glew
+, qt4
+, cmake
+, makeWrapper
+, libjpeg
+, python
+}:
 
 let version = "5.2.1"; in
 stdenv.mkDerivation rec {
@@ -34,6 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

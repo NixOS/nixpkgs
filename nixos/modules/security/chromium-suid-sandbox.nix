@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg     = config.security.chromiumSuidSandbox;
+  cfg = config.security.chromiumSuidSandbox;
   sandbox = pkgs.chromium.sandbox;
 in
 {

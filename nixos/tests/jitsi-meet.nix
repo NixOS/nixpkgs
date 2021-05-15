@@ -5,8 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   nodes = {
-    client = { nodes, pkgs, ... }: {
-    };
+    client = { nodes, pkgs, ... }: { };
     server = { config, pkgs, ... }: {
       services.jitsi-meet = {
         enable = true;

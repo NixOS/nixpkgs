@@ -1,4 +1,6 @@
-{ fetchurl, lib, stdenv
+{ fetchurl
+, lib
+, stdenv
 , CoreServices
 }:
 

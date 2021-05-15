@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "3.30.0";
 
   src = fetchFromGitHub {
-    owner  = "leanprover-community";
-    repo   = "lean";
-    rev    = "v${version}";
+    owner = "leanprover-community";
+    repo = "lean";
+    rev = "v${version}";
     sha256 = "sha256-gJhbkl19iilNyfCt2TfPmghYA3yCjg6kS+yk/x/k14Y=";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Automatic and interactive theorem prover";
-    homepage    = "https://leanprover.github.io/";
-    changelog   = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://leanprover.github.io/";
+    changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice gebner ];
   };
 }

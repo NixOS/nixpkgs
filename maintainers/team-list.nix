@@ -1,9 +1,9 @@
 /* List of maintainer teams.
-    name = {
+  name = {
       # Required
       members = [ maintainer1 maintainer2 ];
       scope = "Maintain foo packages.";
-    };
+  };
 
   where
 

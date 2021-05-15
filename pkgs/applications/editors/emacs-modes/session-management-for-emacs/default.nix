@@ -1,4 +1,4 @@
-{stdenv, fetchurl, emacs}:
+{ stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "session-management-for-emacs-2.2a";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "37dfba7420b5164eab90dafa9e8bf9a2c8f76505fe2fefa14a64e81fa76d0144";
   };
 
-  buildInputs = [emacs];
+  buildInputs = [ emacs ];
 
   installPhase = ''
     mkdir -p "$out/share/emacs/site-lisp"

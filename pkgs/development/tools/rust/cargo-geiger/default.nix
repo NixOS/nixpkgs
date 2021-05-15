@@ -1,9 +1,15 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkg-config, openssl
-# testing packages
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+  # testing packages
 , cargo-insta
-# darwin dependencies
-, Security, CoreFoundation, libiconv
+  # darwin dependencies
+, Security
+, CoreFoundation
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {

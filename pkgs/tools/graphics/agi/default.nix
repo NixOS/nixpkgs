@@ -49,15 +49,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
-    name = "agi";
-    desktopName = "Android GPU Inspector";
-    exec = "$out/bin/agi";
-    icon = "agi";
-    type = "Application";
-    categories = "Development;Debugger;Graphics;3DGraphics";
-    terminal = "false";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "agi";
+      desktopName = "Android GPU Inspector";
+      exec = "$out/bin/agi";
+      icon = "agi";
+      type = "Application";
+      categories = "Development;Debugger;Graphics;3DGraphics";
+      terminal = "false";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/google/agi/";

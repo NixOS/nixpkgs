@@ -1,15 +1,36 @@
-{ lib, stdenv, fetchurl
-, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook, yelp-tools
-, curl, gdk-pixbuf, gtk3, json-glib, libxml2
+{ lib
+, stdenv
+, fetchurl
+, docbook_xml_dtd_45
+, docbook_xsl
+, intltool
+, itstool
+, libxslt
+, pkg-config
+, wrapGAppsHook
+, yelp-tools
+, curl
+, gdk-pixbuf
+, gtk3
+, json-glib
+, libxml2
 , gpsbabel
-, withGeoClue ? true, geoclue2
-, withGeoTag ? true, gexiv2
-, withMagic ? true, file
-, withMapnik ? false, mapnik
-, withMBTiles ? true, sqlite
-, withMd5Hash ? true, nettle
-, withOAuth ? true, liboauth
-, withRealtimeGPSTracking ? true, gpsd
+, withGeoClue ? true
+, geoclue2
+, withGeoTag ? true
+, gexiv2
+, withMagic ? true
+, file
+, withMapnik ? false
+, mapnik
+, withMBTiles ? true
+, sqlite
+, withMd5Hash ? true
+, nettle
+, withOAuth ? true
+, liboauth
+, withRealtimeGPSTracking ? true
+, gpsd
 }:
 
 stdenv.mkDerivation rec {
@@ -25,22 +46,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]
     ++ lib.optional withGeoClue geoclue2
-    ++ lib.optional withGeoTag  gexiv2
-    ++ lib.optional withMagic   file
-    ++ lib.optional withMapnik  mapnik
+    ++ lib.optional withGeoTag gexiv2
+    ++ lib.optional withMagic file
+    ++ lib.optional withMapnik mapnik
     ++ lib.optional withMBTiles sqlite
     ++ lib.optional withMd5Hash nettle
-    ++ lib.optional withOAuth   liboauth
+    ++ lib.optional withOAuth liboauth
     ++ lib.optional withRealtimeGPSTracking gpsd;
 
   configureFlags = [
     (lib.enableFeature withGeoClue "geoclue")
-    (lib.enableFeature withGeoTag  "geotag")
-    (lib.enableFeature withMagic   "magic")
-    (lib.enableFeature withMapnik  "mapnik")
+    (lib.enableFeature withGeoTag "geotag")
+    (lib.enableFeature withMagic "magic")
+    (lib.enableFeature withMapnik "mapnik")
     (lib.enableFeature withMBTiles "mbtiles")
     (lib.enableFeature withMd5Hash "nettle")
-    (lib.enableFeature withOAuth   "oauth")
+    (lib.enableFeature withOAuth "oauth")
     (lib.enableFeature withRealtimeGPSTracking "realtime-gps-tracking")
   ];
 

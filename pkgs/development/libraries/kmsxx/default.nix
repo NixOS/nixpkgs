@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libdrm
-, withPython ? false, python ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libdrm
+, withPython ? false
+, python ? null
+}:
 
 stdenv.mkDerivation {
   pname = "kmsxx";

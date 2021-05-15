@@ -1,5 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner
-, thrift, pytestCheckHook, python-snappy, lz4, zstandard, zstd }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numba
+, numpy
+, pandas
+, pytestrunner
+, thrift
+, pytestCheckHook
+, python-snappy
+, lz4
+, zstandard
+, zstd
+}:
 
 buildPythonPackage rec {
   pname = "fastparquet";

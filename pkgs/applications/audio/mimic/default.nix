@@ -1,6 +1,15 @@
-{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config
-, alsaLib, libtool, icu
-, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
+{ config
+, lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, pkg-config
+, alsaLib
+, libtool
+, icu
+, pulseaudioSupport ? config.pulseaudio or false
+, libpulseaudio
+}:
 
 stdenv.mkDerivation rec {
   pname = "mimic";

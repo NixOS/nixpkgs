@@ -6,20 +6,20 @@ let
     s: lib.removePrefix "/nix/store/" s;
 in
 { name
-, registry         ? "https://registry-1.docker.io/v2/"
-, repository       ? "library"
+, registry ? "https://registry-1.docker.io/v2/"
+, repository ? "library"
 , imageName
 , tag
 , imageLayers
 , imageConfig
-, image            ? "${stripScheme registry}/${repository}/${imageName}:${tag}"
+, image ? "${stripScheme registry}/${repository}/${imageName}:${tag}"
 }:
 
 # Make sure there are *no* slashes in the repository or container
 # names since we use these to make the output derivation name for the
 # nix-store path.
-assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters repository);
-assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters imageName);
+assert null == lib.findFirst (c: "/" == c) null (lib.stringToCharacters repository);
+assert null == lib.findFirst (c: "/" == c) null (lib.stringToCharacters imageName);
 
 let
   # Abuse paths to collapse possible double slashes
@@ -30,10 +30,12 @@ let
 
   manifest =
     writeText "manifest.json" (builtins.toJSON [
-      { Config   = stripNixStore imageConfig;
-        Layers   = layers;
+      {
+        Config = stripNixStore imageConfig;
+        Layers = layers;
         RepoTags = [ "${repoTag1}:${tag}" ];
-      }]);
+      }
+    ]);
 
   repositories =
     writeText "repositories" (builtins.toJSON {
@@ -44,10 +46,10 @@ let
 
   imageFileStorePaths =
     writeText "imageFileStorePaths.txt"
-      (lib.concatStringsSep "\n" ((lib.unique imageLayers) ++ [imageConfig]));
+      (lib.concatStringsSep "\n" ((lib.unique imageLayers) ++ [ imageConfig ]));
 in
 stdenv.mkDerivation {
-  builder     = ./fetchdocker-builder.sh;
+  builder = ./fetchdocker-builder.sh;
   buildInputs = [ coreutils ];
   preferLocalBuild = true;
 

@@ -1,5 +1,9 @@
-{ lib, stdenv, cmake
-, version, src, patches ? [ ]
+{ lib
+, stdenv
+, cmake
+, version
+, src
+, patches ? [ ]
 , ...
 }:
 
@@ -15,9 +19,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "MessagePack implementation for C and C++";
-    homepage    = "https://msgpack.org";
-    license     = licenses.asl20;
+    homepage = "https://msgpack.org";
+    license = licenses.asl20;
     maintainers = with maintainers; [ redbaron ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

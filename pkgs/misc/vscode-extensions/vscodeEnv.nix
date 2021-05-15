@@ -7,42 +7,44 @@
 , jq
 }:
 ##User input
-{ vscode                           ? vscodeDefault
-, nixExtensions                    ? []
-, vscodeExtsFolderName             ? ".vscode-exts"
-# will add to the command updateSettings (which will run on executing vscode) settings to override in settings.json file
-, settings                         ? {}
-, createSettingsIfDoesNotExists    ? true
-, launch                           ? {}
-, createLaunchIfDoesNotExists      ? true
-# will add to the command updateKeybindings(which will run on executing vscode) keybindings to override in keybinding.json file
-, keybindings                      ? {}
+{ vscode ? vscodeDefault
+, nixExtensions ? [ ]
+, vscodeExtsFolderName ? ".vscode-exts"
+  # will add to the command updateSettings (which will run on executing vscode) settings to override in settings.json file
+, settings ? { }
+, createSettingsIfDoesNotExists ? true
+, launch ? { }
+, createLaunchIfDoesNotExists ? true
+  # will add to the command updateKeybindings(which will run on executing vscode) keybindings to override in keybinding.json file
+, keybindings ? { }
 , createKeybindingsIfDoesNotExists ? true
 , user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir''
-# if file exists will use it and import the extensions in it into this dervation else will use empty extensions list
-# this file will be created/updated by vscodeExts2nix when vscode exists
+  # if file exists will use it and import the extensions in it into this dervation else will use empty extensions list
+  # this file will be created/updated by vscodeExts2nix when vscode exists
 , mutableExtensionsFile
 }:
 let
   mutableExtensionsFilePath = toString mutableExtensionsFile;
-  mutableExtensions = if builtins.pathExists mutableExtensionsFile
-                      then import mutableExtensionsFilePath else [];
-  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
-    inherit lib writeShellScriptBin extensionsFromVscodeMarketplace;
-    vscodeDefault = vscode;
-  }
-  {
-    inherit nixExtensions mutableExtensions vscodeExtsFolderName user-data-dir;
-  };
+  mutableExtensions =
+    if builtins.pathExists mutableExtensionsFile
+    then import mutableExtensionsFilePath else [ ];
+  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix
+    {
+      inherit lib writeShellScriptBin extensionsFromVscodeMarketplace;
+      vscodeDefault = vscode;
+    }
+    {
+      inherit nixExtensions mutableExtensions vscodeExtsFolderName user-data-dir;
+    };
 
   updateSettings = import ./updateSettings.nix { inherit lib writeShellScriptBin jq; };
   userSettingsFolder = "${ user-data-dir }/User";
 
   updateSettingsCmd = updateSettings {
     settings = {
-        "extensions.autoCheckUpdates" = false;
-        "extensions.autoUpdate" = false;
-        "update.mode" = "none";
+      "extensions.autoCheckUpdates" = false;
+      "extensions.autoUpdate" = false;
+      "update.mode" = "none";
     } // settings;
     inherit userSettingsFolder;
     createIfDoesNotExists = createSettingsIfDoesNotExists;
@@ -63,14 +65,15 @@ let
     symlinkFromUserSetting = (user-data-dir != "");
   };
 
-  vscodeExts2nix = import ./vscodeExts2nix.nix {
-    inherit lib writeShellScriptBin;
-    vscodeDefault = vscodeWithConfiguration;
-  }
-  {
-    extensionsToIgnore = nixExtensions;
-    extensions = mutableExtensions;
-  };
+  vscodeExts2nix = import ./vscodeExts2nix.nix
+    {
+      inherit lib writeShellScriptBin;
+      vscodeDefault = vscodeWithConfiguration;
+    }
+    {
+      extensionsToIgnore = nixExtensions;
+      extensions = mutableExtensions;
+    };
   code = writeShellScriptBin "code" ''
     ${updateSettingsCmd}/bin/vscodeNixUpdate-settings
     ${updateLaunchCmd}/bin/vscodeNixUpdate-launch

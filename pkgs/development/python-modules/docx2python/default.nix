@@ -14,7 +14,8 @@ buildPythonPackage rec {
 
   preCheck = "cd test"; # Tests require the `test/resources` folder to be accessible
   checkInputs = [ pytestCheckHook ];
-  disabledTests = [ # asserts related to file deletions fail
+  disabledTests = [
+    # asserts related to file deletions fail
     "test_docx2python.py"
     "test_docx_context.py"
     "test_google_docs.py"

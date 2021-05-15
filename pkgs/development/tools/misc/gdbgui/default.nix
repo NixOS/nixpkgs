@@ -14,7 +14,8 @@
 , gevent
 , gevent-websocket
 , eventlet
-, }:
+,
+}:
 
 let
   # gdbgui only works with the latest previous major version of flask-socketio,

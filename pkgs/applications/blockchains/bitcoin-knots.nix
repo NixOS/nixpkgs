@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
@@ -25,11 +26,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ];
+  buildInputs = [
+    openssl
+    db5
+    openssl
+    util-linux
+    protobuf
+    boost
+    zlib
+    miniupnpc
+    libevent
+  ];
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ];
+  configureFlags = [
+    "--with-incompatible-bdb"
+    "--with-boost-libdir=${boost.out}/lib"
+  ];
 
   meta = with lib; {
     description = "An enhanced Bitcoin node software";

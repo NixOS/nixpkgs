@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libusb-compat-0_1}:
+{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   name = "libftdi-0.20";

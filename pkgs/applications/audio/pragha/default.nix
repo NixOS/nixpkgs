@@ -16,19 +16,30 @@
 , libpeas
 , libcddb
 , libcdio
-, gst_all_1, withGstPlugins ? true
-, glyr, withGlyr ? true
-, liblastfmSF, withLastfm ? true
-, libcdio-paranoia, withCD ? true
-, keybinder3, withKeybinder ? false
-, libnotify, withLibnotify ? false
-, libsoup, withLibsoup ? false
-, libgudev, withGudev ? false # experimental
-, libmtp, withMtp ? false # experimental
-, xfce, withXfce4ui ? false
-, totem-pl-parser, withTotemPlParser ? false
-# , grilo, withGrilo ? false
-# , rygel, withRygel ? true
+, gst_all_1
+, withGstPlugins ? true
+, glyr
+, withGlyr ? true
+, liblastfmSF
+, withLastfm ? true
+, libcdio-paranoia
+, withCD ? true
+, keybinder3
+, withKeybinder ? false
+, libnotify
+, withLibnotify ? false
+, libsoup
+, withLibsoup ? false
+, libgudev
+, withGudev ? false # experimental
+, libmtp
+, withMtp ? false # experimental
+, xfce
+, withXfce4ui ? false
+, totem-pl-parser
+, withTotemPlParser ? false
+  # , grilo, withGrilo ? false
+  # , rygel, withRygel ? true
 }:
 
 assert withGlyr -> withLastfm;
@@ -77,8 +88,8 @@ mkDerivation rec {
   ++ lib.optional withMtp libmtp
   ++ lib.optional withXfce4ui xfce.libxfce4ui
   ++ lib.optional withTotemPlParser totem-pl-parser
-  # ++ lib.optional withGrilo grilo
-  # ++ lib.optional withRygel rygel
+    # ++ lib.optional withGrilo grilo
+    # ++ lib.optional withRygel rygel
   ;
 
   CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];

@@ -16,7 +16,7 @@ appleDerivation {
 
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

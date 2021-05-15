@@ -2,7 +2,8 @@
 
 let
   pythonEnv = lib.optional isPy27 mock;
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "json-rpc";
   version = "1.13.0";
 

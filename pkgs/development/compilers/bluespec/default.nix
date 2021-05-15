@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoconf
@@ -24,17 +25,18 @@
 }:
 
 let
-  ghcWithPackages = ghc.withPackages (g: (with g; [old-time regex-compat syb split ]));
-in stdenv.mkDerivation rec {
+  ghcWithPackages = ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
+in
+stdenv.mkDerivation rec {
   pname = "bluespec";
   version = "unstable-2021.03.29";
 
   src = fetchFromGitHub {
-      owner  = "B-Lang-org";
-      repo   = "bsc";
-      rev    = "00185f7960bd1bd5554a1167be9f37e1f18ac454";
-      sha256 = "1bcdhql4cla137d8xr8m2h21dyxv0jpjpalpr5mgj2jxqfsmkbrn";
-    };
+    owner = "B-Lang-org";
+    repo = "bsc";
+    rev = "00185f7960bd1bd5554a1167be9f37e1f18ac454";
+    sha256 = "1bcdhql4cla137d8xr8m2h21dyxv0jpjpalpr5mgj2jxqfsmkbrn";
+  };
 
   enableParallelBuilding = true;
 
@@ -42,14 +44,16 @@ in stdenv.mkDerivation rec {
 
   buildInputs = yices.buildInputs ++ [
     zlib
-    tcl tk
+    tcl
+    tk
     libX11 # tcltk
     xorg.libXft
     fontconfig
   ];
 
   nativeBuildInputs = [
-    automake autoconf
+    automake
+    autoconf
     perl
     flex
     bison
@@ -96,8 +100,8 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Toolchain for the Bluespec Hardware Definition Language";
-    homepage    = "https://github.com/B-Lang-org/bsc";
-    license     = lib.licenses.bsd3;
+    homepage = "https://github.com/B-Lang-org/bsc";
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
     # aarch64 fails, as GHC fails with "ghc: could not execute: opt"

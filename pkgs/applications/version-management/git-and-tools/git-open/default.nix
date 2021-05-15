@@ -1,4 +1,4 @@
-{lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, makeWrapper}:
+{ lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "git-open";

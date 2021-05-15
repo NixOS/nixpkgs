@@ -1,5 +1,18 @@
-{lib, stdenv, fetchurl, allegro, openal, libGLU, libGL, zlib, hawknl, freeglut, libX11,
-  libXxf86vm, libXcursor, libXpm }:
+{ lib
+, stdenv
+, fetchurl
+, allegro
+, openal
+, libGLU
+, libGL
+, zlib
+, hawknl
+, freeglut
+, libX11
+, libXxf86vm
+, libXcursor
+, libXpm
+}:
 
 stdenv.mkDerivation {
   name = "fakenes-0.5.9b3";
@@ -8,8 +21,19 @@ stdenv.mkDerivation {
     sha256 = "026h67s4pzc1vma59pmzk02iy379255qbai2q74wln9bxqcpniy4";
   };
 
-  buildInputs = [ allegro openal libGLU libGL zlib hawknl freeglut libX11
-    libXxf86vm libXcursor libXpm ];
+  buildInputs = [
+    allegro
+    openal
+    libGLU
+    libGL
+    zlib
+    hawknl
+    freeglut
+    libX11
+    libXxf86vm
+    libXcursor
+    libXpm
+  ];
 
   hardeningDisable = [ "format" ];
 

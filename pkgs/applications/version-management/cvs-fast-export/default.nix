@@ -1,8 +1,21 @@
-{lib, stdenv, fetchurl, makeWrapper, flex, bison,
- asciidoc, docbook_xml_dtd_45, docbook_xsl,
- libxml2, libxslt,
- python3, rcs, cvs, git,
- coreutils, rsync}:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, flex
+, bison
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, libxslt
+, python3
+, rcs
+, cvs
+, git
+, coreutils
+, rsync
+}:
 with stdenv; with lib;
 mkDerivation rec {
   name = "cvs-fast-export-${meta.version}";
@@ -21,8 +34,18 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    flex bison asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    python3 rcs cvs git makeWrapper
+    flex
+    bison
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+    python3
+    rcs
+    cvs
+    git
+    makeWrapper
   ];
 
   postPatch = "patchShebangs .";
@@ -40,7 +63,8 @@ mkDerivation rec {
   postInstall =
     let
       binpath = makeBinPath [ out rcs cvs git coreutils rsync ];
-    in ''
+    in
+    ''
       for prog in cvs-fast-export cvsconvert cvssync; do
         wrapProgram $out/bin/$prog \
           --prefix PATH : ${binpath}

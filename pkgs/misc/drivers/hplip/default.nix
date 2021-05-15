@@ -1,11 +1,29 @@
-{ lib, stdenv, fetchurl, substituteAll
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
 , pkg-config
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
-, dbus, file, ghostscript, usbutils
-, net-snmp, openssl, perl, nettools, avahi
-, bash, coreutils, util-linux
-# To remove references to gcc-unwrapped
-, removeReferencesTo, qt5
+, cups
+, zlib
+, libjpeg
+, libusb1
+, python3Packages
+, sane-backends
+, dbus
+, file
+, ghostscript
+, usbutils
+, net-snmp
+, openssl
+, perl
+, nettools
+, avahi
+, bash
+, coreutils
+, util-linux
+  # To remove references to gcc-unwrapped
+, removeReferencesTo
+, qt5
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -32,7 +50,7 @@ let
   };
 
   hplipPlatforms = {
-    i686-linux   = "x86_32";
+    i686-linux = "x86_32";
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
@@ -237,14 +255,19 @@ python3Packages.buildPythonApplication {
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+    "share/hplip"
+    "lib/cups/backend"
+    "lib/cups/filter"
+    python3Packages.python.sitePackages
+    "lib/sane"
   ];
 
   meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
-    license = if withPlugin
+    license =
+      if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
 , zlib ? null
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional (zlib != null) zlib;
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java";
 

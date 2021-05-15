@@ -1,5 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
-, Foundation, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, Foundation
+, Security
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";

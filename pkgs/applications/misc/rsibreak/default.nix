@@ -1,14 +1,21 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools,
-  knotifyconfig, kidletime, kwindowsystem, ktextwidgets, kcrash
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, kdoctools
+, knotifyconfig
+, kidletime
+, kwindowsystem
+, ktextwidgets
+, kcrash
 }:
 
 let
   pname = "rsibreak";
   version = "0.12";
   revision = ".13";
-in mkDerivation rec {
+in
+mkDerivation rec {
   name = "rsibreak-${version}${revision}";
 
   src = fetchurl {

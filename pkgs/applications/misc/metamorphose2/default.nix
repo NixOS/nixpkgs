@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchgit, makeWrapper, gettext
-, python27, python2Packages
+{ lib
+, stdenv
+, fetchgit
+, makeWrapper
+, gettext
+, python27
+, python2Packages
 }:
 
 stdenv.mkDerivation {
@@ -35,9 +40,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "a graphical mass renaming program for files and folders";
-    homepage    = "https://github.com/metamorphose/metamorphose2";
-    license     = with licenses; gpl3Plus;
+    homepage = "https://github.com/metamorphose/metamorphose2";
+    license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ ramkromberg ];
-    platforms   = with platforms; linux;
+    platforms = with platforms; linux;
   };
 }

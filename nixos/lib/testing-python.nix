@@ -64,13 +64,15 @@ rec {
     };
 
   # Run an automated test suite in the given virtual network.
-  runTests = {
-    # the script that runs the network
-    driver,
-    # a source position in the format of builtins.unsafeGetAttrPos
-    # for meta.position
-    pos,
-  }:
+  runTests =
+    {
+      # the script that runs the network
+      driver
+    , # a source position in the format of builtins.unsafeGetAttrPos
+      # for meta.position
+      pos
+    ,
+    }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -97,12 +99,12 @@ rec {
     , name ? "unnamed"
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
-    , passthru ? {}
+    , passthru ? { }
     , # For meta.position
       pos ? # position used in error messages and for meta.position
-        (if t.meta.description or null != null
-          then builtins.unsafeGetAttrPos "description" t.meta
-          else builtins.unsafeGetAttrPos "testScript" t)
+      (if t.meta.description or null != null
+      then builtins.unsafeGetAttrPos "description" t.meta
+      else builtins.unsafeGetAttrPos "testScript" t)
     , ...
     } @ t:
     let

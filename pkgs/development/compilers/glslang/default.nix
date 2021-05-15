@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , bison
 , cmake
@@ -14,26 +15,32 @@
 # https://github.com/KhronosGroup/glslang/blob/${version}/known_good.json
 
 let
-  localSpirv-tools = if argSpirv-tools == null
-    then spirv-tools.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Tools";
-        rev = "b27b1afd12d05bf238ac7368bb49de73cd620a8e";
-        sha256 = "0v26ws6qx23jn4dcpsq6rqmdxgyxpl5pcvfm90wb3nz6iqbqx294";
-      };
-    })
+  localSpirv-tools =
+    if argSpirv-tools == null
+    then
+      spirv-tools.overrideAttrs
+        (_: {
+          src = fetchFromGitHub {
+            owner = "KhronosGroup";
+            repo = "SPIRV-Tools";
+            rev = "b27b1afd12d05bf238ac7368bb49de73cd620a8e";
+            sha256 = "0v26ws6qx23jn4dcpsq6rqmdxgyxpl5pcvfm90wb3nz6iqbqx294";
+          };
+        })
     else argSpirv-tools;
 
-  localSpirv-headers = if argSpirv-headers == null
-    then spirv-headers.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Headers";
-        rev = "f027d53ded7e230e008d37c8b47ede7cd308e19d";
-        sha256 = "12gp2mqcar6jj57jw9isfr62yn72kmvdcl0zga4gvrlyfhnf582q";
-      };
-    })
+  localSpirv-headers =
+    if argSpirv-headers == null
+    then
+      spirv-headers.overrideAttrs
+        (_: {
+          src = fetchFromGitHub {
+            owner = "KhronosGroup";
+            repo = "SPIRV-Headers";
+            rev = "f027d53ded7e230e008d37c8b47ede7cd308e19d";
+            sha256 = "12gp2mqcar6jj57jw9isfr62yn72kmvdcl0zga4gvrlyfhnf582q";
+          };
+        })
     else argSpirv-headers;
 in
 

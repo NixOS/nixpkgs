@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11, libXext, libXi
-, freetype, fontconfig
-, libpng, libjpeg
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXext
+, libXi
+, freetype
+, fontconfig
+, libpng
+, libjpeg
 , zlib
 }:
 
@@ -17,9 +23,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libXext libXi
-    freetype fontconfig
-    libpng libjpeg
+    libX11
+    libXext
+    libXi
+    freetype
+    fontconfig
+    libpng
+    libjpeg
     zlib
   ];
 

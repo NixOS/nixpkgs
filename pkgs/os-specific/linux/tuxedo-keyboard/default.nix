@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders}:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";

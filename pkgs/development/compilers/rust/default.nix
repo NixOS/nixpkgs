@@ -4,18 +4,22 @@
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
-, rustcPatches ? []
+, rustcPatches ? [ ]
 , llvmBootstrapForDarwin
 , llvmShared
 , llvmSharedForBuild
 , llvmSharedForHost
 , llvmSharedForTarget
 }:
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
-, newScope, callPackage
-, CoreFoundation, Security
-, pkgsBuildTarget, pkgsBuildBuild
+, newScope
+, callPackage
+, CoreFoundation
+, Security
+, pkgsBuildTarget
+, pkgsBuildBuild
 , makeRustPlatform
 }: rec {
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
@@ -36,13 +40,14 @@
       "armv7l" = "armv7";
       "armv6l" = "arm";
     }.${cpu.name} or cpu.name;
-  in platform.rustc.config
-    or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+  in
+    platform.rustc.config
+      or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
   # Returns the name of the rust target if it is standard, or the json file
   # containing the custom target spec.
   toRustTargetSpec = platform:
-    if (platform.rustc or {}) ? platform
+    if (platform.rustc or { }) ? platform
     then builtins.toFile (toRustTarget platform + ".json") (builtins.toJSON platform.rustc.platform)
     else toRustTarget platform;
 
@@ -63,43 +68,45 @@
       version = bootstrapVersion;
       hashes = bootstrapHashes;
     };
-    stable = lib.makeScope newScope (self: let
-      # Like `buildRustPackages`, but may also contain prebuilt binaries to
-      # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
-      # nothing in the final package set should refer to this.
-      bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
-        lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-          (selectRustPackage buildPackages).packages.prebuilt);
-      bootRustPlatform = makeRustPlatform bootstrapRustPackages;
-    in {
-      # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
-      # Analogous to stdenv
-      rustPlatform = makeRustPlatform self.buildRustPackages;
-      rustc = self.callPackage ./rustc.nix ({
-        version = rustcVersion;
-        sha256 = rustcSha256;
-        inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget;
+    stable = lib.makeScope newScope (self:
+      let
+        # Like `buildRustPackages`, but may also contain prebuilt binaries to
+        # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
+        # nothing in the final package set should refer to this.
+        bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
+          lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
+            (selectRustPackage buildPackages).packages.prebuilt);
+        bootRustPlatform = makeRustPlatform bootstrapRustPackages;
+      in
+      {
+        # Packages suitable for build-time, e.g. `build.rs`-type stuff.
+        buildRustPackages = (selectRustPackage buildPackages).packages.stable;
+        # Analogous to stdenv
+        rustPlatform = makeRustPlatform self.buildRustPackages;
+        rustc = self.callPackage ./rustc.nix ({
+          version = rustcVersion;
+          sha256 = rustcSha256;
+          inherit enableRustcDev;
+          inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget;
 
-        patches = rustcPatches;
+          patches = rustcPatches;
 
-        # Use boot package set to break cycle
-        rustPlatform = bootRustPlatform;
-      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmBootstrapForDarwin.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+          # Use boot package set to break cycle
+          rustPlatform = bootRustPlatform;
+        } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
+          stdenv = llvmBootstrapForDarwin.stdenv;
+          pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+          pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+          pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        });
+        rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
+        cargo = self.callPackage ./cargo.nix {
+          # Use boot package set to break cycle
+          rustPlatform = bootRustPlatform;
+          inherit CoreFoundation Security;
+        };
+        clippy = self.callPackage ./clippy.nix { inherit Security; };
+        rls = self.callPackage ./rls { inherit CoreFoundation Security; };
       });
-      rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
-      cargo = self.callPackage ./cargo.nix {
-        # Use boot package set to break cycle
-        rustPlatform = bootRustPlatform;
-        inherit CoreFoundation Security;
-      };
-      clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
-    });
   };
 }

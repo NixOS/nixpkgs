@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -15,7 +16,8 @@
 , sqlite
 , discount
 , wrapGAppsHook
-, withPantheon ? false }:
+, withPantheon ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
-    + lib.optionalString withPantheon " - built with Contractor support";
+      + lib.optionalString withPantheon " - built with Contractor support";
     homepage = "https://github.com/Philip-Scott/Notes-up";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];

@@ -4,7 +4,8 @@ let
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix { inherit fetchHex fetchFromGitHub; };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
   pname = "erlang-ls";
   buildInputs = [ (rebar3WithPlugins { }) ];

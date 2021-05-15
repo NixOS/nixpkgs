@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, vtk_7, darwin
-, enablePython ? false, python ? null,  swig ? null}:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, vtk_7
+, darwin
+, enablePython ? false
+, python ? null
+, swig ? null
+}:
 
 stdenv.mkDerivation rec {
   version = "3.0.8";
@@ -31,9 +39,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ vtk_7 ]
     ++ lib.optional stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.ApplicationServices
-      darwin.apple_sdk.frameworks.Cocoa
-    ] ++ lib.optional enablePython [ swig python ];
+    darwin.apple_sdk.frameworks.ApplicationServices
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optional enablePython [ swig python ];
   propagatedBuildInputs = [ ];
 
   meta = with lib; {

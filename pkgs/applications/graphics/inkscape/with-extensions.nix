@@ -2,7 +2,7 @@
 , inkscape
 , symlinkJoin
 , makeWrapper
-, inkscapeExtensions ? []
+, inkscapeExtensions ? [ ]
 }:
 
 symlinkJoin {

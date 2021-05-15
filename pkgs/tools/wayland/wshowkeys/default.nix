@@ -1,12 +1,22 @@
-{ lib, stdenv, fetchFromSourcehut
-, meson, pkg-config, wayland, ninja
-, cairo, libinput, pango, wayland-protocols, libxkbcommon
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, pkg-config
+, wayland
+, ninja
+, cairo
+, libinput
+, pango
+, wayland-protocols
+, libxkbcommon
 }:
 
 let
   version = "2020-03-29";
   commit = "6388a49e0f431d6d5fcbd152b8ae4fa8e87884ee";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wshowkeys-unstable";
   inherit version;
 

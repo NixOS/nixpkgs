@@ -1,20 +1,20 @@
-{ sourcePerArch, knownVulnerabilities ? [] }:
+{ sourcePerArch, knownVulnerabilities ? [ ] }:
 
 { stdenv
 , lib
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
-# minimum dependencies
+  # minimum dependencies
 , alsaLib
 , fontconfig
 , freetype
 , libffi
 , xorg
 , zlib
-# runtime dependencies
+  # runtime dependencies
 , cups
-# runtime dependencies for GTK+ Look and Feel
+  # runtime dependencies for GTK+ Look and Feel
 , gtkSupport ? true
 , cairo
 , glib
@@ -26,13 +26,16 @@ let
   runtimeDependencies = [
     cups
   ] ++ lib.optionals gtkSupport [
-    cairo glib gtk3
+    cairo
+    glib
+    gtk3
   ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 in
 
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
+  name =
+    if sourcePerArch.packageType == "jdk"
     then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
     else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
 

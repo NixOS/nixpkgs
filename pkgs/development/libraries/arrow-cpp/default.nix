@@ -1,7 +1,28 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
-, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, xsimd
-, zlib, zstd
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, fixDarwinDylibNames
+, autoconf
+, boost
+, brotli
+, cmake
+, flatbuffers
+, gflags
+, glog
+, gtest
+, lz4
+, perl
+, python3
+, rapidjson
+, re2
+, snappy
+, thrift
+, utf8proc
+, which
+, xsimd
+, zlib
+, zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -20,7 +41,8 @@ let
     sha256 = "0n16xqlpxn2ryp43w8pppxrbwmllx6sk4hv3ycgikfj57nd3ibc0";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "arrow-cpp";
   version = "4.0.0";
 
@@ -124,27 +146,30 @@ in stdenv.mkDerivation rec {
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   GTEST_FILTER =
-    if doInstallCheck then let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-        "TestCompareKernel.PrimitiveRandomTests"
-      ];
-    in "-${builtins.concatStringsSep ":" filteredTests}" else null;
+    if doInstallCheck then
+      let
+        # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+        filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+          "TestCompareKernel.PrimitiveRandomTests"
+        ];
+      in
+      "-${builtins.concatStringsSep ":" filteredTests}" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase =
-  let
-    excludedTests = lib.optionals stdenv.isDarwin [
-      # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-      # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-      "plasma-external-store-tests"
-      "plasma-client-tests"
-    ];
-  in ''
-    ctest -L unittest -V \
-      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
-  '';
+    let
+      excludedTests = lib.optionals stdenv.isDarwin [
+        # Some plasma tests need to be patched to use a shorter AF_UNIX socket
+        # path on Darwin. See https://github.com/NixOS/nix/pull/1085
+        "plasma-external-store-tests"
+        "plasma-client-tests"
+      ];
+    in
+    ''
+      ctest -L unittest -V \
+        --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+    '';
 
   meta = {
     description = "A  cross-language development platform for in-memory data";

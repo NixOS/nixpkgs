@@ -11,7 +11,7 @@
 let
   version = "0.1.3";
 in
- buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "sl1-to-photon";
   inherit version;
 

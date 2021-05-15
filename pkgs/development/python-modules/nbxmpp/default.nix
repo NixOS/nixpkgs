@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitLab
-, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitLab
+, gobject-introspection
+, idna
+, libsoup
+, precis-i18n
+, pygobject3
+, pyopenssl
 }:
 
 buildPythonPackage rec {

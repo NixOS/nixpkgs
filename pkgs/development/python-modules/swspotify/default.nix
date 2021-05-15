@@ -13,7 +13,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests flask-cors dbus-python
+    requests
+    flask-cors
+    dbus-python
   ];
 
   preConfigure = ''

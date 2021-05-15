@@ -6,7 +6,8 @@ let
     sha256 = "023b0kd8djm3cn1lf1xl67yv3j12yl8bxccn42lkfmwxjwjfqw6h";
   };
 
-in {
+in
+{
   name = "gerrit";
 
   meta = with pkgs.lib.maintainers; {
@@ -39,8 +40,7 @@ in {
       };
 
     client =
-      { ... }: {
-      };
+      { ... }: { };
   };
 
   testScript = ''

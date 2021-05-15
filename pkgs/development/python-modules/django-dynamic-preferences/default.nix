@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, django, persisting-theory, six
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, persisting-theory
+, six
 }:
 
 buildPythonPackage rec {

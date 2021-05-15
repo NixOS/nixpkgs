@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, cryptokit, ocamlnet, ocurl, yojson
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, cryptokit
+, ocamlnet
+, ocurl
+, yojson
 , ounit
 }:
 

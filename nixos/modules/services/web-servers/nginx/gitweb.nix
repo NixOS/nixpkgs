@@ -61,7 +61,7 @@ in
     systemd.services.gitweb = {
       description = "GitWeb service";
       script = "${package}/gitweb.cgi --fastcgi --nproc=1";
-      environment  = {
+      environment = {
         FCGI_SOCKET_PATH = "/run/gitweb/gitweb.sock";
       };
       serviceConfig = {

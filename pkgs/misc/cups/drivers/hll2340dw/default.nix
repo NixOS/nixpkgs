@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file
-, a2ps, coreutils, perl, gnugrep, which
+{ lib
+, stdenv
+, fetchurl
+, cups
+, dpkg
+, gnused
+, makeWrapper
+, ghostscript
+, file
+, a2ps
+, coreutils
+, perl
+, gnugrep
+, which
 }:
 
 let
@@ -57,7 +69,7 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
       --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";

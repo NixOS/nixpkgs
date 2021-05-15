@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
+, pkg-config
 , libusb1
 , readline
 }:

@@ -81,9 +81,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/obfusk/jiten";
     license = with licenses; [
-      agpl3Plus               # code
-      cc-by-sa-30             # jmdict/kanjidic
-      unfreeRedistributable   # pitch data from wadoku is non-commercial :(
+      agpl3Plus # code
+      cc-by-sa-30 # jmdict/kanjidic
+      unfreeRedistributable # pitch data from wadoku is non-commercial :(
     ];
     maintainers = [ maintainers.obfusk ];
     platforms = platforms.unix;

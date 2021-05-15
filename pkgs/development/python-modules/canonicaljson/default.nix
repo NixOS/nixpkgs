@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, frozendict
+, simplejson
+, six
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -13,7 +18,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    frozendict simplejson six
+    frozendict
+    simplejson
+    six
   ];
 
   meta = with lib; {

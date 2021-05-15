@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, dns-root-data } :
+{ lib, stdenv, fetchurl, glibc, dns-root-data }:
 
 let
   version = "1.05";

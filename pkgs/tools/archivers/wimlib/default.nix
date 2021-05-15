@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, pkg-config, openssl, fuse, libxml2
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, openssl
+, fuse
+, libxml2
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
@@ -24,13 +30,15 @@ stdenv.mkDerivation rec {
       --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
-  postInstall = let
-    path = lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
-  in ''
-    for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : ${path}
-    done
-  '';
+  postInstall =
+    let
+      path = lib.makeBinPath [ cabextract cdrkit mtools ntfs3g syslinux ];
+    in
+    ''
+      for prog in $out/bin/*; do
+        wrapProgram $prog --prefix PATH : ${path}
+      done
+    '';
 
   doCheck = true;
 

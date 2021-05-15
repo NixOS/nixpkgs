@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-iUDc54E8AiLMJw9h99kg/3VmaSi8GqfQyrPwa9nJ994=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv Security
+    libiconv
+    Security
   ];
 
   # enable all output formats

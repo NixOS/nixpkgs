@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  pname   = "hexyl";
+  pname = "hexyl";
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0aj2sysl0spf5zlcd5kfzlw97w7dzf9x93pv0d1v9blnbd1rz7lm";
   };
 
@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
       printable ASCII characters, ASCII whitespace characters, other ASCII
       characters and non-ASCII).
     '';
-    homepage    = "https://github.com/sharkdp/hexyl";
-    license     = with licenses; [ asl20 /* or */ mit ];
+    homepage = "https://github.com/sharkdp/hexyl";
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

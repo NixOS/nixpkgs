@@ -10,7 +10,8 @@ let
   # TODO: switch to configGen.json once RFC42 is implemented
   settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
 
-in {
+in
+{
   options = {
     services.matrix-appservice-discord = {
       enable = mkEnableOption "a bridge between Matrix and Discord";

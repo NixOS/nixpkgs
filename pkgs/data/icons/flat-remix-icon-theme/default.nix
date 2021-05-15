@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
   version = "20200710";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix";
     rev = version;

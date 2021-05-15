@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, pytest-metadata, setuptools_scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytest
+, pytest-metadata
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "pytest-html";

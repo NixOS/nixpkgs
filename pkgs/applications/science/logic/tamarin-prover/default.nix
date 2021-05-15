@@ -1,14 +1,20 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
-# the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+{ haskellPackages
+, mkDerivation
+, fetchFromGitHub
+, lib
+  # the following are non-haskell dependencies
+, makeWrapper
+, which
+, maude
+, graphviz
 }:
 
 let
   version = "1.6.0";
   src = fetchFromGitHub {
-    owner  = "tamarin-prover";
-    repo   = "tamarin-prover";
-    rev    = version;
+    owner = "tamarin-prover";
+    repo = "tamarin-prover";
+    rev = version;
     sha256 = "1pl3kz7gyw9g6s4x5j90z4snd10vq6296g3ajlr8d4n53p3c9i3w";
   };
 
@@ -17,8 +23,8 @@ let
   common = pname: src: {
     inherit pname version src;
 
-    license     = lib.licenses.gpl3;
-    homepage    = "https://tamarin-prover.github.io";
+    license = lib.licenses.gpl3;
+    homepage = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
@@ -33,15 +39,22 @@ let
   tamarin-prover-utils = mkDerivation (common "tamarin-prover-utils" (src + "/lib/utils") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = with haskellPackages; [
-      base64-bytestring blaze-builder
-      dlist exceptions fclabels safe SHA syb
+      base64-bytestring
+      blaze-builder
+      dlist
+      exceptions
+      fclabels
+      safe
+      SHA
+      syb
     ];
   });
 
   tamarin-prover-term = mkDerivation (common "tamarin-prover-term" (src + "/lib/term") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = (with haskellPackages; [
-      attoparsec HUnit
+      attoparsec
+      HUnit
     ]) ++ [ tamarin-prover-utils ];
   });
 
@@ -49,7 +62,10 @@ let
     postPatch = replaceSymlinks;
     doHaddock = false; # broken
     libraryHaskellDepends = (with haskellPackages; [
-      aeson aeson-pretty parallel uniplate
+      aeson
+      aeson-pretty
+      parallel
+      uniplate
     ]) ++ [ tamarin-prover-utils tamarin-prover-term ];
   });
 
@@ -84,14 +100,29 @@ mkDerivation (common "tamarin-prover" src // {
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
 
   executableHaskellDepends = (with haskellPackages; [
-    binary-instances binary-orphans blaze-html conduit file-embed
-    gitrev http-types lifted-base monad-control monad-unlift
-    resourcet shakespeare threads wai warp yesod-core yesod-static
-  ]) ++ [ tamarin-prover-utils
-          tamarin-prover-sapic
-          tamarin-prover-term
-          tamarin-prover-theory
-        ];
+    binary-instances
+    binary-orphans
+    blaze-html
+    conduit
+    file-embed
+    gitrev
+    http-types
+    lifted-base
+    monad-control
+    monad-unlift
+    resourcet
+    shakespeare
+    threads
+    wai
+    warp
+    yesod-core
+    yesod-static
+  ]) ++ [
+    tamarin-prover-utils
+    tamarin-prover-sapic
+    tamarin-prover-term
+    tamarin-prover-theory
+  ];
 
   # tamarin-prover 1.6 is incompatible with maude 3.1.
   hydraPlatforms = lib.platforms.none;

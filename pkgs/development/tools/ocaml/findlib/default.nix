@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
   };
 
-  buildInputs = [m4 ncurses ocaml];
+  buildInputs = [ m4 ncurses ocaml ];
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
-  dontAddPrefix=true;
+  dontAddPrefix = true;
 
-  preConfigure=''
+  preConfigure = ''
     configureFlagsArray=(
       -bindir $out/bin
       -mandir $out/share/man
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
     license = lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       lib.maintainers.maggesi
       lib.maintainers.vbmithr

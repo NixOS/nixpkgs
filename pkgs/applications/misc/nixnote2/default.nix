@@ -1,5 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, boost
-, qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, boost
+, qtbase
+, qtwebkit
+, poppler
+, qmake
+, hunspell
+, html-tidy
+}:
 
 mkDerivation rec {
   pname = "nixnote2";

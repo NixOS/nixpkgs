@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, python3, python3Packages
-, gnome, gtk3, wrapGAppsHook, gtksourceview3, snapper
+{ lib
+, fetchFromGitHub
+, python3
+, python3Packages
+, gnome
+, gtk3
+, wrapGAppsHook
+, gtksourceview3
+, snapper
 , gobject-introspection
 }:
 

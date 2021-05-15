@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libjpeg, zlib
-, openssl, libwebp, catch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, boost
+, libpng
+, libjpeg
+, zlib
+, openssl
+, libwebp
+, catch
+}:
 
 stdenv.mkDerivation rec {
   pname = "arc_unpacker-unstable";

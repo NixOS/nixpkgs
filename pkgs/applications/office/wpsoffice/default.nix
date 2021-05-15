@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mlatus th0rgal ];
   };
@@ -130,7 +131,8 @@ stdenv.mkDerivation rec {
     "png"
     # File saving breaks unless we are using vendored llvmPackages_8.libcxx
     #"c++"
-    "ssl" "crypto"
+    "ssl"
+    "crypto"
     "nspr"
     "nss"
     "odbc"

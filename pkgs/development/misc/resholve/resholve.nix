@@ -20,9 +20,9 @@ let
   };
   deps = callPackage ./deps.nix {
     /*
-    resholve needs to patch Oil, but trying to avoid adding
-    them all *to* nixpkgs, since they aren't specific to
-    nix/nixpkgs.
+      resholve needs to patch Oil, but trying to avoid adding
+      them all *to* nixpkgs, since they aren't specific to
+      nix/nixpkgs.
     */
     oilPatches = [
       "${rSrc}/0001-add_setup_py.patch"

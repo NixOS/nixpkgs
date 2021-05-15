@@ -9,9 +9,10 @@ mkCoqDerivation {
   release."1.0.0".sha256 = "190jd8hb8anqsvr9ysr514pm5sh8qhw4030ddykvwxx9d9q6rbp3";
 
   inherit version;
-  defaultVersion = with lib; with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.10" "8.13") (range "1.11.0" "1.12.0") ]; out = "1.0.0"; }
-    ] null;
+  defaultVersion = with lib; with versions; switch [ coq.version mathcomp.version ] [
+    { cases = [ (range "8.10" "8.13") (range "1.11.0" "1.12.0") ]; out = "1.0.0"; }
+  ]
+    null;
 
   propagatedBuildInputs = [ mathcomp.field mathcomp-real-closed ];
 

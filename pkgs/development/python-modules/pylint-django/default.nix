@@ -3,11 +3,11 @@
 , isPy3k
 , lib
 
-# pythonPackages
+  # pythonPackages
 , django
 , pylint-plugin-utils
 
-# pythonPackages for checkInputs
+  # pythonPackages for checkInputs
 , coverage
 , factory_boy
 , pytest
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   # Skip test external_django_tables2_noerror_meta_class:
   # requires an unpackaged django_tables2
   checkPhase = ''
-      python pylint_django/tests/test_func.py -v -k "not tables2"
+    python pylint_django/tests/test_func.py -v -k "not tables2"
   '';
 
   meta = with lib; {

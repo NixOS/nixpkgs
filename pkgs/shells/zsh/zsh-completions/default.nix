@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-completions";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12l9wrx0aysyj62kgp5limglz0nq73w8c415wcshxnxmhyk6sw6d";
   };
 
-  installPhase= ''
+  installPhase = ''
     install -D --target-directory=$out/share/zsh/site-functions src/*
   '';
 

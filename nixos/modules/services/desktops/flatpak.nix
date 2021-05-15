@@ -5,7 +5,8 @@ with lib;
 
 let
   cfg = config.services.flatpak;
-in {
+in
+{
   meta = {
     doc = ./flatpak.xml;
     maintainers = pkgs.flatpak.meta.maintainers;
@@ -19,7 +20,7 @@ in {
       guiPackages = mkOption {
         internal = true;
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.gnome.gnome-software ]";
         description = ''
           Packages that provide an interface for flatpak
@@ -35,7 +36,8 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = (config.xdg.portal.enable == true);
+      {
+        assertion = (config.xdg.portal.enable == true);
         message = "To use Flatpak you must enable XDG Desktop Portals with xdg.portal.enable.";
       }
     ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , gettext
@@ -105,9 +106,9 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     # To silence inkscape warnings regarding profile directory
-  ''
-    export INKSCAPE_PROFILE_DIR="$(mktemp -d)"
-  '';
+    ''
+      export INKSCAPE_PROFILE_DIR="$(mktemp -d)"
+    '';
 
   passthru = {
     updateScript = gnome.updateScript {

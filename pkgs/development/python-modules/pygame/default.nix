@@ -1,5 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
-, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype
+{ lib
+, fetchPypi
+, buildPythonPackage
+, python
+, pkg-config
+, libX11
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, libpng
+, libjpeg
+, portmidi
+, freetype
 }:
 
 buildPythonPackage rec {
@@ -12,12 +24,20 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkg-config SDL2
+    pkg-config
+    SDL2
   ];
 
   buildInputs = [
-    SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
-    portmidi libX11 freetype
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    libpng
+    libjpeg
+    portmidi
+    libX11
+    freetype
   ];
 
   # Tests fail because of no audio device and display.

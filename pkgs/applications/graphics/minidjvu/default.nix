@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libtiff, gettext }:
+{ lib, stdenv, fetchurl, libtiff, gettext }:
 
 stdenv.mkDerivation {
   name = "minidjvu-0.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sed -i s,/usr/bin/gzip,gzip, Makefile.in
   '';
 
-  buildInputs = [ libtiff gettext];
+  buildInputs = [ libtiff gettext ];
 
   preInstall = ''
     mkdir -p $out/lib

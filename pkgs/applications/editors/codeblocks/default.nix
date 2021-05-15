@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, file, zip, wxGTK30-gtk3, gtk3
-, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, file
+, zip
+, wxGTK30-gtk3
+, gtk3
+, contribPlugins ? false
+, hunspell
+, gamin
+, boost
+, wrapGAppsHook
 }:
 
 with lib;

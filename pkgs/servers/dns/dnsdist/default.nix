@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, systemd
-, boost, libsodium, libedit, re2
-, net-snmp, lua, protobuf, openssl, zlib, h2o
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, systemd
+, boost
+, libsodium
+, libedit
+, re2
+, net-snmp
+, lua
+, protobuf
+, openssl
+, zlib
+, h2o
 }:
 
 stdenv.mkDerivation rec {

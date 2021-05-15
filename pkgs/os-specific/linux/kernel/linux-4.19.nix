@@ -17,4 +17,4 @@ buildLinux (args // rec {
   };
 
   kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_4_19 ];
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

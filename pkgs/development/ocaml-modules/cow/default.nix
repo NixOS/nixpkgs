@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildDunePackage, alcotest
-, uri, xmlm, omd, ezjsonm }:
+{ lib
+, fetchurl
+, buildDunePackage
+, alcotest
+, uri
+, xmlm
+, omd
+, ezjsonm
+}:
 
 buildDunePackage rec {
   useDune2 = true;

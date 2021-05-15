@@ -1,8 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, pkgs
-, autoconf, automake, curl, iprange, iproute2, ipset, iptables, iputils
-, kmod, nettools, procps, tcpdump, traceroute, util-linux, whois
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgs
+, autoconf
+, automake
+, curl
+, iprange
+, iproute2
+, ipset
+, iptables
+, iputils
+, kmod
+, nettools
+, procps
+, tcpdump
+, traceroute
+, util-linux
+, whois
 
-# If true, just install FireQOS without FireHOL
+  # If true, just install FireQOS without FireHOL
 , onlyQOS ? false
 }:
 
@@ -35,14 +51,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    curl iprange iproute2 ipset iptables iputils kmod
-    nettools procps tcpdump traceroute util-linux whois
+    curl
+    iprange
+    iproute2
+    ipset
+    iptables
+    iputils
+    kmod
+    nettools
+    procps
+    tcpdump
+    traceroute
+    util-linux
+    whois
   ];
 
   preConfigure = "./autogen.sh";
-  configureFlags = [ "--localstatedir=/var"
-                     "--disable-doc" "--disable-man" ] ++
-                   lib.optional onlyQOS [ "--disable-firehol" ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--disable-doc"
+    "--disable-man"
+  ] ++
+  lib.optional onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {
     description = "A firewall for humans";

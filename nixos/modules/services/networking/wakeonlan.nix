@@ -7,10 +7,10 @@ let
 
   ethtool = "${pkgs.ethtool}/sbin/ethtool";
 
-  passwordParameter = password : if (password == "") then "" else
-    "sopass ${password}";
+  passwordParameter = password: if (password == "") then "" else
+  "sopass ${password}";
 
-  methodParameter = {method, password} :
+  methodParameter = { method, password }:
     if method == "magicpacket" then "wol g"
     else if method == "password" then "wol s so ${passwordParameter password}"
     else throw "Wake-On-Lan method not supported";

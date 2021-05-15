@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake}:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation {
   name = "cmtk-3.3.1";
@@ -14,13 +14,13 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = with lib; {
-    description     = "Computational Morphometry Toolkit ";
+    description = "Computational Morphometry Toolkit ";
     longDescription = ''A software toolkit for computational morphometry of
       biomedical images, CMTK comprises a set of command line tools and a
       back-end general-purpose library for processing and I/O'';
     maintainers = with maintainers; [ tbenst ];
     platforms = platforms.all;
-    license     = licenses.gpl3;
-    homepage    = "https://www.nitrc.org/projects/cmtk/";
+    license = licenses.gpl3;
+    homepage = "https://www.nitrc.org/projects/cmtk/";
   };
 }

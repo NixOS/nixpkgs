@@ -2,7 +2,8 @@
 
 let
   version = "0.0.4.7";
-in fetchurl {
+in
+fetchurl {
   name = "cnstrokeorder-${version}";
 
   url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";

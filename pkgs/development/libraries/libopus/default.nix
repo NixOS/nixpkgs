@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, fixedPoint ? false, withCustomModes ? true }:
+{ lib
+, stdenv
+, fetchurl
+, fixedPoint ? false
+, withCustomModes ? true
+}:
 
 let
   version = "1.3.1";
@@ -16,7 +20,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   configureFlags = lib.optional fixedPoint "--enable-fixed-point"
-                ++ lib.optional withCustomModes "--enable-custom-modes";
+    ++ lib.optional withCustomModes "--enable-custom-modes";
 
   doCheck = !stdenv.isi686; # test_unit_LPC_inv_pred_gain fails
 

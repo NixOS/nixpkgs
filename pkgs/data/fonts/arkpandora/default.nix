@@ -2,7 +2,8 @@
 
 let
   version = "2.04";
-in fetchurl {
+in
+fetchurl {
   name = "arkpandora-${version}";
 
   urls = [

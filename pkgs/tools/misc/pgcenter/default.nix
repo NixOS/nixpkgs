@@ -5,9 +5,9 @@ buildGoModule rec {
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner  = "lesovsky";
-    repo   = "pgcenter";
-    rev    = "v${version}";
+    owner = "lesovsky";
+    repo = "pgcenter";
+    rev = "v${version}";
     sha256 = "sha256-ow26wuM7nw/WbeaPVcNm5iYUYLydeujhw+7BcTirPcA=";
   };
 

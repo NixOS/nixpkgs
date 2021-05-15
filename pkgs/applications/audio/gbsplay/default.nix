@@ -13,16 +13,24 @@ stdenv.mkDerivation {
   buildInputs = [ libpulseaudio ];
 
   configureFlags =
-   [ "--without-test" "--without-contrib" "--disable-devdsp"
-     "--enable-pulse" "--disable-alsa" "--disable-midi"
-     "--disable-nas" "--disable-dsound" "--disable-i18n" ];
+    [
+      "--without-test"
+      "--without-contrib"
+      "--disable-devdsp"
+      "--enable-pulse"
+      "--disable-alsa"
+      "--disable-midi"
+      "--disable-nas"
+      "--disable-dsound"
+      "--disable-i18n"
+    ];
 
   makeFlags = [ "tests=" ];
 
   meta = with lib; {
     description = "gameboy sound player";
     license = licenses.gpl1;
-    platforms = ["i686-linux" "x86_64-linux"];
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ dasuxullebt ];
   };
 }

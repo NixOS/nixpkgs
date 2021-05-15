@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   src = fetchFromGitHub {
-    owner  = "TheLocehiliosan";
-    repo   = "yadm";
-    rev    = version;
+    owner = "TheLocehiliosan";
+    repo = "yadm";
+    rev = version;
     sha256 = "0ga0p28nvqilswa07bzi93adk7wx6d5pgxlacr9wl9v1h6cds92s";
   };
 

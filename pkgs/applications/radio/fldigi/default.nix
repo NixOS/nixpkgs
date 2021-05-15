@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, hamlib, fltk14, libjpeg, libpng, portaudio, libsndfile,
-  libsamplerate, libpulseaudio, libXinerama, gettext, pkg-config, alsaLib }:
+{ lib
+, stdenv
+, fetchurl
+, hamlib
+, fltk14
+, libjpeg
+, libpng
+, portaudio
+, libsndfile
+, libsamplerate
+, libpulseaudio
+, libXinerama
+, gettext
+, pkg-config
+, alsaLib
+}:
 
 stdenv.mkDerivation rec {
   version = "4.1.18";
@@ -10,8 +24,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PH/YSrOoS6RSWyUenVYSDa7mJqODFoSpdP2tR2+QJw0=";
   };
 
-  buildInputs = [ libXinerama gettext hamlib fltk14 libjpeg libpng portaudio
-                  libsndfile libsamplerate libpulseaudio pkg-config alsaLib ];
+  buildInputs = [
+    libXinerama
+    gettext
+    hamlib
+    fltk14
+    libjpeg
+    libpng
+    portaudio
+    libsndfile
+    libsamplerate
+    libpulseaudio
+    pkg-config
+    alsaLib
+  ];
 
   meta = {
     description = "Digital modem program";

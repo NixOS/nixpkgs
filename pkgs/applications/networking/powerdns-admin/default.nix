@@ -10,11 +10,34 @@ let
   };
 
   pythonDeps = with python3Packages; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
-    mysqlclient sqlalchemy
-    configobj bcrypt requests ldap pyotp qrcode dnspython_1
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    flask
+    flask_assets
+    flask_login
+    flask_sqlalchemy
+    flask_migrate
+    flask-seasurf
+    flask_mail
+    flask-sslify
+    mysqlclient
+    sqlalchemy
+    configobj
+    bcrypt
+    requests
+    ldap
+    pyotp
+    qrcode
+    dnspython_1
+    gunicorn
+    python3-saml
+    pyopenssl
+    pytz
+    cssmin
+    jsmin
+    authlib
+    bravado-core
+    lima
+    pytimeparse
+    pyyaml
   ];
 
   assets = mkYarnPackage {
@@ -59,7 +82,8 @@ let
     assets.register('js_main', 'generated/main.js')
     assets.register('css_main', 'generated/main.css')
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "powerdns-admin";
 
   inherit src version;

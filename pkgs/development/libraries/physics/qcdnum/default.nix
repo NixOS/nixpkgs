@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A very fast QCD evolution program written in FORTRAN77";
-    license     = lib.licenses.gpl3;
-    homepage    = "https://www.nikhef.nl/~h24/qcdnum/index.html";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    homepage = "https://www.nikhef.nl/~h24/qcdnum/index.html";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

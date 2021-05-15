@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchurl, chipmunk, sqlite, curl, zlib, bzip2, libjpeg
-, libpng, freeglut, libGLU, libGL, SDL, SDL_mixer, SDL_image, SDL_net
-, SDL_ttf, lua5, ode, libxdg_basedir, libxml2 }:
+{ lib
+, stdenv
+, fetchurl
+, chipmunk
+, sqlite
+, curl
+, zlib
+, bzip2
+, libjpeg
+, libpng
+, freeglut
+, libGLU
+, libGL
+, SDL
+, SDL_mixer
+, SDL_image
+, SDL_net
+, SDL_ttf
+, lua5
+, ode
+, libxdg_basedir
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
@@ -12,9 +32,25 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    chipmunk sqlite curl zlib bzip2 libjpeg libpng
-    freeglut libGLU libGL SDL SDL_mixer SDL_image SDL_net SDL_ttf
-    lua5 ode libxdg_basedir libxml2
+    chipmunk
+    sqlite
+    curl
+    zlib
+    bzip2
+    libjpeg
+    libpng
+    freeglut
+    libGLU
+    libGL
+    SDL
+    SDL_mixer
+    SDL_image
+    SDL_net
+    SDL_ttf
+    lua5
+    ode
+    libxdg_basedir
+    libxml2
   ];
 
   CXXFLAGS = [
