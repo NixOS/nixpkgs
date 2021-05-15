@@ -1290,6 +1290,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/echodoc.vim/";
   };
 
+  edge = buildVimPluginFrom2Nix {
+    pname = "edge";
+    version = "2021-05-08";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "edge";
+      rev = "8f4cc117b703168f6c5d03ef65b36b095bb3f981";
+      sha256 = "0rq256pwfrxpgy9w2wx4fk9jddmb0xrifhnjkdjf3cmir8xdl7mp";
+    };
+    meta.homepage = "https://github.com/sainnhe/edge/";
+  };
+
   editorconfig-vim = buildVimPluginFrom2Nix {
     pname = "editorconfig-vim";
     version = "2021-04-04";
