@@ -1473,7 +1473,9 @@ in
    SDL = SDL_sixel;
   };
 
-  gremlin-console = callPackage ../applications/misc/gremlin-console { };
+  gremlin-console = callPackage ../applications/misc/gremlin-console {
+    openjdk = openjdk11;
+  };
 
   grex = callPackage ../tools/misc/grex {
     inherit (darwin.apple_sdk.frameworks) Security;
