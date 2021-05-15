@@ -425,6 +425,8 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # assign tests grouped by file to workers
     "--dist loadfile"
+    # enable full variable printing on error
+    "--showlocals"
     # tests are located in tests/
     "tests"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
