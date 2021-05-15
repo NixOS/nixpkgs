@@ -76,13 +76,63 @@ This is the follow-up to #TODO.
 
 Make sure to replace all TODO with the actual values.
 
-### Fix Broken Packages
+### Notify Maintainers and Fix Broken Packages
 
-(TODO)
+After you've done the previous steps, Hydra will start building the new and
+updated Haskell packages.  You can see the progress Hydra is making at
+https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.  This Hydra jobset is
+defined in the file [release-haskell.nix](../../top-level/release-haskell.nix).
+
+#### Notify Maintainers
+
+When Hydra finishes building all the packages, you should generate a build
+report to notify maintainers of their broken packages.  You can do that with the
+following commands:
+
+```console
+$ maintainers/scripts/haskell/hydra-report.hs get-report
+$ maintainers/scripts/haskell/hydra-report.hs ping-maintainers
+```
+
+The `hyda-report.hs ping-maintainers` command generates a Markdown document
+that you can paste in a GitHub comment on the PR opened above.  This
+comment describes which Haskell packages are now failing to build.  It also
+pings the maintainers so that they know to fix up their packages.
+
+This build report can be fetched and re-generated for new Hydra evaluations.
+It may help contributors to try to keep the GitHub comment updated with the
+most recent build report.
+
+#### Fix Broken Packages
+
+After getting the build report, you can see which packages and Hydra jobs are
+failing to build.  The most important jobs are the `maintained` and `mergeable`
+jobs. These are both defined in
+[`release-haskell.nix](../../top-level/release-haskell.nix).
+
+`mergeable` is a set of the most important Haskell packages, including things
+like Pandoc and XMonad.  These packages are widely used.  We would like to
+always keep these building.
+
+`maintained` is a set of Haskell packages that have maintainers in Nixpkgs.
+We should be proactive in working with maintainers to keep their packages
+building.
+
+Steps to fix Haskell packages that are failing to build is out of scope for
+this document, but it usually requires fixing up dependencies that now
+out-of-bounds.
 
 ### Merge `haskell-updates` into `master`
 
 (TODO)
+
+- mark broken packages with `mark-broken.sh`
+
+### Additional Info
+
+(TODO)
+
+- you can restart a Hydra evaluation by logging in with github.
 
 ## Contributor Workflow
 
