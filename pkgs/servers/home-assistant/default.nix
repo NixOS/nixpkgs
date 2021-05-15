@@ -328,6 +328,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ondilo_ico"
     "openerz"
     "opentherm_gw"
+    "ovo_energy"
     "ozw"
     "panel_custom"
     "panel_iframe"
