@@ -4755,6 +4755,8 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovoenergy = callPackage ../development/python-modules/ovoenergy { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
