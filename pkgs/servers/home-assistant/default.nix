@@ -370,6 +370,7 @@ in with py.pkgs; buildPythonApplication rec {
     "gpslogger"
     "graphite"
     "group"
+    "growatt_server"
     "guardian"
     "harmony"
     "hassio"
