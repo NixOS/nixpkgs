@@ -1,5 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub
 , pkg-config, taglib, alsaLib
+, zlib
 
 # Disable on-the-fly transcoding,
 # removing the dependency on ffmpeg.
@@ -20,7 +21,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib ];
+  buildInputs = [ taglib alsaLib zlib ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
 
   # TODO(Profpatsch): write a test for transcoding support,
