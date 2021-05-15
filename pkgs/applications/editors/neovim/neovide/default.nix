@@ -132,6 +132,15 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
+  postInstall = ''
+    for n in 16x16 32x32 48x48 256x256; do
+      install -m444 -D "assets/neovide-$n.png" \
+        "$out/share/icons/hicolor/$n/apps/neovide.png"
+    done
+    install -m444 -Dt $out/share/icons/hicolor/scalable/apps assets/neovide.svg
+    install -m444 -Dt $out/share/applications assets/neovide.desktop
+  '';
+
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
     homepage = "https://github.com/Kethku/neovide";
