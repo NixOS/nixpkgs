@@ -26,6 +26,9 @@ let
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      mkdir -p "$rsrc/share"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/share/"* "$rsrc/share/"
+      ln -s "${targetLlvmLibraries.compiler-rt.dev}/include/"*.txt "$rsrc/share/"
     '';
 
   in {
