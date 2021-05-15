@@ -49,7 +49,7 @@ in
 
       cache = {
         redis = {
-          enable = mkEnableOption "Enable the redis cache";
+          enable = mkEnableOption "Redis cache";
           network = mkOption {
             description = "Socket type";
             type = types.enum [ "tcp" "unix" ];
@@ -94,7 +94,7 @@ in
           };
         };
         memcached = {
-          enable = mkEnableOption "Enable memcached cache";
+          enable = mkEnableOption "memcached cache";
           caches = mkOption {
             description = "Memcached caches";
             type = types.listOf (types.submodule (
@@ -118,7 +118,7 @@ in
           };
         };
         memory = {
-          enable = mkEnableOption "Enable the built-in memory cache";
+          enable = mkEnableOption "memory cache";
         };
       };
 
