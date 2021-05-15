@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , libpng
 , libuuid
 , zlib
 , bzip2
-, lzma
+, xz
 , openssl
 , curl
 , libmysqlclient
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l5lmqqc6sqkf4hyk3z4825ly0vdlj5xdfad6zd0708cb1v81nbx";
   };
 
-  buildInputs = [ libpng libuuid zlib bzip2 lzma openssl curl libmysqlclient ];
+  buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
   patchPhase = ''
     substituteInPlace ./src/checkUmask.sh \
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     cp $NIX_BUILD_TOP/bin/x86_64/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     license = licenses.unfree;
     maintainers = with maintainers; [ scalavision ];

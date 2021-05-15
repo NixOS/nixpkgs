@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pyramid
@@ -21,10 +21,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyramid hawkauthlib tokenlib ];
   buildInputs = [ webtest ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "pyramid_hawkauth" ];
+
+  meta = with lib; {
     homepage = "https://github.com/mozilla-services/pyramid_hawkauth";
     description = "A Pyramid authentication plugin for HAWK";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -2,15 +2,16 @@
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytest, boto3, mock, giflib, pytz
 , gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
+, certifi
 }:
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.8.17";
+  version = "1.8.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "716201c21246587f374785bec6d6a20a984fe1f6c2b0e83bf15127eb8f724d0c";
+    sha256 = "b732ece0ff8886a29c439723a3e1fc382718804bb057519d537a81308854967a";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+    certifi
     click
     cligj
     click-plugins
@@ -41,9 +43,7 @@ buildPythonPackage rec {
   checkPhase = ''
     rm -r fiona # prevent importing local fiona
     # Some tests access network, others test packaging
-    pytest -k "not test_*_http \
-           and not test_*_https \
-           and not test_*_wheel"
+    pytest -k "not (http or https or wheel)"
   '';
 
   meta = with lib; {

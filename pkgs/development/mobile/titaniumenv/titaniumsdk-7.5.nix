@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   }
   else throw "Platform: ${stdenv.system} not supported!";
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   buildCommand = ''
     mkdir -p $out

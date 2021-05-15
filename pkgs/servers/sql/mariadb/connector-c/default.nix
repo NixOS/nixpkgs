@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "mariadb-connector-c";
@@ -42,8 +42,6 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ curl openssl zlib ];
   buildInputs = [ libiconv ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     moveToOutput bin/mariadb_config "$dev"
   '';
@@ -58,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client library that can be used to connect to MySQL or MariaDB";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.all;
   };

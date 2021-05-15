@@ -44,7 +44,7 @@ let
 in
   {
     options.services.ihatemoney = {
-      enable = mkEnableOption "ihatemoney webapp. Note that this will set uwsgi to emperor mode running as root";
+      enable = mkEnableOption "ihatemoney webapp. Note that this will set uwsgi to emperor mode";
       backend = mkOption {
         type = types.enum [ "sqlite" "postgresql" ];
         default = "sqlite";
@@ -116,16 +116,13 @@ in
       services.uwsgi = {
         enable = true;
         plugins = [ "python3" ];
-        # the vassal needs to be able to setuid
-        user = "root";
-        group = "root";
         instance = {
           type = "emperor";
           vassals.ihatemoney = {
             type = "normal";
             strict = true;
-            uid = user;
-            gid = group;
+            immediate-uid = user;
+            immediate-gid = group;
             # apparently flask uses threads: https://github.com/spiral-project/ihatemoney/commit/c7815e48781b6d3a457eaff1808d179402558f8c
             enable-threads = true;
             module = "wsgi:application";

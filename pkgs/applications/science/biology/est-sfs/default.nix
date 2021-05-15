@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gsl }:
+{ lib, stdenv, fetchurl, gsl }:
 
 stdenv.mkDerivation rec {
   pname = "est-sfs";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp est-sfs-documentation.pdf $out/share/doc/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/est-usfs";
     description = "Estimate the unfolded site frequency spectrum and ancestral states";
     license = licenses.gpl3;

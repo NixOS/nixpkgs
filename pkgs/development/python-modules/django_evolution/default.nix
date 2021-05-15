@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "django_evolution";
-  version = "2.0";
+  version = "2.1.2";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0bc983657de1b0bc5c8d29ddcbf7b6fb113685bf306ccc266cf22b8a77bd862";
+    sha256 = "28bad07b5e29a0ea4bd9727c6927cbee25d349d21606a553a0c748fbee0c073c";
   };
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database schema evolution tool for the Django web framework";
     homepage = "https://github.com/beanbaginc/django-evolution";
     license = licenses.bsd0;

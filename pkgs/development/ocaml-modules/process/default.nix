@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-process-${version}";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Easy process control in OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
   };

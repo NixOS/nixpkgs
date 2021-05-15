@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "alcotest-lwt";
 
-  inherit (alcotest) version src;
+  inherit (alcotest) version src useDune2;
 
   propagatedBuildInputs = [ alcotest logs ocaml_lwt ];
 

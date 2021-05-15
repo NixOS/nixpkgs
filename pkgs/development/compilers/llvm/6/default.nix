@@ -1,4 +1,4 @@
-{ lowPrio, newScope, pkgs, stdenv, cmake, gccForLibs
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
 , buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
@@ -17,7 +17,7 @@ let
 
   clang-tools-extra_src = fetch "clang-tools-extra" "1w8ml7fyn4vyxmy59n2qm4r1k1kgwgwkaldp6m45fdv4g0kkfbhd";
 
-  tools = stdenv.lib.makeExtensible (tools: let
+  tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
     mkExtraBuildCommands = cc: ''
       rsrc="$out/resource-root"
@@ -25,12 +25,10 @@ let
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   in {
 
-    llvm = callPackage ./llvm.nix { };
+    llvm = callPackage ./llvm { };
 
     clang-unwrapped = callPackage ./clang {
       inherit clang-tools-extra_src;
@@ -38,6 +36,7 @@ let
 
     llvm-manpages = lowPrio (tools.llvm.override {
       enableManpages = true;
+      enableSharedLibraries = false;
       python3 = pkgs.python3;  # don't use python-boot
     });
 
@@ -70,16 +69,16 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld.nix {};
+    lld = callPackage ./lld {};
 
-    lldb = callPackage ./lldb.nix {};
+    lldb = callPackage ./lldb {};
   });
 
-  libraries = stdenv.lib.makeExtensible (libraries: let
+  libraries = lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt.nix {};
+    compiler-rt = callPackage ./compiler-rt {};
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 
@@ -87,7 +86,7 @@ let
 
     libcxx = callPackage ./libc++ {};
 
-    libcxxabi = callPackage ./libc++abi.nix {};
+    libcxxabi = callPackage ./libc++abi {};
 
     openmp = callPackage ./openmp.nix {};
   });

@@ -1,11 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, aiohttp, deepmerge, yarl
-, aresponses, pytest, pytest-asyncio, pytestcov }:
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, deepmerge
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pytest-cov
+, yarl
+}:
 
 buildPythonPackage rec {
   pname = "pyipp";
   version = "0.11.0";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
    owner = "ctalkington";
@@ -22,14 +29,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    pytest
     pytest-asyncio
-    pytestcov
+    pytest-cov
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest -q .
-  '';
+  pythonImportsCheck = [ "pyipp" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for Internet Printing Protocol (IPP)";

@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, meson, pkg-config, ninja, wayland
+{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, ninja, wayland, scdoc
 , wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   pname = "wlsunset";
-  version = "0.1.0";
+  version = "0.2.0";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~kennylevinsen/wlsunset/archive/${version}.tar.gz";
-    sha256 = "0g7mk14hlbwbhq6nqr84452sbgcja3hdxsqf0vws4njhfjgqiv3q";
+  src = fetchFromSourcehut {
+    owner = "~kennylevinsen";
+    repo = pname;
+    rev = version;
+    sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland scdoc ];
   buildInputs = [ wayland wayland-protocols ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Day/night gamma adjustments for Wayland";
     longDescription = ''
       Day/night gamma adjustments for Wayland compositors supporting

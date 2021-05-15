@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_spkac";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0hpr58yazbi21m0sjn22a8ns4h81s4jlab9szcdw7j9w9jdc7j0h";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service module for handling the Netscape keygen requests. ";
 
     homepage = "https://redwax.eu";

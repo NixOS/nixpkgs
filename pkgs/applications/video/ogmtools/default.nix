@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, libvorbis, libdvdread }:
+{ lib, stdenv, fetchurl, libogg, libvorbis, libdvdread }:
 
 stdenv.mkDerivation rec {
   name = "ogmtools-1.5";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       tool for extracting chapter information from DVD.
     '';
     homepage = "https://www.bunkus.org/videotools/ogmtools/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

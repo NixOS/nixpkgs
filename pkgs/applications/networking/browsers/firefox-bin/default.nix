@@ -13,7 +13,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -28,11 +28,13 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -74,9 +76,9 @@ let
 
   policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "firefox-${channel}-bin-unwrapped-${version}";
 
@@ -89,10 +91,9 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -106,7 +107,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       mesa
       libX11
       libXScrnSaver
@@ -126,18 +127,19 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -193,7 +195,7 @@ stdenv.mkDerivation {
         then "http://archive.mozilla.org/pub/devedition/releases/"
         else "http://archive.mozilla.org/pub/firefox/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
     license = {
@@ -201,6 +203,6 @@ stdenv.mkDerivation {
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ taku0 ];
+    maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

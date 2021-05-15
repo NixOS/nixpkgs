@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, xlibsWrapper }:
+{ lib, stdenv, fetchbzr, xlibsWrapper }:
 
 let
   version = "4";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     mv */xwinwrap $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility that allows you to use an animated X window as the wallpaper";
     longDescription = ''
       XWinWrap is a small utility written a loooong time ago that allowed you to

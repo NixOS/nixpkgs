@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
 
 buildPythonPackage rec {
   pname = "pysmf";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config pytest ];
   buildInputs = [ libsmf glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://das.nasophon.de/pysmf/";
     description = "Python extension module for reading and writing Standard MIDI Files, based on libsmf.";
     license = licenses.bsd2;

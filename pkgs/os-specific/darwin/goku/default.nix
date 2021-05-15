@@ -1,23 +1,25 @@
-{stdenv, fetchurl }:
+{lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "goku";
-  version = "0.1.11";
+  version = "0.3.6";
 
   src = fetchurl {
     url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.tar.gz";
-    sha256 = "49562342be114c2656726c5c697131acd286965ab3903a1a1e157cc689e20b15";
+    sha256 = "1pss1k2slbqzpfynik50pdk4jsaiag4abhmr6kadmaaj18mfz7ai";
   };
 
   sourceRoot = ".";
 
   installPhase = ''
+    chmod +x goku
+    chmod +x gokuw
     mkdir -p $out/bin
     cp goku $out/bin
     cp gokuw $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
     license = licenses.gpl3;

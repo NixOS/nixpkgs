@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config, qmake
 , SDL2, fluidsynth, libsndfile, libvorbis, mpg123, qtbase
 }:
 
@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "02kk2hs20h9ffhylwms9f8zikmmlrz1nvbrm97gis9iljkyx035c";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
   buildInputs = [ SDL2 fluidsynth libsndfile libvorbis mpg123 qtbase ];
 

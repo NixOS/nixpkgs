@@ -1,4 +1,4 @@
-{stdenv, fetchurl, allegro, openal, libGLU, libGL, zlib, hawknl, freeglut, libX11,
+{lib, stdenv, fetchurl, allegro, openal, libGLU, libGL, zlib, hawknl, freeglut, libX11,
   libXxf86vm, libXcursor, libXpm }:
 
 stdenv.mkDerivation {
@@ -24,9 +24,9 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://fakenes.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Portable Open Source NES Emulator";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     broken = true;
   };
 }

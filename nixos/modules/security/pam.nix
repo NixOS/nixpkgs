@@ -449,7 +449,7 @@ let
         }) ++
         (optional cfg.rootOK {control = "sufficient"; path = "pam_rootok.so";}) ++
         (optional cfg.requireWheel { control = "required"; path = "pam_wheel.so"; arguments=["use_uid"]; }) ++
-        (optional cfg.logFailures {control = "required"; path = "pam_tally.so";}) ++
+        (optional cfg.logFailures {control = "required"; path = "pam_faillock.so";}) ++
         (optional (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) {
           control = "sufficient";
           path = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so";
@@ -516,10 +516,10 @@ let
             }) ++ (optional cfg.pamMount {
               control = "optional"; path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
             }) ++ (optional cfg.enableKwallet {
-              control = "optional"; path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-              arguments = [ "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5" ];
+              control = "optional"; path = "${pkgs.plasma5packages.kwallet-pam}/lib/security/pam_kwallet5.so";
+              arguments = [ "kwalletd=${pkgs.plasma5packages.kwallet.bin}/bin/kwalletd5" ];
             }) ++ (optional cfg.enableGnomeKeyring {
-              control = "optional"; path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+              control = "optional"; path = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so";
             }) ++ (optional cfg.gnupg.enable {
               control = "optional"; path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
               arguments = optional cfg.gnupg.storeOnly "store-only";
@@ -572,7 +572,7 @@ let
           control = "sufficient"; path = "${pam_krb5}/lib/security/pam_krb5.so"; arguments = ["use_first_pass"];
         })
         ++ (optional cfg.enableGnomeKeyring {
-          control = "optional"; path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"; arguments = ["use_authtok"];
+          control = "optional"; path = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; arguments = ["use_authtok"];
         });
         session = (optional cfg.setEnvironment {
           control = "required"; path = "pam_env.so";
@@ -609,10 +609,10 @@ let
         }) ++ (optional (cfg.enableAppArmor && config.security.apparmor.enable) {
           control = "optional"; path = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so"; arguments = ["order=user,group,default" "debug"];
         }) ++ (optional (cfg.enableKwallet) ({
-          control = "optional"; path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-          arguments = "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5";
+          control = "optional"; path = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so";
+          arguments = "kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
         })) ++ (optional (cfg.enableGnomeKeyring) {
-          control = "optional"; path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"; arguments = ["auto_start"];
+          control = "optional"; path = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; arguments = ["auto_start"];
         }) ++ (optional cfg.gnupg.enable {
           control = "optional"; path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
           arguments = optional cfg.gnupg.noAutostart "no-autostart";

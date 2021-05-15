@@ -31,4 +31,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   muffin = callPackage ./muffin { };
   xapps = callPackage ./xapps { };
   warpinator = callPackage ./warpinator { };
+  xviewer = callPackage ./xviewer { };
 })

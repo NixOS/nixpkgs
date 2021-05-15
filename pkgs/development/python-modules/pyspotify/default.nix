@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , cffi
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     find -print0 | xargs -0 touch
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     find "$out" -name _spotify.so -exec \
         install_name_tool -change \
         @loader_path/../Frameworks/libspotify.framework/libspotify \
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://pyspotify.mopidy.com";
     description = "A Python interface to Spotify’s online music streaming service";
     license     = licenses.unfree;

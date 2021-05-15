@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libmnl-1.0.4";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       re-inventing the wheel.
     '';
     homepage = "https://netfilter.org/projects/libmnl/index.html";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , unittest2
 , future
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.20.1";
+  version = "0.21";
 
   disabled = isPy27;
 
@@ -24,17 +23,9 @@ buildPythonPackage rec {
     owner = "MIC-DKFZ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f91yflv9rschyl5bnfn735hp1rxrzcxkx18aajmlzb067h0ip8m";
+    sha256 = "16bk4r0q3m2c9fawpmj4l7kz0x3fyv1spb92grf44gmyricq3jdb";
 
   };
-
-  patches = [
-    # lift Pillow bound; should be merged in next release
-    (fetchpatch {
-      url = "https://github.com/MIC-DKFZ/batchgenerators/pull/59.patch";
-      sha256 = "171b3dm40yn0wi91m9s2nq3j565s1w39jpdf1mvc03rn75i8vdp0";
-    })
-  ];
 
   propagatedBuildInputs = [
     future numpy pillow scipy scikitlearn scikitimage threadpoolctl

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libzip, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, libzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tool to convert filename encoding inside a ZIP archive";
-    license = stdenv.lib.licenses.bsd2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

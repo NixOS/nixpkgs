@@ -1,5 +1,5 @@
 # Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
-{ lib, stdenv, vscode-utils, jq, rust-analyzer, nodePackages
+{ lib, vscode-utils, jq, rust-analyzer, nodePackages
 , setDefaultServerPath ? true
 }:
 

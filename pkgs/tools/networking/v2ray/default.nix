@@ -3,22 +3,22 @@
 }:
 
 let
-  version = "4.32.1";
+  version = "4.37.3";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "1mlrl5fz1v3bcb83pczqp859d8w9mi7jj600a2yw7xm372w2irk8";
+    sha256 = "0gbkjlrx4ddaxb5f21m3sxbb55ilvm5kqlrys6ckrx0xyz9hj38y";
   };
 
-  vendorSha256 = "1mz1acdj8ailgyqrr1v47n36qc24ggzw5rmj4p2awfwz3gp2yz6z";
+  vendorSha256 = "sha256-hPzIAXImAEJux1VRqCgslgn8giTf9BgZBcEZyF4Ut9Y=";
 
   assets = {
     # MIT licensed
     "geoip.dat" = let
-      geoipRev = "202011050012";
-      geoipSha256 = "1d2n3hskgdmcfk1nl7a8lxxz325p84i7gz44cs77z1m9r7c2vsjy";
+      geoipRev = "202104150006";
+      geoipSha256 = "0ppm5r4bycjm7q0vnxj62q8639kp06sfkkkrkk5gibyrwisr4vrp";
     in fetchurl {
       url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
       sha256 = geoipSha256;
@@ -26,8 +26,8 @@ let
 
     # MIT licensed
     "geosite.dat" = let
-      geositeRev = "20201102141726";
-      geositeSha256 = "0sn2f5vd6w94ryh845mnbfyjzycg7cvb66rkzh37pg9l7fvgs4jh";
+      geositeRev = "20210415054336";
+      geositeSha256 = "0vs9fjbw45ipi7minh0r8zgh3pbwxqlrhwahpwyc6s0hyxgdi40w";
     in fetchurl {
       url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
       sha256 = geositeSha256;
@@ -48,11 +48,10 @@ let
     doCheck = false;
 
     buildPhase = ''
+      buildFlagsArray=(-v -p $NIX_BUILD_CORES -ldflags="-s -w")
       runHook preBuild
-
-      go build -o v2ray v2ray.com/core/main
-      go build -o v2ctl v2ray.com/core/infra/control/main
-
+      go build "''${buildFlagsArray[@]}" -o v2ray ./main
+      go build "''${buildFlagsArray[@]}" -o v2ctl -tags confonly ./infra/control/main
       runHook postBuild
     '';
 
@@ -61,22 +60,21 @@ let
     '';
 
     meta = {
-      homepage = "https://www.v2ray.com/en/index.html";
+      homepage = "https://www.v2fly.org/en_US/";
       description = "A platform for building proxies to bypass network restrictions";
-      # The license of the dependency `https://github.com/XTLS/Go` doesn't allowed user to modify its source code,
-      # which made it unfree.
-      license = with lib.licenses; [ mit unfree ];
+      license = with lib.licenses; [ mit ];
       maintainers = with lib.maintainers; [ servalcatty ];
     };
   };
 
 in runCommand "v2ray-${version}" {
-  inherit version;
+  inherit src version;
   inherit (core) meta;
 
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = {
+    inherit core;
     updateScript = ./update.sh;
     tests = {
       simple-vmess-proxy-test = nixosTests.v2ray;

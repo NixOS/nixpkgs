@@ -1,15 +1,15 @@
-{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkgconfig
+{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkg-config
 , kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
 
 mkDerivation rec {
   pname = "kwalletcli";
-  version = "3.02";
+  version = "3.03";
 
   src = fetchFromGitHub {
     owner = "MirBSD";
     repo = pname;
     rev = "${pname}-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1gq45afb5nmmjfqxglv7wvcxcjd9822pc7nysq0350jmmmqwb474";
+    sha256 = "sha256-DUtaQITzHhQrqA9QJd0U/5EDjH0IzY9/kal/7SYQ/Ck=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ mkDerivation rec {
 
   makeFlags = [ "KDE_VER=5" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
   propagatedBuildInputs = [ kcoreaddons ki18n (lib.getLib kwallet) ];
 

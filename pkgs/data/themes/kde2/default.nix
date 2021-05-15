@@ -15,7 +15,6 @@ mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
 

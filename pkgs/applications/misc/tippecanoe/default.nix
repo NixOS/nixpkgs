@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, sqlite, zlib, perl }:
+{ lib, stdenv, fetchFromGitHub, sqlite, zlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "tippecanoe";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build vector tilesets from large collections of GeoJSON features";
     homepage = "https://github.com/mapbox/tippecanoe";
     license = licenses.bsd2;

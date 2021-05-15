@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wrapGAppsHook, which, gnome3, glib, intltool, pkgconfig, libtool, cairo, gtk3, gst_all_1, xorg }:
+{ lib, stdenv, fetchgit, wrapGAppsHook, which, gnome, glib, intltool, pkg-config, libtool, cairo, gtk3, gst_all_1, xorg }:
 
 stdenv.mkDerivation {
   version = "0.2.3.alpha";
@@ -18,11 +18,11 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which gnome3.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo ]
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ which gnome.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo xorg.libXdamage ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-plugins-ugly gst-libav wrapGAppsHook ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
     homepage = "https://github.com/GNOME/byzanz";
     license = licenses.gpl3;

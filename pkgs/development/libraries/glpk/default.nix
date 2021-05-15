@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , libmysqlclient
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libmysqlclient
-    ] ++ stdenv.lib.optionals withGmp [
+    ] ++ lib.optionals withGmp [
       gmp
     ];
 
-  configureFlags = stdenv.lib.optionals withGmp [
+  configureFlags = lib.optionals withGmp [
     "--with-gmp"
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNU Linear Programming Kit";
 
     longDescription =

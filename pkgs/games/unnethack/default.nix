@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, util-linux, ncurses, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, util-linux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
   pname = "unnethack";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/unnethack
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fork of NetHack";
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";

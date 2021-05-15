@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchzip }:
+{ lib, buildGoPackage, fetchzip }:
 
 buildGoPackage rec {
   pname = "wireguard-go";
@@ -21,7 +21,7 @@ buildGoPackage rec {
     mv $out/bin/wireguard $out/bin/wireguard-go
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";
     license = licenses.gpl2;

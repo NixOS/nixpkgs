@@ -53,7 +53,9 @@
 , disabled ? false
 
 # Raise an error if two packages are installed with the same name
-, catchConflicts ? true
+# TODO: For cross we probably need a different PYTHONPATH, or not
+# add the runtime deps until after buildPhase.
+, catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform)
 
 # Additional arguments to pass to the makeWrapper function, which wraps
 # generated binaries.
@@ -102,11 +104,13 @@ else
 let
   inherit (python) stdenv;
 
+  name_ = name;
+
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
 
-    name = namePrefix + name;
+    name = namePrefix + name_;
 
     nativeBuildInputs = [
       python
@@ -160,7 +164,7 @@ let
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
-    '' + attrs.postFixup or '''';
+    '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];

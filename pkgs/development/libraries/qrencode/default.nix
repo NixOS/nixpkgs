@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, SDL2, libpng, libiconv }:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "qrencode";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL2 libpng ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ SDL2 libpng ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   configureFlags = [
     "--with-tests"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fukuchi.org/works/qrencode/";
     description = "C library for encoding data in a QR Code symbol";
 

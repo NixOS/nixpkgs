@@ -3,7 +3,7 @@
 , nmap
 , openvpn
 , python3Packages
-, stdenv
+, lib
 , tigervnc
 }:
 
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     $out/bin/crowbar --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/galkan/crowbar";
     description = "A brute forcing tool that can be used during penetration tests";
     license = licenses.mit;

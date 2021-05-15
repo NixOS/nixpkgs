@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
+{lib, stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
 , optipng, unrar}:
 
 stdenv.mkDerivation {
@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0mzxpnk97f0ww5ds7h4wsval3g4lnrhv6rhspjs7cy4i41gmk8an";
   };
 
-  buildInputs = [ unzip python makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
 
   broken = true; # Not found.
 
@@ -39,10 +40,10 @@ stdenv.mkDerivation {
     cp -R *.py pylrs $PYDIR
 
     wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pillow}/$LIBSUFFIX/PIL:$PYDIR \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript pngnq djvulibre unrar optipng ]}
+      --prefix PATH : ${lib.makeBinPath [ ghostscript pngnq djvulibre unrar optipng ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF/DJVU to ebook format converter";
     homepage = "https://www.mobileread.com/forums/showthread.php?t=21906";
     license = licenses.mit;

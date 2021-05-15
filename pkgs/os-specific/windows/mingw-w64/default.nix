@@ -1,4 +1,4 @@
-{ stdenv, windows, fetchurl }:
+{ lib, stdenv, windows, fetchurl }:
 
 let
   version = "6.0.0";
@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
   };
 }

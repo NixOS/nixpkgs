@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, apr, jdk, openssl }:
+{ lib, stdenv, fetchurl, apr, jdk, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
-  version = "1.2.25";
+  version = "1.2.28";
 
   src = fetchurl {
     url = "mirror://apache/tomcat/tomcat-connectors/native/${version}/source/${pname}-${version}-src.tar.gz";
-    sha512 = "e121c0a18c51b5f952833df44c3a0add1f9a6e1b61e300abbafa0bc7e8f32296e64c9f81e9ad7389c1bd24abc40739e4726a56158d08e33b7ef00e5fa8a1d33d";
+    sha512 = "16b8659dcd228ea153d05c9ae19e3d97add944315f3b8b42905162d0e4e8a28fd51a172d59d7da8508271ecad0b8ac025a386895565acaf8e2ba11fba77492bb";
   };
 
   sourceRoot = "${pname}-${version}-src/native";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--with-ssl=${openssl.dev}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
     homepage = "https://tomcat.apache.org/native-doc/";
     license = licenses.asl20;

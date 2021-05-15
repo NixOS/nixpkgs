@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, flake8 }:
+{ lib, buildPythonPackage, fetchPypi, jinja2, flake8 }:
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # package contains no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "bundled swagger-ui pip package";
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;

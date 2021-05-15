@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, linuxHeaders }:
+{ lib, stdenv, fetchurl, linuxHeaders }:
 
 stdenv.mkDerivation {
   name = "jujuutils-0.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/cladisch/linux-firewire-utils";
     description = "Utilities around FireWire devices connected to a Linux computer";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

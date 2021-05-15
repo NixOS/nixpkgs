@@ -1,18 +1,22 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchPypi
 , pybind11
+, exdown
 , numpy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyfma";
-  version = "0.1.1";
+  version = "0.1.2";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c9ea44c5e30ca8318ca794ff1e3941d3dc7958901b1a9c430d38734bf7b6f8d";
+    sha256 = "3a9e2503fd01baa4978af5f491b79b7646d7872df9ecc7ab63ba10c250c50d8a";
   };
 
   buildInputs = [
@@ -20,17 +24,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    exdown
     numpy
-    pytest
+    pytestCheckHook
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  checkPhase = ''
-    pytest test
-  '';
+  pythonImportsCheck = [ "pyfma" ];
 
   meta = with lib; {
     description = "Fused multiply-add for Python";

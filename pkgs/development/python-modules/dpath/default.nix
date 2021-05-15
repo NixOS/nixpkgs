@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy27
+{ lib, fetchPypi, buildPythonPackage, isPy27
 , mock, pytestCheckHook, nose, hypothesis
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # use pytest as nosetests hangs
   checkInputs = [ mock nose pytestCheckHook hypothesis ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/akesterson/dpath-python";
     license = [ licenses.mit ];
     description = "A python library for accessing and searching dictionaries via /slashed/paths ala xpath";

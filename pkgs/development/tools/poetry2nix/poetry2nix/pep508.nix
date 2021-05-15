@@ -1,6 +1,6 @@
 { lib, stdenv, poetryLib }: python:
 let
-  inherit (poetryLib) ireplace;
+  inherit (poetryLib) ireplace targetMachine;
 
   # Like builtins.substring but with stop being offset instead of length
   substr = start: stop: s: builtins.substring start (stop - start) s;
@@ -95,7 +95,7 @@ let
           else if stdenv.isDarwin then "darwin"
           else throw "Unsupported platform"
         );
-        platform_machine = stdenv.platform.kernelArch;
+        platform_machine = targetMachine;
         platform_python_implementation =
           let
             impl = python.passthru.implementation;

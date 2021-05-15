@@ -63,7 +63,7 @@ in  {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
       wantedBy = [ "multi-user.target" ];
       after    = [ "network-online.target" ];
-      path     = with pkgs; [ kmod iproute iptables util-linux ];
+      path     = with pkgs; [ kmod iproute2 iptables util-linux ];
       environment = {
         STRONGSWAN_CONF = pkgs.writeTextFile {
           name = "strongswan.conf";

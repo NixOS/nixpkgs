@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, gmp }:
+{ lib, stdenv, fetchgit, autoconf, automake, libtool, gmp }:
 
 stdenv.mkDerivation rec {
   pname = "git-annex-utils";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       Currently there is only one utility gadu, a du like utility for annexed files.
     '';
     homepage = "http://git-annex.mysteryvortex.com/git-annex-utils.html";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ woffs ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.all;
   };
 }

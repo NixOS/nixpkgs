@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 # this expression is mostly based on debian's packaging
 # https://tracker.debian.org/media/packages/u/udns/rules-0.4-1
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # keep man3
   outputDevdoc = "out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.corpit.ru/mjt/udns.html";
     description = "Async-capable DNS stub resolver library";
     license = licenses.lgpl21Plus;

@@ -1,19 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.8.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rqnbils0r98qglhm2jafw5d119fqdzszmk825yc0bma4icm7xzp";
+    sha256 = "sha256-wcOF34GzlB6YKISkjDgYgsaN1NmWBMIntfT23A6byx8=";
   };
 
-  cargoSha256 = "1f3g5i0yh82qll1hyihrvv08pbd4h9vzs6jy6bf94bzabyjsgnzv";
+  cargoSha256 = "sha256-7SJjtHNSabE/VqdiSwKZ/yNzk6GSMNsQLaSx/MjN5NA=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
 
   checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
 
@@ -27,6 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
+    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

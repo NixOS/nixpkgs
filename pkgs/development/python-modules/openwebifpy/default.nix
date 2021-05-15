@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "3.1.1";
+  version = "3.2.7";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqa74i54ww9qjciiv8s58mxbs6vxq06cq5k4pxfarc0l75l4gh2";
+    sha256 = "0n9vi6b0y8b41fd7m9p361y3qb5m3b9p9d8g4fasqi7yy4mw2hns";
   };
 
   propagatedBuildInputs = [

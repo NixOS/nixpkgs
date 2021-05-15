@@ -1,8 +1,8 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   kcmutils, kcrash, kdeclarative, kdelibs4support, kglobalaccel, kidletime,
-  kwayland, libXcursor, pam, plasma-framework, qtdeclarative, qtx11extras,
+  kwayland, libXcursor, pam, plasma-framework, qtbase, qtdeclarative, qtx11extras,
   wayland,
 }:
 

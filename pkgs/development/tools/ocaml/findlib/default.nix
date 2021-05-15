@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
+{ lib, stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-findlib";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "00s3sfb02pnjmkax25pcnljcnhcggiliccfz69a72ic7gsjwz1cf";
+    sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
   };
 
   buildInputs = [m4 ncurses ocaml];
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
-      stdenv.lib.maintainers.vbmithr
+      lib.maintainers.maggesi
+      lib.maintainers.vbmithr
     ];
   };
 }

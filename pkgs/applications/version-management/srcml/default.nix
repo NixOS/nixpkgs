@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
+{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
   curl
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.9.5_beta";

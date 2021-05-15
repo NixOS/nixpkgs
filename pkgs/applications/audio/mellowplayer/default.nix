@@ -3,7 +3,7 @@
 , lib
 , libnotify
 , mkDerivation
-, pkgconfig
+, pkg-config
 , qtbase
 , qtdeclarative
 , qtgraphicaleffects
@@ -14,16 +14,16 @@
 
 mkDerivation rec {
   pname = "MellowPlayer";
-  version = "3.6.6";
+  version = "3.6.8";
 
   src = fetchFromGitLab {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
     rev = version;
-    sha256 = "14y175fl6wg04fz0fhx553r8z3nwqrs2lr3rdls70bhwx5x6lavw";
+    sha256 = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     libnotify

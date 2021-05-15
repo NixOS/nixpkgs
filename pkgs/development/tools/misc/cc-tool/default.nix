@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , boost
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -D udev/90-cc-debugger.rules $out/lib/udev/rules.d/90-cc-debugger.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tool for the Texas Instruments CC Debugger";
     longDescription = ''
       cc-tool provides support for Texas Instruments CC Debugger

@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, openssl, fetchFromGitHub, rustPlatform, darwin }:
+{ stdenv, lib, pkg-config, openssl, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hydra-cli";
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
                 ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for the Hydra CI";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with licenses; [ mit ];

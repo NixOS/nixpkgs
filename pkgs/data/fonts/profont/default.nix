@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, mkfontscale }:
+{ lib, stdenv, fetchzip, mkfontscale }:
 
 stdenv.mkDerivation {
   pname = "profont";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     mkfontdir "$out/share/fonts/misc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tobiasjung.name/profont/";
     description = "A monospaced font created to be a most readable font for programming";
     maintainers = with maintainers; [ myrl ];

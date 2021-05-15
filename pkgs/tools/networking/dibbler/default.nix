@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "dibbler";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     "--enable-resolvconf"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Portable DHCPv6 implementation";
     homepage = "http://www.klub.com.pl/dhcpv6/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";
@@ -12,18 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ];
+  buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   CXXFLAGS = [
     "-DCOMPILE_WITH_LZFSE=1"
     "-llzfse"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.darlinghq.org/";
     description = "Darling lets you open macOS dmgs on Linux";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = platforms.unix;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ Luflosi ];
   };
 }

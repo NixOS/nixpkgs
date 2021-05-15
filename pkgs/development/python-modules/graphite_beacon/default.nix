@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , tornado_5, pyyaml, funcparserlib
 , nixosTests
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     nixos = nixosTests.graphite;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple alerting application for Graphite metrics";
     homepage = "https://github.com/klen/graphite-beacon";
     maintainers = [ maintainers.offline ];

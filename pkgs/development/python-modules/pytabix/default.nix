@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "tabix" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/slowkow/pytabix";
     description = "Python interface for tabix";
     license = licenses.mit;

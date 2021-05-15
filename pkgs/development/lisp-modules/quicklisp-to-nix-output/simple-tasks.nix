@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''simple-tasks'';
-  version = ''20190710-git'';
+  baseName = "simple-tasks";
+  version = "20190710-git";
 
-  description = ''A very simple task scheduling framework.'';
+  description = "A very simple task scheduling framework.";
 
   deps = [ args."alexandria" args."array-utils" args."bordeaux-threads" args."dissect" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/simple-tasks/2019-07-10/simple-tasks-20190710-git.tgz'';
-    sha256 = ''12y5phnbj9s2fsrz1ab6xj857zf1fv8kjk7jj2mdjs6k2d8gk8v3'';
+    url = "http://beta.quicklisp.org/archive/simple-tasks/2019-07-10/simple-tasks-20190710-git.tgz";
+    sha256 = "12y5phnbj9s2fsrz1ab6xj857zf1fv8kjk7jj2mdjs6k2d8gk8v3";
   };
 
   packageName = "simple-tasks";

@@ -1,9 +1,13 @@
-{ stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
-stdenv.mkDerivation {
+{ lib, stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
+stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "2.9-dev";
+  version = "2.9.1";
 
-  src = fetchgit (import ./src.nix);
+  src = fetchgit {
+    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    rev    = "trace-cmd-v${version}";
+    sha256 = "19c63a0qmcppm1456qf4k6a0d1agcvpa6jnbzrdcyc520yax6khw";
+  };
 
   patches = [ ./fix-Makefiles.patch ];
 
@@ -26,7 +30,7 @@ stdenv.mkDerivation {
     "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     homepage    = "https://kernelshark.org/";
     license     = licenses.gpl2;

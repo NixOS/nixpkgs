@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, lib, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "nmon";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp nmon $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AIX & Linux Performance Monitoring tool";
     homepage = "http://nmon.sourceforge.net";
     license = licenses.gpl3Plus;

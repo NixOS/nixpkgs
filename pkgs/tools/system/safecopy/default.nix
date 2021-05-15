@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "safecopy-1.7";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://safecopy.sourceforge.net";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bluescreen303 ];
   };
 }

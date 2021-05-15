@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libtsm
@@ -8,7 +8,7 @@
 , libGLU, libGL
 , pango
 , pixman
-, pkgconfig
+, pkg-config
 , docbook_xsl
 , libxslt
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
-    pkgconfig
+    pkg-config
   ];
 
   configureFlags = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KMS/DRM based System Console";
     homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;

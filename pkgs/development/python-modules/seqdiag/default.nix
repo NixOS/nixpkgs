@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
+{ lib, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
 , blockdiag
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   #   ERROR: Failure: OSError ([Errno 2] No such file or directory: '/tmp/nix-build-python2.7-seqdiag-0.9.0.drv-0/seqdiag-0.9.0/src/seqdiag/tests/diagrams/')
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;

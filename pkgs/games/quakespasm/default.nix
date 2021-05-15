@@ -1,4 +1,4 @@
-{ stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
+{ lib, stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
 stdenv.mkDerivation rec {
   pname = "quakespasm";
   majorVersion = "0.93";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.m3tti ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.m3tti ];
   };
 }

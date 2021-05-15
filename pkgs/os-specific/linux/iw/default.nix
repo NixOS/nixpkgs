@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnl }:
 
 stdenv.mkDerivation rec {
   pname = "iw";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
       deprecated and it's strongly recommended to switch to iw and nl80211.
     '';
     homepage = "https://wireless.wiki.kernel.org/en/users/Documentation/iw";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ viric primeos ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ viric primeos ];
+    platforms = with lib.platforms; linux;
   };
 }

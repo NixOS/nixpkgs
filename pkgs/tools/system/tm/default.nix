@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "3b389bc03b6964ad5ffa57a344b891fdbcf7c9b2604adda723a863f83657c4a0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
     description = "Terminal mixer - multiplexer for the i/o of terminal applications";
     license = licenses.gpl2;

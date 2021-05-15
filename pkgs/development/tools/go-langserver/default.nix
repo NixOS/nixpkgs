@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-langserver";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1wv7xf81s3qi8xydxjkkp8vacdzrq8sbj04346fz73nsn85z0sgp";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Go language server protocol server";
     homepage = "https://github.com/sourcegraph/go-langserver";
     license = licenses.mit;

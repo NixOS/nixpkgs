@@ -8,12 +8,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "vit";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = lib.versionOlder python.version "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5282d8076d9814d9248071aec8784cffbd968601542533ccb28ca61d1d08205e";
+    sha256 = "fd34f0b827953dfdecdc39f8416d41c50c24576c33a512a047a71c1263eb3e0f";
   };
 
   propagatedBuildInputs = [

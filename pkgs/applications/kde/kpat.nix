@@ -5,15 +5,17 @@
 , shared-mime-info
 , libkdegames
 , freecell-solver
+, black-hole-solver
 }:
 
 mkDerivation {
-  name = "kpat";
+  pname = "kpat";
   nativeBuildInputs = [
     extra-cmake-modules
     shared-mime-info
   ];
   buildInputs = [
+    black-hole-solver
     knewstuff
     libkdegames
     freecell-solver

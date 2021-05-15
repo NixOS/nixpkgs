@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, python2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "manta";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     PYTHONPATH=$out/lib/python/pyflow:$PYTHONPATH python -c 'import pyflowTaskWrapper; import pyflow'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Structural variant caller";
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/manta";

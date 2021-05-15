@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+, lib
 , fetchFromGitHub
 , click
 , six
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest -k 'not truecase'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/alvations/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     license = licenses.lgpl21Plus;

@@ -1,25 +1,22 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "Mopidy-TuneIn";
-    sha256 = "0insasf4w8ajsqjh5zmax7pkzmrk1p245vh4y8ddicldj45p6qfj";
+    sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";
   };
 
   propagatedBuildInputs = [
     mopidy
   ];
 
-  # tests fail with "ValueError: Namespace Gst not available" in mopidy itself
-  doCheck = false;
-
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mopidy extension for playing music from tunein";
     homepage = "https://github.com/kingosticks/mopidy-tunein";
     license = licenses.asl20;

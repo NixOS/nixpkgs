@@ -197,6 +197,7 @@ in {
         group = pgmanage;
         home  = cfg.sqlRoot;
         createHome = true;
+        isSystemUser = true;
       };
       groups.${pgmanage} = {
         name = pgmanage;

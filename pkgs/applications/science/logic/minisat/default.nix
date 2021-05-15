@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "minisat";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compact and readable SAT solver";
     maintainers = with maintainers; [ gebner raskin ];
     platforms = platforms.unix;

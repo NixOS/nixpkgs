@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, perl, python, gnuplot, coreutils, gnugrep }:
+{ lib, stdenv, fetchzip, perl, python2, gnuplot, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}" + "-src";
   };
 
-  buildInputs = [ perl python ];
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ python2 ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -e "s|gnuplot_cmd = .*|gnuplot_cmd = '${gnuplot}/bin/gnuplot'|" \
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/gitstats.1 "$out"/share/man/man1/gitstats.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;

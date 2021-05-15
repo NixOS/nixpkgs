@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/saghul/pycares";
     description = "Interface for c-ares";
     license = licenses.mit;

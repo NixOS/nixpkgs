@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''chunga'';
-  version = ''20200427-git'';
+  baseName = "chunga";
+  version = "20200427-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/chunga/2020-04-27/chunga-20200427-git.tgz'';
-    sha256 = ''0p6dlnan6raincd682brcjbklyvmkfkhz0yzp2bkfw67s9615bkk'';
+    url = "http://beta.quicklisp.org/archive/chunga/2020-04-27/chunga-20200427-git.tgz";
+    sha256 = "0p6dlnan6raincd682brcjbklyvmkfkhz0yzp2bkfw67s9615bkk";
   };
 
   packageName = "chunga";

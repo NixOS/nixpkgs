@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , click, pytest, glibcLocales
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     LC_ALL=en_US.utf-8 pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Click params for commmand line interfaces to GeoJSON";
     homepage = "https://github.com/mapbox/cligj";
     license = licenses.bsd3;

@@ -1,21 +1,32 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
 , buildGoModule
-, srht, minio, pygit2, scmsrht }:
-
+, python
+, srht
+, pygit2
+, scmsrht
+}:
 let
-  version = "0.61.10";
+  version = "0.72.8";
+
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "git.sr.ht";
+    rev = version;
+    sha256 = "sha256-AB2uzajO5PtcpJfbOOTfuDFM6is5K39v3AZJ1hShRNc=";
+  };
 
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-    vendorSha256 = "1abyv2s5l3bs0iylpgyj3jri2hh1iy8fiadxm7g6l2vl58h0b9ba";
+    vendorSha256 = "sha256-aqUFICp0C2reqb2p6JCPAUIRsxzSv0t9BHoNWrTYfqk=";
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-    vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
+    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
   };
 
   buildKeys = src: buildGoModule {
@@ -30,32 +41,24 @@ let
     vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
   };
 
-  buildAPI = src: buildGoModule {
-    inherit src version;
-    pname = "gitsrht-api";
-    vendorSha256 = "0d6kmsbsgj2q5nddx4w675zbsiarffj9vqplwvqk7dwz4id2wnif";
-  };
-in buildPythonPackage rec {
-  pname = "gitsrht";
-  inherit version;
+  updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
-    rev = version;
-    sha256 = "0g7aj5wlns0m3kf2aajqjjb5fwk5vbb8frrkdfp4118235h3xcqy";
-  };
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "gitsrht";
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
     srht
-    minio
     pygit2
     scmsrht
   ];
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   postInstall = ''
@@ -63,11 +66,13 @@ in buildPythonPackage rec {
     cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
-    cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
+    cp ${updateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
   '';
+  passthru = {
+    inherit updateHook;
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3;

@@ -1,14 +1,14 @@
-{ buildPecl, lib, pkgs, php }:
+{ stdenv, buildPecl, lib, libiconv, unixODBC, php }:
 
 buildPecl {
   pname = "pdo_sqlsrv";
 
-  version = "5.8.1";
-  sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
+  version = "5.9.0";
+  sha256 = "0n4cnkldvyp1lrpj18ky2ii2dcaa51dsmh8cspixm7w76dxl3khg";
 
   internalDeps = [ php.extensions.pdo ];
 
-  buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta.maintainers = lib.teams.php.members;
 }

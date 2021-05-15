@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "installPhase" ];
 
-  buildInputs = [ env makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ env ];
 
   installPhase = ''
     mkdir -p $out/bin

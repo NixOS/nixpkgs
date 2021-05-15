@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchgit }:
+{ lib, buildGoModule, fetchgit }:
 
 buildGoModule {
   pname = "mm";
@@ -12,7 +12,7 @@ buildGoModule {
 
   vendorSha256 = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A file system based matrix client";
     homepage = "https://git.lost.host/meutraa/mm";
     license = licenses.isc;

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , fetchpatch
 , scons
-, pkgconfig
+, pkg-config
 , SDL
 , SDL_mixer
 , libGLU
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lsrlp47aby2m9hh7i3nv5rb0srlkmnq1w2ca6vyvlga9m9h7jrk";
   };
 
-  nativeBuildInputs = [ pkgconfig scons ];
+  nativeBuildInputs = [ pkg-config scons ];
 
   buildInputs = [ libGLU libGL libpng physfs SDL SDL_mixer ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = "https://www.dxx-rebirth.com/";
     license = licenses.gpl3;

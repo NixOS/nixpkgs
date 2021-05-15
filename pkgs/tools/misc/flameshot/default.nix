@@ -2,19 +2,17 @@
 
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "1z77igs60lz106vsf6wsayxjafxm3llf2lm4dpvsqyyrxybfq191";
+    sha256 = "sha256-E5J61k1tVpbwlzYHbCY1rf9+GODcJRRAQwb0jR4s7BU=";
   };
 
   nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";

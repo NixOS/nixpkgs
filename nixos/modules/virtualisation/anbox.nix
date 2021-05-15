@@ -98,7 +98,6 @@ in
       environment.XDG_RUNTIME_DIR="${anboxloc}";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
       preStart = let
         initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh

@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, libraw, qtbase }:
 
 mkDerivation {
-  name = "libkdcraw";
+  pname = "libkdcraw";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];

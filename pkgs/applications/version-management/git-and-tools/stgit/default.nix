@@ -1,14 +1,14 @@
-{ stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
+{ lib, python3Packages, fetchFromGitHub, git, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
-  version = "0.23";
+  version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "ctmarinas";
+    owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "1r9y8qnl6kdvq61788pnfhhgyv2xrnyrizbhy4qz4l1bpqkwfr2r";
+    sha256 = "sha256-gfPf1yRmx1Mn1TyCBWmjQJBgXLlZrDcew32C9o6uNYk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -21,10 +21,11 @@ python3Packages.buildPythonApplication rec {
     installShellCompletion --name _stg $out/share/stgit/completion/stgit.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A patch manager implemented on top of Git";
-    homepage = "http://procode.org/stgit/";
-    license = licenses.gpl2;
+    homepage = "https://stacked-git.github.io/";
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ jshholland ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 # TODO: links -lsigsegv but loses the reference for some reason
 , withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
 , interactive ? false, readline
@@ -16,7 +16,7 @@
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "gawk-5.1.0";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libsigsegv = if withSigsegv then libsigsegv else null; # for stdenv bootstrap
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
 
@@ -81,4 +81,3 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 }
-

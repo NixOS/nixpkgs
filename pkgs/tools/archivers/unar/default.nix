@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
 
 stdenv.mkDerivation rec {
   pname = "unar";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
       substituteInPlace $f \
-        --replace "= gcc" "=cc" \
-        --replace "= g++" "=c++" \
+        --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+        --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
         --replace "-DGNU_RUNTIME=1" "" \
         --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
     done
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://theunarchiver.com";
     description = "An archive unpacker program";
     longDescription = ''

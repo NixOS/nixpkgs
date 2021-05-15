@@ -1,8 +1,7 @@
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-physical_interfaces";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ kampfschlaefer ];
+  meta = {
+    maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
   nodes = {

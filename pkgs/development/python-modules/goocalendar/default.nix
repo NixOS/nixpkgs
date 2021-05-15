@@ -1,16 +1,13 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
-, pkgconfig
+, pkg-config
 , gtk3
 , gobject-introspection
-, pygtk
 , pygobject3
 , goocanvas2
 , isPy3k
  }:
-
-with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "GooCalendar";
@@ -24,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
   ];
 
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   # No upstream tests available
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A calendar widget for GTK using PyGoocanvas.";
     homepage = "https://goocalendar.tryton.org/";
     license = licenses.gpl2;

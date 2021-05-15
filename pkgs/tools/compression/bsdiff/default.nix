@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2 }:
+{ lib, stdenv, fetchurl, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "bsdiff";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An efficient binary diff/patch tool";
     homepage    = "http://www.daemonology.net/bsdiff";
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.bsd2;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

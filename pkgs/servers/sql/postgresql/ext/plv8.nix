@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, v8, perl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "plv8";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ volth marsam ];

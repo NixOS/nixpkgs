@@ -1,20 +1,38 @@
-{ stdenv, fetchFromGitHub, zlib, ffmpeg_3, pkgconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, ffmpeg
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "ffms";
-  version = "2.23";
+  version = "2.40";
 
   src = fetchFromGitHub {
     owner = "FFMS";
     repo = "ffms2";
     rev = version;
-    sha256 = "0dkz5b3gxq5p4xz0qqg6l2sigszrlsinz3skyf0ln4wf3zrvf8m5";
+    sha256 = "sha256-3bPxt911T0bGpAIS2RxBjo+VV84xW06eKcCj3ZAcmvw=";
   };
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib ffmpeg_3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  preAutoreconf = ''
+    mkdir src/config
+  '';
+
+  buildInputs = [
+    ffmpeg
+    zlib
+  ];
 
   # ffms includes a built-in vapoursynth plugin, see:
   # https://github.com/FFMS/ffms2#avisynth-and-vapoursynth-plugin
@@ -23,11 +41,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libffms2.so $out/lib/vapoursynth/libffms2.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/FFMS/ffms2/";
-    description = "Libav/ffmpeg based source library for easy frame accurate access";
+    description = "FFmpeg based source library for easy frame accurate access";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ tadeokondrak ];
     platforms = platforms.unix;
   };
 }

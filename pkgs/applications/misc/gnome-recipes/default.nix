@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
-, gnome3
+, pkg-config
+, gnome
 , desktop-file-utils
 , gettext
 , itstool
@@ -26,14 +26,14 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1yymii3yf823d9x28fbhqdqm1wa30s40j94x0am9fjj0nzyd5s8v";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     desktop-file-utils
     gettext
     itstool
@@ -64,12 +64,12 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recipe management application for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Recipes";
     maintainers = teams.gnome.members;

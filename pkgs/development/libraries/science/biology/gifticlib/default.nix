@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, expat, nifticlib, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, expat, nifticlib, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "gifticlib";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nitrc.org/projects/gifti";
     description = "Medical imaging geometry format C API";
     maintainers = with maintainers; [ bcdarwin ];

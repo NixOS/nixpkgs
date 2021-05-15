@@ -58,6 +58,7 @@ in
         "2.nixos.pool.ntp.org"
         "3.nixos.pool.ntp.org"
       ];
+      type = types.listOf types.str;
       description = ''
         The set of NTP servers from which to synchronise.
       '';
@@ -192,6 +193,9 @@ in
         hosts.source = pkgs.runCommandNoCC "hosts" {} ''
           cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
+
+        # /etc/netgroup: Network-wide groups.
+        netgroup.text = mkDefault "";
 
         # /etc/host.conf: resolver configuration file
         "host.conf".text = ''

@@ -1,12 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , nix-update-script
-, fetchpatch
 , meson
 , ninja
 , gettext
-, cargo
-, rustc
 , python3
 , rustPlatform
 , pkg-config
@@ -24,7 +21,7 @@
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "fractal";
   version = "4.4.0";
 
@@ -36,16 +33,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "DSNVd9YvI7Dd3s3+M0+wE594tmL1yPNMnD1W9wLhSuw=";
   };
 
-  cargoSha256 = "xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
+  };
 
   nativeBuildInputs = [
-    cargo
     gettext
     meson
     ninja
     pkg-config
     python3
-    rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
     glib
   ];
@@ -76,23 +78,16 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
-    broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ dtzWill worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
+{ lib, stdenv, fetchurl, pkg-config, libjpeg, libX11, libXxf86vm, curl, libogg
 , libvorbis, freetype, openal, libGL }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
                   freetype openal libGL libXxf86vm ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How

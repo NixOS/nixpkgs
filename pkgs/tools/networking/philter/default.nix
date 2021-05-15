@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
   pname = "philter";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     chmod +x "$out"/bin/philter
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mail sorter for Maildirs";
     homepage = "http://philter.sourceforge.net";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl2;
   };
 

@@ -27,10 +27,10 @@ with lib;
 
   ###### implementation
   config = mkIf config.programs.gpaste.enable {
-    environment.systemPackages = [ pkgs.gnome3.gpaste ];
-    services.dbus.packages = [ pkgs.gnome3.gpaste ];
-    systemd.packages = [ pkgs.gnome3.gpaste ];
+    environment.systemPackages = [ pkgs.gnome.gpaste ];
+    services.dbus.packages = [ pkgs.gnome.gpaste ];
+    systemd.packages = [ pkgs.gnome.gpaste ];
     # gnome-control-center crashes in Keyboard Shortcuts pane without the GSettings schemas.
-    services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.gnome3.gpaste ];
+    services.xserver.desktopManager.gnome.sessionPath = [ pkgs.gnome.gpaste ];
   };
 }

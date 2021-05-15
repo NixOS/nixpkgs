@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, tcl, stdenv, ... } @ args:
+{ callPackage, fetchurl, tcl, lib, stdenv, ... } @ args:
 
 callPackage ./generic.nix (args // {
 
@@ -7,6 +7,6 @@ callPackage ./generic.nix (args // {
     sha256 = "1d7bfkxpacy33w5nahf73lkwxqpff44w1jplg7i2gmwgiaawvjwg";
   };
 
-  patches = [ ./different-prefix-with-tcl.patch ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./Fix-bad-install_name-for-libtk8.6.dylib.patch ];
+  patches = [ ./different-prefix-with-tcl.patch ] ++ lib.optionals stdenv.isDarwin [ ./Fix-bad-install_name-for-libtk8.6.dylib.patch ];
 
 })

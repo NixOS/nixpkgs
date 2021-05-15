@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A local DNS server to obtain the fastest website IP for the best Internet experience";
     longDescription = ''

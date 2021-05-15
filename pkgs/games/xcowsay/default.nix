@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config
 , dbus, dbus-glib, gtk3, gdk-pixbuf, librsvg
 , fortune
 }:
 
 stdenv.mkDerivation rec {
   pname = "xcowsay";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://www.nickg.me.uk/files/xcowsay-${version}.tar.gz";
-    sha256 = "0pyaa062z1ag26dhkm1yzp2hivnlmhlpqn5xg7mx9r1m652mm91y";
+    sha256 = "sha256-wypsfAp634wbaAI+fxzmr3J5AmvQzChVi/wp/BPxiA0=";
   };
 
   buildInputs = [
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.doof.me.uk/xcowsay";
-    description =
-      "A program based on cowsay that displays a cute cow and message on your desktop";
-    license = licenses.gpl3;
+    description = "Tool to display a cute cow and messages";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ das_j ];
   };
 }

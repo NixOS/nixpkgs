@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ lib, stdenv, fetchurl, pam }:
 
 stdenv.mkDerivation rec {
   name = "otpw-1.3";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";
     description = "A one-time password login package";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 let
   pkgs = import ../../../.. {};
 
-  emacsEnv = (pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages (epkgs: let
+  emacsEnv = pkgs.emacs.pkgs.withPackages (epkgs: let
 
     promise = epkgs.trivialBuild {
       pname = "promise";
@@ -29,7 +29,7 @@ let
   in [ promise semaphore ]);
 
 in pkgs.mkShell {
-  buildInputs = [
+  packages = [
     pkgs.git
     pkgs.nix
     pkgs.bash

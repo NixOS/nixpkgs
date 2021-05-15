@@ -1,19 +1,20 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-ppcre-template'';
-  version = ''cl-unification-20200925-git'';
+  baseName = "cl-ppcre-template";
+  version = "cl-unification-20200925-git";
 
-  description = ''A system used to conditionally load the CL-PPCRE Template.
+  description = "A system used to conditionally load the CL-PPCRE Template.
 
 This system is not required and it is handled only if CL-PPCRE is
 available.  If it is, then the library provides the
-REGULAR-EXPRESSION-TEMPLATE.'';
+REGULAR-EXPRESSION-TEMPLATE.";
 
   deps = [ args."cl-ppcre" args."cl-unification" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unification/2020-09-25/cl-unification-20200925-git.tgz'';
-    sha256 = ''05i1bmbabfgym9v28cbl37yr0r1m4a4k4a844z6wlq6qf45vzais'';
+    url = "http://beta.quicklisp.org/archive/cl-unification/2020-09-25/cl-unification-20200925-git.tgz";
+    sha256 = "05i1bmbabfgym9v28cbl37yr0r1m4a4k4a844z6wlq6qf45vzais";
   };
 
   packageName = "cl-ppcre-template";

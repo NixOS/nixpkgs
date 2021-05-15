@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ilbc, mediastreamer, pkgconfig }:
+{ lib, stdenv, fetchurl, ilbc, mediastreamer, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "msilbc-2.1.2";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ ilbc mediastreamer ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [
     "ILBC_LIBS=ilbc" "ILBC_CFLAGS=-I${ilbc}/include"
     "MEDIASTREAMER_LIBS=mediastreamer" "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mediastreamer plugin for the iLBC audio codec";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
 , substituteAll
-, graphvizPkg
+, graphvizPkgs
 , graphviz
 , mock
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./hardcode-graphviz-path.patch;
-      graphviz = graphvizPkg;
+      graphviz = graphvizPkgs;
     })
   ];
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     license = licenses.mit;

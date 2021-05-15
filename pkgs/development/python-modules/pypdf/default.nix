@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # Not supported. Package is no longer maintained.
   disabled = isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure-Python PDF toolkit";
     homepage = "http://pybrary.net/pyPdf/";
     license = licenses.bsd3;

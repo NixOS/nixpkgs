@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, libxslt }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "xmlstarlet-1.6.1";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/xmlstar/${name}.tar.gz";
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt ];
 
   preConfigure =
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A command line tool for manipulating and querying XML data";
     homepage = "http://xmlstar.sourceforge.net/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

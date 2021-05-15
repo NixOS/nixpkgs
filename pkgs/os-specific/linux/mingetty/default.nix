@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "mingetty-1.08";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/mingetty";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     make -C src/mod modules_install INSTALL_MOD_PATH=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.jool.mx/";
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
     platforms = platforms.linux;

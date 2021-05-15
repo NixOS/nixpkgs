@@ -5,10 +5,10 @@ then cstruct
 else
 
 buildDunePackage {
-	pname = "cstruct-unix";
-	inherit (cstruct) version src useDune2 meta;
+  pname = "cstruct-unix";
+  inherit (cstruct) version src useDune2 meta;
 
-	minimumOCamlVersion = "4.06";
+  minimumOCamlVersion = "4.06";
 
-	propagatedBuildInputs = [ cstruct ];
+  propagatedBuildInputs = [ cstruct ];
 }

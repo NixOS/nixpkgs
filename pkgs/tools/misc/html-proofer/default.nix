@@ -1,4 +1,4 @@
-{ bundlerEnv, ruby, lib }:
+{ bundlerEnv, ruby, lib, bundlerUpdateScript }:
 
 bundlerEnv rec {
   name = "${pname}-${version}";
@@ -8,11 +8,13 @@ bundlerEnv rec {
   inherit ruby;
   gemdir = ./.;
 
+  passthru.updateScript = bundlerUpdateScript pname;
+
   meta = with lib; {
     description = "A tool to validate HTML files";
     homepage    = "https://github.com/gjtorikian/html-proofer";
     license     = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.unix;
   };
 }

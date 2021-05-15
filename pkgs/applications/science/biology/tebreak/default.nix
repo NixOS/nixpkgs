@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, last, exonerate, minia, python3Packages, bwa
+{ lib, fetchFromGitHub, last, exonerate, minia, python3Packages, bwa
 , samtools, findutils, python }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     ${python.interpreter} checktest.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find and characterise transposable element insertions";
     homepage = "https://github.com/adamewing/tebreak";
     license = licenses.mit;

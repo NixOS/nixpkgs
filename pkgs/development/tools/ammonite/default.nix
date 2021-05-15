@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
+{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
 , nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
@@ -34,7 +34,7 @@ let
           #!${stdenv.shell}
           set -o errexit
           PATH=${
-            stdenv.lib.makeBinPath [
+            lib.makeBinPath [
               common-updater-scripts
               coreutils
               git

@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest
+{ buildPythonPackage, lib, fetchFromGitHub, six, python-axolotl, pytest
 , isPy3k, consonance, appdirs
 }:
 
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six python-axolotl consonance appdirs ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

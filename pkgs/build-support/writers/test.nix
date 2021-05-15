@@ -1,15 +1,13 @@
-{
-  glib,
-  haskellPackages,
-  lib,
-  nodePackages,
-  perlPackages,
-  python2Packages,
-  python3Packages,
-  runCommand,
-  stdenv,
-  writers,
-  writeText
+{ glib
+, haskellPackages
+, lib
+, nodePackages
+, perlPackages
+, python2Packages
+, python3Packages
+, runCommand
+, writers
+, writeText
 }:
 with writers;
 let
@@ -29,6 +27,12 @@ let
 
     dash = writeDashBin "test_writers" ''
      test '~' = '~' && echo 'success'
+    '';
+
+    rust = writeRustBin "test_writers" {} ''
+      fn main(){
+        println!("success")
+      }
     '';
 
     haskell = writeHaskellBin "test_writers" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -190,7 +194,7 @@ let
 
 in runCommand "test-writers" {
   passthru = { inherit writeTest bin simple; };
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}/bin/test_writers") (lib.attrValues bin)}
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues simple)}

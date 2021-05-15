@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, sqlite }:
+{ lib, buildGoPackage, fetchFromGitHub, sqlite }:
 
 buildGoPackage rec {
   pname = "textql";
@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Execute SQL against structured text like CSV or TSV";
     homepage = "https://github.com/dinedal/textql";
     license = licenses.mit;

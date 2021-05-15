@@ -1,30 +1,62 @@
-{ stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
+{ lib
+, stdenv
+, fetchurl
+, libxml2
+, libxslt
+, itstool
+, gnome
+, pkg-config
+, meson
+, ninja
+, python3
+}:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
-  version = "3.38.0";
+  version = "40.0";
+
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp-tools/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1c045c794sm83rrjan67jmsk20qacrw1m814p4nw85w5xsry8z30";
+    url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1bkanqp3qwmirv06mi99qv2acr5ba5rlhy9zlh0fyrfxygraqjv6";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+
+  propagatedBuildInputs = [
+    libxml2 # xmllint required by yelp-check.
+    libxslt # xsltproc required by yelp-build and yelp-check.
+  ];
+
+  buildInputs = [
+    itstool # build script checks for its presence but I am not sure if anything uses it
+    gnome.yelp-xsl
+  ];
+
+  pythonPath = [
+    python3.pkgs.lxml
+  ];
+
+  strictDeps = false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
+
+  doCheck = true;
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 libxslt itstool gnome3.yelp-xsl ];
-
-  doCheck = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
-    maintainers = with maintainers; [ domenkozar ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members ++ (with maintainers; [ domenkozar ]);
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
+, pythonAtLeast
 , pbr
 , testtools
 , mock
@@ -16,7 +18,26 @@ buildPythonPackage rec {
     sha256 = "fcf0d60234f1544da717a9738325812de1f42c2fa085e2d9252d8fff5712b2ef";
   };
 
-  propagatedBuildInputs = [ pbr testtools mock ];
+  patches = lib.optional (pythonAtLeast "3.9") [
+    # drop tests that try to monkeypatch a classmethod, which fails on python3.9
+    # https://github.com/testing-cabal/fixtures/issues/44
+    (fetchpatch {
+       url = "https://salsa.debian.org/openstack-team/python/python-fixtures/-/raw/debian/victoria/debian/patches/remove-broken-monkey-patch-test.patch";
+       sha256 = "1s3hg2zmqc4shmnf90kscphzj5qlqpxghzw2a59p8f88zrbsj97r";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pbr
+  ];
+
+  propagatedBuildInputs = [
+    testtools
+  ];
+
+  checkInputs = [
+    mock
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m testtools.run fixtures.test_suite

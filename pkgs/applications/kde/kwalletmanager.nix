@@ -13,7 +13,7 @@
 }:
 
 mkDerivation {
-  name = "kwalletmanager";
+  pname = "kwalletmanager";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ fridh ];

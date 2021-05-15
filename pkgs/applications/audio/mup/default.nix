@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
+{ lib, stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
 , fltk, libXinerama, libXpm, libjpeg
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
     license = licenses.bsd3;

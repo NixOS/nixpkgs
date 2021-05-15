@@ -1,4 +1,4 @@
-{ stdenv, writeText, erlang, rebar3, openssl, libyaml,
+{ stdenv, writeText, erlang, rebar3WithPlugins, openssl, libyaml,
   pc, lib }:
 
 { name, version
@@ -14,12 +14,15 @@
 , enableDebugInfo ? false
 , ... }@attrs:
 
-with stdenv.lib;
+with lib;
 
 let
   debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
 
-  ownPlugins = buildPlugins ++ (if compilePorts then [pc] else []);
+  rebar3 = rebar3WithPlugins {
+    plugins = buildPlugins;
+    globalPlugins = (if compilePorts then [pc] else []);
+  };
 
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
@@ -36,13 +39,9 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
-    propagatedBuildInputs = unique (beamDeps ++ ownPlugins);
+    propagatedBuildInputs = unique beamDeps;
 
     dontStrip = true;
-    # The following are used by rebar3-nix-bootstrap
-    inherit compilePorts;
-    buildPlugins = ownPlugins;
-
     inherit src;
 
     setupHook = writeText "setupHook.sh" ''
@@ -64,7 +63,7 @@ let
       HOME=. rebar3 compile
       ${if compilePorts then ''
         HOME=. rebar3 pc compile
-      '' else ''''}
+      '' else ""}
       runHook postBuild
     '';
 

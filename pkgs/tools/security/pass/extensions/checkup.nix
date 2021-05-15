@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , curl, findutils, gnugrep, gnused }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -D -m755 checkup.bash $out/lib/password-store/extensions/checkup.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
     homepage = "https://github.com/etu/pass-checkup";
     license = licenses.gpl3;

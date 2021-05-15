@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "requests-hawk";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qcga289yr6qlkmc6fjk0ia6l5cg0galklpdzpslf1y8ky9zb7rl";
+    sha256 = "1a5e61cab14627f1b5ba7de0e3fb2b681007ff7b2a49110d504e5cd6d7fd62d6";
   };
 
   propagatedBuildInputs = [ mohawk requests ];

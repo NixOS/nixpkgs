@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , autoconf
 , automake
 , pkg-config
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   # -pthread gets passed to clang, causing warnings
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
+  configureFlags = lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libgd.github.io/";
     description = "A dynamic image creation library";
     license = licenses.free; # some custom license

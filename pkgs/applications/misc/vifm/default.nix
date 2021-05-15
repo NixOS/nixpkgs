@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, pkgconfig
+, pkg-config
 , ncurses, libX11
 , util-linux, file, which, groff
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0rqyd424y0g5b5basw2ybb60r9gar4f40d1xgzr3c2dsy4jpwvyh";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ ncurses libX11 util-linux file which groff ];
 
   postFixup = let
@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
     ${if mediaSupport then wrapVifmMedia else ""}
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}'';
+  meta = with lib; {
+    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;
@@ -40,5 +40,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://vifm.info/";
     inherit version;
     updateWalker = true;
+    changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
   };
 }

@@ -9,7 +9,7 @@
 
 
   mkDerivation {
-    name = "ktouch";
+    pname = "ktouch";
     meta = {
       license = lib.licenses.gpl2;
       maintainers = [ lib.maintainers.schmittlauch ];

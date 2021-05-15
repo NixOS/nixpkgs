@@ -28,7 +28,7 @@ with lib;
         "systemd-resolved.service"
       ];
       path = [
-        pkgs.iproute
+        pkgs.iproute2
         # Needed for ping
         "/run/wrappers"
       ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,   alsaLib, libjack2, fftwFloat, libclthreads, libclxclient, libX11,  libXft, zita-alsa-pcmi, }:
+{ lib, stdenv, fetchurl,   alsaLib, libjack2, fftwFloat, libclthreads, libclxclient, libX11,  libXft, zita-alsa-pcmi, }:
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A 'perceptual' or 'psychoacoustic' audio spectrum analyser for JACK and ALSA";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

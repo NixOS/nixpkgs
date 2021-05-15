@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, type_conv, camlp4 }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, type_conv, camlp4 }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.00";
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "enumerate-111.08.00 is not available for OCaml ${ocaml.version}"
 else
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://ocaml.janestreet.com/";
     description = "Quotation expanders for enumerating finite types";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = ocaml.meta.platforms or [];
   };
 }

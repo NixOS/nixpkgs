@@ -6,7 +6,7 @@
 , libX11
 , wxGTK
 , wxmac
-, pkgconfig
+, pkg-config
 , buildPythonPackage
 , pyopengl
 , isPy3k
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
     ++ (lib.optionals stdenv.isDarwin [ wxmac ]);
 

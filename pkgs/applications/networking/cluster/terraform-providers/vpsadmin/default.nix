@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "terraform-provider-vpsadmin";
   version = "0.1.0";
@@ -20,7 +20,7 @@ buildGoModule rec {
   # if the versions are not provided via file paths.
   postInstall = "mv $out/bin/${pname}{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terraform provider for vpsAdmin";
     homepage = "https://github.com/vpsfreecz/terraform-provider-vpsadmin";
     license = licenses.mpl20;

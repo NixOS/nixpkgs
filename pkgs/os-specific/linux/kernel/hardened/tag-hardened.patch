@@ -1,7 +1,0 @@
-diff --git a/localversion-hardened b/localversion-hardened
-new file mode 100644
-index 0000000000..e578045860
---- /dev/null
-+++ b/localversion-hardened
-@@ -0,0 +1 @@
-+-hardened

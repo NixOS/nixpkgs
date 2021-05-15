@@ -9,7 +9,7 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "2.0.10-2";
+  version = "2.0.12";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    sha256 = "sha256-ZNViZGjdJKMzKyBfOr0KWBq33hsGCi1X4hhkBmz9Q7c=";
+    sha256 = "sha256-umzvf4I6LSgWYimYLvySYDnUIxPEDiL+DGd2wT0AFbI=";
   };
 
   postPatch = ''
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
     license = licenses.gpl2Plus ;

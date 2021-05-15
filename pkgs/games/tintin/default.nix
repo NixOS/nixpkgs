@@ -6,11 +6,11 @@
 assert tlsSupport -> gnutls != null;
 
 stdenv.mkDerivation rec {
-  name = "tintin-2.02.03";
+  name = "tintin-2.02.05";
 
   src = fetchurl {
     url    = "mirror://sourceforge/tintin/${name}.tar.gz";
-    sha256 = "0ybgy8j8i36d7f892x539vl6fl5zvvfyy5ffc98550vjr6qqhk74";
+    sha256 = "sha256-Y6cAUhItJNade8ASOVdF8aBBLf/UVqjoqrhXBNRL1aE=";
   };
 
   nativeBuildInputs = lib.optional tlsSupport gnutls.dev;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free MUD client for macOS, Linux and Windows";
     homepage    = "http://tintin.sourceforge.net";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -16,7 +16,7 @@ buildPythonPackage {
     sha256 = "1h9biinhy5m7r2cj4abhvsg2hb6xjny3n2dxnj1336zpa082ys3h";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for the Linux unshare() syscall";
     homepage    = "https://github.com/thetincho/python-unshare";
     license     = licenses.gpl2;

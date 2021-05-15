@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , betamax
 , betamax-serializers
 , betamax-matchers
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.bsd2;

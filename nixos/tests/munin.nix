@@ -3,7 +3,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "munin";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ domenkozar eelco ];
   };
 
@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
 
           # increase the systemd timer interval so it fires more often
-          systemd.timers.munin-cron.timerConfig.OnCalendar = pkgs.stdenv.lib.mkForce "*:*:0/10";
+          systemd.timers.munin-cron.timerConfig.OnCalendar = pkgs.lib.mkForce "*:*:0/10";
         };
     };
 

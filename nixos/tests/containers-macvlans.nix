@@ -1,15 +1,13 @@
-# Test for NixOS' container support.
-
 let
   # containers IP on VLAN 1
   containerIp1 = "192.168.1.253";
   containerIp2 = "192.168.1.254";
 in
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-macvlans";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ montag451 ];
+  meta = {
+    maintainers = with lib.maintainers; [ montag451 ];
   };
 
   nodes = {

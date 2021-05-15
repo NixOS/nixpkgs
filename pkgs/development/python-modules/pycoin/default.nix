@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , gnupg
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     "test_tx_with_gpg"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
     license = licenses.mit;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ pytest pytestrunner glibcLocales ];
+  checkInputs = [ numpy pytest pytestrunner glibcLocales ];
   propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
 
   checkPhase = ''

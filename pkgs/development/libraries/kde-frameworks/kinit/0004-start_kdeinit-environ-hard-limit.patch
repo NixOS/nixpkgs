@@ -17,7 +17,7 @@ index f2db3e9..4ff2602 100644
                      if (read(0, &len, sizeof(unsigned)) == sizeof(unsigned)
 -                            && len && len < (1 << 12)) {
 +                            && len) {
-+                        if (len >= (1 << 14)) {
++                        if (len >= (1 << 20)) {
 +                            fprintf(stderr, "%s: exceeded environment length limit", argv[0]);
 +                            return 1;
 +                        }

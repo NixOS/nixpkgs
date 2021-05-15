@@ -1,4 +1,4 @@
-{ stdenv, vscode-utils
+{ lib, vscode-utils
 , fetchurl, unzip
 , mono, writeScript, runtimeShell
 , jq, clang-tools
@@ -92,7 +92,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     chmod a+x ./bin/cpptools{-srv,}
   '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       license = licenses.unfree;
       maintainers = [ maintainers.jraygauthier ];
       # A 32 bit linux would also be possible with some effort (specific download of binaries +

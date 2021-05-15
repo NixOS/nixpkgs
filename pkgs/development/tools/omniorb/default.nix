@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2 }:
+{ lib, stdenv, fetchurl, python2 }:
 stdenv.mkDerivation rec {
 
   pname = "omniorb";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A robust high performance CORBA ORB for C++ and Python. It is freely available under the terms of the GNU Lesser General Public License (for the libraries), and GNU General Public License (for the tools). omniORB is largely CORBA 2.6 compliant";
     homepage    = "http://omniorb.sourceforge.net/";
     license     = licenses.gpl2Plus;

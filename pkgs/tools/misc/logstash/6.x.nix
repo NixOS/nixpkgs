@@ -1,14 +1,15 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
+, nixosTests
 , jre
 }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+let this = stdenv.mkDerivation rec {
   version = elk6Version;
   name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
 
@@ -45,11 +46,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A data pipeline that helps you process logs and other event data from a variety of systems";
     homepage    = "https://www.elastic.co/products/logstash";
     license     = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
-}
+  passthru.tests =
+    optionalAttrs (!enableUnfree) (
+      assert this.drvPath == nixosTests.elk.ELK-6.elkPackages.logstash.drvPath;
+      {
+        elk = nixosTests.elk.ELK-6;
+      }
+    );
+};
+in this

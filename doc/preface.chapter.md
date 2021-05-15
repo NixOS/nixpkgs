@@ -1,10 +1,4 @@
----
-title: Preface
-author: Frederik Rietdijk
-date: 2015-11-25
----
-
-# Preface
+# Preface {#preface}
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a

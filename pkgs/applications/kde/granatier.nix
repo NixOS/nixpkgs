@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "granatier";
+  pname = "granatier";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.granatier";
     description = "Clone of the classic Bomberman game";

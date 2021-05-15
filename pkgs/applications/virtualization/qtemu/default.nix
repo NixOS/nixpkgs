@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitLab, pkgconfig, qmake, qtbase, qemu, makeWrapper }:
+{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu }:
 
 mkDerivation rec {
   pname = "qtemu";
@@ -13,7 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -30,12 +30,12 @@ mkDerivation rec {
     install -D -t $out/bin qtemu
 
     # make sure that the qemu-* executables are found
-    wrapProgram $out/bin/qtemu --prefix PATH : ${stdenv.lib.makeBinPath [ qemu ]}
+    wrapProgram $out/bin/qtemu --prefix PATH : ${lib.makeBinPath [ qemu ]}
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based front-end for QEMU emulator";
     homepage = "https://qtemu.org";
     license = licenses.gpl2;

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, sqlite, readline, asciidoc, SDL, SDL_gfx }:
+{ lib, stdenv, fetchFromGitHub, sqlite, readline, asciidoc, SDL, SDL_gfx }:
 
 let
-  makeSDLFlags = map (p: "-I${stdenv.lib.getDev p}/include/SDL");
+  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
   pname = "jimtcl";
@@ -52,8 +52,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "An open source small-footprint implementation of the Tcl programming language";
     homepage = "http://jim.tcl.tk/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ dbohdan vrthra ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dbohdan vrthra ];
   };
 }

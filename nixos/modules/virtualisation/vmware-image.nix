@@ -18,8 +18,9 @@ in {
   options = {
     vmware = {
       baseImageSize = mkOption {
-        type = types.int;
-        default = 2048;
+        type = with types; either (enum [ "auto" ]) int;
+        default = "auto";
+        example = 2048;
         description = ''
           The size of the VMWare base image in MiB.
         '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
 buildPythonPackage rec {
   pname = "PyBindGen";
   version = "0.21.0";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ pygccxml ];
   doCheck = (!isPy3k); # Fails to import module 'cxxfilt' from pygccxml on Py3k
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gjcarneiro/pybindgen";
     description = "Python Bindings Generator";
     license = licenses.lgpl2;

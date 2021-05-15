@@ -4,12 +4,12 @@
 
 buildPythonApplication rec {
   pname = "barman";
-  version = "2.11";
+  version = "2.12";
 
   outputs = [ "out" "man" ];
   src = fetchurl {
     url = "mirror://sourceforge/pgbarman/${version}/barman-${version}.tar.gz";
-    sha256 = "0w5lh4aavab9ynfy2mq09ga6j4vss4k0vlc3g6f5a9i4175g9pmr";
+    sha256 = "Ts8I6tlP2GRp90OIIKXy+cRWWvUO3Sm86zq2dtVP5YE=";
   };
 
   propagatedBuildInputs = [ dateutil argh psycopg2 boto3 argcomplete ];

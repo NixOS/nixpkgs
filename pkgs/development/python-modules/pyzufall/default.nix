@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, nose, future, coverage }:
+{ lib, fetchPypi, python, buildPythonPackage, nose, future, coverage }:
 
 buildPythonPackage rec {
   pname = "PyZufall";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pyzufall.readthedocs.io/de/latest/";
     description = "Library for generating random data and sentences in german language";
     license = licenses.gpl3Plus;

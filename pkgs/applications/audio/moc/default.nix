@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
 # Sound sub-systems
 , alsaSupport ? true, alsaLib
@@ -25,7 +25,7 @@
 }:
 
 let
-  opt = stdenv.lib.optional;
+  opt = lib.optional;
   mkFlag = c: f: if c then "--with-${f}" else "--without-${f}";
 
 in stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     ++ opt withffmpeg4 ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ opt pulseSupport autoreconfHook;
 
   buildInputs = [ ncurses db popt libtool ]
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     ++ opt midiSupport timidity
     ++ opt modplugSupport libmodplug
     ++ opt mp3Support libmad
-    ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
+    ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
     ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg_3
@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     "--without-rcc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ncurses console audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;

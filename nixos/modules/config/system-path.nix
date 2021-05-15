@@ -29,7 +29,6 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.nano
       pkgs.ncurses
       pkgs.netcat
       config.programs.ssh.package
@@ -43,7 +42,8 @@ let
     ];
 
     defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      [ pkgs.perl
+      [ pkgs.nano
+        pkgs.perl
         pkgs.rsync
         pkgs.strace
       ];
@@ -75,13 +75,21 @@ in
         default = defaultPackages;
         example = literalExample "[]";
         description = ''
-          Set of packages users expect from a minimal linux istall.
-          Like systemPackages, they appear in
-          /run/current-system/sw.  These packages are
+          Set of default packages that aren't strictly neccessary
+          for a running system, entries can be removed for a more
+          minimal NixOS installation.
+
+          Note: If <package>pkgs.nano</package> is removed from this list,
+          make sure another editor is installed and the
+          <literal>EDITOR</literal> environment variable is set to it.
+          Environment variables can be set using
+          <option>environment.variables</option>.
+
+          Like with systemPackages, packages are installed to
+          <filename>/run/current-system/sw</filename>. They are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.
-          If you want a more minimal system, set it to an empty list.
         '';
       };
 
@@ -144,6 +152,7 @@ in
         "/share/kservicetypes5"
         "/share/kxmlgui5"
         "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {

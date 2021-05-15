@@ -1,7 +1,9 @@
-{ stdenv, ghcWithPackages, makeWrapper, packages ? (x: []) }:
+{ lib, stdenv, ghcWithPackages, taffybar, makeWrapper, packages ? (x: []) }:
 
 let
-taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
+  taffybarEnv = ghcWithPackages (self: [
+    self.taffybar
+  ] ++ packages self);
 in stdenv.mkDerivation {
   name = "taffybar-with-packages-${taffybarEnv.version}";
 
@@ -13,8 +15,14 @@ in stdenv.mkDerivation {
       --set NIX_GHC "${taffybarEnv}/bin/ghc"
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd3;
-  };
+  # Trivial derivation
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
+  # For hacking purposes
+  passthru.env = taffybarEnv;
+  buildInputs = [ taffybarEnv ];
+  shellHook = "eval $(egrep ^export ${taffybarEnv}/bin/ghc)";
+
+  inherit (taffybar) meta;
 }

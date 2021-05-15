@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXaw, freetype }:
+{ lib, stdenv, fetchurl, libXaw, freetype }:
 
 stdenv.mkDerivation rec {
   name = "libotf-0.9.16";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (libotf)";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bendlas ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bendlas ];
   };
 }

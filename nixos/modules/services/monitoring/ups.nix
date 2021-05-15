@@ -205,7 +205,7 @@ in
       after = [ "upsd.service" ];
       wantedBy = [ "multi-user.target" ];
       # TODO: replace 'root' by another username.
-      script = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
+      script = "${pkgs.nut}/bin/upsdrvctl -u root start";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

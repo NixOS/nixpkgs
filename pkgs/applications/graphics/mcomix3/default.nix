@@ -1,13 +1,14 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
-, python3
 , wrapGAppsHook
+, installShellFiles
+, python3
 , gobject-introspection
 , gtk3
 , gdk-pixbuf
+
 # Recommended Dependencies:
-, unrarSupport ? false
+, unrarSupport ? false  # unfree software
 , unrar
 , p7zip
 , lhasa
@@ -16,18 +17,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix3";
-  version = "unstable-2020-11-23";
+  version = "unstable-2021-04-23";
 
-  # fetch from github because no official release on pypi/github and no build system
+  # no official release on pypi/github and no build system
   src = fetchFromGitHub {
     repo   = "${pname}";
     owner  = "multiSnow";
-    rev = "cdcb27533dc7ee2ebf7b0a8ab5ba10e61c0b8ff8";
+    rev = "139344e23898c28484328fc29fd0c6659affb12d";
     sha256 = "0q9xgl60ryf7qmy5vgzgfry4rvw5j9rb4d1ilxmpjmvm7dd3fm2k";
   };
 
   buildInputs = [ gobject-introspection gtk3 gdk-pixbuf ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook installShellFiles ];
   propagatedBuildInputs = (with python3.pkgs; [ pillow pygobject3 pycairo ]);
 
   format = "other";
@@ -45,6 +46,8 @@ python3.pkgs.buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
 
+    substituteInPlace mime/*.desktop \
+      --replace "Exec=mcomix" "Exec=mcomix3"
     ${python3.executable} installer.py --srcdir=mcomix --target=$libdir
     mv $libdir/mcomix/mcomixstarter.py $out/bin/${pname}
     mv $libdir/mcomix/comicthumb.py $out/bin/comicthumb
@@ -55,7 +58,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     rmdir $libdir/mcomix/mcomix
-    cp man/* $out/share/man/man1/
+    mv man/mcomix.1 man/${pname}.1
+    installManPage man/*
     cp -r mime/icons/* $out/share/icons/hicolor/
     cp mime/*.desktop $out/share/applications/
     cp mime/*.appdata.xml $out/share/metainfo/
@@ -63,12 +67,13 @@ python3.pkgs.buildPythonApplication rec {
     for folder in $out/share/icons/hicolor/*; do
         mkdir $folder/{apps,mimetypes}
         mv $folder/*.png $folder/mimetypes
+        cp $libdir/mcomix/images/$(basename $folder)/mcomix.png $folder/apps/${pname}.png
         cp $folder/mimetypes/application-x-cbt.png $folder/mimetypes/application-x-cbr.png
         cp $folder/mimetypes/application-x-cbt.png $folder/mimetypes/application-x-cbz.png
     done
   '';
 
-  # to prevent double wrapping
+  # prevent double wrapping
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
@@ -77,13 +82,13 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  # real pytests seem to be broken upstream
+  # real pytests broken upstream
   checkPhase = ''
     $out/bin/comicthumb --help > /dev/null
     $out/bin/${pname} --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Comic book reader and image viewer; python3 fork of mcomix";
     longDescription = ''
       User-friendly, customizable image viewer, specifically designed to handle

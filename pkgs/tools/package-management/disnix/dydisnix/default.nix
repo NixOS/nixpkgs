@@ -1,27 +1,32 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool , pkgconfig, glib, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix, libnixxml }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib
+, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix
+}:
 
 stdenv.mkDerivation rec {
-  version="2020-07-04";
+  version = "unstable-2020-11-02";
   name = "dydisnix-${version}";
 
   src = fetchFromGitHub {
     owner = "svanderburg";
     repo = "dydisnix";
-    rev = "e99091f1c2329d562097e35faedee80622d387f0";
-    sha256 = "sha256-XKab2hNGtWDkIEMxE1vMvqQBTP9BvHTabBVfzpH57h0=";
+    rev = "12ca1516bc1e5d161ac68f5d8252a0a2f353c8cf";
+    sha256 = "00f341274hwwil8mlgcgq331vfca9sscvpdbgkxsjvbhcqd8qa52";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
-  buildInputs = [ glib libxml2 libxslt getopt nix disnix libiconv gettext libnixxml ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
+  buildInputs = [ glib libxml2 libxslt getopt nix disnix libiconv gettext ];
+
   preConfigure = ''
     ./bootstrap
   '';
 
   meta = {
     description = "A toolset enabling self-adaptive redeployment on top of Disnix";
-    longDescription = "Dynamic Disnix is a (very experimental!) prototype extension framework for Disnix supporting dynamic (re)deployment of service-oriented systems.";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.tomberek ];
-    platforms = stdenv.lib.platforms.unix;
+    longDescription = ''
+      Dynamic Disnix is a (very experimental!) prototype extension framework for Disnix supporting dynamic (re)deployment of service-oriented systems.
+    '';
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.tomberek ];
+    platforms = lib.platforms.unix;
   };
 }

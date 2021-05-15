@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , six, nose, unittest2, mock }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six nose unittest2 mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/celery/case";
     description = "unittests utilities";
     license = licenses.bsd3;

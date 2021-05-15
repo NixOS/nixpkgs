@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "samba-wsdd";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes = {
     client_wsdd = { pkgs, ... }: {

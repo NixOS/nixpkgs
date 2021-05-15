@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, pkgs, lib, php }:
+{ mkDerivation, fetchFromGitHub, makeWrapper, lib, php }:
 let
   pname = "php-parallel-lint";
   version = "1.0.0";
@@ -14,7 +14,7 @@ mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkgs.makeWrapper
+    makeWrapper
     php.packages.composer
     php.packages.box
   ];
@@ -31,7 +31,7 @@ mkDerivation {
       --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
     license = licenses.bsd2;
     homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";

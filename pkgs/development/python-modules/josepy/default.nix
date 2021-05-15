@@ -1,29 +1,38 @@
-{ lib, fetchPypi, buildPythonPackage
-# buildInputs
-, six
-, setuptools
-, pyopenssl
+{ lib
+, fetchPypi
+, buildPythonPackage
 , cryptography
+, pyopenssl
+, setuptools
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.4.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c37ff4b93606e6a452b72cdb992da5e0544be12912fac01b31ddbdd61f6d5bd0";
+    sha256 = "a5a182eb499665d99e7ec54bb3fe389f9cbc483d429c9651f20384ba29564269";
   };
+
+  postPatch = ''
+    # remove coverage flags
+    sed -i '/addopts/d' pytest.ini
+    sed -i '/flake8-ignore/d' pytest.ini
+  '';
 
   propagatedBuildInputs = [
     pyopenssl
     cryptography
-    six
     setuptools
   ];
 
-  # too many unpackaged check requirements
-  doCheck = false;
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "JOSE protocol implementation in Python";

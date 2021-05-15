@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, zlib }:
+{ lib, stdenv, fetchurl, kernel, zlib }:
 
 let
   version = "3.1";
@@ -36,8 +36,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Network monitoring module for atop";
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [viric];
   };
 }

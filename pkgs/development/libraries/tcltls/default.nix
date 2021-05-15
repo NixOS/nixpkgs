@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, openssl }:
+{ lib, stdenv, fetchurl, tcl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "tcltls";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://tls.sourceforge.net/";
     description = "An OpenSSL / RSA-bsafe Tcl extension";
-    license = stdenv.lib.licenses.tcltk;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.unix;
   };
 }

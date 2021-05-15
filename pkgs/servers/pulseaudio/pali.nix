@@ -4,7 +4,7 @@
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libsndfile
 , libtool
 , makeWrapper
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     meson
     ninja
-    pkgconfig
+    pkg-config
     perlPackages.perl
     perlPackages.XMLParser
   ];

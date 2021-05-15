@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, hdf5 }:
+{ lib, stdenv, fetchurl, cmake, hdf5 }:
 
 stdenv.mkDerivation rec {
   pname = "medfile";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1khzclkrd1yn9mz3g14ndgpsbj8j50v8dsjarcj6kkn9zgbbazc4";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    ./hdf5-1.12.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ hdf5 ];
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -r $out/bin/testc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to read and write MED files";
     homepage = "http://salome-platform.org/";
     platforms = platforms.linux;

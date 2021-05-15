@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
 stdenv.mkDerivation {
   version = "0.4.10";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   buildPhase     = "ocaml setup.ml -build";
   installPhase   = "ocaml setup.ml -install";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://oasis.forge.ocamlcore.org/";
     description = "Configure, build and install system for OCaml projects";
     license = licenses.lgpl21;

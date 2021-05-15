@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
+{ lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
 
 # Extra Arguments
@@ -16,7 +16,7 @@
 let
   libOnly = type == "lib";
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
   majorVersion = "1.18"; # remove patches below with next upgrade
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
          "ac_cv_printf_positional=yes"
        ];
 
-  nativeBuildInputs = [ pkgconfig perl ]
-    ++ optional (!libOnly) yacc
+  nativeBuildInputs = [ pkg-config perl ]
+    ++ optional (!libOnly) bison
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
 

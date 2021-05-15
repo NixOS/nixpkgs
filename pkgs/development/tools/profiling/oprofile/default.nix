@@ -1,5 +1,5 @@
-{ stdenv, buildPackages
-, fetchurl, pkgconfig
+{ lib, stdenv, buildPackages
+, fetchurl, pkg-config
 , libbfd, popt, zlib, linuxHeaders, libiberty_static
 , withGUI ? false, qt4 ? null
 }:
@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
       --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbfd zlib popt linuxHeaders libiberty_static ]
-    ++ stdenv.lib.optionals withGUI [ qt4 ];
+    ++ lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
       "--with-kernel=${linuxHeaders}"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
-    ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
+    ++ lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
 
   meta = {
     description = "System-wide profiler for Linux";
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
       is profiled: hardware and software interrupt handlers, kernel
       modules, the kernel, shared libraries, and applications.
     '';
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "http://oprofile.sourceforge.net/";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

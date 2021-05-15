@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, which, ocaml, ocamlbuild }:
+{ lib, stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.09"
+if lib.versionAtLeast ocaml.version "4.09"
 then throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A software system for writing extensible parsers for programming languages";
     homepage = "https://github.com/ocaml/camlp4";
     platforms = ocaml.meta.platforms or [];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Emoji annotation files in CLDR";
     homepage = "https://www.unicode.org/";
     license = licenses.unicode-dfs-2016;

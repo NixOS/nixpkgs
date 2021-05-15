@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, python3Packages }:
+{ lib, stdenv, fetchurl, python3, python3Packages }:
 
 stdenv.mkDerivation {
   name = "postiats-utilities-2.0.1";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "12jlzqigmaa9m37x0nq5v3gq8v61m73i5kzdnsm06chf0przpaix";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Hibou57/PostiATS-Utilities";
     license = licenses.bsd2;
     platforms = platforms.linux;

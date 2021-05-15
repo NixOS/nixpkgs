@@ -1,17 +1,18 @@
-{ stdenv, fetchzip
+{ lib, stdenv, fetchzip
 , boost, clasp, cmake, gringo, re2c
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.4";
+  version = "1.9.5";
   pname = "aspcud";
 
   src = fetchzip {
     url = "https://github.com/potassco/aspcud/archive/v${version}.tar.gz";
-    sha256 = "0vrf7h7g99vw1mybqfrpxamsnf89p18czlzgjmxl1zkiwc7vjpzw";
+    sha256 = "sha256-d04GPMoz6PMGq6iiul0zT1C9Mljdl9uJJ2C8MIwcmaw=";
   };
 
-  buildInputs = [ boost clasp cmake gringo re2c ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost clasp gringo re2c ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DASPCUD_CLASP_PATH=${clasp}/bin/clasp"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Solver for package problems in CUDF format using ASP";
     homepage = "https://potassco.org/aspcud/";
     platforms = platforms.all;

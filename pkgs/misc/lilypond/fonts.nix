@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lilypond }:
+{ lib, stdenv, fetchFromGitHub, lilypond }:
 
 let
 
@@ -29,7 +29,7 @@ let
         done
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         inherit (lilypond.meta) homepage platforms;
         description = "${fontName} font for LilyPond";
         license = licenses.ofl;

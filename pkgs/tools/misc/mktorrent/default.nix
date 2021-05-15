@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, openssl}:
+{lib, stdenv, fetchFromGitHub, openssl}:
 
 stdenv.mkDerivation rec {
   pname = "mktorrent";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "USE_PTHREADS=1" "USE_OPENSSL=1" "USE_LONG_OPTIONS=1" ]
-    ++ stdenv.lib.optional stdenv.isi686 "USE_LARGE_FILES=1"
-    ++ stdenv.lib.optional stdenv.isLinux "CFLAGS=-lgcc_s";
+    ++ lib.optional stdenv.isi686 "USE_LARGE_FILES=1"
+    ++ lib.optional stdenv.isLinux "CFLAGS=-lgcc_s";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://mktorrent.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Command line utility to create BitTorrent metainfo files";
-    maintainers = with stdenv.lib.maintainers; [Profpatsch];
+    maintainers = with lib.maintainers; [Profpatsch];
   };
 }

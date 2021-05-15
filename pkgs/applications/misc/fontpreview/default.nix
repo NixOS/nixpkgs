@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ xdotool fzf imagemagick sxiv getopt ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sdushantha/fontpreview";
     description = "Highly customizable and minimal font previewer written in bash";
     longDescription = ''

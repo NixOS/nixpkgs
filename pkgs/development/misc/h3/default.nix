@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , fetchFromGitHub
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_LINTING=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/uber/h3";
     description = "Hexagonal hierarchical geospatial indexing system";
     license = licenses.asl20;

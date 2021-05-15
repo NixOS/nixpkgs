@@ -1,35 +1,37 @@
-{ stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libmad, libogg, libpng
-, libsndfile, libvorbis, lua, pkgconfig, SDL, SDL_image, SDL_net, SDL_ttf, smpeg
-, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip, alephone }:
+{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+, libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
+, SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
+, alephone }:
 
 let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
     pname = "alephone";
-    version = "20150620";
+    version = "1.4";
 
     src = fetchurl {
-      url =
-        "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/AlephOne-${version}.tar.bz2";
-      sha256 = "0cz18fa3gx8mz5j09ywz8gq0r4q082kh6l9pbpwn8qjanzgn1wy0";
+      url = let date = "20210408";
+      in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
+      sha256 = "sha256-tMwATUhUpo8W2oSWxGSZcAHVkj1PWEvUR/rpMZwWCWA=";
     };
 
-    nativeBuildInputs = [ pkgconfig icoutils ];
+    nativeBuildInputs = [ pkg-config icoutils ];
 
     buildInputs = [
       boost
       curl
       ffmpeg
+      libGLU
       libmad
       libsndfile
       libogg
       libpng
       libvorbis
       lua
-      SDL
-      SDL_image
-      SDL_net
-      SDL_ttf
+      SDL2
+      SDL2_image
+      SDL2_net
+      SDL2_ttf
       smpeg
       speex
       zziplib
@@ -50,7 +52,7 @@ let
       popd
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description =
         "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
       homepage = "https://alephone.lhowon.org/";
@@ -91,8 +93,8 @@ in self // {
       '';
 
       meta = alephone.meta // {
-        license = stdenv.lib.licenses.free;
+        license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
-    });
+    } // extraArgs);
 }

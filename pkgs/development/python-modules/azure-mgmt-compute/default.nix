@@ -1,20 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-mgmt-common
 , azure-mgmt-core
-, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "18.0.0";
+  version = "20.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "34815c91193640ad8ff0c4dad7f2d997548c853d2e8b10250329ed516e55879e";
+    sha256 = "7920bea2e11d78fa616992813aea470a8fb50eab2e646e032e138f93d53b70e8";
   };
 
   propagatedBuildInputs = [

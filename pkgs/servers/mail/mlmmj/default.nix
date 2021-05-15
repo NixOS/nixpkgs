@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install -vDm 644 -t $out/share/doc/mlmmj/ $docfiles
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://mlmmj.org";
     description = "Mailing List Management Made Joyful";
     maintainers = [ maintainers.edwtjo ];

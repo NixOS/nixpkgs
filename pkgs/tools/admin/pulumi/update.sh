@@ -3,32 +3,33 @@
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="2.10.2"
+VERSION="3.1.0"
 
 # Grab latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    "auth0=1.1.0"
-    "aws=3.4.0"
-    "cloudflare=2.6.0"
-    "consul=2.5.0"
-    "datadog=2.8.0"
-    "digitalocean=2.8.0"
-    "docker=2.3.0"
-    "gcp=3.25.0"
-    "github=2.0.0"
-    "gitlab=2.6.0"
-    "hcloud=0.2.0"
-    "kubernetes=2.6.1"
-    "mailgun=2.2.0"
-    "mysql=2.2.1"
-    "openstack=2.6.0"
-    "packet=3.1.0"
-    "postgresql=2.4.0"
-    "random=2.3.1"
-    "vault=2.4.0"
-    "vsphere=2.10.0"
-    );
+    "auth0=2.0.0"
+    "aws=4.0.0"
+    "cloudflare=3.0.0"
+    "consul=3.0.0"
+    "datadog=3.0.0"
+    "digitalocean=4.0.0"
+    "docker=3.0.0"
+    "gcp=5.0.0"
+    "github=4.0.0"
+    "gitlab=4.0.0"
+    "hcloud=1.0.0"
+    "kubernetes=3.0.0"
+    "linode=3.0.0"
+    "mailgun=3.0.0"
+    "mysql=3.0.0"
+    "openstack=3.0.0"
+    "packet=3.2.2"
+    "postgresql=3.0.0"
+    "random=4.0.0"
+    "vault=4.0.0"
+    "vsphere=3.0.0"
+)
 
 function genMainSrc() {
     local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
@@ -56,7 +57,8 @@ function genSrcs() {
     done
 }
 
-cat <<EOF                     > data.nix
+{
+  cat <<EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
@@ -64,14 +66,14 @@ cat <<EOF                     > data.nix
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-genMainSrc "linux"           >> data.nix
-genSrcs "linux"              >> data.nix
-echo "    ];"                >> data.nix
+  genMainSrc "linux"
+  genSrcs "linux"
+  echo "    ];"
+  echo "    x86_64-darwin = ["
 
-echo "    x86_64-darwin = [" >> data.nix
-genMainSrc "darwin"          >> data.nix
-genSrcs "darwin"             >> data.nix
-echo "    ];"                >> data.nix
-echo "  };"                  >> data.nix
-echo "}"                     >> data.nix
-
+  genMainSrc "darwin"
+  genSrcs "darwin"
+  echo "    ];"
+  echo "  };"
+  echo "}"
+} > data.nix

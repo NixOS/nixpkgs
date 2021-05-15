@@ -1,7 +1,7 @@
 # set VAMP_PATH ?
 # plugins availible on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
 
-{ stdenv, fetchFromGitHub, pkgconfig, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "vamp-plugin-sdk";
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1lhmskcyk7qqfikmasiw7wjry74gc8g5q6a3j1iya84yd7ll0cz6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
     license = licenses.bsd3;

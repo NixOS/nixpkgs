@@ -1,4 +1,4 @@
-{ stdenv, python, fetchPypi, buildPythonPackage, cython }:
+{ lib, python, fetchPypi, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
   pname = "PyStemmer";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Snowball stemming algorithms, for information retrieval";
     homepage = "http://snowball.tartarus.org/";
     license = licenses.mit;

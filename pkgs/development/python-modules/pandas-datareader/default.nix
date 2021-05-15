@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , isPy27
 , pandas
 , lxml
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pandas lxml requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Up to date remote data access for pandas, works for multiple versions of pandas";
     homepage = "https://github.com/pydata/pandas-datareader";
     license= licenses.bsd3;

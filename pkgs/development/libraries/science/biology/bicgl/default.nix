@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu }:
+{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu }:
 
 stdenv.mkDerivation rec {
   pname = "bicgl";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DBICPL_DIR=${bicpl}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/${owner}/${pname}";
     description = "Brain Imaging Centre graphics library";
     maintainers = with maintainers; [ bcdarwin ];

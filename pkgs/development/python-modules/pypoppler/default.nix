@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pkgs.poppler.dev ];
   propagatedBuildInputs = [ pycairo pygobject2 ];
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.launchpad.net/~mriedesel/poppler-python/main";
     description = "Python bindings for poppler-glib, unofficial branch including bug fixes, and removal of gtk dependencies";
     license = licenses.gpl2;

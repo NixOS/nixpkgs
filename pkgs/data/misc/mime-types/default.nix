@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "9";
@@ -11,7 +11,7 @@ in fetchzip rec {
   '';
   sha256 = "0gyla4wfiaccs0qh0hw7n08kdpnkkssglcg0z2jblb2lsdr4qna0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database of common mappings of file extensions to MIME types";
     homepage = "https://packages.gentoo.org/packages/app-misc/mime-types";
     license = licenses.gpl2;

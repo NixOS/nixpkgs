@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libxcb, libXrandr
+{ lib, stdenv, fetchFromGitHub, libxcb, libXrandr
 , xcbutil, xcbutilkeysyms, xcbutilwm, xcbproto
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stacking window manager that cooks windows with orders from the Waitron";
     homepage = "https://github.com/tudurom/windowchef";
     maintainers = with maintainers; [ bhougland ];

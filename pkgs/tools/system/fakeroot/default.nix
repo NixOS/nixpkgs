@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
+{ lib, stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
 
 stdenv.mkDerivation rec {
   version = "1.23";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1xpl0s2yjyjwlf832b6kbkaa5921liybaar13k7n45ckd9lxd700";
   };
 
-  patches = stdenv.lib.optional stdenv.isLinux ./einval.patch
+  patches = lib.optional stdenv.isLinux ./einval.patch
   # patchset from brew
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     (fetchpatch {
       name = "0001-Implement-openat-2-wrapper-which-handles-optional-ar.patch";
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?msg=5;filename=0001-Implement-openat-2-wrapper-which-handles-optional-ar.patch;att=1;bug=766649";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ getopt gnused ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
+    ++ lib.optional (!stdenv.isDarwin) libcap
     ;
 
   postUnpack = ''
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.unix;
   };
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch }:
+{ lib, fetchFromGitHub, rustPlatform, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eva";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;

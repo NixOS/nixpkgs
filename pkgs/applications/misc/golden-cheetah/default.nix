@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation
+{ lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1
-, yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
+, bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
 
 let
@@ -29,7 +29,7 @@ in mkDerivation rec {
     qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
     qtconnectivity qtcharts libusb-compat-0_1
   ];
-  nativeBuildInputs = [ flex makeWrapper qmake yacc ];
+  nativeBuildInputs = [ flex makeWrapper qmake bison ];
 
   patches = [
     # allow building with bison 3.7
@@ -69,10 +69,10 @@ in mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
-    maintainers = [ maintainers.ocharles ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

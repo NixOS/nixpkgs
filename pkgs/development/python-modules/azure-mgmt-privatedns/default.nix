@@ -1,21 +1,27 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
-  version = "0.1.0";
+  version = "1.0.0";
   pname = "azure-mgmt-privatedns";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08wdvfkk8jh90m3l4nz7knd5vikgfvsx70lk7mkhcvl0xj6gv76j";
+    sha256 = "b60f16e43f7b291582c5f57bae1b083096d8303e9d9958e2c29227a55cc27c45";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
   # no tests included
   doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , coverage
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # OSError: [Errno 98] Address already in use
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An unladen web framework for building APIs and app backends";
     homepage = "https://falconframework.org/";
     license = licenses.asl20;

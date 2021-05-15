@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   name = "ditaa-0.11.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/ditaa"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert ascii art diagrams into proper bitmap graphics";
     homepage = "https://github.com/stathissideris/ditaa";
     license = licenses.lgpl3;

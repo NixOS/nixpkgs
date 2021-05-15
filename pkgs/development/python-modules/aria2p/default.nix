@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , aria2, poetry, pytest, pytestcov, pytest_xdist, responses
 , asciimatics, loguru, requests, setuptools, websocket_client
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ asciimatics loguru requests setuptools websocket_client ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pawamoy/aria2p";
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
     license = licenses.isc;

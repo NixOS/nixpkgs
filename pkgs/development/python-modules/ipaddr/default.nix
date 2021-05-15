@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1ml8r8z3f0mnn381qs1snbffa920i9ycp6mm2am1d3aqczkdz4j0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google's IP address manipulation library";
     homepage = "https://github.com/google/ipaddr-py";
     license = licenses.asl20;

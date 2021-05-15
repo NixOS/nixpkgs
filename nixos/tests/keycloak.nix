@@ -10,7 +10,7 @@ let
     { pkgs, databaseType, ... }:
     {
       name = "keycloak";
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         maintainers = [ talyz ];
       };
 
@@ -20,6 +20,7 @@ let
           services.keycloak = {
             enable = true;
             inherit frontendUrl databaseType initialAdminPassword;
+            databaseUsername = "bogus";
             databasePasswordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
           };
           environment.systemPackages = with pkgs; [

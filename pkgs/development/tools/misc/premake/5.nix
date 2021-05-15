@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, Foundation, readline }:
+{ lib, stdenv, fetchFromGitHub, Foundation, readline }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "premake5";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://premake.github.io";
     description = "A simple build configuration and project generation tool using lua";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = platforms.darwin ++ platforms.linux;
   };
 }

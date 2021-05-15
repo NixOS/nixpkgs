@@ -10,15 +10,12 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.4.1";
+  version = "4.4.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1bmmfvmawnlihbqkksdrwxfkaip4nfsi97w83fmvkyxl4jk715vr";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
-
-  # *somtimes* fails with can't find ui_manager.h, also see https://github.com/NixOS/nixpkgs/issues/35359
-  enableParallelBuilding = false;
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 
@@ -51,6 +48,6 @@ mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 }

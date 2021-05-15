@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook,
   vapoursynth, nasm, fftwFloat
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lngkvxnzn82rz558nvl96rvclrck07ja1pny7wcfixp9b68ppkn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoreconfHook
     nasm vapoursynth fftwFloat
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--libdir=$(out)/lib/vapoursynth" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of filters for motion estimation and compensation";
     homepage = "https://github.com/dubhater/vapoursynth-mvtools";
     license  = licenses.gpl2;

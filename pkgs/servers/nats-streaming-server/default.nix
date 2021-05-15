@@ -4,14 +4,14 @@ with lib;
 
 buildGoPackage rec {
   pname   = "nats-streaming-server";
-  version = "0.17.0";
+  version = "0.21.1";
   goPackagePath = "github.com/nats-io/${pname}";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "nats-io";
     repo   = pname;
-    sha256 = "1dla70k6rxg34qzspq0j12zcjk654jrf3gm7gd45w4qdg8h2fyyg";
+    sha256 = "sha256-GqnIGnXcOcfbAgUruVxsTSvi6pH1E3QugEmZr3tPiIY=";
   };
 
   meta = {

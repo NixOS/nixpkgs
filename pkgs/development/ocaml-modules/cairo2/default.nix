@@ -1,18 +1,20 @@
-{ stdenv, lib, fetchurl, buildDunePackage, ocaml
-, pkgconfig, cairo
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator
+, pkg-config, cairo
 }:
 
 buildDunePackage rec {
   pname = "cairo2";
   version = "0.6.1";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
     sha256 = "1ik4qf4b9443sliq2z7x9acd40rmzvyzjh3bh98wvjklxbb84a9i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cairo ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ cairo dune-configurator ];
 
   doCheck = !(stdenv.isDarwin
   # https://github.com/Chris00/ocaml-cairo/issues/19

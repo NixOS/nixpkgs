@@ -87,21 +87,27 @@ diff -u pam_ssh_agent_auth-0.10.3-orig/pam_ssh_agent_auth.c pam_ssh_agent_auth-0
  
      /*
       * PAM_USER and PAM_RUSER do not necessarily have to get set by the calling application, and we may be unable to divine the latter.
-@@ -187,16 +184,17 @@
+@@ -184,5 +181,5 @@
       */
  
      if(user && strlen(ruser) > 0) {
 -        pamsshagentauth_verbose("Attempting authentication: `%s' as `%s' using %s", ruser, user, authorized_keys_file);
 +        pamsshagentauth_verbose("Attempting authentication: `%s' as `%s' using %s", ruser, user, authorized_keys_file_input);
  
+@@ -201,3 +197,3 @@
+                 retval = PAM_SUCCESS;
+-                pamsshagentauth_logit("Authenticated (sshd): `%s' as `%s' using %s", ruser, user, authorized_keys_file);
++                pamsshagentauth_logit("Authenticated (sshd): `%s' as `%s' using %s", ruser, user, authorized_keys_file_input);
+ 
+@@ -211,11 +208,12 @@
          /*
           * this pw_uid is used to validate the SSH_AUTH_SOCK, and so must be the uid of the ruser invoking the program, not the target-user
           */
 -        if(pamsshagentauth_find_authorized_keys(user, ruser, servicename)) { /* getpwnam(ruser)->pw_uid)) { */
--            pamsshagentauth_logit("Authenticated: `%s' as `%s' using %s", ruser, user, authorized_keys_file);
+-            pamsshagentauth_logit("Authenticated (agent): `%s' as `%s' using %s", ruser, user, authorized_keys_file);
 +        const char *key_file;
 +        if((key_file = pamsshagentauth_find_authorized_keys(user, ruser, servicename))) { /* getpwnam(ruser)->pw_uid)) { */
-+            pamsshagentauth_logit("Authenticated: `%s' as `%s' using %s", ruser, user, key_file);
++            pamsshagentauth_logit("Authenticated (agent): `%s' as `%s' using %s", ruser, user, key_file);
              retval = PAM_SUCCESS;
          } else {
 -            pamsshagentauth_logit("Failed Authentication: `%s' as `%s' using %s", ruser, user, authorized_keys_file);

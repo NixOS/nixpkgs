@@ -5,11 +5,24 @@ with lib;
 let
   cfg = config.services.uwsgi;
 
+  isEmperor = cfg.instance.type == "emperor";
+
+  imperialPowers =
+    [
+      # spawn other user processes
+      "CAP_SETUID" "CAP_SETGID"
+      "CAP_SYS_CHROOT"
+      # transfer capabilities
+      "CAP_SETPCAP"
+      # create other user sockets
+      "CAP_CHOWN"
+    ];
+
   buildCfg = name: c:
     let
       plugins =
         if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
-        then throw "`plugins` attribute in UWSGI configuration contains plugins not in config.services.uwsgi.plugins"
+        then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
         else c.plugins or cfg.plugins;
 
       hasPython = v: filter (n: n == "python${v}") plugins != [];
@@ -18,7 +31,7 @@ let
 
       python =
         if hasPython2 && hasPython3 then
-          throw "`plugins` attribute in UWSGI configuration shouldn't contain both python2 and python3"
+          throw "`plugins` attribute in uWSGI configuration shouldn't contain both python2 and python3"
         else if hasPython2 then cfg.package.python2
         else if hasPython3 then cfg.package.python3
         else null;
@@ -43,7 +56,7 @@ let
                       oldPaths = filter (x: x != null) (map getPath env');
                   in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${pythonEnv}/bin" ];
               }
-          else if c.type == "emperor"
+          else if isEmperor
             then {
               emperor = if builtins.typeOf c.vassals != "set" then c.vassals
                         else pkgs.buildEnv {
@@ -51,7 +64,7 @@ let
                           paths = mapAttrsToList buildCfg c.vassals;
                         };
             } // removeAttrs c [ "type" "vassals" ]
-          else throw "`type` attribute in UWSGI configuration should be either 'normal' or 'emperor'";
+          else throw "`type` attribute in uWSGI configuration should be either 'normal' or 'emperor'";
       };
 
     in pkgs.writeTextDir "${name}.json" (builtins.toJSON uwsgiCfg);
@@ -79,7 +92,7 @@ in {
       };
 
       instance = mkOption {
-        type =  with lib.types; let
+        type =  with types; let
           valueType = nullOr (oneOf [
             bool
             int
@@ -137,31 +150,66 @@ in {
       user = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = "User account under which uwsgi runs.";
+        description = "User account under which uWSGI runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = "Group account under which uwsgi runs.";
+        description = "Group account under which uWSGI runs.";
+      };
+
+      capabilities = mkOption {
+        type = types.listOf types.str;
+        apply = caps: caps ++ optionals isEmperor imperialPowers;
+        default = [ ];
+        example = literalExample ''
+          [
+            "CAP_NET_BIND_SERVICE" # bind on ports <1024
+            "CAP_NET_RAW"          # open raw sockets
+          ]
+        '';
+        description = ''
+          Grant capabilities to the uWSGI instance. See the
+          <literal>capabilities(7)</literal> for available values.
+          <note>
+            <para>
+              uWSGI runs as an unprivileged user (even as Emperor) with the minimal
+              capabilities required. This option can be used to add fine-grained
+              permissions without running the service as root.
+            </para>
+            <para>
+              When in Emperor mode, any capability to be inherited by a vassal must
+              be specified again in the vassal configuration using <literal>cap</literal>.
+              See the uWSGI <link
+              xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
+              for more information.
+            </para>
+          </note>
+        '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = optional (cfg.runDir != "/run/uwsgi") ''
+      d ${cfg.runDir} 775 ${cfg.user} ${cfg.group}
+    '';
+
     systemd.services.uwsgi = {
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -p ${cfg.runDir}
-        chown ${cfg.user}:${cfg.group} ${cfg.runDir}
-      '';
       serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
         Type = "notify";
-        ExecStart = "${cfg.package}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${buildCfg "server" cfg.instance}/server.json";
+        ExecStart = "${cfg.package}/bin/uwsgi --json ${buildCfg "server" cfg.instance}/server.json";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         NotifyAccess = "main";
         KillSignal = "SIGQUIT";
+        AmbientCapabilities = cfg.capabilities;
+        CapabilityBoundingSet = cfg.capabilities;
+        RuntimeDirectory = mkIf (cfg.runDir == "/run/uwsgi") "uwsgi";
       };
     };
 

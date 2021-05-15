@@ -1,30 +1,23 @@
-{stdenv, fetchurl, coq, unzip}:
+{lib, fetchzip, mkCoqDerivation, coq, version ? null }:
 
-stdenv.mkDerivation rec {
+with lib; mkCoqDerivation {
+  pname = "heq";
+  repo = "Heq";
+  owner = "gil";
+  domain = "mpi-sws.org";
+  inherit version fetcher;
+  defaultVersion = if versions.isLt "8.8" coq.coq-version then "0.92" else null;
+  release."0.92".sha256 = "0cf8y6728n81wwlbpq3vi7l2dbzi7759klypld4gpsjjp1y1fj74";
 
-  name = "coq-heq-${coq.coq-version}-${version}";
-  version = "0.92";
-
-  src = fetchurl {
-    url = "https://www.mpi-sws.org/~gil/Heq/download/Heq-${version}.zip";
-    sha256 = "03y71c4qs6cmy3s2hjs05g7pcgk9sqma6flj15394yyxbvr9is1p";
-  };
-
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 unzip ];
+  mlPlugin = true;
   propagatedBuildInputs = [ coq ];
 
+  extraInstallFlags = [ "COQLIB=$out/lib/coq/${coq.coq-version}" ];
   preBuild = "cd src";
 
-  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}" ];
-
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://www.mpi-sws.org/~gil/Heq/";
     description = "Heq : a Coq library for Heterogeneous Equality";
     maintainers = with maintainers; [ jwiegley ];
-    platforms = coq.meta.platforms;
-  };
-
-  passthru = {
-    compatibleCoqVersions = v: !stdenv.lib.versionAtLeast v "8.8";
   };
 }

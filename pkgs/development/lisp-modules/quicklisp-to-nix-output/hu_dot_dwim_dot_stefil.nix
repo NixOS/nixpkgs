@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hu_dot_dwim_dot_stefil'';
-  version = ''20200218-darcs'';
+  baseName = "hu_dot_dwim_dot_stefil";
+  version = "20200218-darcs";
 
   parasites = [ "hu.dwim.stefil/test" ];
 
-  description = ''A Simple Test Framework In Lisp.'';
+  description = "A Simple Test Framework In Lisp.";
 
   deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.stefil/2020-02-18/hu.dwim.stefil-20200218-darcs.tgz'';
-    sha256 = ''16p25pq9fhk0dny6r43yl9z24g6qm6dag9zf2cila9v9jh3r76qf'';
+    url = "http://beta.quicklisp.org/archive/hu.dwim.stefil/2020-02-18/hu.dwim.stefil-20200218-darcs.tgz";
+    sha256 = "16p25pq9fhk0dny6r43yl9z24g6qm6dag9zf2cila9v9jh3r76qf";
   };
 
   packageName = "hu.dwim.stefil";

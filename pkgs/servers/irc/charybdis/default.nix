@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, openssl, gnutls }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flex, openssl, gnutls }:
 
 stdenv.mkDerivation rec {
   name = "charybdis-4.1.2";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace include/defaults.h --replace 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/charybdis'
   '';
 
   autoreconfPhase = "sh autogen.sh";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex ];
   buildInputs = [ openssl gnutls ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IRCv3 server designed to be highly scalable";
     homepage    = "https://github.com/charybdis-ircd/charybdis";
     license     = licenses.gpl2;

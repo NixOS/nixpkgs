@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # Fails to generate machine.h in time.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
     license = licenses.gpl2Plus;

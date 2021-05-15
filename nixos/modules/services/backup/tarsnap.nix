@@ -29,13 +29,7 @@ in
 
   options = {
     services.tarsnap = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable periodic tarsnap backups.
-        '';
-      };
+      enable = mkEnableOption "periodic tarsnap backups";
 
       keyfile = mkOption {
         type = types.str;
@@ -279,7 +273,8 @@ in
           Tarsnap archive configurations. Each attribute names an archive
           to be created at a given time interval, according to the options
           associated with it. When uploading to the tarsnap server,
-          archive names are suffixed by a 1 second resolution timestamp.
+          archive names are suffixed by a 1 second resolution timestamp,
+          with the format <literal>%Y%m%d%H%M%S</literal>.
 
           For each member of the set is created a timer which triggers the
           instanced <literal>tarsnap-archive-name</literal> service unit. You may use
@@ -359,7 +354,7 @@ in
 
         script = let
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
-          lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
+          lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
 
         in if (cfg.cachedir != null) then ''

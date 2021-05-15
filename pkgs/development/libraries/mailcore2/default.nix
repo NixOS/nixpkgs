@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
-, libuchardet, pkgconfig, glib, html-tidy, libxml2, libuuid, openssl
+, libuchardet, pkg-config, glib, html-tidy, libxml2, libuuid, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "0a69q11z194fdfwyazjyyylx57sqs9j4lz7jwh5qcws8syqgb23z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    libetpan cmake icu cyrus_sasl libctemplate libuchardet glib
+    libetpan icu cyrus_sasl libctemplate libuchardet glib
     html-tidy libxml2 libuuid openssl
   ];
 

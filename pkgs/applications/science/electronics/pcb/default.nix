@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gtk2
 , bison
 , intltool
@@ -21,15 +21,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pcb";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcb/${pname}-${version}.tar.gz";
-    sha256 = "0pbfyfadbia1jf9ywkf02j8mfdh8c3mj390c2jdqnl70vcdszvhw";
+    sha256 = "sha256-roUvRq+Eq6f1HYE/uRb8f82+6kP3E08VBQcCThdD+14=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     bison
     intltool
     flex
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--disable-update-desktop-database"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Printed Circuit Board editor";
     homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];

@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkgconfig, sqlite }:
+{ lib, stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "libcangjie";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0i5svvcx099fc9hh5dvr3gpb1041v6vn5fnylxy82zjy239114lg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf libtool m4 sqlite ];
 
   configureScript = "./autogen.sh";
-  
+
   preConfigure = ''
     find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
   '';
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       libcangjie is a library implementing the Cangjie input method.
     '';
     homepage = "http://cangjians.github.io/projects/libcangjie/";
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.linquize ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.linquize ];
+    platforms = lib.platforms.all;
   };
 }

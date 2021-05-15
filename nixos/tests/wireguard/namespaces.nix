@@ -17,7 +17,7 @@ in
 
 import ../make-test-python.nix ({ pkgs, lib, ... } : {
   name = "wireguard-with-namespaces";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ asymmetric ];
   };
 

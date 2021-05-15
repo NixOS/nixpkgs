@@ -12,6 +12,7 @@
 , sympy
 , matplotlib
 , reportlab
+, sphinx
 , pytest
 , pytest-randomly
 , glibcLocales
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.14.0";
+  version = "4.21.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "0aiaxjg2v2391gxnhp4nvmgfb3ygm6x7n080s5mnkfjq2bq319in";
+    sha256 = "1x9qrg6ppqhm5214ymwvn0r34qdz8pqvyxd0sj7rkp06wa757z2i";
   };
 
   # all dependencies are optional, but
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     matplotlib
     # pens
     reportlab
+    sphinx
   ];
 
   preCheck = ''
@@ -65,9 +67,10 @@ buildPythonPackage rec {
       -k 'not ttcompile_timestamp_calcs and not recalc_timestamp'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

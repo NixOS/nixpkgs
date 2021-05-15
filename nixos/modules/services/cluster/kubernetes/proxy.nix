@@ -25,7 +25,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes proxy extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {

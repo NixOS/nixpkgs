@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, PyStemmer, fetchPypi }:
+{ lib, buildPythonPackage, PyStemmer, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "snowballstemmer";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df3bac3df4c2c01363f3dd2cfa78cce2840a79b9f1c2d2de9ce8d31683992f52";
+    sha256 = "e997baa4f2e9139951b6f4c631bad912dfd3c792467e2f03d7239464af90e914";
   };
 
   # No tests included
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ PyStemmer ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
     homepage = "http://sigal.saimon.org/en/latest/index.html";
     license = licenses.bsd3;

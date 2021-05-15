@@ -1,23 +1,26 @@
-{ fetchurl, stdenv, ant, jdk, runtimeShell }:
+{ fetchurl, lib, stdenv, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "fop";
-  version = "2.1";
+  version = "2.6";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
-    sha256 = "165rx13q47l6qc29ppr7sg1z26vw830s3rkklj5ap7wgvy0ivbz5";
+    sha256 = "145qph3c0m4bmb342qxq1hwsg594lndmfs9ga1v7pk53s34sckq8";
   };
 
   buildInputs = [ ant jdk ];
 
-  buildPhase = "ant";
+  # build only the "package" target, which generates the fop command.
+  buildPhase = ''
+     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+     ant -f fop/build.xml package
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/share/doc/fop
-
-    cp build/*.jar lib/*.jar $out/lib/
-    cp -r README examples/ $out/share/doc/fop/
+    cp fop/build/*.jar fop/lib/*.jar $out/lib/
+    cp -r README fop/examples/ $out/share/doc/fop/
 
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/fop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML formatter driven by XSL Formatting Objects (XSL-FO)";
     longDescription = ''
       FOP is a Java application that reads a formatting object tree and then

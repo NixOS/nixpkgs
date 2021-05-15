@@ -9,7 +9,7 @@ let
 in
 {
   name = "cagebreak";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ berbiche ];
   };
 

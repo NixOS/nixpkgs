@@ -1,44 +1,37 @@
-{ stdenv, fetchFromGitHub, python27Packages, geoip }:
+{ lib, fetchFromGitHub, python3Packages, gettext, gdk-pixbuf
+, gobject-introspection, gtk3, wrapGAppsHook }:
 
-with stdenv.lib;
+with lib;
 
-python27Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "1.4.1";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
     repo = "nicotine-plus";
-    rev = "4e057d64184885c63488d4213ade3233bd33e67b";
-    sha256 = "11j2qm67sszfqq730czsr2zmpgkghsb50556ax1vlpm7rw3gm33c";
+    rev = version;
+    sha256 = "sha256-NL6TXFRB7OeqNEfdANkEqh+MCOF1+ehR+6RO1XsIix8=";
   };
 
-  propagatedBuildInputs = with python27Packages; [
-    pygtk
-    miniupnpc
-    mutagen
-    notify
-    (GeoIP.override { inherit geoip; })
-  ];
+  nativeBuildInputs = [ gettext wrapGAppsHook ];
 
-  # Insert real docs directory.
-  # os.getcwd() is not needed
-  postPatch = ''
-    substituteInPlace ./pynicotine/gtkgui/frame.py \
-      --replace "paths.append(os.getcwd())" "paths.append('"$out"/doc')"
-  '';
+  propagatedBuildInputs = [ gtk3 gdk-pixbuf gobject-introspection ]
+    ++ (with python3Packages; [ pygobject3 ]);
 
-  postFixup = ''
-    mkdir -p $out/doc/
-    mv ./doc/NicotinePlusGuide $out/doc/
+  postInstall = ''
     mv $out/bin/nicotine $out/bin/nicotine-plus
+    substituteInPlace $out/share/applications/org.nicotine_plus.Nicotine.desktop \
+      --replace "Exec=nicotine" "Exec=$out/bin/nicotine-plus"
   '';
+
+  doCheck = false;
 
   meta = {
     description = "A graphical client for the SoulSeek peer-to-peer system";
     homepage = "https://www.nicotine-plus.org";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ klntsky ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ehmry klntsky ];
     platforms = platforms.unix;
   };
 }

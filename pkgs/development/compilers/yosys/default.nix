@@ -1,11 +1,12 @@
 { stdenv
+, lib
 , abc-verifier
 , bash
 , bison
 , fetchFromGitHub
 , flex
 , libffi
-, pkgconfig
+, pkg-config
 , protobuf
 , python3
 , readline
@@ -33,32 +34,31 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+3675";
+  version = "0.9+4052";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "71ca9a825309635511b64b3ec40e5e5e9b6ad49b";
-    sha256 = "03jlhfvm5rxx8yybf94nqd3ld2y6brp8r0k6gfi56chv3iqqavy3";
+    rev    = "687f381b6985d9dda7e11535628e2fafff267af5";
+    sha256 = "15lcj798ckh9zwvdqb5gnvicilsxjyxv01gcviijg310hq62n7vf";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
+  nativeBuildInputs = [ pkg-config bison flex ];
+  buildInputs = [ tcl readline libffi python3 protobuf zlib ];
 
   makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
-  patchPhase = ''
+  patches = [
+    ./plugin-search-dirs.patch
+  ];
+
+  postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'CXX = clang' "" \
-      --replace 'LD = clang++' 'LD = $(CXX)' \
-      --replace 'CXX = gcc' "" \
-      --replace 'LD = gcc' 'LD = $(CXX)' \
-      --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
-    substituteInPlace ./misc/yosys-config.in \
-      --replace '/bin/bash' '${bash}/bin/bash'
-    patchShebangs tests
+
+    chmod +x ./misc/yosys-config.in
+    patchShebangs tests ./misc/yosys-config.in
   '';
 
   preBuild = let
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       exit 1
     fi
 
-    if ! grep -q "YOSYS_VER := ${version}" Makefile; then
+    if ! grep -q "YOSYS_VER := $version" Makefile; then
       echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (${version}), failing."
       exit 1
     fi
@@ -96,11 +96,20 @@ stdenv.mkDerivation rec {
   postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
   postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
 
-  meta = with stdenv.lib; {
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
     description = "Open RTL synthesis framework and tools";
     homepage    = "http://www.clifford.at/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
+    #In file included from kernel/driver.cc:20:
+    #./kernel/yosys.h:42:10: fatal error: 'map' file not found
+    ##include <map>
+
+    #https://github.com/YosysHQ/yosys/issues/681
+    #https://github.com/YosysHQ/yosys/issues/2011
+    broken = stdenv.isDarwin;
   };
 }

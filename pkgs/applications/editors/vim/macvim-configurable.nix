@@ -1,4 +1,4 @@
-{ stdenv, callPackage, vimUtils, buildEnv, makeWrapper }:
+{ lib, stdenv, callPackage, vimUtils, buildEnv, makeWrapper }:
 
 let
   macvim = callPackage ./macvim.nix { inherit stdenv; };
@@ -12,7 +12,6 @@ let
     # sourcing of the user's vimrc. Use `customRC = "source $HOME/.vim/vimrc"`
     # if you want to preserve that behavior.
     configure = let
-      inherit (stdenv) lib;
       doConfig = config: let
         vimrcConfig = config // {
           # always source the bundled system vimrc
@@ -30,7 +29,7 @@ let
           "/Applications/MacVim.app/Contents/MacOS"
           "/Applications/MacVim.app/Contents/bin"
         ];
-        buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper ];
         # We need to do surgery on the resulting app. We can't just make a wrapper for vim because this
         # is a GUI app. We need to copy the actual GUI executable image as AppKit uses the loaded image's
         # path to locate the bundle. We can use symlinks for other executables and resources though.

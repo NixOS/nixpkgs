@@ -6,15 +6,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.14.0";
+  version = "0.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06g1j5079ddl2sd3pxh2jg6g83b2z3l5hzbadiry2xg673dcncmb";
+    sha256 = "59c739edee7f3f2258e7c77989241698e356c552f5efb28bb46b478616888bf6";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ psutil pytest ];
+
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ psutil ];
 
   # Remove test QoL package from install_requires
   postPatch = ''

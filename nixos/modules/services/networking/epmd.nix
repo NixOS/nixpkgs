@@ -53,4 +53,6 @@ in
       };
     };
   };
+
+  meta.maintainers = teams.beam.members;
 }

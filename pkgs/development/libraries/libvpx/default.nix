@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -40,7 +40,7 @@
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
-  inherit (stdenv.lib) enableFeature optional optionals;
+  inherit (lib) enableFeature optional optionals;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -56,13 +56,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16xv6ambc82g14h1y0q1vyy57wp6j9fbp0nk0wd5csnrw407rhry";
+    sha256 = "sha256-EZP33U10fchyqy7Jr26vHgUUfWR6xtG3fcMWUII0m9w=";
   };
 
   postPatch = "patchShebangs .";
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''moveToOutput bin "$bin" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = "https://www.webmproject.org/";
     license     = licenses.bsd3;

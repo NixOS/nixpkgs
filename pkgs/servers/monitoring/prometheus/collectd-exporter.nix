@@ -1,22 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "collectd-exporter";
-  version = "0.3.1";
+  version = "0.5.0";
   rev = version;
 
   goPackagePath = "github.com/prometheus/collectd_exporter";
 
-  src= fetchFromGitHub {
-    inherit rev;
+  src = fetchFromGitHub {
+    rev = "v${version}";
     owner = "prometheus";
     repo = "collectd_exporter";
-    sha256 = "1p0kb7c8g0r0sp5a6xrx8vnwbw14hhwlqzk4n2xx2y8pvnbivajz";
+    sha256 = "0vb6vnd2j87iqxdl86j30dk65vrv4scprv200xb83203aprngqgh";
   };
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) collectd; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";
     homepage = "https://github.com/prometheus/collectd_exporter";
     license = licenses.asl20;

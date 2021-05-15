@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, bison, libpcap, libdnet, libnfnetlink, libnetfilter_queue}:
+{ lib, stdenv, fetchurl, flex, bison, libpcap, libdnet, libnfnetlink, libnetfilter_queue}:
 
 stdenv.mkDerivation rec {
   name = "daq-2.2.2";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";
     homepage = "https://www.snort.org";
-    maintainers = with stdenv.lib.maintainers; [ aycanirican ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ aycanirican ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

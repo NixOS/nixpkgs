@@ -180,6 +180,7 @@ in
       };
 
       name = mkOption {
+        type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
         description = "Name of the wiki.";

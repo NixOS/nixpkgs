@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     concatLists (
       mapAttrsToList (feat: enabled:
         optionals enabled (featureDeps."${feat}" or [])
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
     mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
     license = licenses.bsd2;

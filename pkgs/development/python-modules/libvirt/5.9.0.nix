@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchgit, pkgconfig, lxml, libvirt, nose }:
+{ lib, buildPythonPackage, fetchgit, pkg-config, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0qvr0s7yasswy1s5cvkm91iifk33pb8s7nbb38zznc46706b358r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libvirt lxml ];
 
   checkInputs = [ nose ];
@@ -18,7 +18,11 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    inherit libvirt;
+  };
+
+  meta = with lib; {
     homepage = "http://www.libvirt.org/";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;

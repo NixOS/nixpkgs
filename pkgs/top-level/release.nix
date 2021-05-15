@@ -173,13 +173,8 @@ let
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
-
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              # Temporarily disabled. The darwin bootstrap is transitioning the
-              # structure of bootstrap tools. The tools that are generated as
-              # part of the current package set cannot be unpacked in the same
-              # way as the tools used by the current package set.
-              # inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
             };
           };
 

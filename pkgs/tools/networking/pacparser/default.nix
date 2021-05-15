@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "pacparser";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to parse proxy auto-config (PAC) files";
     homepage = "http://pacparser.manugarg.com/";
     license = licenses.lgpl3;

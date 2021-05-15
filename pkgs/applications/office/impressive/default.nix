@@ -16,7 +16,8 @@ in stdenv.mkDerivation {
       sha256 = "1r7ihv41awnlnlry1kymb8fka053wdhzibfwcarn78rr3vs338vl";
     };
 
-    buildInputs = [ makeWrapper pythonEnv ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ pythonEnv ];
 
     configurePhase = ''
       # Let's fail at build time if the library we're substituting in doesn't
@@ -61,9 +62,9 @@ in stdenv.mkDerivation {
 
       homepage = "http://impressive.sourceforge.net/";
 
-      license = stdenv.lib.licenses.gpl2;
+      license = lib.licenses.gpl2;
 
       maintainers = with lib.maintainers; [ lheckemann ];
-      platforms = stdenv.lib.platforms.mesaPlatforms;
+      platforms = lib.platforms.mesaPlatforms;
     };
   }

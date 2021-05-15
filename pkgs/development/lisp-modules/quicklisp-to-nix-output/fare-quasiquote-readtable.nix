@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''fare-quasiquote-readtable'';
-  version = ''fare-quasiquote-20200925-git'';
+  baseName = "fare-quasiquote-readtable";
+  version = "fare-quasiquote-20200925-git";
 
-  description = ''Using fare-quasiquote with named-readtable'';
+  description = "Using fare-quasiquote with named-readtable";
 
   deps = [ args."fare-quasiquote" args."fare-utils" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz'';
-    sha256 = ''0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b'';
+    url = "http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz";
+    sha256 = "0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b";
   };
 
   packageName = "fare-quasiquote-readtable";

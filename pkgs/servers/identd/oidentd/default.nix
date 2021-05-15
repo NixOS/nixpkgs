@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "oidentd";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d5mqlknfywbx2bgj7ap7x6qzvz257hhqcqhy6zk45dqpsirdn7a";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configurable Ident protocol server";
     homepage = "https://oidentd.janikrabe.com/";
     license = licenses.gpl2;

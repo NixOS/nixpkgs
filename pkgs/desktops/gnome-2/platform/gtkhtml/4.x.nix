@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool
+{ stdenv, fetchurl, pkg-config, gtk3, intltool
 , GConf, enchant, isocodes, gnome-icon-theme, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ gsettings-desktop-schemas gtk3 gnome-icon-theme GConf ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ intltool enchant isocodes ];
 }

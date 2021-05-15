@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl }:
+{ lib, stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
   name = "tclx-${version}.${patch}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://tclx.sourceforge.net/";
     description = "Tcl extensions";
-    license = stdenv.lib.licenses.tcltk;
-    maintainers = with stdenv.lib.maintainers; [ kovirobi ];
+    license = lib.licenses.tcltk;
+    maintainers = with lib.maintainers; [ kovirobi ];
   };
 }

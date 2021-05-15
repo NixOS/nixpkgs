@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11}:
+{lib, stdenv, fetchurl, libX11}:
 
 stdenv.mkDerivation {
   name = "icbm3d-0.4";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.newbreedsoftware.com/icbm3d/";
     description = "3D vector-based clone of the atari game Missile Command";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

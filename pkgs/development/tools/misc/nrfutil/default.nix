@@ -1,6 +1,6 @@
-{ stdenv, python37Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-with python37Packages; buildPythonApplication rec {
+with python3Packages; buildPythonApplication rec {
   pname = "nrfutil";
   version = "6.1";
 
@@ -20,7 +20,7 @@ with python37Packages; buildPythonApplication rec {
     mkdir test-reports
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
     license = licenses.unfreeRedistributable;

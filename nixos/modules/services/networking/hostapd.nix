@@ -20,8 +20,8 @@ let
     ssid=${cfg.ssid}
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
-    ${optionalString (cfg.countryCode != null) ''country_code=${cfg.countryCode}''}
-    ${optionalString (cfg.countryCode != null) ''ieee80211d=1''}
+    ${optionalString (cfg.countryCode != null) "country_code=${cfg.countryCode}"}
+    ${optionalString (cfg.countryCode != null) "ieee80211d=1"}
 
     # logging (debug level)
     logger_syslog=-1
@@ -68,6 +68,7 @@ in
       interface = mkOption {
         default = "";
         example = "wlp2s0";
+        type = types.str;
         description = ''
           The interfaces <command>hostapd</command> will use.
         '';

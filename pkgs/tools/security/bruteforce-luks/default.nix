@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
 
 stdenv.mkDerivation rec {
   pname = "bruteforce-luks";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Cracks passwords of LUKS encrypted volumes";
     longDescription = ''

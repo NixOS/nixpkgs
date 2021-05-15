@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/myint/autoflake";
     description = "A simple program which removes unused imports and unused variables as reported by pyflakes";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls,
+{ lib, stdenv, fetchurl, libtool, groff, perl, pkg-config, python2, zlib, gnutls,
   libidn2, libunistring, nghttp2 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y4laraq37kw8hc8jlzgcw7y37bfd0n71q0sy3d3z6yg7zh2prxi";
   };
 
-  nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];
+  nativeBuildInputs = [ libtool groff perl pkg-config python2 ];
 
   buildInputs = [ gnutls zlib libidn2 libunistring nghttp2 ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "--without-librtmp"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of libcurl used by GNUnet";
     homepage    = "https://gnunet.org/en/gnurl.html";
     maintainers = with maintainers; [ vrthra ];

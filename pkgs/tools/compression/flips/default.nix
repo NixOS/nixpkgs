@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, libdivsufsort, pkg-config, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, gtk3, libdivsufsort, pkg-config, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   pname = "flips";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   buildPhase = "./make.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A patcher for IPS and BPS files";
     homepage = "https://github.com/Alcaro/Flips";
     license = licenses.gpl3Plus;

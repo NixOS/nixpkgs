@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, libbfd, libopcodes, libunwind, libblocksruntime
 }:
 
 let
   honggfuzz = stdenv.mkDerivation rec {
     pname = "honggfuzz";
-    version = "2.3.1";
+    version = "2.4";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
       rev = version;
-      sha256 = "0dcl5a5jykgfmnfj42vl7kah9k26wg38l2g6yfh5pssmlf0nax33";
+      sha256 = "sha256-sU5lmlfmvVWo4K96sI+xQsPfTMd1wsLbihcKI4aTj6g=";
     };
 
     postPatch = ''
@@ -43,9 +43,9 @@ let
         feedback-based coverage metrics.
       '';
       homepage    = "https://honggfuzz.dev/";
-      license     = stdenv.lib.licenses.asl20;
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux"];
-      maintainers = with stdenv.lib.maintainers; [ cpu ];
+      maintainers = with lib.maintainers; [ cpu ];
     };
   };
 in honggfuzz

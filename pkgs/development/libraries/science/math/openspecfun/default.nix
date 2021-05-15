@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran }:
+{ lib, stdenv, fetchurl, gfortran }:
 
 stdenv.mkDerivation {
   name = "openspecfun-0.5.3";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A collection of special mathematical functions";
     homepage = "https://github.com/JuliaLang/openspecfun";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.all;
   };
 }

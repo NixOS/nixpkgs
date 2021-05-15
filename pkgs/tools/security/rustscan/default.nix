@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, nmap, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, nmap, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
       --replace 'Command::new("nmap")' 'Command::new("${nmap}/bin/nmap")'
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   checkFlags = [
     "--skip=infer_ulimit_lowering_no_panic"
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=run_python_script"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
     license = licenses.gpl3Only;

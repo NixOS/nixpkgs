@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "konquest";
+  pname = "konquest";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kdelibs4support libkdegames qtquickcontrols ];
   meta = {

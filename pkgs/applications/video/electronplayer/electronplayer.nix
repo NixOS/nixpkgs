@@ -1,4 +1,4 @@
-{ appimageTools, stdenv, fetchurl }:
+{ appimageTools, lib, fetchurl }:
 let
   pname = "electronplayer";
   version = "2.0.8";
@@ -23,7 +23,7 @@ in appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An electron based web video services player";
     homepage = "https://github.com/oscartbeaumont/ElectronPlayer";
     license = licenses.mit;

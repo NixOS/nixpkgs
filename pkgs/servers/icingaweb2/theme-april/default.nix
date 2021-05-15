@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub }: with lib; stdenv.mkDerivation rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
+
+stdenv.mkDerivation rec {
   name = "icingaweb2-theme-april";
   version = "1.0.4";
 
@@ -14,7 +19,7 @@
     cp -r * "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Icingaweb2 theme for april fools";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-april";
     license = licenses.publicDomain;

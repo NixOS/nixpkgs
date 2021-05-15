@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages }:
+{ lib, fetchurl, python3Packages }:
 
 let version = "1.63";
 in python3Packages.buildPythonPackage {
@@ -11,7 +11,7 @@ in python3Packages.buildPythonPackage {
 
   propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit dbus-python jsmin ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-official desktop client for Slack";
     homepage = "https://github.com/raelgc/scudcloud";
     license = licenses.mit;

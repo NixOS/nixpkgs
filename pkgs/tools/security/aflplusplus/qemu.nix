@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, aflplusplus, python2, zlib, pkgconfig, glib, perl
+{ lib, stdenv, fetchurl, aflplusplus, python2, zlib, pkg-config, glib, perl
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   qemuName = "qemu-3.1.0";
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    python2 perl pkgconfig flex bison autoconf texinfo
+    python2 perl pkg-config flex bison autoconf texinfo
   ];
 
   buildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       "--localstatedir=/var"
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.qemu.org/";
     description = "Fork of QEMU with AFL++ instrumentation support";
     license = licenses.gpl2Plus;

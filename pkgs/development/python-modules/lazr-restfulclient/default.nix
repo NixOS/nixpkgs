@@ -8,6 +8,10 @@
 , setuptools
 , six
 , wadllib
+, fixtures
+, lazr-uri
+, pytestCheckHook
+, wsgi-intercept
 }:
 
 buildPythonPackage rec {
@@ -23,7 +27,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ distro httplib2 oauthlib setuptools six wadllib ];
 
-  doCheck = false; # requires to package lazr.restful, lazr.authentication, and wsgi_intercept
+  # E   ModuleNotFoundError: No module named 'lazr.uri'
+  doCheck = false;
+  checkInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
 
   pythonImportsCheck = [ "lazr.restfulclient" ];
 

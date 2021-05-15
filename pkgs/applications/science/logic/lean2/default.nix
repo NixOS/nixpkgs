@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
+{ lib, stdenv, fetchFromGitHub, cmake, gmp, mpfr, python2
 , gperftools, ninja, makeWrapper }:
 
 stdenv.mkDerivation {
@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1xv3j487zhh1zf2b4v19xzw63s2sgjhg8d62a0kxxyknfmdf3khl";
   };
 
-  buildInputs = [ gmp mpfr cmake python gperftools ninja makeWrapper ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake makeWrapper ninja ];
+  buildInputs = [ gmp mpfr python2 gperftools ];
 
   preConfigure = ''
     patchShebangs bin/leantags
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic and interactive theorem prover (version with HoTT support)";
     homepage    = "http://leanprover.github.io";
     license     = licenses.asl20;

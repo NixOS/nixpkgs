@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
 
 stdenv.mkDerivation {
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gallium.inria.fr/~fpottier/fix/";
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;

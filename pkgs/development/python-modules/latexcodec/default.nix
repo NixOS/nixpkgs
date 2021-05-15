@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "latexcodec";
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mcmtroffaes/latexcodec";
     description = "Lexer and codec to work with LaTeX code in Python";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
   };
 
 }

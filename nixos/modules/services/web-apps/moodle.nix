@@ -84,7 +84,7 @@ in
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" ];
         default = "mysql";
-        description = ''Database engine to use.'';
+        description = "Database engine to use.";
       };
 
       host = mkOption {

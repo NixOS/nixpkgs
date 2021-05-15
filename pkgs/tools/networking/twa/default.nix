@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     install -Dm 0644 README.md "$out/share/doc/twa/README.md"
 
     wrapProgram "$out/bin/twa" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ curl
+      --prefix PATH : ${lib.makeBinPath [ curl
                                                  host.dnsutils
                                                  jq
                                                  ncurses

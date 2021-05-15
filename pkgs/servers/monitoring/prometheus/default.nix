@@ -1,14 +1,18 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests }:
+{ stdenv, lib, go, buildGoModule, fetchFromGitHub, mkYarnPackage, nixosTests
+, fetchpatch
+}:
 
 let
-  version = "2.22.2";
+  version = "2.26.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "04pf3shdfd25wf8snkan5hzv1gjzazjw06i11xaamnc8gfahnzdv";
+    sha256 = "06zr10zx3f526wcxj77smcl8wk55mhlnikd0b8vbjl9yyb0qc5mz";
   };
+
+  goPackagePath = "github.com/prometheus/prometheus";
 
   webui = mkYarnPackage {
     src = "${src}/web/ui/react-app";
@@ -23,21 +27,23 @@ let
     installPhase = "mv build $out";
     distPhase = "true";
   };
-in buildGoPackage rec {
+in buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  goPackagePath = "github.com/prometheus/prometheus";
+  vendorSha256 = "0h14pmk74lxj7z39jb4xwvx3whwkaxn9686y23sgrpkra5sk6dbm";
+
+  excludedPackages = [ "documentation/prometheus-mixin" ];
 
   postPatch = ''
     ln -s ${webui.node_modules} web/ui/react-app/node_modules
     ln -s ${webui} web/ui/static/react
   '';
 
+  buildFlags = "-tags=builtinassets";
   buildFlagsArray = let
     t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
   in [
-    "-tags=builtinassets"
     ''
       -ldflags=
          -X ${t}.Version=${version}
@@ -49,8 +55,10 @@ in buildGoPackage rec {
     ''
   ];
 
+  # only run this in the real build, not during the vendor build
+  # this should probably be fixed in buildGoModule
   preBuild = ''
-    make -C go/src/${goPackagePath} assets
+    if [ -d vendor ]; then make assets; fi
   '';
 
   preInstall = ''

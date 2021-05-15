@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "libltc-1.3.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "173h9dgmain3nyrwk6q2d7yl4fnh4vacag4s2p01n5b7nyrkxrjh";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://x42.github.io/libltc/";
     description = "POSIX-C Library for handling Linear/Logitudinal Time Code (LTC)";
     license = licenses.lgpl3Plus;

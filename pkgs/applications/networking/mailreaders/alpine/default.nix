@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
+{lib, stdenv, fetchurl, ncurses, tcl, openssl, pam, libkrb5
 , openldap
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ncurses tcl openssl pam kerberos openldap
+    ncurses tcl openssl pam libkrb5 openldap
   ];
 
   hardeningDisable = [ "format" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-c-client-target=slx"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console mail reader";
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];

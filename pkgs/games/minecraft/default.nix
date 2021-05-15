@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , nixosTests
+, copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
@@ -38,10 +39,9 @@ let
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
     categories = "Game;";
-    fileValidation = false;
   };
 
-  envLibPath = stdenv.lib.makeLibraryPath [
+  envLibPath = lib.makeLibraryPath [
     curl
     libpulseaudio
     systemd
@@ -50,7 +50,7 @@ let
     libXxf86vm # needed only for versions <1.13
   ];
 
-  libPath = stdenv.lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath ([
     alsaLib
     atk
     cairo
@@ -88,11 +88,11 @@ in
 stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.17785";
+  version = "2.2.1441";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "1r70myf6hqcnkd6v2m2r8cpj060vsjdyp4rfw6d93vwsyqi90jkc";
+    sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
   };
 
   icon = fetchurl {
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
   buildInputs = [ gobject-introspection ];
 
   sourceRoot = ".";
@@ -110,11 +110,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt
     mv minecraft-launcher $out/opt
 
-    ${desktopItem.buildCommand}
     install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -134,13 +137,15 @@ stdenv.mkDerivation rec {
     # Do not create `GPUCache` in current directory
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${stdenv.lib.makeBinPath [ jre ]} \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${lib.getBin jre} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with stdenv.lib; {
+  desktopItems = [ desktopItem ];
+
+  meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];

@@ -1,0 +1,31 @@
+From e031b8be0fb2a22f953c034cdf08ca9befe130d2 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Sun, 11 Apr 2021 18:05:12 +0200
+Subject: [PATCH] closure_compiler: Use the Java binary from the system
+
+The bundled Java binary (third_party/jdk/current/bin/java) is missing in
+the tarball and we want to use the one from the system anyway.
+This reverts part of [0].
+
+[0]: https://chromium-review.googlesource.com/c/chromium/src/+/2778794
+---
+ third_party/closure_compiler/compiler.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/third_party/closure_compiler/compiler.py b/third_party/closure_compiler/compiler.py
+index 75690ceb9749..7b9c76f74290 100755
+--- a/third_party/closure_compiler/compiler.py
++++ b/third_party/closure_compiler/compiler.py
+@@ -13,8 +13,7 @@ import subprocess
+ 
+ 
+ _CURRENT_DIR = os.path.join(os.path.dirname(__file__))
+-_JAVA_PATH = os.path.join(_CURRENT_DIR, "..", "jdk", "current", "bin", "java")
+-assert os.path.isfile(_JAVA_PATH), "java only allowed in android builds"
++_JAVA_PATH = "java"
+ 
+ class Compiler(object):
+   """Runs the Closure compiler on given source files to typecheck them
+-- 
+2.20.1
+

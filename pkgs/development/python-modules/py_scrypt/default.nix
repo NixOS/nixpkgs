@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , openssl
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   buildInputs = [ openssl ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bindings for scrypt key derivation function library";
     homepage = "https://pypi.python.org/pypi/scrypt";
     maintainers = [];

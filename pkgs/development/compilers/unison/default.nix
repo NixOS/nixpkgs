@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, autoPatchelfHook
+{ lib, stdenv, fetchurl, autoPatchelfHook
 , ncurses5, zlib, gmp
+, makeWrapper
+, less
 }:
 
 stdenv.mkDerivation rec {
@@ -23,15 +25,16 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
+    wrapProgram $out/bin/ucm --prefix PATH ":" "${lib.makeBinPath [ less ]}";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];

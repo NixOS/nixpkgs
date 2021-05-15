@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , persistent
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "7ce4a5eb5c135bcb5c06b5bd1ca6fd7fd39d8631306182307ed8bc30d3033846";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable persistent components";
     homepage = "http://packages.python.org/BTrees";
     license = licenses.zpl21;

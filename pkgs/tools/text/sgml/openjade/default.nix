@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, opensp, perl }:
+{ lib, stdenv, fetchurl, opensp, perl }:
 
 stdenv.mkDerivation rec {
   name = "openjade-1.3.2";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An implementation of DSSSL, an ISO standard for formatting SGML (and XML) documents";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://openjade.sourceforge.net/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

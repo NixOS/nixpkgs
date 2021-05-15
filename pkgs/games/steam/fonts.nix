@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1cgygmwich5f1jhhbmbkkpnzasjl8gy36xln76n6r2gjh6awqfx0";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   sourceRoot = ".";
 

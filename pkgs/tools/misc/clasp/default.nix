@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "3.1.4";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp bin/clasp $out/bin/clasp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;

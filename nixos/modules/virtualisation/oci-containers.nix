@@ -59,6 +59,18 @@ let
         '';
         };
 
+        environmentFiles = mkOption {
+          type = with types; listOf path;
+          default = [];
+          description = "Environment files for this container.";
+          example = literalExample ''
+            [
+              /path/to/.env
+              /path/to/.env.secret
+            ]
+        '';
+        };
+
         log-driver = mkOption {
           type = types.str;
           default = "journald";
@@ -176,10 +188,10 @@ let
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
-            Use the same name as the attribute under <literal>virtualisation.oci-containers</literal>.
+            Use the same name as the attribute under <literal>virtualisation.oci-containers.containers</literal>.
           '';
           example = literalExample ''
-            virtualisation.oci-containers = {
+            virtualisation.oci-containers.containers = {
               node1 = {};
               node2 = {
                 dependsOn = [ "node1" ];
@@ -217,7 +229,7 @@ let
     environment = proxy_env;
 
     path =
-      if cfg.backend == "docker" then [ pkgs.docker ]
+      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
       else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
       else throw "Unhandled backend: ${cfg.backend}";
 
@@ -227,29 +239,31 @@ let
         ${cfg.backend} load -i ${container.imageFile}
         ''}
       '';
+
+    script = concatStringsSep " \\\n  " ([
+      "exec ${cfg.backend} run"
+      "--rm"
+      "--name=${escapeShellArg name}"
+      "--log-driver=${container.log-driver}"
+    ] ++ optional (container.entrypoint != null)
+      "--entrypoint=${escapeShellArg container.entrypoint}"
+      ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+      ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
+      ++ map (p: "-p ${escapeShellArg p}") container.ports
+      ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+      ++ map (v: "-v ${escapeShellArg v}") container.volumes
+      ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+      ++ map escapeShellArg container.extraOptions
+      ++ [container.image]
+      ++ map escapeShellArg container.cmd
+    );
+
+    preStop = "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
     postStop = "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
       StandardOutput = "null";
       StandardError = "null";
-      ExecStart = concatStringsSep " \\\n  " ([
-        "${config.system.path}/bin/${cfg.backend} run"
-        "--rm"
-        "--name=${name}"
-        "--log-driver=${container.log-driver}"
-      ] ++ optional (container.entrypoint != null)
-        "--entrypoint=${escapeShellArg container.entrypoint}"
-        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ map escapeShellArg container.extraOptions
-        ++ [container.image]
-        ++ map escapeShellArg container.cmd
-      );
-
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}"'';
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their

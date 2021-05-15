@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -8,17 +8,17 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "3.1.0";
+  version = "4.0.2";
   disabled = isPyPy || (!isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00bda1de275ed6fe81817902189c75dfd156b4fa29b44dc1f4620775d2f50cf7";
+    sha256 = "c615a9e9e378a7383b756b7e7a73c38b22aeb8967a8bfbffd4741f7ffd043c4d";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ujson";
     description = "Ultra fast JSON encoder and decoder for Python";
     license = licenses.bsd3;

@@ -5,7 +5,7 @@
 , callPackage
 
 , python3
-, imagemagick7
+, imagemagick
 , ghostscript
 , optipng
 , tesseract
@@ -65,7 +65,7 @@ let
 
     buildPhase = let
       # Paperless has explicit runtime checks that expect these binaries to be in PATH
-      extraBin = lib.makeBinPath [ imagemagick7 ghostscript optipng tesseract unpaper ];
+      extraBin = lib.makeBinPath [ imagemagick ghostscript optipng tesseract unpaper ];
     in ''
       ${python.interpreter} -m compileall $srcDir
 
@@ -111,14 +111,8 @@ let
     {
       pyocr = pyocrWithUserTesseract super;
 
-      # Paperless only supports Django 2.0
-      django = customPkgs.django_2_0;
-
       # Paperless is incompatible with factory_boy >= 3
       factory_boy = customPkgs.factory_boy_2_12_0;
-
-      # The current version of django_extensions is incompatible with django 2.0
-      django_extensions = customPkgs.django_extensions_2_2_8;
 
       # These are pre-release versions, hence they are private to this pkg
       django-filter = self.callPackage ./python-modules/django-filter.nix {};

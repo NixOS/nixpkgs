@@ -1,9 +1,4 @@
----
-title: iOS
-author: Sander van der Burg
-date: 2019-11-10
----
-# iOS
+# iOS {#ios}
 
 This component is basically a wrapper/workaround that makes it possible to
 expose an Xcode installation as a Nix package by means of symlinking to the

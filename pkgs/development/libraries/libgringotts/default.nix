@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, bzip2, libmcrypt, libmhash }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, bzip2, libmcrypt, libmhash }:
 
 stdenv.mkDerivation rec {
   pname = "libgringotts";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ldz1lyl1aml5ci1mpnys8dg6n7khpcs4zpycak3spcpgdsnypm7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib bzip2 libmcrypt libmhash ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small library to encapsulate data in an encrypted structure";
     homepage = "http://libgringotts.sourceforge.net/";
     license = licenses.gpl2Plus;

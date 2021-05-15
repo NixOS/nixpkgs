@@ -1,12 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLU, openssl, dbus, cups, pkg-config
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , alsaLib
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, flashplayerFix ? false, gdk-pixbuf
-, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2, gdk-pixbuf
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
@@ -108,10 +107,6 @@ stdenv.mkDerivation rec {
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
       }))
-    ++ lib.optional flashplayerFix (substituteAll {
-        src = ./dlopen-webkit-nsplugin.diff;
-        gtk = gtk2.out;
-      })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
         sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
@@ -199,7 +194,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
-  nativeBuildInputs = [ perl pkgconfig which ];
+  nativeBuildInputs = [ perl pkg-config which ];
 
   enableParallelBuilding = true;
 

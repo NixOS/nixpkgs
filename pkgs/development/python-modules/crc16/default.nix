@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "crc16";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "15nkx0pa4lskwin84flpk8fsw3jqg6wic6v3s83syjqg76h6my61";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/pycrc16/";
     description = "Python library for calculating CRC16";
     license = licenses.lgpl3;

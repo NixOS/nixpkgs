@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pidgin, libnotify, gdk-pixbuf, glib, dbus
+{ lib, stdenv, fetchurl, pkg-config, pidgin, libnotify, gdk-pixbuf, glib, dbus
 , dbus-glib }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin libnotify gdk-pixbuf glib dbus dbus-glib ];
 
   meta = {
     homepage = "https://github.com/novas0x2a/skype4pidgin";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     description = "Plugin to use a running skype account through pidgin";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

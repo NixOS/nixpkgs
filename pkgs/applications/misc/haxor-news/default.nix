@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, fetchpatch }:
+{ lib, fetchFromGitHub, python3, fetchpatch }:
 
 
 let
@@ -50,7 +50,7 @@ buildPythonApplication rec {
     ${python.interpreter} -m unittest discover -s tests -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";
     description = "Browse Hacker News like a haxor";
     license = licenses.asl20;

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkgconfig
+, pkg-config
 , asciidoctor
 , openssl
 , Security
@@ -11,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.22.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    hash = "sha256-4sM1xT/JQ+yM5tZkGwK7r0gUT5so9o1MnDJ7apZkRd4=";
+    hash = "sha256-i36MYTMkbSuWxxlWUDsyYMay/4Mg7M5jEFhHM60UrkM=";
   };
 
-  nativeBuildInputs = [ pkgconfig asciidoctor installShellFiles ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-LoNm2/6/FgTKp95ETODY39D8Ou+9X+IXIy625YW9AFI=";
+  cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
 
   checkInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];

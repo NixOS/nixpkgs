@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
+{ lib, stdenv, fetchurl, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
 
 let
   options = rec {
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clozure Common Lisp";
     homepage    = "https://ccl.clozure.com/";
     maintainers = with maintainers; [ raskin muflax tohl ];

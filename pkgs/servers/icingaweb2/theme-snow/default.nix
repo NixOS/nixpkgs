@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub }: with lib; stdenv.mkDerivation rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
+
+stdenv.mkDerivation rec {
   name = "icingaweb2-theme-snow";
   version = "1.0.0";
 
@@ -20,7 +25,7 @@
     cp -r * "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Snow theme for Icingaweb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-snow";
     license = licenses.publicDomain;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makeWrapper
+{ lib, stdenv, fetchurl, cmake, makeWrapper
 , llvm, clang-unwrapped
 , flex
 , zlib
@@ -27,19 +27,16 @@ stdenv.mkDerivation rec {
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
       lscpu ${util-linux}/bin/lscpu
   '';
-
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C program reducer";
     homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING

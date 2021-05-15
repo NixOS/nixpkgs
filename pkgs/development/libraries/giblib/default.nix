@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, imlib2 }:
+{ lib, stdenv, fetchurl, xlibsWrapper, imlib2 }:
 
 stdenv.mkDerivation rec {
   name = "giblib-1.2.4";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://linuxbrit.co.uk/giblib/";
     description = "wrapper library for imlib2, and other stuff";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

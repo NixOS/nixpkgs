@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, makeWrapper}:
+{ lib, stdenv, fetchurl, unzip, jdk, makeWrapper}:
 
 stdenv.mkDerivation {
   version = "4.3.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0axz7r30p34z5hgvdglznc82g7yvm3g56dv5190jixskx6ba58rs";
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   unpackCmd = "unzip -o $curSrc";  # tries to go interactive without -o
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/omegat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The free computer aided translation (CAT) tool for professionals";
     longDescription = ''
       OmegaT is a free and open source multiplatform Computer Assisted Translation

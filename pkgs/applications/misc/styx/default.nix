@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, caddy, asciidoctor
+{ lib, stdenv, fetchFromGitHub, caddy, asciidoctor
 , file, lessc, sass, multimarkdown, linkchecker
 , perlPackages, python27 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cp -r themes/* $themes
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "Nix based static site generator";
     maintainers  = with maintainers; [ ericsagnes ];
     homepage     = "https://styx-static.github.io/styx-site/";

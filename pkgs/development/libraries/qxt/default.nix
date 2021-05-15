@@ -1,9 +1,9 @@
-{ stdenv, which, coreutils, fetchzip, qt4 }:
+{ lib, stdenv, which, coreutils, fetchzip, qt4 }:
 
 stdenv.mkDerivation rec {
   pname = "qxt";
   version = "0.6.2";
-  
+
   src = fetchzip {
     url = "https://bitbucket.org/libqxt/libqxt/get/v${version}.tar.gz";
     sha256 = "0zmqfn0h8cpky7wgaaxlfh0l89r9r0isi87587kaicyap7a6kxwz";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
       classes to add functionality not readily available in the Qt toolkit by Qt
       Development Frameworks, Nokia.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ forkk ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ forkk ];
     broken = true;
   };
 }

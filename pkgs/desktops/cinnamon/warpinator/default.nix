@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib
 , gobject-introspection
 , meson
 , ninja
@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec  {
   version = "1.0.8";
 
   format = "other";
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -69,7 +68,7 @@ python3.pkgs.buildPythonApplication rec  {
     chmod -x+X $out/libexec/warpinator/*.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
     license = licenses.gpl3Plus;

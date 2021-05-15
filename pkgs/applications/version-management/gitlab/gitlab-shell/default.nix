@@ -1,32 +1,28 @@
-{ stdenv, fetchFromGitLab, buildGoPackage, ruby }:
+{ lib, fetchFromGitLab, buildGoModule, ruby }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitlab-shell";
-  version = "13.13.0";
+  version = "13.17.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1zx7x3g18xzw7fs7cayd20llxabv5r93m2mp6ixgr99ksvi6zix7";
+    sha256 = "sha256-j/80AIIJdRSisu2fNXcqazb4oIzAQP5CfxHX3l6yijY=";
   };
 
   buildInputs = [ ruby ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  goPackagePath = "gitlab.com/gitlab-org/gitlab-shell";
-  goDeps = ./deps.nix;
-
-  preBuild = ''
-    rm -rf "$NIX_BUILD_TOP/go/src/gitlab.com/gitlab-org/labkit/vendor"
-  '';
+  vendorSha256 = "sha256-/jJTMtS5fcbQroWuaPPfvYxy6znNS0FOXVN7IcE/spQ=";
 
   postInstall = ''
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $out/bin
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $out/
+    cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin
+    cp -r "$NIX_BUILD_TOP/source"/{support,VERSION} $out/
   '';
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH access and repository management app for GitLab";
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;

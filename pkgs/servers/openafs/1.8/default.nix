@@ -1,5 +1,5 @@
-{ stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
-, yacc , glibc, perl, kerberos, libxslt, docbook_xsl, file
+{ lib, stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
+, bison , glibc, perl, libkrb5, libxslt, docbook_xsl, file
 , docbook_xml_dtd_43, libtool_2
 , withDevdoc ? false, doxygen, dblatex # Extra developer documentation
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
@@ -8,7 +8,7 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 let
-  inherit (stdenv.lib) optional optionalString optionals;
+  inherit (lib) optional optionalString optionals;
 
 in stdenv.mkDerivation {
   pname = "openafs";
@@ -16,9 +16,9 @@ in stdenv.mkDerivation {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
-    which yacc ] ++ optionals withDevdoc [ doxygen dblatex ];
+    which bison ] ++ optionals withDevdoc [ doxygen dblatex ];
 
-  buildInputs = [ kerberos ncurses ];
+  buildInputs = [ libkrb5 ncurses ];
 
   patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
 
@@ -94,7 +94,7 @@ in stdenv.mkDerivation {
     rm -rf "$(pwd)" && mkdir "$(pwd)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     outputsToInstall = [ "out" "doc" "man" ];
     description = "Open AFS client";
     homepage = "https://www.openafs.org";

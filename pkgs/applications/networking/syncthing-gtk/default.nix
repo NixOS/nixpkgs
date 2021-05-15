@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
+{ lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
-, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
+, gnome, buildPythonApplication, dateutil, pyinotify, pygobject3
 , bcrypt, gobject-introspection, gsettings-desktop-schemas
 , pango, gdk-pixbuf, atk }:
 
@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3 librsvg libappindicator-gtk3
-    libnotify gnome3.adwaita-icon-theme
+    libnotify gnome.adwaita-icon-theme
     # Schemas with proxy configuration
     gsettings-desktop-schemas
   ];
@@ -55,7 +55,7 @@ buildPythonApplication rec {
     substituteInPlace syncthing-gtk.desktop --replace "/usr/bin/syncthing-gtk" "$out/bin/syncthing-gtk"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK3 & python based GUI for Syncthing";
     homepage = "https://github.com/syncthing/syncthing-gtk";
     license = licenses.gpl2;

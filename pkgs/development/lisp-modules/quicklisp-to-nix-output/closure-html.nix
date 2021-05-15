@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''closure-html'';
-  version = ''20180711-git'';
+  baseName = "closure-html";
+  version = "20180711-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."alexandria" args."babel" args."closure-common" args."flexi-streams" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/closure-html/2018-07-11/closure-html-20180711-git.tgz'';
-    sha256 = ''0ljcrz1wix77h1ywp0bixm3pb5ncmr1vdiwh8m1qzkygwpfjr8aq'';
+    url = "http://beta.quicklisp.org/archive/closure-html/2018-07-11/closure-html-20180711-git.tgz";
+    sha256 = "0ljcrz1wix77h1ywp0bixm3pb5ncmr1vdiwh8m1qzkygwpfjr8aq";
   };
 
   packageName = "closure-html";

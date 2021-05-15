@@ -1,5 +1,5 @@
 { version, sha256 }:
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
@@ -9,7 +9,7 @@
 , disableInitExecTls ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "jemalloc";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jemalloc.net";
     description = "General purpose malloc(3) implementation";
     longDescription = ''

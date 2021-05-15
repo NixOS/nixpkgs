@@ -1,16 +1,16 @@
-{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
+{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkg-config
 , gettext, systemd, perl, lib
 , enableSystemd ? true
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
 
   pname = "vdr";
-  version = "2.4.4";
+  version = "2.4.6";
 
   src = fetchgit {
     url = "git://git.tvdr.de/vdr.git";
-    rev = "V20404";
-    sha256 = "1fzghnp5mpcwn3a3fyk3w8h15z4f2cnc75247kvxj1c9069mgnwa";
+    rev = "V20406";
+    sha256 = "sha256-te9lMmnWpesv+np2gJUDL17pI0WyVxhUnoBsFSRtOco=";
   };
 
   enableParallelBuilding = true;
@@ -28,7 +28,7 @@
   nativeBuildInputs = [ perl ];
 
   # plugins uses the same build environment as vdr
-  propagatedNativeBuildInputs = [ pkgconfig gettext ];
+  propagatedNativeBuildInputs = [ pkg-config gettext ];
 
   installFlags = [
     "DESTDIR=$(out)"

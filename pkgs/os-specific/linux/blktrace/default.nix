@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libaio }:
+{ lib, stdenv, fetchurl, libaio }:
 
 stdenv.mkDerivation {
   name = "blktrace-1.2.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Block layer IO tracing mechanism";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

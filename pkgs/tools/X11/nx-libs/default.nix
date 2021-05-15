@@ -1,18 +1,18 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
-, libpng, libtool, libxml2, pkgconfig, which, xorg
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
+, libpng, libtool, libxml2, pkg-config, which, xorg
 , libtirpc
 }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
-  version = "3.5.99.25";
+  version = "3.5.99.26";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "01aqdwy0i4nxdyfa24bwnrqjz93q0idihdaqals2yjqpg160nwfc";
+    sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig which
+  nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
   buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
     xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs .
@@ -43,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

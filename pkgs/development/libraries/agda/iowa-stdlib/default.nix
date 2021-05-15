@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub }:
+{ lib, mkDerivation, fetchFromGitHub }:
 
 mkDerivation (rec {
   version = "1.5.0";
@@ -22,10 +22,10 @@ mkDerivation (rec {
   meta = {
     homepage = "https://github.com/cedille/ial";
     description = "Agda standard library developed at Iowa";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
     # broken since Agda 2.6.1
     broken = true;
-    maintainers = with stdenv.lib.maintainers; [ alexarice turion ];
+    maintainers = with lib.maintainers; [ alexarice turion ];
   };
 })

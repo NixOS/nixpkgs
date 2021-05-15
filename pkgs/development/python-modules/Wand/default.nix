@@ -1,30 +1,30 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, imagemagick7Big
+, imagemagickBig
 }:
 
 buildPythonPackage rec {
   pname = "Wand";
-  version = "0.6.4";
+  version = "0.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6aeb0183d94762b37a8cdee97174f38ae21e626d44f62f1e2f0ab48a35026e98";
+    sha256 = "540a2da5fb3ada1f0abf6968e0fa01ca7de6cd517f3be5c52d03a4fc8d54d75e";
   };
 
   postPatch = ''
     substituteInPlace wand/api.py --replace \
       "magick_home = os.environ.get('MAGICK_HOME')" \
-      "magick_home = '${imagemagick7Big}'"
+      "magick_home = '${imagemagickBig}'"
   '';
 
   # tests not included with pypi release
   doCheck = false;
 
-  passthru.imagemagick = imagemagick7Big;
+  passthru.imagemagick = imagemagickBig;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ licenses.mit ];

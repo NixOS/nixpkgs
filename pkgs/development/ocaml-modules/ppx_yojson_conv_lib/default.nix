@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";
   version = "0.14.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.02.3";
 
   src = fetchFromGitHub {

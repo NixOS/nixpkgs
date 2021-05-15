@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
+, cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
 
@@ -19,6 +19,12 @@ in mkDerivation {
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    # Load `/etc/profile` for `environment.variables` with zsh default shell.
+    # See: https://github.com/sddm/sddm/pull/1382
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e1dedeeab6de565e043f26ac16033e613c222ef9.patch";
+      sha256 = "sha256-OPyrUI3bbH+PGDBfoL4Ohb4wIvmy9TeYZhE0JxR/D58=";
+    })
   ];
 
   postPatch =
@@ -27,7 +33,7 @@ in mkDerivation {
       sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
 
   buildInputs = [
     libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd

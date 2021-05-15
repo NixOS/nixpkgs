@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libuuid }:
+{ lib, stdenv, fetchFromGitHub, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "lib" + pname + "-" + version;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -D -m644 guid.h "$out/include/guid.h"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight cross platform C++ GUID/UUID library";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];

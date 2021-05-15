@@ -14,10 +14,8 @@ let
     dir = "bin";
     src = ./command-not-found.pl;
     isExecutable = true;
-    inherit (pkgs) perl;
     inherit (cfg) dbPath;
-    perlFlags = concatStrings (map (path: "-I ${path}/${pkgs.perl.libPrefix} ")
-      [ pkgs.perlPackages.DBI pkgs.perlPackages.DBDSQLite pkgs.perlPackages.StringShellQuote ]);
+    perl = pkgs.perl.withPackages (p: [ p.DBDSQLite p.StringShellQuote ]);
   };
 
 in
@@ -80,6 +78,8 @@ in
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
               "$@"
+            else
+              return 127
             fi
           else
             # Indicate than there was an error so ZSH falls back to its default handler

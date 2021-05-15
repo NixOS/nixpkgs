@@ -4,6 +4,8 @@ buildDunePackage rec {
   version = "1.1";
   pname = "resource-pooling";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.06";
 
   src = fetchFromGitHub {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libelf, libpcap }:
+{ lib, stdenv, fetchFromGitHub, cmake, libelf, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "dynamips";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DDYNAMIPS_CODE=stable" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Cisco router emulator";
     longDescription = ''
       Dynamips is an emulator computer program that was written to emulate Cisco

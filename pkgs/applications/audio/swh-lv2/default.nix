@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
+{ lib, stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "swh-lv2";
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fftwSinglePrec lv2 ];
 
   installPhase = "make install-system";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://plugin.org.uk";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''

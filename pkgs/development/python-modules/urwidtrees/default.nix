@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , glibcLocales
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   checkInputs = [ glibcLocales ];
   LC_ALL="en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tree widgets for urwid";
     homepage = "https://github.com/pazz/urwidtrees";
     license = licenses.gpl3;

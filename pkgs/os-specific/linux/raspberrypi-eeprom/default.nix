@@ -1,15 +1,15 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, raspberrypi-tools
+, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
 }:
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-eeprom";
-  version = "unstable-2020-10-05";
+  version = "2021-03-18";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "718820bcebd21d4a619fa262d9b9cf3acbf110f8";
-    sha256 = "1277jsiyv34dqpandva8kxy1s0y5ql344pl9gk84avzp1mqjnv4g";
+    rev = "ff27ccf69403b01e337fc4ee6e7ae75244028cce";
+    sha256 = "1q1vlld0xxh9zinf5g0qa6jw1dggq93br938mvrfx3nb2aviiwcj";
   };
 
   buildInputs = [ python3 ];
@@ -28,14 +28,13 @@ stdenvNoCC.mkDerivation {
 
     cp rpi-eeprom-config rpi-eeprom-update $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
-    cp -r firmware/vl805 $out/bin
   '';
 
   fixupPhase = ''
     patchShebangs $out/bin
     wrapProgram $out/bin/rpi-eeprom-update \
       --set FIRMWARE_ROOT $out/share/rpi-eeprom \
-      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${raspberrypi-tools}/bin/vcmailbox"} \
+      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
       --prefix PATH : "${lib.makeBinPath ([
         binutils-unwrapped
         findutils
@@ -43,7 +42,7 @@ stdenvNoCC.mkDerivation {
         pciutils
         (placeholder "out")
       ] ++ lib.optionals stdenvNoCC.isAarch64 [
-        raspberrypi-tools
+        libraspberrypi
       ])}"
   '';
 

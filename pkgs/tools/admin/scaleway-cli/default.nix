@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "scaleway-cli";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "14likzp3hl04nq9nmpmh9m5zqjyspy5cyk20dkh03c1nhkd4vcnx";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;

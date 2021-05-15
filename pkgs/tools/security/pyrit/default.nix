@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers, ocl-icd }:
+{ lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers, ocl-icd }:
 
 let
   version = "2019-12-13";
@@ -32,7 +32,7 @@ python2Packages.buildPythonApplication rec {
   buildInputs = [ openssl zlib libpcap ];
   propagatedBuildInputs = [ cpyrit_opencl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/JPaulMora/Pyrit";
     description = "GPGPU-driven WPA/WPA2-PSK key cracker";
     license = licenses.gpl3;

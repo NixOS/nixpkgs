@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , click
 , colorama
 , enum34
@@ -11,7 +12,6 @@
 , pexpect
 , pythonAtLeast
 , pythonOlder
-, stdenv
 , substituteAll
 , tree
 , xclip
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   # Remove enum34 requirement if Python >= 3.4
-  postPatch = stdenv.lib.optionalString (pythonAtLeast "3.4") ''
+  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
     substituteInPlace requirements.txt --replace "enum34" ""
   '';
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     click
     colorama
     pexpect
-  ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+  ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   checkInputs = [ nose ];
 
@@ -74,11 +74,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Password manager pass in Python";
     homepage = "https://github.com/aviau/python-pass";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ jluttine ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "urlwatch-${version}";
+  pname = "urlwatch";
   version = "2.21";
 
   src = fetchFromGitHub {
@@ -23,7 +23,10 @@ python3Packages.buildPythonApplication rec {
     pyppeteer
   ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "A tool for monitoring webpages for updates";
     homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;

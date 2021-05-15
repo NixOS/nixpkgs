@@ -70,6 +70,7 @@ let
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/reproducible-builds.sh
       # TODO use lib.optional instead
       (if hasCC then cc else null)
     ];
@@ -82,6 +83,11 @@ let
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+    }
+    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
     }
     // {
       inherit name;
@@ -105,6 +111,8 @@ let
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+        export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
       ''
       # TODO this should be uncommented, but it causes stupid mass rebuilds. I
       # think the best solution would just be to fixup linux RPATHs so we don't
@@ -136,7 +144,7 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
+        isDarwin isLinux isSunOS isCygwin isBSD isFreeBSD isOpenBSD
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
@@ -151,9 +159,12 @@ let
         inherit lib config stdenv;
       }) mkDerivation;
 
-      # For convenience, bring in the library functions in lib/ so
-      # packages don't have to do that themselves.
-      inherit lib;
+      # Slated for removal in 21.11
+      lib = if config.allowAliases or true then builtins.trace
+        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
+         + " Please use `lib` instead."
+         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
+        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
 
       inherit fetchurlBoot;
 

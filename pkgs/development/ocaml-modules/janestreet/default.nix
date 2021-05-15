@@ -1,10 +1,10 @@
-{ janePackage, ocamlbuild, angstrom, cryptokit, ctypes,
-  magic-mime, ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re,
-  num, openssl
-, ppxlib
+{ self
+, openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
@@ -417,7 +417,12 @@ rec {
     pname = "async_ssl";
     hash = "1p83fzfla4rb820irdrz3f2hp8kq5zrhw47rqmfv6qydlca1bq64";
     propagatedBuildInputs = [ async ctypes openssl ];
-    meta.description = "Async wrappers for SSL";
+    meta = {
+      description = "Async wrappers for SSL";
+      # ctypes no longer works with dune 1
+      # dune 2 no longer supports jbuild
+      broken = true;
+    };
   };
 
   sexp_pretty = janePackage {

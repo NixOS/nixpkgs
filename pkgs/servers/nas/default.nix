@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imake, bison, flex, gccmakedep
+{ lib, stdenv, fetchurl, imake, bison, flex, gccmakedep
 , xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
 let
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     rm -r $out/nix
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network transparent, client/server audio transport system";
     homepage = "http://radscan.com/nas.html";
     license = licenses.mit;

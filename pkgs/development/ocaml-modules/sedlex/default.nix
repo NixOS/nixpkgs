@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, ocaml, findlib, gen, ppx_tools_versioned, ocaml-migrate-parsetree }:
+{ stdenv, lib, fetchzip, ocaml, findlib, gen, ppx_tools_versioned, ocaml-migrate-parsetree }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
     description = "An OCaml lexer generator for Unicode";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

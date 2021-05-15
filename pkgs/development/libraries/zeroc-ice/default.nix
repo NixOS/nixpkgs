@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     mv $out/share/ice $dev/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.zeroc.com/ice.html";
     description = "The internet communications engine";
     license = licenses.gpl2;

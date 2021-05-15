@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 let
   ARCH = {
@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.0p3";
+  version = "3.0p4";
 
   src = fetchurl {
-    url    = "http://picat-lang.org/download/picat30_3_src.tar.gz";
-    sha256 = "052w0vk2xfmky5nv280ysb8in6vaph7i79yvbddqmahzszarq5hw";
+    url    = "http://picat-lang.org/download/picat30_4_src.tar.gz";
+    sha256 = "1rwin44m7ni2h2v51sh2r8gj2k6wm6f86zgaylrria9jr57inpqj";
   };
 
   buildInputs = [ zlib ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildPhase = "cd emu && make -j $NIX_BUILD_CORES -f Makefile.$ARCH";
   installPhase = "mkdir -p $out/bin && cp picat $out/bin/picat";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logic-based programming langage";
     homepage    = "http://picat-lang.org/";
     license     = licenses.mpl20;

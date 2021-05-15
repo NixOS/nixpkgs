@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "memtester";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALLPATH=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A userspace utility for testing the memory subsystem for faults";
     homepage = "http://pyropus.ca/software/memtester/";
     license = licenses.gpl2;

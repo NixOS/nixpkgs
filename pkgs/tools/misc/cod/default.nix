@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "cod";
   version = "unstable-2020-09-10";
 
-  goPackagePath = "cod";
-
   src = fetchFromGitHub {
     owner = "dim-an";
     repo = pname;
@@ -15,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "1arllkiz1hk12hq5b2zpg3f8i9lxl66mil5sdv8gnhflmb37vbv3";
 
-  buildFlagsArray = [ "-ldflags=-X main.GitSha=${src.rev}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X main.GitSha=${src.rev}" ];
 
   doCheck = false;
 

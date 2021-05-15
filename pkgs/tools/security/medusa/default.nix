@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, freerdp, openssl, libssh2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, freerdp, openssl, libssh2 }:
 
 stdenv.mkDerivation rec {
   pname = "medusa-unstable";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freerdp openssl libssh2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jmk-foofus/medusa";
     description = "A speedy, parallel, and modular, login brute-forcer";
     license = licenses.gpl2;

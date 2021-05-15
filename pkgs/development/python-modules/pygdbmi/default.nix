@@ -7,15 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pygdbmi";
-  version = "0.9.0.2";
+  version = "0.10.0.0";
 
   src = fetchFromGitHub {
-    #inherit pname version;
-    #inherit pname version;
     owner = "cs01";
     repo = "pygdbmi";
     rev = version;
-    sha256 = "01isx7912dbalmc3xsafk1a1n6bzzfrjn2363djcq0v57rqii53d";
+    sha256 = "0a6b3zyxwdcb671c6lrwxm8fhvsbjh0m8hf1r18m9dha86laimjr";
   };
 
   checkInputs = [ gdb ];

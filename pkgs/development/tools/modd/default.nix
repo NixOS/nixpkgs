@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, stdenv }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
 buildGoPackage rec {
   pname = "modd";
@@ -11,7 +11,7 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/cortesi/modd";
   subPackages = [ "cmd/modd" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible developer tool that runs processes and responds to filesystem changes";
     homepage = "https://github.com/cortesi/modd";
     license = licenses.mit;

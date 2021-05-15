@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, libpng, boost, doxygen, cairomm, pkg-config, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
-  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
+  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkg-config perl asciidoc ];
 
   buildInputs = [
      libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = "http://www.k-3d.org/";
     platforms = platforms.linux;

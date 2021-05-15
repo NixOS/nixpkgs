@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , substituteAll
 , meson
@@ -12,7 +12,7 @@
 , coreutils
 , libsoup
 , libsecret
-, libhandy_0
+, libhandy
 , wrapGAppsHook
 , libgpgerror
 , json-glib
@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "42.5";
+  version = "42.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "1xgsd9a9y36lv6f2vjw2nxi9zj2zl1gv6rcyzkqajf91vgmxwf8k";
+    sha256 = "1q66wccnph78cp1r5mln2iq4bcqdrrchxq3c1pjrzkmzwc6l93gz";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libsecret
-    libhandy_0
+    libhandy
     libgpgerror
     json-glib
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     "-Dduplicity_command=${duplicity}/bin/duplicity"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \

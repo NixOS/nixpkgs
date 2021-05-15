@@ -11,14 +11,21 @@ let
     else if isBool v      then boolToString v
     else if isString v    then ''"${escape [''"''] v}"''
     else if isList v      then "[ " + concatMapStringsSep ", " toConf v + " ]"
+    else if isAttrs v     then "\n{\n" + convertAttrs v + "\n}"
     else abort "clight.toConf: unexpected type (v = ${v})";
 
-  clightConf = pkgs.writeText "clight.conf"
-    (concatStringsSep "\n" (mapAttrsToList
-      (name: value: "${toString name} = ${toConf value};")
-      (filterAttrs
-        (_: value: value != null)
-        cfg.settings)));
+  getSep = v:
+    if isAttrs v then ":"
+    else "=";
+
+  convertAttrs = attrs: concatStringsSep "\n" (mapAttrsToList
+    (name: value: "${toString name} ${getSep value} ${toConf value};")
+    attrs);
+
+  clightConf = pkgs.writeText "clight.conf" (convertAttrs
+    (filterAttrs
+      (_: value: value != null)
+      cfg.settings));
 in {
   options.services.clight = {
     enable = mkOption {
@@ -49,9 +56,10 @@ in {
     };
 
     settings = let
-      validConfigTypes = with types; either int (either str (either bool float));
+      validConfigTypes = with types; oneOf [ int str bool float ];
+      collectionTypes = with types; oneOf [ validConfigTypes (listOf validConfigTypes) ];
     in mkOption {
-      type = with types; attrsOf (nullOr (either validConfigTypes (listOf validConfigTypes)));
+      type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
       default = {};
       example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
       description = ''
@@ -69,10 +77,10 @@ in {
     services.upower.enable = true;
 
     services.clight.settings = {
-      gamma_temp = with cfg.temperature; mkDefault [ day night ];
+      gamma.temp = with cfg.temperature; mkDefault [ day night ];
     } // (optionalAttrs (config.location.provider == "manual") {
-      latitude = mkDefault config.location.latitude;
-      longitude = mkDefault config.location.longitude;
+      daytime.latitude = mkDefault config.location.latitude;
+      daytime.longitude = mkDefault config.location.longitude;
     });
 
     services.geoclue2.appConfig.clightc = {

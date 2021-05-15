@@ -171,6 +171,12 @@ in
         Username to use when connecting to an external or manually
         provisioned database; has no effect when a local database is
         automatically provisioned.
+
+        To use this with a local database, set <xref
+        linkend="opt-services.keycloak.databaseCreateLocally" /> to
+        <literal>false</literal> and create the database and user
+        manually. The database should be called
+        <literal>keycloak</literal>.
       '';
     };
 
@@ -565,7 +571,7 @@ in
         assertions = [
           {
             assertion = (cfg.databaseUseSSL && cfg.databaseType == "postgresql") -> (cfg.databaseCaCert != null);
-            message = ''A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL'';
+            message = "A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL";
           }
         ];
 

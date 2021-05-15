@@ -1,16 +1,16 @@
-{ buildPecl, lib, pkgs, pcre' }:
+{ buildPecl, lib, rdkafka, pcre' }:
 
 buildPecl {
   pname = "rdkafka";
 
-  version = "4.0.4";
-  sha256 = "18a8p43i2g93fv7qzvk2hk66z5iv0mk1rqn097x49bjigliv60mn";
+  version = "5.0.0";
+  sha256 = "sha256-Qy+6rkPczhdxFbDhcuzmUTLMPUXYZ0HaheDBhkh4FXs=";
 
-  buildInputs = [ pkgs.rdkafka pcre' ];
+  buildInputs = [ rdkafka pcre' ];
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
+      --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${rdkafka}'
   '';
 
   meta = with lib; {

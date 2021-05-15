@@ -1,4 +1,4 @@
-{ stdenv, curl, libGL, libX11, libXxf86dga, alsaLib, libXrandr, libXxf86vm, libXext, fetchFromGitHub }:
+{ lib, stdenv, curl, libGL, libX11, libXxf86dga, alsaLib, libXrandr, libXxf86vm, libXext, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "Quake3e";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp build/*/*x64 $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ec-/Quake3e";
     description = "Improved Quake III Arena engine";
     license = licenses.gpl2;

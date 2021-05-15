@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
+{ lib, stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
 
 stdenv.mkDerivation rec {
   pname = "percona-server";
@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "09qqk02iny7jvngyk6k2j0kk2sspc6gw8sm3i6nn97njbkihi697";
   };
 
-  buildInputs = [ cmake bison ncurses openssl zlib libaio perl ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake bison perl ];
+  buildInputs = [ ncurses openssl zlib libaio ];
 
   cmakeFlags = [
     "-DFEATURE_SET=community"
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru.mysqlVersion = "5.6";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.percona.com";
     description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;

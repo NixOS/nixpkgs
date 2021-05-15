@@ -104,7 +104,9 @@ let
     if urls != [] && url == "" then
       (if lib.isList urls then urls
        else throw "`urls` is not a list")
-    else if urls == [] && url != "" then [url]
+    else if urls == [] && url != "" then
+      (if lib.isString url then [url]
+       else throw "`url` is not a string")
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =

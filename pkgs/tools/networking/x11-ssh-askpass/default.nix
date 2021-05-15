@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, xlibsWrapper, imake, gccmakedep }:
 
 stdenv.mkDerivation {
   name = "x11-ssh-askpass-1.2.4.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   installTargets = [ "install" "install.man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sigmavirus24/x11-ssh-askpass";
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
     license = licenses.mit;

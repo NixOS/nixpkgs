@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     gtk2 glib fontconfig freetype unixODBC alsaLib
   ];
 
-  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
+  rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
   unpackPhase = ''
     sh $src --keep --noexec
@@ -232,7 +232,7 @@ stdenv.mkDerivation rec {
     majorVersion = lib.versions.majorMinor version;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compiler for NVIDIA GPUs, math libraries, and tools";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];

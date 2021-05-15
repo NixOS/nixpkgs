@@ -1,4 +1,4 @@
-{stdenv, fetchzip, libtommath}:
+{lib, stdenv, fetchzip, libtommath}:
 
 stdenv.mkDerivation {
   name = "convertlit-1.8";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.convertlit.com/";
     description = "A tool for converting Microsoft Reader ebooks to more open formats";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

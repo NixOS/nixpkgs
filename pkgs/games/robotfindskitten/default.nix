@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, ncurses }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "robotfindskitten";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bwrkxm83r9ajpkd6x03nqvmdfpf5vz6yfy0c97pq3v3ykj74082";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "execgamesdir=$(out)/bin" ];

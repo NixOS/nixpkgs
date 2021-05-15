@@ -65,5 +65,13 @@ if [ -e @out@/nix-support/cc-cflags-before ]; then
     NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="$(< @out@/nix-support/cc-cflags-before) $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
 fi
 
+# Only add darwin min version flag if a default darwin min version is set,
+# which is a signal that we're targetting darwin.
+if [ "@darwinMinVersion@" ]; then
+    mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
+
+    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
+fi
+
 # That way forked processes will not extend these environment variables again.
 export NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@=1

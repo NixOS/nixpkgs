@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, texinfo, pcre2
-, enablePython ? false, python, swig, libxml2, ncurses
+, enablePython ? false, python ? null, swig, libxml2, ncurses
 }:
 let
   isPython3 = enablePython && python.pythonAtLeast "3";
 in
 stdenv.mkDerivation rec {
   pname = "libredwg";
-  version = "0.10.1.3707";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = pname;
     rev = version;
-    sha256 = "009n96lx4ahf05ryvm09z0l9956vz94r8pliyb88j0jficl0pxkf";
+    sha256 = "0ayhp3ym30hzp5f6dz7mmp9hpxf6a48nx3kq5crcmzycm5fllbn7";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ] 
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
     ++ lib.optional enablePython swig;
 
   buildInputs = [ pcre2 ]

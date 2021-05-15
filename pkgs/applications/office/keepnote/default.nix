@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication {
   name = "keepnote-0.7.8";
@@ -17,6 +17,6 @@ python2Packages.buildPythonApplication {
   meta = {
     description = "Note taking application";
     homepage = "http://keepnote.org";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, pytest, coverage, coveralls, folium, scikitlearn, scipy}:
+{ lib, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
+, pandas, requests, Rtree, shapely, folium, scikitlearn, scipy}:
 
 buildPythonPackage rec {
   pname = "osmnx";
@@ -14,16 +14,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ geopandas descartes matplotlib networkx numpy pandas requests Rtree shapely folium scikitlearn scipy ];
 
-  checkInputs = [ coverage pytest coveralls ];
-  #Fails when using sandboxing as it requires internet connection, works fine without it
+  # requires network
   doCheck = false;
+  pythonImportsCheck = [ "osmnx" ];
 
-  #Check phase for the record
-  #checkPhase = ''
-  #  coverage run --source osmnx -m pytest --verbose
-  #'';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX.";
     homepage = "https://github.com/gboeing/osmnx";
     license = licenses.mit;

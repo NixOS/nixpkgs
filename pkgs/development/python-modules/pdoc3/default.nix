@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pdoc3";
-  version = "0.9.1";
+  version = "0.9.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15482rvpg5r70gippj3nbl58x9plgmgvp0rg4xi4dpdqhma8v171";
+    sha256 = "9df5d931f25f353c69c46819a3bd03ef96dd286f2a70bb1b93a23a781f91faa1";
   };
 
   nativeBuildInputs = [ setuptools-git setuptools_scm ];

@@ -1,16 +1,24 @@
-{ stdenv, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
+{ lib, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
-  version = "1.0.2";
+  version = "unstable-2021-04-01";
 
-# no tests included in PyPI tarball
+  # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    rev = "v${version}";
-    sha256 = "0sh32jcf8iznnbg1kqlrswbzfmn4h3gkw32q20xwxzz4935pz1qk";
+    rev = "0b674c57c833f75b1a36d8caf78e1567c8e2180c";
+    sha256 = "0q404gr85caib5hg83cnmgx4684l72w9slxyxrwsiwhlf7gm443q";
   };
+
+  patches = [
+    # ledger-autosync specifies an URL for its ofxparse
+    # dependency. This patch removes the URL to only use the
+    # `ofxparse` name. This works because nixpkgs' version of ofxparse
+    # is more recent than the latest release.
+    ./fix-ofxparse-dependency.patch
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     asn1crypto
@@ -32,8 +40,8 @@ python3Packages.buildPythonApplication rec {
     pycparser
     secretstorage
     six
-  ] ++ stdenv.lib.optional useLedger ledger
-    ++ stdenv.lib.optional useHledger hledger;
+  ] ++ lib.optional useLedger ledger
+    ++ lib.optional useHledger hledger;
 
   # Checks require ledger as a python package,
   # ledger does not support python3 while ledger-autosync requires it.
@@ -42,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     nosetests -a generic -a ledger -a hledger
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/egh/ledger-autosync";
     description = "OFX/CSV autosync for ledger and hledger";
     license = licenses.gpl3;

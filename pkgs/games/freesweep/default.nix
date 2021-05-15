@@ -1,4 +1,4 @@
-{ fetchFromGitHub, ncurses, stdenv,
+{ fetchFromGitHub, ncurses, lib, stdenv,
   updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A console minesweeper-style game written in C for Unix-like systems";
     homepage = "https://github.com/rwestlund/freesweep";
     license = licenses.gpl2;

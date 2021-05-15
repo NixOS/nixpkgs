@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -23,7 +23,7 @@ buildPythonPackage rec {
       --replace "test_sending_unicode_data" "noop"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight SOAP client (Jurko's fork)";
     homepage = "https://bitbucket.org/jurko/suds";
     license = licenses.lgpl3;

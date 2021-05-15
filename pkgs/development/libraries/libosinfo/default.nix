@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -23,17 +23,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1988l5rykpzvml1l7bi2hcax0gdc811vja0f92cnr7r01nz35zs9";
+    sha256 = "sha256-tPNBgVTvP0PZQggnKUkWrqGCcCGvwG4WRPxWlRgwo1k=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     vala
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;

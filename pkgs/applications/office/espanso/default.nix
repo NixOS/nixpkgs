@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , rustPlatform
-, pkgconfig
+, pkg-config
 , extra-cmake-modules
 , libX11
 , libXi
@@ -14,20 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "federico-terzi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11b02i254dn5nwk8m2g21ixz22qcqgcf90vwll0n3yny78p40hn0";
+    sha256 = "1q47r43midkq9574gl8gdv3ylvrnbhdc39rrw4y4yk6jbdf5wwkm";
   };
 
-  cargoSha256 = "1cnz6rbqbb08j67bw485qi22pi31b3l3yzgr6w1qx780ldf1zd54";
+  cargoSha256 = "0mxksifjagx25qkyg6ym0zlhal8014j8iim54cd44ndbkkiqlyxc";
 
   nativeBuildInputs = [
     extra-cmake-modules
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;

@@ -1,0 +1,15 @@
+# avoids a warning about including an internal header when
+# compiling with musl-libc
+diff -crb --new-file a/lib/fixedsizehash.h b/lib/fixedsizehash.h
+*** a/lib/fixedsizehash.h	2020-06-11 11:37:46.000000000 -0400
+--- b/lib/fixedsizehash.h	2021-01-21 05:52:59.000000000 -0500
+***************
+*** 30,36 ****
+  #include <errno.h>
+  #include <stdlib.h>
+  #include <string.h>
+- #include <sys/cdefs.h>
+  
+  #include <system.h>
+  
+--- 30,35 ----

@@ -1,6 +1,6 @@
-{ config, stdenv, fetchurl, pkgconfig, libtool
+{ config, lib, stdenv, fetchurl, pkg-config, libtool
 , zip, libffi, libsigsegv, readline, gmp
-, gnutls, gnome2, cairo, SDL, sqlite
+, gnutls, gtk2, cairo, SDL, sqlite
 , emacsSupport ? config.emacsSupport or false, emacs ? null }:
 
 assert emacsSupport -> (emacs != null);
@@ -11,7 +11,7 @@ let # The gnu-smalltalk project has a dependency to the libsigsegv library.
     # Adding --enable-static=libsigsegv to the gnu-smalltalk configuration flags
     # does not help, the error still occurs. The only solution is to build a
     # shared version of libsigsegv.
-    libsigsegv-shared = stdenv.lib.overrideDerivation libsigsegv (oldAttrs: {
+    libsigsegv-shared = lib.overrideDerivation libsigsegv (oldAttrs: {
       configureFlags = [ "--enable-shared" ];
     });
 
@@ -27,24 +27,24 @@ in stdenv.mkDerivation rec {
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libtool zip libffi libsigsegv-shared readline gmp gnutls gnome2.gtk
+    libtool zip libffi libsigsegv-shared readline gmp gnutls gtk2
     cairo SDL sqlite
   ]
-  ++ stdenv.lib.optional emacsSupport emacs;
+  ++ lib.optional emacsSupport emacs;
 
-  configureFlags = stdenv.lib.optional (!emacsSupport) "--without-emacs";
+  configureFlags = lib.optional (!emacsSupport) "--without-emacs";
 
   hardeningDisable = [ "format" ];
 
-  installFlags = stdenv.lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
+  installFlags = lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if
   # executed within nix-shell --pure.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It

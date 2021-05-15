@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , requests
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests disabled. They fail because they try to access the network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vultr.com API Client";
     homepage = "https://github.com/spry-group/python-vultr";
     license = licenses.mit;

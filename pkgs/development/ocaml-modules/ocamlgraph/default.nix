@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib
+{ stdenv, lib, fetchurl, ocaml, findlib
 , gtkSupport ? true
 , lablgtk
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib ]
-  ++ stdenv.lib.optional gtkSupport lablgtk
+  ++ lib.optional gtkSupport lablgtk
   ;
 
   createFindlibDestdir = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildFlags =  [ "all" ];
   installTargets = [ "install-findlib" ];
 
-  postInstall = stdenv.lib.optionalString gtkSupport ''
+  postInstall = lib.optionalString gtkSupport ''
     mkdir -p $out/bin
     cp dgraph/dgraph.opt $out/bin/graph-viewer
     cp editor/editor.opt $out/bin/graph-editor
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocamlgraph.lri.fr/";
     description = "Graph library for Objective Caml";
-    license = stdenv.lib.licenses.gpl2Oss;
+    license = lib.licenses.gpl2Oss;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.kkallio
+      lib.maintainers.kkallio
     ];
   };
 }

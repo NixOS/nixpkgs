@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clump-binary-tree'';
-  version = ''clump-20160825-git'';
+  baseName = "clump-binary-tree";
+  version = "clump-20160825-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."acclimation" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clump/2016-08-25/clump-20160825-git.tgz'';
-    sha256 = ''1mngxmwklpi52inihkp4akzdi7y32609spfi70yamwgzc1wijbrl'';
+    url = "http://beta.quicklisp.org/archive/clump/2016-08-25/clump-20160825-git.tgz";
+    sha256 = "1mngxmwklpi52inihkp4akzdi7y32609spfi70yamwgzc1wijbrl";
   };
 
   packageName = "clump-binary-tree";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.dalkescientific.om/Python/PyRSS2Gen.html";
     description = "Library for generating RSS 2.0 feeds";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wireless-regdb";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wireless regulatory database for CRDA";
     homepage = "http://wireless.kernel.org/en/developers/Regulatory/";
     license = licenses.isc;

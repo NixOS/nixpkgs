@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libinotify-kqueue";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkFlags = [ "test" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Inotify shim for macOS and BSD";
     homepage = "https://github.com/libinotify-kqueue/libinotify-kqueue";
     license = licenses.mit;

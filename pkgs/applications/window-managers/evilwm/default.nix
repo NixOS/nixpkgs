@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,  libX11, libXext, libXrandr, libXrender,
+{ lib, stdenv, fetchurl,  libX11, libXext, libXrandr, libXrender,
   xorgproto, patches ? [] }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # Allow users set their own list of patches
   inherit patches;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
 

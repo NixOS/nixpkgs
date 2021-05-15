@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.10.2";
+  version = "1.10.6";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -24,17 +24,12 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "1ljhhjafi1nlndjswx7mg0d01zci90wz77yvz5w8bd9mm8ssw38s";
+    sha256 = "v6YH3fRMTzhp7wmU8in9ukcavzHmOAW54EK9ZwQyFxc=";
   };
 
   patches = [
+    # Add option for changing installation path of installed tests.
     ./0001-meson-add-options-for-tests-installation-dirs.patch
-  ];
-
-  mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
-    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
 
   nativeBuildInputs = [
@@ -43,7 +38,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     python3
   ];
@@ -57,7 +52,17 @@ stdenv.mkDerivation rec {
     mutest
   ];
 
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+  ];
+
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs tests/gen-installed-test.py
+  '';
 
   passthru = {
     tests = {
@@ -69,11 +74,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A thin layer of graphic data types";
     homepage = "https://ebassi.github.com/graphene";
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

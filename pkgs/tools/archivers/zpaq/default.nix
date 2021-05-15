@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, unzip }:
+{ lib, stdenv, fetchFromGitHub, perl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "zpaq";
@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ perl /* for pod2man */ unzip ];
 
   preBuild = let
     CPPFLAGS = with stdenv; ""
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Incremental journaling backup utility and archiver";
     homepage = "http://mattmahoney.net/dc/zpaq.html";
     license = licenses.gpl3Plus ;

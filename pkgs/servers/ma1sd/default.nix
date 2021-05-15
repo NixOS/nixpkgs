@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle_5, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jre, git, gradle_6, perl, makeWrapper }:
 
 let
   name = "ma1sd-${version}";
-  version = "2.1.1";
-  rev = "a112a5e57cb38ad282939d2dcb9c1476e038af39";
+  version = "2.4.0";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ma1uta";
     repo = "ma1sd";
-    sha256 = "1qibn6m6mvxwnbiypxlgkaqg6in358vkf0q47410rv1dx1gjcnv5";
+    hash = "sha256-8UnhrGa8KKmMAAkzUXztMkxgYOX8MU1ioXuEStGi4Vc=";
   };
 
 
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    nativeBuildInputs = [ gradle_5 perl git ];
+    nativeBuildInputs = [ gradle_6 perl git ];
 
     buildPhase = ''
       export MA1SD_BUILD_VERSION=${rev}
@@ -35,34 +35,36 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1w9cxq0rlzyh7bzqr3v3vn2cjhpn7hhc5lk9qzwj7sdj4jn2qxq6";
+    outputHash = "0x2wmmhjgnb6p72d3kvnv2vg52l0c4151rs4jrazs9rvxjfc88dr";
   };
 
 in
 stdenv.mkDerivation {
   inherit name src version;
-  nativeBuildInputs = [ gradle_5 perl makeWrapper ];
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
   buildInputs = [ jre ];
 
-  patches = [ ./0001-gradle.patch ];
-
   buildPhase = ''
+    runHook preBuild
     export MA1SD_BUILD_VERSION=${rev}
     export GRADLE_USER_HOME=$(mktemp -d)
 
-    sed -ie "s#REPLACE#mavenLocal(); maven { url '${deps}' }#g" build.gradle
+    sed -ie "s#jcenter()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
     gradle --offline --no-daemon build -x test
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D build/libs/source.jar $out/lib/ma1sd.jar
     makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
   };

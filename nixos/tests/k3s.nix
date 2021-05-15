@@ -31,7 +31,7 @@ let
 in
 {
   name = "k3s";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ euank ];
   };
 

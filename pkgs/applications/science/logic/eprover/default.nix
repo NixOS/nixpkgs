@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
   pname = "eprover";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--man-prefix=$(out)/share/man"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automated theorem prover for full first-order logic with equality";
     homepage = "http://www.eprover.org/";
     license = licenses.gpl2;

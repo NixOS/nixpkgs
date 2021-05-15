@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
@@ -10,7 +10,7 @@ assert eventGUISupport -> cairo != null && glib != null && gtk3 != null;
 assert testsSupport -> check != null && valgrind != null && python3 != null;
 
 let
-  mkFlag = optSet: flag: "-D${flag}=${stdenv.lib.boolToString optSet}";
+  mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
   sphinx-build = if documentationSupport then
     python3.pkgs.sphinx.overrideAttrs (super: {
@@ -24,17 +24,17 @@ let
   else null;
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.16.3";
+  version = "1.16.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0dj2m92kh3xpnjmzp416c73hpw6ban0f6yj39chwxckdgyliak6z";
+    sha256 = "1c81429kh9av9fanxmnjw5rvsjbzcyi7d0dx0gkyq5yysmpmrppi";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ]
+  nativeBuildInputs = [ pkg-config meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
   buildInputs = [

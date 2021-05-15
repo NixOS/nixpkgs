@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gawk }:
+{ lib, stdenv, fetchurl, gawk }:
 
 let version = "2.0";
 in
@@ -35,12 +35,12 @@ in
       description = "The `hibernate' script for swsusp and Tux-on-Ice";
       longDescription = ''
         This package provides the `hibernate' script, a command-line utility
-	that saves the computer's state to disk and switches it off, turning
-	it into "hibernation".  It works both with Linux swsusp and Tux-on-Ice.
+        that saves the computer's state to disk and switches it off, turning
+        it into "hibernation".  It works both with Linux swsusp and Tux-on-Ice.
       '';
 
-      license = stdenv.lib.licenses.gpl2Plus;
+      license = lib.licenses.gpl2Plus;
       homepage = "http://www.tuxonice.net/";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = lib.platforms.linux;
     };
   }

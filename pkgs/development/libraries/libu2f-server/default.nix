@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, json_c, openssl, check, file, help2man, which, gengetopt }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, json_c, openssl, check, file, help2man, which, gengetopt }:
 
 stdenv.mkDerivation rec {
   name = "libu2f-server-1.1.0";
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ json_c openssl check file help2man which gengetopt ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/libu2f-server/";
     description = "A C library that implements the server-side of the U2F protocol";
     license = licenses.bsd2;

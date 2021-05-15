@@ -1,21 +1,21 @@
-{ fetchFromGitHub, rustPlatform, stdenv }:
+{ fetchFromGitHub, rustPlatform, lib }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   pname = "tarssh";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Freaky";
     repo = pname;
-    sha256 = "0fm0rwknhm39nhd6g0pnxby34i5gpmi5ri795d9ylsw0pqwz6kd0";
+    sha256 = "sha256-AoKc8VF6rqYIsijIfgvevwu+6+suOO7XQCXXgAPNgLk=";
   };
 
-  cargoSha256 = "108xdpgfgfd4z455snif0mzbla0rv8gjqxci5qgwjzfyshwkprgv";
+  cargoSha256 = "sha256-7X9klYVZ2yE8BPuLhzWkuT7VFpmdOZGSD0D1x3kBNEs=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple SSH tarpit inspired by endlessh";
     homepage = "https://github.com/Freaky/tarssh";
     license = [ licenses.mit ];

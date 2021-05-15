@@ -52,7 +52,7 @@ with lib;
       default = false;
       example = true;
       description = ''
-        Whether to supporty proxying websocket connections with HTTP/1.1.
+        Whether to support proxying websocket connections with HTTP/1.1.
       '';
     };
 
@@ -98,6 +98,16 @@ with lib;
       example = "301 http://example.com$request_uri";
       description = ''
         Adds a return directive, for e.g. redirections.
+      '';
+    };
+
+    fastcgiParams = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      description = ''
+        FastCGI parameters to override.  Unlike in the Nginx
+        configuration file, overriding only some default parameters
+        won't unset the default values for other parameters.
       '';
     };
 

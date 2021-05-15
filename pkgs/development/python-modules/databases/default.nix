@@ -4,7 +4,8 @@
 , sqlalchemy
 , aiocontextvars
 , isPy27
-, pytest
+, pytestCheckHook
+, pymysql
 , asyncpg
 , aiomysql
 , aiosqlite
@@ -12,33 +13,37 @@
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.2.6";
+  version = "0.4.3";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0cdb4vln4zdmqbbcj7711b81b2l64jg1miihqcg8gpi35v404h2q";
+    sha256 = "0aq88k7d9036cy6qvlfv9p2dxd6p6fic3j0az43gn6k1ardhdsgf";
   };
 
   propagatedBuildInputs = [
-    sqlalchemy
     aiocontextvars
+    sqlalchemy
   ];
 
   checkInputs = [
-    pytest
-    asyncpg
     aiomysql
     aiosqlite
+    asyncpg
+    pymysql
+    pytestCheckHook
   ];
 
-  # big chunk to tests depend on existing posgresql and mysql databases
-  # some tests are better than no tests
-  checkPhase = ''
-    pytest --ignore=tests/test_integration.py --ignore=tests/test_databases.py
-  '';
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'aiopg'
+    "tests/test_connection_options.py"
+    # circular dependency on starlette
+    "tests/test_integration.py"
+    # TEST_DATABASE_URLS is not set.
+    "tests/test_databases.py"
+  ];
 
   meta = with lib; {
     description = "Async database support for Python";

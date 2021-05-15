@@ -1,20 +1,23 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
-, pkg-config
-, which
 , autoreconfHook
-, rep-gtk
-, pango
 , gdk-pixbuf-xlib
-, imlib
 , gettext
-, texinfo
+, gtk2
+, imlib
+, libICE
+, libSM
 , libXinerama
 , libXrandr
 , libXtst
-, libICE
-, libSM
+, librep
 , makeWrapper
+, pango
+, pkg-config
+, rep-gtk
+, texinfo
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -26,37 +29,60 @@ stdenv.mkDerivation rec {
     sha256 = "18p8srqqj9vjffg13qhspfz2gr1h4vfs10qzlv89g76r289iam31";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ which
-    rep-gtk pango gdk-pixbuf-xlib imlib gettext texinfo
-    libXinerama libXrandr libXtst libICE libSM
-    makeWrapper ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    librep
+    makeWrapper
+    pkg-config
+    texinfo
+    which
+  ];
+  buildInputs = [
+    gdk-pixbuf-xlib
+    gtk2
+    imlib
+    libICE
+    libSM
+    libXinerama
+    libXrandr
+    libXtst
+    librep
+    pango
+    rep-gtk
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's|REP_DL_LOAD_PATH=|REP_DL_LOAD_PATH=$(REP_DL_LOAD_PATH):|g' -i Makedefs.in
     sed -e 's|$(repexecdir)|$(libdir)/rep|g' -i src/Makefile.in
   '';
 
+  strictDeps = true;
+
   postInstall = ''
-    for i in $out/lib/sawfish/sawfish-menu $out/bin/sawfish-about \
-             $out/bin/sawfish-client $out/bin/sawfish-config $out/bin/sawfish; do
+    for i in $out/lib/sawfish/sawfish-menu \
+             $out/bin/sawfish-about \
+             $out/bin/sawfish-client \
+             $out/bin/sawfish-config \
+             $out/bin/sawfish; do
       wrapProgram $i \
         --prefix REP_DL_LOAD_PATH : "$out/lib/rep" \
         --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "http://sawfish.tuxfamily.org/";
     description = "An extensible, Lisp-based window manager";
     longDescription = ''
-      Sawfish is an extensible window manager using a Lisp-based scripting language.
-      Its policy is very minimal compared to most window managers. Its aim is simply
-      to manage windows in the most flexible and attractive manner possible.
-      All high-level WM functions are implemented in Lisp for future extensibility
-      or redefinition.
+      Sawfish is an extensible window manager using a Lisp-based scripting
+      language. Its policy is very minimal compared to most window managers. Its
+      aim is simply to manage windows in the most flexible and attractive manner
+      possible. All high-level WM functions are implemented in Lisp for future
+      extensibility or redefinition.
     '';
-    homepage = "https://sawfish.fandom.com/wiki/Main_Page";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

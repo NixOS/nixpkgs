@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0265pvfbcsijf51szsh14qk3l3zgs0rb5rbrw11zwan52yi0jlhq";
+    sha256 = "d1ec578c09a07d3518ec9be540b87546397fa3455de73c166fcce51eaa5c41c5";
   };
 
   pythonImportsCheck = [ "mmh3" ];
@@ -18,6 +18,5 @@ buildPythonPackage rec {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://pypi.org/project/mmh3/";
     license = licenses.cc0;
-    maintainers = [ maintainers.danieldk ];
   };
 }

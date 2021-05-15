@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, python
+{ lib, stdenv, fetchFromGitHub
+, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
   };
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python2 ];
+
+  strictDeps = true;
 
   patchPhase = ''
     patchShebangs src
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
   # no binaries, so out = library, dev = headers
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SQL / SQLI tokenizer parser analyzer";
     homepage    = "https://github.com/client9/libinjection";
     license     = licenses.bsd3;

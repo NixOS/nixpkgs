@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper,
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
   perlPackages,
   libminc, EBTKS }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/N3";
     description = "MRI non-uniformity correction for MINC files";
     maintainers = with maintainers; [ bcdarwin ];

@@ -2,12 +2,12 @@
 , cmake
 , fetchFromGitLab
 , mbedtls
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "4.4.6";
+  version = "4.5.7";
 
   nativeBuildInputs = [ cmake bcunit ];
   buildInputs = [ mbedtls ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1vlvnpkks5mm6ppdmp88mdn39f3ynig6qas83nkjn7x47z2zr6x0";
+    sha256 = "sha256-JQ2HgFVqgO+LLXmN95ZTHyT+htCFUC3VRreKLwPYo9Y=";
   };
 
   # Do not build static libraries
@@ -26,13 +26,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Utilities library for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
-    # Still using GPLv2 but as the rest of the Linphone projects have switched
-    # to GPLv3, this might too, so check this when bumping the version number.
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin jluttine ];
     platforms = platforms.linux;
   };

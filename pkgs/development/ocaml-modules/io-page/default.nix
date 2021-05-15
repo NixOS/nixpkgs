@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage, cstruct, bigarray-compat, ounit }:
+{ lib, fetchurl, buildDunePackage, cstruct, bigarray-compat, ounit }:
 
 buildDunePackage rec {
   pname = "io-page";
@@ -18,8 +18,8 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/mirage/io-page";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     description = "IO memory page library for Mirage backends";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

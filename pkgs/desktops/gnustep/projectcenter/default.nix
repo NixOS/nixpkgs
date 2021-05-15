@@ -16,7 +16,7 @@ gsmakeDerivation {
   # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
   # 2. Framework/PCProjectBuilder.m, locate gmake (similar)
   propagatedBuildInputs = [ base back gui gnumake gdb gorm ];
-  
+
   meta = {
     description = "GNUstep's integrated development environment";
   };

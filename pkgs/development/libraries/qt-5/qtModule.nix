@@ -34,6 +34,8 @@ mkDerivation (args // {
     fixQtBuiltinPaths . '*.pr?'
   '';
 
+  dontWrapQtApps = args.dontWrapQtApps or true;
+
   postFixup = ''
     if [ -d "''${!outputDev}/lib/pkgconfig" ]; then
         find "''${!outputDev}/lib/pkgconfig" -name '*.pc' | while read pc; do

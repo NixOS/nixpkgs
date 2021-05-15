@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
-  libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
+{ stdenv, lib, fetchurl, perlPackages, intltool, autoreconfHook,
+  pkg-config, glib, libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
   libimobiledevice,
   monoSupport ? false, mono, gtk-sharp-2_0
 }:
@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  preConfigure = "configureFlagsArray=( --with-udev-dir=$out/lib/udev )";
+  postPatch = ''
+    # support libplist 2.2
+    substituteInPlace configure.ac --replace 'libplist >= 1.0' 'libplist-2.0 >= 2.2'
+  '';
 
   configureFlags = [
     "--without-hal"
     "--enable-udev"
+    "--with-udev-dir=${placeholder "out"}/lib/udev"
   ] ++ lib.optionals monoSupport [ "--with-mono" ];
 
   dontStrip = true;
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
     gdk-pixbuf taglib libimobiledevice ];
 
-  nativeBuildInputs = [ gettext intltool pkgconfig ]
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ]
     ++ (with perlPackages; [ perl XMLParser ])
     ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
 
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gtkpod.sourceforge.net/";
     description = "Library used by gtkpod to access the contents of an ipod";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
     maintainers = [ ];
   };
 }

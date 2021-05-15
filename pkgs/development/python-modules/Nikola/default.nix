@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "8.1.1";
+  version = "8.1.3";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
@@ -54,7 +55,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cee35b011667a965eca01b7d36b54649c9434ab004d8556d6563b7d899df61ed";
+    sha256 = "05eac356bb4273cdd05d2dd6ad676226133496c457af91987c3f0d40e2fe57ef";
   };
 
   patchPhase = ''
@@ -72,5 +73,7 @@ buildPythonPackage rec {
     description = "A modular, fast, simple, static website and blog generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+    # all tests fail
+    broken = stdenv.isDarwin;
   };
 }

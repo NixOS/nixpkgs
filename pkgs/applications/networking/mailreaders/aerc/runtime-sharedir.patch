@@ -1,6 +1,6 @@
-From 6cf3c2e42d219b9665a43ca65f321c653b0aa102 Mon Sep 17 00:00:00 2001
+From c715a96c693baa0e6c8ab3c96b6c10e0a40bf7af Mon Sep 17 00:00:00 2001
 From: Tadeo Kondrak <me@tadeo.ca>
-Date: Mon, 28 Oct 2019 08:36:36 -0600
+Date: Thu, 21 Jan 2021 10:40:49 +0100
 Subject: [PATCH] Fix aerc breaking every time the package is rebuilt.
 
 On NixOS, the SHAREDIR changes on every rebuild to the package, but aerc
@@ -8,28 +8,28 @@ fills it in as part of the default config and then installs that config
 to the users home folder. Fix this by not substituting @SHAREDIR@ in the
 default config until runtime.
 ---
- Makefile         | 2 +-
- config/config.go | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ Makefile         |  2 +-
+ config/config.go | 13 +++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index d1c755d..1185a96 100644
+index 77f5e61..98cbc11 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -24,7 +24,7 @@ aerc: $(GOSRC)
+@@ -23,7 +23,7 @@ aerc: $(GOSRC)
  		-o $@
- 
+
  aerc.conf: config/aerc.conf.in
 -	sed -e 's:@SHAREDIR@:$(SHAREDIR):g' > $@ < config/aerc.conf.in
 +	cat config/aerc.conf.in > $@
- 
- DOCS := \
- 	aerc.1 \
+
+ debug: $(GOSRC)
+ 	GOFLAGS="-tags=notmuch" \
 diff --git a/config/config.go b/config/config.go
-index 32d07fc..8ffd3e8 100644
+index 87d183a..cb6611a 100644
 --- a/config/config.go
 +++ b/config/config.go
-@@ -355,6 +355,11 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
+@@ -470,6 +470,16 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
  			return nil, err
  		}
  	}
@@ -38,19 +38,23 @@ index 32d07fc..8ffd3e8 100644
 +			sec.NewKey("template-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
 +		}
 +	}
++	if sec, err := file.GetSection("ui"); err == nil {
++		if key, err := sec.GetKey("stylesets-dirs"); err == nil {
++			sec.NewKey("stylesets-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
++		}
++	}
  	file.NameMapper = mapName
  	config := &AercConfig{
  		Bindings: BindingConfig{
-@@ -423,6 +428,9 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
- 	if err = config.LoadConfig(file); err != nil {
+@@ -547,6 +557,9 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
  		return nil, err
  	}
+
 +	for i, filter := range config.Filters {
 +		config.Filters[i].Command = strings.ReplaceAll(filter.Command, "@SHAREDIR@", sharedir)
 +	}
  	if ui, err := file.GetSection("general"); err == nil {
  		if err := ui.MapTo(&config.General); err != nil {
  			return nil, err
--- 
-2.23.0
-
+--
+2.30.0

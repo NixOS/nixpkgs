@@ -1,0 +1,12 @@
+diff --git a/lib/file_helper.rb b/lib/file_helper.rb
+index 162de9a40b..9ac8807e9d 100644
+--- a/lib/file_helper.rb
++++ b/lib/file_helper.rb
+@@ -124,6 +124,7 @@ class FileHelper
+         jpegoptim: { strip: strip_image_metadata ? "all" : "none" },
+         jpegtran: false,
+         jpegrecompress: false,
++        jhead: false,
+       )
+     end
+   end

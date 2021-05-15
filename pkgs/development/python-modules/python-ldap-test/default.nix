@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, py4j }:
+{ lib, buildPythonPackage, fetchPypi, py4j }:
 
 buildPythonPackage rec {
   pname = "python-ldap-test";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Tests needs java to be present in path
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for testing code speaking with LDAP server";
     homepage = "https://github.com/zoldar/python-ldap-test";
     license = licenses.mit;

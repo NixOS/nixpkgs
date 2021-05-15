@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, libpcap, ncurses, openssl, pcre }:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, libpcap, ncurses, openssl, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";
     homepage = "https://github.com/irontec/sngrep";
     license = licenses.gpl3;

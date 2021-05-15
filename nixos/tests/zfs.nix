@@ -8,13 +8,13 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest = name:
-    { kernelPackage ? pkgs.linuxPackages_latest
+    { kernelPackage ? if enableUnstable then pkgs.linuxPackages_latest else pkgs.linuxPackages
     , enableUnstable ? false
     , extraTest ? ""
     }:
     makeTest {
       name = "zfs-" + name;
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         maintainers = [ adisbladis ];
       };
 
@@ -29,7 +29,7 @@ let
 
         # Setup regular fileSystems machinery to ensure forceImportAll can be
         # tested via the regular service units.
-        fileSystems = lib.mkVMOverride {
+        virtualisation.fileSystems = {
           "/forcepool" = {
             device = "forcepool";
             fsType = "zfs";

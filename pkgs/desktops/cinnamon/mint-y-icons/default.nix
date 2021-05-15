@@ -1,6 +1,6 @@
 { fetchFromGitHub
-, stdenv
-, gnome3
+, lib, stdenv
+, gnome
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-y-icons";
     description = "The Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "linenoise";
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/antirez/linenoise";
     description = "A minimal, zero-config, BSD licensed, readline replacement";
-    maintainers = with stdenv.lib.maintainers; [ mpsyco ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mpsyco ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd2;
   };
 }

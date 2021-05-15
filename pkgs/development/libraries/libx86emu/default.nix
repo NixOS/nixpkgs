@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libx86emu";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "x86 emulation library";
     license = licenses.bsd2;
     homepage = "https://github.com/wfeldt/libx86emu";

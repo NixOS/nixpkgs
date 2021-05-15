@@ -1,4 +1,4 @@
-{ stdenv, git, clang,
+{ lib, git, clang,
   fetchFromGitHub, requireFile,
   openssl, xz, gnutar,
   automake, autoconf, libtool, clangStdenv } :
@@ -57,9 +57,9 @@ clangStdenv.mkDerivation rec {
   meta = {
     description =
     "Provides an iOS cross compiler from 7.1 up to iOS-${version} and ldid";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ fxfactorial ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ fxfactorial ];
+    license = lib.licenses.gpl2;
   };
 }

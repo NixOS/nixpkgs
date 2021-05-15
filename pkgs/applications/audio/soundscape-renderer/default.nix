@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , help2man
-, pkgconfig
+, pkg-config
 , libsndfile
 , fftwFloat
 , libjack2
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   LC_ALL = "en_US.UTF-8";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ boost boost.dev ecasound libGLU libGL help2man libsndfile fftwFloat libjack2 libxml2 qt4 glibcLocales ];
 
   # 1) Fix detecting version. https://github.com/SoundScapeRenderer/ssr/pull/53
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://spatialaudio.net/ssr/";
     description = "The SoundScape Renderer (SSR) is a tool for real-time spatial audio reproduction";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.fridh ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.fridh ];
   };
 
 }

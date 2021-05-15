@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl,
+{ lib, fetchurl, python27Packages, python36Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {
@@ -6,7 +6,7 @@
     pname = "plover";
     version = "3.1.1";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;
@@ -28,7 +28,7 @@
     pname = "plover";
     version = "4.0.0.dev8";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;

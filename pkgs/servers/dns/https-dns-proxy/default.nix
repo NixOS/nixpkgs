@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
 
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # for when that happens despite there being none as of right now
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DNS to DNS over HTTPS (DoH) proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

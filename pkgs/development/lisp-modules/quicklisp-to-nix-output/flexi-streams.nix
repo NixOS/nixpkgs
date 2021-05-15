@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''flexi-streams'';
-  version = ''20200925-git'';
+  baseName = "flexi-streams";
+  version = "20200925-git";
 
   parasites = [ "flexi-streams-test" ];
 
-  description = ''Flexible bivalent streams for Common Lisp'';
+  description = "Flexible bivalent streams for Common Lisp";
 
   deps = [ args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/flexi-streams/2020-09-25/flexi-streams-20200925-git.tgz'';
-    sha256 = ''1hmsryfkjnk4gdv803s3hpp71fpdybfl1jb5hgngxpd5lsrq0gb2'';
+    url = "http://beta.quicklisp.org/archive/flexi-streams/2020-09-25/flexi-streams-20200925-git.tgz";
+    sha256 = "1hmsryfkjnk4gdv803s3hpp71fpdybfl1jb5hgngxpd5lsrq0gb2";
   };
 
   packageName = "flexi-streams";

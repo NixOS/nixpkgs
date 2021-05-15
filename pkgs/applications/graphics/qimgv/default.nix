@@ -4,7 +4,7 @@
 , fetchpatch
 
 , cmake
-, pkgconfig
+, pkg-config
 
 , exiv2
 , mpv
@@ -27,7 +27,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

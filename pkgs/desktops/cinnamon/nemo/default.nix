@@ -4,8 +4,8 @@
 , gobject-introspection
 , meson
 , ninja
-, pkgconfig
-, stdenv
+, pkg-config
+, lib, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk3
@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "4.6.5";
+  version = "4.8.6";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "04rgdph9pxdj5wzzv2i0pgyhg3s74nh9jf1ry9z6v5bvv222ili4";
+    hash = "sha256-OUv7l+klu5l1Y7m+iHiq/dDyxH3/hT4k7F9gDuUiGds=";
   };
 
   outputs = [ "out" "dev" ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson
-    pkgconfig
+    pkg-config
     ninja
     wrapGAppsHook
     intltool
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
     license = [ licenses.gpl2 licenses.lgpl2 ];

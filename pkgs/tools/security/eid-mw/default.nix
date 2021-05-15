@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config
 , gtk3, nssTools, pcsclite
 , libxml2, libproxy
 , openssl, curl
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Fedict";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [ gtk3 pcsclite libxml2 libproxy curl openssl ];
   preConfigure = ''
     mkdir openssl
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
     license = licenses.lgpl3;

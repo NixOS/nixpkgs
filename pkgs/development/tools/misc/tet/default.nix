@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation ({
   version = "3.8";
@@ -11,19 +11,19 @@ stdenv.mkDerivation ({
 
   buildInputs = [ ];
 
-  patchPhase = ''chmod +x configure'';
+  patchPhase = "chmod +x configure";
 
-  configurePhase = ''./configure -t lite'';
+  configurePhase = "./configure -t lite";
 
-  buildPhase = ''cd src; make; cd -'';
+  buildPhase = "cd src; make; cd -";
 
-  installPhase = ''cd src; make install; cd -; cp -vr $PWD $out'';
+  installPhase = "cd src; make install; cd -; cp -vr $PWD $out";
 
   meta = {
     description = "The Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";
     homepage = "http://tetworks.opengroup.org/Products/tet.htm";
-    license = stdenv.lib.licenses.artistic1;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.artistic1;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

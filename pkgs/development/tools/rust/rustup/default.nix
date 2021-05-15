@@ -1,6 +1,6 @@
 { stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform, makeWrapper
-, pkgconfig, curl, zlib, Security, CoreServices }:
+, pkg-config, curl, zlib, Security, CoreServices }:
 
 let
   libPath = lib.makeLibraryPath [
@@ -10,22 +10,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.22.1";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "0nf42pkyn87y0n93vd63bihx74h4bpisv74aqldg3vcav2iv35s1";
+    sha256 = "sha256-GKvKawvfm/4eBU4mn/Q9fhu3Ml+j+BsxVNPvbvcnMLU=";
   };
 
-  cargoSha256 = "0ghjrx7y25s6rjp06h0iyv4195x7daj57bqza01i1j4hm5nkhqhi";
+  cargoSha256 = "sha256-tWww+rR4DQgRacVeLqnOBcuXA7o/NYmJBcJgWX3aLRY=";
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
     curl zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];

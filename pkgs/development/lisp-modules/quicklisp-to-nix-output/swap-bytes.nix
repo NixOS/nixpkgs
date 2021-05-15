@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''swap-bytes'';
-  version = ''v1.2'';
+  baseName = "swap-bytes";
+  version = "v1.2";
 
   parasites = [ "swap-bytes/test" ];
 
-  description = ''Optimized byte-swapping primitives.'';
+  description = "Optimized byte-swapping primitives.";
 
   deps = [ args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/swap-bytes/2019-11-30/swap-bytes-v1.2.tgz'';
-    sha256 = ''05g37m4cpsszh16jz7kiscd6m6l66ms73f3s6s94i56c49jfxdy8'';
+    url = "http://beta.quicklisp.org/archive/swap-bytes/2019-11-30/swap-bytes-v1.2.tgz";
+    sha256 = "05g37m4cpsszh16jz7kiscd6m6l66ms73f3s6s94i56c49jfxdy8";
   };
 
   packageName = "swap-bytes";

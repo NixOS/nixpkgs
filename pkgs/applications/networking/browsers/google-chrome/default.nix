@@ -1,11 +1,11 @@
-{ stdenv, patchelf, makeWrapper
+{ lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsaLib, libXdamage, libXtst, libXrandr, expat, cups
+, alsaLib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, kerberos, libdrm, mesa
+, libkrb5, libdrm, mesa
 , libxkbcommon, wayland # ozone/wayland
 
 # Command line programs
@@ -22,7 +22,7 @@
 
 # Additional dependencies according to other distros.
 ## Ubuntu
-, liberation_ttf, curl, util-linux, xdg_utils, wget
+, liberation_ttf, curl, util-linux, xdg-utils, wget
 ## Arch Linux.
 , flac, harfbuzz, icu, libpng, libopus, snappy, speechd
 ## Gentoo
@@ -38,10 +38,16 @@
 , chromium
 
 , gsettings-desktop-schemas
-, gnome3
+, gnome
+
+# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+, libvaSupport ? true, libva
+
+# For Vulkan support (--enable-features=Vulkan)
+, vulkanSupport ? true, vulkan-loader
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   opusWithCustomModes = libopus.override {
@@ -53,16 +59,18 @@ let
   deps = [
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsaLib libXdamage libXtst libXrandr expat cups
+    alsaLib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif
-    liberation_ttf curl util-linux xdg_utils wget
+    liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos libdrm mesa coreutils
+    libkrb5 libdrm mesa coreutils
     libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
+    ++ optional libvaSupport libva
+    ++ optional vulkanSupport vulkan-loader
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -80,7 +88,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''
@@ -138,7 +146,7 @@ in stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --add-flags ${escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,crashpad_handler,nacl_helper}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
@@ -153,5 +161,8 @@ in stdenv.mkDerivation {
     # will try to merge PRs and respond to issues but I'm not actually using
     # Google Chrome.
     platforms = [ "x86_64-linux" ];
+    mainProgram =
+      if (channel == "dev") then "google-chrome-unstable"
+      else "google-chrome-${channel}";
   };
 }

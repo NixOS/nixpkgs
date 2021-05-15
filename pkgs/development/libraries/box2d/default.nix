@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
-, libXi, pkgconfig }:
+{ lib, stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
+, libXi, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "box2d";
@@ -12,10 +12,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "Box2D-${version}/Box2D";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    unzip cmake libGLU libGL freeglut libX11 xorgproto libXi
-  ];
+  nativeBuildInputs = [ cmake unzip pkg-config ];
+  buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
 
   cmakeFlags = [
     "-DBOX2D_INSTALL=ON"
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
     maintainers = [ maintainers.raskin ];

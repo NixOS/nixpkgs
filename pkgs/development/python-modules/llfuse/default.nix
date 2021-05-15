@@ -1,50 +1,53 @@
-{ stdenv, fetchurl, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
-, contextlib2, osxfuse
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, contextlib2
+, cython
+, fuse
+, pkg-config
+, pytestCheckHook
+, python
+, which
 }:
-
-let
-  inherit (stdenv.lib) optionals optionalString;
-in
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.6";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/l/llfuse/${pname}-${version}.tar.bz2";
-    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "python-llfuse";
+    repo = "python-llfuse";
+    rev = "release-${version}";
+    sha256 = "1dcpdg6cpkmdbyg66fgrylj7dp9zqzg5bf23y6m6673ykgxlv480";
   };
 
-  patches = [
-    # https://github.com/python-llfuse/python-llfuse/pull/23 (2 commits)
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/7579b0e626da1a7882b13caedcdbd4a834702e94.diff";
-      sha256 = "0vpybj4k222h20lyn0q7hz86ziqlapqs5701cknw8d11jakbhhb0";
-    })
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/438c00ab9e10d6c485bb054211c01b7f8524a736.diff";
-      sha256 = "1zhb05b7k3c9mjqshy9in8yzpbihy7f33x1myq5kdjip1k50cwrn";
-    })
-  ];
+  nativeBuildInputs = [ cython pkg-config ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs =
-    optionals stdenv.isLinux [ fuse ]
-    ++ optionals stdenv.isDarwin [ osxfuse ];
-  checkInputs = [ pytest which ] ++
-    optionals stdenv.isLinux [ attr ];
+  buildInputs = [ fuse ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
-  checkPhase = ''
-    py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
+  preBuild = ''
+    ${python.interpreter} setup.py build_cython
   '';
 
-  meta = with stdenv.lib; {
+  # On Darwin, the test requires macFUSE to be installed outside of Nix.
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook which ];
+
+  disabledTests = [
+    "test_listdir" # accesses /usr/bin
+  ];
+
+  meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor dotlambda ];
   };
 }

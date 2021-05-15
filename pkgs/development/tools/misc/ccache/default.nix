@@ -13,19 +13,29 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1az11q3wmr8wc7alx9l70wq9am41cm0y17g5gsaqmahws3dxfi8m";
+    hash = "sha256-AmgJpW7AGCSggbHp1fLO5yhXS9LIm7O77nQdDERJYAA=";
   };
 
-  patches = lib.optional stdenv.isDarwin (substituteAll {
-    src = ./force-objdump-on-darwin.patch;
-    objdump = "${binutils.bintools}/bin/objdump";
-  });
+  patches = [
+    # test/run use compgen to get environment variable names, but
+    # compgen isn't available in non-interactive bash.
+    ./env-instead-of-compgen.patch
+
+    # When building for Darwin, test/run uses dwarfdump, whereas on
+    # Linux it uses objdump. We don't have dwarfdump packaged for
+    # Darwin, so this patch updates the test to also use objdump on
+    # Darwin.
+    (substituteAll {
+      src = ./force-objdump-on-darwin.patch;
+      objdump = "${binutils.bintools}/bin/objdump";
+    })
+  ];
 
   nativeBuildInputs = [ asciidoc cmake perl ];
 
@@ -38,7 +48,7 @@ let ccache = stdenv.mkDerivation rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.modules)$'
+      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
     ''}
   '';
 
@@ -60,7 +70,7 @@ let ccache = stdenv.mkDerivation rec {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
-              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
@@ -84,7 +94,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";

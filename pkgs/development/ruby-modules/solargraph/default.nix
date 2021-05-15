@@ -2,7 +2,7 @@
 
 bundlerApp {
   pname = "solargraph";
-  exes = ["solargraph"  "solargraph-runtime"];
+  exes = [ "solargraph" ];
   gemdir = ./.;
 
   passthru.updateScript = bundlerUpdateScript "solargraph";
@@ -11,6 +11,6 @@ bundlerApp {
     description = "A Ruby language server";
     homepage = "https://solargraph.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace nicknovitski angristan ];
+    maintainers = with maintainers; [ nicknovitski angristan ];
   };
 }

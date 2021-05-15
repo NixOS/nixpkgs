@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, pkgconfig, freetype, pango, libpng, libtiff
+{lib, stdenv, fetchurl, fetchpatch, pkg-config, freetype, pango, libpng, libtiff
 , giflib, libjpeg, netpbm}:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
 
   patches = [
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Renders an image of the earth or other planets into the X root window";
     homepage = "http://xplanet.sourceforge.net";
     license = licenses.gpl2;

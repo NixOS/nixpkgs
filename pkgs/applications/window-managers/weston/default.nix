@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, wayland
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland
 , libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
@@ -7,7 +7,7 @@
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "weston";
   version = "9.0.0";

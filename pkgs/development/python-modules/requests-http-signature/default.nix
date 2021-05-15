@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , requests
+, cryptography
 , python
 }:
 
@@ -17,13 +18,13 @@ buildPythonPackage rec {
     sha256 = "0y96wsbci296m1rcxx0ybx8r44rdvyb59p1jl27p7rgz7isr3kx1";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests cryptography ];
 
   checkPhase = ''
     ${python.interpreter} test/test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Requests auth module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = licenses.asl20;

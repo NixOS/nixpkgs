@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, version ? if stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.02" then "20190626" else "20140422"
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
+, version ? if lib.versionAtLeast (lib.getVersion ocaml) "4.02" then "20190626" else "20140422"
 }@args:
 
 let

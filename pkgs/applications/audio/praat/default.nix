@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "praat";
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     cp praat $out/bin
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib gtk2 ];
 
   meta = {
     description = "Doing phonetics by computer";
     homepage = "https://www.fon.hum.uva.nl/praat/";
-    license = stdenv.lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
+    platforms = lib.platforms.linux;
   };
 }

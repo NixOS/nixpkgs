@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
   pname = "emojione";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     install -Dm755 build/EmojiOneColor-SVGinOT.ttf $out/share/fonts/truetype/EmojiOneColor-SVGinOT.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source emoji set";
     homepage = "http://emojione.com/";
     license = licenses.cc-by-40;

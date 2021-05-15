@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "SystemdJournal2Gelf-unstable";
@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/parse-nl/SystemdJournal2Gelf";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz ];

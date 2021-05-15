@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "re2";
@@ -17,9 +17,13 @@ stdenv.mkDerivation {
     substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
   '';
 
+  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+
   preCheck = "patchShebangs runtests";
   doCheck = true;
   checkTarget = "test";
+
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
@@ -27,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/google/re2";
     description = "An efficient, principled regular expression library";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, nose }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "metaphone";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/oubiwann/metaphone";
     description = "A Python implementation of the metaphone and double metaphone algorithms";
     license = licenses.bsd3;

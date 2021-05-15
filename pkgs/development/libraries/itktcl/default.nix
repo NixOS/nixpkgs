@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk, incrtcl }:
+{ lib, stdenv, fetchurl, tcl, tk, incrtcl }:
 
 stdenv.mkDerivation rec {
   pname = "itk-tcl";
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
     mv $out/lib/itk${version}/* $out/lib
     ln -s libitk${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
-      $out/lib/libitk${stdenv.lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
+      $out/lib/libitk${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itk${version}
   '';
 
   outputs = [ "out" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
     license     = licenses.tcltk;

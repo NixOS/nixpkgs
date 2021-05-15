@@ -1,0 +1,29 @@
+name: "Direct Push Warning"
+on:
+  push:
+    branches:
+     - master
+     - release-**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    env:
+      GITHUB_SHA: ${{ github.sha }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+    steps:
+    - name: Check if commit is a merge commit
+      id: ismerge
+      run: |
+        ISMERGE=$(curl -H 'Accept: application/vnd.github.groot-preview+json' -H "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }}/commits/${{ env.GITHUB_SHA }}/pulls | jq -r '.[] | select(.merge_commit_sha == "${{ env.GITHUB_SHA }}") | any')
+        echo "::set-output name=ismerge::$ISMERGE"
+    - name: Warn if the commit was a direct push
+      if: steps.ismerge.outputs.ismerge != 'true'
+      uses: peter-evans/commit-comment@v1
+      with:
+        body: |
+          @${{ github.actor }}, you pushed a commit directly to master/release branch
+          instead of going through a Pull Request.
+
+          That's highly discouraged beyond the few exceptions listed
+          on https://github.com/NixOS/nixpkgs/issues/118661

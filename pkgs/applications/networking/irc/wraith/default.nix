@@ -1,9 +1,6 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
-with stdenv;
-with stdenv.lib;
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "wraith";
   version = "1.4.7";
   src = fetchurl {
@@ -25,7 +22,7 @@ mkDerivation rec {
     ln -s wraith $out/bin/hub
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An IRC channel management bot written purely in C/C++";
     longDescription = ''
       Wraith is an IRC channel management bot written purely in C/C++. It has

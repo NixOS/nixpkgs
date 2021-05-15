@@ -31,6 +31,7 @@ let
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
+    isNixOS = true;
   };
 in {
   options.programs.sway = {
@@ -90,7 +91,7 @@ in {
         rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle xwayland rxvt-unicode dmenu ];
+        with pkgs; [ swaylock swayidle rxvt-unicode alacritty dmenu ];
       '';
       example = literalExample ''
         with pkgs; [
@@ -120,8 +121,11 @@ in {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
-        #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
-        #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
+        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+          # Import the most important environment variables into the D-Bus and systemd
+          # user environments (e.g. required for screen sharing and Pinentry prompts):
+          exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+        '';
       };
     };
     security.pam.services.swaylock = {};
@@ -131,6 +135,8 @@ in {
     # To make a Sway session available if a display manager like SDDM is enabled:
     services.xserver.displayManager.sessionPackages = [ swayPackage ];
     programs.xwayland.enable = mkDefault true;
+    # For screen sharing (this option only has an effect with xdg.portal.enable):
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
   };
 
   meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];

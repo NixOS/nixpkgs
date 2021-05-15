@@ -1,9 +1,0 @@
-It works with fluidsynth 2.
-
-Backported from r400: https://sourceforge.net/p/drumstick/code/400/
-
---- a/library/rt-backends/CMakeLists.txt
-+++ b/library/rt-backends/CMakeLists.txt
-@@ -54,1 +54,1 @@ if (PKG_CONFIG_FOUND)
--    pkg_check_modules(FLUIDSYNTH fluidsynth>=1.1.1 fluidsynth<=1.1.11)
-+    pkg_check_modules(FLUIDSYNTH fluidsynth>=1.1.1)

@@ -92,4 +92,8 @@ mkDerivation (common "tamarin-prover" src // {
           tamarin-prover-term
           tamarin-prover-theory
         ];
+
+  # tamarin-prover 1.6 is incompatible with maude 3.1.
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 })

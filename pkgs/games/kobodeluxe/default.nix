@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, libGLU, libGL} :
+{lib, stdenv, fetchurl, SDL, SDL_image, libGLU, libGL} :
 
 stdenv.mkDerivation {
   name = "kobodeluxe-0.5.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://olofson.net/kobodl/";
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

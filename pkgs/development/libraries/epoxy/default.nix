@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, utilmacros, python3
 , libGL, libX11
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "epoxy";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python3 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config utilmacros python3 ];
   buildInputs = [ libGL libX11 ];
 
   preConfigure = optionalString stdenv.isDarwin ''

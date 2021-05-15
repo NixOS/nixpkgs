@@ -58,7 +58,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
-  gtksourceview = callPackage ./desktop/gtksourceview { };
+  gtksourceview = callPackage ./desktop/gtksourceview {
+    autoreconfHook = pkgs.autoreconfHook269;
+  };
 
   vte = callPackage ./desktop/vte { };
 

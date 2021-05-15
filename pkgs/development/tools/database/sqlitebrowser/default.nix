@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "sqlitebrowser";
-  version = "3.12.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1arv4rzl8s1vjjqzz35l2b1rfzr2b8b23v97fdw1kdxpwvs63l99";
+    rev = "v${version}";
+    sha256 = "0ray6cscx2qil1dfi7hmpijmq3kba49wn430ih1q4fkz9psjvrz1";
   };
 
   # We should be using qscintilla from nixpkgs instead of the vendored version,

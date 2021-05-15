@@ -1,13 +1,13 @@
 /*  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
     and out-of-tree mod packages (mod.nix).
 */
-{ stdenv, makeSetupHook, curl, unzip, dos2unix, pkgconfig, makeWrapper
+{ lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
 , lua, mono, dotnetPackages, python
 , libGL, freetype, openal, SDL2
 , zenity
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   path = makeBinPath ([ mono python ] ++ optional (zenity != null) zenity);
@@ -62,7 +62,7 @@ in {
       curl
       unzip
       dos2unix
-      pkgconfig
+      pkg-config
       makeWrapper
       mkdirp
       mono

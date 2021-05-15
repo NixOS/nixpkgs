@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
-  bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
+{ lib, stdenv, fetchurl, makeWrapper,
+  pkg-config, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
+  bash, iproute2, iptables, procps, coreutils, gnused, gawk, nss, which, python3,
   docs ? false, xmlto, libselinux, ldns
   }:
 
 let
-  binPath = stdenv.lib.makeBinPath [
-    bash iproute iptables procps coreutils gnused gawk nss.tools which python
+  binPath = lib.makeBinPath [
+    bash iproute2 iptables procps coreutils gnused gawk nss.tools which python3
   ];
 in
 
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bj3g6qwd3ir3gk6hdl9npy3k44shf56vcgjahn30qpmx3z5fsr3";
   };
 
+  strictDeps = true;
+
   # These flags were added to compile v3.18. Try to lift them when updating.
   NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
     # these flags were added to build with gcc7
@@ -29,13 +31,23 @@ stdenv.mkDerivation rec {
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
     "-Wno-error=stringop-truncation"
+    # The following flag allows libreswan v3.32 to work with NSS 3.22, see
+    # https://github.com/libreswan/libreswan/issues/334.
+    # This flag should not be needed for libreswan v3.33 (which is not yet released).
+    "-DNSS_PKCS11_2_0_COMPAT=1"
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
-                  libcap_ng curl nspr nss python ldns ]
-                ++ stdenv.lib.optional docs xmlto
-                ++ stdenv.lib.optional stdenv.isLinux libselinux;
+  nativeBuildInputs = [
+    bison
+    flex
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ bash iproute2 iptables systemd coreutils gnused gawk gmp unbound pam libevent
+                  libcap_ng curl nspr nss python3 ldns ]
+                ++ lib.optional docs xmlto
+                ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path
@@ -79,10 +91,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd;
     license = licenses.gpl2;
     maintainers = [ maintainers.afranchuk ];
   };

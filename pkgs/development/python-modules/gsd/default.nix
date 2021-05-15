@@ -1,10 +1,10 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
-, numpy
-, pytest
+, cython, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "1.9.3";
+  version = "2.4.1";
   pname = "gsd";
   disabled = isPy27;
 
@@ -12,14 +12,18 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07hw29r2inyp493dia4fx3ysfr1wxi2jb3n9cmwdi0l54s2ahqvf";
+    sha256 = "02zxfmqw7a5kz8qjdph9a9961mbkd4haxwwa28yjkxs5hzs5x3c8";
   };
 
+  nativeBuildInputs = [ cython ];
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
+  checkInputs = [ pytestCheckHook ];
+  preCheck = ''
+    pushd gsd/test
+  '';
+  postCheck = ''
+    popd
   '';
 
   meta = with lib; {

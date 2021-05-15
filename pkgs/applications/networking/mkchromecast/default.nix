@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
 , sox
@@ -23,7 +23,7 @@ let packages = [
   nodejs
   ffmpeg
   youtube-dl
-] ++ stdenv.lib.optionals stdenv.isLinux [ pulseaudio ];
+] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication rec {
@@ -63,19 +63,19 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"
-    "--prefix PATH : ${stdenv.lib.makeBinPath packages}"
+    "--prefix PATH : ${lib.makeBinPath packages}"
   ];
 
   postInstall = ''
     substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
     substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
     license = licenses.mit;

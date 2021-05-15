@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-backtrace'';
-  version = ''20200610-git'';
+  baseName = "trivial-backtrace";
+  version = "20200610-git";
 
-  description = ''trivial-backtrace'';
+  description = "trivial-backtrace";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-backtrace/2020-06-10/trivial-backtrace-20200610-git.tgz'';
-    sha256 = ''0slz2chal6vpiqx9zmjh4cnihhw794rq3267s7kz7livpiv52rks'';
+    url = "http://beta.quicklisp.org/archive/trivial-backtrace/2020-06-10/trivial-backtrace-20200610-git.tgz";
+    sha256 = "0slz2chal6vpiqx9zmjh4cnihhw794rq3267s7kz7livpiv52rks";
   };
 
   packageName = "trivial-backtrace";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   click
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enable git-like did-you-mean feature in click";
     homepage = "https://github.com/click-contrib/click-didyoumean";
     license = licenses.mit;

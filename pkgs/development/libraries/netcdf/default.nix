@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , hdf5
 , m4
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
       "--enable-shared"
       "--disable-dap-remote-tests"
   ]
-  ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
 
   disallowedReferences = [ stdenv.cc ];
 
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
       homepage = "https://www.unidata.ucar.edu/software/netcdf/";
       license = {
         url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";

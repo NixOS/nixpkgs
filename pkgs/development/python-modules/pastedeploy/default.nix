@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytestrunner
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # should be included with versions > 2.0.1
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "http://pythonpaste.org/deploy/";
     license = licenses.mit;

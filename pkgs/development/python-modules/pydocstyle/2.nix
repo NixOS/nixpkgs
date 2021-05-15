@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k, pythonOlder
 , snowballstemmer, six, configparser
-, pytest, pytestpep8, mock, pathlib }:
+, pytest, mock, pathlib }:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
 
-  checkInputs = [ pytest pytestpep8 mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  checkInputs = [ pytest mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkPhase = ''
     # test_integration.py installs packages via pip
-    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
+    py.test --cache-clear -vv src/tests -k "not test_integration"
   '';
 
   meta = with lib; {

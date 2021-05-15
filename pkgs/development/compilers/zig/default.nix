@@ -1,24 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, libxml2
+, zlib
+}:
 
 llvmPackages.stdenv.mkDerivation rec {
-  version = "0.6.0";
   pname = "zig";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    sha256 = "13dwm2zpscn4n0p5x8ggs9n7mwmq9cgip383i3qqphg7m3pkls8z";
+    hash = "sha256-rZYv8LFH3M70SyPwPVyul+Um9j82K8GZIepVmaonzPw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
   buildInputs = [
-    llvmPackages.clang-unwrapped
-    llvmPackages.llvm
-    llvmPackages.lld
     libxml2
     zlib
-  ];
+  ] ++ (with llvmPackages; [
+    clang-unwrapped
+    lld
+    llvm
+  ]);
 
   preBuild = ''
     export HOME=$TMPDIR;
@@ -26,19 +36,19 @@ llvmPackages.stdenv.mkDerivation rec {
 
   checkPhase = ''
     runHook preCheck
-    ./zig test $src/test/stage1/behavior.zig
+    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/stage1/behavior.zig
     runHook postCheck
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://ziglang.org/";
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
-    homepage = "https://ziglang.org/";
     license = licenses.mit;
+    maintainers = with maintainers; [ andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.andrewrk ];
     # See https://github.com/NixOS/nixpkgs/issues/86299
     broken = stdenv.isDarwin;
   };

@@ -1,5 +1,5 @@
 {
-  stdenv, makeWrapper, fetchFromGitHub, writeShellScriptBin,
+  lib, stdenv, makeWrapper, fetchFromGitHub, writeShellScriptBin,
   imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh, procps, xrdb, xset,
   gnused, gnugrep, coreutils
 }:
@@ -7,7 +7,7 @@ let
   i3lock = writeShellScriptBin "i3lock" ''
     ${i3lock-color}/bin/i3lock-color "$@"
   '';
-  binPath = stdenv.lib.makeBinPath [
+  binPath = lib.makeBinPath [
     imagemagick i3lock
     xdpyinfo xrandr xset
     bc feh procps xrdb
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "multilockscreen";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jeffmhubbard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gmnrq7ibbhiwsn7mfi2r71fwm6nvhiwf4wsyz44cscm474z83p0";
+    sha256 = "1vdai1ymkzlkh5l69s8zpyj2klzm8zyak00vd4p7lcldxfj861ig";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/multilockscreen" --prefix PATH : "${binPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper script for i3lock-color";
     longDescription = ''
       multilockscreen is a wrapper script for i3lock-color.

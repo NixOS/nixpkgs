@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml, openssh
+{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
 , nose, bc, hostname, coreutils, bash, gnused
 }:
 
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     tests/*.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;

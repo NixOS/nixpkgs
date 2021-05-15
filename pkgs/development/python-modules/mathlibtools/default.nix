@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "mathlibtools";
-  version = "0.0.10";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d708bgsxjhhchqc56afi1h7k87vbfn7v40f4y1zlv7hsjc69s36";
+    sha256 = "da41c65e206f55b1faea303581fc11215e52d6e6990b827336b2e1eb82aad96c";
   };
 
   propagatedBuildInputs = [

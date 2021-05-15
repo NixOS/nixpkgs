@@ -1,12 +1,12 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , qmake
 , qttools
 , gstreamer
 , libX11
+, pulseaudio
 , qtbase
 , qtmultimedia
 , qtx11extras
@@ -19,21 +19,19 @@
 mkDerivation rec {
 
   pname = "vokoscreen-ng";
-  version = "3.0.5";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "1spyqw8h8bkc1prdb9aixiw5h3hk3gp2p0nj934bnwq04kmfp660";
+    sha256 = "1302663hyp2xxhaavhfky24a2p9gz23i3rykmrc6c1n23h24snri";
   };
 
   patches = [
-    # Better linux integration
-    (fetchpatch {
-      url = "https://github.com/vkohaupt/vokoscreenNG/commit/0a3784095ecca582f7eb09551ceb34c309d83637.patch";
-      sha256 = "1iibimv8xfxxfk44kkbrkay37ibdndjvs9g53mxr8x8vrsp917bz";
-    })
+    # Adaptation of previously used https://github.com/City-busz/vokoscreenNG/commit/0a3784095ecca582f7eb09551ceb34c309d83637 patch
+    # used for 3.0.5 but incompatible at least since 3.0.8. The issue is addressed here https://github.com/vkohaupt/vokoscreenNG/issues/139
+    ./linux-support-installation-target.patch
   ];
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
@@ -42,6 +40,7 @@ mkDerivation rec {
   buildInputs = [
     gstreamer
     libX11
+    pulseaudio
     qtbase
     qtmultimedia
     qtx11extras

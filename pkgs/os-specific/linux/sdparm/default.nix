@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "sdparm";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nqjc4w2w47zavcbf5xmm53x1zbwgljaw1lpajcdi537cgy32fa8";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://sg.danny.cz/sg/sdparm.html";
     description = "A utility to access SCSI device parameters";
     license = licenses.bsd3;

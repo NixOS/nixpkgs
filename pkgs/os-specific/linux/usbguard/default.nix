@@ -1,30 +1,45 @@
-{
-  stdenv, fetchurl, lib,
-  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
-  audit,
-  libgcrypt ? null,
-  libsodium ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, installShellFiles
+, nixosTests
+, asciidoc
+, pkg-config
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, dbus-glib
+, libcap_ng
+, libqb
+, libseccomp
+, polkit
+, protobuf
+, audit
+, libgcrypt
+, libsodium
 }:
-
-with stdenv.lib;
 
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.8";
+  version = "1.0.0";
   pname = "usbguard";
 
-  repo = "https://github.com/USBGuard/usbguard";
-
-  src = fetchurl {
-    url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1il5immqfxh2cj8wn1bfk7l42inflzgjf07yqprpz7r3lalbxc25";
+  src = fetchFromGitHub {
+    owner = "USBGuard";
+    repo = pname;
+    rev = "usbguard-${version}";
+    sha256 = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    installShellFiles
     asciidoc
-    pkgconfig
+    pkg-config
     libxslt # xsltproc
     libxml2 # xmllint
     docbook_xml_dtd_45
@@ -54,10 +69,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  postInstall = ''
+    installShellCompletion --bash --name usbguard.bash scripts/bash_completion/usbguard
+    installShellCompletion --zsh --name _usbguard scripts/usbguard-zsh-completion
+  '';
+
+  passthru.tests = nixosTests.usbguard;
+
+  meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    longDescription = ''
+      USBGuard is a software framework for implementing USB device authorization
+      policies (what kind of USB devices are authorized) as well as method of
+      use policies (how a USB device may interact with the system). Simply put,
+      it is a USB device whitelisting tool.
+    '';
     homepage = "https://usbguard.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.tnias ];
   };
 }

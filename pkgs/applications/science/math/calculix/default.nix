@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, arpack, spooles, blas, lapack }:
+{ lib, stdenv, fetchurl, gfortran, arpack, spooles, blas, lapack }:
 
 stdenv.mkDerivation rec {
   pname = "calculix";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm0755 ccx_${version} $out/bin/ccx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.calculix.de/";
     description = "Three-dimensional structural finite element program";
     license = licenses.gpl2Plus;

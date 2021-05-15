@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "amrwb";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p6m9nd08mv525w14py9qzs9zwsa5i3vxf5bgcmcvc408jqmkbsw";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
 
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     # The wrapper code is free, but not the libraries from 3gpp.
     # It's a source code reference implementation with patents and licenses on
     # some countries, not redistributable.
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

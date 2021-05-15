@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, fetchzip
+{ lib, stdenv, fetchpatch, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , cmake
@@ -84,17 +84,11 @@ stdenv.mkDerivation rec {
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
   ;
 
   patches = [
-    # Julia recompiles a precompiled file if the mtime stored *in* the
-    # .ji file differs from the mtime of the .ji file.  This
-    # doesn't work in Nix because Nix changes the mtime of files in
-    # the Nix store to 1. So patch Julia to accept mtimes of 1.
-    ./allow_nix_mtime.patch
-    ./diagonal-test.patch
-    ./use-system-utf8proc-julia-1.0.patch
+    ./patches/1.0/use-system-utf8proc-julia-1.0.patch
   ];
 
   postPatch = ''
@@ -121,9 +115,9 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     let
-      arch = stdenv.lib.head (stdenv.lib.splitString "-" stdenv.system);
+      arch = lib.head (lib.splitString "-" stdenv.system);
       march = {
-        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}
@@ -139,7 +133,7 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
+      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
       "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
@@ -166,12 +160,10 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_ZLIB=1"
     ];
 
-  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (stdenv.lib.makeLibraryPath [
+  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (lib.makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr blas lapack openlibm
     openspecfun pcre2
   ]);
-
-  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
   checkTarget = "testall";
@@ -185,6 +177,8 @@ stdenv.mkDerivation rec {
     sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
@@ -206,8 +200,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

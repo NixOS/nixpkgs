@@ -183,7 +183,7 @@ in {
         config = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
-          description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
+          description = "Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.";
           example = literalExample ''{ realtime-scheduling = "yes"; }'';
         };
       };
@@ -306,6 +306,7 @@ in {
         description = "PulseAudio system service user";
         home = stateDir;
         createHome = true;
+        isSystemUser = true;
       };
 
       users.groups.pulse.gid = gid;

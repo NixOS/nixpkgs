@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, trousers, openssl, opencryptoki, perl }:
+{ lib, stdenv, fetchurl, trousers, openssl, opencryptoki, perl }:
 
 let
   version = "1.3.9.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ trousers openssl opencryptoki ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Management tools for TPM hardware";
     longDescription = ''
       tpm-tools is an open-source package designed to enable user and

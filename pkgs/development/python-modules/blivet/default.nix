@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
+{ lib, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
 , pyudev, six, libselinux, multipath-tools, lsof, util-linux
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

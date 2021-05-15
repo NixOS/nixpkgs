@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
+{ lib, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
 
 buildGoPackage rec {
   pname = "quorum";
@@ -31,7 +31,7 @@ buildGoPackage rec {
     find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://www.goquorum.com/";
     license = licenses.lgpl3;

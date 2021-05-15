@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig
+{ lib, fetchFromGitHub, rustPlatform, pkg-config
 , libsodium, libarchive, openssl, zeromq }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "08sncz0jgsr2s821j3s4bk7d54xqwmnld7m57avavym1xqvsnbmy";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsodium libarchive openssl zeromq ];
 
   cargoBuildFlags = ["--package hab"];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An application automation framework";
     homepage = "https://www.habitat.sh";
     license = licenses.asl20;

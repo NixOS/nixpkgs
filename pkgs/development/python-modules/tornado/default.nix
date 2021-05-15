@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.0.4";
+  version = "6.1";
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fe2d45ba43b00a41cd73f8be321a44936dc1aba233dee979f17a042b83eb6dc";
+    sha256 = "33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791";
   };
 
   __darwinAllowLocalNetworking = true;

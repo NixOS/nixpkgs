@@ -67,6 +67,9 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
     inherit sha256;
   };
+  patches = [
+    ./libtiff-4.2.patch  # adjust configure check to work with libtiff > 4.1
+  ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and
   # hardcode their absolute paths in the new package.
@@ -83,10 +86,10 @@ stdenv.mkDerivation {
     openldap  # optional
     pam  # optional
   ];
-  postPatch = ''. ${postPatch}'';
+  postPatch = ". ${postPatch}";
   dontAddPrefix = true;
-  postInstall = ''. ${postInstall}'';
-  postInstallCheck = ''. ${./post-install-check.sh}'';
+  postInstall = ". ${postInstall}";
+  postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";

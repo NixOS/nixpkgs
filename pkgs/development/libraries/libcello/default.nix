@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libcello";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://libcello.org/";
     description = "Higher level programming in C";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.MostAwesomeDude ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    platforms = lib.platforms.unix;
   };
 }

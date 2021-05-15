@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
+{ lib, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
 
 python27Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
@@ -16,7 +16,7 @@ python27Packages.buildPythonApplication rec {
     sha256 = "0abnmn0bh11jihf5d3cggiild1ykawzv5f5fhb4cyyi8fvy4hcxf";
   });
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ python27Packages.biopython wget diamond hmmer ];
 
   # make emapper find diamond & hmmer
@@ -30,7 +30,7 @@ python27Packages.buildPythonApplication rec {
   # the user can download only those that interest them.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast genome-wide functional annotation through orthology assignment";
     license = licenses.gpl2;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";

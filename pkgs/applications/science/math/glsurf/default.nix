@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut
+{ lib, stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut
 , libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng, giflib
 }:
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "A program to draw implicit surfaces and curves";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

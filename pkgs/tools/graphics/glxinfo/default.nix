@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGL, libX11 }:
+{ lib, stdenv, fetchurl, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "glxinfo";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -Dm 555 -t $out/bin glx{info,gears} es2{_info,gears} eglinfo
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test utilities for OpenGL";
     homepage = "https://www.mesa3d.org/";
     license = licenses.mit;

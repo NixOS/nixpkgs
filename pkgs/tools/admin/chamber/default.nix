@@ -1,22 +1,21 @@
 { buildGoModule, lib, fetchFromGitHub }:
+
 buildGoModule rec {
   pname = "chamber";
-  version = "2.8.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7L9RaE4LvHRR6MUimze5QpbnfasWJdY4arfS/Usy2q0=";
+    sha256 = "4G/QGoztpcLIspHxD5G+obG5h05SZek4keOJ5qS3/zg=";
   };
 
-  vendorSha256 = null;
+  CGO_ENABLED = 0;
 
-  # set the version. see: chamber's Makefile
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=v${version}
-  '';
+  vendorSha256 = "XpLLolxWu9aMp1cyG4dUQk4YtknbIRMmBUdSeyY4PNk=";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
 
   meta = with lib; {
     description =

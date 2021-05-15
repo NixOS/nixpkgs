@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "humanfriendly";
-  version = "8.2";
+  version = "9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf52ec91244819c780341a3438d5d7b09f431d3f113a475147ac9b7b167a3d12";
+    sha256 = "sha256-BmVilWY5qyH/JnbR/aC1mH6YXFNPx2cAoZvVS8uBEh0=";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.3") monotonic;

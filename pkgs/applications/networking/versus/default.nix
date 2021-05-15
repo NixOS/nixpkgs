@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "versus";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "1d12jcd8crxcgp5m8ga691wivim4cg8cbz4pzgxp0jhzg9jplpbv";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Benchmark multiple API endpoints against each other";
     homepage = "https://github.com/INFURA/versus";
     license = licenses.mit;

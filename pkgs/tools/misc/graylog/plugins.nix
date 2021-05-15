@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, graylog }:
+{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
 
 with pkgs.lib;
 
@@ -15,7 +15,7 @@ let
     stdenv.mkDerivation (a // {
       inherit installPhase;
       dontUnpack = true;
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       meta = a.meta // {
         platforms = graylog.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
@@ -77,7 +77,7 @@ in {
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
       description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
-      license = stdenv.lib.licenses.unfree;
+      license = lib.licenses.unfree;
     };
   };
   filter-messagesize = glPlugin rec {

@@ -7,6 +7,8 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.07";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-v${version}.tbz";
     sha256 = "15vk8sh50p3f2mbv8z7mqnx76cffri36f2krp25zkkwix8jg7ci4";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, perl, bsdbuild, gettext, mandoc
+{ lib, stdenv, fetchurl, pkg-config, libtool, perl, bsdbuild, gettext, mandoc
 , libpng, libjpeg, xlibsWrapper, libXinerama, freetype, SDL, libGLU, libGL
 , libsndfile, portaudio, libmysqlclient, fontconfig
 }:
@@ -26,14 +26,14 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig libtool gettext ];
+  nativeBuildInputs = [ pkg-config libtool gettext ];
 
   buildInputs = [
     bsdbuild perl xlibsWrapper libXinerama SDL libGL libmysqlclient mandoc
     freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
     license = with licenses; bsd3;

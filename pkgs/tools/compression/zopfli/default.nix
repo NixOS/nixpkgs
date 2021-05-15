@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "zopfli";
@@ -22,9 +22,7 @@ stdenv.mkDerivation rec {
     cp $src/src/zopfli/*.h $dev/include/
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Very good, but slow, deflate or zlib compression";
     longDescription = ''

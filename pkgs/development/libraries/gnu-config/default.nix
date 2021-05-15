@@ -1,20 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
-  rev = "e78c96e5288993aaea3ec44e5c6ee755c668da79";
+  rev = "6faca61810d335c7837f320733fe8e15a1431fc2";
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    sha256 = "sha256-TSLpYIDGSp1flqCBi2Sgg9IWDV5bcO+Hn2Menv3R6KU=";
+    sha256 = "06wkkhpbx9slmknr2g7mcd8x3zsdhnmmay25l31h3rkdp1wkq7kx";
   };
   configSub = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    sha256 = "sha256-DkCGDN/DE3phQ1GO/Ua5ZPPtp0Ya93PnW3yfSK8EV9s=";
+    sha256 = "1qkph8cqanmgy3s4a18bm1a4vk62i8pf8cy5pc1hkpqwn4g6l0di";
   };
 in stdenv.mkDerivation {
   pname = "gnu-config";
-  version = "2020-05-04";
+  version = "2021-01-25";
 
   buildCommand = ''
     mkdir -p $out
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     cp ${configSub} $out/config.sub
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Attempt to guess a canonical system name";
     homepage = "https://savannah.gnu.org/projects/config";
     license = licenses.gpl3;

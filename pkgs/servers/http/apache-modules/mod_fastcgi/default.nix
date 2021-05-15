@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd }:
+{ lib, stdenv, fetchurl, apacheHttpd }:
 
 let
   version = "2.4.7.1";
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       more scalable.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

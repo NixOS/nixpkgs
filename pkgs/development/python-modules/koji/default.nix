@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, dateutil }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, dateutil }:
 
 buildPythonPackage rec {
   pname = "koji";
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     rm -rf $out/nix
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An RPM-based build system";
     homepage = "https://pagure.io/koji";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

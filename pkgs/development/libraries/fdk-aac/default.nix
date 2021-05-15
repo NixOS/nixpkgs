@@ -1,8 +1,8 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , exampleSupport ? false # Example encoding program
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "fdk-aac";
   version = "2.0.1";

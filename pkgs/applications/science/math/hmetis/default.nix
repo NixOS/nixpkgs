@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghostscript }:
+{ lib, stdenv, fetchurl, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "hmetis";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv libhmetis.a $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview";
     license = licenses.unfree;

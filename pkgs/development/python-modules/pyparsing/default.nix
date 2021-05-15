@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pyparsing";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "pyparsing";
     repo = pname;
     rev = "pyparsing_${version}";
-    sha256 = "1fh7s3cfr274pd6hh6zygl99842rqws98an2nkrrqj2spb9ldxcm";
+    sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
   };
 
   # https://github.com/pyparsing/pyparsing/blob/847af590154743bae61a32c3dc1a6c2a19009f42/tox.ini#L6

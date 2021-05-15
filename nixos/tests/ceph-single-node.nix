@@ -34,7 +34,7 @@ let
 
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
-      memorySize = 512;
+      memorySize = 1024;
       emptyDiskImages = [ 20480 20480 20480 ];
       vlans = [ 1 ];
     };
@@ -95,6 +95,7 @@ let
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
     monA.succeed("ceph mon enable-msgr2")
+    monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
 
     # Can't check ceph status until a mon is up
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
@@ -184,7 +185,7 @@ let
   '';
 in {
   name = "basic-single-node-ceph-cluster";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lejonet johanot ];
   };
 

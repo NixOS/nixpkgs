@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge }:
 
 stdenv.mkDerivation rec {
   pname = "spacebar";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ./doc/spacebar.1 $out/share/man/man1/spacebar.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal status bar for macOS";
     homepage = "https://github.com/cmacrae/spacebar";
     platforms = platforms.darwin;

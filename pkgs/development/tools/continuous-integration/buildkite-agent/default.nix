@@ -1,19 +1,18 @@
-{ fetchFromGitHub, stdenv, buildGoModule,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
+{ fetchFromGitHub, lib, buildGoModule,
+  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
+  nixosTests }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.25.0";
-
-  goPackagePath = "github.com/buildkite/agent";
+  version = "3.29.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "VxAGi2NpXpc3U+GNIvGJSkdHGODrX2s8oY+dQ8QXIHQ=";
+    sha256 = "sha256-76yyqZi+ktcwRXo0ZIcdFJ9YCuHm9Te4AI+4meuhMNA=";
   };
 
-  vendorSha256 = "X1K6uKiMFXTDT1PcedGQ8HLGox8ePP7Cz0Ihf4m9ts8=";
+  vendorSha256 = "sha256-6cejbCbr0Rn4jWFJ0fxG4v0L0xUM8k16cbACmcQ6m4o=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
@@ -29,10 +28,14 @@ buildGoModule rec {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    smoke-test = nixosTests.buildkite-agents;
+  };
+
+  meta = with lib; {
     description = "Build runner for buildkite.com";
     longDescription = ''
       The buildkite-agent is a small, reliable, and cross-platform build runner

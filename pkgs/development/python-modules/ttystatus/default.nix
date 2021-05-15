@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , sphinx
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://liw.fi/ttystatus/";
     description = "Progress and status updates on terminals for Python";
     license = licenses.gpl3;

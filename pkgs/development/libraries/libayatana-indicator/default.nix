@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gtk=${gtkVersion}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ayatana Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-indicator";
     changelog = "https://github.com/AyatanaIndicators/libayatana-indicator/blob/${version}/ChangeLog";

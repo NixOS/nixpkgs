@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install fw $out/bin/fw
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     version = "3.20";
     description = "A simple, reliable literate-programming macro preprocessor";
     homepage = "http://www.ross.net/funnelweb/";

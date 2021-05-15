@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation {
   version = "2019-05-09";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -D xcwd "$out/bin/xcwd"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A simple tool which print the current working directory of the currently focused window
     '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gd, ncurses, sqlite, check }:
+{ lib, stdenv, fetchurl, pkg-config, gd, ncurses, sqlite, check }:
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
     substituteInPlace src/cfg.c --replace /usr/local $out
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gd ncurses sqlite ];
 
   checkInputs = [ check ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console-based network statistics utility for Linux";
     longDescription = ''
       vnStat is a console-based network traffic monitor for Linux and BSD that

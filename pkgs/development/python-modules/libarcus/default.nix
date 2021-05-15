@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub
+{ lib, buildPythonPackage, python, fetchFromGitHub
 , cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.7.1";
+  version = "4.9.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "0wmrcvw7k34ib93shhmjzh6kpndgqr37kyr377sril5clmac0z1f";
+    sha256 = "0wq72nf680bwxijjajb4piw563rnvflshmw96kqln4lsny7ydjj2";
   };
 
   disabled = pythonOlder "3.4.0";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;

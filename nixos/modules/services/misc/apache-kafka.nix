@@ -90,19 +90,7 @@ in {
 
     jvmOptions = mkOption {
       description = "Extra command line options for the JVM running Kafka.";
-      default = [
-        "-server"
-        "-Xmx1G"
-        "-Xms1G"
-        "-XX:+UseCompressedOops"
-        "-XX:+UseParNewGC"
-        "-XX:+UseConcMarkSweepGC"
-        "-XX:+CMSClassUnloadingEnabled"
-        "-XX:+CMSScavengeBeforeRemark"
-        "-XX:+DisableExplicitGC"
-        "-Djava.awt.headless=true"
-        "-Djava.net.preferIPv4Stack=true"
-      ];
+      default = [];
       type = types.listOf types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
@@ -115,6 +103,13 @@ in {
       description = "The kafka package to use";
       default = pkgs.apacheKafka;
       defaultText = "pkgs.apacheKafka";
+      type = types.package;
+    };
+
+    jre = mkOption {
+      description = "The JRE with which to run Kafka";
+      default = cfg.package.passthru.jre;
+      defaultText = "pkgs.apacheKafka.passthru.jre";
       type = types.package;
     };
 
@@ -138,7 +133,7 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
+          ${cfg.jre}/bin/java \
             -cp "${cfg.package}/libs/*" \
             -Dlog4j.configuration=file:${logConfig} \
             ${toString cfg.jvmOptions} \

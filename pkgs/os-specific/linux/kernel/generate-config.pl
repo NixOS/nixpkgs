@@ -61,6 +61,12 @@ sub runConfig {
             # Remember choice alternatives ("> 1. bla (FOO)" or " 2. bla (BAR) (NEW)").
             if ($line =~ /^\s*>?\s*(\d+)\.\s+.*?\(([A-Za-z0-9_]+)\)(?:\s+\(NEW\))?\s*$/) {
                 $choices{$2} = $1;
+            } else {
+                # The list of choices has ended without us being
+                # asked. This happens for options where only one value
+                # is valid, for instance. The results can foul up
+                # later options, so forget about it.
+                %choices = ();
             }
 
             $line = "";

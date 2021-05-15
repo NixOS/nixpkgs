@@ -12,18 +12,16 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "4.6.11";
+  version = "5.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca1b45faac8c0b18493d02a8571792f3c40291cf2bcf1f55afed3d8f3aa7ba74";
+    sha256 = "f4965fba0a4718d47d470beeb5d6446e3357a62402b16c510b6a2f251e05ac3c";
   };
 
   postPatch = ''
     substituteInPlace requirements/test.txt \
       --replace "pytest-sugar" ""
-    substituteInPlace requirements/default.txt \
-      --replace "amqp==2.5.1" "amqp~=2.5"
   '';
 
   propagatedBuildInputs = [

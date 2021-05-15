@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, emacs, texlive, ghostscript }:
- 
-let auctex = stdenv.mkDerivation ( rec {
-  version = "12.3";
+{ lib, stdenv, fetchurl, emacs, texlive, ghostscript }:
 
+let auctex = stdenv.mkDerivation ( rec {
   # Make this a valid tex(live-new) package;
   # the pkgs attribute is provided with a hack below.
   pname = "auctex";
+  version = "12.3";
   tlType = "run";
-
 
   outputs = [ "out" "tex" ];
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1pd99hbhci3l1n0lmzn803svqwl47kld6172gwkwjmwlnqqgxm1g";
+    hash = "sha256-L9T+MLaUV8knf+IE0+g8hHK89QDI/kqBDXREBhdMqd0=";
   };
 
-  buildInputs = [ emacs texlive.combined.scheme-basic ghostscript ];
+  buildInputs = [
+    emacs
+    ghostscript
+    texlive.combined.scheme-basic
+  ];
 
   preConfigure = ''
     mkdir -p "$tex"
@@ -27,11 +29,11 @@ let auctex = stdenv.mkDerivation ( rec {
     "--with-texmf-dir=\${tex}"
   ];
 
-  meta = {
-    description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/auctex";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3;
+    description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 });
 

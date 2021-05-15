@@ -5,7 +5,7 @@
 , isPy27
 , aenum
 , wrapt
-, typing
+, typing ? null
 , pyserial
 , nose
 , mock

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 let
   s = # Generated upstream information
   rec {
@@ -8,20 +8,18 @@ let
     url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
     sha256 = "1pp853lbnz383ilp9wbgc3wv1dn7lpx3idz8dmzda94rckl7sd43";
   };
-  buildInputs = [
-    unzip
-  ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ unzip ];
+
   src = fetchurl {
     inherit (s) url sha256;
   };
   preConfigure = ''
     cd angelscript/projects/gnuc
     sed -i makefile -e "s@LOCAL = .*@LOCAL = $out@"
-    export SHARED=1 
+    export SHARED=1
     export VERSION="${s.version}"
     mkdir -p "$out/lib" "$out/bin" "$out/share" "$out/include"
   '';
@@ -35,9 +33,9 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Light-weight scripting library";
-    license = stdenv.lib.licenses.zlib ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.zlib ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     badPlatforms = [ "aarch64-linux" ];
     downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
     homepage="http://www.angelcode.com/angelscript/";

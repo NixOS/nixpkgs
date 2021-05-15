@@ -46,6 +46,13 @@ in {
         '';
       };
 
+      socketActivated = mkOption {
+        default = false;
+        type = types.bool;
+        description =
+          "If enabled Rsync will be socket-activated rather than run persistently.";
+      };
+
     };
   };
 
@@ -63,12 +70,55 @@ in {
 
     services.rsyncd.settings.global.port = toString cfg.port;
 
-    systemd.services.rsyncd = {
-      description = "Rsync daemon";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart =
-        "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=${configFile}";
+    systemd = let
+      serviceConfigSecurity = {
+        ProtectSystem = "full";
+        PrivateDevices = "on";
+        NoNewPrivileges = "on";
+      };
+    in {
+      services.rsync = {
+        enable = !cfg.socketActivated;
+        aliases = [ "rsyncd" ];
+
+        description = "fast remote file copy program daemon";
+        after = [ "network.target" ];
+        documentation = [ "man:rsync(1)" "man:rsyncd.conf(5)" ];
+
+        serviceConfig = serviceConfigSecurity // {
+          ExecStart =
+            "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=${configFile}";
+          RestartSec = 1;
+        };
+
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      services."rsync@" = {
+        description = "fast remote file copy program daemon";
+        after = [ "network.target" ];
+
+        serviceConfig = serviceConfigSecurity // {
+          ExecStart = "${pkgs.rsync}/bin/rsync --daemon --config=${configFile}";
+          StandardInput = "socket";
+          StandardOutput = "inherit";
+          StandardError = "journal";
+        };
+      };
+
+      sockets.rsync = {
+        enable = cfg.socketActivated;
+
+        description = "socket for fast remote file copy program daemon";
+        conflicts = [ "rsync.service" ];
+
+        listenStreams = [ (toString cfg.port) ];
+        socketConfig.Accept = true;
+
+        wantedBy = [ "sockets.target" ];
+      };
     };
+
   };
 
   meta.maintainers = with lib.maintainers; [ ehmry ];

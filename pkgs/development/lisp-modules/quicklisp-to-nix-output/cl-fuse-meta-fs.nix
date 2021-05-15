@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-fuse-meta-fs'';
-  version = ''20190710-git'';
+  baseName = "cl-fuse-meta-fs";
+  version = "20190710-git";
 
-  description = ''CFFI bindings to FUSE (Filesystem in user space)'';
+  description = "CFFI bindings to FUSE (Filesystem in user space)";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-fuse" args."cl-utilities" args."iterate" args."pcall" args."pcall-queue" args."trivial-backtrace" args."trivial-features" args."trivial-utf-8" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-fuse-meta-fs/2019-07-10/cl-fuse-meta-fs-20190710-git.tgz'';
-    sha256 = ''1c2nyxj7q8njxydn4xiagvnb21zhb1l07q7nhfw0qs2qk6dkasq7'';
+    url = "http://beta.quicklisp.org/archive/cl-fuse-meta-fs/2019-07-10/cl-fuse-meta-fs-20190710-git.tgz";
+    sha256 = "1c2nyxj7q8njxydn4xiagvnb21zhb1l07q7nhfw0qs2qk6dkasq7";
   };
 
   packageName = "cl-fuse-meta-fs";

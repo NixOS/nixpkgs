@@ -99,7 +99,10 @@ return Promise to resolve in that process."
             ("github"    (list "nix-prefetch-url"
                                "--unpack" (concat "https://github.com/" repo "/archive/" commit ".tar.gz")))
             ("gitlab"    (list "nix-prefetch-url"
-                               "--unpack" (concat "https://gitlab.com/" repo "/repository/archive.tar.gz?ref=" commit)))
+                               "--unpack" (concat "https://gitlab.com/api/v4/projects/"
+                                                  (url-hexify-string repo)
+                                                  "/repository/archive.tar.gz?ref="
+                                                  commit)))
             ("bitbucket" (list "nix-prefetch-hg"
                                (concat "https://bitbucket.com/" repo) commit))
             ("hg"        (list "nix-prefetch-hg"

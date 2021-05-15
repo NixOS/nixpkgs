@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm755 TimeKeeper/TimeKeeper $out/bin/timekeeper
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log hours worked and make reports";
     homepage = "https://github.com/bburdette/TimeKeeper";
     maintainers = with maintainers; [ bburdette ];

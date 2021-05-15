@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
-, pkgconfig
+, pkg-config
 , util-linux
 , libuuid
 , thin-provisioning-tools, libaio
@@ -15,15 +15,15 @@
 assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + stdenv.lib.optionalString enableDmeventd "with-dmeventd";
-  version = "2.03.10";
+  pname = "lvm2" + lib.optionalString enableDmeventd "with-dmeventd";
+  version = "2.03.11";
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    sha256 = "1l0fkn9abrgk5mfn6jfh9qhdr86b59l1c5pk6lp8jh0491d69las";
+    sha256 = "1m4xpda8vbyd89ca0w8nacvnl4j34yzsa625gn990fb5sh84ab44";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
 
   configureFlags = [
@@ -32,20 +32,20 @@ stdenv.mkDerivation rec {
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ stdenv.lib.optionals (!enableCmdlib) [
+  ] ++ lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
-  ] ++ stdenv.lib.optional enableCmdlib "--enable-cmdlib"
-  ++ stdenv.lib.optionals enableDmeventd [
+  ] ++ lib.optional enableCmdlib "--enable-cmdlib"
+  ++ lib.optionals enableDmeventd [
     "--enable-dmeventd"
     "--with-dmeventd-pidfile=/run/dmeventd/pid"
     "--with-default-dm-run-dir=/run/dmeventd"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ] ++
-  stdenv.lib.optionals (udev != null) [
+  lib.optionals (udev != null) [
     "--enable-udev_rules"
     "--enable-udev_sync"
   ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires root
 
-  makeFlags = stdenv.lib.optionals (udev != null) [
+  makeFlags = lib.optionals (udev != null) [
     "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
   ];
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
 
   # Install systemd stuff.
-  installTargets = [ "install" ] ++ stdenv.lib.optionals (udev != null) [
+  installTargets = [ "install" ] ++ lib.optionals (udev != null) [
     "install_systemd_generators"
     "install_systemd_units"
     "install_tmpfiles_configuration"
@@ -107,18 +107,18 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ] ++ stdenv.lib.optionals (enableCmdlib != true) [
+  ] ++ lib.optionals (enableCmdlib != true) [
     "bin"
     "lib"
   ];
 
-  postInstall = stdenv.lib.optionalString (enableCmdlib != true) ''
+  postInstall = lib.optionalString (enableCmdlib != true) ''
     moveToOutput lib/libdevmapper.so $lib
   '';
 
   passthru.tests.installer = nixosTests.installer.lvm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;

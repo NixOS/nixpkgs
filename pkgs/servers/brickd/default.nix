@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libusb1, pkgconfig, pmutils, udev} :
+{ lib, stdenv, fetchgit, libusb1, pkg-config, pmutils, udev} :
 
 let
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 pmutils udev ];
 
   # shell thing didn't work so i replaced it using nix
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.tinkerforge.com/";
     description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
-    maintainers = [ stdenv.lib.maintainers.qknight ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.qknight ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,20 +1,37 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pymeeus, pytz }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchFromGitHub
+, pymeeus
+, pytz
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "convertdate";
-  version = "2.2.1";
+  version = "2.3.2";
+  disabled = isPy27;
 
   # Tests are not available in the PyPI tarball so use GitHub instead.
   src = fetchFromGitHub {
     owner = "fitnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xgi7x9b9kxm0q51bqnmwdm5lp8vwhx5yk4d1b23r37spz9dbhw5";
+    sha256 = "0k7j59sbqwyi72vcjx5vsh3qb6hxfnkfjkd2i6f6lckdr1bkh7fz";
   };
 
-  propagatedBuildInputs = [ pymeeus pytz ];
+  propagatedBuildInputs = [
+    pymeeus
+    pytz
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "convertdate" ];
+
+  meta = with lib; {
     homepage = "https://github.com/fitnr/convertdate";
     description = "Utils for converting between date formats and calculating holidays";
     license = licenses.mit;

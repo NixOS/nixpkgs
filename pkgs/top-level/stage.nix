@@ -200,6 +200,9 @@ let
       then self
       else import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
 
+    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
+    #       of allocations. DO NOT USE THIS IN NIXPKGS.
+    #
     # Extend the package set with a single overlay. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
     # in one go when calling Nixpkgs, for performance and simplicity.
@@ -224,6 +227,8 @@ let
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };
+      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+        gcc.abi = "elfv2";
       };
     });
   };

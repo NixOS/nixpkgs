@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, dotnetCorePackages, jq }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, dotnetCorePackages, jq }:
 
 stdenv.mkDerivation rec {
   pname = "ArchiSteamFarm";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --run "ln -sf $dist/www ."
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;

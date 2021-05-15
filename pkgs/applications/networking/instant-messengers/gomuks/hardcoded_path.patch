@@ -1,0 +1,13 @@
+diff --git a/lib/notification/notify_linux.go b/lib/notification/notify_linux.go
+index f93a95f..da6a61d 100644
+--- a/lib/notification/notify_linux.go
++++ b/lib/notification/notify_linux.go
+@@ -32,7 +32,7 @@ func Send(title, text string, critical, sound bool) error {
+ 		if critical {
+ 			soundName = "complete"
+ 		}
+-		exec.Command("paplay", "/usr/share/sounds/freedesktop/stereo/"+soundName+".oga").Run()
++		exec.Command("paplay", "@soundTheme@/share/sounds/freedesktop/stereo/"+soundName+".oga").Run()
+ 	}
+ 	return exec.Command("notify-send", args...).Run()
+ }

@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, xcbuildHook
+{ lib, appleDerivation, xcbuildHook
 , openssl_1_0_2, Librpcsvc, xnu, libpcap, developer_cmds }:
 
 appleDerivation {
@@ -44,7 +44,7 @@ appleDerivation {
  '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

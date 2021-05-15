@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ ... }:
 
     virtualisation.emptyDiskImages = [ 4096 ];
 
-    fileSystems = lib.mkVMOverride {
+    virtualisation.fileSystems = {
       "/home" = {
         device = "/dev/disk/by-label/aux";
         fsType = "btrfs";

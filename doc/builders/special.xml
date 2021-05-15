@@ -5,6 +5,6 @@
  <para>
   This chapter describes several special builders.
  </para>
- <xi:include href="special/fhs-environments.xml" />
- <xi:include href="special/mkshell.xml" />
+ <xi:include href="special/fhs-environments.section.xml" />
+ <xi:include href="special/mkshell.section.xml" />
 </chapter>

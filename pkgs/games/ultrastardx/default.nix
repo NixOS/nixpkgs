@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
 , fetchpatch
-, pkgconfig
+, pkg-config
 , lua
 , fpc
 , pcre
@@ -14,7 +14,7 @@
 , SDL2_gfx
 , SDL2_mixer
 , SDL2_net, SDL2_ttf
-, ffmpeg
+, ffmpeg_3
 , sqlite
 , zlib
 , libX11
@@ -26,7 +26,7 @@ let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg
+    sqlite lua zlib libX11 libGLU libGL ffmpeg_3
   ];
 
 in stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0vmfv8zpyf8ymx3rjydpd7iqis080lni94vb316vfxkgvjmqbhym";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
 
   patches = [
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
       --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
 
-  preBuild = with stdenv.lib;
+  preBuild = with lib;
     let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ultrastardx.sourceforge.net/";
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;

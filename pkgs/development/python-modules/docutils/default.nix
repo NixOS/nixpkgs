@@ -29,9 +29,10 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python Documentation Utilities";
     homepage = "http://docutils.sourceforge.net/";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with licenses; [ publicDomain bsd2 psfl gpl3Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

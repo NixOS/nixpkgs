@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
+{lib, stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
 
 stdenv.mkDerivation {
   pname = "rarcrack";
@@ -11,8 +11,9 @@ stdenv.mkDerivation {
     sha256 = "134fq84896w5vp8vg4qg0ybpb466njibigyd7bqqm1xydr07qrgn";
   };
 
-  buildInputs = [ libxml2 file p7zip unrar unzip ];
-  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libxml2 file p7zip unrar ];
+  buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
   installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This program can crack zip,7z and rar file passwords";
     longDescription = ''
     If you forget your password for compressed archive (rar, 7z, zip), this program is the solution.

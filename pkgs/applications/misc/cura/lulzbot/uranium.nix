@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
+{ lib, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage {
@@ -27,7 +27,7 @@ buildPythonPackage {
      UM/Application.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python framework for building Desktop applications";
     homepage = "https://code.alephobjects.com/diffusion/U/";
     license = licenses.lgpl3Plus;

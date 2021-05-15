@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , gobject-introspection
@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.24.4";
+  version = "1.24.6";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libmbim/${pname}-${version}.tar.xz";
-    sha256 = "11djb1d8w9ms07aklfm3pskjw9rnff4p4n3snanschv22zk8wj6x";
+    sha256 = "sha256-dgRlyqoczWmcFCkOl5HaRW1TAN0R6/TBSGFRAz6HXf0=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/libmbim/";
     description = "Library for talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol";
     platforms = platforms.linux;

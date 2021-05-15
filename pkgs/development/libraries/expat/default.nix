@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 
-  configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
 
   outputMan = "dev"; # tiny page for a dev tool
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     patchShebangs ./test-driver-wrapper.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.libexpat.org/";
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;

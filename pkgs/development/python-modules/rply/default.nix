@@ -1,4 +1,4 @@
-{ stdenv, pytest, fetchFromGitHub, buildPythonPackage, appdirs }:
+{ lib, pytest, fetchFromGitHub, buildPythonPackage, appdirs }:
 
 buildPythonPackage rec {
   pname = "rply";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python Lex/Yacc that works with RPython";
     homepage = "https://github.com/alex/rply";
     license = licenses.bsd3;

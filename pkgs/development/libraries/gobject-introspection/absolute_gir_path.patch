@@ -1,8 +1,10 @@
+diff --git a/gir/cairo-1.0.gir.in b/gir/cairo-1.0.gir.in
+index e4c9fb3d..3351b184 100644
 --- a/gir/cairo-1.0.gir.in
 +++ b/gir/cairo-1.0.gir.in
-@@ -5,7 +5,7 @@
-             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+@@ -6,7 +6,7 @@
    <package name="@CAIRO_GIR_PACKAGE@"/>
+   <c:include name="cairo-gobject.h"/>
    <namespace name="cairo" version="1.0"
 -	     shared-library="@CAIRO_SHARED_LIBRARY@"
 +	     shared-library="@cairoLib@/@CAIRO_SHARED_LIBRARY@"

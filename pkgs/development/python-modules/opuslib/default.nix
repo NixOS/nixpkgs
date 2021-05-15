@@ -3,7 +3,7 @@
   isPy27,
   libopus,
   nose,
-  stdenv,
+  lib, stdenv,
   substituteAll,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings to the libopus, IETF low-delay audio codec";
     homepage = "https://github.com/orion-labs/opuslib";
     license = licenses.bsd3;

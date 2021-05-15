@@ -1,43 +1,40 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config
 , libXinerama, libSM, libXxf86vm
 , gtk2, gtk3
 , xorgproto, gst_all_1, setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
-, libGLU ? null, libGL ? null
+, libGLU, libGL
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk ? null
-, AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
+, withWebKit ? false, webkitgtk
+, AGL, Carbon, Cocoa, Kernel, QTKit
 }:
 
-with stdenv.lib;
-
-assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> webkitgtk != null;
+with lib;
 
 assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK30: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
   pname = "wxwidgets";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
+    sha256 = "1l33629ifx2dl2j71idqbd2qb6zb1d566ijpkvz6irrr50s6gbx7";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
-  ] ++ optionals withGtk2 [ gtk2 ]
+  ] ++ optional withGtk2 gtk2
     ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
-
-  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

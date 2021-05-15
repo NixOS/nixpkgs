@@ -1,9 +1,9 @@
 { lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, atpublic }:
+, attrs, atpublic }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.2.1";
+  version = "1.4.2";
   disabled = !isPy3k;
 
   # Release not published to Pypi
@@ -11,11 +11,11 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = version;
-    sha256 = "14c30dm6jzxiblnsah53fdv68vqhxwvb9x0aq9bc4vcdas747vr7";
+    sha256 = "0hbpyns1j1fpvpj7gyb8cz359j7l4hzfqbig74xp4xih59sih0wj";
   };
 
   propagatedBuildInputs = [
-    atpublic
+    atpublic attrs
   ];
 
   # Tests need network access

@@ -1,4 +1,4 @@
-# Cataclysm: Dark Days Ahead
+# Cataclysm: Dark Days Ahead {#cataclysm-dark-days-ahead}
 
 ## How to install Cataclysm DDA
 
@@ -32,6 +32,41 @@ The default configuration directory is `~/.cataclysm-dda`. If you prefer
 cataclysm-dda.override {
   useXdgDir = true;
 }
+```
+
+## Important note for overriding packages
+
+After applying `overrideAttrs`, you need to fix `passthru.pkgs` and
+`passthru.withMods` attributes either manually or by using `attachPkgs`:
+
+```nix
+let
+  # You enabled parallel building.
+  myCDDA = cataclysm-dda-git.overrideAttrs (_: {
+    enableParallelBuilding = true;
+  });
+
+  # Unfortunately, this refers to the package before overriding and
+  # parallel building is still disabled.
+  badExample = myCDDA.withMods (_: []);
+
+  inherit (cataclysmDDA) attachPkgs pkgs wrapCDDA;
+
+  # You can fix it by hand
+  goodExample1 = myCDDA.overrideAttrs (old: {
+    passthru = old.passthru // {
+      pkgs = pkgs.override { build = goodExample1; };
+      withMods = wrapCDDA goodExample1;
+    };
+  });
+
+  # or by using a helper function `attachPkgs`.
+  goodExample2 = attachPkgs pkgs myCDDA;
+in
+
+# badExample                     # parallel building disabled
+# goodExample1.withMods (_: [])  # parallel building enabled
+goodExample2.withMods (_: [])    # parallel building enabled
 ```
 
 ## Customizing with mods

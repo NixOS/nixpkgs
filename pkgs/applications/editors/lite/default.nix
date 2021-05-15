@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , SDL2
 , lua52Packages
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/${pname}/lite $out/bin/lite
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight text editor written in Lua";
     homepage = "https://github.com/rxi/lite";
     license = licenses.mit;

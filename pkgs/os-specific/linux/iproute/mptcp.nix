@@ -1,6 +1,6 @@
-{ stdenv, iproute, fetchFromGitHub }:
+{ lib, iproute2, fetchFromGitHub }:
 
-iproute.overrideAttrs (oa: rec {
+iproute2.overrideAttrs (oa: rec {
   pname = "iproute_mptcp";
   version = "0.95";
 
@@ -17,7 +17,7 @@ iproute.overrideAttrs (oa: rec {
     patchShebangs configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/multipath-tcp/iproute-mptcp";
     description = "IP-Route extensions for MultiPath TCP";
     license = licenses.gpl2;

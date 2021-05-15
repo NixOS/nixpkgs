@@ -148,6 +148,28 @@ rec {
   /* A combination of `traceVal` and `traceSeqN`. */
   traceValSeqN = traceValSeqNFn id;
 
+  /* Trace the input and output of a function `f` named `name`,
+  both down to `depth`.
+
+  This is useful for adding around a function call,
+  to see the before/after of values as they are transformed.
+
+     Example:
+       traceFnSeqN 2 "id" (x: x) { a.b.c = 3; }
+       trace: { fn = "id"; from = { a.b = {…}; }; to = { a.b = {…}; }; }
+       => { a.b.c = 3; }
+  */
+  traceFnSeqN = depth: name: f: v:
+    let res = f v;
+    in lib.traceSeqN
+        (depth + 1)
+        {
+          fn = name;
+          from = v;
+          to = res;
+        }
+        res;
+
 
   # -- TESTING --
 

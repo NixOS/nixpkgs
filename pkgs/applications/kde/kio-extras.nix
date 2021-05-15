@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kio-extras";
+  pname = "kio-extras";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];

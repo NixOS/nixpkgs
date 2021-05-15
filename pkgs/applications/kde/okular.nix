@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "okular";
+  pname = "okular";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     breeze-icons discount djvulibre ebook_tools kactivities karchive kbookmarks

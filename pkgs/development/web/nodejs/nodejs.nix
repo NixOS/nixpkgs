@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
-, pkgconfig, which
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+, pkg-config, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
@@ -7,7 +7,7 @@
 , procps, icu
 }:
 
-with stdenv.lib;
+with lib;
 
 { enableNpm ? true, version, sha256, patches ? [] } @args:
 
@@ -28,7 +28,7 @@ let
     "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
     /** Closure notes: we explicitly avoid specifying --shared-*-includes,
      *  as that would put the paths into bin/nodejs.
-     *  Including pkgconfig in build inputs would also have the same effect!
+     *  Including pkg-config in build inputs would also have the same effect!
      */
   ]) (builtins.attrNames sharedLibDeps) ++ [
     "--with-intl=system-icu"
@@ -55,23 +55,22 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which util-linux pkgconfig python ]
+    nativeBuildInputs = [ which pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-      host = stdenv.hostPlatform.platform;
-      isAarch32 = stdenv.hostPlatform.isAarch32;
+      inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ [
       "--without-dtrace"
     ] ++ (optionals isCross [
       "--cross-compiling"
       "--without-intl"
       "--without-snapshot"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" host.gcc) [
-      "--with-arm-fpu=${host.gcc.fpu}"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" host.gcc) [
-      "--with-arm-float-abi=${host.gcc.float-abi}"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" gcc) [
+      "--with-arm-fpu=${gcc.fpu}"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" gcc) [
+      "--with-arm-float-abi=${gcc.float-abi}"
     ]) ++ (optionals (isCross && isAarch32) [
       "--dest-cpu=arm"
     ]) ++ extraConfigFlags;
@@ -133,7 +132,7 @@ in
 
     passthru.updateScript = import ./update.nix {
       inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
-      inherit (stdenv) lib;
+      inherit lib;
       inherit majorVersion;
     };
 
@@ -143,6 +142,7 @@ in
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
+      mainProgram = "node";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

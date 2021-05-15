@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ncurses }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-curses";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make all opt";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml Bindings to curses/ncurses";
     homepage = "https://opam.ocaml.org/packages/curses/curses.1.0.4/";
     license = licenses.gpl2;

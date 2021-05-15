@@ -1,4 +1,4 @@
-{ config, stdenv
+{ config, lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -17,9 +17,10 @@
 , libv4l
 , x264
 , curl
+, wayland
 , xorg
 , makeWrapper
-, pkgconfig
+, pkg-config
 , libvlc
 , mbedtls
 
@@ -33,24 +34,26 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pipewireSupport ? stdenv.isLinux
+, pipewire
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "26.0.2";
+  version = "26.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = "refs/tags/${version}";
-    sha256 = "1bf56z2yb7gq1knqwcqj369c3wl9jr3wll5vlngmfy2gwqrczjmw";
+    rev = version;
+    sha256 = "1plr5a7k5scxlibhbknhhk19ipk8las14dzs7v64zx7rhpj00009";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
+  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
   buildInputs = [
     curl
@@ -67,6 +70,7 @@ in mkDerivation rec {
     qtx11extras
     qtsvg
     speex
+    wayland
     x264
     libvlc
     makeWrapper
@@ -74,7 +78,8 @@ in mkDerivation rec {
   ]
   ++ optionals scriptingSupport [ luajit swig python3 ]
   ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport libpulseaudio;
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional pipewireSupport pipewire;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -105,12 +110,12 @@ in mkDerivation rec {
         --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
       addOpenGLRunpath $out/lib/lib*.so
       addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster

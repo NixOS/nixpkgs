@@ -238,7 +238,7 @@ in rec {
       package = lib.importJSON packageJSON;
       pname = package.name;
       safeName = reformatPackageName pname;
-      version = package.version or attrs.version;
+      version = attrs.version or package.version;
       baseName = unlessNull name "${safeName}-${version}";
 
       workspaceDependenciesTransitive = lib.unique (

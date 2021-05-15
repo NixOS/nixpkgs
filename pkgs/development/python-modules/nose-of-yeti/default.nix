@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, nose, fudge, should-dsl }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, nose, fudge, should-dsl }:
 
 buildPythonPackage rec {
   pname = "nose-of-yeti";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     ./test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nose plugin providing BDD dsl for python";
     homepage = "https://github.com/delfick/nose-of-yeti";
     license = licenses.mit;

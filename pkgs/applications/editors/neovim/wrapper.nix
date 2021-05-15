@@ -1,13 +1,11 @@
 { stdenv, symlinkJoin, lib, makeWrapper
-, vimUtils
 , writeText
 , bundlerEnv, ruby
 , nodejs
 , nodePackages
-, pythonPackages
 , python3Packages
 }:
-with stdenv.lib;
+with lib;
 
 neovim:
 
@@ -16,7 +14,7 @@ let
       # should contain all args but the binary
       wrapperArgs ? ""
     , manifestRc ? null
-    , withPython2 ? true, python2Env ? null
+    , withPython2 ? false
     , withPython3 ? true,  python3Env ? null
     , withNodeJs ? false
     , rubyEnv ? null
@@ -36,17 +34,16 @@ let
     [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ] ++
       [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ];
   in
+  assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
+
   symlinkJoin {
-      name = "neovim-${stdenv.lib.getVersion neovim}";
+      name = "neovim-${lib.getVersion neovim}";
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
-      ''
-      + optionalString withPython2 ''
-        makeWrapper ${python2Env}/bin/python $out/bin/nvim-python --unset PYTHONPATH
       ''
       + optionalString withPython3 ''
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
@@ -106,7 +103,7 @@ let
 
     preferLocalBuild = true;
 
-    buildInputs = [makeWrapper];
+    nativeBuildInputs = [ makeWrapper ];
     passthru = { unwrapped = neovim; };
 
     meta = neovim.meta // {
@@ -114,6 +111,7 @@ let
       hydraPlatforms = [];
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;
+      mainProgram = "nvim";
     };
   };
 in

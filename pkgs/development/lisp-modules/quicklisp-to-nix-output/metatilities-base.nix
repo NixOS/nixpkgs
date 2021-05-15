@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''metatilities-base'';
-  version = ''20191227-git'';
+  baseName = "metatilities-base";
+  version = "20191227-git";
 
-  description = ''These are metabang.com's Common Lisp basic utilities.'';
+  description = "These are metabang.com's Common Lisp basic utilities.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/metatilities-base/2019-12-27/metatilities-base-20191227-git.tgz'';
-    sha256 = ''1mal51p7mknya2ljcwl3wdjvnirw5vvzic6qcnci7qhmfrb1awil'';
+    url = "http://beta.quicklisp.org/archive/metatilities-base/2019-12-27/metatilities-base-20191227-git.tgz";
+    sha256 = "1mal51p7mknya2ljcwl3wdjvnirw5vvzic6qcnci7qhmfrb1awil";
   };
 
   packageName = "metatilities-base";

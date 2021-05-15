@@ -4926,40 +4926,40 @@ rec {
 
 
 # end
-# url-1.6.0
+# url-1.6.1
 
-  crates.url."1.6.0" = deps: { features?(features_.url."1.6.0" deps {}) }: buildRustCrate {
+  crates.url."1.6.1" = deps: { features?(features_.url."1.6.1" deps {}) }: buildRustCrate {
     crateName = "url";
-    version = "1.6.0";
+    version = "1.6.1";
     description = "URL library for Rust, based on the WHATWG URL Standard";
     authors = [ "The rust-url developers" ];
-    sha256 = "1bvzl4dvjj84h46ai3x23wyafa2wwhchj08vr2brf25dxwc7mg18";
+    sha256 = "1qsnhmxznzaxl068a3ksz69kwcz7ghvl4zflg9qj7lyw4bk9ma38";
     dependencies = mapFeatures features ([
-      (crates."idna"."${deps."url"."1.6.0"."idna"}" deps)
-      (crates."matches"."${deps."url"."1.6.0"."matches"}" deps)
-      (crates."percent_encoding"."${deps."url"."1.6.0"."percent_encoding"}" deps)
+      (crates."idna"."${deps."url"."1.6.1"."idna"}" deps)
+      (crates."matches"."${deps."url"."1.6.1"."matches"}" deps)
+      (crates."percent_encoding"."${deps."url"."1.6.1"."percent_encoding"}" deps)
     ]);
-    features = mkFeatures (features."url"."1.6.0" or {});
+    features = mkFeatures (features."url"."1.6.1" or {});
   };
-  features_.url."1.6.0" = deps: f: updateFeatures f (rec {
-    idna."${deps.url."1.6.0".idna}".default = true;
-    matches."${deps.url."1.6.0".matches}".default = true;
-    percent_encoding."${deps.url."1.6.0".percent_encoding}".default = true;
+  features_.url."1.6.1" = deps: f: updateFeatures f (rec {
+    idna."${deps.url."1.6.1".idna}".default = true;
+    matches."${deps.url."1.6.1".matches}".default = true;
+    percent_encoding."${deps.url."1.6.1".percent_encoding}".default = true;
     url = fold recursiveUpdate {} [
-      { "1.6.0"."encoding" =
-        (f.url."1.6.0"."encoding" or false) ||
-        (f.url."1.6.0".query_encoding or false) ||
-        (url."1.6.0"."query_encoding" or false); }
-      { "1.6.0"."heapsize" =
-        (f.url."1.6.0"."heapsize" or false) ||
-        (f.url."1.6.0".heap_size or false) ||
-        (url."1.6.0"."heap_size" or false); }
-      { "1.6.0".default = (f.url."1.6.0".default or true); }
+      { "1.6.1"."encoding" =
+        (f.url."1.6.1"."encoding" or false) ||
+        (f.url."1.6.1".query_encoding or false) ||
+        (url."1.6.1"."query_encoding" or false); }
+      { "1.6.1"."heapsize" =
+        (f.url."1.6.1"."heapsize" or false) ||
+        (f.url."1.6.1".heap_size or false) ||
+        (url."1.6.1"."heap_size" or false); }
+      { "1.6.1".default = (f.url."1.6.1".default or true); }
     ];
   }) [
-    (features_.idna."${deps."url"."1.6.0"."idna"}" deps)
-    (features_.matches."${deps."url"."1.6.0"."matches"}" deps)
-    (features_.percent_encoding."${deps."url"."1.6.0"."percent_encoding"}" deps)
+    (features_.idna."${deps."url"."1.6.1"."idna"}" deps)
+    (features_.matches."${deps."url"."1.6.1"."matches"}" deps)
+    (features_.percent_encoding."${deps."url"."1.6.1"."percent_encoding"}" deps)
   ];
 
 

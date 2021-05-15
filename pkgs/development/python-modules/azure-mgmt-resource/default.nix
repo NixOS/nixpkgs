@@ -8,14 +8,14 @@
 
 
 buildPythonPackage rec {
-  version = "15.0.0";
+  version = "16.1.0";
   pname = "azure-mgmt-resource";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "80ecb69aa21152b924edf481e4b26c641f11aa264120bc322a14284811df9c14";
+    sha256 = "b814ee27b37f030fe69461ef6f514661340dc8b1f28736362541e1c0d31d90ae";
   };
 
   propagatedBuildInputs = [

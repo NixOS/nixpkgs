@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , buildGoPackage
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libgit2_0_27
 }:
 
@@ -20,10 +20,10 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgit2_0_27 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/isacikgoz/gitin";
     description = "Text-based user interface for git";
     license = licenses.bsd3;

@@ -85,7 +85,7 @@ let
     name = "kubectl";
     tag = "latest";
     contents = [ kubectl pkgs.busybox kubectlPod2 ];
-    config.Entrypoint = "/bin/sh";
+    config.Entrypoint = ["/bin/sh"];
   };
 
   base = {
@@ -97,7 +97,7 @@ let
       machine1.wait_until_succeeds("kubectl get node machine1.my.zyx | grep -w Ready")
 
       machine1.wait_until_succeeds(
-          "docker load < ${kubectlImage}"
+          "${pkgs.gzip}/bin/zcat ${kubectlImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
 
       machine1.wait_until_succeeds(
@@ -134,7 +134,7 @@ let
       machine1.wait_until_succeeds("kubectl get node machine2.my.zyx | grep -w Ready")
 
       machine2.wait_until_succeeds(
-          "docker load < ${kubectlImage}"
+          "${pkgs.gzip}/bin/zcat ${kubectlImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
 
       machine1.wait_until_succeeds(

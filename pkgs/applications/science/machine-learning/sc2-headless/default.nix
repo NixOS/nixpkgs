@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     description = "Starcraft II headless linux client for machine learning research";
     license = {
       fullName = "BLIZZARD® STARCRAFT® II AI AND MACHINE LEARNING LICENSE";

@@ -3,6 +3,7 @@
 , makeSetupHook
 , makeWrapper
 , gobject-introspection
+, isGraphical ? true
 , gtk3
 , librsvg
 , dconf
@@ -21,7 +22,7 @@ makeSetupHook {
     # Unfortunately, it also requires the user to have dconf
     # D-Bus service enabled globally (e.g. through a NixOS module).
     dconf.lib
-  ] ++ [
+  ] ++ lib.optionals isGraphical [
     # TODO: remove this, packages should depend on GTK explicitly.
     gtk3
 
@@ -30,6 +31,7 @@ makeSetupHook {
     # graphics in GTK (e.g. cross for closing window in window title bar)
     # so it is pretty much required for applications using GTK.
     librsvg
+  ] ++ [
 
     # We use the wrapProgram function.
     makeWrapper

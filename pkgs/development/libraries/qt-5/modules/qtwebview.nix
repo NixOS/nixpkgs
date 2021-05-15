@@ -1,6 +1,6 @@
-{ darwin, stdenv, qtModule, qtdeclarative, qtwebengine }:
+{ darwin, lib, stdenv, qtModule, qtdeclarative, qtwebengine }:
 
-with stdenv.lib;
+with lib;
 
 qtModule {
   name = "qtwebview";

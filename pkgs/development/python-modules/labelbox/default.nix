@@ -1,38 +1,67 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, jinja2
-, pillow
-, rasterio
-, shapely
-, ndjson
 , backoff
-, google_api_core
+, backports-datetime-fromisoformat
+, buildPythonPackage
+, dataclasses
+, fetchFromGitHub
+, google-api-core
+, jinja2
+, ndjson
+, pillow
+, pydantic
+, pytest-cases
+, pytestCheckHook
+, pythonOlder
+, rasterio
+, requests
+, shapely
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.4.6";
+  version = "2.5.4";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2be6c03dafce0a786cfab5d120196efccaf300cab5aee4d2fdad644b7bee1aef";
+  src = fetchFromGitHub {
+    owner = "Labelbox";
+    repo = "labelbox-python";
+    rev = "v${version}";
+    sha256 = "0182klvm8bjcm8fkl9w8ypj12s026czgid8ldl6jjvmzhxpmss68";
   };
 
   propagatedBuildInputs = [
-    jinja2 requests pillow rasterio shapely ndjson backoff
-    google_api_core
+    backoff
+    backports-datetime-fromisoformat
+    dataclasses
+    google-api-core
+    jinja2
+    ndjson
+    pillow
+    pydantic
+    rasterio
+    requests
+    shapely
   ];
 
-  # Test cases are not running on pypi or GitHub
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.py --replace "pydantic==1.8" "pydantic>=1.8"
+  '';
+
+  checkInputs = [
+    pytest-cases
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration"
+  ];
 
   pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {
-    homepage = "https://github.com/Labelbox/Labelbox";
     description = "Platform API for LabelBox";
+    homepage = "https://github.com/Labelbox/labelbox-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

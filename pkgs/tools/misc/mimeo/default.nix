@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, desktop-file-utils, file, python3Packages }:
+{ lib, fetchurl, desktop-file-utils, file, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mimeo";
@@ -23,9 +23,9 @@ python3Packages.buildPythonApplication rec {
 
   installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open files by MIME-type or file name using regular expressions";
-    homepage = "http://xyne.archlinux.ca/projects/mimeo/";
+    homepage = "https://xyne.archlinux.ca/projects/mimeo/";
     license = [ licenses.gpl2 ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;

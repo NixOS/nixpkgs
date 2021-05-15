@@ -14,19 +14,19 @@
 }:
 
 buildDunePackage {
-	pname = "opium";
-	inherit (opium_kernel) version src meta minimumOCamlVersion;
+  pname = "opium";
+  inherit (opium_kernel) version src meta minimumOCamlVersion;
 
   useDune2 = true;
 
   doCheck = true;
 
-	buildInputs = [
+  buildInputs = [
     ppx_sexp_conv ppx_fields_conv
     alcotest
   ];
 
-	propagatedBuildInputs = [
+  propagatedBuildInputs = [
     opium_kernel cmdliner cohttp-lwt-unix magic-mime logs stringext
   ];
 }

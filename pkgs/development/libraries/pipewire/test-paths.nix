@@ -1,4 +1,4 @@
-{ lib, runCommand, pipewire, paths-out, paths-lib }:
+{ lib, runCommand, pipewire, paths-out, paths-lib, paths-out-media-session }:
 
 let
   check-path = output: path: ''
@@ -14,6 +14,7 @@ let
 in runCommand "pipewire-test-paths" { } ''
   touch $out
 
+  ${check-output pipewire.mediaSession paths-out-media-session}
   ${check-output pipewire.lib paths-lib}
   ${check-output pipewire paths-out}
 

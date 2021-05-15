@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    export GO111MODULE=off
   '';
 
   # tests requires cluster for testing

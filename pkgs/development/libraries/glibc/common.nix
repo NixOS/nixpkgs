@@ -42,7 +42,7 @@
 
 let
   version = "2.32";
-  patchSuffix = "";
+  patchSuffix = "-40";
   sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
@@ -59,6 +59,16 @@ stdenv.mkDerivation ({
 
   patches =
     [
+      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
+          $ git fetch --all -p && git checkout origin/release/2.32/master && git describe
+          glibc-2.32-40-g778b8d3786
+          $ git show --minimal --reverse glibc-2.32.. | gzip -9n --rsyncable - > 2.32-master.patch.gz
+
+         To compare the archive contents zdiff can be used.
+          $ zdiff -u 2.32-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.32-master.patch.gz
+       */
+      ./2.32-master.patch.gz
+
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
@@ -149,7 +159,7 @@ stdenv.mkDerivation ({
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       (lib.flip lib.withFeature "fp"
-         (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
+         (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
     ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
@@ -159,6 +169,10 @@ stdenv.mkDerivation ({
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
+
+  makeFlags = [
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ];
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -201,7 +215,7 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"''
+      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
     }
 
 

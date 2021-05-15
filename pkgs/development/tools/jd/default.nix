@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "jd";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0dj4k38pf80dl77jns29vx2dj265s4ksg2q2s9n240b7b8z8mn5h";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive JSON Editor";
     license = licenses.mit;
     maintainers = [ maintainers.np ];

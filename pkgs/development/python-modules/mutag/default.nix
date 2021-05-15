@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ pyparsing ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/aroig/mutag";
     description = "A script to change email tags in a mu indexed maildir";
     license = licenses.gpl3;

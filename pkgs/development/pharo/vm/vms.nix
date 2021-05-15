@@ -1,4 +1,5 @@
 { cmake
+, lib
 , stdenv
 , fetchurl
 , bash

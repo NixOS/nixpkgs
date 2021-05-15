@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, systemd, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, systemd, pytest }:
 
 buildPythonPackage rec {
   pname = "journalwatch";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "journalwatch is a tool to find error messages in the systemd journal.";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = licenses.gpl3Plus;

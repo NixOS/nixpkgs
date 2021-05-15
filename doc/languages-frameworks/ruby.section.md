@@ -106,7 +106,7 @@ let
     name = "gems-for-some-project";
     gemdir = ./.;
   };
-in mkShell { buildInputs = [ gems gems.wrappedRuby ]; }
+in mkShell { packages = [ gems gems.wrappedRuby ]; }
 ```
 
 With this file in your directory, you can run `nix-shell` to build and use the gems. The important parts here are `bundlerEnv` and `wrappedRuby`.
@@ -229,10 +229,10 @@ end
 
 If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by simply running the `bundle lock` and `bundix` steps again.
 
-Now you can also also make a `default.nix` that looks like this:
+Now you can also make a `default.nix` that looks like this:
 
 ```nix
-{ lib, bundlerApp }:
+{ bundlerApp }:
 
 bundlerApp {
   pname = "mdl";

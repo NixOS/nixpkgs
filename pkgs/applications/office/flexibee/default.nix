@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 let
   version = "2020.2.6";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for an accouting economic system";
     homepage = "https://www.flexibee.eu/";
     license = licenses.unfree;

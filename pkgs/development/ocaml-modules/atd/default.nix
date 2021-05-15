@@ -1,24 +1,28 @@
-{ stdenv, menhir, easy-format, fetchFromGitHub, buildDunePackage, which, biniou, yojson }:
+{ lib, menhir, easy-format, fetchurl, buildDunePackage, which, re, nixosTests }:
 
 buildDunePackage rec {
   pname = "atd";
-  version = "2.0.0";
+  version = "2.2.1";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.02";
 
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = pname;
-    rev = version;
-    sha256 = "0alzmk97rxg7s6irs9lvf89dy9n3r769my5n4j9p9qyigcdgjaia";
+  src = fetchurl {
+    url = "https://github.com/ahrefs/atd/releases/download/2.2.1/atd-2.2.1.tbz";
+    sha256 = "17jm79np69ixp53a4njxnlb1pg8sd1g47nm3nyki9clkc8d4qsyv";
   };
 
-  createFindlibDestdir = true;
-
   buildInputs = [ which menhir ];
-  propagatedBuildInputs = [ easy-format biniou yojson ];
+  propagatedBuildInputs = [ easy-format re ];
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  passthru.tests = {
+    smoke-test = nixosTests.atd;
+  };
+
+  meta = with lib; {
     homepage = "https://github.com/mjambon/atd";
     description = "Syntax for cross-language type definitions";
     license = licenses.bsd3;

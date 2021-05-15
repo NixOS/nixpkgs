@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python2Packages }:
+{ lib, fetchgit, python2Packages }:
 
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;
@@ -17,7 +17,7 @@ in buildPythonApplication {
   meta = {
     homepage = "https://github.com/eucalyptus/euca2ools";
     description = "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
   };
 }

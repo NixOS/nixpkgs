@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_3
+#!nix-shell -i bash -p curl jq common-updater-scripts dotnet-sdk_5
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 deps_file="$(realpath "./deps.nix")"
 
-new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases" | jq -r '.[0].name')"
+new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases?per_page=1" | jq -r '.[0].name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
   echo "Up to date"
@@ -22,21 +22,8 @@ chmod -R +w "$src"
 
 pushd "$src"
 
-# Setup empty nuget package folder to force reinstall.
 mkdir ./nuget_tmp.packages
-cat >./nuget_tmp.config <<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <add key="nuget" value="https://api.nuget.org/v3/index.json" />
-  </packageSources>
-  <config>
-    <add key="globalPackagesFolder" value="$(realpath ./nuget_tmp.packages)" />
-  </config>
-</configuration>
-EOF
-
-dotnet restore osu.Desktop --configfile ./nuget_tmp.config
+dotnet restore osu.Desktop --packages ./nuget_tmp.packages --runtime linux-x64
 
 echo "{ fetchNuGet }: [" >"$deps_file"
 while read pkg_spec; do

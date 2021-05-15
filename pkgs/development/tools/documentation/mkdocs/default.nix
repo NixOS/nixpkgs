@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 with python3.pkgs;
 
@@ -35,13 +35,13 @@ buildPythonApplication rec {
     backports_tempfile
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project documentation with Markdown / static website generator";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's
       geared towards building project documentation. Documentation source files
       are written in Markdown, and configured with a single YAML configuration file.
-      
+
       MkDocs can also be used to generate general-purpose Websites.
     '';
     homepage = "http://mkdocs.org/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "rang";
   version = "v3.1.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     "sha256" = "0v2pz0l2smagr3j4abjccshg4agaccfz79m5ayvrvqq5d4rlds0s";
   };
   nativeBuildInputs = [ cmake ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A Minimal, Header only Modern c++ library for terminal goodies";
     homepage = "https://agauniyal.github.io/rang/";

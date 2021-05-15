@@ -7,6 +7,8 @@
 , nonHackagePackages ? import ./non-hackage-packages.nix
 , configurationCommon ? import ./configuration-common.nix
 , configurationNix ? import ./configuration-nix.nix
+, configurationArm ? import ./configuration-arm.nix
+, configurationDarwin ? import ./configuration-darwin.nix
 }:
 
 let
@@ -19,17 +21,24 @@ let
     inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
-  commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
-  nixConfiguration = configurationNix { inherit pkgs haskellLib; };
+  isArm = with stdenv.hostPlatform; isAarch64 || isAarch32;
+  platformConfigurations = lib.optionals isArm [
+    (configurationArm { inherit pkgs haskellLib; })
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (configurationDarwin { inherit pkgs haskellLib; })
+  ];
 
-  extensible-self = makeExtensible
-    (extends overrides
-      (extends packageSetConfig
-        (extends compilerConfig
-          (extends commonConfiguration
-            (extends nixConfiguration
-              (extends nonHackagePackages
-                haskellPackages))))));
+  extensions = lib.composeManyExtensions ([
+    nonHackagePackages
+    (configurationNix { inherit pkgs haskellLib; })
+    (configurationCommon { inherit pkgs haskellLib; })
+  ] ++ platformConfigurations ++ [
+    compilerConfig
+    packageSetConfig
+    overrides
+  ]);
+
+  extensible-self = makeExtensible (extends extensions haskellPackages);
 
 in
 

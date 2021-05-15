@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, buildPackages
 , fetchFromGitHub
 , zlib
 , ilmbase
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;

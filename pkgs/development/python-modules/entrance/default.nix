@@ -18,11 +18,11 @@ in
 
 buildPythonPackage rec {
   pname = "entrance";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1fc9d128ce05837d7e149413fbec71bcf84d9ca510accea56761d3f4bd0a021";
+    sha256 = "5b354ecf03226edae567511c8a8db95038cc9c3da20fcfcf5546d1e197eb3aef";
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later

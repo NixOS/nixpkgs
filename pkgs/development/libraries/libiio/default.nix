@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     moveToOutput ${python.sitePackages} "$python"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
     homepage = "https://github.com/analogdevicesinc/libiio";
     license = licenses.lgpl21Plus;

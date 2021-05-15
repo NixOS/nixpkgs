@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , udev
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     gettext
     gobject-introspection
     libxslt
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     udev
     systemd
   ]
-  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
+  ++ lib.optional useIMobileDevice libimobiledevice
   ;
 
   propagatedBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
     platforms = platforms.linux;

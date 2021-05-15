@@ -1,11 +1,11 @@
-{ stdenv, buildRebar3, fetchHex }:
+{ lib, buildRebar3, fetchHex }:
 
 { name, version, sha256
 , builder ? buildRebar3
 , hexPkg ? name
 , ... }@attrs:
 
-with stdenv.lib;
+with lib;
 
 let
   pkg = self: builder (attrs // {

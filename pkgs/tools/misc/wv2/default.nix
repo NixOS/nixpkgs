@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, libgsf, glib, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, cmake, libgsf, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "wv2-0.4.2";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-include.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libgsf glib libxml2 ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libgsf glib libxml2 ];
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   meta = {
     description = "Excellent MS Word filter lib, used in most Office suites";
-    license = stdenv.lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     homepage = "http://wvware.sourceforge.net";
   };
 }

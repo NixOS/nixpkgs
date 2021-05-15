@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchCrate, rustPlatform, pkg-config, libXrandr, libX11, python3 }:
+{ lib, fetchCrate, rustPlatform, pkg-config, libXrandr, libX11, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hacksaw";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , isPy3k
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ gflags ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Checks JavaScript files against Google's style guide.";
     homepage = "https://developers.google.com/closure/utilities/";
     license = with licenses; [ asl20 ];

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''asdf-package-system'';
-  version = ''20150608-git'';
+  baseName = "asdf-package-system";
+  version = "20150608-git";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/asdf-package-system/2015-06-08/asdf-package-system-20150608-git.tgz'';
-    sha256 = ''17lfwfc15hcag8a2jsaxkx42wmz2mwkvxf6vb2h9cim7dwsnyy29'';
+    url = "http://beta.quicklisp.org/archive/asdf-package-system/2015-06-08/asdf-package-system-20150608-git.tgz";
+    sha256 = "17lfwfc15hcag8a2jsaxkx42wmz2mwkvxf6vb2h9cim7dwsnyy29";
   };
 
   packageName = "asdf-package-system";

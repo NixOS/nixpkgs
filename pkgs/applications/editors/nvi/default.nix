@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, lib, stdenv, ncurses }:
 
 stdenv.mkDerivation {
   name = "nvi-1.79";
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.bostic.com/vi/";
     description = "The Berkeley Vi Editor";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
     broken = true; # since 2020-02-08
   };
 }

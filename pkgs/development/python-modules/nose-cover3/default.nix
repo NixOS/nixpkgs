@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coverage 3.x support for Nose";
     homepage = "https://github.com/ask/nosecover3";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zip, love_0_7, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, zip, love_0_7, makeWrapper, makeDesktopItem }:
 
 let
   pname = "nottetris2";
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
     sha256 = "17iabh6rr8jim70n96rbhif4xq02g2kppscm8l339yqx6mhb64hs";
   };
 
-  nativeBuildInputs = [ zip ];
-  buildInputs = [ love_0_7 makeWrapper ];
+  nativeBuildInputs = [ zip makeWrapper ];
+  buildInputs = [ love_0_7 ];
 
   phases = [ "unpackPhase" "installPhase" ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "It's like Tetris, but it's not";
     platforms = platforms.linux;
     license = licenses.wtfpl;

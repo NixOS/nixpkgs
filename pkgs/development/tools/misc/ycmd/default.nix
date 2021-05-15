@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
                 "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code-completion and comprehension server";
     homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;

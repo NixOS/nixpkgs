@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "rtl8814au-${kernel.version}-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = "https://github.com/zebulon2/rtl8814au";
     license = licenses.gpl2;

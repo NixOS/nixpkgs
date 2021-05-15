@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "xosview2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight program that gathers information from your operating system and displays it in graphical form";
     longDescription = ''
       xosview is a lightweight program that gathers information from your

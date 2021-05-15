@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, fetchpatch }:
+{ lib, stdenv, fetchFromGitLab, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "aacgain-1.9.0";
@@ -11,6 +11,10 @@ stdenv.mkDerivation {
   };
 
   hardeningDisable = [ "format" ];
+
+  # -Wnarrowing is enabled by default in recent GCC versions,
+  # causing compilation to fail.
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   postPatch = ''
     (
@@ -53,7 +57,7 @@ stdenv.mkDerivation {
     install -D aacgain/aacgain "$out/bin/aacgain"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ReplayGain for AAC files";
     homepage = "https://aacgain.altosdesign.com";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre}:
+{lib, stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   inherit jre;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser

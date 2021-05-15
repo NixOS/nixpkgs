@@ -39,6 +39,11 @@
                     modules = modules ++ [
                       ./nixos/modules/virtualisation/qemu-vm.nix
                       { virtualisation.useBootLoader = true; }
+                      ({ config, ... }: {
+                        virtualisation.useEFIBoot =
+                          config.boot.loader.systemd-boot.enable ||
+                          config.boot.loader.efi.canTouchEfiVariables;
+                      })
                     ];
                   })).config;
               in

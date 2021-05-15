@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , python3
 , ninja
@@ -15,6 +15,7 @@
 , libgee
 , libxml2
 , libsoup
+, libgdata
 , elementary-calendar
 }:
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     libical
     libsoup
     wingpanel
+    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Date & Time Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPy27, pytest, testfixtures, lib }:
+{ buildPythonApplication, fetchFromGitHub, isPy27, pytest, testfixtures, lib }:
 
 buildPythonApplication rec {
   pname = "bump2version";
@@ -18,7 +18,7 @@ buildPythonApplication rec {
     pytest tests/ -k 'not usage_string_fork'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Version-bump your software with a single command";
     longDescription = ''
       A small command line tool to simplify releasing software by updating

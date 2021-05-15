@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, tie }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, tie }:
 
 stdenv.mkDerivation rec {
   pname = "cwebbin";
@@ -16,7 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "1hdzxfzaibnjxjzgp6d2zay8nsarnfy9hfq55hz1bxzzl23n35aj";
   };
 
-  buildInputs = [ tie ];
+  # Remove references to __DATE__ and __TIME__
+  postPatch = ''
+    substituteInPlace wmerg-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace ctang-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace ctangle.cxx --replace ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace cweav-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
+  '';
+
+  nativeBuildInputs = [ tie ];
 
   makeFlags = [
     "MACROSDIR=$(out)/share/texmf/tex/generic/cweb"
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
     "CP=cp"
     "RM=rm"
     "PDFTEX=echo"
-    "CC=c++"
+    "CC=${stdenv.cc.targetPrefix}c++"
   ];
 
   buildPhase = ''
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
     make -f Makefile.unix install $makeFlags
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Literate Programming in C/C++";
     platforms = with platforms; unix;

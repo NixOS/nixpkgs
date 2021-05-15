@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , SDL2
 , SDL2_ttf
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [ "GCC=cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
+  makeFlags = [ "GCC=${stdenv.cc.targetPrefix}cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
 
   preInstall = ''
     install -d ${placeholder "out"}/bin
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     (cd $out/bin; for i in *; do ln -s $i simh-$i; done)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://simh.trailing-edge.com/";
     description = "A collection of simulators of historic hardware";
     longDescription = ''

@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "scc";
-  version = "2.13.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${version}";
-    sha256 = "16p5g20n5jsbisbgikk9xny94xx6c0dxf19saa686ghh31jr2hh3";
+    sha256 = "sha256-G5LYOtAUnu82cgDdtYzcfVx/WFg9/HvFQAlQtd6GaDE=";
   };
 
   vendorSha256 = null;
@@ -16,7 +16,7 @@ buildGoModule rec {
   # scc has a scripts/ sub-package that's for testing.
   excludedPackages = [ "scripts" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/boyter/scc";
     description = "A very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
     maintainers = with maintainers; [ sigma Br1ght0ne ];

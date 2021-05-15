@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchurl
 , makeWrapper
-, pkgconfig
+, pkg-config
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
@@ -16,7 +16,7 @@ let
     sha256 = "0d1fqwymyfb73zkmpwv4zk4gsg4ji7qs20mfsr20skmnqx30xvna";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://sourceforge.net/projects/faudiostream/files/";
     license = licenses.gpl2;
@@ -30,7 +30,7 @@ let
 
     inherit src;
 
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     passthru = {
       inherit wrap wrapWithBuildEnv;
@@ -159,8 +159,7 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ pkg-config makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
@@ -195,7 +194,7 @@ let
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postFixup = ''
         for script in "$out"/bin/*; do

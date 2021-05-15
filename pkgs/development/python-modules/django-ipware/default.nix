@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "3.0.1";
+  version = "3.0.2";
 
   meta = {
     description = "A Django application to retrieve user's IP address";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73a640a5bff00aa7503a35e92e462001cfabb07d73d649c262f117423beee953";
+    sha256 = "c7df8e1410a8e5d6b1fbae58728402ea59950f043c3582e033e866f0f0cf5e94";
   };
 
   propagatedBuildInputs = [ django ];

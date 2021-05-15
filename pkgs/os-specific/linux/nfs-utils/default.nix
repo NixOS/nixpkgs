@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, util-linux, libcap, libtirpc, libevent
-, sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+{ stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
+, sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , python3, buildPackages, nixosTests, rpcsvc-proto
 , enablePython ? true
 }:
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc rpcsvc-proto ];
+  nativeBuildInputs = [ pkg-config buildPackages.stdenv.cc rpcsvc-proto ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils kerberos tcp_wrappers
+    libuuid keyutils libkrb5 tcp_wrappers
   ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
@@ -33,19 +33,19 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       substituteInPlace configure \
-        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
-        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
+        --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
     '';
 
   configureFlags =
     [ "--enable-gss"
       "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${lib.getLib kerberos}"
+      "--with-krb5=${lib.getLib libkrb5}"
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
-      "--with-rpcgen=${rpcsvc-proto}/bin/rpcgen"
+      "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 
-  disallowedReferences = [ (lib.getDev kerberos) ];
+  disallowedReferences = [ (lib.getDev libkrb5) ];
 
   passthru.tests = {
     nfs3-simple = nixosTests.nfs3.simple;
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     nfs4-kerberos = nixosTests.nfs4.kerberos;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''

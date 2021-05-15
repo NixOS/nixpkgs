@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   nodes =
     { client =
         { pkgs, ... }:
-        { fileSystems = pkgs.lib.mkVMOverride
+        { virtualisation.fileSystems =
             { "/public" = {
                 fsType = "cifs";
                 device = "//server/public";

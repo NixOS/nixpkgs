@@ -55,7 +55,7 @@ in
     # The shared libraries are required for DNS resolution
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.openvpn}/bin/openvpn
-      copy_bin_and_libs ${pkgs.iproute}/bin/ip
+      copy_bin_and_libs ${pkgs.iproute2}/bin/ip
 
       cp -pv ${pkgs.glibc}/lib/libresolv.so.2 $out/lib
       cp -pv ${pkgs.glibc}/lib/libnss_dns.so.2 $out/lib

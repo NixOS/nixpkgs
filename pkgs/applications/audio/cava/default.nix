@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, alsaLib, fftw,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsaLib, fftw,
   libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/consolefonts" "$out/share/consolefonts"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
     license = licenses.mit;

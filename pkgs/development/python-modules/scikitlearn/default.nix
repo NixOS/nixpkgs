@@ -3,24 +3,37 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, gfortran, glibcLocales
-, numpy, scipy, pytest, pillow
+, gfortran
+, glibcLocales
+, numpy
+, scipy
+, pytest
+, pillow
 , cython
 , joblib
 , llvmPackages
 , threadpoolctl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.23.2";
-  # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  version = "0.24.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20766f515e6cd6f954554387dfae705d93c7b544ec0e6c6a5d8e006f6f7ef480";
+    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
   };
+
+  patches = [
+    # This patch fixes compatibility with numpy 1.20. It was merged before 0.24.1 was released,
+    # but for some reason was not included in the 0.24.1 release tarball.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
+      sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
+    })
+  ];
 
   buildInputs = [
     pillow
@@ -52,7 +65,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of python modules for machine learning and data mining";
     changelog = let
       major = versions.major version;

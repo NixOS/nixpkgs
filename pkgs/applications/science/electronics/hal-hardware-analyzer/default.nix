@@ -1,32 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, llvmPackages ? null
+, fmt, graphviz, llvmPackages, z3
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "3.2.6";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
     rev = "v${version}";
-    sha256 = "11xmqxnryksl645wmm1d69k1b5zwvxxf0admk4iblzaa3ggf7cv1";
+    sha256 = "sha256-GRHRrAxZ10hmAXkGGSQEwNJTbnMbJ9jMyKnOUq+KoWo=";
   };
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
   postPatch = ''
-    rm -rf deps/*/*
-    substituteInPlace cmake/detect_dependencies.cmake \
-      --replace 'spdlog 1.4.2 EXACT' 'spdlog 1.4.2 REQUIRED'
+    shopt -s extglob
+    rm -rf deps/!(sanitizers-cmake)/*
+    shopt -u extglob
   '';
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog wrapQtAppsHook ]
+  nativeBuildInputs = [ cmake ninja pkg-config ];
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook z3 ]
     ++ (with python3Packages; [ python pybind11 ])
-    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  cmakeFlags = with stdenv.lib.versions; [
+  cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"
     "-DHAL_VERSION_MAJOR=${major version}"
     "-DHAL_VERSION_MINOR=${minor version}"
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
 
-  meta = {
+  meta = with lib; {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
-    license = stdenv.lib.licenses.mit;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ ris ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ris shamilton ];
   };
 }

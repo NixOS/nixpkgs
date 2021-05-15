@@ -1,38 +1,39 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , libgee
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 , pantheon
 , wrapGAppsHook
 , gtk3
 , json-glib
 , glib
 , glib-networking
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "tootle";
-  version = "0.2.0";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "bleakgrey";
     repo = pname;
     rev = version;
-    sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
+    sha256 = "NRM7GiJA8c5z9AvXpGXtMl4ZaYN2GauEIbjBmoY4pdo=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -41,21 +42,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     glib-networking
-    gnome3.libsoup
+    gnome.libsoup
     gsettings-desktop-schemas
     gtk3
     json-glib
     libgee
     pantheon.granite
-  ];
-
-  patches = [
-    # Fix build with Vala 0.46
-    # https://github.com/bleakgrey/tootle/pull/164
-    (fetchpatch {
-      url = "https://github.com/worldofpeace/tootle/commit/0a88bdad6d969ead1e4058b1a19675c9d6857b16.patch";
-      sha256 = "0xyx00pgswnhxxbsxngsm6khvlbfcl6ic5wv5n64x7klk8rzh6cm";
-    })
+    libhandy
   ];
 
   postPatch = ''
@@ -69,7 +62,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple Mastodon client designed for elementary OS";
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;

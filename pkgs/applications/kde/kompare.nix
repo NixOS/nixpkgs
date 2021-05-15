@@ -1,11 +1,12 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kiconthemes, kparts, ktexteditor, kwidgetsaddons, libkomparediff2
+  kiconthemes, kparts, ktexteditor, kwidgetsaddons, libkomparediff2,
+  fetchpatch
 }:
 
 mkDerivation {
-  name = "kompare";
+  pname = "kompare";
   meta = { license = with lib.licenses; [ gpl2 ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

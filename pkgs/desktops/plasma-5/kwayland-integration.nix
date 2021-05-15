@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   kguiaddons, kidletime, kwayland, kwindowsystem, qtbase,
 }:

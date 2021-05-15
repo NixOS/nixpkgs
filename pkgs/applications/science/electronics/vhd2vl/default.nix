@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "17va2pil4938j8c93anhy45zzgnvq3k71a7glj02synfrsv6fs8n";
   };
 
-  patches = stdenv.lib.optionals (!stdenv.isAarch64) [
+  patches = lib.optionals (!stdenv.isAarch64) [
     # fix build with verilog 11.0 - https://github.com/ldoolitt/vhd2vl/pull/15
     # for some strange reason, this is not needed for aarch64
     (fetchpatch {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     cp src/vhd2vl $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VHDL to Verilog converter";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = licenses.gpl2Plus;

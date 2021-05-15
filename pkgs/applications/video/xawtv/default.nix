@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ncurses
 , libjpeg
@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "SUID_ROOT=" # do not try to setuid
-    "resdir=${placeholder ''out''}/share/X11"
+    "resdir=${placeholder "out"}/share/X11"
   ];
 
   meta = {
     description = "TV application for Linux with apps and tools such as a teletext browser";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://www.kraxel.org/blog/linux/xawtv/";
-    maintainers = with stdenv.lib.maintainers; [ domenkozar ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ domenkozar ];
+    platforms = lib.platforms.linux;
   };
 }

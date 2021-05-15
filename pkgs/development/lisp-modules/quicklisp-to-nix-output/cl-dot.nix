@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-dot'';
-  version = ''20200925-git'';
+  baseName = "cl-dot";
+  version = "20200925-git";
 
-  description = ''Generate Dot Output from Arbitrary Lisp Data'';
+  description = "Generate Dot Output from Arbitrary Lisp Data";
 
   deps = [ args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dot/2020-09-25/cl-dot-20200925-git.tgz'';
-    sha256 = ''01vx4yzasmgswrlyagjr2cz76g906jsijdwikdf8wvxyyq77gkla'';
+    url = "http://beta.quicklisp.org/archive/cl-dot/2020-09-25/cl-dot-20200925-git.tgz";
+    sha256 = "01vx4yzasmgswrlyagjr2cz76g906jsijdwikdf8wvxyyq77gkla";
   };
 
   packageName = "cl-dot";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = ''wrapPythonPrograms'';
+  postFixup = "wrapPythonPrograms";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "DarwinTools-1";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [ stdenv.lib.maintainers.matthewbauer ];
-    platforms = stdenv.lib.platforms.darwin;
+    maintainers = [ lib.maintainers.matthewbauer ];
+    platforms = lib.platforms.darwin;
   };
 }

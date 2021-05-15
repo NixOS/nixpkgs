@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "6.1.1";
+  version = "6.2.0";
   disabled = isPy27; # setup.py no longer py3 compat
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "807da52ee0d4fc1241c8f8a04d274a28d4b23d3a5f942152497d19405482d04f";
+    sha256 = "16fa1518b0778fd53bf0547e6a562b1787bf68c8f6b7995a13bd1902529fdb0c";
   };
 
   # Use pytest because its easier to discover tests
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Furthermore, some tests fail due to being in a chroot
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Explicitly typed attributes for Python";
     homepage = "https://pypi.python.org/pypi/traits";
     license = "BSD";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, lame, libvorbis, gettext }:
+{ lib, stdenv, fetchgit, lame, libvorbis, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "ebook2cw";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert ebooks to Morse MP3s/OGGs";
     homepage = "http://fkurz.net/ham/ebook2cw.html";
     license = licenses.gpl2;
