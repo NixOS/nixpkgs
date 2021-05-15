@@ -24835,6 +24835,8 @@ in
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
+  libreofficePlugins = callPackage ../applications/office/libreoffice/plugins.nix { };
+
   libvmi = callPackage ../development/libraries/libvmi { };
 
   lifelines = callPackage ../applications/misc/lifelines { };
