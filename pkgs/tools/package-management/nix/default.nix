@@ -218,6 +218,13 @@ in rec {
     };
 
     inherit storeDir stateDir confDir boehmgc;
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/8c7e043de2f673bc355d83f1e873baa93f30be62.patch";
+        sha256 = "sha256-aTcUnZXheewnyCT7yQKnTqQDKS2uDoN9plMQgxJH8Ag=";
+      })
+    ];
   });
 
   nixExperimental = nixUnstable.overrideAttrs (prev: {

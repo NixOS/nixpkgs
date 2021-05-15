@@ -72,8 +72,6 @@ self = stdenv.mkDerivation rec {
   '';
   inherit postConfigure;
 
-  NIX_LDFLAGS = [ "-lm" ] ++ lib.optional (lib.versionOlder luaversion "5.2") "-ldl";
-
   inherit postBuild;
 
   postInstall = ''

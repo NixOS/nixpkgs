@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.10.2";
+  version = "1.10.6";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -24,17 +24,12 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "1ljhhjafi1nlndjswx7mg0d01zci90wz77yvz5w8bd9mm8ssw38s";
+    sha256 = "v6YH3fRMTzhp7wmU8in9ukcavzHmOAW54EK9ZwQyFxc=";
   };
 
   patches = [
+    # Add option for changing installation path of installed tests.
     ./0001-meson-add-options-for-tests-installation-dirs.patch
-  ];
-
-  mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
-    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
 
   nativeBuildInputs = [
@@ -57,7 +52,17 @@ stdenv.mkDerivation rec {
     mutest
   ];
 
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+  ];
+
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs tests/gen-installed-test.py
+  '';
 
   passthru = {
     tests = {

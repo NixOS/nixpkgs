@@ -1,20 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
-, gnome, gnome-menus, substituteAll }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkg-config
+, glib
+, gnome
+, gnome-menus
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";
-  version = "40.0";
+  version = "40.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "15hak4prx2nx1svfii39clxy1lll8crdf7p91if85jcsh6r8ab8p";
-  };
-
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
-    };
+    sha256 = "T7/OCtQ1e+5zrn3Bjqoe9MqnOF5PlPavuN/HJR/RqL8=";
   };
 
   patches = [
@@ -22,24 +25,19 @@ stdenv.mkDerivation rec {
       src = ./fix_gmenu.patch;
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
-
-    # Do not show welcome dialog in gnome-classic.
-    # Needed for gnome-shell 40.1.
-    # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/merge_requests/169
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions/commit/3e8bbb07ea7109c44d5ac7998f473779e742d041.patch";
-      sha256 = "jSmPwSBgRBfPPP9mGVjw1mSWumIXQqtA6tSqHr3U+3w=";
-    })
   ];
 
-  doCheck = true;
-  # 60 is required for tests
-  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.34.0/meson.build#L23
-  checkInputs = [ spidermonkey_68 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+  ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext glib ];
-
-  mesonFlags = [ "-Dextension_set=all" ];
+  mesonFlags = [
+    "-Dextension_set=all"
+  ];
 
   preFixup = ''
     # The meson build doesn't compile the schemas.
@@ -63,11 +61,18 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      attrPath = "gnome.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
