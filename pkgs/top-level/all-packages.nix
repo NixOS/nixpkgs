@@ -11879,7 +11879,7 @@ in
   duktape = callPackage ../development/interpreters/duktape { };
 
   evcxr = callPackage ../development/interpreters/evcxr {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   beam = callPackage ./beam-packages.nix { };
