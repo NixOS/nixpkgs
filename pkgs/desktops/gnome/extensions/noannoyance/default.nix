@@ -1,8 +1,8 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "noannoyance";
   version = "unstable-2021-01-17";
 

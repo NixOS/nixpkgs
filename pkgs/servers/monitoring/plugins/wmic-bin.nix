@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, autoPatchelfHook, popt }:
+{ stdenvNoCC, lib, fetchFromGitHub, autoPatchelfHook, popt }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "wmic-bin";
   version = "0.5.0";
 

@@ -158,7 +158,7 @@ let
     MALLOC_ARENA_MAX = "2";
   };
 
-  gitlab-rake = pkgs.stdenv.mkDerivation {
+  gitlab-rake = pkgs.stdenvNoCC.mkDerivation {
     name = "gitlab-rake";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
@@ -173,7 +173,7 @@ let
      '';
   };
 
-  gitlab-rails = pkgs.stdenv.mkDerivation {
+  gitlab-rails = pkgs.stdenvNoCC.mkDerivation {
     name = "gitlab-rails";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;

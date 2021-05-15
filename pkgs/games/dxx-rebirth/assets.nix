@@ -1,9 +1,9 @@
-{ lib, stdenv, requireFile, gogUnpackHook }:
+{ lib, stdenvNoCC, requireFile, gogUnpackHook }:
 
 let
   generic = ver: source: let
     pname = "descent${toString ver}";
-  in stdenv.mkDerivation rec {
+  in stdenvNoCC.mkDerivation rec {
     name = "${pname}-assets-${version}";
     version = "2.0.0.7";
 
