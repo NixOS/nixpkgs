@@ -109,7 +109,7 @@
     "caldav" = ps: with ps; [ caldav ];
     "calendar" = ps: with ps; [ aiohttp-cors ];
     "camera" = ps: with ps; [ aiohttp-cors ];
-    "canary" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: py-canary
+    "canary" = ps: with ps; [ ha-ffmpeg py-canary ];
     "cast" = ps: with ps; [ aiohttp-cors hass-nabucasa mutagen plexapi plexauth plexwebsocket PyChromecast pyroute2 zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
     "channels" = ps: with ps; [ pychannels ];
