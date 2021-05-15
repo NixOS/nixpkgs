@@ -417,6 +417,11 @@
     "https://pypi.io/packages/source/"
   ];
 
+  # Python Test-PyPI mirror
+  testpypi = [
+    "https://test.pypi.io/packages/source/"
+  ];
+
   # Mozilla projects.
   mozilla = [
     "http://download.cdn.mozilla.net/pub/mozilla.org/"
