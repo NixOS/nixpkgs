@@ -49,6 +49,11 @@ in {
         description = "Peer addresses to initialize with on first run.";
       };
 
+      openSwarmPort = mkOption {
+        type = types.bool;
+        description = "Open swarm port, secured by the cluster secret. This does not expose the API or proxy. https://cluster.ipfs.io/documentation/guides/security/";
+      };
+
       secretFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -111,6 +116,6 @@ in {
         Group = cfg.group;
       };
     };
-    networking.firewall.allowedTCPPorts = [ 9096 ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openSwarmPort [ 9096 ];
   };
 }
