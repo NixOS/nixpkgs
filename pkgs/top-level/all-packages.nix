@@ -22472,6 +22472,8 @@ in
 
   breezy = with python3Packages; toPythonApplication breezy;
 
+  btpd = callPackage ../applications/networking/p2p/btpd { };
+
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
   brig = callPackage ../applications/networking/brig { };
