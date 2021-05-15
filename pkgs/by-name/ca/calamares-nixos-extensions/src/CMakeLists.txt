@@ -49,7 +49,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 # consumers by loading the developer's config from a build
 # directory (which doesn't have the rest of the config
 # installed inside it).
-find_package(Calamares 3.2.26 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
+find_package(Calamares 3.2.40 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
 if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
     message(FATAL_ERROR "Calamares found with missing CMake targets")
 endif()
