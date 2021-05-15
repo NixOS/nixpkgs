@@ -333,6 +333,7 @@ in with py.pkgs; buildPythonApplication rec {
     "panel_iframe"
     "persistent_notification"
     "person"
+    "philips_js"
     "plaato"
     "plugwise"
     "prometheus"
