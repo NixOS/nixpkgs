@@ -18,39 +18,31 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "20210503";
+  version = "20210515";
 
   src =
     let
       repo = fetchFromGitHub {
         owner = "Kethku";
         repo = "neovide";
-        rev = "ba42855f4c0f8b8b35c8cfd2c0572241f2a0112e";
-        sha256 = "sha256-DQrkdm8K09gCIYJHpQB6wBs4Jqee0aMklSw3eba+4qQ=";
+        rev = "0b976c3d28bbd24e6c83a2efc077aa96dde1e9eb";
+        sha256 = "sha256-asaOxcAenKdy/yJvch3HFfgnrBnQagL02UpWYnz7sa8=";
       };
     in
     runCommand "source" { } ''
       cp -R ${repo} $out
       chmod -R +w $out
       # Reasons for patching Cargo.toml:
-      # - For package sdl2-sys disable feature bundled, which is pulled in by
-      #   target windows and can not be disabled with cargo resolver version 1.
-      #   By updating resolver to version 2, the features are disabled. See
-      #   also:
-      #     https://doc.rust-lang.org/cargo/reference/resolver.html#feature-resolver-version-2
-      #   This change is proposed upstream in following PR:
-      #     https://github.com/Kethku/neovide/pull/652
       # - I got neovide built with latest compatible skia-save version 0.35.1
       #   and I did not try to get it with 0.32.1 working. Changing the skia
       #   version is time consuming, because of manual dependecy tracking and
       #   long compilation runs.
       sed -i $out/Cargo.toml \
-        -e '/\[package\]/a resolver = "2"' \
         -e '/skia-safe/s;0.32.1;0.35.1;'
       cp ${./Cargo.lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "sha256-DsRXpsCH4Y2vk54QT5n/5YQAcXLKIqRfvOcrOdZmccU=";
+  cargoSha256 = "sha256-XMPRM3BAfCleS0LXQv03A3lQhlUhAP8/9PdVbAUnfG0=";
 
   SKIA_OFFLINE_SOURCE_DIR =
     let
