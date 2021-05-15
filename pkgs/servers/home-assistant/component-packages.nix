@@ -157,7 +157,7 @@
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa netdisco pillow pyroute2 scapy sqlalchemy zeroconf ];
-    "delijn" = ps: with ps; [ ]; # missing inputs: pydelijn
+    "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
     "demo" = ps: with ps; [ aiohttp-cors ];
     "denon" = ps: with ps; [ ];
