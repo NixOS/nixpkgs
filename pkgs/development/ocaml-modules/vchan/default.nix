@@ -1,7 +1,18 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_sexp_conv, ounit, io-page-unix
-, lwt, cstruct, io-page, mirage-flow, xenstore, xenstore_transport
-, sexplib, cmdliner
+{ lib
+, buildDunePackage
+, fetchurl
+, ppx_cstruct
+, ppx_sexp_conv
+, ounit
+, io-page-unix
+, lwt
+, cstruct
+, io-page
+, mirage-flow
+, xenstore
+, xenstore_transport
+, sexplib
+, cmdliner
 }:
 
 buildDunePackage rec {

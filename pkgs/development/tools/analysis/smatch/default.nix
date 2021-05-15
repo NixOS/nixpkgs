@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchgit, sqlite, pkg-config, perl
+{ lib
+, stdenv
+, fetchgit
+, sqlite
+, pkg-config
+, perl
 , buildllvmsparse ? true
 , buildc2xml ? true
-, llvm ? null, libxml2 ? null
+, llvm ? null
+, libxml2 ? null
 }:
 
 assert buildllvmsparse -> llvm != null;
@@ -17,9 +23,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [sqlite perl]
-   ++ lib.optional buildllvmsparse llvm
-   ++ lib.optional buildc2xml libxml2;
+  buildInputs = [ sqlite perl ]
+    ++ lib.optional buildllvmsparse llvm
+    ++ lib.optional buildc2xml libxml2;
 
   preBuild =
     '' sed -i Makefile \

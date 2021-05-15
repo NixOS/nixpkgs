@@ -16,7 +16,7 @@
 }:
 
 let
-  pulseSources = runCommand "pulseaudio-sources" {} ''
+  pulseSources = runCommand "pulseaudio-sources" { } ''
     mkdir $out
     if [ -d ${pulseaudio.src} ]; then
       ln -s ${pulseaudio.src}/* $out/
@@ -26,7 +26,8 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pulseaudio-modules-bt";
   version = "1.4";
 

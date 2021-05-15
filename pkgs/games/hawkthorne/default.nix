@@ -11,7 +11,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    love curl zip
+    love
+    curl
+    zip
   ];
 
   patches = [

@@ -1,4 +1,4 @@
-{lib, stdenv, qtdeclarative, fetchFromGitHub, qmake }:
+{ lib, stdenv, qtdeclarative, fetchFromGitHub, qmake }:
 stdenv.mkDerivation {
   name = "qml-box2d-2018-04-06";
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     substituteInPlace box2d.pro \
       --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
     qmakeFlags="$qmakeFlags PREFIXSHORTCUT=$out"
-    '';
+  '';
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

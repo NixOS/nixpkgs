@@ -44,8 +44,8 @@ self: super: {
   # Hasura 1.3.1
   # Because of ghc-heap-view, profiling needs to be disabled.
   graphql-engine = overrideCabal (super.graphql-engine) (drv: {
-     # GHC 8.8.x needs a revert of https://github.com/hasura/graphql-engine/commit/a77bb0570f4210fb826985e17a84ddcc4c95d3ea
-     patches = [ ./patches/hasura-884-compat.patch ];
+    # GHC 8.8.x needs a revert of https://github.com/hasura/graphql-engine/commit/a77bb0570f4210fb826985e17a84ddcc4c95d3ea
+    patches = [ ./patches/hasura-884-compat.patch ];
   });
 
   # GHC 8.8.x can build haddock version 2.23.*
@@ -60,8 +60,8 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_4_0_0;
     base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+    random = dontCheck super.random_1_2_0; # break infinite recursion
+    hashable = doJailbreak super.hashable; # allow random 1.2.x
   });
 
   # Ignore overly restrictive upper version bounds.
@@ -73,7 +73,7 @@ self: super: {
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
   hashable-time = doJailbreak super.hashable-time;
-  hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
+  hledger-lib = doJailbreak super.hledger-lib; # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;

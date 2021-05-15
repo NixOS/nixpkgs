@@ -1,6 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, requests-mock, tox
-, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted, ujson }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, requests-mock
+, tox
+, autobahn
+, certifi
+, chardet
+, cryptography
+, dateparser
+, pyopenssl
+, requests
+, service-identity
+, twisted
+, ujson
+}:
 
 buildPythonPackage rec {
   version = "0.7.9";
@@ -11,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "476459d91f6cfe0a37ccac38911643ea6cca632499ad8682e0957a075f73d239";
   };
 
-  doCheck = false;  # Tries to test multiple interpreters with tox
+  doCheck = false; # Tries to test multiple interpreters with tox
   checkInputs = [ pytest requests-mock tox ];
 
   propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ujson ];

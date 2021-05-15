@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.skydns;
 
-in {
+in
+{
   options.services.skydns = {
     enable = mkEnableOption "skydns service";
 
@@ -51,7 +52,7 @@ in {
       default = map (n: n + ":53") config.networking.nameservers;
       type = types.listOf types.str;
       description = "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
-      example = ["8.8.8.8:53" "8.8.4.4:53"];
+      example = [ "8.8.8.8:53" "8.8.4.4:53" ];
     };
 
     package = mkOption {
@@ -62,7 +63,7 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.str;
       description = "Skydns attribute set of extra config options passed as environment variables.";
     };

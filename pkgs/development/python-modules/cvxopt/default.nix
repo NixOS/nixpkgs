@@ -3,7 +3,8 @@
 , fetchPypi
 , isPyPy
 , python
-, blas, lapack # build segfaults with 64-bit blas
+, blas
+, lapack # build segfaults with 64-bit blas
 , suitesparse
 , glpk ? null
 , gsl ? null

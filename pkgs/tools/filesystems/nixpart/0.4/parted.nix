@@ -1,5 +1,13 @@
-{ lib,stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
-, util-linux, check
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libuuid
+, gettext
+, readline
+, util-linux
+, check
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
@@ -26,9 +34,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
-       (if (readline != null)
-        then [ "--with-readline" ]
-        else [ "--without-readline" ])
+    (if (readline != null)
+    then [ "--with-readline" ]
+    else [ "--without-readline" ])
     ++ lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ lib.optional enableStatic "--enable-static";
 

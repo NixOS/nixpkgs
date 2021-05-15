@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         acl = {
           rule_sets = [
             {
-              rules = [ { field = "x-application"; equals = "MyApp"; } ];
+              rules = [{ field = "x-application"; equals = "MyApp"; }];
               allow = [ "myuser" ];
             }
           ];

@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
-, libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
+{ lib
+, stdenv
+, fetchurl
+, bzip2
+, freetype
+, graphviz
+, ghostscript
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, zlib
+, libtool
+, xz
+, libX11
+, libwebp
+, quantumdepth ? 8
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
@@ -23,8 +39,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
-      zlib libtool libwebp
+    [
+      bzip2
+      freetype
+      ghostscript
+      graphviz
+      libjpeg
+      libpng
+      libtiff
+      libX11
+      libxml2
+      zlib
+      libtool
+      libwebp
     ];
 
   nativeBuildInputs = [ xz ]

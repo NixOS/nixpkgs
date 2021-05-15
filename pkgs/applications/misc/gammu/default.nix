@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, bluez, libusb1, curl
-, libiconv, gettext, sqlite
-, dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
-, postgresSupport ? false, postgresql ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, bluez
+, libusb1
+, curl
+, libiconv
+, gettext
+, sqlite
+, dbiSupport ? false
+, libdbi ? null
+, libdbiDrivers ? null
+, postgresSupport ? false
+, postgresql ? null
 }:
 
 with lib;
@@ -24,8 +36,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [ bluez libusb1 curl gettext sqlite libiconv ]
-  ++ optionals dbiSupport [ libdbi libdbiDrivers ]
-  ++ optionals postgresSupport [ postgresql ];
+    ++ optionals dbiSupport [ libdbi libdbiDrivers ]
+    ++ optionals postgresSupport [ postgresql ];
 
   meta = {
     homepage = "https://wammu.eu/gammu/";

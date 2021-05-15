@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
-, async ? null, lwt ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, ocamlbuild
+, ocplib-endian
+, sexplib
+, findlib
+, ppx_tools
+, async ? null
+, lwt ? null
 }:
 
 assert lib.versionAtLeast ocaml.version "4.01";
@@ -31,6 +40,6 @@ stdenv.mkDerivation {
     description = "Map OCaml arrays onto C-like structs";
     license = lib.licenses.isc;
     maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

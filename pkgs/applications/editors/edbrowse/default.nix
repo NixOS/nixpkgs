@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C"
+    "src"
     "prefix=${placeholder "out"}"
   ];
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
       This program was originally written for blind users, but many sighted users have taken advantage of the unique scripting capabilities of this program, which can be found nowhere else.
       A batch job, or cron job, can access web pages on the internet, submit forms, and send email, with no human intervention whatsoever.
       edbrowse can also tap into databases through odbc. It was primarily written by Karl Dahlke.
-      '';
+    '';
     license = licenses.gpl1Plus;
     homepage = "https://edbrowse.org/";
     maintainers = with maintainers; [ schmitthenner vrthra equirosa ];

@@ -8,7 +8,7 @@ let
       (import ./poetry-git-overlay.nix { inherit pkgs; })
       (self: super: {
 
-        rmfuse = super.rmfuse.overridePythonAttrs(old: {
+        rmfuse = super.rmfuse.overridePythonAttrs (old: {
           meta = old.meta // {
             description = "RMfuse provides access to your reMarkable Cloud files in the form of a FUSE filesystem.";
             longDescription = ''
@@ -23,4 +23,5 @@ let
       })
     ];
   }).python.pkgs;
-in pythonPackages.rmfuse
+in
+pythonPackages.rmfuse

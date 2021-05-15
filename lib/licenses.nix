@@ -230,12 +230,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
 
   cecill-b = spdx {
     spdxId = "CECILL-B";
-    fullName  = "CeCILL-B Free Software License Agreement";
+    fullName = "CeCILL-B Free Software License Agreement";
   };
 
   cecill-c = spdx {
     spdxId = "CECILL-C";
-    fullName  = "CeCILL-C Free Software License Agreement";
+    fullName = "CeCILL-C Free Software License Agreement";
   };
 
   cpal10 = spdx {
@@ -434,15 +434,15 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
   };
 
   inria-compcert = {
-    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
-    url       = "http://compcert.inria.fr/doc/LICENSE"; # https is broken
-    free      = false;
+    fullName = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
+    url = "http://compcert.inria.fr/doc/LICENSE"; # https is broken
+    free = false;
   };
 
   inria-icesl = {
     fullName = "INRIA Non-Commercial License Agreement for IceSL";
-    url      = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf"; # https is broken
-    free     = false;
+    url = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf"; # https is broken
+    free = false;
   };
 
   ipa = spdx {
@@ -588,7 +588,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
 
   ncsa = spdx {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
   };
 
   nposl3 = spdx {

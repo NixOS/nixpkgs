@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   # Since we don't have access to the internet during the tests, we have to
@@ -44,7 +44,8 @@ let
   '';
 
 
-in {
+in
+{
   name = "lxd";
 
   meta = with pkgs.lib.maintainers; {

@@ -1,4 +1,17 @@
-{lib, stdenv, pkg-config, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
+{ lib
+, stdenv
+, pkg-config
+, luajit
+, openssl
+, fetchurl
+, libpcap
+, pcre
+, libdnet
+, daq
+, zlib
+, flex
+, bison
+, makeWrapper
 , libtirpc
 }:
 

@@ -355,14 +355,14 @@ stdenv.mkDerivation {
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
     /*
-    As of now, systemd doesn't allow runtime configuration of these values. So
-    the settings in /etc/login.defs have no effect on it. Many people think this
-    should be supported however, see
-    - https://github.com/systemd/systemd/issues/3855
-    - https://github.com/systemd/systemd/issues/4850
-    - https://github.com/systemd/systemd/issues/9769
-    - https://github.com/systemd/systemd/issues/9843
-    - https://github.com/systemd/systemd/issues/10184
+      As of now, systemd doesn't allow runtime configuration of these values. So
+      the settings in /etc/login.defs have no effect on it. Many people think this
+      should be supported however, see
+      - https://github.com/systemd/systemd/issues/3855
+      - https://github.com/systemd/systemd/issues/4850
+      - https://github.com/systemd/systemd/issues/9769
+      - https://github.com/systemd/systemd/issues/9843
+      - https://github.com/systemd/systemd/issues/10184
     */
     "-Dsystem-uid-max=999"
     "-Dsystem-gid-max=999"

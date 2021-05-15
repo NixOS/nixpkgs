@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ginac-1.8.0";
 
   src = fetchurl {
-    url    = "${meta.homepage}/${name}.tar.bz2";
+    url = "${meta.homepage}/${name}.tar.bz2";
     sha256 = "0l9byzfxq3f9az5pcdldnl95ws8mpirkqky46f973mvxi5541d24";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GiNaC is Not a CAS";
-    homepage    = "https://www.ginac.de/";
+    homepage = "https://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

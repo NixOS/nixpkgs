@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib

@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ilevkivskyi/typing_inspect";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham ];
-    broken = isPy39;  # see https://github.com/ilevkivskyi/typing_inspect/issues/65
+    broken = isPy39; # see https://github.com/ilevkivskyi/typing_inspect/issues/65
   };
 }

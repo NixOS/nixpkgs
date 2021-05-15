@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   port = 8081;

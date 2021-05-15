@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -39,8 +39,8 @@ let
 
         # forcepool doesn't exist at first boot, and we need to manually test
         # the import after tweaking the hostId.
-        systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [];
-        systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
+        systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ ];
+        systemd.targets.zfs.wantedBy = lib.mkVMOverride [ ];
         boot.zfs.forceImportAll = true;
         # /dev/disk/by-id doesn't get populated in the NixOS test framework
         boot.zfs.devNodes = "/dev/disk/by-uuid";
@@ -95,7 +95,8 @@ let
     };
 
 
-in {
+in
+{
 
   stable = makeZfsTest "stable" { };
 

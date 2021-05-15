@@ -2,7 +2,8 @@
 
 let
   version = "2014.10";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "crimson-${version}";
 
   url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
@@ -20,6 +21,6 @@ in fetchzip rec {
     description = "A font family inspired by beautiful oldstyle typefaces";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

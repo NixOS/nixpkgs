@@ -1,7 +1,12 @@
-{lib, stdenv, fetchurl, gettext, ncurses
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, ncurses
 , gtkGUI ? false
 , pkg-config ? null
-, gtk2 ? null}:
+, gtk2 ? null
+}:
 
 assert gtkGUI -> pkg-config != null && gtk2 != null;
 
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gettext ncurses ]
-    ++ (if gtkGUI then [pkg-config gtk2] else []);
+    ++ (if gtkGUI then [ pkg-config gtk2 ] else [ ]);
 
   meta = {
     description = "Audio mixer for X and the console";

@@ -4,7 +4,7 @@ let
   package = (import ./composition.nix {
     inherit pkgs system;
     noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
+  }).overrideAttrs (attrs: {
     installPhase = attrs.installPhase + ''
       rm -R $out/storage $out/public/uploads
       ln -s ${dataDir}/.env $out/.env
@@ -13,7 +13,8 @@ let
     '';
   });
 
-in package.override rec {
+in
+package.override rec {
   name = "bookstack";
   version = "21.04.3";
 

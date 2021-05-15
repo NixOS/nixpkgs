@@ -21,9 +21,9 @@ fetchzip {
     homepage = "http://dotcolon.net/font/${pname}/";
     description = "Geometric sans serif designed by Sora Sagano";
     longDescription = ''
-     Penna is a geometric sans serif designed by Sora Sagano,
-     with outsized counters in the uppercase and a lowercase
-     with a small x-height.
+      Penna is a geometric sans serif designed by Sora Sagano,
+      with outsized counters in the uppercase and a lowercase
+      with a small x-height.
     '';
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];

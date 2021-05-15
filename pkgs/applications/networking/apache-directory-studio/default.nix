@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
-        sha256 = "1rkyb0qcsl9hk2qcwp5mwaab69q3sn77v5xyn9mbvi5wg9icbc37";
-      }
+      fetchurl
+        {
+          url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
+          sha256 = "1rkyb0qcsl9hk2qcwp5mwaab69q3sn77v5xyn9mbvi5wg9icbc37";
+        }
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   buildInputs = [ glib libsecret ];

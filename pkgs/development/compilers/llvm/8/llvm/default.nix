@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetch
 , fetchpatch
 , cmake
@@ -16,9 +17,9 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+    || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+    || stdenv.isAarch32 # broken for the armv7l builder
+  )
 , enablePolly ? false
 }:
 
@@ -29,7 +30,8 @@ let
   shortVersion = with lib;
     concatStringsSep "." (take 1 (splitVersion release_version));
 
-in stdenv.mkDerivation ({
+in
+stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
 
@@ -97,7 +99,7 @@ in stdenv.mkDerivation ({
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
@@ -154,10 +156,10 @@ in stdenv.mkDerivation ({
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = "https://llvm.org/";
-    license     = lib.licenses.ncsa;
+    homepage = "https://llvm.org/";
+    license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -166,7 +168,7 @@ in stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

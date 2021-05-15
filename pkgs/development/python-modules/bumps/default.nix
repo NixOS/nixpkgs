@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six}:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "bumps";
   version = "0.8.0";
 
-  propagatedBuildInputs = [six];
+  propagatedBuildInputs = [ six ];
 
   # Bumps does not provide its own tests.py, so the test
   # always fails

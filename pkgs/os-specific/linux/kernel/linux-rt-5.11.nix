@@ -1,20 +1,25 @@
-{ lib, buildLinux, fetchurl
+{ lib
+, buildLinux
+, fetchurl
 , kernelPatches ? [ ]
-, structuredExtraConfig ? {}
-, extraMeta ? {}
-, argsOverride ? {}
-, ... } @ args:
+, structuredExtraConfig ? { }
+, extraMeta ? { }
+, argsOverride ? { }
+, ...
+} @ args:
 
 let
   version = "5.11.4-rt11"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
-in buildLinux (args // {
+in
+buildLinux (args // {
   inherit version;
 
   # modDirVersion needs a patch number, change X.Y-rtZ to X.Y.0-rtZ.
-  modDirVersion = if (builtins.match "[^.]*[.][^.]*-.*" version) == null then version
-    else lib.replaceStrings ["-"] [".0-"] version;
+  modDirVersion =
+    if (builtins.match "[^.]*[.][^.]*-.*" version) == null then version
+    else lib.replaceStrings [ "-" ] [ ".0-" ] version;
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";

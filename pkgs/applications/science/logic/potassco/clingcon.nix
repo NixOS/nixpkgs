@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , bison
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "1q7517h10jfvjdk2czq8d6y57r8kr1j1jj2k2ip2qxkpyfigk4rs";
-   };
+  };
 
   # deal with clingcon through git submodules recursively importing
   # an outdated version of libpotassco which uses deprecated <xlocale.h> header in .cpp files

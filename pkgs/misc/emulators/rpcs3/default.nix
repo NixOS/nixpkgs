@@ -1,10 +1,30 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config, git
-, qtbase, qtquickcontrols, openal, glew, vulkan-headers, vulkan-loader, libpng
-, ffmpeg, libevdev, libusb1, zlib, curl, python3
-, sdl2Support ? true, SDL2
-, pulseaudioSupport ? true, libpulseaudio
-, waylandSupport ? true, wayland
-, alsaSupport ? true, alsaLib
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, git
+, qtbase
+, qtquickcontrols
+, openal
+, glew
+, vulkan-headers
+, vulkan-loader
+, libpng
+, ffmpeg
+, libevdev
+, libusb1
+, zlib
+, curl
+, python3
+, sdl2Support ? true
+, SDL2
+, pulseaudioSupport ? true
+, libpulseaudio
+, waylandSupport ? true
+, wayland
+, alsaSupport ? true
+, alsaLib
 }:
 
 let
@@ -46,12 +66,23 @@ mkDerivation {
   nativeBuildInputs = [ cmake pkg-config git ];
 
   buildInputs = [
-    qtbase qtquickcontrols openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl python3
+    qtbase
+    qtquickcontrols
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg
+    libevdev
+    zlib
+    libusb1
+    curl
+    python3
   ] ++ lib.optional sdl2Support SDL2
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional alsaSupport alsaLib
-    ++ lib.optional waylandSupport wayland;
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional alsaSupport alsaLib
+  ++ lib.optional waylandSupport wayland;
 
   meta = with lib; {
     description = "PS3 emulator/debugger";

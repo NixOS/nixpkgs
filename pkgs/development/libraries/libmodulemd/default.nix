@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchFromGitHub
 , pkg-config
@@ -71,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin ;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

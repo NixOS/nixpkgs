@@ -18,7 +18,7 @@ let
     installTargets = [ "install-rnnoise-nu" ];
   };
 in
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   pname = "speech-denoiser";
   version = "unstable-07-10-2019";
 

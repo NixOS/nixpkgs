@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
-    fftwFloat lv2
+    fftwFloat
+    lv2
   ];
 
   meta = with lib; {
     description = "An lv2 plugin for broadband noise reduction";
-    homepage    = "https://github.com/lucianodato/noise-repellent";
-    license     = licenses.gpl3;
+    homepage = "https://github.com/lucianodato/noise-repellent";
+    license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin"  ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
   };
 }

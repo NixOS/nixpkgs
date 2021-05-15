@@ -6,7 +6,7 @@
 , numpy
 , qdldl
 , scipy
-# check inputs
+  # check inputs
 , pytestCheckHook
 , cvxopt
 }:

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "logcheck";
   version = "1.3.23";
-  _name    = "logcheck_${version}";
+  _name = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";

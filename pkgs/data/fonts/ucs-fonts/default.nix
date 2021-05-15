@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, bdftopcf
-, libfaketime, fonttosfnt, mkfontscale
+{ lib
+, stdenv
+, fetchurl
+, bdftopcf
+, libfaketime
+, fonttosfnt
+, mkfontscale
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +29,10 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   nativeBuildInputs =
-    [ bdftopcf libfaketime fonttosfnt
+    [
+      bdftopcf
+      libfaketime
+      fonttosfnt
       mkfontscale
     ];
 

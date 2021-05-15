@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wrapGAppsHook, python3
-, gettext, gnome, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook
+, python3
+, gettext
+, gnome
+, glib
+, gtk3
+, libgnome-games-support
+, gdk-pixbuf
+}:
 
 let
   pname = "atomix";
   version = "3.34.0";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

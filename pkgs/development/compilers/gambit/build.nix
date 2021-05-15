@@ -1,6 +1,21 @@
-{ gccStdenv, lib, git, openssl, autoconf, pkgs, makeStaticLibraries, gcc, coreutils, gnused, gnugrep,
-  src, version, git-version,
-  gambit-support, optimizationSetting ? "-O1", gambit-params ? pkgs.gambit-support.stable-params }:
+{ gccStdenv
+, lib
+, git
+, openssl
+, autoconf
+, pkgs
+, makeStaticLibraries
+, gcc
+, coreutils
+, gnused
+, gnugrep
+, src
+, version
+, git-version
+, gambit-support
+, optimizationSetting ? "-O1"
+, gambit-params ? pkgs.gambit-support.stable-params
+}:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
 # clang is 10x (with default settings) to 15% (with -O2) slower than GCC at compiling
@@ -59,8 +74,8 @@ gccStdenv.mkDerivation rec {
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
   ] ++
-    # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    lib.optional (!gccStdenv.isDarwin) "--enable-poll";
+  # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+  lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \

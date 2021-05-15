@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, libogg, libvorbis, libao, pkg-config, curl
-, speex, flac
-, autoreconfHook }:
+{ lib
+, stdenv
+, fetchurl
+, libogg
+, libvorbis
+, libao
+, pkg-config
+, curl
+, speex
+, flac
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "vorbis-tools";

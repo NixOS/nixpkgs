@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   version = "2.9.1";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "trace-cmd-v${version}";
+    url = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    rev = "trace-cmd-v${version}";
     sha256 = "19c63a0qmcppm1456qf4k6a0d1agcvpa6jnbzrdcyc520yax6khw";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
-    homepage    = "https://kernelshark.org/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://kernelshark.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };
 }

@@ -4,7 +4,7 @@
 , lightyear
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "yaml";
   version = "2018-01-25";
 

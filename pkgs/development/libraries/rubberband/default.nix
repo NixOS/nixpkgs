@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
-, vamp-plugin-sdk, ladspaH }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libsamplerate
+, libsndfile
+, fftw
+, vamp-plugin-sdk
+, ladspaH
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubberband";

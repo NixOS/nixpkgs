@@ -44,7 +44,7 @@
       sha256 = "1p2rl5353fi4p3l0bz3dg0lifhxqj8hjyh1b6z1cn286qxwnnnm8";
     };
   }
- {
+  {
     goPackagePath = "github.com/gdamore/encoding";
     fetch = {
       type = "git";

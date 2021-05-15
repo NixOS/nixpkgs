@@ -3,7 +3,8 @@
 let
   version = "2.13";
   name = "cpio-${version}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -11,9 +12,10 @@ in stdenv.mkDerivation {
     sha256 = "0vbgnhkawdllgnkdn6zn1f56fczwk0518krakz2qbwhxmv2vvdga";
   };
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  preConfigure =
+    if stdenv.isCygwin then ''
+      sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
+    '' else null;
 
   enableParallelBuilding = true;
 

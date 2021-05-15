@@ -1,7 +1,9 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  ki18n, kwidgetsaddons, kxmlgui
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, ki18n
+, kwidgetsaddons
+, kxmlgui
 }:
 
 mkDerivation {

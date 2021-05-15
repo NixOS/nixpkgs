@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = with perlPackages; [
-    perl NetDNS NetIP NetNetmask StringRandom XMLWriter NetWhoisIP WWWMechanize
+    perl
+    NetDNS
+    NetIP
+    NetNetmask
+    StringRandom
+    XMLWriter
+    NetWhoisIP
+    WWWMechanize
   ];
   nativeBuildInputs = [ makeWrapper ];
 

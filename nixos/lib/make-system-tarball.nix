@@ -1,4 +1,6 @@
-{ stdenv, closureInfo, pixz
+{ stdenv
+, closureInfo
+, pixz
 
 , # The file name of the resulting tarball
   fileName ? "nixos-system-${stdenv.hostPlatform.system}"
@@ -14,7 +16,7 @@
   # a list of attribute sets {object, symlink} where `object' if a
   # store path whose closure will be copied, and `symlink' is a
   # symlink to `object' that will be added to the tarball.
-  storeContents ? []
+  storeContents ? [ ]
 
   # Extra commands to be executed before archiving files
 , extraCommands ? ""

@@ -1,7 +1,9 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestCheckHook, pytestrunner, pytestcov
+, pytestCheckHook
+, pytestrunner
+, pytestcov
 , isPy3k
 }:
 

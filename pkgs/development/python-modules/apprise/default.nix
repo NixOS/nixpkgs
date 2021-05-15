@@ -1,6 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, installShellFiles
-, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
-, pytestrunner, coverage, flake8, mock, pytestCheckHook, pytestcov, tox, gntp, sleekxmpp
+{ lib
+, buildPythonPackage
+, fetchPypi
+, installShellFiles
+, Babel
+, requests
+, requests_oauthlib
+, six
+, click
+, markdown
+, pyyaml
+, cryptography
+, pytestrunner
+, coverage
+, flake8
+, mock
+, pytestCheckHook
+, pytestcov
+, tox
+, gntp
+, sleekxmpp
 }:
 
 buildPythonPackage rec {
@@ -15,14 +33,28 @@ buildPythonPackage rec {
   nativeBuildInputs = [ Babel installShellFiles ];
 
   propagatedBuildInputs = [
-    cryptography requests requests_oauthlib six click markdown pyyaml
+    cryptography
+    requests
+    requests_oauthlib
+    six
+    click
+    markdown
+    pyyaml
   ];
 
   checkInputs = [
-    pytestrunner coverage flake8 mock pytestCheckHook pytestcov tox gntp sleekxmpp
+    pytestrunner
+    coverage
+    flake8
+    mock
+    pytestCheckHook
+    pytestcov
+    tox
+    gntp
+    sleekxmpp
   ];
 
-  disabledTests = [ "test_apprise_cli_nux_env"  ];
+  disabledTests = [ "test_apprise_cli_nux_env" ];
 
   postInstall = ''
     installManPage packaging/man/apprise.1

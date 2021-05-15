@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, jq, callPackage
-, nodePackages, cmake, nodejs, unzip, python3
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, jq
+, callPackage
+, nodePackages
+, cmake
+, nodejs
+, unzip
+, python3
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -15,7 +25,7 @@ let
     fetchSubmodules = true;
   };
 
-  lldb = callPackage ./lldb.nix {};
+  lldb = callPackage ./lldb.nix { };
 
   adapter = rustPlatform.buildRustPackage {
     pname = "${pname}-adapter";
@@ -42,7 +52,8 @@ let
 
   nodeDeps = nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "vscode-extension-${pname}";
   inherit src;
   vscodeExtUniqueId = "${publisher}.${pname}";

@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "Easily rotate your AWS key";
     homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = licenses.mit;
-    maintainers = [maintainers.mbode];
+    maintainers = [ maintainers.mbode ];
     platforms = platforms.unix;
   };
 }

@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
 , cheroot
-, dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
+, dbutils
+, mysqlclient
+, pymysql
+, mysql-connector
+, psycopg2
 }:
 
 buildPythonPackage rec {

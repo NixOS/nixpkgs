@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = {
-    homepage    = "http://ytalk.ourproject.org";
+    homepage = "http://ytalk.ourproject.org";
     description = "A terminal based talk client";
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ taeer ];
-    license     = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

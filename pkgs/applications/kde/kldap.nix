@@ -1,7 +1,13 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  cyrus_sasl, ki18n, kio, kmbox, openldap
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, cyrus_sasl
+, ki18n
+, kio
+, kmbox
+, openldap
 }:
 
 mkDerivation {

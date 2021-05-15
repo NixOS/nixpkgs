@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule
-, enableUnfree ? true }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, enableUnfree ? true
+}:
 
 buildGoModule rec {
   pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";

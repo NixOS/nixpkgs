@@ -1,9 +1,20 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, bison, doxygen
-, xkeyboard_config, libxcb, libxml2
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, bison
+, doxygen
+, xkeyboard_config
+, libxcb
+, libxml2
 , python3
 , libX11
-# To enable the "interactive-wayland" subcommand of xkbcli:
-, withWaylandSupport ? false, wayland, wayland-protocols
+  # To enable the "interactive-wayland" subcommand of xkbcli:
+, withWaylandSupport ? false
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {

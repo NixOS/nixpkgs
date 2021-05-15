@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix, bash}:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix, bash }:
 
 stdenv.mkDerivation {
   pname = "libnixxml";

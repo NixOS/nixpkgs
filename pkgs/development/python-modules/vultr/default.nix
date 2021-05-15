@@ -9,10 +9,10 @@ buildPythonPackage rec {
   pname = "vultr";
 
   src = fetchFromGitHub {
-      owner = "spry-group";
-      repo = "python-vultr";
-      rev = version;
-      sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+    owner = "spry-group";
+    repo = "python-vultr";
+    rev = version;
+    sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
   };
 
   propagatedBuildInputs = [ requests ];

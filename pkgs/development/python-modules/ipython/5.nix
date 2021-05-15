@@ -3,15 +3,15 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-# Build dependencies
+  # Build dependencies
 , glibcLocales
-# Test dependencies
+  # Test dependencies
 , nose
 , pygments
 , testpath
 , isPy27
 , mock
-# Runtime dependencies
+  # Runtime dependencies
 , backports_shutil_get_terminal_size
 , decorator
 , pathlib2
@@ -51,11 +51,18 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
   propagatedBuildInputs = [
-    backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
-    simplegeneric traitlets requests pathlib2 pexpect
+    backports_shutil_get_terminal_size
+    decorator
+    pickleshare
+    prompt_toolkit
+    simplegeneric
+    traitlets
+    requests
+    pathlib2
+    pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 

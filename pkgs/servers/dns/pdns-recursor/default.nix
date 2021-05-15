@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, boost, nixosTests
-, openssl, systemd, lua, luajit, protobuf
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, boost
+, nixosTests
+, openssl
+, systemd
+, lua
+, luajit
+, protobuf
 , enableProtoBuf ? false
 }:
 
@@ -14,8 +23,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost openssl systemd
-    lua luajit
+    boost
+    openssl
+    systemd
+    lua
+    luajit
   ] ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [

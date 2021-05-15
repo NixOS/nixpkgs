@@ -33,7 +33,8 @@ let
   potr = python3Packages.potr.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs = [ pycrypto ];
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "weechat-otr";
   version = "1.9.2";
 

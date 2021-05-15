@@ -1,13 +1,30 @@
-{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
-, which, python3, makeWrapper, docbook_xml_dtd_45, perl }:
+{ stdenv
+, lib
+, fetchurl
+, protobuf
+, protobufc
+, asciidoc
+, iptables
+, xmlto
+, docbook_xsl
+, libpaper
+, libnl
+, libcap
+, libnet
+, pkg-config
+, which
+, python3
+, makeWrapper
+, docbook_xml_dtd_45
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "criu";
   version = "3.15";
 
   src = fetchurl {
-    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
+    url = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
     sha256 = "09d0j24x0cyc7wkgi7cnxqgfjk7kbdlm79zxpj8d356sa3rw2z24";
   };
 
@@ -45,9 +62,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace checkpoint/restore for Linux";
-    homepage    = "https://criu.org";
-    license     = licenses.gpl2;
-    platforms   = [ "x86_64-linux" "aarch64-linux" ];
+    homepage = "https://criu.org";
+    license = licenses.gpl2;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };
 }

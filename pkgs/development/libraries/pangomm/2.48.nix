@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.48.0";
+  version = "2.48.0";
 
   outputs = [ "out" "dev" ];
 

@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql openssl zlib readline ];
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "refs/tags/ver_${version}";
+    owner = "reorg";
+    repo = "pg_repack";
+    rev = "refs/tags/ver_${version}";
     sha256 = "01n320cvn0z48ac4mbclpbzspdraaqzzw4xdcns7fj33vqq8nqm7";
   };
 

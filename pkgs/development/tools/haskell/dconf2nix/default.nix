@@ -4,14 +4,14 @@ let
   dconf2nix =
     haskell.lib.justStaticExecutables
       (haskell.lib.overrideCabal haskellPackages.dconf2nix (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
+        maintainers = (oldAttrs.maintainers or [ ]) ++ [
           lib.maintainers.gvolpe
         ];
       }));
 in
 
 dconf2nix.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+  passthru = (oldAttrs.passthru or { }) // {
     updateScript = ./update.sh;
 
     # These tests can be run with the following command.

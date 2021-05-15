@@ -2,7 +2,8 @@
 
 let
   version = "3.0.8";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "easyrsa";
   inherit version;
 

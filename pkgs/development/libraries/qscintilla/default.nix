@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, qt4 ? null
+, qmake4Hook ? null
+, withQt5 ? false
+, qtbase ? null
+, qtmacextras ? null
+, qmake ? null
 , fixDarwinDylibNames
 }:
 
@@ -8,7 +15,8 @@ let
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
   version = "2.11.6";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {

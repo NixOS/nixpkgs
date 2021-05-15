@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/zile/";

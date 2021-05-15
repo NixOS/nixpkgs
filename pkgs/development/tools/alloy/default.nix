@@ -49,24 +49,27 @@ let generic = { major, version, src }:
     };
   };
 
-in rec {
-  alloy4 = let version = "4.2_2015-02-22"; in generic {
-    major = "4";
-    inherit version;
-    src = fetchurl {
-      sha256 = "0p93v8jwx9prijpikkgmfdzb9qn8ljmvga5d9wvrkxddccjx9k28";
-      url = "http://alloytools.org/download/alloy${version}.jar";
+in
+rec {
+  alloy4 = let version = "4.2_2015-02-22"; in
+    generic {
+      major = "4";
+      inherit version;
+      src = fetchurl {
+        sha256 = "0p93v8jwx9prijpikkgmfdzb9qn8ljmvga5d9wvrkxddccjx9k28";
+        url = "http://alloytools.org/download/alloy${version}.jar";
+      };
     };
-  };
 
-  alloy5 = let version = "5.1.0"; in generic {
-    major = "5";
-    inherit version;
-    src = fetchurl {
-      sha256 = "02k9khs4k5nc86x9pp5k3vcb0kiwdgcin46mlap4fycnr673xd53";
-      url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/org.alloytools.alloy.dist.jar";
+  alloy5 = let version = "5.1.0"; in
+    generic {
+      major = "5";
+      inherit version;
+      src = fetchurl {
+        sha256 = "02k9khs4k5nc86x9pp5k3vcb0kiwdgcin46mlap4fycnr673xd53";
+        url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/org.alloytools.alloy.dist.jar";
+      };
     };
-  };
 
   alloy = alloy5;
 }

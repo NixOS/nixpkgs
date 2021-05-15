@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
-, openssl, boost, grpc, abseil-cpp, protobuf3_8, libnsl }:
+{ lib
+, stdenv
+, fetchgit
+, fetchurl
+, git
+, cmake
+, pkg-config
+, openssl
+, boost
+, grpc
+, abseil-cpp
+, protobuf3_8
+, libnsl
+}:
 
 let
   sqlite3 = fetchurl rec {
@@ -114,7 +126,8 @@ let
     leaveDotGit = true;
     fetchSubmodules = false;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "rippled";
   version = "1.7.0";
 
@@ -126,8 +139,8 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  hardeningDisable = ["format"];
-  cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
+  hardeningDisable = [ "format" ];
+  cmakeFlags = [ "-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON" ];
 
   nativeBuildInputs = [ pkg-config cmake git ];
   buildInputs = [ openssl openssl.dev boostSharedStatic grpc abseil-cpp protobuf3_8 libnsl ];

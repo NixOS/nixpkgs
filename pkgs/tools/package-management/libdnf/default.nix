@@ -1,5 +1,22 @@
-{ gcc9Stdenv, lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
+{ gcc9Stdenv
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, pkg-config
+, gpgme
+, libsolv
+, openssl
+, check
+, json_c
+, libmodulemd
+, libsmartcols
+, sqlite
+, librepo
+, libyaml
+, rpm
+}:
 
 gcc9Stdenv.mkDerivation rec {
   pname = "libdnf";

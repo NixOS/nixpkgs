@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitLab
+, symlinkJoin
+, gfortran
+, perl
+, procps
+, libyaml
+, libxc
+, fftw
+, blas
+, lapack
+, gsl
+, netcdf
+, arpack
+, autoreconfHook
 , python3
 }:
 

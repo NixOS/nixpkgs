@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub,
-  fetchHex, erlang, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchHex
+, erlang
+, makeWrapper
+}:
 
 let
   version = "3.15.1";
@@ -56,7 +61,7 @@ let
         of build configuration work. rebar also provides dependency management,
         enabling application writers to easily re-use common libraries from a
         variety of locations (hex.pm, git, hg, and so on).
-        '';
+      '';
 
       platforms = lib.platforms.unix;
       maintainers = lib.teams.beam.members;
@@ -78,7 +83,8 @@ let
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
         patches = [ ./skip-plugins.patch ./global-plugins.patch ];
       }));
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
       inherit (rebar3) version bootstrapper;
       nativeBuildInputs = [ erlang makeWrapper ];
@@ -101,4 +107,5 @@ let
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';
     };
-in { inherit rebar3 rebar3WithPlugins; }
+in
+{ inherit rebar3 rebar3WithPlugins; }

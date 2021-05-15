@@ -1,16 +1,20 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , ncurses
-, libX11, xorgproto, buildEnv
+, libX11
+, xorgproto
+, buildEnv
 }:
 
 let
-   useX11 = stdenv.isi686 || stdenv.isx86_64;
-   x11deps = [ libX11 xorgproto ];
-   inherit (lib) optionals;
+  useX11 = stdenv.isi686 || stdenv.isx86_64;
+  x11deps = [ libX11 xorgproto ];
+  inherit (lib) optionals;
 
-   baseOcamlBranch  = "4.07";
-   baseOcamlVersion = "${baseOcamlBranch}.1";
-   metaocamlPatch   = "107";
+  baseOcamlBranch = "4.07";
+  baseOcamlVersion = "${baseOcamlBranch}.1";
+  metaocamlPatch = "107";
 in
 
 stdenv.mkDerivation rec {
@@ -33,8 +37,11 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11
-    [ "-x11lib" x11lib
-      "-x11include" x11inc
+    [
+      "-x11lib"
+      x11lib
+      "-x11include"
+      x11inc
       "-flambda"
     ];
 
@@ -79,14 +86,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description     = "Multi-Stage Programming extension for OCaml";
-    homepage        = "http://okmij.org/ftp/ML/MetaOCaml.html";
-    license         = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
-    maintainers     = with maintainers; [ thoughtpolice ];
+    description = "Multi-Stage Programming extension for OCaml";
+    homepage = "http://okmij.org/ftp/ML/MetaOCaml.html";
+    license = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
+    maintainers = with maintainers; [ thoughtpolice ];
 
-    branch          = baseOcamlBranch;
-    platforms       = with platforms; linux ++ darwin;
-    broken          = stdenv.isAarch64 || stdenv.isMips;
+    branch = baseOcamlBranch;
+    platforms = with platforms; linux ++ darwin;
+    broken = stdenv.isAarch64 || stdenv.isMips;
 
     longDescription = ''
       A simple extension of OCaml with the primitive type of code values, and

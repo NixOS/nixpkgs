@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , packaging
-, fetchurl, python }:
+, fetchurl
+, python
+}:
 
 buildPythonPackage rec {
   pname = "vcver";

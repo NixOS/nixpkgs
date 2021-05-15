@@ -1,6 +1,12 @@
-{ lib, fetchFromGitHub
-, python, buildPythonPackage, isPy27
-, pygame, pyglet, pysdl2, six
+{ lib
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, isPy27
+, pygame
+, pyglet
+, pysdl2
+, six
 }:
 
 buildPythonPackage rec {

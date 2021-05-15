@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    cairo glib gobject-introspection
-    gnome.gnome-common gtk3 gnome.libsoup
+    cairo
+    glib
+    gobject-introspection
+    gnome.gnome-common
+    gtk3
+    gnome.libsoup
   ];
 
   meta = with lib; {

@@ -33,8 +33,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "http://www.riverbankcomputing.co.uk/";
-    license     = licenses.gpl3Only;
+    homepage = "http://www.riverbankcomputing.co.uk/";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ eduardosm ];
   };
 }

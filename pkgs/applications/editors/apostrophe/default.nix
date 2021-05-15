@@ -1,34 +1,73 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, cmake
-, wrapGAppsHook, pkg-config, desktop-file-utils
-, appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
-, shared-mime-info, libhandy
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, cmake
+, wrapGAppsHook
+, pkg-config
+, desktop-file-utils
+, appstream-glib
+, pythonPackages
+, glib
+, gobject-introspection
+, gtk3
+, webkitgtk
+, glib-networking
+, gnome
+, gspell
+, texlive
+, shared-mime-info
+, libhandy
 }:
 
 let
-  pythonEnv = pythonPackages.python.withPackages(p: with p; [
-    regex setuptools python-Levenshtein pyenchant
-    pygobject3 pycairo pypandoc chardet
+  pythonEnv = pythonPackages.python.withPackages (p: with p; [
+    regex
+    setuptools
+    python-Levenshtein
+    pyenchant
+    pygobject3
+    pycairo
+    pypandoc
+    chardet
   ]);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "apostrophe";
   version = "2.4";
 
   src = fetchFromGitLab {
-    owner  = "somas";
-    repo   = pname;
+    owner = "somas";
+    repo = pname;
     domain = "gitlab.gnome.org";
-    rev    = "v${version}";
+    rev = "v${version}";
     sha256 = "1qzy3zhi18wf42m034s8kcmx9gl05j620x3hf6rnycq2fvy7g4gz";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
-    appstream-glib wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    cmake
+    pkg-config
+    desktop-file-utils
+    appstream-glib
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome.adwaita-icon-theme webkitgtk gspell texlive
-    glib-networking libhandy ];
+  buildInputs = [
+    glib
+    pythonEnv
+    gobject-introspection
+    gtk3
+    gnome.adwaita-icon-theme
+    webkitgtk
+    gspell
+    texlive
+    glib-networking
+    libhandy
+  ];
 
   postPatch = ''
     patchShebangs --build build-aux/meson_post_install.py

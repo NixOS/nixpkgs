@@ -1,7 +1,8 @@
 { lib, stdenv, fetchzip, coreutils, perl, gnutar, gzip }:
 let
   version = "6M62";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "inform7";
   inherit version;
   buildInputs = [ perl coreutils gnutar gzip ];

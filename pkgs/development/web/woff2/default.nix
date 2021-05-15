@@ -1,4 +1,9 @@
-{ brotli, cmake, pkg-config, fetchFromGitHub, lib, stdenv
+{ brotli
+, cmake
+, pkg-config
+, fetchFromGitHub
+, lib
+, stdenv
 , static ? stdenv.hostPlatform.isStatic
 }:
 

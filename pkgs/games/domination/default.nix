@@ -1,6 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchsvn
-# jdk8 is needed for building, but the game runs on newer jres as well
+  # jdk8 is needed for building, but the game runs on newer jres as well
 , jdk8
 , jre
 , ant
@@ -24,7 +25,8 @@ let
     icon = "domination";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "domination";
   version = "1.2.3";
 

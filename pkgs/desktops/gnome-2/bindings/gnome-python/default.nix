@@ -4,7 +4,8 @@ with lib;
 
 let
   inherit (python2.pkgs) python pygobject2 pygtk dbus-python;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "2.28";
   name = "gnome-python-${version}.1";
 

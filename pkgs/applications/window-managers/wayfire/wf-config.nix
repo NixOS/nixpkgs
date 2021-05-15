@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, cmake, meson, ninja, pkg-config
-, doctest, glm, libevdev, libxml2
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, meson
+, ninja
+, pkg-config
+, doctest
+, glm
+, libevdev
+, libxml2
 }:
 
 stdenv.mkDerivation rec {

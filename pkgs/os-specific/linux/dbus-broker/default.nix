@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, docutils, meson, ninja, pkg-config
-, dbus, linuxHeaders, systemd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, docutils
+, meson
+, ninja
+, pkg-config
+, dbus
+, linuxHeaders
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "dbus-broker";
   version = "28";
 
   src = fetchFromGitHub {
-    owner  = "bus1";
-    repo   = "dbus-broker";
-    rev    = "v${version}";
+    owner = "bus1";
+    repo = "dbus-broker";
+    rev = "v${version}";
     sha256 = "1rsn74x6yhyl9w7jqgnzgzyhp9cln1602jyzpw5qvrkdk5b7zzgs";
     fetchSubmodules = true;
   };
@@ -34,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux D-Bus Message Broker";
-    homepage    = "https://github.com/bus1/dbus-broker/wiki";
-    license     = licenses.asl20;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/bus1/dbus-broker/wiki";
+    license = licenses.asl20;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

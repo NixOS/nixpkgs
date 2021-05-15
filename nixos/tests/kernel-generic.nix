@@ -6,23 +6,25 @@
 with pkgs.lib;
 
 let
-  makeKernelTest = version: linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
-    name = "kernel-${version}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus ];
-    };
-
-    machine = { ... }:
-      {
-        boot.kernelPackages = linuxPackages;
+  makeKernelTest = version: linuxPackages: (import ./make-test-python.nix
+    ({ pkgs, ... }: {
+      name = "kernel-${version}";
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ nequissimus ];
       };
 
-    testScript =
-      ''
-        assert "Linux" in machine.succeed("uname -s")
-        assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
-      '';
-  }) args);
+      machine = { ... }:
+        {
+          boot.kernelPackages = linuxPackages;
+        };
+
+      testScript =
+        ''
+          assert "Linux" in machine.succeed("uname -s")
+          assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
+        '';
+    })
+    args);
 in
 with pkgs; {
   linux_4_4 = makeKernelTest "4.4" linuxPackages_4_4;

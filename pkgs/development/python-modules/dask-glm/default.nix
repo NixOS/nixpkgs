@@ -3,7 +3,8 @@
 , fetchPypi
 , cloudpickle
 , dask
-, numpy, toolz # dask[array]
+, numpy
+, toolz # dask[array]
 , multipledispatch
 , setuptools-scm
 , scipy

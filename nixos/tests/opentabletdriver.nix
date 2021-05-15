@@ -1,6 +1,8 @@
-import ./make-test-python.nix ( { pkgs, ... }: let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
   testUser = "alice";
-in {
+in
+{
   name = "opentabletdriver";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ thiagokokada ];

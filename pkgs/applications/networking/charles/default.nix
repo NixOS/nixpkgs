@@ -1,5 +1,5 @@
-{
-lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
@@ -9,19 +9,20 @@ lib, stdenv
 
 let
   generic = { version, sha256, platform ? "", jdk, ... }@attrs:
-  let
-    desktopItem = makeDesktopItem {
-      categories = "Network;Development;WebDevelopment;Java;";
-      desktopName = "Charles";
-      exec = "charles %F";
-      genericName  = "Web Debugging Proxy";
-      icon = "charles-proxy";
-      mimeType = "application/x-charles-savedsession;application/x-charles-savedsession+xml;application/x-charles-savedsession+json;application/har+json;application/vnd.tcpdump.pcap;application/x-charles-trace";
-      name = "Charles";
-      startupNotify = "true";
-    };
+    let
+      desktopItem = makeDesktopItem {
+        categories = "Network;Development;WebDevelopment;Java;";
+        desktopName = "Charles";
+        exec = "charles %F";
+        genericName = "Web Debugging Proxy";
+        icon = "charles-proxy";
+        mimeType = "application/x-charles-savedsession;application/x-charles-savedsession+xml;application/x-charles-savedsession+json;application/har+json;application/vnd.tcpdump.pcap;application/x-charles-trace";
+        name = "Charles";
+        startupNotify = "true";
+      };
 
-  in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       pname = "charles";
       inherit version;
 
@@ -55,7 +56,8 @@ let
       };
     };
 
-in {
+in
+{
   charles4 = (generic {
     version = "4.6.1";
     sha256 = "1kl83jjj5wjhdpj34gcj04vf1asxlqlfx9zi91ln4v90swlaaclv";

@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop notifications, the UNIX way";
     longDescription = ''
-    tiramisu is a notification daemon based on dunst that outputs notifications
-    to STDOUT in order to allow the user to process notifications any way they
-    prefer.
+      tiramisu is a notification daemon based on dunst that outputs notifications
+      to STDOUT in order to allow the user to process notifications any way they
+      prefer.
     '';
     homepage = "https://github.com/Sweets/tiramisu";
     license = licenses.mit;

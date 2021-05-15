@@ -13,7 +13,8 @@
 , pkg-config
 , uhd
 , log4cpp
-, blas, lapack
+, blas
+, lapack
 , matio
 , pugixml
 , protobuf
@@ -50,7 +51,8 @@ gnuradio3_8.pkgs.mkDerivation rec {
     # nothing to be gained by leaving it out.
     gnuradio3_8.unwrapped.uhd
     log4cpp
-    blas lapack
+    blas
+    lapack
     matio
     pugixml
     protobuf

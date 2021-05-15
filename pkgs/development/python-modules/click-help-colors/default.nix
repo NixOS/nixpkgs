@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage
-, click, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, click
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -21,9 +24,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colorization of help messages in Click";
-    homepage    = "https://github.com/r-m-n/click-help-colors";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/r-m-n/click-help-colors";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

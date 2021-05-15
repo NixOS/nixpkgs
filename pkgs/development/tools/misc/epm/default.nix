@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, rpm}:
+{ lib, stdenv, fetchFromGitHub, rpm }:
 
 stdenv.mkDerivation rec {
   pname = "epm";

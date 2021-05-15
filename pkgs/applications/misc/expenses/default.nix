@@ -28,8 +28,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-   description = "An interactive command line expense logger";
-   license = licenses.mit;
-   maintainers = [ maintainers.manojkarthick ];
+    description = "An interactive command line expense logger";
+    license = licenses.mit;
+    maintainers = [ maintainers.manojkarthick ];
   };
 }

@@ -4,7 +4,8 @@ let
   configDir = "/var/lib/foobar";
   mqttUsername = "homeassistant";
   mqttPassword = "secret";
-in {
+in
+{
   name = "home-assistant";
   meta.maintainers = lib.teams.home-assistant.members;
 
@@ -33,7 +34,7 @@ in {
           longitude = "0.0";
           elevation = 0;
         };
-        frontend = {};
+        frontend = { };
         mqtt = {
           broker = "127.0.0.1";
           username = mqttUsername;

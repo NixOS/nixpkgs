@@ -1,6 +1,6 @@
 # This test runs haka and probes it with hakactl
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "haka";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ tvestelind ];
@@ -9,10 +9,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes = {
     haka =
       { ... }:
-        {
-          services.haka.enable = true;
-        };
-    };
+      {
+        services.haka.enable = true;
+      };
+  };
 
   testScript = ''
     start_all()

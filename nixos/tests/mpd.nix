@@ -1,55 +1,58 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
-  let
-    track = pkgs.fetchurl {
-      # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
-      # License: http://creativecommons.org/licenses/by-sa/4.0/
+let
+  track = pkgs.fetchurl {
+    # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
+    # License: http://creativecommons.org/licenses/by-sa/4.0/
 
-      name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
-      url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
-      sha256 = "0xw417bxkx4gqqy139bb21yldi37xx8xjfxrwaqa0gyw19dl6mgp";
-    };
+    name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
+    url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
+    sha256 = "0xw417bxkx4gqqy139bb21yldi37xx8xjfxrwaqa0gyw19dl6mgp";
+  };
 
-    defaultCfg = rec {
-      user = "mpd";
-      group = "mpd";
-      dataDir = "/var/lib/mpd";
-      musicDirectory = "${dataDir}/music";
-    };
+  defaultCfg = rec {
+    user = "mpd";
+    group = "mpd";
+    dataDir = "/var/lib/mpd";
+    musicDirectory = "${dataDir}/music";
+  };
 
-    defaultMpdCfg = with defaultCfg; {
-      inherit dataDir musicDirectory user group;
-      enable = true;
-    };
+  defaultMpdCfg = with defaultCfg; {
+    inherit dataDir musicDirectory user group;
+    enable = true;
+  };
 
-    musicService = { user, group, musicDirectory }: {
-      description = "Sets up the music file(s) for MPD to use.";
-      requires = [ "mpd.service" ];
-      after = [ "mpd.service" ];
-      wantedBy = [ "default.target" ];
-      script = ''
-        cp ${track} ${musicDirectory}
-      '';
-      serviceConfig = {
-        User = user;
-        Group = group;
-      };
+  musicService = { user, group, musicDirectory }: {
+    description = "Sets up the music file(s) for MPD to use.";
+    requires = [ "mpd.service" ];
+    after = [ "mpd.service" ];
+    wantedBy = [ "default.target" ];
+    script = ''
+      cp ${track} ${musicDirectory}
+    '';
+    serviceConfig = {
+      User = user;
+      Group = group;
     };
+  };
 
-    mkServer = { mpd, musicService, }:
-      { boot.kernelModules = [ "snd-dummy" ];
-        sound.enable = true;
-        services.mpd = mpd;
-        systemd.services.musicService = musicService;
-      };
-  in {
-    name = "mpd";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ emmanuelrosa ];
+  mkServer = { mpd, musicService, }:
+    {
+      boot.kernelModules = [ "snd-dummy" ];
+      sound.enable = true;
+      services.mpd = mpd;
+      systemd.services.musicService = musicService;
     };
+in
+{
+  name = "mpd";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ emmanuelrosa ];
+  };
 
   nodes =
-    { client =
-      { ... }: { };
+    {
+      client =
+        { ... }: { };
 
       serverALSA =
         { ... }: lib.mkMerge [

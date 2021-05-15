@@ -1,15 +1,24 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kinit, kjsembed, taglib, exiv2, podofo,
-  kcrash
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, kconfig
+, kinit
+, kjsembed
+, taglib
+, exiv2
+, podofo
+, kcrash
 }:
 
 let
   pname = "krename";
   version = "5.0.1";
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "pgf-3.00";

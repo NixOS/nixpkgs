@@ -1,5 +1,16 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, gobject-introspection, glib, gdk-pixbuf
-, libxml2, cairo, pango, gnome }:
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, intltool
+, gobject-introspection
+, glib
+, gdk-pixbuf
+, libxml2
+, cairo
+, pango
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "lasem";
@@ -15,7 +26,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool gobject-introspection ];
 
   propagatedBuildInputs = [
-    glib gdk-pixbuf libxml2 cairo pango
+    glib
+    gdk-pixbuf
+    libxml2
+    cairo
+    pango
   ];
 
   enableParallelBuilding = true;

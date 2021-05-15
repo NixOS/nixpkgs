@@ -1,28 +1,43 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
-, gmp, mpfr, libffi, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, autoconf
+, automake
+, gmp
+, mpfr
+, libffi
+, makeWrapper
 , noUnicode ? false
 , gcc
 , threadSupport ? false
-, useBoehmgc ? true, boehmgc
+, useBoehmgc ? true
+, boehmgc
 }:
 
 assert useBoehmgc -> boehmgc != null;
 
 let
   s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="16.1.2";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
-    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
-  };
+    rec {
+      baseName = "ecl";
+      version = "16.1.2";
+      name = "${baseName}-${version}";
+      url = "https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
+      sha256 = "16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    };
   buildInputs = [
-    libtool autoconf automake makeWrapper
+    libtool
+    autoconf
+    automake
+    makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr gcc
+    libffi
+    gmp
+    mpfr
+    gcc
   ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
@@ -40,11 +55,11 @@ stdenv.mkDerivation {
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-prefix=${gmp.dev}"
     "--with-libffi-prefix=${libffi.dev}"
-    ]
-    ++
-    (lib.optional (! noUnicode)
-      "--enable-unicode")
-    ;
+  ]
+  ++
+  (lib.optional (! noUnicode)
+    "--enable-unicode")
+  ;
 
   patches = [
     (fetchpatch {
@@ -77,8 +92,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

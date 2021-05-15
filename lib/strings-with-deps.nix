@@ -1,6 +1,6 @@
 { lib }:
 /*
-Usage:
+  Usage:
 
   You define you custom builder script by adding all build steps to a list.
   for example:
@@ -16,25 +16,25 @@ Usage:
   Attention:
 
   let
-    pkgs = (import <nixpkgs>) {};
+  pkgs = (import <nixpkgs>) {};
   in let
-    inherit (pkgs.stringsWithDeps) fullDepEntry packEntry noDepEntry textClosureMap;
-    inherit (pkgs.lib) id;
+  inherit (pkgs.stringsWithDeps) fullDepEntry packEntry noDepEntry textClosureMap;
+  inherit (pkgs.lib) id;
 
-    nameA = noDepEntry "Text a";
-    nameB = fullDepEntry "Text b" ["nameA"];
-    nameC = fullDepEntry "Text c" ["nameA"];
+  nameA = noDepEntry "Text a";
+  nameB = fullDepEntry "Text b" ["nameA"];
+  nameC = fullDepEntry "Text c" ["nameA"];
 
-    stages = {
+  stages = {
       nameHeader = noDepEntry "#! /bin/sh \n";
       inherit nameA nameB nameC;
-    };
+  };
   in
-    textClosureMap id stages
-    [ "nameHeader" "nameA" "nameB" "nameC"
+  textClosureMap id stages
+  [ "nameHeader" "nameA" "nameB" "nameC"
       nameC # <- added twice. add a dep entry if you know that it will be added once only [1]
       "nameB" # <- this will not be added again because the attr name (reference) is used
-    ]
+  ]
 
   # result: Str("#! /bin/sh \n\nText a\nText b\nText c\nText c",[])
 
@@ -59,25 +59,29 @@ rec {
   textClosureList = predefined: arg:
     let
       f = done: todo:
-        if todo == [] then {result = []; inherit done;}
+        if todo == [ ] then { result = [ ]; inherit done; }
         else
           let entry = head todo; in
           if isAttrs entry then
-            let x = f done entry.deps;
-                y = f x.done (tail todo);
-            in { result = x.result ++ [entry.text] ++ y.result;
-                 done = y.done;
-               }
+            let
+              x = f done entry.deps;
+              y = f x.done (tail todo);
+            in
+            {
+              result = x.result ++ [ entry.text ] ++ y.result;
+              done = y.done;
+            }
           else if done ? ${entry} then f done (tail todo)
-          else f (done // listToAttrs [{name = entry; value = 1;}]) ([predefined.${entry}] ++ tail todo);
-    in (f {} arg).result;
+          else f (done // listToAttrs [{ name = entry; value = 1; }]) ([ predefined.${entry} ] ++ tail todo);
+    in
+    (f { } arg).result;
 
   textClosureMap = f: predefined: names:
     concatStringsSep "\n" (map f (textClosureList predefined names));
 
-  noDepEntry = text: {inherit text; deps = [];};
-  fullDepEntry = text: deps: {inherit text deps;};
-  packEntry = deps: {inherit deps; text="";};
+  noDepEntry = text: { inherit text; deps = [ ]; };
+  fullDepEntry = text: deps: { inherit text deps; };
+  packEntry = deps: { inherit deps; text = ""; };
 
   stringAfter = deps: text: { inherit text deps; };
 

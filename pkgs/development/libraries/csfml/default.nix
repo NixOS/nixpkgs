@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchFromGitHub {
     owner = "SFML";
-    repo  = "CSFML";
-    rev   = version;
+    repo = "CSFML";
+    rev = version;
     sha256 = "071magxif5nrdddzk2z34czqmz1dfws4d7dqynb2zpn7cwhwxcpm";
   };
   nativeBuildInputs = [ cmake ];

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, coreutils, gnused, util-linux
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ragel
+, python3
+, coreutils
+, gnused
+, util-linux
 , boost
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
@@ -24,10 +31,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python3
+    cmake
+    ragel
+    python3
     # Consider simply using busybox for these
     # Need at least: rev, sed, cut, nm
-    coreutils gnused util-linux
+    coreutils
+    gnused
+    util-linux
   ];
 
   cmakeFlags = [

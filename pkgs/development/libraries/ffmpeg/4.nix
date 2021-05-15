@@ -1,6 +1,9 @@
-{ callPackage, fetchpatch
-# Darwin frameworks
-, Cocoa, CoreMedia, VideoToolbox
+{ callPackage
+, fetchpatch
+  # Darwin frameworks
+, Cocoa
+, CoreMedia
+, VideoToolbox
 , ...
 }@args:
 

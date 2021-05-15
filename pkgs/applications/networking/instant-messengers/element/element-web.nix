@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? { } }:
 
 # Note for maintainers:
 # Versions of `element-web` and `element-desktop` should be kept in sync.
@@ -10,7 +10,8 @@ let
   };
   configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "element-web";
   version = "1.7.27";
 
@@ -36,6 +37,6 @@ in stdenv.mkDerivation rec {
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

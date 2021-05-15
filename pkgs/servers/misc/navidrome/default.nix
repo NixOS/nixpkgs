@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   unpackPhase = ''
-     tar xvf $src navidrome
+    tar xvf $src navidrome
   '';
 
   installPhase = ''

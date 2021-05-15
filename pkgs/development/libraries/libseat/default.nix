@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  mesonFlags = [ "-Dserver=disabled" "-Dseatd=disabled" "-Dlogind=enabled"];
+  mesonFlags = [ "-Dserver=disabled" "-Dseatd=disabled" "-Dlogind=enabled" ];
 
   meta = with lib; {
     description = "A universal seat management library";
-    changelog   = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
-    homepage    = "https://sr.ht/~kennylevinsen/seatd/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
+    homepage = "https://sr.ht/~kennylevinsen/seatd/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ emantor ];
   };
 }

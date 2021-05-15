@@ -80,28 +80,30 @@ buildPythonPackage rec {
     hash = "sha256-6lk2YfI9km10YbJAn38fvo9qa4iXcByL+udCsDe+kvU=";
   };
 
-  postPatch = let
-    legacyOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslLegacyStatic.version;
-    modernOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslStatic.version;
-    zlibVersion = zlibStatic.version;
-  in ''
-    mkdir -p deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
-    cp ${opensslLegacyStatic.out}/lib/libssl.a \
-      ${opensslLegacyStatic.out}/lib/libcrypto.a \
-      deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
-    ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_${legacyOpenSSLVersion}/include
-    ln -s ${opensslLegacyStatic.bin} deps/openssl-OpenSSL_${legacyOpenSSLVersion}/apps
+  postPatch =
+    let
+      legacyOpenSSLVersion = lib.replaceStrings [ "." ] [ "_" ] opensslLegacyStatic.version;
+      modernOpenSSLVersion = lib.replaceStrings [ "." ] [ "_" ] opensslStatic.version;
+      zlibVersion = zlibStatic.version;
+    in
+    ''
+      mkdir -p deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
+      cp ${opensslLegacyStatic.out}/lib/libssl.a \
+        ${opensslLegacyStatic.out}/lib/libcrypto.a \
+        deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
+      ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_${legacyOpenSSLVersion}/include
+      ln -s ${opensslLegacyStatic.bin} deps/openssl-OpenSSL_${legacyOpenSSLVersion}/apps
 
-    mkdir -p deps/openssl-OpenSSL_${modernOpenSSLVersion}/
-    cp ${opensslStatic.out}/lib/libssl.a \
-      ${opensslStatic.out}/lib/libcrypto.a \
-      deps/openssl-OpenSSL_${modernOpenSSLVersion}/
-    ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_${modernOpenSSLVersion}/include
-    ln -s ${opensslStatic.bin}/bin deps/openssl-OpenSSL_${modernOpenSSLVersion}/apps
+      mkdir -p deps/openssl-OpenSSL_${modernOpenSSLVersion}/
+      cp ${opensslStatic.out}/lib/libssl.a \
+        ${opensslStatic.out}/lib/libcrypto.a \
+        deps/openssl-OpenSSL_${modernOpenSSLVersion}/
+      ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_${modernOpenSSLVersion}/include
+      ln -s ${opensslStatic.bin}/bin deps/openssl-OpenSSL_${modernOpenSSLVersion}/apps
 
-    mkdir -p deps/zlib-${zlibVersion}/
-    cp ${zlibStatic.out}/lib/libz.a deps/zlib-${zlibVersion}/
-  '';
+      mkdir -p deps/zlib-${zlibVersion}/
+      cp ${zlibStatic.out}/lib/libz.a deps/zlib-${zlibVersion}/
+    '';
 
   propagatedBuildInputs = [ tls-parser ];
 

@@ -1,8 +1,21 @@
-{ config, stdenv, lib, fetchurl, fetchpatch
-, perl, pkg-config
-, libcap, libtool, libxml2, openssl, libuv
-, enablePython ? config.bind.enablePython or false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchpatch
+, perl
+, pkg-config
+, libcap
+, libtool
+, libxml2
+, openssl
+, libuv
+, enablePython ? config.bind.enablePython or false
+, python3 ? null
+, enableSeccomp ? false
+, libseccomp ? null
+, buildPackages
+, nixosTests
 }:
 
 assert enableSeccomp -> libseccomp != null;
@@ -52,8 +65,8 @@ stdenv.mkDerivation rec {
     "--without-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  ++ lib.optional enableSeccomp "--enable-seccomp"
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

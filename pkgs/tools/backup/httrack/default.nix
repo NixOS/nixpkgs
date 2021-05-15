@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Easy-to-use offline browser / website mirroring utility";
-    homepage    = "http://www.httrack.com";
-    license     = licenses.gpl3;
-    platforms   = with platforms; unix;
+    homepage = "http://www.httrack.com";
+    license = licenses.gpl3;
+    platforms = with platforms; unix;
   };
 }

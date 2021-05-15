@@ -37,7 +37,8 @@
 , xorgproto
 , xtrans
 , zlib
-, defaultFontPath ? "" }:
+, defaultFontPath ? ""
+}:
 
 stdenv.mkDerivation rec {
 

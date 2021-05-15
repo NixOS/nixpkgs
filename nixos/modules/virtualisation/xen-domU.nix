@@ -7,8 +7,14 @@
   boot.loader.grub.device = "nodev";
 
   boot.initrd.kernelModules =
-    [ "xen-blkfront" "xen-tpmfront" "xen-kbdfront" "xen-fbfront"
-      "xen-netfront" "xen-pcifront" "xen-scsifront"
+    [
+      "xen-blkfront"
+      "xen-tpmfront"
+      "xen-kbdfront"
+      "xen-fbfront"
+      "xen-netfront"
+      "xen-pcifront"
+      "xen-scsifront"
     ];
 
   # Send syslog messages to the Xen console.

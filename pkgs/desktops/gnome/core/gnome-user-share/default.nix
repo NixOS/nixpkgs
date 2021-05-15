@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , meson
 , ninja

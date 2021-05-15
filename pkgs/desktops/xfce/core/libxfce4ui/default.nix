@@ -1,5 +1,16 @@
-{ lib, mkXfceDerivation, gobject-introspection, vala, gtk3, libICE, libSM
-, libstartup_notification, libgtop, epoxy, libxfce4util, xfconf }:
+{ lib
+, mkXfceDerivation
+, gobject-introspection
+, vala
+, gtk3
+, libICE
+, libSM
+, libstartup_notification
+, libgtop
+, epoxy
+, libxfce4util
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "xfce";
@@ -9,7 +20,7 @@ mkXfceDerivation {
   sha256 = "0a9wfdpsv83giwv6kcidvpd6c665aa7sv6f2l1q6qcq214vb0rk2";
 
   nativeBuildInputs = [ gobject-introspection vala ];
-  buildInputs =  [ gtk3 libstartup_notification libgtop epoxy xfconf ];
+  buildInputs = [ gtk3 libstartup_notification libgtop epoxy xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
   configureFlags = [

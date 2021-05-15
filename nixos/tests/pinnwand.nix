@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...}:
+import ./make-test-python.nix ({ pkgs, ... }:
 let
   pythonEnv = pkgs.python3.withPackages (py: with py; [ appdirs toml ]);
 
@@ -21,31 +21,31 @@ let
     os.makedirs(appdirs.user_config_dir('steck'))
     with open(os.path.join(appdirs.user_config_dir('steck'), 'steck.toml'), "w") as fd:
         toml.dump(CONFIG, fd)
-    '';
+  '';
 in
 {
   name = "pinnwand";
   meta = with pkgs.lib.maintainers; {
-    maintainers =[ hexa ];
+    maintainers = [ hexa ];
   };
 
   nodes = {
     server = { config, ... }:
-    {
-      networking.firewall.allowedTCPPorts = [
-        port
-      ];
+      {
+        networking.firewall.allowedTCPPorts = [
+          port
+        ];
 
-      services.pinnwand = {
-        enable = true;
-        port = port;
+        services.pinnwand = {
+          enable = true;
+          port = port;
+        };
       };
-    };
 
     client = { pkgs, ... }:
-    {
-      environment.systemPackages = [ pkgs.steck ];
-    };
+      {
+        environment.systemPackages = [ pkgs.steck ];
+      };
   };
 
   testScript = ''

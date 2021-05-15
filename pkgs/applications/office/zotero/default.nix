@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook
+, makeDesktopItem
 , atk
 , cairo
 , coreutils
@@ -27,7 +31,8 @@
 , libXt
 , libnotify
 , gnome
-, libGLU, libGL
+, libGLU
+, libGL
 , nspr
 , nss
 , pango
@@ -44,7 +49,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+  buildInputs = [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -52,7 +57,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
+    [
+      stdenv.cc.cc
       atk
       cairo
       curl
@@ -78,13 +84,14 @@ stdenv.mkDerivation rec {
       libXrender
       libXt
       libnotify
-      libGLU libGL
+      libGLU
+      libGL
       nspr
       nss
       pango
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+    stdenv.cc.cc
+  ];
 
   postPatch = ''
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js

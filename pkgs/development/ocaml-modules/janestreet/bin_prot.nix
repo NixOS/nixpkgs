@@ -1,4 +1,4 @@
-{lib, buildOcamlJane, type_conv}:
+{ lib, buildOcamlJane, type_conv }:
 
 buildOcamlJane {
   name = "bin_prot";

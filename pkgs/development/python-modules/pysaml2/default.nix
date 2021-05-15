@@ -4,8 +4,20 @@
 , fetchFromGitHub
 , substituteAll
 , xmlsec
-, cryptography, defusedxml, pyopenssl, dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
+, cryptography
+, defusedxml
+, pyopenssl
+, dateutil
+, pytz
+, requests
+, six
+, mock
+, pyasn1
+, pymongo
+, pytest
+, responses
+, xmlschema
+, importlib-resources
 }:
 
 buildPythonPackage rec {

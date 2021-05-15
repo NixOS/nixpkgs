@@ -1,8 +1,22 @@
 { spellChecking ? true
-, lib, stdenv, fetchurl, pkg-config, gtk3, gtkspell3 ? null
-, gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
-, makeWrapper, gnupg
-, gnomeSupport ? true, libsecret, gcr
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, gtkspell3 ? null
+, gmime2
+, gettext
+, intltool
+, itstool
+, libxml2
+, libnotify
+, gnutls
+, makeWrapper
+, gnupg
+, gnomeSupport ? true
+, libsecret
+, gcr
 }:
 
 assert spellChecking -> gtkspell3 != null;
@@ -29,7 +43,7 @@ stdenv.mkDerivation {
     "--with-gnutls"
     "--enable-libnotify"
   ] ++ lib.optional spellChecking "--with-gtkspell"
-    ++ lib.optional gnomeSupport "--enable-gkr";
+  ++ lib.optional gnomeSupport "--enable-gkr";
 
   postInstall = ''
     wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin

@@ -17,8 +17,8 @@ let
     configuration to yield an operational system.
   '';
 
-  str1 = lib.types.addCheck str (s: s!="");  # non-empty string
-  int1 = lib.types.addCheck int (i: i>0);  # positive integer
+  str1 = lib.types.addCheck str (s: s != "");  # non-empty string
+  int1 = lib.types.addCheck int (i: i > 0);  # positive integer
 
   configAttrType =
     # Options in HylaFAX configuration files can be
@@ -31,7 +31,7 @@ let
       innerType = coercedTo bool (x: if x then "Yes" else "No")
         (coercedTo int (toString) str);
     in
-      attrsOf (coercedTo innerType lib.singleton (listOf innerType));
+    attrsOf (coercedTo innerType lib.singleton (listOf innerType));
 
   cfg = config.services.hylafax;
 
@@ -79,7 +79,7 @@ let
       inherit (config.security) wrapperDir;
       inherit (config.services.mail.sendmailSetuidWrapper) program;
       mkIfDefault = cond: value: mkIf cond (mkDefault value);
-      noWrapper = config.services.mail.sendmailSetuidWrapper==null;
+      noWrapper = config.services.mail.sendmailSetuidWrapper == null;
       # If a sendmail setuid wrapper exists,
       # we add the path to the default configuration file.
       # Otherwise, we use `false` to provoke
@@ -90,19 +90,19 @@ let
       ];
       importDefaultConfig = file:
         lib.attrsets.mapAttrs
-        (lib.trivial.const mkDefault)
-        (import file { inherit pkgs; });
+          (lib.trivial.const mkDefault)
+          (import file { inherit pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
     in
-      c;
+    c;
 
   localConfig =
     let
       c.hfaxdConfig.UserAccessFile = cfg.userAccessFile;
       c.faxqConfig = lib.attrsets.mapAttrs
-        (lib.trivial.const (v: mkIf (v!=null) v))
+        (lib.trivial.const (v: mkIf (v != null) v))
         {
           AreaCode = cfg.areaCode;
           CountryCode = cfg.countryCode;
@@ -111,7 +111,7 @@ let
         };
       c.commonModemConfig = c.faxqConfig;
     in
-      c;
+    c;
 
 in
 
@@ -249,7 +249,7 @@ in
 
     modems = mkOption {
       type = attrsOf (submodule [ modemConfigOptions ]);
-      default = {};
+      default = { };
       example.ttyS1 = {
         type = "cirrus";
         config = {
@@ -368,8 +368,8 @@ in
 
   config.services.hylafax =
     mkIf
-    (config.services.hylafax.enable)
-    (mkMerge [ defaultConfig localConfig ])
+      (config.services.hylafax.enable)
+      (mkMerge [ defaultConfig localConfig ])
   ;
 
 }

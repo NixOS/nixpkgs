@@ -1,16 +1,29 @@
-{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, hdf5-cpp, python3, texlive
-, armadillo, mpi, globalarrays, openssh
-, makeWrapper, fetchpatch
-} :
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gfortran
+, perl
+, openblas
+, hdf5-cpp
+, python3
+, texlive
+, armadillo
+, mpi
+, globalarrays
+, openssh
+, makeWrapper
+, fetchpatch
+}:
 
 let
   version = "20.10";
   gitLabRev = "v${version}";
 
-  python = python3.withPackages (ps : with ps; [ six pyparsing ]);
+  python = python3.withPackages (ps: with ps; [ six pyparsing ]);
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "openmolcas";
   inherit version;
 
@@ -24,7 +37,7 @@ in stdenv.mkDerivation {
   patches = [
     # Required to handle openblas multiple outputs
     ./openblasPath.patch
-];
+  ];
 
   nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
   buildInputs = [
@@ -49,7 +62,7 @@ in stdenv.mkDerivation {
     "-DOPENBLASROOT=${openblas.dev}"
   ];
 
-  GAROOT=globalarrays;
+  GAROOT = globalarrays;
 
   postConfigure = ''
     # The Makefile will install pymolcas during the build grrr.

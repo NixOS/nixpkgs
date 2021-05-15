@@ -15,7 +15,7 @@ assert ldgallery-compiler.version == versions.majorMinor ldgallery-viewer.versio
 justStaticExecutables (overrideCabal ldgallery-compiler (oldAttrs: {
   pname = "ldgallery"; # bundled viewer + compiler
 
-  buildTools = (oldAttrs.buildTools or []) ++ [ makeWrapper pandoc ];
+  buildTools = (oldAttrs.buildTools or [ ]) ++ [ makeWrapper pandoc ];
 
   prePatch = ''
     # add viewer dist to data

@@ -27,7 +27,8 @@ let
     rev = "1566642";
     sha256 = "0y45fjib153za085la3hqpryycx33dkj3cz8kwzn2w31kvldfl1q";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "trojita";
   version = "unstable-2020-07-06";
 

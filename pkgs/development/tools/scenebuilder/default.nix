@@ -74,7 +74,8 @@ let
     categories = "Development";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname src version;
 
   nativeBuildInputs = [ jdk gradle makeWrapper glib wrapGAppsHook ];
@@ -88,7 +89,7 @@ in stdenv.mkDerivation rec {
     gradle -PVERSION=${version} --offline --no-daemon --info --init-script ${gradleInit} build -x test
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -102,7 +103,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
-    '';
+  '';
 
   desktopItems = [ desktopItem ];
 

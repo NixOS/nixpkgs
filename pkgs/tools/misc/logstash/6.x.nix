@@ -1,6 +1,7 @@
 { elk6Version
 , enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , makeWrapper
 , nixosTests
@@ -21,13 +22,14 @@ let this = stdenv.mkDerivation rec {
       else "0spxgqsyh72n0l0xh6rljp0lbqz46xmr02sqz25ybycr4qkxdhgk";
   };
 
-  dontBuild         = true;
-  dontPatchELF      = true;
-  dontStrip         = true;
+  dontBuild = true;
+  dontPatchELF = true;
+  dontStrip = true;
   dontPatchShebangs = true;
 
   buildInputs = [
-    makeWrapper jre
+    makeWrapper
+    jre
   ];
 
   installPhase = ''
@@ -48,9 +50,9 @@ let this = stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A data pipeline that helps you process logs and other event data from a variety of systems";
-    homepage    = "https://www.elastic.co/products/logstash";
-    license     = if enableUnfree then licenses.elastic else licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://www.elastic.co/products/logstash";
+    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
   passthru.tests =

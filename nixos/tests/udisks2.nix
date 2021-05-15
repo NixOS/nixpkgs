@@ -17,7 +17,8 @@ in
 
   machine =
     { ... }:
-    { services.udisks2.enable = true;
+    {
+      services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];
 
       security.polkit.extraConfig =

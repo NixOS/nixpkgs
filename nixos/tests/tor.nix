@@ -6,14 +6,16 @@ rec {
 
   common =
     { ... }:
-    { boot.kernelParams = [ "audit=0" "apparmor=0" "quiet" ];
+    {
+      boot.kernelParams = [ "audit=0" "apparmor=0" "quiet" ];
       networking.firewall.enable = false;
       networking.useDHCP = false;
     };
 
   nodes.client =
     { pkgs, ... }:
-    { imports = [ common ];
+    {
+      imports = [ common ];
       environment.systemPackages = with pkgs; [ netcat ];
       services.tor.enable = true;
       services.tor.client.enable = true;

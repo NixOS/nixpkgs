@@ -7,7 +7,8 @@
 , pytestCheckHook
 , six
 , spinners
-, termcolor }:
+, termcolor
+}:
 
 buildPythonPackage rec {
   pname = "halo";

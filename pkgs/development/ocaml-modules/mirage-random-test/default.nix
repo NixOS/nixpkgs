@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, mirage-random
+{ lib
+, buildDunePackage
+, fetchurl
+, cstruct
+, mirage-random
 }:
 
 buildDunePackage rec {

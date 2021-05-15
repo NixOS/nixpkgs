@@ -1,7 +1,16 @@
-{ lib, buildPythonPackage, substituteAll, stdenv,
-  fetchPypi, numpy, cython, freetype-py, fontconfig, libGL,
-  setuptools_scm, setuptools-scm-git-archive
-  }:
+{ lib
+, buildPythonPackage
+, substituteAll
+, stdenv
+, fetchPypi
+, numpy
+, cython
+, freetype-py
+, fontconfig
+, libGL
+, setuptools_scm
+, setuptools-scm-git-archive
+}:
 
 buildPythonPackage rec {
   pname = "vispy";
@@ -21,14 +30,19 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython setuptools_scm setuptools-scm-git-archive
+    cython
+    setuptools_scm
+    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = [
-    numpy freetype-py fontconfig libGL
+    numpy
+    freetype-py
+    fontconfig
+    libGL
   ];
 
-  doCheck = false;  # otherwise runs OSX code on linux.
+  doCheck = false; # otherwise runs OSX code on linux.
   pythonImportsCheck = [ "vispy" ];
 
   meta = with lib; {

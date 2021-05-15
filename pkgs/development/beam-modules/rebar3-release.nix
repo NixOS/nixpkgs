@@ -1,27 +1,34 @@
-{ stdenv, writeText, erlang, rebar3, openssl,
-  lib }:
+{ stdenv
+, writeText
+, erlang
+, rebar3
+, openssl
+, lib
+}:
 
-{ name, version
+{ name
+, version
 , src
 , checkouts ? null
 , releaseType
-, buildInputs ? []
+, buildInputs ? [ ]
 , setupHook ? null
 , profile ? "default"
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
-, ... }@attrs:
+, ...
+}@attrs:
 
 with lib;
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   customPhases = filterAttrs
     (_: v: v != null)
@@ -33,14 +40,14 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl ];
-    propagatedBuildInputs = [checkouts];
+    propagatedBuildInputs = [ checkouts ];
 
     dontStrip = true;
 
     inherit src;
 
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     configurePhase = ''
@@ -77,7 +84,7 @@ let
     passthru = {
       packageName = name;
       env = shell self;
-   };
+    };
   } // customPhases);
 in
-  fix pkg
+fix pkg

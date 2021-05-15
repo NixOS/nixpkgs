@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "ac_cv_header_windows_h=no"
   ];
 
-  CPPFLAGS=lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-DAPR_IOVEC_DEFINED";
+  CPPFLAGS = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-DAPR_IOVEC_DEFINED";
 
   enableParallelBuilding = true;
 

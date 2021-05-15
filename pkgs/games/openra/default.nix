@@ -1,10 +1,10 @@
 /*  This file defines all OpenRA packages under `openraPackages`,
-    e.g. the OpenRA release engine can be found at `openraPackages.engines.release` (see `engines.nix`),
-    or the out-of-tree mod "Combined Arms" can be found at `openraPackages.mods.ca` (see `mods.nix`).
-    The `openra` package is just an alias to `openraPackages.engines.release`,
-    and just provides the mods included in the source code of the engine.
-    Additional engines or mods can be added with `openraPackages.buildOpenRAEngine` (function around `engine.nix`)
-    and `openraPackages.buildOpenRAMod` (function around `mod.nix`), respectively.
+  e.g. the OpenRA release engine can be found at `openraPackages.engines.release` (see `engines.nix`),
+  or the out-of-tree mod "Combined Arms" can be found at `openraPackages.mods.ca` (see `mods.nix`).
+  The `openra` package is just an alias to `openraPackages.engines.release`,
+  and just provides the mods included in the source code of the engine.
+  Additional engines or mods can be added with `openraPackages.buildOpenRAEngine` (function around `engine.nix`)
+  and `openraPackages.buildOpenRAMod` (function around `mod.nix`), respectively.
 */
 pkgs:
 
@@ -21,12 +21,13 @@ let
       so either the attributes added by `makeOverridable` have to be removed
       or the engine and mod package definitions will need to add `...` to the argument list.
   */
-  common = let f = import ./common.nix; in f (builtins.intersectAttrs (functionArgs f) pkgs // {
-    lua = pkgs.lua5_1;
-    # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
-    # rather than having to look to the logs why it is not starting.
-    inherit (pkgs.gnome) zenity;
-  });
+  common = let f = import ./common.nix; in
+    f (builtins.intersectAttrs (functionArgs f) pkgs // {
+      lua = pkgs.lua5_1;
+      # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
+      # rather than having to look to the logs why it is not starting.
+      inherit (pkgs.gnome) zenity;
+    });
 
   /*  Building a set of engines or mods requires some dependencies as well,
       so the sets will actually be defined as a function instead,
@@ -49,7 +50,8 @@ let
     '';
   } // args)));
 
-in pkgs.recurseIntoAttrs rec {
+in
+pkgs.recurseIntoAttrs rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine = { name ? null, version, description, homepage, mods, src }@engine:
@@ -59,7 +61,7 @@ in pkgs.recurseIntoAttrs rec {
     }); in if name == null then builder else builder name;
 
   # See `buildOpenRAEngine`.
-  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine, assetsError ? "" }@mod: ({ version, mods ? [], src }@engine:
+  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine, assetsError ? "" }@mod: ({ version, mods ? [ ], src }@engine:
     let builder = name: pkgs.callPackage ./mod.nix (common // {
       mod = mod // { inherit name assetsError; };
       engine = engine // { inherit mods; };

@@ -1,10 +1,15 @@
-{ lib, rustPlatform, runCommand, makeWrapper, rust-analyzer-unwrapped
+{ lib
+, rustPlatform
+, runCommand
+, makeWrapper
+, rust-analyzer-unwrapped
 , pname ? "rust-analyzer"
 , version ? rust-analyzer-unwrapped.version
   # Use name from `RUST_SRC_PATH`
 , rustSrc ? rustPlatform.rustLibSrc
 }:
-runCommand "${pname}-${version}" {
+runCommand "${pname}-${version}"
+{
   inherit pname version;
   inherit (rust-analyzer-unwrapped) src meta;
   nativeBuildInputs = [ makeWrapper ];

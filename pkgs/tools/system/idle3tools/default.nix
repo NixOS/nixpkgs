@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "idle3-tools-0.9.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     homepage = "http://idle3-tools.sourceforge.net/";
     description = "Tool to get/set the infamous idle3 timer in WD HDDs";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

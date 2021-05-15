@@ -6,7 +6,8 @@ let
 
   cfg = config.virtualbox;
 
-in {
+in
+{
 
   options = {
     virtualbox = {
@@ -58,7 +59,7 @@ in {
 
           Run <literal>VBoxManage modifyvm --help</literal> to see more options.
         '';
-     };
+      };
       extraDisk = mkOption {
         description = ''
           Optional extra disk/hdd configuration.

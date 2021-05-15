@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
-, gnome, libgee, glib, json-glib, libarchive, libsoup, gobject-introspection }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, makeFontsConf
+, vala
+, fetchpatch
+, gnome
+, libgee
+, glib
+, json-glib
+, libarchive
+, libsoup
+, gobject-introspection
+}:
 
 let
   pname = "libhttpseverywhere";
   version = "0.8.3";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

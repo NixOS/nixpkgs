@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromBitbucket
 , autoreconfHook
 , m4ri

@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome, libsysprof-capture
-, gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
-, libpsl, python3, brotli
+{ stdenv
+, lib
+, fetchurl
+, glib
+, libxml2
+, meson
+, ninja
+, pkg-config
+, gnome
+, libsysprof-capture
+, gnomeSupport ? true
+, sqlite
+, glib-networking
+, gobject-introspection
+, vala
+, libpsl
+, python3
+, brotli
 }:
 
 stdenv.mkDerivation rec {

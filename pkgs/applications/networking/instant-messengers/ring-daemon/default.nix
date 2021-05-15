@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , which
 , autoreconfHook
@@ -54,11 +55,11 @@ let
   restbed = import ./restbed.nix {
     inherit stdenv lib fetchFromGitHub cmake asio openssl;
     patches = [
-    "${patchdir}/restbed/CMakeLists.patch"
-    "${patchdir}/restbed/strand.patch"
-    "${patchdir}/restbed/uri_cpp.patch"
-    "${patchdir}/restbed/dns-resolution-error.patch"
-    "${patchdir}/restbed/string.patch"
+      "${patchdir}/restbed/CMakeLists.patch"
+      "${patchdir}/restbed/strand.patch"
+      "${patchdir}/restbed/uri_cpp.patch"
+      "${patchdir}/restbed/dns-resolution-error.patch"
+      "${patchdir}/restbed/string.patch"
     ];
   };
 

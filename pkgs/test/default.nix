@@ -27,28 +27,28 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
-  install-shell-files = callPackage ./install-shell-files {};
+  install-shell-files = callPackage ./install-shell-files { };
 
-  kernel-config = callPackage ./kernel.nix {};
+  kernel-config = callPackage ./kernel.nix { };
 
-  ld-library-path = callPackage ./ld-library-path {};
+  ld-library-path = callPackage ./ld-library-path { };
 
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
+  macOSSierraShared = callPackage ./macos-sierra-shared { };
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross { };
 
-  rustCustomSysroot = callPackage ./rust-sysroot {};
+  rustCustomSysroot = callPackage ./rust-sysroot { };
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
 
-  vim = callPackage ./vim {};
+  vim = callPackage ./vim { };
 
-  nixos-functions = callPackage ./nixos-functions {};
+  nixos-functions = callPackage ./nixos-functions { };
 
-  patch-shebangs = callPackage ./patch-shebangs {};
+  patch-shebangs = callPackage ./patch-shebangs { };
 
-  texlive = callPackage ./texlive {};
+  texlive = callPackage ./texlive { };
 
   cuda = callPackage ./cuda { };
 
-  writers = callPackage ../build-support/writers/test.nix {};
+  writers = callPackage ../build-support/writers/test.nix { };
 }

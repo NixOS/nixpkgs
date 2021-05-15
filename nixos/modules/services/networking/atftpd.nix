@@ -26,7 +26,7 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example = literalExample ''
           [ "--bind-address 192.168.9.1"

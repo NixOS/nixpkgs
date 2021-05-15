@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , mrustc
 , mrustc-minicargo
@@ -69,9 +70,13 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    llvm_7 libffi zlib libxml2
+    llvm_7
+    libffi
+    zlib
+    libxml2
     # for cargo
-    openssl curl
+    openssl
+    curl
   ];
 
   makeFlags = [

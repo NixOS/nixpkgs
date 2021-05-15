@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
+  dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
   meta = with lib; {
     description = "Open source version of Mellanox Firmware Tools (MFT)";

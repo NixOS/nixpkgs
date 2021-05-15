@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , alsaLib
 , aubio
@@ -53,7 +54,8 @@ let
 
   # Version to build.
   tag = "5.12";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ardour_5";
   version = "5.12";
 

@@ -1,4 +1,7 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
 , cython
 , libxml2
 , libxslt

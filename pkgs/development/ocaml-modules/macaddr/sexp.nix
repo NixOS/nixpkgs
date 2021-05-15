@@ -1,5 +1,9 @@
-{ lib, buildDunePackage
-, macaddr, ppx_sexp_conv, macaddr-cstruct, ounit
+{ lib
+, buildDunePackage
+, macaddr
+, ppx_sexp_conv
+, macaddr-cstruct
+, ounit
 }:
 
 buildDunePackage {

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
-  withCuda ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibc
+, python3
+, cudatoolkit
+, withCuda ? true
 }:
 
 with lib;

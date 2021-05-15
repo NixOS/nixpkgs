@@ -7,7 +7,7 @@
 , pygobject3
 , goocanvas2
 , isPy3k
- }:
+}:
 
 buildPythonPackage rec {
   pname = "GooCalendar";

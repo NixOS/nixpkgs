@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
-, nodejs, yarn, electron_7, jre8, tor }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, makeWrapper
+, makeDesktopItem
+, nodejs
+, yarn
+, electron_7
+, jre8
+, tor
+}:
 
 let
   system = stdenv.hostPlatform.system;
   electron = electron_7;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "whirlpool-gui";
   version = "0.10.1";
 

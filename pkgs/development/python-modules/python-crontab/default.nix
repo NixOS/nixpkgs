@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_07_non_posix_shell"];
+  disabledTests = [ "test_07_non_posix_shell" ];
 
   propagatedBuildInputs = [ python-dateutil ];
 

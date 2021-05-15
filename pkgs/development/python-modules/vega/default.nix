@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage , fetchPypi, pythonOlder
-, jupyter_core, pandas, ipywidgets, jupyter }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, jupyter_core
+, pandas
+, ipywidgets
+, jupyter
+}:
 
 buildPythonPackage rec {
   pname = "vega";

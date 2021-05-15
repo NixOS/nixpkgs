@@ -14,7 +14,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           config = subConf;
         };
       };
-    in makeNested (makeNested { });
+    in
+    makeNested (makeNested { });
 
   testScript = ''
     machine.start()

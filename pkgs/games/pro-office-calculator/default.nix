@@ -4,9 +4,9 @@ mkDerivation rec {
   pname = "pro-office-calculator";
 
   src = fetchFromGitHub {
-    owner  = "RobJinman";
-    repo   = "pro_office_calc";
-    rev    = "v${version}";
+    owner = "RobJinman";
+    repo = "pro_office_calc";
+    rev = "v${version}";
     sha256 = "1v75cysargmp4fk7px5zgib1p6h5ya4w39rndbzk614fcnv0iipd";
   };
 

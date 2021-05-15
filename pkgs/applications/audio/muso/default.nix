@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, wrapGAppsHook
 }:
 
 rustPlatform.buildRustPackage rec {

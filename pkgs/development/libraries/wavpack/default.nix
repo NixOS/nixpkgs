@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Hybrid audio compression format";
-    homepage    = "https://www.wavpack.com/";
-    changelog   = "https://github.com/dbry/WavPack/releases/tag/${version}";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    homepage = "https://www.wavpack.com/";
+    changelog = "https://github.com/dbry/WavPack/releases/tag/${version}";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

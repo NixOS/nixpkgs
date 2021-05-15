@@ -1,5 +1,16 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, ocaml
+, findlib
+, dune_2
+, fix
+, menhir
+, merlin-extend
+, ppx_tools_versioned
+, utop
+, cppo
 }:
 
 stdenv.mkDerivation rec {

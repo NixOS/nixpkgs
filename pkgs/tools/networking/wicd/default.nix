@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchurl, python2Packages
-, wpa_supplicant, dhcp, dhcpcd, wirelesstools
-, nettools, openresolv, iproute2, iputils }:
+{ lib
+, stdenv
+, fetchurl
+, python2Packages
+, wpa_supplicant
+, dhcp
+, dhcpcd
+, wirelesstools
+, nettools
+, openresolv
+, iproute2
+, iputils
+}:
 
 let
   inherit (python2Packages) python pygobject2 dbus-python pyGtkGlade pycairo;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wicd";
   version = "1.7.2.4";
 
@@ -14,7 +25,10 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = with python2Packages; [
-    python Babel urwid notify
+    python
+    Babel
+    urwid
+    notify
   ];
 
   patches = [
@@ -26,7 +40,7 @@ in stdenv.mkDerivation rec {
     ./fix-gtk-issues.patch
     ./urwid-api-update.patch
     ./fix-curses.patch
-    ];
+  ];
 
   # Should I be using pygtk's propagated build inputs?
   # !!! Should use makeWrapper.
@@ -105,7 +119,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://wicd.net/";
     description = "A wiredless and wired network manager";
-    longDescription=''
+    longDescription = ''
       A complete network connection manager
       Wicd supports wired and wireless networks, and capable of
       creating and tracking profiles for both.  It has a

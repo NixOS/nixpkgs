@@ -10,7 +10,7 @@ let
 
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
-    || xserverCfg.desktopManager.plasma5.enable then
+      || xserverCfg.desktopManager.plasma5.enable then
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
       "gtk2"
@@ -94,10 +94,13 @@ in
   config = mkIf cfg.agent.enable {
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
-      serviceConfig.ExecStart = [ "" ''
-        ${cfg.package}/bin/gpg-agent --supervised \
-          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-      '' ];
+      serviceConfig.ExecStart = [
+        ""
+        ''
+          ${cfg.package}/bin/gpg-agent --supervised \
+            --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
+        ''
+      ];
     };
 
     systemd.user.sockets.gpg-agent = {
@@ -142,7 +145,8 @@ in
     '';
 
     assertions = [
-      { assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
+      {
+        assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
         message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
       }
     ];

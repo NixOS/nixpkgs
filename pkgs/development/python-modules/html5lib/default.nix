@@ -20,7 +20,8 @@ buildPythonPackage rec {
 
   checkInputs = [ flake8 pytest_4 pytest-expect mock ];
   propagatedBuildInputs = [
-    six webencodings
+    six
+    webencodings
   ];
 
   checkPhase = ''

@@ -36,7 +36,7 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME
-    '';
+  '';
   # All other tests require an API key
   pytestFlagsArray = [ "tests/test_config.py" ];
   pythonImportsCheck = [ "censys" ];

@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome
-, pulseaudio }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, genericUpdater
+, writeShellScript
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gnome2
+, gtk2
+, libGLU
+, libGL
+, pango
+, xorg
+, minizip
+, lsb-release
+, freetype
+, fontconfig
+, polkit
+, polkit_gnome
+, pulseaudio
+}:
 
 let
   description = "Desktop sharing application, providing remote support and online meetings";
@@ -16,7 +37,8 @@ let
     startupNotify = "false";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "anydesk";
   version = "6.1.1";
 
@@ -42,12 +64,37 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU libGL minizip freetype
-    fontconfig polkit polkit_gnome pulseaudio
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk2
+    stdenv.cc.cc
+    pango
+    gnome2.gtkglext
+    libGLU
+    libGL
+    minizip
+    freetype
+    fontconfig
+    polkit
+    polkit_gnome
+    pulseaudio
   ] ++ (with xorg; [
-    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst libXt libICE libSM libXrender
+    libxcb
+    libxkbfile
+    libX11
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXmu
+    libXrandr
+    libXtst
+    libXt
+    libICE
+    libSM
+    libXrender
   ]);
 
   nativeBuildInputs = [ makeWrapper ];

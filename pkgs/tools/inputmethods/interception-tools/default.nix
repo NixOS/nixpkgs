@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, libyamlcpp,
-  libevdev, udev }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cmake
+, libyamlcpp
+, libevdev
+, udev
+}:
 
 let
   version = "0.2.1";
   baseName = "interception-tools";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {

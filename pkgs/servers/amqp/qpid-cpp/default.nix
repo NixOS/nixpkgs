@@ -53,7 +53,8 @@ let
 
     propagatedBuildInputs = [ qpid-python ];
   };
-in buildEnv {
+in
+buildEnv {
   name = "${name}-env";
   paths = [ qpid-cpp python-frontend ];
 }

@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
-, libva, libpciaccess, intel-gmmlib
-, enableX11 ? true, libX11
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libva
+, libpciaccess
+, intel-gmmlib
+, enableX11 ? true
+, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "21.2.0";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "media-driver";
-    rev    = "intel-media-${version}";
+    owner = "intel";
+    repo = "media-driver";
+    rev = "intel-media-${version}";
     sha256 = "101wbg5j00amdbfz4p6mpg90wi549dl78jd34mac5g6zhcpwqbh9";
   };
 

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.localtime;
-in {
+in
+{
   options = {
     services.localtime = {
       enable = mkOption {

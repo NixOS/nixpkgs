@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, parallel
-, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, parallel
+, sassc
+, inkscape
+, libxml2
+, glib
+, gdk-pixbuf
+, librsvg
+, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
-, mateSupport ? true, gtk3, marco
+, mateSupport ? true
+, gtk3
+, marco
 , gtkNextSupport ? false
 , plankSupport ? false
 , steamSupport ? false
-, telegramSupport ? false, zip
+, telegramSupport ? false
+, zip
 , tweetdeckSupport ? false
 , selectionColor ? null # Primary color for 'selected-items' (Default: #3F51B5 = Indigo500)
 , accentColor ? null # Secondary color for notifications and OSDs (Default: #7986CB = Indigo300)
@@ -55,7 +69,8 @@ stdenv.mkDerivation rec {
     let
       inherit (lib) enableFeature optional;
       withOptional = value: feat: optional (value != null) "--with-${feat}=${value}";
-    in [
+    in
+    [
       "--enable-parallel"
       (enableFeature cinnamonSupport "cinnamon")
       (enableFeature gnomeFlashbackSupport "flashback")

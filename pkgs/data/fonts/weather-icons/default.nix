@@ -2,7 +2,8 @@
 
 let
   version = "2.0.10";
-in fetchzip {
+in
+fetchzip {
   name = "weather-icons-${version}";
 
   url = "https://github.com/erikflowers/weather-icons/archive/${version}.zip";

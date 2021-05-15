@@ -7,7 +7,8 @@
 , pkg-config
 , baseBinName ? "pkg-config"
 , propagateDoc ? pkg-config != null && pkg-config ? man
-, extraPackages ? [], extraBuildCommands ? ""
+, extraPackages ? [ ]
+, extraBuildCommands ? ""
 }:
 
 with lib;
@@ -21,10 +22,10 @@ let
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                        (targetPlatform.config + "-");
+    (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
 in
 
@@ -117,11 +118,12 @@ stdenv.mkDerivation {
     + extraBuildCommands;
 
   meta =
-    let pkg-config_ = if pkg-config != null then pkg-config else {}; in
-    (if pkg-config_ ? meta then removeAttrs pkg-config.meta ["priority"] else {}) //
-    { description =
-        lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
+    let pkg-config_ = if pkg-config != null then pkg-config else { }; in
+    (if pkg-config_ ? meta then removeAttrs pkg-config.meta [ "priority" ] else { }) //
+    {
+      description =
+        lib.attrByPath [ "meta" "description" ] "pkg-config" pkg-config_
         + " (wrapper script)";
       priority = 10;
-  };
+    };
 }

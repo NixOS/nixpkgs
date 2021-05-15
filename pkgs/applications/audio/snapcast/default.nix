@@ -1,33 +1,45 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
-, nixosTests }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsaLib
+, asio
+, avahi
+, boost170
+, flac
+, libogg
+, libvorbis
+, soxr
+, nixosTests
+}:
 
 let
 
   dependency = { name, version, sha256 }:
-  stdenv.mkDerivation {
-    name = "${name}-${version}";
+    stdenv.mkDerivation {
+      name = "${name}-${version}";
 
-    src = fetchFromGitHub {
-      owner = "badaix";
-      repo  = name;
-      rev   = "v${version}";
-      inherit sha256;
+      src = fetchFromGitHub {
+        owner = "badaix";
+        repo = name;
+        rev = "v${version}";
+        inherit sha256;
+      };
+
+      nativeBuildInputs = [ cmake ];
     };
 
-    nativeBuildInputs = [ cmake ];
-  };
-
   aixlog = dependency {
-    name    = "aixlog";
+    name = "aixlog";
     version = "1.5.0";
-    sha256  = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
+    sha256 = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
   };
 
   popl = dependency {
-    name    = "popl";
+    name = "popl";
     version = "1.2.0";
-    sha256  = "1z6z7fwffs3d9h56mc2m24d5gp4fc5bi8836zyfb276s6fjyfcai";
+    sha256 = "1z6z7fwffs3d9h56mc2m24d5gp4fc5bi8836zyfb276s6fjyfcai";
   };
 
 in
@@ -37,9 +49,9 @@ stdenv.mkDerivation rec {
   version = "0.24.0";
 
   src = fetchFromGitHub {
-    owner  = "badaix";
-    repo   = "snapcast";
-    rev    = "v${version}";
+    owner = "badaix";
+    repo = "snapcast";
+    rev = "v${version}";
     sha256 = "13yz8alplnqwkcns3mcli01qbyy6l3h62xx0v71ygcrz371l4g9g";
   };
 
@@ -47,8 +59,15 @@ stdenv.mkDerivation rec {
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    alsaLib asio avahi flac libogg libvorbis
-    aixlog popl soxr
+    alsaLib
+    asio
+    avahi
+    flac
+    libogg
+    libvorbis
+    aixlog
+    popl
+    soxr
   ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a

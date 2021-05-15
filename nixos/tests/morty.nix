@@ -7,15 +7,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   nodes =
-    { mortyProxyWithKey =
+    {
+      mortyProxyWithKey =
 
-      { ... }:
-      { services.morty = {
-        enable = true;
-        key = "78a9cd0cfee20c672f78427efb2a2a96036027f0";
-        port = 3001;
+        { ... }:
+        {
+          services.morty = {
+            enable = true;
+            key = "78a9cd0cfee20c672f78427efb2a2a96036027f0";
+            port = 3001;
+          };
         };
-      };
 
     };
 

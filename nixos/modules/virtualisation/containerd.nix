@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 let
   cfg = config.virtualisation.containerd;
-  containerdConfigChecked = pkgs.runCommand "containerd-config-checked.toml" { nativeBuildInputs = [pkgs.containerd]; } ''
+  containerdConfigChecked = pkgs.runCommand "containerd-config-checked.toml" { nativeBuildInputs = [ pkgs.containerd ]; } ''
     containerd -c ${cfg.configFile} config dump >/dev/null
     ln -s ${cfg.configFile} $out
   '';
@@ -18,7 +18,7 @@ in
     };
 
     args = lib.mkOption {
-      default = {};
+      default = { };
       description = "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };
@@ -27,7 +27,7 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.containerd.args.config = lib.mkIf (cfg.configFile != null) (toString containerdConfigChecked);
 
-    environment.systemPackages = [pkgs.containerd];
+    environment.systemPackages = [ pkgs.containerd ];
 
     systemd.services.containerd = {
       description = "containerd - container runtime";

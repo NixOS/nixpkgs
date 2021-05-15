@@ -9,19 +9,19 @@ let
   phpPackage = pkgs.php74.buildEnv {
     extensions = { enabled, all }:
       (with all;
-        enabled
-        ++ optional cfg.enableImagemagick imagick
-        # Optionally enabled depending on caching settings
-        ++ optional cfg.caching.apcu apcu
-        ++ optional cfg.caching.redis redis
-        ++ optional cfg.caching.memcached memcached
+      enabled
+      ++ optional cfg.enableImagemagick imagick
+      # Optionally enabled depending on caching settings
+      ++ optional cfg.caching.apcu apcu
+      ++ optional cfg.caching.redis redis
+      ++ optional cfg.caching.memcached memcached
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
     extraConfig = toKeyValue phpOptions;
   };
 
   toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+    mkKeyValue = generators.mkKeyValueDefault { } " = ";
   };
 
   phpOptions = {
@@ -29,9 +29,9 @@ let
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions
-    // optionalAttrs cfg.caching.apcu {
-      "apc.enable_cli" = "1";
-    };
+  // optionalAttrs cfg.caching.apcu {
+    "apc.enable_cli" = "1";
+  };
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -48,7 +48,8 @@ let
 
   inherit (config.system) stateVersion;
 
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
@@ -125,7 +126,7 @@ in {
 
     phpExtraExtensions = mkOption {
       type = with types; functionTo (listOf package);
-      default = all: [];
+      default = all: [ ];
       defaultText = "all: []";
       description = ''
         Additional PHP extensions to use for nextcloud.
@@ -257,7 +258,7 @@ in {
 
       extraTrustedDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Trusted domains, from which the nextcloud installation will be
           acessible.  You don't need to add
@@ -267,7 +268,7 @@ in {
 
       trustedProxies = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Trusted proxies, to provide if the nextcloud installation is being
           proxied to secure against e.g. spoofing.
@@ -307,11 +308,11 @@ in {
     };
 
     enableImagemagick = mkEnableOption ''
-        Whether to load the ImageMagick module into PHP.
-        This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
-        You may want to disable it for increased security. In that case, previews will still be available
-        for some images (e.g. JPEG and PNG).
-        See https://github.com/nextcloud/server/issues/13099
+      Whether to load the ImageMagick module into PHP.
+      This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
+      You may want to disable it for increased security. In that case, previews will still be available
+      for some images (e.g. JPEG and PNG).
+      See https://github.com/nextcloud/server/issues/13099
     '' // {
       default = true;
     };
@@ -371,35 +372,42 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    { assertions = let acfg = cfg.config; in [
-        { assertion = !(acfg.dbpass != null && acfg.dbpassFile != null);
-          message = "Please specify no more than one of dbpass or dbpassFile";
-        }
-        { assertion = ((acfg.adminpass != null || acfg.adminpassFile != null)
-            && !(acfg.adminpass != null && acfg.adminpassFile != null));
-          message = "Please specify exactly one of adminpass or adminpassFile";
-        }
-        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
-          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
-        }
-      ];
+    {
+      assertions = let acfg = cfg.config; in
+        [
+          {
+            assertion = !(acfg.dbpass != null && acfg.dbpassFile != null);
+            message = "Please specify no more than one of dbpass or dbpassFile";
+          }
+          {
+            assertion = ((acfg.adminpass != null || acfg.adminpassFile != null)
+              && !(acfg.adminpass != null && acfg.adminpassFile != null));
+            message = "Please specify exactly one of adminpass or adminpassFile";
+          }
+          {
+            assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
+            message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
+          }
+        ];
 
-      warnings = let
-        latest = 21;
-        upgradeWarning = major: nixos:
-          ''
-            A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
+      warnings =
+        let
+          latest = 21;
+          upgradeWarning = major: nixos:
+            ''
+              A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
-            After nextcloud${toString major} is installed successfully, you can safely upgrade
-            to ${toString (major + 1)}. The latest version available is nextcloud${toString latest}.
+              After nextcloud${toString major} is installed successfully, you can safely upgrade
+              to ${toString (major + 1)}. The latest version available is nextcloud${toString latest}.
 
-            Please note that Nextcloud doesn't support upgrades across multiple major versions
-            (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
+              Please note that Nextcloud doesn't support upgrades across multiple major versions
+              (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
 
-            The package can be upgraded by explicitly declaring the service-option
-            `services.nextcloud.package`.
-          '';
-      in (optional (cfg.poolConfig != null) ''
+              The package can be upgraded by explicitly declaring the service-option
+              `services.nextcloud.package`.
+            '';
+        in
+        (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
@@ -410,7 +418,8 @@ in {
       services.nextcloud.package = with pkgs;
         mkDefault (
           if pkgs ? nextcloud
-            then throw ''
+          then
+            throw ''
               The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
@@ -425,7 +434,8 @@ in {
         );
     }
 
-    { systemd.timers.nextcloud-cron = {
+    {
+      systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "15m";
@@ -438,141 +448,148 @@ in {
         # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
         phpfpm-nextcloud.restartTriggers = [ cfg.package ];
 
-        nextcloud-setup = let
-          c = cfg.config;
-          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
-          overrideConfig = pkgs.writeText "nextcloud-config.php" ''
-            <?php
-            ${optionalString (c.dbpassFile != null) ''
-              function nix_read_pwd() {
-                $file = "${c.dbpassFile}";
-                if (!file_exists($file)) {
-                  throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
-                    . "exist! Please make sure that the file exists and has appropriate "
-                    . "permissions for user & group 'nextcloud'!",
-                    $file
-                  ));
+        nextcloud-setup =
+          let
+            c = cfg.config;
+            writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+            overrideConfig = pkgs.writeText "nextcloud-config.php" ''
+              <?php
+              ${optionalString (c.dbpassFile != null) ''
+                function nix_read_pwd() {
+                  $file = "${c.dbpassFile}";
+                  if (!file_exists($file)) {
+                    throw new \RuntimeException(sprintf(
+                      "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
+                      . "exist! Please make sure that the file exists and has appropriate "
+                      . "permissions for user & group 'nextcloud'!",
+                      $file
+                    ));
+                  }
+
+                  return trim(file_get_contents($file));
                 }
+              ''}
+              $CONFIG = [
+                'apps_paths' => [
+                  [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
+                  [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
+                ],
+                'datadirectory' => '${cfg.home}/data',
+                'skeletondirectory' => '${cfg.skeletonDirectory}',
+                ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
+                'log_type' => 'syslog',
+                'log_level' => '${builtins.toString cfg.logLevel}',
+                ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+                ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+                ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+                ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+                ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+                ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+                ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
+                ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+                'dbtype' => '${c.dbtype}',
+                'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+                'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+                ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ];
+            '';
+            occInstallCmd =
+              let
+                dbpass =
+                  if c.dbpassFile != null
+                  then ''"$(<"${toString c.dbpassFile}")"''
+                  else if c.dbpass != null
+                  then ''"${toString c.dbpass}"''
+                  else ''""'';
+                adminpass =
+                  if c.adminpassFile != null
+                  then ''"$(<"${toString c.adminpassFile}")"''
+                  else ''"${toString c.adminpass}"'';
+                installFlags = concatStringsSep " \\\n    "
+                  (mapAttrsToList (k: v: "${k} ${toString v}") {
+                    "--database" = ''"${c.dbtype}"'';
+                    # The following attributes are optional depending on the type of
+                    # database.  Those that evaluate to null on the left hand side
+                    # will be omitted.
+                    ${if c.dbname != null then "--database-name" else null} = ''"${c.dbname}"'';
+                    ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
+                    ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
+                    ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
+                    "--database-pass" = dbpass;
+                    ${if c.dbtableprefix != null
+                    then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
+                    "--admin-user" = ''"${c.adminuser}"'';
+                    "--admin-pass" = adminpass;
+                    "--data-dir" = ''"${cfg.home}/data"'';
+                  });
+              in
+              ''
+                ${occ}/bin/nextcloud-occ maintenance:install \
+                    ${installFlags}
+              '';
+            occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
+              (i: v: ''
+                ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
+                  ${toString i} --value="${toString v}"
+              '')
+              ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
 
-                return trim(file_get_contents($file));
-              }
-            ''}
-            $CONFIG = [
-              'apps_paths' => [
-                [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
-                [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
-              ],
-              'datadirectory' => '${cfg.home}/data',
-              'skeletondirectory' => '${cfg.skeletonDirectory}',
-              ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => 'syslog',
-              'log_level' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
-              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
-              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
-              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
-              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
-              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
-              'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
-              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
-            ];
-          '';
-          occInstallCmd = let
-            dbpass = if c.dbpassFile != null
-              then ''"$(<"${toString c.dbpassFile}")"''
-              else if c.dbpass != null
-              then ''"${toString c.dbpass}"''
-              else ''""'';
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
-            installFlags = concatStringsSep " \\\n    "
-              (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--database" = ''"${c.dbtype}"'';
-              # The following attributes are optional depending on the type of
-              # database.  Those that evaluate to null on the left hand side
-              # will be omitted.
-              ${if c.dbname != null then "--database-name" else null} = ''"${c.dbname}"'';
-              ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
-              ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
-              ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = dbpass;
-              ${if c.dbtableprefix != null
-                then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
-              "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = adminpass;
-              "--data-dir" = ''"${cfg.home}/data"'';
-            });
-          in ''
-            ${occ}/bin/nextcloud-occ maintenance:install \
-                ${installFlags}
-          '';
-          occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
-            (i: v: ''
-              ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
-                ${toString i} --value="${toString v}"
-            '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
+          in
+          {
+            wantedBy = [ "multi-user.target" ];
+            before = [ "phpfpm-nextcloud.service" ];
+            path = [ occ ];
+            script = ''
+              chmod og+x ${cfg.home}
 
-        in {
-          wantedBy = [ "multi-user.target" ];
-          before = [ "phpfpm-nextcloud.service" ];
-          path = [ occ ];
-          script = ''
-            chmod og+x ${cfg.home}
+              ${optionalString (c.dbpassFile != null) ''
+                if [ ! -r "${c.dbpassFile}" ]; then
+                  echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                  exit 1
+                fi
+                if [ -z "$(<${c.dbpassFile})" ]; then
+                  echo "dbpassFile ${c.dbpassFile} is empty!"
+                  exit 1
+                fi
+              ''}
+              ${optionalString (c.adminpassFile != null) ''
+                if [ ! -r "${c.adminpassFile}" ]; then
+                  echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                  exit 1
+                fi
+                if [ -z "$(<${c.adminpassFile})" ]; then
+                  echo "adminpassFile ${c.adminpassFile} is empty!"
+                  exit 1
+                fi
+              ''}
 
-            ${optionalString (c.dbpassFile != null) ''
-              if [ ! -r "${c.dbpassFile}" ]; then
-                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
+              ln -sf ${cfg.package}/apps ${cfg.home}/
+
+              # create nextcloud directories.
+              # if the directories exist already with wrong permissions, we fix that
+              for dir in ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps; do
+                if [ ! -e $dir ]; then
+                  install -o nextcloud -g nextcloud -d $dir
+                elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
+                  chgrp -R nextcloud $dir
+                fi
+              done
+
+              ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
+
+              # Do not install if already installed
+              if [[ ! -e ${cfg.home}/config/config.php ]]; then
+                ${occInstallCmd}
               fi
-              if [ -z "$(<${c.dbpassFile})" ]; then
-                echo "dbpassFile ${c.dbpassFile} is empty!"
-                exit 1
-              fi
-            ''}
-            ${optionalString (c.adminpassFile != null) ''
-              if [ ! -r "${c.adminpassFile}" ]; then
-                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.adminpassFile})" ]; then
-                echo "adminpassFile ${c.adminpassFile} is empty!"
-                exit 1
-              fi
-            ''}
 
-            ln -sf ${cfg.package}/apps ${cfg.home}/
+              ${occ}/bin/nextcloud-occ upgrade
 
-            # create nextcloud directories.
-            # if the directories exist already with wrong permissions, we fix that
-            for dir in ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps; do
-              if [ ! -e $dir ]; then
-                install -o nextcloud -g nextcloud -d $dir
-              elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
-                chgrp -R nextcloud $dir
-              fi
-            done
-
-            ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
-
-            # Do not install if already installed
-            if [[ ! -e ${cfg.home}/config/config.php ]]; then
-              ${occInstallCmd}
-            fi
-
-            ${occ}/bin/nextcloud-occ upgrade
-
-            ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
-            ${occSetTrustedDomainsCmd}
-          '';
-          serviceConfig.Type = "oneshot";
-          serviceConfig.User = "nextcloud";
-        };
+              ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
+              ${occSetTrustedDomainsCmd}
+            '';
+            serviceConfig.Type = "oneshot";
+            serviceConfig.User = "nextcloud";
+          };
         nextcloud-cron = {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
@@ -596,10 +613,11 @@ in {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
-          settings = mapAttrs (name: mkDefault) {
-            "listen.owner" = config.services.nginx.user;
-            "listen.group" = config.services.nginx.group;
-          } // cfg.poolSettings;
+          settings = mapAttrs (name: mkDefault)
+            {
+              "listen.owner" = config.services.nginx.user;
+              "listen.group" = config.services.nginx.group;
+            } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
       };
@@ -616,116 +634,118 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      services.nginx.virtualHosts.${cfg.hostName} = let
-        major = toInt (versions.major cfg.package.version);
-      in {
-        root = cfg.package;
-        locations = {
-          "= /robots.txt" = {
-            priority = 100;
-            extraConfig = ''
-              allow all;
-              log_not_found off;
+      services.nginx.virtualHosts.${cfg.hostName} =
+        let
+          major = toInt (versions.major cfg.package.version);
+        in
+        {
+          root = cfg.package;
+          locations = {
+            "= /robots.txt" = {
+              priority = 100;
+              extraConfig = ''
+                allow all;
+                log_not_found off;
+                access_log off;
+              '';
+            };
+            "= /" = {
+              priority = 100;
+              extraConfig = ''
+                if ( $http_user_agent ~ ^DavClnt ) {
+                  return 302 /remote.php/webdav/$is_args$args;
+                }
+              '';
+            };
+            "/" = {
+              priority = 900;
+              extraConfig = "rewrite ^ /index.php;";
+            };
+            "~ ^/store-apps" = {
+              priority = 201;
+              extraConfig = "root ${cfg.home};";
+            };
+            "^~ /.well-known" = {
+              priority = 210;
+              extraConfig = ''
+                absolute_redirect off;
+                location = /.well-known/carddav {
+                  return 301 /remote.php/dav;
+                }
+                location = /.well-known/caldav {
+                  return 301 /remote.php/dav;
+                }
+                location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
+                  return 301 /index.php$request_uri;
+                }
+                try_files $uri $uri/ =404;
+              '';
+            };
+            "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
+              return 404;
+            '';
+            "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
+              return 404;
+            '';
+            "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+              priority = 500;
+              extraConfig = ''
+                include ${config.services.nginx.package}/conf/fastcgi.conf;
+                fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
+                set $path_info $fastcgi_path_info;
+                try_files $fastcgi_script_name =404;
+                fastcgi_param PATH_INFO $path_info;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
+                fastcgi_param modHeadersAvailable true;
+                fastcgi_param front_controller_active true;
+                fastcgi_pass unix:${fpm.socket};
+                fastcgi_intercept_errors on;
+                fastcgi_request_buffering off;
+                fastcgi_read_timeout 120s;
+              '';
+            };
+            "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
+              try_files $uri /index.php$request_uri;
+              expires 6M;
+              access_log off;
+            '';
+            "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+              try_files $uri/ =404;
+              index index.php;
+            '';
+            "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
+              try_files $uri /index.php$request_uri;
               access_log off;
             '';
           };
-          "= /" = {
-            priority = 100;
-            extraConfig = ''
-              if ( $http_user_agent ~ ^DavClnt ) {
-                return 302 /remote.php/webdav/$is_args$args;
-              }
-            '';
-          };
-          "/" = {
-            priority = 900;
-            extraConfig = "rewrite ^ /index.php;";
-          };
-          "~ ^/store-apps" = {
-            priority = 201;
-            extraConfig = "root ${cfg.home};";
-          };
-          "^~ /.well-known" = {
-            priority = 210;
-            extraConfig = ''
-              absolute_redirect off;
-              location = /.well-known/carddav {
-                return 301 /remote.php/dav;
-              }
-              location = /.well-known/caldav {
-                return 301 /remote.php/dav;
-              }
-              location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
-                return 301 /index.php$request_uri;
-              }
-              try_files $uri $uri/ =404;
-            '';
-          };
-          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
-            priority = 500;
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/fastcgi.conf;
-              fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
-              set $path_info $fastcgi_path_info;
-              try_files $fastcgi_script_name =404;
-              fastcgi_param PATH_INFO $path_info;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
-              fastcgi_param modHeadersAvailable true;
-              fastcgi_param front_controller_active true;
-              fastcgi_pass unix:${fpm.socket};
-              fastcgi_intercept_errors on;
-              fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
-            '';
-          };
-          "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            expires 6M;
-            access_log off;
-          '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
-            try_files $uri/ =404;
-            index index.php;
-          '';
-          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            access_log off;
+          extraConfig = ''
+            index index.php index.html /index.php$request_uri;
+            expires 1m;
+            add_header X-Content-Type-Options nosniff;
+            add_header X-XSS-Protection "1; mode=block";
+            add_header X-Robots-Tag none;
+            add_header X-Download-Options noopen;
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
+            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+            client_max_body_size ${cfg.maxUploadSize};
+            fastcgi_buffers 64 4K;
+            fastcgi_hide_header X-Powered-By;
+            gzip on;
+            gzip_vary on;
+            gzip_comp_level 4;
+            gzip_min_length 256;
+            gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+            gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+
+            ${optionalString cfg.webfinger ''
+              rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+              rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+            ''}
           '';
         };
-        extraConfig = ''
-          index index.php index.html /index.php$request_uri;
-          expires 1m;
-          add_header X-Content-Type-Options nosniff;
-          add_header X-XSS-Protection "1; mode=block";
-          add_header X-Robots-Tag none;
-          add_header X-Download-Options noopen;
-          add_header X-Permitted-Cross-Domain-Policies none;
-          add_header X-Frame-Options sameorigin;
-          add_header Referrer-Policy no-referrer;
-          add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-          client_max_body_size ${cfg.maxUploadSize};
-          fastcgi_buffers 64 4K;
-          fastcgi_hide_header X-Powered-By;
-          gzip on;
-          gzip_vary on;
-          gzip_comp_level 4;
-          gzip_min_length 256;
-          gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-          gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
-
-          ${optionalString cfg.webfinger ''
-            rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-            rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
-          ''}
-        '';
-      };
     }
   ]);
 

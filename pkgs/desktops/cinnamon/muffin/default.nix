@@ -14,7 +14,8 @@
 , libXtst
 , libxkbcommon
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , udev
 , xorg
 , wrapGAppsHook

@@ -32,13 +32,13 @@ let
 
       driveExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to drive flag.";
       };
 
       deviceExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to device flag.";
       };
 
@@ -56,7 +56,7 @@ let
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
     let
       drvId = "drive${toString idx}";
-      mkKeyValue = generators.mkKeyValueDefault {} "=";
+      mkKeyValue = generators.mkKeyValueDefault { } "=";
       mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
       driveOpts = mkOpts (driveExtraOpts // {
         index = idx;
@@ -73,7 +73,7 @@ let
         else
           "-device virtio-blk-pci,${deviceOpts}";
     in
-      "-drive ${driveOpts} ${device}";
+    "-drive ${driveOpts} ${device}";
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
@@ -83,7 +83,8 @@ let
   # * `driveDeviceName 2` -> `/dev/vdb`
   driveDeviceName = idx:
     let letter = elemAt lowerChars (idx - 1);
-    in if cfg.qemu.diskInterface == "scsi" then
+    in
+    if cfg.qemu.diskInterface == "scsi" then
       "/dev/sd${letter}"
     else
       "/dev/vd${letter}";
@@ -91,7 +92,8 @@ let
   lookupDriveDeviceName = driveName: driveList:
     (findSingle (drive: drive.name == driveName)
       (throw "Drive ${driveName} not found")
-      (throw "Multiple drives named ${driveName}") driveList).device;
+      (throw "Multiple drives named ${driveName}")
+      driveList).device;
 
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
@@ -176,7 +178,8 @@ let
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "nixos-boot-disk"
-        { preVM =
+        {
+          preVM =
             ''
               mkdir $out
               diskImage=$out/disk.img
@@ -189,9 +192,10 @@ let
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
-                      + lib.optionalString cfg.useEFIBoot (
-                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-                      + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
+            + lib.optionalString cfg.useEFIBoot (
+            " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+              + " -drive if=pflash,format=raw,unit=1,file=$efiVars"
+          );
         }
         ''
           # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
@@ -321,7 +325,7 @@ in
 
     virtualisation.emptyDiskImages =
       mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.int;
         description =
           ''
@@ -339,7 +343,7 @@ in
             Whether to run QEMU with a graphics window, or in nographic mode.
             Serial console will be enabled on both settings, but this will
             change the preferred console.
-            '';
+          '';
       };
 
     virtualisation.cores =
@@ -356,7 +360,7 @@ in
 
     virtualisation.pathsInNixDB =
       mkOption {
-        default = [];
+        default = [ ];
         description =
           ''
             The list of paths whose closure is registered in the Nix
@@ -424,16 +428,18 @@ in
       options =
         mkOption {
           type = types.listOf types.unspecified;
-          default = [];
+          default = [ ];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
         };
 
       consoles = mkOption {
         type = types.listOf types.str;
-        default = let
-          consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
-        in if cfg.graphics then consoles else reverseList consoles;
+        default =
+          let
+            consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
+          in
+          if cfg.graphics then consoles else reverseList consoles;
         example = [ "console=tty1" ];
         description = ''
           The output console devices to pass to the kernel command line via the
@@ -557,8 +563,8 @@ in
     # note [Disk layout with `useBootLoader`].
     boot.loader.grub.device = mkVMOverride (
       if cfg.useBootLoader
-        then driveDeviceName 2 # second disk
-        else cfg.bootDevice
+      then driveDeviceName 2 # second disk
+      else cfg.bootDevice
     );
 
     boot.initrd.extraUtilsCommands =
@@ -621,10 +627,14 @@ in
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
-        "-usb" "-device usb-tablet,bus=usb-bus.0"
+        "-usb"
+        "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
-        "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
+        "-device virtio-gpu-pci"
+        "-device usb-ehci,id=usb0"
+        "-device usb-kbd"
+        "-device usb-tablet"
       ])
       (mkIf (!cfg.useBootLoader) [
         "-kernel ${config.system.build.toplevel}/kernel"
@@ -660,10 +670,12 @@ in
           deviceExtraOpts.bootindex = "1";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0
+        (idx: _: {
+          file = "$(pwd)/empty${toString idx}.qcow2";
+          driveExtraOpts.werror = "report";
+        })
+        cfg.emptyDiskImages)
     ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
@@ -674,49 +686,59 @@ in
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
       cfg.fileSystems //
-      { "/".device = cfg.bootDevice;
+      {
+        "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
-          { device = "store";
+          {
+            device = "store";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp" = mkIf config.boot.tmpOnTmpfs
-          { device = "tmpfs";
+          {
+            device = "tmpfs";
             fsType = "tmpfs";
             neededForBoot = true;
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
           };
         "/tmp/xchg" =
-          { device = "xchg";
+          {
+            device = "xchg";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
         "/tmp/shared" =
-          { device = "shared";
+          {
+            device = "shared";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ] ++ lib.optional (cfg.msize != null) "msize=${toString cfg.msize}";
             neededForBoot = true;
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
-      { "/nix/.rw-store" =
-          { fsType = "tmpfs";
-            options = [ "mode=0755" ];
-            neededForBoot = true;
-          };
-      } // optionalAttrs cfg.useBootLoader
-      { "/boot" =
-          # see note [Disk layout with `useBootLoader`]
-          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
-            fsType = "vfat";
-            noCheck = true; # fsck fails on a r/o filesystem
-          };
-      });
+        {
+          "/nix/.rw-store" =
+            {
+              fsType = "tmpfs";
+              options = [ "mode=0755" ];
+              neededForBoot = true;
+            };
+        } // optionalAttrs cfg.useBootLoader
+        {
+          "/boot" =
+            # see note [Disk layout with `useBootLoader`]
+            {
+              device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
+              fsType = "vfat";
+              noCheck = true; # fsck fails on a r/o filesystem
+            };
+        }
+    );
 
     swapDevices = mkVMOverride [ ];
-    boot.initrd.luks.devices = mkVMOverride {};
+    boot.initrd.luks.devices = mkVMOverride { };
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
@@ -734,7 +756,7 @@ in
     # video driver the host uses.
     services.xserver.videoDrivers = mkVMOverride [ "modesetting" ];
     services.xserver.defaultDepth = mkVMOverride 0;
-    services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
+    services.xserver.resolutions = mkVMOverride [{ x = 1024; y = 768; }];
     services.xserver.monitorSection =
       ''
         # Set a higher refresh rate so that resolutions > 800x600 work.
@@ -752,7 +774,8 @@ in
     networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isEnabled "VIRTIO_BLK")
+      [
+        (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
         (isEnabled "EXT4_FS")

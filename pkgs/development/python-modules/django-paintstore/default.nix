@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, requests, requests_oauthlib
-, django, python3-openid }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, requests_oauthlib
+, django
+, python3-openid
+}:
 
 buildPythonPackage rec {
   pname = "django-paintstore";

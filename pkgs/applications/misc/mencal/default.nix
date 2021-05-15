@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-      mkdir -p $out/bin
-      cp mencal $out/bin/
-    '';
+    mkdir -p $out/bin
+    cp mencal $out/bin/
+  '';
 
   buildInputs = [ perl ];
 

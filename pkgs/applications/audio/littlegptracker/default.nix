@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , SDL
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   preBuild = "cd projects";
 
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
+    ++ lib.optionals stdenv.isLinux [ "PLATFORM=DEB" ]
     ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
 
-  installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
+  installPhase =
+    let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
 
   passthru.updateScript = unstableGitUpdater {

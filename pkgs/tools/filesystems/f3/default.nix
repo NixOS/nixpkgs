@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub
-, parted, systemd ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, parted
+, systemd ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     sed -i 's/-oroot -groot//' Makefile
+    sed -i 's/-oroot -groot//' Makefile
 
-     for f in f3write.h2w log-f3wr; do
-      substituteInPlace $f \
-        --replace '$(dirname $0)' $out/bin
-     done
+    for f in f3write.h2w log-f3wr; do
+     substituteInPlace $f \
+       --replace '$(dirname $0)' $out/bin
+    done
   '';
 
   buildInputs = [
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildFlags   = [
+  buildFlags = [
     "all" # f3read, f3write
   ]
   ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe

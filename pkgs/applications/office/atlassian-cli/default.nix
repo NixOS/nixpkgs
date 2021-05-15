@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "9.5.0";
 
   src = fetchzip {
-    url  = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${pname}-${version}-distribution.zip";
-    sha256  = "sha256-EAoydA2lg4K1gTgzn9patNw7pcCdU/OPfaEG1OfEJ18=";
+    url = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${pname}-${version}-distribution.zip";
+    sha256 = "sha256-EAoydA2lg4K1gTgzn9patNw7pcCdU/OPfaEG1OfEJ18=";
   };
 
   tools = [

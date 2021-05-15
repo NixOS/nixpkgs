@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , cmake
 }:
 
@@ -7,9 +9,9 @@ stdenv.mkDerivation rec {
   version = "21.1.3";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "gmmlib";
-    rev    = "${pname}-${version}";
+    owner = "intel";
+    repo = "gmmlib";
+    rev = "${pname}-${version}";
     sha256 = "05vcr2rv6l38j7rv34mvcvzpgc2gjmvsb73wyprgdj71mcwrksyq";
   };
 

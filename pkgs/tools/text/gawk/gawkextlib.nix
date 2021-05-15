@@ -1,13 +1,39 @@
-{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkg-config, autoreconfHook
-, autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
-, shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
-, expat, tre, makeWrapper }:
+{ lib
+, stdenv
+, recurseIntoAttrs
+, fetchgit
+, writeText
+, pkg-config
+, autoreconfHook
+, autoconf
+, automake
+, libiconv
+, libtool
+, texinfo
+, gettext
+, gawk
+, rapidjson
+, gd
+, shapelib
+, libharu
+, lmdb
+, gmp
+, glibcLocales
+, mpfr
+, more
+, postgresql
+, hiredis
+, expat
+, tre
+, makeWrapper
+}:
 
 let
   buildExtension = lib.makeOverridable
     ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true }:
       let is_extension = !isNull gawkextlib;
-      in stdenv.mkDerivation rec {
+      in
+      stdenv.mkDerivation rec {
         pname = "gawkextlib-${name}";
         version = "unstable-2019-11-21";
 
@@ -143,7 +169,8 @@ let
       extraBuildInputs = [ expat libiconv ];
     };
   };
-in recurseIntoAttrs (libs // {
+in
+recurseIntoAttrs (libs // {
   inherit gawkextlib buildExtension;
   full = builtins.attrValues libs;
 })

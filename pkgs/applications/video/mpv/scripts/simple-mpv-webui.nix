@@ -1,5 +1,7 @@
-{ lib, stdenvNoCC
-, fetchFromGitHub }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "simple-mpv-ui";
   version = "1.0.0";

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "ent-1.1";

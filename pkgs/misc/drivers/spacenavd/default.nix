@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  configureFlags = [ "--disable-debug"];
+  configureFlags = [ "--disable-debug" ];
 
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";

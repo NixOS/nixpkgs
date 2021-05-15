@@ -7,5 +7,5 @@ qtModule {
   qtInputs = [ qtbase ];
   NIX_CFLAGS_COMPILE =
     optional stdenv.isLinux
-    ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
+      ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 }

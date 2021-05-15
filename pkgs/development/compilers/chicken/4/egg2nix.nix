@@ -14,7 +14,8 @@ eggDerivation {
 
   name = "egg2nix-${version}";
   buildInputs = with chickenEggs; [
-    matchable http-client
+    matchable
+    http-client
   ];
 
   meta = {

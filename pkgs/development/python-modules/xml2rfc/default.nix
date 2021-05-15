@@ -1,5 +1,23 @@
-{ lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonAtLeast
+, intervaltree
+, pyflakes
+, requests
+, lxml
+, google-i18n-address
+, pycountry
+, html5lib
+, six
+, kitchen
+, pypdf2
+, dict2xml
+, weasyprint
+, pyyaml
+, jinja2
+, ConfigArgParse
+, appdirs
 }:
 
 buildPythonPackage rec {

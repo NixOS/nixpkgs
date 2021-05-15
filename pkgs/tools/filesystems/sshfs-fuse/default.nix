@@ -1,8 +1,10 @@
 { lib, stdenv, callPackage, fetchpatch }:
 
 let mkSSHFS = args: callPackage (import ./common.nix args) { };
-in if stdenv.isDarwin then
-  mkSSHFS {
+in
+if stdenv.isDarwin then
+  mkSSHFS
+  {
     version = "2.10"; # macFUSE isn't yet compatible with libfuse 3.x
     sha256 = "1dmw4kx6vyawcywiv8drrajnam0m29mxfswcp4209qafzx3mjlp1";
     patches = [

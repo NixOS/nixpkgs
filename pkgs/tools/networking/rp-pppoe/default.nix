@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ppp } :
+{ lib, stdenv, fetchurl, ppp }:
 let
   version = "3.12";
 in

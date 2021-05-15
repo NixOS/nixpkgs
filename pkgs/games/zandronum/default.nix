@@ -1,5 +1,22 @@
-{ stdenv, lib, fetchhg, cmake, pkg-config, makeWrapper, callPackage
-, soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, libgme
+{ stdenv
+, lib
+, fetchhg
+, cmake
+, pkg-config
+, makeWrapper
+, callPackage
+, soundfont-fluid
+, SDL
+, libGL
+, glew
+, bzip2
+, zlib
+, libjpeg
+, fluidsynth
+, openssl
+, gtk2
+, python3
+, libgme
 , serverOnly ? false
 }:
 
@@ -9,7 +26,8 @@ let
   sqlite = callPackage ./sqlite.nix { };
   clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zandronum${suffix}";
   version = "3.0.1";
 
@@ -30,7 +48,7 @@ in stdenv.mkDerivation rec {
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
   buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite libgme ]
-             ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
+    ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper python3 ];
 

@@ -1,12 +1,12 @@
-{ test, lib, ...}:
+{ test, lib, ... }:
 {
   equal = expected: actual:
     if actual == expected then
       (test.passed "= ${toString expected}") else
       (test.failed (
-      "expected '${toString expected}'(${builtins.typeOf expected})"
-      + " !=  "+
-      "actual '${toString actual}'(${builtins.typeOf actual})"
+        "expected '${toString expected}'(${builtins.typeOf expected})"
+        + " !=  " +
+        "actual '${toString actual}'(${builtins.typeOf actual})"
       ));
 
   beASet = actual:
@@ -16,8 +16,8 @@
 
   haveKeys = expected: actual:
     if builtins.all
-    (ex: builtins.any (ac: ex == ac) (builtins.attrNames actual))
-    expected then
+      (ex: builtins.any (ac: ex == ac) (builtins.attrNames actual))
+      expected then
       (test.passed "has expected keys") else
       (test.failed "keys differ: expected: [${lib.concatStringsSep ";" expected}] actual: [${lib.concatStringsSep ";" (builtins.attrNames actual)}]");
 

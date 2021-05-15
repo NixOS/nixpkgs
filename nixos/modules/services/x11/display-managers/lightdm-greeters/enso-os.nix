@@ -20,7 +20,8 @@ let
     brightness=${toString cfg.brightness}
     ${cfg.extraConfig}
   '';
-in {
+in
+{
   options = {
     services.xserver.displayManager.lightdm.greeters.enso = {
       enable = mkOption {

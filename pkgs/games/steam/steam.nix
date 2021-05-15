@@ -4,7 +4,8 @@ let
   traceLog = "/tmp/steam-trace-dependencies.log";
   version = "1.0.0.70";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "steam-original";
   inherit version;
 

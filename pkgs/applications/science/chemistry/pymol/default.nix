@@ -1,6 +1,18 @@
-{ lib, fetchurl, fetchFromGitHub, makeDesktopItem
-, python3, python3Packages
-, glew, glm, freeglut, libpng, libxml2, tk, freetype, msgpack }:
+{ lib
+, fetchurl
+, fetchFromGitHub
+, makeDesktopItem
+, python3
+, python3Packages
+, glew
+, glm
+, freeglut
+, libpng
+, libxml2
+, tk
+, freetype
+, msgpack
+}:
 
 
 let

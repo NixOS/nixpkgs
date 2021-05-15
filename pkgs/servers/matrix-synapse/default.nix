@@ -1,5 +1,9 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
+{ lib
+, stdenv
+, python3
+, openssl
+, enableSystemd ? stdenv.isLinux
+, nixosTests
 , enableRedis ? false
 , callPackage
 }:
@@ -57,7 +61,7 @@ buildPythonApplication rec {
     authlib
     pyjwt
   ] ++ lib.optional enableSystemd systemd
-    ++ lib.optional enableRedis hiredis;
+  ++ lib.optional enableRedis hiredis;
 
   checkInputs = [ mock parameterized openssl ];
 

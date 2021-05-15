@@ -1,5 +1,6 @@
 { fetchurl
-, lib, stdenv
+, lib
+, stdenv
 , gtk
 , pkg-config
 , libgsf

@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, colorlog, lomond
-, requests, isPy3k, requests-mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, colorlog
+, lomond
+, requests
+, isPy3k
+, requests-mock
+}:
 
 buildPythonPackage rec {
   pname = "abodepy";

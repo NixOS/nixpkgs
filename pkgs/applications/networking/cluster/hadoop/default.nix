@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, which, maven, cmake, jre, jdk8, bash
-, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, which
+, maven
+, cmake
+, jre
+, jdk8
+, bash
+, coreutils
+, glibc
+, protobuf2_5
+, fuse
+, snappy
+, zlib
+, bzip2
+, openssl
+, openssl_1_0_2
 }:
 
 let
@@ -68,55 +86,55 @@ let
         installPhase = "mv hadoop-dist/target/hadoop-${version} $out";
       };
     in
-      stdenv.mkDerivation {
-        pname = "hadoop";
-        inherit version;
+    stdenv.mkDerivation {
+      pname = "hadoop";
+      inherit version;
 
-        src = binary-distributon;
+      src = binary-distributon;
 
-        nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
-        installPhase = ''
-          mkdir -p $out/share/doc/hadoop
-          cp -dpR * $out/
-          mv $out/*.txt $out/share/doc/hadoop/
+      installPhase = ''
+        mkdir -p $out/share/doc/hadoop
+        cp -dpR * $out/
+        mv $out/*.txt $out/share/doc/hadoop/
 
-          #
-          # Do not use `wrapProgram` here, script renaming may result to weird things: http://i.imgur.com/0Xee013.png
-          #
-          mkdir -p $out/bin.wrapped
-          for n in $out/bin/*; do
-            if [ -f "$n" ]; then # only regular files
-              mv $n $out/bin.wrapped/
-              makeWrapper $out/bin.wrapped/$(basename $n) $n \
-                --prefix PATH : "${lib.makeBinPath [ which jre bash coreutils ]}" \
-                --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
-                --set JAVA_HOME "${jre}" \
-                --set HADOOP_PREFIX "$out"
-            fi
-          done
+        #
+        # Do not use `wrapProgram` here, script renaming may result to weird things: http://i.imgur.com/0Xee013.png
+        #
+        mkdir -p $out/bin.wrapped
+        for n in $out/bin/*; do
+          if [ -f "$n" ]; then # only regular files
+            mv $n $out/bin.wrapped/
+            makeWrapper $out/bin.wrapped/$(basename $n) $n \
+              --prefix PATH : "${lib.makeBinPath [ which jre bash coreutils ]}" \
+              --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
+              --set JAVA_HOME "${jre}" \
+              --set HADOOP_PREFIX "$out"
+          fi
+        done
+      '';
+
+      meta = with lib; {
+        homepage = "http://hadoop.apache.org/";
+        description = "Framework for distributed processing of large data sets across clusters of computers";
+        license = licenses.asl20;
+
+        longDescription = ''
+          The Apache Hadoop software library is a framework that allows for
+          the distributed processing of large data sets across clusters of
+          computers using a simple programming model. It is designed to
+          scale up from single servers to thousands of machines, each
+          offering local computation and storage. Rather than rely on
+          hardware to deliver high-avaiability, the library itself is
+          designed to detect and handle failures at the application layer,
+          so delivering a highly-availabile service on top of a cluster of
+          computers, each of which may be prone to failures.
         '';
-
-        meta = with lib; {
-          homepage = "http://hadoop.apache.org/";
-          description = "Framework for distributed processing of large data sets across clusters of computers";
-          license = licenses.asl20;
-
-          longDescription = ''
-            The Apache Hadoop software library is a framework that allows for
-            the distributed processing of large data sets across clusters of
-            computers using a simple programming model. It is designed to
-            scale up from single servers to thousands of machines, each
-            offering local computation and storage. Rather than rely on
-            hardware to deliver high-avaiability, the library itself is
-            designed to detect and handle failures at the application layer,
-            so delivering a highly-availabile service on top of a cluster of
-            computers, each of which may be prone to failures.
-          '';
-          maintainers = with maintainers; [ volth ];
-          platforms = [ "x86_64-linux" ];
-        };
+        maintainers = with maintainers; [ volth ];
+        platforms = [ "x86_64-linux" ];
       };
+    };
 
   tomcat_6_0_48 = rec {
     version = "6.0.48";
@@ -127,7 +145,8 @@ let
     };
   };
 
-in {
+in
+{
   hadoop_2_7 = common {
     version = "2.7.7";
     sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";

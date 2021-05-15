@@ -5,7 +5,8 @@ let
   stateDir = "/var/lib/fprot";
   fprotGroup = fprotUser;
   cfg = config.services.fprot;
-in {
+in
+{
   options = {
 
     services.fprot = {
@@ -51,7 +52,8 @@ in {
     };
 
     users.users.${fprotUser} =
-      { uid = config.ids.uids.fprot;
+      {
+        uid = config.ids.uids.fprot;
         description = "F-Prot daemon user";
         home = stateDir;
       };
@@ -78,5 +80,5 @@ in {
 
       script = "/var/lib/fprot/fpupdate --keyfile ${cfg.updater.licenseKeyfile}";
     };
- };
+  };
 }

@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, python3Packages, gettext, gdk-pixbuf
-, gobject-introspection, gtk3, wrapGAppsHook }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+, gettext
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, wrapGAppsHook
+}:
 
 with lib;
 

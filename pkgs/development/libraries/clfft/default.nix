@@ -2,7 +2,8 @@
 
 let
   version = "2.12.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "clfft";
   inherit version;
 

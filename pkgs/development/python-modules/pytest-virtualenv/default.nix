@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcov
+, mock
+, cmdline
+, pytest-fixture-config
+, pytest-shutil
+, virtualenv
+}:
 
 buildPythonPackage rec {
   pname = "pytest-virtualenv";

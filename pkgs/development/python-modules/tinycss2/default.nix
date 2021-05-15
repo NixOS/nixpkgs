@@ -4,7 +4,7 @@
 , fetchPypi
 , fetchpatch
 , webencodings
-# Check inputs
+  # Check inputs
 , pytest
 , pytestrunner
 , pytestcov

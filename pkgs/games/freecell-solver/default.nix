@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, perl, gmp, libtap, gperf
-, perlPackages, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cmake
+, perl
+, gmp
+, libtap
+, gperf
+, perlPackages
+, python3
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -14,14 +23,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake perl pkg-config
+    cmake
+    perl
+    pkg-config
   ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
-    GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
+    GamesSolitaireVerify
+    StringShellQuote
+    TaskFreecellSolverTesting
+    TemplateToolkit
   ]);
 
   buildInputs = [
-    gmp libtap gperf
-    python3 python3.pkgs.random2
+    gmp
+    libtap
+    gperf
+    python3
+    python3.pkgs.random2
   ];
 
   # "ninja t/CMakeFiles/delta-states-test.t.exe.dir/__/delta_states.c.o" fails

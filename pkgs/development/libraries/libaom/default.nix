@@ -6,14 +6,18 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
-    rev	= "v${version}";
+    rev = "v${version}";
     sha256 = "178rq1d7i9q4lg40bipkyhdrk18j9wi5k5avpa5bls0zm7g5ifsx";
   };
 
   patches = [ ./outputs.patch ];
 
   nativeBuildInputs = [
-    yasm perl cmake pkg-config python3
+    yasm
+    perl
+    cmake
+    pkg-config
+    python3
   ];
 
   preConfigure = ''
@@ -50,10 +54,10 @@ stdenv.mkDerivation rec {
       for Open Media. It contains an AV1 library as well as applications like
       an encoder (aomenc) and a decoder (aomdec).
     '';
-    homepage    = "https://aomedia.org/av1-features/get-started/";
-    changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    homepage = "https://aomedia.org/av1-features/get-started/";
+    changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
     maintainers = with maintainers; [ primeos kiloreux ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     license = licenses.bsd2;
   };
 }

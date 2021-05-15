@@ -1,6 +1,9 @@
-{ buildDunePackage, containers
+{ buildDunePackage
+, containers
 , dune-configurator
-, gen, iter, qcheck
+, gen
+, iter
+, qcheck
 }:
 
 buildDunePackage {

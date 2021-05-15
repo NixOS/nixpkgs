@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0c5vwy3c5ji602dj64z6jqvcpi2xff03zvjbnwihb3ydqwnb3v67";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.clang-unwrapped}/lib"

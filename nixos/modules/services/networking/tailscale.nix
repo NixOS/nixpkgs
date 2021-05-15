@@ -3,7 +3,8 @@
 with lib;
 
 let cfg = config.services.tailscale;
-in {
+in
+{
   meta.maintainers = with maintainers; [ danderson mbaillie ];
 
   options.services.tailscale = {

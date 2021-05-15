@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   meta = with retroarch.meta; {
     inherit license homepage platforms maintainers;
     description = description
-                  + " (with cores: "
-                  + lib.concatStrings (lib.intersperse ", " (map (x: ""+x.name) cores))
-                  + ")";
+      + " (with cores: "
+      + lib.concatStrings (lib.intersperse ", " (map (x: "" + x.name) cores))
+      + ")";
   };
 }

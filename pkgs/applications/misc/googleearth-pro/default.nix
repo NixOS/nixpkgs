@@ -104,7 +104,7 @@ mkDerivation rec {
     dpkg --fsys-tarfile ${src} | tar --extract
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out
@@ -140,7 +140,7 @@ mkDerivation rec {
       xargs rm
   '';
 
-  autoPatchelfIgnoreMissingDeps=true;
+  autoPatchelfIgnoreMissingDeps = true;
 
   installCheckPhase = ''
     $out/bin/gpsbabel -V > /dev/null

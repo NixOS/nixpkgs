@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+  ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

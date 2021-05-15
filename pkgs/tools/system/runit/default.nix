@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl, darwin
+{ lib
+, stdenv
+, fetchurl
+, darwin
 
-# Build runit-init as a static binary
+  # Build runit-init as a static binary
 , static ? false
 }:
 

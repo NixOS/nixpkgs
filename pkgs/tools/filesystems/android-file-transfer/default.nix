@@ -8,7 +8,8 @@
 , pkg-config
 , qtbase
 , qttools
-, wrapQtAppsHook }:
+, wrapQtAppsHook
+}:
 
 mkDerivation rec {
   pname = "android-file-transfer";

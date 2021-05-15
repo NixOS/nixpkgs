@@ -40,13 +40,15 @@ ocamlPackages.buildDunePackage {
   configureFlags = pname;
 
   buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
-    cmdliner menhir ])
+    cmdliner
+    menhir
+  ])
   ;
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
-    homepage    = "https://alt-ergo.ocamlpro.com/";
-    license     = lib.licenses.ocamlpro_nc;
+    homepage = "https://alt-ergo.ocamlpro.com/";
+    license = lib.licenses.ocamlpro_nc;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

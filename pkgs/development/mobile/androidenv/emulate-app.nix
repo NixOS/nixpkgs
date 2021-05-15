@@ -1,9 +1,15 @@
 { composeAndroidPackages, stdenv, lib, runtimeShell }:
-{ name, app ? null
-, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
-, enableGPU ? false, extraAVDFiles ? []
-, package ? null, activity ? null
-, avdHomeDir ? null, sdkExtraArgs ? {}
+{ name
+, app ? null
+, platformVersion ? "16"
+, abiVersion ? "armeabi-v7a"
+, systemImageType ? "default"
+, enableGPU ? false
+, extraAVDFiles ? [ ]
+, package ? null
+, activity ? null
+, avdHomeDir ? null
+, sdkExtraArgs ? { }
 }:
 
 let

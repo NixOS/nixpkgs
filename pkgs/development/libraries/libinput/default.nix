@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
-, libevdev, mtdev, udev, libwacom
-, documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
-, eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
-, testsSupport ? false, check ? null, valgrind ? null, python3 ? null
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, meson
+, ninja
+, libevdev
+, mtdev
+, udev
+, libwacom
+, documentationSupport ? false
+, doxygen ? null
+, graphviz ? null # Documentation
+, eventGUISupport ? false
+, cairo ? null
+, glib ? null
+, gtk3 ? null # GUI event viewer support
+, testsSupport ? false
+, check ? null
+, valgrind ? null
+, python3 ? null
 }:
 
 assert documentationSupport -> doxygen != null && graphviz != null && python3 != null;
@@ -12,16 +28,18 @@ assert testsSupport -> check != null && valgrind != null && python3 != null;
 let
   mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
-  sphinx-build = if documentationSupport then
-    python3.pkgs.sphinx.overrideAttrs (super: {
-      propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
+  sphinx-build =
+    if documentationSupport then
+      python3.pkgs.sphinx.overrideAttrs
+        (super: {
+          propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
 
-      postFixup = super.postFixup or "" + ''
-        # Do not propagate Python
-        rm $out/nix-support/propagated-build-inputs
-      '';
-    })
-  else null;
+          postFixup = super.postFixup or "" + ''
+            # Do not propagate Python
+            rm $out/nix-support/propagated-build-inputs
+          '';
+        })
+    else null;
 in
 
 with lib;
@@ -61,7 +79,7 @@ stdenv.mkDerivation rec {
       setuptools
     ]))
   ]
-    ++ optionals eventGUISupport [ cairo glib gtk3 ];
+  ++ optionals eventGUISupport [ cairo glib gtk3 ];
 
   checkInputs = [
     check
@@ -83,9 +101,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = "https://www.freedesktop.org/wiki/Software/libinput/";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

@@ -18,8 +18,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go client and server OpenAPI 3 generator";
-    homepage    = "https://github.com/deepmap/oapi-codegen";
-    license     = licenses.asl20;
+    homepage = "https://github.com/deepmap/oapi-codegen";
+    license = licenses.asl20;
     maintainers = [ maintainers.j4m3s ];
   };
 }

@@ -1,9 +1,12 @@
 { stdenv, lib, buildEnv, writeText, writeShellScriptBin, pkgs, pkgsi686Linux }:
 
-{ name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
-, extraBuildCommands ? "", extraBuildCommandsMulti ? ""
-, extraOutputsToInstall ? []
+{ name
+, profile ? ""
+, targetPkgs ? pkgs: [ ]
+, multiPkgs ? pkgs: [ ]
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
+, extraOutputsToInstall ? [ ]
 }:
 
 # HOWTO:
@@ -23,12 +26,12 @@
 
 let
   is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  isMultiBuild = multiPkgs != null && is64Bit;
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
   # host's architecture
-  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [] else multiPkgs pkgs);
+  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [ ] else multiPkgs pkgs);
 
   # list of packages which are installed for both x86 and x86_64 on x86_64
   # systems
@@ -39,14 +42,28 @@ let
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   basePkgs = with pkgs;
-    [ glibcLocales
+    [
+      glibcLocales
       (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
-      gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
+      (toString gcc.cc.lib)
+      bashInteractive
+      coreutils
+      less
+      shadow
+      su
+      gawk
+      diffutils
+      findutils
+      gnused
+      gnugrep
+      gnutar
+      gzip
+      bzip2
+      xz
     ];
   baseMultiPkgs = with pkgsi686Linux;
-    [ (toString gcc.cc.lib)
+    [
+      (toString gcc.cc.lib)
     ];
 
   ldconfig = writeShellScriptBin "ldconfig" ''
@@ -73,7 +90,7 @@ let
 
   # Compose /etc for the chroot environment
   etcPkg = stdenv.mkDerivation {
-    name         = "${name}-chrootenv-etc";
+    name = "${name}-chrootenv-etc";
     buildCommand = ''
       mkdir -p $out/etc
       cd $out/etc
@@ -128,8 +145,9 @@ let
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
-  setupLibDirs = if isTargetBuild then setupLibDirsTarget
-                                  else setupLibDirsMulti;
+  setupLibDirs =
+    if isTargetBuild then setupLibDirsTarget
+    else setupLibDirsMulti;
 
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
@@ -168,8 +186,9 @@ let
     done
   '';
 
-in stdenv.mkDerivation {
-  name         = "${name}-fhs";
+in
+stdenv.mkDerivation {
+  name = "${name}-fhs";
   buildCommand = ''
     mkdir -p $out
     cd $out

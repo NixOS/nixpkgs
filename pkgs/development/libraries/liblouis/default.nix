@@ -1,5 +1,6 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
 , autoreconfHook
 , pkg-config
 , gettext

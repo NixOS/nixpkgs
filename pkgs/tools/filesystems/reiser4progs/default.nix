@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libaal}:
+{ lib, stdenv, fetchurl, libaal }:
 
 let version = "2.0.4"; in
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WmIkISnRp5BngSfPEKY95HVEt5TBtPKu+RMBwlLsnuA=";
   };
 
-  buildInputs = [libaal];
+  buildInputs = [ libaal ];
 
   hardeningDisable = [ "format" ];
 

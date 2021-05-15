@@ -119,7 +119,8 @@ let
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
-in {
+in
+{
   # this old version is required to compile some libraries
   haxe_3_2 = generic {
     version = "3.2.1";

@@ -3,7 +3,8 @@
 let
   version = "5.1.4";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libxc";
   inherit version;
 

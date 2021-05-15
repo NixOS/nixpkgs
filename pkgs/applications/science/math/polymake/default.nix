@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchurl
-, ninja, libxml2, libxslt, readline, perl, gmp, mpfr, boost
-, bliss, ppl, singular, cddlib, lrs, nauty
-, ant, openjdk
+{ lib
+, stdenv
+, fetchurl
+, ninja
+, libxml2
+, libxslt
+, readline
+, perl
+, gmp
+, mpfr
+, boost
+, bliss
+, ppl
+, singular
+, cddlib
+, lrs
+, nauty
+, ant
+, openjdk
 , perlPackages
 , makeWrapper
 }:
@@ -16,16 +31,34 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libxml2 libxslt readline perl gmp mpfr boost
-    bliss ppl singular cddlib lrs nauty
+    libxml2
+    libxslt
+    readline
+    perl
+    gmp
+    mpfr
+    boost
+    bliss
+    ppl
+    singular
+    cddlib
+    lrs
+    nauty
     openjdk
   ] ++
   (with perlPackages; [
-    XMLLibXML XMLLibXSLT XMLWriter TermReadLineGnu TermReadKey
+    XMLLibXML
+    XMLLibXSLT
+    XMLWriter
+    TermReadLineGnu
+    TermReadKey
   ]);
 
   nativeBuildInputs = [
-    makeWrapper ninja ant perl
+    makeWrapper
+    ninja
+    ant
+    perl
   ];
 
   ninjaFlags = [ "-C" "build/Opt" ];
@@ -39,8 +72,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Software for research in polyhedral geometry";
-    license = lib.licenses.gpl2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://www.polymake.org/doku.php";
   };

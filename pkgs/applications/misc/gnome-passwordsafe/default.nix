@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , pkg-config
@@ -13,7 +14,8 @@
 , gdk-pixbuf
 , gobject-introspection
 , desktop-file-utils
-, appstream-glib }:
+, appstream-glib
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-passwordsafe";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nnhziz9v523hpciylnxfajmxabh2ig5iawzwrfpf7aww70v330x";
   };
 
-  makeFlags=["PREFIX=\${out}"];
+  makeFlags = [ "PREFIX=\${out}" ];
 
   nativeBuildInputs = [
     pythonPackages.wrapPython

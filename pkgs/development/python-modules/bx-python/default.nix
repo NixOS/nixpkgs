@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27, numpy, cython, zlib, six
-, python-lzo, nose }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPy27
+, numpy
+, cython
+, zlib
+, six
+, python-lzo
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "bx-python";

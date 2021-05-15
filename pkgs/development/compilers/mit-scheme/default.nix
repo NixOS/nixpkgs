@@ -1,12 +1,22 @@
-{ fetchurl, lib, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
-  enableX11 ? false, xlibsWrapper ? null }:
+{ fetchurl
+, lib
+, stdenv
+, makeWrapper
+, gnum4
+, texinfo
+, texLive
+, automake
+, enableX11 ? false
+, xlibsWrapper ? null
+}:
 
 let
   version = "10.1.10";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 
-  arch = if      stdenv.isi686   then "-i386"
-         else                         "-x86-64";
+  arch =
+    if stdenv.isi686 then "-i386"
+    else "-x86-64";
 in
 stdenv.mkDerivation {
   name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
@@ -17,15 +27,18 @@ stdenv.mkDerivation {
   # generated C code instead of those binaries.
   src =
     if stdenv.isi686
-    then fetchurl {
-      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "117lf06vcdbaa5432hwqnskpywc6x8ai0gj99h480a4wzkp3vhy6";
-  } else fetchurl {
-      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "1rljv6iddrbssm91c0nn08myj92af36hkix88cc6qwq38xsxs52g";
-    };
+    then
+      fetchurl
+        {
+          url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
+          sha256 = "117lf06vcdbaa5432hwqnskpywc6x8ai0gj99h480a4wzkp3vhy6";
+        } else
+      fetchurl {
+        url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
+        sha256 = "1rljv6iddrbssm91c0nn08myj92af36hkix88cc6qwq38xsxs52g";
+      };
 
-  buildInputs = if enableX11 then [xlibsWrapper] else [];
+  buildInputs = if enableX11 then [ xlibsWrapper ] else [ ];
 
   configurePhase =
     '' (cd src && ./configure)

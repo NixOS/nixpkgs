@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   version = "0.33";
 
   src = fetchFromGitHub {
-    owner  = "MusicPlayerDaemon";
-    repo   = "mpc";
-    rev    = "v${version}";
+    owner = "MusicPlayerDaemon";
+    repo = "mpc";
+    rev = "v${version}";
     sha256 = "1qbi0i9cq54rj8z2kapk8x8g1jkw2jz781niwb9i7kw4xfhvy5zx";
   };
 

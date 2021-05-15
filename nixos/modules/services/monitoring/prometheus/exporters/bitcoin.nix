@@ -57,7 +57,7 @@ in
 
     extraEnv = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       description = ''
         Extra environment variables for the exporter.
       '';

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sphinx ];
 
   checkInputs = [ readthedocs-sphinx-ext pytest ];
-  CI=1; # Don't use NPM to fetch assets. Assets are included in sdist.
+  CI = 1; # Don't use NPM to fetch assets. Assets are included in sdist.
 
   checkPhase = ''
     py.test

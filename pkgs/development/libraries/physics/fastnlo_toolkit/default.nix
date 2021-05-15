@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     lhapdf
     yoda
   ] ++ lib.optional withPython python
-    ++ lib.optional (withPython && python.isPy3k) ncurses;
+  ++ lib.optional (withPython && python.isPy3k) ncurses;
 
   propagatedBuildInputs = [
     zlib

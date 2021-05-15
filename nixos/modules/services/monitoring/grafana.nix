@@ -73,7 +73,7 @@ let
 
   notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
-  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" { } ''
     mkdir -p $out/{datasources,dashboards,notifiers}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
@@ -91,11 +91,11 @@ let
         description = "Name of the datasource. Required.";
       };
       type = mkOption {
-        type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
+        type = types.enum [ "graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki" ];
         description = "Datasource type. Required.";
       };
       access = mkOption {
-        type = types.enum ["proxy" "direct"];
+        type = types.enum [ "proxy" "direct" ];
         default = "proxy";
         description = "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
@@ -221,7 +221,7 @@ let
         description = "Notifier name.";
       };
       type = mkOption {
-        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+        type = types.enum [ "dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook" ];
         description = "Notifier type.";
       };
       uid = mkOption {
@@ -270,14 +270,15 @@ let
       };
     };
   };
-in {
+in
+{
   options.services.grafana = {
     enable = mkEnableOption "grafana";
 
     protocol = mkOption {
       description = "Which protocol to listen.";
       default = "http";
-      type = types.enum ["http" "https" "socket"];
+      type = types.enum [ "http" "https" "socket" ];
     };
 
     addr = mkOption {
@@ -351,7 +352,7 @@ in {
       type = mkOption {
         description = "Database type.";
         default = "sqlite3";
-        type = types.enum ["mysql" "sqlite3" "postgres"];
+        type = types.enum [ "mysql" "sqlite3" "postgres" ];
       };
 
       host = mkOption {
@@ -411,19 +412,19 @@ in {
       enable = mkEnableOption "provision";
       datasources = mkOption {
         description = "Grafana datasources configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.datasourceConfig;
         apply = x: map _filter x;
       };
       dashboards = mkOption {
         description = "Grafana dashboard configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.dashboardConfig;
         apply = x: map _filter x;
       };
       notifiers = mkOption {
         description = "Grafana notifier configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
@@ -524,7 +525,7 @@ in {
       autoAssignOrgRole = mkOption {
         description = "Default role new users will be auto assigned.";
         default = "Viewer";
-        type = types.enum ["Viewer" "Editor"];
+        type = types.enum [ "Viewer" "Editor" ];
       };
     };
 
@@ -561,23 +562,26 @@ in {
         <link xlink:href="http://docs.grafana.org/installation/configuration/">documentation</link>,
         but without GF_ prefix
       '';
-      default = {};
+      default = { };
       type = with types; attrsOf (either str path);
     };
   };
 
   config = mkIf cfg.enable {
     warnings = flatten [
-      (optional (
-        cfg.database.password != opt.database.password.default ||
-        cfg.security.adminPassword != opt.security.adminPassword.default
-      ) "Grafana passwords will be stored as plaintext in the Nix store!")
-      (optional (
-        any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
-      ) "Datasource passwords will be stored as plaintext in the Nix store!")
-      (optional (
-        any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store!")
+      (optional
+        (
+          cfg.database.password != opt.database.password.default ||
+          cfg.security.adminPassword != opt.security.adminPassword.default
+        ) "Grafana passwords will be stored as plaintext in the Nix store!")
+      (optional
+        (
+          any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
+        ) "Datasource passwords will be stored as plaintext in the Nix store!")
+      (optional
+        (
+          any (x: x.secure_settings != null) cfg.provision.notifiers
+        ) "Notifier secure settings will be stored as plaintext in the Nix store!")
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -603,8 +607,8 @@ in {
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
-      wantedBy = ["multi-user.target"];
-      after = ["networking.target"];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "networking.target" ];
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
@@ -645,6 +649,6 @@ in {
       createHome = true;
       group = "grafana";
     };
-    users.groups.grafana = {};
+    users.groups.grafana = { };
   };
 }

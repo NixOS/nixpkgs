@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchurl, ipaddr, functoria-runtime
-, fmt, logs, ocaml_lwt, alcotest }:
+{ lib
+, buildDunePackage
+, fetchurl
+, ipaddr
+, functoria-runtime
+, fmt
+, logs
+, ocaml_lwt
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "mirage-runtime";

@@ -1,9 +1,18 @@
 { enableGUI ? true
 , enablePDFtoPPM ? true
 , enablePrinting ? true
-, lib, stdenv, fetchzip, cmake, makeDesktopItem
-, zlib, libpng, cups ? null, freetype ? null
-, qtbase ? null, qtsvg ? null, wrapQtAppsHook
+, lib
+, stdenv
+, fetchzip
+, cmake
+, makeDesktopItem
+, zlib
+, libpng
+, cups ? null
+, freetype ? null
+, qtbase ? null
+, qtsvg ? null
+, wrapQtAppsHook
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
@@ -22,13 +31,13 @@ stdenv.mkDerivation rec {
   # Fix "No known features for CXX compiler", see
   # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
-  patches = lib.optional stdenv.isDarwin  ./cmake_version.patch;
+  patches = lib.optional stdenv.isDarwin ./cmake_version.patch;
 
   nativeBuildInputs =
     [ cmake ]
     ++ lib.optional enableGUI wrapQtAppsHook;
 
-  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
+  cmakeFlags = [ "-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON" ]
     ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
 
   buildInputs = [ zlib libpng ] ++

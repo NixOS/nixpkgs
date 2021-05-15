@@ -8,7 +8,8 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "wiki-js.yml" cfg.settings;
-in {
+in
+{
   options.services.wiki-js = {
     enable = mkEnableOption "wiki-js";
 
@@ -30,7 +31,7 @@ in {
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {

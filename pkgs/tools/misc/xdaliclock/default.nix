@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.44";
 
   src = fetchurl {
-    url="https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
+    url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
     sha256 = "1gsgnsm6ql0mcg9zpdkhws3g23r3a92bc3rpg4qbgbmd02nvj3c0";
   };
 

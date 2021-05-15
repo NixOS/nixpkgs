@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gtest }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, glog
+, leveldb
+, marisa
+, opencc
+, libyamlcpp
+, gtest
+}:
 
 stdenv.mkDerivation rec {
   pname = "librime";
@@ -17,10 +27,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest ];
 
   meta = with lib; {
-    homepage    = "https://rime.im/";
+    homepage = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

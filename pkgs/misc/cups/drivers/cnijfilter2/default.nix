@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
-, withDebug ? false }:
+{ stdenv
+, lib
+, fetchzip
+, autoconf
+, automake
+, cups
+, glib
+, libxml2
+, libusb1
+, libtool
+, withDebug ? false
+}:
 
 stdenv.mkDerivation {
   pname = "cnijfilter2";
@@ -12,7 +22,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb1 libtool
+    cups
+    automake
+    autoconf
+    glib
+    libxml2
+    libusb1
+    libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which

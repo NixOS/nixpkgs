@@ -10,10 +10,14 @@
 , proj
 , qtsvg
 , qtwebkit
-, withGeoimage ? true, exiv2
-, withGpsdlib ? (!stdenv.isDarwin), gpsd
-, withLibproxy ? false, libproxy
-, withZbar ? false, zbar
+, withGeoimage ? true
+, exiv2
+, withGpsdlib ? (!stdenv.isDarwin)
+, gpsd
+, withLibproxy ? false
+, libproxy
+, withZbar ? false
+, zbar
 }:
 
 mkDerivation rec {

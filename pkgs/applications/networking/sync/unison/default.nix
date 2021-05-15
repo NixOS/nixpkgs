@@ -1,5 +1,14 @@
-{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
-, enableX11 ? true}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocamlPackages
+, fontschumachermisc
+, xset
+, makeWrapper
+, ncurses
+, gnugrep
+, enableX11 ? true
+}:
 
 let inherit (ocamlPackages) ocaml lablgtk; in
 
@@ -20,7 +29,7 @@ stdenv.mkDerivation (rec {
   preBuild = (if enableX11 then ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
   '' else "") + ''
-  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
+    echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
   '';
 
   makeFlags = [
@@ -30,12 +39,13 @@ stdenv.mkDerivation (rec {
 
   preInstall = "mkdir -p $out/bin";
 
-  postInstall = if enableX11 then ''
-    for i in $(cd $out/bin && ls); do
-      wrapProgram $out/bin/$i \
-        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | ${gnugrep}/bin/grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
-    done
-  '' else "";
+  postInstall =
+    if enableX11 then ''
+      for i in $(cd $out/bin && ls); do
+        wrapProgram $out/bin/$i \
+          --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | ${gnugrep}/bin/grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
+      done
+    '' else "";
 
   dontStrip = !ocaml.nativeCompilers;
 
@@ -43,7 +53,7 @@ stdenv.mkDerivation (rec {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; unix;
   };
 

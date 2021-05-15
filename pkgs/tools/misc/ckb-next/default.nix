@@ -1,5 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, substituteAll
+, udev
+, pkg-config
+, qtbase
+, cmake
+, zlib
+, kmod
+, libXdmcp
+, qttools
+, qtx11extras
+, libdbusmenu
+}:
 
 mkDerivation rec {
   version = "0.4.4";

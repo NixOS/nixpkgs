@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -62,12 +63,12 @@ stdenv.mkDerivation rec {
     sed "s|^mono|${mono}/bin/mono|g" -i src/bless-script.in
 
     ./autogen.sh
-    '';
+  '';
 
   preFixup = ''
     MPATH="${gtk-sharp-2_0}/lib/mono/gtk-sharp-2.0:${glib.out}/lib:${gtk2-x11}/lib:${gnome2.libglade}/lib:${gtk-sharp-2_0}/lib"
     wrapProgram $out/bin/bless --prefix MONO_PATH : "$MPATH" --prefix LD_LIBRARY_PATH : "$MPATH"
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/afrantzis/bless";

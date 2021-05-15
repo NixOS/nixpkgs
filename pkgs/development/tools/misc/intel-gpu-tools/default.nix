@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, libdrm, libpciaccess, cairo, xorgproto, udev
-, libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
-, procps, utilmacros, gtk-doc, openssl, peg, elfutils
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libdrm
+, libpciaccess
+, cairo
+, xorgproto
+, udev
+, libX11
+, libXext
+, libXv
+, libXrandr
+, glib
+, bison
+, libunwind
+, python3
+, kmod
+, procps
+, utilmacros
+, gtk-doc
+, openssl
+, peg
+, elfutils
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +34,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config utilmacros ];
-  buildInputs = [ libdrm libpciaccess cairo xorgproto udev libX11 kmod
-    libXext libXv libXrandr glib bison libunwind python3 procps
-    gtk-doc openssl peg elfutils ];
+  buildInputs = [
+    libdrm
+    libpciaccess
+    cairo
+    xorgproto
+    udev
+    libX11
+    kmod
+    libXext
+    libXv
+    libXrandr
+    glib
+    bison
+    libunwind
+    python3
+    procps
+    gtk-doc
+    openssl
+    peg
+    elfutils
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
 

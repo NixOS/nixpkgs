@@ -1,12 +1,33 @@
-{ stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+{ stdenv
+, lib
+, pkgs
+, fetchurl
+, buildEnv
+, coreutils
+, findutils
+, gnugrep
+, gnused
+, getopt
+, git
+, tree
+, gnupg
+, openssl
+, which
+, procps
+, qrencode
+, makeWrapper
+, pass
+, symlinkJoin
 
-, xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin , dmenuSupport ? x11Support
-, waylandSupport ? false, wl-clipboard ? null
+, xclip ? null
+, xdotool ? null
+, dmenu ? null
+, x11Support ? !stdenv.isDarwin
+, dmenuSupport ? x11Support
+, waylandSupport ? false
+, wl-clipboard ? null
 
-# For backwards-compatibility
+  # For backwards-compatibility
 , tombPluginSupport ? false
 }:
 
@@ -15,8 +36,8 @@ with lib;
 assert x11Support -> xclip != null;
 
 assert dmenuSupport -> dmenu != null
-                       && xdotool != null
-                       && x11Support;
+  && xdotool != null
+  && x11Support;
 
 assert waylandSupport -> wl-clipboard != null;
 
@@ -27,7 +48,8 @@ let
     let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
-    in buildEnv {
+    in
+    buildEnv {
       name = "pass-extensions-env";
       paths = selected;
       buildInputs = [ makeWrapper ] ++ concatMap (x: x.buildInputs) selected;
@@ -56,7 +78,7 @@ stdenv.mkDerivation rec {
   pname = "password-store";
 
   src = fetchurl {
-    url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
+    url = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
     sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
   };
 
@@ -64,9 +86,9 @@ stdenv.mkDerivation rec {
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
   ] ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
-    # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
-    # version bump.
-    ++ lib.optional waylandSupport ./clip-wayland-support.patch;
+  # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
+  # version bump.
+  ++ lib.optional waylandSupport ./clip-wayland-support.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -95,9 +117,9 @@ stdenv.mkDerivation rec {
     qrencode
     procps
   ] ++ optional stdenv.isDarwin openssl
-    ++ optional x11Support xclip
-    ++ optionals dmenuSupport [ xdotool dmenu ]
-    ++ optional waylandSupport wl-clipboard);
+  ++ optional x11Support xclip
+  ++ optionals dmenuSupport [ xdotool dmenu ]
+  ++ optional waylandSupport wl-clipboard);
 
   postFixup = ''
     # Fix program name in --help
@@ -151,10 +173,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = "https://www.passwordstore.org/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://www.passwordstore.org/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       pass is a very simple password store that keeps passwords inside gpg2

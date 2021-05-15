@@ -7,7 +7,8 @@ let
   autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
   configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
-in {
+in
+{
   options = {
     services.kmscon = {
       enable = mkOption {

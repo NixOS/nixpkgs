@@ -1,9 +1,34 @@
-{ mkDerivation, aeson, aeson-casing, attoparsec, base, bytestring
-, criterion, fetchgit, file-embed, hashable, hashtables, hasql
-, hasql-pool, hasql-transaction, monad-control, mtl
-, postgresql-binary, postgresql-libpq, resource-pool, retry
-, scientific, lib, template-haskell, text, text-builder, th-lift
-, th-lift-instances, time, transformers-base, uuid, vector
+{ mkDerivation
+, aeson
+, aeson-casing
+, attoparsec
+, base
+, bytestring
+, criterion
+, fetchgit
+, file-embed
+, hashable
+, hashtables
+, hasql
+, hasql-pool
+, hasql-transaction
+, monad-control
+, mtl
+, postgresql-binary
+, postgresql-libpq
+, resource-pool
+, retry
+, scientific
+, lib
+, template-haskell
+, text
+, text-builder
+, th-lift
+, th-lift-instances
+, time
+, transformers-base
+, uuid
+, vector
 }:
 mkDerivation {
   pname = "pg-client";
@@ -15,15 +40,44 @@ mkDerivation {
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
-    aeson aeson-casing attoparsec base bytestring hashable hashtables
-    monad-control mtl postgresql-binary postgresql-libpq resource-pool
-    retry scientific template-haskell text text-builder th-lift
-    th-lift-instances time transformers-base uuid vector
+    aeson
+    aeson-casing
+    attoparsec
+    base
+    bytestring
+    hashable
+    hashtables
+    monad-control
+    mtl
+    postgresql-binary
+    postgresql-libpq
+    resource-pool
+    retry
+    scientific
+    template-haskell
+    text
+    text-builder
+    th-lift
+    th-lift-instances
+    time
+    transformers-base
+    uuid
+    vector
   ];
   testHaskellDepends = [ base ];
   benchmarkHaskellDepends = [
-    base bytestring criterion file-embed hashable hasql hasql-pool
-    hasql-transaction mtl postgresql-libpq text text-builder
+    base
+    bytestring
+    criterion
+    file-embed
+    hashable
+    hasql
+    hasql-pool
+    hasql-transaction
+    mtl
+    postgresql-libpq
+    text
+    text-builder
   ];
   homepage = "https://github.com/hasura/platform";
   license = lib.licenses.bsd3;

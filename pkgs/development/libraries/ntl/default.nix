@@ -4,8 +4,8 @@
 , perl
 , gmp
 , gf2x ? null
-# I asked the ntl maintainer weather or not to include gf2x by default:
-# > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
+  # I asked the ntl maintainer weather or not to include gf2x by default:
+  # > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
 , withGf2x ? true
 , tune ? false # tune for current system; non reproducible and time consuming
 }:

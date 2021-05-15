@@ -2,12 +2,11 @@
 
 with lib;
 
-makeOverridable ({
-  completionDirs ? [],
-  functionDirs ? [],
-  confDirs ? [],
-  pluginPkgs ? []
-}:
+makeOverridable ({ completionDirs ? [ ]
+                 , functionDirs ? [ ]
+                 , confDirs ? [ ]
+                 , pluginPkgs ? [ ]
+                 }:
 
 let
   vendorDir = kind: plugin: "${plugin}/share/fish/vendor_${kind}.d";
@@ -15,7 +14,8 @@ let
   funcPath = functionDirs ++ map (vendorDir "functions") pluginPkgs;
   confPath = confDirs ++ map (vendorDir "conf") pluginPkgs;
 
-in writeShellScriptBin "fish" ''
+in
+writeShellScriptBin "fish" ''
   ${fish}/bin/fish --init-command "
     set --prepend fish_complete_path ${escapeShellArgs complPath}
     set --prepend fish_function_path ${escapeShellArgs funcPath}

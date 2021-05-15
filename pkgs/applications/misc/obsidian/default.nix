@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, lib, makeWrapper, electron, makeDesktopItem, graphicsmagick
-, writeScript }:
+{ stdenv
+, fetchurl
+, lib
+, makeWrapper
+, electron
+, makeDesktopItem
+, graphicsmagick
+, writeScript
+}:
 
 let
   icon = fetchurl {
@@ -28,7 +35,8 @@ let
     update-source-version obsidian "$latestVersion"
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "obsidian";
   version = "0.12.3";
 

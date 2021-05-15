@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
       for TPM based attestation using the TPM quote mechanism.  The manual
       page for tpm_quote_tools provides a usage overview.
     '';
-    homepage    = "http://tpmquotetools.sourceforge.net/";
-    license     = licenses.bsd3;
+    homepage = "http://tpmquotetools.sourceforge.net/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ak ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

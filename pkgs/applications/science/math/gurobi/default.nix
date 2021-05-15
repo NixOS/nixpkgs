@@ -2,7 +2,8 @@
 
 let
   majorVersion = "8.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gurobi";
   version = "${majorVersion}.0";
 
@@ -48,7 +49,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
-  passthru.libSuffix = lib.replaceStrings ["."] [""] majorVersion;
+  passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] majorVersion;
 
   meta = with lib; {
     description = "Optimization solver for mathematical programming";

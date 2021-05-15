@@ -2,7 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , xz
-, autoPatchelfHook }:
+, autoPatchelfHook
+}:
 
 # Assets for fishnet: A collection of pre-built compressed stockfish binaries.
 # We have to decompress them, patch them using auto-patchelf and compress them

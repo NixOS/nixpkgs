@@ -1,5 +1,15 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, intltool, libpulseaudio,
-gtkmm3 , libcanberra-gtk3, gnome, wrapGAppsHook }:
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, pkg-config
+, intltool
+, libpulseaudio
+, gtkmm3
+, libcanberra-gtk3
+, gnome
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
@@ -17,10 +27,15 @@ stdenv.mkDerivation rec {
       name = "streamwidget-fix-drop-down-wayland.patch";
       url = "https://gitlab.freedesktop.org/pulseaudio/pavucontrol/-/commit/ae278b8643cf1089f66df18713c8154208d9a505.patch";
       sha256 = "066vhxjz6gmi2sp2n4pa1cdsxjnq6yml5js094g5n7ld34p84dpj";
-  })];
+    })
+  ];
 
-  buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
-                  gnome.adwaita-icon-theme ];
+  buildInputs = [
+    libpulseaudio
+    gtkmm3
+    libcanberra-gtk3
+    gnome.adwaita-icon-theme
+  ];
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 

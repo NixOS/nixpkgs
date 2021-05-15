@@ -3,7 +3,7 @@ let
   debPlatform =
     if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
     else if stdenv.hostPlatform.system == "i686-linux" then "i386"
-         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   pname = "fxlinuxprintutil";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://onlinesupport.fujixerox.com/driver_downloads/fxlinuxpdf112119031.zip";
     sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
-    curlOpts = "--user-agent Mozilla/5.0";  # HTTP 410 otherwise
+    curlOpts = "--user-agent Mozilla/5.0"; # HTTP 410 otherwise
   };
 
   patches = [

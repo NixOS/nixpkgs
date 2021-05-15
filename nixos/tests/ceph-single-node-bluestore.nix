@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   cfg = {
@@ -59,20 +59,22 @@ let
       { address = cfg.monA.ip; prefixLength = 24; }
     ];
   };
-  cephConfigMonA = generateCephConfig { daemonConfig = {
-    mon = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
+  cephConfigMonA = generateCephConfig {
+    daemonConfig = {
+      mon = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      mgr = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      osd = {
+        enable = true;
+        daemons = [ cfg.osd0.name cfg.osd1.name cfg.osd2.name ];
+      };
     };
-    mgr = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
-    };
-    osd = {
-      enable = true;
-      daemons = [ cfg.osd0.name cfg.osd1.name cfg.osd2.name ];
-    };
-  }; };
+  };
 
   # Following deployment is based on the manual deployment described here:
   # https://docs.ceph.com/docs/master/install/manual-deployment/
@@ -183,7 +185,8 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
-in {
+in
+{
   name = "basic-single-node-ceph-cluster-bluestore";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lukegb ];

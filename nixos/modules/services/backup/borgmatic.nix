@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.borgmatic;
   cfgfile = pkgs.writeText "config.yaml" (builtins.toJSON cfg.settings);
-in {
+in
+{
   options.services.borgmatic = {
     enable = mkEnableOption "borgmatic";
 

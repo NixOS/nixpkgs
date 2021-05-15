@@ -1,8 +1,17 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kdbusaddons, kcrash, kbookmarks, kiconthemes, kio, kpimtextedit,
-  kmailtransport, pimcommon, libksieve
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, kdbusaddons
+, kcrash
+, kbookmarks
+, kiconthemes
+, kio
+, kpimtextedit
+, kmailtransport
+, pimcommon
+, libksieve
 }:
 
 mkDerivation {
@@ -13,7 +22,14 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kdbusaddons kcrash kbookmarks kiconthemes kio kpimtextedit kmailtransport
-    pimcommon libksieve
+    kdbusaddons
+    kcrash
+    kbookmarks
+    kiconthemes
+    kio
+    kpimtextedit
+    kmailtransport
+    pimcommon
+    libksieve
   ];
 }

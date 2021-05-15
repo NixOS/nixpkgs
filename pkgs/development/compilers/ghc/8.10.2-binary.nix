@@ -1,6 +1,13 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
-, ncurses6, gmp, glibc, libiconv, numactl
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gcc
+, ncurses6
+, gmp
+, glibc
+, libiconv
+, numactl
 , llvmPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
@@ -17,17 +24,18 @@ let
   useLLVM = !stdenv.targetPlatform.isx86;
 
   libPath = lib.makeLibraryPath ([
-    ncurses6 gmp
+    ncurses6
+    gmp
   ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv
-    ++ lib.optional (stdenv.hostPlatform.isAarch64) numactl);
+  ++ lib.optional (stdenv.hostPlatform.isAarch64) numactl);
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
@@ -41,29 +49,31 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   # https://downloads.haskell.org/~ghc/8.10.2/
-  src = fetchurl ({
-    i686-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-      sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
-    };
-    x86_64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
-      sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
-    };
-    armv7l-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
-      sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
-    };
-    aarch64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
-      sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
-    };
-    x86_64-darwin = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-      sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
-    };
-  }.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform"));
+  src = fetchurl (
+    {
+      i686-linux = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+        sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
+      };
+      x86_64-linux = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+        sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
+      };
+      armv7l-linux = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
+        sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
+      };
+      aarch64-linux = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
+        sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
+      };
+      x86_64-darwin = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+        sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
+      };
+    }.${stdenv.hostPlatform.system}
+      or (throw "cannot bootstrap GHC on this platform")
+  );
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
@@ -133,7 +143,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
@@ -143,33 +153,33 @@ stdenv.mkDerivation rec {
   # find editline/gmp.
   postFixup = lib.optionalString stdenv.isLinux
     (if stdenv.hostPlatform.isAarch64 then
-      # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
-      # are 2 directories deep from $out/lib, so pooling symlinks there makes
-      # a short rpath.
+    # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
+    # are 2 directories deep from $out/lib, so pooling symlinks there makes
+    # a short rpath.
       ''
-      (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
-      (cd $out/lib; ln -s ${gmp.out}/lib/libgmp.so.10)
-      (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
-      for p in $(find "$out/lib" -type f -name "*\.so*"); do
-        (cd $out/lib; ln -s $p)
-      done
+        (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
+        (cd $out/lib; ln -s ${gmp.out}/lib/libgmp.so.10)
+        (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
+        for p in $(find "$out/lib" -type f -name "*\.so*"); do
+          (cd $out/lib; ln -s $p)
+        done
 
-      for p in $(find "$out/lib" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
-        fi
-      done
+        for p in $(find "$out/lib" -type f -executable); do
+          if isELF "$p"; then
+            echo "Patchelfing $p"
+            patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
+          fi
+        done
       ''
     else
       ''
-      for p in $(find "$out" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
-        fi
-      done
-    '') + lib.optionalString stdenv.isDarwin ''
+        for p in $(find "$out" -type f -executable); do
+          if isELF "$p"; then
+            echo "Patchelfing $p"
+            patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+          fi
+        done
+      '') + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -218,7 +228,7 @@ stdenv.mkDerivation rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
     hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [ lostnet ];
   };

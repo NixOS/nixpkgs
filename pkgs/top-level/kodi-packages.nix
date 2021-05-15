@@ -14,7 +14,7 @@ let self = rec {
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
   toKodiAddon = drv: drv.overrideAttrs (oldAttrs: {
     # Use passthru in order to prevent rebuilds when possible.
-    passthru = (oldAttrs.passthru or {}) // {
+    passthru = (oldAttrs.passthru or { }) // {
       kodiAddonFor = kodi;
       requiredKodiAddons = requiredKodiAddons drv.propagatedBuildInputs;
     };
@@ -28,7 +28,7 @@ let self = rec {
     let
       modules = filter hasKodiAddon drvs;
     in
-      unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
+    unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
   # package update scripts
 

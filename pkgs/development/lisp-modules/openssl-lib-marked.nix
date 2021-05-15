@@ -1,5 +1,5 @@
-with import ../../../default.nix {};
-runCommand "openssl-lib-marked" {} ''
+with import ../../../default.nix { };
+runCommand "openssl-lib-marked" { } ''
   mkdir -p "$out/lib"
   for lib in ssl crypto; do
     version="${lib.getVersion openssl}"

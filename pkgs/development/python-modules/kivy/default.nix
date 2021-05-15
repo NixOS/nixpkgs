@@ -1,9 +1,20 @@
 { lib
-, buildPythonPackage, fetchPypi
-, pkg-config, cython, docutils
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+, cython
+, docutils
 , kivy-garden
-, mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, gst_all_1
-, pillow, requests, pygments
+, mesa
+, mtdev
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, SDL2_mixer
+, gst_all_1
+, pillow
+, requests
+, pygments
 }:
 
 buildPythonPackage rec {

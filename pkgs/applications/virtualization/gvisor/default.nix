@@ -31,14 +31,15 @@ let
     export GOPATH=
   '';
 
-in buildBazelPackage rec {
+in
+buildBazelPackage rec {
   name = "gvisor-${version}";
   version = "2019-11-14";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo  = "gvisor";
-    rev   = "release-20191114.0";
+    repo = "gvisor";
+    rev = "release-20191114.0";
     sha256 = "0kyixjjlws9iz2r2srgpdd4rrq94vpxkmh2rmmzxd9mcqy2i9bg1";
   };
 

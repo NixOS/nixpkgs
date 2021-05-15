@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pyscard, ecdsa, pyaes
-, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyscard
+, ecdsa
+, pyaes
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pysatochip";

@@ -1,15 +1,17 @@
-{lib, stdenv, fetchurl, texinfo, texLive, perl}:
+{ lib, stdenv, fetchurl, texinfo, texLive, perl }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="asdf";
-    version="3.1.7";
-    name="${baseName}-${version}";
-    url="http://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
-    sha256="1g8wp3vi7gwrs22gnjy9lvrxqag3m8apxnryfs8n5bv6rln8bzzq";
-  };
+    rec {
+      baseName = "asdf";
+      version = "3.1.7";
+      name = "${baseName}-${version}";
+      url = "http://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
+      sha256 = "1g8wp3vi7gwrs22gnjy9lvrxqag3m8apxnryfs8n5bv6rln8bzzq";
+    };
   buildInputs = [
-    texinfo texLive perl
+    texinfo
+    texLive
+    perl
   ];
 in
 stdenv.mkDerivation {
@@ -33,8 +35,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (s) version;
     description = "Standard software-system definition library for Common Lisp";
-    license = licenses.mit ;
-    maintainers = [maintainers.raskin];
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
   };
 }

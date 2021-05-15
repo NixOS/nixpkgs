@@ -26,10 +26,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description  = "A dmenu wrapper for connmann";
-    homepage     = "https://github.com/march-linux/connman_dmenu";
-    license      = lib.licenses.free;
-    maintainers  = [ lib.maintainers.magnetophon ];
-    platforms    = lib.platforms.all;
+    description = "A dmenu wrapper for connmann";
+    homepage = "https://github.com/march-linux/connman_dmenu";
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

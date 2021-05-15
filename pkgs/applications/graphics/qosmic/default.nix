@@ -55,7 +55,8 @@ mkDerivation rec {
 
   qmakeFlags = [
     # Use pkg-config to correctly locate library paths
-    "-config" "link_pkgconfig"
+    "-config"
+    "link_pkgconfig"
   ];
 
   meta = with lib; {

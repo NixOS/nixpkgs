@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
-, libvpx, check, libconfig, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libsodium
+, ncurses
+, libopus
+, libvpx
+, check
+, libconfig
+, pkg-config
+}:
 
 stdenv.mkDerivation {
   name = "tox-core-new-20160727";
 
   src = fetchFromGitHub {
-    owner  = "irungentoo";
-    repo   = "toxcore";
-    rev    = "755f084e8720b349026c85afbad58954cb7ff1d4";
+    owner = "irungentoo";
+    repo = "toxcore";
+    rev = "755f084e8720b349026c85afbad58954cb7ff1d4";
     sha256 = "0ap1gvlyihnfivv235dbrgsxsiiz70bhlmlr5gn1027w3h5kqz8w";
   };
 
@@ -32,7 +42,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
-    autoreconfHook libsodium ncurses check libconfig
+    autoreconfHook
+    libsodium
+    ncurses
+    check
+    libconfig
   ] ++ lib.optionals (!stdenv.isAarch32) [
     libopus
   ];

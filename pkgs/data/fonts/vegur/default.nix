@@ -2,7 +2,8 @@
 
 let
   version = "0.701";
-in fetchzip {
+in
+fetchzip {
   name = "vegur-font-${version}";
 
   # Upstream doesn't version their URLs.

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, ncurses, zlib
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, zlib
 , openssl ? null
 , sslSupport ? true
 }:

@@ -1,10 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland, scdoc
-, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, swaybg
+, meson
+, ninja
+, pkg-config
+, wayland
+, scdoc
+, libxkbcommon
+, pcre
+, json_c
+, dbus
+, libevdev
+, pango
+, cairo
+, libinput
+, libcap
+, pam
+, gdk-pixbuf
+, librsvg
+, wlroots
+, wayland-protocols
+, libdrm
 , nixosTests
-# Used by the NixOS module:
+  # Used by the NixOS module:
 , isNixOS ? false
 }:
 
@@ -34,13 +54,30 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland scdoc
+    meson
+    ninja
+    pkg-config
+    wayland
+    scdoc
   ];
 
   buildInputs = [
-    wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wlroots wayland-protocols libdrm
+    wayland
+    libxkbcommon
+    pcre
+    json_c
+    dbus
+    libevdev
+    pango
+    cairo
+    libinput
+    libcap
+    pam
+    gdk-pixbuf
+    librsvg
+    wlroots
+    wayland-protocols
+    libdrm
   ];
 
   mesonFlags = [
@@ -61,10 +98,10 @@ stdenv.mkDerivation rec {
       maximizes the efficiency of your screen and can be quickly manipulated
       using only the keyboard.
     '';
-    homepage    = "https://swaywm.org";
-    changelog   = "https://github.com/swaywm/sway/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://swaywm.org";
+    changelog = "https://github.com/swaywm/sway/releases/tag/${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

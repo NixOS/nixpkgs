@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkg-config
 , glib
 , libxml2
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     python27
     libpng
     expat
-  ] ++ lib.optionals stdenv.isDarwin [ApplicationServices Foundation];
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [

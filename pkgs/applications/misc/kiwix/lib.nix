@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub
-, meson, ninja, pkg-config
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
 , python3
 , curl
 , icu

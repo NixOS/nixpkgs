@@ -1,9 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, wrapGAppsHook
-, autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkg-config
-, libICE, libSM, libXScrnSaver, libXtst, cheetah
-, gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
-, cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
-, gst-plugins-good, libsigcxx }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook
+, autoconf
+, autoconf-archive
+, automake
+, gettext
+, intltool
+, libtool
+, pkg-config
+, libICE
+, libSM
+, libXScrnSaver
+, libXtst
+, cheetah
+, gobject-introspection
+, glib
+, glibmm
+, gtkmm3
+, atk
+, pango
+, pangomm
+, cairo
+, cairomm
+, dbus
+, dbus-glib
+, gdome2
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, libsigcxx
+}:
 
 stdenv.mkDerivation rec {
   pname = "workrave";
@@ -18,12 +45,37 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf autoconf-archive automake gettext intltool libtool pkg-config wrapGAppsHook
+    autoconf
+    autoconf-archive
+    automake
+    gettext
+    intltool
+    libtool
+    pkg-config
+    wrapGAppsHook
   ];
   buildInputs = [
-    libICE libSM libXScrnSaver libXtst cheetah
-    gobject-introspection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
-    dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
+    libICE
+    libSM
+    libXScrnSaver
+    libXtst
+    cheetah
+    gobject-introspection
+    glib
+    glibmm
+    gtkmm3
+    atk
+    pango
+    pangomm
+    cairo
+    cairomm
+    dbus
+    dbus-glib
+    gdome2
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    libsigcxx
   ];
 
   preConfigure = "./autogen.sh";

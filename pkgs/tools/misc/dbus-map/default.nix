@@ -11,7 +11,9 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib procps libxml2
+    glib
+    procps
+    libxml2
   ];
   installPhase = ''
     mkdir -p $out/bin

@@ -1,9 +1,39 @@
-{ lib, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
-, fftw, flac, faad2, glibcLocales, mp4v2
-, libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
-, libGLU, libxcb, lilv, lv2, opusfile
-, pkg-config, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
-, qtx11extras, rubberband, sconsPackages, sqlite, taglib, upower, vamp-plugin-sdk
+{ lib
+, mkDerivation
+, fetchurl
+, fetchFromGitHub
+, chromaprint
+, fftw
+, flac
+, faad2
+, glibcLocales
+, mp4v2
+, libid3tag
+, libmad
+, libopus
+, libshout
+, libsndfile
+, libusb1
+, libvorbis
+, libGLU
+, libxcb
+, lilv
+, lv2
+, opusfile
+, pkg-config
+, portaudio
+, portmidi
+, protobuf
+, qtbase
+, qtscript
+, qtsvg
+, qtx11extras
+, rubberband
+, sconsPackages
+, sqlite
+, taglib
+, upower
+, vamp-plugin-sdk
 }:
 
 let
@@ -30,9 +60,37 @@ mkDerivation rec {
 
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [
-    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
-    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkg-config portaudio portmidi protobuf qtbase qtscript qtsvg
-    qtx11extras rubberband sqlite taglib upower vamp-plugin-sdk
+    chromaprint
+    fftw
+    flac
+    faad2
+    glibcLocales
+    mp4v2
+    libid3tag
+    libmad
+    libopus
+    libshout241
+    libsndfile
+    libusb1
+    libvorbis
+    libxcb
+    libGLU
+    lilv
+    lv2
+    opusfile
+    pkg-config
+    portaudio
+    portmidi
+    protobuf
+    qtbase
+    qtscript
+    qtsvg
+    qtx11extras
+    rubberband
+    sqlite
+    taglib
+    upower
+    vamp-plugin-sdk
   ];
 
   enableParallelBuilding = true;

@@ -1,12 +1,46 @@
-{ lib, stdenv, fetchurl, makeWrapper,
-  pkg-config, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
-  bash, iproute2, iptables, procps, coreutils, gnused, gawk, nss, which, python3,
-  docs ? false, xmlto, libselinux, ldns
-  }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, systemd
+, gmp
+, unbound
+, bison
+, flex
+, pam
+, libevent
+, libcap_ng
+, curl
+, nspr
+, bash
+, iproute2
+, iptables
+, procps
+, coreutils
+, gnused
+, gawk
+, nss
+, which
+, python3
+, docs ? false
+, xmlto
+, libselinux
+, ldns
+}:
 
 let
   binPath = lib.makeBinPath [
-    bash iproute2 iptables procps coreutils gnused gawk nss.tools which python3
+    bash
+    iproute2
+    iptables
+    procps
+    coreutils
+    gnused
+    gawk
+    nss.tools
+    which
+    python3
   ];
 in
 
@@ -25,7 +59,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=redundant-decls"
+    "-Wno-error=format-nonliteral"
     # these flags were added to build with gcc7
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=format-truncation"
@@ -44,10 +80,27 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ bash iproute2 iptables systemd coreutils gnused gawk gmp unbound pam libevent
-                  libcap_ng curl nspr nss python3 ldns ]
-                ++ lib.optional docs xmlto
-                ++ lib.optional stdenv.isLinux libselinux;
+  buildInputs = [
+    bash
+    iproute2
+    iptables
+    systemd
+    coreutils
+    gnused
+    gawk
+    gmp
+    unbound
+    pam
+    libevent
+    libcap_ng
+    curl
+    nspr
+    nss
+    python3
+    ldns
+  ]
+  ++ lib.optional docs xmlto
+  ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path

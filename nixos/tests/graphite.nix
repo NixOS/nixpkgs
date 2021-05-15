@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... } :
+import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "graphite";
   nodes = {
@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, ... } :
             finders = [ ];
           };
           carbon.enableCache = true;
-          seyren.enable = false;  # Implicitely requires openssl-1.0.2u which is marked insecure
+          seyren.enable = false; # Implicitely requires openssl-1.0.2u which is marked insecure
           beacon.enable = true;
         };
       };

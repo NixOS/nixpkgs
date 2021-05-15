@@ -1,13 +1,36 @@
-{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
+{ stdenv
+, writeScriptBin
+, makeWrapper
+, lib
+, fetchurl
+, git
+, cacert
+, libpng
+, libjpeg
+, libwebp
+, erlang
+, openssl
+, expat
+, libyaml
+, bash
+, gnused
+, gnugrep
+, coreutils
+, util-linux
+, procps
+, gd
 , flock
 , withMysql ? false
 , withPgsql ? false
-, withSqlite ? false, sqlite
-, withPam ? false, pam
-, withZlib ? true, zlib
+, withSqlite ? false
+, sqlite
+, withPam ? false
+, pam
+, withZlib ? true
+, zlib
 , withRiak ? false
-, withElixir ? false, elixir
+, withElixir ? false
+, elixir
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
@@ -23,7 +46,8 @@ let
 
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "20.12";
   pname = "ejabberd";
 
@@ -39,7 +63,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
     ++ lib.optional withElixir elixir
-    ;
+  ;
 
   # Apparently needed for Elixir
   LANG = "en_US.UTF-8";
@@ -80,7 +104,8 @@ in stdenv.mkDerivation rec {
   };
 
   configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
+    [
+      (lib.enableFeature withMysql "mysql")
       (lib.enableFeature withPgsql "pgsql")
       (lib.enableFeature withSqlite "sqlite")
       (lib.enableFeature withPam "pam")

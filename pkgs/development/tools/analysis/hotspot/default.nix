@@ -1,18 +1,19 @@
-{ lib,
-  mkDerivation,
-  cmake,
-  elfutils,
-  extra-cmake-modules,
-  fetchFromGitHub,
-  kconfigwidgets,
-  ki18n,
-  kio,
-  kitemmodels,
-  kitemviews,
-  kwindowsystem,
-  libelf,
-  qtbase,
-  threadweaver,
+{ lib
+, mkDerivation
+, cmake
+, elfutils
+, extra-cmake-modules
+, fetchFromGitHub
+, kconfigwidgets
+, ki18n
+, kio
+, kitemmodels
+, kitemviews
+, kwindowsystem
+, libelf
+, qtbase
+, threadweaver
+,
 }:
 
 mkDerivation rec {

@@ -4,7 +4,8 @@ let
   version = "0.15.0";
   jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
   mavenUrl = "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version jarName;
 
   name = "jmx-prometheus-httpserver-${version}";

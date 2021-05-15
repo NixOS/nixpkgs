@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
 
-  makeFlags = [ "HOME=$(out)" "RSC_PATH=$(out)/fltrator"];
+  makeFlags = [ "HOME=$(out)" "RSC_PATH=$(out)/fltrator" ];
 
   postInstall = ''
     mkdir -p $out/share/applications

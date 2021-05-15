@@ -1,5 +1,13 @@
-{ buildPythonPackage, freezegun, fetchFromGitHub, lib, pytestCheckHook
-, pytest-mock, pytestrunner, six, tornado_4 }:
+{ buildPythonPackage
+, freezegun
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, pytest-mock
+, pytestrunner
+, six
+, tornado_4
+}:
 
 buildPythonPackage rec {
   pname = "lomond";

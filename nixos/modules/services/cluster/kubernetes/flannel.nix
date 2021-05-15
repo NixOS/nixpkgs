@@ -40,8 +40,8 @@ in
 
     networking = {
       firewall.allowedUDPPorts = [
-        8285  # flannel udp
-        8472  # flannel vxlan
+        8285 # flannel udp
+        8472 # flannel vxlan
       ];
       dhcpcd.denyInterfaces = [ "mynet*" "flannel*" ];
     };
@@ -66,16 +66,16 @@ in
           resources = [ "pods" ];
           verbs = [ "get" ];
         }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes" ];
+            verbs = [ "list" "watch" ];
+          }
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes/status" ];
+            verbs = [ "patch" ];
+          }];
       };
 
       flannel-crb = {

@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, libusb1, xorg, libxml2
-, ncurses5, bluez, libmhash, gimxAuth ? "" }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, curl
+, libusb1
+, xorg
+, libxml2
+, ncurses5
+, bluez
+, libmhash
+, gimxAuth ? ""
+}:
 
 let
   gimx-config = fetchFromGitHub {
@@ -9,7 +20,8 @@ let
     sha256 = "02wcjk8da188x7y0jf3p0arjdh9zbb0lla3fxdb28b1xyybfvx5p";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gimx";
   version = "8.0";
 
@@ -23,13 +35,20 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    curl libusb1 bluez libxml2 ncurses5 libmhash
-    xorg.libX11 xorg.libXi xorg.libXext
+    curl
+    libusb1
+    bluez
+    libxml2
+    ncurses5
+    libmhash
+    xorg.libX11
+    xorg.libXi
+    xorg.libXext
   ];
 
   patches = [ ./env.patch ];
   prePatch = (if gimxAuth == "afterglow" then (import ./variant.nix).afterglow
-              else "");
+  else "");
 
   makeFlags = "build-core";
   installPhase = ''

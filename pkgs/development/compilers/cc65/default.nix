@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 }:
 
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://cc65.github.io/";

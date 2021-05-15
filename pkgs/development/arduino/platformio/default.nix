@@ -1,4 +1,3 @@
-
 { newScope, fetchFromGitHub }:
 
 let
@@ -18,4 +17,5 @@ let
     platformio-chrootenv = callPackage ./chrootenv.nix { inherit version src; };
   };
 
-in self
+in
+self

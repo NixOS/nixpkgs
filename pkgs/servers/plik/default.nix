@@ -3,14 +3,15 @@
 let
   version = "1.3.1";
 
-  programs = callPackage ./programs.nix {};
+  programs = callPackage ./programs.nix { };
 
   webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${version}/plik-${version}-linux-amd64.tar.gz";
     sha256 = "KN6cp29KKdGamYnfL3jYltx0EDx6syDPfV0jShOk7Zw=";
   };
 
-in {
+in
+{
 
   inherit (programs) plik plikd-unwrapped;
 

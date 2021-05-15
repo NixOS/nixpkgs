@@ -1,5 +1,10 @@
-{ vimUtils, vim_configurable, neovim, vimPlugins
-, lib, fetchFromGitHub,
+{ vimUtils
+, vim_configurable
+, neovim
+, vimPlugins
+, lib
+, fetchFromGitHub
+,
 }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
@@ -10,13 +15,14 @@ in
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
   vim_with_vim2nix = vim_configurable.customize {
-    name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
+    name = "vim";
+    vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
   };
 
   # test cases:
   test_vim_with_vim_nix_using_vam = vim_configurable.customize {
-   name = "vim-with-vim-addon-nix-using-vam";
-    vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
+    name = "vim-with-vim-addon-nix-using-vam";
+    vimrcConfig.vam.pluginDictionaries = [{ name = "vim-nix"; }];
   };
 
   test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {
@@ -59,7 +65,7 @@ in
           dependencies = [ "vim-nix" ];
         };
       });
-    vimrcConfig.vam.pluginDictionaries = [ { names = [ "vim-trailing-whitespace" ]; } ];
+    vimrcConfig.vam.pluginDictionaries = [{ names = [ "vim-trailing-whitespace" ]; }];
   };
 
   # system remote plugin manifest should be generated, deoplete should be usable

@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl
-, pkg-config, intltool
-, glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
-, librsvg, wrapGAppsHook
-, pulseaudioSupport ? true, libpulseaudio ? null }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, glib
+, dbus
+, gtk3
+, libappindicator-gtk3
+, gst_all_1
+, librsvg
+, wrapGAppsHook
+, pulseaudioSupport ? true
+, libpulseaudio ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "audio-recorder";
@@ -20,9 +30,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
   buildInputs = [
-    glib dbus gtk3 librsvg libappindicator-gtk3
+    glib
+    dbus
+    gtk3
+    librsvg
+    libappindicator-gtk3
   ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
   ]) ++ lib.optional pulseaudioSupport libpulseaudio;
 
   meta = with lib; {

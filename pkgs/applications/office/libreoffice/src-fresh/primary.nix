@@ -1,7 +1,7 @@
 { fetchurl }:
 
 rec {
-  fetchSrc = {name, sha256}: fetchurl {
+  fetchSrc = { name, sha256 }: fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
     inherit sha256;
   };

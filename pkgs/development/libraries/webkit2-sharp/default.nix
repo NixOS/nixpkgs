@@ -1,13 +1,13 @@
-{
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  gtk-sharp-3_0,
-  lib,
-  libxslt,
-  mono,
-  pkg-config,
-  webkitgtk,
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, gtk-sharp-3_0
+, lib
+, libxslt
+, mono
+, pkg-config
+, webkitgtk
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   ac_cv_path_MONODOCER = "no";
-  installFlagsArray = ["GAPIXMLDIR=/tmp/gapixml"];
+  installFlagsArray = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
   passthru = {
     inherit webkitgtk;

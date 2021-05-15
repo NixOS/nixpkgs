@@ -19,7 +19,7 @@ with lib;
 
       programs.xss-lock = {
         enable = true;
-        extraOptions = [ "-n" "${pkgs.libnotify}/bin/notify-send 'About to sleep!'"];
+        extraOptions = [ "-n" "${pkgs.libnotify}/bin/notify-send 'About to sleep!'" ];
         lockerCommand = "${pkgs.xlockmore}/bin/xlock -mode ant";
       };
     };

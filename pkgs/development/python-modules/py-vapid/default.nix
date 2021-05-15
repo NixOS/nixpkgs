@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, flake8, mock, nose, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, mock
+, nose
+, pytest
 , cryptography
 }:
 

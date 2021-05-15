@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kcat/alure";
     license = licenses.zlib;
     platforms = platforms.linux;
-    maintainers  = with maintainers; [ McSinyx ];
+    maintainers = with maintainers; [ McSinyx ];
   };
 }

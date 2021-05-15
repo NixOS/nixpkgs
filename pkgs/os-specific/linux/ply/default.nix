@@ -4,7 +4,8 @@ assert kernel != null -> lib.versionAtLeast kernel.version "4.0";
 
 let
   version = "1.0.beta1-9e810b1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ply";
   inherit version;
   nativeBuildInputs = [ autoreconfHook flex bison p7zip rsync ];

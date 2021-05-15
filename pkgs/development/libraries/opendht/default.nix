@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
-, asio, nettle, gnutls, msgpack, readline, libargon2
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, asio
+, nettle
+, gnutls
+, msgpack
+, readline
+, libargon2
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ cmake
+    [
+      cmake
       pkg-config
     ];
 
   buildInputs =
-    [ asio
+    [
+      asio
       nettle
       gnutls
       msgpack
@@ -32,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C++11 Kademlia distributed hash table implementation";
-    homepage    = "https://github.com/savoirfairelinux/opendht";
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/savoirfairelinux/opendht";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

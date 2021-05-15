@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkg-config, popt }:
+{ lib
+, stdenv
+, fetchurl
+, lvm2
+, json_c
+, openssl
+, libuuid
+, pkg-config
+, popt
+}:
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";

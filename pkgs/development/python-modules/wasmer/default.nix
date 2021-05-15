@@ -6,7 +6,8 @@
 let
   pname = "wasmer";
   version = "1.0.0";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   inherit pname version;
 
   src = fetchFromGitHub {

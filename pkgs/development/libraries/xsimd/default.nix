@@ -26,7 +26,8 @@ let
     rev = version;
     sha256 = "0c9pq5vz43j99z83w3b9qylfi66mn749k1afpv5cwfxggbxvy63f";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "xsimd";
   inherit version;
   src = if stdenv.hostPlatform.isDarwin then darwin_src else src;
@@ -38,13 +39,15 @@ in stdenv.mkDerivation {
   doCheck = true;
   checkInputs = [ gtest ];
   checkTarget = "xtest";
-  GTEST_FILTER = let
+  GTEST_FILTER =
+    let
       # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
       filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
         "error_gamma_test/sse_double.gamma"
         "error_gamma_test/avx_double.gamma"
       ];
-    in "-${builtins.concatStringsSep ":" filteredTests}";
+    in
+    "-${builtins.concatStringsSep ":" filteredTests}";
 
   meta = with lib; {
     description = "C++ wrappers for SIMD intrinsics";

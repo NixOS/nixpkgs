@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
-  # Darwin
-  libiconv, CoreFoundation, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, libzip
+, gnupg
+, # Darwin
+  libiconv
+, CoreFoundation
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sit";

@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   # skip tests which require being online to download test vectors
   pytestFlags = [
-     "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
-     "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
+    "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
+    "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
   ];
 
   # skip tests for now, they fail with

@@ -18,7 +18,7 @@
 , pkg-config
 , allowPgo ? true
 , python3  # for PGO
-# for clang stdenv check
+  # for clang stdenv check
 , foot
 , llvmPackages
 , llvmPackages_latest

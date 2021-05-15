@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , autoreconfHook
 
 }:
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
   };
 
-  patches = [];
+  patches = [ ];
 
   outputs = [ "out" "dev" "man" "info" ];
 

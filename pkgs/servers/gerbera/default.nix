@@ -1,24 +1,46 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
-# required
-, libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt
-# options
-, enableDuktape ? true, duktape
-, enableCurl ? true, curl
-, enableTaglib ? true, taglib
-, enableLibmagic ? true, file
-, enableLibmatroska ? true, libmatroska, libebml
-, enableAvcodec ? false, ffmpeg
-, enableLibexif ? true, libexif
-, enableExiv2 ? false, exiv2
-, enableFFmpegThumbnailer ? false, ffmpegthumbnailer
-, enableInotifyTools ? true, inotify-tools
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+  # required
+, libupnp
+, libuuid
+, pugixml
+, libiconv
+, sqlite
+, zlib
+, spdlog
+, fmt
+  # options
+, enableDuktape ? true
+, duktape
+, enableCurl ? true
+, curl
+, enableTaglib ? true
+, taglib
+, enableLibmagic ? true
+, file
+, enableLibmatroska ? true
+, libmatroska
+, libebml
+, enableAvcodec ? false
+, ffmpeg
+, enableLibexif ? true
+, libexif
+, enableExiv2 ? false
+, exiv2
+, enableFFmpegThumbnailer ? false
+, ffmpegthumbnailer
+, enableInotifyTools ? true
+, inotify-tools
 }:
 
 with lib;
 let
   optionOnOff = option: if option then "on" else "off";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gerbera";
   version = "1.8.0";
 
@@ -47,7 +69,13 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libupnp libuuid pugixml libiconv sqlite zlib fmt.dev
+    libupnp
+    libuuid
+    pugixml
+    libiconv
+    sqlite
+    zlib
+    fmt.dev
     spdlog
   ]
   ++ optionals enableDuktape [ duktape ]

@@ -1,5 +1,14 @@
-{ qtModule, lib, stdenv, qtbase, qtdeclarative, pkg-config
-, alsaLib, gstreamer, gst-plugins-base, libpulseaudio, wayland
+{ qtModule
+, lib
+, stdenv
+, qtbase
+, qtdeclarative
+, pkg-config
+, alsaLib
+, gstreamer
+, gst-plugins-base
+, libpulseaudio
+, wayland
 }:
 
 with lib;

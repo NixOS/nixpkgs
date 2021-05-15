@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A multiplayer X11 space combat game (server part)";
     homepage = "http://bloodspilot.sf.net/";
-    license = licenses.gpl2Plus ;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

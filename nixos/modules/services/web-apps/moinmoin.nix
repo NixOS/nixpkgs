@@ -105,7 +105,7 @@ in
 
           superUsers = mkOption {
             type = listOf str;
-            default = [];
+            default = [ ];
             example = [ "elvis" ];
             description = ''
               List of trusted user names with wiki system administration super powers.
@@ -176,7 +176,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = forEach (attrNames cfg.wikis) (wname:
-      { assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
+      {
+        assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
         message = "${wname} is not valid Python identifier";
       }
     );
@@ -208,14 +209,16 @@ in
             restartIfChanged = true;
             restartTriggers = [ (wikiConfigFile wikiIdent wiki) ];
 
-            environment = let
-              penv = python.buildEnv.override {
-                # setuptools: https://github.com/benoitc/gunicorn/issues/1716
-                extraLibs = [ python.pkgs.eventlet python.pkgs.setuptools pkg ];
+            environment =
+              let
+                penv = python.buildEnv.override {
+                  # setuptools: https://github.com/benoitc/gunicorn/issues/1716
+                  extraLibs = [ python.pkgs.eventlet python.pkgs.setuptools pkg ];
+                };
+              in
+              {
+                PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
               };
-            in {
-              PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
-            };
 
             preStart = ''
               umask 0007

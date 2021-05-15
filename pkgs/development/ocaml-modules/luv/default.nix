@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl
-, ctypes, result
+{ lib
+, buildDunePackage
+, fetchurl
+, ctypes
+, result
 , alcotest
 , file
 }:

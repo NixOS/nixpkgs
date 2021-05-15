@@ -3,41 +3,45 @@
 with lib;
 
 let
-  package = if cfg.allowAuxiliaryImperativeNetworks
+  package =
+    if cfg.allowAuxiliaryImperativeNetworks
     then pkgs.wpa_supplicant_ro_ssids
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
-    ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
-      update_config=1''}
-    ${cfg.extraConfig}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
-      key = if psk != null
-        then ''"${psk}"''
-        else pskRaw;
-      baseAuth = if key != null
-        then "psk=${key}"
-        else "key_mgmt=NONE";
-    in ''
-      network={
-        ssid="${ssid}"
-        ${optionalString (priority != null) ''priority=${toString priority}''}
-        ${optionalString hidden "scan_ssid=1"}
-        ${if (auth != null) then auth else baseAuth}
-        ${extraConfig}
-      }
-    '') cfg.networks)}
-  '' else "/etc/wpa_supplicant.conf";
-in {
+  configFile =
+    if cfg.networks != { } || cfg.extraConfig != "" || cfg.userControlled.enable then
+      pkgs.writeText "wpa_supplicant.conf" ''
+        ${optionalString cfg.userControlled.enable ''
+          ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+          update_config=1''}
+        ${cfg.extraConfig}
+        ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
+          key = if psk != null
+            then ''"${psk}"''
+            else pskRaw;
+          baseAuth = if key != null
+            then "psk=${key}"
+            else "key_mgmt=NONE";
+        in ''
+          network={
+            ssid="${ssid}"
+            ${optionalString (priority != null) ''priority=${toString priority}''}
+            ${optionalString hidden "scan_ssid=1"}
+            ${if (auth != null) then auth else baseAuth}
+            ${extraConfig}
+          }
+        '') cfg.networks)}
+      '' else "/etc/wpa_supplicant.conf";
+in
+{
   options = {
     networking.wireless = {
       enable = mkEnableOption "wpa_supplicant";
 
       interfaces = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "wlan0" "wlan1" ];
         description = ''
           The interfaces <command>wpa_supplicant</command> will use. If empty, it will
@@ -165,7 +169,7 @@ in {
            parameter is left empty wpa_supplicant will use
           /etc/wpa_supplicant.conf as the configuration file.
         '';
-        default = {};
+        default = { };
         example = literalExample ''
           { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";
@@ -231,47 +235,52 @@ in {
     services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
-    systemd.services.wpa_supplicant = let
-      ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
-    in {
-      description = "WPA Supplicant";
+    systemd.services.wpa_supplicant =
+      let
+        ifaces = cfg.interfaces;
+        deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
+      in
+      {
+        description = "WPA Supplicant";
 
-      after = lib.concatMap deviceUnit ifaces;
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      requires = lib.concatMap deviceUnit ifaces;
-      wantedBy = [ "multi-user.target" ];
-      stopIfChanged = false;
+        after = lib.concatMap deviceUnit ifaces;
+        before = [ "network.target" ];
+        wants = [ "network.target" ];
+        requires = lib.concatMap deviceUnit ifaces;
+        wantedBy = [ "multi-user.target" ];
+        stopIfChanged = false;
 
-      path = [ package ];
+        path = [ package ];
 
-      script = let
-        configStr = if cfg.allowAuxiliaryImperativeNetworks
-          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-          else "-c ${configFile}";
-      in ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
-        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
-        iface_args="-s -u -D${cfg.driver} ${configStr}"
-        ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
+        script =
+          let
+            configStr =
+              if cfg.allowAuxiliaryImperativeNetworks
+              then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+              else "-c ${configFile}";
+          in
+          ''
+            if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+            then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
             fi
-          done
-        '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
-        exec wpa_supplicant $args
-      '';
-    };
+            iface_args="-s -u -D${cfg.driver} ${configStr}"
+            ${if ifaces == [] then ''
+              for i in $(cd /sys/class/net && echo *); do
+                DEVTYPE=
+                UEVENT_PATH=/sys/class/net/$i/uevent
+                if [ -e "$UEVENT_PATH" ]; then
+                  source "$UEVENT_PATH"
+                  if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                    args+="''${args:+ -N} -i$i $iface_args"
+                  fi
+                fi
+              done
+            '' else ''
+              args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
+            ''}
+            exec wpa_supplicant $args
+          '';
+      };
 
     powerManagement.resumeCommands = ''
       /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
+{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }:
+let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
@@ -47,7 +48,8 @@
         maintainers = with maintainers; [ das_j ];
       };
     });
-in {
+in
+{
   rainloop-community = common {
     edition = "community";
     sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";

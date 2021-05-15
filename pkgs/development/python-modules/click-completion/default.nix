@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k,
-  click, jinja2, shellingham, six
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, click
+, jinja2
+, shellingham
+, six
 }:
 
 buildPythonPackage rec {

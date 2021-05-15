@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libpthreadstubs, libXau, libXdmcp
-, libXext, libvdpau, glib, libva, ffmpeg_3, libGLU }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libX11
+, libpthreadstubs
+, libXau
+, libXdmcp
+, libXext
+, libvdpau
+, glib
+, libva
+, ffmpeg_3
+, libGLU
+}:
 
 stdenv.mkDerivation rec {
   pname = "libvdpau-va-gl";

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper
-, coreutils, gawk, which, gnugrep, findutils
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, coreutils
+, gawk
+, which
+, gnugrep
+, findutils
 , jdk
 }:
 
@@ -33,7 +41,7 @@ stdenv.mkDerivation {
     description = "Open source Geographic Information System (GIS) written in the Java programming language";
     homepage = "http://www.openjump.org/index.html";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

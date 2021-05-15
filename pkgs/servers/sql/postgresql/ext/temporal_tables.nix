@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "mlt";
-    repo   = pname;
-    rev    = "6cc86eb03d618d6b9fc09ae523f1a1e5228d22b5";
+    owner = "mlt";
+    repo = pname;
+    rev = "6cc86eb03d618d6b9fc09ae523f1a1e5228d22b5";
     sha256 = "0ykv37rm511n5955mbh9dcp7pgg88z1nwgszav7z6pziaj3nba8x";
   };
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Temporal Tables PostgreSQL Extension ";
-    homepage    = "https://github.com/mlt/temporal_tables";
+    homepage = "https://github.com/mlt/temporal_tables";
     maintainers = with maintainers; [ ggpeti ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.bsd2;
+    platforms = postgresql.meta.platforms;
+    license = licenses.bsd2;
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "vscodium";
@@ -8,19 +8,19 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   machine = { ... }:
 
-  {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+    {
+      imports = [
+        ./common/user-account.nix
+        ./common/x11.nix
+      ];
 
-    virtualisation.memorySize = 2047;
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = with pkgs; [
-      vscodium
-    ];
-  };
+      virtualisation.memorySize = 2047;
+      services.xserver.enable = true;
+      test-support.displayManager.auto.user = "alice";
+      environment.systemPackages = with pkgs; [
+        vscodium
+      ];
+    };
 
   enableOCR = true;
 

@@ -7,7 +7,8 @@ let
         (lib.mapAttrsToList (name: path: "ln -s ${path} $out/${name}\n") rubies)}
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "chruby";
 
   version = "0.3.9";

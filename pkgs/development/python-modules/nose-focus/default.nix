@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
-, nose-pattern-exclude, which }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, nose
+, nose-of-yeti
+, nose-pattern-exclude
+, which
+}:
 
 buildPythonPackage rec {
   pname = "nose-focus";

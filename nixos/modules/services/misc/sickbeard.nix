@@ -25,7 +25,7 @@ in
         type = types.package;
         default = pkgs.sickbeard;
         example = literalExample "pkgs.sickrage";
-        description =''
+        description = ''
           Enable <literal>pkgs.sickrage</literal> or <literal>pkgs.sickgear</literal>
           as an alternative to SickBeard
         '';
@@ -79,7 +79,7 @@ in
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {

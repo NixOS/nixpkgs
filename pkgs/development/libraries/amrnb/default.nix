@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "amrnb-11.0.0.0";

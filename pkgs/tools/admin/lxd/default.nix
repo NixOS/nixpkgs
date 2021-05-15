@@ -1,8 +1,31 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
-, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
+{ lib
+, hwdata
+, pkg-config
+, lxc
+, buildGoPackage
+, fetchurl
+, makeWrapper
+, acl
+, rsync
+, gnutar
+, xz
+, btrfs-progs
+, gzip
+, dnsmasq
+, squashfsTools
+, iproute2
+, iptables
+, ebtables
+, iptables-nftables-compat
+, libcap
+, libco-canonical
+, dqlite
+, raft-canonical
+, sqlite-replication
+, udev
+, writeShellScriptBin
+, apparmor-profiles
+, apparmor-parser
 , criu
 , bash
 , installShellFiles
@@ -10,10 +33,11 @@
 }:
 
 let
-  networkPkgs = if nftablesSupport then
-    [ iptables-nftables-compat ]
-  else
-    [ iptables ebtables ];
+  networkPkgs =
+    if nftablesSupport then
+      [ iptables-nftables-compat ]
+    else
+      [ iptables ebtables ];
 
 in
 buildGoPackage rec {
@@ -59,8 +83,16 @@ buildGoPackage rec {
   '';
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    libco-canonical.dev
+    dqlite.dev
+    raft-canonical.dev
+    sqlite-replication
+    udev.dev
+  ];
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

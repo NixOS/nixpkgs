@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   gpgKeyring = (pkgs.runCommand "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
     mkdir -p $out
@@ -31,7 +31,8 @@ let
     cp -R ${gpgKeyring}/* $GNUPGHOME
     gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
   '');
-in {
+in
+{
   name = "systemd-nspawn";
 
   nodes = {

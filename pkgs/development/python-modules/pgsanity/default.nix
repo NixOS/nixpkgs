@@ -2,7 +2,8 @@
 , python
 , fetchPypi
 , buildPythonPackage
-, postgresql }:
+, postgresql
+}:
 
 buildPythonPackage rec {
   pname = "pgsanity";

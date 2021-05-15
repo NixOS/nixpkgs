@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, autoreconfHook}:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 stdenv.mkDerivation {
   name = "pwgen-2.08";
 

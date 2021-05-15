@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
+{ stdenv, lib, fetchFromGitLab, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, fetch
+, fetchpatch
+, cmake
+, python3
+, libcxxabi
+, llvm
+, fixDarwinDylibNames
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -36,12 +45,12 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
-      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+  ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+  ++ lib.optional stdenv.hostPlatform.isWasm [
+    "-DLIBCXX_ENABLE_THREADS=OFF"
+    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   passthru = {
     isLLVM = true;

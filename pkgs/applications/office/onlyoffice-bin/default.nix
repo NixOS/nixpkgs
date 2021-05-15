@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-# Alphabetic ordering below
+  # Alphabetic ordering below
 , alsaLib
 , at-spi2-atk
 , atk
@@ -59,7 +59,7 @@ let
       let
         version = "v20201206-cjk";
       in
-        "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
+      "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
     sha256 = "sha256-aJXSVNJ+p6wMAislXUn4JQilLhimNSedbc9nAuPVxo4=";
   };
 
@@ -70,7 +70,8 @@ let
     pulseaudio
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "onlyoffice-desktopeditors";
   version = "6.1.0";
   minor = "90";

@@ -1,8 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , fetchzip
-, SDL2, SDL2_mixer, SDL2_net
-, gtk3, gobject-introspection
+, SDL2
+, SDL2_mixer
+, SDL2_net
+, gtk3
+, gobject-introspection
 , python3Packages
 , wrapGAppsHook
 }:
@@ -47,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "cute, true multiplayer platform game with bunnies";
-    homepage    = "https://libregames.gitlab.io/jumpnbump/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://libregames.gitlab.io/jumpnbump/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

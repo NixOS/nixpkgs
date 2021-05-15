@@ -8,7 +8,9 @@ stdenv.mkDerivation {
   inherit version;
 
   buildInputs = [
-    libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc)
+    libelf
+    stdenv.cc.libc
+    (lib.getOutput "static" stdenv.cc.libc)
   ];
 
   src = fetchurl {

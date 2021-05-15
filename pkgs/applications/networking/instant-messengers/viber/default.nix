@@ -1,7 +1,33 @@
-{fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
- harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+{ fetchurl
+, lib
+, stdenv
+, dpkg
+, makeWrapper
+, alsaLib
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, glib
+, gst_all_1
+, harfbuzz
+, libcap
+, libGL
+, libGLU
+, libpulseaudio
+, libxkbcommon
+, libxml2
+, libxslt
+, nspr
+, nss
+, openssl
+, systemd
+, wayland
+, xorg
+, zlib
+, ...
 }:
 
 stdenv.mkDerivation {
@@ -19,49 +45,50 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   libPath = lib.makeLibraryPath [
-      alsaLib
-      cups
-      curl
-      dbus
-      expat
-      fontconfig
-      freetype
-      glib
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      harfbuzz
-      libcap
-      libGLU libGL
-      libpulseaudio
-      libxkbcommon
-      libxml2
-      libxslt
-      nspr
-      nss
-      openssl
-      stdenv.cc.cc
-      systemd
-      wayland
-      zlib
+    alsaLib
+    cups
+    curl
+    dbus
+    expat
+    fontconfig
+    freetype
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    harfbuzz
+    libcap
+    libGLU
+    libGL
+    libpulseaudio
+    libxkbcommon
+    libxml2
+    libxslt
+    nspr
+    nss
+    openssl
+    stdenv.cc.cc
+    systemd
+    wayland
+    zlib
 
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
   ]
   ;
 

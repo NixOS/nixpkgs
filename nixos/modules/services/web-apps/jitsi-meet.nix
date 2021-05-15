@@ -17,7 +17,8 @@ let
         process.stdout.write(JSON.stringify(eval(process.argv[3])));
       '';
       userJson = pkgs.writeText "user.json" (builtins.toJSON userCfg);
-    in (pkgs.runCommand "${varName}.js" { } ''
+    in
+    (pkgs.runCommand "${varName}.js" { } ''
       ${pkgs.nodejs}/bin/node ${extractor} ${source} ${varName} > default.json
       (
         echo "var ${varName} = "
@@ -220,7 +221,7 @@ in
       SupplementaryGroups = [ "jitsi-meet" ];
     };
 
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
     systemd.tmpfiles.rules = [
       "d '/var/lib/jitsi-meet' 0750 root jitsi-meet - -"
     ];
@@ -232,43 +233,44 @@ in
         Type = "oneshot";
       };
 
-      script = let
-        secrets = [ "jicofo-component-secret" "jicofo-user-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
-        videobridgeSecret = if cfg.videobridge.passwordFile != null then cfg.videobridge.passwordFile else "/var/lib/jitsi-meet/videobridge-secret";
-      in
-      ''
-        cd /var/lib/jitsi-meet
-        ${concatMapStringsSep "\n" (s: ''
-          if [ ! -f ${s} ]; then
-            tr -dc a-zA-Z0-9 </dev/urandom | head -c 64 > ${s}
-            chown root:jitsi-meet ${s}
-            chmod 640 ${s}
+      script =
+        let
+          secrets = [ "jicofo-component-secret" "jicofo-user-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+          videobridgeSecret = if cfg.videobridge.passwordFile != null then cfg.videobridge.passwordFile else "/var/lib/jitsi-meet/videobridge-secret";
+        in
+        ''
+          cd /var/lib/jitsi-meet
+          ${concatMapStringsSep "\n" (s: ''
+            if [ ! -f ${s} ]; then
+              tr -dc a-zA-Z0-9 </dev/urandom | head -c 64 > ${s}
+              chown root:jitsi-meet ${s}
+              chmod 640 ${s}
+            fi
+          '') secrets}
+
+          # for easy access in prosody
+          echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
+          chown root:jitsi-meet secrets-env
+          chmod 640 secrets-env
+        ''
+        + optionalString cfg.prosody.enable ''
+          ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
+          ${config.services.prosody.package}/bin/prosodyctl register jvb auth.${cfg.hostName} "$(cat ${videobridgeSecret})"
+
+          # generate self-signed certificates
+          if [ ! -f /var/lib/jitsi-meet.crt ]; then
+            ${getBin pkgs.openssl}/bin/openssl req \
+              -x509 \
+              -newkey rsa:4096 \
+              -keyout /var/lib/jitsi-meet/jitsi-meet.key \
+              -out /var/lib/jitsi-meet/jitsi-meet.crt \
+              -days 36500 \
+              -nodes \
+              -subj '/CN=${cfg.hostName}/CN=auth.${cfg.hostName}'
+            chmod 640 /var/lib/jitsi-meet/jitsi-meet.{crt,key}
+            chown root:jitsi-meet /var/lib/jitsi-meet/jitsi-meet.{crt,key}
           fi
-        '') secrets}
-
-        # for easy access in prosody
-        echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
-        chown root:jitsi-meet secrets-env
-        chmod 640 secrets-env
-      ''
-      + optionalString cfg.prosody.enable ''
-        ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
-        ${config.services.prosody.package}/bin/prosodyctl register jvb auth.${cfg.hostName} "$(cat ${videobridgeSecret})"
-
-        # generate self-signed certificates
-        if [ ! -f /var/lib/jitsi-meet.crt ]; then
-          ${getBin pkgs.openssl}/bin/openssl req \
-            -x509 \
-            -newkey rsa:4096 \
-            -keyout /var/lib/jitsi-meet/jitsi-meet.key \
-            -out /var/lib/jitsi-meet/jitsi-meet.crt \
-            -days 36500 \
-            -nodes \
-            -subj '/CN=${cfg.hostName}/CN=auth.${cfg.hostName}'
-          chmod 640 /var/lib/jitsi-meet/jitsi-meet.{crt,key}
-          chown root:jitsi-meet /var/lib/jitsi-meet/jitsi-meet.{crt,key}
-        fi
-      '';
+        '';
     };
 
     services.nginx = mkIf cfg.nginx.enable {

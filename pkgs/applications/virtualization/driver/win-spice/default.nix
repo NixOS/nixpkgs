@@ -27,7 +27,7 @@ let
   };
 in
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   # use version number of qxlwddm as qxlwddm is the most important component
   name = "win-spice-0.11";
   version = "0.11";
@@ -45,7 +45,7 @@ stdenv.mkDerivation  {
 
     mkdir -p qxlwddm
     (cd qxlwddm; ${p7zip}/bin/7z x ${src_qxlwddm}; mv Win8 w8.1; cd w8.1; mv x64 amd64)
-    '';
+  '';
 
   installPhase =
     let
@@ -58,7 +58,7 @@ stdenv.mkDerivation  {
       copy_vioserial = arch: "mkdir -p $out/${arch}/vioserial; cp ${win-virtio}/${arch}/vioserial/* $out/${arch}/vioserial/. \n";
       copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch);
     in
-      (copy "amd64" "w8.1") + (copy "x86" "w8.1");
+    (copy "amd64" "w8.1") + (copy "x86" "w8.1");
 
   meta = with lib; {
     description = "Windows SPICE Drivers";

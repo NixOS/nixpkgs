@@ -5,9 +5,10 @@ with lib;
 let inherit (pkgs) writeScript; in
 
 let
- pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  pkgs2storeContents = l: map (x: { object = x; symlink = "none"; }) l;
 
-in {
+in
+{
   # Docker image config.
   imports = [
     ../installer/cd-dvd/channel.nix
@@ -34,9 +35,9 @@ in {
     # Some container managers like lxc need these
     extraCommands =
       let script = writeScript "extra-commands.sh" ''
-            rm etc
-            mkdir -p proc sys dev etc
-          '';
+        rm etc
+        mkdir -p proc sys dev etc
+      '';
       in script;
   };
 

@@ -12,8 +12,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   substituteInPlace setup.py \
-     --replace "loguru==0.4.1" "loguru~=0.5.0"
+    substituteInPlace setup.py \
+      --replace "loguru==0.4.1" "loguru~=0.5.0"
   '';
 
   propagatedBuildInputs = [ alsaUtils libnotify loguru which ];

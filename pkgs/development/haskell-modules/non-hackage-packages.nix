@@ -25,15 +25,15 @@ self: super: {
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 
   # cabal2nix --revision <rev> https://github.com/hasura/ci-info-hs.git
-  ci-info = self.callPackage ../misc/haskell/hasura/ci-info {};
+  ci-info = self.callPackage ../misc/haskell/hasura/ci-info { };
   # cabal2nix --revision <rev> https://github.com/hasura/pg-client-hs.git
-  pg-client = self.callPackage ../misc/haskell/hasura/pg-client {};
+  pg-client = self.callPackage ../misc/haskell/hasura/pg-client { };
   # cabal2nix --revision <rev> https://github.com/hasura/graphql-parser-hs.git
-  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser {};
+  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser { };
   # cabal2nix  --subpath server --maintainer offline --no-check --revision 1.2.1 https://github.com/hasura/graphql-engine.git
-  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine {};
+  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine { };
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
-  hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+  hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix { };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nixosTests
 
-# Dependencies
+  # Dependencies
 , cmake
 , libjpeg_turbo
 , makeWrapper

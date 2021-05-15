@@ -1,7 +1,15 @@
 { lib
-, buildPackages, pkgs, targetPackages
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, stdenv, splicePackages, newScope
+, buildPackages
+, pkgs
+, targetPackages
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, stdenv
+, splicePackages
+, newScope
 }:
 
 let
@@ -10,12 +18,13 @@ let
     selfBuildHost = pkgsBuildHost.darwin;
     selfBuildTarget = pkgsBuildTarget.darwin;
     selfHostHost = pkgsHostHost.darwin;
-    selfTargetTarget = pkgsTargetTarget.darwin or {}; # might be missing
+    selfTargetTarget = pkgsTargetTarget.darwin or { }; # might be missing
   };
 
 in
 
-lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: { }) (spliced: spliced.apple_sdk.frameworks) (self:
+let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -35,7 +44,7 @@ impure-cmds // apple-source-releases // {
   inherit apple_sdk;
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ ];
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
@@ -70,8 +79,7 @@ impure-cmds // apple-source-releases // {
 
   print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-  };
+  maloader = callPackage ../os-specific/darwin/maloader { };
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
@@ -111,9 +119,9 @@ impure-cmds // apple-source-releases // {
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
-  libtapi = callPackage ../os-specific/darwin/libtapi {};
+  libtapi = callPackage ../os-specific/darwin/libtapi { };
 
-  ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
+  ios-deploy = callPackage ../os-specific/darwin/ios-deploy { };
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 

@@ -7,7 +7,7 @@ buildGoModule rec {
   vendorSha256 = "0ls6d5ijl8bbh48w0i30mwd4a4na93iw9xqpbw23lnb8pvskaggh";
 
   patches = [
-      ./test.patch
+    ./test.patch
   ];
 
   src = fetchFromGitHub {

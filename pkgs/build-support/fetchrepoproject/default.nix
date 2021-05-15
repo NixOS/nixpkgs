@@ -1,9 +1,17 @@
 { lib, stdenvNoCC, gitRepo, cacert, copyPathsToStore }:
 
-{ name, manifest, rev ? "HEAD", sha256
-# Optional parameters:
-, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? "", manifestName ? ""
-, localManifests ? [], createMirror ? false, useArchive ? false
+{ name
+, manifest
+, rev ? "HEAD"
+, sha256
+  # Optional parameters:
+, repoRepoURL ? ""
+, repoRepoRev ? ""
+, referenceDir ? ""
+, manifestName ? ""
+, localManifests ? [ ]
+, createMirror ? false
+, useArchive ? false
 }:
 
 assert repoRepoRev != "" -> repoRepoURL != "";
@@ -29,7 +37,8 @@ let
 
   local_manifests = copyPathsToStore localManifests;
 
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   inherit name;
 
   inherit cacert manifest rev repoRepoURL repoRepoRev referenceDir; # TODO
@@ -42,7 +51,8 @@ in stdenvNoCC.mkDerivation {
   enableParallelBuilding = true;
 
   impureEnvVars = fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+    "GIT_PROXY_COMMAND"
+    "SOCKS_SERVER"
   ];
 
   nativeBuildInputs = [ gitRepo cacert ];

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, udev, runtimeShellPackage,
-runtimeShell }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, udev
+, runtimeShellPackage
+, runtimeShell
+}:
 
 stdenv.mkDerivation rec {
   # when updating this to >=7, check, see previous reverts:

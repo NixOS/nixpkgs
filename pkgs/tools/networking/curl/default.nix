@@ -1,16 +1,31 @@
-{ stdenv, lib, fetchurl, pkg-config, perl
-, http2Support ? true, nghttp2
-, idnSupport ? false, libidn ? null
-, ldapSupport ? false, openldap ? null
-, zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
-, gnutlsSupport ? false, gnutls ? null
-, wolfsslSupport ? false, wolfssl ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, perl
+, http2Support ? true
+, nghttp2
+, idnSupport ? false
+, libidn ? null
+, ldapSupport ? false
+, openldap ? null
+, zlibSupport ? true
+, zlib ? null
+, sslSupport ? zlibSupport
+, openssl ? null
+, gnutlsSupport ? false
+, gnutls ? null
+, wolfsslSupport ? false
+, wolfssl ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin
+, libssh2 ? null
 , # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5 ? null
-, c-aresSupport ? false, c-ares ? null
-, brotliSupport ? false, brotli ? null
+  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
+, libkrb5 ? null
+, c-aresSupport ? false
+, c-ares ? null
+, brotliSupport ? false
+, brotli ? null
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -80,31 +95,31 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      "--without-ca-bundle"
-      "--without-ca-path"
-      # The build fails when using wolfssl with --with-ca-fallback
-      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
-      "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
-      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
-      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
-      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
-      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
-      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
-    ]
-    ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
-    ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
-       # For the 'urandom', maybe it should be a cross-system option
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "--with-random=/dev/urandom"
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "--disable-shared"
-      "--enable-static"
-    ];
+    # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
+    # to nss-cacert from the default profile.
+    "--without-ca-bundle"
+    "--without-ca-path"
+    # The build fails when using wolfssl with --with-ca-fallback
+    (if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
+    "--disable-manual"
+    (if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl")
+    (if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls")
+    (if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2")
+    (if ldapSupport then "--enable-ldap" else "--disable-ldap")
+    (if ldapSupport then "--enable-ldaps" else "--disable-ldaps")
+    (if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn")
+    (if brotliSupport then "--with-brotli" else "--without-brotli")
+  ]
+  ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+  ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
+  ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+  # For the 'urandom', maybe it should be a cross-system option
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--with-random=/dev/urandom"
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "--disable-shared"
+    "--enable-static"
+  ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
@@ -130,7 +145,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = "https://curl.haxx.se/";
+    homepage = "https://curl.haxx.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;

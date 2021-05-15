@@ -8,10 +8,12 @@ stdenv.mkDerivation {
     sha256 = "0jhzgiypmh6hwsv1zpiq77fi0cvcmwbiy5x0yg7mz6p3dh1dmkns";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocaml-inifiles/ocaml-inifiles.1.2/files/ocaml-inifiles.diff";
-    sha256 = "037kk3172s187w8vwsykdxlpklxzc7m7np57sapk499d8adzdgwn";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocaml-inifiles/ocaml-inifiles.1.2/files/ocaml-inifiles.diff";
+      sha256 = "037kk3172s187w8vwsykdxlpklxzc7m7np57sapk499d8adzdgwn";
+    })
+  ];
 
   buildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ocaml_pcre ];

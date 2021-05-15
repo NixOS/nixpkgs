@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gnome
-, iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, gnome
+, iconnamingutils
+, gtk3
+, gdk-pixbuf
+, librsvg
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";

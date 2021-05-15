@@ -11,8 +11,8 @@ stdenv.mkDerivation {
     sha256 = "9c850aee90d7e59de834f83e09fa6e3e51b123f06e265ead70957608ada95441";
   };
 
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [gtk2 glib pidgin];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 glib pidgin ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   postPatch = ''

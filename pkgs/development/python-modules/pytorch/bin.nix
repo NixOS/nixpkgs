@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchurl
 , isPy37
@@ -19,7 +20,8 @@ let
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
   version = "1.8.1";
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version;
 
   pname = "pytorch";
@@ -49,15 +51,17 @@ in buildPythonPackage {
     rm -rf $out/bin
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in ''
-    find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      echo "setting rpath for $lib..."
-      patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torch/lib" "$lib"
-      addOpenGLRunpath "$lib"
-    done
-  '';
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+    in
+    ''
+      find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+        echo "setting rpath for $lib..."
+        patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torch/lib" "$lib"
+        addOpenGLRunpath "$lib"
+      done
+    '';
 
   pythonImportsCheck = [ "torch" ];
 

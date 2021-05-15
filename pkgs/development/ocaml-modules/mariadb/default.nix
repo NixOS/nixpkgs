@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildOasisPackage
-, ctypes, mariadb, libmysqlclient }:
+{ lib
+, fetchFromGitHub
+, buildOasisPackage
+, ctypes
+, mariadb
+, libmysqlclient
+}:
 
 buildOasisPackage rec {
   pname = "mariadb";

@@ -21,7 +21,7 @@ let
       LDFLAGS=-s
       EXTRA_OBJS=strverscmp.o
     '' else
-    ""; # use linux flags by default
+      ""; # use linux flags by default
 in
 stdenv.mkDerivation {
   pname = "tree";
@@ -54,6 +54,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = [lib.maintainers.peti];
+    maintainers = [ lib.maintainers.peti ];
   };
 }

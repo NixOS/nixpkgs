@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       lib.maintainers.maggesi
     ];

@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , python3Packages
-, gdk-pixbuf, glib, gobject-introspection, gtk3
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk3
 , intltool
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
@@ -16,15 +21,25 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk3 intltool wrapGAppsHook
+    glib.dev
+    gobject-introspection
+    gtk3
+    intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gdk-pixbuf glib
+    gdk-pixbuf
+    glib
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    beautifulsoup4 distutils_extra mpd2 notify-py pygobject3 requests
+    beautifulsoup4
+    distutils_extra
+    mpd2
+    notify-py
+    pygobject3
+    requests
   ];
 
   postInstall = ''

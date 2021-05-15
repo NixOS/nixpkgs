@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchzip
 , fetchFromGitHub
 , cmake
@@ -30,8 +31,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ fftw fftwFloat ]
-  ++ lib.optional enablePython pythonPackages.python
-  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+    ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = lib.optional enablePython [

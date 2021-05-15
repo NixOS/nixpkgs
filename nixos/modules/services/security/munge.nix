@@ -36,12 +36,12 @@ in
     environment.systemPackages = [ pkgs.munge ];
 
     users.users.munge = {
-      description   = "Munge daemon user";
-      isSystemUser  = true;
-      group         = "munge";
+      description = "Munge daemon user";
+      isSystemUser = true;
+      group = "munge";
     };
 
-    users.groups.munge = {};
+    users.groups.munge = { };
 
     systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];

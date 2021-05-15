@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub
-, makeWrapper, makeDesktopItem, mkYarnPackage
-, electron, element-web
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, mkYarnPackage
+, electron
+, element-web
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -15,7 +19,8 @@ let
     rev = "v${version}";
     sha256 = "0rgsc2cc1v6gjsklwvsjlqq9a8j9j80h9ac0jkvf9lhq33f3c57k";
   };
-in mkYarnPackage rec {
+in
+mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
 

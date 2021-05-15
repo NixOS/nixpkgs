@@ -2,25 +2,27 @@
 
 with lib;
 
-let cfg = config.services.xserver.synaptics;
-    tapConfig = if cfg.tapButtons then enabledTapConfig else disabledTapConfig;
-    enabledTapConfig = ''
-      Option "MaxTapTime" "180"
-      Option "MaxTapMove" "220"
-      Option "TapButton1" "${builtins.elemAt cfg.fingersMap 0}"
-      Option "TapButton2" "${builtins.elemAt cfg.fingersMap 1}"
-      Option "TapButton3" "${builtins.elemAt cfg.fingersMap 2}"
-    '';
-    disabledTapConfig = ''
-      Option "MaxTapTime" "0"
-      Option "MaxTapMove" "0"
-      Option "TapButton1" "0"
-      Option "TapButton2" "0"
-      Option "TapButton3" "0"
-    '';
+let
+  cfg = config.services.xserver.synaptics;
+  tapConfig = if cfg.tapButtons then enabledTapConfig else disabledTapConfig;
+  enabledTapConfig = ''
+    Option "MaxTapTime" "180"
+    Option "MaxTapMove" "220"
+    Option "TapButton1" "${builtins.elemAt cfg.fingersMap 0}"
+    Option "TapButton2" "${builtins.elemAt cfg.fingersMap 1}"
+    Option "TapButton3" "${builtins.elemAt cfg.fingersMap 2}"
+  '';
+  disabledTapConfig = ''
+    Option "MaxTapTime" "0"
+    Option "MaxTapMove" "0"
+    Option "TapButton1" "0"
+    Option "TapButton2" "0"
+    Option "TapButton3" "0"
+  '';
   pkg = pkgs.xorg.xf86inputsynaptics;
   etcFile = "X11/xorg.conf.d/70-synaptics.conf";
-in {
+in
+{
 
   options = {
 
@@ -106,16 +108,16 @@ in {
 
       buttonsMap = mkOption {
         type = types.listOf types.int;
-        default = [1 2 3];
-        example = [1 3 2];
+        default = [ 1 2 3 ];
+        example = [ 1 3 2 ];
         description = "Remap touchpad buttons.";
         apply = map toString;
       };
 
       fingersMap = mkOption {
         type = types.listOf types.int;
-        default = [1 2 3];
-        example = [1 3 2];
+        default = [ 1 2 3 ];
+        example = [ 1 3 2 ];
         description = "Remap several-fingers taps.";
         apply = map toString;
       };

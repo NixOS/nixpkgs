@@ -3,7 +3,8 @@
 let
   pname = "zd1211-firmware";
   version = "1.5";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "${pname}-${version}";
   url = "mirror://sourceforge/zd1211/${name}.tar.bz2";
 

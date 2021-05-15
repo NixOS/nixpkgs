@@ -1,14 +1,37 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config, gtk2, gtk2-x11
-, gtkspell2, aspell
-, gst_all_1, startupnotification, gettext
-, perlPackages, libxml2, nss, nspr, farstream
-, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
-, lib, python, libICE, libXext, libSM
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, gtk2
+, gtk2-x11
+, gtkspell2
+, aspell
+, gst_all_1
+, startupnotification
+, gettext
+, perlPackages
+, libxml2
+, nss
+, nspr
+, farstream
+, libXScrnSaver
+, ncurses
+, avahi
+, dbus
+, dbus-glib
+, intltool
+, libidn
+, lib
+, python
+, libICE
+, libXext
+, libSM
 , cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
 , libgcrypt ? null
-, plugins, symlinkJoin
+, plugins
+, symlinkJoin
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
@@ -29,21 +52,37 @@ let unwrapped = stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
-  buildInputs = let
-    python-with-dbus = python.withPackages (pp: with pp; [ dbus-python ]);
-  in [
-    aspell startupnotification
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    libxml2 nss nspr
-    libXScrnSaver ncurses python-with-dbus
-    avahi dbus dbus-glib intltool libidn
-    libICE libXext libSM cyrus_sasl
-  ]
-  ++ (lib.optional (openssl != null) openssl)
-  ++ (lib.optional (gnutls != null) gnutls)
-  ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optionals (stdenv.isLinux) [gtk2 gtkspell2 farstream])
-  ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
+  buildInputs =
+    let
+      python-with-dbus = python.withPackages (pp: with pp; [ dbus-python ]);
+    in
+    [
+      aspell
+      startupnotification
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      libxml2
+      nss
+      nspr
+      libXScrnSaver
+      ncurses
+      python-with-dbus
+      avahi
+      dbus
+      dbus-glib
+      intltool
+      libidn
+      libICE
+      libXext
+      libSM
+      cyrus_sasl
+    ]
+    ++ (lib.optional (openssl != null) openssl)
+    ++ (lib.optional (gnutls != null) gnutls)
+    ++ (lib.optional (libgcrypt != null) libgcrypt)
+    ++ (lib.optionals (stdenv.isLinux) [ gtk2 gtkspell2 farstream ])
+    ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
 
 
   propagatedBuildInputs = [ pkg-config gettext ]
@@ -64,8 +103,8 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-tcl"
   ]
   ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
-  ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"])
-  ++ (lib.optionals (stdenv.isDarwin) ["--disable-gtkspell" "--disable-vv"]);
+  ++ (lib.optionals (gnutls != null) [ "--enable-gnutls=yes" "--enable-nss=no" ])
+  ++ (lib.optionals (stdenv.isDarwin) [ "--disable-gtkspell" "--disable-vv" ]);
 
   enableParallelBuilding = true;
 
@@ -76,15 +115,17 @@ let unwrapped = stdenv.mkDerivation rec {
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   # In particular, this detects missing python imports in some of the tools.
-  postFixup = let
-    # TODO: python is a script, so it doesn't work as interpreter on darwin
-    binsToTest = lib.optionalString stdenv.isLinux "purple-remote," + "pidgin,finch";
-  in lib.optionalString doInstallCheck ''
-    for f in "''${!outputBin}"/bin/{${binsToTest}}; do
-      echo "Testing: $f --help"
-      "$f" --help
-    done
-  '';
+  postFixup =
+    let
+      # TODO: python is a script, so it doesn't work as interpreter on darwin
+      binsToTest = lib.optionalString stdenv.isLinux "purple-remote," + "pidgin,finch";
+    in
+    lib.optionalString doInstallCheck ''
+      for f in "''${!outputBin}"/bin/{${binsToTest}}; do
+        echo "Testing: $f --help"
+        "$f" --help
+      done
+    '';
 
   meta = with lib; {
     description = "Multi-protocol instant messaging client";
@@ -95,8 +136,10 @@ let unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-in if plugins == [] then unwrapped
-    else import ./wrapper.nix {
-      inherit makeWrapper symlinkJoin plugins;
-      pidgin = unwrapped;
-    }
+in
+if plugins == [ ] then unwrapped
+else
+  import ./wrapper.nix {
+    inherit makeWrapper symlinkJoin plugins;
+    pidgin = unwrapped;
+  }

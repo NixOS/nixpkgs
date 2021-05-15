@@ -1,15 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, which
 , pcre2
-, withPython2 ? false, python2
-, withPython3 ? true, python3, ncurses
-, withPHP73 ? false, php73
-, withPHP74 ? true, php74
-, withPerl530 ? false, perl530
-, withPerl532 ? true, perl532
-, withPerldevel ? false, perldevel
-, withRuby_2_6 ? true, ruby_2_6
-, withRuby_2_7 ? false, ruby_2_7
-, withSSL ? true, openssl ? null
+, withPython2 ? false
+, python2
+, withPython3 ? true
+, python3
+, ncurses
+, withPHP73 ? false
+, php73
+, withPHP74 ? true
+, php74
+, withPerl530 ? false
+, perl530
+, withPerl532 ? true
+, perl532
+, withPerldevel ? false
+, perldevel
+, withRuby_2_6 ? true
+, ruby_2_6
+, withRuby_2_7 ? false
+, ruby_2_7
+, withSSL ? true
+, openssl ? null
 , withIPv6 ? true
 , withDebug ? false
 }:
@@ -29,7 +44,8 @@ let
   php73-unit = php73.override phpConfig;
   php74-unit = php74.override phpConfig;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.22.0";
   pname = "unit";
 
@@ -59,9 +75,9 @@ in stdenv.mkDerivation rec {
     "--pid=/run/unit/unit.pid"
     "--user=unit"
     "--group=unit"
-  ] ++ optional withSSL     "--openssl"
-    ++ optional (!withIPv6) "--no-ipv6"
-    ++ optional withDebug   "--debug";
+  ] ++ optional withSSL "--openssl"
+  ++ optional (!withIPv6) "--no-ipv6"
+  ++ optional withDebug "--debug";
 
   # Optionally add the PHP derivations used so they can be addressed in the configs
   usedPhp73 = optionals withPHP73 php73-unit;
@@ -83,9 +99,9 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
-    homepage    = "https://unit.nginx.org/";
-    license     = licenses.asl20;
-    platforms   = platforms.linux;
+    homepage = "https://unit.nginx.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };
 }

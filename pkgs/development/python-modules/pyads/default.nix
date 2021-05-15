@@ -1,5 +1,12 @@
-{ adslib, buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, pytest
-, pytestcov, pythonOlder }:
+{ adslib
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, pytest
+, pytestcov
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pyads";

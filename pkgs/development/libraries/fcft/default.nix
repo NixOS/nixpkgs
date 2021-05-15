@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja, scdoc
-, freetype, fontconfig, pixman, tllist, check
+{ stdenv
+, lib
+, fetchgit
+, pkg-config
+, meson
+, ninja
+, scdoc
+, freetype
+, fontconfig
+, pixman
+, tllist
+, check
 , withHarfBuzz ? true
 , harfbuzz
 }:

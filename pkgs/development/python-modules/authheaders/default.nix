@@ -1,5 +1,12 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib
-, authres, dnspython, dkimpy, ipaddress, publicsuffix2
+{ buildPythonPackage
+, fetchPypi
+, isPy27
+, lib
+, authres
+, dnspython
+, dkimpy
+, ipaddress
+, publicsuffix2
 }:
 
 buildPythonPackage rec {
@@ -12,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ]
-                          ++ lib.optional isPy27 ipaddress;
+    ++ lib.optional isPy27 ipaddress;
 
   meta = {
     description = "Python library for the generation of email authentication headers";

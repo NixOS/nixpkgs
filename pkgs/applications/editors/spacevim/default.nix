@@ -1,8 +1,19 @@
-{ ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub
-, lib, stdenv, formats, runCommand, spacevim_config ? import ./init.nix }:
+{ ripgrep
+, git
+, fzf
+, makeWrapper
+, vim_configurable
+, vimPlugins
+, fetchFromGitHub
+, lib
+, stdenv
+, formats
+, runCommand
+, spacevim_config ? import ./init.nix
+}:
 
 let
-  format = formats.toml {};
+  format = formats.toml { };
   vim-customized = vim_configurable.customize {
     name = "vim";
     # Not clear at the moment how to import plugins such that
@@ -14,7 +25,8 @@ let
     mkdir -p $out
     cp ${format.generate "init.toml" spacevim_config} $out/init.toml
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "spacevim";
   version = "1.6.0";
   src = fetchFromGitHub {
@@ -24,7 +36,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-QQdtjEdbuzmf0Rw+u2ZltLihnJt8LqkfTrLDWLAnCLE=";
   };
 
-  nativeBuildInputs = [ makeWrapper vim-customized];
+  nativeBuildInputs = [ makeWrapper vim-customized ];
   buildInputs = [ vim-customized ];
 
   buildPhase = ''

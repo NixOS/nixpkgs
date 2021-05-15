@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , pkg-config
-, libX11, libXv
+, libX11
+, libXv
 , udev
-, libGLU, libGL, SDL2
-, libao, openal, libpulseaudio
+, libGLU
+, libGL
+, SDL2
+, libao
+, openal
+, libpulseaudio
 , alsaLib
-, gtk2, gtksourceview
+, gtk2
+, gtksourceview
 , runtimeShell
-# Darwin dependencies
-, libicns, Carbon, Cocoa, OpenGL, OpenAL}:
+  # Darwin dependencies
+, libicns
+, Carbon
+, Cocoa
+, OpenGL
+, OpenAL
+}:
 
 let
   inherit (lib) optionals;
@@ -40,10 +53,19 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ SDL2 libao ]
-                ++ optionals stdenv.isLinux [ alsaLib udev libpulseaudio openal
-                                              gtk2 gtksourceview libX11 libXv
-                                              libGLU libGL ]
-                ++ optionals stdenv.isDarwin [ Carbon Cocoa OpenGL OpenAL ];
+    ++ optionals stdenv.isLinux [
+    alsaLib
+    udev
+    libpulseaudio
+    openal
+    gtk2
+    gtksourceview
+    libX11
+    libXv
+    libGLU
+    libGL
+  ]
+    ++ optionals stdenv.isDarwin [ Carbon Cocoa OpenGL OpenAL ];
 
   buildPhase = ''
     make compiler=c++ -C higan openmp=true target=higan
@@ -84,25 +106,28 @@ stdenv.mkDerivation rec {
       icarus/Database icarus/Firmware $out/share/icarus/
   '';
 
-  fixupPhase = let
-    dest = if stdenv.isDarwin
-           then "\\$HOME/Library/Application Support/higan"
-           else "\\$HOME/higan";
-  in ''
-    # A dirty workaround, suggested by @cpages:
-    # we create a first-run script to populate
-    # $HOME with all the stuff needed at runtime
+  fixupPhase =
+    let
+      dest =
+        if stdenv.isDarwin
+        then "\\$HOME/Library/Application Support/higan"
+        else "\\$HOME/higan";
+    in
+    ''
+      # A dirty workaround, suggested by @cpages:
+      # we create a first-run script to populate
+      # $HOME with all the stuff needed at runtime
 
-    mkdir -p "$out"/bin
-    cat <<EOF > $out/bin/higan-init.sh
-    #!${runtimeShell}
+      mkdir -p "$out"/bin
+      cat <<EOF > $out/bin/higan-init.sh
+      #!${runtimeShell}
 
-    cp --recursive --update $out/share/higan/System/ "${dest}"/
+      cp --recursive --update $out/share/higan/System/ "${dest}"/
 
-    EOF
+      EOF
 
-    chmod +x $out/bin/higan-init.sh
-  '';
+      chmod +x $out/bin/higan-init.sh
+    '';
 
   meta = with lib; {
     description = "An open-source, cycle-accurate multi-system emulator";

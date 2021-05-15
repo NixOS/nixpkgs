@@ -18,13 +18,19 @@ let
     patches = [ ./azure-agent-entropy.patch ];
 
     buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
-    runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
-                    nettools # for hostname
-                    procps # for pidof
-                    shadow # for useradd, usermod
-                    util-linux # for (u)mount, fdisk, sfdisk, mkswap
-                    parted
-                  ];
+    runtimeDeps = [
+      findutils
+      gnugrep
+      gawk
+      coreutils
+      openssl
+      openssh
+      nettools # for hostname
+      procps # for pidof
+      shadow # for useradd, usermod
+      util-linux # for (u)mount, fdisk, sfdisk, mkswap
+      parted
+    ];
     pythonPath = [ pythonPackages.pyasn1 ];
 
     configurePhase = false;
@@ -75,69 +81,70 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [ {
+    assertions = [{
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
       message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-    } {
-      assertion = config.networking.networkmanager.enable == false;
-      message = "Windows Azure Linux Agent is not compatible with NetworkManager";
-    } ];
+    }
+      {
+        assertion = config.networking.networkmanager.enable == false;
+        message = "Windows Azure Linux Agent is not compatible with NetworkManager";
+      }];
 
     boot.initrd.kernelModules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];
 
 
     environment.etc."waagent.conf".text = ''
-        #
-        # Windows Azure Linux Agent Configuration
-        #
+      #
+      # Windows Azure Linux Agent Configuration
+      #
 
-        Role.StateConsumer=${provisionedHook}
+      Role.StateConsumer=${provisionedHook}
 
-        # Enable instance creation
-        Provisioning.Enabled=y
+      # Enable instance creation
+      Provisioning.Enabled=y
 
-        # Password authentication for root account will be unavailable.
-        Provisioning.DeleteRootPassword=n
+      # Password authentication for root account will be unavailable.
+      Provisioning.DeleteRootPassword=n
 
-        # Generate fresh host key pair.
-        Provisioning.RegenerateSshHostKeyPair=n
+      # Generate fresh host key pair.
+      Provisioning.RegenerateSshHostKeyPair=n
 
-        # Supported values are "rsa", "dsa" and "ecdsa".
-        Provisioning.SshHostKeyPairType=ed25519
+      # Supported values are "rsa", "dsa" and "ecdsa".
+      Provisioning.SshHostKeyPairType=ed25519
 
-        # Monitor host name changes and publish changes via DHCP requests.
-        Provisioning.MonitorHostName=y
+      # Monitor host name changes and publish changes via DHCP requests.
+      Provisioning.MonitorHostName=y
 
-        # Decode CustomData from Base64.
-        Provisioning.DecodeCustomData=n
+      # Decode CustomData from Base64.
+      Provisioning.DecodeCustomData=n
 
-        # Execute CustomData after provisioning.
-        Provisioning.ExecuteCustomData=n
+      # Execute CustomData after provisioning.
+      Provisioning.ExecuteCustomData=n
 
-        # Format if unformatted. If 'n', resource disk will not be mounted.
-        ResourceDisk.Format=${if cfg.mountResourceDisk then "y" else "n"}
+      # Format if unformatted. If 'n', resource disk will not be mounted.
+      ResourceDisk.Format=${if cfg.mountResourceDisk then "y" else "n"}
 
-        # File system on the resource disk
-        # Typically ext3 or ext4. FreeBSD images should use 'ufs2' here.
-        ResourceDisk.Filesystem=ext4
+      # File system on the resource disk
+      # Typically ext3 or ext4. FreeBSD images should use 'ufs2' here.
+      ResourceDisk.Filesystem=ext4
 
-        # Mount point for the resource disk
-        ResourceDisk.MountPoint=/mnt/resource
+      # Mount point for the resource disk
+      ResourceDisk.MountPoint=/mnt/resource
 
-        # Respond to load balancer probes if requested by Windows Azure.
-        LBProbeResponder=y
+      # Respond to load balancer probes if requested by Windows Azure.
+      LBProbeResponder=y
 
-        # Enable logging to serial console (y|n)
-        # When stdout is not enough...
-        # 'y' if not set
-        Logs.Console=y
+      # Enable logging to serial console (y|n)
+      # When stdout is not enough...
+      # 'y' if not set
+      Logs.Console=y
 
-        # Enable verbose logging (y|n)
-        Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
+      # Enable verbose logging (y|n)
+      Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
 
-        # Root device timeout in seconds.
-        OS.RootDeviceScsiTimeout=300
+      # Root device timeout in seconds.
+      OS.RootDeviceScsiTimeout=300
     '';
 
     services.udev.packages = [ waagent ];
@@ -161,23 +168,24 @@ in
       description = "Services Requiring Azure VM provisioning to have finished";
     };
 
-  systemd.services.consume-hypervisor-entropy =
-    { description = "Consume entropy in ACPI table provided by Hyper-V";
+    systemd.services.consume-hypervisor-entropy =
+      {
+        description = "Consume entropy in ACPI table provided by Hyper-V";
 
-      wantedBy = [ "sshd.service" "waagent.service" ];
-      before = [ "sshd.service" "waagent.service" ];
+        wantedBy = [ "sshd.service" "waagent.service" ];
+        before = [ "sshd.service" "waagent.service" ];
 
-      path  = [ pkgs.coreutils ];
-      script =
-        ''
-          echo "Fetching entropy..."
-          cat /sys/firmware/acpi/tables/OEM0 > /dev/random
-        '';
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      serviceConfig.StandardError = "journal+console";
-      serviceConfig.StandardOutput = "journal+console";
-     };
+        path = [ pkgs.coreutils ];
+        script =
+          ''
+            echo "Fetching entropy..."
+            cat /sys/firmware/acpi/tables/OEM0 > /dev/random
+          '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.StandardError = "journal+console";
+        serviceConfig.StandardOutput = "journal+console";
+      };
 
     systemd.services.waagent = {
       wantedBy = [ "multi-user.target" ];

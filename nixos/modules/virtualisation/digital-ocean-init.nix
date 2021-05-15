@@ -10,7 +10,8 @@ let
       ];
     }
   '';
-in {
+in
+{
   options.virtualisation.digitalOcean.rebuildFromUserData = mkOption {
     type = types.bool;
     default = true;
@@ -88,7 +89,7 @@ in {
         else
           echo "no user data is available"
         fi
-        '';
+      '';
     };
   };
   meta.maintainers = with maintainers; [ arianvp eamsden ];

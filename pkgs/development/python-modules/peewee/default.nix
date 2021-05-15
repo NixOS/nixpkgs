@@ -5,8 +5,10 @@
 , cython
 , apsw
 , flask
-, withPostgres ? false, psycopg2
-, withMysql ? false, mysql-connector
+, withPostgres ? false
+, psycopg2
+, withMysql ? false
+, mysql-connector
 }:
 
 buildPythonPackage rec {
@@ -38,13 +40,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     apsw # sqlite performance improvement
   ] ++ (lib.optional withPostgres psycopg2)
-    ++ (lib.optional withMysql mysql-connector);
+  ++ (lib.optional withMysql mysql-connector);
 
   doCheck = withPostgres;
 
   meta = with lib; {
     description = "a small, expressive orm";
-    homepage    = "http://peewee-orm.com";
-    license     = licenses.mit;
+    homepage = "http://peewee-orm.com";
+    license = licenses.mit;
   };
 }

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
-, certvalidator, pyasn1, pyasn1-modules
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, certvalidator
+, pyasn1
+, pyasn1-modules
 }:
 
 buildPythonPackage rec {

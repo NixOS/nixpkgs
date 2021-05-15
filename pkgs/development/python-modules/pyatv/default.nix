@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
   };
 
-  nativeBuildInputs = [ pytest-runner];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [
     aiohttp

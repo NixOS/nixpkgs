@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline, pcsclite, qt5
-, gcc-arm-embedded }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, readline
+, pcsclite
+, qt5
+, gcc-arm-embedded
+}:
 
 let
   generic = { pname, version, rev, sha256 }:

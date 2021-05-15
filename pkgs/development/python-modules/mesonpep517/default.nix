@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "b5bcca61024164c4a51d29e6921ea1f756d54197c8f052e4c66a2b8399aa9349";
   };
 
-  nativeBuildInputs = [ intreehooks  ];
+  nativeBuildInputs = [ intreehooks ];
 
   propagatedBuildInputs = [ pytoml ];
 

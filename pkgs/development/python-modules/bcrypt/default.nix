@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
-, cffi, pycparser, mock, pytest, py, six }:
+{ lib
+, buildPythonPackage
+, isPyPy
+, fetchPypi
+, pythonOlder
+, cffi
+, pycparser
+, mock
+, pytest
+, py
+, six
+}:
 
 buildPythonPackage rec {
   version = "3.2.0";

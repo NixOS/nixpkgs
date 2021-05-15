@@ -1,34 +1,55 @@
-{ lib, stdenv, fetchFromGitHub, which, ninja, pkg-config, protobuf
-, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, ninja
+, pkg-config
+, protobuf
+, ibus
+, gtk2
+, zinnia
+, qt5
+, libxcb
+, tegaki-zinnia-japanese
+, python3Packages
+}:
 
 let
   japanese_usage_dictionary = fetchFromGitHub {
-    owner  = "hiroyuki-komatsu";
-    repo   = "japanese-usage-dictionary";
-    rev    = "e5b3425575734c323e1d947009dd74709437b684";
+    owner = "hiroyuki-komatsu";
+    repo = "japanese-usage-dictionary";
+    rev = "e5b3425575734c323e1d947009dd74709437b684";
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "ibus-mozc-${version}";
   version = "2.23.4206.102";
 
   meta = with lib; {
     isIbusEngine = true;
-    description  = "Japanese input method from Google";
-    homepage     = "https://github.com/google/mozc";
-    license      = licenses.free;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ gebner ericsagnes ];
+    description = "Japanese input method from Google";
+    homepage = "https://github.com/google/mozc";
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ which ninja python3Packages.python python3Packages.six
-                        python3Packages.gyp pkg-config qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    which
+    ninja
+    python3Packages.python
+    python3Packages.six
+    python3Packages.gyp
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
-    owner  = "google";
-    repo   = "mozc";
-    rev    = "91cc1e19ef34aeb12888b697fefa52907f1a834d";
+    owner = "google";
+    repo = "mozc";
+    rev = "91cc1e19ef34aeb12888b697fefa52907f1a834d";
     sha256 = "1fyy9g1pnaq6s5nkf56aqmp5mgyibbmp1ylc64fqc6g1plg90zk2";
     fetchSubmodules = true;
   };

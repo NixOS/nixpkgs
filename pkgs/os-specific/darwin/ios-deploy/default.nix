@@ -4,7 +4,8 @@
 # should have a special flag for users to enable this.
 
 let version = "1.11.0";
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "ios-deploy";
   inherit version;
   src = fetchFromGitHub {

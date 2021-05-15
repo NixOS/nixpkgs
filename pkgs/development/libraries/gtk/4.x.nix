@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
     for program in ''${demos[@]}; do

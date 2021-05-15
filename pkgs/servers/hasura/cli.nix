@@ -13,11 +13,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [''-ldflags=
+  buildFlagsArray = [
+    ''-ldflags=
     -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}
     -s
     -w
-  ''];
+  ''
+  ];
 
   postInstall = ''
     mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}

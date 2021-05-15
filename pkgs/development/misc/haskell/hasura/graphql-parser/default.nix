@@ -1,7 +1,25 @@
-{ mkDerivation, aeson, attoparsec, base, bytestring, containers
-, criterion, fetchgit, filepath, hedgehog, hpack, prettyprinter
-, protolude, regex-tdfa, scientific, lib, template-haskell, text
-, text-builder, th-lift-instances, unordered-containers, vector
+{ mkDerivation
+, aeson
+, attoparsec
+, base
+, bytestring
+, containers
+, criterion
+, fetchgit
+, filepath
+, hedgehog
+, hpack
+, prettyprinter
+, protolude
+, regex-tdfa
+, scientific
+, lib
+, template-haskell
+, text
+, text-builder
+, th-lift-instances
+, unordered-containers
+, vector
 }:
 mkDerivation {
   pname = "graphql-parser";
@@ -13,21 +31,63 @@ mkDerivation {
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
-    aeson attoparsec base bytestring containers filepath hedgehog
-    prettyprinter protolude regex-tdfa scientific template-haskell text
-    text-builder th-lift-instances unordered-containers vector
+    aeson
+    attoparsec
+    base
+    bytestring
+    containers
+    filepath
+    hedgehog
+    prettyprinter
+    protolude
+    regex-tdfa
+    scientific
+    template-haskell
+    text
+    text-builder
+    th-lift-instances
+    unordered-containers
+    vector
   ];
   libraryToolDepends = [ hpack ];
   testHaskellDepends = [
-    aeson attoparsec base bytestring containers filepath hedgehog
-    prettyprinter protolude regex-tdfa scientific template-haskell text
-    text-builder th-lift-instances unordered-containers vector
+    aeson
+    attoparsec
+    base
+    bytestring
+    containers
+    filepath
+    hedgehog
+    prettyprinter
+    protolude
+    regex-tdfa
+    scientific
+    template-haskell
+    text
+    text-builder
+    th-lift-instances
+    unordered-containers
+    vector
   ];
   benchmarkHaskellDepends = [
-    aeson attoparsec base bytestring containers criterion filepath
-    hedgehog prettyprinter protolude regex-tdfa scientific
-    template-haskell text text-builder th-lift-instances
-    unordered-containers vector
+    aeson
+    attoparsec
+    base
+    bytestring
+    containers
+    criterion
+    filepath
+    hedgehog
+    prettyprinter
+    protolude
+    regex-tdfa
+    scientific
+    template-haskell
+    text
+    text-builder
+    th-lift-instances
+    unordered-containers
+    vector
   ];
   doCheck = false;
   prePatch = "hpack";

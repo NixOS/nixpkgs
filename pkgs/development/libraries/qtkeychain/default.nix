@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
-, withQt5 ? false, qtbase ? null, qttools ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt4 ? null
+, withQt5 ? false
+, qtbase ? null
+, qttools ? null
 , darwin ? null
 , libsecret
 }:
@@ -10,7 +17,7 @@ assert stdenv.isDarwin -> darwin != null;
 
 stdenv.mkDerivation rec {
   name = "qtkeychain-${if withQt5 then "qt5" else "qt4"}-${version}";
-  version = "0.9.1";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
+  version = "0.9.1"; # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
@@ -21,7 +28,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  patches = (if withQt5 then [] else [ ./0001-Fixes-build-with-Qt4.patch ]) ++ (if stdenv.isDarwin then [ ./0002-Fix-install-name-Darwin.patch ] else []);
+  patches = (if withQt5 then [ ] else [ ./0001-Fixes-build-with-Qt4.patch ]) ++ (if stdenv.isDarwin then [ ./0002-Fix-install-name-Darwin.patch ] else [ ]);
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
@@ -32,8 +39,9 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation Security
-    ])
+    CoreFoundation
+    Security
+  ])
   ;
 
   meta = {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite, libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
   version = "1.7.11";

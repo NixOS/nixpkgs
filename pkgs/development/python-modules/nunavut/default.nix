@@ -5,7 +5,7 @@
 , pydsdl
 }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nunavut";
   version = "1.0.3";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported

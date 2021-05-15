@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, ffmpeg, libjpeg, libmicrohttpd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, ffmpeg
+, libjpeg
+, libmicrohttpd
+}:
 
 stdenv.mkDerivation rec {
   pname = "motion";
   version = "4.3.2";
 
   src = fetchFromGitHub {
-    owner  = "Motion-Project";
-    repo   = "motion";
-    rev    = "release-${version}";
+    owner = "Motion-Project";
+    repo = "motion";
+    rev = "release-${version}";
     sha256 = "09xs815jsivcilpmnrx2jkcxirj4lg5kp99fkr0p2sdxw03myi95";
   };
 

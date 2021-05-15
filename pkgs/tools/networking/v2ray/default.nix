@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
+{ lib
+, fetchFromGitHub
+, fetchurl
+, linkFarm
+, buildGoModule
+, runCommand
+, makeWrapper
+, nixosTests
+, assetOverrides ? { }
 }:
 
 let
@@ -16,28 +23,34 @@ let
 
   assets = {
     # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202104150006";
-      geoipSha256 = "0ppm5r4bycjm7q0vnxj62q8639kp06sfkkkrkk5gibyrwisr4vrp";
-    in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
+    "geoip.dat" =
+      let
+        geoipRev = "202104150006";
+        geoipSha256 = "0ppm5r4bycjm7q0vnxj62q8639kp06sfkkkrkk5gibyrwisr4vrp";
+      in
+      fetchurl {
+        url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
+        sha256 = geoipSha256;
+      };
 
     # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "20210415054336";
-      geositeSha256 = "0vs9fjbw45ipi7minh0r8zgh3pbwxqlrhwahpwyc6s0hyxgdi40w";
-    in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
+    "geosite.dat" =
+      let
+        geositeRev = "20210415054336";
+        geositeSha256 = "0vs9fjbw45ipi7minh0r8zgh3pbwxqlrhwahpwyc6s0hyxgdi40w";
+      in
+      fetchurl {
+        url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
+        sha256 = geositeSha256;
+      };
 
   } // assetOverrides;
 
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
+  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList
+    (name: path: {
+      inherit name path;
+    })
+    assets);
 
   core = buildGoModule rec {
     pname = "v2ray-core";
@@ -67,7 +80,9 @@ let
     };
   };
 
-in runCommand "v2ray-${version}" {
+in
+runCommand "v2ray-${version}"
+{
   inherit src version;
   inherit (core) meta;
 

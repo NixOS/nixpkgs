@@ -1,12 +1,33 @@
-{ stdenv, lib ,fetchurl, scons, pkg-config, dbus, ncurses
-, libusb1, docbook_xml_dtd_412, docbook_xsl, bc
+{ stdenv
+, lib
+, fetchurl
+, scons
+, pkg-config
+, dbus
+, ncurses
+, libusb1
+, docbook_xml_dtd_412
+, docbook_xsl
+, bc
 
-# optional deps for GUI packages
+  # optional deps for GUI packages
 , guiSupport ? true
-, dbus-glib ? null, libX11 ? null, libXt ? null, libXpm ? null, libXaw ? null, libXext ? null
-, gobject-introspection ? null, pango ? null, gdk-pixbuf ? null, atk ? null, wrapGAppsHook ? null
+, dbus-glib ? null
+, libX11 ? null
+, libXt ? null
+, libXpm ? null
+, libXaw ? null
+, libXext ? null
+, gobject-introspection ? null
+, pango ? null
+, gdk-pixbuf ? null
+, atk ? null
+, wrapGAppsHook ? null
 
-, libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+, libxslt
+, xmlto
+, gpsdUser ? "gpsd"
+, gpsdGroup ? "dialout"
 , pps-tools
 , python3Packages
 }:
@@ -22,19 +43,36 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkg-config docbook_xml_dtd_412 docbook_xsl xmlto bc
+    scons
+    pkg-config
+    docbook_xml_dtd_412
+    docbook_xsl
+    xmlto
+    bc
     python3Packages.python
     python3Packages.wrapPython
   ]
   ++ lib.optionals guiSupport [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [
-    python3Packages.python dbus ncurses
-    libxslt libusb1 pps-tools
+    python3Packages.python
+    dbus
+    ncurses
+    libxslt
+    libusb1
+    pps-tools
   ]
   ++ lib.optionals guiSupport [
-    dbus-glib libX11 libXt libXpm libXaw libXext
-    gobject-introspection pango gdk-pixbuf atk
+    dbus-glib
+    libX11
+    libXt
+    libXpm
+    libXaw
+    libXext
+    gobject-introspection
+    pango
+    gdk-pixbuf
+    atk
   ];
 
   pythonPath = lib.optionals guiSupport [

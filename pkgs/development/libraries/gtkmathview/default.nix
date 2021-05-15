@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
 
 let
   pname = "gtkmathview";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ t1lib glib gmetadom libxml2 popt];
-  propagatedBuildInputs = [gtk2 t1lib];
+  buildInputs = [ t1lib glib gmetadom libxml2 popt ];
+  propagatedBuildInputs = [ gtk2 t1lib ];
 
   patches = [ ./gcc-4.3-build-fixes.patch ./gcc-4.4-build-fixes.patch ];
 

@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsHook
-, SDL2, zlib, gtk3, libxml2, libXv, epoxy, minizip, pulseaudio, portaudio }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook
+, SDL2
+, zlib
+, gtk3
+, libxml2
+, libXv
+, epoxy
+, minizip
+, pulseaudio
+, portaudio
+}:
 
 stdenv.mkDerivation rec {
   pname = "snes9x-gtk";

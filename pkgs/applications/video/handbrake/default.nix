@@ -7,41 +7,73 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv, lib, fetchFromGitHub,
-  # Main build tools
-  pkg-config, autoconf, automake, libtool, m4, xz, python3,
-  numactl,
-  # Processing, video codecs, containers
-  ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
-  # Codecs, audio
-  libopus, lame, libvorbis, a52dec, speex, libsamplerate,
-  # Text processing
-  libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2, harfbuzz,
-  # Optical media
-  libdvdread, libdvdnav, libdvdcss, libbluray,
-  # Darwin-specific
-  AudioToolbox ? null,
-  Foundation ? null,
-  libobjc ? null,
-  VideoToolbox ? null,
-  # GTK
+{ stdenv
+, lib
+, fetchFromGitHub
+, # Main build tools
+  pkg-config
+, autoconf
+, automake
+, libtool
+, m4
+, xz
+, python3
+, numactl
+, # Processing, video codecs, containers
+  ffmpeg-full
+, nv-codec-headers
+, libogg
+, x264
+, x265
+, libvpx
+, libtheora
+, dav1d
+, # Codecs, audio
+  libopus
+, lame
+, libvorbis
+, a52dec
+, speex
+, libsamplerate
+, # Text processing
+  libiconv
+, fribidi
+, fontconfig
+, freetype
+, libass
+, jansson
+, libxml2
+, harfbuzz
+, # Optical media
+  libdvdread
+, libdvdnav
+, libdvdcss
+, libbluray
+, # Darwin-specific
+  AudioToolbox ? null
+, Foundation ? null
+, libobjc ? null
+, VideoToolbox ? null
+, # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
-  useGtk ? !stdenv.isDarwin, wrapGAppsHook ? null,
-  intltool ? null,
-  glib ? null,
-  gtk3 ? null,
-  libappindicator-gtk3 ? null,
-  libnotify ? null,
-  gst_all_1 ? null,
-  dbus-glib ? null,
-  udev ? null,
-  libgudev ? null,
-  hicolor-icon-theme ? null,
-  # FDK
-  useFdk ? false, fdk_aac ? null
+  useGtk ? !stdenv.isDarwin
+, wrapGAppsHook ? null
+, intltool ? null
+, glib ? null
+, gtk3 ? null
+, libappindicator-gtk3 ? null
+, libnotify ? null
+, gst_all_1 ? null
+, dbus-glib ? null
+, udev ? null
+, libgudev ? null
+, hicolor-icon-theme ? null
+, # FDK
+  useFdk ? false
+, fdk_aac ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -62,20 +94,20 @@ stdenv.mkDerivation rec {
   # add to it here without having to fiddle with src.sha256
   # only DATE and HASH are absolutely necessary
   postPatch = ''
-    cat >> version.txt <<_EOF
-HASH=${src.rev}
-SHORTHASH=${src.rev}
-TAG=${version}
-URL=${src.meta.homepage}
-_EOF
+        cat >> version.txt <<_EOF
+    HASH=${src.rev}
+    SHORTHASH=${src.rev}
+    TAG=${version}
+    URL=${src.meta.homepage}
+    _EOF
 
-    patchShebangs scripts
+        patchShebangs scripts
 
-    # Force using nixpkgs dependencies
-    sed -i '/MODULES += contrib/d' make/include/main.defs
-    sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
-        -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
-        -i make/configure.py
+        # Force using nixpkgs dependencies
+        sed -i '/MODULES += contrib/d' make/include/main.defs
+        sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+            -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+            -i make/configure.py
   '' + (lib.optionalString stdenv.isDarwin ''
     # Use the Nix-provided libxml2 instead of the patched version available on
     # the Handbrake website.
@@ -93,19 +125,53 @@ _EOF
   '');
 
   nativeBuildInputs = [
-    pkg-config autoconf automake libtool m4 python3
+    pkg-config
+    autoconf
+    automake
+    libtool
+    m4
+    python3
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
-    ffmpeg-full libogg libtheora x264 x265 libvpx dav1d
-    libopus lame libvorbis a52dec speex libsamplerate
-    libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
-    libdvdread libdvdnav libdvdcss libbluray xz
+    ffmpeg-full
+    libogg
+    libtheora
+    x264
+    x265
+    libvpx
+    dav1d
+    libopus
+    lame
+    libvorbis
+    a52dec
+    speex
+    libsamplerate
+    libiconv
+    fribidi
+    fontconfig
+    freetype
+    libass
+    jansson
+    libxml2
+    harfbuzz
+    libdvdread
+    libdvdnav
+    libdvdcss
+    libbluray
+    xz
   ] ++ lib.optional (!stdenv.isDarwin) numactl
   ++ lib.optionals useGtk [
-    glib gtk3 libappindicator-gtk3 libnotify
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
-    libgudev hicolor-icon-theme
+    glib
+    gtk3
+    libappindicator-gtk3
+    libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    dbus-glib
+    udev
+    libgudev
+    hicolor-icon-theme
   ] ++ lib.optional useFdk fdk_aac
   ++ lib.optionals stdenv.isDarwin [ AudioToolbox Foundation libobjc VideoToolbox ]
   # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
@@ -117,9 +183,9 @@ _EOF
   configureFlags = [
     "--disable-df-fetch"
     "--disable-df-verify"
-    (if useGtk          then "--disable-gtk-update-checks" else "--disable-gtk")
-    (if useFdk          then "--enable-fdk-aac"            else "")
-    (if stdenv.isDarwin then "--disable-xcode"             else "")
+    (if useGtk then "--disable-gtk-update-checks" else "--disable-gtk")
+    (if useFdk then "--enable-fdk-aac" else "")
+    (if stdenv.isDarwin then "--disable-xcode" else "")
   ] ++ lib.optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing

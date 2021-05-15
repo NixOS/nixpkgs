@@ -1,10 +1,9 @@
-
 { buildPythonPackage
 , fetchFromGitHub
 , isPy37
 , lib
 
-# Python Dependencies
+  # Python Dependencies
 , mock
 , pytest
 , six

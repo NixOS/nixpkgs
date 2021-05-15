@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, intltool, wrapGAppsHook, pkg-config , gtk, libxml2
-, enchant, gucharmap, python3, gnome
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, wrapGAppsHook
+, pkg-config
+, gtk
+, libxml2
+, enchant
+, gucharmap
+, python3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +21,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool pkg-config wrapGAppsHook ];
-  buildInputs = [ gnome.adwaita-icon-theme gtk libxml2
-    enchant gucharmap python3 ];
+  buildInputs = [
+    gnome.adwaita-icon-theme
+    gtk
+    libxml2
+    enchant
+    gucharmap
+    python3
+  ];
 
   meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
     homepage = "http://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;
-    maintainers = [maintainers.vbgl];
+    maintainers = [ maintainers.vbgl ];
     platforms = platforms.all;
   };
 }

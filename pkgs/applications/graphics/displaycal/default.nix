@@ -9,11 +9,12 @@
 , libXinerama
 , libXScrnSaver
 , argyllcms
- }:
+}:
 
 let
   inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "displaycal";
   version = "3.8.9.3";
 
@@ -66,7 +67,7 @@ in buildPythonApplication rec {
     description = "Display Calibration and Characterization powered by Argyll CMS";
     homepage = "https://displaycal.net/";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

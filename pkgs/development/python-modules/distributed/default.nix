@@ -30,8 +30,20 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-      click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
+    click
+    cloudpickle
+    dask
+    msgpack
+    psutil
+    six
+    sortedcontainers
+    tblib
+    toolz
+    tornado
+    zict
+    pyyaml
+    mpi4py
+    bokeh
   ];
 
   # when tested random tests would fail and not repeatably

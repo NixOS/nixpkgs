@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools_scm, toml
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy27
+, six
+, pytest
+, backports_unittest-mock
+, keyring
+, setuptools_scm
+, toml
 }:
 
 buildPythonPackage rec {

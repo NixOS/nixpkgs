@@ -3,7 +3,7 @@
 , isPy3k
 , lib
 
-# pythonPackages
+  # pythonPackages
 , pylint
 , toml
 }:
@@ -21,7 +21,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pylint toml
+    pylint
+    toml
   ];
 
   checkPhase = ''

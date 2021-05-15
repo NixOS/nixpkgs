@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, withShishi ? !stdenv.isDarwin, shishi ? null
+{ lib
+, stdenv
+, fetchurl
+, withShishi ? !stdenv.isDarwin
+, shishi ? null
 }:
 
 assert withShishi -> shishi != null;

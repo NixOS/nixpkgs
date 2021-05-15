@@ -8,7 +8,8 @@
 , libmysqlclient
 , log4cplus
 , postgresql
-, python3 }:
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "kea";

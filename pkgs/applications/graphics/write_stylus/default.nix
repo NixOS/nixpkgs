@@ -35,21 +35,23 @@ mkDerivation rec {
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
   '';
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      qtbase            # libQt5PrintSupport.so.5
-      qtsvg             # libQt5Svg.so.5
-      stdenv.cc.cc.lib  # libstdc++.so.6
-      libglvnd          # libGL.so.1
-      libX11            # libX11.so.6
-      libXi             # libXi.so.6
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/Write/Write
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        qtbase # libQt5PrintSupport.so.5
+        qtsvg # libQt5Svg.so.5
+        stdenv.cc.cc.lib # libstdc++.so.6
+        libglvnd # libGL.so.1
+        libX11 # libX11.so.6
+        libXi # libXi.so.6
+      ];
+    in
+    ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/Write/Write
+    '';
 
   meta = with lib; {
     homepage = "http://www.styluslabs.com/";

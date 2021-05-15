@@ -1,11 +1,17 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, lxml, pycryptodomex, construct
-, argon2_cffi, dateutil, future
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, lxml
+, pycryptodomex
+, construct
+, argon2_cffi
+, dateutil
+, future
 , python
 }:
 
 buildPythonPackage rec {
-  pname   = "pykeepass";
+  pname = "pykeepass";
   version = "4.0.0";
 
   src = fetchFromGitHub {
@@ -20,8 +26,12 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    lxml pycryptodomex construct
-    argon2_cffi dateutil future
+    lxml
+    pycryptodomex
+    construct
+    argon2_cffi
+    dateutil
+    future
   ];
 
   checkPhase = ''

@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, fetchgit
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchgit
 , buildKakounePluginFrom2Nix
-, kak-lsp, parinfer-rust, rep
-, fzf, git, guile, kakoune-unwrapped, lua5_3, plan9port
+, kak-lsp
+, parinfer-rust
+, rep
+, fzf
+, git
+, guile
+, kakoune-unwrapped
+, lua5_3
+, plan9port
 }:
 
 self: super: {
@@ -19,7 +30,7 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
-  fzf-kak = super.fzf-kak.overrideAttrs(oldAttrs: rec {
+  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
         fzfImpl='${fzf}/bin/fzf'
@@ -44,14 +55,14 @@ self: super: {
     };
 
     installPhase = ''
-      mkdir -p $out/bin $out/share/kak/autoload/plugins/
-      cp kak-ansi-filter $out/bin/
-      # Hard-code path of filter and don't try to build when Kakoune boots
-      sed '
-        /^declare-option.* ansi_filter /i\
-declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
-        /^declare-option.* ansi_filter /,/^}/d
-      ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
+            mkdir -p $out/bin $out/share/kak/autoload/plugins/
+            cp kak-ansi-filter $out/bin/
+            # Hard-code path of filter and don't try to build when Kakoune boots
+            sed '
+              /^declare-option.* ansi_filter /i\
+      declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
+              /^declare-option.* ansi_filter /,/^}/d
+            ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
     '';
 
     meta = with lib; {
@@ -93,7 +104,7 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     };
   };
 
-  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs(oldAttrs: rec {
+  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       mkdir -p $out/bin
       mv $out/share/kak/autoload/plugins/kakoune-rainbow/bin/kak-rainbow.scm $out/bin
@@ -124,7 +135,7 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     };
   };
 
-  powerline-kak = super.powerline-kak.overrideAttrs(oldAttrs: rec {
+  powerline-kak = super.powerline-kak.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       substituteInPlace $out/share/kak/autoload/plugins/powerline-kak/rc/modules/git.kak \
         --replace ' git ' ' ${git}/bin/git '

@@ -10,7 +10,7 @@
         }
       ];
     };
-    default = {};
+    default = { };
   };
 
   config.submodule = lib.mkMerge [

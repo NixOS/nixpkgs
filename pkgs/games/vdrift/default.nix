@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchsvn, pkg-config, sconsPackages, libGLU, libGL, SDL2, SDL2_image
-, libvorbis, bullet, curl, gettext, writeTextFile
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchsvn
+, pkg-config
+, sconsPackages
+, libGLU
+, libGL
+, SDL2
+, SDL2_image
+, libvorbis
+, bullet
+, curl
+, gettext
+, writeTextFile
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
@@ -36,25 +49,27 @@ let
       description = "Car racing game";
       homepage = "http://vdrift.net/";
       license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [viric];
+      maintainers = with lib.maintainers; [ viric ];
       platforms = lib.platforms.linux;
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
-in writeTextFile {
-  name = wrappedName;
-  text = ''
-    export VDRIFT_DATA_DIRECTORY="${data}"
-    exec ${bin}/bin/vdrift "$@"
-  '';
-  destination = "/bin/vdrift";
-  executable = true;
-  checkPhase = ''
-    ${stdenv.shell} -n $out/bin/vdrift
-  '';
-} // {
+in
+writeTextFile
+  {
+    name = wrappedName;
+    text = ''
+      export VDRIFT_DATA_DIRECTORY="${data}"
+      exec ${bin}/bin/vdrift "$@"
+    '';
+    destination = "/bin/vdrift";
+    executable = true;
+    checkPhase = ''
+      ${stdenv.shell} -n $out/bin/vdrift
+    '';
+  } // {
   meta = bin.meta // {
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
   unwrapped = bin;
   inherit bin data;

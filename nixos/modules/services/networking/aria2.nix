@@ -11,15 +11,15 @@ let
   sessionFile = "${homeDir}/aria2.session";
   downloadDir = "${homeDir}/Downloads";
 
-  rangesToStringList = map (x: builtins.toString x.from +"-"+ builtins.toString x.to);
+  rangesToStringList = map (x: builtins.toString x.from + "-" + builtins.toString x.to);
 
   settingsFile = pkgs.writeText "aria2.conf"
-  ''
-    dir=${cfg.downloadDir}
-    listen-port=${concatStringsSep "," (rangesToStringList cfg.listenPortRange)}
-    rpc-listen-port=${toString cfg.rpcListenPort}
-    rpc-secret=${cfg.rpcSecret}
-  '';
+    ''
+      dir=${cfg.downloadDir}
+      listen-port=${concatStringsSep "," (rangesToStringList cfg.listenPortRange)}
+      rpc-listen-port=${toString cfg.rpcListenPort}
+      rpc-secret=${cfg.rpcSecret}
+    '';
 
 in
 {
@@ -55,7 +55,7 @@ in
       };
       listenPortRange = mkOption {
         type = types.listOf types.attrs;
-        default = [ { from = 6881; to = 6999; } ];
+        default = [{ from = 6881; to = 6999; }];
         description = ''
           Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.
         '';

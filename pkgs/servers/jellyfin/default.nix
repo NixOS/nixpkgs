@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnetCorePackages, ffmpeg,
-  fontconfig, freetype, nixosTests }:
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, sqlite
+, makeWrapper
+, dotnetCorePackages
+, ffmpeg
+, fontconfig
+, freetype
+, nixosTests
+}:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -15,7 +25,8 @@ let
       "musl-");
   runtimeDir = "${os}-${musl}${arch}";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "jellyfin";
   version = "10.7.2";
 
@@ -53,7 +64,7 @@ in stdenv.mkDerivation rec {
     smoke-test = nixosTests.jellyfin;
   };
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "The Free Software Media System";
     homepage = "https://jellyfin.org/";
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "grantlee-0.5.1";
 
-# Upstream download server has country code firewall, so I made a mirror.
+  # Upstream download server has country code firewall, so I made a mirror.
   src = fetchurl {
     urls = [
       "http://downloads.grantlee.org/${name}.tar.gz"

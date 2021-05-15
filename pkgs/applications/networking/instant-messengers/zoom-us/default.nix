@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
-# Dynamic libraries
+  # Dynamic libraries
 , alsaLib
 , atk
 , cairo
@@ -18,12 +18,13 @@
 , xorg
 , libxkbcommon
 , zlib
-# Runtime
+  # Runtime
 , coreutils
 , pciutils
 , procps
 , util-linux
-, pulseaudioSupport ? true, libpulseaudio ? null
+, pulseaudioSupport ? true
+, libpulseaudio ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -65,7 +66,8 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
   src = srcs.${stdenv.hostPlatform.system};

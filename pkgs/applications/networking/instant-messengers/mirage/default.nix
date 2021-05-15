@@ -1,13 +1,33 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, qmake, pkg-config, olm, wrapQtAppsHook
-, qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qtgraphicaleffects
-, python3Packages, pyotherside, libXScrnSaver
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, pkg-config
+, olm
+, wrapQtAppsHook
+, qtbase
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qtgraphicaleffects
+, python3Packages
+, pyotherside
+, libXScrnSaver
 }:
 
 let
   pypkgs = with python3Packages; [
-    aiofiles filetype matrix-nio appdirs cairosvg
-    pymediainfo setuptools html-sanitizer mistune blist
+    aiofiles
+    filetype
+    matrix-nio
+    appdirs
+    cairosvg
+    pymediainfo
+    setuptools
+    html-sanitizer
+    mistune
+    blist
     pyotherside
   ];
 in
@@ -26,10 +46,13 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook python3Packages.wrapPython ];
 
   buildInputs = [
-    qtbase qtmultimedia
+    qtbase
+    qtmultimedia
     qtquickcontrols2
-    qtkeychain qtgraphicaleffects
-    olm pyotherside
+    qtkeychain
+    qtgraphicaleffects
+    olm
+    pyotherside
     libXScrnSaver
   ];
 
@@ -45,7 +68,7 @@ mkDerivation rec {
     wrapProgram $out/bin/mirage \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       "''${qtWrapperArgs[@]}"
-    '';
+  '';
 
   meta = with lib; {
     description = "A fancy, customizable, keyboard-operable Qt/QML+Python Matrix chat client for encrypted and decentralized communication";

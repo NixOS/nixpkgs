@@ -1,5 +1,15 @@
-{ lib, setuptools, boto3, requests, click, pyyaml, pydantic, buildPythonApplication
-, pythonOlder, fetchFromGitHub, awscli }:
+{ lib
+, setuptools
+, boto3
+, requests
+, click
+, pyyaml
+, pydantic
+, buildPythonApplication
+, pythonOlder
+, fetchFromGitHub
+, awscli
+}:
 
 buildPythonApplication rec {
   pname = "nimbo";

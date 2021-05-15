@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ fcitx gettext ];
 
   preInstall = ''
-   substituteInPlace tables/cmake_install.cmake \
-      --replace ${fcitx} $out
+    substituteInPlace tables/cmake_install.cmake \
+       --replace ${fcitx} $out
   '';
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-table-extra";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-extra/";
-    description   = "Provides extra table for Fcitx, including Boshiamy, Zhengma, Cangjie, and Quick";
-    license       = licenses.gpl2Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ linc01n ];
+    homepage = "https://github.com/fcitx/fcitx-table-extra";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-extra/";
+    description = "Provides extra table for Fcitx, including Boshiamy, Zhengma, Cangjie, and Quick";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ linc01n ];
   };
 
 }

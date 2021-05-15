@@ -15,49 +15,49 @@ rec {
 
   packageName = "serapeum";
 
-  asdFilesToKeep = ["serapeum.asd"];
+  asdFilesToKeep = [ "serapeum.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM serapeum DESCRIPTION Utilities beyond Alexandria. SHA256
-    1zz0sjp2dwy7qg7a3h1asvflkl9z2ajwk9zqfqylm0mhl0mv2c01 URL
-    http://beta.quicklisp.org/archive/serapeum/2021-04-11/serapeum-20210411-git.tgz
-    MD5 091a7c572d48164ba8499bb44a37a85f NAME serapeum FILENAME serapeum DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
-     (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME closer-mop FILENAME closer-mop)
-     (NAME fare-quasiquote FILENAME fare-quasiquote)
-     (NAME fare-quasiquote-extras FILENAME fare-quasiquote-extras)
-     (NAME fare-quasiquote-optima FILENAME fare-quasiquote-optima)
-     (NAME fare-quasiquote-readtable FILENAME fare-quasiquote-readtable)
-     (NAME fare-utils FILENAME fare-utils)
-     (NAME global-vars FILENAME global-vars)
-     (NAME introspect-environment FILENAME introspect-environment)
-     (NAME iterate FILENAME iterate)
-     (NAME lisp-namespace FILENAME lisp-namespace)
-     (NAME named-readtables FILENAME named-readtables)
-     (NAME parse-declarations-1.0 FILENAME parse-declarations-1_dot_0)
-     (NAME parse-number FILENAME parse-number)
-     (NAME split-sequence FILENAME split-sequence)
-     (NAME string-case FILENAME string-case) (NAME trivia FILENAME trivia)
-     (NAME trivia.balland2006 FILENAME trivia_dot_balland2006)
-     (NAME trivia.level0 FILENAME trivia_dot_level0)
-     (NAME trivia.level1 FILENAME trivia_dot_level1)
-     (NAME trivia.level2 FILENAME trivia_dot_level2)
-     (NAME trivia.quasiquote FILENAME trivia_dot_quasiquote)
-     (NAME trivia.trivial FILENAME trivia_dot_trivial)
-     (NAME trivial-cltl2 FILENAME trivial-cltl2)
-     (NAME trivial-features FILENAME trivial-features)
-     (NAME trivial-file-size FILENAME trivial-file-size)
-     (NAME trivial-garbage FILENAME trivial-garbage)
-     (NAME trivial-macroexpand-all FILENAME trivial-macroexpand-all)
-     (NAME type-i FILENAME type-i) (NAME uiop FILENAME uiop))
-    DEPENDENCIES
-    (alexandria babel bordeaux-threads closer-mop fare-quasiquote
-     fare-quasiquote-extras fare-quasiquote-optima fare-quasiquote-readtable
-     fare-utils global-vars introspect-environment iterate lisp-namespace
-     named-readtables parse-declarations-1.0 parse-number split-sequence
-     string-case trivia trivia.balland2006 trivia.level0 trivia.level1
-     trivia.level2 trivia.quasiquote trivia.trivial trivial-cltl2
-     trivial-features trivial-file-size trivial-garbage trivial-macroexpand-all
-     type-i uiop)
+  1zz0sjp2dwy7qg7a3h1asvflkl9z2ajwk9zqfqylm0mhl0mv2c01 URL
+  http://beta.quicklisp.org/archive/serapeum/2021-04-11/serapeum-20210411-git.tgz
+  MD5 091a7c572d48164ba8499bb44a37a85f NAME serapeum FILENAME serapeum DEPS
+  ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+   (NAME bordeaux-threads FILENAME bordeaux-threads)
+   (NAME closer-mop FILENAME closer-mop)
+   (NAME fare-quasiquote FILENAME fare-quasiquote)
+   (NAME fare-quasiquote-extras FILENAME fare-quasiquote-extras)
+   (NAME fare-quasiquote-optima FILENAME fare-quasiquote-optima)
+   (NAME fare-quasiquote-readtable FILENAME fare-quasiquote-readtable)
+   (NAME fare-utils FILENAME fare-utils)
+   (NAME global-vars FILENAME global-vars)
+   (NAME introspect-environment FILENAME introspect-environment)
+   (NAME iterate FILENAME iterate)
+   (NAME lisp-namespace FILENAME lisp-namespace)
+   (NAME named-readtables FILENAME named-readtables)
+   (NAME parse-declarations-1.0 FILENAME parse-declarations-1_dot_0)
+   (NAME parse-number FILENAME parse-number)
+   (NAME split-sequence FILENAME split-sequence)
+   (NAME string-case FILENAME string-case) (NAME trivia FILENAME trivia)
+   (NAME trivia.balland2006 FILENAME trivia_dot_balland2006)
+   (NAME trivia.level0 FILENAME trivia_dot_level0)
+   (NAME trivia.level1 FILENAME trivia_dot_level1)
+   (NAME trivia.level2 FILENAME trivia_dot_level2)
+   (NAME trivia.quasiquote FILENAME trivia_dot_quasiquote)
+   (NAME trivia.trivial FILENAME trivia_dot_trivial)
+   (NAME trivial-cltl2 FILENAME trivial-cltl2)
+   (NAME trivial-features FILENAME trivial-features)
+   (NAME trivial-file-size FILENAME trivial-file-size)
+   (NAME trivial-garbage FILENAME trivial-garbage)
+   (NAME trivial-macroexpand-all FILENAME trivial-macroexpand-all)
+   (NAME type-i FILENAME type-i) (NAME uiop FILENAME uiop))
+  DEPENDENCIES
+  (alexandria babel bordeaux-threads closer-mop fare-quasiquote
+   fare-quasiquote-extras fare-quasiquote-optima fare-quasiquote-readtable
+   fare-utils global-vars introspect-environment iterate lisp-namespace
+   named-readtables parse-declarations-1.0 parse-number split-sequence
+   string-case trivia trivia.balland2006 trivia.level0 trivia.level1
+   trivia.level2 trivia.quasiquote trivia.trivial trivial-cltl2
+   trivial-features trivial-file-size trivial-garbage trivial-macroexpand-all
+   type-i uiop)
     VERSION 20210411-git SIBLINGS NIL PARASITES NIL) */

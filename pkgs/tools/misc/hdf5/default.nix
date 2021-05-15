@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
 , cpp ? false
@@ -36,20 +37,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip
     ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = []
+  propagatedBuildInputs = [ ]
     ++ optional (zlib != null) zlib
     ++ optional mpiSupport mpi;
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java"
     ++ optional usev110Api "--with-default-api-version=v110";

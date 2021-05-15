@@ -2,7 +2,7 @@
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
-  certs = import ./certs.nix { externalDomain = domain; kubelets = ["machine1" "machine2"]; };
+  certs = import ./certs.nix { externalDomain = domain; kubelets = [ "machine1" "machine2" ]; };
   kubeconfig = pkgs.writeText "kubeconfig.json" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";
@@ -34,7 +34,8 @@ let
       $machine1->succeed("e2e.test -kubeconfig ${kubeconfig} -provider local -ginkgo.focus '\\[Conformance\\]' -ginkgo.skip '\\[Flaky\\]|\\[Serial\\]'");
     '';
   };
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest base;
   multinode = mkKubernetesMultiNodeTest base;
 }

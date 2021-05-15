@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper
-, mysqlSupport ? true, mysql_jdbc
-, postgresqlSupport ? true, postgresql_jdbc }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeWrapper
+, mysqlSupport ? true
+, mysql_jdbc
+, postgresqlSupport ? true
+, postgresql_jdbc
+}:
 
 let
   extraJars =
@@ -30,7 +37,8 @@ stdenv.mkDerivation rec {
         CP="\$CP":"\$jar"
       done
     '';
-    in ''
+    in
+    ''
       mkdir -p $out
       mv ./{lib,licenses,liquibase.jar} $out/
 
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
         liquibase.integration.commandline.Main \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
-  '';
+    '';
 
   meta = with lib; {
     description = "Version Control for your database";

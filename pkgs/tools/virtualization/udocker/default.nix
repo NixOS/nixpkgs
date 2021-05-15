@@ -7,7 +7,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
-    repo = "udocker" ;
+    repo = "udocker";
     rev = "v${version}";
     sha256 = "1c8y1p3brj987drikwrby8m1hdr40ja4anx0p4xsij3ll2h62w6z";
   };
@@ -15,11 +15,11 @@ buildPythonApplication rec {
   buildInputs = [ proot patchelf fakechroot runc simplejson pycurl coreutils ];
 
   postPatch = ''
-      substituteInPlace udocker.py --replace /usr/sbin:/sbin:/usr/bin:/bin $PATH
-      substituteInPlace udocker.py --replace /bin/chmod ${coreutils}/bin/chmod
-      substituteInPlace udocker.py --replace /bin/rm ${coreutils}/bin/rm
-      substituteInPlace tests/unit_tests.py --replace /bin/rm ${coreutils}/bin/rm
-      substituteInPlace udocker.py --replace "autoinstall = True" "autoinstall = False"
+    substituteInPlace udocker.py --replace /usr/sbin:/sbin:/usr/bin:/bin $PATH
+    substituteInPlace udocker.py --replace /bin/chmod ${coreutils}/bin/chmod
+    substituteInPlace udocker.py --replace /bin/rm ${coreutils}/bin/rm
+    substituteInPlace tests/unit_tests.py --replace /bin/rm ${coreutils}/bin/rm
+    substituteInPlace udocker.py --replace "autoinstall = True" "autoinstall = False"
   '';
 
   checkInputs = [

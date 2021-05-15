@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml omake findlib graphicsmagick ghostscript ];
 
-  propagatedBuildInputs = [libtiff libjpeg libpng giflib freetype libXpm ];
+  propagatedBuildInputs = [ libtiff libjpeg libpng giflib freetype libXpm ];
 
   createFindlibDestdir = true;
 

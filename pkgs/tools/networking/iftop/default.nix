@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     cp ${automake}/share/automake*/config.{sub,guess} config
   '';
 
-  buildInputs = [ncurses libpcap];
+  buildInputs = [ ncurses libpcap ];
 
   passthru.tests = { inherit (nixosTests) iftop; };
 

@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , enableStatic ? true
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -30,8 +33,8 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "stackprotector" ];
 
   buildFlags =
-      lib.optional enableStatic "static"
-   ++ lib.optional enableShared "dynamic";
+    lib.optional enableStatic "static"
+    ++ lib.optional enableShared "dynamic";
 
   patchFlags = [ "-p0" ];
 

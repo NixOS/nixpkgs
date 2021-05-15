@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ cffi pytestCheckHook ];
 
-  LMDB_FORCE_SYSTEM=1;
+  LMDB_FORCE_SYSTEM = 1;
 
   meta = with lib; {
     description = "Universal Python binding for the LMDB 'Lightning' Database";

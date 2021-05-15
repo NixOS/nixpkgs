@@ -12,7 +12,7 @@ buildPythonPackage rec {
   patchPhase = ''
     substituteInPlace setup.py \
         --replace '/usr/include/mupdf' ${mupdf.dev}/include/mupdf
-    '';
+  '';
   nativeBuildInputs = [ swig ];
   buildInputs = [ mupdf ];
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     description = "Python bindings for MuPDF's rendering library.";
     homepage = "https://github.com/pymupdf/PyMuPDF";
     maintainers = with maintainers; [ teto ];
-    license =  licenses.agpl3;
+    license = licenses.agpl3;
     platforms = platforms.linux;
   };
 }

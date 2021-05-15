@@ -1,7 +1,26 @@
-{ lib, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
-  psutil, pyflakes, rope, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels_0_5, qtpy, pyzmq, chardet, pyqtwebengine
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jedi
+, pycodestyle
+, psutil
+, pyflakes
+, rope
+, pylint
+, keyring
+, numpydoc
+, qtconsole
+, qtawesome
+, nbconvert
+, mccabe
+, pyopengl
+, cloudpickle
+, pygments
+, spyder-kernels_0_5
+, qtpy
+, pyzmq
+, chardet
+, pyqtwebengine
 }:
 
 buildPythonPackage rec {
@@ -16,9 +35,26 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope pylint keyring numpydoc
-    qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels_0_5
-    pygments qtpy pyzmq chardet pyqtwebengine
+    jedi
+    pycodestyle
+    psutil
+    pyflakes
+    rope
+    pylint
+    keyring
+    numpydoc
+    qtconsole
+    qtawesome
+    nbconvert
+    mccabe
+    pyopengl
+    cloudpickle
+    spyder-kernels_0_5
+    pygments
+    qtpy
+    pyzmq
+    chardet
+    pyqtwebengine
   ];
 
   # tests fail with a segfault

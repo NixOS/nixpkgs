@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.programs.feedbackd;
-in {
+in
+{
   options = {
     programs.feedbackd = {
       enable = mkEnableOption ''
@@ -27,6 +28,6 @@ in {
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    users.groups.feedbackd = {};
+    users.groups.feedbackd = { };
   };
 }

@@ -1,8 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, glibcLocales, git
-, mock, nose, markdown, lxml, typogrify
-, jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
-, blinker, pillow, beautifulsoup4, markupsafe, pandoc }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, glibcLocales
+, git
+, mock
+, nose
+, markdown
+, lxml
+, typogrify
+, jinja2
+, pygments
+, docutils
+, pytz
+, unidecode
+, six
+, dateutil
+, feedgenerator
+, blinker
+, pillow
+, beautifulsoup4
+, markupsafe
+, pandoc
+}:
 
 buildPythonPackage rec {
   pname = "pelican";
@@ -44,8 +64,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-    blinker pillow beautifulsoup4 markupsafe lxml
+    jinja2
+    pygments
+    docutils
+    pytz
+    unidecode
+    six
+    dateutil
+    feedgenerator
+    blinker
+    pillow
+    beautifulsoup4
+    markupsafe
+    lxml
   ];
 
   checkInputs = [
@@ -53,12 +84,12 @@ buildPythonPackage rec {
     pandoc
   ];
 
-  postPatch= ''
+  postPatch = ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   # We only want to patch shebangs in /bin, and not those
   # of the project scripts that are created by Pelican.

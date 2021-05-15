@@ -1,8 +1,9 @@
-import ../make-test-python.nix ({pkgs, ...}:
- let
-    testdir = pkgs.writeTextDir "www/info.php" "<?php phpinfo();";
+import ../make-test-python.nix ({ pkgs, ... }:
+let
+  testdir = pkgs.writeTextDir "www/info.php" "<?php phpinfo();";
 
-in {
+in
+{
   name = "unit-php-test";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
@@ -39,7 +40,7 @@ in {
         group = "testgroup";
       };
       groups.testgroup = {
-        gid= 1074;
+        gid = 1074;
       };
     };
   };

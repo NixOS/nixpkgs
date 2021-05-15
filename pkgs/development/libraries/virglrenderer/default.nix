@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
-, libGLU, epoxy, libX11, libdrm, mesa
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, meson
+, ninja
+, pkg-config
+, python3
+, libGLU
+, epoxy
+, libX11
+, libdrm
+, mesa
 }:
 
 stdenv.mkDerivation rec {

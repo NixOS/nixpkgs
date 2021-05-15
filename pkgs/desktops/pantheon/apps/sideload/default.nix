@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , desktop-file-utils
 , nix-update-script
 , elementary-gtk-theme

@@ -23,7 +23,8 @@ let
 
   logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
 
-  logstashSettingsDir = pkgs.runCommand "logstash-settings" {
+  logstashSettingsDir = pkgs.runCommand "logstash-settings"
+    {
       inherit logstashSettingsYml;
       preferLocalBuild = true;
     } ''

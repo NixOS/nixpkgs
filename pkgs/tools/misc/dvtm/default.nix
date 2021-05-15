@@ -1,4 +1,4 @@
-{callPackage, fetchurl}:
+{ callPackage, fetchurl }:
 callPackage ./dvtm.nix rec {
   name = "dvtm-0.15";
 

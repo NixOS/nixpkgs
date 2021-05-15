@@ -23,7 +23,7 @@ with lib;
       path = [ pkgs.audit ];
 
       serviceConfig = {
-        ExecStartPre="${pkgs.coreutils}/bin/mkdir -p /var/log/audit";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/log/audit";
         ExecStart = "${pkgs.audit}/bin/auditd -l -n -s nochange";
       };
     };

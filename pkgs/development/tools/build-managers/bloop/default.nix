@@ -35,9 +35,10 @@ stdenv.mkDerivation rec {
   bloop-coursier = stdenv.mkDerivation rec {
     name = "${pname}-coursier-${version}";
 
-    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
-               else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
-               else throw "unsupported platform";
+    platform =
+      if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+      else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+      else throw "unsupported platform";
 
     phases = [ "installPhase" ];
     installPhase = ''
@@ -50,11 +51,12 @@ stdenv.mkDerivation rec {
 
       # Remove binary part of the coursier launcher script to make derivation output hash stable
       sed -i '5,$ d' $out/bloop
-   '';
+    '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "1cs3ng6bj9s7xf6c4xaiqgg5qr34abnipfgc44sy2ljklr7x0jwa"
+    outputHash =
+      if stdenv.isLinux && stdenv.isx86_64 then "1cs3ng6bj9s7xf6c4xaiqgg5qr34abnipfgc44sy2ljklr7x0jwa"
       else if stdenv.isDarwin && stdenv.isx86_64 then "0l9vqvzcmxya1s04cps96skw4dslh3i3ks73dl53ing50zb0ga9r"
       else throw "unsupported platform";
   };

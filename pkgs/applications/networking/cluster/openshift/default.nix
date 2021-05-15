@@ -1,8 +1,18 @@
-{ lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, util-linux
-, coreutils, libkrb5, ncurses, clang, installShellFiles
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+, which
+, go-bindata
+, rsync
+, util-linux
+, coreutils
+, libkrb5
+, ncurses
+, clang
+, installShellFiles
 , components ? [
-  "cmd/oc"
-  "cmd/openshift"
+    "cmd/oc"
+    "cmd/openshift"
   ]
 }:
 
@@ -20,7 +30,8 @@ let
   k8sgitcommit = "b1b2997";
   k8sgitMajor = "0";
   k8sgitMinor = "1";
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   pname = "openshift-origin";
   inherit version;
 
@@ -71,7 +82,7 @@ in buildGoPackage rec {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = "http://www.openshift.org";
-    maintainers = with maintainers; [offline bachp moretea];
+    maintainers = with maintainers; [ offline bachp moretea ];
     platforms = platforms.unix;
   };
 }

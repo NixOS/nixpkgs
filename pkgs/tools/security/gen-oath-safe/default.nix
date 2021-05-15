@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/mcepl/gen-oath-safe";
     description = "Script for generating HOTP/TOTP keys (and QR code)";
-    platforms =  platforms.unix;
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = [ maintainers.makefu ];
   };

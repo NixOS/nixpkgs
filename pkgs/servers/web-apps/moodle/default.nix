@@ -4,7 +4,8 @@ let
   version = "3.10.2";
   stableVersion = lib.concatStrings (lib.take 2 (lib.splitVersion version));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
 

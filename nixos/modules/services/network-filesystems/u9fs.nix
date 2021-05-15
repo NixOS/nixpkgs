@@ -64,7 +64,8 @@ in
         reloadIfChanged = true;
         requires = [ "u9fs.socket" ];
         serviceConfig =
-          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
+          {
+            ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
             StandardInput = "socket";
             StandardError = "journal";
             User = cfg.user;

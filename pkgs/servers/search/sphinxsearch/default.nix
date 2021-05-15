@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, expat, libmysqlclient,
-  enableXmlpipe2 ? false,
-  enableMysql ? true
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, expat
+, libmysqlclient
+, enableXmlpipe2 ? false
+, enableMysql ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +46,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An open source full text search server";
-    homepage    = "http://sphinxsearch.com";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.all;
+    homepage = "http://sphinxsearch.com";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ederoyd46 valodim ];
   };
 }

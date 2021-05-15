@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config
-, withPerl ? false, perl
-, withPython ? false, python3
-, withTcl ? false, tcl
-, withCyrus ? true, cyrus_sasl
-, withUnicode ? true, icu
-, withZlib ? true, zlib
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, pkg-config
+, withPerl ? false
+, perl
+, withPython ? false
+, python3
+, withTcl ? false
+, tcl
+, withCyrus ? true
+, cyrus_sasl
+, withUnicode ? true
+, icu
+, withZlib ? true
+, zlib
 , withIPv6 ? true
 , withDebug ? false
 }:
@@ -37,7 +47,7 @@ stdenv.mkDerivation rec {
     (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (lib.enableFeature withCyrus "cyrus")
   ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
-    ++ optional withDebug [ "--enable-debug" ];
+  ++ optional withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
 

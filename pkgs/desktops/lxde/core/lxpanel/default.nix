@@ -20,7 +20,8 @@
 , lxmenu-data
 , wirelesstools
 , curl
-, supportAlsa ? false, alsaLib
+, supportAlsa ? false
+, alsaLib
 }:
 
 stdenv.mkDerivation rec {

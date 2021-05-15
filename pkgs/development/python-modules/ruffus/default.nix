@@ -4,7 +4,8 @@
 , hostname
 , pytest
 , python
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 buildPythonPackage rec {

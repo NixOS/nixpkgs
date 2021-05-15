@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace im/cmake_install.cmake \
     --replace ${fcitx} $out
-    '';
+  '';
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-m17n";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
-    description   = "Fcitx wrapper for m17n";
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-m17n";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
+    description = "Fcitx wrapper for m17n";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

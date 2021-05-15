@@ -3,7 +3,8 @@
 let
   version = "2.6.2";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "tinyxml";
   inherit version;
 

@@ -12,7 +12,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   machine =
     { ... }:
-    { services.httpd.adminAddr = "webmaster@site.local";
+    {
+      services.httpd.adminAddr = "webmaster@site.local";
       services.httpd.logPerVirtualHost = true;
 
       services.wordpress."site1.local" = {

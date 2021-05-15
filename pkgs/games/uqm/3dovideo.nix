@@ -1,12 +1,14 @@
 { stdenv, lib, requireFile, writeText, fetchurl, haskellPackages }:
 
 let
-  makeSpin = num: let
-    padded = (lib.optionalString (lib.lessThan num 10) "0") + toString num;
-  in "slides.spins.${padded} = 3DOVID:" +
-     "addons/3dovideo/spins/ship${padded}.duk:" +
-     "addons/3dovideo/spins/spin.aif:" +
-     "addons/3dovideo/spins/ship${padded}.aif:89";
+  makeSpin = num:
+    let
+      padded = (lib.optionalString (lib.lessThan num 10) "0") + toString num;
+    in
+    "slides.spins.${padded} = 3DOVID:" +
+    "addons/3dovideo/spins/ship${padded}.duk:" +
+    "addons/3dovideo/spins/spin.aif:" +
+    "addons/3dovideo/spins/ship${padded}.aif:89";
 
   videoRMP = writeText "3dovideo.rmp" (''
     slides.ending = 3DOVID:addons/3dovideo/ending/victory.duk
@@ -31,7 +33,8 @@ let
     license = lib.licenses.bsd3;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "uqm-3dovideo";
 
   src = requireFile rec {

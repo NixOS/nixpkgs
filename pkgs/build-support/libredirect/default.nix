@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
-  outputs = ["out" "hook"];
+  outputs = [ "out" "hook" ];
 
   buildPhase = ''
     $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \

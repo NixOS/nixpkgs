@@ -1,5 +1,19 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkg-config }:
+{ gnustep
+, lib
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, python3
+, lndir
+, openssl_1_1
+, openldap
+, sope
+, libmemcached
+, curl
+, libsodium
+, libzip
+, pkg-config
+}:
 with lib; gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.0.1";

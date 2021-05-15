@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, libpng, libtiff, lcms2, jpylyzer
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libpng
+, libtiff
+, lcms2
+, jpylyzer
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
 , jpipLibSupport ? false # JPIP library & executables
-, jpipServerSupport ? false, curl ? null, fcgi ? null # JPIP Server
-#, opjViewerSupport ? false, wxGTK ? null # OPJViewer executable
+, jpipServerSupport ? false
+, curl ? null
+, fcgi ? null # JPIP Server
+  #, opjViewerSupport ? false, wxGTK ? null # OPJViewer executable
 , openjpegJarSupport ? false # Openjpeg jar (Java)
 , jp3dSupport ? true # # JP3D comp
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build

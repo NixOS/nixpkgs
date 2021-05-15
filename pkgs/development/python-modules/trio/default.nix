@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , attrs
 , sortedcontainers
 , async_generator

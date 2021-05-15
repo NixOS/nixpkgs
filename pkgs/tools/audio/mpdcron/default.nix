@@ -20,7 +20,8 @@ let
     name = "mpdcron-bundle";
     gemdir = ./.;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mpdcron";
   version = "20161228";
 
@@ -54,9 +55,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A cron like daemon for mpd";
-    homepage    = "http://alip.github.io/mpdcron/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://alip.github.io/mpdcron/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 manveru ];
   };
 }

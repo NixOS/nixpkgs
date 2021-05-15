@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, libX11, cairo
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, libXinerama
+, libSM
+, libXxf86vm
+, xorgproto
+, libX11
+, cairo
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true,
+, libGLU ? null
+, libGL ? null
+, compat24 ? false
+, compat26 ? true
+, unicode ? true
+,
 }:
 
 assert withMesa -> libGLU != null && libGL != null;

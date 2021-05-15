@@ -7,7 +7,8 @@
 let
   version = "release-2019-10-13";
 
-in buildGoPackage {
+in
+buildGoPackage {
 
   pname = "boulder";
   inherit version;

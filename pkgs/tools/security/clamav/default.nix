@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config
-, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd, Foundation, json_c, check
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, zlib
+, bzip2
+, libiconv
+, libxml2
+, openssl
+, ncurses
+, curl
+, libmilter
+, pcre2
+, libmspack
+, systemd
+, Foundation
+, json_c
+, check
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +35,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
+    zlib
+    bzip2
+    libxml2
+    openssl
+    ncurses
+    curl
+    libiconv
+    libmilter
+    pcre2
+    libmspack
+    json_c
+    check
   ] ++ lib.optional stdenv.isLinux systemd
-    ++ lib.optional stdenv.isDarwin Foundation;
+  ++ lib.optional stdenv.isDarwin Foundation;
 
   configureFlags = [
     "--libdir=$(out)/lib"

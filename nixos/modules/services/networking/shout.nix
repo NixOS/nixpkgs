@@ -21,7 +21,8 @@ let
     )
   '';
 
-in {
+in
+{
   options.services.shout = {
     enable = mkEnableOption "Shout web IRC client";
 
@@ -60,7 +61,7 @@ in {
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = {
         displayNetwork = false;
@@ -98,9 +99,12 @@ in {
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
-        "--port" (toString cfg.port)
-        "--host" (toString cfg.listenAddress)
-        "--home" shoutHome
+        "--port"
+        (toString cfg.port)
+        "--host"
+        (toString cfg.listenAddress)
+        "--home"
+        shoutHome
       ];
       serviceConfig = {
         User = "shout";

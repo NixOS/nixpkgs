@@ -1,5 +1,10 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm, pytestCheckHook
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools_scm
+, pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , appdirs
@@ -11,7 +16,8 @@
 , regex
 , toml
 , typed-ast
-, typing-extensions }:
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "black";
@@ -30,7 +36,7 @@ buildPythonPackage rec {
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs =  [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -64,9 +70,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";
-    homepage    = "https://github.com/psf/black";
-    changelog   = "https://github.com/psf/black/blob/${version}/CHANGES.md";
-    license     = licenses.mit;
+    homepage = "https://github.com/psf/black";
+    changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
+    license = licenses.mit;
     maintainers = with maintainers; [ sveitser ];
   };
 }

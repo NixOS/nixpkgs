@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, cmake
+, fetchpatch
 , libiconv
 , useMimalloc ? false
 , doCheck ? true

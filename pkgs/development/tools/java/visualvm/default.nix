@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   desktopItem = makeDesktopItem {
-      name = "visualvm";
-      exec = "visualvm";
-      comment = "Java Troubleshooting Tool";
-      desktopName = "VisualVM";
-      genericName = "Java Troubleshooting Tool";
-      categories = "Development;";
+    name = "visualvm";
+    exec = "visualvm";
+    comment = "Java Troubleshooting Tool";
+    desktopName = "VisualVM";
+    genericName = "Java Troubleshooting Tool";
+    categories = "Development;";
   };
 
   nativeBuildInputs = [ makeWrapper ];

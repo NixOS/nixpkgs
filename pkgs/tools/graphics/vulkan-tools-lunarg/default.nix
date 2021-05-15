@@ -1,21 +1,41 @@
-{ stdenv, cmake, expat, fetchFromGitHub, jq, lib, libXdmcp, libXrandr, libffi
-, libxcb, pkg-config, python3, symlinkJoin, vulkan-headers, vulkan-loader
-, vulkan-validation-layers, wayland, writeText, xcbutilkeysyms, xcbutilwm
-, xlibsWrapper }:
+{ stdenv
+, cmake
+, expat
+, fetchFromGitHub
+, jq
+, lib
+, libXdmcp
+, libXrandr
+, libffi
+, libxcb
+, pkg-config
+, python3
+, symlinkJoin
+, vulkan-headers
+, vulkan-loader
+, vulkan-validation-layers
+, wayland
+, writeText
+, xcbutilkeysyms
+, xcbutilwm
+, xlibsWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
   version = "1.2.162.0";
 
-  src = (assert version == vulkan-headers.version;
+  src = (
+    assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "LunarG";
       repo = "VulkanTools";
       rev = "sdk-${version}";
       sha256 = "13v4202bfd7d7nwi8w12ja9k1vi10p9xxypzkpi063hmsgzxm5k5";
       fetchSubmodules = true;
-    });
+    }
+  );
 
   nativeBuildInputs = [ cmake pkg-config python3 jq ];
 

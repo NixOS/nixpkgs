@@ -1,11 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, htslib, zlib, curl, openssl, samblaster, sambamba
-, samtools, hexdump, python2Packages, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, htslib
+, zlib
+, curl
+, openssl
+, samblaster
+, sambamba
+, samtools
+, hexdump
+, python2Packages
+, which
+}:
 
 let
   python =
     python2Packages.python.withPackages (pkgs: with pkgs; [ pysam numpy ]);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "lumpy";
   version = "0.3.1";
 

@@ -22,6 +22,6 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.zsa-udev-rules ];
-    users.groups.plugdev = {};
+    users.groups.plugdev = { };
   };
 }

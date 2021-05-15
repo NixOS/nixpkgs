@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
-, coreutils, gnugrep, gnused, lm_sensors, net-snmp, openssh, openssl, perl
-, dnsutils, libdbi, libmysqlclient, zlib, openldap, procps
-, runtimeShell }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, runCommand
+, coreutils
+, gnugrep
+, gnused
+, lm_sensors
+, net-snmp
+, openssh
+, openssl
+, perl
+, dnsutils
+, libdbi
+, libmysqlclient
+, zlib
+, openldap
+, procps
+, runtimeShell
+}:
 
 with lib;
 
@@ -11,13 +29,14 @@ let
 
   binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net-snmp procps ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "monitoring-plugins-${majorVersion}${minorVersion}";
 
   src = fetchFromGitHub {
-    owner  = "monitoring-plugins";
-    repo   = "monitoring-plugins";
-    rev    = "v${majorVersion}";
+    owner = "monitoring-plugins";
+    repo = "monitoring-plugins";
+    rev = "v${majorVersion}";
     sha256 = "1pw7i6d2cnb5nxi2lbkwps2qzz04j9zd86fzpv9ka896b4aqrwv1";
   };
 
@@ -34,7 +53,7 @@ in stdenv.mkDerivation {
   # syntax is totally impure, because it runs an actual ping to
   # localhost (which won't work for ping6 if IPv6 support isn't
   # configured on the build machine).
-  preConfigure= ''
+  preConfigure = ''
     substituteInPlace po/Makefile.in.in \
       --replace /bin/sh ${stdenv.shell}
 
@@ -63,12 +82,12 @@ in stdenv.mkDerivation {
   # it doesn't succeed.
   # So we create it and remove it again later.
   preBuild = ''
-    mkdir -p $out
-    cat <<_EOF > $out/share
-#!${runtimeShell}
-exit 0
-_EOF
-    chmod 755 $out/share
+        mkdir -p $out
+        cat <<_EOF > $out/share
+    #!${runtimeShell}
+    exit 0
+    _EOF
+        chmod 755 $out/share
   '';
 
   postInstall = ''
@@ -78,9 +97,9 @@ _EOF
 
   meta = {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
-    homepage    = "https://www.monitoring-plugins.org";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://www.monitoring-plugins.org";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice relrod ];
   };
 }

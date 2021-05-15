@@ -1,6 +1,20 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, writeShellScriptBin, substituteAll
-, sbcl, bash, which, perl, nettools
-, openssl, glucose, minisat, abc-verifier, z3, python2
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, writeShellScriptBin
+, substituteAll
+, sbcl
+, bash
+, which
+, perl
+, nettools
+, openssl
+, glucose
+, minisat
+, abc-verifier
+, z3
+, python2
 , certifyBooks ? true
 } @ args:
 
@@ -14,7 +28,8 @@ let
   # be removed in ACL2 8.4.
   glucose = writeShellScriptBin "glucose" ''exec ${args.glucose}/bin/glucose -model "$@"'';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "acl2";
   version = "8.3";
 
@@ -41,10 +56,17 @@ in stdenv.mkDerivation rec {
     sbcl
   ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl nettools
+    which
+    perl
+    nettools
     # Some of the books require one or more of these external tools:
-    openssl.out glucose minisat abc-verifier libipasirglucose4
-    z3 (python2.withPackages (ps: [ ps.z3 ]))
+    openssl.out
+    glucose
+    minisat
+    abc-verifier
+    libipasirglucose4
+    z3
+    (python2.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -71,7 +93,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = "mkdir -p $HOME";
-  makeFlags="LISP=${sbcl}/bin/sbcl";
+  makeFlags = "LISP=${sbcl}/bin/sbcl";
 
   doCheck = true;
   checkTarget = "mini-proveall";
@@ -129,7 +151,12 @@ in stdenv.mkDerivation rec {
     ] ++ optionals certifyBooks [
       # The community books are mostly bsd3 or mit but with a few
       # other things thrown in.
-      mit gpl2 llgpl21 cc0 publicDomain unfreeRedistributable
+      mit
+      gpl2
+      llgpl21
+      cc0
+      publicDomain
+      unfreeRedistributable
     ];
     maintainers = with maintainers; [ kini raskin ];
     platforms = platforms.all;

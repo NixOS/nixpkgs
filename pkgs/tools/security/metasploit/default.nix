@@ -6,7 +6,8 @@ let
     name = "metasploit-bundler-env";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "metasploit-framework";
   version = "6.0.44";
 

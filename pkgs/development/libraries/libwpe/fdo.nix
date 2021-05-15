@@ -10,7 +10,8 @@
 , libwpe
 , libxkbcommon
 , libGL
-, libX11 }:
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";

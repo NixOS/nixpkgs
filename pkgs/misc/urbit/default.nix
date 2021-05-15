@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
-, openssl, pkg-config, re2c, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, git
+, gmp
+, libsigsegv
+, meson
+, ncurses
+, ninja
+, openssl
+, pkg-config
+, re2c
+, zlib
 }:
 
 stdenv.mkDerivation rec {

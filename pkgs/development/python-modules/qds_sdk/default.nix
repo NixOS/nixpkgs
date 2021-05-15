@@ -1,13 +1,14 @@
-{ lib,
- fetchFromGitHub,
- buildPythonPackage,
- boto,
- inflection,
- pytest,
- mock,
- requests,
- six,
- urllib3 }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, boto
+, inflection
+, pytest
+, mock
+, requests
+, six
+, urllib3
+}:
 
 buildPythonPackage rec {
   pname = "qds_sdk";

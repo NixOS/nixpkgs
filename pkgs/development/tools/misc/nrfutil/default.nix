@@ -11,8 +11,23 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "0g43lf5jmk0qxb7r4h68wr38fli6pjjk67w8l2cpdm9rd8jz4lpn";
   };
 
-  propagatedBuildInputs = [ pc-ble-driver-py six pyserial enum34  click ecdsa
-    protobuf tqdm piccata pyspinel intelhex pyyaml crcmod libusb1 ipaddress ];
+  propagatedBuildInputs = [
+    pc-ble-driver-py
+    six
+    pyserial
+    enum34
+    click
+    ecdsa
+    protobuf
+    tqdm
+    piccata
+    pyspinel
+    intelhex
+    pyyaml
+    crcmod
+    libusb1
+    ipaddress
+  ];
 
   checkInputs = [ nose behave ];
 

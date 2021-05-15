@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, unzip
+, zlib
+, SDL
+, readline
+, libGLU
+, libGL
+, libX11
+}:
 
 with lib;
 stdenv.mkDerivation rec {

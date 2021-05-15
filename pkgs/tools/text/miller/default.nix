@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON";
-    homepage    = "http://johnkerl.org/miller/";
-    license     = licenses.bsd2;
+    homepage = "http://johnkerl.org/miller/";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ mstarzyk ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

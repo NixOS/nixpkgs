@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, opencascade
-, Cocoa }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, opencascade
+, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   pname = "smesh";

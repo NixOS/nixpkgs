@@ -35,7 +35,8 @@ let
     outputHashMode = "recursive";
     outputHash = "05fsycpd90dbak2vgdpd9cz08liq5j78ag9ry9y1s62ld776g0hz";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];

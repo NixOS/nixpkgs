@@ -33,22 +33,24 @@ import ./make-test-python.nix {
         mailLocation = "maildir:~/mail";
         protocols = [ "imap" ];
       };
-      environment.systemPackages = let
-        checkMailLanded = pkgs.writeScriptBin "check-mail-landed" ''
-          #!${pkgs.python3.interpreter}
-          import imaplib
+      environment.systemPackages =
+        let
+          checkMailLanded = pkgs.writeScriptBin "check-mail-landed" ''
+            #!${pkgs.python3.interpreter}
+            import imaplib
 
-          with imaplib.IMAP4('127.0.0.1', 143) as imap:
-            imap.login('alice', 'foobar')
-            imap.select()
-            status, refs = imap.search(None, 'ALL')
-            print("=====> Result of search for all:", status, refs)
-            assert status == 'OK'
-            assert len(refs) > 0
-            status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
-            assert status == 'OK'
-        '';
-      in [ pkgs.opensmtpd checkMailLanded ];
+            with imaplib.IMAP4('127.0.0.1', 143) as imap:
+              imap.login('alice', 'foobar')
+              imap.select()
+              status, refs = imap.search(None, 'ALL')
+              print("=====> Result of search for all:", status, refs)
+              assert status == 'OK'
+              assert len(refs) > 0
+              status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
+              assert status == 'OK'
+          '';
+        in
+        [ pkgs.opensmtpd checkMailLanded ];
     };
   };
 

@@ -3,8 +3,7 @@
 , fetchurl
 , unzip
 , version ? "2.12.2"
-, sources ?
-  let
+, sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
     i686 = "ia32";

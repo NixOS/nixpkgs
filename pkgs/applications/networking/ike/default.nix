@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
-, gcc, nettools, iproute2, linuxHeaders }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, openssl
+, libedit
+, flex
+, bison
+, qt4
+, makeWrapper
+, gcc
+, nettools
+, iproute2
+, linuxHeaders
+}:
 
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"

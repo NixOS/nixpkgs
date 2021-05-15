@@ -1,6 +1,14 @@
-{ lib, pythonOlder, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch ? null
-, pytestCheckHook }:
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, buildPythonPackage
+, six
+, enum34
+, pyasn1
+, cryptography
+, singledispatch ? null
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pgpy";

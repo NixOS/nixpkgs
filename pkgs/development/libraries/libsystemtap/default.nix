@@ -1,4 +1,4 @@
-{lib, stdenv, fetchgit, gettext, python, elfutils}:
+{ lib, stdenv, fetchgit, gettext, python, elfutils }:
 
 stdenv.mkDerivation {
   pname = "libsystemtap";

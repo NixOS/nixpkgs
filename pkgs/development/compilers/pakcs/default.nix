@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
-, curl, git, unzip, gnutar, coreutils, sqlite }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, haskellPackages
+, haskell
+, which
+, swiProlog
+, rlwrap
+, tk
+, curl
+, git
+, unzip
+, gnutar
+, coreutils
+, sqlite
+}:
 
 let
   pname = "pakcs";
@@ -16,17 +29,18 @@ let
 
   curry-frontend = (haskellPackages.override {
     overrides = self: super: {
-      curry-base = haskell.lib.overrideCabal (super.callPackage ./curry-base.nix {}) (drv: {
+      curry-base = haskell.lib.overrideCabal (super.callPackage ./curry-base.nix { }) (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-base";
       });
-      curry-frontend = haskell.lib.overrideCabal (super.callPackage ./curry-frontend.nix {}) (drv: {
+      curry-frontend = haskell.lib.overrideCabal (super.callPackage ./curry-frontend.nix { }) (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-frontend";
       });
     };
   }).curry-frontend;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [ swiProlog ];
@@ -51,7 +65,7 @@ in stdenv.mkDerivation {
                 examples/test.sh testsuite/test.sh lib/test.sh; do
         substituteInPlace $file --replace "/bin/rm" "rm"
     done
-  '' ;
+  '';
 
   # cypm new: EXISTENCE ERROR: source_sink
   # "/tmp/nix-build-pakcs-2.0.2.drv-0/pakcs-2.0.2/currytools/cpm/templates/LICENSE"

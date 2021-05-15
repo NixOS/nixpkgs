@@ -1,7 +1,16 @@
-{ lib, stdenv, patchelf, fetchurl, p7zip
-, nss, nspr, libusb1
-, qtbase, qtmultimedia, qtserialport
-, autoPatchelfHook, wrapQtAppsHook
+{ lib
+, stdenv
+, patchelf
+, fetchurl
+, p7zip
+, nss
+, nspr
+, libusb1
+, qtbase
+, qtmultimedia
+, qtserialport
+, autoPatchelfHook
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +29,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    nss nspr libusb1
-    qtbase qtmultimedia qtserialport
+    nss
+    nspr
+    libusb1
+    qtbase
+    qtmultimedia
+    qtserialport
   ];
 
   # We nuke the vendored Qt5 libraries that LightBurn ships and instead use our

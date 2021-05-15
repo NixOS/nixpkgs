@@ -3,7 +3,8 @@
 let
   pname = "xkcd-font";
   version = "unstable-2017-08-24";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "ipython";

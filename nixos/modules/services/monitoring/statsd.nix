@@ -9,11 +9,13 @@ let
   isBuiltinBackend = name:
     builtins.elem name [ "graphite" "console" "repeater" ];
 
-  backendsToPackages = let
-    mkMap = list: name:
-      if isBuiltinBackend name then list
-      else list ++ [ pkgs.nodePackages.${name} ];
-  in foldl mkMap [];
+  backendsToPackages =
+    let
+      mkMap = list: name:
+        if isBuiltinBackend name then list
+        else list ++ [ pkgs.nodePackages.${name} ];
+    in
+    foldl mkMap [ ];
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
@@ -84,7 +86,7 @@ in
 
     backends = mkOption {
       description = "List of backends statsd will use for data persistence";
-      default = [];
+      default = [ ];
       example = [
         "graphite"
         "console"
@@ -120,10 +122,12 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = map (backend: {
-      assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
-      message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
-    }) cfg.backends;
+    assertions = map
+      (backend: {
+        assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
+        message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
+      })
+      cfg.backends;
 
     users.users.statsd = {
       uid = config.ids.uids.statsd;

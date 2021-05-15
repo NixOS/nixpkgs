@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gdk-pixbuf, glib, ibus, libnotify
-, librime, brise }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gdk-pixbuf
+, glib
+, ibus
+, libnotify
+, librime
+, brise
+}:
 
 stdenv.mkDerivation rec {
   pname = "ibus-rime";

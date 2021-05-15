@@ -10,9 +10,11 @@
    directory, so the Makefile of the package should support DESTDIR.
 */
 
-{ src, stdenv
+{ src
+, stdenv
 , name ? "binary-tarball"
-, ... } @ args:
+, ...
+} @ args:
 
 stdenv.mkDerivation (
 
@@ -70,7 +72,7 @@ stdenv.mkDerivation (
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     '';
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (if args ? meta then args.meta else { }) // {
       description = "Build of a generic binary distribution";
     };
 

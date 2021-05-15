@@ -19,7 +19,8 @@
 
 let
   inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
 

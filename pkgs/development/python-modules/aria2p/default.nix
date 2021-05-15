@@ -1,6 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, aria2, poetry, pytest, pytestcov, pytest_xdist, responses
-, asciimatics, loguru, requests, setuptools, websocket_client
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aria2
+, poetry
+, pytest
+, pytestcov
+, pytest_xdist
+, responses
+, asciimatics
+, loguru
+, requests
+, setuptools
+, websocket_client
 }:
 
 buildPythonPackage rec {

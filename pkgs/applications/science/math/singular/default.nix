@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
+{ stdenv
+, fetchFromGitHub
+, gmp
+, bison
+, perl
+, ncurses
+, readline
+, coreutils
+, pkg-config
 , lib
 , fetchpatch
 , autoreconfHook
@@ -11,9 +19,9 @@
 , lrcalc
 , doxygen
 , graphviz
-# upstream generates docs with texinfo 4. later versions of texinfo
-# use letters instead of numbers for post-appendix chapters, and we
-# want it to match the upstream format because sage depends on it.
+  # upstream generates docs with texinfo 4. later versions of texinfo
+  # use letters instead of numbers for post-appendix chapters, and we
+  # want it to match the upstream format because sage depends on it.
 , texinfo4
 , texlive
 , enableDocs ? true

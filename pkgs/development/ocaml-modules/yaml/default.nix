@@ -1,7 +1,14 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , dune-configurator
 , ppx_sexp_conv
-, bos, ctypes, fmt, logs, rresult, sexplib
+, bos
+, ctypes
+, fmt
+, logs
+, rresult
+, sexplib
 }:
 
 buildDunePackage rec {

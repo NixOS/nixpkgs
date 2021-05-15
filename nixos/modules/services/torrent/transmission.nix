@@ -150,31 +150,38 @@ in
       install -d -m 700 '${cfg.home}/${settingsDir}'
       chown -R '${cfg.user}:${cfg.group}' ${cfg.home}/${settingsDir}
       install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
-      '' + optionalString cfg.settings.incomplete-dir-enabled ''
+    '' + optionalString cfg.settings.incomplete-dir-enabled ''
       install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-      '';
+    '';
 
     assertions = [
-      { assertion = builtins.match "^/.*" cfg.home != null;
+      {
+        assertion = builtins.match "^/.*" cfg.home != null;
         message = "`services.transmission.home' must be an absolute path.";
       }
-      { assertion = types.path.check cfg.settings.download-dir;
+      {
+        assertion = types.path.check cfg.settings.download-dir;
         message = "`services.transmission.settings.download-dir' must be an absolute path.";
       }
-      { assertion = types.path.check cfg.settings.incomplete-dir;
+      {
+        assertion = types.path.check cfg.settings.incomplete-dir;
         message = "`services.transmission.settings.incomplete-dir' must be an absolute path.";
       }
-      { assertion = types.path.check cfg.settings.watch-dir;
+      {
+        assertion = types.path.check cfg.settings.watch-dir;
         message = "`services.transmission.settings.watch-dir' must be an absolute path.";
       }
-      { assertion = cfg.settings.script-torrent-done-filename == "" || types.path.check cfg.settings.script-torrent-done-filename;
+      {
+        assertion = cfg.settings.script-torrent-done-filename == "" || types.path.check cfg.settings.script-torrent-done-filename;
         message = "`services.transmission.settings.script-torrent-done-filename' must be an absolute path.";
       }
-      { assertion = types.port.check cfg.settings.rpc-port;
+      {
+        assertion = types.port.check cfg.settings.rpc-port;
         message = "${toString cfg.settings.rpc-port} is not a valid port number for `services.transmission.settings.rpc-port`.";
       }
       # In case both port and settings.rpc-port are explicitely defined: they must be the same.
-      { assertion = !options.services.transmission.port.isDefined || cfg.port == cfg.settings.rpc-port;
+      {
+        assertion = !options.services.transmission.port.isDefined || cfg.port == cfg.settings.rpc-port;
         message = "`services.transmission.port' is not equal to `services.transmission.settings.rpc-port'";
       }
     ];
@@ -191,21 +198,23 @@ in
 
       serviceConfig = {
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
-        ExecStartPre = [("+" + pkgs.writeShellScript "transmission-prestart" ''
-          set -eu${lib.optionalString (cfg.settings.message-level >= 3) "x"}
-          ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
-          install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
-           '${cfg.home}/${settingsDir}/settings.json'
-        '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir}";
+        ExecStartPre = [
+          ("+" + pkgs.writeShellScript "transmission-prestart" ''
+            set -eu${lib.optionalString (cfg.settings.message-level >= 3) "x"}
+            ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
+            install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
+             '${cfg.home}/${settingsDir}/settings.json'
+          '')
+        ];
+        ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "755";
         # Avoid mounting rootDir in the own rootDir of ExecStart='s mount namespace.
-        InaccessiblePaths = ["-+${rootDir}"];
+        InaccessiblePaths = [ "-+${rootDir}" ];
         # This is for BindPaths= and BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
@@ -222,7 +231,8 @@ in
         RootDirectoryStartOnly = true;
         MountAPIVFS = true;
         BindPaths =
-          [ "${cfg.home}/${settingsDir}"
+          [
+            "${cfg.home}/${settingsDir}"
             cfg.settings.download-dir
           ] ++
           optional cfg.settings.incomplete-dir-enabled
@@ -230,17 +240,18 @@ in
           ++
           optional cfg.settings.watch-dir-enabled
             cfg.settings.watch-dir
-          ;
+        ;
         BindReadOnlyPaths = [
           # No confinement done of /nix/store here like in systemd-confinement.nix,
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
           "/etc"
           "/run"
-          ] ++
-          optional (cfg.settings.script-torrent-done-enabled &&
-                    cfg.settings.script-torrent-done-filename != "")
-            cfg.settings.script-torrent-done-filename;
+        ] ++
+        optional
+          (cfg.settings.script-torrent-done-enabled &&
+            cfg.settings.script-torrent-done-filename != "")
+          cfg.settings.script-torrent-done-filename;
         # The following options are only for optimizing:
         # systemd-analyze security transmission
         AmbientCapabilities = "";
@@ -280,7 +291,13 @@ in
           # Groups in @system-service which do not contain a syscall
           # listed by perf stat -e 'syscalls:sys_enter_*' transmission-daemon -f
           # in tests, and seem likely not necessary for transmission-daemon.
-          "~@aio" "~@chown" "~@keyring" "~@memlock" "~@resources" "~@setuid" "~@timer"
+          "~@aio"
+          "~@chown"
+          "~@keyring"
+          "~@memlock"
+          "~@resources"
+          "~@setuid"
+          "~@timer"
           # In the @privileged group, but reached when querying infos through RPC (eg. with stig).
           "quotactl"
         ];
@@ -310,19 +327,21 @@ in
     networking.firewall = mkIf cfg.openFirewall (
       if cfg.settings.peer-port-random-on-start
       then
-        { allowedTCPPortRanges =
-            [ { from = cfg.settings.peer-port-random-low;
-                to   = cfg.settings.peer-port-random-high;
-              }
-            ];
+        {
+          allowedTCPPortRanges =
+            [{
+              from = cfg.settings.peer-port-random-low;
+              to = cfg.settings.peer-port-random-high;
+            }];
           allowedUDPPortRanges =
-            [ { from = cfg.settings.peer-port-random-low;
-                to   = cfg.settings.peer-port-random-high;
-              }
-            ];
+            [{
+              from = cfg.settings.peer-port-random-low;
+              to = cfg.settings.peer-port-random-high;
+            }];
         }
       else
-        { allowedTCPPorts = [ cfg.settings.peer-port ];
+        {
+          allowedTCPPorts = [ cfg.settings.peer-port ];
           allowedUDPPorts = [ cfg.settings.peer-port ];
         }
     );

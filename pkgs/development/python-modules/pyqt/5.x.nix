@@ -1,35 +1,43 @@
-{ lib, pythonPackages, pkg-config
+{ lib
+, pythonPackages
+, pkg-config
 , dbus
-, qmake, lndir
+, qmake
+, lndir
 , qtbase
 , qtsvg
 , qtdeclarative
 , qtwebchannel
-, withConnectivity ? false, qtconnectivity
-, withMultimedia ? false, qtmultimedia
-, withWebKit ? false, qtwebkit
-, withWebSockets ? false, qtwebsockets
+, withConnectivity ? false
+, qtconnectivity
+, withMultimedia ? false
+, qtmultimedia
+, withWebKit ? false
+, qtwebkit
+, withWebSockets ? false
+, qtwebsockets
 }:
 
 let
 
   inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
 
-  sip = if isPy3k then
-    pythonPackages.sip_5
-  else
-    (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
-      # If we install sip in another folder, then we need to create a __init__.py as well
-      # if we want to be able to import it with Python 2.
-      # Python 3 could rely on it being an implicit namespace package, however,
-      # PyQt5 we made an explicit namespace package so sip should be as well.
-      postInstall = ''
-        cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-        from pkgutil import extend_path
-        __path__ = extend_path(__path__, __name__)
-        EOF
-      '';
-    });
+  sip =
+    if isPy3k then
+      pythonPackages.sip_5
+    else
+      (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs (oldAttrs: {
+        # If we install sip in another folder, then we need to create a __init__.py as well
+        # if we want to be able to import it with Python 2.
+        # Python 3 could rely on it being an implicit namespace package, however,
+        # PyQt5 we made an explicit namespace package so sip should be as well.
+        postInstall = ''
+          cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
+          from pkgutil import extend_path
+          __path__ = extend_path(__path__, __name__)
+          EOF
+        '';
+      });
 
   pyqt5_sip = buildPythonPackage rec {
     pname = "PyQt5_sip";
@@ -45,7 +53,8 @@ let
     doCheck = false;
   };
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.2";
   format = "other";
@@ -69,10 +78,10 @@ in buildPythonPackage rec {
     qtdeclarative
     qtwebchannel
   ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
+  ++ lib.optional withConnectivity qtconnectivity
+  ++ lib.optional withMultimedia qtmultimedia
+  ++ lib.optional withWebKit qtwebkit
+  ++ lib.optional withWebSockets qtwebsockets
   ;
 
   buildInputs = [
@@ -81,9 +90,9 @@ in buildPythonPackage rec {
     qtsvg
     qtdeclarative
   ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
+  ++ lib.optional withConnectivity qtconnectivity
+  ++ lib.optional withWebKit qtwebkit
+  ++ lib.optional withWebSockets qtwebsockets
   ;
 
   propagatedBuildInputs = [
@@ -144,19 +153,19 @@ in buildPythonPackage rec {
     "PyQt5.QtWidgets"
     "PyQt5.QtGui"
   ]
-    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-    ++ lib.optional withWebKit "PyQt5.QtWebKit"
-    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+  ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+  ++ lib.optional withWebKit "PyQt5.QtWebKit"
+  ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+  ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
   ;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "http://www.riverbankcomputing.co.uk";
+    license = licenses.gpl3;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };
 }

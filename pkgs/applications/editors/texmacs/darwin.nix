@@ -1,13 +1,25 @@
-{ lib, stdenv, callPackage, fetchurl,
-  guile_1_8, qt4, zlib, freetype, CoreFoundation, Cocoa, gettext, libiconv, ghostscript,
-  tex ? null,
-  aspell ? null,
-  netpbm ? null,
-  imagemagick ? null,
-  extraFonts ? false,
-  chineseFonts ? false,
-  japaneseFonts ? false,
-  koreanFonts ? false }:
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, guile_1_8
+, qt4
+, zlib
+, freetype
+, CoreFoundation
+, Cocoa
+, gettext
+, libiconv
+, ghostscript
+, tex ? null
+, aspell ? null
+, netpbm ? null
+, imagemagick ? null
+, extraFonts ? false
+, chineseFonts ? false
+, japaneseFonts ? false
+, koreanFonts ? false
+}:
 let
   version = "1.99.4";
   common = callPackage ./common.nix {
@@ -18,7 +30,7 @@ stdenv.mkDerivation {
   pname = "TeXmacs";
   inherit version;
 
-  src= fetchurl {
+  src = fetchurl {
     url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
     sha256 = "1z8sj0xd1ncbl7ipzfsib6lmc7ahgvmiw61ln5zxm2l88jf7qc1a";
   };
@@ -27,9 +39,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ guile_1_8.dev qt4 freetype CoreFoundation Cocoa gettext libiconv ghostscript ];
 
-  GUILE_CPPFLAGS="-D_THREAD_SAFE -I${guile_1_8.dev}/include -I${guile_1_8.dev}/include/guile ";
+  GUILE_CPPFLAGS = "-D_THREAD_SAFE -I${guile_1_8.dev}/include -I${guile_1_8.dev}/include/guile ";
 
-  NIX_LDFLAGS="${zlib}/lib/libz.dylib";
+  NIX_LDFLAGS = "${zlib}/lib/libz.dylib";
 
   buildPhase = ''
     substituteInPlace Makefile \

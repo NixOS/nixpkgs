@@ -4,7 +4,8 @@
 
 {
   imports =
-    [ ./netboot-base.nix
+    [
+      ./netboot-base.nix
       ../../profiles/minimal.nix
     ];
 }

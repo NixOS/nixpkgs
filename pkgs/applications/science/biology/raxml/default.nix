@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , useMpi ? false
 , mpi
@@ -18,17 +19,19 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals useMpi [ mpi ];
 
   # TODO darwin, AVX and AVX2 makefile targets
-  buildPhase = if useMpi then ''
+  buildPhase =
+    if useMpi then ''
       make -f Makefile.MPI.gcc
     '' else ''
       make -f Makefile.SSE3.PTHREADS.gcc
     '';
 
-  installPhase = if useMpi then ''
-    mkdir -p $out/bin && cp raxmlHPC-MPI $out/bin
-  '' else ''
-    mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
-  '';
+  installPhase =
+    if useMpi then ''
+      mkdir -p $out/bin && cp raxmlHPC-MPI $out/bin
+    '' else ''
+      mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
+    '';
 
   meta = with lib; {
     description = "A tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";

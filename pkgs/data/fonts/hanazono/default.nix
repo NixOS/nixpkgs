@@ -2,7 +2,8 @@
 
 let
   version = "20170904";
-in fetchzip {
+in
+fetchzip {
   name = "hanazono-${version}";
 
   url = "mirror://osdn/hanazono-font/68253/hanazono-${version}.zip";

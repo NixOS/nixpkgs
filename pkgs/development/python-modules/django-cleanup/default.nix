@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, django
-, redis, async-timeout, hiredis
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, redis
+, async-timeout
+, hiredis
 }:
 
 buildPythonPackage rec {

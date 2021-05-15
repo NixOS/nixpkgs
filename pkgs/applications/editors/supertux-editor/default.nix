@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [mono gtk-sharp-2_0 gnome2.libglade gtk2 ];
+  buildInputs = [ mono gtk-sharp-2_0 gnome2.libglade gtk2 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/supertux-editor

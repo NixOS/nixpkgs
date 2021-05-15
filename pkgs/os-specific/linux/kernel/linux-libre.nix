@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchsvn, linux
+{ stdenv
+, lib
+, fetchsvn
+, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
     rev = "18063";
@@ -14,7 +17,8 @@ let
   minor = lib.versions.minor linux.modDirVersion;
   patch = lib.versions.patch linux.modDirVersion;
 
-in linux.override {
+in
+linux.override {
   argsOverride = {
     modDirVersion = "${linux.modDirVersion}-gnu";
     isLibre = true;

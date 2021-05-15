@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, twisted, whisper, txamqp, cachetools, urllib3
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, twisted
+, whisper
+, txamqp
+, cachetools
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -13,7 +20,7 @@ buildPythonPackage rec {
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular python module.
-  GRAPHITE_NO_PREFIX="True";
+  GRAPHITE_NO_PREFIX = "True";
 
   propagatedBuildInputs = [ twisted whisper txamqp cachetools urllib3 ];
 

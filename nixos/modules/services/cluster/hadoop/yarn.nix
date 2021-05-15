@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.hadoop;
   hadoopConf = import ./conf.nix { hadoop = cfg; pkgs = pkgs; };
@@ -23,16 +23,18 @@ with lib;
   };
 
   config = mkMerge [
-    (mkIf (
+    (mkIf
+      (
         cfg.yarn.resourcemanager.enabled || cfg.yarn.nodemanager.enabled
-    ) {
+      )
+      {
 
-      users.users.yarn = {
-        description = "Hadoop YARN user";
-        group = "hadoop";
-        uid = config.ids.uids.yarn;
-      };
-    })
+        users.users.yarn = {
+          description = "Hadoop YARN user";
+          group = "hadoop";
+          uid = config.ids.uids.yarn;
+        };
+      })
 
     (mkIf cfg.yarn.resourcemanager.enabled {
       systemd.services.yarn-resourcemanager = {
@@ -47,7 +49,7 @@ with lib;
           User = "yarn";
           SyslogIdentifier = "yarn-resourcemanager";
           ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " resourcemanager";
+            " resourcemanager";
         };
       };
     })
@@ -65,7 +67,7 @@ with lib;
           User = "yarn";
           SyslogIdentifier = "yarn-nodemanager";
           ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " nodemanager";
+            " nodemanager";
         };
       };
     })

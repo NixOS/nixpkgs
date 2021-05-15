@@ -7,10 +7,11 @@ stdenv.mkDerivation rec {
   version = "1.9.61";
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
-        sha256 = "1i2j9ympl1218akwsmm7yb31v0gibgpzlb657bcravi1irfv1hhs";
-      }
+      fetchzip
+        {
+          url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
+          sha256 = "1i2j9ympl1218akwsmm7yb31v0gibgpzlb657bcravi1irfv1hhs";
+        }
     else
       fetchzip {
         url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_darwin_amd64-${version}.zip";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";
     license = licenses.asl20;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ lufia ];
   };
 }

@@ -1,7 +1,8 @@
 { cmake
 , fetchFromGitHub
 , sqlite
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

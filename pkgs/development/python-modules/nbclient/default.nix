@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-  async_generator, traitlets, nbformat, nest-asyncio, jupyter_client,
-  pytest, xmltodict, nbconvert, ipywidgets
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, async_generator
+, traitlets
+, nbformat
+, nest-asyncio
+, jupyter_client
+, pytest
+, xmltodict
+, nbconvert
+, ipywidgets
 , doCheck ? true
 }:
 

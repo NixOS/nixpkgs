@@ -4,7 +4,7 @@ args@
 , url ? ""
 , name ? ""
 , developerProgram ? false
-, runPatches ? []
+, runPatches ? [ ]
 , addOpenGLRunpath
 , alsaLib
 , expat
@@ -37,15 +37,16 @@ stdenv.mkDerivation rec {
 
   src =
     if developerProgram then
-      requireFile {
-        message = ''
-          This nix expression requires that ${args.name} is already part of the store.
-          Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
-          at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
-          nix-prefetch-url file://\$PWD/${args.name}
-        '';
-        inherit (args) name sha256;
-      }
+      requireFile
+        {
+          message = ''
+            This nix expression requires that ${args.name} is already part of the store.
+            Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
+            at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
+            nix-prefetch-url file://\$PWD/${args.name}
+          '';
+          inherit (args) name sha256;
+        }
     else
       fetchurl {
         inherit (args) url sha256;
@@ -56,9 +57,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    gtk2
+    glib
+    fontconfig
+    freetype
+    unixODBC
+    alsaLib
   ];
 
   rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
@@ -211,22 +227,24 @@ stdenv.mkDerivation rec {
   # when we figure out how to get `cuda-gdb --version` to run correctly
   # when not using sandboxing.
   doInstallCheck = false;
-  postInstallCheck = let
-  in ''
-    # Smoke test binaries
-    pushd $out/bin
-    for f in *; do
-      case $f in
-        crt)                           continue;;
-        nvcc.profile)                  continue;;
-        nsight_ee_plugins_manage.sh)   continue;;
-        uninstall_cuda_toolkit_6.5.pl) continue;;
-        computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
-        *)                             echo "Executing '$f --version':"; ./$f --version;;
-      esac
-    done
-    popd
-  '';
+  postInstallCheck =
+    let
+    in
+    ''
+      # Smoke test binaries
+      pushd $out/bin
+      for f in *; do
+        case $f in
+          crt)                           continue;;
+          nvcc.profile)                  continue;;
+          nsight_ee_plugins_manage.sh)   continue;;
+          uninstall_cuda_toolkit_6.5.pl) continue;;
+          computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
+          *)                             echo "Executing '$f --version':"; ./$f --version;;
+        esac
+      done
+      popd
+    '';
   passthru = {
     cc = gcc;
     majorVersion = lib.versions.majorMinor version;

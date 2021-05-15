@@ -1,4 +1,6 @@
-{ lib, rustPlatform, fetchFromGitHub
+{ lib
+, rustPlatform
+, fetchFromGitHub
 , fetchpatch
 , fuse
 , pkg-config

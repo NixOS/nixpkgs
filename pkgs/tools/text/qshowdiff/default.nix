@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, qt4, perl, pkg-config }:
+{ lib, stdenv, fetchurl, qt4, perl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "qshowdiff";

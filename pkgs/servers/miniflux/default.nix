@@ -4,7 +4,8 @@ let
   pname = "miniflux";
   version = "2.0.29";
 
-in buildGoModule {
+in
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {

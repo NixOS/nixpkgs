@@ -1,11 +1,28 @@
-{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook, wrapQtAppsHook ? null
-, openssl, db48, boost, zlib, miniupnpc, gmp
-, qrencode, glib, protobuf, yasm, libevent
-, util-linux, qtbase ? null, qttools ? null
+{ fetchFromGitHub
+, lib
+, stdenv
+, pkg-config
+, autoreconfHook
+, wrapQtAppsHook ? null
+, openssl
+, db48
+, boost
+, zlib
+, miniupnpc
+, gmp
+, qrencode
+, glib
+, protobuf
+, yasm
+, libevent
+, util-linux
+, qtbase ? null
+, qttools ? null
 , enableUpnp ? false
 , disableWallet ? false
 , disableDaemon ? false
-, withGui ? false }:
+, withGui ? false
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -14,22 +31,23 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
-    repo= "PIVX";
+    repo = "PIVX";
     rev = "v${version}";
     sha256 = "03ndk46h6093v8s18d5iffz48zhlshq7jrk6vgpjfs6z2iqgd2sy";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
   buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf util-linux ]
-                  ++ optionals withGui [ qtbase qttools qrencode ];
+    ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                    ++ optional enableUpnp "--enable-upnp-default"
-                    ++ optional disableWallet "--disable-wallet"
-                    ++ optional disableDaemon "--disable-daemon"
-                    ++ optionals withGui [ "--with-gui=yes"
-                                           "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-                                         ];
+    ++ optional enableUpnp "--enable-upnp-default"
+    ++ optional disableWallet "--disable-wallet"
+    ++ optional disableDaemon "--disable-daemon"
+    ++ optionals withGui [
+    "--with-gui=yes"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+  ];
 
   enableParallelBuilding = true;
   doChecks = true;

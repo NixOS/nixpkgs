@@ -1,7 +1,20 @@
-{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT, zlib, ruby
-, enableStoneSense ? false,  allegro5, libGLU, libGL
-, enableTWBT ? true, twbt
+{ stdenv
+, buildEnv
+, lib
+, fetchFromGitHub
+, cmake
+, writeScriptBin
+, perl
+, XMLLibXML
+, XMLLibXSLT
+, zlib
+, ruby
+, enableStoneSense ? false
+, allegro5
+, libGLU
+, libGL
+, enableTWBT ? true
+, twbt
 , SDL
 , dfVersion
 }:
@@ -60,9 +73,10 @@ let
     };
   };
 
-  release = if hasAttr dfVersion dfhack-releases
-            then getAttr dfVersion dfhack-releases
-            else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if hasAttr dfVersion dfhack-releases
+    then getAttr dfVersion dfhack-releases
+    else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
 
@@ -125,7 +139,7 @@ let
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]
-               ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
+      ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
       # Trick build system into believing we have .git
@@ -138,7 +152,7 @@ let
     '';
 
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-              ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+      ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
 
     # dfhack expects an unversioned libruby.so to be present in the hack
     # subdirectory for ruby plugins to function.

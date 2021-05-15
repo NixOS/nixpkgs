@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 
 , pkg-config
@@ -19,9 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
   };
 
-  cmakeFlags = if stdenv.isDarwin then [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-  ] else null;
+  cmakeFlags =
+    if stdenv.isDarwin then [
+      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    ] else null;
 
   # FreeImage needs this patch
   patches = [ ./headers.patch ];

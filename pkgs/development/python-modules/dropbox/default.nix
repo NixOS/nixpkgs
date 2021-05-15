@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytestrunner, requests, urllib3, mock, setuptools, stone }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestrunner
+, requests
+, urllib3
+, mock
+, setuptools
+, stone
+}:
 
 buildPythonPackage rec {
   pname = "dropbox";

@@ -14,7 +14,7 @@ buildPythonApplication rec {
     sha256 = "ee4ef08f7e4df27f67ffebb5fa413a7cf4fad967a248c1c75d48b00122a5b945";
   };
 
-  propagatedBuildInputs= [
+  propagatedBuildInputs = [
     markdown
     pygments
   ];

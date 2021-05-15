@@ -28,7 +28,7 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common" ];
 
     enableParallelBuilding = true;
   };
@@ -40,7 +40,7 @@ let
     src = fetchFromGitHub {
       owner = "volth";
       repo = "xrdp";
-      rev = "refs/tags/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
+      rev = "refs/tags/runtime-cfg-path-${version}"; # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
       fetchSubmodules = true;
       sha256 = "0ynj6pml4f38y8571ryhifza57wfqg4frdrjcwzw3fmryiznfm1z";
     };
@@ -102,4 +102,5 @@ let
       platforms = platforms.linux;
     };
   };
-in xrdp
+in
+xrdp

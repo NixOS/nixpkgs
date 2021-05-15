@@ -1,4 +1,9 @@
-{ fetchPypi, buildPythonPackage, lib, six, singledispatch ? null, isPy3k
+{ fetchPypi
+, buildPythonPackage
+, lib
+, six
+, singledispatch ? null
+, isPy3k
 , click
 , joblib
 , regex

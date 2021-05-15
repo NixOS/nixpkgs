@@ -4,7 +4,8 @@ with lib;
 
 let cfg = config.services.nzbhydra2;
 
-in {
+in
+{
   options = {
     services.nzbhydra2 = {
       enable = mkEnableOption "NZBHydra2";
@@ -58,7 +59,7 @@ in {
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies ="AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -73,6 +74,6 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.nzbhydra2 = {};
+    users.groups.nzbhydra2 = { };
   };
 }

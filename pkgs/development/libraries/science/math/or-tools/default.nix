@@ -18,7 +18,7 @@
 stdenv.mkDerivation rec {
   pname = "or-tools";
   version = "8.1";
-  disabled = python.pythonOlder "3.6";  # not supported upstream
+  disabled = python.pythonOlder "3.6"; # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";

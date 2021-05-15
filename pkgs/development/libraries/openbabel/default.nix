@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
+{ stdenv, lib, fetchurl, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         package_data = {'openbabel' : ['_openbabel.so']}
     )
     EOF
-    '';
+  '';
 
   meta = with lib; {
     description = "A toolbox designed to speak the many languages of chemical data";

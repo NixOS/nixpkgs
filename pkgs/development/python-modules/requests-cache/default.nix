@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, requests, six, urllib3 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, requests
+, six
+, urllib3
+}:
 
 buildPythonPackage rec {
   pname = "requests-cache";

@@ -1,18 +1,18 @@
-import ./make-test-python.nix ({ lib, ...}:
+import ./make-test-python.nix ({ lib, ... }:
 
 {
   name = "zoneminder";
   meta.maintainers = with lib.maintainers; [ danielfullmer ];
 
   machine = { ... }:
-  {
-    services.zoneminder = {
-      enable = true;
-      database.createLocally = true;
-      database.username = "zoneminder";
+    {
+      services.zoneminder = {
+        enable = true;
+        database.createLocally = true;
+        database.username = "zoneminder";
+      };
+      time.timeZone = "America/New_York";
     };
-    time.timeZone = "America/New_York";
-  };
 
   testScript = ''
     machine.wait_for_unit("zoneminder.service")

@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, cmake
-, libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Cocoa, Kernel, fixDarwinDylibNames
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libGL
+, libXrandr
+, libXinerama
+, libXcursor
+, libX11
+, libXi
+, libXext
+, Cocoa
+, Kernel
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {

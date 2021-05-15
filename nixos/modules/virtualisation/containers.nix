@@ -8,20 +8,20 @@ let
 in
 {
   meta = {
-    maintainers = [] ++ lib.teams.podman.members;
+    maintainers = [ ] ++ lib.teams.podman.members;
   };
 
 
   imports = [
     (
       lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "users" ]
-      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
+        [ "virtualisation" "containers" "users" ]
+        "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
     )
     (
       lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "containersConf" "extraConfig" ]
-      "Use virtualisation.containers.containersConf.settings instead."
+        [ "virtualisation" "containers" "containersConf" "extraConfig" ]
+        "Use virtualisation.containers.containersConf.settings instead."
     )
   ];
 
@@ -58,7 +58,7 @@ in
       };
 
       insecure = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of insecure repositories.
@@ -66,7 +66,7 @@ in
       };
 
       block = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of blocked repositories.
@@ -75,7 +75,7 @@ in
     };
 
     policy = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = lib.literalExample ''
         {
@@ -114,7 +114,7 @@ in
     };
 
     environment.etc."containers/policy.json".source =
-      if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
+      if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
       else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
 

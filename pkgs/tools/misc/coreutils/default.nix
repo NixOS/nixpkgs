@@ -1,11 +1,26 @@
-{ stdenv, lib, buildPackages
-, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, aclSupport ? stdenv.isLinux, acl ? null
-, attrSupport ? stdenv.isLinux, attr ? null
-, selinuxSupport? false, libselinux ? null, libsepol ? null
-# No openssl in default version, so openssl-induced rebuilds aren't too big.
-# It makes *sum functions significantly faster.
-, minimal ? true, withOpenssl ? !minimal, openssl ? null
+{ stdenv
+, lib
+, buildPackages
+, autoreconfHook
+, bison
+, texinfo
+, fetchurl
+, perl
+, xz
+, libiconv
+, gmp ? null
+, aclSupport ? stdenv.isLinux
+, acl ? null
+, attrSupport ? stdenv.isLinux
+, attr ? null
+, selinuxSupport ? false
+, libselinux ? null
+, libsepol ? null
+  # No openssl in default version, so openssl-induced rebuilds aren't too big.
+  # It makes *sum functions significantly faster.
+, minimal ? true
+, withOpenssl ? !minimal
+, openssl ? null
 , withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
@@ -78,18 +93,18 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]; # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
-      ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+    ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
-      # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
-      # don't know why it is not properly detected cross building with glibc.
-      "fu_cv_sys_stat_statfs2_bsize=yes"
-    ];
+    # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
+    # don't know why it is not properly detected cross building with glibc.
+    "fu_cv_sys_stat_statfs2_bsize=yes"
+  ];
 
 
   buildInputs = [ gmp ]
@@ -97,7 +112,7 @@ stdenv.mkDerivation (rec {
     ++ optional attrSupport attr
     ++ optional withOpenssl openssl
     ++ optionals selinuxSupport [ libselinux libsepol ]
-       # TODO(@Ericson2314): Investigate whether Darwin could benefit too
+    # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin

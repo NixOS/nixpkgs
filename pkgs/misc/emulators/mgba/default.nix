@@ -29,7 +29,8 @@ let
     categories = "Game;Emulator;";
     startupNotify = "false";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mgba";
   version = "0.9.0";
 

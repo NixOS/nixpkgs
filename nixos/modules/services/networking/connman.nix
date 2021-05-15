@@ -12,7 +12,8 @@ let
     ${cfg.extraConfig}
   '';
   enableIwd = cfg.wifi.backend == "iwd";
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
@@ -94,12 +95,13 @@ in {
     assertions = [{
       assertion = !config.networking.useDHCP;
       message = "You can not use services.connman with networking.useDHCP";
-    }{
-      # TODO: connman seemingly can be used along network manager and
-      # connmanFull supports this - so this should be worked out somehow
-      assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.connman with networking.networkmanager";
-    }];
+    }
+      {
+        # TODO: connman seemingly can be used along network manager and
+        # connmanFull supports this - so this should be worked out somehow
+        assertion = !config.networking.networkmanager.enable;
+        message = "You can not use services.connman with networking.networkmanager";
+      }];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -117,7 +119,7 @@ in {
           "--config=${configFile}"
           "--nodaemon"
         ] ++ optional enableIwd "--wifi=iwd_agent"
-          ++ cfg.extraFlags);
+        ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };

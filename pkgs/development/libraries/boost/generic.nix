@@ -1,9 +1,17 @@
-{ lib, stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ lib
+, stdenv
+, icu
+, expat
+, zlib
+, bzip2
+, python
+, fixDarwinDylibNames
+, libiconv
 , fetchpatch
 , which
 , buildPackages
-, toolset ? /**/ if stdenv.cc.isClang  then "clang"
-            else null
+, toolset ? /**/ if stdenv.cc.isClang then "clang"
+  else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -13,13 +21,14 @@
 , enablePython ? false
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
-, patches ? []
+, patches ? [ ]
 , useMpi ? false
 , mpi
-, extraB2Args ? []
+, extraB2Args ? [ ]
 
-# Attributes inherit from specific versions
-, version, src
+  # Attributes inherit from specific versions
+, version
+, src
 , ...
 }:
 
@@ -38,15 +47,15 @@ let
 
   variant = concatStringsSep ","
     (optional enableRelease "release" ++
-     optional enableDebug "debug");
+      optional enableDebug "debug");
 
   threading = concatStringsSep ","
     (optional enableSingleThreaded "single" ++
-     optional enableMultiThreaded "multi");
+      optional enableMultiThreaded "multi");
 
   link = concatStringsSep ","
     (optional enableShared "shared" ++
-     optional enableStatic "static");
+      optional enableStatic "static");
 
   runtime-link = if enableShared then "shared" else "static";
 
@@ -92,11 +101,11 @@ let
            else if stdenv.hostPlatform.isMips then "o32"
            else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
-    ++ optional (variant == "release") "debug-symbols=off"
-    ++ optional (toolset != null) "toolset=${toolset}"
-    ++ optional (!enablePython) "--without-python"
-    ++ optional (useMpi || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
-    ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  ++ optional (variant == "release") "debug-symbols=off"
+  ++ optional (toolset != null) "toolset=${toolset}"
+  ++ optional (!enablePython) "--without-python"
+  ++ optional (useMpi || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+  ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -108,23 +117,26 @@ stdenv.mkDerivation {
 
   inherit src version;
 
-  patchFlags = [];
+  patchFlags = [ ];
 
   patches = patches
-  ++ optional stdenv.isDarwin (
+    ++ optional stdenv.isDarwin (
     if version == "1.55.0"
     then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch)
-  # Fix boost-context segmentation faults on ppc64 due to ABI violation
-  ++ optional (versionAtLeast version "1.61" &&
-               versionOlder version "1.71") (fetchpatch {
-    url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
-    sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
-    stripLen = 1;
-    extraPrefix = "libs/context/";
-  })
-  ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
-  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
+    else ./darwin-no-system-python.patch
+  )
+    # Fix boost-context segmentation faults on ppc64 due to ABI violation
+    ++ optional
+    (versionAtLeast version "1.61" &&
+      versionOlder version "1.71")
+    (fetchpatch {
+      url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
+      sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
+      stripLen = 1;
+      extraPrefix = "libs/context/";
+    })
+    ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
+    ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
 
   meta = {
     homepage = "http://boost.org/";
@@ -132,8 +144,8 @@ stdenv.mkDerivation {
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
-                 ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
+      ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
+      ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
     maintainers = with maintainers; [ peti ];
   };
 
@@ -156,7 +168,7 @@ stdenv.mkDerivation {
   '';
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+    "-headerpad_max_install_names";
 
   enableParallelBuilding = true;
 
@@ -169,13 +181,13 @@ stdenv.mkDerivation {
     ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
   ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
-    ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+  ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
     runHook preBuild

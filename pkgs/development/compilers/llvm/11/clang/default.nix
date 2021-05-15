@@ -1,4 +1,13 @@
-{ lib, stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
+{ lib
+, stdenv
+, fetch
+, cmake
+, libxml2
+, llvm
+, version
+, clang-tools-extra_src
+, python3
+, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -88,9 +97,9 @@ let
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = "https://llvm.org/";
-      license     = lib.licenses.ncsa;
-      platforms   = lib.platforms.all;
+      homepage = "https://llvm.org/";
+      license = lib.licenses.ncsa;
+      platforms = lib.platforms.all;
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
@@ -111,4 +120,5 @@ let
 
     meta.description = "man page for Clang ${version}";
   });
-in self
+in
+self

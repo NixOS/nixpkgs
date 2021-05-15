@@ -1,6 +1,20 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake
-, boost, netcdf, hdf5, fftwSinglePrec, muparser, openssl, ffmpeg, python
-, qtbase, qtsvg, qttools, qscintilla }:
+{ mkDerivation
+, lib
+, fetchFromGitLab
+, cmake
+, boost
+, netcdf
+, hdf5
+, fftwSinglePrec
+, muparser
+, openssl
+, ffmpeg
+, python
+, qtbase
+, qtsvg
+, qttools
+, qscintilla
+}:
 
 mkDerivation rec {
   pname = "ovito";

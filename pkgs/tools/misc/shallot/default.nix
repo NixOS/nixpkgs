@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
 , openssl
 }:
 

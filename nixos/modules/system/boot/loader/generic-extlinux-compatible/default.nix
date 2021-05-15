@@ -53,9 +53,10 @@ in
     };
   };
 
-  config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
-  in
+  config =
+    let
+      builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
+    in
     mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";
       system.boot.loader.id = "generic-extlinux-compatible";

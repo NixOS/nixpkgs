@@ -31,7 +31,8 @@ let
       isExecutable = true;
       src = ./rfkill-hook.sh;
     };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "rfkill-udev";
 
   dontUnpack = true;

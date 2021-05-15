@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, boost, flac, id3lib, pkg-config
-, taglib, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, boost
+, flac
+, id3lib
+, pkg-config
+, taglib
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "dsf2flac";

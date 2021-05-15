@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation {
-  name= "yaml-merge-2016-02-16";
+  name = "yaml-merge-2016-02-16";
 
   src = fetchFromGitHub {
     owner = "abbradar";

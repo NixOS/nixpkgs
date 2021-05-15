@@ -1,4 +1,4 @@
-{lib, stdenv, pkgsi686Linux, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk}:
+{ lib, stdenv, pkgsi686Linux, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk }:
 
 let
   version = "3.0.1-1";
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W \
       --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
-    '';
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

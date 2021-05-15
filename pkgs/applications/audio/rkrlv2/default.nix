@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, lv2, fftw, cmake, libXpm
-, libXft, libjack2, libsamplerate, libsndfile }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, lv2
+, fftw
+, cmake
+, libXpm
+, libXft
+, libjack2
+, libsamplerate
+, libsndfile
+}:
 
 stdenv.mkDerivation rec {
   pname = "rkrlv2";

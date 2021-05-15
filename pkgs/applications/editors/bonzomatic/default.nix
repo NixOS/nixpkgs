@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, makeWrapper
-, alsaLib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, alsaLib
+, fontconfig
+, mesa_glu
+, libXcursor
+, libXinerama
+, libXrandr
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +25,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    alsaLib fontconfig mesa_glu
-    libXcursor libXinerama libXrandr xorg.xinput xorg.libXi xorg.libXext
+    alsaLib
+    fontconfig
+    mesa_glu
+    libXcursor
+    libXinerama
+    libXrandr
+    xorg.xinput
+    xorg.libXi
+    xorg.libXext
   ];
 
   postFixup = ''

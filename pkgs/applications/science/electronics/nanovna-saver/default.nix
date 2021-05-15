@@ -1,11 +1,17 @@
-{ lib, mkDerivationWith, wrapQtAppsHook, python3Packages, fetchFromGitHub
-, qtbase }:
+{ lib
+, mkDerivationWith
+, wrapQtAppsHook
+, python3Packages
+, fetchFromGitHub
+, qtbase
+}:
 
 let
   version = "0.3.8";
   pname = "nanovna-saver";
 
-in mkDerivationWith python3Packages.buildPythonApplication {
+in
+mkDerivationWith python3Packages.buildPythonApplication {
   inherit pname version;
 
   src = fetchFromGitHub {

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub
-, qtbase, qttools, qmake, wrapQtAppsHook
+{ stdenv
+, lib
+, fetchFromGitHub
+, qtbase
+, qttools
+, qmake
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "0.1.5";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = version;
+    owner = pname;
+    repo = pname;
+    rev = version;
     sha256 = "0ag8h3id2c1k9ds22rfrvyhf2vjhkv82xnrdrz4n1hnlr9566vcx";
     fetchSubmodules = true;
   };
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
   buildInputs = [ qtbase ];
 
-  qmakeFlags = ["-r"];
+  qmakeFlags = [ "-r" ];
 
   # the build system tries to use 'git' at build time to find the HEAD hash.
   # that's a no-no, so replace it with a quick hack. NOTE: the # adds a comment
@@ -34,9 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
-    homepage    = "https://librepcb.org/";
+    homepage = "https://librepcb.org/";
     maintainers = with maintainers; [ luz thoughtpolice ];
-    license     = licenses.gpl3Plus;
-    platforms   = platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

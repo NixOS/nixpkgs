@@ -16,7 +16,8 @@
 
 let stdenv = llvmPackages.stdenv;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mozart2";
   version = "2.0.1";
   name = "${pname}-${version}";

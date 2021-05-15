@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl
-, pkg-config, SDL, libxml2, SDL_image, libjpeg, libpng, libGLU, libGL, zlib
-, dedicatedServer ? false }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, SDL
+, libxml2
+, SDL_image
+, libjpeg
+, libpng
+, libGLU
+, libGL
+, zlib
+, dedicatedServer ? false
+}:
 
 let
   versionMajor = "0.2.9";

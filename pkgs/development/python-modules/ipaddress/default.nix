@@ -5,7 +5,8 @@
 , python
 }:
 
-if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
+if (pythonAtLeast "3.3") then null else
+buildPythonPackage rec {
   pname = "ipaddress";
   version = "1.0.23";
 

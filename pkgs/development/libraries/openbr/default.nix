@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     description = "Open Source Biometric Recognition";
     homepage = "http://openbiometrics.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [flosse];
+    maintainers = with lib.maintainers; [ flosse ];
     platforms = with lib.platforms; linux;
     broken = true;
   };

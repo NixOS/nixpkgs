@@ -9,7 +9,8 @@ let
     sha256 = hash;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "bulletml";
   inherit version;
 

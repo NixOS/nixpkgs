@@ -28,7 +28,7 @@ in
 
       tags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 

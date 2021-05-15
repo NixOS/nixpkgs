@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, fetchFromGitHub
+{ lib
+, buildDunePackage
+, fetchFromGitHub
 , dune-configurator
 , posix-socket
 , srt

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, intltool}:
+{ stdenv, fetchurl, intltool }:
 
 stdenv.mkDerivation {
   name = "gnome-mime-data-2.18.0";

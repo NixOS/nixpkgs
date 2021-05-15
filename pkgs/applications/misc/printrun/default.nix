@@ -12,12 +12,21 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs cython dbus-python numpy six wxPython_4_0 psutil pyglet pyopengl pyserial
+    appdirs
+    cython
+    dbus-python
+    numpy
+    six
+    wxPython_4_0
+    psutil
+    pyglet
+    pyopengl
+    pyserial
   ];
 
   doCheck = false;
 
-  setupPyBuildFlags = ["-i"];
+  setupPyBuildFlags = [ "-i" ];
 
   postPatch = ''
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py

@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
-, pkg-config, gettext, xmlsec, zlib
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, gwenhywfar
+, libtool
+, libxml2
+, libxslt
+, pkg-config
+, gettext
+, xmlsec
+, zlib
 }:
 
 let
   inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "aqbanking";
   inherit version;
 
@@ -30,7 +41,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An interface to banking tasks, file formats and country information";
     homepage = "https://www.aquamaniac.de/";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    description   = "Fcitx Wrapper for anthy";
-    license       = licenses.gpl2Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    description = "Fcitx Wrapper for anthy";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

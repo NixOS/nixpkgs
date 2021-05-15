@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   # Ran 113 tests in 3.082s
   checkPhase = ''
-      nosetests -v paramz/tests
+    nosetests -v paramz/tests
   '';
 
   meta = with lib; {

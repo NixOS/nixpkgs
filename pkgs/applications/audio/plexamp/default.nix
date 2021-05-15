@@ -7,14 +7,15 @@ let
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
     sha256 = "1iz6qi12ljafb49l73rba5rwi5sdbd8ck5h2r6jiy260lgr2iiyk";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   multiPkgs = null; # no 32bit needed

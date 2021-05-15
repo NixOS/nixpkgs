@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
   checkInputs = [ pytest ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = !stdenv.isAarch64;
   # Skip test_feature_importance_regression - does web fetch
@@ -67,11 +67,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of python modules for machine learning and data mining";
-    changelog = let
-      major = versions.major version;
-      minor = versions.minor version;
-      dashVer = replaceChars ["."] ["-"] version;
-    in
+    changelog =
+      let
+        major = versions.major version;
+        minor = versions.minor version;
+        dashVer = replaceChars [ "." ] [ "-" ] version;
+      in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = licenses.bsd3;

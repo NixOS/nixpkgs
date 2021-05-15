@@ -1,10 +1,31 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder
-# runtime dependencies
-, pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata
-# test suite dependencies
-, nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy
-# additional runtime dependencies are required on Python 2.x
-, pyopenssl, ndg-httpsclient, pyasn1
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, pythonOlder
+  # runtime dependencies
+, pandas
+, numpy
+, requests
+, inflection
+, python-dateutil
+, six
+, more-itertools
+, importlib-metadata
+  # test suite dependencies
+, nose
+, unittest2
+, flake8
+, httpretty
+, mock
+, jsondate
+, parameterized
+, faker
+, factory_boy
+  # additional runtime dependencies are required on Python 2.x
+, pyopenssl
+, ndg-httpsclient
+, pyasn1
 }:
 
 buildPythonPackage rec {

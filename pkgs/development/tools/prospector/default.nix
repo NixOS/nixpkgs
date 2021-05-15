@@ -6,7 +6,7 @@
 let
   py = python.override {
     packageOverrides = self: super: {
-      pep8-naming = super.pep8-naming.overridePythonAttrs(oldAttrs: rec {
+      pep8-naming = super.pep8-naming.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.1";
         src = oldAttrs.src.override {
           inherit version;

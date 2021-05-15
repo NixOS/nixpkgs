@@ -1,35 +1,77 @@
-{
-  version
-  , sha256
-  , versionModifier ? ""
-  , pname ? "emacs"
-  , name ? "emacs-${version}${versionModifier}"
-  , patches ? [ ]
+{ version
+, sha256
+, versionModifier ? ""
+, pname ? "emacs"
+, name ? "emacs-${version}${versionModifier}"
+, patches ? [ ]
 }:
-{ stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
-, jansson, harfbuzz
-, dontRecurseIntoAttrs ,emacsPackagesFor
-, libgccjit, targetPlatform, makeWrapper # native-comp params
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, ncurses
+, xlibsWrapper
+, libXaw
+, libXpm
+, Xaw3d
+, libXcursor
+, pkg-config
+, gettext
+, libXft
+, dbus
+, libpng
+, libjpeg
+, libungif
+, libtiff
+, librsvg
+, gconf
+, libxml2
+, imagemagick
+, gnutls
+, libselinux
+, alsaLib
+, cairo
+, acl
+, gpm
+, AppKit
+, GSS
+, ImageIO
+, m17n_lib
+, libotf
+, jansson
+, harfbuzz
+, dontRecurseIntoAttrs
+, emacsPackagesFor
+, libgccjit
+, targetPlatform
+, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
-, withGTK2 ? false, gtk2-x11 ? null
-, withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
-, withMotif ? false, motif ? null
+, withGTK2 ? false
+, gtk2-x11 ? null
+, withGTK3 ? true
+, gtk3-x11 ? null
+, gsettings-desktop-schemas ? null
+, withXwidgets ? false
+, webkitgtk ? null
+, wrapGAppsHook ? null
+, glib-networking ? null
+, withMotif ? false
+, motif ? null
 , withCsrc ? true
-, srcRepo ? false, autoreconfHook ? null, texinfo ? null
+, srcRepo ? false
+, autoreconfHook ? null
+, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
-  if withGTK2 then "gtk2"
-  else if withGTK3 then "gtk3"
-  else if withMotif then "motif"
-  else "lucid")
+    if withGTK2 then "gtk2"
+    else if withGTK3 then "gtk3"
+    else if withMotif then "motif"
+    else "lucid"
+  )
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -43,10 +85,11 @@ assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
-  NATIVE_FULL_AOT = "1";
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
-} // lib.optionalAttrs stdenv.isDarwin {
+let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp
+  {
+    NATIVE_FULL_AOT = "1";
+    LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+  } // lib.optionalAttrs stdenv.isDarwin {
   CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 } // {
   inherit pname version patches;
@@ -70,33 +113,36 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ''
 
     ''
-    substituteInPlace lisp/international/mule-cmds.el \
-      --replace /usr/share/locale ${gettext}/share/locale
+      substituteInPlace lisp/international/mule-cmds.el \
+        --replace /usr/share/locale ${gettext}/share/locale
 
-    for makefile_in in $(find . -name Makefile.in -print); do
-      substituteInPlace $makefile_in --replace /bin/pwd pwd
-    done
+      for makefile_in in $(find . -name Makefile.in -print); do
+        substituteInPlace $makefile_in --replace /bin/pwd pwd
+      done
     ''
 
     # Make native compilation work both inside and outside of nix build
-    (lib.optionalString nativeComp (let
-      backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''\"-B${x}\"'') [
-          # Paths necessary so the JIT compiler finds its libraries:
-          "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc"
-          "${lib.getLib stdenv.cc.libc}/lib"
+    (lib.optionalString nativeComp (
+      let
+        backendPath = (lib.concatStringsSep " "
+          (builtins.map (x: ''\"-B${x}\"'') [
+            # Paths necessary so the JIT compiler finds its libraries:
+            "${lib.getLib libgccjit}/lib"
+            "${lib.getLib libgccjit}/lib/gcc"
+            "${lib.getLib stdenv.cc.libc}/lib"
 
-          # Executable paths necessary for compilation (ld, as):
-          "${lib.getBin stdenv.cc.cc}/bin"
-          "${lib.getBin stdenv.cc.bintools}/bin"
-          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ]));
-    in ''
-      substituteInPlace lisp/emacs-lisp/comp.el --replace \
-        "(defcustom native-comp-driver-options nil" \
-        "(defcustom native-comp-driver-options '(${backendPath})"
-    ''))
+            # Executable paths necessary for compilation (ld, as):
+            "${lib.getBin stdenv.cc.cc}/bin"
+            "${lib.getBin stdenv.cc.bintools}/bin"
+            "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+          ]));
+      in
+      ''
+        substituteInPlace lisp/emacs-lisp/comp.el --replace \
+          "(defcustom native-comp-driver-options nil" \
+          "(defcustom native-comp-driver-options '(${backendPath})"
+      ''
+    ))
     ""
   ];
 
@@ -106,20 +152,31 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz.dev ]
-    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
-    ++ lib.optionals withX
-      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
-        gconf cairo ]
-    ++ lib.optionals (withX || withNS) [ librsvg ]
-    ++ lib.optionals withImageMagick [ imagemagick ]
-    ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
-    ++ lib.optional (withX && withGTK2) gtk2-x11
-    ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
-    ++ lib.optional (withX && withMotif) motif
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
-    ++ lib.optionals withNS [ AppKit GSS ImageIO ]
-    ++ lib.optionals nativeComp [ libgccjit ]
-    ;
+      ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
+      ++ lib.optionals withX
+      [
+        xlibsWrapper
+        libXaw
+        Xaw3d
+        libXpm
+        libpng
+        libjpeg
+        libungif
+        libtiff
+        libXft
+        gconf
+        cairo
+      ]
+      ++ lib.optionals (withX || withNS) [ librsvg ]
+      ++ lib.optionals withImageMagick [ imagemagick ]
+      ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
+      ++ lib.optional (withX && withGTK2) gtk2-x11
+      ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+      ++ lib.optional (withX && withMotif) motif
+      ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
+      ++ lib.optionals withNS [ AppKit GSS ImageIO ]
+      ++ lib.optionals nativeComp [ libgccjit ]
+  ;
 
   hardeningDisable = [ "format" ];
 
@@ -127,18 +184,24 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     "--disable-build-details" # for a (more) reproducible build
     "--with-modules"
   ] ++
-    (lib.optional stdenv.isDarwin
-      (lib.withFeature withNS "ns")) ++
-    (if withNS
-      then [ "--disable-ns-self-contained" ]
-    else if withX
-      then [ "--with-x-toolkit=${toolkit}" "--with-xft" "--with-cairo" ]
-      else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-             "--with-gif=no" "--with-tiff=no" ])
-    ++ lib.optional withXwidgets "--with-xwidgets"
-    ++ lib.optional nativeComp "--with-native-compilation"
-    ++ lib.optional withImageMagick "--with-imagemagick"
-    ;
+  (lib.optional stdenv.isDarwin
+    (lib.withFeature withNS "ns")) ++
+  (if withNS
+  then [ "--disable-ns-self-contained" ]
+  else if withX
+  then [ "--with-x-toolkit=${toolkit}" "--with-xft" "--with-cairo" ]
+  else [
+    "--with-x=no"
+    "--with-xpm=no"
+    "--with-jpeg=no"
+    "--with-png=no"
+    "--with-gif=no"
+    "--with-tiff=no"
+  ])
+  ++ lib.optional withXwidgets "--with-xwidgets"
+  ++ lib.optional nativeComp "--with-native-compilation"
+  ++ lib.optional withImageMagick "--with-imagemagick"
+  ;
 
   installTargets = [ "tags" "install" ];
 
@@ -196,10 +259,10 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   meta = with lib; {
     description = "The extensible, customizable GNU text editor";
-    homepage    = "https://www.gnu.org/software/emacs/";
-    license     = licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/emacs/";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 peti jwiegley adisbladis ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

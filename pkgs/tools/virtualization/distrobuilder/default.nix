@@ -1,9 +1,21 @@
-{ lib, pkg-config, buildGoPackage, fetchFromGitHub
-, makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
+{ lib
+, pkg-config
+, buildGoPackage
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gnupg
+, gnutar
+, squashfsTools
+, debootstrap
 }:
 
 let binPath = lib.makeBinPath [
-  coreutils gnupg gnutar squashfsTools debootstrap
+  coreutils
+  gnupg
+  gnutar
+  squashfsTools
+  debootstrap
 ];
 in
 buildGoPackage rec {

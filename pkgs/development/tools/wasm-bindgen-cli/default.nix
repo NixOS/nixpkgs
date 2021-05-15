@@ -1,4 +1,11 @@
-{ rustPlatform, fetchFromGitHub, lib, openssl, pkg-config, stdenv, curl, Security
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, openssl
+, pkg-config
+, stdenv
+, curl
+, Security
 , runCommand
 }:
 
@@ -14,7 +21,8 @@ rustPlatform.buildRustPackage rec {
         rev = version;
         sha256 = "sha256-JrfS9Z/ZqhoZXJxrxMSLpl2NiktTUkjW6q3xN9AU2zw=";
       };
-    in runCommand "source" { } ''
+    in
+    runCommand "source" { } ''
       cp -R ${tarball} $out
       chmod -R +w $out
       cp ${./Cargo.lock} $out/Cargo.lock

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.throttled;
-in {
+in
+{
   options = {
     services.throttled = {
       enable = mkEnableOption "fix for Intel CPU throttling";
@@ -31,6 +32,6 @@ in {
     # See https://github.com/erpalma/throttled/issues/215
     boot.kernelParams =
       optional (versionAtLeast config.boot.kernelPackages.kernel.version "5.9")
-      "msr.allow_writes=on";
+        "msr.allow_writes=on";
   };
 }

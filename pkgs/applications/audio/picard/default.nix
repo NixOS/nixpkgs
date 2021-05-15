@@ -10,10 +10,11 @@
 
 let
   pythonPackages = python3Packages;
-  pyqt5 = if enablePlayback then
-    pythonPackages.pyqt5_with_qtmultimedia
-  else
-    pythonPackages.pyqt5
+  pyqt5 =
+    if enablePlayback then
+      pythonPackages.pyqt5_with_qtmultimedia
+    else
+      pythonPackages.pyqt5
   ;
 in
 pythonPackages.buildPythonApplication rec {
@@ -28,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
+    ++ lib.optionals (pyqt5.multimediaEnabled) [
     qt5.qtmultimedia.bin
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base

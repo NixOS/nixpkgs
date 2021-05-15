@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       sha256 = "08q90bx36ixwlcj331dh7420qyj8i0qh1cc1gljrhd83fhl9w0y5";
     })
   ] ++ lib.optionals stdenv.isDarwin [
-      # Temporary fix until a proper one is accepted upstream
+    # Temporary fix until a proper one is accepted upstream
     ./0001-fix-dirent64-et-al-on-darwin.patch
   ];
 

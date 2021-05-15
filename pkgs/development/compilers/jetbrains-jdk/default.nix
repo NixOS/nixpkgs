@@ -9,19 +9,19 @@ openjdk11.overrideAttrs (oldAttrs: rec {
     rev = "jb${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "sha256-2cn+FiFfGpp7CBeQMAASVZwTm6DOFaXaWxAL/nVC2Nk=";
   };
-  patches = [];
+  patches = [ ];
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
-     JetBrains Runtime is a runtime environment for running IntelliJ Platform
-     based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
-     based on OpenJDK project with some modifications. These modifications
-     include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
-     support, ligatures, some fixes for native crashes not presented in
-     official build, and other small enhancements.
+      JetBrains Runtime is a runtime environment for running IntelliJ Platform
+      based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
+      based on OpenJDK project with some modifications. These modifications
+      include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
+      support, ligatures, some fixes for native crashes not presented in
+      official build, and other small enhancements.
 
-     JetBrains Runtime is not a certified build of OpenJDK. Please, use at
-     your own risk.
+      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
+      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
     license = licenses.gpl2;

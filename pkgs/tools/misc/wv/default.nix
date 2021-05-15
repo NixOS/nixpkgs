@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkg-config, libgsf
-, libxml2, bzip2 }:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, imagemagick
+, libpng
+, glib
+, pkg-config
+, libgsf
+, libxml2
+, bzip2
+}:
 
 stdenv.mkDerivation rec {
   pname = "wv";

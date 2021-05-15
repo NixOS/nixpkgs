@@ -6,17 +6,18 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   machine =
     { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
-      virtualisation.vlans = [];
+      virtualisation.vlans = [ ];
 
       networking.useDHCP = false;
       networking.bridges = {
         br0 = {
-          interfaces = [];
+          interfaces = [ ];
         };
-        br1 = { interfaces = []; };
+        br1 = { interfaces = [ ]; };
       };
       networking.interfaces = {
         br0 = {

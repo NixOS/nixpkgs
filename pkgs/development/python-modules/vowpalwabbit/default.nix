@@ -11,13 +11,14 @@
 , pygments
 , numpy
 , scipy
-, scikitlearn }:
+, scikitlearn
+}:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
   version = "8.9.0";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     sha256 = "37fb7a400f3a7923a04df9921b3eef1bbe96117424ef083dcfed0e4eea77fa08";
   };
@@ -57,9 +58,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
-    homepage    = "https://github.com/JohnLangford/vowpal_wabbit";
-    license     = licenses.bsd3;
-    broken      = stdenv.isAarch64;
+    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    license = licenses.bsd3;
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ teh ];
   };
 }

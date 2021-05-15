@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pytestCheckHook
 , isPy3k
 , backports_functools_lru_cache
 , setuptools

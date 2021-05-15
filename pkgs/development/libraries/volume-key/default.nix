@@ -1,12 +1,27 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
-, ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
-, autoconf, automake, libtool
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, gettext
+, python3
+, ncurses
+, swig
+, glib
+, util-linux
+, cryptsetup
+, nss
+, gpgme
+, autoconf
+, automake
+, libtool
 , buildPackages
 }:
 
 let
   version = "0.3.11";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "volume_key";
   inherit version;
 
@@ -42,7 +57,7 @@ in stdenv.mkDerivation {
     description = "A library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
     homepage = "https://pagure.io/volume_key/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

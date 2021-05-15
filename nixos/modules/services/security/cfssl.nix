@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.cfssl;
-in {
+in
+{
   options.services.cfssl = {
     enable = mkEnableOption "the CFSSL CA api-server";
 
@@ -174,30 +175,30 @@ in {
         ExecStart = with cfg; let
           opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
         in
-          lib.concatStringsSep " \\\n" [
-            "${pkgs.cfssl}/bin/cfssl serve"
-            (opt "address" address)
-            (opt "port" (toString port))
-            (opt "ca" ca)
-            (opt "ca-key" caKey)
-            (opt "ca-bundle" caBundle)
-            (opt "int-bundle" intBundle)
-            (opt "int-dir" intDir)
-            (opt "metadata" metadata)
-            (opt "remote" remote)
-            (opt "config" configFile)
-            (opt "responder" responder)
-            (opt "responder-key" responderKey)
-            (opt "tls-key" tlsKey)
-            (opt "tls-cert" tlsCert)
-            (opt "mutual-tls-ca" mutualTlsCa)
-            (opt "mutual-tls-cn" mutualTlsCn)
-            (opt "mutual-tls-client-key" mutualTlsClientKey)
-            (opt "mutual-tls-client-cert" mutualTlsClientCert)
-            (opt "tls-remote-ca" tlsRemoteCa)
-            (opt "db-config" dbConfig)
-            (opt "loglevel" (toString logLevel))
-          ];
+        lib.concatStringsSep " \\\n" [
+          "${pkgs.cfssl}/bin/cfssl serve"
+          (opt "address" address)
+          (opt "port" (toString port))
+          (opt "ca" ca)
+          (opt "ca-key" caKey)
+          (opt "ca-bundle" caBundle)
+          (opt "int-bundle" intBundle)
+          (opt "int-dir" intDir)
+          (opt "metadata" metadata)
+          (opt "remote" remote)
+          (opt "config" configFile)
+          (opt "responder" responder)
+          (opt "responder-key" responderKey)
+          (opt "tls-key" tlsKey)
+          (opt "tls-cert" tlsCert)
+          (opt "mutual-tls-ca" mutualTlsCa)
+          (opt "mutual-tls-cn" mutualTlsCn)
+          (opt "mutual-tls-client-key" mutualTlsClientKey)
+          (opt "mutual-tls-client-cert" mutualTlsClientCert)
+          (opt "tls-remote-ca" tlsRemoteCa)
+          (opt "db-config" dbConfig)
+          (opt "loglevel" (toString logLevel))
+        ];
       };
     };
 

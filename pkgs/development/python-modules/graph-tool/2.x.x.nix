@@ -1,6 +1,21 @@
-{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
-, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
-, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
+{ fetchurl
+, python
+, cairomm
+, sparsehash
+, pycairo
+, autoreconfHook
+, pkg-config
+, boost
+, expat
+, scipy
+, cgal
+, gmp
+, mpfr
+, gobject-introspection
+, pygobject3
+, gtk3
+, matplotlib
+, ncurses
 , buildPythonPackage
 , fetchpatch
 , pythonAtLeast
@@ -51,8 +66,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = "https://graph-tool.skewed.de/";
-    license     = licenses.gpl3;
+    homepage = "https://graph-tool.skewed.de/";
+    license = licenses.gpl3;
     maintainers = [ maintainers.joelmo ];
   };
 }

@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchurl, makeDesktopItem
-, libX11, libXt, libXft, libXrender
-, ncurses, fontconfig, freetype
-, pkg-config, gdk-pixbuf, perl
-, perlSupport      ? true
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, libX11
+, libXt
+, libXft
+, libXrender
+, ncurses
+, fontconfig
+, freetype
+, pkg-config
+, gdk-pixbuf
+, perl
+, perlSupport ? true
 , gdkPixbufSupport ? true
-, unicode3Support  ? true
+, unicode3Support ? true
 }:
 
 let
@@ -35,10 +45,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ libX11 libXt libXft ncurses  # required to build the terminfo file
-      fontconfig freetype pkg-config libXrender
+    [
+      libX11
+      libXt
+      libXft
+      ncurses # required to build the terminfo file
+      fontconfig
+      freetype
+      pkg-config
+      libXrender
     ] ++ optional perlSupport perl
-      ++ optional gdkPixbufSupport gdk-pixbuf;
+    ++ optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [ "out" "terminfo" ];
 

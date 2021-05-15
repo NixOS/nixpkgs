@@ -6,7 +6,8 @@ let
       inherit sha256;
       url = "${nugetUrlBase}/${name}/${version}";
     };
-in [
+in
+[
 
   (fetchNuGet {
     name = "System.Xml.XmlSerializer";

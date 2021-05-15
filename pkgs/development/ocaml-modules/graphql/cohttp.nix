@@ -1,6 +1,14 @@
-{ lib, buildDunePackage, ocaml-crunch
-, astring, cohttp, digestif, graphql, ocplib-endian
-, alcotest, cohttp-lwt-unix, graphql-lwt
+{ lib
+, buildDunePackage
+, ocaml-crunch
+, astring
+, cohttp
+, digestif
+, graphql
+, ocplib-endian
+, alcotest
+, cohttp-lwt-unix
+, graphql-lwt
 }:
 
 buildDunePackage rec {

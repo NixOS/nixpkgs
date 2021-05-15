@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, check, cmake, pkg-config
-, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, check
+, cmake
+, pkg-config
+, libtoxcore
+, filter-audio
+, dbus
+, libvpx
+, libX11
+, openal
+, freetype
+, libv4l
+, libXrender
+, fontconfig
+, libXext
+, libXft
+, libsodium
+, libopus
+}:
 
 stdenv.mkDerivation rec {
   pname = "utox";
@@ -8,21 +26,33 @@ stdenv.mkDerivation rec {
   version = "0.17.0";
 
   src = fetchFromGitHub {
-    owner  = "uTox";
-    repo   = "uTox";
-    rev    = "v${version}";
+    owner = "uTox";
+    repo = "uTox";
+    rev = "v${version}";
     sha256 = "12wbq883il7ikldayh8hm0cjfrkp45vn05xx9s1jbfz6gmkidyar";
     fetchSubmodules = true;
   };
 
   buildInputs = [
-    libtoxcore dbus libvpx libX11 openal freetype
-    libv4l libXrender fontconfig libXext libXft filter-audio
-    libsodium libopus
+    libtoxcore
+    dbus
+    libvpx
+    libX11
+    openal
+    freetype
+    libv4l
+    libXrender
+    fontconfig
+    libXext
+    libXft
+    filter-audio
+    libsodium
+    libopus
   ];
 
   nativeBuildInputs = [
-    cmake pkg-config
+    cmake
+    pkg-config
   ];
 
   cmakeFlags = [

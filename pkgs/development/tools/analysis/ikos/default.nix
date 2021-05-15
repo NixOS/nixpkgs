@@ -1,6 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, tbb
-, gmp, llvm, clang, sqlite, python3
-, ocamlPackages, mpfr, ppl, doxygen, graphviz
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, boost
+, tbb
+, gmp
+, llvm
+, clang
+, sqlite
+, python3
+, ocamlPackages
+, mpfr
+, ppl
+, doxygen
+, graphviz
 }:
 
 let
@@ -21,8 +34,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost tbb gmp clang llvm sqlite python
-                  ocamlPackages.apron mpfr ppl doxygen graphviz ];
+  buildInputs = [
+    boost
+    tbb
+    gmp
+    clang
+    llvm
+    sqlite
+    python
+    ocamlPackages.apron
+    mpfr
+    ppl
+    doxygen
+    graphviz
+  ];
 
   cmakeFlags = [ "-DAPRON_ROOT=${ocamlPackages.apron}" ];
 

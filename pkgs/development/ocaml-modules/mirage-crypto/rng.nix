@@ -1,5 +1,14 @@
-{ buildDunePackage, mirage-crypto, ounit, randomconv, dune-configurator
-, cstruct, duration, logs, mtime, ocaml_lwt }:
+{ buildDunePackage
+, mirage-crypto
+, ounit
+, randomconv
+, dune-configurator
+, cstruct
+, duration
+, logs
+, mtime
+, ocaml_lwt
+}:
 
 buildDunePackage {
   pname = "mirage-crypto-rng";

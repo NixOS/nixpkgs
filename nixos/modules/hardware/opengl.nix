@@ -89,7 +89,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
         description = ''
           Additional packages to add to OpenGL drivers. This can be used
@@ -99,7 +99,7 @@ in
 
       extraPackages32 = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
         description = ''
           Additional packages to add to 32-bit OpenGL drivers on
@@ -127,10 +127,12 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
+      {
+        assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
         message = "Option driSupport32Bit only makes sense on a 64-bit system.";
       }
-      { assertion = cfg.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
+      {
+        assertion = cfg.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
         message = "Option driSupport32Bit requires a kernel that supports 32bit emulation";
       }
     ];

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
+{ lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";

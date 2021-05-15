@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gppcscconnectionplugin";
-  version  = "1.1.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/globalplatform/${pname}-${version}.tar.gz";

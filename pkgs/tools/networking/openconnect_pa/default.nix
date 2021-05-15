@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, autoreconfHook } :
+{ lib, stdenv, fetchFromGitHub, pkg-config, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, autoreconfHook }:
 
 assert (openssl != null) == (gnutls == null);
 
@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-      export PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config
-      export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
-      export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
+    export PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config
+    export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
+    export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
   '';
 
   configureFlags = [

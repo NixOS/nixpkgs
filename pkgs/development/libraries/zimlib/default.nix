@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
 , python3
 , icu
 , libuuid
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for reading and writing ZIM files";
-    homepage =  "https://www.openzim.org/wiki/Zimlib";
+    homepage = "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.linux;

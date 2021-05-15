@@ -2,7 +2,8 @@
 , cmake
 , fetchFromGitLab
 , sqlite
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

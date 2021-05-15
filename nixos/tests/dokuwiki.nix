@@ -30,7 +30,8 @@ let
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
 
-in {
+in
+{
   name = "dokuwiki";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [ _1000101 ];

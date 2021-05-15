@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
-, docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
-, gnugrep, gnused, jq, nix }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, asciidoc
+, docbook_xml_dtd_45
+, git
+, docbook_xsl
+, libxml2
+, libxslt
+, coreutils
+, gawk
+, gnugrep
+, gnused
+, jq
+, nix
+}:
 
 let
   binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nix-prefetch";
   version = "0.4.0";
 

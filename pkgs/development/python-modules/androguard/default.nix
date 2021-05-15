@@ -21,11 +21,11 @@
 , codecov
 , coverage
 , qt5
-# This is usually used as a library, and it'd be a shame to force the gui
-# libraries to the closure if gui is not desired.
+  # This is usually used as a library, and it'd be a shame to force the gui
+  # libraries to the closure if gui is not desired.
 , withGui ? false
-# Tests take a very long time, and currently fail, but next release' tests
-# shouldn't fail
+  # Tests take a very long time, and currently fail, but next release' tests
+  # shouldn't fail
 , doCheck ? false
 }:
 

@@ -3,14 +3,15 @@
 let
   date = "07.apr.2016";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mht2mht";
   version = "1.8.1.35";
 
   src = fetchurl {
     # there is a disconnect between the directory name date and file name date
     # you should verify if that is still then case when the next version is released
-    url    = "mirror://sourceforge/mht2htm/mht2htm/1.8.1%20%2805.apr.2016%29/mht2htmcl-${version}_${date}.source.zip";
+    url = "mirror://sourceforge/mht2htm/mht2htm/1.8.1%20%2805.apr.2016%29/mht2htmcl-${version}_${date}.source.zip";
     sha256 = "16r6zkihp84yqllp2hyaf0nvymdn9ji3g30mc5scfwycdfanja6f";
   };
 
@@ -35,10 +36,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Convert .mht files to .html";
-    homepage    = "http://pgm.bpalanka.com/mht2htm.html";
-    license     = licenses.gpl3;
+    homepage = "http://pgm.bpalanka.com/mht2htm.html";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     broken = true; # 2018-04-11
   };
 }

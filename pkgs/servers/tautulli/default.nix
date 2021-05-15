@@ -36,7 +36,7 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta  = with lib; {
+  meta = with lib; {
     description = "A Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
     license = licenses.gpl3;

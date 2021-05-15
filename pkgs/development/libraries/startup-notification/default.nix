@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libX11, libxcb, pkg-config, xcbutil}:
+{ lib, stdenv, fetchurl, libX11, libxcb, pkg-config, xcbutil }:
 
 let
   version = "0.12";

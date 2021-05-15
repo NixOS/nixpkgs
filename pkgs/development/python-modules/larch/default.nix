@@ -26,7 +26,7 @@ buildPythonPackage rec {
     homepage = "https://liw.fi/larch/";
     description = "Python B-tree library";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
 
 }

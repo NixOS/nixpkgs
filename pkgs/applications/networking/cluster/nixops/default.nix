@@ -1,7 +1,7 @@
 { pkgs
 , poetry2nix
 , lib
-, overrides ? (self: super: {})
+, overrides ? (self: super: { })
 }:
 
 let
@@ -55,7 +55,8 @@ let
     }
   ).python;
 
-in interpreter.pkgs.nixops.withPlugins(ps: [
+in
+interpreter.pkgs.nixops.withPlugins (ps: [
   ps.nixops-encrypted-links
   ps.nixops-virtd
   ps.nixops-aws

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "gperf-3.0.4";

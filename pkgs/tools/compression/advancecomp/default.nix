@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A set of tools to optimize deflate-compressed files";
-    license = licenses.gpl3 ;
+    license = licenses.gpl3;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;
     homepage = "https://github.com/amadvance/advancecomp";

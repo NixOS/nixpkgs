@@ -9,7 +9,9 @@
 , wayland
 , wayland-protocols
 , wlroots
-, enable-xwayland ? true, xwayland, libX11
+, enable-xwayland ? true
+, xwayland
+, libX11
 , patches ? [ ]
 , conf ? null
 , writeText
@@ -54,11 +56,14 @@ stdenv.mkDerivation rec {
   '';
 
   # Allow users to set an alternative config.def.h
-  postPatch = let
-    configFile = if lib.isDerivation conf || builtins.isPath conf
-                 then conf
-                 else writeText "config.def.h" conf;
-  in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf
+        then conf
+        else writeText "config.def.h" conf;
+    in
+    lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   dontConfigure = true;
 

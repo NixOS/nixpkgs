@@ -1,5 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake,
-  qtbase, cfitsio, gsl, wcslib, withTester ? false }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, cfitsio
+, gsl
+, wcslib
+, withTester ? false
+}:
 
 mkDerivation rec {
   pname = "stellarsolver";

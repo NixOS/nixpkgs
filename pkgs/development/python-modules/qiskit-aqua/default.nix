@@ -97,7 +97,7 @@ buildPythonPackage rec {
       >> qiskit/optimization/__init__.py
   '';
 
-  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
+  postInstall = "rm -rf $out/${python.sitePackages}/docs"; # Remove docs dir b/c it can cause conflicts.
 
   checkInputs = [
     pytestCheckHook

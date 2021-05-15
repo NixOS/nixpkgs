@@ -1,10 +1,13 @@
 # This test runs simple etcd cluster
 
-import ./make-test-python.nix ({ pkgs, ... } : let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
 
-  runWithOpenSSL = file: cmd: pkgs.runCommand file {
-    buildInputs = [ pkgs.openssl ];
-  } cmd;
+  runWithOpenSSL = file: cmd: pkgs.runCommand file
+    {
+      buildInputs = [ pkgs.openssl ];
+    }
+    cmd;
 
   ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
   ca_pem = runWithOpenSSL "ca.pem" ''
@@ -80,8 +83,8 @@ import ./make-test-python.nix ({ pkgs, ... } : let
         certFile = etcd_cert;
         trustedCaFile = ca_pem;
         peerClientCertAuth = true;
-        listenClientUrls = ["https://127.0.0.1:2379"];
-        listenPeerUrls = ["https://0.0.0.0:2380"];
+        listenClientUrls = [ "https://127.0.0.1:2379" ];
+        listenPeerUrls = [ "https://0.0.0.0:2380" ];
       };
     };
 
@@ -94,7 +97,8 @@ import ./make-test-python.nix ({ pkgs, ... } : let
 
     networking.firewall.allowedTCPPorts = [ 2380 ];
   };
-in {
+in
+{
   name = "etcd";
 
   meta = with pkgs.lib.maintainers; {
@@ -103,26 +107,26 @@ in {
 
   nodes = {
     node1 = { ... }: {
-      require = [nodeConfig];
+      require = [ nodeConfig ];
       services.etcd = {
-        initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
-        initialAdvertisePeerUrls = ["https://node1:2380"];
+        initialCluster = [ "node1=https://node1:2380" "node2=https://node2:2380" ];
+        initialAdvertisePeerUrls = [ "https://node1:2380" ];
       };
     };
 
     node2 = { ... }: {
-      require = [nodeConfig];
+      require = [ nodeConfig ];
       services.etcd = {
-        initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
-        initialAdvertisePeerUrls = ["https://node2:2380"];
+        initialCluster = [ "node1=https://node1:2380" "node2=https://node2:2380" ];
+        initialAdvertisePeerUrls = [ "https://node2:2380" ];
       };
     };
 
     node3 = { ... }: {
-      require = [nodeConfig];
+      require = [ nodeConfig ];
       services.etcd = {
-        initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380" "node3=https://node3:2380"];
-        initialAdvertisePeerUrls = ["https://node3:2380"];
+        initialCluster = [ "node1=https://node1:2380" "node2=https://node2:2380" "node3=https://node3:2380" ];
+        initialAdvertisePeerUrls = [ "https://node3:2380" ];
         initialClusterState = "existing";
       };
     };

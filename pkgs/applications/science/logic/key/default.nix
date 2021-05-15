@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , unzip
 , jdk
@@ -12,7 +13,8 @@
 # get this from the download URL when changing version
 let gitRevision = "7d3deab0763c88edee4f7a08e604661e0dbdd450";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "key";
   version = "2.6.3";
 

@@ -16,8 +16,9 @@ let
           makeWrapper $out/libexec/hci $out/bin/hci --prefix PATH : ${makeBinPath bundledBins}
         '';
       });
-in pkg // {
-    meta = pkg.meta // {
-      position = toString ./default.nix + ":1";
-    };
-  }
+in
+pkg // {
+  meta = pkg.meta // {
+    position = toString ./default.nix + ":1";
+  };
+}

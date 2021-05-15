@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://packages.debian.org/source/xbindkeys-config";
     description = "Graphical interface for configuring xbindkeys";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [benley];
+    maintainers = with lib.maintainers; [ benley ];
     platforms = with lib.platforms; linux;
   };
 

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
-, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, autoconf
+, automake
+, libtool
+, libpcap
+, pkg-config
+}:
 
 let version = "3.4"; in
 
@@ -16,7 +24,7 @@ stdenv.mkDerivation {
 
   configureScript = "./autogen.sh";
 
-  nativeBuildInputs = [which autoconf automake libtool];
+  nativeBuildInputs = [ which autoconf automake libtool ];
   buildInputs = [
     libpcap
     pkg-config

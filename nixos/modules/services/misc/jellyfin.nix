@@ -93,8 +93,15 @@ in
         SystemCallFilter = [
           "@system-service"
 
-          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
-          "~@obsolete" "~@privileged" "~@setuid"
+          "~@chown"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@module"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
@@ -107,7 +114,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
+      jellyfin = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {

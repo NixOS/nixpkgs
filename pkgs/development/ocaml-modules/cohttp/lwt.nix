@@ -12,7 +12,11 @@ buildDunePackage {
   buildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    cohttp ocaml_lwt logs sexplib0 uri
+    cohttp
+    ocaml_lwt
+    logs
+    sexplib0
+    uri
   ];
 
   meta = cohttp.meta // {

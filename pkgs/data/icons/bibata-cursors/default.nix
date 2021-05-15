@@ -1,8 +1,9 @@
 { lib, stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
 
 let
-  py = python3.withPackages(ps: [ ps.pillow ]);
-in stdenvNoCC.mkDerivation rec {
+  py = python3.withPackages (ps: [ ps.pillow ]);
+in
+stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors";
   version = "0.4.2";
 
@@ -23,7 +24,7 @@ in stdenvNoCC.mkDerivation rec {
     echo "exit 0" > w32-make.sh
   '';
 
-  nativeBuildInputs  = [
+  nativeBuildInputs = [
     gnome-themes-extra
     inkscape
     xcursorgen

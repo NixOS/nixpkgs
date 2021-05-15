@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, curl, findutils, gnugrep, gnused }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, findutils
+, gnugrep
+, gnused
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-checkup";

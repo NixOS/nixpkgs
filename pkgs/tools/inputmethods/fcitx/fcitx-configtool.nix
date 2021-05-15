@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK-based config tool for Fcitx";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ cdepillabout ];
   };
 

@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , cryptography
 , invoke
 , mock
@@ -35,8 +37,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic remote execution";
-    homepage    = "https://www.fabfile.org/";
-    license     = licenses.bsd2;
+    homepage = "https://www.fabfile.org/";
+    license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };
 }

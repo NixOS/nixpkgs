@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, future, python-language-server, mypy, configparser
-, pytestCheckHook, mock, pytestcov, coverage
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, future
+, python-language-server
+, mypy
+, configparser
+, pytestCheckHook
+, mock
+, pytestcov
+, coverage
 , fetchpatch
 }:
 
@@ -37,7 +46,9 @@ buildPythonPackage rec {
   checkInputs = [ mock pytestcov coverage pytestCheckHook ];
 
   propagatedBuildInputs = [
-    mypy python-language-server configparser
+    mypy
+    python-language-server
+    configparser
   ] ++ lib.optional (isPy27) [
     future
   ];

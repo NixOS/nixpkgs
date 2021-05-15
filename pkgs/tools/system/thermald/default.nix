@@ -12,7 +12,8 @@
 , libxml2
 , xz
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , upower
 }:
 

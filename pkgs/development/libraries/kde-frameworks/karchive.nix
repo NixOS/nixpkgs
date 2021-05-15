@@ -1,7 +1,10 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  bzip2, xz, qtbase, zlib,
+{ mkDerivation
+, extra-cmake-modules
+, bzip2
+, xz
+, qtbase
+, zlib
+,
 }:
 
 mkDerivation {

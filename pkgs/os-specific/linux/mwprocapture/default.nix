@@ -7,8 +7,8 @@ assert versionAtLeast kernel.version "3.2.0";
 
 let
   bits =
-  if stdenv.is64bit then "64"
-  else "32";
+    if stdenv.is64bit then "64"
+    else "32";
 
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsaLib ];
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ kernel.moduleBuildDependencies ];
 
   preConfigure =
-  ''
-    cd ./src
-    export INSTALL_MOD_PATH="$out"
-  '';
+    ''
+      cd ./src
+      export INSTALL_MOD_PATH="$out"
+    '';
 
   hardeningDisable = [ "pic" "format" ];
 

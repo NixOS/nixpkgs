@@ -1,4 +1,4 @@
-{lib, stdenv, fetchzip, libtommath}:
+{ lib, stdenv, fetchzip, libtommath }:
 
 stdenv.mkDerivation {
   name = "convertlit-1.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     stripRoot = false;
   };
 
-  buildInputs = [libtommath];
+  buildInputs = [ libtommath ];
 
   hardeningDisable = [ "format" ];
 

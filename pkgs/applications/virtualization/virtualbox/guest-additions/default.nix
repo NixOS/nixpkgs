@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox}:
+{ stdenv
+, fetchurl
+, lib
+, patchelf
+, cdrkit
+, kernel
+, which
+, makeWrapper
+, zlib
+, xorg
+, dbus
+, virtualbox
+}:
 
 let
   version = virtualbox.version;
@@ -10,7 +21,8 @@ let
   # in case someone does just a standalone build
   # (not via videoDrivers = ["vboxvideo"]).
   # It's likely to work again in some future update.
-  xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
+  xserverABI =
+    let abi = xserverVListFunc 0 + xserverVListFunc 1;
     in if abi == "119" || abi == "120" then "118" else abi;
 
   # Specifies how to patch binaries to make sure that libraries loaded using
@@ -22,7 +34,8 @@ let
     { name = "libXrandr.so"; pkg = xorg.libXrandr; }
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
@@ -145,12 +158,14 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   # Patch RUNPATH according to dlopenLibs (see the comment there).
-  postFixup = lib.concatMapStrings (library: ''
-    for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
-      origRpath=$(patchelf --print-rpath "$i")
-      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
-    done
-  '') dlopenLibs;
+  postFixup = lib.concatMapStrings
+    (library: ''
+      for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
+        origRpath=$(patchelf --print-rpath "$i")
+        patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
+      done
+    '')
+    dlopenLibs;
 
   meta = {
     description = "Guest additions for VirtualBox";

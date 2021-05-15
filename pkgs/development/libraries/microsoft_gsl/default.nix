@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, catch, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, catch
+, cmake
 }:
 
 let
@@ -31,13 +35,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C++ Core Guideline support library";
     longDescription = ''
-     The Guideline Support Library (GSL) contains functions and types that are suggested for
-     use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
-     This package contains Microsoft's implementation of GSL.
+      The Guideline Support Library (GSL) contains functions and types that are suggested for
+      use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
+      This package contains Microsoft's implementation of GSL.
     '';
-    homepage    = "https://github.com/Microsoft/GSL";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    homepage = "https://github.com/Microsoft/GSL";
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice xwvvvvwx yuriaisaka ];
   };
 }

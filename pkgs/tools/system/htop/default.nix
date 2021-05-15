@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, stdenv, autoreconfHook
-, ncurses, IOKit
+{ lib
+, fetchFromGitHub
+, stdenv
+, autoreconfHook
+, ncurses
+, IOKit
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ ncurses
+  buildInputs = [
+    ncurses
   ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {

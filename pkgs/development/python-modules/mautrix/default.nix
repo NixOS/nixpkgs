@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel_yaml, CommonMark, lxml
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, pythonOlder
+, sqlalchemy
+, ruamel_yaml
+, CommonMark
+, lxml
 }:
 
 buildPythonPackage rec {

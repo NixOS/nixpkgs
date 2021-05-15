@@ -1,7 +1,18 @@
-{ lib, fetchurl, buildDunePackage
-, repr, ppx_repr, fmt, logs, mtime, stdlib-shims
-, cmdliner, progress, semaphore-compat
-, alcotest, crowbar, re
+{ lib
+, fetchurl
+, buildDunePackage
+, repr
+, ppx_repr
+, fmt
+, logs
+, mtime
+, stdlib-shims
+, cmdliner
+, progress
+, semaphore-compat
+, alcotest
+, crowbar
+, re
 }:
 
 buildDunePackage rec {
@@ -19,7 +30,14 @@ buildDunePackage rec {
 
   buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [
-    fmt logs mtime repr ppx_repr cmdliner progress semaphore-compat
+    fmt
+    logs
+    mtime
+    repr
+    ppx_repr
+    cmdliner
+    progress
+    semaphore-compat
   ];
 
   doCheck = true;

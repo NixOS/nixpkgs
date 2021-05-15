@@ -1,30 +1,30 @@
-{ lib, stdenv, fetchurl, cups, perl, glibc, ghostscript, which, makeWrapper}:
+{ lib, stdenv, fetchurl, cups, perl, glibc, ghostscript, which, makeWrapper }:
 
 /*
-    [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
+  [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
 
-    URI example
-     ~  `lpd://BRW0080927AFBCE/binary_p1`
+  URI example
+   ~  `lpd://BRW0080927AFBCE/binary_p1`
 
-    Logging
-    -------
+  Logging
+  -------
 
-    `/tmp/br_lpdfilter_ml1.log` when `$ENV{LPD_DEBUG} > 0` in `filter_BrGenML1`
-    which is activated automatically when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`
-    from the cups wrapper.
+  `/tmp/br_lpdfilter_ml1.log` when `$ENV{LPD_DEBUG} > 0` in `filter_BrGenML1`
+  which is activated automatically when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`
+  from the cups wrapper.
 
-    Issues
-    ------
+  Issues
+  ------
 
-     -  filter_BrGenML1 ln 196 `my $GHOST_SCRIPT=`which gs`;`
+   -  filter_BrGenML1 ln 196 `my $GHOST_SCRIPT=`which gs`;`
 
         `GHOST_SCRIPT` is empty resulting in an empty `/tmp/br_lpdfilter_ml1_gsout.dat` file.
         See `/tmp/br_lpdfilter_ml1.log` for the executed command.
 
-    Notes
-    -----
+  Notes
+  -----
 
-     -  The `setupPrintcap` has totally no use in our context.
+   -  The `setupPrintcap` has totally no use in our context.
 */
 
 let

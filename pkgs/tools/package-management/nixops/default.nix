@@ -1,11 +1,19 @@
-{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert, nixopsAzurePackages ? []
-, fetchurl, fetchpatch
+{ lib
+, python2Packages
+, libxslt
+, docbook_xsl_ns
+, openssh
+, cacert
+, nixopsAzurePackages ? [ ]
+, fetchurl
+, fetchpatch
 }:
 
 let
   version = "1.7";
 
-in python2Packages.buildPythonApplication {
+in
+python2Packages.buildPythonApplication {
   pname = "nixops";
   inherit version;
 
@@ -25,7 +33,8 @@ in python2Packages.buildPythonApplication {
   buildInputs = [ libxslt ];
 
   pythonPath = with python2Packages;
-    [ prettytable
+    [
+      prettytable
       boto
       boto3
       hetzner
@@ -36,17 +45,17 @@ in python2Packages.buildPythonApplication {
       datadog
       digital-ocean
       typing
-      ]
-      ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
-      ++ nixopsAzurePackages;
+    ]
+    ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
+    ++ nixopsAzurePackages;
 
   checkPhase =
-  # Ensure, that there are no (python) import errors
-  ''
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt \
-    HOME=$(pwd) \
-      $out/bin/nixops --version
-  '';
+    # Ensure, that there are no (python) import errors
+    ''
+      SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt \
+      HOME=$(pwd) \
+        $out/bin/nixops --version
+    '';
 
   postInstall = ''
     make -C doc/manual install nixops.1 docbookxsl=${docbook_xsl_ns}/xml/xsl/docbook \

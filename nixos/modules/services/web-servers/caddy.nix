@@ -36,10 +36,12 @@ let
           }
         }
       }'';
-    in pkgs.runCommand "caddy-config.json" { } ''
-    ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
-  '';
-in {
+    in
+    pkgs.runCommand "caddy-config.json" { } ''
+      ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
+    '';
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
   ];

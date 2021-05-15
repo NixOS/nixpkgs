@@ -10,8 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libICE libpng12 libSM libX11 libXext
-    xorgproto zlib
+    libICE
+    libpng12
+    libSM
+    libX11
+    libXext
+    xorgproto
+    zlib
   ];
 
   patches = [

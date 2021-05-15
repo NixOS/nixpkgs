@@ -1,9 +1,42 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
-  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, makeWrapper
+, isPy3k
+, python
+, twisted
+, jinja2
+, zope_interface
+, sqlalchemy
+, sqlalchemy_migrate
+, dateutil
+, txaio
+, autobahn
+, pyjwt
+, pyyaml
+, unidiff
+, treq
+, txrequests
+, pypugjs
+, boto3
+, moto
+, mock
+, python-lz4
+, setuptoolsTrial
+, isort
+, pylint
+, flake8
+, buildbot-worker
+, buildbot-pkg
+, buildbot-plugins
+, parameterized
+, git
+, openssh
+, glibcLocales
+, ldap3
+, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -46,8 +79,8 @@ let
       pyyaml
       unidiff
     ]
-      # tls
-      ++ twisted.extras.tls;
+    # tls
+    ++ twisted.extras.tls;
 
     checkInputs = [
       treq
@@ -105,4 +138,5 @@ let
       license = licenses.gpl2;
     };
   };
-in package
+in
+package

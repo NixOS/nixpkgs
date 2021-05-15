@@ -11,8 +11,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers";
-    homepage    = "https://github.com/daviddrysdale/python-phonenumbers";
-    license     = licenses.asl20;
+    homepage = "https://github.com/daviddrysdale/python-phonenumbers";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fadenb ];
   };
 }

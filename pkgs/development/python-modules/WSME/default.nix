@@ -8,7 +8,7 @@
 , netaddr
 , pytz
 , webob
-# Test inputs
+  # Test inputs
 , cherrypy
 , flask
 , flask-restful

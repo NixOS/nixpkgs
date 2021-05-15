@@ -1,29 +1,36 @@
 { lib, callPackage, fetchpatch, fetchurl, stdenv, pkgsi686Linux }:
 
 let
-  generic = args: let
-    imported = import ./generic.nix args;
-  in if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage imported {
-    lib32 = (pkgsi686Linux.callPackage imported {
-      libsOnly = true;
-      kernel = null;
-    }).out;
-  };
+  generic = args:
+    let
+      imported = import ./generic.nix args;
+    in
+    if ((!lib.versionOlder args.version "391")
+      && stdenv.hostPlatform.system != "x86_64-linux") then null
+    else
+      callPackage imported {
+        lib32 = (pkgsi686Linux.callPackage imported {
+          libsOnly = true;
+          kernel = null;
+        }).out;
+      };
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
-    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel)
+    { };
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
-      version = "460.73.01";
-      sha256_64bit = "120ymf59l6nipczszf82lrm2p4ihhqyv2pfwwfg9wy96vqcckc8i";
-      settingsSha256 = "08jh7g34p9yxv5fh1cw0r2pjx65ryiv3w2lk1qg0gxn2r7xypkx0";
-      persistencedSha256 = "040gx4wqp3hxcfb4aba4sl7b01ixr5slhzw0xldwcqlmhpwqphi5";
-    }
+  stable =
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
+      generic
+        {
+          version = "460.73.01";
+          sha256_64bit = "120ymf59l6nipczszf82lrm2p4ihhqyv2pfwwfg9wy96vqcckc8i";
+          settingsSha256 = "08jh7g34p9yxv5fh1cw0r2pjx65ryiv3w2lk1qg0gxn2r7xypkx0";
+          persistencedSha256 = "040gx4wqp3hxcfb4aba4sl7b01ixr5slhzw0xldwcqlmhpwqphi5";
+        }
     else legacy_390;
 
   beta = generic {

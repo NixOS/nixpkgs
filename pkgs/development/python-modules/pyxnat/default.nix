@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";
-  doCheck = false;  # requires a docker container running an XNAT server
+  doCheck = false; # requires a docker container running an XNAT server
 
   pythonImportsCheck = [ "pyxnat" ];
 

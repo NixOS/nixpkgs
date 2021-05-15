@@ -1,9 +1,10 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 let
-  folder = if stdenv.hostPlatform.system == "i686-linux" then "i686"
-  else if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
-  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  folder =
+    if stdenv.hostPlatform.system == "i686-linux" then "i686"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation {
   name = "pngout-20150319";

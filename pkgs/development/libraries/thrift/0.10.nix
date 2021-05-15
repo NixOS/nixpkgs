@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkg-config, bison
-, flex, twisted
+{ lib
+, stdenv
+, fetchurl
+, boost
+, zlib
+, libevent
+, openssl
+, python
+, pkg-config
+, bison
+, flex
+, twisted
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +25,18 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost zlib libevent openssl python bison flex twisted
+    boost
+    zlib
+    libevent
+    openssl
+    python
+    bison
+    flex
+    twisted
   ];
 
   preConfigure = "export PY_PREFIX=$out";

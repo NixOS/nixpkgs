@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail"}:
+{ lib, stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail" }:
 
 stdenv.mkDerivation {
   name = "cron-4.1";

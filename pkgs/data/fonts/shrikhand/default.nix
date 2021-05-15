@@ -2,7 +2,8 @@
 
 let
   version = "2016-03-03";
-in fetchzip {
+in
+fetchzip {
   name = "shrikhand-${version}";
 
   url = "https://github.com/jonpinhorn/shrikhand/raw/c11c9b0720fba977fad7cb4f339ebacdba1d1394/build/Shrikhand-Regular.ttf";

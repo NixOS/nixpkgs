@@ -32,9 +32,19 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake gettext ninja qttools ];
 
   buildInputs = [
-    qmlbox2d qtbase qtdeclarative qtgraphicaleffects qtmultimedia qtquickcontrols qtsensors qtxmlpatterns
+    qmlbox2d
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtmultimedia
+    qtquickcontrols
+    qtsensors
+    qtxmlpatterns
   ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ]);
 
   postInstall = ''

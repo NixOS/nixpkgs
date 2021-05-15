@@ -6,7 +6,8 @@ let
   cfg = config.programs.firejail;
 
   wrappedBins = pkgs.runCommand "firejail-wrapped-binaries"
-    { preferLocalBuild = true;
+    {
+      preferLocalBuild = true;
       allowSubstitutes = false;
     }
     ''
@@ -30,7 +31,8 @@ let
       '') cfg.wrappedBinaries)}
     '';
 
-in {
+in
+{
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
@@ -50,13 +52,13 @@ in {
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             description = "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
       }));
-      default = {};
+      default = { };
       example = literalExample ''
         {
           firefox = {

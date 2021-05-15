@@ -12,7 +12,8 @@
 , glibcLocales
 , cairo
 , cffi
-, withXcffib ? false, xcffib
+, withXcffib ? false
+, xcffib
 , python
 , glib
 , gdk-pixbuf

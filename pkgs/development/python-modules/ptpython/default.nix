@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , appdirs
 , black
 , importlib-metadata

@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, fetchurl
+{ lib
+, buildDunePackage
+, fetchurl
 , seq
 , stdlib-shims
 }:

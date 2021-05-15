@@ -1,4 +1,6 @@
-{ lib, stdenv, buildPackages
+{ lib
+, stdenv
+, buildPackages
 , staticBuild ? stdenv.hostPlatform.isStatic
 }:
 

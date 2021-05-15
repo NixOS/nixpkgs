@@ -12,7 +12,8 @@
 , wrapGAppsHook
 , pkg-config
 , pulseaudio
-, lib, stdenv
+, lib
+, stdenv
 , systemd
 , upower
 , dconf
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   version = "4.8.5";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
-   #include "csd-power-proxy.h"
+     #include "csd-power-proxy.h"
             ^~~~~~~~~~~~~~~~~~~
   compilation terminated. */
 

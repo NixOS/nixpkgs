@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lemonbar-1.4";
 
   src = fetchurl {
-    url    = "https://github.com/LemonBoy/bar/archive/v1.4.tar.gz";
+    url = "https://github.com/LemonBoy/bar/archive/v1.4.tar.gz";
     sha256 = "0fa91vb968zh6fyg97kdaix7irvqjqhpsb6ks0ggcl59lkbkdzbv";
   };
 

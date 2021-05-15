@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -30,8 +31,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    mono glib pango gtk3 GConf libglade libgnomecanvas
-    libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+    mono
+    glib
+    pango
+    gtk3
+    GConf
+    libglade
+    libgnomecanvas
+    libgtkhtml
+    libgnomeui
+    libgnomeprint
+    libgnomeprintui
+    gtkhtml
+    libxml2
   ];
 
   patches = [

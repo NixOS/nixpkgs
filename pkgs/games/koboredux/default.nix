@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , requireFile
@@ -16,12 +17,14 @@ stdenv.mkDerivation rec {
   version = "0.7.5.1";
 
   src =
-    [(fetchFromGitHub {
-      owner = "olofson";
-      repo = "koboredux";
-      rev = "v${version}";
-      sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
-    })]
+    [
+      (fetchFromGitHub {
+        owner = "olofson";
+        repo = "koboredux";
+        rev = "v${version}";
+        sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
+      })
+    ]
     ++
     (optional useProprietaryAssets (requireFile {
       name = "koboredux-${version}-Linux.tar.bz2";
@@ -43,10 +46,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "source"; # needed when we have the assets source
 
   # Fix clang build
-  patches = [(fetchpatch {
-    url = "https://github.com/olofson/koboredux/commit/cf92b8a61d002ccaa9fbcda7a96dab08a681dee4.patch";
-    sha256 = "0dwhvis7ghf3mgzjd2rwn8hk3ndlgfwwcqaq581yc5rwd73v6vw4";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/olofson/koboredux/commit/cf92b8a61d002ccaa9fbcda7a96dab08a681dee4.patch";
+      sha256 = "0dwhvis7ghf3mgzjd2rwn8hk3ndlgfwwcqaq581yc5rwd73v6vw4";
+    })
+  ];
 
   postPatch = optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/

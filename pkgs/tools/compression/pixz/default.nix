@@ -1,7 +1,17 @@
-{
-  lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
-  , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
-  , libarchive, xz
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, asciidoc
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, libarchive
+, xz
 }:
 stdenv.mkDerivation rec {
   baseName = "pixz";
@@ -10,9 +20,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoconf automake libtool asciidoc libxslt libxml2
-    docbook_xml_dtd_45 docbook_xsl
-    libarchive xz
+    autoconf
+    automake
+    libtool
+    asciidoc
+    libxslt
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libarchive
+    xz
   ];
   preBuild = ''
     echo "XML_CATALOG_FILES='$XML_CATALOG_FILES'"
@@ -31,7 +48,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "A parallel compressor/decompressor for xz format";
     license = lib.licenses.bsd2;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

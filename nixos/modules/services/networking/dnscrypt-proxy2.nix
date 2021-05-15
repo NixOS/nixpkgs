@@ -24,7 +24,7 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     upstreamDefaults = mkOption {
@@ -44,10 +44,11 @@ in
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
       type = types.path;
-      default = pkgs.runCommand "dnscrypt-proxy.toml" {
-        json = builtins.toJSON cfg.settings;
-        passAsFile = [ "json" ];
-      } ''
+      default = pkgs.runCommand "dnscrypt-proxy.toml"
+        {
+          json = builtins.toJSON cfg.settings;
+          passAsFile = [ "json" ];
+        } ''
         ${if cfg.upstreamDefaults then ''
           ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
           ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two

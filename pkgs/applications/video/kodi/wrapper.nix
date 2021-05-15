@@ -2,7 +2,7 @@
 
 let
   # linux distros are supposed to provide pillow and pycryptodome
-  requiredPythonPackages = with kodi.pythonPackages; [ pillow pycryptodome] ++ addons;
+  requiredPythonPackages = with kodi.pythonPackages; [ pillow pycryptodome ] ++ addons;
 in
 
 buildEnv {

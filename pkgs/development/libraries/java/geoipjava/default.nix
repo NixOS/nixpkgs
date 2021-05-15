@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, jdk, unzip}:
+{ lib, stdenv, fetchurl, jdk, unzip }:
 
 stdenv.mkDerivation {
   name = "GeoIPJava-1.2.5";

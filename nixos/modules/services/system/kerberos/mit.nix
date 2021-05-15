@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... } :
+{ pkgs, config, lib, ... }:
 
 let
   inherit (lib) mkIf concatStrings concatStringsSep concatMapStrings toList
@@ -8,20 +8,30 @@ let
   stateDir = "/var/lib/krb5kdc";
   PIDFile = "/run/kdc.pid";
   aclMap = {
-    add = "a"; cpw = "c"; delete = "d"; get = "i"; list = "l"; modify = "m";
+    add = "a";
+    cpw = "c";
+    delete = "d";
+    get = "i";
+    list = "l";
+    modify = "m";
     all = "*";
   };
   aclFiles = mapAttrs
-    (name: {acl, ...}: (pkgs.writeText "${name}.acl" (concatMapStrings (
-      {principal, access, target, ...} :
-      let access_code = map (a: aclMap.${a}) (toList access); in
-      "${principal} ${concatStrings access_code} ${target}\n"
-    ) acl))) cfg.realms;
-  kdcConfigs = mapAttrsToList (name: value: ''
-    ${name} = {
-      acl_file = ${value}
-    }
-  '') aclFiles;
+    (name: { acl, ... }: (pkgs.writeText "${name}.acl" (concatMapStrings
+      (
+        { principal, access, target, ... }:
+        let access_code = map (a: aclMap.${a}) (toList access); in
+        "${principal} ${concatStrings access_code} ${target}\n"
+      )
+      acl)))
+    cfg.realms;
+  kdcConfigs = mapAttrsToList
+    (name: value: ''
+      ${name} = {
+        acl_file = ${value}
+      }
+    '')
+    aclFiles;
   kdcConfFile = pkgs.writeText "kdc.conf" ''
     [realms]
     ${concatStringsSep "\n" kdcConfigs}

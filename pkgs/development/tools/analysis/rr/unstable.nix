@@ -8,16 +8,16 @@
 { callPackage, fetchFromGitHub }:
 
 let
-  rr = callPackage ./. {};
+  rr = callPackage ./. { };
 in
 
-  rr.overrideAttrs (old: {
-    version = "unstable-2020-10-04";
+rr.overrideAttrs (old: {
+  version = "unstable-2020-10-04";
 
-    src = fetchFromGitHub {
-      owner = "mozilla";
-      repo = "rr";
-      rev = "9ff375813a740a0a6ebcdfcebc58bd61ab68c667";
-      sha256 = "0raifs6cg5ckpi2445inhy3hfhp4p89s1lkx9z17mcc2g1c1phf5";
-    };
-  })
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "rr";
+    rev = "9ff375813a740a0a6ebcdfcebc58bd61ab68c667";
+    sha256 = "0raifs6cg5ckpi2445inhy3hfhp4p89s1lkx9z17mcc2g1c1phf5";
+  };
+})

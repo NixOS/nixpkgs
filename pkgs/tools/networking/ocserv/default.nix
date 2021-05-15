@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, nettle, gnutls
-, libev, protobufc, guile, geoip, libseccomp, gperf, readline
-, lz4, libgssglue, ronn, pam
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, nettle
+, gnutls
+, libev
+, protobufc
+, guile
+, geoip
+, libseccomp
+, gperf
+, readline
+, lz4
+, libgssglue
+, ronn
+, pam
 }:
 
 stdenv.mkDerivation rec {

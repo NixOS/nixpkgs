@@ -11,7 +11,9 @@
 , pandas
 , pyshp
 , setuptools
-, withPcap ? true, dpkt ? null, dnslib ? null
+, withPcap ? true
+, dpkt ? null
+, dnslib ? null
 }:
 buildPythonApplication rec {
   pname = "visidata";

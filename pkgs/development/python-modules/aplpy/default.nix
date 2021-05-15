@@ -27,12 +27,25 @@ buildPythonPackage rec {
     sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";
   };
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       # Can be removed in next release after 2.0.3
       url = "https://github.com/aplpy/aplpy/pull/448.patch";
       sha256 = "1pnzh7ykjc8hwahzbzyryrzv5a8fddgd1bmzbhagkrn6lmvhhpvq";
-      excludes = [ "tox.ini" "azure-pipelines.yml" ".circleci/config.yml" "MANIFEST.in" ".gitignore"
-       "setup.cfg" "appveyor.yml" "readthedocs.yml" "CHANGES.rst" ".gitmodules" ".travis.yml" "astropy_helpers" ];
+      excludes = [
+        "tox.ini"
+        "azure-pipelines.yml"
+        ".circleci/config.yml"
+        "MANIFEST.in"
+        ".gitignore"
+        "setup.cfg"
+        "appveyor.yml"
+        "readthedocs.yml"
+        "CHANGES.rst"
+        ".gitmodules"
+        ".travis.yml"
+        "astropy_helpers"
+      ];
     })
   ];
 

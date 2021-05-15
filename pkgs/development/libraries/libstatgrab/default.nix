@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, IOKit ? null }:
+{ lib
+, stdenv
+, fetchurl
+, IOKit ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "libstatgrab-0.92";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "15m1sl990l85ijf8pnc6hdfha6fqyiq74mijrzm3xz4zzxm91wav";
   };
 
-  buildInputs = [] ++ lib.optional stdenv.isDarwin IOKit;
+  buildInputs = [ ] ++ lib.optional stdenv.isDarwin IOKit;
 
   meta = with lib; {
     homepage = "https://www.i-scream.org/libstatgrab/";

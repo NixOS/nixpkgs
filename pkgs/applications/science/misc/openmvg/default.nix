@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
 , eigen ? null
 , libtiff ? null
 , enableExamples ? false
-, enableDocs ? false }:
+, enableDocs ? false
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6";

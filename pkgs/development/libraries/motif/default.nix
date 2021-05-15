@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libtool
-, xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
-, expat, libjpeg, libpng, libiconv
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libtool
+, xlibsWrapper
+, xbitmaps
+, libXrender
+, libXmu
+, libXt
+, expat
+, libjpeg
+, libpng
+, libiconv
 , flex
-, libXp, libXau
+, libXp
+, libXau
 , demoSupport ? false
 }:
 # refer to the gentoo package
@@ -18,8 +31,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    xlibsWrapper xbitmaps libXrender libXmu libXt
-    expat libjpeg libpng libiconv
+    xlibsWrapper
+    xbitmaps
+    libXrender
+    libXmu
+    libXt
+    expat
+    libjpeg
+    libpng
+    libiconv
   ];
 
   nativeBuildInputs = [ pkg-config flex ];

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
-, dbus, readline ? null, pcsclite ? null
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, pkg-config
+, libnl
+, dbus
+, readline ? null
+, pcsclite ? null
 
 , readOnlyModeSSIDs ? false
 }:

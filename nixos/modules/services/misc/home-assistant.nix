@@ -8,7 +8,7 @@ let
   # cfg.config != null can be assumed here
   configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
-    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+      (recursiveUpdate defaultConfig cfg.config) else cfg.config));
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
     # Hack to support custom yaml objects,
@@ -50,7 +50,8 @@ let
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
 
-  package = if (cfg.autoExtraComponents && cfg.config != null)
+  package =
+    if (cfg.autoExtraComponents && cfg.config != null)
     then (cfg.package.override { inherit extraComponents; })
     else cfg.package;
 
@@ -62,7 +63,8 @@ let
     lovelace.mode = "yaml";
   };
 
-in {
+in
+{
   meta.maintainers = teams.home-assistant.members;
 
   options.services.home-assistant = {
@@ -97,8 +99,9 @@ in {
     config = mkOption {
       default = null;
       # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
-      type =  with lib.types; let
-          valueType = nullOr (oneOf [
+      type = with lib.types; let
+        valueType = nullOr
+          (oneOf [
             bool
             int
             float
@@ -106,10 +109,11 @@ in {
             (lazyAttrsOf valueType)
             (listOf valueType)
           ]) // {
-            description = "Yaml value";
-            emptyValue.value = {};
-          };
-        in valueType;
+          description = "Yaml value";
+          emptyValue.value = { };
+        };
+      in
+      valueType;
       example = literalExample ''
         {
           homeassistant = {
@@ -234,98 +238,103 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
-        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
-      '' else ''
-        rm -f "${cfg.configDir}/configuration.yaml"
-        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
-      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
+      preStart = optionalString (cfg.config != null)
+        (if cfg.configWritable then ''
+          cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+        '' else ''
+          rm -f "${cfg.configDir}/configuration.yaml"
+          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+        '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
         cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
       '' else ''
         rm -f "${cfg.configDir}/ui-lovelace.yaml"
         ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
       '');
-      serviceConfig = let
-        # List of capabilities to equip home-assistant with, depending on configured components
-        capabilities = [
-          # Empty string first, so we will never accidentally have an empty capability bounding set
-          # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
-          ""
-        ] ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
-          # Required for interaction with hci devices and bluetooth sockets
-          # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
-          "CAP_NET_ADMIN"
-          "CAP_NET_RAW"
-        ] ++ lib.optionals (useComponent "emulated_hue") [
-          # Alexa looks for the service on port 80
-          # https://www.home-assistant.io/integrations/emulated_hue
-          "CAP_NET_BIND_SERVICE"
-        ] ++ lib.optionals (useComponent "nmap_tracker") [
-          # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
-          "CAP_NET_ADMIN"
-          "CAP_NET_BIND_SERVICE"
-          "CAP_NET_RAW"
-        ]));
-      in {
-        ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        User = "hass";
-        Group = "hass";
-        Restart = "on-failure";
-        RestartForceExitStatus = "100";
-        SuccessExitStatus = "100";
-        KillSignal = "SIGINT";
+      serviceConfig =
+        let
+          # List of capabilities to equip home-assistant with, depending on configured components
+          capabilities = [
+            # Empty string first, so we will never accidentally have an empty capability bounding set
+            # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
+            ""
+          ] ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+            # Required for interaction with hci devices and bluetooth sockets
+            # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+          ] ++ lib.optionals (useComponent "emulated_hue") [
+            # Alexa looks for the service on port 80
+            # https://www.home-assistant.io/integrations/emulated_hue
+            "CAP_NET_BIND_SERVICE"
+          ] ++ lib.optionals (useComponent "nmap_tracker") [
+            # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
+            "CAP_NET_ADMIN"
+            "CAP_NET_BIND_SERVICE"
+            "CAP_NET_RAW"
+          ]));
+        in
+        {
+          ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          User = "hass";
+          Group = "hass";
+          Restart = "on-failure";
+          RestartForceExitStatus = "100";
+          SuccessExitStatus = "100";
+          KillSignal = "SIGINT";
 
-        # Hardening
-        AmbientCapabilities = capabilities;
-        CapabilityBoundingSet = capabilities;
-        DeviceAllow = [
-          "char-ttyACM rw"
-          "char-ttyAMA rw"
-          "char-ttyUSB rw"
-        ];
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        PrivateUsers = false; # prevents gaining capabilities in the host namespace
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProcSubset = "all";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        ReadWritePaths = let
-          # Allow rw access to explicitly configured paths
-          cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
-          value = attrByPath cfgPath [] cfg;
-          allowPaths = if isList value then value else singleton value;
-        in [ "${cfg.configDir}" ] ++ allowPaths;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-          "AF_UNIX"
-        ] ++ optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
-          "AF_BLUETOOTH"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SupplementaryGroups = [ "dialout" ];
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-        ];
-        UMask = "0077";
-      };
+          # Hardening
+          AmbientCapabilities = capabilities;
+          CapabilityBoundingSet = capabilities;
+          DeviceAllow = [
+            "char-ttyACM rw"
+            "char-ttyAMA rw"
+            "char-ttyUSB rw"
+          ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          PrivateUsers = false; # prevents gaining capabilities in the host namespace
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProcSubset = "all";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          ReadWritePaths =
+            let
+              # Allow rw access to explicitly configured paths
+              cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
+              value = attrByPath cfgPath [ ] cfg;
+              allowPaths = if isList value then value else singleton value;
+            in
+            [ "${cfg.configDir}" ] ++ allowPaths;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ] ++ optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+            "AF_BLUETOOTH"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SupplementaryGroups = [ "dialout" ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
+          UMask = "0077";
+        };
       path = [
         "/run/wrappers" # needed for ping
       ];

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, gnome
-, webkitgtk, libsoup, libxml2, libarchive }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, gobject-introspection
+, gnome
+, webkitgtk
+, libsoup
+, libxml2
+, libarchive
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgepub";

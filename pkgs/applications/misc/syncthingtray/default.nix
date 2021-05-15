@@ -14,7 +14,7 @@
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? true
-, plasmoidSupport  ? true
+, plasmoidSupport ? true
 , systemdSupport ? true
 }:
 
@@ -40,7 +40,7 @@ mkDerivation rec {
     cmake
     qttools
   ]
-    ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
+  ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
   ;
 
   # No tests are available by upstream, but we test --help anyway
@@ -52,10 +52,10 @@ mkDerivation rec {
   cmakeFlags = [
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
-  ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
-    ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
-    ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
-    ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
+  ] ++ lib.optionals (!plasmoidSupport) [ "-DNO_PLASMOID=ON" ]
+  ++ lib.optionals (!kioPluginSupport) [ "-DNO_FILE_ITEM_ACTION_PLUGIN=ON" ]
+  ++ lib.optionals systemdSupport [ "-DSYSTEMD_SUPPORT=ON" ]
+  ++ lib.optionals (!webviewSupport) [ "-DWEBVIEW_PROVIDER:STRING=none" ]
   ;
 
   meta = with lib; {

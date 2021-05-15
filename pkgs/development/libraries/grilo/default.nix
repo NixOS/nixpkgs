@@ -1,11 +1,29 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, vala, glib, liboauth, gtk3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, libxml2, gnome, gobject-introspection, libsoup, totem-pl-parser }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, vala
+, glib
+, liboauth
+, gtk3
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, libxml2
+, gnome
+, gobject-introspection
+, libsoup
+, totem-pl-parser
+}:
 
 let
   pname = "grilo";
   version = "0.3.13"; # if you change minor, also change ./setup-hook.sh
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
@@ -23,8 +41,15 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config gettext gobject-introspection vala
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
   buildInputs = [ glib liboauth gtk3 libxml2 libsoup totem-pl-parser ];
 

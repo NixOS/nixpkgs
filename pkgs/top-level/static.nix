@@ -10,29 +10,35 @@
 # Basic things like pkgsStatic.hello should work out of the box. More
 # complicated things will need to be fixed with overrides.
 
-self: super: let
+self: super:
+let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 makeStaticLibraries
-                                 propagateBuildInputs;
+    makeStaticLibraries
+    propagateBuildInputs;
   inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ self.buildPackages.darwin.CF ];
-  }; in stdenv // {
-    mkDerivation = args: stdenv.mkDerivation (args // {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
-        substitutions = {
-          libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-        };
-      } ../stdenv/darwin/portable-libsystem.sh) ];
-    });
-  };
+  makeStaticDarwin = stdenv_:
+    let stdenv = stdenv_.override {
+      # extraBuildInputs are dropped in cross.nix, but darwin still needs them
+      extraBuildInputs = [ self.buildPackages.darwin.CF ];
+    }; in
+    stdenv // {
+      mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+        + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
+        nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+          (makeSetupHook
+            {
+              substitutions = {
+                libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+              };
+            } ../stdenv/darwin/portable-libsystem.sh)
+        ];
+      });
+    };
 
   staticAdapters =
     # makeStaticDarwin must go first so that the extraBuildInputs
@@ -52,7 +58,7 @@ self: super: let
 
   removeUnknownConfigureFlags = f: with self.lib;
     remove "--disable-shared"
-    (remove "--enable-static" f);
+      (remove "--enable-static" f);
 
   ocamlFixPackage = b:
     b.overrideAttrs (o: {
@@ -89,7 +95,8 @@ self: super: let
       libcxxStdenv = foldl (flip id) llvmPackages.libcxxStdenv staticAdapters;
     };
 
-in {
+in
+{
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
@@ -120,9 +127,11 @@ in {
     gssSupport = false;
   };
 
-  ocaml-ng = self.lib.mapAttrs (_: set:
-    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
-  ) super.ocaml-ng;
+  ocaml-ng = self.lib.mapAttrs
+    (_: set:
+      if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
+    )
+    super.ocaml-ng;
 
   openssl = super.openssl_1_1.overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.

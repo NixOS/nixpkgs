@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "devkitPro";
-    repo  = "wiiload";
+    repo = "wiiload";
     rev = "v${version}";
     sha256 = "0dffy603zggkqv7g1a2jninmi64vy519gpgkdfhjnijhdm9gs5m3";
   };

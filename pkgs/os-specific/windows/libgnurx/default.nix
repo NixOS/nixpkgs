@@ -2,7 +2,8 @@
 
 let
   version = "2.5.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libgnurx";
   inherit version;
   src = fetchurl {

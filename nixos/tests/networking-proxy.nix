@@ -4,16 +4,17 @@
 # TODO: test whether nix tools work as expected behind a proxy
 
 let default-config = {
-        imports = [ ./common/user-account.nix ];
+  imports = [ ./common/user-account.nix ];
 
-        services.xserver.enable = false;
+  services.xserver.enable = false;
 
-        virtualisation.memorySize = 128;
-      };
-in import ./make-test-python.nix ({ pkgs, ...} : {
+  virtualisation.memorySize = 128;
+};
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "networking-proxy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [  ];
+    maintainers = [ ];
   };
 
   nodes = {
@@ -62,7 +63,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           noProxy = "131415-127.0.0.1,localhost,.localdomain";
         };
       };
-    };
+  };
 
   testScript =
     ''

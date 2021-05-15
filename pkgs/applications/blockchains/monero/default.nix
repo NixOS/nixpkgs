@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-, boost, miniupnpc, openssl, unbound
-, zeromq, pcsclite, readline, libsodium, hidapi
-, randomx, rapidjson
-, CoreData, IOKit, PCSC
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, boost
+, miniupnpc
+, openssl
+, unbound
+, zeromq
+, pcsclite
+, readline
+, libsodium
+, hidapi
+, randomx
+, rapidjson
+, CoreData
+, IOKit
+, PCSC
 , trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+, libusb1 ? null
+, protobuf ? null
+, python3 ? null
 }:
 
 with lib;
 
 assert stdenv.isDarwin -> IOKit != null;
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
+assert trezorSupport -> all (x: x != null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
@@ -41,12 +55,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    boost miniupnpc openssl unbound
-    zeromq pcsclite readline
-    libsodium hidapi randomx rapidjson
+    boost
+    miniupnpc
+    openssl
+    unbound
+    zeromq
+    pcsclite
+    readline
+    libsodium
+    hidapi
+    randomx
+    rapidjson
     protobuf
   ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
-    ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+  ++ optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -60,9 +82,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Private, secure, untraceable currency";
-    homepage    = "https://getmonero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://getmonero.org/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
-, gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, gnome
+, gtk-doc
+, gtk3
+, libX11
+, libXext
+, libXrender
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +27,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
   buildInputs = [
-    gnome.gnome-common gtk-doc gtk3
-    libX11 libXext libXrender gobject-introspection
+    gnome.gnome-common
+    gtk-doc
+    gtk3
+    libX11
+    libXext
+    libXrender
+    gobject-introspection
   ];
 
   preConfigure = ''

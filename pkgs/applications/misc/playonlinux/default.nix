@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , fetchurl
 , cabextract
@@ -23,7 +24,7 @@
 , xorg
 , libGL
 , steam-run-native
-# needed for avoiding crash on file selector
+  # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
 }:
 
@@ -57,13 +58,14 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
-  python = python3.withPackages(ps: with ps; [
+  python = python3.withPackages (ps: with ps; [
     wxPython_4_1
     setuptools
     natsort
   ]);
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "playonlinux";
   inherit version;
 

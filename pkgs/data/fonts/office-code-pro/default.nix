@@ -3,7 +3,8 @@
 let
   pname = "office-code-pro";
   version = "1.004";
-in fetchFromGitHub rec {
+in
+fetchFromGitHub rec {
   name = "${pname}-${version}";
 
   owner = "nathco";

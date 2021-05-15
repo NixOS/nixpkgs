@@ -1,4 +1,4 @@
-{ lib, python}:
+{ lib, python }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "alibuild";

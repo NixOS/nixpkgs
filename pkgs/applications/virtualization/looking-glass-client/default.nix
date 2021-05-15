@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
-, fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
-, libXi, libXext, wayland, wayland-protocols, libffi, libGLU, libXScrnSaver
-, expat, libbfd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, SDL2
+, SDL2_ttf
+, spice-protocol
+, fontconfig
+, libX11
+, freefont_ttf
+, nettle
+, libpthreadstubs
+, libXau
+, libXdmcp
+, libXi
+, libXext
+, wayland
+, wayland-protocols
+, libffi
+, libGLU
+, libXScrnSaver
+, expat
+, libbfd
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +39,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
-    libpthreadstubs libXau libXdmcp libXi libXext wayland wayland-protocols
-    libffi libGLU libXScrnSaver expat libbfd
+    SDL2
+    SDL2_ttf
+    spice-protocol
+    fontconfig
+    libX11
+    freefont_ttf
+    nettle
+    libpthreadstubs
+    libXau
+    libXdmcp
+    libXi
+    libXext
+    wayland
+    wayland-protocols
+    libffi
+    libGLU
+    libXScrnSaver
+    expat
+    libbfd
   ];
 
   patches = [

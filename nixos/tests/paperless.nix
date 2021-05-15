@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... } : {
+import ./make-test-python.nix ({ lib, ... }: {
   name = "paperless";
   meta = with lib.maintainers; {
     maintainers = [ earvstedt ];

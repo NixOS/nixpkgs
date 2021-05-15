@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, python37Packages, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python37Packages.cairocffi.override {
-    withXcffib = true;
-  };
+  withXcffib = true;
+};
 in
 
 python37Packages.buildPythonApplication rec {

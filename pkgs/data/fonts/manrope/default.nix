@@ -3,7 +3,8 @@
 let
   pname = "manrope";
   version = "3";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "sharanda";
   repo = pname;

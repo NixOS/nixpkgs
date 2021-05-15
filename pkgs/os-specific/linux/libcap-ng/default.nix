@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
     (if python3 != null then "--with-python3" else "--without-python3")
   ];
 
-  meta = let inherit (lib) platforms licenses; in {
-    description = "Library for working with POSIX capabilities";
-    homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
-  };
+  meta = let inherit (lib) platforms licenses; in
+    {
+      description = "Library for working with POSIX capabilities";
+      homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
+      platforms = platforms.linux;
+      license = licenses.lgpl21;
+    };
 }

@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, lib
-, pkg-config, autoreconfHook
+{ stdenv
+, fetchFromGitHub
+, lib
+, pkg-config
+, autoreconfHook
 , gtkVersion ? "3"
 , gtk2
 , gtk3

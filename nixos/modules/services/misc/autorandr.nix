@@ -6,7 +6,8 @@ let
 
   cfg = config.services.autorandr;
 
-in {
+in
+{
 
   options = {
 

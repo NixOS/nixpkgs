@@ -1,8 +1,27 @@
-{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
-, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
+{ config
+, stdenv
+, lib
+, fetchurl
+, pkg-config
+, zlib
+, expat
+, openssl
+, autoconf
+, libjpeg
+, libpng
+, libtiff
+, freetype
+, fontconfig
+, libpaper
+, jbig2dec
+, libiconv
+, ijs
+, lcms2
+, fetchpatch
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin)
+, cups ? null
+, x11Support ? cupsSupport
+, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
@@ -55,13 +74,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs =
-    [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs lcms2
+    [
+      zlib
+      expat
+      openssl
+      libjpeg
+      libpng
+      libtiff
+      freetype
+      fontconfig
+      libpaper
+      jbig2dec
+      libiconv
+      ijs
+      lcms2
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
-    ;
+  ;
 
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg

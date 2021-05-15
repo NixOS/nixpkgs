@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, ocaml, findlib}:
+{ stdenv, lib, fetchurl, ocaml, findlib }:
 let
   pname = "xml-light";
   version = "2.4";
@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

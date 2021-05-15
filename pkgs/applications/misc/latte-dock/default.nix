@@ -1,5 +1,16 @@
-{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchurl
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff }:
+{ mkDerivation
+, lib
+, cmake
+, xorg
+, plasma-framework
+, fetchurl
+, extra-cmake-modules
+, karchive
+, kwindowsystem
+, qtx11extras
+, kcrash
+, knewstuff
+}:
 
 mkDerivation rec {
   pname = "latte-dock";
@@ -13,8 +24,15 @@ mkDerivation rec {
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
 
-  nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
-    qtx11extras kcrash knewstuff ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    cmake
+    karchive
+    kwindowsystem
+    qtx11extras
+    kcrash
+    knewstuff
+  ];
 
 
 

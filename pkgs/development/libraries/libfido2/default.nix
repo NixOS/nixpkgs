@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , cmake
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = ''
-    Provides library functionality for FIDO 2.0, including communication with a device over USB.
+      Provides library functionality for FIDO 2.0, including communication with a device over USB.
     '';
     homepage = "https://github.com/Yubico/libfido2";
     license = licenses.bsd2;

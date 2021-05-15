@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchzip
+{ lib
+, stdenv
+, fetchzip
 , pkg-config
 , gpm
 , libXext
@@ -6,7 +8,7 @@
 , libXt
 , ncurses5
 , slang
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "jed";
@@ -34,7 +36,9 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "jed" "xjed" "rgrep"
+    "jed"
+    "xjed"
+    "rgrep"
   ];
 
   postPatch = ''

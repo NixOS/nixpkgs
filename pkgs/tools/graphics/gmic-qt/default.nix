@@ -48,7 +48,7 @@ in
 
 assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${variant}” is not supported. Please use one of ${lib.concatStringsSep ", " (builtins.attrNames variants)}.";
 
-assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
+assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or [ ]) "gmic-qt variant “${variant}” is missing one of its dependencies.";
 
 mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
@@ -124,7 +124,7 @@ mkDerivation rec {
     openexr
     graphicsmagick
     curl
-  ] ++ variants.${variant}.extraDeps or [];
+  ] ++ variants.${variant}.extraDeps or [ ];
 
   cmakeFlags = [
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"

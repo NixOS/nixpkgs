@@ -1,5 +1,17 @@
-{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, makeWrapper
+, pkg-config
+, curl
+, openssl
+, gmp
+, zlib
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+}:
 
 let
   libPath = lib.makeLibraryPath [ gmp ];
@@ -29,16 +41,17 @@ rustPlatform.buildRustPackage rec {
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
     # This necessary because Lean 4 now dynamically links to GMP.
-    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      {
         CC = stdenv.cc;
         patchelf = patchelf;
         libPath = "$ORIGIN/../lib:${libPath}";
       } ''
-     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-       --subst-var patchelf \
-       --subst-var dynamicLinker \
-       --subst-var libPath
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker \
+        --subst-var libPath
     '')
   ];
 

@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkg-config, SDL, libGL, zlib, smpeg
-, SDL_image, libvorbis, expat, zip, lua }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, sconsPackages
+, pkg-config
+, SDL
+, libGL
+, zlib
+, smpeg
+, SDL_image
+, libvorbis
+, expat
+, zip
+, lua
+}:
 
 stdenv.mkDerivation rec {
   pname = "btanks";

@@ -1,18 +1,64 @@
-{ config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libXi, libX11, libXext, libXrender
-, libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
-, openvdb, libXxf86vm, tbb, alembic
-, zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
-, jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, colladaSupport ? true, opencollada
-, spaceNavSupport ? stdenv.isLinux, libspnav
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchzip
+, boost
+, cmake
+, ffmpeg
+, gettext
+, glew
+, ilmbase
+, libXi
+, libX11
+, libXext
+, libXrender
+, libjpeg
+, libpng
+, libsamplerate
+, libsndfile
+, libtiff
+, libGLU
+, libGL
+, openal
+, opencolorio
+, openexr
+, openimagedenoise
+, openimageio2
+, openjpeg
+, python3Packages
+, openvdb
+, libXxf86vm
+, tbb
+, alembic
+, zlib
+, fftw
+, opensubdiv
+, freetype
+, jemalloc
+, ocl-icd
+, addOpenGLRunpath
+, jackaudioSupport ? false
+, libjack2
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, colladaSupport ? true
+, opencollada
+, spaceNavSupport ? stdenv.isLinux
+, libspnav
 , makeWrapper
-, pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, pugixml
+, llvmPackages
+, SDL
+, Cocoa
+, CoreGraphics
+, ForceFeedback
+, OpenAL
+, OpenGL
 , potrace
 , openxr-loader
-, embree, gmp
+, embree
+, gmp
 }:
 
 with lib;
@@ -38,9 +84,27 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper python3Packages.wrapPython ]
     ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
-    [ boost ffmpeg gettext glew ilmbase
-      freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
+    [
+      boost
+      ffmpeg
+      gettext
+      glew
+      ilmbase
+      freetype
+      libjpeg
+      libpng
+      libsamplerate
+      libsndfile
+      libtiff
+      opencolorio
+      openexr
+      openimagedenoise
+      openimageio2
+      openjpeg
+      python
+      zlib
+      fftw
+      jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -50,15 +114,26 @@ stdenv.mkDerivation rec {
       potrace
     ]
     ++ (if (!stdenv.isDarwin) then [
-      libXi libX11 libXext libXrender
-      libGLU libGL openal
+      libXi
+      libX11
+      libXext
+      libXrender
+      libGLU
+      libGL
+      openal
       libXxf86vm
       openxr-loader
       # OpenVDB currently doesn't build on darwin
       openvdb
     ]
     else [
-      llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
+      llvmPackages.openmp
+      SDL
+      Cocoa
+      CoreGraphics
+      ForceFeedback
+      OpenAL
+      OpenGL
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
@@ -70,27 +145,27 @@ stdenv.mkDerivation rec {
     # allow usage of dynamically linked embree
     rm build_files/cmake/Modules/FindEmbree.cmake
   '' +
-    (if stdenv.isDarwin then ''
-      : > build_files/cmake/platform/platform_apple_xcode.cmake
-      substituteInPlace source/creator/CMakeLists.txt \
-        --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
-      substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-        --replace 'set(PYTHON_VERSION 3.7)' \
-                  'set(PYTHON_VERSION ${python.pythonVersion})' \
-        --replace '${"$"}{PYTHON_VERSION}m' \
-                  '${"$"}{PYTHON_VERSION}' \
-        --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/opencollada' \
-                  '${opencollada}' \
-        --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                  '${python3Packages.numpy}/${python.sitePackages}/numpy'
-    '' else ''
-      substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+  (if stdenv.isDarwin then ''
+    : > build_files/cmake/platform/platform_apple_xcode.cmake
+    substituteInPlace source/creator/CMakeLists.txt \
+      --replace '${"$"}{LIBDIR}/python' \
+                '${python}' \
+      --replace '${"$"}{LIBDIR}/openmp' \
+                '${llvmPackages.openmp}'
+    substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+      --replace 'set(PYTHON_VERSION 3.7)' \
+                'set(PYTHON_VERSION ${python.pythonVersion})' \
+      --replace '${"$"}{PYTHON_VERSION}m' \
+                '${"$"}{PYTHON_VERSION}' \
+      --replace '${"$"}{LIBDIR}/python' \
+                '${python}' \
+      --replace '${"$"}{LIBDIR}/opencollada' \
+                '${opencollada}' \
+      --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
+                '${python3Packages.numpy}/${python.sitePackages}/numpy'
+  '' else ''
+    substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
+  '');
 
   cmakeFlags =
     [

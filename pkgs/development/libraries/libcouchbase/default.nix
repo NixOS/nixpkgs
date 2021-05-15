@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevent, openssl}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "libcouchbase";

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = "https://www.pdflabs.com/tools/pdftk-server/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [raskin];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
     broken = true; # Broken on Hydra since 2020-08-24
   };

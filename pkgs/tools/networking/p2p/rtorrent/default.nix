@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config
-, libtool, autoconf, automake, cppunit
-, libtorrent, ncurses, libsigcxx, curl
-, zlib, openssl, xmlrpc_c
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, pkg-config
+, libtool
+, autoconf
+, automake
+, cppunit
+, libtorrent
+, ncurses
+, libsigcxx
+, curl
+, zlib
+, openssl
+, xmlrpc_c
 
-# This no longer works
+  # This no longer works
 , colorSupport ? false
 }:
 
@@ -20,8 +32,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libtool autoconf automake cppunit
-    libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
+    libtool
+    autoconf
+    automake
+    cppunit
+    libtorrent
+    ncurses
+    libsigcxx
+    curl
+    zlib
+    openssl
+    xmlrpc_c
   ];
 
   # Optional patch adds support for custom configurable colors

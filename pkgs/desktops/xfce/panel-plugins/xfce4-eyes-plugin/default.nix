@@ -13,8 +13,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-eyes-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-eyes-plugin";
   version = "4.5.1";
 
   src = fetchurl {

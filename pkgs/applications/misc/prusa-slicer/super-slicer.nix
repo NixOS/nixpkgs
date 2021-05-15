@@ -44,4 +44,5 @@ let
     };
 
   };
-in prusa-slicer.overrideAttrs override
+in
+prusa-slicer.overrideAttrs override

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, asciidoc, libxcb, xcbutil, xcbutilkeysyms
+{ lib
+, stdenv
+, fetchFromGitHub
+, asciidoc
+, libxcb
+, xcbutil
+, xcbutilkeysyms
 , xcbutilwm
 }:
 

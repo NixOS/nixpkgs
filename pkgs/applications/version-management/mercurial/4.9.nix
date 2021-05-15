@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, python2Packages, makeWrapper, unzip
-, guiSupport ? false, tk ? null
+{ lib
+, stdenv
+, fetchurl
+, python2Packages
+, makeWrapper
+, unzip
+, guiSupport ? false
+, tk ? null
 , ApplicationServices
 , mercurialSrc ? fetchurl rec {
     meta.name = "mercurial-${meta.version}";
@@ -12,7 +18,8 @@
 let
   inherit (python2Packages) docutils hg-git dulwich python;
 
-in python2Packages.buildPythonApplication {
+in
+python2Packages.buildPythonApplication {
 
   inherit (mercurialSrc.meta) name version;
   src = mercurialSrc;
@@ -42,21 +49,21 @@ in python2Packages.buildPythonApplication {
                 --set HG $out/bin/hg
                 --prefix PATH : ${tk}/bin "
     '') +
-    ''
-      for i in $(cd $out/bin && ls); do
-        wrapProgram $out/bin/$i \
-          $WRAP_TK
-      done
+  ''
+    for i in $(cd $out/bin && ls); do
+      wrapProgram $out/bin/$i \
+        $WRAP_TK
+    done
 
-      # copy hgweb.cgi to allow use in apache
-      mkdir -p $out/share/cgi-bin
-      cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
-      chmod u+x $out/share/cgi-bin/hgweb.cgi
+    # copy hgweb.cgi to allow use in apache
+    mkdir -p $out/share/cgi-bin
+    cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
+    chmod u+x $out/share/cgi-bin/hgweb.cgi
 
-      # install bash/zsh completions
-      install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
-      install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
-    '';
+    # install bash/zsh completions
+    install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
+    install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
+  '';
 
   meta = {
     inherit (mercurialSrc.meta) version;

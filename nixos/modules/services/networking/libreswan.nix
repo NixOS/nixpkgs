@@ -9,20 +9,23 @@ let
   libexec = "${pkgs.libreswan}/libexec/ipsec";
   ipsec = "${pkgs.libreswan}/sbin/ipsec";
 
-  trim = chars: str: let
-      nonchars = filter (x : !(elem x.value chars))
-                  (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
+  trim = chars: str:
+    let
+      nonchars = filter (x: !(elem x.value chars))
+        (imap0 (i: v: { ind = i; value = v; }) (stringToCharacters str));
     in
-      if length nonchars == 0 then ""
-      else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
-  indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
+    if length nonchars == 0 then ""
+    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+  indent = str: concatStrings (concatMap (s: [ "  " (trim [ " " "\t" ] s) "\n" ]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
-  connectionText = concatStrings (mapAttrsToList (n: v:
-    ''
-      conn ${n}
-      ${indent v}
+  connectionText = concatStrings (mapAttrsToList
+    (n: v:
+      ''
+        conn ${n}
+        ${indent v}
 
-    '') cfg.connections);
+      '')
+    cfg.connections);
   configFile = pkgs.writeText "ipsec.conf"
     ''
       config setup
@@ -46,22 +49,22 @@ in
       configSetup = mkOption {
         type = types.lines;
         default = ''
-            protostack=netkey
-            nat_traversal=yes
-            virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
+          protostack=netkey
+          nat_traversal=yes
+          virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
         '';
         example = ''
-            secretsfile=/root/ipsec.secrets
-            protostack=netkey
-            nat_traversal=yes
-            virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
+          secretsfile=/root/ipsec.secrets
+          protostack=netkey
+          nat_traversal=yes
+          virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
         '';
         description = "Options to go in the 'config setup' section of the libreswan ipsec configuration";
       };
 
       connections = mkOption {
         type = types.attrsOf types.lines;
-        default = {};
+        default = { };
         example = {
           myconnection = ''
             auto=add

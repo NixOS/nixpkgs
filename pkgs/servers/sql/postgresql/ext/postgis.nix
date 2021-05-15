@@ -1,5 +1,6 @@
 { fetchurl
-, lib, stdenv
+, lib
+, stdenv
 , perl
 , libxml2
 , postgresql
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
-                ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ perl pkg-config ];
   dontDisableStatic = true;
 

@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An OCaml module for normalizing Unicode text";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

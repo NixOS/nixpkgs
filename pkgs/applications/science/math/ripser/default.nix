@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
 , assembleReductionMatrix ? false
 , useCoefficients ? false
 , indicateProgress ? false
-, useGoogleHashmap ? false, sparsehash ? null
+, useGoogleHashmap ? false
+, sparsehash ? null
 , fileFormat ? "lowerTriangularCsv"
 }:
 
 with lib;
 
 assert assertOneOf "fileFormat" fileFormat
-  ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
+  [ "lowerTriangularCsv" "upperTriangularCsv" "dipha" ];
 assert useGoogleHashmap -> sparsehash != null;
 
 let
@@ -29,10 +33,12 @@ stdenv.mkDerivation {
 
   #Patch from dev branch to make compilation work.
   #Will be removed when it gets merged into master.
-  patches = [(fetchurl {
-    url = "https://github.com/Ripser/ripser/commit/dc78d8ce73ee35f3828f0aad67a4e53620277ebf.patch";
-    sha256 = "1y93aqpqz8fm1cxxrf90dhh67im3ndkr8dnxgbw5y96296n4r924";
-  })];
+  patches = [
+    (fetchurl {
+      url = "https://github.com/Ripser/ripser/commit/dc78d8ce73ee35f3828f0aad67a4e53620277ebf.patch";
+      sha256 = "1y93aqpqz8fm1cxxrf90dhh67im3ndkr8dnxgbw5y96296n4r924";
+    })
+  ];
 
   buildInputs = optional useGoogleHashmap sparsehash;
 
@@ -61,7 +67,7 @@ stdenv.mkDerivation {
     description = "A lean C++ code for the computation of Vietoris–Rips persistence barcodes";
     homepage = "https://github.com/Ripser/ripser";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [erikryb];
+    maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;
   };
 }

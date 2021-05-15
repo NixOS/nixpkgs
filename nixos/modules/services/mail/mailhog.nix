@@ -55,7 +55,7 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of additional arguments to pass to the MailHog process.";
       };
     };

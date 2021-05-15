@@ -1,5 +1,9 @@
 # Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
-{ lib, vscode-utils, jq, rust-analyzer, nodePackages
+{ lib
+, vscode-utils
+, jq
+, rust-analyzer
+, nodePackages
 , setDefaultServerPath ? true
 }:
 
@@ -24,7 +28,8 @@ let
     '';
   };
 
-in vscode-utils.buildVscodeExtension {
+in
+vscode-utils.buildVscodeExtension {
   inherit version vsix;
   name = "${pname}-${version}";
   src = "${vsix}/${pname}.zip";

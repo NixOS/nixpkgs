@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
 , flake8-polyfill
 , importlib-metadata
 }:

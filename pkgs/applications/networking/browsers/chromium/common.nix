@@ -1,37 +1,87 @@
-{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, fetchurl
+{ stdenv
+, lib
+, llvmPackages
+, gnChromium
+, ninja
+, which
+, nodejs
+, fetchpatch
+, fetchurl
 
-# default dependencies
-, gnutar, bzip2, flac, speex, libopus
-, libevent, expat, libjpeg, snappy
-, libpng, libcap
-, xdg-utils, yasm, nasm, minizip, libwebp
-, libusb1, pciutils, nss, re2
+  # default dependencies
+, gnutar
+, bzip2
+, flac
+, speex
+, libopus
+, libevent
+, expat
+, libjpeg
+, snappy
+, libpng
+, libcap
+, xdg-utils
+, yasm
+, nasm
+, minizip
+, libwebp
+, libusb1
+, pciutils
+, nss
+, re2
 
-, python2, python3, perl, pkg-config
-, nspr, systemd, libkrb5
-, util-linux, alsaLib
-, bison, gperf
-, glib, gtk3, dbus-glib
+, python2
+, python3
+, perl
+, pkg-config
+, nspr
+, systemd
+, libkrb5
+, util-linux
+, alsaLib
+, bison
+, gperf
+, glib
+, gtk3
+, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
-, protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, libXScrnSaver
+, libXcursor
+, libXtst
+, libxshmfence
+, libGLU
+, libGL
+, protobuf
+, speechd
+, libXdamage
+, cups
+, ffmpeg
+, libxslt
+, libxml2
+, at-spi2-core
 , jre8
 , pipewire
 , libva
-, libdrm, wayland, mesa, libxkbcommon # Ozone
+, libdrm
+, wayland
+, mesa
+, libxkbcommon # Ozone
 , curl
 
-# optional dependencies
+  # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
-# package customization
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
+  # package customization
+, gnomeSupport ? false
+, gnome2 ? null
+, gnomeKeyringSupport ? false
+, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, libpulseaudio ? null
-, ungoogled ? false, ungoogled-chromium
+, pulseSupport ? false
+, libpulseaudio ? null
+, ungoogled ? false
+, ungoogled-chromium
 
 , channel
 , upstream-info
@@ -43,11 +93,15 @@ with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  python2WithPackages = python2.withPackages(ps: with ps; [
-    ply jinja2 setuptools
+  python2WithPackages = python2.withPackages (ps: with ps; [
+    ply
+    jinja2
+    setuptools
   ]);
-  python3WithPackages = python3.withPackages(ps: with ps; [
-    ply jinja2 setuptools
+  python3WithPackages = python3.withPackages (ps: with ps; [
+    ply
+    jinja2
+    setuptools
   ]);
 
   # The additional attributes for creating derivations based on the chromium
@@ -72,7 +126,8 @@ let
         else if isString value then mkGnString value
         else throw "Unsupported type for GN value `${value}'.";
       toFlag = key: value: "${key}=${sanitize value}";
-    in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
+    in
+    attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
@@ -92,12 +147,24 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex opusWithCustomModes
-    libevent expat libjpeg snappy
-    libpng libcap
-    xdg-utils minizip libwebp
-    libusb1 re2
-    ffmpeg libxslt libxml2
+    bzip2
+    flac
+    speex
+    opusWithCustomModes
+    libevent
+    expat
+    libjpeg
+    snappy
+    libpng
+    libcap
+    xdg-utils
+    minizip
+    libwebp
+    libusb1
+    re2
+    ffmpeg
+    libxslt
+    libxml2
     nasm
   ];
 
@@ -109,14 +176,15 @@ let
 
   warnObsoleteVersionConditional = min-version: result:
     let ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
-    in warnIf (versionAtLeast ungoogled-version min-version) "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
+    in
+    warnIf (versionAtLeast ungoogled-version min-version) "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
       result;
   chromiumVersionAtLeast = min-version:
     let result = versionAtLeast upstream-info.version min-version;
-    in  warnObsoleteVersionConditional min-version result;
+    in warnObsoleteVersionConditional min-version result;
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
-        result = versionAtLeast version min-version && versionOlder version upto-version;
+      result = versionAtLeast version min-version && versionOlder version upto-version;
     in warnObsoleteVersionConditional upto-version result;
 
   ungoogler = ungoogled-chromium {
@@ -134,26 +202,49 @@ let
     };
 
     nativeBuildInputs = [
-      ninja pkg-config
-      python2WithPackages perl nodejs
-      gnutar which
+      ninja
+      pkg-config
+      python2WithPackages
+      perl
+      nodejs
+      gnutar
+      which
       llvmPackages.lldClang.bintools
     ] ++ lib.optionals (chromiumVersionAtLeast "92") [
       python3WithPackages
     ];
 
     buildInputs = defaultDependencies ++ [
-      nspr nss systemd
-      util-linux alsaLib
-      bison gperf libkrb5
-      glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
+      nspr
+      nss
+      systemd
+      util-linux
+      alsaLib
+      bison
+      gperf
+      libkrb5
+      glib
+      gtk3
+      dbus-glib
+      libXScrnSaver
+      libXcursor
+      libXtst
+      libxshmfence
+      libGLU
+      libGL
       mesa # required for libgbm
-      pciutils protobuf speechd libXdamage at-spi2-core
+      pciutils
+      protobuf
+      speechd
+      libXdamage
+      at-spi2-core
       jre
       pipewire
       libva
-      libdrm wayland mesa.drivers libxkbcommon
+      libdrm
+      wayland
+      mesa.drivers
+      libxkbcommon
       curl
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
@@ -302,7 +393,7 @@ let
       safe_browsing_mode = 0;
       use_official_google_api_keys = false;
       use_unofficial_version_number = false;
-    } // (extraAttrs.gnFlags or {}));
+    } // (extraAttrs.gnFlags or { }));
 
     configurePhase = ''
       runHook preConfigure
@@ -323,19 +414,21 @@ let
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
     NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
-    buildPhase = let
-      buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
-        (
-          source chrome/installer/linux/common/installer.include
-          PACKAGE=$packageName
-          MENUNAME="Chromium"
-          process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-        )
-      '';
-      targets = extraAttrs.buildTargets or [];
-      commands = map buildCommand targets;
-    in concatStringsSep "\n" commands;
+    buildPhase =
+      let
+        buildCommand = target: ''
+          ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+          (
+            source chrome/installer/linux/common/installer.include
+            PACKAGE=$packageName
+            MENUNAME="Chromium"
+            process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+          )
+        '';
+        targets = extraAttrs.buildTargets or [ ];
+        commands = map buildCommand targets;
+      in
+      concatStringsSep "\n" commands;
 
     postFixup = ''
       # Make sure that libGLESv2 is found by dlopen (if using EGL).
@@ -352,7 +445,10 @@ let
     };
   };
 
-# Remove some extraAttrs we supplied to the base attributes already.
-in stdenv.mkDerivation (base // removeAttrs extraAttrs [
-  "name" "gnFlags" "buildTargets"
-] // { passthru = base.passthru // (extraAttrs.passthru or {}); })
+  # Remove some extraAttrs we supplied to the base attributes already.
+in
+stdenv.mkDerivation (base // removeAttrs extraAttrs [
+  "name"
+  "gnFlags"
+  "buildTargets"
+] // { passthru = base.passthru // (extraAttrs.passthru or { }); })

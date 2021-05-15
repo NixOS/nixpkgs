@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, cmake
+{ lib
+, stdenv
+, fetchurl
+, cmake
 , parallel ? true
 }:
 

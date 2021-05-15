@@ -1,10 +1,19 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkg-config, which
-, flex, bison
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, makeWrapper
+, autoreconfHook
+, pkg-config
+, which
+, flex
+, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl
+, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python
+, python
 , swig
 , ncurses
 , pam
@@ -51,7 +60,7 @@ let
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-    ];
+  ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -74,7 +83,7 @@ let
       perl
     ];
 
-    buildInputs = []
+    buildInputs = [ ]
       ++ lib.optional withPerl perl
       ++ lib.optional withPython python;
 
@@ -191,7 +200,9 @@ let
     inherit patches;
     postPatch = "cd ./parser";
     makeFlags = [
-      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "LANGS="
+      "USE_SYSTEM=1"
+      "INCLUDEDIR=${libapparmor}/include"
       "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ];
     installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];

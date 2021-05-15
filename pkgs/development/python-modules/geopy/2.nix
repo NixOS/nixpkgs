@@ -23,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;
-    maintainers = with maintainers; [GuillaumeDesforges];
+    maintainers = with maintainers; [ GuillaumeDesforges ];
   };
 }

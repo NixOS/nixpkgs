@@ -1,6 +1,28 @@
-{ fetchFromGitHub, lib, stdenv, autoconf, automake, pkg-config, m4, curl,
-libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
-sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, autoconf
+, automake
+, pkg-config
+, m4
+, curl
+, libGLU
+, libGL
+, libXmu
+, libXi
+, freeglut
+, libjpeg
+, libtool
+, wxGTK30
+, xcbutil
+, sqlite
+, gtk2
+, patchelf
+, libXScrnSaver
+, libnotify
+, libX11
+, libxcb
+}:
 
 let
   majorVersion = "7.14";
@@ -22,8 +44,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
 
   buildInputs = [
-    curl libGLU libGL libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
-    libnotify patchelf libX11 libxcb xcbutil
+    curl
+    libGLU
+    libGL
+    libXmu
+    libXi
+    freeglut
+    libjpeg
+    wxGTK30
+    sqlite
+    gtk2
+    libXScrnSaver
+    libnotify
+    patchelf
+    libX11
+    libxcb
+    xcbutil
   ];
 
   NIX_LDFLAGS = "-lX11";
@@ -41,6 +77,6 @@ stdenv.mkDerivation rec {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
     license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.linux; # arbitrary choice
   };
 }

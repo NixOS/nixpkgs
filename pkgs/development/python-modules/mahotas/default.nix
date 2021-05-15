@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy imread pillow scipy ];
   checkInputs = [ nose ];
 
-  checkPhase= ''
+  checkPhase = ''
     python setup.py test
   '';
 

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, pidgin, libnotify, gdk-pixbuf, glib, dbus
-, dbus-glib }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, pidgin
+, libnotify
+, gdk-pixbuf
+, glib
+, dbus
+, dbus-glib
+}:
 
 stdenv.mkDerivation rec {
   name = "skype4pidgin-novas0x2a-20120411-6c53f7c48f";
@@ -17,7 +26,7 @@ stdenv.mkDerivation rec {
     pkg-config --cflags glib-2.0 gdk-pixbuf-2.0 libnotify
   '';
 
-  buildPhase  = "make libskype.so libskype_dbus.so";
+  buildPhase = "make libskype.so libskype_dbus.so";
 
   installPhase = ''
     mkdir -p $out/pixmaps/pidgin/protocols/{16,22,48} $out/bin $out/lib/pidgin

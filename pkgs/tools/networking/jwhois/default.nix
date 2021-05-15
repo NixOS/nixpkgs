@@ -1,4 +1,4 @@
-{lib, stdenv, lynx, fetchurl}:
+{ lib, stdenv, lynx, fetchurl }:
 
 stdenv.mkDerivation {
   name = "jwhois-4.0";

@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, fetch, libcxx, llvm, version
+{ lib
+, stdenv
+, cmake
+, fetch
+, libcxx
+, llvm
+, version
 , standalone ? false
   # on musl the shared objects don't build
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -23,10 +29,11 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags =
-     lib.optional standalone "-DLLVM_ENABLE_LIBCXX=ON" ++
-     lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
+    lib.optional standalone "-DLLVM_ENABLE_LIBCXX=ON" ++
+    lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

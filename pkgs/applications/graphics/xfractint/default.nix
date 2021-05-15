@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libX11, libXft}:
+{ lib, stdenv, fetchurl, libX11, libXft }:
 stdenv.mkDerivation rec {
   pname = "xfractint";
   version = "20.04p16";
@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ba77jifxv8jql044mdydh4p4ms4w5vw3qrqmcfzlvqfxk7h2m2f";
   };
 
-  buildInputs = [libX11 libXft];
+  buildInputs = [ libX11 libXft ];
 
   configurePhase = ''
     sed -e 's@/usr/bin/@@' -i Makefile
   '';
 
-  makeFlags = ["PREFIX=$(out)"];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     inherit version;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # Code cannot be used in commercial programs
     # Looks like the definition hinges on the price, not license
     license = lib.licenses.unfree;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://www.fractint.net/";
   };

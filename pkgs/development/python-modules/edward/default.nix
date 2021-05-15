@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
-, Keras, numpy, scipy, six, tensorflow }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pythonAtLeast
+, Keras
+, numpy
+, scipy
+, six
+, tensorflow
+}:
 
 buildPythonPackage rec {
   pname = "edward";

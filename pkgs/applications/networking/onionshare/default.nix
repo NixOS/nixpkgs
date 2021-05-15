@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonApplication,
-  substituteAll,
-  fetchFromGitHub,
-  isPy3k,
-  flask,
-  flask-httpauth,
-  flask-socketio,
-  stem,
-  psutil,
-  pyqt5,
-  pycrypto,
-  pyside2,
-  pytestCheckHook,
-  qrcode,
-  qt5,
-  requests,
-  unidecode,
-  tor,
-  obfs4,
+{ lib
+, buildPythonApplication
+, substituteAll
+, fetchFromGitHub
+, isPy3k
+, flask
+, flask-httpauth
+, flask-socketio
+, stem
+, psutil
+, pyqt5
+, pycrypto
+, pyside2
+, pytestCheckHook
+, qrcode
+, qt5
+, requests
+, unidecode
+, tor
+, obfs4
+,
 }:
 
 let
@@ -32,20 +32,20 @@ let
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
     longDescription = ''
-    OnionShare is an open source tool for securely and anonymously sending
-    and receiving files using Tor onion services. It works by starting a web
-    server directly on your computer and making it accessible as an
-    unguessable Tor web address that others can load in Tor Browser to
-    download files from you, or upload files to you. It doesn't require
-    setting up a separate server, using a third party file-sharing service,
-    or even logging into an account.
+      OnionShare is an open source tool for securely and anonymously sending
+      and receiving files using Tor onion services. It works by starting a web
+      server directly on your computer and making it accessible as an
+      unguessable Tor web address that others can load in Tor Browser to
+      download files from you, or upload files to you. It doesn't require
+      setting up a separate server, using a third party file-sharing service,
+      or even logging into an account.
 
-    Unlike services like email, Google Drive, DropBox, WeTransfer, or nearly
-    any other way people typically send files to each other, when you use
-    OnionShare you don't give any companies access to the files that you're
-    sharing. So long as you share the unguessable web address in a secure way
-    (like pasting it in an encrypted messaging app), no one but you and the
-    person you're sharing with can access the files.
+      Unlike services like email, Google Drive, DropBox, WeTransfer, or nearly
+      any other way people typically send files to each other, when you use
+      OnionShare you don't give any companies access to the files that you're
+      sharing. So long as you share the unguessable web address in a secure way
+      (like pasting it in an encrypted messaging app), no one but you and the
+      person you're sharing with can access the files.
     '';
 
     homepage = "https://onionshare.org/";
@@ -54,7 +54,8 @@ let
     maintainers = with maintainers; [ lourkeur ];
   };
 
-in rec {
+in
+rec {
   onionshare = buildPythonApplication {
     pname = "onionshare-cli";
     inherit version meta;

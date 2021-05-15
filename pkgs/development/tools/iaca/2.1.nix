@@ -16,12 +16,13 @@ stdenv.mkDerivation {
     cp bin/iaca $out/bin/
     cp lib/* $out/lib
   '';
-  preFixup = let libPath = makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in ''
-    patchelf \
-        --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-        --set-rpath $out/lib:"${libPath}" \
-        $out/bin/iaca
-  '';
+  preFixup = let libPath = makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in
+    ''
+      patchelf \
+          --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
+          --set-rpath $out/lib:"${libPath}" \
+          $out/bin/iaca
+    '';
   postFixup = "wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib";
   meta = {
     description = "Intel Architecture Code Analyzer";

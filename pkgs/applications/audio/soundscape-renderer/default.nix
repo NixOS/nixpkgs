@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , autoreconfHook
 , help2man
@@ -11,7 +12,8 @@
 , boost
 , ecasound
 , glibcLocales
-, libGLU, libGL # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
+, libGLU
+, libGL # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
 }:
 
 stdenv.mkDerivation {
@@ -26,9 +28,9 @@ stdenv.mkDerivation {
   };
 
   # Without it doesn't find all of the boost libraries.
-  BOOST_LIB_DIR="${boost}/lib";
+  BOOST_LIB_DIR = "${boost}/lib";
   # uses the deprecated get_generic_category() in boost_system
-  NIX_CFLAGS_COMPILE="-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
+  NIX_CFLAGS_COMPILE = "-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
 
   LC_ALL = "en_US.UTF-8";
 

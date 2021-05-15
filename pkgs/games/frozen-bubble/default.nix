@@ -1,5 +1,13 @@
-{ lib, fetchurl, perlPackages, pkg-config, SDL, SDL_mixer, SDL_Pango, glib
-, copyDesktopItems, makeDesktopItem
+{ lib
+, fetchurl
+, perlPackages
+, pkg-config
+, SDL
+, SDL_mixer
+, SDL_Pango
+, glib
+, copyDesktopItems
+, makeDesktopItem
 }:
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";
@@ -13,7 +21,7 @@ perlPackages.buildPerlModule {
 
   nativeBuildInputs = [ copyDesktopItems pkg-config ];
 
-  buildInputs =  [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
+  buildInputs = [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
   propagatedBuildInputs = with perlPackages; [ AlienSDL CompressBzip2 FileShareDir FileWhich IPCSystemSimple LocaleMaketextLexicon ];
 
   perlPreHook = "export LD=$CC";

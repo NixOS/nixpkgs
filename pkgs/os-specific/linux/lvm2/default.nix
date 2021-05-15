@@ -1,10 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , pkg-config
 , util-linux
 , libuuid
-, thin-provisioning-tools, libaio
+, thin-provisioning-tools
+, libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
 , udev ? null

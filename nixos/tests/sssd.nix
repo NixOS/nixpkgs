@@ -10,8 +10,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   testScript = ''
-      start_all()
-      machine.wait_for_unit("multi-user.target")
-      machine.wait_for_unit("sssd.service")
-    '';
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("sssd.service")
+  '';
 })

@@ -1,6 +1,16 @@
-{ lib, buildDunePackage, fetchurl
-, rresult, cstruct, ppx_cstruct, mirage-net, mirage-protocols
-, mirage-profile, macaddr, fmt, lwt, logs
+{ lib
+, buildDunePackage
+, fetchurl
+, rresult
+, cstruct
+, ppx_cstruct
+, mirage-net
+, mirage-protocols
+, mirage-profile
+, macaddr
+, fmt
+, lwt
+, logs
 }:
 
 buildDunePackage rec {

@@ -1,5 +1,14 @@
-{ lib, stdenv, autoreconfHook, which, writeText, makeWrapper, fetchFromGitHub, erlang
-, z3, python }:
+{ lib
+, stdenv
+, autoreconfHook
+, which
+, writeText
+, makeWrapper
+, fetchFromGitHub
+, erlang
+, z3
+, python
+}:
 
 stdenv.mkDerivation rec {
   pname = "cuter";

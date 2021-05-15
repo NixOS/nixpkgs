@@ -8,7 +8,8 @@ let
 
   inherit (pkgs) das_watchdog;
 
-in {
+in
+{
   ###### interface
 
   options = {

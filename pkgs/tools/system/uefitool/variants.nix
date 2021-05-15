@@ -1,7 +1,8 @@
 { libsForQt5 }:
 let
-  common = opts: libsForQt5.callPackage (import ./common.nix opts) {};
-in rec {
+  common = opts: libsForQt5.callPackage (import ./common.nix opts) { };
+in
+rec {
   new-engine = common rec {
     version = "A58";
     sha256 = "131hkyr07fg7rnr938yyj0gk528x3402dhisav221c27v84zb7pn";

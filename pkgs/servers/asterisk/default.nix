@@ -1,19 +1,50 @@
-{ stdenv, lib, fetchurl, fetchsvn,
-  jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  util-linux, dmidecode, libuuid, newt,
-  lua, speex,
-  srtp, wget, curl, iksemel, pkg-config
+{ stdenv
+, lib
+, fetchurl
+, fetchsvn
+, jansson
+, libedit
+, libxml2
+, libxslt
+, ncurses
+, openssl
+, sqlite
+, util-linux
+, dmidecode
+, libuuid
+, newt
+, lua
+, speex
+, srtp
+, wget
+, curl
+, iksemel
+, pkg-config
 }:
 
 let
-  common = {version, sha256, externals}: stdenv.mkDerivation {
+  common = { version, sha256, externals }: stdenv.mkDerivation {
     inherit version;
     pname = "asterisk";
 
-    buildInputs = [ jansson libedit libxml2 libxslt ncurses openssl sqlite
-                    dmidecode libuuid newt
-                    lua speex
-                    srtp wget curl iksemel ];
+    buildInputs = [
+      jansson
+      libedit
+      libxml2
+      libxslt
+      ncurses
+      openssl
+      sqlite
+      dmidecode
+      libuuid
+      newt
+      lua
+      speex
+      srtp
+      wget
+      curl
+      iksemel
+    ];
     nativeBuildInputs = [ util-linux pkg-config ];
 
     patches = [
@@ -90,7 +121,8 @@ let
     sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
 
-in rec {
+in
+rec {
   # Supported releases (as of 2020-10-26).
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
   # Exact version can be found at https://www.asterisk.org/downloads/asterisk/all-asterisk-versions/

@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchurl, buildDunePackage, pkg-config, dune-configurator
-, bigstring,
+{ pkgs
+, lib
+, fetchurl
+, buildDunePackage
+, pkg-config
+, dune-configurator
+, bigstring
+,
 }:
 
 buildDunePackage rec {

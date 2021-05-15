@@ -5,7 +5,8 @@
 , python
 }:
 
-if pythonAtLeast "3.4" then null else buildPythonPackage rec {
+if pythonAtLeast "3.4" then null else
+buildPythonPackage rec {
   pname = "enum34";
   version = "1.1.10";
 

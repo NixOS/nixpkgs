@@ -1,17 +1,18 @@
-{lib, stdenv, packages}:
+{ lib, stdenv, packages }:
 
-stdenv.mkDerivation {
-  name = "xlibs-wrapper";
+stdenv.mkDerivation
+  {
+    name = "xlibs-wrapper";
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = "mkdir -p $out";
-  unpackPhase = "sourceRoot=.";
+    installPhase = "mkdir -p $out";
+    unpackPhase = "sourceRoot=.";
 
-  propagatedBuildInputs = packages;
+    propagatedBuildInputs = packages;
 
-  preferLocalBuild = true;
-} // {
+    preferLocalBuild = true;
+  } // {
   # For compatability with XFree86.
   buildClientLibs = true;
 

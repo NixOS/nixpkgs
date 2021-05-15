@@ -2,7 +2,8 @@
 
 let
   houdini-runtime = callPackage ./runtime.nix { };
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "houdini-${houdini-runtime.version}";
 
   extraBuildCommands = ''

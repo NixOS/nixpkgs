@@ -6,7 +6,8 @@
 , gtk2
 , libX11
 , xrandr
-, withGtk3 ? false, gtk3
+, withGtk3 ? false
+, gtk3
 }:
 
 stdenv.mkDerivation rec {

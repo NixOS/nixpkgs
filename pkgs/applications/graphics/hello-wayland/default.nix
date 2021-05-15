@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub
-, imagemagick, pkg-config, wayland, wayland-protocols
+{ stdenv
+, lib
+, fetchFromGitHub
+, imagemagick
+, pkg-config
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation {

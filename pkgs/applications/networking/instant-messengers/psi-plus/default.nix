@@ -1,7 +1,22 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake
-, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca-qt5, libsecret, libXScrnSaver, hunspell
-, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qttools
+, qtwebengine
+, libidn
+, qca-qt5
+, libsecret
+, libXScrnSaver
+, hunspell
+, libgcrypt
+, libotr
+, html-tidy
+, libgpgerror
+, libsignal-protocol-c
 }:
 
 mkDerivation rec {
@@ -22,9 +37,20 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools ];
 
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qtwebengine
-    libidn qca-qt5 libsecret libXScrnSaver hunspell
-    libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebengine
+    libidn
+    qca-qt5
+    libsecret
+    libXScrnSaver
+    hunspell
+    libgcrypt
+    libotr
+    html-tidy
+    libgpgerror
+    libsignal-protocol-c
   ];
 
   meta = with lib; {

@@ -193,7 +193,7 @@
   };
 }
 
-// optionalAttrs (builtins.match "armv[67]l-linux" system != null) {
+  // optionalAttrs (builtins.match "armv[67]l-linux" system != null) {
   "build/arduino-builder-linuxarm-1.5.2.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.5.2.tar.bz2";
     sha256 = "1vs2s5px07jb2sdv83qxkf9lxmsy8j4dm7bn3vpw5dcjqd3qdyww";

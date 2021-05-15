@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "exiftags-1.01";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     homepage = "http://johnst.org/sw/exiftags/";
     description = "Displays EXIF data from JPEG files";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; unix;
   };
 }

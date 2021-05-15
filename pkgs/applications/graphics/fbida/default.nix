@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
-, pkg-config, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
-, epoxy, poppler, mesa, lirc }:
+{ lib
+, stdenv
+, fetchurl
+, libjpeg
+, libexif
+, libungif
+, libtiff
+, libpng
+, libwebp
+, libdrm
+, pkg-config
+, freetype
+, fontconfig
+, which
+, imagemagick
+, curl
+, sane-backends
+, libXpm
+, epoxy
+, poppler
+, mesa
+, lirc
+}:
 
 stdenv.mkDerivation rec {
   name = "fbida-2.14";
@@ -12,8 +32,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config which ];
   buildInputs = [
-    libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
-    imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc
+    libexif
+    libjpeg
+    libpng
+    libungif
+    freetype
+    fontconfig
+    libtiff
+    libwebp
+    imagemagick
+    curl
+    sane-backends
+    libdrm
+    libXpm
+    epoxy
+    poppler
+    lirc
     mesa
   ];
 

@@ -6,7 +6,8 @@ let
   cfg = config.services.go-neb;
 
   configFile = pkgs.writeText "config.yml" (builtins.toJSON cfg.config);
-in {
+in
+{
   options.services.go-neb = {
     enable = mkEnableOption "Extensible matrix bot written in Go";
 

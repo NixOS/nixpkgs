@@ -1,7 +1,32 @@
-{ lib, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
-, dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutil, hfs, darling, darwin-stubs }:
+{ lib
+, appleDerivation
+, cpio
+, xnu
+, Libc
+, Libm
+, libdispatch
+, cctools
+, Libinfo
+, dyld
+, Csu
+, architecture
+, libclosure
+, CarbonHeaders
+, ncurses
+, CommonCrypto
+, copyfile
+, removefile
+, libresolv
+, Libnotify
+, libplatform
+, libpthread
+, mDNSResponder
+, launchd
+, libutil
+, hfs
+, darling
+, darwin-stubs
+}:
 
 appleDerivation {
   dontBuild = true;
@@ -120,7 +145,7 @@ appleDerivation {
   meta = with lib; {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, aiohttp, zigpy
-, pytest, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, zigpy
+, pytest
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "flux_led";

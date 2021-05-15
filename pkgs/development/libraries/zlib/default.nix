@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , shared ? !stdenv.hostPlatform.isStatic
 , static ? true
-# If true, a separate .static ouput is created and the .a is moved there.
-# In this case `pkg-config` auto detection does not currently work if the
-# .static output is given as `buildInputs` to another package (#66461), because
-# the `.pc` file lists only the main output's lib dir.
-# If false, and if `{ static = true; }`, the .a stays in the main output.
+  # If true, a separate .static ouput is created and the .a is moved there.
+  # In this case `pkg-config` auto detection does not currently work if the
+  # .static output is given as `buildInputs` to another package (#66461), because
+  # the `.pc` file lists only the main output's lib dir.
+  # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
 }:
 
@@ -27,7 +28,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     urls =
-      [ "https://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
+      [
+        "https://www.zlib.net/fossils/${name}.tar.gz" # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
     sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
@@ -61,7 +63,7 @@ stdenv.mkDerivation (rec {
   # what we did in the past and we can avoid mass rebuilds this way.
   # As a result, we pass `--static` only when we want just static.
   configureFlags = lib.optional (static && !shared) "--static"
-                   ++ lib.optional shared "--shared";
+    ++ lib.optional shared "--shared";
 
   # Note we don't need to set `dontDisableStatic`, because static-disabling
   # works by grepping for `enable-static` in the `./configure` script
@@ -74,16 +76,16 @@ stdenv.mkDerivation (rec {
   postInstall = lib.optionalString splitStaticOutput ''
     moveToOutput lib/libz.a "$static"
   ''
-    # jww (2015-01-06): Sometimes this library install as a .so, even on
-    # Darwin; others time it installs as a .dylib.  I haven't yet figured out
-    # what causes this difference.
+  # jww (2015-01-06): Sometimes this library install as a .so, even on
+  # Darwin; others time it installs as a .dylib.  I haven't yet figured out
+  # what causes this difference.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.so* $out/lib/*.dylib* ; do
       ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
     done
   ''
-    # Non-typical naming confuses libtool which then refuses to use zlib's DLL
-    # in some cases, e.g. when compiling libpng.
+  # Non-typical naming confuses libtool which then refuses to use zlib's DLL
+  # in some cases, e.g. when compiling libpng.
   + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
@@ -95,7 +97,7 @@ stdenv.mkDerivation (rec {
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   installFlags = lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "BINARY_PATH=$(out)/bin"
@@ -109,7 +111,8 @@ stdenv.mkDerivation (rec {
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
-    "-f" "win32/Makefile.gcc"
+    "-f"
+    "win32/Makefile.gcc"
   ] ++ lib.optionals shared [
     # Note that as of writing (zlib 1.2.11), this flag only has an effect
     # for Windows as it is specific to `win32/Makefile.gcc`.

@@ -1,7 +1,22 @@
-{ lib, fetchFromGitHub, fetchpatch, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1
-, bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, qtbase
+, qtsvg
+, qtserialport
+, qtwebengine
+, qtmultimedia
+, qttools
+, qtconnectivity
+, qtcharts
+, libusb-compat-0_1
+, bison
+, flex
+, zlib
+, qmake
+, makeDesktopItem
+, makeWrapper
 }:
 
 let
@@ -14,7 +29,8 @@ let
     comment = "Performance software for cyclists, runners and triathletes";
     categories = "Utility;";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "golden-cheetah";
   version = "3.5";
 
@@ -26,8 +42,16 @@ in mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
   ];
   nativeBuildInputs = [ flex makeWrapper qmake bison ];
 

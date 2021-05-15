@@ -17,7 +17,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ]
-  ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

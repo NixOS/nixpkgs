@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , extra-cmake-modules
 , plasma-framework

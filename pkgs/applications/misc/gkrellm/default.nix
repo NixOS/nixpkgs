@@ -1,5 +1,18 @@
-{ lib, fetchurl, stdenv, gettext, pkg-config, glib, gtk2, libX11, libSM, libICE, which
-, IOKit, copyDesktopItems, makeDesktopItem, wrapGAppsHook
+{ lib
+, fetchurl
+, stdenv
+, gettext
+, pkg-config
+, glib
+, gtk2
+, libX11
+, libSM
+, libICE
+, which
+, IOKit
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook
 }:
 
 with lib;
@@ -13,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook ];
-  buildInputs = [gettext glib gtk2 libX11 libSM libICE]
+  buildInputs = [ gettext glib gtk2 libX11 libSM libICE ]
     ++ optionals stdenv.isDarwin [ IOKit ];
 
   hardeningDisable = [ "format" ];

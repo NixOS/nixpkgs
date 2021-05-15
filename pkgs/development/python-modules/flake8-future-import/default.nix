@@ -14,8 +14,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flake8 six ]
     ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-    ];
+    importlib-metadata
+  ];
 
   # Upstream disables this test case naturally on python 3, but it also fails
   # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it

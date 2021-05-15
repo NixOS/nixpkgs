@@ -29,7 +29,8 @@ let
     };
   });
 
-in {
+in
+{
   tomcat7 = common {
     versionMajor = "7";
     versionMinor = "0.100";

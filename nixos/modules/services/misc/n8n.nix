@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.n8n;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
   configFile = format.generate "n8n.json" cfg.settings;
 in
 {
@@ -20,7 +20,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Configuration for n8n, see <link xlink:href="https://docs.n8n.io/reference/configuration.html"/>
         for supported values.

@@ -5,7 +5,8 @@
 with lib;
 let
   cfg = config.services.bee-clef;
-in {
+in
+{
   meta = {
     maintainers = with maintainers; [ attila-lendvai ];
   };
@@ -58,9 +59,9 @@ in {
     systemd.packages = [ pkgs.bee-clef ]; # include the upstream bee-clef.service file
 
     systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}/'         0750 ${cfg.user} ${cfg.group}"
-        "d '${cfg.dataDir}/keystore' 0700 ${cfg.user} ${cfg.group}"
-      ];
+      "d '${cfg.dataDir}/'         0750 ${cfg.user} ${cfg.group}"
+      "d '${cfg.dataDir}/keystore' 0700 ${cfg.user} ${cfg.group}"
+    ];
 
     systemd.services.bee-clef = {
       path = [
@@ -101,7 +102,7 @@ in {
     };
 
     users.groups = optionalAttrs (cfg.group == "bee-clef") {
-      bee-clef = {};
+      bee-clef = { };
     };
   };
 }

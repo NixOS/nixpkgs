@@ -1,8 +1,8 @@
 /*
 
-This file is for NixOS-specific options and configs.
+  This file is for NixOS-specific options and configs.
 
-Code that is shared with nix-darwin goes in common.nix.
+  Code that is shared with nix-darwin goes in common.nix.
 
  */
 

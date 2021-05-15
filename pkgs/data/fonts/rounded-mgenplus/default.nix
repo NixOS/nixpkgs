@@ -3,7 +3,8 @@
 let
   pname = "rounded-mgenplus";
   version = "20150602";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "${pname}-${version}";
 
   url = "https://osdn.jp/downloads/users/8/8598/${name}.7z";

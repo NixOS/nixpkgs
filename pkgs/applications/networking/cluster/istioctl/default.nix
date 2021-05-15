@@ -23,14 +23,16 @@ buildGoModule rec {
   '';
 
   # Bundle release metadata
-  buildFlagsArray = let
-    attrs = [
-      "istio.io/pkg/version.buildVersion=${version}"
-      "istio.io/pkg/version.buildStatus=Nix"
-      "istio.io/pkg/version.buildTag=${version}"
-      "istio.io/pkg/version.buildHub=docker.io/istio"
-    ];
-  in ["-ldflags=-s -w ${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
+  buildFlagsArray =
+    let
+      attrs = [
+        "istio.io/pkg/version.buildVersion=${version}"
+        "istio.io/pkg/version.buildStatus=Nix"
+        "istio.io/pkg/version.buildTag=${version}"
+        "istio.io/pkg/version.buildHub=docker.io/istio"
+      ];
+    in
+    [ "-ldflags=-s -w ${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}" ];
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 

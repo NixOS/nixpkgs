@@ -19,7 +19,7 @@
 , fishPlugins
 , procps
 
-# used to generate autocompletions from manpages and for configuration editing in the browser
+  # used to generate autocompletions from manpages and for configuration editing in the browser
 , usePython ? true
 
 , runCommand

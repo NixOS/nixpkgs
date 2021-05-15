@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Rust port of shadowsocks";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
-    broken = stdenv.isAarch64;  # crypto2 crate doesn't build on aarch64
+    broken = stdenv.isAarch64; # crypto2 crate doesn't build on aarch64
   };
 }

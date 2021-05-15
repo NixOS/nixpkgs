@@ -1,15 +1,25 @@
 { version, sha256Hash }:
 
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, fusePackages, util-linux, gettext, shadow
-, meson, ninja, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fusePackages
+, util-linux
+, gettext
+, shadow
+, meson
+, ninja
+, pkg-config
 , autoreconfHook
-, python3Packages, which
+, python3Packages
+, which
 }:
 
 let
   isFuse3 = lib.hasPrefix "3" version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "fuse";
   inherit version;
 
@@ -30,10 +40,11 @@ in stdenv.mkDerivation rec {
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
     ++ (if isFuse3
-      then [ ./fuse3-install.patch ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch ]
-      else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
+    then [ ./fuse3-install.patch ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch ]
+    else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
 
-  nativeBuildInputs = if isFuse3
+  nativeBuildInputs =
+    if isFuse3
     then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
@@ -55,16 +66,16 @@ in stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="-DFUSERMOUNT_DIR=\"/run/wrappers/bin\""
 
     substituteInPlace lib/mount_util.c --replace "/bin/" "${util-linux}/bin/"
-    '' + (if isFuse3 then ''
-      # The configure phase will delete these files (temporary workaround for
-      # ./fuse3-install_man.patch)
-      install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
-      install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
-    '' else ''
-      substituteInPlace util/mount.fuse.c --replace '"su"' '"${shadow.su}/bin/su"'
-      sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
-      ./makeconf.sh
-    '');
+  '' + (if isFuse3 then ''
+    # The configure phase will delete these files (temporary workaround for
+    # ./fuse3-install_man.patch)
+    install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
+    install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
+  '' else ''
+    substituteInPlace util/mount.fuse.c --replace '"su"' '"${shadow.su}/bin/su"'
+    sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
+    ./makeconf.sh
+  '');
 
   checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
 

@@ -1,4 +1,4 @@
-{lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{ lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils, writeScriptBin, bzip2 }:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "A backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = lib.licenses.gpl3Plus;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

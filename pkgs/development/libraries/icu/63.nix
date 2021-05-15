@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, nativeBuildRoot }:
 
-import ./base.nix {
+import ./base.nix
+{
   version = "63.1";
   sha256 = "17fbk0lm2clsxbmjzvyp245ayx0n4chji3ky1f3fbz2ljjv91i05";
   patches = [
@@ -11,4 +12,5 @@ import ./base.nix {
     })
   ];
   patchFlags = [ "-p3" ];
-} { inherit stdenv lib fetchurl fixDarwinDylibNames nativeBuildRoot; }
+}
+{ inherit stdenv lib fetchurl fixDarwinDylibNames nativeBuildRoot; }

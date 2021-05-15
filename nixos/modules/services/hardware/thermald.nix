@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {

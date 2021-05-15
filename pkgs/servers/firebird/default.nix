@@ -1,6 +1,11 @@
-{lib, stdenv, fetchurl, libedit, automake, autoconf, libtool
-,
-  # icu = null: use icu which comes with firebird
+{ lib
+, stdenv
+, fetchurl
+, libedit
+, automake
+, autoconf
+, libtool
+, # icu = null: use icu which comes with firebird
 
   # icu = pkgs.icu => you may have trouble sharing database files with windows
   # users if "Collation unicode" columns are being used
@@ -23,11 +28,11 @@
 /*
    there are 3 ways to use firebird:
    a) superserver
-    - one process, one thread for each connection
+  - one process, one thread for each connection
    b) classic
-    - is built by default
-    - one process for each connection
-    - on linux direct io operations (?)
+  - is built by default
+  - one process for each connection
+  - on linux direct io operations (?)
    c) embedded.
 
    manual says that you usually don't notice the difference between a and b.
@@ -49,14 +54,15 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--with-serivec-port=${builtins.toString port}"
+    [
+      "--with-serivec-port=${builtins.toString port}"
       "--with-service-name=${serviceName}"
       "--with-system-editline"
       "--with-fblog=/var/log/firebird"
       "--with-fbconf=/etc/firebird"
       "--with-fbsecure-db=/var/db/firebird/system"
     ]
-    ++ (lib.optional  (icu != null) "--with-system-icu")
+    ++ (lib.optional (icu != null) "--with-system-icu")
     ++ (lib.optional superServer "--enable-superserver");
 
   src = fetchurl {
@@ -70,7 +76,7 @@ stdenv.mkDerivation rec {
   #   sed -i 's@cp /usr/share/automake-.*@@' autogen.sh
   #   sh autogen.sh $configureFlags --prefix=$out
   # '';
-  buildInputs = [libedit icu automake autoconf libtool];
+  buildInputs = [ libedit icu automake autoconf libtool ];
 
   # TODO: Probably this hase to be tidied up..
   # make install requires beeing. disabling the root checks
@@ -82,8 +88,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SQL relational database management system";
     homepage = "https://www.firebirdnews.org";
-    license = ["IDPL" "Interbase-1.0"];
-    maintainers = [lib.maintainers.marcweber];
+    license = [ "IDPL" "Interbase-1.0" ];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
     broken = true;
   };

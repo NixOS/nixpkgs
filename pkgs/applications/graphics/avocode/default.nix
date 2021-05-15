@@ -1,6 +1,33 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa
+{ lib
+, stdenv
+, makeDesktopItem
+, fetchurl
+, unzip
+, gdk-pixbuf
+, glib
+, gtk3
+, atk
+, at-spi2-atk
+, pango
+, cairo
+, freetype
+, fontconfig
+, dbus
+, nss
+, nspr
+, alsaLib
+, cups
+, expat
+, udev
+, gnome
+, xorg
+, mozjpeg
+, makeWrapper
+, wrapGAppsHook
+, libuuid
+, at-spi2-core
+, libdrm
+, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +85,7 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  nativeBuildInputs = [makeWrapper wrapGAppsHook unzip];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook unzip ];
   buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must

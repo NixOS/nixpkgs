@@ -2,10 +2,10 @@
 , mkDerivation
 , lib
 , fetchurl
-# native
+  # native
 , autoreconfHook
 , pkg-config
-# not native
+  # not native
 , gdal
 , wxGTK31-gtk3
 , proj

@@ -32,7 +32,7 @@ in
   config = mkIf cfg.enable {
 
     users = {
-      groups.lm_sensors = {};
+      groups.lm_sensors = { };
 
       users.fancontrol = {
         isSystemUser = true;

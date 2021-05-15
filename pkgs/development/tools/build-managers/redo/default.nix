@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "redo-1.4";

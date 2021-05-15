@@ -1,21 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, shared-mime-info
-, autoconf, automake, intltool, libtool, pkg-config, cmake
-, ruby, librsvg
-, ncurses, m17n_lib, m17n_db, expat
-, withAnthy ? true, anthy ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, shared-mime-info
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, cmake
+, ruby
+, librsvg
+, ncurses
+, m17n_lib
+, m17n_db
+, expat
+, withAnthy ? true
+, anthy ? null
 , withGtk ? true
-, withGtk2 ? withGtk, gtk2 ? null
-, withGtk3 ? withGtk, gtk3 ? null
+, withGtk2 ? withGtk
+, gtk2 ? null
+, withGtk3 ? withGtk
+, gtk3 ? null
 , withQt ? true
-, withQt4 ? withQt, qt4 ? null
-, withQt5 ? false, qt5 ? null
-, withLibnotify ? true, libnotify ? null
-, withSqlite ? true, sqlite ? null
-, withNetworking ? true, curl ? null, openssl ? null
-, withFFI ? true, libffi ? null
+, withQt4 ? withQt
+, qt4 ? null
+, withQt5 ? false
+, qt5 ? null
+, withLibnotify ? true
+, libnotify ? null
+, withSqlite ? true
+, sqlite ? null
+, withNetworking ? true
+, curl ? null
+, openssl ? null
+, withFFI ? true
+, libffi ? null
 
-# Things that are clearly an overkill to be enabled by default
-, withMisc ? false, libeb ? null
+  # Things that are clearly an overkill to be enabled by default
+, withMisc ? false
+, libeb ? null
 }:
 
 with lib;
@@ -50,14 +73,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf automake intltool libtool pkg-config cmake
+    autoconf
+    automake
+    intltool
+    libtool
+    pkg-config
+    cmake
 
     ruby # used by sigscheme build to generate function tables
     librsvg # used by uim build to generate png pixmaps from svg
   ];
 
   buildInputs = [
-    ncurses m17n_lib m17n_db expat
+    ncurses
+    m17n_lib
+    m17n_db
+    expat
   ]
   ++ optional withAnthy anthy
   ++ optional withGtk2 gtk2
@@ -67,7 +98,8 @@ stdenv.mkDerivation rec {
   ++ optional withLibnotify libnotify
   ++ optional withSqlite sqlite
   ++ optionals withNetworking [
-    curl openssl
+    curl
+    openssl
   ]
   ++ optional withFFI libffi
   ++ optional withMisc libeb;
@@ -136,11 +168,11 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   meta = with lib; {
-    homepage    = src.meta.homepage;
+    homepage = src.meta.homepage;
     description = "A multilingual input method framework";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
-    broken      = stdenv.hostPlatform.isAarch64; # fails to build libgcroots (not supported on aarch64)
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isAarch64; # fails to build libgcroots (not supported on aarch64)
     maintainers = with maintainers; [ ericsagnes oxij ];
   };
 }

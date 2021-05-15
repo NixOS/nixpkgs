@@ -1,21 +1,21 @@
-{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk}:
+{ lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk }:
 
 let
   version = "3.0.1-1";
-cupsdeb = fetchurl {
-  url = "http://download.brother.com/welcome/dlf100421/hl1110cupswrapper-${version}.i386.deb";
-  sha256 = "a87880f4ece764a724411b5b24d15d1b912f6ffc6ecbfd9fac4cd5eda13d2eb7";
-};
-srcdir = "hl1110cupswrapper-GPL_src-${version}";
-cupssrc = fetchurl {
-  url = "http://download.brother.com/welcome/dlf100422/${srcdir}.tar.gz";
-  sha256 = "be1dce6a4608cb253b0b382db30bf5885da46b010e8eb595b15c435e2487761c";
-};
-lprdeb = fetchurl {
-  url = "http://download.brother.com/welcome/dlf100419/hl1110lpr-${version}.i386.deb";
-  sha256 = "5af241782a0d500d7f47e06ea43d61127f4019b5b1c6e68b4c1cb4521a742c22";
-};
-  in
+  cupsdeb = fetchurl {
+    url = "http://download.brother.com/welcome/dlf100421/hl1110cupswrapper-${version}.i386.deb";
+    sha256 = "a87880f4ece764a724411b5b24d15d1b912f6ffc6ecbfd9fac4cd5eda13d2eb7";
+  };
+  srcdir = "hl1110cupswrapper-GPL_src-${version}";
+  cupssrc = fetchurl {
+    url = "http://download.brother.com/welcome/dlf100422/${srcdir}.tar.gz";
+    sha256 = "be1dce6a4608cb253b0b382db30bf5885da46b010e8eb595b15c435e2487761c";
+  };
+  lprdeb = fetchurl {
+    url = "http://download.brother.com/welcome/dlf100419/hl1110lpr-${version}.i386.deb";
+    sha256 = "5af241782a0d500d7f47e06ea43d61127f4019b5b1c6e68b4c1cb4521a742c22";
+  };
+in
 stdenv.mkDerivation {
   name = "cups-brother-hl1110";
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation {
   buildInputs = [ cups ghostscript dpkg a2ps ];
   unpackPhase = ''
     tar -xvf ${cupssrc}
-    '';
+  '';
   buildPhase = ''
     gcc -Wall ${srcdir}/brcupsconfig/brcupsconfig.c -o brcupsconfig4
-    '';
+  '';
   installPhase = ''
     # install lpr
     dpkg-deb -x ${lprdeb} $out
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 \
     --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
 
-    '';
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

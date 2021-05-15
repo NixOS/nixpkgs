@@ -1,5 +1,17 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, blas
-, lapack, libGLU, qtbase, libqglviewer, makeWrapper }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, eigen
+, suitesparse
+, blas
+, lapack
+, libGLU
+, qtbase
+, libqglviewer
+, makeWrapper
+}:
 
 mkDerivation rec {
   pname = "g2o";

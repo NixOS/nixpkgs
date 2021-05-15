@@ -1,27 +1,23 @@
 { stdenv, lib, writeScript, wrapFish }:
 
-attrs@{
-  pname,
-  version,
-  src,
-
-  name ? "fishplugin-${pname}-${version}",
-  unpackPhase ? "",
-  configurePhase ? ":",
-  buildPhase ? ":",
-  preInstall ? "",
-  postInstall ? "",
-
-  checkInputs ? [],
-  # plugin packages to add to the vendor paths of the test fish shell
-  checkPlugins ? [],
-  # vendor directories to add to the function path of the test fish shell
-  checkFunctionDirs ? [],
-  # test script to be executed in a fish shell
-  checkPhase ? "",
-  doCheck ? checkPhase != "",
-
-  ...
+attrs@{ pname
+, version
+, src
+, name ? "fishplugin-${pname}-${version}"
+, unpackPhase ? ""
+, configurePhase ? ":"
+, buildPhase ? ":"
+, preInstall ? ""
+, postInstall ? ""
+, checkInputs ? [ ]
+, # plugin packages to add to the vendor paths of the test fish shell
+  checkPlugins ? [ ]
+, # vendor directories to add to the function path of the test fish shell
+  checkFunctionDirs ? [ ]
+, # test script to be executed in a fish shell
+  checkPhase ? ""
+, doCheck ? checkPhase != ""
+, ...
 }:
 
 let
@@ -61,10 +57,12 @@ stdenv.mkDerivation (drvAttrs // {
 
   inherit doCheck;
 
-  checkInputs = [ (wrapFish {
-    pluginPkgs = checkPlugins;
-    functionDirs = checkFunctionDirs;
-  }) ] ++ checkInputs;
+  checkInputs = [
+    (wrapFish {
+      pluginPkgs = checkPlugins;
+      functionDirs = checkFunctionDirs;
+    })
+  ] ++ checkInputs;
 
   checkPhase = ''
     export HOME=$(mktemp -d)  # fish wants a writable home

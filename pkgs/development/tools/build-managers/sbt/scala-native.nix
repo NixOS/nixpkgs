@@ -1,6 +1,6 @@
 { lib, sbt, makeWrapper, boehmgc, libunwind, re2, llvmPackages, zlib }:
 
-sbt.overrideDerivation(old: {
+sbt.overrideDerivation (old: {
   nativeBuildInputs = [ makeWrapper ];
 
   version = "0.13.16";

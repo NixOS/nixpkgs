@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "https://www.seasip.info/Unix/PSF/${pname}-${version}.tar.gz";
     sha256 = "17nia5n5rabbh42gz51c8y53rjwddria4j3wvzk8dd0llj7k1y6w";
   };
-  outputs = ["out" "man" "dev" "lib"];
+  outputs = [ "out" "man" "dev" "lib" ];
 
   meta = with lib; {
     homepage = "https://www.seasip.info/Unix/PSF";

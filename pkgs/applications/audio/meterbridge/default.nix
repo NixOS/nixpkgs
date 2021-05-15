@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL, SDL_image, libjack2
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, SDL
+, SDL_image
+, libjack2
 }:
 
 stdenv.mkDerivation rec {
@@ -10,10 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0s7n3czfpil94vsd7iblv4xrck9c7zvsz4r3yfbkqcv85pjz1viz";
   };
 
-  patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch];
+  patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch ];
 
   buildInputs =
-    [ pkg-config SDL SDL_image libjack2
+    [
+      pkg-config
+      SDL
+      SDL_image
+      libjack2
     ];
 
   meta = with lib; {

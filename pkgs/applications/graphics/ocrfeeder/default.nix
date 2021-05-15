@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , gtk3
@@ -13,7 +14,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , tesseract4
-, extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform
+, extraOcrEngines ? [ ] # other supported engines are: ocrad gocr cuneiform
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     goocanvas2
     gtkspell3
     isocodes
-    (python3.withPackages(ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       pyenchant
       sane
       pillow

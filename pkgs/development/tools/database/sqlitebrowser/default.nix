@@ -1,5 +1,12 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, antlr
-, qtbase, qttools, sqlite }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, antlr
+, qtbase
+, qttools
+, sqlite
+}:
 
 mkDerivation rec {
   pname = "sqlitebrowser";

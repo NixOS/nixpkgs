@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, libpng
+{ lib
+, stdenv
+, fetchurl
+, libpng
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -30,9 +33,10 @@ stdenv.mkDerivation rec {
     #"-prefix=$out"
   ];
 
-  postInstall = if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then ''
-    mv "$out"/bin/optipng{,.exe}
-  '' else null;
+  postInstall =
+    if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then ''
+      mv "$out"/bin/optipng{,.exe}
+    '' else null;
 
   meta = with lib; {
     homepage = "http://optipng.sourceforge.net/";

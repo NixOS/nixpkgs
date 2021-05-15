@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   # Make sure we don't have to go through the startup tutorial
@@ -9,7 +9,7 @@ let
     [ui]
     application\startup\showTours=false
     application\startup\showStartCenter=false
-    '';
+  '';
 in
 {
   name = "musescore";
@@ -19,17 +19,17 @@ in
 
   machine = { ... }:
 
-  {
-    imports = [
-      ./common/x11.nix
-    ];
+    {
+      imports = [
+        ./common/x11.nix
+      ];
 
-    services.xserver.enable = true;
-    environment.systemPackages = with pkgs; [
-      musescore
-      pdfgrep
-    ];
-  };
+      services.xserver.enable = true;
+      environment.systemPackages = with pkgs; [
+        musescore
+        pdfgrep
+      ];
+    };
 
   enableOCR = true;
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bison
+, flex
 , buildsystem
 }:
 

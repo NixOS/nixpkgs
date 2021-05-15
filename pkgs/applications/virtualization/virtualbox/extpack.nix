@@ -1,4 +1,4 @@
-{fetchurl, lib, virtualbox}:
+{ fetchurl, lib, virtualbox }:
 
 with lib;
 

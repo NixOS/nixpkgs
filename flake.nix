@@ -42,7 +42,7 @@
                       ({ config, ... }: {
                         virtualisation.useEFIBoot =
                           config.boot.loader.systemd-boot.enable ||
-                          config.boot.loader.efi.canTouchEfiVariables;
+                            config.boot.loader.efi.canTouchEfiVariables;
                       })
                     ];
                   })).config;

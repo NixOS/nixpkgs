@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, mount, libuuid
-, macfuse-stubs, DiskArbitration
-, crypto ? false, libgcrypt, gnutls
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, mount
+, libuuid
+, macfuse-stubs
+, DiskArbitration
+, crypto ? false
+, libgcrypt
+, gnutls
 }:
 
 stdenv.mkDerivation rec {

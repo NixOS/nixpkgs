@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  patches = lib.singleton ./libressl-fixes.patch ;
+  patches = lib.singleton ./libressl-fixes.patch;
 
   meta = with lib; {
     description = "A utility for bidirectional data transfer between two independent data channels";
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl2;
     maintainers = [ maintainers.eelco ];
-    broken = true;  # broken with openssl 1.1
+    broken = true; # broken with openssl 1.1
   };
 }

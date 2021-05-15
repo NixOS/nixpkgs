@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
+{ lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc }:
 stdenv.mkDerivation {
   name = "xflux-2013-09-01";
   src = fetchurl {

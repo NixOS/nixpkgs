@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , vala
 , gettext
@@ -12,7 +13,8 @@
 , gobject-introspection
 , gsettings-desktop-schemas
 , pantheon
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "regextester";

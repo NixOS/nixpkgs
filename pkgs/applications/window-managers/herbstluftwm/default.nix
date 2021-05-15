@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
-, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, python3
+, libX11
+, libXext
+, libXinerama
+, libXrandr
+, libXft
+, freetype
+, asciidoc
+, xdotool
+, xorgserver
+, xsetroot
+, xterm
+, runtimeShell
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtk3
+, ncurses
+, libcpuid
+, pciutils
+, procps
+, wrapGAppsHook
+, nasm
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
@@ -14,7 +26,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
   buildInputs = [
-    gtk3 ncurses libcpuid pciutils procps
+    gtk3
+    ncurses
+    libcpuid
+    pciutils
+    procps
   ];
 
   postInstall = ''

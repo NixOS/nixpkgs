@@ -1,7 +1,14 @@
-{
-  mkDerivation, lib, extra-cmake-modules
-, qtbase, qtdeclarative, ki18n, kmime, kpkpass
-, poppler, kcontacts, kcalendarcore
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qtbase
+, qtdeclarative
+, ki18n
+, kmime
+, kpkpass
+, poppler
+, kcontacts
+, kcalendarcore
 , shared-mime-info
 }:
 
@@ -16,8 +23,14 @@ mkDerivation {
     shared-mime-info # for update-mime-database
   ];
   buildInputs = [
-    qtbase qtdeclarative ki18n kmime kpkpass poppler
-    kcontacts kcalendarcore
+    qtbase
+    qtdeclarative
+    ki18n
+    kmime
+    kpkpass
+    poppler
+    kcontacts
+    kcalendarcore
   ];
   outputs = [ "out" "dev" ];
 }

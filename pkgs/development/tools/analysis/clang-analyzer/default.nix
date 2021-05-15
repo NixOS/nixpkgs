@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clang Static Analyzer";
-    homepage    = "http://clang-analyzer.llvm.org";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
+    homepage = "http://clang-analyzer.llvm.org";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

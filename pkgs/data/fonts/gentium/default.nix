@@ -2,7 +2,8 @@
 
 let
   version = "5.000";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "gentium-${version}";
 
   url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";

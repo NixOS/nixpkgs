@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libjpeg, libpng
-, libXrender, libexif, autoreconfHook, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, glib
+, cairo
+, Carbon
+, fontconfig
+, libtiff
+, giflib
+, libjpeg
+, libpng
+, libXrender
+, libexif
+, autoreconfHook
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgdiplus";
@@ -26,8 +40,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-    [ glib cairo fontconfig libtiff giflib
-      libjpeg libpng libXrender libexif
+    [
+      glib
+      cairo
+      fontconfig
+      libtiff
+      giflib
+      libjpeg
+      libpng
+      libXrender
+      libexif
     ]
     ++ lib.optional stdenv.isDarwin Carbon;
 

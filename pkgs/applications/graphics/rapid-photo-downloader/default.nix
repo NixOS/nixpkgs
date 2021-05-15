@@ -1,7 +1,19 @@
-{ lib, mkDerivationWith, fetchurl, python3Packages
-, file, intltool, gobject-introspection, libgudev
-, udisks, gexiv2, gst_all_1, libnotify
-, exiftool, gdk-pixbuf, libmediainfo, vmtouch
+{ lib
+, mkDerivationWith
+, fetchurl
+, python3Packages
+, file
+, intltool
+, gobject-introspection
+, libgudev
+, udisks
+, gexiv2
+, gst_all_1
+, libnotify
+, exiftool
+, gdk-pixbuf
+, libmediainfo
+, vmtouch
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {

@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3
+{ appimageTools
+, fetchurl
+, lib
+, gsettings-desktop-schemas
+, gtk3
 , makeDesktopItem
 }:
 
@@ -20,7 +24,8 @@ let
     categories = "Application";
   };
 
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   name = "${pname}-v${version}";
   src = fetchurl {
     url = "https://github.com/klaussinani/tusk/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";

@@ -1,7 +1,8 @@
 { fetchurl
 , fetchpatch
 , substituteAll
-, lib, stdenv
+, lib
+, stdenv
 , pkg-config
 , gnome
 , pantheon

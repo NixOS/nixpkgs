@@ -1,10 +1,24 @@
-{ stdenv, lib, buildPythonApplication, bottle
-, click, click-completion, colorama, semantic-version
-, lockfile, pyserial, requests
-, tabulate, pyelftools, marshmallow
-, pytest, tox, jsondiff
-, git, spdx-license-list-data
-, version, src
+{ stdenv
+, lib
+, buildPythonApplication
+, bottle
+, click
+, click-completion
+, colorama
+, semantic-version
+, lockfile
+, pyserial
+, requests
+, tabulate
+, pyelftools
+, marshmallow
+, pytest
+, tox
+, jsondiff
+, git
+, spdx-license-list-data
+, version
+, src
 }:
 
 let
@@ -74,14 +88,24 @@ let
     "test_ino2cpp.py"
   ]));
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "platformio";
   inherit version src;
 
-  propagatedBuildInputs =  [
-    bottle click click-completion colorama git
-    lockfile pyserial requests semantic-version
-    tabulate pyelftools marshmallow
+  propagatedBuildInputs = [
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    pyserial
+    requests
+    semantic-version
+    tabulate
+    pyelftools
+    marshmallow
   ];
 
   HOME = "/tmp";

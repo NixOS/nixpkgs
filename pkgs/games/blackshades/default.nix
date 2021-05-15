@@ -1,4 +1,4 @@
-{lib, stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image}:
+{ lib, stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image }:
 
 stdenv.mkDerivation {
   name = "blackshades-svn-110";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "http://icculus.org/blackshades/";
     description = "Protect the VIP";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

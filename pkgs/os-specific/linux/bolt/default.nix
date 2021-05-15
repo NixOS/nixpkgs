@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , pkg-config
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
       sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
     })
-    ];
+  ];
 
   postPatch = ''
     patchShebangs scripts tests

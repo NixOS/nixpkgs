@@ -2,7 +2,8 @@
 
 let
   description = "A note-taking application that knows programmers and Markdown better";
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "2.10";
   pname = "vnote";
 

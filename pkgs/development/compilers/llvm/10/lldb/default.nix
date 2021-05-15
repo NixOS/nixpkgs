@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetch
 , cmake
 , zlib
@@ -80,7 +81,7 @@ stdenv.mkDerivation (rec {
     make docs-lldb-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     # manually install lldb man page

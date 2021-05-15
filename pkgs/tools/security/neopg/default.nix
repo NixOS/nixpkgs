@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , sqlite
@@ -8,7 +9,8 @@
 , gettext
 , pkg-config
 , libusb1
-, gnutls }:
+, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "neopg";
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [  cmake gettext pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config ];
 
   buildInputs = [ sqlite botan2 boost curl libusb1 gnutls ];
 

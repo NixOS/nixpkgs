@@ -1,7 +1,31 @@
-{ stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
-, alex, array, base, bytestring, cond, containers, directory, extra
-, filepath, haskeline, hpack, hspec, hspec-core, json, lib, mtl
-, parsec, process, regex-compat, text, time }:
+{ stdenv
+, pkgsHostTarget
+, cmake
+, makeWrapper
+, mkDerivation
+, fetchFromGitHub
+, alex
+, array
+, base
+, bytestring
+, cond
+, containers
+, directory
+, extra
+, filepath
+, haskeline
+, hpack
+, hspec
+, hspec-core
+, json
+, lib
+, mtl
+, parsec
+, process
+, regex-compat
+, text
+, time
+}:
 
 let
   version = "2.1.1";
@@ -33,8 +57,19 @@ mkDerivation rec {
   isExecutable = true;
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    array base bytestring cond containers directory haskeline mtl
-    parsec process text time kklib
+    array
+    base
+    bytestring
+    cond
+    containers
+    directory
+    haskeline
+    mtl
+    parsec
+    process
+    text
+    time
+    kklib
   ];
   executableToolDepends = [ alex makeWrapper ];
   postInstall = ''

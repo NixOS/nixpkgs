@@ -1,5 +1,13 @@
-{ buildPythonPackage, python, fetchurl, lib, stdenv, pyside2
-, cmake, qt5, llvmPackages }:
+{ buildPythonPackage
+, python
+, fetchurl
+, lib
+, stdenv
+, pyside2
+, cmake
+, qt5
+, llvmPackages
+}:
 
 stdenv.mkDerivation {
   pname = "shiboken2";

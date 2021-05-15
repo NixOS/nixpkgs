@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, coverage, setuptools
-, Mako, sqlalchemy, python-editor, dateutil
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcov
+, mock
+, coverage
+, setuptools
+, Mako
+, sqlalchemy
+, python-editor
+, dateutil
 }:
 
 buildPythonPackage rec {

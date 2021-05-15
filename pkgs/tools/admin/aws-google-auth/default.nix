@@ -15,7 +15,8 @@
 , tzlocal
 , nose
 , mock
-, withU2F ? false, python-u2flib-host
+, withU2F ? false
+, python-u2flib-host
 }:
 
 buildPythonApplication rec {

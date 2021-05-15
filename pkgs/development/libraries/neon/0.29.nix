@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, libxml2, pkg-config, perl
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, fetchurl
+, libxml2
+, pkg-config
+, perl
+, compressionSupport ? true
+, zlib ? null
+, sslSupport ? true
+, openssl ? null
 , static ? false
 , shared ? true
 }:
@@ -10,7 +17,7 @@ assert sslSupport -> openssl != null;
 assert static || shared;
 
 let
-   inherit (lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libxml2 openssl]
+  buildInputs = [ libxml2 openssl ]
     ++ lib.optional compressionSupport zlib;
 
   configureFlags = [
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature sslSupport "ssl")
   ];
 
-  passthru = {inherit compressionSupport sslSupport;};
+  passthru = { inherit compressionSupport sslSupport; };
 
   checkInputs = [ perl ];
   doCheck = false; # fails, needs the net

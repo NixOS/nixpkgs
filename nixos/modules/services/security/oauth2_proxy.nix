@@ -16,20 +16,24 @@ let
       resource = cfg.azure.resource;
     };
 
-    github = cfg: { github = {
-      inherit (cfg.github) org team;
-    }; };
+    github = cfg: {
+      github = {
+        inherit (cfg.github) org team;
+      };
+    };
 
-    google = cfg: { google = with cfg.google; optionalAttrs (groups != []) {
-      admin-email = adminEmail;
-      service-account = serviceAccountJSON;
-      group = groups;
-    }; };
+    google = cfg: {
+      google = with cfg.google; optionalAttrs (groups != [ ]) {
+        admin-email = adminEmail;
+        service-account = serviceAccountJSON;
+        group = groups;
+      };
+    };
   };
 
   authenticatedEmailsFile = pkgs.writeText "authenticated-emails" cfg.email.addresses;
 
-  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: {}) cfg;
+  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: { }) cfg;
 
   allConfig = with cfg; {
     inherit (cfg) provider scope upstream;
@@ -72,14 +76,17 @@ let
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
   mapConfig = key: attr:
-  if attr != null && attr != [] then (
-    if isDerivation attr then mapConfig key (toString attr) else
-    if (builtins.typeOf attr) == "set" then concatStringsSep " "
-      (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
-    if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
-    if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
-    if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
-    "--${key}=${toString attr}")
+    if attr != null && attr != [ ] then
+      (
+        if isDerivation attr then mapConfig key (toString attr) else
+        if (builtins.typeOf attr) == "set" then
+          concatStringsSep " "
+            (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
+          if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
+          if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
+          if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
+          "--${key}=${toString attr}"
+      )
     else "";
 
   configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
@@ -122,7 +129,7 @@ in
     };
 
     approvalPrompt = mkOption {
-      type = types.enum ["force" "auto"];
+      type = types.enum [ "force" "auto" ];
       default = "force";
       description = ''
         OAuth approval_prompt.
@@ -145,19 +152,19 @@ in
     };
 
     skipAuthRegexes = mkOption {
-     type = types.listOf types.str;
-     default = [];
-     description = ''
-       Skip authentication for requests matching any of these regular
-       expressions.
-     '';
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        Skip authentication for requests matching any of these regular
+        expressions.
+      '';
     };
 
     # XXX: Not clear whether these two options are mutually exclusive or not.
     email = {
       domains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Authenticate emails with the specified domains. Use
           <literal>*</literal> to authenticate any email.
@@ -256,7 +263,7 @@ in
 
       groups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Restrict logins to members of these Google groups.
         '';
@@ -292,8 +299,8 @@ in
     ####################################################
     # UPSTREAM Configuration
     upstream = mkOption {
-      type = with types; coercedTo str (x: [x]) (listOf str);
-      default = [];
+      type = with types; coercedTo str (x: [ x ]) (listOf str);
+      default = [ ];
       description = ''
         The http url(s) of the upstream endpoint or <literal>file://</literal>
         paths for static files. Routing is based on the path.
@@ -537,7 +544,7 @@ in
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       description = ''
         Extra config to pass to oauth2-proxy.

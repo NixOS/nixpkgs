@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "ipfs";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mguentner ];

@@ -4,29 +4,33 @@ let
   client =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.teeworlds ];
     };
 
-in {
+in
+{
   name = "teeworlds";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ hax404 ];
   };
 
   nodes =
-    { server =
-      { services.teeworlds = {
-          enable = true;
-          openPorts = true;
+    {
+      server =
+        {
+          services.teeworlds = {
+            enable = true;
+            openPorts = true;
+          };
         };
-      };
 
       client1 = client;
       client2 = client;
     };
 
-    testScript =
+  testScript =
     ''
       start_all()
 

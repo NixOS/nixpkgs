@@ -9,7 +9,7 @@ let
   header = "Accept: application/vnd.go.cd.v2+json";
 in
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "gocd-agent";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ grahamc swarren83 ];

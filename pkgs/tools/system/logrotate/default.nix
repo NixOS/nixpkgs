@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, gzip
+, popt
+, autoreconfHook
 , mailutils ? null
-, aclSupport ? true, acl
+, aclSupport ? true
+, acl
 }:
 
 stdenv.mkDerivation rec {

@@ -23,10 +23,12 @@ in
   config = {
 
     assertions = [
-      { assertion = cfg.hvm;
+      {
+        assertion = cfg.hvm;
         message = "Paravirtualized EC2 instances are no longer supported.";
       }
-      { assertion = cfg.efi -> cfg.hvm;
+      {
+        assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
     ];

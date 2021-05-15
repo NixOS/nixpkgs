@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-       name = "fix-intarray-test.patch";
-       url = "https://github.com/minrk/traittypes/commit/a02441e5b259e5858453a853207260c9bd4efbb5.patch";
-       sha256 = "120dsvr5nksizw75z1ah3h38mi399fxbvz5anakica557jahi0aw";
+      name = "fix-intarray-test.patch";
+      url = "https://github.com/minrk/traittypes/commit/a02441e5b259e5858453a853207260c9bd4efbb5.patch";
+      sha256 = "120dsvr5nksizw75z1ah3h38mi399fxbvz5anakica557jahi0aw";
     })
   ];
 

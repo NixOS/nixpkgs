@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
-, atpublic, psutil, pytestcov, sybil
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, atpublic
+, psutil
+, pytestcov
+, sybil
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs,  ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "leaps";
@@ -11,7 +11,8 @@ import ./make-test-python.nix ({ pkgs,  ... }:
       client = { };
 
       server =
-        { services.leaps = {
+        {
+          services.leaps = {
             enable = true;
             port = 6666;
             path = "/leaps/";

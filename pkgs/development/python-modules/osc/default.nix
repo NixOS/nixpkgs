@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
-, m2crypto, rpm, chardet
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, bashInteractive
+, urlgrabber
+, m2crypto
+, rpm
+, chardet
 }:
 
 buildPythonPackage rec {

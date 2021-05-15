@@ -24,7 +24,7 @@ buildPythonPackage rec {
     homepage = "https://liw.fi/ttystatus/";
     description = "Progress and status updates on terminals for Python";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
 
 }

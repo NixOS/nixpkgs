@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, zlib
+, kmod
+, which
 , hwdata
 , static ? stdenv.hostPlatform.isStatic
 , IOKit

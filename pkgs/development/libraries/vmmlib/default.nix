@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, lapack
-, Accelerate, CoreGraphics, CoreVideo
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, lapack
+, Accelerate
+, CoreGraphics
+, CoreVideo
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./disable-cpack.patch   #disable the need of cpack/rpm
+    ./disable-cpack.patch #disable the need of cpack/rpm
   ];
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -35,9 +43,9 @@ stdenv.mkDerivation rec {
             More advanced functionality include solvers, frustum
             computations and frustum culling classes, and spatial data structures'';
 
-    license     = licenses.bsd2;
-    homepage    = "https://github.com/VMML/vmmlib/";
+    license = licenses.bsd2;
+    homepage = "https://github.com/VMML/vmmlib/";
     maintainers = [ maintainers.adev ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

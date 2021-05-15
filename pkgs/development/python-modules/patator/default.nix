@@ -1,6 +1,22 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, paramiko, pycurl, ajpy, impacket, pyopenssl, cx_oracle, mysqlclient
-, psycopg2, pycrypto, dnspython, ipy, pysnmp, pyasn1, pysqlcipher3 }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, paramiko
+, pycurl
+, ajpy
+, impacket
+, pyopenssl
+, cx_oracle
+, mysqlclient
+, psycopg2
+, pycrypto
+, dnspython
+, ipy
+, pysnmp
+, pyasn1
+, pysqlcipher3
+}:
 
 
 buildPythonPackage rec {

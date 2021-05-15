@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, addOpenGLRunpath
-, sha256, cudatoolkit
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, addOpenGLRunpath
+, sha256
+, cudatoolkit
 }:
 
 let

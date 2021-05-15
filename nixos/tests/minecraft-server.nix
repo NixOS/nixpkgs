@@ -2,7 +2,8 @@ let
   seed = "2151901553968352745";
   rcon-pass = "foobar";
   rcon-port = 43000;
-in import ./make-test-python.nix ({ pkgs, ... }: {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "minecraft-server";
   meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 

@@ -51,7 +51,7 @@ buildPythonPackage rec {
     sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
   '');
 
-  checkInputs = [ glibcLocales  ];
+  checkInputs = [ glibcLocales ];
   checkPhase = ''
     runHook preCheck
 

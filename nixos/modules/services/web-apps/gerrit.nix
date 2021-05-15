@@ -11,7 +11,8 @@ let
       multipleType = either primitiveType (listOf primitiveType);
       sectionType = lazyAttrsOf multipleType;
       supersectionType = lazyAttrsOf (either multipleType sectionType);
-    in lazyAttrsOf supersectionType;
+    in
+    lazyAttrsOf supersectionType;
 
   gerritConfig = pkgs.writeText "gerrit.conf" (
     lib.generators.toGitINI cfg.settings
@@ -103,7 +104,7 @@ in
 
       settings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Gerrit configuration. This will be generated to the
           <literal>etc/gerrit.config</literal> file.
@@ -112,7 +113,7 @@ in
 
       replicationSettings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Replication configuration. This will be generated to the
           <literal>etc/replication.config</literal> file.
@@ -121,7 +122,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           List of plugins to add to Gerrit. Each derivation is a jar file
           itself where the name of the derivation is the name of plugin.
@@ -130,7 +131,7 @@ in
 
       builtinPlugins = mkOption {
         type = types.listOf (types.enum cfg.package.passthru.plugins);
-        default = [];
+        default = [ ];
         description = ''
           List of builtins plugins to install. Those are shipped in the
           <literal>gerrit.war</literal> file.
@@ -153,7 +154,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
+        assertion = cfg.replicationSettings != { } -> elem "replication" cfg.builtinPlugins;
         message = "Gerrit replicationSettings require enabling the replication plugin";
       }
     ];

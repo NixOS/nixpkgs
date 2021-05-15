@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, m17n_db}:
+{ lib, stdenv, fetchurl, m17n_db }:
 stdenv.mkDerivation rec {
   name = "m17n-lib-1.8.0";
 

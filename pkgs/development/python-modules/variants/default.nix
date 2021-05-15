@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.2.0";
 
   src = fetchPypi {
-    inherit pname version ;
+    inherit pname version;
     sha256 = "511f75b4cf7483c27e4d86d9accf2b5317267900c166d17636beeed118929b90";
   };
 

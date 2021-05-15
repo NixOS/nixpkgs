@@ -1,9 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, cmake, doxygen
-, libopenshot-audio, imagemagick, ffmpeg
-, swig, python3, jsoncpp
-, cppzmq, zeromq
-, qtbase, qtmultimedia
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cmake
+, doxygen
+, libopenshot-audio
+, imagemagick
+, ffmpeg
+, swig
+, python3
+, jsoncpp
+, cppzmq
+, zeromq
+, qtbase
+, qtmultimedia
 , llvmPackages
 }:
 
@@ -37,8 +48,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake doxygen swig ];
 
   buildInputs =
-  [ imagemagick ffmpeg python3 jsoncpp
-    cppzmq zeromq qtbase qtmultimedia ]
+    [
+      imagemagick
+      ffmpeg
+      python3
+      jsoncpp
+      cppzmq
+      zeromq
+      qtbase
+      qtmultimedia
+    ]
     ++ optional stdenv.isDarwin llvmPackages.openmp
   ;
 

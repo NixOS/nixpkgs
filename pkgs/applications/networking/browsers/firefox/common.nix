@@ -1,41 +1,95 @@
-{ pname, ffversion, meta, updateScript ? null
-, src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
+{ pname
+, ffversion
+, meta
+, updateScript ? null
+, src
+, unpackPhase ? null
+, patches ? [ ]
+, extraNativeBuildInputs ? [ ]
+, extraConfigureFlags ? [ ]
+, extraMakeFlags ? [ ]
+, tests ? [ ]
+}:
 
-{ lib, stdenv, pkg-config, pango, perl, python3, zip
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53
-, yasm, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification
+{ lib
+, stdenv
+, pkg-config
+, pango
+, perl
+, python3
+, zip
+, libjpeg
+, zlib
+, dbus
+, dbus-glib
+, bzip2
+, xorg
+, freetype
+, fontconfig
+, file
+, nspr
+, nss
+, nss_3_53
+, yasm
+, libGLU
+, libGL
+, sqlite
+, unzip
+, makeWrapper
+, hunspell
+, libevent
+, libstartup_notification
 , libvpx_1_8
-, icu67, libpng, jemalloc, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
-, rust-cbindgen, nodejs, nasm, fetchpatch
+, icu67
+, libpng
+, jemalloc
+, glib
+, pciutils
+, autoconf213
+, which
+, gnused
+, rustPackages
+, rustPackages_1_45
+, rust-cbindgen
+, nodejs
+, nasm
+, fetchpatch
 , gnum4
 , debugBuild ? false
 
-### optionals
+  ### optionals
 
-## optional libraries
+  ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
 , ffmpegSupport ? true
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
-, waylandSupport ? true, libxkbcommon, libdrm
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, gssSupport ? true, libkrb5
-, pipewireSupport ? waylandSupport && webrtcSupport, pipewire
+, gtk3Support ? true
+, gtk2
+, gtk3
+, wrapGAppsHook
+, waylandSupport ? true
+, libxkbcommon
+, libdrm
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit)
+, overrideCC
+, buildPackages
+, gssSupport ? true
+, libkrb5
+, pipewireSupport ? waylandSupport && webrtcSupport
+, pipewire
 
-## privacy-related options
+  ## privacy-related options
 
 , privacySupport ? false
 
-# WARNING: NEVER set any of the options below to `true` by default.
-# Set to `!privacySupport` or `false`.
+  # WARNING: NEVER set any of the options below to `true` by default.
+  # Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
+  # webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
 , webrtcSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
@@ -44,30 +98,40 @@
 , safeBrowsingSupport ? false
 , drmSupport ? false
 
-# macOS dependencies
-, xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
-, CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
+  # macOS dependencies
+, xcbuild
+, CoreMedia
+, ExceptionHandling
+, Kerberos
+, AVFoundation
+, MediaToolbox
+, CoreLocation
+, Foundation
+, AddressBook
+, libobjc
+, cups
+, rsync
 
-## other
+  ## other
 
-# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
-# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
-# have permission to use the official firefox branding.
-#
-# For purposes of documentation the statement of @sylvestre:
-# > As the person who did part of the work described in the LWN article
-# > and release manager working for Mozilla, I can confirm the statement
-# > that I made in
-# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
-# >
-# > @garbas shared with me the list of patches applied for the Nix package.
-# > As they are just for portability and tiny modifications, they don't
-# > alter the experience of the product. In parallel, Rok also shared the
-# > build options. They seem good (even if I cannot judge the quality of the
-# > packaging of the underlying dependencies like sqlite, png, etc).
-# > Therefor, as long as you keep the patch queue sane and you don't alter
-# > the experience of Firefox users, you won't have any issues using the
-# > official branding.
+  # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+  # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+  # have permission to use the official firefox branding.
+  #
+  # For purposes of documentation the statement of @sylvestre:
+  # > As the person who did part of the work described in the LWN article
+  # > and release manager working for Mozilla, I can confirm the statement
+  # > that I made in
+  # > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+  # >
+  # > @garbas shared with me the list of patches applied for the Nix package.
+  # > As they are just for portability and tiny modifications, they don't
+  # > alter the experience of the product. In parallel, Rok also shared the
+  # > build options. They seem good (even if I cannot judge the quality of the
+  # > packaging of the underlying dependencies like sqlite, png, etc).
+  # > Therefor, as long as you keep the patch queue sane and you don't alter
+  # > the experience of Firefox users, you won't have any issues using the
+  # > official branding.
 , enableOfficialBranding ? true
 }:
 
@@ -76,19 +140,21 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSu
 assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  flag = tf: x: [ (if tf then "--enable-${x}" else "--disable-${x}") ];
 
-  default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
+  default-toolkit =
+    if stdenv.isDarwin then "cairo-cocoa"
+    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
 
   binaryName = "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
 
   browserName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
 
-  execdir = if stdenv.isDarwin
-            then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
-            else "/bin";
+  execdir =
+    if stdenv.isDarwin
+    then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
+    else "/bin";
 
   # 78 ESR won't build with rustc 1.47
   inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
@@ -98,26 +164,29 @@ let
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
   # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
-  llvmPackages = if stdenv.isDarwin
-                 then buildPackages.llvmPackages
-                 else if lib.versionAtLeast rustc.llvm.version "11"
-                      then buildPackages.llvmPackages_11
-                      else buildPackages.llvmPackages_10;
+  llvmPackages =
+    if stdenv.isDarwin
+    then buildPackages.llvmPackages
+    else if lib.versionAtLeast rustc.llvm.version "11"
+    then buildPackages.llvmPackages_11
+    else buildPackages.llvmPackages_10;
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
-  buildStdenv = if ltoSupport
-                then overrideCC stdenv llvmPackages.lldClang
-                else stdenv;
+  buildStdenv =
+    if ltoSupport
+    then overrideCC stdenv llvmPackages.lldClang
+    else stdenv;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
   # We also disable adding "-g" for easier linking
-  releaseFlags = if stdenv.is32bit
-                 then [ "--disable-release" "--disable-debug-symbols" ]
-                 else [ "--enable-release" ];
+  releaseFlags =
+    if stdenv.is32bit
+    then [ "--disable-release" "--disable-debug-symbols" ]
+    else [ "--enable-release" ];
 in
 
 buildStdenv.mkDerivation ({
@@ -156,32 +225,66 @@ buildStdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gtk2 perl zip libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
-    xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    xorg.pixman yasm libGLU libGL
+    gtk2
+    perl
+    zip
+    libjpeg
+    zlib
+    bzip2
+    dbus
+    dbus-glib
+    pango
+    freetype
+    fontconfig
+    xorg.libXi
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXrender
+    xorg.libXft
+    xorg.libXt
+    file
+    xorg.pixman
+    yasm
+    libGLU
+    libGL
     xorg.xorgproto
     xorg.libXdamage
-    xorg.libXext makeWrapper
-    libevent libstartup_notification /* cairo */
-    libpng jemalloc glib
-    nasm icu67 libvpx_1_8
+    xorg.libXext
+    makeWrapper
+    libevent
+    libstartup_notification /* cairo */
+    libpng
+    jemalloc
+    glib
+    nasm
+    icu67
+    libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss_pkg
+    nspr
+    nss_pkg
   ]
-  ++ lib.optional  alsaSupport alsaLib
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport libkrb5
+  ++ lib.optional alsaSupport alsaLib
+  ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional gtk3Support gtk3
+  ++ lib.optional gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  pipewireSupport pipewire
-  ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
-  ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                          AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ];
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional (lib.versionAtLeast ffversion "82") gnum4
+  ++ lib.optionals buildStdenv.isDarwin [
+    CoreMedia
+    ExceptionHandling
+    Kerberos
+    AVFoundation
+    MediaToolbox
+    CoreLocation
+    Foundation
+    libobjc
+    AddressBook
+    cups
+  ];
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
     -rpath ${llvmPackages.libunwind.out}/lib
@@ -306,9 +409,12 @@ buildStdenv.mkDerivation ({
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else ([ "--disable-debug"
-                           "--enable-optimize"
-                           "--enable-strip" ] ++ releaseFlags))
+  else
+    ([
+      "--disable-debug"
+      "--enable-optimize"
+      "--enable-strip"
+    ] ++ releaseFlags))
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 
@@ -332,10 +438,11 @@ buildStdenv.mkDerivation ({
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  installPhase = if buildStdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -LR dist/${binaryNameCapitalized}.app $out/Applications
-  '' else null;
+  installPhase =
+    if buildStdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -LR dist/${binaryNameCapitalized}.app $out/Applications
+    '' else null;
 
   postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?

@@ -9,7 +9,8 @@ let
     paths = [ ioquake3 ] ++ paks;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${name}-${ioquake3.name}";
 
   nativeBuildInputs = [ makeWrapper ];

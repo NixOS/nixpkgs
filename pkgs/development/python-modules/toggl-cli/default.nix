@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
 , click
 , click-completion
 , factory_boy
@@ -29,9 +33,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "inquirer==2.6.3" "inquirer>=2.6.3" \
-     --replace "notify-py==0.2.2" "notify-py>=0.2.2"
+    substituteInPlace requirements.txt \
+      --replace "inquirer==2.6.3" "inquirer>=2.6.3" \
+      --replace "notify-py==0.2.2" "notify-py>=0.2.2"
   '';
 
   nativeBuildInputs = [ pbr twine ];
@@ -41,12 +45,12 @@ buildPythonPackage rec {
     export TOGGL_API_TOKEN=your_api_token
     export TOGGL_PASSWORD=toggl_password
     export TOGGL_USERNAME=user@example.com
-    '';
+  '';
 
   checkPhase = ''
-   runHook preCheck
-   pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
-   runHook postCheck
+    runHook preCheck
+    pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
+    runHook postCheck
   '';
 
   propagatedBuildInputs = [

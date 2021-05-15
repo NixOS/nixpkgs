@@ -17,7 +17,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       package = pkgs.mariadb;
       ensureDatabases = [ "powerdns" ];
       ensureUsers = lib.singleton
-        { name = "pdns";
+        {
+          name = "pdns";
           ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
         };
     };

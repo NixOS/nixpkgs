@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, which, pkg-config, SDL2, libGL, openalSoft
-, curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, SDL2
+, libGL
+, openalSoft
+, curl
+, speex
+, opusfile
+, libogg
+, libvorbis
+, libopus
+, libjpeg
+, mumble
+, freetype
 }:
 
 stdenv.mkDerivation {
@@ -15,8 +30,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which pkg-config ];
   buildInputs = [
-    SDL2 libGL openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
-    freetype mumble
+    SDL2
+    libGL
+    openalSoft
+    curl
+    speex
+    opusfile
+    libogg
+    libvorbis
+    libopus
+    libjpeg
+    freetype
+    mumble
   ];
 
   enableParallelBuilding = true;

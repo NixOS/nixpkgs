@@ -1,5 +1,10 @@
-{ lib, pythonPackages, pkg-config
-, qmake, qtbase, qtsvg, qtwebengine
+{ lib
+, pythonPackages
+, pkg-config
+, qmake
+, qtbase
+, qtsvg
+, qtwebengine
 , wrapQtAppsHook
 }:
 
@@ -12,7 +17,8 @@ let
     [ ./fix-build-with-qt-514.patch ]
   ;
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
   format = "other";
@@ -73,16 +79,18 @@ in buildPythonPackage rec {
     EOF
   '';
 
-  installCheckPhase = let
-    modules = [
-      "PyQt5.QtWebEngine"
-      "PyQt5.QtWebEngineWidgets"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages} ${python.interpreter} -c "${imports}"
-  '';
+  installCheckPhase =
+    let
+      modules = [
+        "PyQt5.QtWebEngine"
+        "PyQt5.QtWebEngineWidgets"
+      ];
+      imports = lib.concatMapStrings (module: "import ${module};") modules;
+    in
+    ''
+      echo "Checking whether modules can be imported..."
+      PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages} ${python.interpreter} -c "${imports}"
+    '';
 
   doCheck = true;
 
@@ -94,8 +102,8 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "http://www.riverbankcomputing.co.uk";
+    license = licenses.gpl3;
+    platforms = platforms.mesaPlatforms;
   };
 }

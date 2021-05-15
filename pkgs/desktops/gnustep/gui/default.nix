@@ -11,7 +11,8 @@ gsmakeDerivation {
   buildInputs = [ base ];
   patches = [
     ./fixup-all.patch
-    (fetchpatch {  # for icu68 compatibility, remove with next update(?)
+    (fetchpatch {
+      # for icu68 compatibility, remove with next update(?)
       url = "https://github.com/gnustep/libs-gui/commit/05572b2d01713f5caf07f334f17ab639be8a1cff.patch";
       sha256 = "04z287dk8jf3hdwzk8bpnv49qai2dcdlh824yc9bczq291pjy2xc";
     })

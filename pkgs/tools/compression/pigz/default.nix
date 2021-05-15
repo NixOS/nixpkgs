@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, zlib, util-linux }:
 
-let name = "pigz";
-    version = "2.6";
+let
+  name = "pigz";
+  version = "2.6";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
@@ -13,20 +14,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [zlib] ++ lib.optional stdenv.isLinux util-linux;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.isLinux util-linux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
   installPhase =
-  ''
+    ''
       install -Dm755 pigz "$out/bin/pigz"
       ln -s pigz "$out/bin/unpigz"
       install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
       ln -s pigz.1 "$out/share/man/man1/unpigz.1"
       install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
-  '';
+    '';
 
   meta = with lib; {
     homepage = "http://www.zlib.net/pigz/";

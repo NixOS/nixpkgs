@@ -4,7 +4,7 @@
 , patricia
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "semidirect";
   version = "2018-07-02";
 

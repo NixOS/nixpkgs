@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mednaffe \
       --prefix PATH ':' "${mednafen}/bin" \
       "''${gappsWrapperArgs[@]}"
-   '';
+  '';
 
   meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";

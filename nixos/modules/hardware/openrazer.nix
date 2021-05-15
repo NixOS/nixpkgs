@@ -109,20 +109,20 @@ in
     # A user must be a member of the plugdev group in order to start
     # the openrazer-daemon. Therefore we make sure that the plugdev
     # group exists.
-    users.groups.plugdev = {};
+    users.groups.plugdev = { };
 
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };

@@ -1,5 +1,10 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, uvloop, postgresql }:
+{ lib
+, isPy3k
+, fetchPypi
+, buildPythonPackage
+, uvloop
+, postgresql
+}:
 
 buildPythonPackage rec {
   pname = "asyncpg";

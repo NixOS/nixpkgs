@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
-, mock, pytestCheckHook, nose, hypothesis
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy27
+, mock
+, pytestCheckHook
+, nose
+, hypothesis
 }:
 
 buildPythonPackage rec {

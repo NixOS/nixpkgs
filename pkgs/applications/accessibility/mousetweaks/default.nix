@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config
-, glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook
-, libX11, libXtst, libXfixes, libXcursor
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gtk3
+, gnome
+, gsettings-desktop-schemas
+, wrapGAppsHook
+, libX11
+, libXtst
+, libXfixes
+, libXcursor
 }:
 
 stdenv.mkDerivation rec {
@@ -8,15 +18,20 @@ stdenv.mkDerivation rec {
   version = "3.32.0";
 
   src = fetchurl {
-   url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-   sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    glib gtk3 gsettings-desktop-schemas
-    libX11 libXtst libXfixes libXcursor
+    glib
+    gtk3
+    gsettings-desktop-schemas
+    libX11
+    libXtst
+    libXfixes
+    libXcursor
   ];
 
   passthru = {

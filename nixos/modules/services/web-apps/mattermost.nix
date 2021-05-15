@@ -13,14 +13,14 @@ let
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
   mattermostConf = foldl recursiveUpdate defaultConfig
-    [ { ServiceSettings.SiteURL = cfg.siteUrl;
-        ServiceSettings.ListenAddress = cfg.listenAddress;
-        TeamSettings.SiteName = cfg.siteName;
-        SqlSettings.DriverName = "postgres";
-        SqlSettings.DataSource = database;
-      }
-      cfg.extraConfig
-    ];
+    [{
+      ServiceSettings.SiteURL = cfg.siteUrl;
+      ServiceSettings.ListenAddress = cfg.listenAddress;
+      TeamSettings.SiteName = cfg.siteName;
+      SqlSettings.DriverName = "postgres";
+      SqlSettings.DataSource = database;
+    }
+      cfg.extraConfig];
 
   mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json" (builtins.toJSON mattermostConf);
 

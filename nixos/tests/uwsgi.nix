@@ -6,8 +6,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   machine = { pkgs, ... }: {
-    users.users.hello  =
-      { isSystemUser = true;
+    users.users.hello =
+      {
+        isSystemUser = true;
         group = "hello";
       };
     users.groups.hello = { };

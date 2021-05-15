@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gtk2, pkg-config }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config }:
 
 stdenv.mkDerivation {
   name = "gtkdialog-0.8.3";

@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fftw
+, fftwFloat
+, fftwLongDouble
+, numpy
+, scipy
+, cython
+, dask
+}:
 
 buildPythonPackage rec {
   version = "0.12.0";
@@ -15,7 +24,7 @@ buildPythonPackage rec {
     export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
   '';
 
-  buildInputs = [ fftw fftwFloat fftwLongDouble];
+  buildInputs = [ fftw fftwFloat fftwLongDouble ];
 
   propagatedBuildInputs = [ numpy scipy cython dask ];
 

@@ -1,6 +1,20 @@
-{ lib, stdenv, meson, ninja, gettext, fetchurl
-, pkg-config, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme, libhandy
-, wrapGAppsHook, gnome, harfbuzz }:
+{ lib
+, stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, pkg-config
+, gtk3
+, glib
+, libxml2
+, gnome-desktop
+, adwaita-icon-theme
+, libhandy
+, wrapGAppsHook
+, gnome
+, harfbuzz
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";

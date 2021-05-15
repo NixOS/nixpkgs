@@ -7,9 +7,9 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "sepandhaghighi";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "sepandhaghighi";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1aspd3vkjasb4wxs9czwjw42fmd4027wsmm4vlj09yp7sl57gary";
   };
 

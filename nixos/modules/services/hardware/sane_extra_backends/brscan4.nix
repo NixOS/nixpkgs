@@ -58,7 +58,8 @@ let
 
 
     config =
-      { name = mkDefault name;
+      {
+        name = mkDefault name;
       };
   };
 
@@ -69,16 +70,17 @@ in
 
     hardware.sane.brscan4.enable =
       mkEnableOption "Brother's brscan4 scan backend" // {
-      description = ''
-        When enabled, will automatically register the "brscan4" sane
-        backend and bring configuration files to their expected location.
-      '';
-    };
+        description = ''
+          When enabled, will automatically register the "brscan4" sane
+          backend and bring configuration files to their expected location.
+        '';
+      };
 
     hardware.sane.brscan4.netDevices = mkOption {
-      default = {};
+      default = { };
       example =
-        { office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
+        {
+          office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
           office2 = { model = "MFC-7860DW"; nodename = "BRW0080927AFBCE"; };
         };
       type = with types; attrsOf (submodule netDeviceOpts);
@@ -99,7 +101,8 @@ in
       { source = "${etcFiles}/etc/opt/brother/scanner/brscan4"; };
 
     assertions = [
-      { assertion = all (x: !(null != x.ip && null != x.nodename)) netDeviceList;
+      {
+        assertion = all (x: !(null != x.ip && null != x.nodename)) netDeviceList;
         message = ''
           When describing a network device as part of the attribute list
           `hardware.sane.brscan4.netDevices`, only one of its `ip` or `nodename`

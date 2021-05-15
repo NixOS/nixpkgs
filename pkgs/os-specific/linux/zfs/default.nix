@@ -1,17 +1,32 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, nixosTests
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook269
+, util-linux
+, nukeReferences
+, coreutils
+, perl
+, nixosTests
 , configFile ? "all"
 
-# Userspace dependencies
-, zlib, libuuid, python3, attr, openssl
+  # Userspace dependencies
+, zlib
+, libuuid
+, python3
+, attr
+, openssl
 , libtirpc
 , nfs-utils
-, gawk, gnugrep, gnused, systemd
-, smartmontools, enableMail ? false
-, sysstat, pkg-config
+, gawk
+, gnugrep
+, gnused
+, systemd
+, smartmontools
+, enableMail ? false
+, sysstat
+, pkg-config
 
-# Kernel dependencies
+  # Kernel dependencies
 , kernel ? null
 , enablePython ? true
 }:
@@ -23,12 +38,14 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
-  common = { version
+  common =
+    { version
     , sha256
-    , extraPatches ? []
+    , extraPatches ? [ ]
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , kernelCompatible ? null }:
+    , kernelCompatible ? null
+    }:
 
     stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
@@ -149,13 +166,15 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
-      postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
-      in ''
-        for i in $out/libexec/zfs/zpool.d/*; do
-          sed -i '2i${path}' $i
-        done
-      '';
+      postFixup =
+        let
+          path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
+        in
+        ''
+          for i in $out/libexec/zfs/zpool.d/*; do
+            sed -i '2i${path}' $i
+          done
+        '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
@@ -187,7 +206,8 @@ let
         broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
       };
     };
-in {
+in
+{
   # also check if kernel version constraints in
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted

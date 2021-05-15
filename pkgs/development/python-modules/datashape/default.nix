@@ -12,14 +12,15 @@ let
   # Fetcher function looks similar to fetchPypi.
   # Allows for easier overriding, without having to know
   # how the source is actually fetched.
-  fetcher = {pname, version, sha256}: fetchFromGitHub {
+  fetcher = { pname, version, sha256 }: fetchFromGitHub {
     owner = "blaze";
     repo = pname;
     rev = version;
     inherit sha256;
   };
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "datashape";
   version = "0.5.4";
 

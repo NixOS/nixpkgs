@@ -2,7 +2,8 @@
 
 let
   version = "1.5c";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zssh";
   inherit version;
 

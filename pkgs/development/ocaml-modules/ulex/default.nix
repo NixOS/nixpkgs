@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "A lexer generator for Unicode and OCaml";
     license = lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ lib.maintainers.roconnor ];
   };
 }

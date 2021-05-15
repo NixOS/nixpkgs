@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, expat
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, expat
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -21,7 +25,8 @@ stdenv.mkDerivation rec {
     libhubbub
     libparserutils
     libwapcaplet
-    buildsystem ];
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     docutils
     pkg-config
     removeReferencesTo
-    varnish.python  # use same python version as varnish server
+    varnish.python # use same python version as varnish server
   ];
 
   buildInputs = [ varnish ];

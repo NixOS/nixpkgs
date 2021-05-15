@@ -26,7 +26,7 @@ buildPythonPackage rec {
     # in the next release of spectral cube > 0.5.0
     (fetchpatch {
       url = "https://github.com/radio-astro-tools/spectral-cube/commit/bbe4295ebef7dfa6fe4474275a29acd6cb0cb544.patch";
-    sha256 = "1qddfm3364kc34yf6wd9nd6rxh4qc2v5pqilvz9adwb4a50z28bf";
+      sha256 = "1qddfm3364kc34yf6wd9nd6rxh4qc2v5pqilvz9adwb4a50z28bf";
     })
   ];
 

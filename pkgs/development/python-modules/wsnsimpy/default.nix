@@ -1,6 +1,13 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, setuptools, simpy, tkinter
-# GUI-based visualization of the simulation is optional
-, enableVisualization ? true }:
+{ buildPythonPackage
+, fetchPypi
+, isPy27
+, lib
+, setuptools
+, simpy
+, tkinter
+  # GUI-based visualization of the simulation is optional
+, enableVisualization ? true
+}:
 
 buildPythonPackage rec {
   pname = "wsnsimpy";

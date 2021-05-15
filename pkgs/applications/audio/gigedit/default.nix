@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkg-config, which
-, docbook_xml_dtd_45, docbook_xsl, gtkmm2, libgig, libsndfile, libxslt
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, which
+, docbook_xml_dtd_45
+, docbook_xsl
+, gtkmm2
+, libgig
+, libsndfile
+, libxslt
 }:
 
 stdenv.mkDerivation rec {

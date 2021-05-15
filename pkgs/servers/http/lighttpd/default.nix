@@ -1,9 +1,26 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
-, openssl, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, libmysqlclient ? null
-, enableLdap ? false, openldap ? null
-, enableWebDAV ? false, sqlite ? null, libuuid ? null
-, enableExtendedAttrs ? false, attr ? null
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, pcre
+, libxml2
+, zlib
+, bzip2
+, which
+, file
+, openssl
+, enableMagnet ? false
+, lua5_1 ? null
+, enableMysql ? false
+, libmysqlclient ? null
+, enableLdap ? false
+, openldap ? null
+, enableWebDAV ? false
+, sqlite ? null
+, libuuid ? null
+, enableExtendedAttrs ? false
+, attr ? null
 , perl
 }:
 
@@ -32,19 +49,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
-             ++ lib.optional enableMagnet lua5_1
-             ++ lib.optional enableMysql libmysqlclient
-             ++ lib.optional enableLdap openldap
-             ++ lib.optional enableWebDAV sqlite
-             ++ lib.optional enableWebDAV libuuid;
+    ++ lib.optional enableMagnet lua5_1
+    ++ lib.optional enableMysql libmysqlclient
+    ++ lib.optional enableLdap openldap
+    ++ lib.optional enableWebDAV sqlite
+    ++ lib.optional enableWebDAV libuuid;
 
   configureFlags = [ "--with-openssl" ]
-                ++ lib.optional enableMagnet "--with-lua"
-                ++ lib.optional enableMysql "--with-mysql"
-                ++ lib.optional enableLdap "--with-ldap"
-                ++ lib.optional enableWebDAV "--with-webdav-props"
-                ++ lib.optional enableWebDAV "--with-webdav-locks"
-                ++ lib.optional enableExtendedAttrs "--with-attr";
+    ++ lib.optional enableMagnet "--with-lua"
+    ++ lib.optional enableMysql "--with-mysql"
+    ++ lib.optional enableLdap "--with-ldap"
+    ++ lib.optional enableWebDAV "--with-webdav-props"
+    ++ lib.optional enableWebDAV "--with-webdav-locks"
+    ++ lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
     export PATH=$PATH:${pcre.dev}/bin

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.ympd;
-in {
+in
+{
 
   ###### interface
 

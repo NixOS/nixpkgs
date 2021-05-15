@@ -1,5 +1,10 @@
-{ lib, runCommand, buildEnv, vscode, makeWrapper
-, vscodeExtensions ? [] }:
+{ lib
+, runCommand
+, buildEnv
+, vscode
+, makeWrapper
+, vscodeExtensions ? [ ]
+}:
 
 /*
   `vscodeExtensions`
@@ -55,8 +60,9 @@ let
 in
 
 # When no extensions are requested, we simply redirect to the original
-# non-wrapped vscode executable.
-runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
+  # non-wrapped vscode executable.
+runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
+{
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ vscode ];
   dontPatchELF = true;

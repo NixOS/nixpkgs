@@ -1,6 +1,27 @@
-{ lib, mkDerivation, fetchurl, fetchpatch, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
-, openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
-, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
+{ lib
+, mkDerivation
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, makeDesktopItem
+, cmake
+, boost
+, zlib
+, openssl
+, R
+, qtbase
+, qtxmlpatterns
+, qtsensors
+, qtwebengine
+, qtwebchannel
+, libuuid
+, hunspellDicts
+, unzip
+, ant
+, jdk
+, gnumake
+, makeWrapper
+, pandoc
 , llvmPackages
 }:
 
@@ -19,8 +40,18 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
-  buildInputs = [ boost zlib openssl R qtbase qtxmlpatterns qtsensors
-                  qtwebengine qtwebchannel libuuid ];
+  buildInputs = [
+    boost
+    zlib
+    openssl
+    R
+    qtbase
+    qtxmlpatterns
+    qtsensors
+    qtwebengine
+    qtwebchannel
+    libuuid
+  ];
 
   src = fetchFromGitHub {
     owner = "rstudio";
@@ -30,15 +61,17 @@ mkDerivation rec {
   };
 
   # Hack RStudio to only use the input R and provided libclang.
-  patches = [ ./r-location.patch ./clang-location.patch
-              (fetchpatch {
-                # Fetch a patch to ensure Rstudio compiles against R
-                # 4.0.0, should be removed next 1.2.X Rstudio update
-                # or possibly 1.3.X
-                url = "https://github.com/rstudio/rstudio/commit/3fb2397c2f208bb8ace0bbaf269481ccb96b5b20.patch";
-                sha256 = "0qpgjy6aash0fc0xbns42cwpj3nsw49nkbzwyq8az01xwg81g0f3";
-              })
-            ];
+  patches = [
+    ./r-location.patch
+    ./clang-location.patch
+    (fetchpatch {
+      # Fetch a patch to ensure Rstudio compiles against R
+      # 4.0.0, should be removed next 1.2.X Rstudio update
+      # or possibly 1.3.X
+      url = "https://github.com/rstudio/rstudio/commit/3fb2397c2f208bb8ace0bbaf269481ccb96b5b20.patch";
+      sha256 = "0qpgjy6aash0fc0xbns42cwpj3nsw49nkbzwyq8az01xwg81g0f3";
+    })
+  ];
   postPatch = ''
     substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
     substituteInPlace src/cpp/core/libclang/LibClang.cpp \
@@ -60,8 +93,10 @@ mkDerivation rec {
   # These dicts contain identically-named dict files, so we only keep the
   # -large versions in case of clashes
   largeDicts = filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
-  otherDicts = filter (d: !(hasAttr "dictFileName" d &&
-                            elem d.dictFileName (map (d: d.dictFileName) largeDicts))) hunspellDictionaries;
+  otherDicts = filter
+    (d: !(hasAttr "dictFileName" d &&
+      elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
@@ -125,14 +160,15 @@ mkDerivation rec {
   qtWrapperArgs = [ "--suffix PATH : ${gnumake}/bin" ];
 
   postInstall = ''
-      mkdir $out/share
-      cp -r ${desktopItem}/share/applications $out/share
-      mkdir $out/share/icons
-      ln $out/rstudio.png $out/share/icons
+    mkdir $out/share
+    cp -r ${desktopItem}/share/applications $out/share
+    mkdir $out/share/icons
+    ln $out/rstudio.png $out/share/icons
   '';
 
   meta = with lib;
-    { description = "Set of integrated tools for the R language";
+    {
+      description = "Set of integrated tools for the R language";
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];

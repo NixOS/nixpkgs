@@ -1,10 +1,10 @@
-{stdenv}:
-{version ? "11.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
+{ stdenv }:
+{ version ? "11.1", xcodeBaseDir ? "/Applications/Xcode.app" }:
 
 assert stdenv.isDarwin;
 
 stdenv.mkDerivation {
-  name = "xcode-wrapper-"+version;
+  name = "xcode-wrapper-" + version;
   buildCommand = ''
     mkdir -p $out/bin
     cd $out/bin

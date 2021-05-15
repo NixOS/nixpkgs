@@ -77,7 +77,10 @@ mkDerivation rec {
   ++ lib.optional withVlc libvlc;
 
   nativeBuildInputs = [
-    cmake ninja pkg-config qttools
+    cmake
+    ninja
+    pkg-config
+    qttools
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
   ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
@@ -83,9 +84,9 @@ stdenv.mkDerivation rec {
       It is a lite version of GiNaC as well, not implementing all the features
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
-    homepage    = "http://pynac.org";
+    homepage = "http://pynac.org";
     license = licenses.gpl3;
     maintainers = teams.sage.members;
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

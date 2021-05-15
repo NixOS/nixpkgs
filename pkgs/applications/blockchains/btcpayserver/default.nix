@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, linkFarmFromDrvs
+, makeWrapper
+, dotnetPackages
+, dotnetCorePackages
 }:
 
 let

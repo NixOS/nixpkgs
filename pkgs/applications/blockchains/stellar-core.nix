@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkg-config, git
-, bison, flex, postgresql }:
+{ lib
+, stdenv
+, fetchgit
+, autoconf
+, libtool
+, automake
+, pkg-config
+, git
+, bison
+, flex
+, postgresql
+}:
 
 let
   pname = "stellar-core";
   version = "0.5.1";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchgit {

@@ -1,9 +1,9 @@
 { buildOctavePackage
 , lib
 , fetchurl
-# Octave's Python (Python 3)
+  # Octave's Python (Python 3)
 , python
-# Needed only to get the correct version of sympy needed
+  # Needed only to get the correct version of sympy needed
 , python2Packages
 }:
 
@@ -12,21 +12,27 @@ let
   # It has been addressed, but not merged yet.
   # In the meantime, we create a Python environment with Python 3, its mpmath
   # version and sympy 1.5 from python2Packages.
-  pythonEnv = (let
-      overridenPython = let
-        packageOverrides = self: super: {
-          sympy = super.sympy.overridePythonAttrs (old: rec {
-            version = python2Packages.sympy.version;
-            src = python2Packages.sympy.src;
-          });
-        };
-      in python.override {inherit packageOverrides; self = overridenPython; };
-    in overridenPython.withPackages (ps: [
+  pythonEnv = (
+    let
+      overridenPython =
+        let
+          packageOverrides = self: super: {
+            sympy = super.sympy.overridePythonAttrs (old: rec {
+              version = python2Packages.sympy.version;
+              src = python2Packages.sympy.src;
+            });
+          };
+        in
+        python.override { inherit packageOverrides; self = overridenPython; };
+    in
+    overridenPython.withPackages (ps: [
       ps.sympy
       ps.mpmath
-    ]));
+    ])
+  );
 
-in buildOctavePackage rec {
+in
+buildOctavePackage rec {
   pname = "symbolic";
   version = "2.9.0";
 

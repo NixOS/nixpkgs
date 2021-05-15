@@ -1,4 +1,7 @@
-{lib, stdenv, fetchFromGitHub, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
 , drmSupport ? false # Digital Radio Mondiale
 }:
 
@@ -14,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0q52kdd95ls6ihzyspx176wg9x22425v5qsknrmrjq30q25qmmlg";
   };
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional drmSupport "--with-drm";
 
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
-    license     = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

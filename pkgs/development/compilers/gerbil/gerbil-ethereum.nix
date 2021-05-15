@@ -7,8 +7,8 @@ gerbil-support.gerbilPackage {
   gerbil-package = "mukn/ethereum";
   gerbil = gerbil-unstable;
   gerbilInputs = with gerbil-support.gerbilPackages-unstable;
-    [gerbil-utils gerbil-crypto gerbil-poo gerbil-persist];
-  buildInputs = [];
+    [ gerbil-utils gerbil-crypto gerbil-poo gerbil-persist ];
+  buildInputs = [ ];
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-ethereum";
@@ -20,9 +20,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
-    homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
 }

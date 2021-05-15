@@ -15,7 +15,8 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "lemon";
   version = "1.69";
 

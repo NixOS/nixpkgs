@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   buildPhase = ''
-   ${stdenv.cc}/bin/cc ./ttyplot.c -lncurses -o ttyplot
+    ${stdenv.cc}/bin/cc ./ttyplot.c -lncurses -o ttyplot
   '';
 
   installPhase = ''

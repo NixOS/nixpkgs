@@ -1,7 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
-, flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
-, requests, zope_configuration, click, falcon, importlib-resources
-, zope_component, lynx, postfix, authheaders, gunicorn
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, isPy3k
+, alembic
+, aiosmtpd
+, dnspython
+, flufl_bounce
+, flufl_i18n
+, flufl_lock
+, lazr_config
+, lazr_delegates
+, passlib
+, requests
+, zope_configuration
+, click
+, falcon
+, importlib-resources
+, zope_component
+, lynx
+, postfix
+, authheaders
+, gunicorn
 }:
 
 buildPythonPackage rec {
@@ -15,9 +35,22 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
-    importlib-resources lazr_config passlib requests zope_configuration
-    zope_component authheaders gunicorn
+    alembic
+    aiosmtpd
+    click
+    dnspython
+    falcon
+    flufl_bounce
+    flufl_i18n
+    flufl_lock
+    importlib-resources
+    lazr_config
+    passlib
+    requests
+    zope_configuration
+    zope_component
+    authheaders
+    gunicorn
   ];
 
   patches = [

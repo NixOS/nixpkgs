@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gettext}:
+{ lib, stdenv, fetchurl, gettext }:
 
 assert stdenv.isLinux && stdenv ? glibc;
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     # 2.14.
     ./use-old-memcpy.patch;
 
-  buildInputs = [gettext];
+  buildInputs = [ gettext ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     # as an LD_PRELOADed library on applications that load against a
     # different Glibc.
     ''
-       patchelf --set-rpath "" $out/lib/installwatch.so
+      patchelf --set-rpath "" $out/lib/installwatch.so
     '';
 
   meta = {

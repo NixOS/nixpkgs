@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+, fontconfig
+, harfbuzz
+, openssl
+, pkg-config
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";

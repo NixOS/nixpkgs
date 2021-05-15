@@ -10,7 +10,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml cbor2 dateutil tomlkit u-msgpack-python
+    pyyaml
+    cbor2
+    dateutil
+    tomlkit
+    u-msgpack-python
   ];
 
   meta = with lib; {

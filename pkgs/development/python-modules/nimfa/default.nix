@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy scipy ];
   checkInputs = [ matplotlib pytest ];
-  doCheck = !isPy3k;  # https://github.com/marinkaz/nimfa/issues/42
+  doCheck = !isPy3k; # https://github.com/marinkaz/nimfa/issues/42
 
   meta = with lib; {
     description = "Nonnegative matrix factorization library";

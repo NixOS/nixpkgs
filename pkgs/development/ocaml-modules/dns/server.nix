@@ -1,6 +1,17 @@
-{ buildDunePackage, dns, dns-mirage, randomconv, duration, lwt
-, mirage-time, mirage-clock, mirage-stack, metrics
-, alcotest, mirage-crypto-rng, dns-tsig, base64
+{ buildDunePackage
+, dns
+, dns-mirage
+, randomconv
+, duration
+, lwt
+, mirage-time
+, mirage-clock
+, mirage-stack
+, metrics
+, alcotest
+, mirage-crypto-rng
+, dns-tsig
+, base64
 }:
 
 buildDunePackage {

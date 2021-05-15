@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc ];
 
-  configureFlags = if !stdenv.isDarwin
+  configureFlags =
+    if !stdenv.isDarwin
     then [ "--with-libc=libc.so.6" ]
     else [ "--with-libc=libc${stdenv.targetPlatform.extensions.sharedLibrary}" ];
 
@@ -19,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
-    homepage    = "https://www.inet.no/dante/";
+    homepage = "https://www.inet.no/dante/";
     maintainers = [ maintainers.arobyn ];
-    license     = licenses.bsdOriginal;
-    platforms   = platforms.linux ++ platforms.darwin;
+    license = licenses.bsdOriginal;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

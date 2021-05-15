@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     homepage = "https://code.google.com/archive/p/udptunnel/";
     description = "Tunnels TCP over UDP packets";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

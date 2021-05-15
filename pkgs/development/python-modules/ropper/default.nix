@@ -21,7 +21,7 @@ buildPythonApplication rec {
   '';
   doCheck = false; # Tests not included in archive
 
-  checkInputs = [pytest];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with lib; {
     homepage = "https://scoding.de/ropper/";

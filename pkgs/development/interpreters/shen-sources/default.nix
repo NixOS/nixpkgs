@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 }:
 
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "16jaliga3bia0f8c8ja1y22wanbnbriv31qfqdc87a4p4dx9c77q";
   };
 
-  buildInputs = [];
+  buildInputs = [ ];
   buildPhase = "";
   installPhase = ''
     mkdir -p $out

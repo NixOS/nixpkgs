@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2, alsaLib, SDL}:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, alsaLib, SDL }:
 
 stdenv.mkDerivation rec {
   name = "uae-0.8.29";

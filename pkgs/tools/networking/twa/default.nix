@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ bash
-                  curl
-                  gawk
-                  host.dnsutils
-                  jq
-                  netcat ];
+  buildInputs = [
+    bash
+    curl
+    gawk
+    host.dnsutils
+    jq
+    netcat
+  ];
 
   installPhase = ''
     install -Dm 0755 twa "$out/bin/twa"

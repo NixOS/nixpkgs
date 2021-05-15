@@ -43,8 +43,19 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
+    entrypoints
+    bleach
+    mistune
+    jinja2
+    pygments
+    traitlets
+    testpath
+    jupyter_core
+    nbformat
+    ipykernel
+    pandocfilters
+    tornado
+    jupyter_client
     defusedxml
     (nbclient.override { doCheck = false; }) # avoid infinite recursion
     jupyterlab-pygments

@@ -11,7 +11,8 @@ let
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
     pkgs.gst_all_1.gst-plugins-bad
-    pkgs.gst_all_1.gst-libav ];
+    pkgs.gst_all_1.gst-libav
+  ];
 
 in
 
@@ -80,19 +81,23 @@ in
     services.dbus.packages = [ e.efl ];
 
     systemd.user.services.efreet =
-      { enable = true;
+      {
+        enable = true;
         description = "org.enlightenment.Efreet";
         serviceConfig =
-          { ExecStart = "${e.efl}/bin/efreetd";
+          {
+            ExecStart = "${e.efl}/bin/efreetd";
             StandardOutput = "null";
           };
       };
 
     systemd.user.services.ethumb =
-      { enable = true;
+      {
+        enable = true;
         description = "org.enlightenment.Ethumb";
         serviceConfig =
-          { ExecStart = "${e.efl}/bin/ethumbd";
+          {
+            ExecStart = "${e.efl}/bin/ethumbd";
             StandardOutput = "null";
           };
       };

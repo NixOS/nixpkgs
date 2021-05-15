@@ -5,8 +5,8 @@ let
 
   cfg = config.programs.tmux;
 
-  defaultKeyMode  = "emacs";
-  defaultResize   = 5;
+  defaultKeyMode = "emacs";
+  defaultResize = 5;
   defaultShortcut = "b";
   defaultTerminal = "screen";
 
@@ -55,7 +55,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {

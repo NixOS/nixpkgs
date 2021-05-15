@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytest, pytestcov, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest
+, pytestcov
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "vdf";

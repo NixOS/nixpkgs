@@ -1,14 +1,28 @@
-{ stdenv, lib, fetchurl, pkg-config
-, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, bzip2
+, curlMinimal
+, expat
+, libarchive
+, xz
+, zlib
+, libuv
+, rhash
 , buildPackages
-# darwin attributes
+  # darwin attributes
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, useOpenSSL ? !isBootstrap, openssl
-, useNcurses ? false, ncurses
-, useQt4 ? false, qt4
-, withQt5 ? false, qtbase
+, useOpenSSL ? !isBootstrap
+, openssl
+, useNcurses ? false
+, ncurses
+, useQt4 ? false
+, qt4
+, withQt5 ? false
+, qtbase
 }:
 
 assert withQt5 -> useQt4 == false;
@@ -16,10 +30,10 @@ assert useQt4 -> withQt5 == false;
 
 stdenv.mkDerivation (rec {
   pname = "cmake"
-          + lib.optionalString isBootstrap "-boot"
-          + lib.optionalString useNcurses "-cursesUI"
-          + lib.optionalString withQt5 "-qt5UI"
-          + lib.optionalString useQt4 "-qt4UI";
+    + lib.optionalString isBootstrap "-boot"
+    + lib.optionalString useNcurses "-cursesUI"
+    + lib.optionalString withQt5 "-qt5UI"
+    + lib.optionalString useQt4 "-qt4UI";
   version = "3.19.7";
 
   src = fetchurl {
@@ -49,7 +63,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ setupHook pkg-config ];
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
@@ -73,13 +87,13 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ lib.optional (useQt4 || withQt5) "--qt-gui"
-    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
-    ++ lib.optionals stdenv.hostPlatform.is32bit [
-      "CFLAGS=-D_FILE_OFFSET_BITS=64"
-      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
-    ]
-    ++ [
+  ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+  # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    "CFLAGS=-D_FILE_OFFSET_BITS=64"
+    "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+  ]
+  ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -128,5 +142,5 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-} // (if withQt5 then { dontWrapQtApps = true; } else {})
+} // (if withQt5 then { dontWrapQtApps = true; } else { })
 )

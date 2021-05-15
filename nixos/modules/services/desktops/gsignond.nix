@@ -28,7 +28,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           What plugins to use with the gSignOn daemon.
         '';

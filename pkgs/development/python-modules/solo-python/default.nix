@@ -12,7 +12,7 @@
 , requests
 }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "solo-python";
   version = "0.0.27";
   format = "flit";

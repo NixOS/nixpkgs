@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub , boost, cairomm, cmake, libsndfile, lv2, ntk, pkg-config, python }:
+{ lib, stdenv, fetchFromGitHub, boost, cairomm, cmake, libsndfile, lv2, ntk, pkg-config, python }:
 
 stdenv.mkDerivation rec {
   pname = "sorcer";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost cairomm libsndfile lv2 ntk python ];
 
   postPatch = ''
-     # Fix build with lv2 1.18: https://github.com/brummer10/guitarix/commit/c0334c72
-     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
-       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
-   '';
+    # Fix build with lv2 1.18: https://github.com/brummer10/guitarix/commit/c0334c72
+    find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+      -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+  '';
 
   installPhase = ''
     make install

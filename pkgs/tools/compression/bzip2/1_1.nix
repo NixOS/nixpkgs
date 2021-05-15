@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , meson
 , python3
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

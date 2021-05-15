@@ -5,24 +5,24 @@
 , python3
 , nix-update-script
   # To include additional plugins, pass them here as an overlay.
-, packageOverrides ? self: super: {}
+, packageOverrides ? self: super: { }
 }:
 let
   mkOverride = attrname: version: sha256:
-  self: super: {
-    ${attrname} = super.${attrname}.overridePythonAttrs (
-      oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      }
-    );
-  };
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (
+        oldAttrs: {
+          inherit version;
+          src = oldAttrs.src.override {
+            inherit version sha256;
+          };
+        }
+      );
+    };
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) (
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
         # the following dependencies are non trivial to update since later versions introduce backwards incompatible
         # changes that might affect plugins, or due to other observed problems
@@ -142,22 +142,23 @@ let
 
               checkInputs = with super; [ pytestCheckHook mock ddt ];
 
-              postPatch = let
-                ignoreVersionConstraints = [
-                  "emoji"
-                  "sentry-sdk"
-                  "watchdog"
-                ];
-              in
+              postPatch =
+                let
+                  ignoreVersionConstraints = [
+                    "emoji"
+                    "sentry-sdk"
+                    "watchdog"
+                  ];
+                in
                 ''
-                  sed -r -i \
-                    ${lib.concatStringsSep "\n" (
-                  map (
-                    e:
-                      ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-                  ) ignoreVersionConstraints
-                )}
-                    setup.py
+                    sed -r -i \
+                      ${lib.concatStringsSep "\n" (
+                    map (
+                      e:
+                        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                    ) ignoreVersionConstraints
+                  )}
+                      setup.py
                 '';
 
               dontUseSetuptoolsCheck = true;
@@ -193,4 +194,4 @@ let
     );
   };
 in
-  with py.pkgs; toPythonApplication octoprint
+with py.pkgs; toPythonApplication octoprint

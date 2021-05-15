@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
-  nose, dbus, dbus-python, pygobject3,
-  which, pyflakes, pycodestyle, bluez, networkmanager
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, runtimeShell
+, nose
+, dbus
+, dbus-python
+, pygobject3
+, which
+, pyflakes
+, pycodestyle
+, bluez
+, networkmanager
 }:
 
 buildPythonPackage rec {
@@ -43,8 +53,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
+    nose
+    dbus
+    dbus-python
+    which
+    pycodestyle
+    pyflakes
+    pygobject3
+    bluez
+    (lib.getOutput "test" bluez)
+    networkmanager
   ];
 
   checkPhase = ''

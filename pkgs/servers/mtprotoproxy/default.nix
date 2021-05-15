@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Async MTProto proxy for Telegram";
-    license     = licenses.mit;
-    homepage    = "https://github.com/alexbers/mtprotoproxy";
-    platforms   = python.meta.platforms;
+    license = licenses.mit;
+    homepage = "https://github.com/alexbers/mtprotoproxy";
+    platforms = python.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
   };
 }

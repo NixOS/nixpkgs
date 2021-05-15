@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "artyFX";

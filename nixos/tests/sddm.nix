@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -22,17 +22,19 @@ let
 
       enableOCR = true;
 
-      testScript = { nodes, ... }: let
-        user = nodes.machine.config.users.users.alice;
-      in ''
-        start_all()
-        machine.wait_for_text("(?i)select your user")
-        machine.screenshot("sddm")
-        machine.send_chars("${user.password}\n")
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
-        machine.wait_for_window("^IceWM ")
-      '';
+      testScript = { nodes, ... }:
+        let
+          user = nodes.machine.config.users.users.alice;
+        in
+        ''
+          start_all()
+          machine.wait_for_text("(?i)select your user")
+          machine.screenshot("sddm")
+          machine.send_chars("${user.password}\n")
+          machine.wait_for_file("${user.home}/.Xauthority")
+          machine.succeed("xauth merge ${user.home}/.Xauthority")
+          machine.wait_for_window("^IceWM ")
+        '';
     };
 
     autoLogin = {
@@ -55,15 +57,17 @@ let
         services.xserver.windowManager.icewm.enable = true;
       };
 
-      testScript = { nodes, ... }: let
-        user = nodes.machine.config.users.users.alice;
-      in ''
-        start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
-        machine.wait_for_window("^IceWM ")
-      '';
+      testScript = { nodes, ... }:
+        let
+          user = nodes.machine.config.users.users.alice;
+        in
+        ''
+          start_all()
+          machine.wait_for_file("${user.home}/.Xauthority")
+          machine.succeed("xauth merge ${user.home}/.Xauthority")
+          machine.wait_for_window("^IceWM ")
+        '';
     };
   };
 in
-  lib.mapAttrs (lib.const makeTest) tests
+lib.mapAttrs (lib.const makeTest) tests

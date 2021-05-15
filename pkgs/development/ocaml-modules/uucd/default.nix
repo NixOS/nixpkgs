@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

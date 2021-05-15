@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchgit, darwin, writeText
-, ninja, python3
+{ stdenv
+, lib
+, fetchgit
+, darwin
+, writeText
+, ninja
+, python3
 }:
 
 let
@@ -21,7 +26,8 @@ let
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gn-unstable";
   inherit version;
 

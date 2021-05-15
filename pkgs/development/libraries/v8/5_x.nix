@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchgit, fetchFromGitHub, gyp, readline, python, which, icu
-, patchelf, coreutils, xcbuild
+{ stdenv
+, lib
+, fetchgit
+, fetchFromGitHub
+, gyp
+, readline
+, python
+, which
+, icu
+, patchelf
+, coreutils
+, xcbuild
 , doCheck ? false
 , static ? false
 }:
@@ -7,11 +17,12 @@
 assert readline != null;
 
 let
-  arch = if stdenv.isx86_64 then "x64"
-            else if stdenv.isi686 then "ia32"
-            else if stdenv.isAarch64 then "arm64"
-            else if stdenv.isAarch32 then "arm"
-            else throw "Unknown architecture for v8";
+  arch =
+    if stdenv.isx86_64 then "x64"
+    else if stdenv.isi686 then "ia32"
+    else if stdenv.isAarch64 then "arm64"
+    else if stdenv.isAarch32 then "arm"
+    else throw "Unknown architecture for v8";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
   sharedFlag = if static then "static_library" else "shared_library";

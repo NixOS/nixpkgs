@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetch
 , cmake
 , zlib
@@ -52,8 +53,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A next-generation high-performance debugger";
-    homepage    = "https://llvm.org/";
-    license     = licenses.ncsa;
-    platforms   = platforms.all;
+    homepage = "https://llvm.org/";
+    license = licenses.ncsa;
+    platforms = platforms.all;
   };
 }

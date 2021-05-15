@@ -13,8 +13,19 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket_client
-    gevent-websocket rencode bitcoinlib maxminddb pyopenssl
+    gevent
+    msgpack
+    base58
+    merkletools
+    rsa
+    pysocks
+    pyasn1
+    websocket_client
+    gevent-websocket
+    rencode
+    bitcoinlib
+    maxminddb
+    pyopenssl
   ];
 
   buildPhase = ''

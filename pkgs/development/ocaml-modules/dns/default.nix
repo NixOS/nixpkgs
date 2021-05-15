@@ -1,5 +1,19 @@
-{ lib, buildDunePackage, fetchurl, alcotest
-, cstruct, domain-name, duration, gmap, ipaddr, logs, lru, metrics, ptime, rresult, astring, fmt
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, cstruct
+, domain-name
+, duration
+, gmap
+, ipaddr
+, logs
+, lru
+, metrics
+, ptime
+, rresult
+, astring
+, fmt
 }:
 
 buildDunePackage rec {

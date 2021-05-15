@@ -1,6 +1,17 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
-, asgiref, autobahn, twisted, pytestrunner
-, hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
+{ lib
+, stdenv
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, asgiref
+, autobahn
+, twisted
+, pytestrunner
+, hypothesis
+, pytest
+, pytest-asyncio
+, service-identity
+, pyopenssl
 }:
 buildPythonPackage rec {
   pname = "daphne";

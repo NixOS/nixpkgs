@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, ocaml_extlib, ocamlfuse, gapi_ocaml, ocaml_sqlite3
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ocaml_extlib
+, ocamlfuse
+, gapi_ocaml
+, ocaml_sqlite3
 }:
 
 buildDunePackage rec {

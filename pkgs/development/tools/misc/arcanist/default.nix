@@ -2,7 +2,8 @@
 , fetchFromGitHub
 , flex
 , php
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 # Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetch
 , cmake
 , libxml2
@@ -24,8 +25,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The LLVM Linker";
-    homepage    = "https://lld.llvm.org/";
-    license     = lib.licenses.ncsa;
-    platforms   = lib.platforms.all;
+    homepage = "https://lld.llvm.org/";
+    license = lib.licenses.ncsa;
+    platforms = lib.platforms.all;
   };
 }

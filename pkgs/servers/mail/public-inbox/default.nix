@@ -1,7 +1,21 @@
-{ buildPerlPackage, lib, fetchurl, fetchpatch, makeWrapper
-, DBDSQLite, EmailMIME, IOSocketSSL, IPCRun, Plack, PlackMiddlewareReverseProxy
-, SearchXapian, TimeDate, URI
-, git, highlight, openssl, xapian
+{ buildPerlPackage
+, lib
+, fetchurl
+, fetchpatch
+, makeWrapper
+, DBDSQLite
+, EmailMIME
+, IOSocketSSL
+, IPCRun
+, Plack
+, PlackMiddlewareReverseProxy
+, SearchXapian
+, TimeDate
+, URI
+, git
+, highlight
+, openssl
+, xapian
 }:
 
 let
@@ -47,8 +61,16 @@ buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    DBDSQLite EmailMIME IOSocketSSL IPCRun Plack PlackMiddlewareReverseProxy
-    SearchXapian TimeDate URI highlight
+    DBDSQLite
+    EmailMIME
+    IOSocketSSL
+    IPCRun
+    Plack
+    PlackMiddlewareReverseProxy
+    SearchXapian
+    TimeDate
+    URI
+    highlight
   ];
 
   checkInputs = [ git openssl xapian ];

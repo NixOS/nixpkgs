@@ -9,22 +9,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N+3ICilozhAxWJ5DumtJKHfKeQG+o4+Lt1NqXIz4EA0=";
   };
 
-  latex = texlive.combine { inherit (texlive)
-    scheme-basic
-    collection-pstricks
-    collection-fontsrecommended
-    l3kernel
-    l3packages
-    mathastext
-    pgf
-    relsize
-    sansmath
-    sfmath
-    siunitx
-    xcolor
-    xkeyval
-    xstring
-    ;};
+  latex = texlive.combine {
+    inherit (texlive)
+      scheme-basic
+      collection-pstricks
+      collection-fontsrecommended
+      l3kernel
+      l3packages
+      mathastext
+      pgf
+      relsize
+      sansmath
+      sfmath
+      siunitx
+      xcolor
+      xkeyval
+      xstring
+      ;
+  };
 
   nativeBuildInputs = [ rsync makeWrapper ];
   buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];
@@ -73,9 +75,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license     = licenses.gpl3;
-    homepage    = "https://rivet.hepforge.org";
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = "https://rivet.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.04";
 
   src = fetchurl {
-    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
+    url = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
     sha256 = "1mzk6n0g2vdsv38y493zg85lxrpz72b92cmsray3g970xzanqd6s";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
-    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
-    license     = lib.licenses.cecill-b;
-    platforms   = lib.platforms.unix;
+    homepage = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
+    license = lib.licenses.cecill-b;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -79,7 +79,7 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra configuration lines for the <filename>teeworlds.cfg</filename>. See <link xlink:href="https://www.teeworlds.com/?page=docs&amp;wiki=server_settings">Teeworlds Documentation</link>.
         '';

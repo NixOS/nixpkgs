@@ -27,6 +27,6 @@ buildGoPackage rec {
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -3,21 +3,22 @@
 , lib
 , stdenv ? pkgs.stdenv
 , name
-, antTargets ? []
-, jars ? []
-, jarWrappers ? []
-, antProperties ? []
-, antBuildInputs ? []
+, antTargets ? [ ]
+, jars ? [ ]
+, jarWrappers ? [ ]
+, antProperties ? [ ]
+, antBuildInputs ? [ ]
 , buildfile ? "build.xml"
 , ant ? pkgs.ant
 , jre ? pkgs.jdk
 , hydraAntLogger ? pkgs.hydraAntLogger
 , zip ? pkgs.zip
 , unzip ? pkgs.unzip
-, ... } @ args:
+, ...
+} @ args:
 
 let
-  antFlags = "-f ${buildfile} " + lib.concatMapStrings ({name, value}: "-D${name}=${value} " ) antProperties ;
+  antFlags = "-f ${buildfile} " + lib.concatMapStrings ({ name, value }: "-D${name}=${value} ") antProperties;
 in
 stdenv.mkDerivation (
 
@@ -26,10 +27,10 @@ stdenv.mkDerivation (
     showBuildStats = true;
 
     postPhases =
-      ["generateWrappersPhase" "finalPhase"];
+      [ "generateWrappersPhase" "finalPhase" ];
 
     prePhases =
-      ["antSetupPhase"];
+      [ "antSetupPhase" ];
 
     antSetupPhase = with lib; ''
       if test "$hydraAntLogger" != "" ; then
@@ -64,8 +65,9 @@ stdenv.mkDerivation (
         cp = w: "-cp '${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/share/java/*"}'";
       in
       ''
-      header "Generating jar wrappers"
-    '' + (lib.concatMapStrings (w: ''
+        header "Generating jar wrappers"
+      '' + (lib.concatMapStrings
+        (w: ''
 
       mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
@@ -75,21 +77,25 @@ stdenv.mkDerivation (
       EOF
 
       chmod a+x $out/bin/${w.name} || exit 1
-    '') jarWrappers) + ''
-      closeNest
-    '';
+    '')
+        jarWrappers) + ''
+        closeNest
+      '';
 
     buildPhase = ''
       runHook preBuild
-    '' + (if antTargets == [] then ''
+    '' + (if antTargets == [ ] then ''
       header "Building default ant target"
       ant ${antFlags}
       closeNest
-    '' else lib.concatMapStrings (t: ''
-      header "Building '${t}' target"
-      ant ${antFlags} ${t}
-      closeNest
-    '') antTargets) + ''
+    '' else
+      lib.concatMapStrings
+        (t: ''
+          header "Building '${t}' target"
+          ant ${antFlags} ${t}
+          closeNest
+        '')
+        antTargets) + ''
       runHook postBuild
     '';
 
@@ -103,13 +109,13 @@ stdenv.mkDerivation (
       '';
   }
 
-  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "lib" "jarWrappers"] //
+  // removeAttrs args [ "antProperties" "buildInputs" "pkgs" "lib" "jarWrappers" ] //
 
   {
     name = name + (if src ? version then "-" + src.version else "");
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ant jre zip] ++ lib.optional (args ? buildInputs) args.buildInputs ;
+    buildInputs = [ ant jre zip ] ++ lib.optional (args ? buildInputs) args.buildInputs;
 
     postHook = ''
       mkdir -p $out/nix-support

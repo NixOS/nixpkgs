@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, meson, ninja, python3
-, wrapGAppsHook, vala, shared-mime-info
-, cairo, pantheon, glib, gtk3, libxml2, libgee, libarchive
-, discount, gtksourceview3
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, python3
+, wrapGAppsHook
+, vala
+, shared-mime-info
+, cairo
+, pantheon
+, glib
+, gtk3
+, libxml2
+, libgee
+, libarchive
+, discount
+, gtksourceview3
 , hicolor-icon-theme # for setup-hook
 }:
 

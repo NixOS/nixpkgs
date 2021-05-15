@@ -2,7 +2,8 @@
 
 let
   version = "2016-06-23";
-in fetchzip {
+in
+fetchzip {
   name = "open-dyslexic-${version}";
 
   url = "https://github.com/antijingoist/open-dyslexic/archive/20160623-Stable.zip";
@@ -20,6 +21,6 @@ in fetchzip {
     description = "Font created to increase readability for readers with dyslexia";
     license = "Bitstream Vera License (https://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

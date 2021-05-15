@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cups}:
+{ lib, stdenv, fetchurl, cups }:
 
 stdenv.mkDerivation rec {
   name = "cups-bjnp-1.2.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
-  buildInputs = [cups];
+  buildInputs = [ cups ];
   NIX_CFLAGS_COMPILE = [
     "-include stdio.h"
     "-Wno-error=stringop-truncation"

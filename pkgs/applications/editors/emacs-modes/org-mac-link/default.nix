@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1gkzlfbhg289r1hbqd25szan1wizgk6s99h9xxjip5bjv0jywcx5";
   };
 
-  phases = [ "buildPhase" "installPhase"];
+  phases = [ "buildPhase" "installPhase" ];
 
   buildInputs = [ emacs ];
 

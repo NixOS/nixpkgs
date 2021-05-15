@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = pname;
-    rev  = version;
+    rev = version;
     sha256 = "0s5bli08wfd9xszx3kc90k51vlgjc00r0qg4mikb6qdc4pxpgsxj";
   };
 

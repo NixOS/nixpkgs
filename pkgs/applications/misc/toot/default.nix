@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.27.0";
-  name    = "toot-${version}";
+  name = "toot-${version}";
 
   src = fetchFromGitHub {
-    owner  = "ihabunek";
-    repo   = "toot";
-    rev    = version;
+    owner = "ihabunek";
+    repo = "toot";
+    rev = version;
     sha256 = "197g9lvwg8qnsf18kifcqdj3cpfdnxz9vay766rn9bi4nfz0s6j2";
   };
 
@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Mastodon CLI interface";
-    homepage    = "https://github.com/ihabunek/toot";
-    license     = licenses.gpl3;
+    homepage = "https://github.com/ihabunek/toot";
+    license = licenses.gpl3;
     maintainers = [ maintainers.matthiasbeyer ];
   };
 

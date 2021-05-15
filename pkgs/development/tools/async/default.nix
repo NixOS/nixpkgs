@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
       able to quickly parallelize shell scripts with minimal changes. It was
       inspired by GNU Parallel, with the main difference being that async
       retains state between commands by running a server in the background.
-      '';
+    '';
     homepage = "https://github.com/ctbur/async";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ minijackson ];

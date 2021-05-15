@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , autoconf
 , automake
 , pkg-config

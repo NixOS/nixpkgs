@@ -1,5 +1,16 @@
-{lib, stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
-, optipng, unrar}:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, python
+, makeWrapper
+, ghostscript
+, pngnq
+, pillow
+, djvulibre
+, optipng
+, unrar
+}:
 
 stdenv.mkDerivation {
   name = "pdfread-1.8.2";

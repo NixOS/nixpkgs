@@ -41,9 +41,10 @@ let
   };
 
   backendFlags = builtins.map
-    (b: if builtins.elem b withBackends
-        then "-D${b}=enabled"
-        else "-D${b}=disabled")
+    (b:
+      if builtins.elem b withBackends
+      then "-D${b}=enabled"
+      else "-D${b}=disabled")
     (builtins.attrNames backends);
 in
 
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
     pango
     inih
   ] ++ windowSystems."${withWindowSystem}"
-    ++ builtins.map (b: backends."${b}") withBackends;
+  ++ builtins.map (b: backends."${b}") withBackends;
 
   postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,

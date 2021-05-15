@@ -1,5 +1,11 @@
-{ lib, fetchpatch, buildPythonPackage, fetchPypi
-, aiohttp, pytest, pytestcov, pytest-aiohttp
+{ lib
+, fetchpatch
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, pytest
+, pytestcov
+, pytest-aiohttp
 }:
 
 buildPythonPackage rec {

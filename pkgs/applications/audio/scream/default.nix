@@ -1,6 +1,13 @@
-{ stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+{ stdenv
+, lib
+, config
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {

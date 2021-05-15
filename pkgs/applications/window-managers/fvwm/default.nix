@@ -1,6 +1,25 @@
-{ autoreconfHook, enableGestures ? false, lib, stdenv, fetchFromGitHub
-, pkg-config, cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
-, libXpm, libXt, librsvg, libpng, fribidi, perl, libstroke, readline, libxslt }:
+{ autoreconfHook
+, enableGestures ? false
+, lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cairo
+, fontconfig
+, freetype
+, libXft
+, libXcursor
+, libXinerama
+, libXpm
+, libXt
+, librsvg
+, libpng
+, fribidi
+, perl
+, libstroke
+, readline
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
   pname = "fvwm";

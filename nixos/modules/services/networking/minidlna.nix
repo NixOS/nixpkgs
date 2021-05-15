@@ -24,7 +24,7 @@ in
 
     services.minidlna.mediaDirs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "/data/media" "V,/home/alice/video" ];
       description =
         ''
@@ -64,7 +64,7 @@ in
             (eg. 1$F for Music/Playlists)
           If you specify "B" and the client device is audio-only then
           "Music/Folders" will be used as root.
-         '';
+        '';
     };
 
     services.minidlna.loglevel = mkOption {
@@ -114,11 +114,11 @@ in
     services.minidlna.config = mkOption {
       type = types.lines;
       description =
-      ''
-        The contents of MiniDLNA's configuration file.
-        When the service is activated, a basic template is generated
-        from the current options opened here.
-      '';
+        ''
+          The contents of MiniDLNA's configuration file.
+          When the service is activated, a basic template is generated
+          from the current options opened here.
+        '';
     };
 
     services.minidlna.extraConfig = mkOption {
@@ -139,11 +139,11 @@ in
         wide_links=yes
       '';
       description =
-      ''
-        Extra minidlna options not yet opened for configuration here
-        (strict_dlna, model_number, model_name, etc...).  This is appended
-        to the current service already provided.
-      '';
+        ''
+          Extra minidlna options not yet opened for configuration here
+          (strict_dlna, model_number, model_name, etc...).  This is appended
+          to the current service already provided.
+        '';
     };
   };
 
@@ -173,13 +173,15 @@ in
     users.groups.minidlna.gid = config.ids.gids.minidlna;
 
     systemd.services.minidlna =
-      { description = "MiniDLNA Server";
+      {
+        description = "MiniDLNA Server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
         serviceConfig =
-          { User = "minidlna";
+          {
+            User = "minidlna";
             Group = "minidlna";
             CacheDirectory = "minidlna";
             RuntimeDirectory = "minidlna";

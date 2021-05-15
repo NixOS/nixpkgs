@@ -4,7 +4,7 @@
 , bi
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "trees";
   version = "2018-03-19";
 

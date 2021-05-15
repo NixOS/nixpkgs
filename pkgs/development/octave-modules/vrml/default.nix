@@ -1,12 +1,12 @@
 { buildOctavePackage
 , lib
 , fetchurl
-# Octave dependencies
+  # Octave dependencies
 , linear-algebra
 , miscellaneous
 , struct
 , statistics
-# Runtime dependencies
+  # Runtime dependencies
 , freewrl
 }:
 

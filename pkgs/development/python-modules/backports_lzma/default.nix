@@ -7,7 +7,8 @@
 , pythonOlder
 }:
 
-if !(pythonOlder "3.3") then null else buildPythonPackage rec {
+if !(pythonOlder "3.3") then null else
+buildPythonPackage rec {
   pname = "backports.lzma";
   version = "0.0.14";
 

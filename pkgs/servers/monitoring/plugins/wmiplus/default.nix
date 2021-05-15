@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, txt2man
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
+, txt2man
 , monitoring-plugins
-, wmic-bin ? null }:
+, wmic-bin ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "check-wmiplus";
@@ -20,12 +26,32 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = with perlPackages; [
-    BHooksEndOfScope ClassDataInheritable ClassInspector ClassSingleton
-    ConfigIniFiles DateTime DateTimeLocale DateTimeTimeZone DevelStackTrace
-    EvalClosure ExceptionClass FileShareDir ModuleImplementation ModuleRuntime
-    MROCompat namespaceautoclean namespaceclean NumberFormat PackageStash
-    ParamsValidate ParamsValidationCompiler RoleTiny Specio
-    SubExporterProgressive SubIdentify TryTiny
+    BHooksEndOfScope
+    ClassDataInheritable
+    ClassInspector
+    ClassSingleton
+    ConfigIniFiles
+    DateTime
+    DateTimeLocale
+    DateTimeTimeZone
+    DevelStackTrace
+    EvalClosure
+    ExceptionClass
+    FileShareDir
+    ModuleImplementation
+    ModuleRuntime
+    MROCompat
+    namespaceautoclean
+    namespaceclean
+    NumberFormat
+    PackageStash
+    ParamsValidate
+    ParamsValidationCompiler
+    RoleTiny
+    Specio
+    SubExporterProgressive
+    SubIdentify
+    TryTiny
   ];
 
   nativeBuildInputs = [ makeWrapper txt2man ];

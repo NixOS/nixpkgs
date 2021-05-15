@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, tcl, tk}:
+{ lib, stdenv, fetchurl, tcl, tk }:
 
 stdenv.mkDerivation
 {

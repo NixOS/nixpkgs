@@ -23,7 +23,8 @@
 , python3
 , wrapGAppsHook
 , xapps
-, yelp-tools }:
+, yelp-tools
+}:
 
 let
   pythonenv = python3.withPackages (ps: [

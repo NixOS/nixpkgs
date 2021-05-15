@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , makeWrapper
@@ -23,12 +24,12 @@ let common_meta = {
 };
 in
 ############################
-#
-#  PLUGINS
-#
-############################
+  #
+  #  PLUGINS
+  #
+  ############################
 
-# adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
+  # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 let plugins = {
   v330 = stdenv.mkDerivation rec {
     name = "iscan-v330-bundle";

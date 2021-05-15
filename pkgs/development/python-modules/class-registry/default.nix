@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  nose,
-  six,
-  typing ? null,
-  isPy27,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, nose
+, six
+, typing ? null
+, isPy27
+,
 }:
 
 buildPythonPackage rec {

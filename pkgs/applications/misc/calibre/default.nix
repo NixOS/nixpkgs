@@ -40,7 +40,7 @@ mkDerivation rec {
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
-  escaped_pyqt5_dir = builtins.replaceStrings ["/"] ["\\/"] (toString python3Packages.pyqt5);
+  escaped_pyqt5_dir = builtins.replaceStrings [ "/" ] [ "\\/" ] (toString python3Packages.pyqt5);
 
   prePatch = ''
     sed -i "s/\[tool.sip.project\]/[tool.sip.project]\nsip-include-dirs = [\"${escaped_pyqt5_dir}\/share\/sip\/PyQt5\"]/g" \

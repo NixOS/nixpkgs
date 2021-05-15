@@ -22,7 +22,8 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton
-      { name = "2bwm";
+      {
+        name = "2bwm";
         start =
           ''
             ${pkgs._2bwm}/bin/2bwm &

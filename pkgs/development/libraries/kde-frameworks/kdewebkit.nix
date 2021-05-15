@@ -1,5 +1,10 @@
-{ mkDerivation, extra-cmake-modules
-, kconfig, kcoreaddons, kio, kparts, qtwebkit
+{ mkDerivation
+, extra-cmake-modules
+, kconfig
+, kcoreaddons
+, kio
+, kparts
+, qtwebkit
 }:
 
 mkDerivation {

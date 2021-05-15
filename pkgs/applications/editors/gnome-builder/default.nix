@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , ctags
 , appstream-glib
 , desktop-file-utils

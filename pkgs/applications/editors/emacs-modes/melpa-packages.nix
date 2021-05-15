@@ -1,51 +1,57 @@
 /*
 
-# Updating
+  # Updating
 
-To update the list of packages from MELPA,
+  To update the list of packages from MELPA,
 
-1. Run ./update-melpa
-2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
-3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
+  1. Run ./update-melpa
+  2. Check for evaluation errors:
+  env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
+  env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
+  3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
-## Update from overlay
+  ## Update from overlay
 
-Alternatively, run the following command:
+  Alternatively, run the following command:
 
-./update-from-overlay
+  ./update-from-overlay
 
-It will update both melpa and elpa packages using
-https://github.com/nix-community/emacs-overlay. It's almost
-instantenous and formats commits for you.
+  It will update both melpa and elpa packages using
+  https://github.com/nix-community/emacs-overlay. It's almost
+  instantenous and formats commits for you.
 
 */
 
 { lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        dontConfigure = true;
-      });
-    }) else null;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            dontConfigure = true;
+          });
+        }) else null;
 
   markBroken = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        meta = (drv.meta or { }) // { broken = true; };
-      });
-    }) else null;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            meta = (drv.meta or { }) // { broken = true; };
+          });
+        }) else null;
 
   externalSrc = pkg: epkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        inherit (epkg) src version;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            inherit (epkg) src version;
 
-        propagatedUserEnvPkgs = [ epkg ];
-      });
-    }) else null;
+            propagatedUserEnvPkgs = [ epkg ];
+          });
+        }) else null;
 
   buildWithGit = pkg: pkg.overrideAttrs (attrs: {
     nativeBuildInputs =
@@ -198,8 +204,8 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
-        libgit = super.libgit.overrideAttrs(attrs: {
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
+        libgit = super.libgit.overrideAttrs (attrs: {
+          nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
           buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
           dontUseCmakeBuildDir = true;
           postPatch = ''

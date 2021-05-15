@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
     pybind11
   ];

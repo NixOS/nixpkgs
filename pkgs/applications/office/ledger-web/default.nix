@@ -1,6 +1,10 @@
-{ lib, bundlerApp, bundlerUpdateScript
-, withPostgresql ? true, postgresql
-, withSqlite ? false, sqlite
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, withPostgresql ? true
+, postgresql
+, withSqlite ? false
+, sqlite
 }:
 
 bundlerApp {
@@ -8,8 +12,8 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "ledger_web" ];
 
-  buildInputs =    lib.optional withPostgresql postgresql
-                ++ lib.optional withSqlite sqlite;
+  buildInputs = lib.optional withPostgresql postgresql
+    ++ lib.optional withSqlite sqlite;
 
   passthru.updateScript = bundlerUpdateScript "ledger-web";
 

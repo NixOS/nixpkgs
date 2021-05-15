@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl , alsaLib, }:
+{ lib, stdenv, fetchurl, alsaLib, }:
 
 stdenv.mkDerivation rec {
   pname = "zita-alsa-pcmi";

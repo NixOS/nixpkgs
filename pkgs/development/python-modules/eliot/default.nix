@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hypothesis
     testtools
     pytest
-   ];
+  ];
 
   propagatedBuildInputs = [
     aiocontextvars

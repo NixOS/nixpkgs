@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, rpclib
+{ lib
+, buildDunePackage
+, rpclib
 , lwt
-, alcotest-lwt, ppx_deriving_rpc, yojson
+, alcotest-lwt
+, ppx_deriving_rpc
+, yojson
 }:
 
 buildDunePackage {

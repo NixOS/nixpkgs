@@ -3,7 +3,8 @@
 let
   version = "1.4";
   name = "deer-${version}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchFromGitHub {

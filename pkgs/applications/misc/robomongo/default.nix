@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig,
-  freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, glib
+, xorg
+, dbus
+, fontconfig
+, freetype
+, xkeyboard_config
+, makeDesktopItem
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "robomongo";
@@ -25,7 +36,7 @@ stdenv.mkDerivation rec {
     categories = "Development;IDE;mongodb;";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc

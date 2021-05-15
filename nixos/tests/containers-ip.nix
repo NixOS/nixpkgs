@@ -11,7 +11,8 @@ let
     };
   };
 
-in import ./make-test-python.nix ({ pkgs, lib, ... }: {
+in
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-ipv4-ipv6";
   meta = {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];

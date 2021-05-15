@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "ammonite";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ nequissimus ];
@@ -7,10 +7,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes = {
     amm =
       { pkgs, ... }:
-        {
-          environment.systemPackages = [ (pkgs.ammonite.override { jre = pkgs.jre8; }) ];
-        };
-    };
+      {
+        environment.systemPackages = [ (pkgs.ammonite.override { jre = pkgs.jre8; }) ];
+      };
+  };
 
   testScript = ''
     start_all()

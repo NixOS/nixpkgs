@@ -1,33 +1,87 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
-, perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
-, makeWrapper, autoPatchelfHook
-, attr, libcap, libcap_ng
-, CoreServices, Cocoa, Hypervisor, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python
+, zlib
+, pkg-config
+, glib
+, perl
+, pixman
+, vde2
+, alsaLib
+, texinfo
+, flex
+, bison
+, lzo
+, snappy
+, libaio
+, gnutls
+, nettle
+, curl
+, ninja
+, meson
+, makeWrapper
+, autoPatchelfHook
+, attr
+, libcap
+, libcap_ng
+, CoreServices
+, Cocoa
+, Hypervisor
+, rez
+, setfile
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32
+, numactl
+, seccompSupport ? stdenv.isLinux
+, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
-, usbredirSupport ? spiceSupport, usbredir
-, xenSupport ? false, xen
-, cephSupport ? false, ceph
-, glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, epoxy, libdrm
-, virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
-, smbdSupport ? false, samba
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner
+, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner
+, SDL2
+, SDL2_image
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner
+, gtk3
+, gettext
+, vte
+, wrapGAppsHook
+, vncSupport ? !nixosTestRunner
+, libjpeg
+, libpng
+, smartcardSupport ? !nixosTestRunner
+, libcacard
+, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner
+, spice
+, spice-protocol
+, ncursesSupport ? !nixosTestRunner
+, ncurses
+, usbredirSupport ? spiceSupport
+, usbredir
+, xenSupport ? false
+, xen
+, cephSupport ? false
+, ceph
+, glusterfsSupport ? false
+, glusterfs
+, libuuid
+, openGLSupport ? sdlSupport
+, mesa
+, epoxy
+, libdrm
+, virglSupport ? openGLSupport
+, virglrenderer
+, libiscsiSupport ? true
+, libiscsi
+, smbdSupport ? false
+, samba
 , tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
-                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
-                    else null)
+  then
+    (lib.optional stdenv.isx86_64 "i386-softmmu"
+      ++ [ "${stdenv.hostPlatform.qemuArch}-softmmu" ])
+  else null)
 , nixosTestRunner ? false
 }:
 
@@ -47,7 +101,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
     sha256 = "1f9hz8rf12jm8baa7kda34yl4hyl0xh0c4ap03krfjx23i3img47";
   };
 
@@ -55,9 +109,19 @@ stdenv.mkDerivation rec {
     ++ optionals gtkSupport [ wrapGAppsHook ]
     ++ optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs =
-    [ zlib glib perl pixman
-      vde2 texinfo makeWrapper lzo snappy
-      gnutls nettle curl
+    [
+      zlib
+      glib
+      perl
+      pixman
+      vde2
+      texinfo
+      makeWrapper
+      lzo
+      snappy
+      gnutls
+      nettle
+      curl
     ]
     ++ optionals ncursesSupport [ ncurses ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
@@ -87,7 +151,7 @@ stdenv.mkDerivation rec {
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optionals stdenv.hostPlatform.isMusl [
+  ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch";
       sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
@@ -125,7 +189,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--audio-drv-list=${audio}"
+    [
+      "--audio-drv-list=${audio}"
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"

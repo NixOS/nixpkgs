@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, python3, boost
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, boost
 , cmake
 }:
 
@@ -13,19 +16,19 @@ stdenv.mkDerivation rec {
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "YosysHQ";
-       repo   = "prjtrellis";
-       rev    = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
-       sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
-       name   = "trellis";
-     })
+      owner = "YosysHQ";
+      repo = "prjtrellis";
+      rev = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
+      sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
+      name = "trellis";
+    })
 
     (fetchFromGitHub {
-      owner  = "YosysHQ";
-      repo   = "prjtrellis-db";
-      rev    = "2cf058e7a3ba36134d21e34823e9b2ecaaceac2c";
+      owner = "YosysHQ";
+      repo = "prjtrellis-db";
+      rev = "2cf058e7a3ba36134d21e34823e9b2ecaaceac2c";
       sha256 = "1hjaw5jkwiaiznm2z0smy88m2cdz63cd51z4nibajfih7ikvkj6g";
-      name   = "trellis-database";
+      name = "trellis-database";
     })
   ];
   sourceRoot = "trellis";
@@ -46,16 +49,16 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description     = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
+    description = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
       Project Trellis documents the Lattice ECP5 architecture
       to enable development of open-source tools. Its goal is
       to provide sufficient information to develop a free and
       open Verilog to bitstream toolchain for these devices.
     '';
-    homepage    = "https://github.com/SymbiFlow/prjtrellis";
-    license     = lib.licenses.isc;
+    homepage = "https://github.com/SymbiFlow/prjtrellis";
+    license = lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

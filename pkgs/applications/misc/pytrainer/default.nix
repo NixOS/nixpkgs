@@ -24,7 +24,8 @@ let
       };
     });
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.0.2";
 
@@ -60,7 +61,10 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ perl gpsbabel ])
   ];
 
   checkInputs = [

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];

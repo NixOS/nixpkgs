@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , colorama
 , coverage
 , termstyle
@@ -18,7 +21,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    colorama coverage termstyle unidecode lxml
+    colorama
+    coverage
+    termstyle
+    unidecode
+    lxml
   ];
 
   # let green run it's own test suite

@@ -1,5 +1,6 @@
 { fetchurl
-, lib, stdenv
+, lib
+, stdenv
 , meson
 , ninja
 , gettext

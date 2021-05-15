@@ -1,7 +1,11 @@
-{
-  mkDerivation, lib, propagate,
-  extra-cmake-modules,
-  kwayland, libXrandr, qtbase, qtx11extras
+{ mkDerivation
+, lib
+, propagate
+, extra-cmake-modules
+, kwayland
+, libXrandr
+, qtbase
+, qtx11extras
 }:
 
 mkDerivation {

@@ -11,11 +11,12 @@ let
     '';
 
   generateConfig = extraLabels: {
-    metrics = (map (path: {
-      name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
-      path = "{ .${path} }";
-      labels = extraLabels;
-    }) [
+    metrics = (map
+      (path: {
+        name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
+        path = "{ .${path} }";
+        labels = extraLabels;
+      }) [
       "actions.'add header'"
       "actions.'no action'"
       "actions.'rewrite subject'"
@@ -41,10 +42,12 @@ let
       name = "rspamd_statfiles";
       type = "object";
       path = "$.statfiles[*]";
-      labels = recursiveUpdate {
-        symbol = "$.symbol";
-        type = "$.type";
-      } extraLabels;
+      labels = recursiveUpdate
+        {
+          symbol = "$.symbol";
+          type = "$.type";
+        }
+        extraLabels;
       values = {
         revision = "$.revision";
         size = "$.size";
@@ -94,6 +97,6 @@ in
       For more information, take a look at the official documentation
       (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
-     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
 }

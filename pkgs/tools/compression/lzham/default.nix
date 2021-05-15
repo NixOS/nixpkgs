@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake } :
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation {
   name = "lzham-1.0";

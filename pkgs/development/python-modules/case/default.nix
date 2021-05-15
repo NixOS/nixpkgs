@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, six, nose, unittest2, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, nose
+, unittest2
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "case";

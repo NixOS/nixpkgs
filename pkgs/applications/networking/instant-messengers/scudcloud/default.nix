@@ -1,7 +1,8 @@
 { lib, fetchurl, python3Packages }:
 
 let version = "1.63";
-in python3Packages.buildPythonPackage {
+in
+python3Packages.buildPythonPackage {
   name = "scudcloud-${version}";
 
   src = fetchurl {

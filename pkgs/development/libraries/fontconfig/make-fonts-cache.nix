@@ -1,16 +1,16 @@
 { runCommand, lib, fontconfig, fontDirectories }:
 
 runCommand "fc-cache"
-  {
-    nativeBuildInputs = [ fontconfig.bin ];
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    passAsFile = [ "fontDirs" ];
-    fontDirs = ''
-      <!-- Font directories -->
-      ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
-    '';
-  }
+{
+  nativeBuildInputs = [ fontconfig.bin ];
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+  passAsFile = [ "fontDirs" ];
+  fontDirs = ''
+    <!-- Font directories -->
+    ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
+  '';
+}
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
 

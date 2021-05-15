@@ -43,7 +43,8 @@ let
     outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name src;
 
   nativeBuildInputs = [ makeWrapper ];

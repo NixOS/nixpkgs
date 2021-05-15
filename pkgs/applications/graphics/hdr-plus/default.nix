@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, halide
-, libpng, libjpeg, libtiff, libraw
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, halide
+, libpng
+, libjpeg
+, libtiff
+, libraw
 }:
 
 stdenv.mkDerivation rec {

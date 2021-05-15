@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, gnome, dconf, nautilus
-, gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, pcre2
-, libxslt, docbook-xsl-nons }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxml2
+, gnome
+, dconf
+, nautilus
+, gtk3
+, gsettings-desktop-schemas
+, vte
+, gettext
+, which
+, libuuid
+, vala
+, desktop-file-utils
+, itstool
+, wrapGAppsHook
+, pcre2
+, libxslt
+, docbook-xsl-nons
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
@@ -13,14 +31,27 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk3 gsettings-desktop-schemas vte libuuid dconf
+    gtk3
+    gsettings-desktop-schemas
+    vte
+    libuuid
+    dconf
     # For extension
     nautilus
   ];
 
   nativeBuildInputs = [
-    pkg-config gettext itstool which libxml2 libxslt docbook-xsl-nons
-    vala desktop-file-utils wrapGAppsHook pcre2
+    pkg-config
+    gettext
+    itstool
+    which
+    libxml2
+    libxslt
+    docbook-xsl-nons
+    vala
+    desktop-file-utils
+    wrapGAppsHook
+    pcre2
   ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the

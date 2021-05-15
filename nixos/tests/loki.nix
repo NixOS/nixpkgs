@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
           http_listen_port = 9080;
           grpc_listen_port = 0;
         };
-        clients = [ { url = "http://localhost:3100/loki/api/v1/push"; } ];
+        clients = [{ url = "http://localhost:3100/loki/api/v1/push"; }];
         scrape_configs = [
           {
             job_name = "system";

@@ -1,5 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytestCheckHook, autoconf
-, automake, cmake, gcc, libtool, perl, simplejson }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
+, autoconf
+, automake
+, cmake
+, gcc
+, libtool
+, perl
+, simplejson
+}:
 
 buildPythonPackage rec {
   pname = "awslambdaric";

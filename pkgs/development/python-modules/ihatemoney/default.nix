@@ -1,4 +1,10 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, isPy27
+, nixosTests
+, fetchpatch
+, fetchPypi
 , alembic
 , aniso8601
 , Babel
@@ -114,13 +120,14 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    flask_testing pytestCheckHook
+    flask_testing
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
   disabledTests = [
-    "test_notifications"  # requires running service.
-    "test_invite"         # requires running service.
+    "test_notifications" # requires running service.
+    "test_invite" # requires running service.
   ];
 
   passthru.tests = {

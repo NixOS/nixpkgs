@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gettext, gnome, packagekit, polkit
-, gtk3, systemd, wrapGAppsHook, desktop-file-utils }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, gnome
+, packagekit
+, polkit
+, gtk3
+, systemd
+, wrapGAppsHook
+, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-packagekit";
@@ -11,7 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config meson ninja gettext wrapGAppsHook desktop-file-utils
+    pkg-config
+    meson
+    ninja
+    gettext
+    wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [ gtk3 packagekit systemd polkit ];

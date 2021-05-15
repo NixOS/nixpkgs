@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Calculates statistics on the keys in your gpg key-ring";
     longDescription = ''
-    GPGstats calculates statistics on the keys in your key-ring.
+      GPGstats calculates statistics on the keys in your key-ring.
     '';
     homepage = "http://www.vanheusden.com/gpgstats/";
     license = licenses.gpl2;

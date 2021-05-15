@@ -15,16 +15,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   libPath = lib.makeLibraryPath [
-      xorg.libX11
-      xorg.libxcb
-      freetype
-      fontconfig
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      stdenv.cc.cc
-      glibc
-      libGLU libGL
+    xorg.libX11
+    xorg.libxcb
+    freetype
+    fontconfig
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    stdenv.cc.cc
+    glibc
+    libGLU
+    libGL
   ];
 
   installPhase = ''

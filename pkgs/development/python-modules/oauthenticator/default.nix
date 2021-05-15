@@ -37,9 +37,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-  # The constraint was removed. No longer needed for > 14.0.0
-  # https://github.com/jupyterhub/oauthenticator/pull/431
-    substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
+    # The constraint was removed. No longer needed for > 14.0.0
+    # https://github.com/jupyterhub/oauthenticator/pull/431
+      substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
   '';
 
   disabledTests = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
-    homepage =  "https://github.com/jupyterhub/oauthenticator";
+    homepage = "https://github.com/jupyterhub/oauthenticator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie ];
   };

@@ -103,10 +103,10 @@ let
     });
 
     insect = super.insect.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
+      nativeBuildInputs = drv.nativeBuildInputs or [ ] ++ [ pkgs.psc-package self.pulp ];
     });
 
-    makam =  super.makam.override {
+    makam = super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
         wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}
@@ -120,32 +120,33 @@ let
 
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
-      postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
-      in
-      ''
-        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
-          --replace "/usr/local" ""
+      postInstall =
+        let
+          runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
+        in
+        ''
+          substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
+            --replace "/usr/local" ""
 
-        # XXX: Files copied from the Nix store are non-writable, so they need
-        # to be given explicit write permissions
-        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
-          --replace 'fs.copyFileSync("config/server.yml", path);' \
-                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
-                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/channels.yml", path);' \
-                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
+          # XXX: Files copied from the Nix store are non-writable, so they need
+          # to be given explicit write permissions
+          substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
+            --replace 'fs.copyFileSync("config/server.yml", path);' \
+                      'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
+            --replace 'fs.copyFileSync("config/tuners.yml", path);' \
+                      'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
+            --replace 'fs.copyFileSync("config/channels.yml", path);' \
+                      'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
 
-        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-        # server.  However, we invoke the server directly and let systemd
-        # manage it to avoid complication. This is okay since no features
-        # unique to PM2 is currently being used.
-        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
-          --add-flags "start" \
-          --run "cd $out/lib/node_modules/mirakurun" \
-          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
-      '';
+          # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
+          # server.  However, we invoke the server directly and let systemd
+          # manage it to avoid complication. This is okay since no features
+          # unique to PM2 is currently being used.
+          makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
+            --add-flags "start" \
+            --run "cd $out/lib/node_modules/mirakurun" \
+            --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
+        '';
     };
 
     node-inspector = super.node-inspector.override {
@@ -165,18 +166,19 @@ let
     };
 
     mermaid-cli = super."@mermaid-js/mermaid-cli".override (
-    if stdenv.isDarwin
-    then {}
-    else {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/mmdc \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    });
+      if stdenv.isDarwin
+      then { }
+      else {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        prePatch = ''
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+        '';
+        postInstall = ''
+          wrapProgram $out/bin/mmdc \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+        '';
+      }
+    );
 
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -185,16 +187,18 @@ let
         sed 's/"link:/"file:/g' --in-place package.json
       '';
 
-      postInstall = let
-        pnpmLibPath = pkgs.lib.makeBinPath [
-          nodejs.passthru.python
-          nodejs
-        ];
-      in ''
-        for prog in $out/bin/*; do
-          wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-        done
-      '';
+      postInstall =
+        let
+          pnpmLibPath = pkgs.lib.makeBinPath [
+            nodejs.passthru.python
+            nodejs
+          ];
+        in
+        ''
+          for prog in $out/bin/*; do
+            wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
+          done
+        '';
     };
 
     pulp = super.pulp.override {
@@ -202,7 +206,7 @@ let
       npmFlags = "--ignore-scripts";
 
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      postInstall =  ''
+      postInstall = ''
         wrapProgram "$out/bin/pulp" --suffix PATH : ${pkgs.lib.makeBinPath [
           pkgs.purescript
         ]}
@@ -278,18 +282,18 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
-        postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
-        '';
+      # npx tries to install vega from scratch at vegalite runtime if it
+      # can't find it. We thus replace it with a direct call to the nix
+      # derivation. This might not be necessary anymore in future vl
+      # versions: https://github.com/vega/vega-lite/issues/6863.
+      postInstall = ''
+        substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
+          --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
+        substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
+          --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
+        substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
+          --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+      '';
     };
 
     webtorrent-cli = super.webtorrent-cli.override {
@@ -327,4 +331,5 @@ let
       '';
     };
   };
-in self
+in
+self

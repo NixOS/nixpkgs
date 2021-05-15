@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , libX11
 , libXt
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libXt
+    libX11
+    libXt
   ] ++ lib.optionals withJpegSupport [
     libjpeg
   ] ++ lib.optionals withPngSupport [
@@ -83,6 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [ andrew-d ];
-    platforms = lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.linux; # arbitrary choice
   };
 }

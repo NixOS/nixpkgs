@@ -1,7 +1,20 @@
-{ buildPythonPackage, fetchFromGitHub, fetchpatch, lib, pythonOlder
-, clang_7, python2
-, graphviz, matplotlib, numpy, pandas, plotly, scipy, six
-, withCuda ? false, cudatoolkit }:
+{ buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, lib
+, pythonOlder
+, clang_7
+, python2
+, graphviz
+, matplotlib
+, numpy
+, pandas
+, plotly
+, scipy
+, six
+, withCuda ? false
+, cudatoolkit
+}:
 
 buildPythonPackage rec {
   pname = "catboost";
@@ -32,7 +45,7 @@ buildPythonPackage rec {
 
   preBuild = ''
     cd catboost/python-package
-    '';
+  '';
   setupPyBuildFlags = [ "--with-ymake=no" ];
   CUDA_ROOT = lib.optional withCuda cudatoolkit;
   enableParallelBuilding = true;

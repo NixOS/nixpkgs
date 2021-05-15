@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     homepage = "http://viric.name/cgi-bin/btar";
     platforms = with lib.platforms; all;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

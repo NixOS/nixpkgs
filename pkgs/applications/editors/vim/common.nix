@@ -22,9 +22,9 @@ rec {
 
   meta = with lib; {
     description = "The most popular clone of the VI editor";
-    homepage    = "http://www.vim.org";
-    license     = licenses.vim;
+    homepage = "http://www.vim.org";
+    license = licenses.vim;
     maintainers = with maintainers; [ lovek323 equirosa ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

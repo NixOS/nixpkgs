@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjson, json_c, gengetopt, flex, byacc, gmp
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libjson
+, json_c
+, gengetopt
+, flex
+, byacc
+, gmp
 , libpcap
 }:
 

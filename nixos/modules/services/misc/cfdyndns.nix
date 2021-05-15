@@ -33,7 +33,7 @@ in
       };
 
       records = mkOption {
-        default = [];
+        default = [ ];
         example = [ "host.tld" ];
         type = types.listOf types.str;
         description = ''
@@ -55,8 +55,8 @@ in
         Group = config.ids.gids.cfdyndns;
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_EMAIL = "${cfg.email}";
+        CLOUDFLARE_RECORDS = "${concatStringsSep "," cfg.records}";
       };
       script = ''
         ${optionalString (cfg.apikeyFile != null) ''

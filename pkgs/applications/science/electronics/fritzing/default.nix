@@ -1,5 +1,15 @@
-{ mkDerivation, lib, fetchpatch, fetchFromGitHub, qmake, pkg-config
-, qtbase, qtsvg, qttools, qtserialport, boost, libgit2
+{ mkDerivation
+, lib
+, fetchpatch
+, fetchFromGitHub
+, qmake
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, qtserialport
+, boost
+, libgit2
 }:
 
 let
@@ -34,11 +44,13 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
 
-  patches = [(fetchpatch {
-    name = "fix-libgit2-version.patch";
-    url = "https://github.com/fritzing/fritzing-app/commit/472951243d70eeb40a53b1f7e16e6eab0588d079.patch";
-    sha256 = "0v1zi609cjnqac80xgnk23n54z08g1lia37hbzfl8jcq9sn9adak";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "fix-libgit2-version.patch";
+      url = "https://github.com/fritzing/fritzing-app/commit/472951243d70eeb40a53b1f7e16e6eab0588d079.patch";
+      sha256 = "0v1zi609cjnqac80xgnk23n54z08g1lia37hbzfl8jcq9sn9adak";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace phoenix.pro \

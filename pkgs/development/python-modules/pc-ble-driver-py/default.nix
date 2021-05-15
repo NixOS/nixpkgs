@@ -1,5 +1,20 @@
-{ lib, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver, pythonOlder
-, buildPythonPackage, enum34, wrapt, future, setuptools, scikit-build, pythonAtLeast }:
+{ lib
+, fetchFromGitHub
+, cmake
+, git
+, swig
+, boost
+, udev
+, pc-ble-driver
+, pythonOlder
+, buildPythonPackage
+, enum34
+, wrapt
+, future
+, setuptools
+, scikit-build
+, pythonAtLeast
+}:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";

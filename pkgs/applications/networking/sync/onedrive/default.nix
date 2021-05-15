@@ -1,6 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, ldc, installShellFiles, pkg-config
-, curl, sqlite, libnotify
-, withSystemd ? stdenv.isLinux, systemd ? null }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, ldc
+, installShellFiles
+, pkg-config
+, curl
+, sqlite
+, libnotify
+, withSystemd ? stdenv.isLinux
+, systemd ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
@@ -16,7 +26,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
 
   buildInputs = [
-    curl sqlite libnotify
+    curl
+    sqlite
+    libnotify
   ] ++ lib.optional withSystemd systemd;
 
   configureFlags = [

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cairo
 , fetchFromGitHub
 , gettext
@@ -16,7 +17,8 @@
 , sphinx
 , util-linux
 , wrapGAppsHook
-, withGui ? false }:
+, withGui ? false
+}:
 
 assert withGui -> !stdenv.isDarwin;
 

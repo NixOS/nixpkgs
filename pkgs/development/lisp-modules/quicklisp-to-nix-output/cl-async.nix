@@ -17,26 +17,26 @@ rec {
 
   packageName = "cl-async";
 
-  asdFilesToKeep = ["cl-async.asd"];
+  asdFilesToKeep = [ "cl-async.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-async DESCRIPTION Asynchronous operations for Common Lisp. SHA256
-    08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4 URL
-    http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz
-    MD5 0954743eb96f941aa27ff09bceff91dc NAME cl-async FILENAME cl-async DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
-     (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
-     (NAME cffi-toolchain FILENAME cffi-toolchain)
-     (NAME cl-libuv FILENAME cl-libuv) (NAME cl-ppcre FILENAME cl-ppcre)
-     (NAME fast-io FILENAME fast-io)
-     (NAME static-vectors FILENAME static-vectors)
-     (NAME trivial-features FILENAME trivial-features)
-     (NAME trivial-gray-streams FILENAME trivial-gray-streams)
-     (NAME uiop FILENAME uiop) (NAME vom FILENAME vom))
-    DEPENDENCIES
-    (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain cl-libuv
-     cl-ppcre fast-io static-vectors trivial-features trivial-gray-streams uiop
-     vom)
-    VERSION 20210228-git SIBLINGS (cl-async-repl cl-async-ssl cl-async-test)
+  08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4 URL
+  http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz
+  MD5 0954743eb96f941aa27ff09bceff91dc NAME cl-async FILENAME cl-async DEPS
+  ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+   (NAME bordeaux-threads FILENAME bordeaux-threads)
+   (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+   (NAME cffi-toolchain FILENAME cffi-toolchain)
+   (NAME cl-libuv FILENAME cl-libuv) (NAME cl-ppcre FILENAME cl-ppcre)
+   (NAME fast-io FILENAME fast-io)
+   (NAME static-vectors FILENAME static-vectors)
+   (NAME trivial-features FILENAME trivial-features)
+   (NAME trivial-gray-streams FILENAME trivial-gray-streams)
+   (NAME uiop FILENAME uiop) (NAME vom FILENAME vom))
+  DEPENDENCIES
+  (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain cl-libuv
+   cl-ppcre fast-io static-vectors trivial-features trivial-gray-streams uiop
+   vom)
+  VERSION 20210228-git SIBLINGS (cl-async-repl cl-async-ssl cl-async-test)
     PARASITES (cl-async-base cl-async-util)) */

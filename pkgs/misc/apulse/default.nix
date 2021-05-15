@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib, cmake, pkg-config, glib
-, tracingSupport ? true, logToStderr ? true }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsaLib
+, cmake
+, pkg-config
+, glib
+, tracingSupport ? true
+, logToStderr ? true
+}:
 
 let oz = x: if x then "1" else "0"; in
 

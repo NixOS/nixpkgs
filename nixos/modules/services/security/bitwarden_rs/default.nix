@@ -11,21 +11,28 @@ let
   nameToEnvVar = name:
     let
       parts = builtins.split "([A-Z0-9]+)" name;
-      partsToEnvVar = parts: foldl' (key: x: let last = stringLength key - 1; in
-        if isList x then key + optionalString (key != "" && substring last 1 key != "_") "_" + head x
-        else if key != "" && elem (substring 0 1 x) lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
-          substring 0 last key + optionalString (substring (last - 1) 1 key != "_") "_" + substring last 1 key + toUpper x
-        else key + toUpper x) "" parts;
-    in if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
+      partsToEnvVar = parts: foldl'
+        (key: x:
+          let last = stringLength key - 1; in
+          if isList x then key + optionalString (key != "" && substring last 1 key != "_") "_" + head x
+          else if key != "" && elem (substring 0 1 x) lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
+            substring 0 last key + optionalString (substring (last - 1) 1 key != "_") "_" + substring last 1 key + toUpper x
+          else key + toUpper x) ""
+        parts;
+    in
+    if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
 
   # Due to the different naming schemes allowed for config keys,
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
-        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
-      ) cfg.config));
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+      configEnv = listToAttrs (concatLists (mapAttrsToList
+        (name: value:
+          if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else [ ]
+        )
+        cfg.config));
+    in
+    { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${pkgs.bitwarden_rs-vault}/share/bitwarden_rs/vault";
     } // configEnv;
 
@@ -33,7 +40,8 @@ let
 
   bitwarden_rs = pkgs.bitwarden_rs.override { inherit (cfg) dbBackend; };
 
-in {
+in
+{
   options.services.bitwarden_rs = with types; {
     enable = mkEnableOption "bitwarden_rs";
 
@@ -55,7 +63,7 @@ in {
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
-      default = {};
+      default = { };
       example = literalExample ''
         {
           domain = "https://bw.domain.tld:8443";
@@ -101,10 +109,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [ {
+    assertions = [{
       assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
       message = "Backups for database backends other than sqlite will need customization";
-    } ];
+    }];
 
     users.users.bitwarden_rs = {
       inherit group;

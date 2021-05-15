@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
-     mkdir -pv $out/bin
-     cp $src $out/jython.jar
-     makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
+    mkdir -pv $out/bin
+    cp $src $out/jython.jar
+    makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
   '';
 
   meta = {

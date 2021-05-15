@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  KERNEL_SRC="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  KERNEL_SRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   buildPhase = ''
     for d in ashmem binder;do

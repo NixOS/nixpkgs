@@ -35,19 +35,19 @@ in
         default = "";
         description = "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = literalExample ''
-          error_log {
-            filename /var/log/sniproxy/error.log
+            error_log {
+              filename /var/log/sniproxy/error.log
+            }
+            access_log {
+              filename /var/log/sniproxy/access.log
+            }
+            listen 443 {
+              proto tls
+            }
+            table {
+              example.com 192.0.2.10
+              example.net 192.0.2.20
           }
-          access_log {
-            filename /var/log/sniproxy/access.log
-          }
-          listen 443 {
-            proto tls
-          }
-          table {
-            example.com 192.0.2.10
-            example.net 192.0.2.20
-        }
         '';
       };
 

@@ -1,18 +1,21 @@
 { lib, stdenv, chicken, makeWrapper }:
-{ name, src
-, buildInputs ? []
-, chickenInstallFlags ? []
-, cscOptions          ? []
-, ...} @ args:
+{ name
+, src
+, buildInputs ? [ ]
+, chickenInstallFlags ? [ ]
+, cscOptions ? [ ]
+, ...
+} @ args:
 
 let
   overrides = import ./overrides.nix;
   baseName = lib.getName name;
-  override = if builtins.hasAttr baseName overrides
-   then
-     builtins.getAttr baseName overrides
-   else
-     {};
+  override =
+    if builtins.hasAttr baseName overrides
+    then
+      builtins.getAttr baseName overrides
+    else
+      { };
 in
 stdenv.mkDerivation ({
   name = "chicken-${name}";
@@ -39,4 +42,4 @@ stdenv.mkDerivation ({
 
     runHook postInstall
   '';
-} // (builtins.removeAttrs args ["name" "buildInputs"]) // override)
+} // (builtins.removeAttrs args [ "name" "buildInputs" ]) // override)

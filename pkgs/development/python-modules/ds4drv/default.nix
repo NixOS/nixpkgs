@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, evdev, pyudev
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, evdev
+, pyudev
 , bluez
 }:
 

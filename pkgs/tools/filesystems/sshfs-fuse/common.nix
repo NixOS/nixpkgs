@@ -1,15 +1,25 @@
 { version, sha256, platforms, patches ? [ ] }:
 
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja, docutils, makeWrapper
-, fuse3, macfuse-stubs, glib
-, which, python3Packages
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, docutils
+, makeWrapper
+, fuse3
+, macfuse-stubs
+, glib
+, which
+, python3Packages
 , openssh
 }:
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sshfs-fuse";
   inherit version;
 

@@ -1,7 +1,27 @@
-{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, ppx_cstruct, cstruct
-, cstruct-sexp, sexplib, mirage-crypto, mirage-crypto-pk, mirage-crypto-rng
-, x509, domain-name, fmt, cstruct-unix, ounit2, ocaml_lwt, ptime, rresult
-, mirage-crypto-ec, hkdf, logs, alcotest }:
+{ lib
+, fetchurl
+, buildDunePackage
+, ppx_sexp_conv
+, ppx_cstruct
+, cstruct
+, cstruct-sexp
+, sexplib
+, mirage-crypto
+, mirage-crypto-pk
+, mirage-crypto-rng
+, x509
+, domain-name
+, fmt
+, cstruct-unix
+, ounit2
+, ocaml_lwt
+, ptime
+, rresult
+, mirage-crypto-ec
+, hkdf
+, logs
+, alcotest
+}:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.08";
@@ -19,10 +39,25 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ cstruct-unix ounit2 alcotest ];
 
-  propagatedBuildInputs = [ ppx_sexp_conv ppx_cstruct cstruct cstruct-sexp
-                            sexplib mirage-crypto mirage-crypto-pk mirage-crypto-rng
-                            x509 domain-name fmt ocaml_lwt ptime mirage-crypto-ec
-                            hkdf logs rresult ];
+  propagatedBuildInputs = [
+    ppx_sexp_conv
+    ppx_cstruct
+    cstruct
+    cstruct-sexp
+    sexplib
+    mirage-crypto
+    mirage-crypto-pk
+    mirage-crypto-rng
+    x509
+    domain-name
+    fmt
+    ocaml_lwt
+    ptime
+    mirage-crypto-ec
+    hkdf
+    logs
+    rresult
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-tls";

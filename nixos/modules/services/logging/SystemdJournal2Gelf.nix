@@ -5,7 +5,8 @@ with lib;
 let cfg = config.services.SystemdJournal2Gelf;
 in
 
-{ options = {
+{
+  options = {
     services.SystemdJournal2Gelf = {
       enable = mkOption {
         type = types.bool;

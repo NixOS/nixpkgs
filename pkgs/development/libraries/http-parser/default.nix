@@ -2,7 +2,8 @@
 
 let
   version = "2.9.4";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "http-parser";
   inherit version;
 

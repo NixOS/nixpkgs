@@ -22,9 +22,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Emacs major mode for Cedille";
-    homepage    = cedille.meta.homepage;
-    license     = cedille.meta.license ;
-    platforms   = cedille.meta.platforms;
+    homepage = cedille.meta.homepage;
+    license = cedille.meta.license;
+    platforms = cedille.meta.platforms;
     maintainers = cedille.meta.maintainers;
   };
 }

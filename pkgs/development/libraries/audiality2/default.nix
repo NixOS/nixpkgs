@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
-# The two audio backends:
+  # The two audio backends:
 , SDL2
 , jack2
 }:

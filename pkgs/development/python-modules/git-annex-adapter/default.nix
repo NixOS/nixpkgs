@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
-, python, util-linux, pygit2, gitMinimal, git-annex, cacert
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, fetchpatch
+, substituteAll
+, python
+, util-linux
+, pygit2
+, gitMinimal
+, git-annex
+, cacert
 }:
 
 buildPythonPackage rec {

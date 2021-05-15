@@ -22,7 +22,8 @@ let
     categories = "Development;";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ghidra";
   version = "9.2.3";
   versiondate = "20210325";

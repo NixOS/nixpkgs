@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.is64bit "install64";
+    ++ lib.optional stdenv.is64bit "install64";
 
   meta = {
     description = "The ERESI Reverse Engineering Software Interface";

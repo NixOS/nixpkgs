@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, libungif, libtiff
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, zlib
+, libpng
+, libjpeg
+, libungif
+, libtiff
 }:
 
 stdenv.mkDerivation rec {

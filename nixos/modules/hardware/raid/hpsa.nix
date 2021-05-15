@@ -40,7 +40,8 @@ let
       maintainers = with maintainers; [ volth ];
     };
   };
-in {
+in
+{
   ###### interface
 
   options = {

@@ -1,6 +1,22 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
+{ mkDerivation
+, lib
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, xdg-utils
+, dbus
+, qtbase
+, qtwebkit
+, qtx11extras
+, qtquickcontrols
+, glibc
+, libXrandr
+, libX11
+, libXext
+, libXdamage
+, libXtst
+, libSM
+, libXfixes
 , wrapQtAppsHook
 }:
 

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, libsndfile, rapidjson
-, libjack2, lv2, libX11, cairo }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, libsndfile
+, rapidjson
+, libjack2
+, lv2
+, libX11
+, cairo
+}:
 
 stdenv.mkDerivation rec {
   pname = "geonkick";

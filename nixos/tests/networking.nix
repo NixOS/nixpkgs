@@ -1,8 +1,9 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
-# bool: whether to use networkd in the tests
-, networkd }:
+  # bool: whether to use networkd in the tests
+, networkd
+}:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -14,7 +15,8 @@ let
     with pkgs.lib;
     let
       vlanIfs = range 1 (length config.virtualisation.vlans);
-    in {
+    in
+    {
       environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
       virtualisation.vlans = [ 1 2 3 ];
       boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
@@ -25,8 +27,8 @@ let
         firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (forEach vlanIfs (n:
           nameValuePair "eth${toString n}" {
-            ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24; } ];
-            ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];
+            ipv4.addresses = [{ address = "192.168.${toString n}.1"; prefixLength = 24; }];
+            ipv6.addresses = [{ address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; }];
           })));
       };
       services.dhcpd4 = {
@@ -240,90 +242,94 @@ let
               router.fail("ping -c 1 192.168.2.2")
         '';
     };
-    bond = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
-        virtualisation.vlans = [ 1 2 ];
-        networking = {
-          useNetworkd = networkd;
-          useDHCP = false;
-          bonds.bond = {
-            interfaces = [ "eth1" "eth2" ];
-            driverOptions.mode = "balance-rr";
+    bond =
+      let
+        node = address: { pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ 1 2 ];
+          networking = {
+            useNetworkd = networkd;
+            useDHCP = false;
+            bonds.bond = {
+              interfaces = [ "eth1" "eth2" ];
+              driverOptions.mode = "balance-rr";
+            };
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.bond.ipv4.addresses = mkOverride 0
+              [{ inherit address; prefixLength = 30; }];
           };
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.bond.ipv4.addresses = mkOverride 0
-            [ { inherit address; prefixLength = 30; } ];
         };
+      in
+      {
+        name = "Bond";
+        nodes.client1 = node "192.168.1.1";
+        nodes.client2 = node "192.168.1.2";
+        testScript = { ... }:
+          ''
+            start_all()
+
+            with subtest("Wait for networking to come up"):
+                client1.wait_for_unit("network.target")
+                client2.wait_for_unit("network.target")
+
+            with subtest("Test bonding"):
+                client1.wait_until_succeeds("ping -c 2 192.168.1.1")
+                client1.wait_until_succeeds("ping -c 2 192.168.1.2")
+
+                client2.wait_until_succeeds("ping -c 2 192.168.1.1")
+                client2.wait_until_succeeds("ping -c 2 192.168.1.2")
+          '';
       };
-    in {
-      name = "Bond";
-      nodes.client1 = node "192.168.1.1";
-      nodes.client2 = node "192.168.1.2";
-      testScript = { ... }:
-        ''
-          start_all()
-
-          with subtest("Wait for networking to come up"):
-              client1.wait_for_unit("network.target")
-              client2.wait_for_unit("network.target")
-
-          with subtest("Test bonding"):
-              client1.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client1.wait_until_succeeds("ping -c 2 192.168.1.2")
-
-              client2.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client2.wait_until_succeeds("ping -c 2 192.168.1.2")
-        '';
-    };
-    bridge = let
-      node = { address, vlan }: { pkgs, ... }: with pkgs.lib; {
-        virtualisation.vlans = [ vlan ];
-        networking = {
-          useNetworkd = networkd;
-          useDHCP = false;
-          interfaces.eth1.ipv4.addresses = mkOverride 0
-            [ { inherit address; prefixLength = 24; } ];
+    bridge =
+      let
+        node = { address, vlan }: { pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ vlan ];
+          networking = {
+            useNetworkd = networkd;
+            useDHCP = false;
+            interfaces.eth1.ipv4.addresses = mkOverride 0
+              [{ inherit address; prefixLength = 24; }];
+          };
         };
-      };
-    in {
-      name = "Bridge";
-      nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
-      nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
-      nodes.router = { pkgs, ... }: with pkgs.lib; {
-        virtualisation.vlans = [ 1 2 ];
-        networking = {
-          useNetworkd = networkd;
-          useDHCP = false;
-          bridges.bridge.interfaces = [ "eth1" "eth2" ];
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.bridge.ipv4.addresses = mkOverride 0
-            [ { address = "192.168.1.1"; prefixLength = 24; } ];
+      in
+      {
+        name = "Bridge";
+        nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
+        nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
+        nodes.router = { pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ 1 2 ];
+          networking = {
+            useNetworkd = networkd;
+            useDHCP = false;
+            bridges.bridge.interfaces = [ "eth1" "eth2" ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.bridge.ipv4.addresses = mkOverride 0
+              [{ address = "192.168.1.1"; prefixLength = 24; }];
+          };
         };
+        testScript = { ... }:
+          ''
+            start_all()
+
+            with subtest("Wait for networking to come up"):
+                for machine in client1, client2, router:
+                    machine.wait_for_unit("network.target")
+
+            with subtest("Test bridging"):
+                client1.wait_until_succeeds("ping -c 1 192.168.1.1")
+                client1.wait_until_succeeds("ping -c 1 192.168.1.2")
+                client1.wait_until_succeeds("ping -c 1 192.168.1.3")
+
+                client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+                client2.wait_until_succeeds("ping -c 1 192.168.1.2")
+                client2.wait_until_succeeds("ping -c 1 192.168.1.3")
+
+                router.wait_until_succeeds("ping -c 1 192.168.1.1")
+                router.wait_until_succeeds("ping -c 1 192.168.1.2")
+                router.wait_until_succeeds("ping -c 1 192.168.1.3")
+          '';
       };
-      testScript = { ... }:
-        ''
-          start_all()
-
-          with subtest("Wait for networking to come up"):
-              for machine in client1, client2, router:
-                  machine.wait_for_unit("network.target")
-
-          with subtest("Test bridging"):
-              client1.wait_until_succeeds("ping -c 1 192.168.1.1")
-              client1.wait_until_succeeds("ping -c 1 192.168.1.2")
-              client1.wait_until_succeeds("ping -c 1 192.168.1.3")
-
-              client2.wait_until_succeeds("ping -c 1 192.168.1.1")
-              client2.wait_until_succeeds("ping -c 1 192.168.1.2")
-              client2.wait_until_succeeds("ping -c 1 192.168.1.3")
-
-              router.wait_until_succeeds("ping -c 1 192.168.1.1")
-              router.wait_until_succeeds("ping -c 1 192.168.1.2")
-              router.wait_until_succeeds("ping -c 1 192.168.1.3")
-        '';
-    };
     macvlan = {
       name = "MACVLAN";
       nodes.router = router;
@@ -380,96 +386,100 @@ let
               router.wait_until_succeeds("ping -c 1 192.168.1.3")
         '';
     };
-    sit = let
-      node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
-        virtualisation.vlans = [ 1 ];
-        networking = {
-          useNetworkd = networkd;
-          firewall.enable = false;
-          useDHCP = false;
-          sits.sit = {
-            inherit remote;
-            local = address4;
-            dev = "eth1";
+    sit =
+      let
+        node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ 1 ];
+          networking = {
+            useNetworkd = networkd;
+            firewall.enable = false;
+            useDHCP = false;
+            sits.sit = {
+              inherit remote;
+              local = address4;
+              dev = "eth1";
+            };
+            interfaces.eth1.ipv4.addresses = mkOverride 0
+              [{ address = address4; prefixLength = 24; }];
+            interfaces.sit.ipv6.addresses = mkOverride 0
+              [{ address = address6; prefixLength = 64; }];
           };
-          interfaces.eth1.ipv4.addresses = mkOverride 0
-            [ { address = address4; prefixLength = 24; } ];
-          interfaces.sit.ipv6.addresses = mkOverride 0
-            [ { address = address6; prefixLength = 64; } ];
         };
+      in
+      {
+        name = "Sit";
+        nodes.client1 = node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; };
+        nodes.client2 = node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; };
+        testScript = { ... }:
+          ''
+            start_all()
+
+            with subtest("Wait for networking to be configured"):
+                client1.wait_for_unit("network.target")
+                client2.wait_for_unit("network.target")
+
+                # Print diagnostic information
+                client1.succeed("ip addr >&2")
+                client2.succeed("ip addr >&2")
+
+            with subtest("Test ipv6"):
+                client1.wait_until_succeeds("ping -c 1 fc00::1")
+                client1.wait_until_succeeds("ping -c 1 fc00::2")
+
+                client2.wait_until_succeeds("ping -c 1 fc00::1")
+                client2.wait_until_succeeds("ping -c 1 fc00::2")
+          '';
       };
-    in {
-      name = "Sit";
-      nodes.client1 = node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; };
-      nodes.client2 = node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; };
-      testScript = { ... }:
-        ''
-          start_all()
-
-          with subtest("Wait for networking to be configured"):
-              client1.wait_for_unit("network.target")
-              client2.wait_for_unit("network.target")
-
-              # Print diagnostic information
-              client1.succeed("ip addr >&2")
-              client2.succeed("ip addr >&2")
-
-          with subtest("Test ipv6"):
-              client1.wait_until_succeeds("ping -c 1 fc00::1")
-              client1.wait_until_succeeds("ping -c 1 fc00::2")
-
-              client2.wait_until_succeeds("ping -c 1 fc00::1")
-              client2.wait_until_succeeds("ping -c 1 fc00::2")
-        '';
-    };
-    vlan = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
-        #virtualisation.vlans = [ 1 ];
-        networking = {
-          useNetworkd = networkd;
-          useDHCP = false;
-          vlans.vlan = {
-            id = 1;
-            interface = "eth0";
+    vlan =
+      let
+        node = address: { pkgs, ... }: with pkgs.lib; {
+          #virtualisation.vlans = [ 1 ];
+          networking = {
+            useNetworkd = networkd;
+            useDHCP = false;
+            vlans.vlan = {
+              id = 1;
+              interface = "eth0";
+            };
+            interfaces.eth0.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+            interfaces.vlan.ipv4.addresses = mkOverride 0
+              [{ inherit address; prefixLength = 24; }];
           };
-          interfaces.eth0.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.vlan.ipv4.addresses = mkOverride 0
-            [ { inherit address; prefixLength = 24; } ];
         };
+      in
+      {
+        name = "vlan";
+        nodes.client1 = node "192.168.1.1";
+        nodes.client2 = node "192.168.1.2";
+        testScript = { ... }:
+          ''
+            start_all()
+
+            with subtest("Wait for networking to be configured"):
+                client1.wait_for_unit("network.target")
+                client2.wait_for_unit("network.target")
+
+            with subtest("Test vlan is setup"):
+                client1.succeed("ip addr show dev vlan >&2")
+                client2.succeed("ip addr show dev vlan >&2")
+          '';
       };
-    in {
-      name = "vlan";
-      nodes.client1 = node "192.168.1.1";
-      nodes.client2 = node "192.168.1.2";
-      testScript = { ... }:
-        ''
-          start_all()
-
-          with subtest("Wait for networking to be configured"):
-              client1.wait_for_unit("network.target")
-              client2.wait_for_unit("network.target")
-
-          with subtest("Test vlan is setup"):
-              client1.succeed("ip addr show dev vlan >&2")
-              client2.succeed("ip addr show dev vlan >&2")
-        '';
-    };
     virtual = {
       name = "Virtual";
       machine = {
         networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.tap0 = {
-          ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
-          ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
+          ipv4.addresses = [{ address = "192.168.1.1"; prefixLength = 24; }];
+          ipv6.addresses = [{ address = "2001:1470:fffd:2096::"; prefixLength = 64; }];
           virtual = true;
           mtu = 1342;
           macAddress = "02:de:ad:be:ef:01";
         };
         networking.interfaces.tun0 = {
-          ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-          ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          ipv4.addresses = [{ address = "192.168.1.2"; prefixLength = 24; }];
+          ipv6.addresses = [{ address = "2001:1470:fffd:2097::"; prefixLength = 64; }];
           virtual = true;
           mtu = 1343;
         };
@@ -604,8 +614,8 @@ let
       machine = {
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
-          ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-          ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          ipv4.addresses = [{ address = "192.168.1.2"; prefixLength = 24; }];
+          ipv6.addresses = [{ address = "2001:1470:fffd:2097::"; prefixLength = 64; }];
           ipv6.routes = [
             { address = "fdfd:b3f0::"; prefixLength = 48; }
             { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
@@ -682,15 +692,17 @@ let
         };
       } //
       (if networkd
-       then { systemd.network.links."10-custom_name" = {
-                matchConfig.MACAddress = "52:54:00:12:01:01";
-                linkConfig.Name = "custom_name";
-              };
-            }
-       else { services.udev.initrdRules = ''
-               SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
-              '';
-            });
+      then {
+        systemd.network.links."10-custom_name" = {
+          matchConfig.MACAddress = "52:54:00:12:01:01";
+          linkConfig.Name = "custom_name";
+        };
+      }
+      else {
+        services.udev.initrdRules = ''
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
+        '';
+      });
       testScript = ''
         machine.succeed("udevadm settle")
         print(machine.succeed("ip link show dev custom_name"))
@@ -723,6 +735,9 @@ let
     };
   };
 
-in mapAttrs (const (attrs: makeTest (attrs // {
-  name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-}))) testCases
+in
+mapAttrs
+  (const (attrs: makeTest (attrs // {
+    name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
+  })))
+  testCases

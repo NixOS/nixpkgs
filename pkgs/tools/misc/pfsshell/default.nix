@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [
       gpl2Only # the pfsshell software itself
-      afl20    # APA, PFS, and iomanX libraries which are compiled together with this package
+      afl20 # APA, PFS, and iomanX libraries which are compiled together with this package
     ];
     maintainers = with maintainers; [ makefu ];
   };

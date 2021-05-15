@@ -9,14 +9,19 @@
 , Security
 , libiconv
 
-# rbw-fzf
-, withFzf ? false, fzf, perl
+  # rbw-fzf
+, withFzf ? false
+, fzf
+, perl
 
-# rbw-rofi
-, withRofi ? false, rofi, xclip
+  # rbw-rofi
+, withRofi ? false
+, rofi
+, xclip
 
-# pass-import
-, withPass ? false, pass
+  # pass-import
+, withPass ? false
+, pass
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , pkg-config

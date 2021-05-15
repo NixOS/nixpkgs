@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pproxy" ];
-  disabledTests = [ "api_server" "api_client" ];  # try to connect to outside Internet, so disabled
+  disabledTests = [ "api_server" "api_client" ]; # try to connect to outside Internet, so disabled
   # test suite doesn't use test runner. so need to run ``python ./tests/*``
   checkPhase = ''
     shopt -s extglob

@@ -1,5 +1,9 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
-, pandoc, texlive
+{ lib
+, substituteAll
+, buildPythonPackage
+, fetchFromGitHub
+, pandoc
+, texlive
 }:
 
 buildPythonPackage rec {

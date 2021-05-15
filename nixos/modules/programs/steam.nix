@@ -11,7 +11,8 @@ let
       then [ package ] ++ extraPackages
       else [ package32 ] ++ extraPackages32;
   };
-in {
+in
+{
   options.programs.steam = {
     enable = mkEnableOption "steam";
 
@@ -33,7 +34,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    hardware.opengl = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
+    hardware.opengl = {
+      # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
@@ -49,7 +51,7 @@ in {
     networking.firewall = lib.mkMerge [
       (mkIf cfg.remotePlay.openFirewall {
         allowedTCPPorts = [ 27036 ];
-        allowedUDPPortRanges = [ { from = 27031; to = 27036; } ];
+        allowedUDPPortRanges = [{ from = 27031; to = 27036; }];
       })
 
       (mkIf cfg.dedicatedServer.openFirewall {

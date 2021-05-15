@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip
-, bdftopcf, mkfontscale, fontforge
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, bdftopcf
+, mkfontscale
+, fontforge
 }:
 
 stdenv.mkDerivation {

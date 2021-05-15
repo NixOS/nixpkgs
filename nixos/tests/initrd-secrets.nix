@@ -1,5 +1,5 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 , lib ? pkgs.lib
 , testing ? import ../lib/testing-python.nix { inherit system pkgs; }
@@ -30,6 +30,15 @@ let
       )
     '';
   };
-in lib.flip lib.genAttrs testWithCompressor [
-  "cat" "gzip" "bzip2" "xz" "lzma" "lzop" "pigz" "pixz" "zstd"
+in
+lib.flip lib.genAttrs testWithCompressor [
+  "cat"
+  "gzip"
+  "bzip2"
+  "xz"
+  "lzma"
+  "lzop"
+  "pigz"
+  "pixz"
+  "zstd"
 ]

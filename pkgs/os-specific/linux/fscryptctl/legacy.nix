@@ -38,14 +38,16 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
-    knownVulnerabilities = [ ''
-      fscryptctl version 1.0.0 was released and now uses v2 encryption
-      policies. fscryptctl-experimental will remain at version 0.1.0 which
-      still supports the v1 encryption policies. Please try to switch from the
-      "fscryptctl-experimental" package to "fscryptctl". The v1 encryption
-      policies can be insecure, are hard to use correctly, and have different
-      semantics from v2 policies (which is why they are no longer supported in
-      fscryptctl 1.0.0+).
-    '' ];
+    knownVulnerabilities = [
+      ''
+        fscryptctl version 1.0.0 was released and now uses v2 encryption
+        policies. fscryptctl-experimental will remain at version 0.1.0 which
+        still supports the v1 encryption policies. Please try to switch from the
+        "fscryptctl-experimental" package to "fscryptctl". The v1 encryption
+        policies can be insecure, are hard to use correctly, and have different
+        semantics from v2 policies (which is why they are no longer supported in
+        fscryptctl 1.0.0+).
+      ''
+    ];
   };
 }

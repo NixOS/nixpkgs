@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     rev = "a0935ab2e7056feb3e8a90f5129990c9b335a587";
     owner = "JulienPalard";
-    repo  ="logtop";
+    repo = "logtop";
     sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";
   };
 

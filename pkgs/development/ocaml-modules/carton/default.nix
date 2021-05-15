@@ -1,8 +1,33 @@
-{ lib, buildDunePackage, fetchurl
-, ke, duff, decompress, cstruct, optint, bigstringaf, stdlib-shims
-, bigarray-compat, checkseum, logs, psq, fmt
-, result, rresult, fpath, base64, bos, digestif, mmap, alcotest
-, crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner, hxd
+{ lib
+, buildDunePackage
+, fetchurl
+, ke
+, duff
+, decompress
+, cstruct
+, optint
+, bigstringaf
+, stdlib-shims
+, bigarray-compat
+, checkseum
+, logs
+, psq
+, fmt
+, result
+, rresult
+, fpath
+, base64
+, bos
+, digestif
+, mmap
+, alcotest
+, crowbar
+, alcotest-lwt
+, lwt
+, findlib
+, mirage-flow
+, cmdliner
+, hxd
 }:
 
 buildDunePackage rec {

@@ -2,7 +2,8 @@
 , fetchpatch
 , fetchgit
 , substituteAll
-, lib, stdenv
+, lib
+, stdenv
 , meson
 , ninja
 , pkg-config

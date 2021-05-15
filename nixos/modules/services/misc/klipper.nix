@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.services.klipper;
   package = pkgs.klipper;
-  format = pkgs.formats.ini { mkKeyValue = generators.mkKeyValueDefault {} ":"; };
+  format = pkgs.formats.ini { mkKeyValue = generators.mkKeyValueDefault { } ":"; };
 in
 {
   ##### interface

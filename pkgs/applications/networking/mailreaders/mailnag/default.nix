@@ -12,10 +12,10 @@
 , gsettings-desktop-schemas
 , glib
 , gobject-introspection
-# Available plugins (can be overriden)
+  # Available plugins (can be overriden)
 , availablePlugins
-# Used in the withPlugins interface at passthru, can be overrided directly, or
-# prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
+  # Used in the withPlugins interface at passthru, can be overrided directly, or
+  # prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
 , mailnag
 , userPlugins ? [ ]
 , pluginsDeps ? [ ]
@@ -71,10 +71,10 @@ python3Packages.buildPythonApplication rec {
         pluginsDeps = lib.flatten (lib.catAttrs "buildInputs" plugs);
         self = mailnag;
       in
-        self.override {
-          userPlugins = plugs;
-          inherit pluginsDeps;
-        };
+      self.override {
+        userPlugins = plugs;
+        inherit pluginsDeps;
+      };
   };
 
   # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped

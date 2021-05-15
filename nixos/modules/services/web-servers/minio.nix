@@ -74,7 +74,7 @@ in
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "d '${cfg.configDir}' - minio minio - -"
-    ] ++ (map (x:  "d '" + x + "' - minio minio - - ") cfg.dataDir);
+    ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
     systemd.services.minio = {
       description = "Minio Object Storage";

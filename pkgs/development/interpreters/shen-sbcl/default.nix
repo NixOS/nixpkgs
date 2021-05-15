@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , shen-sources
 , sbcl
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mc10jlrxqi337m6ngwbr547zi4qgk69g1flz5dsddjy5x41j0yz";
   };
   buildInputs = [
-    sbcl shen-sources
+    sbcl
+    shen-sources
   ];
   buildPhase = ''
     ln -s ${shen-sources} kernel

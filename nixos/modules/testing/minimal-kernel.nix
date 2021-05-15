@@ -22,7 +22,8 @@ let
     '';
   }));
 
-   kernelPackages = pkgs.linuxPackagesFor kernel;
-in {
+  kernelPackages = pkgs.linuxPackagesFor kernel;
+in
+{
   boot.kernelPackages = kernelPackages;
 }

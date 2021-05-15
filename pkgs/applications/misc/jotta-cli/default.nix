@@ -7,10 +7,10 @@ stdenv.mkDerivation rec {
   pname = "jotta-cli";
   version = "0.9.39536";
   src = fetchzip {
-      url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-JZtc6Si3ZQoRG3q+ctzPPQm7WbMYRailIuq/Y5Avd2s=";
-      stripRoot = false;
-    };
+    url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
+    sha256 = "sha256-JZtc6Si3ZQoRG3q+ctzPPQm7WbMYRailIuq/Y5Avd2s=";
+    stripRoot = false;
+  };
 
   installPhase = ''
     install -D usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "Jottacloud CLI";
-    homepage     = "https://www.jottacloud.com/";
+    description = "Jottacloud CLI";
+    homepage = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";
-    maintainers  = with maintainers; [ evenbrenden ];
-    license      = licenses.unfree;
-    platforms    = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ evenbrenden ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

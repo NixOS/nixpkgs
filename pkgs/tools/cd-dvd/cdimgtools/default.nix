@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl perlPackages.StringEscape perlPackages.DataHexdumper libdvdcss libdvdread ];
 
-  patches = [ ./nrgtool_fix_my.patch ./removed_dvdcss_interface_2.patch];
+  patches = [ ./nrgtool_fix_my.patch ./removed_dvdcss_interface_2.patch ];
 
   postFixup = ''
     for cmd in raw96cdconv nrgtool; do

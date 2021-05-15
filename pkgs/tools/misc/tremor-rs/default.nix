@@ -1,5 +1,15 @@
-{ lib, rustPlatform, pkg-config, cmake, llvmPackages, openssl, fetchFromGitHub
-, installShellFiles, stdenv, Security, libiconv }:
+{ lib
+, rustPlatform
+, pkg-config
+, cmake
+, llvmPackages
+, openssl
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, Security
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";

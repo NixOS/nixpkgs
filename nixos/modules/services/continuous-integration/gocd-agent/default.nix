@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.gocd-agent;
-in {
+in
+{
   options = {
     services.gocd-agent = {
       enable = mkEnableOption "gocd-agent";
@@ -164,15 +165,15 @@ in {
             lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
               config.environment.sessionVariables;
         in
-          selectedSessionVars //
-            {
-              NIX_REMOTE = "daemon";
-              AGENT_WORK_DIR = cfg.workDir;
-              AGENT_STARTUP_ARGS = ''${concatStringsSep " "  cfg.startupOptions}'';
-              LOG_DIR = cfg.workDir;
-              LOG_FILE = "${cfg.workDir}/go-agent-start.log";
-            } //
-            cfg.environment;
+        selectedSessionVars //
+        {
+          NIX_REMOTE = "daemon";
+          AGENT_WORK_DIR = cfg.workDir;
+          AGENT_STARTUP_ARGS = ''${concatStringsSep " "  cfg.startupOptions}'';
+          LOG_DIR = cfg.workDir;
+          LOG_FILE = "${cfg.workDir}/go-agent-start.log";
+        } //
+        cfg.environment;
 
       path = cfg.packages;
 

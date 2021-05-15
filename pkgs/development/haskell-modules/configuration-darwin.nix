@@ -22,7 +22,7 @@ self: super: {
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
   hakyll = overrideCabal super.hakyll {
-    testToolDepends = [];
+    testToolDepends = [ ];
     doCheck = false;
   };
 
@@ -102,7 +102,7 @@ self: super: {
 
   # Ensure the necessary frameworks are propagatedBuildInputs on darwin
   OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
-    librarySystemDepends = [];
+    librarySystemDepends = [ ];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
       darwin.apple_sdk.frameworks.OpenGL
     ];
@@ -113,13 +113,13 @@ self: super: {
     '' + (drv.preConfigure or "");
   });
   GLURaw = overrideCabal super.GLURaw (drv: {
-    librarySystemDepends = [];
+    librarySystemDepends = [ ];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
       darwin.apple_sdk.frameworks.OpenGL
     ];
   });
   bindings-GLFW = overrideCabal super.bindings-GLFW (drv: {
-    librarySystemDepends = [];
+    librarySystemDepends = [ ];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
       darwin.apple_sdk.frameworks.AGL
       darwin.apple_sdk.frameworks.Cocoa
@@ -131,7 +131,7 @@ self: super: {
     ];
   });
   OpenCL = overrideCabal super.OpenCL (drv: {
-    librarySystemDepends = [];
+    librarySystemDepends = [ ];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
       darwin.apple_sdk.frameworks.OpenCL
     ];
@@ -150,7 +150,7 @@ self: super: {
     librarySystemDepends = [
       darwin.libobjc
       darwin.apple_sdk.frameworks.AppKit
-    ] ++ (drv.librarySystemDepends or []);
+    ] ++ (drv.librarySystemDepends or [ ]);
   });
 
   arbtt = overrideCabal super.arbtt (drv: {
@@ -158,7 +158,7 @@ self: super: {
       darwin.apple_sdk.frameworks.Foundation
       darwin.apple_sdk.frameworks.Carbon
       darwin.apple_sdk.frameworks.IOKit
-    ] ++ (drv.librarySystemDepends or []);
+    ] ++ (drv.librarySystemDepends or [ ]);
   });
 
   HTF = overrideCabal super.HTF (drv: {

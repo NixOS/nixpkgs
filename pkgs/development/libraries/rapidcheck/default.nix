@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "emil-e";
-    repo  = "rapidcheck";
-    rev   = "b78f89288c7e086d06e2a1e10b605d8375517a8a";
+    repo = "rapidcheck";
+    rev = "b78f89288c7e086d06e2a1e10b605d8375517a8a";
     sha256 = "0fj11gbhkaxbsgix2im7vdfvr26l75b8djk462sfw8xrwrfkjbdz";
   };
 

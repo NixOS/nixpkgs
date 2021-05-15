@@ -11,5 +11,5 @@ path: runCommand "closure-paths"
       . .attrs.sh
       python3 ${./closure-graph.py} .attrs.json graph > ''${outputs[out]}
     '';
-  }
+}
   ""

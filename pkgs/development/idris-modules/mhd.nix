@@ -5,7 +5,7 @@
 , libmicrohttpd
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "mhd";
   version = "2016-04-22";
 

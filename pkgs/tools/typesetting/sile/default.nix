@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , darwin
 , fetchurl
 , makeWrapper
@@ -16,7 +17,7 @@
 }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [
+  luaEnv = lua.withPackages (ps: with ps; [
     cassowary
     cosmo
     compat53
@@ -110,7 +111,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
