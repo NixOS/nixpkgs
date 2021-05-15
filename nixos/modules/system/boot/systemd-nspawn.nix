@@ -96,7 +96,8 @@ let
   };
 
   makeUnit' = name: def:
-    if def.extraDrvConfig == null || !def.enable then makeUnit name def
+    if def.extraDrvConfig == null || !def.enable
+      then pkgs.runCommand "nspawn-inst" { } ("cat ${makeUnit name def}/${shellEscape name} > $out")
     else pkgs.runCommand "nspawn-${mkPathSafeName name}-custom"
       { preferLocalBuild = true;
         allowSubstitutes = false;
@@ -108,25 +109,27 @@ let
           exit 1
         fi
 
-        mkdir -p $out
-        cat ${makeUnit name def}/${name'} > $out/${name'}
-        cat ${def.extraDrvConfig} >> $out/${name'}
+        touch $out
+        cat ${makeUnit name def}/${name'} > $out
+        cat ${def.extraDrvConfig} >> $out
       '');
 
   instanceToUnit = name: def:
-    let base = {
-      text = ''
-        [Exec]
-        ${attrsToSection def.execConfig}
+    let
+      base = {
+        text = ''
+          [Exec]
+          ${attrsToSection def.execConfig}
 
-        [Files]
-        ${attrsToSection def.filesConfig}
+          [Files]
+          ${attrsToSection def.filesConfig}
 
-        [Network]
-        ${attrsToSection def.networkConfig}
-      '';
-    } // def;
-    in base // { unit = makeUnit' name base; };
+          [Network]
+          ${attrsToSection def.networkConfig}
+        '';
+      } // (filterAttrs (n: const (elem n optWhitelist)) def);
+      optWhitelist = [ "extraDrvConfig" "enable" ];
+    in makeUnit' name base;
 
 in {
 
@@ -142,11 +145,14 @@ in {
 
   config =
     let
-      units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
+      units = mapAttrs' (name: value: {
+        name = "systemd/nspawn/${name}.nspawn";
+        value.source = instanceToUnit "${name}.nspawn" value;
+      }) cfg;
     in
       mkMerge [
         (mkIf (cfg != {}) {
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits' false "nspawn" units [] []);
+          environment.etc = units;
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
