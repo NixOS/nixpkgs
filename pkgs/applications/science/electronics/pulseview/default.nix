@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkg-config, cmake, glib, boost, libsigrok
+{ mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
 , libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
 , pcre, librevisa, python3, qtbase, qtsvg
 }:
@@ -18,6 +18,15 @@ mkDerivation rec {
     glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
     pcre librevisa python3
     qtbase qtsvg
+  ];
+
+  patches = [
+    # Allow building with glib 2.68
+    # PR at https://github.com/sigrokproject/pulseview/pull/39
+    (fetchpatch {
+      url = "https://github.com/sigrokproject/pulseview/commit/fb89dd11f2a4a08b73c498869789e38677181a8d.patch";
+      sha256 = "153lrvbj0qf8qxx3l01v3ln8g5qjmlapwp8h1k1iir3xx3lyy37k";
+    })
   ];
 
   meta = with lib; {
