@@ -433,9 +433,14 @@ in
           ENABLE = true;
           ADAPTER = "memcache";
           HOST = builtins.concatStringsSep ";" (lists.forEach cfg.cache.memcached.caches (c: "${c.host}:${toString c.port}"));
-        } else {
+
+        # Memory cache
+        } else if cfg.cache.memory.enable then {
           ENABLE = true;
           ADAPTER = "memory";
+
+        # Use gitea's default or users's settings for backwards compatibility
+        } else {
         };
 
       database = mkMerge [

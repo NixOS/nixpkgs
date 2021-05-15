@@ -109,9 +109,14 @@ let
   });
 in
   listToAttrs (
+    # Test all supported database types
     (map (db: makeGiteaTest "${db}" db { }) supportedDbTypes)
     ++
+    # Test all supported cache types
     (map (cache: makeGiteaTest "${cache}" "sqlite3" { "${cache}".enable = true; }) supportedCacheTypes)
+    ++
+    # Test with gitea's default cache settings
+    [(makeGiteaTest "default-cache" "sqlite3" {})]
     ++ [
       # Test with local redis over TCP
       (makeGiteaTest "redis-tcp" "sqlite3" {
