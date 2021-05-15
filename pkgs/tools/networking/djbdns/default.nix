@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, dns-root-data } :
+{ lib, stdenv, fetchurl, glibc, dns-root-data, nixosTests } :
 
 let
   version = "1.05";
@@ -47,6 +47,10 @@ stdenv.mkDerivation {
     done;
     rm -rv djbdns-man;
   '';
+
+  passthru.tests = {
+    tinydns = nixosTests.tinydns;
+  };
 
   meta = with lib; {
     description = "A collection of Domain Name System tools";
