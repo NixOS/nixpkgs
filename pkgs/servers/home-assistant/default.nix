@@ -259,6 +259,7 @@ in with py.pkgs; buildPythonApplication rec {
     "geo_json_events"
     "geo_location"
     "group"
+    "growatt_server"
     "hddtemp"
     "history"
     "history_stats"
