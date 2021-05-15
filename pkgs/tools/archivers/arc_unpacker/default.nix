@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper catch ];
   buildInputs = [ boost libpng libjpeg zlib openssl libwebp ];
 
+  patches = [
+    # Add a missing `<stdexcept>` import that caused the build to fail.
+    # Failure: https://hydra.nixos.org/build/141997371/log
+    # Also submitted as an upstream PR: https://github.com/vn-tools/arc_unpacker/pull/194
+    ./add-missing-import.patch
+  ];
+
   postPatch = ''
     cp ${catch}/include/catch/catch.hpp tests/test_support/catch.h
   '';
