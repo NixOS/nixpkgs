@@ -626,7 +626,7 @@
     "pencom" = ps: with ps; [ ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [ ];
     "person" = ps: with ps; [ aiohttp-cors pillow ];
-    "philips_js" = ps: with ps; [ ]; # missing inputs: ha-philipsjs
+    "philips_js" = ps: with ps; [ ha-philipsjs ];
     "pi4ioe5v9xxxx" = ps: with ps; [ ]; # missing inputs: pi4ioe5v9xxxx
     "pi_hole" = ps: with ps; [ hole ];
     "picnic" = ps: with ps; [ python-picnic-api ];
