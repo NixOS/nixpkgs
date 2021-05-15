@@ -123,8 +123,6 @@ with self; {
         );
     '';
 
-    NIX_LDFLAGS = [ "-ldl" ];
-
     meta = with lib; {
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
