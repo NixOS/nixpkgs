@@ -5189,6 +5189,8 @@ in {
 
   praw = callPackage ../development/python-modules/praw { };
 
+  prayer-times-calculator = callPackage ../development/python-modules/prayer-times-calculator { };
+
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
   pre-commit = callPackage ../development/python-modules/pre-commit { };
