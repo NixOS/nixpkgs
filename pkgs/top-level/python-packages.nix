@@ -3019,6 +3019,8 @@ in {
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
+  growattserver = callPackage ../development/python-modules/growattserver { };
+
   grip = callPackage ../development/python-modules/grip { };
 
   grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
