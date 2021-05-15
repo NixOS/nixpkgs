@@ -93,7 +93,7 @@ self = stdenv.mkDerivation rec {
     Description: An Extensible Extension Language
     Version: ${version}
     Requires:
-    Libs: -L$out/lib -llua -lm
+    Libs: -L$out/lib -llua
     Cflags: -I$out/include
     EOF
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
