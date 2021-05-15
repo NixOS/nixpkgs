@@ -302,6 +302,35 @@ rec {
         in mapAttrs g set;
     in recurse [] set;
 
+  /* Builds a map from <attr>=value to <attr>.<item>=value for each item in
+   * the list.
+   *
+   * This is mainly useful for flake-like structures.
+   *
+   * Type:
+   *   mapAttrsJump ::
+   *     [String] -> (String -> AttrSet) -> AttrSet<String, AttrSet>
+   *
+   * Example:
+   *   mapAttrsJump ["x86_64-linux"] (system: { hello = 42; })
+   *   => { x86_64-linux = { hello = 42; }; }
+   */
+  mapAttrsJump = list: f:
+    let
+      op = attrs: item:
+        let
+          ret = f item;
+          op = attrs: key:
+            attrs //
+            {
+              ${key} = (attrs.${key} or { }) // { ${item} = ret.${key}; };
+            }
+          ;
+        in
+        builtins.foldl' op attrs (builtins.attrNames ret);
+    in
+    builtins.foldl' op { } list;
+
 
   /* Generate an attribute set by mapping a function over a list of
      attribute names.
