@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="libmwaw";
-    version="0.3.18";
+    version="0.3.19";
     name="${baseName}-${version}";
-    hash="sha256-/F0FFoD4AAvmT/68CwxYcWscm/BgA+w5k4exCdHtHg8=";
-    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.18/libmwaw-0.3.18.tar.xz";
-    sha256="sha256-/F0FFoD4AAvmT/68CwxYcWscm/BgA+w5k4exCdHtHg8=";
+    hash="sha256-snLiNO78goxLuDRK8PBHpi4HD1MOni+6EbBMjbjtpa8=";
+    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.19/libmwaw-0.3.19.tar.xz";
+    sha256="sha256-snLiNO78goxLuDRK8PBHpi4HD1MOni+6EbBMjbjtpa8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
