@@ -20,11 +20,25 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ gevent tornado twisted ];
-  
+
   checkInputs = [ nose mock ];
 
+  postPatch = ''
+    # don't stop at first test failure
+    # don't run acceptance tests because they access the network
+    # don't report test coverage
+    substituteInPlace setup.cfg \
+      --replace "stop = 1" "stop = 0" \
+      --replace "tests=tests/unit,tests/acceptance" "tests=tests/unit" \
+      --replace "with-coverage = 1" "with-coverage = 0"
+  '';
+
   checkPhase = ''
+    runHook preCheck
+
     PIKA_TEST_TLS=true nosetests
+
+    runHook postCheck
   '';
 
   meta = with lib; {
