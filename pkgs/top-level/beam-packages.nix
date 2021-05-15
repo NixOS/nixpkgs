@@ -140,7 +140,7 @@ rec {
   packages = {
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
-    
+
     erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;
     erlangR22 = packagesWith interpreters.erlangR22;
