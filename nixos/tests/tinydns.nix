@@ -21,6 +21,7 @@ import ./make-test-python.nix ({ lib, ...} : {
   testScript = ''
     nameserver.start()
     nameserver.wait_for_unit("tinydns.service")
-    nameserver.succeed("host bla.foo.bar 192.168.1.1 | grep '1\.2\.3\.4'")
+    for loop in range(100):
+        nameserver.succeed("host bla.foo.bar 192.168.1.1 | grep '1\.2\.3\.4'")
   '';
 })
