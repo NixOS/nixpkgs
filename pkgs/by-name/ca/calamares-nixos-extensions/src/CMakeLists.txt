@@ -36,9 +36,25 @@
 #   USE_*           : fills in SKIP_MODULES for modules called *-<something>
 # In this repository, there is just one "group" to which USE_* applies:
 #   USE_os          : operating-system-specific modules.
+#
+### NOTES
+#
+# Call this CMake file in script mode, e.g. `cmake -P CMakeLists.txt`
+# to print out version information. Use `cmake -DVERSION_STYLE=short`
+# to get just the short versioning.
+#
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+
+set( CALAMARES_EXTENSIONS_VERSION 1.1.2 )
+
+include( ${CMAKE_CURRENT_LIST_DIR}/CMakeModules/ExtendedVersion.cmake )
+if ( CMAKE_SCRIPT_MODE_FILE )
+    report_version( ${CALAMARES_EXTENSIONS_VERSION} ${CMAKE_CURRENT_LIST_DIR} )
+    return()
+endif()
+
 project(calamares-extensions
-    VERSION 1.1.2
+    VERSION ${CALAMARES_EXTENSIONS_VERSION}
     LANGUAGES CXX
 )
 
@@ -110,18 +126,3 @@ calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
 calamares_explain_skipped_modules( ${LIST_SKIPPED_MODULES} )
-
-### RELEASE SUPPORT
-#
-#
-set( CALAMARES_VERSION ${calamares-extensions_VERSION_MAJOR}.${calamares-extensions_VERSION_MINOR}.${calamares-extensions_VERSION_PATCH} )
-# In rare cases we have hotfix-releases with a tweak
-if( calamares-extensions_VERSION_TWEAK )
-    set( CALAMARES_VERSION "${calamares-extensions_VERSION}.${calamares-extensions_VERSION_TWEAK}" )
-endif()
-set( CALAMARES_VERSION_SHORT "${CALAMARES_VERSION}" )
-
-add_custom_target(show-version
-    ${CMAKE_COMMAND} -E echo CALAMARES_VERSION=${CALAMARES_VERSION_SHORT}
-    USES_TERMINAL
-)
