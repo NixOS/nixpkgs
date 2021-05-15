@@ -7,16 +7,17 @@ let
   options = {
     touch = libXi != null;
     pulseaudio = false;
+    udev = false;
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.2.3";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "19vrp5lhyvxbm6wjxzn28sn3i0s8j08ca7nani8l1nrhvlc8wi0v";
+    sha256 = "0lclrx0y7w1dah40053sjlppb6c5p32icq7x5pvdfgyd3i63mnbb";
   };
 
   nativeBuildInputs = [ pkg-config ];
