@@ -5611,6 +5611,8 @@ in {
 
   pyfiglet = callPackage ../development/python-modules/pyfiglet { };
 
+  pyfirmata = callPackage ../development/python-modules/pyfirmata { };
+
   pyfnip = callPackage ../development/python-modules/pyfnip { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
