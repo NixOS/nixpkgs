@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, withDebug ? false
-, withXTinyProxy ? true, withFilter ? true, withUpstream ? true
-, withTransparent ? true, withReverse ? true, withManpageSupport ? true }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, withDebug ? false }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -14,18 +12,10 @@ stdenv.mkDerivation rec {
     owner = "tinyproxy";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ] ++ optionals withManpageSupport [ perl ];
+  # perl is needed for man page generation.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
-  configureFlags =
-    optionals    (withDebug)           [ "--enable-debug" ]             # Enable debugging support code and methods.
-    ++ optionals (!withXTinyProxy)     [ "--disable-xtinyproxy" ]       # Compile in support for the XTinyproxy header, which is sent to any web server in your domain.
-    ++ optionals (!withFilter)         [ "--disable-filter"]            # Allows Tinyproxy to filter out certain domains and URLs.
-    ++ optionals (!withUpstream)       [ "--disable-upstream" ]         # Enable support for proxying connections through another proxy server.
-    ++ optionals (!withTransparent)    [ "--disable-transparent" ]      # Allow Tinyproxy to be used as a transparent proxy daemon.
-    ++ optionals (!withReverse)        [ "--disable-reverse" ]          # Enable reverse proxying.
-    ++ optionals (!withManpageSupport) [ "--disable-manpage_support" ]; # Enable support for building manpages.
+  configureFlags = optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
   meta = {
     homepage = "https://tinyproxy.github.io/";
