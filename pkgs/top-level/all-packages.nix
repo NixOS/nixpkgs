@@ -5352,6 +5352,8 @@ in
 
   gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
+  gtk-frdp = callPackage ../development/libraries/gtk-frdp {};
+
   gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess {

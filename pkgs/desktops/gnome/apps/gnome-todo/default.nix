@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -9,13 +10,14 @@
 , gettext
 , gnome
 , glib
-, gtk3
+, gtk4
+, wayland
+, libadwaita
 , libpeas
 , gnome-online-accounts
 , gsettings-desktop-schemas
+, libportal
 , evolution-data-server
-, libxml2
-, libsoup
 , libical
 , librest
 , json-glib
@@ -23,25 +25,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "3.28.1";
+  version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08ygqbib72jlf9y0a16k54zz51sncpq2wa18wp81v46q8301ymy7";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "aAl8lvBnXHFCZn0QQ0ToNHLdf8xTj+wKzb9gJrucobE=";
   };
-
-  patches = [
-    # fix build with libecal 2.0
-    (fetchpatch {
-      name = "gnome-todo-eds-libecal-2.0.patch";
-      url = "https://src.fedoraproject.org/rpms/gnome-todo/raw/bed44b8530f3c79589982e03b430b3a125e9bceb/f/gnome-todo-eds-libecal-2.0.patch";
-      sha256 = "1ghrz973skal36j90wm2z13m3panw983r6y0k7z9gpj5lxgz92mq";
-    })
-  ];
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   nativeBuildInputs = [
     meson
@@ -54,23 +43,30 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
+    wayland # required by gtk header
+    libadwaita
     libpeas
     gnome-online-accounts
     gsettings-desktop-schemas
     gnome.adwaita-icon-theme
+
     # Plug-ins
-    evolution-data-server
-    libxml2
-    libsoup
+    libportal # background
+    evolution-data-server # eds
     libical
-    librest
-    json-glib
+    librest # todoist
+    json-glib # todoist
   ];
 
-  # Fix parallel building: missing dependency from src/gtd-application.c
-  # Probably remove for 3.30+ https://gitlab.gnome.org/GNOME/gnome-todo/issues/170
-  preBuild = "ninja src/gtd-vcs-identifier.h";
+  postPatch = ''
+    chmod +x build-aux/meson/meson_post_install.py
+    patchShebangs build-aux/meson/meson_post_install.py
+
+    # https://gitlab.gnome.org/GNOME/gnome-todo/merge_requests/103
+    substituteInPlace src/meson.build \
+      --replace 'Gtk-3.0' 'Gtk-4.0'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
