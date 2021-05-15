@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, cmake, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, stdenv, rustPlatform, cmake, fetchFromGitHub, pkg-config, openssl
+, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
@@ -14,8 +15,9 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0gw19zdxbkgnj1kcyqn1naj1dnhsx10j860m0xgs5z7bbvfg82p6";
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = if stdenv.isDarwin
+    then [ libiconv Security ]
+    else [ openssl ];
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
