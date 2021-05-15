@@ -20,29 +20,20 @@ in
     # Automatically login on tty1 as a normal user:
     imports = [ ./common/user-account.nix ];
     services.getty.autologinUser = "alice";
+    programs.bash.loginShellInit = ''
+      if [ "$(tty)" = "/dev/tty1" ]; then
+        set -e
+
+        mkdir -p ~/.config/cagebreak
+        cp -f ${cagebreakConfigfile} ~/.config/cagebreak/config
+
+        cagebreak
+      fi
+    '';
 
     hardware.opengl.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wallutils ];
-
-    systemd.services.setupCagebreakConfig = {
-      wantedBy = [ "multi-user.target" ];
-      before = [ "multi-user.target" ];
-      environment = {
-        HOME = alice.home;
-      };
-      unitConfig = {
-        type = "oneshot";
-        RemainAfterExit = true;
-        user = alice.name;
-      };
-      script = ''
-        cd $HOME
-        CONFFILE=$HOME/.config/cagebreak/config
-        mkdir -p $(dirname $CONFFILE)
-        cp ${cagebreakConfigfile} $CONFFILE
-      '';
-    };
 
     virtualisation.memorySize = 1024;
     # Need to switch to a different VGA card / GPU driver than the default one (std) so that Cagebreak can launch:
@@ -57,8 +48,6 @@ in
   in ''
     start_all()
     machine.wait_for_unit("multi-user.target")
-    machine.wait_until_tty_matches(1, "alice\@machine")
-    machine.send_chars("cagebreak\n")
     machine.wait_for_file("${XDG_RUNTIME_DIR}/wayland-0")
 
     with subtest("ensure wayland works with wayinfo from wallutils"):
