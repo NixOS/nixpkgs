@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , pkg-config
 , systemd
 , gmp
@@ -126,6 +127,8 @@ stdenv.mkDerivation rec {
     sed -e '0,/^$/{s||export PATH=${binPath}:$PATH|}' \
         -i $out/bin/ipsec
   '';
+
+  passthru.tests.libreswan = nixosTests.libreswan;
 
   meta = with lib; {
     homepage = "https://libreswan.org";
