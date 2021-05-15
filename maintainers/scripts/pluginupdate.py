@@ -13,6 +13,7 @@ import http
 import json
 import os
 import subprocess
+import logging
 import sys
 import time
 import traceback
@@ -33,6 +34,14 @@ import git
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
+
+LOG_LEVELS = {
+    logging.getLevelName(level): level for level in [
+        logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR ]
+}
+
+log = logging.getLogger()
+log.addHandler(logging.StreamHandler())
 
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
@@ -235,6 +244,7 @@ def prefetch_plugin(
     alias: Optional[str],
     cache: "Optional[Cache]" = None,
 ) -> Tuple[Plugin, Dict[str, str]]:
+    log.info("Prefetching plugin %s", repo_name)
     repo = Repo(user, repo_name, branch, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
@@ -464,6 +474,11 @@ def parse_args(editor: Editor):
         "--no-commit", "-n", action="store_true", default=False,
         help="Whether to autocommit changes"
     )
+    parser.add_argument(
+        "--debug", "-d", choices=LOG_LEVELS.keys(),
+        default=logging.getLevelName(logging.WARN),
+        help="Adjust log level"
+    )
     return parser.parse_args()
 
 
@@ -503,6 +518,9 @@ def update_plugins(editor: Editor):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
     args = parse_args(editor)
+    log.setLevel(LOG_LEVELS[args.debug])
+
+    log.info("Start updating plugins")
     nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
     update = get_update(args.input_file, args.outfile, args.proc, editor)
 
