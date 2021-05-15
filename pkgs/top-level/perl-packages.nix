@@ -21787,6 +21787,8 @@ let
       url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.88.tar.gz";
       sha256 = "0b7lmjvfmypps1nw6nsdikgaakm0n0g4186glaqazg5xd1p5h55h";
     };
+    # libbtparse.so: cannot open shared object file (aarch64 only)
+    patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
     perlPreHook = "export LD=$CC";
     perlPostHook = lib.optionalString stdenv.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"

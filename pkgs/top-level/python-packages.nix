@@ -1479,6 +1479,8 @@ in {
 
   colored = callPackage ../development/python-modules/colored { };
 
+  colored-traceback = callPackage ../development/python-modules/colored-traceback { };
+
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
 
   colorful = callPackage ../development/python-modules/colorful { };
