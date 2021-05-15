@@ -5942,6 +5942,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/vim-easy-align/";
   };
 
+  vim-easyescape = buildVimPluginFrom2Nix {
+    pname = "vim-easyescape";
+    version = "2020-11-22";
+    src = fetchFromGitHub {
+      owner = "zhou13";
+      repo = "vim-easyescape";
+      rev = "fd7875f1657fd54fae85088acf289b9723d8a790";
+      sha256 = "0h8kmhliicbdqhximp3d961crp6qkjjs4yciksl037ds47kzrkif";
+    };
+    meta.homepage = "https://github.com/zhou13/vim-easyescape/";
+  };
+
   vim-easygit = buildVimPluginFrom2Nix {
     pname = "vim-easygit";
     version = "2018-07-08";
