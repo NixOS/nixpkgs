@@ -1,23 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, requests-mock, tox
+{ lib
 , aiohttp
+, buildPythonPackage
 , dateparser
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
 , requests
+, requests-mock
 , six
 , ujson
 , websockets
 }:
 
 buildPythonPackage rec {
-  version = "1.0.10";
   pname = "python-binance";
+  version = "1.0.10";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5U/xMJ0iPij3Y+6SKuKQHspSiktxJVrDQzHPoJCM4H8=";
+  src = fetchFromGitHub {
+    owner = "sammchardy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "09pq2blvky1ah4k8yc6zkp2g5nkn3awc52ad3lxvj6m33akfzxiv";
   };
 
-  propagatedBuildInputs = [ 
+  propagatedBuildInputs = [
     aiohttp
     dateparser
     requests
@@ -27,16 +34,22 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     requests-mock
   ];
 
-  doCheck = false;  # Tries to test multiple interpreters with tox
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_api_request.py"
+    "tests/test_historical_klines.py"
+  ];
 
-  meta = {
+  pythonImportsCheck = [ "binance" ];
+
+  meta = with lib; {
     description = "Binance Exchange API python implementation for automated trading";
     homepage = "https://github.com/sammchardy/python-binance";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.bhipple ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }
