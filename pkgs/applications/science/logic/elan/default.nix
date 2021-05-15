@@ -1,5 +1,5 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
   libPath = lib.makeLibraryPath [ gmp ];
@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   OPENSSL_NO_VENDOR = 1;
-  buildInputs = [ curl zlib openssl ];
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
