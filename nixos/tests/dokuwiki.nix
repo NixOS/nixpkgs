@@ -88,7 +88,6 @@ in {
 
     start_all()
 
-
     dokuwiki_nginx.wait_for_unit("nginx.service")
     dokuwiki_caddy.wait_for_unit("caddy.service")
 
@@ -99,7 +98,7 @@ in {
       for site_name in site_names:
         machine.wait_for_unit("phpfpm-dokuwiki-{site_name}.service")
 
-      
+
         machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
         machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
 
