@@ -5911,6 +5911,8 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
+  pyobihai = callPackage ../development/python-modules/pyobihai { };
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
