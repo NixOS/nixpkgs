@@ -1,6 +1,6 @@
 let
   cert = pkgs: pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com'
+    openssl req -x509 -days ${toString (365 * 100)} -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com'
     mkdir -p $out
     cp key.pem cert.pem $out
   '';
@@ -85,7 +85,7 @@ in import ../make-test-python.nix {
     server.succeed('prosodyctl status | grep "Prosody is running"')
 
     server.succeed("create-prosody-users")
-    client.succeed('send-message 2>&1 | grep "XMPP SCRIPT TEST SUCCESS"')
+    client.succeed("send-message")
     server.succeed("delete-prosody-users")
   '';
 }
