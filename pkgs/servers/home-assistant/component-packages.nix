@@ -329,7 +329,7 @@
     "greeneye_monitor" = ps: with ps; [ ]; # missing inputs: greeneye_monitor
     "greenwave" = ps: with ps; [ ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [ ];
-    "growatt_server" = ps: with ps; [ ]; # missing inputs: growattServer
+    "growatt_server" = ps: with ps; [ growattserver ];
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ ]; # missing inputs: pygtfs
     "guardian" = ps: with ps; [ aioguardian ];
