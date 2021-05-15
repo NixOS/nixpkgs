@@ -22805,7 +22805,8 @@ in
 
   dmrconfig = callPackage ../applications/radio/dmrconfig { };
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
+  dmtx-utils = callPackage ../tools/graphics/dmtx-utils {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
@@ -22907,7 +22908,9 @@ in
     jdk = jdk11;
   });
 
-  ecpdap = callPackage ../development/tools/ecpdap { };
+  ecpdap = callPackage ../development/tools/ecpdap {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -24121,7 +24124,7 @@ in
   };
 
   imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
     ghostscript = null;
   };
 
@@ -28952,7 +28955,9 @@ in
 
   bppsuite = callPackage ../applications/science/biology/bppsuite { };
 
-  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+  cd-hit = callPackage ../applications/science/biology/cd-hit {
+    inherit (llvmPackages) openmp;
+  };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
