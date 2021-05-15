@@ -38,4 +38,20 @@ testDirectReferences 'writeText "hi" "hello"'
 testDirectReferences 'writeText "hi" "hello ${hello}"'
 testDirectReferences 'writeText "hi" "hello ${hello} ${figlet}"'
 
+
+
+testClosure() {
+  expr="$1"
+  diff -U3 \
+    <(sort <$(nix-build --no-out-link --expr "with import ../../.. {}; writeReferencesToFile ($expr)")) \
+    <(nix-store -q --requisites $(nix-build --no-out-link --expr "with import ../../.. {}; ($expr)") | sort)
+}
+
+testClosure 'hello'
+testClosure 'figlet'
+testClosure 'writeText "hi" "hello"'
+testClosure 'writeText "hi" "hello ${hello}"'
+testClosure 'writeText "hi" "hello ${hello} ${figlet}"'
+
+
 echo 'OK!'
