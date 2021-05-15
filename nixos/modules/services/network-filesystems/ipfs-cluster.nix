@@ -34,7 +34,7 @@ in {
 
       consensus = mkOption {
         type = types.enum [ "raft" "crdt" ];
-        description = "Consensus protocol - 'raft' or 'crdt'.";
+        description = "Consensus protocol - 'raft' or 'crdt'. https://cluster.ipfs.io/documentation/guides/consensus/";
       };
 
       dataDir = mkOption {
@@ -82,6 +82,7 @@ in {
       wantedBy = [ "default.target" ];
 
       serviceConfig = {
+        # "" clears exec list (man systemd.service -> execStart)
         ExecStart = [
           ""
           "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus} ${initFlags}"
