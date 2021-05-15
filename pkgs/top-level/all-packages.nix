@@ -6504,7 +6504,7 @@ in
     libwebsockets_4_0
     libwebsockets_4_1
     libwebsockets_4_2;
-  libwebsockets = libwebsockets_3_2;
+  libwebsockets = libwebsockets_4_2;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
