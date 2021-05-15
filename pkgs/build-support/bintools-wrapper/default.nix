@@ -9,11 +9,22 @@
 , lib
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
-, sharedLibraryLoader ? if libc == null then null else lib.getLib libc
+, netbsd ? null, netbsdCross ? null
+, sharedLibraryLoader ?
+  if libc == null then
+    null
+  else if stdenvNoCC.targetPlatform.isNetBSD then
+    if libc != targetPackages.netbsdCross.headers then
+      targetPackages.netbsdCross.ld_elf_so
+    else
+      null
+  else
+    lib.getLib libc
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
+, targetPackages ? {}
 , useMacosReexportHack ? false
 
 # Darwin code signing support utilities
