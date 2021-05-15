@@ -1134,6 +1134,7 @@ in
       mapAttrs (name: service:
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
+          timerConfig.Persistent = service.persistent;
         })
         (filterAttrs (name: service: service.enable && service.startAt != []) cfg.services);
 
@@ -1142,6 +1143,7 @@ in
       mapAttrs (name: service:
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
+          timerConfig.Persistent = service.persistent;
         })
         (filterAttrs (name: service: service.startAt != []) cfg.user.services);
 

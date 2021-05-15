@@ -371,6 +371,21 @@ in rec {
       apply = v: if isList v then v else [ v ];
     };
 
+    persistent = mkOption {
+      type = types.bool;
+      default = false;
+      example = "true";
+      description = ''
+        When the timer is activated, trigger immediately if the timer would have
+        triggered at least once while the timer was inactive. Can be useful to
+        trigger missed runs of a service while the system was powered down. See
+        <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>. This is equivalent to adding a
+        corresponding timer unit with <option>Persistent</option> set to the
+        value given here.
+      '';
+    };
+
   };
 
 
