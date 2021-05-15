@@ -30,17 +30,25 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     pushd ..
     ./build/run_tests
     popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/arc_unpacker $out/libexec/arc_unpacker
     cp arc_unpacker $out/libexec/arc_unpacker/arc_unpacker
     cp ../GAMELIST.{htm,js} $out/share/doc/arc_unpacker
     cp -r ../etc $out/libexec/arc_unpacker
     makeWrapper $out/libexec/arc_unpacker/arc_unpacker $out/bin/arc_unpacker
+
+    runHook postInstall
   '';
 
   doCheck = true;
@@ -48,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool to extract files from visual novel archives";
     homepage = "https://github.com/vn-tools/arc_unpacker";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ midchildan ];
   };
 }
