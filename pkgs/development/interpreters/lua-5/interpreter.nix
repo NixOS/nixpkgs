@@ -72,8 +72,6 @@ self = stdenv.mkDerivation rec {
   '';
   inherit postConfigure;
 
-  NIX_LDFLAGS = [ "-lm" ] ++ lib.optional (lib.versionOlder luaversion "5.2") "-ldl";
-
   inherit postBuild;
 
   postInstall = ''
@@ -95,7 +93,7 @@ self = stdenv.mkDerivation rec {
     Description: An Extensible Extension Language
     Version: ${version}
     Requires:
-    Libs: -L$out/lib -llua
+    Libs: -L$out/lib -llua -lm
     Cflags: -I$out/include
     EOF
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
