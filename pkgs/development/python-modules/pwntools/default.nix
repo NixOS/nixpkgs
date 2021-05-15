@@ -10,6 +10,7 @@
 , pygments
 , ROPGadget
 , capstone
+, colored-traceback
 , paramiko
 , pip
 , psutil
@@ -17,6 +18,7 @@
 , pyserial
 , dateutil
 , requests
+, rpyc
 , tox
 , unicorn
 , intervaltree
@@ -24,12 +26,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.3.1";
+  version = "4.5.0";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12ja913kz8wl4afrmpzxh9fx6j7rcwc2vqzkvfr1fxn42gkqhqf4";
+    sha256 = "sha256-IWHMorSASG/po8ib1whS3xPuoUUlD0tbbWI35DI2SIY=";
   };
 
   # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
@@ -46,6 +48,7 @@ buildPythonPackage rec {
     pygments
     ROPGadget
     capstone
+    colored-traceback
     paramiko
     pip
     psutil
@@ -53,6 +56,7 @@ buildPythonPackage rec {
     pyserial
     dateutil
     requests
+    rpyc
     tox
     unicorn
     intervaltree
