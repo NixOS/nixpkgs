@@ -2027,6 +2027,8 @@ in
     boost = pkgs.boost.override { python = python3; };
   };
 
+  calendar-cli = callPackage ../tools/networking/calendar-cli { };
+
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -5864,6 +5866,8 @@ in
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jq = callPackage ../development/tools/jq { };
+
+  jiq = callPackage ../development/tools/misc/jiq { };
 
   jql = callPackage ../development/tools/jql { };
 
@@ -19416,6 +19420,7 @@ in
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
@@ -22865,7 +22870,8 @@ in
 
   dmrconfig = callPackage ../applications/radio/dmrconfig { };
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
+  dmtx-utils = callPackage ../tools/graphics/dmtx-utils {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
@@ -22967,7 +22973,9 @@ in
     jdk = jdk11;
   });
 
-  ecpdap = callPackage ../development/tools/ecpdap { };
+  ecpdap = callPackage ../development/tools/ecpdap {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -24181,7 +24189,7 @@ in
   };
 
   imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
     ghostscript = null;
   };
 
@@ -29014,7 +29022,9 @@ in
 
   bppsuite = callPackage ../applications/science/biology/bppsuite { };
 
-  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+  cd-hit = callPackage ../applications/science/biology/cd-hit {
+    inherit (llvmPackages) openmp;
+  };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 

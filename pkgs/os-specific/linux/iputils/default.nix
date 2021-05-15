@@ -38,7 +38,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libcap ]
     ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2;
   postInstall = ''
-    install -D -m 644 /dev/stdin $apparmor/bin.ping <<EOF
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
     include <tunables/global>
     $out/bin/ping {
       include <abstractions/base>

@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-xp1ei41HdbSxq8hoQB4JFtYZLb4bIKSlwEwwxUcjojE=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "A high performance code minimap render";

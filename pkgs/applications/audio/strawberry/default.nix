@@ -82,10 +82,6 @@ mkDerivation rec {
     util-linux
   ];
 
-  cmakeFlags = [
-    "-DUSE_SYSTEM_TAGLIB=ON"
-  ];
-
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';

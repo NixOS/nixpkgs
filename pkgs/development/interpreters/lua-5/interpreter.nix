@@ -61,7 +61,8 @@ self = stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(SYSCFLAGS)' )
+    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(${
+      if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
