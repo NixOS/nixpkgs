@@ -184,6 +184,8 @@ in
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  arcan = callPackage ../development/libraries/arcan { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
