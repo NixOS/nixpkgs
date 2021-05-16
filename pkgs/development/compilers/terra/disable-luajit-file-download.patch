@@ -1,0 +1,13 @@
+diff --git a/cmake/Modules/GetLuaJIT.cmake b/cmake/Modules/GetLuaJIT.cmake
+index 023b5c2..8564b92 100644
+--- a/cmake/Modules/GetLuaJIT.cmake
++++ b/cmake/Modules/GetLuaJIT.cmake
+@@ -63,8 +63,6 @@ string(CONCAT
+   "${CMAKE_SHARED_LIBRARY_SUFFIX}"
+ )
+ 
+-file(DOWNLOAD "${LUAJIT_URL}" "${LUAJIT_TAR}")
+-
+ execute_process(
+   COMMAND "${CMAKE_COMMAND}" -E tar xzf "${LUAJIT_TAR}"
+   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
