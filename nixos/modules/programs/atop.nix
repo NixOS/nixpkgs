@@ -107,7 +107,6 @@ in
           (cfg.package.override { withAtopgpu = true; })
         else
           cfg.package;
-      packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
     in
     {
       environment.etc = mkIf (cfg.settings != { }) {
@@ -118,13 +117,13 @@ in
             '')
             cfg.settings);
       };
-      environment.systemPackages = packages;
+      environment.systemPackages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       boot.extraModulePackages = [ (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       systemd =
         let
-          mkSystemd = type: cond: name: {
+          mkSystemd = type: cond: name: restartTriggers: {
             ${name} = lib.mkIf cond {
-              restartTriggers = packages;
+              inherit restartTriggers;
               wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
             };
           };
@@ -132,13 +131,13 @@ in
           mkTimer = mkSystemd "timers";
         in
         {
-          inherit packages;
+          packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
           services =
-            mkService cfg.atopService.enable "atop"
-            // mkService cfg.atopacctService.enable "atopacct"
-            // mkService cfg.netatop.enable "netatop"
-            // mkService cfg.atopgpu.enable "atopgpu";
-          timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate";
+            mkService cfg.atopService.enable "atop" [ atop ]
+            // mkService cfg.atopacctService.enable "atopacct" [ atop ]
+            // mkService cfg.netatop.enable "netatop" [ cfg.netatop.package ]
+            // mkService cfg.atopgpu.enable "atopgpu" [ atop ];
+          timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate" [ atop ];
         };
       security.wrappers =
         lib.mkIf cfg.setuidWrapper.enable { atop = { source = "${atop}/bin/atop"; }; };
