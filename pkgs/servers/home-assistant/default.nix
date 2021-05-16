@@ -407,6 +407,7 @@ in with py.pkgs; buildPythonApplication rec {
     "workday"
     "worldclock"
     "xiaomi_miio"
+    "yandex_transport"
     "yeelight"
     "zeroconf"
     "zha"
