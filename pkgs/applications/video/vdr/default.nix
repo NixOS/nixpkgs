@@ -51,6 +51,6 @@
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
