@@ -14867,7 +14867,7 @@ in
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
-      else throw "don't yet have a `targetPackages.darwin.LibsystemCross`"
+      else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
     else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
