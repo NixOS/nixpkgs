@@ -326,6 +326,7 @@ unsupported-platforms:
   rtlsdr:                                       [ x86_64-darwin ]
   rubberband:                                   [ x86_64-darwin ]
   sbv:                                          [ aarch64-linux ]
+  scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin ]
   synthesizer-alsa:                             [ x86_64-darwin ]

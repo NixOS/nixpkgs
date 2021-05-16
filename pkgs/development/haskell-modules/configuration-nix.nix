@@ -772,9 +772,4 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
-
-  # https://github.com/informatikr/scrypt/issues/8
-  scrypt = overrideCabal super.scrypt {
-    platforms = pkgs.lib.platforms.x86;
-  };
 }
