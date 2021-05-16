@@ -6,7 +6,7 @@
 , findutils
 , systemd
 , python3
-  # makes the package unfree via pynvml
+# makes the package unfree via pynvml
 , withAtopgpu ? false
 }:
 
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
   };
 
-  nativeBuildInputs = if withAtopgpu then [ python3.pkgs.wrapPython ] else [ ];
-  buildInputs = [ zlib ncurses ] ++ (if withAtopgpu then [ python3 ] else [ ]);
-  pythonPath = if withAtopgpu then [ python3.pkgs.pynvml ] else [ ];
+  nativeBuildInputs = lib.optionals withAtopgpu [ python3.pkgs.wrapPython ];
+  buildInputs = [ zlib ncurses ] ++ lib.optionals withAtopgpu [ python3 ];
+  pythonPath = lib.optionals withAtopgpu [ python3.pkgs.pynvml ];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -59,14 +59,11 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     # remove extra files we don't need
-    rm -rf $out/{var,etc}
-    rm -rf $out/bin/atop{sar,}-${version}
+    rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
   '' + (if withAtopgpu then ''
     wrapPythonPrograms
   '' else ''
-    rm $out/lib/systemd/system/atopgpu.service
-    rm $out/bin/atopgpud
-    rm $out/share/man/man8/atopgpud.8
+    rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
   '');
 
   meta = with lib; {
