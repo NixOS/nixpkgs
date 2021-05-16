@@ -7696,6 +7696,8 @@ in {
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 
+  spacy-pkuseg = callPackage ../development/python-modules/spacy-pkuseg { };
+
   spake2 = callPackage ../development/python-modules/spake2 { };
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
