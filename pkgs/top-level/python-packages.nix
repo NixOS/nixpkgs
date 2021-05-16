@@ -5851,6 +5851,8 @@ in {
 
   pymongo = callPackage ../development/python-modules/pymongo { };
 
+  pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
+
   pymorphy2-dicts-ru = callPackage ../development/python-modules/pymorphy2/dicts-ru.nix { };
 
   pympler = callPackage ../development/python-modules/pympler { };
