@@ -972,7 +972,7 @@
     "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
     "yamaha" = ps: with ps; [ rxv ];
     "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
-    "yandex_transport" = ps: with ps; [ ]; # missing inputs: aioymaps
+    "yandex_transport" = ps: with ps; [ aioymaps ];
     "yandextts" = ps: with ps; [ ];
     "yeelight" = ps: with ps; [ yeelight ];
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
