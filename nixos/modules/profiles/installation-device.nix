@@ -99,5 +99,13 @@ with lib;
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
+
+    # Prevent installation media from evacuating persistent storage, as their
+    # var directory is not persistent and it would thus result in deletion of
+    # those entries.
+    environment.etc."systemd/pstore.conf".text = ''
+      [PStore]
+      Unlink=no
+    '';
   };
 }
