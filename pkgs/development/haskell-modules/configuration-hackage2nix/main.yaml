@@ -314,6 +314,8 @@ unsupported-platforms:
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
   parport:                                      [ x86_64-darwin ]
+  password:                                     [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
+  password-instances:                           [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   piyo:                                         [ x86_64-darwin ]
   PortMidi-simple:                              [ x86_64-darwin ]
   PortMidi:                                     [ x86_64-darwin ]
@@ -326,6 +328,7 @@ unsupported-platforms:
   rtlsdr:                                       [ x86_64-darwin ]
   rubberband:                                   [ x86_64-darwin ]
   sbv:                                          [ aarch64-linux ]
+  scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin ]
