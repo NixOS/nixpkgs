@@ -9,18 +9,19 @@
 , SDL2
 , glew
 , openal
+, OpenAL
 , libvorbis
 , libogg
 , curl
 , freetype
-, bluez
 , libjpeg
 , libpng
-, enet
 , harfbuzz
 , mcpp
 , wiiuse
 , angelscript
+, Cocoa
+, IOKit
 }:
 let
   dir = "stk-code";
@@ -82,10 +83,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Deletes all bundled libs in stk-code/lib except those
-  # That couldn't be replaced with system packages
   postPatch = ''
+    # Deletes all bundled libs in stk-code/lib except those
+    # That couldn't be replaced with system packages
     find lib -maxdepth 1 -type d | egrep -v "^lib$|${(lib.concatStringsSep "|" bundledLibraries)}" | xargs -n1 -L1 -r -I{} rm -rf {}
+
+    # Allow building with system-installed wiiuse on Darwin
+    substituteInPlace CMakeLists.txt \
+      --replace 'NOT (APPLE OR HAIKU)) AND USE_SYSTEM_WIIUSE' 'NOT (HAIKU)) AND USE_SYSTEM_WIIUSE'
   '';
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
@@ -93,20 +98,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     glew
-    openal
     libvorbis
     libogg
     freetype
     curl
-    bluez
     libjpeg
     libpng
-    enet
     harfbuzz
     mcpp
     wiiuse
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isAarch64) angelscript;
+  ++ lib.optional (!stdenv.hostPlatform.isAarch64) angelscript
+  ++ lib.optional stdenv.hostPlatform.isLinux openal
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa ];
 
   cmakeFlags = [
     "-DBUILD_RECORDER=OFF" # libopenglrecorder is not in nixpkgs
@@ -117,9 +121,18 @@ stdenv.mkDerivation rec {
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
+  # Extract binary from built app bundle
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/bin
+    mv $out/{supertuxkart.app/Contents/MacOS,bin}/supertuxkart
+    rm -rf $out/supertuxkart.app
+  '';
+
   # Obtain the assets directly from the fetched store path, to avoid duplicating assets across multiple engine builds
   preFixup = ''
-    wrapProgram $out/bin/supertuxkart --set-default SUPERTUXKART_ASSETS_DIR "${assets}"
+    wrapProgram $out/bin/supertuxkart \
+      --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
+      --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart" \
   '';
 
   meta = with lib; {
@@ -132,7 +145,7 @@ stdenv.mkDerivation rec {
     homepage = "https://supertuxkart.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pyrolagus peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${version}/CHANGELOG.md";
   };
 }
