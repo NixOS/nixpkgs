@@ -30,6 +30,7 @@ in
           default = false;
           description = ''
             Whether to install and enable the netatop kernel module.
+            Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
         };
         package = mkOption {
