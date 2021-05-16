@@ -4777,6 +4777,18 @@ let
     meta.homepage = "https://github.com/wellle/tmux-complete.vim/";
   };
 
+  todo-comments-nvim = buildVimPluginFrom2Nix {
+    pname = "todo-comments-nvim";
+    version = "2021-05-16";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "todo-comments.nvim";
+      rev = "0f6a87bb04925775bb2fd68c063152512e033313";
+      sha256 = "1w2qgchd8r553i836pb4zjy2h23nryd5nfc905h5nxw0jaqb1f4i";
+    };
+    meta.homepage = "https://github.com/folke/todo-comments.nvim/";
+  };
+
   todo-txt-vim = buildVimPluginFrom2Nix {
     pname = "todo-txt-vim";
     version = "2021-03-20";

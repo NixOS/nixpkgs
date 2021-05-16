@@ -137,6 +137,7 @@ fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
 folke/lsp-colors.nvim@main
+folke/todo-comments.nvim@main
 folke/trouble.nvim@main
 folke/which-key.nvim@main
 freitass/todo.txt-vim
