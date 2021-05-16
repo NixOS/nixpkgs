@@ -177,8 +177,11 @@ package-maintainers:
     - hercules-ci-cnix-expr
     - hercules-ci-cnix-store
   cdepillabout:
+    - password
+    - password-instances
     - pretty-simple
     - spago
+    - termonad
   terlar:
     - nix-diff
   maralorn:
