@@ -52,7 +52,7 @@ in
 
       setuidWrapper.enable = mkOption {
         type = types.bool;
-        default = cfg.netatop.enable || cfg.atopgpu.enable;
+        default = false;
         description = ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
           the features as non-root user (e.g.: ipc information, netatop, atopgpu).
@@ -60,7 +60,7 @@ in
         '';
       };
 
-      atopsvc.enable = mkOption {
+      atopService.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -68,7 +68,7 @@ in
           long-term analysis.
         '';
       };
-      atopRotate.enable = mkOption {
+      atopRotateTimer.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -76,7 +76,7 @@ in
           daily to make sure the data files are rotate.
         '';
       };
-      atopacct.enable = mkOption {
+      atopacctService.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -133,11 +133,11 @@ in
         {
           inherit packages;
           services =
-            mkService cfg.atopsvc.enable "atop"
-            // mkService cfg.atopacct.enable "atopacct"
+            mkService cfg.atopService.enable "atop"
+            // mkService cfg.atopacctService.enable "atopacct"
             // mkService cfg.netatop.enable "netatop"
             // mkService cfg.atopgpu.enable "atopgpu";
-          timers = mkTimer cfg.atopRotate.enable "atop-rotate";
+          timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate";
         };
       security.wrappers =
         lib.mkIf cfg.setuidWrapper.enable { atop = { source = "${atop}/bin/atop"; }; };
