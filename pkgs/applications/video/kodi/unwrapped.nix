@@ -45,7 +45,7 @@ let
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
-    rev    = "v${kodiVersion}";
+    rev    = "${kodiVersion}-${rel}";
     sha256 = "0jh67vw3983lnfgqzqfislawwbpq0vxxk1ljsg7mar06mlwfxb7h";
   };
 
