@@ -1675,6 +1675,7 @@ broken-packages:
   - grasp
   - gray-code
   - greencard
+  - greenclip
   - greg-client
   - gremlin-haskell
   - Grempa
@@ -3036,6 +3037,7 @@ broken-packages:
   - multext-east-msd
   - multiaddr
   - multiarg
+  - multi-except
   - multihash
   - multi-instance
   - multilinear
