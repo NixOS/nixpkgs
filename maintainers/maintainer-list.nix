@@ -104,6 +104,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  a12l = {
+    name = "Albin Otterhäll";
+    email = "dev@a12l.xyx";
+    github = "a12l";
+    githubId = 38804798;
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
