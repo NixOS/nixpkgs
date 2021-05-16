@@ -1727,6 +1727,8 @@ in {
 
   datrie = callPackage ../development/python-modules/datrie { };
 
+  dawg-python = callPackage ../development/python-modules/dawg-python { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
