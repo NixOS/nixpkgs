@@ -12233,6 +12233,8 @@ in
 
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 
+  pythonCondaPackages = callPackage ./../development/interpreters/python/conda { };
+
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
 
   # Should eventually be moved inside Python interpreters.
