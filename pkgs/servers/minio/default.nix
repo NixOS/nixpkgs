@@ -15,22 +15,22 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2021-04-22T15-44-28Z";
+  version = "2021-05-11T23-27-41Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "147a4vgf2hdpbndska443axzvxx56bmc0011m3cq4ca1vm783k8q";
+    sha256 = "0yljq4lm9maz73ha9m38ljv977999p57rfkzybgzbjjrijgszm2b";
   };
 
-  vendorSha256 = "0qj1zab97q8s5gy7a304wqi832y8m083cnk8hllz8lz9yjcw6q92";
+  vendorSha256 = "1dm8nbg86zvxakc7h4dafqb035sc5x6viz8p409l22l695qrp6bi";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s/Version.*/Version = \"${versionToTimestamp version}\"/g" cmd/build-constants.go
     sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
     sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go

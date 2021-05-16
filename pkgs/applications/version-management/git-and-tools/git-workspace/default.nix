@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , rustPlatform
-, Security
+, libiconv, Security
 , pkg-config, openssl
 }:
 
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-lvxEYjVMJoAFFRG5iVfGwxUeJObIxfEaWokk69l++nI=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "Sync personal and work git repositories from multiple providers";

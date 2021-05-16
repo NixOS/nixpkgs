@@ -926,6 +926,23 @@ let
         };
       };
 
+      stephlin.vscode-tmux-keybinding = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tmux-keybinding";
+          publisher = "stephlin";
+          version = "0.0.6";
+          sha256 = "0mph2nval1ddmv9hpl51fdvmagzkqsn8ljwqsfha2130bb7la0d9";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/stephlin.vscode-tmux-keybinding/changelog";
+          description = "A simple extension for tmux behavior in vscode terminal.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stephlin.vscode-tmux-keybinding";
+          homepage = "https://github.com/StephLin/vscode-tmux-keybinding";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "code-spell-checker";
