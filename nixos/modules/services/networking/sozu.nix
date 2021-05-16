@@ -42,7 +42,7 @@ in
 
         options = {
           saved_state = mkOption {
-            type = types.str;
+            type = types.either types.str types.path;
             default = "/run/sozu/state.json";
             description = ''
               Path to a file sozu can use to load an initial configuration state
@@ -103,7 +103,7 @@ in
           };
 
           command_socket = mkOption {
-            type = types.str;
+            type = types.either types.str types.path;
             default = "/run/sozu/sozu.sock";
             description = ''
               Path to the unix socket file used to send commands to sozu.
@@ -211,7 +211,7 @@ in
           };
 
           pid_file_path = mkOption {
-            type = types.str;
+            type = types.either types.str types.path;
             default = "/run/sozu/sozu.pid";
             description = ''
               PID file is a file containing the PID of the master process of sozu.
