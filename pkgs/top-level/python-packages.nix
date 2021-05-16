@@ -7700,6 +7700,8 @@ in {
 
   spacy-pkuseg = callPackage ../development/python-modules/spacy-pkuseg { };
 
+  spacy-transformers = callPackage ../development/python-modules/spacy-transformers { };
+
   spake2 = callPackage ../development/python-modules/spake2 { };
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
