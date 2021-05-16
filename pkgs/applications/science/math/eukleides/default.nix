@@ -9,6 +9,9 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     sha256 = "0s8cyh75hdj89v6kpm3z24i48yzpkr8qf0cwxbs9ijxj1i38ki0q";
   };
 
+  # use $CC instead of hardcoded gcc
+  patches = [ ./use-CC.patch ];
+
   nativeBuildInputs = [ bison flex texinfo makeWrapper ];
 
   buildInputs = [ readline texLive ];
@@ -59,7 +62,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
       circles and conics.
     '';
 
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.peti ];
   };
 })
