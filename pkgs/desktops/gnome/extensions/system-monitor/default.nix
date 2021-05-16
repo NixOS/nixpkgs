@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-system-monitor";
-  version = "unstable-2021-04-08";
+  version = "unstable-2021-05-04";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "942603da39de12f50b1f86efbde92d7526d1290e";
-    sha256 = "0lzb7064bigw2xsqkzr8qfhp9wfmxyi3823j2782v99jpcz423aw";
+    rev = "bc38ccf49ac0ffae0fc0436f3c2579fc86949f10";
+    sha256 = "0yb5sb2xv4m18a24h4daahnxgnlmbfa0rfzic0zs082qv1kfi5h8";
   };
 
   buildInputs = [

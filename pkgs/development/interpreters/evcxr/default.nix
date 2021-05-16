@@ -1,4 +1,5 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv, gcc, Security, cmake }:
+{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv
+, gcc, cmake, libiconv, CoreServices, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
@@ -16,7 +17,9 @@ rustPlatform.buildRustPackage rec {
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv CoreServices Security ];
+
   postInstall = let
     wrap = exe: ''
       wrapProgram $out/bin/${exe} \

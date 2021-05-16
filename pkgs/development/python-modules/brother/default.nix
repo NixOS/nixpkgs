@@ -5,29 +5,29 @@
 , pytest-asyncio
 , pytest-error-for-skips
 , pytest-runner
-, pytest-tornasync
-, pytest-trio
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "1.0.0";
+  version = "1.0.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0NfqPlQiOkNhR+H55E9LE4dGa9R8vcSyPNbbIeiRJV8=";
+    sha256 = "sha256-Cfut6Y4Hln32g4V13xbOo5JdjPv2cH6FCDqvRRyijIA=";
   };
 
+  nativeBuildInputs = [
+    pytest-runner
+  ];
+
   postPatch = ''
-    substituteInPlace pytest.ini \
+    substituteInPlace setup.cfg \
       --replace "--cov --cov-report term-missing " ""
-    substituteInPlace requirements-test.txt \
-      --replace "pytest-cov" ""
   '';
 
   propagatedBuildInputs = [
@@ -37,9 +37,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-asyncio
     pytest-error-for-skips
-    pytest-runner
-    pytest-tornasync
-    pytest-trio
     pytestCheckHook
   ];
 

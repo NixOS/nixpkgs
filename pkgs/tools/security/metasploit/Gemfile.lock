@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 08fd394933eadca2b90e4de4ecce7f478af1f161
-  ref: refs/tags/6.0.43
+  revision: dbc17d32977b2e36ead8dafff4f41c607a8bec88
+  ref: refs/tags/6.0.44
   specs:
-    metasploit-framework (6.0.43)
+    metasploit-framework (6.0.44)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -80,6 +80,7 @@ GIT
       sinatra
       sqlite3
       sshkey
+      swagger-blocks
       thin
       tzinfo
       tzinfo-data
@@ -124,13 +125,13 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.452.0)
+    aws-partitions (1.455.0)
     aws-sdk-core (3.114.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.235.0)
+    aws-sdk-ec2 (1.236.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.52.0)
@@ -268,7 +269,7 @@ GEM
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.3.0)
+    puma (5.3.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -289,7 +290,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rake (13.0.3)
     rb-readline (0.5.5)
-    recog (2.3.19)
+    recog (2.3.20)
       nokogiri
     redcarpet (3.5.1)
     reline (0.2.5)
@@ -367,6 +368,7 @@ GEM
       tilt (~> 2.0)
     sqlite3 (1.4.2)
     sshkey (2.0.0)
+    swagger-blocks (3.0.0)
     thin (1.8.0)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)

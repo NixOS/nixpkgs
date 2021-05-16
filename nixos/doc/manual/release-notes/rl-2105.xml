@@ -78,7 +78,7 @@
    </listitem>
    <listitem>
     <para>
-     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.0 "Matrix". See
+     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.1 "Matrix". See
      the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
      further details.
     </para>
@@ -713,6 +713,20 @@ environment.systemPackages = [
    <listitem>
     <para>
      The <package>yadm</package> dotfile manager has been updated from 2.x to 3.x, which has new (XDG) default locations for some data/state files. Most yadm commands will fail and print a legacy path warning (which describes how to upgrade/migrate your repository). If you have scripts, daemons, scheduled jobs, shell profiles, etc. that invoke yadm, expect them to fail or misbehave until you perform this migration and prepare accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Instead of determining <option>services.radicale.package</option>
+     automatically based on <option>system.stateVersion</option>, the latest
+     version is always used because old versions are not officially supported.
+    </para>
+    <para>
+     Furthermore, Radicale's systemd unit was hardened which might break some
+     deployments.  In particular, a non-default
+     <literal>filesystem_folder</literal> has to be added to
+     <option>systemd.services.radicale.serviceConfig.ReadWritePaths</option> if
+     the deprecated <option>services.radicale.config</option> is used.
     </para>
    </listitem>
   </itemizedlist>

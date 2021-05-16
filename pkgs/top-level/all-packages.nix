@@ -1473,7 +1473,9 @@ in
    SDL = SDL_sixel;
   };
 
-  gremlin-console = callPackage ../applications/misc/gremlin-console { };
+  gremlin-console = callPackage ../applications/misc/gremlin-console {
+    openjdk = openjdk11;
+  };
 
   grex = callPackage ../tools/misc/grex {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -2011,6 +2013,8 @@ in
     python = python3;
     boost = pkgs.boost.override { python = python3; };
   };
+
+  calendar-cli = callPackage ../tools/networking/calendar-cli { };
 
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
@@ -5359,6 +5363,8 @@ in
 
   gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
+  gtk-frdp = callPackage ../development/libraries/gtk-frdp {};
+
   gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess {
@@ -5860,6 +5866,8 @@ in
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jq = callPackage ../development/tools/jq { };
+
+  jiq = callPackage ../development/tools/misc/jiq { };
 
   jql = callPackage ../development/tools/jql { };
 
@@ -9045,6 +9053,8 @@ in
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
+  ttp = with python3.pkgs; toPythonApplication ttp;
+
   chaps = callPackage ../tools/security/chaps { };
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
@@ -9707,6 +9717,8 @@ in
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
 
   wpgtk = callPackage ../tools/X11/wpgtk { };
+
+  wrap = callPackage ../tools/text/wrap { };
 
   wring = nodePackages.wring;
 
@@ -11867,14 +11879,14 @@ in
   duktape = callPackage ../development/interpreters/duktape { };
 
   evcxr = callPackage ../development/interpreters/evcxr {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   beam = callPackage ./beam-packages.nix { };
   beam_nox = callPackage ./beam-packages.nix { wxSupport = false; };
 
   inherit (beam.interpreters)
-    erlang erlangR23 erlangR22 erlangR21 erlangR20 erlangR19 erlangR18
+    erlang erlangR24 erlangR23 erlangR22 erlangR21 erlangR20 erlangR19 erlangR18
     erlang_odbc erlang_javac erlang_odbc_javac erlang_basho_R16B02
     elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7
     elixir_ls;
@@ -14955,7 +14967,9 @@ in
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
-  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
+  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   pango = callPackage ../development/libraries/pango {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
@@ -19314,9 +19328,7 @@ in
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus {
-    buildGoPackage = buildGo115Package;
-  };
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-artifactory-exporter = callPackage ../servers/monitoring/prometheus/artifactory-exporter.nix { };
@@ -19336,6 +19348,7 @@ in
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
@@ -22787,7 +22800,8 @@ in
 
   dmrconfig = callPackage ../applications/radio/dmrconfig { };
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
+  dmtx-utils = callPackage ../tools/graphics/dmtx-utils {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
@@ -22889,7 +22903,9 @@ in
     jdk = jdk11;
   });
 
-  ecpdap = callPackage ../development/tools/ecpdap { };
+  ecpdap = callPackage ../development/tools/ecpdap {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -23167,7 +23183,7 @@ in
   # A build without gui components and other utilites not needed for end user
   # libraries
   gnuradioMinimal = gnuradio.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio.unwrapped.override {
       volk = volk.override {
         # So it will not reference python
@@ -23197,7 +23213,7 @@ in
   # A build without gui components and other utilites not needed if gnuradio is
   # used as a c++ library.
   gnuradio3_8Minimal = gnuradio3_8.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio3_8.unwrapped.override {
       volk = volk.override {
         enableModTool = false;
@@ -23226,7 +23242,7 @@ in
   # A build without gui components and other utilites not needed if gnuradio is
   # used as a c++ library.
   gnuradio3_7Minimal = gnuradio3_7.override {
-    wrap = false;
+    doWrap = false;
     unwrapped = gnuradio3_7.unwrapped.override {
       volk = volk.override {
         enableModTool = false;
@@ -24103,7 +24119,7 @@ in
   };
 
   imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
     ghostscript = null;
   };
 
@@ -25961,7 +25977,7 @@ in
 
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
 
-  rpcs3 = libsForQt514.callPackage ../misc/emulators/rpcs3 { };
+  rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
 
   rsclock = callPackage ../applications/misc/rsclock { };
 
@@ -26767,6 +26783,8 @@ in
   };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
+
+  neovide = callPackage ../applications/editors/neovim/neovide { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
@@ -28934,7 +28952,9 @@ in
 
   bppsuite = callPackage ../applications/science/biology/bppsuite { };
 
-  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+  cd-hit = callPackage ../applications/science/biology/cd-hit {
+    inherit (llvmPackages) openmp;
+  };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 

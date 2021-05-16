@@ -37,8 +37,12 @@ buildPythonPackage rec {
   inherit doCheck;
 
   disabledTests = [
-    "test_gunicorn" # No "examples" directory in pypi distribution.
-    "test_zero_downtime" # No "examples.delayed_response.app" module in pypi distribution.
+    # No "examples" directory in pypi distribution
+    "test_gunicorn"
+    "test_zero_downtime"
+    # flaky
+    "test_keep_alive_client_timeout"
+    "test_reloader_live"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -34,6 +34,7 @@ let
     "fritzbox"
     "json"
     "jitsi"
+    "kea"
     "keylight"
     "knot"
     "lnd"

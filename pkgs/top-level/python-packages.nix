@@ -409,7 +409,11 @@ in {
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
-  ansible = callPackage ../development/python-modules/ansible { };
+  ansible = callPackage ../development/python-modules/ansible/legacy.nix { };
+
+  ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
+
+  ansible-collections = callPackage ../development/python-modules/ansible/collections.nix { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
@@ -1474,6 +1478,8 @@ in {
   colorclass = callPackage ../development/python-modules/colorclass { };
 
   colored = callPackage ../development/python-modules/colored { };
+
+  colored-traceback = callPackage ../development/python-modules/colored-traceback { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
 
@@ -2725,6 +2731,8 @@ in {
 
   glasgow = callPackage ../development/python-modules/glasgow { };
 
+  glcontext = callPackage ../development/python-modules/glcontext { };
+
   glob2 = callPackage ../development/python-modules/glob2 { };
 
   globre = callPackage ../development/python-modules/globre { };
@@ -3578,6 +3586,8 @@ in {
   jupytext = callPackage ../development/python-modules/jupytext { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
+
+  jxmlease = callPackage ../development/python-modules/jxmlease { };
 
   k5test = callPackage ../development/python-modules/k5test {
     inherit (pkgs) krb5Full findutils which;
@@ -5885,6 +5895,8 @@ in {
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
+  pynetbox = callPackage ../development/python-modules/pynetbox { };
+
   pynetdicom = callPackage ../development/python-modules/pynetdicom { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
@@ -6880,6 +6892,8 @@ in {
   pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
+
+  pyxb = callPackage ../development/python-modules/pyxb { };
 
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
@@ -8265,6 +8279,8 @@ in {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ttp = callPackage ../development/python-modules/ttp { };
+
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
@@ -8857,6 +8873,8 @@ in {
   yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
 
   yanc = callPackage ../development/python-modules/yanc { };
+
+  yangson = callPackage ../development/python-modules/yangson { };
 
   yapf = callPackage ../development/python-modules/yapf { };
 

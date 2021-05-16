@@ -8,6 +8,7 @@
 , cairo
 , fontconfig
 , libsigcxx30
+, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost # for tests
     fontconfig
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
   ];
 
   propagatedBuildInputs = [
@@ -47,7 +50,8 @@ stdenv.mkDerivation rec {
   BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
-  doCheck = true;
+  # Tests fail on Darwin, possibly because of sandboxing.
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";

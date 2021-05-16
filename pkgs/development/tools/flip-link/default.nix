@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flip-link";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "13rgpbwaz2b928rg15lbaszzjymph54pwingxpszp5paihx4iayr";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Adds zero-cost stack overflow protection to your embedded programs";

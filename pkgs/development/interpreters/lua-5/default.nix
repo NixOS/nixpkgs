@@ -17,7 +17,7 @@ in rec {
   lua5_4 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "4"; patch = "2"; };
     hash = "0ksj5zpj74n0jkamy3di1p6l10v4gjnd2zjnb453qc6px6bhsmqi";
-    patches = [
+    patches = if stdenv.isDarwin then [ ./5.4.darwin.patch ] else [
       # build lua as a shared library as well, MIT-licensed from
       # https://github.com/archlinux/svntogit-packages/tree/packages/lua/trunk
       ./liblua.so.patch
