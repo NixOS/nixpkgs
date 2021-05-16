@@ -386,6 +386,8 @@ prebuiltNix() {
         echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
         echo @nix_i686_linux@
+    elif [[ "$machine" = aarch64 ]]; then
+        echo @nix_aarch64_linux@
     else
         echo "$0: unsupported platform"
         exit 1
