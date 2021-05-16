@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     sha256 = "1vpvlahv6dmr7vfb11p5cc5ds2y2vfvcb877nkqx18yin6pg357l";
   };
 
+  patches = [
+    # To fix the build with wlroots 0.13:
+    ./wlroots-0.13.patch
+  ];
+
   nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
   buildInputs = [
     cairo
