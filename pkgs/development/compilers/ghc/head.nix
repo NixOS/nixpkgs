@@ -258,7 +258,10 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [ marcweber andres peti ];
-    inherit (ghc.meta) license platforms;
+    inherit (ghc.meta) license;
+    # GHC-HEAD does not appear to compile on aarch64.
+    broken = stdenv.isAarch64;
+    platforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
