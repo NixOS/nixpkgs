@@ -209,7 +209,9 @@ let
       cabal-install = all;
       Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
       funcmp = all;
-      haskell-language-server = all;
+      # Doesn't currently work on ghc-9.0:
+      # https://github.com/haskell/haskell-language-server/issues/297
+      haskell-language-server = with compilerNames; [ ghc884 ghc8104 ];
       hoogle = all;
       hsdns = all;
       jailbreak-cabal = all;
