@@ -16929,7 +16929,6 @@ in
   };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
-  nss_3_44 = lowPrio (callPackage ../development/libraries/nss/3.44.nix { });
   nssTools = nss.tools;
 
   # required for stable thunderbird and firefox-esr-78
@@ -26488,19 +26487,10 @@ in
     gtk3Support = true;
   };
 
-  thunderbird-68 = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
-    inherit (rustPackages) cargo rustc;
-    libpng = libpng_apng;
-    nss = nss_3_44;
-    gtk3Support = true;
-  };
-
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
   thunderbird-bin = thunderbird-bin-78;
   thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
-
-  thunderbird-bin-68 = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
