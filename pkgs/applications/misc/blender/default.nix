@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python3Packages.wrapPython ]
+  nativeBuildInputs = [ cmake makeWrapper python3Packages.wrapPython llvmPackages.llvm.dev ]
     ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase

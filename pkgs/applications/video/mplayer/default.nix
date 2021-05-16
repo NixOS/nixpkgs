@@ -106,6 +106,8 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
+  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;

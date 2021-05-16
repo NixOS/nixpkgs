@@ -77,7 +77,7 @@ buildPythonPackage rec {
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = lib.optionalString stdenv.isDarwin ''
-    cpp_sdk="${libcxx}/include/c++/v1";
+    cpp_sdk="${lib.getDev libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \

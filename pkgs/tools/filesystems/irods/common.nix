@@ -19,7 +19,7 @@
     "-DIRODS_LINUX_DISTRIBUTION_NAME=nix"
     "-DIRODS_LINUX_DISTRIBUTION_VERSION_MAJOR=${builtins.nixVersion}"
     "-DCPACK_GENERATOR=TGZ"
-    "-DCMAKE_CXX_FLAGS=-I${libcxx}/include/c++/v1"
+    "-DCMAKE_CXX_FLAGS=-I${lib.getDev libcxx}/include/c++/v1"
   ];
 
   preConfigure = ''

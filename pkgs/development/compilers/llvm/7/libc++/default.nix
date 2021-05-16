@@ -13,7 +13,11 @@ stdenv.mkDerivation {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
@@ -37,7 +41,8 @@ stdenv.mkDerivation {
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
-  ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
 
   passthru = {
     isLLVM = true;

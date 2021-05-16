@@ -22,9 +22,9 @@ import ./default.nix {
   rustcVersion = "1.51.0";
   rustcSha256 = "0ixqkqglv3isxbvl4ldr4byrkx692wghsz3fasy1pn5kr2prnsvs";
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_11.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_11.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_11.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
 
   llvmBootstrapForDarwin = llvmPackages_11;
 

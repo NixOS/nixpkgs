@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     ++ (lib.optional stdenv.isDarwin Security);
 
   configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
+    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
   '';
 
   meta = with lib; {

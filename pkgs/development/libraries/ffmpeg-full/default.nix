@@ -1,4 +1,4 @@
-{ lib, stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -126,13 +126,14 @@
 , vid-stab ? null # Video stabilization
 #, vo-aacenc ? null # AAC encoder
 , vo-amrwbenc ? null # AMR-WB encoder
-, wavpack ? null # Wavpack encoder
 , x264 ? null # H.264/AVC encoder
 , x265 ? null # H.265/HEVC encoder
 , xavs ? null # AVS encoder
 , xvidcore ? null # Xvid encoder, native encoder exists
 , zeromq4 ? null # Message passing
 , zlib ? null
+, vulkan-loader ? null
+, glslang ? null
 #, zvbi ? null # Teletext support
 /*
  *  Developer options
@@ -243,15 +244,6 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
-
-  # this should go away in the next release
-  patches = [
-    # Patch ffmpeg for svt-av1 until version 4.4
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/AOMediaCodec/SVT-AV1/v0.8.4/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-av1.patch";
-      sha256 = "1p4g8skr5gjw5h1648j7qrks81zx49lrnx9g0p81qgnrvxc2wwx0";
-    })
-  ];
 
   prePatch = ''
     patchShebangs .
@@ -405,13 +397,14 @@ stdenv.mkDerivation rec {
     (enableFeature (vid-stab != null && gplLicensing) "libvidstab") # Actual min. version 2.0
     #(enableFeature (vo-aacenc != null && version3Licensing) "libvo-aacenc")
     (enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
-    (enableFeature (wavpack != null) "libwavpack")
     (enableFeature (x264 != null && gplLicensing) "libx264")
     (enableFeature (x265 != null && gplLicensing) "libx265")
     (enableFeature (xavs != null && gplLicensing) "libxavs")
     (enableFeature (xvidcore != null && gplLicensing) "libxvid")
     (enableFeature (zeromq4 != null) "libzmq")
     (enableFeature (zlib != null) "zlib")
+    (enableFeature (isLinux && vulkan-loader != null) "vulkan")
+    (enableFeature (glslang != null) "libglslang")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
      * Developer flags
@@ -432,13 +425,13 @@ stdenv.mkDerivation rec {
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
-    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
-    zeromq4 zlib
+    samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
+    zeromq4 zlib glslang
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
+    ++ optionals isLinux [ alsaLib libraw1394 libv4l vulkan-loader ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
@@ -465,6 +458,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines

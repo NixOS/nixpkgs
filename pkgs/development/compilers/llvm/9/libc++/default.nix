@@ -13,7 +13,11 @@ stdenv.mkDerivation {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   preConfigure = ''
     # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package

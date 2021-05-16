@@ -13,7 +13,11 @@ stdenv.mkDerivation {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"

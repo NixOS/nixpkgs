@@ -4,6 +4,7 @@
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
+, reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
@@ -48,11 +49,15 @@ assert langAda -> gnatboot != null;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
+
 with lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.2.0";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -85,7 +90,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "130xdkhmz1bc2kzx061s3sfwk36xah1fw5w332c0nzwwpdl47pdq";
+    sha256 = "0i6378ig6h397zkhd7m4ccwjx5alvzrf2hm27p1pzwjhlv0h9x34";
   };
 
   inherit patches;
@@ -186,8 +191,7 @@ stdenv.mkDerivation ({
 
   dontDisableStatic = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = import ../common/configure-flags.nix {
     inherit

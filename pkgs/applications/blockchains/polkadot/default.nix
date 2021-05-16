@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ clang ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
 
   # NOTE: We don't build the WASM runtimes since this would require a more

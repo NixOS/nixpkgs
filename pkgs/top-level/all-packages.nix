@@ -30,7 +30,7 @@ in
   # just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
 
-  stdenvNoCC = stdenv.override { cc = null; extraAttrs.noCC = true; };
+  stdenvNoCC = stdenv.override { cc = null; hasCC = false; };
 
   mkStdenvNoLibs = stdenv: let
     bintools = stdenv.cc.bintools.override {
@@ -201,7 +201,7 @@ in
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
-    inherit (llvmPackages) clang-unwrapped libclang llvm;
+    inherit (llvmPackages) libclang llvm;
     inherit (python3Packages) sphinx;
   };
 
@@ -2341,13 +2341,9 @@ in
 
   discount = callPackage ../tools/text/discount { };
 
-  discourse = callPackage ../servers/web-apps/discourse {
-    ruby = ruby_2_7;
-  };
+  discourse = callPackage ../servers/web-apps/discourse { };
 
-  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver {
-    ruby = ruby_2_7;
-  };
+  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail_receiver { };
 
   discocss = callPackage ../tools/misc/discocss { };
 
@@ -5031,19 +5027,14 @@ in
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_7;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
   gitlab-ee = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_7;
     gitlabEnterprise = true;
   };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell {
-    ruby = ruby_2_7;
-  };
+  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
@@ -5051,9 +5042,7 @@ in
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
-  gitaly = callPackage ../applications/version-management/gitlab/gitaly {
-    ruby = ruby_2_7;
-  };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -8613,7 +8602,7 @@ in
 
   spacebar = callPackage ../os-specific/darwin/spacebar {
     inherit (darwin.apple_sdk.frameworks)
-      Carbon Cocoa ScriptingBridge;
+      Carbon Cocoa ScriptingBridge SkyLight;
   };
 
   spaceFM = callPackage ../applications/misc/spacefm { };
@@ -10247,6 +10236,7 @@ in
   chez-matchable = callPackage ../development/chez-modules/chez-matchable { };
 
   clang = llvmPackages.clang;
+  libclang = llvmPackages.libclang;
   clang-manpages = llvmPackages.clang-manpages;
 
   clang-sierraHack = clang.override {
@@ -10389,9 +10379,16 @@ in
       if stdenv.targetPlatform.isAarch64 then gcc9 else gcc10;
   gcc-unwrapped = gcc.cc;
 
+  wrapNonDeterministicGcc = stdenv: ccWrapper:
+    if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
+      cc = old.cc.override {
+        reproducibleBuild = false;
+        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+      };
+    }) else ccWrapper;
+
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
     allowedRequisites = null;
-    cc = gcc;
     # Remove libcxx/libcxxabi, and add clang for AS if on darwin (it uses
     # clang's internal assembler).
     extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
@@ -10404,6 +10401,11 @@ in
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
+
+  # This is not intended for use in nixpkgs but for providing a faster-running
+  # compiler to nixpkgs users by building gcc with reproducibility-breaking
+  # profile-guided optimizations
+  fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc10);
 
   wrapCCMulti = cc:
     if stdenv.targetPlatform.system == "x86_64-linux" then let
@@ -10448,10 +10450,12 @@ in
     stripped = false;
   }));
 
-  crossLibcStdenv = overrideCC stdenv
-    (if stdenv.hostPlatform.useLLVM or false
-      then buildPackages.llvmPackages_8.lldClangNoLibc
-      else buildPackages.gccCrossStageStatic);
+  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
+
+  crossLibcStdenv =
+    if stdenv.hostPlatform.useLLVM or false
+    then overrideCC stdenv buildPackages.llvmPackages_8.lldClangNoLibc
+    else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
@@ -10461,8 +10465,10 @@ in
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
-        # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+        reproducibleBuild = true;
+        profiledCompiler = false;
+
         isl = if !stdenv.isDarwin then isl_0_20 else null;
 
         # just for stage static
@@ -10480,8 +10486,8 @@ in
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10494,8 +10500,8 @@ in
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10508,8 +10514,8 @@ in
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10527,8 +10533,8 @@ in
   gcc7 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/7 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10542,8 +10548,8 @@ in
   gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -10557,8 +10563,8 @@ in
   gcc9 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/9 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     enableLTO = !stdenv.isi686;
 
@@ -10571,8 +10577,8 @@ in
   gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
     inherit noSysDirs;
 
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    reproducibleBuild = true;
+    profiledCompiler = false;
 
     enableLTO = !stdenv.isi686;
 
@@ -11179,6 +11185,7 @@ in
   lldb_12 = llvmPackages_12.lldb;
 
   llvm = llvmPackages.llvm;
+  libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
   llvm_12 = llvmPackages_12.llvm;
@@ -11235,7 +11242,7 @@ in
   llvmPackages_10 = recurseIntoAttrs (callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries or llvmPackages_10.libraries;
   });
 
   llvmPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/llvm/11 ({
@@ -11462,9 +11469,11 @@ in
   # So this commit doesn't remove the 1.45.2 release.
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm_10 = llvmPackages_10.libllvm;
   };
   rust_1_51 = callPackage ../development/compilers/rust/1_51.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm_11 = llvmPackages_11.libllvm;
   };
   rust = rust_1_51;
 
@@ -12259,8 +12268,8 @@ in
     ruby_2_7
     ruby_3_0;
 
-  ruby = ruby_2_6;
-  rubyPackages = rubyPackages_2_6;
+  ruby = ruby_2_7;
+  rubyPackages = rubyPackages_2_7;
 
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
@@ -12825,7 +12834,7 @@ in
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_7) llvm clang-unwrapped;
+    inherit (llvmPackages_7) llvm libclang;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -12837,7 +12846,7 @@ in
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
-    inherit (llvmPackages_11) llvm clang-unwrapped;
+    inherit (llvmPackages_11) llvm libclang;
   };
 
   libcxx = llvmPackages.libcxx;
@@ -13796,7 +13805,7 @@ in
 
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
-    readline = readline80;
+    readline = readline81;
   };
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
@@ -14046,7 +14055,7 @@ in
   belr = callPackage ../development/libraries/belr { };
 
   beignet = callPackage ../development/libraries/beignet {
-    inherit (llvmPackages_6) llvm clang-unwrapped;
+    inherit (llvmPackages_6) libllvm libclang;
   };
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
@@ -14726,7 +14735,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
   };
 
-  glibc = callPackage ../development/libraries/glibc { };
+  glibc = callPackage ../development/libraries/glibc {
+    stdenv = gccStdenv; # doesn't compile without gcc
+  };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
   elf-header =
@@ -14742,7 +14753,7 @@ in
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
-    stdenv = crossLibcStdenv;
+    stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
   };
 
   muslCross = musl.override {
@@ -14765,7 +14776,7 @@ in
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
-    else if name == "nblibc" then targetPackages.netbsdCross.libc
+    else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
     else if stdenv.targetPlatform.isGhcjs then null
@@ -14807,7 +14818,6 @@ in
 
   glsurf = callPackage ../applications/science/math/glsurf {
     libpng = libpng12;
-    giflib = giflib_4_1;
     ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
   };
 
@@ -15228,8 +15238,13 @@ in
   } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu69 = callPackage ../development/libraries/icu/69.nix ({
+    nativeBuildRoot = buildPackages.icu69.override { buildRootOnly = true; };
+  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
-  icu = icu68;
+  icu = icu69;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -16330,7 +16345,7 @@ in
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libqalculate = callPackage ../development/libraries/libqalculate {
-    readline = readline80;
+    readline = readline81;
   };
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
@@ -16480,12 +16495,9 @@ in
 
   libwhereami = callPackage ../development/libraries/libwhereami { };
 
-  giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
   giflib     = callPackage ../development/libraries/giflib { };
 
   libunarr = callPackage ../development/libraries/libunarr { };
-
-  libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
@@ -16874,7 +16886,7 @@ in
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
   notcurses = callPackage ../development/libraries/notcurses {
-    readline = readline80;
+    readline = readline81;
   };
 
   ncurses5 = ncurses.override {
@@ -17234,8 +17246,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_15;
+  protobuf = protobuf3_16;
 
+  protobuf3_16 = callPackage ../development/libraries/protobuf/3.16.nix { };
   protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
   protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
   protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
@@ -17442,7 +17455,7 @@ in
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
-  readline80 = callPackage ../development/libraries/readline/8.0.nix { };
+  readline81 = callPackage ../development/libraries/readline/8.1.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -19736,7 +19749,7 @@ in
 
   inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
-    apparmor-profiles apparmor-kernel-patches;
+    apparmor-profiles apparmor-kernel-patches apparmorRulesFromClosure;
 
   aseq2json = callPackage ../os-specific/linux/aseq2json {};
 
@@ -20011,8 +20024,6 @@ in
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
-
-  kbdKeymaps = callPackage ../os-specific/linux/kbd/keymaps.nix { };
 
   kbdlight = callPackage ../os-specific/linux/kbdlight { };
 
@@ -30859,9 +30870,7 @@ in
 
   vbam = callPackage ../misc/emulators/vbam { };
 
-  vice = callPackage ../misc/emulators/vice {
-    giflib = giflib_4_1;
-  };
+  vice = callPackage ../misc/emulators/vice { };
 
   ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
 
@@ -31279,8 +31288,12 @@ in
 
   fts = if stdenv.hostPlatform.isMusl then netbsd.fts else null;
 
-  netbsd = callPackages ../os-specific/bsd/netbsd {};
-  netbsdCross = callPackages ../os-specific/bsd/netbsd {
+  bsdSetupHook = makeSetupHook {
+    name = "bsd-setup-hook";
+  } ../os-specific/bsd/setup-hook.sh;
+
+  netbsd = callPackage ../os-specific/bsd/netbsd {};
+  netbsdCross = callPackage ../os-specific/bsd/netbsd {
     stdenv = crossLibcStdenv;
   };
 

@@ -5,7 +5,7 @@
 , meson
 , pkg-config
 , ninja
-, wayland
+, wayland-scanner
 , expat
 , libxml2
 , withLibraries ? stdenv.isLinux
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ninja
   ] ++ lib.optionals isCross [
-    wayland # For wayland-scanner during the build
+    wayland-scanner
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
     doxygen
@@ -84,6 +84,18 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xml_dtd_42
   ];
+
+  postFixup = ''
+    # The pkg-config file is required for cross-compilation:
+    mkdir -p $bin/lib/pkgconfig/
+    cat <<EOF > $bin/lib/pkgconfig/wayland-scanner.pc
+    wayland_scanner=$bin/bin/wayland-scanner
+
+    Name: Wayland Scanner
+    Description: Wayland scanner
+    Version: ${version}
+    EOF
+  '';
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";

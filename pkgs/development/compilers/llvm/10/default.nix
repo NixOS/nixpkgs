@@ -1,6 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
-, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -18,31 +17,39 @@ let
   clang-tools-extra_src = fetch "clang-tools-extra" "06n1yp638rh24xdxv9v2df0qajxbjz4w59b7dd4ky36drwmpi4yh";
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
-    mkExtraBuildCommands = cc: ''
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
+    mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
+    mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+    '';
+
   in {
 
-    llvm = callPackage ./llvm { };
+    libllvm = callPackage ./llvm { };
 
-    clang-unwrapped = callPackage ./clang {
-      inherit (tools) lld;
+    # `llvm` historically had the binaries.  When choosing an output explicitly,
+    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputUnspecified = true; };
+
+    libclang = callPackage ./clang {
       inherit clang-tools-extra_src;
     };
 
+    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+
     # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.llvm.override {
+    #Llvm-manpages = lowPrio (tools.libllvm.override {
     #  enableManpages = true;
     #  python3 = pkgs.python3;  # don't use python-boot
     #});
 
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
+    clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
@@ -52,8 +59,6 @@ let
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
-
-    libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
@@ -144,7 +149,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith {
+    lldClangNoCompilerRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = wrapBintoolsWith {
@@ -154,7 +159,7 @@ let
       extraPackages = [ ];
       extraBuildCommands = ''
         echo "-nostartfiles" >> $out/nix-support/cc-cflags
-      '';
+      '' + mkExtraBuildCommands0 cc;
     };
 
   });

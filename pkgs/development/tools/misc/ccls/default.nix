@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jipSipgD0avd7XODlpxnqjHK3s6nacaxbIQIddix7X8=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
+  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
+  buildInputs = with llvmPackages; [ libclang llvm rapidjson ];
 
   cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
 
