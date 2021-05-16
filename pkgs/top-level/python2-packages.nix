@@ -443,6 +443,8 @@ with self; with super; {
 
   pylint = callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pymysql = callPackage ../development/python-modules/pymysql/0.nix { };
+
   pyobjc = if stdenv.isDarwin then
     callPackage ../development/python-modules/pyobjc { }
   else
