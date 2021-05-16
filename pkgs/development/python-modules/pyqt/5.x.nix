@@ -13,7 +13,7 @@
 
 let
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
+  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34 pyqt-builder;
 
   sip = if isPy3k then
     pythonPackages.sip
@@ -48,7 +48,7 @@ let
 in buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.2";
-  format = "other";
+  format = if isPy3k then "pyproject" else "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
@@ -84,6 +84,7 @@ in buildPythonPackage rec {
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional isPy3k pyqt-builder
   ;
 
   propagatedBuildInputs = [
@@ -91,7 +92,7 @@ in buildPythonPackage rec {
   ] ++ (if isPy3k then [ pyqt5_sip ] else [ sip enum34 ]);
 
   patches = [
-    # Fix some wrong assumptions by ./configure.py
+    # Fix some wrong assumptions by ./configure.py and ./project.py
     # TODO: figure out how to send this upstream
     ./pyqt5-fix-dbus-mainloop-support.patch
   ];
@@ -102,6 +103,9 @@ in buildPythonPackage rec {
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
   };
+
+  # Configure only needed when building with sip 4 (python 2)
+  dontConfigure = isPy3k;
 
   configurePhase = ''
     runHook preConfigure
