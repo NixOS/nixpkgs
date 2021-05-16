@@ -3111,6 +3111,8 @@ in {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hsluv = callPackage ../development/python-modules/hsluv { };
+
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
   html2text = callPackage ../development/python-modules/html2text { };
