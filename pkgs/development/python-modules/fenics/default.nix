@@ -56,7 +56,6 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the DOLFIN FEM compiler";
     homepage = "https://fenicsproject.org/";
-    platforms = lib.platforms.all;
     license = lib.licenses.lgpl3;
   };
 }
