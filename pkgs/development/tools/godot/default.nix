@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libX11, libXcursor
-, libXinerama, libXrandr, libXrender, libpulseaudio ? null
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libudev ? null, libX11
+, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio ? null
 , libXi ? null, libXext, libXfixes, freetype, openssl
 , alsaLib, libGLU, zlib, yasm ? null }:
 
@@ -7,7 +7,7 @@ let
   options = {
     touch = libXi != null;
     pulseaudio = false;
-    udev = false;
+    udev = libudev != null;
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons libX11 libXcursor libXinerama libXrandr libXrender
+    scons libudev libX11 libXcursor libXinerama libXrandr libXrender
     libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
     libGLU zlib yasm
   ];
