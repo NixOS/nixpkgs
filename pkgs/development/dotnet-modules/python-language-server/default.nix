@@ -11,7 +11,7 @@
 
 let deps = import ./deps.nix { inherit fetchurl; };
 
-    version = "2020-06-19";
+    version = "2020-10-08";
 
     # Build the nuget source needed for the later build all by itself
     # since it's a time-consuming step that only depends on ./deps.nix.
@@ -49,8 +49,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "python-language-server";
-    rev = "838ba78e00173d639bd90f54d8610ec16b4ba3a2";
-    sha256 = "0nj8l1apcb67gqwy5i49v0f01fs4lvdfmmp4w2hvrpss9if62c1m";
+    rev = "76a29da373a4bb1e81b052f25802f3ca872d0a67";
+    sha256 = "16jb90lacdrhi4dpp084bqzx351mv23f4mhl4lz5h6rkfzj5jxgg";
   };
 
   buildInputs = [dotnet-sdk_3 openssl icu];
@@ -62,6 +62,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir home
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -75,14 +77,20 @@ stdenv.mkDerivation {
     pushd src/LanguageServer/Impl
     dotnet publish --no-restore -c Release -r linux-x64
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r output/bin/Release/linux-x64/publish $out/lib
 
     mkdir $out/bin
     makeWrapper $out/lib/Microsoft.Python.LanguageServer $out/bin/python-language-server
+
+    runHook postInstall
   '';
 
   postFixup = ''
