@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchurl, jieba, pkuseg, spacy }:
+{ lib
+, buildPythonPackage
+, fetchurl
+, jieba
+, pymorphy2
+, sentencepiece
+, spacy
+, spacy-pkuseg
+, spacy-transformers }:
 let
   buildModelPackage = { pname, version, sha256, license }:
   let
@@ -12,7 +20,15 @@ let
     };
 
     propagatedBuildInputs = [ spacy ]
-      ++ lib.optionals (lang == "zh") [ jieba pkuseg ];
+      ++ lib.optionals (lang == "zh") [ jieba spacy-pkuseg ]
+      ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-transformers ]
+      ++ lib.optionals (lang == "ru") [ pymorphy2 ]
+      ++ lib.optionals (pname == "fr_dep_news_trf") [ sentencepiece ];
+
+    postPatch = lib.optionals (pname == "fr_dep_news_trf") ''
+      substituteInPlace meta.json \
+        --replace "sentencepiece==0.1.91" "sentencepiece>=0.1.91"
+    '';
 
     pythonImportsCheck = [ pname ];
 
