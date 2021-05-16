@@ -12,61 +12,41 @@
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
 # Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.12
+#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.13
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 python3Packages.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-0M9wcdBmuTK+NvEGsXEdoYiVFjw8G2MRUwmi1PJgmzI=";
+    sha256 = "1sh7sjkh7ihbkqc7sl4hnzci0n7gv4s140dykpb1havaqyfhjn8l";
   };
 
-  patches = [
-    # https://github.com/coqui-ai/TTS/pull/435
-    (fetchpatch {
-      url = "https://github.com/coqui-ai/TTS/commit/97f98e4c4584ef14ed2f4885aa02c162d9364a00.patch";
-      sha256 = "sha256-DAZYOOAe+6TYBF5ukFq5HRwm49askEvNEivuwb/oCWM=";
-    })
-  ];
-
   preBuild = ''
-    # numba jit tries to write to its cache directory
-    export HOME=$TMPDIR
-    # we only support pytorch models right now
-    sed -i -e '/tensorflow/d' requirements.txt
-
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt setup.py
-    sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt setup.py
-    sed -i -e 's!bokeh==[^"]*!bokeh!' requirements.txt setup.py
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt setup.py
-    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt setup.py
-    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt setup.py
-    # Not required for building/installation but for their development/ci workflow
-    sed -i -e '/black/d' requirements.txt
-    sed -i -e '/isor/d' requirements.txt
-    sed -i -e '/pylint/d' requirements.txt
-    sed -i -e '/cardboardlint/d' requirements.txt setup.py
+    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
+    sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt
+    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
+    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
   '';
 
-  nativeBuildInputs = [ python3Packages.cython ];
+  nativeBuildInputs = with python3Packages; [
+    cython
+  ];
 
   propagatedBuildInputs = with python3Packages; [
-    attrdict
-    bokeh
     flask
-    fuzzywuzzy
     gdown
     inflect
     jieba
     librosa
     matplotlib
+    pandas
     phonemizer
     pypinyin
     pysbd
@@ -88,22 +68,30 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # RuntimeError: fft: ATen not compiled with MKL support
     "test_torch_stft"
     "test_stft_loss"
     "test_multiscale_stft_loss"
-    # AssertionErrors that I feel incapable of debugging
-    "test_phoneme_to_sequence"
-    "test_text2phone"
+    # assert tensor(1.1904e-07, dtype=torch.float64) <= 0
     "test_parametrized_gan_dataset"
+    # RuntimeError: expected scalar type Double but found Float
+    "test_speaker_embedding"
+    # Requires network acccess to download models
+    "test_synthesize"
   ];
 
   preCheck = ''
     # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
     mv TTS{,.old}
+    export PATH=$out/bin:$PATH
+
+    # numba tries to write to HOME directory
+    export HOME=$TMPDIR
   '';
 
   disabledTestPaths = [
