@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     reportlab
     usbutils
-    sip
+    sip_4
     dbus-python
   ] ++ lib.optionals withQt5 [
     pyqt5
