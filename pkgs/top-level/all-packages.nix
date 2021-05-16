@@ -11224,16 +11224,17 @@ in
     # This returns the minimum suported version for the platform. The
     # assumption is that or any later version is good.
     choose = platform:
-      /**/ if platform.isDarwin then "7"
-      else if platform.isFreeBSD then "7"
-      else if platform.isAndroid then "12"
-      else if platform.isLinux then "7"
-      else if platform.isWasm then "8"
-      else "latest";
+      /**/ if platform.isDarwin then 7
+      else if platform.isFreeBSD then 7
+      else if platform.isAndroid then 12
+      else if platform.isLinux then 7
+      else if platform.isWasm then 8
+      else 11; # latest
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
-    minSupported = lib.max (choose stdenv.hostPlatform) (choose stdenv.targetPlatform);
+    minSupported = toString (lib.trivial.max (choose stdenv.hostPlatform) (choose
+      stdenv.targetPlatform));
   in pkgs.${"llvmPackages_${minSupported}"};
 
   llvmPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/llvm/5 {
