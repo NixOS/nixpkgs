@@ -7,6 +7,8 @@
 , mkYarnPackage
 , pkg-config
 , rustPlatform
+, stdenv
+, libiconv
 }:
 
 # Note for maintainers: use ./update-influxdb2.sh to update the Yarn
@@ -57,6 +59,7 @@ let
     sourceRoot = "source/libflux";
     cargoSha256 = "06gh466q7qkid0vs5scic0qqlz3h81yb00nwn8nwq8ppr5z2ijyq";
     nativeBuildInputs = [ llvmPackages.libclang ];
+    buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
@@ -71,6 +74,8 @@ let
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace /out $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
   };
 in buildGoModule {
