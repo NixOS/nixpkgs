@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , fetchPypi
 , buildPythonPackage
 , pytorch
@@ -29,6 +30,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "spacy_transformers" ];
+
+  passthru.tests.annotation = callPackage ./annotation-test { };
 
   meta = with lib; {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
