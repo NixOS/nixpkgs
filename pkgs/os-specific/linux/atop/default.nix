@@ -35,11 +35,14 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./atop-pm.sh.patch
-    ./atop-rotate.service.patch
+    # Fix paths in atop.service, atop-rotate.service, atopgpu.service, atopacct.service,
+    # and atop-pm.sh
+    ./fix-paths.patch
+    # Don't fail on missing /etc/default/atop, make sure /var/log/atop exists pre-start
     ./atop.service.patch
+    # Specify PIDFile in /run, not /var/run to silence systemd warning
     ./atopacct.service.patch
-  ] ++ (if withAtopgpu then [ ./atopgpu.service.patch ] else [ ]);
+  ];
 
   preConfigure = ''
     for f in *.{sh,service}; do

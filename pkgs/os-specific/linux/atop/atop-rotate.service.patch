@@ -1,7 +1,0 @@
---- a/atop-rotate.service
-+++ b/atop-rotate.service
-@@ -4,3 +4,3 @@
- [Service]
- Type=oneshot
--ExecStart=/usr/bin/systemctl try-restart atop.service
-+ExecStart=@systemd@/bin/systemctl try-restart atop.service

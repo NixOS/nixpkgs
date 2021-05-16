@@ -1,11 +1,7 @@
 --- a/atopacct.service
 +++ b/atopacct.service
-@@ -8,6 +8,6 @@
- [Service]
+@@ -9,3 +9,3 @@
  Type=forking
 -PIDFile=/var/run/atopacctd.pid
--ExecStart=/usr/sbin/atopacctd
 +PIDFile=/run/atopacctd.pid
-+ExecStart=@out@/bin/atopacctd
-
- [Install]
+ ExecStart=@out@/bin/atopacctd
