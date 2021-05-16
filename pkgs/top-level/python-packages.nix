@@ -351,6 +351,8 @@ in {
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
+  aioymaps = callPackage ../development/python-modules/aioymaps { };
+
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
   airly = callPackage ../development/python-modules/airly { };
