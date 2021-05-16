@@ -9680,7 +9680,10 @@ in
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
 
-  wiiuse = callPackage ../development/libraries/wiiuse { };
+  wiiuse = callPackage ../development/libraries/wiiuse {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
+  };
 
   woeusb = callPackage ../tools/misc/woeusb { };
 
