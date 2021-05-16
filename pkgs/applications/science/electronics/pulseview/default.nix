@@ -25,7 +25,7 @@ mkDerivation rec {
     # PR at https://github.com/sigrokproject/pulseview/pull/39
     (fetchpatch {
       url = "https://github.com/sigrokproject/pulseview/commit/fb89dd11f2a4a08b73c498869789e38677181a8d.patch";
-      sha256 = "153lrvbj0qf8qxx3l01v3ln8g5qjmlapwp8h1k1iir3xx3lyy37k";
+      sha256 = "07ifsis9jlc0jjp2d11f7hvw9kaxcbk0a57h2m4xsv1d7vzl9yfh";
     })
   ];
 
