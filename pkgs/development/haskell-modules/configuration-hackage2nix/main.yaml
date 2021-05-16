@@ -117,6 +117,53 @@ extra-packages:
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
 
 package-maintainers:
+  abbradar:
+    - Agda
+  bdesham:
+    - pinboard-notes-backup
+  cdepillabout:
+    - password
+    - password-instances
+    - pretty-simple
+    - spago
+    - termonad
+  gridaphobe:
+    - located-base
+  jb55:
+    # - bson-lens
+    - cased
+    - elm-export-persistent
+    # - pipes-mongodb
+    - streaming-wai
+  kiwi:
+    - config-schema
+    - config-value
+    - glirc
+    - irc-core
+    - matterhorn
+    - mattermost-api
+    - mattermost-api-qc
+    - Unique
+  maralorn:
+    - arbtt
+    - cabal-fmt
+    - generic-optics
+    - ghcup
+    - haskell-language-server
+    - hedgehog
+    - hmatrix
+    - iCalendar
+    - neuron
+    - optics
+    - reflex-dom
+    - releaser
+    - req
+    - shake-bench
+    - shh
+    - snap
+    - stm-containers
+    - streamly
+    - taskwarrior
   peti:
     - cabal-install
     - cabal2nix
@@ -142,31 +189,14 @@ package-maintainers:
     - titlecase
     - xmonad
     - xmonad-contrib
-  gridaphobe:
-    - located-base
-  jb55:
-    # - bson-lens
-    - cased
-    - elm-export-persistent
-    # - pipes-mongodb
-    - streaming-wai
-  kiwi:
-    - config-schema
-    - config-value
-    - glirc
-    - irc-core
-    - matterhorn
-    - mattermost-api
-    - mattermost-api-qc
-    - Unique
+  poscat:
+    - hinit
   psibi:
     - path-pieces
     - persistent
     - persistent-sqlite
     - persistent-template
     - shakespeare
-  abbradar:
-    - Agda
   roberth:
     - arion-compose
     - hercules-ci-agent
@@ -176,34 +206,10 @@ package-maintainers:
     - hercules-ci-cli
     - hercules-ci-cnix-expr
     - hercules-ci-cnix-store
-  cdepillabout:
-    - password
-    - password-instances
-    - pretty-simple
-    - spago
-    - termonad
-  terlar:
-    - nix-diff
-  maralorn:
+  rvl:
+    - taffybar
     - arbtt
-    - cabal-fmt
-    - generic-optics
-    - ghcup
-    - haskell-language-server
-    - hedgehog
-    - hmatrix
-    - iCalendar
-    - neuron
-    - optics
-    - reflex-dom
-    - releaser
-    - req
-    - shake-bench
-    - shh
-    - snap
-    - stm-containers
-    - streamly
-    - taskwarrior
+    - lentil
   sorki:
     - cayenne-lpp
     - data-stm32
@@ -214,20 +220,6 @@ package-maintainers:
     - ttn-client
     - update-nix-fetchgit
     - zre
-  utdemir:
-    - nix-tree
-  turion:
-    - rhine
-    - rhine-gloss
-    - essence-of-live-coding
-    - essence-of-live-coding-gloss
-    - essence-of-live-coding-pulse
-    - essence-of-live-coding-quickcheck
-    - Agda
-    - dunai
-    - finite-typelits
-    - pulse-simple
-    - simple-affine-space
   sternenseemann:
     # also maintain upstream package
     - spacecookie
@@ -243,14 +235,22 @@ package-maintainers:
     - yarn-lock
     - yarn2nix
     - large-hashable
-  poscat:
-    - hinit
-  bdesham:
-    - pinboard-notes-backup
-  rvl:
-    - taffybar
-    - arbtt
-    - lentil
+  terlar:
+    - nix-diff
+  turion:
+    - rhine
+    - rhine-gloss
+    - essence-of-live-coding
+    - essence-of-live-coding-gloss
+    - essence-of-live-coding-pulse
+    - essence-of-live-coding-quickcheck
+    - Agda
+    - dunai
+    - finite-typelits
+    - pulse-simple
+    - simple-affine-space
+  utdemir:
+    - nix-tree
 
 unsupported-platforms:
   Allure:                                       [ x86_64-darwin ]
