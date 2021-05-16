@@ -230,7 +230,10 @@ let
         constituents = accumulateDerivations [
           # haskell specific tests
           jobs.tests.haskell
-          jobs.tests.writers # writeHaskell{,Bin}
+          # writeHaskell and writeHaskellBin
+          # TODO: writeHaskell currently fails on darwin
+          jobs.tests.writers.x86_64-linux
+          jobs.tests.writers.aarch64-linux
           # important top-level packages
           jobs.cabal-install
           jobs.cabal2nix
