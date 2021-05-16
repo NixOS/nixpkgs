@@ -143,8 +143,14 @@ handlesParams = ["--eval", "--strict", "--json", "-"]
 handlesExpression :: String
 handlesExpression = "with import ./. {}; with lib; zipAttrsWith (_: builtins.head) (mapAttrsToList (_: v: if v ? github then { \"${v.email}\" = v.github; } else {}) (import maintainers/maintainer-list.nix))"
 
-newtype Maintainers = Maintainers {maintainers :: Text}
-  deriving stock (Generic)
+-- | This newtype is used to parse a Hydra job output from @hydra-eval-jobs@.
+-- The only field we are interested in is @maintainers@, which is why this
+-- is just a newtype.
+--
+-- Note that there are occassionally jobs that don't have a maintainers
+-- field, which is why this has to be @Maybe Text@.
+newtype Maintainers = Maintainers { maintainers :: Maybe Text }
+  deriving stock (Generic, Show)
   deriving anyclass (FromJSON, ToJSON)
 
 -- | This is a 'Map' from Hydra job name to maintainer email addresses.
@@ -153,10 +159,10 @@ newtype Maintainers = Maintainers {maintainers :: Text}
 --
 -- @@
 --  fromList
---    [ ("arion.aarch64-linux", Maintainers "robert@example.com")
---    , ("bench.x86_64-linux", Maintainers "")
---    , ("conduit.x86_64-linux", Maintainers "snoy@man.com, web@ber.com")
---    , ("lens.x86_64-darwin", Maintainers "ek@category.com")
+--    [ ("arion.aarch64-linux", Maintainers (Just "robert@example.com"))
+--    , ("bench.x86_64-linux", Maintainers (Just ""))
+--    , ("conduit.x86_64-linux", Maintainers (Just "snoy@man.com, web@ber.com"))
+--    , ("lens.x86_64-darwin", Maintainers (Just "ek@category.com"))
 --    ]
 -- @@
 --
@@ -196,7 +202,14 @@ getMaintainerMap = do
       readJSONProcess hydraEvalCommand hydraEvalParams "" "Failed to decode hydra-eval-jobs output: "
    handlesMap :: EmailToGitHubHandles <-
       readJSONProcess handlesCommand handlesParams handlesExpression "Failed to decode nix output for lookup of github handles: "
-   pure $ Map.mapMaybe (nonEmpty . mapMaybe (`Map.lookup` handlesMap) . Text.splitOn ", " . maintainers) hydraJobs
+   pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
+   where
+   -- Split a comma-spearated string of Maintainers into a NonEmpty list of
+   -- GitHub handles.
+   splitMaintainersToGitHubHandles
+      :: EmailToGitHubHandles -> Maintainers -> Maybe (NonEmpty Text)
+   splitMaintainersToGitHubHandles handlesMap (Maintainers maint) =
+      nonEmpty .  mapMaybe (`Map.lookup` handlesMap) .  Text.splitOn ", " $ fromMaybe "" maint
 
 -- | Run a process that produces JSON on stdout and and decode the JSON to a
 -- data type.
