@@ -1,132 +1,213 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
+
+let assertions = rec {
+  path = program: path: ''
+    with subtest("The path of ${program} should be ${path}"):
+        p = machine.succeed("type -p \"${program}\" | head -c -1")
+        assert p == "${path}", f"${program} is {p}, expected ${path}"
+  '';
+  unit = name: state: ''
+    with subtest("Unit ${name} should be ${state}"):
+        machine.require_unit_state("${name}", "${state}")
+  '';
+  version = ''
+    import re
+
+    with subtest("binary should report the correct version"):
+        pkgver = "${pkgs.atop.version}"
+        ver = re.sub(r'(?s)^Version: (\d\.\d\.\d).*', r'\1', machine.succeed("atop -V"))
+        assert ver == pkgver, f"Version is `{ver}`, expected `{pkgver}`"
+  '';
+  atoprc = contents:
+    if builtins.stringLength contents > 0 then ''
+      with subtest("/etc/atoprc should have the correct contents"):
+          f = machine.succeed("cat /etc/atoprc")
+          assert f == "${contents}", f"/etc/atoprc contents: '{f}', expected '${contents}'"
+    '' else ''
+      with subtest("/etc/atoprc should not be present"):
+          machine.succeed("test ! -e /etc/atoprc")
+    '';
+  wrapper = present:
+    if present then path "atop" "/run/wrappers/bin/atop" + ''
+      with subtest("Wrapper should be setuid root"):
+          stat = machine.succeed("stat --printf '%a %u' /run/wrappers/bin/atop")
+          assert stat == "4511 0", f"Wrapper stat is {stat}, expected '4511 0'"
+    ''
+    else path "atop" "/run/current-system/sw/bin/atop";
+  atopService = present:
+    if present then
+      unit "atop.service" "active"
+      + ''
+        with subtest("atop.service should have written some data to /var/log/atop"):
+            files = int(machine.succeed("ls -1 /var/log/atop | wc -l"))
+            assert files > 0, "Expected at least 1 data file"
+      '' else unit "atop.service" "inactive";
+  atopRotateTimer = present:
+    unit "atop-rotate.timer" (if present then "active" else "inactive");
+  atopacctService = present:
+    if present then
+      unit "atopacct.service" "active"
+      + ''
+        with subtest("atopacct.service should enable process accounting"):
+            machine.succeed("test -f /run/pacct_source")
+
+        with subtest("atopacct.service should write data to /run/pacct_shadow.d"):
+            files = int(machine.succeed("ls -1 /run/pacct_shadow.d | wc -l"))
+            assert files >= 1, "Expected at least 1 pacct_shadow.d file"
+      '' else unit "atopacct.service" "inactive";
+  netatop = present:
+    if present then
+      unit "netatop.service" "active"
+      + ''
+        with subtest("The netatop kernel module should be loaded"):
+            out = machine.succeed("modprobe -n -v netatop")
+            assert out == "", f"Module should be loaded already, but modprobe would have done {out}."
+      '' else ''
+      with subtest("The netatop kernel module should be absent"):
+          machine.fail("modprobe -n -v netatop")
+    '';
+  atopgpu = present:
+    if present then
+      (unit "atopgpu.service" "active") + (path "atopgpud" "/run/current-system/sw/bin/atopgpud")
+    else (unit "atopgpu.service" "inactive") + ''
+      with subtest("atopgpud should not be present"):
+          machine.fail("type -p atopgpud")
+    '';
+};
+in
+{
   name = "atop";
 
-  nodes = {
-    defaults = { ... }: {
+  justThePackage = makeTest {
+    name = "atop-justThePackage";
+    machine = {
+      environment.systemPackages = [ pkgs.atop ];
+    };
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "")
+      (wrapper false)
+      (atopService false)
+      (atopRotateTimer false)
+      (atopacctService false)
+      (netatop false)
+      (atopgpu false)
+    ];
+  };
+  defaults = makeTest {
+    name = "atop-defaults";
+    machine = {
       programs.atop = {
         enable = true;
       };
     };
-    minimal = { ... }: {
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "")
+      (wrapper false)
+      (atopService true)
+      (atopRotateTimer true)
+      (atopacctService true)
+      (netatop false)
+      (atopgpu false)
+    ];
+  };
+  minimal = makeTest {
+    name = "atop-minimal";
+    machine = {
       programs.atop = {
         enable = true;
-        atopsvc.enable = false;
-        atopRotate.enable = false;
-        atopacct.enable = false;
+        atopService.enable = false;
+        atopRotateTimer.enable = false;
+        atopacctService.enable = false;
       };
     };
-    minimal_with_setuid = { ... }: {
-      programs.atop = {
-        enable = true;
-        atopsvc.enable = false;
-        atopRotate.enable = false;
-        atopacct.enable = false;
-        setuidWrapper.enable = true;
-      };
-    };
-
-    atoprc_and_netatop = { ... }: {
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "")
+      (wrapper false)
+      (atopService false)
+      (atopRotateTimer false)
+      (atopacctService false)
+      (netatop false)
+      (atopgpu false)
+    ];
+  };
+  netatop = makeTest {
+    name = "atop-netatop";
+    machine = {
       programs.atop = {
         enable = true;
         netatop.enable = true;
-        settings = {
-          flags = "faf1";
-          interval = 2;
-        };
       };
     };
-
-    atopgpu = { lib, ... }: {
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "")
+      (wrapper false)
+      (atopService true)
+      (atopRotateTimer true)
+      (atopacctService true)
+      (netatop true)
+      (atopgpu false)
+    ];
+  };
+  atopgpu = makeTest {
+    name = "atop-atopgpu";
+    machine = {
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
         "cudatoolkit"
       ];
+
       programs.atop = {
         enable = true;
         atopgpu.enable = true;
       };
     };
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "")
+      (wrapper false)
+      (atopService true)
+      (atopRotateTimer true)
+      (atopacctService true)
+      (netatop false)
+      (atopgpu true)
+    ];
   };
+  everything = makeTest {
+    name = "atop-everthing";
+    machine = {
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
+        "cudatoolkit"
+      ];
 
-  testScript = ''
-    def a_version(m):
-      v = m.succeed("atop -V")
-      pkgver = "${pkgs.atop.version}"
-      assert v.startswith("Version: {}".format(pkgver)), "Version is {}, expected `{}`".format(v, pkgver)
-
-    def __exp_path(m, prg, expected):
-      p = m.succeed("type -p \"{}\" | head -c -1".format(prg))
-      assert p == expected, "{} is `{}`, expected `{}`".format(prg, p, expected)
-
-    def a_setuid(m, present=True):
-      if present:
-        __exp_path(m, "atop", "/run/wrappers/bin/atop")
-        stat = m.succeed("stat --printf '%a %u' /run/wrappers/bin/atop")
-        assert stat == "4511 0", "Wrapper stat is {}, expected `4511 0`".format(stat)
-      else:
-        __exp_path(m, "atop", "/run/current-system/sw/bin/atop")
-
-    def assert_no_netatop(m):
-      m.require_unit_state("netatop.service", "inactive")
-      m.fail("modprobe -n -v netatop")
-
-    def a_netatop(m, present=True):
-      m.require_unit_state("netatop.service", "active" if present else "inactive")
-      if present:
-        out = m.succeed("modprobe -n -v netatop")
-        assert out == "", "Module should be loaded, but modprobe would have done `{}`.".format(out)
-      else:
-        m.fail("modprobe -n -v netatop")
-
-    def a_atopgpu(m, present=True):
-      m.require_unit_state("atopgpu.service", "active" if present else "inactive")
-      if present:
-        __exp_path(m, "atopgpud", "/run/current-system/sw/bin/atopgpud")
-
-    # atop.service should log some data to /var/log/atop
-    def a_atopsvc(m, present=True):
-      m.require_unit_state("atop.service", "active" if present else "inactive")
-      if present:
-          files = int(m.succeed("ls -1 /var/log/atop | wc -l"))
-          assert files >= 1, "Expected at least 1 data file"
-        # def check_files(_):
-        #   files = int(m.succeed("ls -1 /var/log/atop | wc -l"))
-        #   return files >= 1
-        # retry(check_files)
-
-    def a_atoprotate(m, present=True):
-      m.require_unit_state("atop-rotate.timer", "active" if present else "inactive")
-
-    # atopacct.service should make kernel write to /run/pacct_source and make dir
-    # /run/pacct_shadow.d
-    def a_atopacct(m, present=True):
-      m.require_unit_state("atopacct.service", "active" if present else "inactive")
-      if present:
-        m.succeed("test -f /run/pacct_source")
-        files = int(m.succeed("ls -1 /run/pacct_shadow.d | wc -l"))
-        assert files >= 1, "Expected at least 1 pacct_shadow.d file"
-
-    def a_atoprc(m, contents):
-      if contents:
-        f = m.succeed("cat /etc/atoprc")
-        assert f == contents, "/etc/atoprc contents: `{}`, expected `{}`".format(f, contents)
-      else:
-        m.succeed("test ! -e /etc/atoprc")
-
-    def assert_all(m, setuid, atopsvc, atoprotate, atopacct, netatop, atopgpu, atoprc):
-      a_version(m)
-      a_setuid(m, setuid)
-      a_atopsvc(m, atopsvc)
-      a_atoprotate(m, atoprotate)
-      a_atopacct(m, atopacct)
-      a_netatop(m, netatop)
-      a_atopgpu(m, atopgpu)
-      a_atoprc(m, atoprc)
-
-    assert_all(defaults, False, True, True, True, False, False, False)
-    assert_all(minimal, False, False, False, False, False, False, False)
-    assert_all(minimal_with_setuid, True, False, False, False, False, False, False)
-    assert_all(atoprc_and_netatop, False, True, True, True, True, False,
-      "flags faf1\ninterval 2\n")
-    assert_all(atopgpu, False, True, True, True, False, True, False)
-  '';
-})
+      programs.atop = {
+        enable = true;
+        settings = {
+          flags = "faf1";
+          interval = 2;
+        };
+        setuidWrapper.enable = true;
+        netatop.enable = true;
+        atopgpu.enable = true;
+      };
+    };
+    testScript = with assertions; builtins.concatStringsSep "\n" [
+      version
+      (atoprc "flags faf1\\ninterval 2\\n")
+      (wrapper true)
+      (atopService true)
+      (atopRotateTimer true)
+      (atopacctService true)
+      (netatop true)
+      (atopgpu true)
+    ];
+  };
+}
