@@ -25,18 +25,19 @@
   };
 
   config = lib.mkIf config.test-support.resolver.enable {
-    networking.firewall.enable = false;
+    networking.firewall.allowedTCPPorts = [ 53 ];
+    networking.firewall.allowedUDPPorts = [ 53 ];
     services.bind.enable = true;
     services.bind.cacheNetworks = lib.mkForce [ "any" ];
     services.bind.forwarders = lib.mkForce [];
     services.bind.zones = lib.singleton {
       name = ".";
+      master = true;
       file = let
         addDot = zone: zone + lib.optionalString (!lib.hasSuffix "." zone) ".";
-        mkNsdZoneNames = zones: map addDot (lib.attrNames zones);
-        mkBindZoneNames = zones: map (zone: addDot zone.name) zones;
-        getZones = cfg: mkNsdZoneNames cfg.services.nsd.zones
-                     ++ mkBindZoneNames cfg.services.bind.zones;
+        mkZoneNames = zones: map addDot (lib.attrNames zones);
+        getZones = cfg: mkZoneNames cfg.services.nsd.zones
+                     ++ mkZoneNames cfg.services.bind.zones;
 
         getZonesForNode = attrs: {
           ip = attrs.config.networking.primaryIPAddress;
