@@ -58,6 +58,8 @@ stdenv.mkDerivation {
     dbus
   ] ++ lib.optional speechSupport speechd;
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "https://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
