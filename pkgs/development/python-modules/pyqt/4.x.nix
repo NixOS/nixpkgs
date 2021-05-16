@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "PyQt-x11-gpl";
-  version = "4.12";
+  version = "4.12.3";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4_gpl_x11-${version}.tar.gz";
-    sha256 = "1nw8r88a5g2d550yvklawlvns8gd5slw53yy688kxnsa65aln79w";
+    sha256 = "0wnlasg62rm5d39nq1yw4namcx2ivxgzl93r5f2vb9s0yaz5l3x0";
   };
 
   postPatch = ''
