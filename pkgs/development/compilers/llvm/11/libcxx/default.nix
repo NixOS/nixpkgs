@@ -46,7 +46,20 @@ stdenv.mkDerivation {
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
+
+    # TODO: this is a bit of a hack to cross compile to Apple Silicon.  libcxx
+    # starting with 11 enables CMAKE_BUILD_WITH_INSTALL_NAME_DIR which requires
+    # platform setup for rpaths. In cmake, this is enabled when macos is newer
+    # than 10.5. However CMAKE_SYSTEM_VERSION is set to empty (TODO: why?)
+    # which prevents the conditional configuration, and configure fails.  The
+    # value here corresponds to `uname -r`. If stdenv.hostPlatform.release is
+    # not null, then this property will be set via mkDerivation (TODO: how can
+    # we set this?).
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 &&
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "-DCMAKE_SYSTEM_VERSION=20.1.0";
 
   passthru = {
     isLLVM = true;

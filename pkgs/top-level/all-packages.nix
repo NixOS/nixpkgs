@@ -14848,6 +14848,7 @@ in
     inherit (stdenv.targetPlatform) libc;
   in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
+    else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
 
   # We can choose:
