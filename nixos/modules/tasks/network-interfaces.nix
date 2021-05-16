@@ -1139,6 +1139,21 @@ in
     } else {
       ping.source = "${pkgs.iputils.out}/bin/ping";
     };
+    security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
+      /run/wrappers/bin/ping {
+        include <abstractions/base>
+        include <nixos/security.wrappers>
+        rpx /run/wrappers/wrappers.*/ping,
+      }
+      /run/wrappers/wrappers.*/ping {
+        include <abstractions/base>
+        include <nixos/security.wrappers>
+        r /run/wrappers/wrappers.*/ping.real,
+        mrpx ${config.security.wrappers.ping.source},
+        capability net_raw,
+        capability setpcap,
+      }
+    '');
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,

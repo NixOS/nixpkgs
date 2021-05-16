@@ -5,6 +5,7 @@
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
+, setJavaClassPath
 # minimum dependencies
 , alsaLib
 , fontconfig
@@ -74,7 +75,11 @@ let result = stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/57733
     find "$out" -name 'libfreetype.so*' -delete
 
+    # Propagate the setJavaClassPath setup hook from the JDK so that
+    # any package that depends on the JDK has $CLASSPATH set up
+    # properly.
     mkdir -p $out/nix-support
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> "$out/nix-support/setup-hook"

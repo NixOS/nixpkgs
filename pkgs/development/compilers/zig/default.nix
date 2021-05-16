@@ -19,13 +19,13 @@ llvmPackages.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake
+    cmake llvmPackages.llvm.dev
   ];
   buildInputs = [
     libxml2
     zlib
   ] ++ (with llvmPackages; [
-    clang-unwrapped
+    libclang
     lld
     llvm
   ]);

@@ -1,9 +1,10 @@
 { lib, stdenv, llvm_meta
+, buildLlvmTools
 , fetch
 , libunwind
 , cmake
 , libxml2
-, llvm
+, libllvm
 , version
 }:
 
@@ -13,21 +14,26 @@ stdenv.mkDerivation rec {
 
   src = fetch pname "1zakyxk5bwnh7jarckcd4rbmzi58jgn2dbah5j5cwcyfyfbx9drc";
 
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvm libxml2 ];
+  buildInputs = [ libllvm libxml2 ];
+
+  cmakeFlags = [
+    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+  ];
+
+  outputs = [ "out" "lib" "dev" ];
 
   postPatch = ''
     substituteInPlace MachO/CMakeLists.txt --replace \
       '(''${LLVM_MAIN_SRC_DIR}/' '('
     mkdir -p libunwind/include
     tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
-  '';
-
-  outputs = [ "out" "dev" ];
-
-  postInstall = ''
-    moveToOutput include "$dev"
-    moveToOutput lib "$dev"
   '';
 
   meta = llvm_meta // {

@@ -57,7 +57,7 @@ let
     sourceRoot = "source/libflux";
     cargoSha256 = "0y5xjkqpaxp9qq1qj39zw3mnvkbbb9g4fa5cli77nhfwz288xx6h";
     nativeBuildInputs = [ llvmPackages.libclang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}

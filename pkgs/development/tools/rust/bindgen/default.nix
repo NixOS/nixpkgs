@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
   configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
+    export LIBCLANG_PATH="${libclang.lib}/lib"
   '';
 
   postInstall = ''

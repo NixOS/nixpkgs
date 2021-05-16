@@ -105,7 +105,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --flake)
         flake="$1"
-        flakeFlags=(--experimental-features 'nix-command flakes')
+        flakeFlags=(--extra-experimental-features 'nix-command flakes')
         shift 1
         ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)

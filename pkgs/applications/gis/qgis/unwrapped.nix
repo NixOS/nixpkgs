@@ -19,7 +19,7 @@ let
     urllib3
     pygments
     pyqt5
-    sip
+    sip_4
     owslib
     six
   ];

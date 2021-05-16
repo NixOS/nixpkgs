@@ -73,7 +73,7 @@ in rec {
       mkExtraBuildCommands = cc: ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
-        ln -s "${cc}/lib/clang/${cc.version}/include" "$rsrc"
+        ln -s "${cc.lib or cc}/lib/clang/${cc.version}/include" "$rsrc"
         ln -s "${last.pkgs.llvmPackages_7.compiler-rt.out}/lib" "$rsrc/lib"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       '';
@@ -407,7 +407,7 @@ in rec {
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [
-        xz.bin xz.out bash libcxx libcxxabi llvmPackages_7.compiler-rt
+        xz.bin xz.out bash libcxx libcxx.dev libcxxabi libcxxabi.dev llvmPackages_7.compiler-rt
         llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out brotli.lib openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
@@ -434,8 +434,8 @@ in rec {
 
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
-          clang-unwrapped = llvmPackages_7.clang-unwrapped.override { llvm = llvmSelf.llvm; };
-          llvm = llvmPackages_7.llvm.override { inherit libxml2; };
+          clang-unwrapped-all-outputs = llvmPackages_7.clang-unwrapped-all-outputs.override { llvm = llvmSelf.llvm; };
+          libllvm = llvmPackages_7.libllvm.override { inherit libxml2; };
         });
         libraries = super.llvmPackages_7.libraries.extend (llvmSelf: _: {
           inherit (llvmPackages_7) libcxx libcxxabi compiler-rt;
@@ -524,11 +524,13 @@ in rec {
     };
 
     allowedRequisites = (with pkgs; [
-      xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
+      xz.out xz.bin libcxx libcxx.dev libcxxabi libcxxabi.dev gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib llvmPackages.compiler-rt llvmPackages.compiler-rt.dev
       zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
+      gnugrep llvmPackages.clang-unwrapped
+      llvmPackages.libclang.dev llvmPackages.libclang.lib
+      patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
       curl.out brotli.lib openssl.out libssh2.out nghttp2.lib libkrb5
       cc.expand-response-params libxml2.out

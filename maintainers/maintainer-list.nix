@@ -1394,12 +1394,6 @@
     githubId = 302429;
     name = "Marton Boros";
   };
-  branwright1 = {
-    email = "branwright@protonmail.com";
-    github = "branwright1";
-    githubId = 71175207;
-    name = "Brandon Wright";
-  };
   bramd = {
     email = "bram@bramd.nl";
     github = "bramd";
@@ -4765,12 +4759,6 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
-  joaquinito2051 = {
-    email = "joaquinito2051@gmail.com";
-    github = "heroku-miraheze";
-    githubId = 61781343;
-    name = "Joaquín Rufo Gutierrez";
-  };
   jobojeha = {
     email = "jobojeha@jeppener.de";
     github = "jobojeha";
@@ -5011,7 +4999,7 @@
     name = "Julien Dehos";
   };
   julm = {
-    email = "julm+nix@sourcephile.fr";
+    email = "julm+nixpkgs@sourcephile.fr";
     github = "ju1m";
     githubId = 21160136;
     name = "Julien Moutinho";

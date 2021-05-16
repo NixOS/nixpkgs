@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, callPackage, wrapCCWith }:
+{ lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith }:
 
 let
   version = "4.1.0";
@@ -15,7 +15,7 @@ in rec {
       clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc}/lib/clang/$clang_version/include" "$rsrc"
+      ln -s "${lib.getLib cc}/lib/clang/$clang_version/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       echo "-Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
       rm $out/nix-support/add-hardening.sh
@@ -31,6 +31,7 @@ in rec {
   lld = callPackage ./lld {
     inherit llvm version;
     src = "${src}/lld";
+    buildLlvmTools = buildPackages.llvmPackages_rocm;
   };
 
   llvm = callPackage ./llvm {

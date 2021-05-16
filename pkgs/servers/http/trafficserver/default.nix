@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
       large intranets by maximizing existing and available bandwidth.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan joaquinito2051 ];
+    maintainers = with maintainers; [ midchildan ];
     platforms = platforms.unix;
   };
 }

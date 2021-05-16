@@ -11,7 +11,11 @@ stdenv.mkDerivation {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
 

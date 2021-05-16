@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "950a199911a8d94683a6b10321f9345d5a3a8433ec58b217ace979e18f16e248";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = [
     cppy

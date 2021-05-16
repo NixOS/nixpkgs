@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     mv llvm-* llvm
   '';
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     (fetchpatch {
       # Backported from LLVM 12, avoids clashes with commonly used "block.h" header.
@@ -22,6 +24,7 @@ stdenv.mkDerivation {
       sha256 = "sha256-aWa66ogmPkG0xHzSfcpD0qZyZQcNKwLV44js4eiun78=";
       stripLen = 1;
     })
+    ./gnu-install-dirs.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''

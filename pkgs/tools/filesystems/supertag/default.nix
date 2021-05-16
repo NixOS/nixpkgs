@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1mzmp1jcxgn2swp52r9y7k09fk0z67i1qafzkkzlfxxd10vfr70v";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   nativeBuildInputs = [ clang pkg-config ];
   buildInputs = [ dbus fuse sqlite ];

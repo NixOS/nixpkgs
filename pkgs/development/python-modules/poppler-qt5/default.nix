@@ -4,7 +4,7 @@
 , isPy3k
 , fetchPypi
 , pythonPackages
-, sip_5
+, sip
 , qtbase
 , qmake
 , pyqt5
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ qtbase.dev poppler pyqt-builder ];
-  nativeBuildInputs = [ pkg-config qmake sip_5 ];
+  nativeBuildInputs = [ pkg-config qmake sip ];
   propagatedBuildInputs = [ pyqt5.dev ];
 
   format = "pyproject";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
     [tool.sip.bindings.Poppler-Qt5]
     include-dirs = ["${poppler.dev}/include/poppler"]
-    tags = ["${sip_5.platform_tag}"]
+    tags = ["${sip.platform_tag}"]
     EOF
   '';
 

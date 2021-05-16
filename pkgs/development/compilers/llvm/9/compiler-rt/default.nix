@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   inherit version;
   src = fetch pname "0xwh79g3zggdabxgnd0bphry75asm1qz7mv3hcqihqwqr6aspgy2";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ./gnu-install-dirs.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 

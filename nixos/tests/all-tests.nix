@@ -27,6 +27,7 @@ in
   airsonic = handleTest ./airsonic.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   ammonite = handleTest ./ammonite.nix {};
+  apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };

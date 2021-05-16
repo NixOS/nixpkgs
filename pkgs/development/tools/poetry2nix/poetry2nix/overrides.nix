@@ -512,7 +512,7 @@ self: super:
 
       # Set directory containing llvm-config binary
       preConfigure = ''
-        export LLVM_CONFIG=${pkgs.llvm}/bin/llvm-config
+        export LLVM_CONFIG=${pkgs.llvm.dev}/bin/llvm-config
       '';
 
       __impureHostDeps = lib.optionals pkgs.stdenv.isDarwin [ "/usr/lib/libm.dylib" ];

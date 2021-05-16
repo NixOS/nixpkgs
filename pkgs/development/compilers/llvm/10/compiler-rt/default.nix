@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   inherit version;
   src = fetch pname "1yjqjri753w0fzmxcyz687nvd97sbc9rsqrxzpq720na47hwh3fr";
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [ cmake python3 llvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./find-darwin-sdk-version.patch # don't test for macOS being >= 10.15
+    ./gnu-install-dirs.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
