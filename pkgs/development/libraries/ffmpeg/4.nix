@@ -1,6 +1,7 @@
 { callPackage
 # Darwin frameworks
 , Cocoa, CoreMedia, VideoToolbox
+, stdenv, lib
 , ...
 }@args:
 
@@ -11,5 +12,6 @@ callPackage ./generic.nix (rec {
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
 
   /* Work around https://trac.ffmpeg.org/ticket/9242 */
-  patches = [ ./v2-0001-avcodec-videotoolboxenc-define-TARGET_CPU_ARM64-t.patch ];
+  patches = lib.optional stdenv.isDarwin
+    ./v2-0001-avcodec-videotoolboxenc-define-TARGET_CPU_ARM64-t.patch;
 } // args)
