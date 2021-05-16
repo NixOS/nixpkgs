@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, shared-mime-info }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
 
   nativeBuildInputs = [ shared-mime-info ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   preCheck = ''
     export HOME=$TEMPDIR
