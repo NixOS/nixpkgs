@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , nixosTests
 , pkg-config
 , systemd
@@ -68,6 +69,14 @@ stdenv.mkDerivation rec {
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
+
+  patches = [
+    # Fix compilation on aarch64, remove on next update
+    (fetchpatch {
+      url = "https://github.com/libreswan/libreswan/commit/ea50d36d2886e44317ba5ba841de1d1bf91aee6c.patch";
+      sha256 = "1jp89rm9jp55zmiyimyhg7yadj0fwwxaw7i5gyclrs38w3y1aacj";
+    })
+  ];
 
   prePatch = ''
     # Correct iproute2 path
