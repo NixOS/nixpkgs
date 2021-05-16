@@ -2458,6 +2458,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
   };
 
+  lsp_signature-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp_signature-nvim";
+    version = "2021-05-07";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "lsp_signature.nvim";
+      rev = "de68e0754019f7ff5822f3180b067d89f014943b";
+      sha256 = "009lih2s5x9nccx2i2xqb377jkclpxbw25vmznngdq47qr89ws1r";
+    };
+    meta.homepage = "https://github.com/ray-x/lsp_signature.nvim/";
+  };
+
   lspkind-nvim = buildVimPluginFrom2Nix {
     pname = "lspkind-nvim";
     version = "2021-02-06";
