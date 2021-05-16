@@ -26080,6 +26080,8 @@ in
 
   orca-c = callPackage ../applications/audio/orca-c {};
 
+  organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
+
   osm2xmap = callPackage ../applications/misc/osm2xmap {
     libyamlcpp = libyamlcpp_0_3;
   };
