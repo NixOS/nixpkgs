@@ -1,13 +1,37 @@
-diff --git a/libqtile/core/manager.py b/libqtile/core/manager.py
-index c22eeb6a..2ffe4eab 100644
---- a/libqtile/core/manager.py
-+++ b/libqtile/core/manager.py
-@@ -278,7 +278,7 @@ class Qtile(CommandObject):
-             logger.error("Unable to pickle qtile state")
-         argv = [s for s in argv if not s.startswith('--with-state')]
-         argv.append('--with-state=' + buf.getvalue().decode())
--        self._restart = (sys.executable, argv)
-+        self._restart = (os.environ.get("QTILE_WRAPPER", "@out@/bin/qtile"), argv[1:])
-         self.stop()
+diff --color -ur a/libqtile/core/lifecycle.py b/libqtile/core/lifecycle.py
+--- a/libqtile/core/lifecycle.py	2021-05-16 15:45:58.021328775 +0200
++++ b/libqtile/core/lifecycle.py	2021-05-16 17:02:02.112047701 +0200
+@@ -25,7 +25,9 @@
  
-     async def finalize(self):
+     def _atexit(self) -> None:
+         if self.behavior is Behavior.RESTART:
+-            argv = [sys.executable] + sys.argv
++            executable = os.environ.get("QTILE_WRAPPER", "@out@/bin/qtile")
++            args = sys.argv[1:]
++            argv = [executable] + args
+             if '--no-spawn' not in argv:
+                 argv.append('--no-spawn')
+             argv = [s for s in argv if not s.startswith('--with-state')]
+@@ -33,7 +35,7 @@
+                 argv.append('--with-state=' + self.state_file)
+             logger.warning('Restarting Qtile with os.execv(...)')
+             # No other code will execute after the following line does
+-            os.execv(sys.executable, argv)
++            os.execv(executable, argv)
+         elif self.behavior is Behavior.TERMINATE:
+             logger.warning('Qtile will now terminate')
+         elif self.behavior is Behavior.NONE:
+diff --color -ur a/libqtile/interactive/iqshell_install.py b/libqtile/interactive/iqshell_install.py
+--- a/libqtile/interactive/iqshell_install.py	2021-05-16 15:45:58.012328587 +0200
++++ b/libqtile/interactive/iqshell_install.py	2021-05-16 17:03:23.286716678 +0200
+@@ -25,8 +25,9 @@
+ 
+ from jupyter_client.kernelspec import install_kernel_spec
+ 
++executable = os.environ.get("QTILE_WRAPPER", "@out@/bin/qtile")
+ kernel_json = {
+-    "argv": [sys.executable, "-m", "libqtile.interactive.iqshell_kernel", "-f", "{connection_file}"],
++    "argv": [executable, "-m", "libqtile.interactive.iqshell_kernel", "-f", "{connection_file}"],
+     "display_name": "iqshell",
+     "language": "qshell",
+ }

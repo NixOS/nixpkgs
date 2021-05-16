@@ -26763,8 +26763,8 @@ in
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
-  qtile = callPackage ../applications/window-managers/qtile {
-    inherit (xorg) libxcb;
+  qtile = with python38Packages; callPackage ../applications/window-managers/qtile {
+    inherit (xorg) libxcb xcbutilcursor;
   };
 
   vimpc = callPackage ../applications/audio/vimpc { };
