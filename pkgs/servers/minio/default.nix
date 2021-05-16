@@ -30,25 +30,18 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postPatch = ''
-    sed -i "s/Version.*/Version = \"${versionToTimestamp version}\"/g" cmd/build-constants.go
-    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
-    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
-  '';
-
-  postConfigure = ''
-    export CGO_ENABLED=0
-  '';
-
-  buildFlagsArray = [
-    "-tags=kqueue"
-  ];
+  preBuild = let t = "github.com/minio/minio/cmd"; in
+    ''
+      export CGO_ENABLED=0
+      buildFlagsArray+=("-tags" "kqueue" "-ldflags" "-s -w -X ${t}.Version=${versionToTimestamp version} -X ${t}.ReleaseTag=RELEASE.${version} -X ${t}.CommitID=${src.rev}")
+    '';
 
   passthru.tests.minio = nixosTests.minio;
 
   meta = with lib; {
     homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
+    changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;
     license = licenses.agpl3Plus;
