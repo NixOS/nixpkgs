@@ -8,11 +8,6 @@ let
 
   globalSettings = format.generate "global.toml" cfg.global;
   optionalSettings = format.generate "optional.toml" cfg.optional;
-  configFile = pkgs.writeText "config.toml" ''
-    ${fileContents globalSettings}
-
-    ${fileContents optionalSettings}
-  '';
 in
 {
   options.services.sozu = {
@@ -22,6 +17,19 @@ in
       type = types.package;
       default = pkgs.sozu;
       description = "Sozu package to use.";
+    };
+
+    configFile = mkOption {
+      type = types.either types.str types.path;
+      default = pkgs.writeText "config.toml" ''
+        ${fileContents globalSettings}
+
+        ${fileContents optionalSettings}
+      '';
+      description = ''
+        Override the configuration file used by Sozu.
+        By default, NixOS generates on automatically.
+      '';
     };
 
     global = mkOption {
@@ -429,6 +437,8 @@ in
   config = mkIf
     cfg.enable
     {
+      environment.etc."sozu/config.toml".source = cfg.configFile;
+
       environment.systemPackages = with pkgs; [
         cfg.package
       ];
@@ -445,11 +455,12 @@ in
         after = [ "network.target" ];
         wants = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ cfg.configFile ];
 
         serviceConfig = {
           PIDFile = "/run/sozu/sozu.pid";
-          ExecStart = "${cfg.package}/bin/sozu start --config ${configFile}";
-          ExecReload = "${cfg.package}/bin/sozuctl --config ${configFile} reload";
+          ExecStart = "${cfg.package}/bin/sozu start --config /etc/sozu/config.toml";
+          ExecReload = "${cfg.package}/bin/sozuctl --config /etc/sozu/config.toml reload";
           Restart = "on-failure";
           User = "sozu";
           Group = "sozu";
