@@ -48,7 +48,7 @@ stdenv.mkDerivation {
         # the magic combination of necessary CMake variables
         # if you fancy a try, take a look at
         # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        install_name_tool -id $out/$file $file
+        ${stdenv.cc.targetPrefix}install_name_tool -id $out/$file $file
       done
       make install
       install -d 755 $out/include

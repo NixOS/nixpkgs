@@ -21,6 +21,10 @@
 #include <sys/errno.h>
 #include <yaml.h>
 
+#define LOG(str, ...) fprintf(stderr, "%s", str)
+
+#define LOGF(...) fprintf(stderr, __VA_ARGS__)
+
 static yaml_node_t *get_mapping_entry(yaml_document_t *document, yaml_node_t *mapping, const char *name) {
   if (!mapping) {
     fprintf(stderr, "get_mapping_entry: mapping is null\n");
@@ -35,12 +39,12 @@ static yaml_node_t *get_mapping_entry(yaml_document_t *document, yaml_node_t *ma
     yaml_node_t *key = yaml_document_get_node(document, pair->key);
 
     if (!key) {
-      fprintf(stderr, "get_mapping_entry: key (%i) is null\n", pair->key);
+      LOGF("key (%d) is null\n", pair->key);
       return NULL;
     }
 
     if (key->type != YAML_SCALAR_NODE) {
-      fprintf(stderr, "get_mapping_entry: key is not a scalar\n");
+      LOG("get_mapping_entry: key is not a scalar\n");
       return NULL;
     }
 
@@ -54,18 +58,17 @@ static yaml_node_t *get_mapping_entry(yaml_document_t *document, yaml_node_t *ma
   return NULL;
 }
 
-static int emit_reexports(yaml_document_t *document) {
+static int emit_reexports_v2(yaml_document_t *document) {
   yaml_node_t *root = yaml_document_get_root_node(document);
 
   yaml_node_t *exports = get_mapping_entry(document, root, "exports");
 
   if (!exports) {
-    fprintf(stderr, "emit_reexports: no exports found\n");
-    return 0;
+    return 1;
   }
 
   if (exports->type != YAML_SEQUENCE_NODE) {
-    fprintf(stderr, "emit_reexports, value is not a sequence\n");
+    LOG("value is not a sequence\n");
     return 0;
   }
 
@@ -82,6 +85,11 @@ static int emit_reexports(yaml_document_t *document) {
       continue;
     }
 
+    if (reexports->type != YAML_SEQUENCE_NODE) {
+      LOG("re-exports is not a sequence\n");
+      return 0;
+    }
+
     for (
         yaml_node_item_t *reexport = reexports->data.sequence.items.start;
         reexport < reexports->data.sequence.items.top;
@@ -90,7 +98,58 @@ static int emit_reexports(yaml_document_t *document) {
       yaml_node_t *val = yaml_document_get_node(document, *reexport);
 
       if (val->type != YAML_SCALAR_NODE) {
-        fprintf(stderr, "item is not a scalar\n");
+        LOG("item is not a scalar\n");
+        return 0;
+      }
+
+      fwrite(val->data.scalar.value, val->data.scalar.length, 1, stdout);
+      putchar('\n');
+    }
+  }
+
+  return 1;
+}
+
+static int emit_reexports_v4(yaml_document_t *document) {
+  yaml_node_t *root = yaml_document_get_root_node(document);
+  yaml_node_t *reexports = get_mapping_entry(document, root, "reexported-libraries");
+
+  if (!reexports) {
+    return 1;
+  }
+
+  if (reexports->type != YAML_SEQUENCE_NODE) {
+    LOG("value is not a sequence\n");
+    return 0;
+  }
+
+  for (
+      yaml_node_item_t *entry = reexports->data.sequence.items.start;
+      entry < reexports->data.sequence.items.top;
+      ++entry
+  ) {
+    yaml_node_t *entry_node = yaml_document_get_node(document, *entry);
+
+    yaml_node_t *libs = get_mapping_entry(document, entry_node, "libraries");
+
+    if (!libs) {
+      continue;
+    }
+
+    if (libs->type != YAML_SEQUENCE_NODE) {
+      LOG("libraries is not a sequence\n");
+      return 0;
+    }
+
+    for (
+        yaml_node_item_t *lib = libs->data.sequence.items.start;
+        lib < libs->data.sequence.items.top;
+        ++lib
+    ) {
+      yaml_node_t *val = yaml_document_get_node(document, *lib);
+
+      if (val->type != YAML_SCALAR_NODE) {
+        LOG("item is not a scalar\n");
         return 0;
       }
 
@@ -135,7 +194,13 @@ int main(int argc, char **argv) {
     goto err_yaml;
   }
 
-  emit_reexports(&yaml_document);
+  // Try both, only fail if one reports an error.  A lack of re-exports is not
+  // considered an error.
+  int ok = 1;
+  ok = ok && emit_reexports_v2(&yaml_document);
+  ok = ok && emit_reexports_v4(&yaml_document);
+
+  result = !ok;
 
 err_yaml:
   yaml_parser_delete(&yaml_parser);

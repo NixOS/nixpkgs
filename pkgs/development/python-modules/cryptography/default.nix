@@ -66,8 +66,18 @@ buildPythonPackage rec {
     pytz
   ];
 
+  pytestFlags = lib.concatStringsSep " " ([
+    "--disable-pytest-warnings"
+  ] ++
+    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # aarch64-darwin forbids W+X memory, but this tests depends on it:
+      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+      "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
+    ]
+  );
+
   checkPhase = ''
-    py.test --disable-pytest-warnings tests
+    py.test ${pytestFlags} tests
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we

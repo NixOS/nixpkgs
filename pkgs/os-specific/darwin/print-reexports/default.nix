@@ -7,11 +7,11 @@ stdenv.mkDerivation {
   buildInputs = [ libyaml ];
 
   buildPhase = ''
-    $CC -lyaml -o $name main.c
+    $CC -lyaml -o print-reexports main.c
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    mv $name $out/bin
+    mv print-reexports $out/bin
   '';
 }

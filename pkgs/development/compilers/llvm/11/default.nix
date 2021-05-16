@@ -213,20 +213,20 @@ let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid
+    compiler-rt = if stdenv.hostPlatform.isAndroid || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 
@@ -236,21 +236,21 @@ let
 
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };
 
     libcxxabi = callPackage ./libcxxabi {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };

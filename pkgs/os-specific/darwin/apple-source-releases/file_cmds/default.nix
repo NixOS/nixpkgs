@@ -1,8 +1,8 @@
-{ lib, appleDerivation, xcbuildHook, zlib, bzip2, xz, ncurses, libutil }:
+{ lib, appleDerivation, xcbuildHook, zlib, bzip2, xz, ncurses, libutil, Libinfo }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ zlib bzip2 xz ncurses libutil ];
+  buildInputs = [ zlib bzip2 xz ncurses libutil Libinfo ];
 
   # some commands not working:
   # mtree: _simple.h not found

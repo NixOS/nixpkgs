@@ -131,7 +131,7 @@ rec {
         else null;
       # The canonical name for this attribute is darwinSdkVersion, but some
       # platforms define the old name "sdkVer".
-      darwinSdkVersion = final.sdkVer or "10.12";
+      darwinSdkVersion = final.sdkVer or (if final.isAarch64 then "11.0" else "10.12");
       darwinMinVersion = final.darwinSdkVersion;
       darwinMinVersionVariable =
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
