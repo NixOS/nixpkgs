@@ -148,7 +148,6 @@ let
         koka
         krank
         lambdabot
-        ldgallery
         madlang
         matterhorn
         mueval

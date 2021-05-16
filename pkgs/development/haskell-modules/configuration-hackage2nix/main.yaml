@@ -164,6 +164,8 @@ package-maintainers:
     - stm-containers
     - streamly
     - taskwarrior
+  pacien:
+    - ldgallery-compiler
   peti:
     - cabal-install
     - cabal2nix
