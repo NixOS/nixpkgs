@@ -11978,8 +11978,7 @@ in
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_6;
-    lua = lua5_1;
+    llvmPackages = llvmPackages_10;
   };
 
   teyjus = callPackage ../development/compilers/teyjus (
