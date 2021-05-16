@@ -163,8 +163,6 @@ rec {
     postPatch = ''
       patchShebangs .
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-      substituteInPlace ./scripts/docs/generate-man.sh --replace "-v md2man" "-v go-md2man"
-      substituteInPlace ./man/md2man-all.sh            --replace md2man go-md2man
     '' + optionalString buildxSupport ''
       substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
           ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
@@ -222,20 +220,20 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.2";
+    version = "20.10.6";
     rev = "v${version}";
-    sha256 = "0z0hpm5hrqh7p8my8lmiwpym2shs48my6p0zv2cc34wym0hcly51";
+    sha256 = "15kknb26vyzjgqmn8r81a1sy1i5br6bvngqd5xljihppnxvp2gvl";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "0c2zycpnwj4kh8m8xckv1raj3fx07q9bfaj46rr85jihm4p2dp5w";
+      sha256 = "1l4ra9bsvydaxd2fy7dgxp7ynpp0mrlwvcdhxiafw596559ab6qk";
     };
-    runcRev = "ff819c7e9184c13b7c2607fe6c30ae19403a7aff"; # v1.0.0-rc92
-    runcSha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
-    containerdRev = "269548fa27e0089a8b8278fc4fc781d7f65a939b"; # v1.4.3
-    containerdSha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
-    tiniRev = "de40ad007797e0dcd8b7126f27bb87401d224240"; # v0.19.0
+    runcRev = "v1.0.0-rc94";
+    runcSha256 = "0f11zr2d3bnycd6rmb1cynhy9zh169yj6kcn5s22wz2j6grghwz7";
+    containerdRev = "v1.5.1";
+    containerdSha256 = "1jwz53cpi9sxjsd1qr3sji1jai9wh3kfwspsgxnijhjs0bz8gvyn";
+    tiniRev = "v0.19.0";
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }
