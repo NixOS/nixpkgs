@@ -51,6 +51,6 @@ buildGoModule rec {
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
   };
 }
