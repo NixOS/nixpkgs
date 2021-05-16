@@ -99,9 +99,16 @@ that you can paste in a GitHub comment on the PR opened above.  This
 comment describes which Haskell packages are now failing to build.  It also
 pings the maintainers so that they know to fix up their packages.
 
+It may be helpful to pipe `hydra-report.hs ping-maintainers` into `xclip`
+(XOrg) or `wl-clip` (Wayland) in order to post on GitHub.
+
 This build report can be fetched and re-generated for new Hydra evaluations.
 It may help contributors to try to keep the GitHub comment updated with the
 most recent build report.
+
+Maintainers should be given at least 7 days to fix up their packages when they
+break.  If maintainers don't fix up their packages with 7 days, then they
+may be marked broken before merging `haskell-updates` into `master`.
 
 #### Fix Broken Packages
 
@@ -119,8 +126,41 @@ We should be proactive in working with maintainers to keep their packages
 building.
 
 Steps to fix Haskell packages that are failing to build is out of scope for
-this document, but it usually requires fixing up dependencies that now
+this document, but it usually requires fixing up dependencies that are now
 out-of-bounds.
+
+#### Mark Broken Packages
+
+Packages that do not get fixed can be marked broken with the following
+commands.  First check which packages are broken:
+
+```console
+$ maintainers/scripts/haskell/hydra-report.hs get-report
+$ maintainers/scripts/haskell/hydra-report.hs mark-broken-list
+```
+
+This shows a list of packages that are thought to be broken.
+
+Next, run the following command.
+
+```console
+$ maintainers/scripts/haskell/mark-broken.sh --do-commit
+```
+
+This first opens up an editor with the broken package list.  Some of these
+packages may have a maintainer in Nixpkgs.  If these maintainers have not been
+given 7 days to fix up their package, then make sure to remove those packages
+from the list.  After saving and exiting the editor, the following will
+happen:
+
+- packages from the list will be added to
+  [`configuration-hackage2nix/broken.yaml`](configuration-hackage2nix/broken.yaml)
+- `hackage-packages.nix` will be regenerated
+- the
+  [`configuration-hackage2nix/transitive-broken.yaml`](configuration-hackage2nix/transitive-broken.yaml)
+  file will be regenerated
+- `hackage-packages.nix` will be regenerated again
+- everything will be committed
 
 ### Merge `haskell-updates` into `master`
 
