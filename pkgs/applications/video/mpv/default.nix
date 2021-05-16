@@ -108,7 +108,7 @@ in stdenv.mkDerivation rec {
     # To make mpv build with libplacebo 3.104.0:
     (fetchpatch { # vo_gpu: placebo: update for upstream API changes
       url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
-      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
+      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l506pgrmvcyiyzrx";
     })
   ];
 
