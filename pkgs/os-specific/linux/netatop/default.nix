@@ -16,7 +16,12 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  patches = [ ./netatop.service.patch ];
+  patches = [
+    # fix paths in netatop.service
+    ./fix-paths.patch
+    # Specify PIDFile in /run, not /var/run to silence systemd warning
+    ./netatop.service.patch
+  ];
   preConfigure = ''
     patchShebangs mkversion
     sed -i -e 's,^KERNDIR.*,KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build,' \
