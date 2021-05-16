@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
-    repo = "${pname}-contrib";
+    repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
     sha256 = "03713b4bkhcz61maz0r5mkd36kv3rq8rji3qcpi9zf5bkkjs1yzb";
   };
