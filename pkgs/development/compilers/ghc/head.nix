@@ -10,7 +10,9 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+  # Libdw.c only supports x86_64, i686 and s390x
+, enableDwarf ? stdenv.targetPlatform.isx86 &&
+                !stdenv.targetPlatform.isDarwin &&
                 !stdenv.targetPlatform.isWindows
 , elfutils # for DWARF support
 
@@ -258,10 +260,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [ marcweber andres peti ];
-    inherit (ghc.meta) license;
-    # GHC-HEAD does not appear to compile on aarch64.
-    broken = stdenv.isAarch64;
-    platforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;
+    inherit (ghc.meta) license platforms;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
