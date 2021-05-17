@@ -8,3 +8,9 @@
  */
 
 #include "Runners.h"
+
+
+Calamares::JobResult UnsquashRunner::run()
+{
+    return Calamares::JobResult::ok();
+}
