@@ -582,7 +582,7 @@
     "nx584" = ps: with ps; [ pynx584 ];
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
-    "obihai" = ps: with ps; [ ]; # missing inputs: pyobihai
+    "obihai" = ps: with ps; [ pyobihai ];
     "octoprint" = ps: with ps; [ aiohttp-cors netdisco pyroute2 zeroconf ];
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
