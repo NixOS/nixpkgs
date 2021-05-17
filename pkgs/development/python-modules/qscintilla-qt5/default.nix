@@ -4,7 +4,7 @@
 , qtbase
 }:
 with pythonPackages;
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;
@@ -23,6 +23,11 @@ buildPythonPackage {
       "'$out/${python.sitePackages}'"
   '';
 
+  pyqt5_sip_dir = if isPy3k then
+    "${pyqt5}/${python.sitePackages}/PyQt5/bindings"
+  else
+    "${pyqt5}/share/sip/PyQt5";
+
   preConfigure = ''
     # configure.py will look for this folder
     mkdir -p $out/share/sip/PyQt5
@@ -38,7 +43,7 @@ buildPythonPackage {
       --qsci-incdir=${qscintilla}/include \
       --qsci-featuresdir=${qscintilla}/mkspecs/features \
       --qsci-libdir=${qscintilla}/lib \
-      --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
+      --pyqt-sipdir=${pyqt5_sip_dir} \
       --qsci-sipdir=$out/share/sip/PyQt5 \
       --sip-incdir=${sip_4}/include
   '';
