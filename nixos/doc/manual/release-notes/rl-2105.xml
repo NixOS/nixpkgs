@@ -1244,6 +1244,14 @@ environment.systemPackages = [
      Nixpkgs now contains <link xlink:href="https://github.com/NixOS/nixpkgs/pull/118232">automatically packaged GNOME Shell extensions</link> from the <link xlink:href="https://extensions.gnome.org/">GNOME Extensions</link> portal. You can find them, filed by their UUID, under <literal>gnome38Extensions</literal> attribute for GNOME 3.38 and under <literal>gnome40Extensions</literal> for GNOME 40. Finally, the <literal>gnomeExtensions</literal> attribute contains extensions for the latest GNOME Shell version in Nixpkgs, listed under a more human-friendly name. The unqualified attribute scope also contains manually packaged extensions. Note that the automatically packaged extensions are provided for convenience and are not checked or guaranteed to work.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Erlang/OTP versions older than R21 got dropped. We also dropped the cuter package, as it was purely an example of how to build a package.
+     We also dropped <literal>lfe_1_2</literal> as it could not build with R21+.
+     Moving forward, we expect to only support 3 yearly releases of OTP.
+    </para>
+   </listitem>
+
   </itemizedlist>
  </section>
 </section>
