@@ -11,15 +11,16 @@
 
 #include <QFileInfo>
 
-Runner::Runner(const QString& source, const QString& destination) : m_source(source), m_destination(destination)
+Runner::Runner( const QString& source, const QString& destination )
+    : m_source( source )
+    , m_destination( destination )
 {
 }
 
-Runner::~Runner()
-{
-}
+Runner::~Runner() {}
 
-bool Runner::checkSourceExists() const
+bool
+Runner::checkSourceExists() const
 {
     return false;
 }

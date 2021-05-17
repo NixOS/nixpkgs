@@ -9,14 +9,15 @@
 
 #include "Runners.h"
 
-Calamares::JobResult FSArchiverRunner::run()
+Calamares::JobResult
+FSArchiverRunner::run()
 {
-    if (!checkSourceExists())
+    if ( !checkSourceExists() )
     {
         return Calamares::JobResult::internalError(
             tr( "Invalid fsarchiver configuration" ),
-                                                   tr( "The source archive <i>%1</i> does not exist." ).arg(m_source),
-                                                   Calamares::JobResult::InvalidConfiguration );
+            tr( "The source archive <i>%1</i> does not exist." ).arg( m_source ),
+            Calamares::JobResult::InvalidConfiguration );
     }
 
     return Calamares::JobResult::ok();

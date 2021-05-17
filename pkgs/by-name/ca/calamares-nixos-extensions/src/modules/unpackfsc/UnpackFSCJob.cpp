@@ -17,17 +17,14 @@
 
 #include <memory>
 
-static const NamedEnumTable< UnpackFSCJob::Type > typeNames()
+static const NamedEnumTable< UnpackFSCJob::Type >
+typeNames()
 {
     using T = UnpackFSCJob::Type;
 
     static const NamedEnumTable< T > names {
-        { "none", T::None },
-        { "fsarchiver", T::FSArchive },
-        { "fsarchive", T::FSArchive },
-        { "fsa", T::FSArchive },
-        { "squashfs", T::Squashfs },
-        { "squash", T::Squashfs },
+        { "none", T::None },         { "fsarchiver", T::FSArchive }, { "fsarchive", T::FSArchive },
+        { "fsa", T::FSArchive },     { "squashfs", T::Squashfs },    { "squash", T::Squashfs },
         { "unsquash", T::Squashfs },
     };
 
@@ -50,19 +47,19 @@ UnpackFSCJob::prettyName() const
 Calamares::JobResult
 UnpackFSCJob::exec()
 {
-    std::unique_ptr<Runner> r;
+    std::unique_ptr< Runner > r;
     switch ( m_type )
     {
-        case Type::FSArchive:
-            r = std::make_unique<FSArchiverRunner>(m_source, m_destination);
-            break;
-        case Type::Squashfs:
-            r = std::make_unique<UnsquashRunner>(m_source, m_destination);
-            break;
-        case Type::None:
-        default:
-            cDebug() << "Nothing to do.";
-            return Calamares::JobResult::ok();
+    case Type::FSArchive:
+        r = std::make_unique< FSArchiverRunner >( m_source, m_destination );
+        break;
+    case Type::Squashfs:
+        r = std::make_unique< UnsquashRunner >( m_source, m_destination );
+        break;
+    case Type::None:
+    default:
+        cDebug() << "Nothing to do.";
+        return Calamares::JobResult::ok();
     }
 
     // progress?
@@ -72,8 +69,8 @@ UnpackFSCJob::exec()
 void
 UnpackFSCJob::setConfigurationMap( const QVariantMap& map )
 {
-    QString source = CalamaresUtils::getString(map, "source" );
-    QString sourceTypeName = CalamaresUtils::getString(map, "sourcefs" );
+    QString source = CalamaresUtils::getString( map, "source" );
+    QString sourceTypeName = CalamaresUtils::getString( map, "sourcefs" );
     if ( source.isEmpty() || sourceTypeName.isEmpty() )
     {
         cWarning() << "Skipping item with bad source data:" << map;
@@ -86,7 +83,7 @@ UnpackFSCJob::setConfigurationMap( const QVariantMap& map )
         cWarning() << "Skipping item with source type None";
         return;
     }
-    QString destination = CalamaresUtils::getString(map, "destination" );
+    QString destination = CalamaresUtils::getString( map, "destination" );
     if ( destination.isEmpty() )
     {
         cWarning() << "Skipping item with empty destination";
