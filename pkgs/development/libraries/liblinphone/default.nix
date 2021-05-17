@@ -10,7 +10,7 @@
 , cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, ffmpeg_3
+, ffmpeg
 , gdk-pixbuf
 , glib
 , graphviz
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg_3
+    ffmpeg
     gdk-pixbuf
     glib
     gtk2
