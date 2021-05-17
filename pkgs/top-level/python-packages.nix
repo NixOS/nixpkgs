@@ -7206,6 +7206,8 @@ in {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+  resolvelib = callPackage ../development/python-modules/resolvelib { };
+
   responses = callPackage ../development/python-modules/responses { };
 
   respx = callPackage ../development/python-modules/respx { };
