@@ -8865,6 +8865,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  telepresence2 = callPackage ../tools/networking/telepresence2 { };
+
   teler = callPackage ../tools/security/teler { };
 
   termius = callPackage ../applications/networking/termius { };
