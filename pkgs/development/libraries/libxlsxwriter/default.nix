@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
     rev = "RELEASE_${version}";
-    sha256 = "0k0km5d4xs6z98nqczvdkqwhhc5izqs82ciifx2l5wcbcdxb4r0k";
+    sha256 = "1jjmwg1mk7pvf36q30rng42qphgz6qdjvn96agrym2q0hhwxc99v";
   };
 
   nativeBuildInputs = [

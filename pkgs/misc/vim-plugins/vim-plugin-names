@@ -47,7 +47,6 @@ camspiers/lens.vim
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
-Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name
@@ -177,6 +176,7 @@ guns/xterm-color-table.vim
 hashivim/vim-packer
 hashivim/vim-terraform
 hashivim/vim-vagrant
+hauleth/sad.vim
 haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
 haya14busa/is.vim
@@ -703,6 +703,7 @@ vhda/verilog_systemverilog.vim
 vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
+vim-autoformat/vim-autoformat
 vim-erlang/vim-erlang-compiler
 vim-erlang/vim-erlang-omnicomplete
 vim-erlang/vim-erlang-runtime

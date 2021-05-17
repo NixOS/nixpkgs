@@ -830,6 +830,10 @@ in
     wine = wineWowPackages.staging;
   };
 
+  yafetch = callPackage ../tools/misc/yafetch {
+    stdenv = clangStdenv;
+  };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
@@ -5749,6 +5753,8 @@ in
   netmask = callPackage ../tools/networking/netmask {};
 
   netifd = callPackage ../tools/networking/netifd {};
+
+  ipinfo = callPackage ../tools/networking/ipinfo {};
 
   ipscan = callPackage ../tools/security/ipscan { };
 
