@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       findutils=${findutils} systemd=${systemd} substituteAllInPlace "$f"
     done
 
-    sed -e 's/chown/true/g' -i Makefile
-    sed -e 's/chmod 04711/chmod 0711/g' -i Makefile
+    substituteInPlace Makefile --replace 'chown' 'true'
+    substituteInPlace Makefile --replace 'chmod 04711' 'chmod 0711'
   '';
 
   installTargets = [ "systemdinstall" ];
