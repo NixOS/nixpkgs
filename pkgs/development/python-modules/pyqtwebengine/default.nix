@@ -5,7 +5,7 @@
 
 let
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k pyqt5 enum34;
+  inherit (pythonPackages) buildPythonPackage python isPy3k pyqt5 enum34 pyqt-builder;
   inherit (pyqt5) sip;
   # source: https://www.riverbankcomputing.com/pipermail/pyqt/2020-June/042985.html
   patches = lib.optional (lib.hasPrefix "5.14" pyqt5.version)
@@ -15,7 +15,7 @@ let
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
-  format = "other";
+  format = if isPy3k then "pyproject" else "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
@@ -23,6 +23,11 @@ in buildPythonPackage rec {
   };
 
   inherit patches;
+
+  postPatch = lib.optionalString isPy3k ''
+    substituteInPlace pyproject.toml \
+      --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
+  '';
 
   outputs = [ "out" "dev" ];
 
@@ -33,7 +38,7 @@ in buildPythonPackage rec {
     qtbase
     qtsvg
     qtwebengine
-  ];
+  ] ++ lib.optional isPy3k pyqt-builder;
 
   buildInputs = [
     sip
@@ -46,6 +51,9 @@ in buildPythonPackage rec {
     ++ lib.optional (!isPy3k) enum34;
 
   dontWrapQtApps = true;
+
+  # Configure only needed when building with sip 4 (python 2)
+  dontConfigure = isPy3k;
 
   configurePhase = ''
     runHook preConfigure
@@ -65,7 +73,7 @@ in buildPythonPackage rec {
     runHook postConfigure
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!isPy3k) ''
     # Let's make it a namespace package
     cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
     from pkgutil import extend_path
@@ -73,18 +81,13 @@ in buildPythonPackage rec {
     EOF
   '';
 
-  installCheckPhase = let
-    modules = [
-      "PyQt5.QtWebEngine"
-      "PyQt5.QtWebEngineWidgets"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages} ${python.interpreter} -c "${imports}"
-  '';
+  # Checked using pythonImportsCheck
+  doCheck = false;
 
-  doCheck = true;
+  pythonImportsCheck = [
+    "PyQt5.QtWebEngine"
+    "PyQt5.QtWebEngineWidgets"
+  ];
 
   enableParallelBuilding = true;
 
