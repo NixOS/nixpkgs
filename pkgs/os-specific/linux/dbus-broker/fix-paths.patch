@@ -1,0 +1,16 @@
+diff --git a/src/launch/launcher.c b/src/launch/launcher.c
+index 5ba9b77..e338d92 100644
+--- a/src/launch/launcher.c
++++ b/src/launch/launcher.c
+@@ -1007,9 +1007,9 @@ static int launcher_parse_config(Launcher *launcher, ConfigRoot **rootp, NSSCach
+         if (launcher->configfile)
+                 configfile = launcher->configfile;
+         else if (launcher->user_scope)
+-                configfile = "/usr/share/dbus-1/session.conf";
++                configfile = "/etc/dbus-1/session.conf";
+         else
+-                configfile = "/usr/share/dbus-1/system.conf";
++                configfile = "/etc/dbus-1/system.conf";
+ 
+         config_parser_init(&parser);
+ 

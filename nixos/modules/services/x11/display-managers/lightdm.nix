@@ -258,7 +258,7 @@ in
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
 
-    services.dbus.enable = true;
+    services.dbus.enable = mkDefault true;
     services.dbus.packages = [ lightdm ];
 
     # lightdm uses the accounts daemon to remember language/window-manager per user

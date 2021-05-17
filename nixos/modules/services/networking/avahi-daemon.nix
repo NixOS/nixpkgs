@@ -278,7 +278,7 @@ in
       };
     };
 
-    services.dbus.enable = true;
+    services.dbus.enable = mkDefault true;
     services.dbus.packages = [ pkgs.avahi ];
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];

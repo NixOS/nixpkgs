@@ -34,7 +34,7 @@ with lib;
       script = "${pkgs.wicd}/sbin/wicd -f";
     };
 
-    services.dbus.enable = true;
+    services.dbus.enable = mkDefault true;
     services.dbus.packages = [pkgs.wicd];
   };
 }
