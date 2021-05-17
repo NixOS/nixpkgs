@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromBitbucket
 , buildPythonPackage
 , python3Packages
 , numpy
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "ufl";
   inherit (dolfin) version;
 
-  src = fetchurl {
-    url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
-    sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
+  src = fetchFromBitbucket {
+    owner = "fenics-project";
+    repo = "ufl";
+    rev = version;
+    sha256 = "19wq9y8ghx3n7jha57cj64gb0ql1w4rnkw8s7b71j5p2lr9i7z2h";
   };
 
   propagatedBuildInputs = [ numpy six ];
