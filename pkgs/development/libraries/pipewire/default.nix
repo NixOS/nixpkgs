@@ -42,6 +42,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
+    # also run nixos/modules/services/desktops/pipewire/update-config.sh after updating
     version = "0.3.27";
 
     outputs = [
