@@ -11374,6 +11374,12 @@
       fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
     }];
   };
+  zeri = {
+    name = "zeri";
+    email = "68825133+zeri42@users.noreply.github.com";
+    github = "zeri42";
+    githubId = 68825133;
+  };
   zseri = {
     name = "zseri";
     email = "zseri.devel@ytrizja.de";
