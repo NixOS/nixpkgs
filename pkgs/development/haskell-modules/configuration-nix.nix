@@ -772,4 +772,10 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+
+  taglib = overrideCabal super.taglib (drv: {
+    librarySystemDepends = [
+      pkgs.zlib
+    ] ++ (drv.librarySystemDepends or []);
+  });
 }
