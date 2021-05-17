@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromBitbucket
 , fetchpatch
 # - Python Dependencies
 , python3Packages
@@ -24,9 +24,11 @@ stdenv.mkDerivation rec {
   pname = "dolfin";
   version = "2019.1.0";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/fenics-project/dolfin/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0kbyi4x5f6j4zpasch0swh0ch81w2h92rqm1nfp3ydi4a93vky33";
+  src = fetchFromBitbucket {
+    owner = "fenics-project";
+    repo = "dolfin";
+    rev = version;
+    sha256 = "0zz572yx8sp0g0h9hmk40m5j8mz7bsn0828mi97dval38vyivbax";
   };
 
   patches = [
