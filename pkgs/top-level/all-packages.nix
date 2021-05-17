@@ -14484,6 +14484,8 @@ in
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
+  fcl = callPackage ../development/libraries/fcl { };
+
   ffcast = callPackage ../tools/X11/ffcast { };
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
@@ -15573,6 +15575,8 @@ in
     else pkgs.libcanberra-gtk2;
 
   libcbor = callPackage ../development/libraries/libcbor { };
+
+  libccd = callPackage ../development/libraries/libccd { };
 
   libcec = callPackage ../development/libraries/libcec {
     libraspberrypi = null;
@@ -20859,6 +20863,8 @@ in
   linux-pam = callPackage ../os-specific/linux/pam { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
+
+  octomap = callPackage ../development/libraries/octomap { };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
