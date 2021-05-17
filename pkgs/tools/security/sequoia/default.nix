@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     cargo
     rustc
     git
-    llvmPackages_10.libclang
+    llvmPackages_10.libclang.lib
     llvmPackages_10.clang
     ensureNewerSourcesForZipFilesHook
     capnproto
