@@ -10,6 +10,7 @@
 #include "Runners.h"
 
 #include <QFileInfo>
+#include <QStandardPaths>
 
 Runner::Runner( const QString& source, const QString& destination )
     : m_source( source )
@@ -22,5 +23,13 @@ Runner::~Runner() {}
 bool
 Runner::checkSourceExists() const
 {
-    return false;
+    QFileInfo fi( m_source );
+    return fi.exists() && fi.isReadable();
+}
+
+bool
+Runner::checkToolExists( const QString& toolName, QString& fullPath )
+{
+    fullPath = QStandardPaths::findExecutable( toolName );
+    return !fullPath.isEmpty();
 }

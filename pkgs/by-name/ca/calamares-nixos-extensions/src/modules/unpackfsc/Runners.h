@@ -30,6 +30,14 @@ public:
      */
     bool checkSourceExists() const;
 
+    /** @brief Check that a named tool (executable) exists in the search path.
+     *
+     * Returns @c true if the tool is found and sets @p fullPath
+     * to the full path of that tool; returns @c false and clears
+     * @p fullPath otherwise.
+     */
+    static bool checkToolExists( const QString& toolName, QString& fullPath );
+
 Q_SIGNALS:
     // Progress?
 
