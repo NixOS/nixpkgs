@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://synergy-project.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.all;
   };
 }
