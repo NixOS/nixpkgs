@@ -379,6 +379,7 @@ let
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
     gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    RcppArmadillo = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
