@@ -17226,12 +17226,6 @@
     githubId = 144952;
     name = "Suvash Thapaliya";
   };
-  svavs = {
-    name = "Silvano Sallese";
-    email = "silvano.sallese+nixpkgs@gmail.com";
-    github = "svavs";
-    githubId = 1369198;
-  };
   sveitser = {
     email = "sveitser@gmail.com";
     github = "sveitser";
