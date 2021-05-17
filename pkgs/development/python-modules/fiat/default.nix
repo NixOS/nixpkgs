@@ -1,11 +1,15 @@
 { stdenv
 , lib
 , fetchurl
-, python3Packages
+, buildPythonPackage
+, numpy
+, sympy
+, six
+, pytestCheckHook
 , dolfin
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "fiat";
   inherit (dolfin) version;
 
@@ -14,23 +18,19 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
   };
 
-  propagatedBuildInputs = with python3Packages; [ numpy six sympy ];
+  propagatedBuildInputs = [ numpy six sympy ];
 
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  preCheck = ''
+  disabledTests = [
     # Workaround pytest 4.6.3 issue.
     # See: https://bitbucket.org/fenics-project/fiat/pull-requests/59
-    rm test/unit/test_quadrature.py
-    rm test/unit/test_reference_element.py
-    rm test/unit/test_fiat.py
-  '';
+    "test_quadrature"
+    "test_reference_element"
+    "tes_fiat"
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    py.test test/unit/
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "test/unit/" ];
 
   meta = with lib; {
     description = "Automatic generation of arbitrary order instances of the Lagrange elements on lines, triangles, and tetrahedra";

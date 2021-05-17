@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , buildPythonPackage
 , isPy27
@@ -56,6 +57,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the DOLFIN FEM compiler";
     homepage = "https://fenicsproject.org/";
-    license = licenses.lgpl3;
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
   };
 }
