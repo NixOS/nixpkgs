@@ -34,6 +34,8 @@ Erlang.mk works exactly as expected. There is a bootstrap process that needs to 
 
 For Elixir applications use `mixRelease` to make a release. See examples for more details.
 
+There is also a `buildMix` helper, whose behavior is closer to that of `buildErlangMk` and `buildRebar3`. The primary difference is that mixRelease makes a release, while buildMix only builds the package, making it useful for libraries and other dependencies.
+
 ## How to Install BEAM Packages {#how-to-install-beam-packages}
 
 BEAM builders are not registered at the top level, simply because they are not relevant to the vast majority of Nix users. To install any of those builders into your profile, refer to them by their attribute path `beamPackages.rebar3`:

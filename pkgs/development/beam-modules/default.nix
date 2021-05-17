@@ -32,6 +32,7 @@ let
       buildRebar3 = callPackage ./build-rebar3.nix { };
       buildHex = callPackage ./build-hex.nix { };
       buildErlangMk = callPackage ./build-erlang-mk.nix { };
+      buildMix = callPackage ./build-mix.nix { };
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
       mixRelease = callPackage ./mix-release.nix { };
 

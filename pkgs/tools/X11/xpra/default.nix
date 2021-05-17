@@ -1,5 +1,5 @@
-{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
+{ lib, fetchurl, substituteAll, python3, pkg-config, writeText
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
 , ffmpeg, x264, libvpx, libwebp, x265
 , libfakeXinerama
@@ -13,8 +13,11 @@ let
 
   xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
     patches = [
+      # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
+      # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
+      # patch provided by Xpra upstream
       ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
@@ -30,27 +33,27 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.0.6";
+  version = "4.1.3";
 
   src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
+    url = "https://xpra.org/src/${pname}-${version}.tar.gz";
+    sha256 = "TesmPRmfWy+IqqxoNFd04oX/b2ryGreZPeh2r4sL8JQ=";
   };
 
   patches = [
-    (substituteAll {
+    (substituteAll {  # correct hardcoded paths
       src = ./fix-paths.patch;
       inherit (xorg) xkeyboardconfig;
       inherit libfakeXinerama;
     })
-    ./fix-41106.patch
+    ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
   ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage

@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-d1NjPwT3YDp1U9JWeUejpWDbJonFlt5lYbUf7p3jVT0=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Ping, but with a graph";
