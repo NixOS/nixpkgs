@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromBitbucket
 , buildPythonPackage
 , numpy
 , six
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "dijitso";
   inherit (dolfin) version;
 
-  src = fetchurl {
-    url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
-    sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
+  src = fetchFromBitbucket {
+    owner = "fenics-project";
+    repo = "dijitso";
+    rev = version;
+    sha256 = "0wffd8lphszj678xn9w45k4jr964g55awfghv0i9vln776gpsbfp";
   };
 
   propagatedBuildInputs =[ numpy six ];

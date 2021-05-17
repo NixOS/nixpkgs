@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromBitbucket
 , buildPythonPackage
 , numpy
 , sympy
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "fiat";
   inherit (dolfin) version;
 
-  src = fetchurl {
-    url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
-    sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
+  src = fetchFromBitbucket {
+    owner = "fenics-project";
+    repo = "fiat";
+    rev = version;
+    sha256 = "01fy7fyi570gz4l5jwgx6091xfrnbkgf27sxdi5s1z4kkasdv492";
   };
 
   propagatedBuildInputs = [ numpy six sympy ];

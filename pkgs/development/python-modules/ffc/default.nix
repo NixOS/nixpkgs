@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromBitbucket
 , buildPythonPackage
 , pybind11
 , dijitso
@@ -18,9 +18,11 @@ buildPythonPackage rec {
   pname = "ffc";
   inherit (dolfin) version;
 
-  src = fetchurl {
-    url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
-    sha256 = "1zdg6pziss4va74pd7jjl8sc3ya2gmhpypccmyd8p7c66ji23y2g";
+  src = fetchFromBitbucket {
+    owner = "fenics-project";
+    repo = "ffc";
+    rev = version;
+    sha256 = "1192wk1sq2agr2aasxnppnh8mhmx88c5svfidly5jr558i7wch6c";
   };
 
   nativeBuildInputs = [
