@@ -7,10 +7,11 @@
  *
  */
 
-#include "Runners.h"
+#include "UnsquashRunner.h"
 
 
-Calamares::JobResult UnsquashRunner::run()
+Calamares::JobResult
+UnsquashRunner::run()
 {
     return Calamares::JobResult::ok();
 }

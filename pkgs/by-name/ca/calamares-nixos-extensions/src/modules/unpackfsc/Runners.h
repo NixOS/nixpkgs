@@ -14,6 +14,32 @@
 
 #include <QObject>
 
+class QProcess;
+
+class RunCommand : public QObject
+{
+    Q_OBJECT
+public:
+    RunCommand( QStringList commandLine )
+        : m_commandLine( commandLine )
+    {
+    }
+
+    ~RunCommand() override;
+
+    Calamares::JobResult run();
+
+Q_SIGNALS:
+    void stdOut( QString line );
+
+private Q_SLOTS:
+    void stdOutReady();
+
+private:
+    QStringList m_commandLine;
+    QProcess* m_process = nullptr;
+};
+
 class Runner : public QObject
 {
     Q_OBJECT
@@ -45,24 +71,5 @@ protected:
     QString m_source;
     QString m_destination;
 };
-
-// Implementation in FSArchiverRunner.cpp
-class FSArchiverRunner : public Runner
-{
-public:
-    using Runner::Runner;
-
-    Calamares::JobResult run() override;
-};
-
-// Implementation in Unsquash.cpp
-class UnsquashRunner : public Runner
-{
-public:
-    using Runner::Runner;
-
-    Calamares::JobResult run() override;
-};
-
 
 #endif

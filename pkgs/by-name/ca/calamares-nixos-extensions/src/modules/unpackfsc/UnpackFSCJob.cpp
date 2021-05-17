@@ -9,7 +9,8 @@
 
 #include "UnpackFSCJob.h"
 
-#include "Runners.h"
+#include "FSArchiverRunner.h"
+#include "UnsquashRunner.h"
 
 #include <utils/Logger.h>
 #include <utils/NamedEnum.h>
