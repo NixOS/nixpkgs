@@ -1,7 +1,19 @@
-{ lib, stdenv ,fetchFromGitHub
-, zig, wayland, pkg-config, scdoc
-, xwayland, wayland-protocols, wlroots
-, libxkbcommon, pixman, udev, libevdev, libX11, libGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, zig
+, wayland
+, pkg-config
+, scdoc
+, xwayland
+, wayland-protocols
+, wlroots
+, libxkbcommon
+, pixman
+, udev
+, libevdev
+, libX11
+, libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +28,18 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ wayland-protocols wlroots pixman
-    libxkbcommon pixman udev libevdev libX11 libGL
+  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
+
+  buildInputs = [
+    wayland-protocols
+    wlroots
+    pixman
+    libxkbcommon
+    pixman
+    udev
+    libevdev
+    libX11
+    libGL
   ];
 
   dontConfigure = true;
@@ -25,17 +47,18 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export HOME=$TMPDIR
   '';
+
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dxwayland -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dtarget=${stdenv.hostPlatform.parsed.cpu.name}-native -Dxwayland -Dman-pages --prefix $out install
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
-
-  # Builder patch install dir into river to get default config
-  # When installFlags is removed, river becomes half broken
-  # see https://github.com/ifreund/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
+  /*
+    Builder patch install dir into river to get default config
+    When installFlags is removed, river becomes half broken.
+    See https://github.com/ifreund/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
+  */
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
