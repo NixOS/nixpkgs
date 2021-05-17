@@ -16,7 +16,7 @@ buildPythonPackage rec {
     description = "A Python RAML parser.";
     homepage    = "https://ramlfications.readthedocs.org";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.all;
   };
 

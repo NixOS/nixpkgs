@@ -7019,12 +7019,6 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
-  nand0p = {
-    email = "nando@hex7.com";
-    github = "nand0p";
-    githubId = 1916245;
-    name = "Fernando Jose Pando";
-  };
   nasirhm = {
     email = "nasirhussainm14@gmail.com";
     github = "nasirhm";
