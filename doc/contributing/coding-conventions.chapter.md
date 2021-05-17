@@ -181,6 +181,21 @@
   rev = "${version}";
   ```
 
+- Filling lists condionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null`.
+
+  ```nix
+  buildInputs = lib.optional stdenv.isDarwin iconv;
+  ```
+
+  instead of
+
+  ```nix
+  buildInputs = if stdenv.isDarw then [ iconv ] else null;
+  ```
+
+  An exception can be made when fixing a important bug without triggering a mass rebuild.
+  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 - The top-level `lib` must be used in the master and 21.05 branch over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled which is the case for ofborg.
