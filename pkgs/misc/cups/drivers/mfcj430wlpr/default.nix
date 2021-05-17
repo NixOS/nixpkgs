@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = "http://www.brother.com/";
+    homepage = "https://www.brother.com/";
     description = "Brother MFC-J430W LPR driver";
     license = licenses.unfree;
     platforms = platforms.linux;
