@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
+, libiconv, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "macchina";
@@ -14,6 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-OfOh0YXeLT/kBuR9SOV7pHa8Z4b6+JvtVwqqwd1hCJY=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
 
   postInstall = ''
     installShellCompletion target/completions/*.{bash,fish}
