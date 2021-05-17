@@ -19,6 +19,7 @@
 , fetchFromGitHub
 , makeWrapper
 , runtimeShell
+, libnsl
 } @args:
 
 let
