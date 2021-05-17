@@ -127,6 +127,48 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  Gabriel439:
+    - annah
+    - bench
+    - break
+    - dhall-bash
+    - dhall-docs
+    - dhall-json
+    - dhall-lsp-server
+    - dhall-nix
+    - dhall-nixpkgs
+    - dhall-openapi
+    - dhall-text
+    - dhall-yaml
+    - dhall
+    - dirstream
+    - errors
+    - foldl
+    - index-core
+    - lens-tutorial
+    - list-transformer
+    - managed
+    - mmorph
+    - morte
+    - mvc-updates
+    - mvc
+    - nix-derivation
+    - nix-diff
+    - optional-args
+    - optparse-generic
+    - pipes-bytestring
+    - pipes-concurrency
+    - pipes-csv
+    - pipes-extras
+    - pipes-group
+    - pipes-http
+    - pipes-parse
+    - pipes-safe
+    - pipes
+    - server-generic
+    - total
+    - turtle
+    - typed-spreadsheet
   gridaphobe:
     - located-base
   jb55:
