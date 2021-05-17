@@ -33,6 +33,7 @@
 , libXrandr
 , libXrender
 , libXtst
+, libxkbcommon
 , libsecret
 , libuuid
 , libxcb
@@ -81,6 +82,7 @@ let
     libXrandr
     libXrender
     libXtst
+    libxkbcommon
     libsecret
     libuuid
     libxcb
@@ -97,11 +99,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "1854m93mr2crg68zhh1pgwwis0dqdv0778wqrb8dz9sdz940rza8";
+    sha256 = "sha256-2DzZ5JnFGBeaHtDf7CAXb/qv6kVI+sYMW5Nc25E3eNA=";
   };
 
   dontConfigure = true;
@@ -170,9 +172,14 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "$ORIGIN:$out/opt/appgate/service/:$out/opt/appgate/:${rpath}" $binary
     done
 
+    # fail if there are missing dependencies
+    ldd $out/opt/appgate/appgate | grep -i 'not found' && exit 1
+    ldd $out/opt/appgate/service/appgateservice.bin | grep -i 'not found' && exit 1
+    ldd $out/opt/appgate/appgate-driver | grep -i 'not found' && exit 1
+
     wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${lib.makeBinPath [ iproute2 networkmanager dnsmasq ]}
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
-    wrapProgram $out/bin/appgate --prefix PATH : ${xdg-utils}/bin
+    wrapProgram $out/bin/appgate --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";

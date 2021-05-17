@@ -50,5 +50,7 @@ with pkgs;
 
   cuda = callPackage ./cuda { };
 
+  trivial = callPackage ../build-support/trivial-builders/test.nix {};
+
   writers = callPackage ../build-support/writers/test.nix {};
 }

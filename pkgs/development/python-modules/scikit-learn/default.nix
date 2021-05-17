@@ -7,7 +7,8 @@
 , glibcLocales
 , numpy
 , scipy
-, pytest
+, pytestCheckHook
+, pytest-xdist
 , pillow
 , cython
 , joblib
@@ -54,16 +55,29 @@ buildPythonPackage rec {
     joblib
     threadpoolctl
   ];
-  checkInputs = [ pytest ];
+
+  checkInputs = [ pytestCheckHook pytest-xdist ];
 
   LC_ALL="en_US.UTF-8";
 
-  doCheck = !stdenv.isAarch64;
-  # Skip test_feature_importance_regression - does web fetch
-  checkPhase = ''
-    cd $TMPDIR
-    HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
+  preBuild = ''
+    export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
   '';
+
+  doCheck = !stdenv.isAarch64;
+
+  # Skip test_feature_importance_regression - does web fetch
+  disabledTests = [ "test_feature_importance_regression" ];
+
+  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" "--pyargs" "sklearn" ];
+
+  preCheck = ''
+    cd $TMPDIR
+    export HOME=$TMPDIR
+    export OMP_NUM_THREADS=1
+  '';
+
+  pythonImportsCheck = [ "sklearn" ];
 
   meta = with lib; {
     description = "A set of python modules for machine learning and data mining";

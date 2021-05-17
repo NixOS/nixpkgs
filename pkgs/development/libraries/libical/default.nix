@@ -12,12 +12,11 @@
 , libical
 , python3
 , tzdata
+, fixDarwinDylibNames
 , introspectionSupport ? stdenv.buildPlatform == stdenv.hostPlatform
-, gobject-introspection ? null
-, vala ? null
+, gobject-introspection
+, vala
 }:
-
-assert introspectionSupport -> gobject-introspection != null && vala != null;
 
 stdenv.mkDerivation rec {
   pname = "libical";
@@ -47,6 +46,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
     vala
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
   installCheckInputs = [
     # running libical-glib tests
@@ -80,6 +81,13 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   doInstallCheck = true;
   enableParallelChecking = false;
+  preInstallCheck = if stdenv.isDarwin then ''
+    for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
+      for lib in $(cd lib && ls *.3.dylib); do
+        install_name_tool -change $lib $out/lib/$lib $testexe
+      done
+    done
+  '' else null;
   installCheckPhase = ''
     runHook preInstallCheck
 

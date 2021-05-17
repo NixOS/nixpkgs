@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, folium, scikitlearn, scipy}:
+, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy}:
 
 buildPythonPackage rec {
   pname = "osmnx";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1k3y5kl4k93vxaxyanc040x44s2fyyc3m1ndy2j3kg0037z8ad4z";
   };
 
-  propagatedBuildInputs = [ geopandas descartes matplotlib networkx numpy pandas requests Rtree shapely folium scikitlearn scipy ];
+  propagatedBuildInputs = [ geopandas descartes matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy ];
 
   # requires network
   doCheck = false;

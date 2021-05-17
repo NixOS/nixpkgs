@@ -5,7 +5,7 @@ support for importing Dhall expressions, which is documented here:
 
 * [`dhall-lang.org` - Installing packages](https://docs.dhall-lang.org/tutorials/Language-Tour.html#installing-packages)
 
-## Remote imports
+## Remote imports {#ssec-dhall-remote-imports}
 
 Nixpkgs bypasses Dhall's support for remote imports using Dhall's
 semantic integrity checks.  Specifically, any Dhall import can be protected by
@@ -32,7 +32,7 @@ example, the Prelude Dhall package uses `pkgs.fetchFromGitHub` to fetch the
 to fetch Dhall code ensures that Dhall packages built using Nix remain pure and
 also behave well when built within a sandbox.
 
-## Packaging a Dhall expression from scratch
+## Packaging a Dhall expression from scratch {#ssec-dhall-packaging-expression}
 
 We can illustrate how Nixpkgs integrates Dhall by beginning from the following
 trivial Dhall expression with one dependency (the Prelude):
@@ -117,7 +117,7 @@ in
 $ nix build --file ./example.nix dhallPackages.true
 ```
 
-## Contents of a Dhall package
+## Contents of a Dhall package {#ssec-dhall-package-contents}
 
 The above package produces the following directory tree:
 
@@ -224,7 +224,7 @@ $ cat ./result/source.dhall
 …
 ```
 
-## Packaging functions
+## Packaging functions {#ssec-dhall-packaging-functions}
 
 We already saw an example of using `buildDhallPackage` to create a Dhall
 package from a single file, but most Dhall packages consist of more than one
@@ -297,7 +297,7 @@ terms of `buildDhallPackage` that accepts the following arguments:
 Additionally, `buildDhallGitHubPackage` accepts the same arguments as
 `fetchFromGitHub`, such as `sha256` or `fetchSubmodules`.
 
-## `dhall-to-nixpkgs`
+## `dhall-to-nixpkgs` {#ssec-dhall-dhall-to-nixpkgs}
 
 You can use the `dhall-to-nixpkgs` command-line utility to automate
 packaging Dhall code.  For example:
@@ -342,7 +342,7 @@ $ dhall-to-nixpkgs directory ~/proj/dhall-semver
     }
 ```
 
-## Overriding dependency versions
+## Overriding dependency versions {#ssec-dhall-overriding-dependency-versions}
 
 Suppose that we change our `true.dhall` example expression to depend on an older
 version of the Prelude (19.0.0):
@@ -415,7 +415,7 @@ like this:
   };
 ```
 
-## Overrides
+## Overrides {#ssec-dhall-overrides}
 
 You can override any of the arguments to `buildDhallGitHubPackage` or
 `buildDhallDirectoryPackage` using the `overridePackage` attribute of a package.

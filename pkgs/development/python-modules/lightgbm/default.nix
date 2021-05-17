@@ -4,7 +4,7 @@
 , cmake
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , llvmPackages ? null
 }:
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scipy
-    scikitlearn
+    scikit-learn
   ];
 
   postConfigure = ''
