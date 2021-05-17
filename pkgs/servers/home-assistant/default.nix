@@ -74,6 +74,23 @@ let
       });
     })
 
+    # Pinned due to API changes in pyopenuv>=1.1.0
+    (self: super: {
+      pyopenuv = super.pyopenuv.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.13";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "pyopenuv";
+          rev = version;
+          sha256 = "1gx9xjkyvqqy8410lnbshq1j5y4cb0cdc4m505g17rwdzdwb01y8";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry.api" "poetry.core.masonry.api"
+        '';
+      });
+    })
+
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
