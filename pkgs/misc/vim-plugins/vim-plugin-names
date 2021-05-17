@@ -556,6 +556,7 @@ rstacruz/vim-closer
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
+sainnhe/edge
 sainnhe/sonokai
 sakhnik/nvim-gdb
 saltstack/salt-vim
@@ -779,4 +780,5 @@ yssl/QFEnter
 yuki-yano/ncm2-dictionary
 yunlingz/ci_dark
 zah/nim.vim
+zhou13/vim-easyescape
 ziglang/zig.vim

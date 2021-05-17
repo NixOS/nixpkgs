@@ -1290,6 +1290,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/echodoc.vim/";
   };
 
+  edge = buildVimPluginFrom2Nix {
+    pname = "edge";
+    version = "2021-05-08";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "edge";
+      rev = "8f4cc117b703168f6c5d03ef65b36b095bb3f981";
+      sha256 = "0rq256pwfrxpgy9w2wx4fk9jddmb0xrifhnjkdjf3cmir8xdl7mp";
+    };
+    meta.homepage = "https://github.com/sainnhe/edge/";
+  };
+
   editorconfig-vim = buildVimPluginFrom2Nix {
     pname = "editorconfig-vim";
     version = "2021-04-04";
@@ -5940,6 +5952,18 @@ final: prev:
       sha256 = "0gpfdla8shaf5ykgakrsf0h0w6ygvwcv3lfpnki24l790xhdi606";
     };
     meta.homepage = "https://github.com/junegunn/vim-easy-align/";
+  };
+
+  vim-easyescape = buildVimPluginFrom2Nix {
+    pname = "vim-easyescape";
+    version = "2020-11-22";
+    src = fetchFromGitHub {
+      owner = "zhou13";
+      repo = "vim-easyescape";
+      rev = "fd7875f1657fd54fae85088acf289b9723d8a790";
+      sha256 = "0h8kmhliicbdqhximp3d961crp6qkjjs4yciksl037ds47kzrkif";
+    };
+    meta.homepage = "https://github.com/zhou13/vim-easyescape/";
   };
 
   vim-easygit = buildVimPluginFrom2Nix {

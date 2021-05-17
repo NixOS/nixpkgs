@@ -290,5 +290,5 @@ in {
 
   ];
 
-  meta.maintainers = [ maintainers.gnidorah ];
+  meta.maintainers = [ ];
 }

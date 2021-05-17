@@ -84,6 +84,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

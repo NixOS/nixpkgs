@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

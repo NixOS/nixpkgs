@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication {
     description = "A MIDI router and processor based on Python, supporting ALSA and JACK MIDI";
     homepage = "http://das.nasophon.de/mididings";
     license = licenses.gpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

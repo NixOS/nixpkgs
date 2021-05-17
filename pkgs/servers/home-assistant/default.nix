@@ -114,7 +114,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.5.3";
+  hassVersion = "2021.5.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -133,7 +133,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1zc21d70n24sk8y42xq3gzisj44kn6w6fhgqrcani470hhph24ba";
+    sha256 = "1jxbxzhcnvxf6qkik2qmpdml41q6hlkazjqaxygyw7pyj094fp8v";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -425,6 +425,8 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # assign tests grouped by file to workers
     "--dist loadfile"
+    # enable full variable printing on error
+    "--showlocals"
     # tests are located in tests/
     "tests"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
@@ -455,6 +457,8 @@ in with py.pkgs; buildPythonApplication rec {
     "test_check_package_version_does_not_match"
     # homeassistant/util/thread.py:51: SystemError
     "test_executor_shutdown_can_interrupt_threads"
+    # {'theme_color': '#03A9F4'} != {'theme_color': 'blue'}
+    "test_webhook_handle_get_config"
   ];
 
   preCheck = ''

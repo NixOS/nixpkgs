@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchHex, stdenv, rebar3WithPlugins, lib }:
+{ fetchFromGitHub, fetchHex, stdenv, erlang, rebar3WithPlugins, lib }:
 let
   version = "0.15.0";
   owner = "erlang-ls";
@@ -7,7 +7,7 @@ let
 in stdenv.mkDerivation {
   inherit version;
   pname = "erlang-ls";
-  buildInputs = [ (rebar3WithPlugins { }) ];
+  buildInputs = [ erlang (rebar3WithPlugins { }) ];
   src = fetchFromGitHub {
     inherit owner repo;
     sha256 = "1s6zk8r5plm7ajifz17mvfrnk5mzbhj7alayink9phqbmzrypnfg";

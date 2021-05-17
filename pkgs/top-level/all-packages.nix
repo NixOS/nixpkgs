@@ -4449,6 +4449,8 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fancy-motd = callPackage ../tools/system/fancy-motd { };
+
   fastpbkdf2 = callPackage ../development/libraries/fastpbkdf2 { };
 
   fanficfare = callPackage ../tools/text/fanficfare { };
@@ -11729,9 +11731,7 @@ in
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
-  solc = solc_0_8;
-  solc_0_8 = callPackage ../development/compilers/solc { };
-  solc_0_7 = callPackage ../development/compilers/solc/0.7.nix { };
+  solc = callPackage ../development/compilers/solc { };
 
   souffle = callPackage ../development/compilers/souffle {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -24848,7 +24848,7 @@ in
 
   melonDS = libsForQt5.callPackage ../misc/emulators/melonDS { };
 
-  meme = callPackage ../applications/graphics/meme { };
+  meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
   meme-suite = callPackage ../applications/science/biology/meme-suite { };
 
