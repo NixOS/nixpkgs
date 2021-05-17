@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     source $out/share/dolfin/dolfin.conf
-    make runtests
+    make runtests -j$NIX_BUILD_CORES
   '';
 
   meta = with lib; {
