@@ -19471,6 +19471,8 @@ in
 
   redstore = callPackage ../servers/http/redstore { };
 
+  reproxy = callPackage ../servers/reproxy { };
+
   restic = callPackage ../tools/backup/restic { };
 
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
