@@ -55,6 +55,25 @@ let
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
 
+    # Pinned due to API changes in pyflunearyou>=2.0
+    (self: super: {
+      pyflunearyou = super.pyflunearyou.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.7";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "pyflunearyou";
+          rev = version;
+          sha256 = "0hq55k298m9a90qb3lasw9bi093hzndrah00rfq94bp53aq0is99";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry.api" "poetry.core.masonry.api" \
+            --replace 'msgpack = "^0.6.2"' 'msgpack = "*"' \
+            --replace 'ujson = "^1.35"' 'ujson = "*"'
+        '';
+      });
+    })
+
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
