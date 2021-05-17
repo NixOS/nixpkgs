@@ -4,27 +4,20 @@
 }:
 
 let
-
-  inherit (pythonPackages) buildPythonPackage python isPy3k pyqt5 enum34 pyqt-builder;
-  inherit (pyqt5) sip;
-  # source: https://www.riverbankcomputing.com/pipermail/pyqt/2020-June/042985.html
-  patches = lib.optional (lib.hasPrefix "5.14" pyqt5.version)
-    [ ./fix-build-with-qt-514.patch ]
-  ;
-
+  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
-  format = if isPy3k then "pyproject" else "other";
+  format = "pyproject";
+
+  disabled = isPy27;
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
     sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };
 
-  inherit patches;
-
-  postPatch = lib.optionalString isPy3k ''
+  postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
@@ -38,7 +31,8 @@ in buildPythonPackage rec {
     qtbase
     qtsvg
     qtwebengine
-  ] ++ lib.optional isPy3k pyqt-builder;
+    pyqt-builder
+  ];
 
   buildInputs = [
     sip
@@ -47,39 +41,12 @@ in buildPythonPackage rec {
     qtwebengine
   ];
 
-  propagatedBuildInputs = [ pyqt5 ]
-    ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [ pyqt5 ];
 
   dontWrapQtApps = true;
 
-  # Configure only needed when building with sip 4 (python 2)
-  dontConfigure = isPy3k;
-
-  configurePhase = ''
-    runHook preConfigure
-
-    mkdir -p "$out/share/sip/PyQt5"
-
-    # FIXME: Without --no-dist-info, I get
-    #     unable to create /nix/store/yv4pzx3lxk3lscq0pw3hqzs7k4x76xsm-python3-3.7.2/lib/python3.7/site-packages/PyQtWebEngine-5.12.dist-info
-    ${python.executable} configure.py -w \
-      --destdir="$out/${python.sitePackages}/PyQt5" \
-      --no-dist-info \
-      --apidir="$out/api/${python.libPrefix}" \
-      --sipdir="$out/share/sip/PyQt5" \
-      --pyqt-sipdir="${pyqt5}/share/sip/PyQt5" \
-      --stubsdir="$out/${python.sitePackages}/PyQt5"
-
-    runHook postConfigure
-  '';
-
-  postInstall = lib.optionalString (!isPy3k) ''
-    # Let's make it a namespace package
-    cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-    from pkgutil import extend_path
-    __path__ = extend_path(__path__, __name__)
-    EOF
-  '';
+  # Avoid running qmake, which is in nativeBuildInputs
+  dontConfigure = true;
 
   # Checked using pythonImportsCheck
   doCheck = false;
