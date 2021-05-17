@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ pkgs, lib, stdenv, fetchFromGitHub
 , autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, nixosTests
 , configFile ? "all"
@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_13
+, linuxPackages_5_13 ? pkgs.linuxKernel.packages.linux_5_13
 }:
 
 with lib;
