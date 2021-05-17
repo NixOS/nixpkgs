@@ -1,11 +1,14 @@
 { stdenv
 , lib
 , fetchurl
-, python3Packages
+, buildPythonPackage
+, numpy
+, six
+, pytestCheckHook
 , dolfin
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "dijitso";
   inherit (dolfin) version;
 
@@ -14,18 +17,15 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
   };
 
-  propagatedBuildInputs = with python3Packages; [ numpy six ];
-  checkInputs = with python3Packages; [ pytest ];
+  propagatedBuildInputs =[ numpy six ];
 
   preCheck = ''
     export HOME=$PWD
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    py.test test/
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "test/" ];
 
   pythonImportsCheck = [ "dijitso" ];
 

@@ -1,11 +1,18 @@
 { stdenv
 , lib
 , fetchurl
-, python3Packages
+, buildPythonPackage
+, pybind11
+, dijitso
+, fiat
+, numpy
+, six
+, sympy
+, ufl
+, setuptools
+, pytestCheckHook
 , dolfin
 }:
-
-with python3Packages;
 
 buildPythonPackage rec {
   pname = "ffc";
@@ -30,18 +37,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$PWD
-    rm test/unit/ufc/finite_element/test_evaluate.py
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    py.test test/unit/
-    runHook postCheck
-  '';
+  disabledTests = [ "test_evalute" ];
+
+  pytestFlagsArray = [ "test/" ];
 
   pythonImportsCheck = [ "ffc" ];
 
