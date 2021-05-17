@@ -214,6 +214,7 @@ in with py.pkgs; buildPythonApplication rec {
     "caldav"
     "calendar"
     "camera"
+    "canary"
     "cast"
     "climacell"
     "climate"
