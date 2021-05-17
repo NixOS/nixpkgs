@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $WRAPPER \
     --replace "\`cp " "\`cp -p " \
     --replace "\`mv " "\`cp -p "
-    '';
+  '';
 
   buildPhase = ''
     cd brcupsconfig
     make all
     cd ..
-    '';
+  '';
 
   installPhase = ''
     TARGETFOLDER=$out/opt/brother/Printers/mfcj430w/cupswrapper/
@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
 
     mkdir -p $CUPSPPD_DIR
     ln -s $TARGETFOLDER/brother_mfcj430w_printer_en.ppd $CUPSPPD_DIR
-    '';
+  '';
 
   cleanPhase = ''
     cd brcupsconfig
     make clean
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://www.brother.com/";
