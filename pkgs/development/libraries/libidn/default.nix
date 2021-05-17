@@ -1,11 +1,12 @@
 { fetchurl, lib, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libidn-1.36";
+  pname = "libidn";
+  version = "1.37";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "0f20n634whpmdwr81c2r0vxxjwchgkvhsr1i8s2bm0ad6h473dhl";
+    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
+    sha256 = "1hljls9rkilh04dwiwg388wk8djkac8idijrdysqq2nqbh6rg3iw";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
