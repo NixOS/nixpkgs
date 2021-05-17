@@ -9,6 +9,7 @@ let
 
     # Disable automatically generating desktop icon
     noDesktopIcon=true
+    noBackup=${cfg.noBackup}
 
     [Network]
     # host setting is relevant only for web deployments - set the host on which the server will listen
@@ -37,6 +38,14 @@ in
       default = "Trilium";
       description = ''
         Instance name used to distinguish between different instances
+      '';
+    };
+
+    noBackup = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Disable periodic database backups.
       '';
     };
 
