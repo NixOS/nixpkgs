@@ -286,6 +286,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent"
     "intent_script"
     "ipp"
+    "islamic_prayer_times"
     "jewish_calendar"
     "kmtronic"
     "knx"

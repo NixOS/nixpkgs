@@ -407,7 +407,7 @@
     "ipp" = ps: with ps; [ pyipp ];
     "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
-    "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
+    "islamic_prayer_times" = ps: with ps; [ prayer-times-calculator ];
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
     "isy994" = ps: with ps; [ ]; # missing inputs: pyisy
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
