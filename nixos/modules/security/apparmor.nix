@@ -133,7 +133,7 @@ in
 
           parser = ${pkgs.apparmor-parser}/bin/apparmor_parser
           ldd = ${pkgs.glibc.bin}/bin/ldd
-          logger = ${pkgs.utillinux}/bin/logger
+          logger = ${pkgs.util-linux}/bin/logger
 
           # customize how file ownership permissions are presented
           # 0 - off
