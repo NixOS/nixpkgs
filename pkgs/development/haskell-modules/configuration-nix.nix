@@ -616,7 +616,7 @@ self: super: builtins.intersectAttrs super {
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
