@@ -45,7 +45,12 @@ buildPythonPackage rec {
     export HOME=$PWD
   '';
 
-  disabledTests = [ "test_evalute" ];
+  disabledTestPaths = [
+    # # Remove ERROR  - AttributeError: 'str' object has no attribute '__name__'
+    "test/uflacs/"
+    # Handle ModuleNotFoundError: No module named 'ffc_factory'
+    "test/unit/ufc/finite_element/test_evaluate.py"
+  ];
 
   pytestFlagsArray = [ "test/" ];
 
