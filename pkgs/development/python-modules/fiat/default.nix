@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # Workaround pytest 4.6.3 issue.
     # See: https://bitbucket.org/fenics-project/fiat/pull-requests/59
-    "test_quadrature"
-    "test_reference_element"
-    "tes_fiat"
+    "test/unit/test_quadrature.py"
+    "test/unit/test_reference_element.py"
+    "test/unit/test_fiat.py"
   ];
 
   pytestFlagsArray = [ "test/unit/" ];
