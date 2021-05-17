@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation {
   pname = "mix2nix";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ydlr";
     repo = "mix2nix";
-    rev = "b153a252f0689d3f6919e16c2df2fb3b6bcc9d2a";
-    sha256 = "15wyz7gdjywsqvsf1ad9gklvqsqi7lwgmyks3bjlc2sk6kpdxdmi";
+    rev = "66c277bdffb93da9a63e3f1ea42432a73e572b51";
+    sha256 = "11qn80im5zfbx25ibxqrgi90mglf8pnsmrqsami633mcf2gvj2hy";
   };
 
-  buildInputs = [ elixir erlang ];
+  nativeBuildInputs = [ elixir ];
+  buildInputs = [ erlang ];
 
   buildPhase = "mix escript.build";
   installPhase = "install -Dt $out/bin mix2nix";
