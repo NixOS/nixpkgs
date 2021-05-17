@@ -11,7 +11,7 @@ mkFranzDerivation rec {
   meta = with lib; {
     description = "Combine your favorite messaging services into one application";
     homepage = "https://getferdi.com/";
-    license = licenses.free;
+    license = licenses.asl20;
     maintainers = [ maintainers.davidtwco ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
