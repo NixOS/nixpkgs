@@ -28,7 +28,7 @@ in
       type = types.str;
       default = "/var/lib/trilium";
       description = ''
-        The directory storing the nodes database and the configuration.
+        The directory storing the notes database and the configuration.
       '';
     };
 
@@ -85,7 +85,7 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
   {
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ fliegendewurst ];
 
     users.groups.trilium = {};
     users.users.trilium = {
