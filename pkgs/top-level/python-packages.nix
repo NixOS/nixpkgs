@@ -7614,8 +7614,6 @@ in {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
-  slimit = callPackage ../development/python-modules/slimit { };
-
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
   slixmpp = callPackage ../development/python-modules/slixmpp {
