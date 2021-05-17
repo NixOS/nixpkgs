@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     description = "Ethereum miner with OpenCL${lib.optionalString cudaSupport ", CUDA"} and stratum support";
     homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nand0p atemu ];
+    maintainers = with maintainers; [ atemu ];
     license = licenses.gpl3Only;
     broken = cudaSupport;
   };

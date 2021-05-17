@@ -169,6 +169,18 @@
   })
   ```
 
+- Unnecessary string conversions should be avoided. Do
+
+  ```nix
+  rev = version;
+  ```
+
+  instead of
+
+  ```nix
+  rev = "${version}";
+  ```
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 - The top-level `lib` must be used in the master and 21.05 branch over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled which is the case for ofborg.

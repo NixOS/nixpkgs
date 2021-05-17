@@ -4449,6 +4449,8 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fancy-motd = callPackage ../tools/system/fancy-motd { };
+
   fastpbkdf2 = callPackage ../development/libraries/fastpbkdf2 { };
 
   fanficfare = callPackage ../tools/text/fanficfare { };
@@ -7069,6 +7071,8 @@ in
   notable = callPackage ../applications/misc/notable { };
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
+
+  numberstation = callPackage ../applications/misc/numberstation { };
 
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
@@ -9714,7 +9718,10 @@ in
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
 
-  wiiuse = callPackage ../development/libraries/wiiuse { };
+  wiiuse = callPackage ../development/libraries/wiiuse {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
+  };
 
   woeusb = callPackage ../tools/misc/woeusb { };
 
@@ -11605,7 +11612,9 @@ in
   cargo-embed = callPackage ../development/tools/rust/cargo-embed { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
-  cargo-flash = callPackage ../development/tools/rust/cargo-flash { };
+  cargo-flash = callPackage ../development/tools/rust/cargo-flash {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -11722,9 +11731,7 @@ in
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
-  solc = solc_0_8;
-  solc_0_8 = callPackage ../development/compilers/solc { };
-  solc_0_7 = callPackage ../development/compilers/solc/0.7.nix { };
+  solc = callPackage ../development/compilers/solc { };
 
   souffle = callPackage ../development/compilers/souffle {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -15531,7 +15538,9 @@ in
 
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
-  libacr38u = callPackage ../tools/security/libacr38u { };
+  libacr38u = callPackage ../tools/security/libacr38u {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   libadwaita = callPackage ../development/libraries/libadwaita { };
 
@@ -18394,9 +18403,7 @@ in
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
-  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt {
-    pythonPackages = python3Packages;
-  };
+  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
 
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
@@ -24841,7 +24848,7 @@ in
 
   melonDS = libsForQt5.callPackage ../misc/emulators/melonDS { };
 
-  meme = callPackage ../applications/graphics/meme { };
+  meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
   meme-suite = callPackage ../applications/science/biology/meme-suite { };
 
@@ -28596,7 +28603,9 @@ in
 
   superTux = callPackage ../games/supertux { };
 
-  superTuxKart = callPackage ../games/super-tux-kart { };
+  superTuxKart = callPackage ../games/super-tux-kart {
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit OpenAL;
+  };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
 

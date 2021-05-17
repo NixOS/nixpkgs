@@ -154,9 +154,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   60;
-        proxy_send_timeout      60;
-        proxy_read_timeout      60;
+        proxy_connect_timeout   ${cfg.proxyTimeout};
+        proxy_send_timeout      ${cfg.proxyTimeout};
+        proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
@@ -398,6 +398,15 @@ in
         type = types.bool;
         description = "
           Enable recommended proxy settings.
+        ";
+      };
+
+      proxyTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = "
+          Change the proxy related timeouts in recommendedProxySettings.
         ";
       };
 

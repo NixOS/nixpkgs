@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

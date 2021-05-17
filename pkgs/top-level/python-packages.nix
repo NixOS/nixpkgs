@@ -3115,6 +3115,8 @@ in {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hsluv = callPackage ../development/python-modules/hsluv { };
+
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
   html2text = callPackage ../development/python-modules/html2text { };
@@ -8242,6 +8244,8 @@ in {
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
+
+  torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
 
   tornado = callPackage ../development/python-modules/tornado { };
 

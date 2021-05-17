@@ -3709,12 +3709,6 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
-  gnidorah = {
-    email = "gnidorah@users.noreply.github.com";
-    github = "gnidorah";
-    githubId = 12064730;
-    name = "gnidorah";
-  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
@@ -7019,12 +7013,6 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
-  nand0p = {
-    email = "nando@hex7.com";
-    github = "nand0p";
-    githubId = 1916245;
-    name = "Fernando Jose Pando";
-  };
   nasirhm = {
     email = "nasirhussainm14@gmail.com";
     github = "nasirhm";
@@ -7706,12 +7694,6 @@
     github = "periklis";
     githubId = 152312;
     name = "Periklis Tsirakidis";
-  };
-  pesterhazy = {
-    email = "pesterhazy@gmail.com";
-    github = "pesterhazy";
-    githubId = 106328;
-    name = "Paulus Esterhazy";
   };
   petabyteboy = {
     email = "milan@petabyte.dev";
