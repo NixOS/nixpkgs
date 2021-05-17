@@ -3021,6 +3021,8 @@ in {
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
+  ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
+
   halo = callPackage ../development/python-modules/halo { };
 
   handout = callPackage ../development/python-modules/handout { };
