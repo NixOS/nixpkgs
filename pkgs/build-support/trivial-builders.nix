@@ -438,6 +438,35 @@ rec {
       done < graph
     '';
 
+  /*
+    Write the set of references to a file, that is, their immediate dependencies.
+
+    This produces the equivalent of `nix-store -q --references`.
+   */
+  writeDirectReferencesToFile = path: runCommand "runtime-references"
+    {
+      exportReferencesGraph = ["graph" path];
+      inherit path;
+    }
+    ''
+      touch ./references
+      while read p; do
+        read dummy
+        read nrRefs
+        if [[ $p == $path ]]; then
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+            echo $ref >>./references
+          done
+        else
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+          done
+        fi
+      done < graph
+      sort ./references >$out
+    '';
+
 
   /* Print an error message if the file with the specified name and
    * hash doesn't exist in the Nix store. This function should only
