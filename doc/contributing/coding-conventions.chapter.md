@@ -190,7 +190,7 @@
   instead of
 
   ```nix
-  buildInputs = if stdenv.isDarw then [ iconv ] else null;
+  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
   ```
 
   An exception can be made when fixing a important bug without triggering a mass rebuild.
