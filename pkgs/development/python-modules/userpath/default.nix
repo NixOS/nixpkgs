@@ -2,19 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , click
-, distro
 }:
 
 buildPythonPackage rec {
   pname = "userpath";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256="0mfjmvx286z1dmnrc7bm65x8gj8qrmkcyagl0vf5ywfq0bm48591";
+    sha256="0fj2lj9vcns5sxv72v3ggrszcl7j1jd9a6ycnsl00218nycliy31";
   };
 
-  propagatedBuildInputs = [ click distro ];
+  propagatedBuildInputs = [ click ];
 
   # test suite is difficult to emulate in sandbox due to shell manipulation
   doCheck = false;
