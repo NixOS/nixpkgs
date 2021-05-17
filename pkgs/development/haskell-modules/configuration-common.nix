@@ -1408,6 +1408,15 @@ self: super: {
       # 2021-04-09: test failure
       # PR pending https://github.com/expipiplus1/update-nix-fetchgit/pull/60
       doCheck = false;
+
+      patches = [
+        # 2021-05-17 compile with hnix >= 0.13
+        # https://github.com/expipiplus1/update-nix-fetchgit/pull/64
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/bc28c8b26c38093aa950574802012c0cd8447ce8.patch";
+          sha256 = "1dwd1jdsrx3ss6ql1bk2ch7ln74mkq6jy9ms8vi8kmf3gbg8l9fg";
+        })
+      ] ++ (drv.patches or []);
     }));
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
