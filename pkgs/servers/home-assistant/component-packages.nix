@@ -614,7 +614,7 @@
     "orvibo" = ps: with ps; [ orvibo ];
     "osramlightify" = ps: with ps; [ ]; # missing inputs: lightify
     "otp" = ps: with ps; [ pyotp ];
-    "ovo_energy" = ps: with ps; [ ]; # missing inputs: ovoenergy
+    "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
