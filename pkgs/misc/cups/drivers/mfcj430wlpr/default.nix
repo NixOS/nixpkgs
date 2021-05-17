@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J430W LPR driver";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj430w_all&os=128&autolayerclose=1";
-    maintainers = with lib.maintainers; [ svavs ];
+    maintainers = with maintainers; [ svavs ];
   };
 }
