@@ -40,6 +40,7 @@
 , gnupg
 , zlib
 , xz
+, tpm2-tss
 , libuuid
 , libapparmor
 , intltool
@@ -113,7 +114,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.6";
+  version = "248.3";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -124,7 +125,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
+    sha256 = "sha256-pXjgtHDlMA3S2hQDQLYAuPhLq1QXf/Tap07fqIVhPn4=";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -151,12 +152,6 @@ stdenv.mkDerivation {
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
     ./0019-pkg-config-derive-prefix-from-prefix.patch
-
-    # Fix -Werror=format.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
-      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
-    })
   ];
 
   postPatch = ''
@@ -221,6 +216,16 @@ stdenv.mkDerivation {
 
         # journalctl --grep requires libpcre so lets provide it
         { name = "libpcre2-8.so.0"; pkg = pcre2; }
+
+        # TODO: Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
+        #{ name = "libtss2-esys.so.0"; pkg = if withCryptsetup then tpm2-tss else null; }
+        #{ name = "libtss2-rc.so.0"; pkg = if withCryptsetup then tpm2-tss else null; }
+        #{ name = "libtss2-mu.so.0"; pkg = if withCryptsetup then tpm2-tss else null; }
+        #{ name = "libfido2.so.1"; pkg = if (withCryptsetup || withHomed) then libfido2 else null; }
+        { name = "libtss2-esys.so.0"; pkg = null; }
+        { name = "libtss2-rc.so.0"; pkg = null; }
+        { name = "libtss2-mu.so.0"; pkg = null; }
+        { name = "libfido2.so.1"; pkg = null; }
       ];
 
       patchDlOpen = dl:
@@ -244,6 +249,9 @@ stdenv.mkDerivation {
             echo "patching dlopen(\"${dl.name}\", …) in $file to ${library}…"
             substituteInPlace "$file" --replace 'dlopen("${dl.name}"' 'dlopen("${library}"'
           done
+
+          # no longer necessary with https://github.com/systemd/systemd/pull/19638
+          patchShebangs .
         '';
     in
     # patch all the dlopen calls to contain absolute paths to the libraries
@@ -308,7 +316,8 @@ stdenv.mkDerivation {
     ++ lib.optional withResolved libgpgerror
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ;
 
   #dontAddPrefix = true;
@@ -452,7 +461,8 @@ stdenv.mkDerivation {
         --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
-    substituteInPlace src/journal/catalog.c \
+
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 

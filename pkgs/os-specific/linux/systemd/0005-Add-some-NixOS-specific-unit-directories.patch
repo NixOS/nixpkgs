@@ -1,4 +1,4 @@
-From 8b7f881cf22e98e907506f4c403b9e304e332bf9 Mon Sep 17 00:00:00 2001
+From 1553aa82d034460d0c679a1c69d8e1ce28f69fc8 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
 Subject: [PATCH 05/19] Add some NixOS-specific unit directories
@@ -14,7 +14,7 @@ Also, remove /usr and /lib as these don't exist on NixOS.
  2 files changed, 5 insertions(+), 17 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index 96b82170d0..bf66bd6b77 100644
+index e53c2302b1..a5a5b83517 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
 @@ -94,11 +94,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
@@ -110,5 +110,5 @@ index b5cc8f94a5..a701cd05f8 100644
  
  systemd_system_generator_dir=${root_prefix}/lib/systemd/system-generators
 -- 
-2.30.1
+2.31.1
 

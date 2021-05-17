@@ -123,6 +123,14 @@ in
         restartIfChanged = false;
       };
 
+    systemd.services."autovt@" =
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear %I $TERM")
+        ];
+        restartIfChanged = false;
+      };
+
     systemd.services."container-getty@" =
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
