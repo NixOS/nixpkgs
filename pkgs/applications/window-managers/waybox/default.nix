@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "wizbright";
     repo = pname;
     rev = "309ccd2faf08079e698104b19eff32b3a255b947";
-    sha256 = "0kzss266jf1kgwnhk42vaakbmn269nphlq9xjsapp6mhccd9qz8v";
+    hash = "sha256-G32cGmOwmnuVlj1hCq9NRti6plJbkAktfzM4aYzQ+k8=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
