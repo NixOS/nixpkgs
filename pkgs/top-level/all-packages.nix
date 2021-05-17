@@ -18053,6 +18053,8 @@ in
 
   ustr = callPackage ../development/libraries/ustr { };
 
+  usrsctp = callPackage ../development/libraries/usrsctp { };
+
   usbredir = callPackage ../development/libraries/usbredir { };
 
   uthash = callPackage ../development/libraries/uthash { };
