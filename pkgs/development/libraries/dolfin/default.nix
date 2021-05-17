@@ -3,7 +3,6 @@
 , fetchurl
 , fetchpatch
 # - Python Dependencies
-, python3
 , python3Packages
 # Package Building
 , pkg-config
@@ -54,26 +53,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    python3Packages.dijitso
     eigen
-    python3Packages.ffc
-    python3Packages.fiat
     hdf5
     mpi
-    python3Packages.numpy
     blas
     lapack
-    python3Packages.ply
-    python3
     scotch
-    python3Packages.six
-    python3Packages.sphinx
     suitesparse
     swig
-    python3Packages.sympy
-    python3Packages.ufl
     zlib
-  ];
+  ] ++ (with python3Packages; [
+    python
+    dijitso
+    ffc
+    fiat
+    numpy
+    ply
+    six
+    sphinx
+    sympy
+    ufl
+  ]);
 
   cmakeFlags = [
     "-DDOLFIN_CXX_FLAGS=-std=c++11"
