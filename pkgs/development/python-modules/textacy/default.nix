@@ -9,7 +9,7 @@
 , pyphen
 , pytest
 , requests
-, scikitlearn
+, scikit-learn
 , scipy
 , spacy
 , srsly
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pyemd
     pyphen
     requests
-    scikitlearn
+    scikit-learn
     scipy
     spacy
     srsly

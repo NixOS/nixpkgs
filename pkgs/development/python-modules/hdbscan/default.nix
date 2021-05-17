@@ -5,7 +5,7 @@
 , numpy
 , pytestCheckHook
 , scipy
-, scikitlearn
+, scikit-learn
 , fetchPypi
 , joblib
 , six
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy scikitlearn joblib six ];
+  propagatedBuildInputs = [ numpy scipy scikit-learn joblib six ];
   preCheck = ''
     cd hdbscan/tests
     rm __init__.py

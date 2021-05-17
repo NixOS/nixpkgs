@@ -5,7 +5,7 @@
 , six
 , scipy
 , smart_open
-, scikitlearn, testfixtures, unittest2
+, scikit-learn, testfixtures, unittest2
 , isPy3k
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ smart_open numpy six scipy ];
 
-  checkInputs = [ scikitlearn testfixtures unittest2 ];
+  checkInputs = [ scikit-learn testfixtures unittest2 ];
 
   # Two tests fail.
   #

@@ -14,7 +14,7 @@
 , qiskit-ignis
 , qiskit-terra
 , quandl
-, scikitlearn
+, scikit-learn
 , yfinance
   # Optional inputs
 , withTorch ? false
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     qiskit-terra
     qiskit-ignis
     quandl
-    scikitlearn
+    scikit-learn
     yfinance
   ] ++ lib.optionals (withTorch) [ pytorch ]
   ++ lib.optionals (withPyscf) [ pyscf ]

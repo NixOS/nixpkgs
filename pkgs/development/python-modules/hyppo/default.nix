@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook , pytestcov , numba
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , matplotlib
 , seaborn
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numba
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 
