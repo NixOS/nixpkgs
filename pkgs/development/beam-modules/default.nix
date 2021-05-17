@@ -73,7 +73,6 @@ let
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
       lfe = lfe_1_3;
-      lfe_1_2 = lib'.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
       lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
@@ -81,9 +80,6 @@ let
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
       relxExe = callPackage ../tools/erlang/relx-exe { };
-
-      # An example of Erlang/C++ package.
-      cuter = callPackage ../tools/erlang/cuter { };
     };
 in
 makeExtensible packages
