@@ -178,7 +178,7 @@ in
       radvd = 139;
       zookeeper = 140;
       dnsmasq = 141;
-      uhub = 142;
+      #uhub = 142; # unused
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       consul = 145;
