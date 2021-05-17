@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.4.0";
+  version = "0.4.1";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-NY78gkKJd9ATdu7Ja1AvWkaPv0PuDIKWDZBeYGMJufU=";
+    sha256 = "sha256-tKMxi0umMmM99NusSSE9tT95TBcfXm1lfo95fQRUBrs=";
   };
 
   dontUnpack = true;
