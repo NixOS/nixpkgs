@@ -8713,6 +8713,8 @@ in {
 
   websockify = callPackage ../development/python-modules/websockify { };
 
+  webssh = callPackage ../development/python-modules/webssh { };
+
   webtest = callPackage ../development/python-modules/webtest { };
 
   webthing = callPackage ../development/python-modules/webthing { };
