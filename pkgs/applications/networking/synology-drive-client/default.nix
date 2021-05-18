@@ -16,11 +16,13 @@
 , fetchurl
 , lib
 }:
-
-stdenv.mkDerivation {
+let
+  buildNumber = "11112";
+  versionNumber = "2.0.4";
+in stdenv.mkDerivation {
   pname = "synology-drive-client";
   
-  version = "2.0.4";
+  version = versionNumber;
 
   srcs = [
     (fetchurl {
@@ -28,7 +30,7 @@ stdenv.mkDerivation {
       sha256 = "01f9qgqkd6m3idr5f0w2k5cl9sjk7617fzp023d0qfnsw661wy56";
     })
     (fetchurl {
-      url = "https://global.download.synology.com/download/Utility/SynologyDriveClient/2.0.4-11112/Ubuntu/Installer/x86_64/synology-drive-client-11112.x86_64.deb";
+      url = "https://global.download.synology.com/download/Utility/SynologyDriveClient/${versionNumber}-${buildNumber}/Ubuntu/Installer/x86_64/synology-drive-client-${buildNumber}.x86_64.deb";
       sha256 = "0q9zyf98zw75j0yfwidqmc7jwf2zhg942xsqvkxxdqlrncmb4g01";
     })
   ];
