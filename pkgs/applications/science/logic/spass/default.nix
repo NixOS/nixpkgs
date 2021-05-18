@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ bison flex ];
 
   buildPhase = ''
-    make RM="rm -f" proparser.c ${extraTools} opt
+    make CC="${stdenv.cc.targetPrefix}cc" RM="rm -f" proparser.c ${extraTools} opt
   '';
   installPhase = ''
     mkdir -p $out/bin
