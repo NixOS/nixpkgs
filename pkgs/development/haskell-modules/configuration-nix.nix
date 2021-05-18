@@ -485,7 +485,7 @@ self: super: builtins.intersectAttrs super {
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark = with pkgs;
-    overrideCabal (addBuildTools super.futhark [makeWrapper python37Packages.sphinx])
+    overrideCabal (addBuildTools super.futhark [makeWrapper python3Packages.sphinx])
       (_drv: {
         postBuild = (_drv.postBuild or "") + ''
         make -C docs man
