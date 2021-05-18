@@ -4169,6 +4169,8 @@ in {
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
+  mercantile = callPackage ../development/python-modules/mercantile { };
+
   mercurial = toPythonModule (pkgs.mercurial.override {
     python3Packages = self;
   });
