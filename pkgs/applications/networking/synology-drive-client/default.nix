@@ -74,6 +74,7 @@ stdenv.mkDerivation {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server to access, browse, and share files via file browser";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     license = licenses.unfree;
+    maintainers = with maintainers; [ jcouyang ];
     platforms = [ "x86_64-linux" ];
   };
 }
