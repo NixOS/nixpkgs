@@ -102,6 +102,14 @@ let
       inherit (cfg) startAt;
     };
 
+  mkBackupTimers = name: cfg:
+    nameValuePair "borgbackup-job-${name}" {
+      description = "BorgBackup job ${name} timer";
+      timerConfig = {
+        Persistent = cfg.persistentTimer;
+      };
+    };
+
   # utility function around makeWrapper
   mkWrapperDrv = {
       original, name, set ? {}
@@ -318,6 +326,19 @@ in {
               automatically, use <literal>[ ]</literal>.
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
+            '';
+          };
+
+          persistentTimer = mkOption {
+            default = false;
+            type = types.bool;
+            example = true;
+            description = literalDocBook ''
+              Set the <literal>persistentTimer</literal> option for the
+              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+              <manvolnum>5</manvolnum></citerefentry>
+              which triggers the backup immediately if the last trigger
+              was missed (e.g. if the system was powered down).
             '';
           };
 
@@ -694,6 +715,9 @@ in {
         mapAttrs' mkBackupService jobs
         # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
         // mapAttrs' mkRepoService repos;
+
+      # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
+      systemd.timers = mapAttrs' mkBackupTimers jobs;
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
