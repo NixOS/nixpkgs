@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wagyu";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "16d1b3pamkg29nq80n6cbzc4zl9z3cgfvdxjkr2z4xrnzmkn1ysi";
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Rust library for generating cryptocurrency wallets";
