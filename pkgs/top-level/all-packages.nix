@@ -1228,6 +1228,8 @@ in
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
+  bkyml = callPackage ../tools/misc/bkyml { };
+
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
