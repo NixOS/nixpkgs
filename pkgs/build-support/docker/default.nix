@@ -786,12 +786,42 @@ rec {
     fakeRootCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
-    maxLayers ? 100
+    maxLayers ? 100,
+    # Pipeline used to produce docker layers.
+    layeringPipeline ? null,
+    # Enables debug logging for the layering pipeline.
+    debug ? false
   }:
-    assert
-      (lib.assertMsg (maxLayers > 1)
-      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
+      baseImageLayersCount = if fromImage == null then 0 else import (
+        import ./image-layers-count.nix { inherit runCommand jq; } fromImage
+      );
+
+      # One layer is take up by the customisationLayer.
+      usedLayers = baseImageLayersCount + 1;
+      maxNewLayers = maxLayers - usedLayers;
+
+      assertWithMessage = predicate: message: successValue:
+        # Using throw since assert (lib.assertMsg ..) doesn't seem to work
+        # well with string interpolation.
+        if predicate then successValue else throw message
+      ;
+
+      pipeline = if layeringPipeline != null then layeringPipeline else
+        assertWithMessage
+          (maxNewLayers > 0)
+          (
+            "Error: maxLayers (${toString maxLayers}) set too low. " +
+            "At lest ${toString (usedLayers + 1)} layers are needed since " +
+            (if baseImageLayersCount > 0 then "base image has ${toString baseImageLayersCount} layers, " else "") +
+            "1 will be taken by customisation layer, and at least 1 is required for the contents."
+          )
+          [
+            ["popularity_contest"]
+            ["limit_layers" maxNewLayers]
+          ]
+      ;
+
       baseName = baseNameOf name;
 
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
@@ -834,22 +864,17 @@ rec {
         '';
       };
 
-      closureRoots = [ baseJson ] ++ contentsList;
-      overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
-
-      # These derivations are only created as implementation details of docker-tools,
-      # so they'll be excluded from the created images.
-      unnecessaryDrvs = [ baseJson overallClosure ];
-
       conf = runCommand "${baseName}-conf.json" {
-        inherit fromImage maxLayers created;
+        inherit fromImage created;
         imageName = lib.toLower name;
         passthru.imageTag =
           if tag != null
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = buildPackages.referencesByPopularity overallClosure;
+        layersJsonFile = buildPackages.dockerMakeLayers {
+          inherit baseJson contentsList debug pipeline;
+        };
         nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''
@@ -866,53 +891,6 @@ rec {
             created="$(date -Iseconds -d "$created")"
         fi
 
-        paths() {
-          cat $paths ${lib.concatMapStringsSep " "
-                         (path: "| (grep -v ${path} || true)")
-                         unnecessaryDrvs}
-        }
-
-        # Compute the number of layers that are already used by a potential
-        # 'fromImage' as well as the customization layer. Ensure that there is
-        # still at least one layer available to store the image contents.
-        usedLayers=0
-
-        # subtract number of base image layers
-        if [[ -n "$fromImage" ]]; then
-          (( usedLayers += $(tar -xOf "$fromImage" manifest.json | jq '.[0].Layers | length') ))
-        fi
-
-        # one layer will be taken up by the customisation layer
-        (( usedLayers += 1 ))
-
-        if ! (( $usedLayers < $maxLayers )); then
-          echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage' and" \
-                    "'extraCommands', but only maxLayers=$maxLayers were" \
-                    "allowed. At least 1 layer is required to store contents."
-          exit 1
-        fi
-        availableLayers=$(( maxLayers - usedLayers ))
-
-        # Create $maxLayers worth of Docker Layers, one layer per store path
-        # unless there are more paths than $maxLayers. In that case, create
-        # $maxLayers-1 for the most popular layers, and smush the remainaing
-        # store paths in to one final layer.
-        #
-        # The following code is fiddly w.r.t. ensuring every layer is
-        # created, and that no paths are missed. If you change the
-        # following lines, double-check that your code behaves properly
-        # when the number of layers equals:
-        #      maxLayers-1, maxLayers, and maxLayers+1, 0
-        store_layers="$(
-          paths |
-            jq -sR '
-              rtrimstr("\n") | split("\n")
-                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                | map(select(length > 0))
-            ' \
-              --argjson maxLayers "$availableLayers"
-        )"
-
         cat ${baseJson} | jq '
           . + {
             "store_dir": $store_dir,
@@ -924,7 +902,7 @@ rec {
           }
           ' --arg store_dir "${storeDir}" \
             --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
-            --argjson store_layers "$store_layers" \
+            --argfile store_layers "$layersJsonFile" \
             --arg customisation_layer ${customisationLayer} \
             --arg repo_tag "$imageName:$imageTag" \
             --arg created "$created" |
