@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "21.5.0";
+  version = "21.5.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11dw8hij1vzqawlv5l1ax6i2zw6p4ccn4ww3v6q1kdmrwk46vi7r";
+    sha256 = "1826wz4d7qnlwl5csnjds1xh9ainicj2s004hlwv54bdvwx2ny1z";
   };
 
   patches = [
@@ -24,7 +24,8 @@ buildPythonPackage rec {
   checkInputs = [ pulseaudio ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest pulsectl.tests.all
+    export HOME=$TMPDIR
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {
