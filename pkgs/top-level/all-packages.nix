@@ -19644,6 +19644,8 @@ in
     unifi6;
   unifi = unifi6;
 
+  unpackerr = callPackage ../servers/unpackerr { };
+
   urserver = callPackage ../servers/urserver { };
 
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
