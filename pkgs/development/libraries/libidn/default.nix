@@ -11,14 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
-  # broken with gcc-7
-  #doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isMusl;
-
   hardeningDisable = [ "format" ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
-
-  doCheck = false; # fails
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/";
