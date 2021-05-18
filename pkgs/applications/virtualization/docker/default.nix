@@ -229,11 +229,11 @@ rec {
       rev = "v${version}";
       sha256 = "1l4ra9bsvydaxd2fy7dgxp7ynpp0mrlwvcdhxiafw596559ab6qk";
     };
-    runcRev = "v1.0.0-rc94";
+    runcRev = "2c7861bc5e1b3e756392236553ec14a78a09f8bf"; # v1.0.0-rc94
     runcSha256 = "0f11zr2d3bnycd6rmb1cynhy9zh169yj6kcn5s22wz2j6grghwz7";
-    containerdRev = "v1.5.1";
-    containerdSha256 = "1jwz53cpi9sxjsd1qr3sji1jai9wh3kfwspsgxnijhjs0bz8gvyn";
-    tiniRev = "v0.19.0";
+    containerdRev = "12dca9790f4cb6b18a6a7a027ce420145cb98ee7"; # v1.5.1
+    containerdSha256 = "16q34yiv5q98b9d5vgy1lmmppg8agrmnfd1kzpakkf4czkws0p4d";
+    tiniRev = "de40ad007797e0dcd8b7126f27bb87401d224240"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }
