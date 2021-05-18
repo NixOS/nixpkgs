@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";
     description = "Interactive configuration GUI for space navigator input devices";
