@@ -68,5 +68,13 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ninjin raskin ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      # Built with libgit2 v0.27.2:
+      #   https://github.com/JuliaLang/julia/blob/e0837d1e64a9e4d17534a9f981e9a2a3f221356f/deps/libgit2.version
+      # https://nvd.nist.gov/vuln/detail/CVE-2020-12278
+      "CVE-2020-12278"
+      # https://nvd.nist.gov/vuln/detail/CVE-2020-12279
+      "CVE-2020-12279"
+    ];
   };
 }
