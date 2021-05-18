@@ -10,7 +10,7 @@ rec {
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256, buildxSupport ? false
       # package dependencies
-      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
+      , stdenv, fetchFromGitHub, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx
@@ -124,7 +124,7 @@ rec {
    }) // rec {
     inherit version rev;
 
-    name = "docker-${version}";
+    pname = "docker";
 
     src = fetchFromGitHub {
       owner = "docker";
