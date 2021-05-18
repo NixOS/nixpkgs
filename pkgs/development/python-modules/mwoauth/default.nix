@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , six
-, pyjwt
+, pyjwt1
 , requests
 , oauthlib
 , requests_oauthlib
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     oauthlib
-    pyjwt
+    pyjwt1
     requests
     requests_oauthlib
     six

@@ -4,7 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , inflection
-, pyjwt
+, pyjwt1
 , pytest-asyncio
 , pytestCheckHook
 , python-dateutil
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     inflection
-    pyjwt
+    pyjwt1
     python-dateutil
   ];
 
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mdz/python-smarttub";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = pyjwt.version != "1.7.1";
+    broken = pyjwt1.version != "1.7.1";
   };
 }

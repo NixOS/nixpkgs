@@ -5,7 +5,7 @@
 , pytest
 , cryptography
 , blinker
-, pyjwt
+, pyjwt1
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ cryptography blinker pyjwt ];
+  propagatedBuildInputs = [ cryptography blinker pyjwt1 ];
 
   checkPhase = ''
     py.test tests/

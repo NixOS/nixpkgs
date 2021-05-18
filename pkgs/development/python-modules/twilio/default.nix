@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , mock
 , nose
-, pyjwt
+, pyjwt1
 , pysocks
 , pytz
 , requests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pyjwt
+    pyjwt1
     pysocks
     pytz
     requests
