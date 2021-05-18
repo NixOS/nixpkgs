@@ -19653,7 +19653,9 @@ in
     unifi6;
   unifi = unifi6;
 
-  unpackerr = callPackage ../servers/unpackerr { };
+  unpackerr = callPackage ../servers/unpackerr {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
 
   urserver = callPackage ../servers/urserver { };
 

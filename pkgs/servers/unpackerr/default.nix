@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, Cocoa, WebKit }:
 
 buildGoModule rec {
   pname = "unpackerr";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "1j79vmf0mkwkqrg5j6fm2b8y3a23y039kbiqkiwb56724bmd27dd";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
   meta = with lib; {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
