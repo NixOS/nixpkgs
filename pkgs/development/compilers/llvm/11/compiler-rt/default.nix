@@ -3,7 +3,7 @@
 let
 
   useLLVM = stdenv.hostPlatform.useLLVM or false;
-  isDarwin = stdenv.hostPlatform.isDarwin;
+  isNewDarwinBootstrap = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl;
@@ -25,19 +25,19 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-  ] ++ lib.optionals (useLLVM || isDarwin || bareMetal || isMusl) [
+  ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isNewDarwinBootstrap) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals ((useLLVM || isDarwin || bareMetal) && !haveLibc) [
+  ] ++ lib.optionals (!haveLibc || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals ((useLLVM || isDarwin) && !haveLibc) [
+  ] ++ lib.optionals (!haveLibc) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
-  ] ++ lib.optionals (useLLVM || isDarwin) [
+  ] ++ lib.optionals (useLLVM || isNewDarwinBootstrap) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
 
-  preConfigure = lib.optionalString isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_LIPO=$(command -v ${stdenv.cc.targetPrefix}lipo)")
   '';
 

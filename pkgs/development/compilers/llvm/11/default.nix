@@ -213,14 +213,14 @@ let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
     };
@@ -236,21 +236,21 @@ let
 
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };
 
     libcxxabi = callPackage ./libcxxabi {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || stdenv.hostPlatform.isDarwin
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
     };
