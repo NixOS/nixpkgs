@@ -35,6 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     pytest-subprocess
   ];
 
+  # requires networking
+  doCheck = false;
+
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
   ];
