@@ -300,6 +300,9 @@ rec {
    *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
    * ...
    *
+   * # creates multiple outputs, each the result of combining the corresponding outputs of the paths
+   * symlinkJoin { name = "multiexample"; paths = [ pkgs.libpng pkgs.openssl ]; outputs = [ "out" "dev" ]; }
+   *
    * symlinkJoin and linkFarm are similar functions, but they output
    * derivations with different structure.
    *
@@ -318,23 +321,46 @@ rec {
   symlinkJoin =
     args_@{ name
          , paths
+         , outputs ? [ "out" ]
          , preferLocalBuild ? true
          , allowSubstitutes ? false
          , postBuild ? ""
          , ...
          }:
     let
+      secondaryOutputs = builtins.filter (o: o != "out") outputs;
+      outputToPathsAttr = output: {
+        name = output + "Paths";
+        value = lib.flatten (map (p: p.${output} or []) paths);
+      };
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
           inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
+          outputs = [ "out" ] ++ secondaryOutputs;
+          passAsFile = [ "paths" ] ++ map (o: o + "Paths") secondaryOutputs;
+        } // builtins.listToAttrs (map outputToPathsAttr secondaryOutputs);
     in runCommand name args
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
           ${lndir}/bin/lndir -silent $i $out
         done
+
+        for output in ${toString secondaryOutputs}; do
+          eval output_path=\$$output
+          mkdir -p $output_path
+          for i in $(eval cat \$${output}PathsPath); do
+            ${lndir}/bin/lndir -silent $i $output_path
+
+            # Replace previously propagated build outputs with our
+            # main output
+            if [ -e $output_path/nix-support/propagated-build-inputs ]; then
+              rm $output_path/nix-support/propagated-build-inputs
+              echo "$out" >> $output_path/nix-support/propagated-build-inputs
+            fi
+          done
+        done
+
         ${postBuild}
       '';
 
