@@ -29830,7 +29830,9 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else gcc8Stdenv;
   });
 
-  rink = callPackage ../applications/science/misc/rink { };
+  rink = callPackage ../applications/science/misc/rink {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
