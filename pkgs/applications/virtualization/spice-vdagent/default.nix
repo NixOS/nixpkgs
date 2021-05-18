@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
     sha256 = "0n8jlc1pv6mkry161y656b1nk9hhhminjq6nymzmmyjl7k95ymzx";
   };
+
+  # FIXME: May no longer be needed with spice-vdagent versions over 0.21.0
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
