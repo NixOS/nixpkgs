@@ -12,6 +12,8 @@
 , runCommandLocal
 , makeWrapper
 , coreutils
+, scalingFactor ? 2 # this is to resize the fixed-size zod_launcher window
+, substituteAll
 }:
 let
   version = "2011-09-06";
@@ -64,6 +66,12 @@ let
       # the Idea is to apply the scalingFactor to all positions and sizes and I tested 1,2,3 and 4
       # 2,3,4 look acceptable on my 4k monitor and 1 is unreadable.
       # also the ./ in the run command is removed to have easier time starting the game
+      patches = [
+        (substituteAll {
+          inherit scalingFactor;
+          src=./0002-add-scaling-factor-to-source.patch;
+        })
+      ];
       postPatch = ''
         substituteInPlace zod_launcher_src/zod_launcherFrm.cpp \
           --replace 'message = wxT("./zod");' 'message = wxT("zod");'
