@@ -13,6 +13,7 @@
 , AppKit
 , CoreText
 , Security
+, fira-code
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-1sekLS+jhMeFJcW7pH/X8t28//xA+L54u81uKOo1kHE=";
 
-  buildInputs = [ llvmPackages.libclang expat freetype ]
+  buildInputs = [ llvmPackages.libclang expat freetype fira-code ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
 
