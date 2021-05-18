@@ -74,6 +74,10 @@ let
       });
     })
 
+    # Pinned due to API changes in pylast 4.2.1
+    (mkOverride "pylast" "4.2.0"
+      "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
+
     # Pinned due to API changes in pyopenuv>=1.1.0
     (self: super: {
       pyopenuv = super.pyopenuv.overridePythonAttrs (oldAttrs: rec {
