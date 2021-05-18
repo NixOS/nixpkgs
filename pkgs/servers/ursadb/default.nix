@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, cmake, zeromq, cppzmq }:
 
-stdenv.mkDerivation {
-  name = "ursadb";
+stdenv.mkDerivation rec {
+  pname = "ursadb";
   version = "1.2.0";
 
   src = fetchurl {
