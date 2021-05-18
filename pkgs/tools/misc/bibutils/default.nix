@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "bibutils";
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "15p4av74ihsg03j854dkdqihpspwnp58p9g1lhx48w8kz91c0ml6";
   };
 
-  configureFlags = [ "--dynamic" "--install-dir" "$(out)/bin" "--install-lib" "$(out)/lib" ];
+  configureFlags = [
+    (if static then "--static" else "--dynamic")
+    "--install-dir" "$(out)/bin"
+    "--install-lib" "$(out)/lib"
+  ];
   dontAddPrefix = true;
 
   doCheck = true;
