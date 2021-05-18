@@ -29,6 +29,7 @@ in
   ammonite = handleTest ./ammonite.nix {};
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
+  atop = handleTest ./atop.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   awscli = handleTest ./awscli.nix { };
