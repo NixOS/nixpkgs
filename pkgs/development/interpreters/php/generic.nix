@@ -121,6 +121,7 @@ let
                   };
                 };
                 paths = [ php ];
+                outputs = [ "out" "dev" ];
                 postBuild = ''
                   ln -s ${extraInit} $out/lib/php.ini
 
@@ -135,6 +136,18 @@ let
                   if test -e $out/bin/phpdbg; then
                     wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
                   fi
+
+                  for i in php-config phpize; do
+                    target=$dev/bin/$i
+                    if test -e $target; then
+                      bin="$(readlink -f $target)"
+                      rm $target
+                      cp $bin $target
+                      substituteInPlace $target \
+                        --replace '${php}' "$out" \
+                        --replace '${php.dev}' "$dev"
+                    fi
+                  done
                 '';
               };
             in
