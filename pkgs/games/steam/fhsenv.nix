@@ -105,6 +105,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
+    json-glib # paradox launcher (Stellaris)
     libdrm
     libxkbcommon # paradox launcher
     mono
