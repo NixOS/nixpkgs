@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
+
   installPhase = ''
     runHook preInstall
     install --directory $out/bin $out/share/doc/$pname
