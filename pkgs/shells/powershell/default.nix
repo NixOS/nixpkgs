@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     rm -f $pslibs/libcrypto${ext}.1.0.0
     rm -f $pslibs/libssl${ext}.1.0.0
 
+    # At least the 7.1.3-osx package does not have the executable bit set.
+    chmod a+x $pslibs/pwsh
+
     ls $pslibs
   '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
@@ -55,7 +58,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/pwsh --help > /dev/null
+    # May need a writable home, seen on Darwin.
+    HOME=$TMP $out/bin/pwsh --help > /dev/null
   '';
 
   meta = with lib; {

@@ -53,7 +53,7 @@ let
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
-      llvm = pkgs.llvm_8;
+      inherit (pkgs.llvmPackages_8) llvm;
     };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };

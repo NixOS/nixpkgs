@@ -1,4 +1,4 @@
-{ fetchFromGitHub, installShellFiles, lib, rustPlatform }:
+{ fetchFromGitHub, installShellFiles, lib, stdenv, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pactorio";
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1rac2s36j88vm231aji8d0ndfbaa2gzxwsrxrvsi0zp9cqisc6rh";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   preFixup = ''
     completions=($releaseDir/build/pactorio-*/out/completions)

@@ -3,12 +3,12 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev109";
+        version = "2.0.0dev112";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "b006ff741d12608a9187b873e276abd1fd8eb707";
-          sha256 = "sha256-uU3XVQiwtbBt7cdSwAeHkv6NUbL8kK2Ro44h1GYyA1A=";
+          rev = "221c0aa5dbad42f096e00fed45d2e2071561b1da";
+          sha256 = "sha256-uJCP3bUK/xACQVG4kMBDIIP+zPjre+uWbqWEC/gBTD4=";
         };
       });
       prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
@@ -31,13 +31,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.1"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.4"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-TafYBkRlPCqewGBMgTfcX8kLtDhSCdiUYK1xXofKrLk=";
+    sha256 = "sha256-MctW31X012DXY16qS6AP6nLiaAt/cuA8iMwGm0oXi6M=";
   };
 
   postPatch = ''
