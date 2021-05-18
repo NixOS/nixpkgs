@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "1.3.5";
+  version = "1.3.6";
 in
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
+    sha256 = "sha256-mqx1756be9e1M4pMDU3VNubCLqexXqYiqh2PH6MNN6s=";
   };
 
   patches = lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
