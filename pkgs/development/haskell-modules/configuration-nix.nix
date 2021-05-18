@@ -747,6 +747,21 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  blake3 = overrideCabal super.blake3 {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
+  crc32c = overrideCabal super.crc32c {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # uses x86 intrinsics
+  seqalign = overrideCabal super.seqalign {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
