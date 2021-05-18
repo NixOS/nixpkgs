@@ -9664,7 +9664,9 @@ in
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
   wafHook = callPackage ../development/tools/build-managers/wafHook { };
 
-  wagyu = callPackage ../tools/misc/wagyu { };
+  wagyu = callPackage ../tools/misc/wagyu {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
