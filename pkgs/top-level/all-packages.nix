@@ -31321,7 +31321,9 @@ in
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
-  simple-http-server = callPackage ../servers/simple-http-server { };
+  simple-http-server = callPackage ../servers/simple-http-server {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   diceware = with python3Packages; toPythonApplication diceware;
 
