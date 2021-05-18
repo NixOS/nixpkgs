@@ -140,6 +140,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    # Unfortunately, this derivation does not pass Julia's test suite. See
+    # https://github.com/NixOS/nixpkgs/pull/121114.
     broken = true;
   };
 }
