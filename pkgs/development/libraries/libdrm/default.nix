@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.105";
+  version = "2.4.106";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0iiamypwdfiz250ki120nh598r48yyacmnndb4mkximdgi5h478x";
+    sha256 = "1m3vwpabjg3az84vmyxi96jyd7rrqm6qkhk1gq41w5wv89aarn4j";
   };
 
   outputs = [ "out" "dev" "bin" ];
