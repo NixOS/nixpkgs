@@ -26699,7 +26699,9 @@ in
 
   lavalauncher = callPackage ../applications/misc/lavalauncher { };
 
-  t-rec = callPackage ../misc/t-rec { };
+  t-rec = callPackage ../misc/t-rec {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
