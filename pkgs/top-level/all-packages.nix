@@ -26029,6 +26029,8 @@ in
 
   sxiv = callPackage ../applications/graphics/sxiv { };
 
+  synology-drive-client = callPackage ../applications/networking/synology-drive-client { };
+
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
