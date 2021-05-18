@@ -1,24 +1,25 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
+{ buildPythonPackage, lib, fetchFromGitHub, pythonOlder
 , cython, setuptools
-, numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3, mock
+, matplotlib, numpy, affine, attrs, boto3, cligj, click-plugins, snuggs, gdal
+, pytest, pytestcov, hypothesis, shapely
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.1.5";
+  version = "1.2.6";
+  disabled = pythonOlder "3.6";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "rasterio";
     rev = version;
-    sha256 = "168b6hmx026jsvhnq6s5k0qfhzda02mmx1alax6wqk16mk63mqcz";
+    sha256 = "sha256-rf2qdUhbS4Z2+mvlN1RzZvlgTgjqiBoQzry4z5QLSUc=";
   };
 
-  checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ pytest pytestcov hypothesis shapely ];
   nativeBuildInputs = [ cython gdal ];
-  propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
+  propagatedBuildInputs = [ gdal matplotlib numpy attrs affine boto3 cligj click-plugins snuggs setuptools ];
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
