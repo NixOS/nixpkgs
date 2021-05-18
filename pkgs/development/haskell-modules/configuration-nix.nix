@@ -798,4 +798,9 @@ self: super: builtins.intersectAttrs super {
   inline-asm = overrideCabal super.inline-asm {
     platforms = pkgs.lib.platforms.isx86;
   };
+
+  # uses x86 assembler in C bits
+  hw-prim-bits = overrideCabal super.hw-prim-bits {
+    platforms = pkgs.lib.platforms.x86;
+  };
 }
