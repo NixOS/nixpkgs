@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Retry a command until the command succeeds";
     platforms = platforms.all;
     license = licenses.asl20;
-    # maintainers = with maintainers; [ gfrascadorio ];
+    maintainers = with maintainers; [ gfrascadorio ];
   };
 }
 

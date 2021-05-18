@@ -3657,6 +3657,12 @@
     githubId = 10353047;
     name = "Tobias Happ";
   };
+  gfrascadorio = {
+    email = "gfrascadorio@tutanota.com";
+    github = "gfrascadorio";
+    githubId = 37602871;
+    name = "Galois";
+  };
   ggpeti = {
     email = "ggpeti@gmail.com";
     github = "ggpeti";
