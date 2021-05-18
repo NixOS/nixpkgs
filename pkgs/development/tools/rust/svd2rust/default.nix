@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv }:
 
 with rustPlatform;
 
@@ -15,6 +15,8 @@ buildRustPackage rec {
   cargoPatches = [ ./cargo-lock.patch ];
 
   cargoSha256 = "0c0f86x17fzav5q76z3ha3g00rbgyz2lm5a5v28ggy0jmg9xgsv6";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
