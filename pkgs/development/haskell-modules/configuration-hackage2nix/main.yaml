@@ -306,6 +306,7 @@ unsupported-platforms:
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
   bindings-sane:                                [ x86_64-darwin ]
+  charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   cut-the-crap:                                 [ x86_64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
@@ -363,6 +364,7 @@ unsupported-platforms:
   parport:                                      [ x86_64-darwin ]
   password:                                     [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   password-instances:                           [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
+  persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
   piyo:                                         [ x86_64-darwin ]
   PortMidi-simple:                              [ x86_64-darwin ]
   PortMidi:                                     [ x86_64-darwin ]
