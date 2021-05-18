@@ -28362,8 +28362,6 @@ in
 
   prboom = callPackage ../games/prboom { };
 
-  privateer = callPackage ../games/privateer { };
-
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
   qqwing = callPackage ../games/qqwing { };
