@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, scikitlearn
+, scikit-learn
 , numpy
 , scipy
 , jinja2
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    scikitlearn
+    scikit-learn
     numpy
     scipy
     jinja2

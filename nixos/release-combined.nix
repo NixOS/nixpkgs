@@ -90,7 +90,7 @@ in rec {
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
         (onFullSupported "nixos.tests.keymap.dvorak")
-        (onFullSupported "nixos.tests.keymap.dvp")
+        (onFullSupported "nixos.tests.keymap.dvorak-programmer")
         (onFullSupported "nixos.tests.keymap.neo")
         (onFullSupported "nixos.tests.keymap.qwertz")
         (onFullSupported "nixos.tests.latestKernel.login")

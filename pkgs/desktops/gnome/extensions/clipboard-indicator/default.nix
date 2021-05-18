@@ -1,24 +1,26 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, gettext, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clipboard-indicator";
-  version = "37";
+  version = "38";
 
   src = fetchFromGitHub {
     owner = "Tudmotu";
     repo = "gnome-shell-extension-clipboard-indicator";
     rev = "v${version}";
-    sha256 = "0npxhaam2ra2b9zh2gk2q0n5snlhx6glz86m3jf8hz037w920k41";
+    sha256 = "FNrh3b6la2BuWCsriYP5gG0/KNbkFPuq/YTXTj0aJAI=";
   };
 
   uuid = "clipboard-indicator@tudmotu.com";
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions/${uuid}
-    cp -r * $out/share/gnome-shell/extensions/${uuid}
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    gettext
+    glib
+  ];
+
+  makeFlags = [
+    "INSTALLPATH=${placeholder "out"}/share/gnome-shell/extensions/${uuid}/"
+  ];
 
   meta = with lib; {
     description = "Adds a clipboard indicator to the top panel and saves clipboard history";

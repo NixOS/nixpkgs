@@ -2,7 +2,7 @@
 , pytestCheckHook
 , cmake
 , scipy
-, scikitlearn
+, scikit-learn
 , stdenv
 , xgboost
 , substituteAll
@@ -22,7 +22,7 @@ buildPythonPackage {
   propagatedBuildInputs = [ scipy ];
   checkInputs = [
     pytestCheckHook
-    scikitlearn
+    scikit-learn
     pandas
     matplotlib
     graphviz

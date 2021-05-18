@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, rustPlatform
+, pkg-config, wrapGAppsHook, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = lib.optional stdenv.isDarwin CoreServices;
 
   preConfigure = ''
     substituteInPlace lib/utils.rs \

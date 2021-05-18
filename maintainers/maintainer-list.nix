@@ -2511,6 +2511,12 @@
     githubId = 1316469;
     name = "Naomi Morse";
   };
+  dlesl = {
+    email = "dlesl@dlesl.com";
+    github = "dlesl";
+    githubId = 28980797;
+    name = "David Leslie";
+  };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
     github = "dmalikov";
@@ -4132,6 +4138,12 @@
     github = "hyphon81";
     githubId = 12491746;
     name = "Masato Yonekawa";
+  };
+  hyzual = {
+    email = "hyzual@gmail.com";
+    github = "Hyzual";
+    githubId = 2051507;
+    name = "Joris Masson";
   };
   hzeller = {
     email = "h.zeller@acm.org";
@@ -5868,6 +5880,12 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lromor = {
+    email = "leonardo.romor@gmail.com";
+    github = "lromor";
+    githubId = 1597330;
+    name = "Leonardo Romor";
+  };
   lrworth = {
     email = "luke@worth.id.au";
     name = "Luke Worth";
@@ -7310,6 +7328,12 @@
     github = "nthorne";
     githubId = 1839979;
     name = "Niklas Thörne";
+  };
+  nullx76 = {
+    email = "nix@xirion.net";
+    github = "NULLx76";
+    githubId = 1809198;
+    name = "Victor Roest";
   };
   numinit = {
     email = "me@numin.it";

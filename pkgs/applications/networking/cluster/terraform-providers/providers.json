@@ -436,6 +436,15 @@
     "sha256": "0jhx9rap4128j8sfkvpp8lbdmvdba0rkd3nxvy38wr3n18m7v1xg",
     "version": "1.2.0"
   },
+  "hydra": {
+    "owner": "DeterminateSystems",
+    "provider-source-address": "registry.terraform.io/DeterminateSystems/hydra",
+    "repo": "terraform-provider-hydra",
+    "rev": "v0.1.0",
+    "sha256": "18c9j54fy1f2sfz317rlv8z7fb18bpc1a0baw1bgl72x5sgil5kv",
+    "vendorSha256": null,
+    "version": "0.1.0"
+  },
   "ibm": {
     "owner": "IBM-Cloud",
     "provider-source-address": "registry.terraform.io/IBM-Cloud/ibm",

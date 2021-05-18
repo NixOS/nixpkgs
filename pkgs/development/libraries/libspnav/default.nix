@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   configureFlags = [ "--disable-debug"];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

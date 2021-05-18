@@ -109,7 +109,7 @@
     "caldav" = ps: with ps; [ caldav ];
     "calendar" = ps: with ps; [ aiohttp-cors ];
     "camera" = ps: with ps; [ aiohttp-cors ];
-    "canary" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: py-canary
+    "canary" = ps: with ps; [ ha-ffmpeg py-canary ];
     "cast" = ps: with ps; [ aiohttp-cors hass-nabucasa mutagen plexapi plexauth plexwebsocket PyChromecast pyroute2 zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
     "channels" = ps: with ps; [ pychannels ];
@@ -157,7 +157,7 @@
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiodiscover aiohttp-cors async-upnp-client defusedxml distro emoji hass-nabucasa netdisco pillow pyroute2 scapy sqlalchemy zeroconf ];
-    "delijn" = ps: with ps; [ ]; # missing inputs: pydelijn
+    "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
     "demo" = ps: with ps; [ aiohttp-cors ];
     "denon" = ps: with ps; [ ];
@@ -407,7 +407,7 @@
     "ipp" = ps: with ps; [ pyipp ];
     "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
-    "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
+    "islamic_prayer_times" = ps: with ps; [ prayer-times-calculator ];
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
     "isy994" = ps: with ps; [ ]; # missing inputs: pyisy
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
@@ -582,7 +582,7 @@
     "nx584" = ps: with ps; [ pynx584 ];
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
-    "obihai" = ps: with ps; [ ]; # missing inputs: pyobihai
+    "obihai" = ps: with ps; [ pyobihai ];
     "octoprint" = ps: with ps; [ aiohttp-cors netdisco pyroute2 zeroconf ];
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
@@ -614,7 +614,7 @@
     "orvibo" = ps: with ps; [ orvibo ];
     "osramlightify" = ps: with ps; [ ]; # missing inputs: lightify
     "otp" = ps: with ps; [ pyotp ];
-    "ovo_energy" = ps: with ps; [ ]; # missing inputs: ovoenergy
+    "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
@@ -626,7 +626,7 @@
     "pencom" = ps: with ps; [ ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [ ];
     "person" = ps: with ps; [ aiohttp-cors pillow ];
-    "philips_js" = ps: with ps; [ ]; # missing inputs: ha-philipsjs
+    "philips_js" = ps: with ps; [ ha-philipsjs ];
     "pi4ioe5v9xxxx" = ps: with ps; [ ]; # missing inputs: pi4ioe5v9xxxx
     "pi_hole" = ps: with ps; [ hole ];
     "picnic" = ps: with ps; [ python-picnic-api ];
@@ -972,7 +972,7 @@
     "yale_smart_alarm" = ps: with ps; [ yalesmartalarmclient ];
     "yamaha" = ps: with ps; [ rxv ];
     "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
-    "yandex_transport" = ps: with ps; [ ]; # missing inputs: aioymaps
+    "yandex_transport" = ps: with ps; [ aioymaps ];
     "yandextts" = ps: with ps; [ ];
     "yeelight" = ps: with ps; [ yeelight ];
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower

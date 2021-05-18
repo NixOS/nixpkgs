@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "turbo-geth";
-  version = "2021.05.01";
+  version = "2021.05.02";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zvxtBK0/6fShxAZfU4gTV0XiP6TzhKFNsADSZA9gv0Y=";
+    sha256 = "sha256-7sTRAAlKZOdwi/LRbIEDKWpBe1ol8pZfEf2KIC4s0xk=";
   };
 
-  vendorSha256 = "0c8p6djs0zcci8sh4zgzky89155mr4cfqlax025618x8vngrsxf2";
+  vendorSha256 = "1d0ahdb2b5v8nxq3kdxw151phnyv6habb8kr8qjaq3kyhcnyk6ng";
   runVend = true;
 
   subPackages = [

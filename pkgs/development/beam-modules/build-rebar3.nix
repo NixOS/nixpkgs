@@ -1,12 +1,10 @@
-{ stdenv, writeText, erlang, rebar3WithPlugins, openssl, libyaml,
-  pc, lib }:
+{ stdenv, writeText, erlang, rebar3WithPlugins, openssl, libyaml, lib }:
 
 { name, version
 , src
 , setupHook ? null
 , buildInputs ? [], beamDeps ? [], buildPlugins ? []
 , postPatch ? ""
-, compilePorts ? false
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
@@ -21,7 +19,6 @@ let
 
   rebar3 = rebar3WithPlugins {
     plugins = buildPlugins;
-    globalPlugins = (if compilePorts then [pc] else []);
   };
 
   shell = drv: stdenv.mkDerivation {
@@ -52,18 +49,9 @@ let
       rm -f rebar rebar3
     '' + postPatch;
 
-    configurePhase = ''
-      runHook preConfigure
-      ${erlang}/bin/escript ${rebar3.bootstrapper} ${debugInfoFlag}
-      runHook postConfigure
-    '';
-
     buildPhase = ''
       runHook preBuild
-      HOME=. rebar3 compile
-      ${if compilePorts then ''
-        HOME=. rebar3 pc compile
-      '' else ""}
+      HOME=. rebar3 bare compile -path ""
       runHook postBuild
     '';
 
@@ -71,10 +59,9 @@ let
       runHook preInstall
       mkdir -p "$out/lib/erlang/lib/${name}-${version}"
       for reldir in src ebin priv include; do
-        fd="_build/default/lib/${name}/$reldir"
-        [ -d "$fd" ] || continue
-        cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
-        success=1
+        [ -d "$reldir" ] || continue
+        # $out/lib/erlang/lib is a convention used in nixpkgs for compiled BEAM packages
+        cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
       done
       runHook postInstall
     '';

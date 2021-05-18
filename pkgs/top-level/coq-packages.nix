@@ -13,6 +13,7 @@ let
       contribs = recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
 
+      aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
@@ -68,6 +69,7 @@ let
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       pocklington = callPackage ../development/coq-modules/pocklington {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
+      relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};

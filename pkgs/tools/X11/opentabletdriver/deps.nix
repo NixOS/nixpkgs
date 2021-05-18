@@ -41,8 +41,8 @@
   })
   (fetchNuGet {
     name = "HidSharpCore";
-    version = "1.2.1";
-    sha256 = "0vcw38skr9g691gxbzv3cf6y9rk11vh5pvcyjshdgii2z1z8a4g2";
+    version = "1.2.1.1";
+    sha256 = "1zkndglmz0s8rblfhnqcvv90rkq2i7lf4bc380g7z8h1avf2ikll";
   })
   (fetchNuGet {
     name = "MessagePack.Annotations";
@@ -121,8 +121,8 @@
   })
   (fetchNuGet {
     name = "Octokit";
-    version = "0.48.0";
-    sha256 = "17ria1shx04rb6knbaswpqndmwam6v3r3lsfsd486q584798ccn8";
+    version = "0.50.0";
+    sha256 = "1ignj5i6a1c19qqrw00wlr9fdjmwrxkxz7gdxj0x653w84gbv7qq";
   })
   (fetchNuGet {
     name = "PangoSharp";

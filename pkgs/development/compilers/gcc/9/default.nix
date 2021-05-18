@@ -200,7 +200,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version hostPlatform gnatboot langAda langGo langJit;
+    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit;
   };
 
   dontDisableStatic = true;

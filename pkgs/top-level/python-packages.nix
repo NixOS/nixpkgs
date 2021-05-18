@@ -351,6 +351,8 @@ in {
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
+  aioymaps = callPackage ../development/python-modules/aioymaps { };
+
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
   airly = callPackage ../development/python-modules/airly { };
@@ -1725,6 +1727,8 @@ in {
 
   datrie = callPackage ../development/python-modules/datrie { };
 
+  dawg-python = callPackage ../development/python-modules/dawg-python { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -3020,6 +3024,8 @@ in {
   hdate = callPackage ../development/python-modules/hdate { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
+  ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
   halo = callPackage ../development/python-modules/halo { };
 
@@ -4779,6 +4785,8 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovoenergy = callPackage ../development/python-modules/ovoenergy { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
@@ -5205,6 +5213,8 @@ in {
 
   praw = callPackage ../development/python-modules/praw { };
 
+  prayer-times-calculator = callPackage ../development/python-modules/prayer-times-calculator { };
+
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
   pre-commit = callPackage ../development/python-modules/pre-commit { };
@@ -5496,6 +5506,8 @@ in {
 
   pycparser = callPackage ../development/python-modules/pycparser { };
 
+  py-canary = callPackage ../development/python-modules/py-canary { };
+
   py-cid = callPackage ../development/python-modules/py-cid { };
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
@@ -5534,6 +5546,8 @@ in {
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydeconz = callPackage ../development/python-modules/pydeconz { };
+
+  pydelijn = callPackage ../development/python-modules/pydelijn { };
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
@@ -5879,6 +5893,10 @@ in {
 
   pymongo = callPackage ../development/python-modules/pymongo { };
 
+  pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
+
+  pymorphy2-dicts-ru = callPackage ../development/python-modules/pymorphy2/dicts-ru.nix { };
+
   pympler = callPackage ../development/python-modules/pympler { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
@@ -5942,6 +5960,8 @@ in {
   pynvml = callPackage ../development/python-modules/pynvml { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
+
+  pyobihai = callPackage ../development/python-modules/pyobihai { };
 
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
@@ -7382,9 +7402,11 @@ in {
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
-  scikitlearn = callPackage ../development/python-modules/scikitlearn {
+  scikit-learn = callPackage ../development/python-modules/scikit-learn {
     inherit (pkgs) gfortran glibcLocales;
   };
+
+  scikitlearn = self.scikit-learn;
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
@@ -7618,8 +7640,6 @@ in {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
-  slimit = callPackage ../development/python-modules/slimit { };
-
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
   slixmpp = callPackage ../development/python-modules/slixmpp {
@@ -7716,9 +7736,15 @@ in {
 
   spacy = callPackage ../development/python-modules/spacy { };
 
+  spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
+
   spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
+
+  spacy-pkuseg = callPackage ../development/python-modules/spacy-pkuseg { };
+
+  spacy-transformers = callPackage ../development/python-modules/spacy-transformers { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
@@ -8710,6 +8736,8 @@ in {
   websockets = callPackage ../development/python-modules/websockets { };
 
   websockify = callPackage ../development/python-modules/websockify { };
+
+  webssh = callPackage ../development/python-modules/webssh { };
 
   webtest = callPackage ../development/python-modules/webtest { };
 
