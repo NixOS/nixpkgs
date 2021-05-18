@@ -793,4 +793,9 @@ self: super: builtins.intersectAttrs super {
       pkgs.zlib
     ] ++ (drv.librarySystemDepends or []);
   });
+
+  # test suite uses x86 assembler
+  inline-asm = overrideCabal super.inline-asm {
+    doCheck = pkgs.stdenv.hostPlatform.isx86;
+  };
 }
