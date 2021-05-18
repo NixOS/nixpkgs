@@ -64,6 +64,7 @@ in
 {
 
   meta = {
+    doc = ./gnome.xml;
     maintainers = teams.gnome.members;
   };
 
@@ -553,7 +554,7 @@ in
         /* gnome-boxes */
       ] config.environment.gnome.excludePackages);
 
-      services.sysprof.enable = true;
+      services.sysprof.enable = notExcluded pkgs.sysprof;
     })
   ];
 
