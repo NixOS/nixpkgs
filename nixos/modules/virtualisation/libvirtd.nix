@@ -11,9 +11,10 @@ let
     auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
+  ovmfFilePrefix = if pkgs.stdenv.isAarch64 then "AAVMF" else "OVMF";
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemuOvmf ''
-      nvram = ["/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd"]
+      nvram = [ "/run/libvirt/nix-ovmf/${ovmfFilePrefix}_CODE.fd:/run/libvirt/nix-ovmf/${ovmfFilePrefix}_VARS.fd" ]
     ''}
     ${optionalString (!cfg.qemuRunAsRoot) ''
       user = "qemu-libvirtd"
@@ -206,8 +207,8 @@ in {
         done
 
         ${optionalString cfg.qemuOvmf ''
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${pkgs.OVMF.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${pkgs.OVMF.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
         ''}
       '';
 
