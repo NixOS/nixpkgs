@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, perl, withDebug ? false }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "tinyproxy";
   version = "1.11.0";
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2Only;
