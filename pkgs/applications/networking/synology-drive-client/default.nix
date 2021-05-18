@@ -21,7 +21,7 @@ let
   versionNumber = "2.0.4";
 in stdenv.mkDerivation {
   pname = "synology-drive-client";
-  
+
   version = versionNumber;
 
   srcs = [
