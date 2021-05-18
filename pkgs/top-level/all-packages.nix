@@ -30527,6 +30527,8 @@ in
 
   nut = callPackage ../applications/misc/nut { };
 
+  nvd = callPackage ../tools/package-management/nvd { };
+
   solfege = python3Packages.callPackage ../misc/solfege { };
 
   disnix = callPackage ../tools/package-management/disnix { };
