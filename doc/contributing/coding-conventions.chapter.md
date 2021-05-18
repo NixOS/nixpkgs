@@ -181,7 +181,7 @@
   rev = "${version}";
   ```
 
-- Filling lists condionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null`.
+- Filling lists condionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
 
   ```nix
   buildInputs = lib.optional stdenv.isDarwin iconv;
