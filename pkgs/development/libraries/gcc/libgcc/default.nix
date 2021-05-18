@@ -129,8 +129,7 @@ stdenvNoLibs.mkDerivation rec {
 
     "--with-system-zlib"
   ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
-       # libgcc expects a glibc version of the format X.Y while we usually have a version X.Y-Z where Z is our patchlevel.
-       "--with-glibc-version=${builtins.head (builtins.split "-" glibc.version)}";
+       "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
