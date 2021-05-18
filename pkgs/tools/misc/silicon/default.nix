@@ -9,6 +9,7 @@
 , freetype
 , libxcb
 , python3
+, libiconv
 , AppKit
 , CoreText
 , Security
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ llvmPackages.libclang expat freetype ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
 
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
