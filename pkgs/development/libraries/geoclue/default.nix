@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/1a00809a0d89b0849a57647c878d192354247a33.patch";
       sha256 = "6FuiukgFWg2cEKt8LlKP4E0rfSH/ZQgk6Ip1mGJpNFQ=";
     })
+    (fetchpatch {
+      url = "https://salsa.debian.org/freedesktop-team/geoclue-2.0/-/raw/5350f630b7b30cef43453f67c914509af6073c3e/debian/patches/fix-nowifi-query.patch";
+      sha256 = "0a5d4ld7bbi4gd3n0fn5jr1wwfbspc3p0xvy8ra30qvmnvflhdnv";
+    })
 
     ./add-option-for-installation-sysconfdir.patch
   ];
