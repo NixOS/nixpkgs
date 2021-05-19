@@ -22,6 +22,12 @@ let
 
   patches = [
     ./clementine-spotify-blob.patch
+    (fetchpatch {
+      # "short-term" fix for execution on wayland (1.4.0rc1-131-g2179027a6)
+      # for https://github.com/clementine-player/Clementine/issues/6587
+      url = "https://github.com/clementine-player/Clementine/commit/2179027a6d97530c857e43be873baacd696ff332.patch";
+      sha256 = "0344bfcyvjim5ph8w4km6zkg96rj5g9ybp9x14qgyw2gkdksimn6";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
