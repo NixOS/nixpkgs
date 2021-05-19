@@ -192,6 +192,11 @@ let
         default = "";
         description = "Add dashboards to the specified folder.";
       };
+      folderUid = mkOption {
+        type = types.str;
+        default = "";
+        description = "Folder UID. will be automatically generated if not specified";
+      };
       type = mkOption {
         type = types.str;
         default = "file";
@@ -211,6 +216,11 @@ let
         path = mkOption {
           type = types.path;
           description = "Path grafana will watch for dashboards.";
+        };
+        foldersFromFilesStructure = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Maintain folder structure";
         };
       };
     };
