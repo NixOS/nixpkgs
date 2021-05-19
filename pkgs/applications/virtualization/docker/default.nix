@@ -32,7 +32,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: {
+    docker-containerd = (callPackage ./containerd.nix {}).overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
