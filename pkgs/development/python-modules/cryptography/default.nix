@@ -15,6 +15,7 @@
 , pytest
 , pytest-subtests
 , pretend
+, libiconv
 , iso8601
 , pytz
 , hypothesis
@@ -48,7 +49,7 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
   propagatedBuildInputs = [
     packaging
     six
