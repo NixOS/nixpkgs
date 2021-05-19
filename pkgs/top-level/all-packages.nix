@@ -9716,6 +9716,8 @@ in
 
   woeusb = callPackage ../tools/misc/woeusb { };
 
+  wslu = callPackage ../tools/system/wslu { };
+
   chase = callPackage ../tools/system/chase { };
 
   wicd = callPackage ../tools/networking/wicd { };
