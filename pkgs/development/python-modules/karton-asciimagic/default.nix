@@ -7,23 +7,18 @@
 
 buildPythonPackage rec {
   pname = "karton-asciimagic";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yvd0plpwy5qkd2jljpd6wm6dlj2g8csvj1q2md23vsgx7h7v2vm";
+    sha256 = "0d15fhb3y0jpwdfm4y11i6pmfa9szr943cm6slvf0ir31f9nznyz";
   };
 
   propagatedBuildInputs = [
     karton-core
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "karton.core==4.0.5" "karton-core"
-  '';
 
   checkPhase = ''
     runHook preCheck

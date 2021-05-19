@@ -135,6 +135,9 @@ in buildPythonApplication rec {
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+
+    substituteInPlace setup.py \
+      --replace "zeroconf==0.28.*" "zeroconf"
   '';
 
   meta = with lib; {

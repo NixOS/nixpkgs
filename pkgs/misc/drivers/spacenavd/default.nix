@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libX11 }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
 
 stdenv.mkDerivation rec {
   version = "0.8";
@@ -11,9 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1zz0cm5cgvp9s5n4nzksl8rb11c7sw214bdafzra74smvqfjcjcf";
   };
 
-  buildInputs = [ libX11 ];
+  patches = [
+    # Fixes Darwin: https://github.com/FreeSpacenav/spacenavd/pull/38
+    (fetchpatch {
+      url = "https://github.com/FreeSpacenav/spacenavd/commit/d6a25d5c3f49b9676d039775efc8bf854737c43c.patch";
+      sha256 = "02pdgcvaqc20qf9hi3r73nb9ds7yk2ps9nnxaj0x9p50xjnhfg5c";
+    })
+  ];
 
-  configureFlags = [ "--disable-debug"];
+  buildInputs = [ libX11 ]
+    ++ lib.optional stdenv.isDarwin IOKit;
+
+  configureFlags = [ "--disable-debug" ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";

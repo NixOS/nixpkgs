@@ -633,6 +633,9 @@ in
             after = databaseServices;
             bindsTo = databaseServices;
             wantedBy = [ "multi-user.target" ];
+            path = with pkgs; [
+              replace-secret
+            ];
             environment = {
               JBOSS_LOG_DIR = "/var/log/keycloak";
               JBOSS_BASE_DIR = "/run/keycloak";
@@ -653,8 +656,7 @@ in
                   install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
                   install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
 
-                  db_password="$(</run/keycloak/secrets/db_password)"
-                  ${pkgs.replace}/bin/replace-literal -fe '@db-password@' "$db_password" /run/keycloak/configuration/standalone.xml
+                  replace-secret '@db-password@' '/run/keycloak/secrets/db_password' /run/keycloak/configuration/standalone.xml
 
                   export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
                   ${cfg.package}/bin/add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'

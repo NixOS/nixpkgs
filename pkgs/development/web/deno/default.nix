@@ -11,6 +11,7 @@
 , CoreServices
 , Metal
 , Foundation
+, QuartzCore
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
@@ -31,7 +32,8 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cli";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv libobjc Security CoreServices Metal Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance

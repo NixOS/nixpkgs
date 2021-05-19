@@ -112,6 +112,19 @@
      it is deprecated.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
+     to version 4.4. The package now includes example configurations and manual
+     pages by default. The NixOS module has been changed to use the upstream
+     systemd units and write the configuration in the <literal>/etc/ipsec.d/
+     </literal> directory. In addition, two new options have been added to
+     specify connection policies
+     (<xref linkend="opt-services.libreswan.policies"/>)
+     and disable send/receive redirects
+     (<xref linkend="opt-services.libreswan.disableRedirects"/>).
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -155,6 +168,11 @@
      <para>
        See the <link linkend="module-services-discourse">Discourse
        section of the NixOS manual</link> for more information.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <xref linkend="opt-services.nebula.networks" /> <link xlink:href="https://github.com/slackhq/nebula">Nebula VPN</link>
      </para>
    </listitem>
   </itemizedlist>

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -6,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "4.11.1";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9TYArmNWnK8XXcniAQCegrfWAUfTKKuClgdSTQep0U=";
+    sha256 = "sha256-IrlyHYAcoRvF5CA0LMKHTb8aYSawvEcU7s+a03QYI1c=";
   };
 
   vendorSha256 = "sha256-QiO5p0x8kmIN6f0uYS0IR2MlWtRYTHeZpW6Nmupjias=";
@@ -27,21 +28,14 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace cmd/app/app_test.go --replace "development" "${version}"
+    substituteInPlace cmd/gdu/app/app_test.go --replace "development" "${version}"
   '';
 
   postInstall = ''
     installManPage gdu.1
   '';
 
-  # tests fail with:
-  #  dir_test.go:76:
-  #              Error Trace:    dir_test.go:76
-  #              Error:          Not equal:
-  #                              expected: 0
-  #                              actual  : 512
-  #              Test:           TestFlags
-  doCheck = false;
+  doCheck = !(stdenv.isAarch64 || stdenv.isDarwin);
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";

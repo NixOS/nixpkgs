@@ -62,6 +62,30 @@ self: super: {
   hsemail-ns = dontCheck super.hsemail-ns;
   openapi3 = dontCheck super.openapi3;
   strict-writer = dontCheck super.strict-writer;
+  xml-html-qq = dontCheck super.xml-html-qq;
+  static = dontCheck super.static;
+  hhp = dontCheck super.hhp;
+  groupBy = dontCheck super.groupBy;
+  greskell = dontCheck super.greskell;
+  html-validator-cli = dontCheck super.html-validator-cli;
+  hw-fingertree-strict = dontCheck super.hw-fingertree-strict;
+  hw-prim = dontCheck super.hw-prim;
+  hw-packed-vector = dontCheck super.hw-packed-vector;
+  hw-xml = dontCheck super.hw-xml;
+  lens-regex = dontCheck super.lens-regex;
+  meep = dontCheck super.meep;
+  ranged-list = dontCheck super.ranged-list;
+  rank2classes = dontCheck super.rank2classes;
+  schedule = dontCheck super.schedule;
+  twiml = dontCheck super.twiml;
+  twitter-conduit = dontCheck super.twitter-conduit;
+  validationt = dontCheck super.validationt;
+  vgrep = dontCheck super.vgrep;
+  vulkan-utils = dontCheck super.vulkan-utils;
+  yaml-combinators = dontCheck super.yaml-combinators;
+  yesod-paginator = dontCheck super.yesod-paginator;
+  grammatical-parsers = dontCheck super.grammatical-parsers;
+  construct = dontCheck super.construct;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;

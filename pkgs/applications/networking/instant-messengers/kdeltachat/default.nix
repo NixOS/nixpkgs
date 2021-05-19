@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2021-05-16";
+  version = "unstable-2021-05-18";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "670960e18a7e9a1d994f26af27a12c73a7413c9a";
-    sha256 = "1k065pvz1p2wm1rvw4nlcmknc4z10ya4qfch5kz77bbhkf9vfw2l";
+    rev = "837336dc93b66912d48a3b7a2e8c1991b4d3650f";
+    sha256 = "17ms6dcfdz0y24285fqpmgvw391bxrkagsiiy4g5cyp8gfppkgaj";
   };
 
   nativeBuildInputs = [

@@ -942,7 +942,6 @@ dont-distribute-packages:
  - ghcjs-hplay
  - ghc-mod
  - ghc-tags-plugin
- - ghcup
  - ghc-vis
  - ght
  - gi-cairo-again
@@ -3276,6 +3275,7 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
+ - Z-Botan
  - zephyr
  - zerobin
  - zeromq3-conduit
