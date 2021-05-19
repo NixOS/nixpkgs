@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -23,4 +24,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ roberth ];
   };
+
+  passthru.tests.nixos = nixosTests.ghostunnel;
 }
