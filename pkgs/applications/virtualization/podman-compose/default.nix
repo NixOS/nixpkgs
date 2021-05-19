@@ -13,7 +13,7 @@ buildPythonApplication rec {
     repo = "podman-compose";
     owner = "containers";
     rev = "62d2024feecf312e9591cc145f49cee9c70ab4fe";
-    sha256 = "sha256:17992imkvi6129wvajsp0iz5iicfmh53i20qy2mzz17kcz30r2pp";
+    sha256 = "17992imkvi6129wvajsp0iz5iicfmh53i20qy2mzz17kcz30r2pp";
   };
 
   propagatedBuildInputs = [ pyyaml ];
