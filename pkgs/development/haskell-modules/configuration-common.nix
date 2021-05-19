@@ -1943,4 +1943,8 @@ EOT
     '' + (drv.prePatch or "");
   });
 
+  # Too strict bound on random
+  # https://github.com/haskell-hvr/missingh/issues/56
+  MissingH = doJailbreak super.MissingH;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
