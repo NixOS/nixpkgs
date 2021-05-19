@@ -997,6 +997,23 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu2104x86_64 = {
+      name = "ubuntu-21.04-hirsute-amd64";
+      fullName = "Ubuntu 21.04 Hirsute Hippo (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/hirsute/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-MJPu1K7xLSh8euH6MByreNWPxI49j6vN261gFt/eZCU=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/hirsute/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-jTUn5zjAutez0U3DhfV0nyCYzkMISlhWUwHckXaFYuA=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian8i386 = {
       name = "debian-8.11-jessie-i386";
       fullName = "Debian 8.11 Jessie (i386)";
@@ -1041,6 +1058,16 @@ rec {
       packages = commonDebianPackages;
     };
 
+    debian10x86_64 = {
+      name = "debian-10.9-buster";
+      fullName = "Debian 10.9 Buster (amd64)";
+      packagesList = fetchurl {
+        url = "http://snapshot.debian.org/archive/debian/20210518T203004Z/dists/buster/main/binary-amd64/Packages.xz";
+        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
 
   };
 
@@ -1168,7 +1195,7 @@ rec {
     "passwd"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
 
 
   /* A set of functions that build the Linux distributions specified
