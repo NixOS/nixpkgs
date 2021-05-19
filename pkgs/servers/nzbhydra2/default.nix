@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ jre makeWrapper unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d -m 755 "$out/lib/${pname}"
     cp -dpr --no-preserve=ownership "lib" "readme.md" "$out/lib/nzbhydra2"
     install -D -m 755 "nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3}/bin/python $out/bin/nzbhydra2 \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
       --prefix PATH ":" ${jre}/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
