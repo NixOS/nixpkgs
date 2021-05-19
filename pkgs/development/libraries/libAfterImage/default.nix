@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, zlib
+, static ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation {
   pname = "libAfterImage";
@@ -52,11 +53,16 @@ stdenv.mkDerivation {
     rm -rf {libjpeg,libpng,libungif,zlib}/
     substituteInPlace Makefile.in \
       --replace "include .depend" ""
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.in \
+      --replace "-soname," "-install_name,$out/lib/"
   '';
 
   configureFlags = [
     "--with-gif"
     "--disable-mmx-optimization"
+    "--${if static then "enable" else "disable"}-staticlibs"
+    "--${if !static then "enable" else "disable"}-sharedlibs"
   ];
 
   meta = with lib; {
