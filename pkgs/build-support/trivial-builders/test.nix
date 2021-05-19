@@ -43,4 +43,11 @@ nixosTest {
       ${./test.sh} 2>/dev/console
     """)
   '';
+  meta = {
+    license = lib.licenses.mit; # nixpkgs license
+    maintainers = with lib.maintainers; [
+      roberth
+    ];
+    description = "Run the Nixpkgs trivial builders tests";
+  };
 }
