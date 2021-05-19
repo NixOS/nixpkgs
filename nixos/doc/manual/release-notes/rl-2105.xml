@@ -100,6 +100,19 @@
       Now nginx uses the zlib-ng library by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
+     to version 4.4. The package now includes example configurations and manual
+     pages by default. The NixOS module has been changed to use the upstream
+     systemd units and write the configuration in the <literal>/etc/ipsec.d/
+     </literal> directory. In addition, two new options have been added to
+     specify connection policies
+     (<xref linkend="opt-services.libreswan.policies"/>)
+     and disable send/receive redirects
+     (<xref linkend="opt-services.libreswan.disableRedirects"/>).
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
