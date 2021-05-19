@@ -53,6 +53,7 @@ with pkgs;
               pytestCheckHook
               pythonCatchConflictsHook
               pythonImportsCheckHook
+              pythonKeepWheelHook
               pythonNamespacesHook
               pythonRecompileBytecodeHook
               pythonRemoveBinBytecodeHook

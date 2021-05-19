@@ -16,6 +16,7 @@
 , pipInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
+, pythonKeepWheelHook
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
@@ -87,6 +88,10 @@
 # "other" : Provide your own buildPhase and installPhase.
 , format ? "setuptools"
 
+# whether to keep .whl files
+# If enabled the .whl files will be put in a separate output `wheel`
+, keepWheel ? true
+
 , meta ? {}
 
 , passthru ? {}
@@ -141,6 +146,8 @@ let
     ] ++ lib.optionals (python.pythonAtLeast "3.3") [
       # Optionally enforce PEP420 for python3
       pythonNamespacesHook
+    ] ++ lib.optionals keepWheel [
+      pythonKeepWheelHook
     ] ++ nativeBuildInputs;
 
     buildInputs = buildInputs ++ pythonPath;
@@ -169,10 +176,13 @@ let
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
+    outputs = [ "out" ] ++ (lib.optionals keepWheel [ "wheel" ]);
+
     meta = {
       # default to python's platforms
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
+      outputsToInstall = [ "out" ];
     } // meta;
   } // lib.optionalAttrs (attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.

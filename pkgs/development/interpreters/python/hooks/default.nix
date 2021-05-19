@@ -46,6 +46,11 @@ in rec {
       };
     } ./flit-build-hook.sh) {};
 
+  pythonKeepWheelHook = callPackage ({}:
+    makeSetupHook {
+      name = "pythonKeepWheelHook";
+    } ./python-keep-wheel-hook.sh) {};
+
   pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {
       name = "pip-build-hook.sh";
