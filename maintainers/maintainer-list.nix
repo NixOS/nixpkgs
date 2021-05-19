@@ -2571,6 +2571,12 @@
     githubId = 4708206;
     name = "Daniel Fox Franke";
   };
+  dgliwka = {
+    email = "dawid.gliwka@gmail.com";
+    github = "dgliwka";
+    githubId = 33262214;
+    name = "Dawid Gliwka";
+  };
   dgonyeo = {
     email = "derek@gonyeo.com";
     github = "dgonyeo";
