@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
   preConfigure = ''
-    export CMAKE_PREFIX_PATH=${pybind11}/share/cmake/pybind11:$CMAKE_PREFIX_PATH
     substituteInPlace setup.py --replace "pybind11==2.2.4" "pybind11"
     substituteInPlace dolfin/jit/jit.py \
       --replace 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
