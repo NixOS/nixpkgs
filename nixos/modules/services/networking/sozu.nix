@@ -275,7 +275,7 @@ in
 
     settings = mkOption {
       description = ''
-        Ssettings that will be parsed into Sozu's <literal>config.toml</literal>.
+        Settings that will be parsed into Sozu's <literal>config.toml</literal>.
         Documentation <link xlink:href="https://github.com/sozu-proxy/sozu/blob/master/doc/configure.md">here</link>.
         Also see example.
       '';
@@ -313,6 +313,9 @@ in
 
             listeners = mkOption {
               default = [];
+
+              description = "Configuration options specific to a TCP listen socket.";
+
               example = [
                 # Example for an HTTP (plaintext) listener
                 {
@@ -383,6 +386,8 @@ in
 
             applications = mkOption {
               default = {};
+
+              description = "These applications will be routed by sozu directly from the start";
 
               example = {
                 # Every application has an "application ID", here it is "MyApp".
@@ -470,6 +475,13 @@ in
 
             metrics = mkOption {
               default = {};
+
+              description = ''
+                Various statistics can be sent to a server that supports the statsd protocol.
+                You can see those statistics with sozuctl, like this:
+                <literal>sozuctl metrics</literal>
+                or <literal>sozuctl metrics --json</literal> for machine consumption
+              '';
 
               example = {
                 address = "127.0.0.1:8125";
