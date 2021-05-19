@@ -75,5 +75,6 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej ];
+    broken = stdenv.isAarch64; # only supports armv8
   };
 }
