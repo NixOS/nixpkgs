@@ -82,7 +82,18 @@ let
             else "rel"}
       mkdir -p "$out/$dir"
       cp -R --preserve=mode "_build/${profile}/$dir" "$out"
+      ${lib.optionalString (releaseType == "release")
+      "mkdir -p $out/bin && ln -s -t $out/bin $out/rel/*/bin/*"}
       runHook postInstall
+    '';
+
+    postInstall = ''
+      for dir in $out/rel/*/erts-*; do
+        echo "ERTS found in $dir - removing references to erlang to reduce closure size"
+        for f in $dir/bin/{erl,start}; do
+          substituteInPlace "$f" --replace "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
+        done
+      done
     '';
 
     meta = {
