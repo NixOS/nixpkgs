@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, zlib
-, static ? stdenv.hostPlatform.isStatic }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, libX11, zlib
+, static ? stdenv.hostPlatform.isStatic
+, withX ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation {
   pname = "libAfterImage";
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
   patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ giflib libjpeg libpng zlib ];
+  buildInputs = [ giflib libjpeg libpng zlib ] ++ lib.optional withX libX11;
 
   preConfigure = ''
     rm -rf {libjpeg,libpng,libungif,zlib}/
@@ -63,7 +64,7 @@ stdenv.mkDerivation {
     "--disable-mmx-optimization"
     "--${if static then "enable" else "disable"}-staticlibs"
     "--${if !static then "enable" else "disable"}-sharedlibs"
-  ];
+  ] ++ lib.optional withX "--with-x";
 
   meta = with lib; {
     homepage = "http://www.afterstep.org/afterimage/";
