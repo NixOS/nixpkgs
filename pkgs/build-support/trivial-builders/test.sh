@@ -25,33 +25,32 @@ set -euo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"  # nixpkgs root
 
-testDirectReferences() {
-  expr="$1"
+if [[ -z ${SAMPLE:-} ]]; then
+  sample=( `nix-build test/sample.nix` )
+  directRefs=( `nix-build test/invoke-writeDirectReferencesToFile.nix` )
+  references=( `nix-build test/invoke-writeReferencesToFile.nix` )
+else
+  # Injected by Nix (to avoid evaluating in a derivation)
+  # turn them into arrays
+  sample=($SAMPLE)
+  directRefs=($DIRECT_REFS)
+  references=($REFERENCES)
+fi
+
+echo >&2 Testing direct references...
+for i in "${!sample[@]}"; do
+  echo >&2 Checking '#'$i ${sample[$i]} ${directRefs[$i]}
   diff -U3 \
-    <(sort <$(nix-build --no-out-link --expr "with import ../../.. {}; writeDirectReferencesToFile ($expr)")) \
-    <(nix-store -q --references $(nix-build --no-out-link --expr "with import ../../.. {}; ($expr)") | sort)
-}
+    <(sort <${directRefs[$i]}) \
+    <(nix-store -q --references ${sample[$i]} | sort)
+done
 
-testDirectReferences 'hello'
-testDirectReferences 'figlet'
-testDirectReferences 'writeText "hi" "hello"'
-testDirectReferences 'writeText "hi" "hello ${hello}"'
-testDirectReferences 'writeText "hi" "hello ${hello} ${figlet}"'
-
-
-
-testClosure() {
-  expr="$1"
+echo >&2 Testing closure...
+for i in "${!sample[@]}"; do
+  echo >&2 Checking '#'$i ${sample[$i]} ${references[$i]}
   diff -U3 \
-    <(sort <$(nix-build --no-out-link --expr "with import ../../.. {}; writeReferencesToFile ($expr)")) \
-    <(nix-store -q --requisites $(nix-build --no-out-link --expr "with import ../../.. {}; ($expr)") | sort)
-}
-
-testClosure 'hello'
-testClosure 'figlet'
-testClosure 'writeText "hi" "hello"'
-testClosure 'writeText "hi" "hello ${hello}"'
-testClosure 'writeText "hi" "hello ${hello} ${figlet}"'
-
+    <(sort <${references[$i]}) \
+    <(nix-store -q --requisites ${sample[$i]} | sort)
+done
 
 echo 'OK!'
