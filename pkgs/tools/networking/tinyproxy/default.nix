@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # perl is needed for man page generation.
   nativeBuildInputs = [ autoreconfHook perl ];
 
-  configureFlags = optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
+  configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
   meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
