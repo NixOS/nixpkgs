@@ -158,6 +158,11 @@
        section of the NixOS manual</link> for more information.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <xref linkend="opt-services.nebula.networks" /> <link xlink:href="https://github.com/slackhq/nebula">Nebula VPN</link>
+     </para>
+   </listitem>
   </itemizedlist>
 
  </section>

@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-fuzzy-app-search";
-  version = "4";
+  version = "4.0.1";
 
   src = fetchFromGitLab {
     owner = "Czarlie";
     repo = "gnome-fuzzy-app-search";
-    rev = "da9c15d39958d9c3b38df3b616fd40b85aed24e5";
-    sha256 = "1r3qha530s97x818znn1wi76f4x9bhlgi7jlxfwjnrwys62cv5fn";
+    rev = "v${version}";
+    sha256 = "127n3jc5d6cl0yrpjf8acdj76br97knks1wx4f6jcswkx9x47w0a";
   };
 
   uuid = "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com";
 
   nativeBuildInputs = [ glib ];
-
-  patches = [ ./fix-desktop-file-paths.patch ];
 
   makeFlags = [ "INSTALL_PATH=$(out)/share/gnome-shell/extensions" ];
 
