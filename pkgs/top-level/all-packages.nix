@@ -20737,6 +20737,7 @@ in
     # which depends on lvm2 again.  But we only need the libudev part
     # which does not depend on cryptsetup.
     udev = systemdMinimal;
+    util-linux = util-linuxMinimal; # break the cyclic dependency
   };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
     enableDmeventd = true;
@@ -20750,7 +20751,9 @@ in
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
   mdadm = mdadm4;
-  mdadm4 = callPackage ../os-specific/linux/mdadm { };
+  mdadm4 = callPackage ../os-specific/linux/mdadm {
+    util-linux = util-linuxMinimal;
+  };
 
   inherit (skawarePackages) mdevd;
 
