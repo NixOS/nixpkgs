@@ -8,7 +8,6 @@
 , python3
 , pkg-config
 , glib
-, cmake
 , libhandy
 , gtk3
 , appstream-glib
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream-glib
-    cmake
     desktop-file-utils
     glib
     gtk3
