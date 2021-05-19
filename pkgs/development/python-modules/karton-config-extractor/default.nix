@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vijyqki2x813H2xbmz2JIXlh87J5l6NFoZcOu8xi61o=";
+    sha256 = "1kq0gbfz9y0n0bcblyrmwv4la3lcf86lf80794sdvyvn49g0brny";
   };
 
   propagatedBuildInputs = [

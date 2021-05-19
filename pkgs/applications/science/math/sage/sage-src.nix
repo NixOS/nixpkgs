@@ -78,6 +78,18 @@ stdenv.mkDerivation rec {
 
     # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
     ./patches/ignore-cmp-deprecation.patch
+
+    # https://trac.sagemath.org/ticket/30801. this patch has
+    # positive_review but has not been merged upstream yet, so we
+    # don't use fetchSageDiff because it returns a file that contains
+    # each commit as a separate patch instead of a single diff, and
+    # some commits from the pari update branch are already in 9.3.rc5
+    # (auto-resolvable merge conflicts).
+    (fetchpatch {
+      name = "pari-2.13.1.patch";
+      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
+      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

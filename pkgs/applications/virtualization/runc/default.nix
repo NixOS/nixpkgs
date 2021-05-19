@@ -16,13 +16,13 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc94";
+  version = "1.0.0-rc95";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-53P48jNSfC6ELpZNI30yAf7kofUsrJpNY96u0UT+ITg=";
+    sha256 = "sha256-q4sXcvJO9gyo7m0vlaMrwh7ZZHYa58FJy3GatWndS6M=";
   };
 
   goPackagePath = "github.com/opencontainers/runc";

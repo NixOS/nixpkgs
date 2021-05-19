@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luaformatter";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "koihik";
     repo = "luaformatter";
     rev = version;
-    sha256 = "sha256-TMo6zRfhVAXVh0tIC0PecaJCKr0ev45jOKm2+reTtS4=";
+    sha256 = "0440kdab5i0vhlk71sbprdrhg362al8jqpy7w2vdhcz1fpi5cm0b";
     fetchSubmodules = true;
   };
 
