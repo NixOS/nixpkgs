@@ -1363,6 +1363,8 @@ in {
 
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
+  cirq-google = callPackage ../development/python-modules/cirq-google { };
+
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
