@@ -243,7 +243,6 @@ rec {
       inherit name;
       inherit (runtime) checkPhase;
       text = ''
-        ${runtime.preamble}
         ${text}
         '';
     };
@@ -264,7 +263,6 @@ rec {
       inherit name;
       inherit (bash) checkPhase;
       text = ''
-        ${bash.preamble}
         ${text}
         '';
     };
@@ -285,7 +283,6 @@ rec {
       inherit name;
       inherit (zsh) checkPhase;
       text = ''
-        ${zsh.preamble}
         ${text}
         '';
     };
@@ -306,7 +303,6 @@ rec {
       inherit name;
       inherit (dash) checkPhase;
       text = ''
-        ${dash.preamble}
         ${text}
         '';
     };
