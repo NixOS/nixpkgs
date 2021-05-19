@@ -3268,6 +3268,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
+  bacon = callPackage ../development/tools/bacon { };
+
   bareos = callPackage ../tools/backup/bareos { };
 
   bats = callPackage ../development/interpreters/bats { };
@@ -9093,7 +9095,9 @@ in
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
-  trunk = callPackage ../development/tools/trunk { };
+  trunk = callPackage ../development/tools/trunk {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
@@ -9698,7 +9702,9 @@ in
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
   wafHook = callPackage ../development/tools/build-managers/wafHook { };
 
-  wagyu = callPackage ../tools/misc/wagyu { };
+  wagyu = callPackage ../tools/misc/wagyu {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
@@ -19542,9 +19548,7 @@ in
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix {
-    pythonPackages = python3Packages;
-  };
+  prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
