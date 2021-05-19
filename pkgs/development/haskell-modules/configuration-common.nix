@@ -267,7 +267,7 @@ self: super: {
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   #next release supports random 1.1; jailbroken because i didn't know about vty when glguy was updating the bounds
   #should be fixed soon. maybe even before this is merged. currently glirc is 2.37
-  glirc = doJailbreak (super.glirc.override { random = self.random_1_2_0; });
+  glirc = doJailbreak super.glirc;
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
