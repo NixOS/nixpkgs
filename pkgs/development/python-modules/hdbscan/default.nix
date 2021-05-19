@@ -35,6 +35,12 @@ buildPythonPackage rec {
     rm __init__.py
   '';
   checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # known flaky tests: https://github.com/scikit-learn-contrib/hdbscan/issues/420
+    "test_mem_vec_diff_clusters"
+    "test_all_points_mem_vec_diff_clusters"
+    "test_approx_predict_diff_clusters"
+  ];
 
   meta = with lib; {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";
