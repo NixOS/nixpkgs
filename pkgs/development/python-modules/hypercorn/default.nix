@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitLab
 , isPy27, isPy35, isPy36
 , pythonOlder
 , typing-extensions
@@ -8,6 +8,7 @@
 , toml
 , h2
 , priority
+, tox
 }:
 
 buildPythonPackage rec {
@@ -15,15 +16,19 @@ buildPythonPackage rec {
   version = "0.11.2";
   disabled = isPy27 || isPy35 || isPy36;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5ba1e719c521080abd698ff5781a2331e34ef50fc1c89a50960538115a896a9a";
+  src = fetchFromGitLab {
+    owner = "pgjones";
+    repo = pname;
+    rev = version;
+    sha256 = "0v80v6l2xqac5mgrmh2im7y23wpvz4yc2v4h9ryhvl88c2jk9mvh";
   };
 
   propagatedBuildInputs = [ wsproto toml h2 priority ]
   ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  doCheck = false;
+  checkInputs = [ tox ];
+
+  checkPhase = "tox -e py37,py38,py39 -s";
 
   pythonImportsCheck = [ "hypercorn" ];
 
@@ -31,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://pgjones.gitlab.io/hypercorn/";
     description = "The ASGI web server inspired by Gunicorn";
     license = licenses.mit;
+    maintainers = with maintainers; [ dgliwka ];
   };
 }
