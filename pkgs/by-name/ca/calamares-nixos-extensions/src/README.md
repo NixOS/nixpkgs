@@ -207,3 +207,16 @@ usually called `main.py` which defines a `run()` function.
 
 The API is loosely documented in the
 [developer guide](https://github.com/calamares/calamares/wiki/Develop-Guide).
+
+# Join the Conversation
+
+GitHub Issues are **one** place for discussing Calamares (and Calamares Extensions)
+if there are concrete
+problems or a new feature to discuss.
+
+Regular Calamares development chit-chat happens on old-school IRC
+(no registration required). Responsiveness is best during the day
+in Europe, but feel free to idle. The Matrix room is relatively new.
+
+- [![Visit our IRC channel](https://kiwiirc.com/buttons/webchat.freenode.net/calamares.png)](https://webchat.freenode.net/?channel=#calamares?nick=guest|)
+- [Join us on Matrix](https://webchat.kde.org/#/room/%23calamares:kde.org)
