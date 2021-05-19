@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     "-DDOLFIN_AUTO_DETECT_MPI=ON"
     "-DDOLFIN_ENABLE_CHOLMOD=ON"
     "-DDOLFIN_ENABLE_DOCS=ON"
-    "-DDOLFIN_ENABLE_HDF5=ON"
+    # HDF5 had symbols change between 1.10 and 1.12, currently broken on fenics 2019.1.0
+    "-DDOLFIN_ENABLE_HDF5=OFF"
     "-DDOLFIN_ENABLE_MPI=ON"
     "-DDOLFIN_ENABLE_SCOTCH=ON"
     "-DDOLFIN_ENABLE_UMFPACK=ON"
