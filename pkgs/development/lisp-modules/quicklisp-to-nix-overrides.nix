@@ -277,4 +277,6 @@ $out/lib/common-lisp/query-fs"
   md5 = ifLispNotIn ["sbcl" "ccl" "gcl"]
     (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
   cl-gobject-introspection = addNativeLibs (with pkgs; [glib gobject-introspection]);
+  generic-cl = x: { parasites = []; };
+  static-dispatch = x: { parasites = []; };
 }

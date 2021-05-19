@@ -31,7 +31,7 @@ mkDerivation {
     substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
   '';
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString (stdenv.isDarwin && enableGUI) ''
     mkdir -p $out/Applications
     mv bin/heimdall-frontend.app $out/Applications/heimdall-frontend.app
     wrapQtApp $out/Applications/heimdall-frontend.app/Contents/MacOS/heimdall-frontend

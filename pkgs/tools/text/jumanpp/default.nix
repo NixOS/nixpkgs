@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, protobuf }:
+{ lib, stdenv, fetchurl, cmake, protobuf, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "jumanpp";
@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
     url = "https://github.com/ku-nlp/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-ASdr6qbkSe71M7QmuuwidCa4xQhDVoXBJ2XqvSY53pQ=";
   };
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ protobuf ];
+  buildInputs = [ protobuf ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
