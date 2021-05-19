@@ -1,5 +1,31 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, zsh, dash, bash}:
 
+let
+  runtime = { 
+    preamble = "#!${runtimeShell}";
+    checkPhase = ''
+      ${stdenv.shell} -n $out
+    '';
+  };
+  bash = { 
+    preamble = "#!${lib.getBin bash}/bin/bash"; 
+    checkPhase = ''
+      ${lib.getBin bash}/bin/bash -n $out
+    '';
+  };
+  zsh = { 
+    preamble = "#!${lib.getBin zsh}/bin/zsh"; 
+    checkPhase = ''
+      ${lib.getBin zsh}/bin/zsh -n $out
+    '';
+  };
+  dash = { 
+    preamble = "#!${lib.getBin dash}/bin/dash"; 
+    checkPhase = ''
+      ${lib.getBin dash}/bin/dash -n $out
+    '';
+  };
+in
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
@@ -120,7 +146,7 @@ rec {
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
-        allowSubstitutes = false;
+        allowSubstituNixOStes = false;
       }
       ''
         n=$out${destination}
@@ -212,17 +238,88 @@ rec {
    *   '';
    *
   */
+  writeShellText = name: text:
+    writeTextFile {
+      inherit name;
+      inherit (runtime) checkPhase;
+      text = ''
+        ${runtime.preamble}
+        ${text}
+        '';
+    };
+  
   writeShellScript = name: text:
     writeTextFile {
       inherit name;
       executable = true;
+      inherit (runtime) checkPhase;
       text = ''
-        #!${runtimeShell}
+        ${runtime.preamble}
         ${text}
         '';
-      checkPhase = ''
-        ${stdenv.shell} -n $out
-      '';
+    };
+  
+  writeBashText = name: text:
+    writeTextFile {
+      inherit name;
+      inherit (bash) checkPhase;
+      text = ''
+        ${bash.preamble}
+        ${text}
+        '';
+    };
+  
+  writeBashScript = name: text:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      inherit (bash) checkPhase;
+      text = ''
+        ${bash.preamble}
+        ${text}
+        '';
+    };
+  
+  writeZSHText = name: text:
+    writeTextFile {
+      inherit name;
+      inherit (zsh) checkPhase;
+      text = ''
+        ${zsh.preamble}
+        ${text}
+        '';
+    };
+  
+  writeZSHScript = name: text:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      inherit (zsh) checkPhase;
+      text = ''
+        ${zsh.preamble}
+        ${text}
+        '';
+    };
+  
+  writeDashText = name: text:
+    writeTextFile {
+      inherit name;
+      inherit (dash) checkPhase;
+      text = ''
+        ${dash.preamble}
+        ${text}
+        '';
+    };
+  
+  writeDashScript = name: text:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      inherit (dash) checkPhase;
+      text = ''
+        ${dash.preamble}
+        ${text}
+        '';
     };
 
   /*
