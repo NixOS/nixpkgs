@@ -26,7 +26,8 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ]
+      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ];
     knownVulnerabilities = optional (versionOlder version "6.0.0") "Electron version ${version} is EOL";
   };
 
@@ -46,6 +47,7 @@ let
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin-x64";
+    aarch64-darwin = "darwin-arm64";
   };
 
   get = as: platform: as.${platform.system} or
