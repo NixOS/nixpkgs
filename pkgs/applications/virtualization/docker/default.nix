@@ -229,8 +229,8 @@ rec {
       rev = "v${version}";
       sha256 = "1l4ra9bsvydaxd2fy7dgxp7ynpp0mrlwvcdhxiafw596559ab6qk";
     };
-    runcRev = "2c7861bc5e1b3e756392236553ec14a78a09f8bf"; # v1.0.0-rc94
-    runcSha256 = "0f11zr2d3bnycd6rmb1cynhy9zh169yj6kcn5s22wz2j6grghwz7";
+    runcRev = "b9ee9c6314599f1b4a7f497e1f1f856fe433d3b7"; # v1.0.0-rc95
+    runcSha256 = "18sbvmlvb6kird4w3rqsfrjdj7n25firabvdxsl0rxjfy9r1g2xb";
     containerdRev = "12dca9790f4cb6b18a6a7a027ce420145cb98ee7"; # v1.5.1
     containerdSha256 = "16q34yiv5q98b9d5vgy1lmmppg8agrmnfd1kzpakkf4czkws0p4d";
     tiniRev = "de40ad007797e0dcd8b7126f27bb87401d224240"; # v0.19.0
