@@ -79,6 +79,15 @@ stdenv.mkDerivation rec {
     # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
     ./patches/ignore-cmp-deprecation.patch
 
+    # remove use of matplotlib function deprecated in 3.4
+    # https://trac.sagemath.org/ticket/31827
+    (fetchSageDiff {
+      base = "9.3";
+      name = "remove-matplotlib-deprecated-function.patch";
+      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
+      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
+    })
+
     # https://trac.sagemath.org/ticket/30801. this patch has
     # positive_review but has not been merged upstream yet, so we
     # don't use fetchSageDiff because it returns a file that contains
