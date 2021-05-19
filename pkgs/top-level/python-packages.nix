@@ -1590,7 +1590,9 @@ in {
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
-  cryptography = callPackage ../development/python-modules/cryptography { };
+  cryptography = callPackage ../development/python-modules/cryptography {
+    inherit (pkgs.darwin) libiconv;
+  };
 
   cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
 
