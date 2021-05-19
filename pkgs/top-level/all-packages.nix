@@ -9178,6 +9178,8 @@ in
 
   ua = callPackage ../tools/networking/ua { };
 
+  uade = callPackage ../applications/audio/uade { };
+
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
