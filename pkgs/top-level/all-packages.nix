@@ -852,6 +852,8 @@ in
 
   amidst = callPackage ../tools/games/amidst { };
 
+  gfshare = callPackage ../tools/security/gfshare { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
