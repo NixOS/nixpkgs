@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, writeScript, kubernetes-helm }:
 
 buildGoModule rec {
   pname = "helmfile";
@@ -24,6 +24,12 @@ buildGoModule rec {
   postInstall = ''
     wrapProgram $out/bin/helmfile \
       --prefix PATH : ${lib.makeBinPath [ kubernetes-helm ]}
+  '';
+
+  passthru.updateScript = writeScript "update-helmfile" ''
+    set -eufo pipefail
+    latestTag=$(curl -s https://api.github.com/repos/${src.owner}/${src.repo}/releases/latest | jq -r '.tag_name | ltrimstr("v")')
+    update-source-version ${pname} "''${latestTag#v}"
   '';
 
   meta = {
