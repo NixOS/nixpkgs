@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "Hypercorn";
   version = "0.11.2";
-  disabled = isPy27 || isPy35 || isPy36;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "pgjones";
