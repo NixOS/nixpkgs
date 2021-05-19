@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     description = "A wrapper for the user, group and hosts NSS API";
     homepage = "https://git.samba.org/?p=nss_wrapper.git;a=summary;";
     license = licenses.bsd3;
-    platforms = platforms.all;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

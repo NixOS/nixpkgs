@@ -485,7 +485,7 @@ self: super: builtins.intersectAttrs super {
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark = with pkgs;
-    overrideCabal (addBuildTools super.futhark [makeWrapper python37Packages.sphinx])
+    overrideCabal (addBuildTools super.futhark [makeWrapper python3Packages.sphinx])
       (_drv: {
         postBuild = (_drv.postBuild or "") + ''
         make -C docs man
@@ -616,7 +616,7 @@ self: super: builtins.intersectAttrs super {
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -747,6 +747,21 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  blake3 = overrideCabal super.blake3 {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
+  crc32c = overrideCabal super.crc32c {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # uses x86 intrinsics
+  seqalign = overrideCabal super.seqalign {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
@@ -772,4 +787,20 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+
+  taglib = overrideCabal super.taglib (drv: {
+    librarySystemDepends = [
+      pkgs.zlib
+    ] ++ (drv.librarySystemDepends or []);
+  });
+
+  # uses x86 assembler
+  inline-asm = overrideCabal super.inline-asm {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
+  # uses x86 assembler in C bits
+  hw-prim-bits = overrideCabal super.hw-prim-bits {
+    platforms = pkgs.lib.platforms.x86;
+  };
 }

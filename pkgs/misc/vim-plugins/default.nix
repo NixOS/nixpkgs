@@ -25,7 +25,7 @@ let
     inherit llvmPackages;
   };
 
-  aliases = if (config.allowAliases or true) then final: prev: {} else (import ./aliases.nix lib);
+  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};
 
   extensible-self = lib.makeExtensible
     (extends aliases

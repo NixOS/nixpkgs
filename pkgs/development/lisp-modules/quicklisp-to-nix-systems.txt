@@ -123,6 +123,7 @@ fiveam
 flexi-streams
 form-fiddle
 fset
+generic-cl
 gettext
 http-body
 hu.dwim.asdf
@@ -189,6 +190,7 @@ swank
 swap-bytes
 symbol-munger
 trivia
+trivial-arguments
 trivial-backtrace
 trivial-clipboard
 trivial-features
