@@ -688,6 +688,15 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-networking.wireless.iwd.enable">networking.wireless.iwd</link>
+          module has a new
+          <link xlink:href="options.html#opt-networking.wireless.iwd.settings">networking.wireless.iwd.settings</link>
+          option.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
