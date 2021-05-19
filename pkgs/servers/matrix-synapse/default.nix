@@ -24,6 +24,8 @@ buildPythonApplication rec {
     ./homeserver-script.patch
   ];
 
+  buildInputs = [ openssl ];
+
   propagatedBuildInputs = [
     setuptools
     bcrypt
