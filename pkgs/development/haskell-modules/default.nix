@@ -5,7 +5,7 @@
 , overrides ? (self: super: {})
 , initialPackages ? import ./initial-packages.nix
 , nonHackagePackages ? import ./non-hackage-packages.nix
-, configurationCommon ? import ./configuration-common.nix
+, configurationCommon ? import ./overrides.nix
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
