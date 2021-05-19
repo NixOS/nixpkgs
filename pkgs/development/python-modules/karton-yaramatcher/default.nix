@@ -22,11 +22,6 @@ buildPythonPackage rec {
     yara-python
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "yara-python==4.0.2" "yara-python" \
-  '';
-
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} -m unittest discover
