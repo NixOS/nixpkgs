@@ -2294,6 +2294,8 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  dduper = callPackage ../tools/filesystems/dduper { };
+
   dedup = callPackage ../tools/backup/dedup { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
