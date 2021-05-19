@@ -204,6 +204,9 @@ self: super: {
           revert = true;
         })
       ] ++ (drv.patches or []);
+      # make sure patches are not broken by cabal file revisions
+      revision = null;
+      editedCabalFile = null;
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
