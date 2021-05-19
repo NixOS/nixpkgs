@@ -1947,4 +1947,8 @@ EOT
   # https://github.com/haskell-hvr/missingh/issues/56
   MissingH = doJailbreak super.MissingH;
 
+  # Too strict bound on random
+  # https://github.com/batterseapower/parallel-io/issues/14
+  parallel-io = doJailbreak super.parallel-io;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
