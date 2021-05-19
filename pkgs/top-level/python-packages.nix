@@ -3967,6 +3967,8 @@ in {
 
   localzone = callPackage ../development/python-modules/localzone { };
 
+  locationsharinglib = callPackage ../development/python-modules/locationsharinglib { };
+
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
