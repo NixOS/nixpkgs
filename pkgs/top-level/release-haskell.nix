@@ -1,4 +1,8 @@
 /*
+  This is the Hydra jobset for the `haskell-updates` branch in Nixpkgs.
+  You can see the status of this jobset at
+  https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
+
   To debug this expression you can use `hydra-eval-jobs` from
   `pkgs.hydra-unstable` which prints the jobset description
   to `stdout`:
@@ -144,7 +148,6 @@ let
         koka
         krank
         lambdabot
-        ldgallery
         madlang
         matterhorn
         mueval
@@ -205,7 +208,9 @@ let
       cabal-install = all;
       Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
       funcmp = all;
-      haskell-language-server = all;
+      # Doesn't currently work on ghc-9.0:
+      # https://github.com/haskell/haskell-language-server/issues/297
+      haskell-language-server = with compilerNames; [ ghc884 ghc8104 ];
       hoogle = all;
       hsdns = all;
       jailbreak-cabal = all;
@@ -226,7 +231,10 @@ let
         constituents = accumulateDerivations [
           # haskell specific tests
           jobs.tests.haskell
-          jobs.tests.writers # writeHaskell{,Bin}
+          # writeHaskell and writeHaskellBin
+          # TODO: writeHaskell currently fails on darwin
+          jobs.tests.writers.x86_64-linux
+          jobs.tests.writers.aarch64-linux
           # important top-level packages
           jobs.cabal-install
           jobs.cabal2nix
