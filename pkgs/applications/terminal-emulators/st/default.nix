@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
   ] ++ extraLibs;
 
   installPhase = ''
+    runHook preInstall
     TERMINFO=$out/share/terminfo make install PREFIX=$out
+    runHook postInstall
   '';
 
   meta = {
