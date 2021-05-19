@@ -56,6 +56,7 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--with-gif"
+    "--disable-mmx-optimization"
   ];
 
   meta = with lib; {
