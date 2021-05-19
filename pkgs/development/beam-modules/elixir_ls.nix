@@ -14,7 +14,7 @@ mixRelease rec {
     fetchSubmodules = true;
   };
 
-  mixDeps = fetchMixDeps {
+  mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
     sha256 = "0r9x223imq4j9pn9niskyaybvk7jmq8dxcyzk7kwfsi128qig1a1";
