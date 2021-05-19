@@ -3213,6 +3213,8 @@ in {
 
   hypchat = callPackage ../development/python-modules/hypchat { };
 
+  hypercorn = callPackage ../development/python-modules/hypercorn { };
+
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
   hyperion-py = callPackage ../development/python-modules/hyperion-py { };
