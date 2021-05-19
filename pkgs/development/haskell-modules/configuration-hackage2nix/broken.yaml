@@ -5156,6 +5156,7 @@ broken-packages:
   - yampa-glut
   - yampa-sdl2
   - YampaSynth
+  - yampa-test
   - yam-servant
   - yandex-translate
   - yaop
