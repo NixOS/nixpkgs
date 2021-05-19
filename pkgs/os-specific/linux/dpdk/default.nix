@@ -11,11 +11,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "20.05";
+  version = "21.02";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "0h0xv2zwb91b9n29afg5ihn06a8q28in64hag2f112kc19f79jj8";
+    sha256 = "sha256-CZJKKoJVGqKZeKNoYYT4oQX1L1ZAsb4of1QLLJHpSJs=";
   };
 
   nativeBuildInputs = [
@@ -23,9 +23,13 @@ in stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
+
+    # python3.withPackages isn't sufficient, because python3 during a
+    # meson build points to the one used by meson
+    python3.pkgs.pyelftools
     python3.pkgs.sphinx
   ];
+
   buildInputs = [
     jansson
     libbpf
