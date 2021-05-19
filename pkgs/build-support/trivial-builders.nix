@@ -347,9 +347,10 @@ rec {
         done
 
         for output in ${toString secondaryOutputs}; do
-          eval output_path=\$$output
+          output_path=''${!output}
           mkdir -p $output_path
-          for i in $(eval cat \$${output}PathsPath); do
+          output_paths_path_var=''${output}PathsPath
+          for i in $(cat ''${!output_paths_path_var}); do
             ${lndir}/bin/lndir -silent $i $output_path
 
             # Replace previously propagated build outputs with our
