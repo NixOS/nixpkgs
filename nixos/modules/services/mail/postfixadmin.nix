@@ -30,9 +30,9 @@ in
 
     adminEmail = mkOption {
       type = types.str;
-      example = "postfixadmin.example.com";
+      example = "postmaster@example.com";
       description = ''
-        Define the Site Admin's email address below.
+        Defines the Site Admin's email address.
         This will be used to send emails from to create mailboxes and
         from Send Email / Broadcast message pages.
       '';
