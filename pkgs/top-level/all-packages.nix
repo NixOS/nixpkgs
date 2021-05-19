@@ -4265,6 +4265,8 @@ in
 
   zoxide = callPackage ../tools/misc/zoxide { };
 
+  zkg = callPackage ../tools/package-management/zkg { };
+
   zzuf = callPackage ../tools/security/zzuf { };
 
   ### DEVELOPMENT / EMSCRIPTEN
@@ -12704,6 +12706,8 @@ in
   bossa = callPackage ../development/tools/misc/bossa {
     wxGTK = wxGTK30;
   };
+
+  btest = callPackage ../development/tools/btest { };
 
   buck = callPackage ../development/tools/build-managers/buck { };
 

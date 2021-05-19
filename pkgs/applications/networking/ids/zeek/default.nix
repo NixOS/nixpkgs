@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "py" ];
 
+  ZEEK_DIST = "${placeholder "out"}";
+  preConfigure = ''
+    substituteInPlace zeek-config.in --subst-var ZEEK_DIST
+  '';
+
   cmakeFlags = [
     "-DCAF_ROOT=${caf}"
     "-DZEEK_PYTHON_DIR=${placeholder "py"}/lib/${python3.libPrefix}/site-packages"
