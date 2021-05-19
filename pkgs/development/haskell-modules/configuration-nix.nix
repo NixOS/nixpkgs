@@ -803,4 +803,9 @@ self: super: builtins.intersectAttrs super {
   hw-prim-bits = overrideCabal super.hw-prim-bits {
     platforms = pkgs.lib.platforms.x86;
   };
+
+  # random 1.2.0 has tests that indirectly depend on
+  # itself causing an infinite recursion at evaluation
+  # time
+  random = dontCheck super.random;
 }
