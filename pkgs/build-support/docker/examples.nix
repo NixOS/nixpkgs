@@ -516,4 +516,7 @@ rec {
     bash
     layeredImageWithFakeRootCommands
   ];
+
+  # Example export of the bash image
+  exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
 }

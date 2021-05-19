@@ -281,9 +281,13 @@ rec {
       '');
     in
     runCommand name {} ''
-      mkdir -p $out
       cd ${result}
-      cp layer.tar json VERSION $out
+      if [ -e json ] && [ -e VERSION ] ; then
+        mkdir -p $out
+        cp layer.tar json VERSION $out
+      else
+        cp layer.tar $out
+      fi
     '';
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
@@ -292,7 +296,7 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
       '';
     };
 

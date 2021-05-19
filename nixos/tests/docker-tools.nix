@@ -364,5 +364,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed(
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
+
+    with subtest("exportImage produces a valid tarball"):
+        docker.succeed(
+            "tar -tf ${examples.exportBash} > /dev/null"
+        )
   '';
 })
