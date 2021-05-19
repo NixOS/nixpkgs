@@ -3238,7 +3238,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
-  bacon = callPackage ../development/tools/bacon { };
+  bacon = callPackage ../development/tools/bacon {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   bareos = callPackage ../tools/backup/bareos { };
 
