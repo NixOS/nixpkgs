@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.5.4";
+  version = "2021.5.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -316,7 +316,7 @@
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
     "google_cloud" = ps: with ps; [ google-cloud-texttospeech ];
     "google_domains" = ps: with ps; [ ];
-    "google_maps" = ps: with ps; [ ]; # missing inputs: locationsharinglib
+    "google_maps" = ps: with ps; [ locationsharinglib ];
     "google_pubsub" = ps: with ps; [ google-cloud-pubsub ];
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
