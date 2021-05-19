@@ -5,7 +5,28 @@ with lib;
 let
   cfg = config.networking.wireless.iwd;
 in {
-  options.networking.wireless.iwd.enable = mkEnableOption "iwd";
+  options.networking.wireless.iwd = {
+    enable = mkEnableOption "iwd";
+
+    settings = mkOption {
+      type = (pkgs.formats.ini {}).type;
+      default = {};
+
+      example = {
+        Settings.AutoConnect = true;
+
+        Network = {
+          EnableIPv6 = true;
+          RoutePriorityOffset = 300;
+        };
+      };
+
+      description = ''
+        Options passed to iwd.
+        See https://iwd.wiki.kernel.org/networkconfigurationsettings for supported options.
+      '';
+    };
+  };
 
   config = mkIf cfg.enable {
     assertions = [{
@@ -14,6 +35,8 @@ in {
         Only one wireless daemon is allowed at the time: networking.wireless.enable and networking.wireless.iwd.enable are mutually exclusive.
       '';
     }];
+
+    environment.etc."iwd/main.conf".source = (pkgs.formats.ini {}).generate "main.conf" cfg.settings;
 
     # for iwctl
     environment.systemPackages =  [ pkgs.iwd ];
