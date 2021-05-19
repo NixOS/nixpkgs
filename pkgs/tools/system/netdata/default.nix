@@ -1,7 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
+, curl, libcap, libuuid, lm_sensors, zlib, json_c
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -22,11 +22,12 @@ in stdenv.mkDerivation rec {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0x6vg2z7x83b127flbfqkgpakd5md7n2w39dvs8s16facdy2lvry";
+    sha256 = "0735cxmljrp8zlkcq7hcxizy4j4xiv7vf782zkz5chn06n38mcik";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ curl.dev zlib.dev ]
+  buildInputs = [ curl.dev zlib.dev json_c ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
@@ -70,6 +71,8 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--enable-cloud"
+    "--with-aclk-ng"
   ];
 
   postFixup = ''
