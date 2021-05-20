@@ -4855,6 +4855,8 @@ in
 
   ghorg = callPackage ../applications/version-management/git-and-tools/ghorg { };
 
+  ghostunnel = callPackage ../tools/networking/ghostunnel { };
+
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };

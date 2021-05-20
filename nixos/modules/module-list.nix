@@ -689,6 +689,7 @@
   ./services/networking/gale.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
+  ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
   ./services/networking/go-neb.nix
