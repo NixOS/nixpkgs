@@ -24,7 +24,7 @@ kernel.override ( args // {
       name = "bcachefs-${commit}";
       patch = fetchpatch {
         name = "bcachefs-${commit}.diff";
-        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${commit}&id2=v${lib.versions.major kernel.version}.${lib.versions.minor kernel.version}";
+        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${commit}&id2=v${lib.versions.majorMinor kernel.version}";
         sha256 = diffHash;
       };
       extraConfig = "BCACHEFS_FS m";
