@@ -111,6 +111,13 @@ in
         default     = false;
         description = "Disables automatic Universal Plug and Play.";
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Wheter to open ports in the firewall";
+      };
+
       dataDir = mkOption {
         type        = types.str;
         default     = "/var/lib/terraria";
@@ -151,5 +158,11 @@ in
         ${pkgs.coreutils}/bin/chgrp terraria ${cfg.dataDir}/terraria.sock
       '';
     };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+    };
+
   };
 }
