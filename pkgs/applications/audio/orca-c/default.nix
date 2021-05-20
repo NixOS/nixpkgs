@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses portmidi ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs tool
   '';
 
