@@ -111,6 +111,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # Expat version
     platforms = if withLibraries then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
+    # big sur doesn't support gcc stdenv and wayland doesn't build with clang
+    broken = stdenv.isDarwin;
   };
 
   passthru.version = version;

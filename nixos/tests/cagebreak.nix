@@ -33,7 +33,7 @@ in
 
     hardware.opengl.enable = true;
     programs.xwayland.enable = true;
-    environment.systemPackages = [ pkgs.cagebreak pkgs.wallutils ];
+    environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
 
     virtualisation.memorySize = 1024;
     # Need to switch to a different VGA card / GPU driver than the default one (std) so that Cagebreak can launch:
@@ -51,7 +51,7 @@ in
     machine.wait_for_file("${XDG_RUNTIME_DIR}/wayland-0")
 
     with subtest("ensure wayland works with wayinfo from wallutils"):
-        print(machine.succeed("env XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} wayinfo"))
+        print(machine.succeed("env XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} wayland-info"))
 
     # TODO: Fix the XWayland test (log the cagebreak output to debug):
     # with subtest("ensure xwayland works with xterm"):

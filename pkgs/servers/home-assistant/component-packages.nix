@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.5.4";
+  version = "2021.5.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -89,7 +89,7 @@
     "bloomsky" = ps: with ps; [ ];
     "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
-    "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
+    "bluetooth_le_tracker" = ps: with ps; [ pygatt ];
     "bluetooth_tracker" = ps: with ps; [ bt_proximity pybluez ];
     "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
@@ -316,7 +316,7 @@
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
     "google_cloud" = ps: with ps; [ google-cloud-texttospeech ];
     "google_domains" = ps: with ps; [ ];
-    "google_maps" = ps: with ps; [ ]; # missing inputs: locationsharinglib
+    "google_maps" = ps: with ps; [ locationsharinglib ];
     "google_pubsub" = ps: with ps; [ google-cloud-pubsub ];
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
@@ -755,7 +755,7 @@
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
     "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
-    "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
+    "skybeacon" = ps: with ps; [ pygatt ];
     "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ slackclient ];
     "sleepiq" = ps: with ps; [ sleepyq ];

@@ -76,6 +76,13 @@ let
         ./opencl-headers-dir.patch
       ];
 
+      # Uses linker flags that are not supported on Darwin.
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+        substituteInPlace CMakeLists.txt \
+          --replace '-Wl,--no-undefined' ""
+      '';
+
       nativeBuildInputs = [ cmake git llvm.dev ];
 
       buildInputs = [ libclang llvm spirv-llvm-translator ];

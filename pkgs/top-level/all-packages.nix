@@ -2294,6 +2294,8 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  dduper = callPackage ../tools/filesystems/dduper { };
+
   dedup = callPackage ../tools/backup/dedup { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
@@ -3236,7 +3238,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
-  bacon = callPackage ../development/tools/bacon { };
+  bacon = callPackage ../development/tools/bacon {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   bareos = callPackage ../tools/backup/bareos { };
 
@@ -6311,10 +6315,6 @@ in
   };
   nodejs-14_x = callPackage ../development/web/nodejs/v14.nix { };
   nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
-    enableNpm = false;
-  };
-  nodejs-15_x = callPackage ../development/web/nodejs/v15.nix { };
-  nodejs-slim-15_x = callPackage ../development/web/nodejs/v15.nix {
     enableNpm = false;
   };
   nodejs-16_x = callPackage ../development/web/nodejs/v16.nix { };
@@ -13355,7 +13355,10 @@ in
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
-  luaformatter = callPackage ../development/tools/luaformatter { };
+  luaformatter = callPackage ../development/tools/luaformatter
+    (lib.optionalAttrs stdenv.isDarwin {
+      stdenv = overrideCC stdenv llvmPackages_latest.clang;
+    });
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
@@ -14737,6 +14740,8 @@ in
   givaro = callPackage ../development/libraries/givaro {};
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
+
+  ghc_filesystem = callPackage ../development/libraries/ghc_filesystem {};
 
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
@@ -19126,6 +19131,7 @@ in
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
   opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
+  opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
 
   openxpki = callPackage ../servers/openxpki { };
 
@@ -26757,7 +26763,7 @@ in
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
-  valentina = libsForQt514.callPackage ../applications/misc/valentina { };
+  valentina = libsForQt512.callPackage ../applications/misc/valentina { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
@@ -27638,6 +27644,8 @@ in
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots.nix { miniupnpc = miniupnpc_2; };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
+
+  chia = callPackage ../applications/blockchains/chia { };
 
   clightning = callPackage ../applications/blockchains/clightning.nix { };
 
@@ -30447,6 +30455,8 @@ in
   nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc/default.nix)
     ({ inherit pkgs lib; } // attrs);
+
+  nixos-install-tools = callPackage ../tools/nix/nixos-install-tools { };
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 

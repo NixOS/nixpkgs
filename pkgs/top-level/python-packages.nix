@@ -1091,6 +1091,8 @@ in {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blspy = callPackage ../development/python-modules/blspy { };
+
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
@@ -1345,6 +1347,12 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chiabip158 = callPackage ../development/python-modules/chiabip158 { };
+
+  chiapos = callPackage ../development/python-modules/chiapos { };
+
+  chiavdf = callPackage ../development/python-modules/chiavdf { };
+
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
@@ -1352,6 +1360,10 @@ in {
   ci-py = callPackage ../development/python-modules/ci-py { };
 
   cirq = callPackage ../development/python-modules/cirq { };
+
+  cirq-core = callPackage ../development/python-modules/cirq-core { };
+
+  cirq-google = callPackage ../development/python-modules/cirq-google { };
 
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
@@ -1439,6 +1451,12 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  clvm = callPackage ../development/python-modules/clvm { };
+
+  clvm-rs = callPackage ../development/python-modules/clvm-rs { };
+
+  clvm-tools = callPackage ../development/python-modules/clvm-tools { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
@@ -1504,6 +1522,8 @@ in {
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
+
+  concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
 
@@ -3655,6 +3675,8 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
+
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
@@ -3966,6 +3988,8 @@ in {
   localimport = callPackage ../development/python-modules/localimport { };
 
   localzone = callPackage ../development/python-modules/localzone { };
+
+  locationsharinglib = callPackage ../development/python-modules/locationsharinglib { };
 
   locket = callPackage ../development/python-modules/locket { };
 
@@ -6674,8 +6698,8 @@ in {
 
   pythonnet = callPackage
     ../development/python-modules/pythonnet {
-      # `mono >= 4.6` required to prevent crashes encountered with earlier versions.
-      mono = pkgs.mono4;
+      # Using `mono > 5`, tests are failing..
+      mono = pkgs.mono5;
     };
 
   python-nmap = callPackage ../development/python-modules/python-nmap { };
