@@ -27567,6 +27567,8 @@ in
 
   ytcc = callPackage ../tools/networking/ytcc { };
 
+  ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin {
