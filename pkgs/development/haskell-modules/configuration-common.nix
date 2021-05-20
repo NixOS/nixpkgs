@@ -1869,18 +1869,6 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # Test assets missing from sdist
-  # https://github.com/hadolint/language-docker/issues/63
-  language-docker = overrideSrc super.language-docker {
-    src = pkgs.fetchFromGitHub {
-      owner = "hadolint";
-      repo = "language-docker";
-      rev = "refs/tags/${super.language-docker.version}";
-      sha256 = "06263jy538ni31vms5pzggmh64fyk62cv3lxnvkc6gylb94kljb8";
-      name = "language-docker-${super.language-docker.version}-source";
-    };
-  };
-
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
 
