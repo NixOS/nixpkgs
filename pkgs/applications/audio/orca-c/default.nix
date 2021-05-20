@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, portmidi }:
+{ lib, stdenv, fetchgit, ncurses, portmidi }:
 stdenv.mkDerivation {
   pname = "orca-c";
 
-  version = "git-2020-05-01";
+  version = "git-2021-02-13";
 
-  src = fetchFromGitHub {
-    owner = "hundredrabbits";
-    repo = "Orca-c";
-    rev = "d7a3b169c5ed0b06a9ad0fdb3057704da9a0b6ce";
-    sha256 = "101y617a295hzwr98ykvza1sycxlk29kzxn2ybjwc718r0alkbzz";
+  src = fetchgit {
+    url = "https://git.sr.ht/~rabbits/orca";
+    rev = "5ba56ca67baae3db140f8b7a2b2fc46bbac5602f";
+    sha256 = "sha256-bbIH0kyHRTcMGXV3WdBQIH1br0FyIzKKL88wqpGZ0NY=";
   };
 
   buildInputs = [ ncurses portmidi ];
@@ -24,8 +23,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "An esoteric programming language designed to quickly create procedural sequencers";
-    homepage = "https://github.com/hundredrabbits/Orca-c";
+    homepage = "https://git.sr.ht/~rabbits/orca";
     license = licenses.mit;
     platforms = platforms.all;
+    maintainers = with maintainers; [ netcrns ];
   };
 }
