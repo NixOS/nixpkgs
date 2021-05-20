@@ -5515,6 +5515,8 @@ in
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
+  heisenbridge = callPackage ../servers/heisenbridge { };
+
   helio-workstation = callPackage ../applications/audio/helio-workstation { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
