@@ -3357,6 +3357,12 @@
     githubId = 10799507;
     name = "Karl Fischer";
   };
+  fitzgibbon = {
+    name = "Niall FitzGibbon";
+    email = "fitzgibbon.niall@gmail.com";
+    github = "fitzgibbon";
+    githubId = 617048;
+  };
   Flakebi = {
     email = "flakebi@t-online.de";
     github = "Flakebi";
