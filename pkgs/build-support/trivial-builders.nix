@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, replace, runtimeShell }:
 
 rec {
 
@@ -300,8 +300,12 @@ rec {
    *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
    * ...
    *
-   * # creates multiple outputs, each the result of combining the corresponding outputs of the paths
-   * symlinkJoin { name = "multiexample"; paths = [ pkgs.libpng pkgs.openssl ]; outputs = [ "out" "dev" ]; }
+
+   * # creates multiple outputs, where the `out` output is the result
+   * # of combining the main outputs of all packages in `paths`, and
+   * # `bin` and `dev` are the result of combining their corresponding
+   * # outputs of all packages in `paths`
+   * symlinkJoin { name = "multiexample"; paths = [ pkgs.libpng pkgs.openssl ]; outputs = [ "out" "bin" "dev" ]; }
    *
    * symlinkJoin and linkFarm are similar functions, but they output
    * derivations with different structure.
@@ -329,41 +333,39 @@ rec {
          }:
     let
       secondaryOutputs = builtins.filter (o: o != "out") outputs;
-      outputToPathsAttr = output: {
-        name = output + "Paths";
-        value = lib.flatten (map (p: p.${output} or []) paths);
-      };
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
           inherit preferLocalBuild allowSubstitutes;
           outputs = [ "out" ] ++ secondaryOutputs;
-          passAsFile = [ "paths" ] ++ map (o: o + "Paths") secondaryOutputs;
-        } // builtins.listToAttrs (map outputToPathsAttr secondaryOutputs);
-    in runCommand name args
+        };
+    in runCommand name args (
       ''
-        mkdir -p $out
-        for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
+        set -o errexit -o pipefail -o nounset -o errtrace
+        shopt -s inherit_errexit
 
-        for output in ${toString secondaryOutputs}; do
-          output_path=''${!output}
+        mkdir -p $out
+      '' + lib.concatMapStrings (path: ''
+        ${lndir}/bin/lndir -silent ${path} $out
+      '') paths + lib.concatMapStrings (output: ''
+          output_path=''${${output}}
           mkdir -p $output_path
-          output_paths_path_var=''${output}PathsPath
-          for i in $(cat ''${!output_paths_path_var}); do
-            ${lndir}/bin/lndir -silent $i $output_path
+        '' + lib.concatMapStrings (path: lib.optionalString (path ? ${output}) ''
+            ${lndir}/bin/lndir -silent ${path.${output}} $output_path
 
             # Replace previously propagated build outputs with our
             # main output
             if [ -e $output_path/nix-support/propagated-build-inputs ]; then
+              cat ${path.${output}}/nix-support/propagated-build-inputs <(echo) >> propagated-build-inputs
               rm $output_path/nix-support/propagated-build-inputs
-              echo "$out" >> $output_path/nix-support/propagated-build-inputs
+              ${replace}/bin/replace-literal ${path} $out propagated-build-inputs
             fi
-          done
-        done
-
+          '') paths + ''
+          if [ -e propagated-build-inputs ]; then
+            mv propagated-build-inputs $output_path/nix-support/propagated-build-inputs
+          fi
+        '') secondaryOutputs + ''
         ${postBuild}
-      '';
+      '');
 
   /*
    * Quickly create a set of symlinks to derivations.
