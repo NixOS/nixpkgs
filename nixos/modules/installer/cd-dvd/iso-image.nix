@@ -418,19 +418,11 @@ let
       faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI -type d | sort); do
+      for d in $(find EFI boot -type d | sort); do
         faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
       done
 
-      for d in $(find boot -type d | sort); do
-        faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
-      done
-
-      for f in $(find EFI -type f | sort); do
-        mcopy -pvm -i "$out" "$f" "::/$f"
-      done
-
-      for f in $(find boot -type f | sort); do
+      for f in $(find EFI boot -type f | sort); do
         mcopy -pvm -i "$out" "$f" "::/$f"
       done
 
