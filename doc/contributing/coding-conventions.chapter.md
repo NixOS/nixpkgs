@@ -532,7 +532,26 @@ Tests are important to ensure quality and make reviews and automatic updates eas
 
 Nix package tests are a lightweight alternative to [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests). They can be used to create simple integration tests for packages while the module tests are used to test services or programs with a graphical user interface on a NixOS VM. Unittests that are included in the source code of a package should be executed in the `checkPhase`.
 
-### Writing package tests {#ssec-package-tests-writing}
+### Writing inline package tests {#ssec-inline-package-tests-writing}
+
+For very simple tests, they can be written inline:
+
+```nix
+{ …, key }:
+
+mkDerivation rec {
+  …
+
+  passthru.tests = {
+    version-check = runCommand "key-help" {} ''
+      ${key}/bin/KeY --help | grep -Fw ${version}
+      touch $out
+    '';
+  };
+}
+```
+
+### Writing larger package tests {#ssec-package-tests-writing}
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 
