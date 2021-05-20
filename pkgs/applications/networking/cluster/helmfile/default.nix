@@ -27,9 +27,12 @@ buildGoModule rec {
   '';
 
   passthru.updateScript = writeScript "update-helmfile" ''
+    #! /usr/bin/env nix-shell
+    #! nix-shell -i bash -p common-updater-scripts curl findutils
     set -eufo pipefail
-    latestTag=$(curl -s https://api.github.com/repos/${src.owner}/${src.repo}/releases/latest | jq -r '.tag_name | ltrimstr("v")')
-    update-source-version ${pname} "''${latestTag#v}"
+    curl -s https://api.github.com/repos/roboll/${pname}/releases/latest |
+        jq -e -r '.tag_name | ltrimstr("v")' |
+        xargs update-source-version ${pname}
   '';
 
   meta = {
