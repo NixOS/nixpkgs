@@ -3067,6 +3067,8 @@ in
 
   socklog = callPackage ../tools/system/socklog { };
 
+  soju = callPackage ../applications/networking/soju { };
+
   spacevim = callPackage ../applications/editors/spacevim { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
