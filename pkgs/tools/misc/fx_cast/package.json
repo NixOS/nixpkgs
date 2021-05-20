@@ -1,0 +1,41 @@
+{
+    "name": "fx_cast_bridge",
+    "version": "0.1.2",
+    "__applicationName": "fx_cast_bridge",
+    "__applicationVersion": "0.1.0",
+    "__applicationDirectoryName": "fx_cast",
+    "__applicationExecutableName": "fx_cast_bridge",
+    "scripts": {
+        "build": "node bin/build.js",
+        "package": "node bin/build.js --package",
+        "install-manifest": "node bin/install-manifest.js",
+        "remove-manifest": "node bin/install-manifest.js --remove"
+    },
+    "dependencies": {
+        "@types/minimist": "^1.2.1",
+        "@types/ws": "^7.4.0",
+        "bplist-creator": "0.0.8",
+        "bplist-parser": "^0.2.0",
+        "castv2": "^0.1.10",
+        "fast-srp-hap": "^2.0.2",
+        "mdns": "^2.5.1",
+        "mime-types": "^2.1.27",
+        "minimist": "^1.2.5",
+        "node-fetch": "^2.6.0",
+        "tweetnacl": "^1.0.3",
+        "ws": "^7.4.3"
+    },
+    "devDependencies": {
+        "@types/mdns": "0.0.33",
+        "@types/mime-types": "^2.1.0",
+        "@types/node": "^13.13.15",
+        "@types/node-fetch": "^2.5.7",
+        "fs-extra": "^9.1.0",
+        "mustache": "^4.0.1",
+        "pkg": "^4.4.9",
+        "typescript": "^4.1.5"
+    },
+    "optionalDependencies": {
+        "rage-edit": "^1.2.0"
+    }
+}
