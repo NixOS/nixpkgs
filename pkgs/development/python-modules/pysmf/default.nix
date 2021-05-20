@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest, cython }:
 
 buildPythonPackage rec {
   pname = "pysmf";
@@ -9,7 +9,11 @@ buildPythonPackage rec {
     sha256 = "10i7vvvdx6c3gl4afsgnpdanwgzzag087zs0fxvfipnqknazj806";
   };
 
-  nativeBuildInputs = [ pkg-config pytest ];
+  postUnpack = ''
+    rm $sourceRoot/src/smf.c
+  '';
+
+  nativeBuildInputs = [ pkg-config pytest cython ];
   buildInputs = [ libsmf glib ];
 
   meta = with lib; {
