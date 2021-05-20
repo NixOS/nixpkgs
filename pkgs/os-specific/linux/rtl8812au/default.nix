@@ -12,15 +12,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
+
   buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
 
   prePatch = ''
-    substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
-    substituteInPlace ./Makefile --replace /sbin/depmod \#
-    substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    substituteInPlace ./Makefile \
+      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
+      --replace /sbin/depmod \# \
+      --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   makeFlags = [
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gordboy/rtl8812au-5.9.3.2";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fortuneteller2k ];
     broken = kernel.kernelOlder "4.10" || kernel.isHardened;
   };
 }
