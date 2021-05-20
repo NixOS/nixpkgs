@@ -541,10 +541,7 @@ self: super: {
   elm-yesod = markBroken super.elm-yesod;
 
   # https://github.com/Euterpea/Euterpea2/issues/40
-  Euterpea = appendPatch super.Euterpea (pkgs.fetchpatch {
-    url = "https://github.com/Euterpea/Euterpea2/pull/38.patch";
-    sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
-  });
+  Euterpea = doJailbreak super.Euterpea;
 
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
