@@ -13209,6 +13209,8 @@ in
 
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
+  gnome-inform7 = callPackage ../applications/editors/gnome-inform7/default.nix { };
+
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
 
   gnome-network-displays = callPackage ../applications/networking/gnome-network-displays { };
