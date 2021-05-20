@@ -26068,6 +26068,10 @@ in
 
   runc = callPackage ../applications/virtualization/runc {};
 
+  rymcast = callPackage ../applications/audio/rymcast {
+    inherit (gnome) zenity;
+  };
+
   uade123 = callPackage ../applications/audio/uade123 {};
 
   udevil = callPackage ../applications/misc/udevil {};
