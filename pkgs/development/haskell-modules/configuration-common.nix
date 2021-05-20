@@ -1944,4 +1944,7 @@ EOT
     testTarget = "test --test-options='-p \"!/[NOCI]/\"'";
   };
 
+  # Tests require to run a binary which isn't built
+  lsp-test = dontCheck super.lsp-test;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
