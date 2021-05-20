@@ -259,8 +259,18 @@ self: super: builtins.intersectAttrs super {
     '';
   }));
 
-  # Patch to consider NIX_GHC just like xmonad does
-  dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
+  dyre =
+    appendPatch
+      # dyre's tests appear to be trying to directly call GHC.
+      (dontCheck super.dyre)
+      # Dyre needs special support for reading the NIX_GHC env var.  This is
+      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
+      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
+      # next version.
+      (pkgs.fetchpatch {
+        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
+        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
+      });
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
