@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install build/orca $out/bin/orca
+
+    runHook postInstall
   '';
 
   meta = with lib; {
