@@ -5,6 +5,7 @@
 , gtksourceview4, docutils
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
+, cdrtools
 }:
 
 with lib;
@@ -53,8 +54,21 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
-  # Failed tests
-  doCheck = false;
+  checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
+
+  disabledTestPaths = [
+    "tests/test_cli.py"
+    "tests/test_disk.py"
+    "tests/test_checkprops.py"
+  ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
+
+  preCheck = ''
+    export HOME=.
+  ''; # <- Required for "tests/test_urldetect.py".
+
+  postCheck = ''
+    $out/bin/virt-manager --version | grep -Fw ${version} > /dev/null
+  '';
 
   meta = with lib; {
     homepage = "http://virt-manager.org";
