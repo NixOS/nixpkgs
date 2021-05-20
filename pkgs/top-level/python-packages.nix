@@ -1283,6 +1283,8 @@ in {
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
+  coqpit = callPackage ../development/python-modules/coqpit { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
