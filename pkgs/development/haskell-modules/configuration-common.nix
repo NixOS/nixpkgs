@@ -1936,4 +1936,12 @@ EOT
   # https://github.com/batterseapower/parallel-io/issues/14
   parallel-io = doJailbreak super.parallel-io;
 
+  # Disable flaky tests
+  # https://github.com/DavidEichmann/alpaca-netcode/issues/2
+  alpaca-netcode = overrideCabal super.alpaca-netcode {
+    # use testTarget to also pass some flags to the test suite.
+    # TODO: We should add proper support for this to the builder.
+    testTarget = "test --test-options='-p \"!/[NOCI]/\"'";
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
