@@ -4,7 +4,7 @@
 , cmake
 , doxygen
 , fetchFromGitLab
-, ffmpeg_3
+, ffmpeg
 , glew
 , gsm
 , intltool
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     alsaLib
     bctoolbox
     bzrtp
-    ffmpeg_3
+    ffmpeg
     glew
     gsm
     libGL
