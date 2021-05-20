@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
-  version = "5.9.20210411.0";
+  version = "5.9.20210516.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "p${version}";
-    sha256 = "0c031y0dl2b70pd0mqfbylplf8f27x11b0ch7ljka3rqav0zb1zr";
+    sha256 = "05hh2bd613wymp1d6mswl15i17ylcg7h167aqny2wg280flqrh1n";
   };
 
-  nativeBuildInputs = [ autoreconfHook coreutils pkg-config python3Packages.docutils ];
+  nativeBuildInputs = [ autoreconfHook coreutils pkg-config python3Packages.docutils perl ];
   buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in
