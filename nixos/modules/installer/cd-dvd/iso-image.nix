@@ -405,7 +405,8 @@ let
         "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
       touch --date=@0 ./EFI ./boot
 
-      usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
+      # Round up to the nearest multiple of 1MB, for more deterministic du output
+      usage_size=$(( $(du -s --block-size=1M --apparent-size . | tr -cd '[:digit:]') * 1024 * 1024 ))
       # Make the image 110% as big as the files need to make up for FAT overhead
       image_size=$(( ($usage_size * 110) / 100 ))
       # Make the image fit blocks of 1M
