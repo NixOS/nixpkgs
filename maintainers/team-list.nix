@@ -48,6 +48,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  chia = {
+    members = [
+      atemu
+      lourkeur
+    ];
+    scope = "Maintain the Chia blockchain and its dependencies";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [

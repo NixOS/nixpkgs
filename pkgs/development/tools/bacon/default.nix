@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1pii5ajl3xgylrm20pkwbd1lk7gv0pshl1cxjfna0l63q56v7f21";
+
+  buildInputs = lib.optional stdenv.isDarwin CoreServices;
 
   meta = with lib; {
     description = "Background rust code checker";
