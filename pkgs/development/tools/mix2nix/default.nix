@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, elixir, erlang }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mix2nix";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ydlr";
     repo = "mix2nix";
-    rev = "66c277bdffb93da9a63e3f1ea42432a73e572b51";
+    rev = version;
     sha256 = "11qn80im5zfbx25ibxqrgi90mglf8pnsmrqsami633mcf2gvj2hy";
   };
 
