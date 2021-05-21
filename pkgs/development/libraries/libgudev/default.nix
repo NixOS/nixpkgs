@@ -6,8 +6,10 @@
 , udev
 , glib
 , gobject-introspection
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gnome
 , vala
+, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -23,11 +25,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    gobject-introspection
     meson
     ninja
-    vala
-  ];
+    glib
+  ] ++ lib.optional withIntrospection gobject-introspection
+    ++ lib.optional withVala vala;
 
   buildInputs = [
     udev
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
     "-Dtests=disabled"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dvapi=${if withVala then "enabled" else "disabled"}"
   ];
 
   passthru = {
