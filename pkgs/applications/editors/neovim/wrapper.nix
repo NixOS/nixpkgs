@@ -11,8 +11,9 @@ neovim:
 
 let
   wrapper = {
+      extraName ? ""
       # should contain all args but the binary
-      wrapperArgs ? ""
+    , wrapperArgs ? ""
     , manifestRc ? null
     , withPython2 ? false
     , withPython3 ? true,  python3Env ? null
@@ -37,7 +38,7 @@ let
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
   symlinkJoin {
-      name = "neovim-${lib.getVersion neovim}";
+      name = "neovim-${lib.getVersion neovim}${extraName}";
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = lib.optionalString stdenv.isLinux ''
