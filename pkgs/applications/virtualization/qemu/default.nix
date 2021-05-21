@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl
-, makeWrapper
+, bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
+, makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
+, sdlSupport ? !stdenv.isDarwin, SDL2, SDL2_image
 , gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? true, libjpeg, libpng
 , smartcardSupport ? true, libcacard
@@ -36,7 +36,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "5.1.0";
+  version = "5.2.0";
   pname = "qemu"
     + stdenv.lib.optionalString xenSupport "-xen"
     + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
@@ -44,11 +44,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1rd41wwlvp0vpialjp2czs6i3lsc338xc72l3zkbb7ixjfslw5y9";
+    sha256 = "1g0pvx4qbirpcn9mni704y03n3lvkmw2c0rbcwvydyr8ns4xh66b";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
-    ++ optionals gtkSupport [ wrapGAppsHook ];
+  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison meson ninja ]
+    ++ optionals gtkSupport [ wrapGAppsHook ]
+    ++ optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs =
     [ zlib glib ncurses perl pixman
       vde2 texinfo makeWrapper lzo snappy
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL2 ]
+    ++ optionals sdlSupport [ SDL2 SDL2_image ]
     ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals smartcardSupport [ libcacard ]
@@ -71,20 +72,132 @@ stdenv.mkDerivation rec {
     ++ optionals virglSupport [ virglrenderer ]
     ++ optionals smbdSupport [ samba ];
 
-  enableParallelBuilding = true;
+  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
 
   patches = [
-    ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
-    ./CVE-2020-27617.patch
     (fetchpatch {
-      # e1000e: infinite loop scenario in case of null packet descriptor, remove for QEMU >= 5.2.0-rc3
-      name = "CVE-2020-28916.patch";
-      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=c2cb511634012344e3d0fe49a037a33b12d8a98a";
-      sha256 = "1kvm6wl4vry0npiisxsn76h8nf1iv5fmqsyjvb46203f1yyg5pis";
+      name = "CVE-2020-27821.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/memory-clamp-cached-translation-if-points-to-MMIO-region-CVE-2020-27821.patch";
+      sha256 = "0sj0kr0g6jalygr5mb9i17fgr491jzaxvk3dvala0268940s01x9";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20221.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/arm_gic-fix-interrupt-ID-in-GICD_SGIR-CVE-2021-20221.patch";
+      sha256 = "1iyvcw87hzlc57fg5l87vddqmch8iw2yghk0s125hk5shn1bygjq";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20181.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/9pfs-Fully-restart-unreclaim-loop-CVE-2021-20181.patch";
+      sha256 = "149ifiazj6rn4d4mv2c7lcayq744fijsv5abxlb8bhbkj99wd64f";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-extract-lo_do_open-from-lo_open.patch";
+      sha256 = "0j4waaz6q54by4a7vd5m8s2n8y0an9hqf0ndycxsy03g4ksm669d";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-optionally-return-inode-pointer-from-lo_do_lookup.patch";
+      sha256 = "08bag890r6dx2rhnq58gyvsxvzwqgvn83pjlg95b5ic0z6gyjnsg";
+    })
+    (fetchpatch {
+      name = "CVE-2020-35517.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-prevent-opening-of-special-files-CVE-2020-35517.patch";
+      sha256 = "0ziy6638zbkn037l29ywirvgymbqq66l5rngg8iwyky67acilv94";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20263.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-save-error-code-early-at-the-failure-callsite.patch";
+      sha256 = "15rwb15yjpclrqaxkhx76npr8zlfm9mj4jb19czg093is2cn4rys";
+    })
+    (fetchpatch {
+      name = "CVE-2021-20263.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/virtiofsd-drop-remapped-security.capability-xattr-as-needed-CVE-2021-20263.patch";
+      sha256 = "06ylz80ilg30wlskd4dsjx677fp5qr8cranwlakvjhr88b630xw0";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-introduce.patch";
+      sha256 = "0hcpf00vqpg9rc0wl8cry905w04614843aqifybyv15wbv190gpz";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-cadence_gem.patch";
+      sha256 = "12mjnrvs6p4g5frzqb08k4h86hphdqlka91fcma2a3m4ap98nrxy";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-dp8393x.patch";
+      sha256 = "02z6q0578fj55phjlg2larrsx3psch2ixzy470yf57jl3jq1dy6k";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-4.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-e1000.patch";
+      sha256 = "0zzbiz8i9js524mcdi739c7hrsmn82gnafrygi0xrd5sqf1hp08z";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-5.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-lan9118.patch";
+      sha256 = "1f44v5znd9s7l7wgc71nbg8jw1bjqiga4wkz7d7cpnkv3l7b9kjj";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-6.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-msf2.patch";
+      sha256 = "04n1rzn6gfxdalp34903ysdhlvxqkfndnqayjj3iv1k27i5pcidn";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-7.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-pcnet.patch";
+      sha256 = "1p9ls6f8r6hxprj8ha6278fydcxj3av29p1hvszxmabazml2g7l2";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-8.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-rtl8139.patch";
+      sha256 = "0lms1zn49kpwblkp54widjjy7fwyhdh1x832l1jvds79l2nm6i04";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-9.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-sungem.patch";
+      sha256 = "1mkzyrgsp9ml9yqzjxdfqnwjr7n0fd8vxby4yp4ksrskyni8y0p4";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3416.part-10.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/net-qemu_receive_packet-for-loopback-tx_pkt-iov.patch";
+      sha256 = "1pwqq8yw06y3p6hah3dgjhsqzk802wbn7zyajla1zwdfpic63jss";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-1.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/dont-transfer-any-data-when-command-time-out.patch";
+      sha256 = "0wf1yhb9mqpfgh9rv0hff0v1sw3zl2vsfgjrby4r8jvxdfjrxj8s";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-2.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/dont-write-to-SDHC_SYSAD-register-when-transfer-is-in-progress.patch";
+      sha256 = "1dd405dsdc7fbp68yf6f32js1azsv3n595c6nbxh28kfh9lspx4v";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-3.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/correctly-set-the-controller-status-for-ADMA.patch";
+      sha256 = "08jk51pfrbn1zfymahgllrzivajh2v2qx0868rv9zmgi0jldbky6";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-4.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/limit-block-size-only-when-SDHC_BLKSIZE-register-is-writable.patch";
+      sha256 = "1valfhw3l83br1cny6n4kmrv0f416hl625mggayqfz4prsknyhh7";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3409.part-5.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/sdhci/reset-the-data-pointer-of-s-fifo_buffer-when-a-different-block-size-is-programmed.patch";
+      sha256 = "01p5qrr00rh3mlwrp3qq56h7yhqv0w7pw2cw035nxw3mnap03v31";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3392.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:5.2+dfsg-10/debian/patches/mptsas-remove-unused-MPTSASState.pending-CVE-2021-3392.patch";
+      sha256 = "0n7dn2p102c21mf3ncqrnks0wl5kas6yspafbn8jd03ignjgc4hd";
     })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
@@ -103,30 +216,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Remove CVE-2020-{29129,29130} for QEMU >5.1.0
+  # Otherwise tries to ensure /var/run exists.
   postPatch = ''
-    (cd slirp && patch -p1 < ${fetchpatch {
-      name = "CVE-2020-29129_CVE-2020-29130.patch";
-      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f.patch";
-      sha256 = "01vbjqgnc0kp881l5p6b31cyyirhwhavm6x36hlgkymswvl3wh9w";
-    }})
+    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+        qga/meson.build
   '';
-
-  hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+    # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
+    chmod +x ./scripts/shaderinclude.pl
+    patchShebangs .
   '' + optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
     [ "--audio-drv-list=${audio}"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
     ]
     # disable sysctl check on darwin.
     ++ optional stdenv.isDarwin "--cpu=x86_64"
@@ -152,7 +263,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # the .desktop is both invalid and pointless
-    rm $out/share/applications/qemu.desktop
+    rm -f $out/share/applications/qemu.desktop
 
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
@@ -163,6 +274,7 @@ stdenv.mkDerivation rec {
       wrapGApp $f
     done
   '';
+  preBuild = "cd build";
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
