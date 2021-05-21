@@ -4656,6 +4656,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-dap-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-dap-nvim";
+    version = "2021-03-26";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-dap.nvim";
+      rev = "b4134fff5cbaf3b876e6011212ed60646e56f060";
+      sha256 = "1fcpw42bwl5iych3hxrrl08s5hm6r6k0qx2savw853f3ff982s38";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-dap.nvim/";
+  };
+
   telescope-frecency-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-frecency-nvim";
     version = "2021-04-17";
