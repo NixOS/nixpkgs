@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , extra-cmake-modules
 , kcoreaddons
@@ -12,22 +11,14 @@
 
 mkDerivation rec {
   pname = "applet-window-buttons";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "psifidotos";
     repo = "applet-window-buttons";
     rev = version;
-    sha256 = "0r1h4kbdv6pxj15w4n1w50g8zsl0jrc4808dyfygzwf87mghziyz";
+    sha256 = "sha256-ikgUE8GaiTpNjwrz7SbNQ3+b8KiigDgMREQ7J2b+EEs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-compilation-error-with-plasma-5.21.patch";
-      url = "https://github.com/psifidotos/applet-window-buttons/commit/dc5ed862fa3cb943f9c0d561c864ff461156a19e.patch";
-      sha256 = "17bdkkmy7k402viynj2bpw281qzsn0f1w8gf98gq65wkm4sf4j6k";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
