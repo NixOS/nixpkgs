@@ -6438,10 +6438,10 @@
     email = "softs@metabarcoding.org";
     name = "Celine Mercier";
   };
-  metadark = {
+  kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
-    github = "metadark";
+    github = "kira-bruneau";
     githubId = 382041;
   };
   meutraa = {

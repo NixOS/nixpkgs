@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "An implementation of the Language Server Protocol for LaTeX";
     homepage = "https://texlab.netlify.app";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar metadark ];
+    maintainers = with maintainers; [ doronbehar kira-bruneau ];
   };
 }
