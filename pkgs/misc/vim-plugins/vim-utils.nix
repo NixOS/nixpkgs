@@ -244,7 +244,7 @@ let
         };
       in
       ''
-        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.pathogen.rtp}"
+        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.vim-pathogen.rtp}"
         execute pathogen#infect('${pluginsEnv}/{}')
 
         filetype indent plugin on | syn on
