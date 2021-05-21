@@ -127,9 +127,8 @@ let
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
       ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
-    ) else (
-      [ "--http" "--http.webroot" data.webroot ]
-    );
+    ) else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
+    else [ "--http" "--http.webroot" data.webroot ];
 
     commonOpts = [
       "--accept-tos" # Checking the option is covered by the assertions
@@ -268,6 +267,8 @@ let
             ${data.postRun}
           fi
         '');
+      } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
 
       # Working directory will be /tmp
@@ -393,6 +394,17 @@ let
           will be created below the webroot if it doesn't exist.
           <literal>http://example.org/.well-known/acme-challenge/</literal> must also
           be available (notice unencrypted HTTP).
+        '';
+      };
+
+      listenHTTP = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = ":1360";
+        description = ''
+          Interface and port to listen on to solve HTTP challenges
+          in the form [INTERFACE]:PORT.
+          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
@@ -712,6 +724,28 @@ in {
           message = ''
             Options `security.acme.certs.${cert}.dnsProvider` and
             `security.acme.certs.${cert}.webroot` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.webroot == null || data.listenHTTP == null;
+          message = ''
+            Options `security.acme.certs.${cert}.webroot` and
+            `security.acme.certs.${cert}.listenHTTP` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.listenHTTP == null || data.dnsProvider == null;
+          message = ''
+            Options `security.acme.certs.${cert}.listenHTTP` and
+            `security.acme.certs.${cert}.dnsProvider` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.dnsProvider != null || data.webroot != null || data.listenHTTP != null;
+          message = ''
+            One of `security.acme.certs.${cert}.dnsProvider`,
+            `security.acme.certs.${cert}.webroot`, or
+            `security.acme.certs.${cert}.listenHTTP` must be provided.
           '';
         }
       ]) cfg.certs));
