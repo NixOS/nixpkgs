@@ -8217,7 +8217,7 @@ in
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
-  rubocop = callPackage ../development/tools/rubocop { };
+  rubocop = rubyPackages.rubocop;
 
   ruffle = callPackage ../misc/emulators/ruffle { };
 
