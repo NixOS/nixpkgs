@@ -327,11 +327,11 @@ buildStdenv.mkDerivation ({
     "BUILD_OFFICIAL=1"
   ]
   ++ lib.optionals ltoSupport [
-    "AR=${llvmPackages.bintools}/bin/llvm-ar"
-    "LLVM_OBJDUMP=${llvmPackages.bintools}/bin/llvm-objdump"
-    "NM=${llvmPackages.bintools}/bin/llvm-nm"
-    "RANLIB=${llvmPackages.bintools}/bin/llvm-ranlib"
-    "STRIP=${llvmPackages.bintools}/bin/llvm-strip"
+    "AR=${buildStdenv.cc.bintools.bintools}/bin/llvm-ar"
+    "LLVM_OBJDUMP=${buildStdenv.cc.bintools.bintools}/bin/llvm-objdump"
+    "NM=${buildStdenv.cc.bintools.bintools}/bin/llvm-nm"
+    "RANLIB=${buildStdenv.cc.bintools.bintools}/bin/llvm-ranlib"
+    "STRIP=${buildStdenv.cc.bintools.bintools}/bin/llvm-strip"
   ]
   ++ extraMakeFlags;
 
