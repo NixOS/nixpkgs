@@ -211,13 +211,19 @@
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  colorThemeSolarized = callPackage ./color-theme-solarized { };
-  emacsSessionManagement = callPackage ./session-management-for-emacs { };
+  color-theme-solarized = callPackage ./color-theme-solarized { };
+  session-management-for-emacs = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
   ido-ubiquitous = callPackage ./ido-ubiquitous { };
   prolog-mode = callPackage ./prolog { };
-  rectMark = callPackage ./rect-mark { };
-  sunriseCommander = callPackage ./sunrise-commander { };
+  rect-mark = callPackage ./rect-mark { };
+  sunrise-commander = callPackage ./sunrise-commander { };
+
+  # camelCase aliases for some of the kebab-case expressions above
+  colorThemeSolarized = color-theme-solarized;
+  emacsSessionManagement = session-management-for-emacs;
+  rectMark = rect-mark;
+  sunriseCommander = sunrise-commander;
 
   # Legacy aliases, these try to mostly map to melpa stable because it's
   # closer to the old outdated package infra.
