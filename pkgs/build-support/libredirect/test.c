@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <spawn.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include <sys/stat.h>
@@ -31,6 +32,10 @@ void test_execv(void) {
     assert(execv(TESTPATH, argv) == 0);
 }
 
+void test_system(void) {
+    assert(system(TESTPATH) == 0);
+}
+
 int main(void)
 {
     FILE *testfp;
@@ -50,6 +55,7 @@ int main(void)
     assert(stat(TESTPATH, &testsb) != -1);
 
     test_spawn();
+    test_system();
     test_execv();
 
     /* If all goes well, this is never reached because test_execv() replaces
