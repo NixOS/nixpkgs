@@ -16,8 +16,10 @@ let
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/
       cp -R . $out/
+      runHook postInstall
     '';
 
     meta = with stdenv.lib; {
