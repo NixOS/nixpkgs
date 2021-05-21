@@ -1655,6 +1655,8 @@ in
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
+  plausible = callPackage ../servers/web-apps/plausible { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
