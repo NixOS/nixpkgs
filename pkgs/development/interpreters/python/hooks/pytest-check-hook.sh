@@ -32,7 +32,7 @@ function pytestCheckPhase() {
     runHook preCheck
 
     # Compose arguments
-    args=" -m pytest"
+    args=" -m pytest -n $NIX_BUILD_CORES"
     if [ -n "$disabledTests" ]; then
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
       args+=" -k \""$disabledTestsString"\""
@@ -50,25 +50,25 @@ function pytestCheckPhase() {
       args+=" --ignore=\"$path\""
     done
     args+=" ${pytestFlagsArray[@]}"
-    eval "@pythonCheckInterpreter@ $args"
+
+    PYTHONPATH_TMP="@prefixPythonPath@:$PYTHONPATH:@pytest@"
+
+    PYTHONPATH=$PYTHONPATH_TMP eval "@pythonCheckInterpreter@ $args"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
 }
 
-if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
-    echo "Using pytestCheckPhase"
-    preDistPhases+=" pytestCheckPhase"
+# because pytestCheckHook has replaced setuptoolsCheckHook,
+# the hook must still be executed even if dontUsePytestCheck is set,
+# as long as dontUseSetuptoolsCheck is not set
+if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ] \
+    || ( [ -n "${dontUsePytestCheck-}" ] && [ -z "${dontUseSetuptoolsCheck-}" ] ); then
 
-    # It's almost always the case that setuptoolsCheckPhase should not be ran
-    # when the pytestCheckHook is being ran
-    if [ -z "${useSetuptoolsCheck-}" ]; then
-        dontUseSetuptoolsCheck=1
-
-        # Remove command if already injected into preDistPhases
-        if [[ "$preDistPhases" =~ "setuptoolsCheckPhase" ]]; then
-            echo "Removing setuptoolsCheckPhase"
-            preDistPhases=${preDistPhases/setuptoolsCheckPhase/}
-        fi
+    # prevent the hook from beeing executed more than once
+    # (It is now included by default in all setuptools based python builds)
+    if ! [[ "$preDistPhases" =~ "pytestCheckPhase" ]]; then
+        echo "Using pytestCheckPhase"
+        preDistPhases+=" pytestCheckPhase"
     fi
 fi

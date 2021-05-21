@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+, doCheck ? true, flaky, mock
 , sortedcontainers
 }:
 buildPythonPackage rec {
@@ -29,13 +29,17 @@ buildPythonPackage rec {
     sortedcontainers
   ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
+  checkInputs = [ flaky mock pexpect ];
   inherit doCheck;
 
-  checkPhase = ''
-    rm tox.ini # This file changes how py.test runs and breaks it
-    py.test tests/cover
+  # This file changes how pytest runs and breaks it
+  preCheck = ''
+    rm tox.ini
   '';
+
+  pytestFlagsArray = [
+    "tests/cover"
+  ];
 
   meta = with lib; {
     description = "A Python library for property based testing";

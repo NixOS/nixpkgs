@@ -9,6 +9,7 @@
 , mock
 , pyopenssl
 , pysocks
+, pytest_6_1
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     mock
     pytest-freezegun
     pytest-timeout
-    pytestCheckHook
+    (pytestCheckHook.override { enforcedPythonPackages = [ pytest_6_1 ]; })
     tornado
     trustme
   ];

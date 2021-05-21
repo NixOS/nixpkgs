@@ -32,6 +32,14 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
   '';
 
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   meta = {
      description = "LZ4 Bindings for Python";
      homepage = "https://github.com/python-lz4/python-lz4";

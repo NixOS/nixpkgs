@@ -28,6 +28,14 @@ buildPythonPackage rec {
 
   checkInputs = [ nose pyyaml ];
 
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   meta = {
     description = "A Python implementation of John Gruber's Markdown with Extension support";
     homepage = "https://github.com/Python-Markdown/markdown";

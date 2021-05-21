@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pkgs
+, hypothesis
+, openssl
 , six
 }:
 
@@ -16,7 +17,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
   # Only needed for tests
-  checkInputs = [ pkgs.openssl ];
+  checkInputs = [
+    hypothesis
+    openssl
+  ];
+
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
 
   meta = with lib; {
     description = "ECDSA cryptographic signature library";

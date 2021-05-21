@@ -19,6 +19,7 @@
 , iso8601
 , pytz
 , hypothesis
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {

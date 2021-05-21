@@ -9,6 +9,10 @@ buildPythonPackage rec {
     sha256 = "18d82244ee114f543149c66a6e0c14e9c4f8a1044b5cdaadd0f82159d6a6ff59";
   };
 
+  doCheck = false;
+
+  pythonImportsCheck = [ "filelock" ];
+
   meta = with lib; {
     homepage = "https://github.com/benediktschmitt/py-filelock";
     description = "A platform independent file lock for Python";

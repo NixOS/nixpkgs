@@ -48,6 +48,9 @@ in buildPythonPackage rec {
   pytestFlagsArray = [
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+
+    # parallel testing leads to failure
+    "-n" "0"
   ];
 
   disabledTests = [

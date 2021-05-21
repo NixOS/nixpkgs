@@ -17,6 +17,14 @@ buildPythonPackage rec {
     nose
   ];
 
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/google/yapf";
     description = "Yet Another Python Formatter";

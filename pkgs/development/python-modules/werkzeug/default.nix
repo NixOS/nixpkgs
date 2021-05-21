@@ -1,6 +1,7 @@
 { lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
 , pytestCheckHook, requests
+, pytest_6_1
 , pytest-timeout
 , isPy3k
  }:
@@ -15,7 +16,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
+  checkInputs = [
+    (pytestCheckHook.override { enforcedPythonPackages = [ pytest_6_1 ]; })
+    requests
+    hypothesis
+    pytest-timeout
+  ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"

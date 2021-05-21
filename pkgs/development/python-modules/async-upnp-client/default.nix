@@ -4,6 +4,7 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
+, pytest_6_1
 , pytest-asyncio
 , pytestCheckHook
 , python-didl-lite
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
+    (pytestCheckHook.override { enforcedPythonPackages = [ pytest_6_1 ]; })
     pytest-asyncio
   ];
 

@@ -26,7 +26,12 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
+
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

@@ -15,6 +15,16 @@ buildPythonPackage rec {
 
   checkInputs = [ unittest2 ];
 
+  # pytest based tests fail with:
+  #   TypeError: 'NoneType' object is not callable
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   meta = {
     description = "Backports and enhancements for the contextlib module";
     homepage = "https://contextlib2.readthedocs.org/";

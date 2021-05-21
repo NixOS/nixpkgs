@@ -33,6 +33,11 @@ if isPyPy then null else buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code";
 
+  # disable parallel testing which crashes on test_parse_c_type.py
+  pytestFlagsArray = [
+    "-n" "0"
+  ];
+
   doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
 
   checkInputs = [ pytestCheckHook ];

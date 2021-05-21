@@ -12,6 +12,10 @@ buildPythonPackage rec {
     sha256 = "1rxzhk5zwiggk45hl53zydvy70lk654kg0nc1p54090p402jz9p3";
   };
 
+  pytestFlagsArray = [
+    "src/tests/test.py"
+  ];
+
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/decorator";
     description = "Better living through Python with decorators";

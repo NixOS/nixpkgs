@@ -12,6 +12,9 @@ buildPythonPackage rec {
     sha256 = "177mdbw0livdjvp17sz6wsfrc32838m9y59v871gpgv2888raj8s";
   };
 
+  # package doesn't contain any tests
+  doCheck = false;
+
   pythonImportsCheck = [ "certifi" ];
 
   dontUseSetuptoolsCheck = true;

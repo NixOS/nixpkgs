@@ -19,6 +19,16 @@ buildPythonPackage rec {
       --replace "catch = 1" ""
   '';
 
+  # pytest based tests raise:
+  #   AttributeError: 'TestTestWithScenarios' object has no attribute 'impl'
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   propagatedBuildInputs = [ testtools ];
 
   meta = with lib; {

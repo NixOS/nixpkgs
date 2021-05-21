@@ -57,18 +57,20 @@ buildPythonPackage rec {
 
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   # test_missing_required_plugins will emit deprecation warning which is treated as error
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ \
-      --ignore=testing/test_junitxml.py \
-      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
+  disabledTest = [
+    "test_collect_pyargs_with_testpaths"
+    "test_missing_required_plugins"
+  ];
 
-    # tests leave behind unreproducible pytest binaries in the output directory, remove:
+  disabledTestPaths = [
+    "testing/test_junitxml.py"
+  ];
+
+  # tests leave behind unreproducible pytest binaries in the output directory, remove:
+  postCheck = ''
     find $out/lib -name "*-pytest-${version}.pyc" -delete
     # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
     find $out/lib -name "*opt-2.pyc" -delete
-
-    runHook postCheck
   '';
 
   # Remove .pytest_cache when using py.test in a Nix build

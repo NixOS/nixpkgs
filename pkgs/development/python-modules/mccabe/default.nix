@@ -11,6 +11,11 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest pytestrunner ];
 
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
+
   meta = with lib; {
     description = "McCabe checker, plugin for flake8";
     homepage = "https://github.com/flintwork/mccabe";

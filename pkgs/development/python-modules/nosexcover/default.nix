@@ -16,6 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ coverage nose ];
 
+  # does not contain any tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Extends nose.plugins.cover to add Cobertura-style XML reports";
     homepage = "https://github.com/cmheisel/nose-xcover/";

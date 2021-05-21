@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cython, libyaml, buildPackages }:
+{ lib, buildPythonPackage, fetchPypi, cython, libyaml, buildPackages, isPy27 }:
 
 buildPythonPackage rec {
   pname = "PyYAML";
@@ -12,6 +12,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython buildPackages.stdenv.cc ];
 
   buildInputs = [ libyaml ];
+
+  # couldn't get pytest based tests working
+  checkPhase = ''
+    python setup.py test
+  '';
 
   meta = with lib; {
     description = "The next generation YAML parser and emitter for Python";

@@ -18,6 +18,14 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests --processes $NIX_BUILD_CORES
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Immutable URL class for easy URL-building and manipulation";
     homepage = "https://github.com/codeinthehole/purl";

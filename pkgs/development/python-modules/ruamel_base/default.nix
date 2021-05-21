@@ -12,6 +12,9 @@ buildPythonPackage rec {
     sha256 = "1wswxrn4givsm917mfl39rafgadimf1sldpbjdjws00g1wx36hf0";
   };
 
+  # package doesn't contain tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
