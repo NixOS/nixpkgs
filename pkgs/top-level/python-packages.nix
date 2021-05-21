@@ -6907,6 +6907,8 @@ in {
 
   pyvisa = callPackage ../development/python-modules/pyvisa { };
 
+  pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };
