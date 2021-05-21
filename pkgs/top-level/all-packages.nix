@@ -28579,6 +28579,8 @@ in
 
   streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
 
+  stt = callPackage ../tools/audio/stt { };
+
   stuntrally = callPackage ../games/stuntrally {
     ogre = ogre1_9;
     mygui = mygui.override {
@@ -30035,8 +30037,6 @@ in
   });
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
-
-  deepspeech = callPackage ../misc/deepspeech { };
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
