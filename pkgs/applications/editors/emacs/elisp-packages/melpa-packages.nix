@@ -116,6 +116,13 @@ let
           stripDebugList = [ "share" ];
         });
 
+        erlang = super.erlang.overrideAttrs (attrs: {
+          buildInputs = attrs.buildInputs ++ [
+            pkgs.perl
+            pkgs.ncurses
+          ];
+        });
+
         # https://github.com/syl20bnr/evil-escape/pull/86
         evil-escape = super.evil-escape.overrideAttrs (attrs: {
           postPatch = ''
