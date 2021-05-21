@@ -1,4 +1,8 @@
-{ lib, fetchzip }:
+{ lib
+, fetchzip
+# select a font type to install.
+# Default is opentype with file extension '.otf'
+, type ? "opentype"}:
 
 let
   version = "3.18";
@@ -12,11 +16,6 @@ let
   };
 
 in
-
-{ # select a font type to install.
-  # Default is opentype with file extension '.otf'
-  type ? "opentype"
-}:
 
 assert builtins.hasAttr type exts;
 assert builtins.hasAttr type hashes;
