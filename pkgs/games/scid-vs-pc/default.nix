@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
+{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
   version = "4.21";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tcl tk libX11 zlib ];
+  buildInputs = [ tk libX11 zlib ];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
 
     for cmd in $out/bin/* ; do
       wrapProgram "$cmd" \
-        --set TCLLIBPATH "${tcl}/${tcl.libdir}" \
         --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
     done
   '';
@@ -79,4 +78,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 }
-

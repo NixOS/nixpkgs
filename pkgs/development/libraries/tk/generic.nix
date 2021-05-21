@@ -2,7 +2,7 @@
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
-stdenv.mkDerivation {
+tcl.mkTclDerivation {
   name = "tk-${tcl.version}";
 
   inherit src patches;
@@ -33,14 +33,13 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--enable-threads"
-    "--with-tcl=${tcl}/lib"
   ] ++ lib.optional stdenv.is64bit "--enable-64bit"
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
-  propagatedBuildInputs = [ tcl libXft ];
+  propagatedBuildInputs = [ libXft ];
 
   doCheck = false; # fails. can't find itself
 
