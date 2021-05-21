@@ -45,7 +45,8 @@ in mkYarnPackage rec {
 
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron"
+      --add-flags "$out/share/element/electron" \
+      --set-default MOZ_DBUS_REMOTE 1
   '';
 
   # Do not attempt generating a tarball for element-web again.

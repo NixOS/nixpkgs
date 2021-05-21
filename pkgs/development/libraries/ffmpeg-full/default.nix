@@ -272,7 +272,6 @@ stdenv.mkDerivation rec {
     # On some ARM platforms --enable-thumb
     "--enable-shared"
     (enableFeature true "pic")
-    (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
     (enableFeature enableLto "lto")
@@ -404,7 +403,7 @@ stdenv.mkDerivation rec {
     (enableFeature (zeromq4 != null) "libzmq")
     (enableFeature (zlib != null) "zlib")
     (enableFeature (isLinux && vulkan-loader != null) "vulkan")
-    (enableFeature (glslang != null) "libglslang")
+    (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
      * Developer flags
@@ -416,6 +415,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
+  ] ++ optionals stdenv.cc.isClang [
+    "--cc=clang"
+    "--cxx=clang++"
   ];
 
   nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
@@ -426,12 +428,12 @@ stdenv.mkDerivation rec {
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
-    zeromq4 zlib glslang
+    zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l vulkan-loader ]
+    ++ optionals isLinux [ alsaLib libraw1394 libv4l vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation

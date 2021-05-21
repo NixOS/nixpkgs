@@ -2782,6 +2782,8 @@ in
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
+  jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
+
   jiten = callPackage ../applications/misc/jiten { };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
@@ -3096,6 +3098,8 @@ in
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   socklog = callPackage ../tools/system/socklog { };
+
+  soju = callPackage ../applications/networking/soju { };
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
@@ -4886,6 +4890,8 @@ in
   gh = callPackage ../applications/version-management/git-and-tools/gh { };
 
   ghorg = callPackage ../applications/version-management/git-and-tools/ghorg { };
+
+  ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
@@ -10257,6 +10263,8 @@ in
 
   ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
+
+  ats-acc = callPackage ../development/tools/ats-acc { };
 
   avra = callPackage ../development/compilers/avra { };
 

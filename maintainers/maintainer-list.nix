@@ -6104,6 +6104,12 @@
     githubId = 2914269;
     name = "Malo Bourgon";
   };
+  malvo = {
+    email = "malte@malvo.org";
+    github = "malte-v";
+    githubId = 34393802;
+    name = "Malte Voos";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
@@ -11490,6 +11496,12 @@
       longkeyid = "rsa4096/0x68616B2D8AC4DCC5";
       fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
     }];
+  };
+  zeri = {
+    name = "zeri";
+    email = "68825133+zeri42@users.noreply.github.com";
+    github = "zeri42";
+    githubId = 68825133;
   };
   zseri = {
     name = "zseri";

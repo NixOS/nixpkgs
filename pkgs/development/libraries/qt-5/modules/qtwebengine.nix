@@ -12,6 +12,7 @@
 , libcap
 , pciutils
 , systemd
+, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
@@ -133,6 +134,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional stdenv.isLinux "-webengine-webrtc-pipewire"
     ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -165,6 +167,9 @@ qtModule {
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
+
+    # Pipewire
+    pipewire_0_2
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
