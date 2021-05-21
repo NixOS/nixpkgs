@@ -10,7 +10,7 @@
 , cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, ffmpeg_3
+, ffmpeg
 , gdk-pixbuf
 , glib
 , graphviz
@@ -46,7 +46,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.5.1";
+  version = "4.5.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "05ybbxq2yqzy3f3vzq8c3szs3qr0zl64la53icpqnmfakwnps5gs";
+    sha256 = "sha256-lDj2OkWuodPHpvoJ5W2GivzVIeMnprb42kAnJKfKtdg=";
   };
 
   # Do not build static libraries
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg_3
+    ffmpeg
     gdk-pixbuf
     glib
     gtk2

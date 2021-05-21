@@ -196,6 +196,12 @@
      It was broken since the switch to cgroups-v2.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>linuxPackages.ati_drivers_x11</literal> kernel modules have been removed.
+     The drivers only supported kernels prior to 4.2, and thus have become obsolete.
+    </para>
+   </listitem>
     <listitem>
       <para>
         The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.
@@ -1099,6 +1105,11 @@ environment.systemPackages = [
     <para>
      The newly enabled <literal>systemd-pstore.service</literal> now automatically evacuates crashdumps and panic logs from the persistent storage to <literal>/var/lib/systemd/pstore</literal>.
      This prevents NVRAM from filling up, which ensures the latest diagnostic data is always stored and alleviates problems with writing new boot configurations.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nixpkgs now contains <link xlink:href="https://github.com/NixOS/nixpkgs/pull/118232">automatically packaged GNOME Shell extensions</link> from the <link xlink:href="https://extensions.gnome.org/">GNOME Extensions</link> portal. You can find them, filed by their UUID, under <literal>gnome38Extensions</literal> attribute for GNOME 3.38 and under <literal>gnome40Extensions</literal> for GNOME 40. Finally, the <literal>gnomeExtensions</literal> attribute contains extensions for the latest GNOME Shell version in Nixpkgs, listed under a more human-friendly name. The unqualified attribute scope also contains manually packaged extensions. Note that the automatically packaged extensions are provided for convenience and are not checked or guaranteed to work.
     </para>
    </listitem>
   </itemizedlist>

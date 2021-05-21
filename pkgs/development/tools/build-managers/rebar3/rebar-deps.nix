@@ -16,11 +16,6 @@
     version = "1.8.1";
     sha256 = "sha256-5FdFrenEdqmkaeoIQOQYqxk2DcRPAaIzME4RikRIa6A=";
   };
-  parse_trans = fetchHex {
-    pkg = "parse_trans";
-    version = "3.3.1";
-    sha256 = "sha256-B82Vd4hfVjYtQU6MTE5r3xDUOodnq7ktJMvoskxUiIs=";
-  };
   getopt = fetchHex {
     pkg = "getopt";
     version = "1.0.1";
@@ -33,8 +28,8 @@
   };
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
-    version = "1.4.0";
-    sha256 = "sha256-GF7PXPQ7qzoBPds2FM57un9seoJ5BOZOV9pU/N/c4uY=";
+    version = "1.5.0";
+    sha256 = "sha256-PnxvsrpMKbDdXf6dAxtmRJ4giOzsGoFGW9n94F7X0Ns=";
   };
   cth_readable = fetchHex {
     pkg = "cth_readable";
@@ -48,8 +43,8 @@
   };
   certifi = fetchHex {
     pkg = "certifi";
-    version = "2.5.3";
-    sha256 = "sha256-7VFqyzkpsQEgip1wAGLVIPOVPaO2uRjYZhBv+pgOHBA=";
+    version = "2.6.1";
+    sha256 = "sha256-UkyXtJkbOEndXBemMSI4licsawr0RneLpGdaHf9Tu34=";
   };
   bbmustache = fetchHex {
     pkg = "bbmustache";

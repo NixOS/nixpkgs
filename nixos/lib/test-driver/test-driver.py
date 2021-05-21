@@ -3,6 +3,7 @@ from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
 from xml.sax.saxutils import XMLGenerator
+from colorama import Style
 import queue
 import io
 import _thread
@@ -151,6 +152,8 @@ class Logger:
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs={})
 
+        self._print_serial_logs = True
+
     def close(self) -> None:
         self.xml.endElement("logfile")
         self.xml.endDocument()
@@ -174,15 +177,21 @@ class Logger:
         self.drain_log_queue()
         self.log_line(message, attributes)
 
-    def enqueue(self, message: Dict[str, str]) -> None:
-        self.queue.put(message)
+    def log_serial(self, message: str, machine: str) -> None:
+        self.enqueue({"msg": message, "machine": machine, "type": "serial"})
+        if self._print_serial_logs:
+            eprint(Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL)
+
+    def enqueue(self, item: Dict[str, str]) -> None:
+        self.queue.put(item)
 
     def drain_log_queue(self) -> None:
         try:
             while True:
                 item = self.queue.get_nowait()
-                attributes = {"machine": item["machine"], "type": "serial"}
-                self.log_line(self.sanitise(item["msg"]), attributes)
+                msg = self.sanitise(item["msg"])
+                del item["msg"]
+                self.log_line(msg, item)
         except Empty:
             pass
 
@@ -307,8 +316,9 @@ class Machine:
             start_command += "-cdrom " + args["cdrom"] + " "
 
         if "usb" in args:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
             start_command += (
-                "-device piix3-usb-uhci -drive "
+                "-device usb-ehci -drive "
                 + "id=usbdisk,file="
                 + args["usb"]
                 + ",if=none,readonly "
@@ -326,6 +336,9 @@ class Machine:
 
     def log(self, msg: str) -> None:
         self.logger.log(msg, {"machine": self.name})
+
+    def log_serial(self, msg: str) -> None:
+        self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
@@ -784,8 +797,7 @@ class Machine:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 self.last_lines.put(line)
-                eprint("{} # {}".format(self.name, line))
-                self.logger.enqueue({"msg": line, "machine": self.name})
+                self.log_serial(line)
 
         _thread.start_new_thread(process_serial_output, ())
 
@@ -925,6 +937,16 @@ def run_tests() -> None:
     for machine in machines:
         if machine.is_up():
             machine.execute("sync")
+
+
+def serial_stdout_on() -> None:
+    global log
+    log._print_serial_logs = True
+
+
+def serial_stdout_off() -> None:
+    global log
+    log._print_serial_logs = False
 
 
 @contextmanager

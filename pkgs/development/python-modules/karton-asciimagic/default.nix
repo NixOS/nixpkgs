@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "karton-asciimagic";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d15fhb3y0jpwdfm4y11i6pmfa9szr943cm6slvf0ir31f9nznyz";
+    sha256 = "0vj4b8man81g99g4c53zyvp1gc47c2imj5ha9r4z4bf8gs3aqsv6";
   };
 
   propagatedBuildInputs = [
