@@ -89,6 +89,8 @@ jobs:
         working-directory: ${{ env.BUILDDIR }}
         run: make install VERBOSE=1
       - name: "notify: ok"
-        run: curl -XPOST -d '{"msgtype":"m.text", "body":"OK ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}"}' 'https://matrix.org/_matrix/client/r0/rooms/%21${{ secrets.MATRIX_ROOM }}/send/m.room.message?access_token=${{ secrets.MATRIX_TOKEN }}'
+        run: |
+            curl -XPOST -d '{"msgtype":"m.text", "body":"OK ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}"}' 'https://matrix.org/_matrix/client/r0/rooms/%21${{ secrets.MATRIX_ROOM }}/send/m.room.message?access_token=${{ secrets.MATRIX_TOKEN }}'
       - name: "notify: fail"
-        run: curl -XPOST -d '{"msgtype":"m.text", "body": "FAIL ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}\n.. DIFF ${{ github.event.compare }}" }' 'https://matrix.org/_matrix/client/r0/rooms/%21${{ secrets.MATRIX_ROOM }}/send/m.room.message?access_token=${{ secrets.MATRIX_TOKEN }}'
+        run: |
+            curl -XPOST -d '{"msgtype":"m.text", "body": "FAIL ${{ github.workflow }} in ${{ github.repository }} ${{ github.actor }} on ${{ github.event.ref }}\n.. ${{ steps.pre_build.outputs.message }}\n.. DIFF ${{ github.event.compare }}" }' 'https://matrix.org/_matrix/client/r0/rooms/%21${{ secrets.MATRIX_ROOM }}/send/m.room.message?access_token=${{ secrets.MATRIX_TOKEN }}'
