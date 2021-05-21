@@ -1893,6 +1893,18 @@ final: prev:
     meta.homepage = "https://github.com/travitch/hasksyn/";
   };
 
+  hiPairs = buildVimPluginFrom2Nix {
+    pname = "hiPairs";
+    version = "2020-12-10";
+    src = fetchFromGitHub {
+      owner = "Yggdroot";
+      repo = "hiPairs";
+      rev = "8272bf6979d0ee65a3fdbbb97eff3dda79b661b2";
+      sha256 = "1hcskq9zdkf8vlxwd2n403m4rq7495v2fj35hjf6461hqx9v9dnw";
+    };
+    meta.homepage = "https://github.com/Yggdroot/hiPairs/";
+  };
+
   hlint-refactor-vim = buildVimPluginFrom2Nix {
     pname = "hlint-refactor-vim";
     version = "2015-12-05";

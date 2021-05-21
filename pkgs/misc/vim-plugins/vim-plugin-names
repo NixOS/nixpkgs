@@ -781,6 +781,7 @@ Xuyuanp/nerdtree-git-plugin
 Xuyuanp/scrollbar.nvim
 yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
+Yggdroot/hiPairs
 Yggdroot/indentLine
 Yggdroot/LeaderF
 Yilin-Yang/vim-markbar
