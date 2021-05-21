@@ -30321,9 +30321,7 @@ in
       })
     nix
     nixStable
-    nixUnstable
-    nixFlakes
-    nixExperimental;
+    nixUnstable;
 
   nixStatic = pkgsStatic.nix;
 
