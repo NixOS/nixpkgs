@@ -44,7 +44,7 @@ let
         homepage = "https://www.tcl.tk/";
         license = licenses.tcltk;
         platforms = platforms.all;
-        maintainers = with maintainers; [ vrthra ];
+        maintainers = with maintainers; [ agbrooks ];
       };
 
       passthru = rec {
