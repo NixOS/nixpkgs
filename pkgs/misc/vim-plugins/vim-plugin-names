@@ -775,6 +775,7 @@ xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
 Xuyuanp/nerdtree-git-plugin
+Xuyuanp/scrollbar.nvim
 yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
 Yggdroot/indentLine

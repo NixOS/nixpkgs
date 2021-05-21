@@ -4163,6 +4163,18 @@ final: prev:
     meta.homepage = "https://github.com/saltstack/salt-vim/";
   };
 
+  scrollbar-nvim = buildVimPluginFrom2Nix {
+    pname = "scrollbar-nvim";
+    version = "2020-09-28";
+    src = fetchFromGitHub {
+      owner = "Xuyuanp";
+      repo = "scrollbar.nvim";
+      rev = "72a4174a47a89b7f89401fc66de0df95580fa48c";
+      sha256 = "10kk74pmbzc4v70n8vwb2zk0ayr147xy9zk2sbr78zwqf12gas9y";
+    };
+    meta.homepage = "https://github.com/Xuyuanp/scrollbar.nvim/";
+  };
+
   self = buildVimPluginFrom2Nix {
     pname = "self";
     version = "2014-05-28";
