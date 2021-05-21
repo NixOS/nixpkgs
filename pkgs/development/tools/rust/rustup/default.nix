@@ -10,6 +10,8 @@
 , zlib
 , Security
 , CoreServices
+, libiconv
+, xz
 }:
 
 let
@@ -36,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     curl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
