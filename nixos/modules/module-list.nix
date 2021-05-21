@@ -76,7 +76,6 @@
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu-pro.nix
-  ./hardware/video/ati.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
