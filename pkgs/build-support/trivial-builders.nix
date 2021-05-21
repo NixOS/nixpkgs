@@ -300,12 +300,17 @@ rec {
    *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
    * ...
    *
-
    * # creates multiple outputs, where the `out` output is the result
    * # of combining the main outputs of all packages in `paths`, and
-   * # `bin` and `dev` are the result of combining their corresponding
+   * # `dev` and `man` are the result of combining their corresponding
    * # outputs of all packages in `paths`
-   * symlinkJoin { name = "multiexample"; paths = [ pkgs.libpng pkgs.openssl ]; outputs = [ "out" "bin" "dev" ]; }
+   * symlinkJoin { name = "multiexample"; paths = [ pkgs.libpng pkgs.openssl ]; outputs = [ "out" "dev" "man" ]; }
+   *
+   * Note that this means that if a package uses `out` as a secondary
+   * output, you need to explicitly include it if you're interested in
+   * its contents. For example, if you want the `openssl`'s `out`
+   * output, add `pkgs.openssl.out` to `paths`.
+   *
    *
    * symlinkJoin and linkFarm are similar functions, but they output
    * derivations with different structure.
