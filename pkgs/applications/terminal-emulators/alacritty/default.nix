@@ -31,6 +31,7 @@
 , CoreServices
 , CoreText
 , Foundation
+, libiconv
 , OpenGL
 }:
 let
@@ -80,6 +81,7 @@ rustPlatform.buildRustPackage rec {
     CoreServices
     CoreText
     Foundation
+    libiconv
     OpenGL
   ];
 

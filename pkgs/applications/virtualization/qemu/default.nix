@@ -103,10 +103,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Otherwise tries to ensure /var/run exists.
   postPatch = ''
+    # Otherwise tries to ensure /var/run exists.
     sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
         qga/meson.build
+
+    # TODO: On aarch64-darwin, we automatically codesign everything, but qemu
+    # needs specific entitlements and does its own signing. This codesign
+    # command fails, but we have no fix at the moment, so this disables it.
+    # This means `-accel hvf` is broken for now, on aarch64-darwin only.
+    substituteInPlace meson.build \
+      --replace 'if exe_sign' 'if false'
   '';
 
   preConfigure = ''
