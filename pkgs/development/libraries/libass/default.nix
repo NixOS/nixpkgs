@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, yasm
 , freetype, fribidi, harfbuzz
-, encaSupport ? true, enca ? null # enca support
 , fontconfigSupport ? true, fontconfig ? null # fontconfig support
 , rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
 , libiconv
 }:
 
-assert encaSupport -> enca != null;
 assert fontconfigSupport -> fontconfig != null;
 
 let
@@ -25,7 +23,6 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag encaSupport "enca")
     (mkFlag fontconfigSupport "fontconfig")
     (mkFlag rasterizerSupport "rasterizer")
     (mkFlag largeTilesSupport "large-tiles")
@@ -34,7 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config yasm ];
 
   buildInputs = [ freetype fribidi harfbuzz ]
-    ++ optional encaSupport enca
     ++ optional fontconfigSupport fontconfig
     ++ optional stdenv.isDarwin libiconv;
 
