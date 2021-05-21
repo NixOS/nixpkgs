@@ -1,0 +1,39 @@
+diff --color -ur a/scripts/xephyr b/scripts/xephyr
+--- a/scripts/xephyr	2021-05-18 18:36:57.910662743 +0200
++++ b/scripts/xephyr	2021-05-18 18:44:28.004382216 +0200
+@@ -13,7 +13,7 @@
+ XEPHYR_PID=$!
+ (
+   sleep 1
+-  env DISPLAY=${XDISPLAY} QTILE_XEPHYR=1 ${PYTHON} "${HERE}"/../bin/qtile start -l ${LOG_LEVEL} $@ &
++  env DISPLAY=${XDISPLAY} QTILE_XEPHYR=1 ${PYTHON} "${HERE}"/../bin/qtile start $@ &
+   QTILE_PID=$!
+   env DISPLAY=${XDISPLAY} ${APP} &
+   wait $QTILE_PID
+diff --color -ur a/test/conftest.py b/test/conftest.py
+--- a/test/conftest.py	2021-05-18 18:36:57.915662904 +0200
++++ b/test/conftest.py	2021-05-18 22:12:13.826803443 +0200
+@@ -364,7 +364,7 @@
+ 
+         @Retry(ignore_exceptions=(RuntimeError,), fail_msg='Window never appeared...')
+         def success():
+-            while failed is None or not failed():
++            while failed is not None and not failed():
+                 if len(client.windows()) > start:
+                     return True
+             raise RuntimeError("not here yet")
+@@ -384,10 +384,12 @@
+ 
+         def spawn():
+             nonlocal proc
+-            proc = subprocess.Popen(args, env={"DISPLAY": self.display})
++            pythonpath=os.environ["PYTHONPATH"]
++            print("lol pythonpath : {pythonpath}")
++            proc = subprocess.Popen(args, env={"DISPLAY": self.display, "PYTHONPATH":pythonpath})
+ 
+         def failed():
+-            if proc.poll() is not None:
++            if proc is None or proc.poll() is not None:
+                 return True
+             return False
+ 
