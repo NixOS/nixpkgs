@@ -6905,6 +6905,8 @@ in {
 
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
+  pyvisa = callPackage ../development/python-modules/pyvisa { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };
