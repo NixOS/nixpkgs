@@ -529,6 +529,7 @@ ray-x/aurora
 ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog
+rcarriga/nvim-dap-ui
 rhysd/committia.vim
 rhysd/devdocs.vim
 rhysd/git-messenger.vim

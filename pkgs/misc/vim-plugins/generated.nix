@@ -3322,6 +3322,18 @@ final: prev:
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
   };
 
+  nvim-dap-ui = buildVimPluginFrom2Nix {
+    pname = "nvim-dap-ui";
+    version = "2021-05-21";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "nvim-dap-ui";
+      rev = "cf7a6bb4e7c93ef60a18097bd24a6db2baea7306";
+      sha256 = "0mv7230xpcicaypmlfjsyhzwb6mp8vyp0sdzis5z2ixvm7rmh70a";
+    };
+    meta.homepage = "https://github.com/rcarriga/nvim-dap-ui/";
+  };
+
   nvim-dap-virtual-text = buildVimPluginFrom2Nix {
     pname = "nvim-dap-virtual-text";
     version = "2021-05-16";
