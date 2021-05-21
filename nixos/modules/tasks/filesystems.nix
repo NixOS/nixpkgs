@@ -309,7 +309,7 @@ in
         "mount-pstore" = {
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore";
+            ExecStart = "${pkgs.utillinux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore";
             ExecStartPost = pkgs.writeShellScript "wait-for-pstore.sh" ''
               set -eu
               TRIES=0
