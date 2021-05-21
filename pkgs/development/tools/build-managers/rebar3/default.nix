@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchpatch,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
@@ -20,6 +20,15 @@ let
     };
 
     buildInputs = [ erlang ];
+
+    patches = [
+      # TODO: remove this on next rebar3 release
+      (fetchpatch {
+        name = "escriptize-erl-libs";
+        url = "https://github.com/erlang/rebar3/commit/8049a92512420b0967a4c23acfa304d8ca7a712e.patch";
+        sha256 = "0jzdy7n2nz4v38nn76bgjcmssvqgvdhy9v2gl867ylwqn1y5sdm1";
+      })
+    ];
 
     postPatch = ''
       mkdir -p _checkouts _build/default/lib/
@@ -100,7 +109,7 @@ let
         # global-deps.patch makes it possible to use REBAR_GLOBAL_PLUGINS to
         # instruct rebar3 to always load a certain plugin. It is necessary since
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
-        patches = [ ./skip-plugins.patch ./global-plugins.patch ];
+        patches = old.patches ++ [ ./skip-plugins.patch ./global-plugins.patch ];
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
