@@ -65,7 +65,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 # consumers by loading the developer's config from a build
 # directory (which doesn't have the rest of the config
 # installed inside it).
-find_package(Calamares 3.2.26 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
+find_package(Calamares 3.2.40 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
 if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
     message(FATAL_ERROR "Calamares found with missing CMake targets")
 endif()
@@ -122,6 +122,7 @@ calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-nixos LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # Python job
+calamares_add_module_subdirectory( modules/unpackfsc LIST_SKIPPED_MODULES )
 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
