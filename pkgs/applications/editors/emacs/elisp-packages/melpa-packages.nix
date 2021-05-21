@@ -4,11 +4,11 @@
 
 To update the list of packages from MELPA,
 
-1. Run ./update-melpa
+1. Run `./update-melpa`
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
-3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
+     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
+     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
+3. Run `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
 
@@ -17,8 +17,8 @@ Alternatively, run the following command:
 ./update-from-overlay
 
 It will update both melpa and elpa packages using
-https://github.com/nix-community/emacs-overlay. It's almost
-instantenous and formats commits for you.
+https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+formats commits for you.
 
 */
 
