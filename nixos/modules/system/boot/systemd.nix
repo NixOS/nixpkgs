@@ -90,7 +90,6 @@ let
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
       "systemd-remount-fs.service"
-      "systemd-pstore.service"
       "local-fs.target"
       "local-fs-pre.target"
       "remote-fs.target"
@@ -1184,7 +1183,6 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
-    systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
