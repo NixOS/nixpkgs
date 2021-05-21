@@ -8898,6 +8898,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/vim-which-key/";
   };
 
+  vim-wordmotion = buildVimPluginFrom2Nix {
+    pname = "vim-wordmotion";
+    version = "2021-04-25";
+    src = fetchFromGitHub {
+      owner = "chaoren";
+      repo = "vim-wordmotion";
+      rev = "f6a2064444f39ba52161b16ac1429ee87c1af76d";
+      sha256 = "0y69jkgh9pf4b0c4pxgqvf43gq8amz9qwhq1cg38zriy2m4kxi7h";
+    };
+    meta.homepage = "https://github.com/chaoren/vim-wordmotion/";
+  };
+
   vim-wordy = buildVimPluginFrom2Nix {
     pname = "vim-wordy";
     version = "2020-10-24";
