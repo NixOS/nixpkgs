@@ -1,6 +1,6 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     udev
     libX11
     libxcb
+    libxshmfence
+    libxkbcommon
     libXi
     libXcursor
     libXdamage
