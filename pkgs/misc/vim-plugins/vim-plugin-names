@@ -532,6 +532,7 @@ rbgrouleff/bclose.vim
 rbong/vim-flog
 rcarriga/nvim-dap-ui
 rhysd/committia.vim
+rhysd/conflict-marker.vim
 rhysd/devdocs.vim
 rhysd/git-messenger.vim
 rhysd/vim-clang-format

@@ -712,6 +712,18 @@ final: prev:
     meta.homepage = "https://github.com/chikatoike/concealedyank.vim/";
   };
 
+  conflict-marker-vim = buildVimPluginFrom2Nix {
+    pname = "conflict-marker-vim";
+    version = "2020-09-23";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "conflict-marker.vim";
+      rev = "6a9b8f92a57ea8a90cbf62c960db9e5894be2d7a";
+      sha256 = "0vw5kvnmwwia65gni97vk42b9s47r3p5bglrhpcxsvs3f4s250vq";
+    };
+    meta.homepage = "https://github.com/rhysd/conflict-marker.vim/";
+  };
+
   conjure = buildVimPluginFrom2Nix {
     pname = "conjure";
     version = "2021-05-15";
