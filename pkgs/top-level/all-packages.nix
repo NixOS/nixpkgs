@@ -7837,6 +7837,8 @@ in
 
   polygraph = callPackage ../tools/networking/polygraph { };
 
+  pr-tracker = callPackage ../servers/pr-tracker { };
+
   progress = callPackage ../tools/misc/progress { };
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
