@@ -19,16 +19,18 @@ in {
     server = { pkgs, ... }: {
       networking.firewall.allowedTCPPorts = [ port ];
       services.mosquitto = {
-        inherit port;
         enable = true;
-        host = "0.0.0.0";
-        checkPasswords = true;
-        users.${username} = {
-          inherit password;
-          acl = [
-            "topic readwrite ${topic}"
-          ];
-        };
+        listeners = [
+          {
+            inherit port;
+            users.${username} = {
+              inherit password;
+              acl = [
+                "readwrite ${topic}"
+              ];
+            };
+          }
+        ];
       };
 
       # disable private /tmp for this test
