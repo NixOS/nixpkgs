@@ -27,7 +27,7 @@ assert versionAtLeast (getVersion erlang) minimumOTPVersion;
 stdenv.mkDerivation ({
   name = "${baseName}-${version}";
 
-  inherit src version;
+  inherit src version debugInfo;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ erlang ];
@@ -36,8 +36,6 @@ stdenv.mkDerivation ({
   LC_TYPE = "C.UTF-8";
 
   setupHook = ./setup-hook.sh;
-
-  inherit debugInfo;
 
   buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
