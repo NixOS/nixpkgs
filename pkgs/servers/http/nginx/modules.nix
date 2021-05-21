@@ -491,7 +491,7 @@ in
       rev = "92b80642538eec4cfc98114dec5917b8d820e912";
       sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg_4 ];
+    inputs = [ pkgs.ffmpeg ];
   };
 
   vod = {
