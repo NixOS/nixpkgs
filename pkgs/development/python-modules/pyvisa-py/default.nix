@@ -2,20 +2,22 @@
 , fetchFromGitHub
 , buildPythonPackage
 , setuptools-scm
-, setuptools
+, pyserial
+, pyusb
+, pyvisa
 , typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "pyvisa";
-  version = "1.11.3";
+  pname = "pyvisa-py";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
-    repo = "pyvisa";
+    repo = "pyvisa-py";
     rev = version;
-    hash = "sha256-Qe7W1zPI1aedLDnhkLTDPTa/lsNnCGik5Hu+jLn+meA=";
+    hash = "sha256-V1BS+BvHVI8h/rynLnOHvQdIR6RwQrNa2p2S6GQug98=";
   };
 
   nativeBuildInputs = [
@@ -23,17 +25,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    pyserial
+    pyusb
+    pyvisa
     typing-extensions
-    setuptools
   ];
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  # Test can't find cli tool bin path correctly
-  disabledTests = [
-    "test_visa_info"
   ];
 
   postConfigure = ''
@@ -41,8 +40,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
-    homepage = "https://github.com/pyvisa/pyvisa";
+    description = "PyVISA backend that implements a large part of the Virtual Instrument Software Architecture in pure Python";
+    homepage = "https://github.com/pyvisa/pyvisa-py";
     license = licenses.mit;
     maintainers = with maintainers; [ mvnetbiz ];
   };
