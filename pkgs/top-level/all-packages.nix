@@ -30084,7 +30084,7 @@ in
 
   scotch = callPackage ../applications/science/math/scotch { };
 
-  mininet = callPackage ../tools/virtualization/mininet { };
+  mininet = callPackage ../tools/virtualization/mininet { python = python3; };
 
   msieve = callPackage ../applications/science/math/msieve { };
 
