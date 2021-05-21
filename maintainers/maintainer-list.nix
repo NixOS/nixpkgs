@@ -8721,6 +8721,12 @@
     githubId = 221121;
     name = "Robert P. Seaton";
   };
+  rraval = {
+    email = "ronuk.raval@gmail.com";
+    github = "rraval";
+    githubId = 373566;
+    name = "Ronuk Raval";
+  };
   rszibele = {
     email = "richard@szibele.com";
     github = "rszibele";
