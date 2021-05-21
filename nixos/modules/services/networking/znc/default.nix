@@ -299,9 +299,8 @@ in
         # Ensure essential files exist.
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
             echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            cp --no-clobber ${cfg.configFile} ${cfg.dataDir}/configs/znc.conf
+            cp --no-preserve=ownership --no-clobber ${cfg.configFile} ${cfg.dataDir}/configs/znc.conf
             chmod u+rw ${cfg.dataDir}/configs/znc.conf
-            chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
         fi
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
