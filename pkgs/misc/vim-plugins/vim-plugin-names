@@ -603,6 +603,7 @@ solarnz/arcanist.vim
 sonph/onehalf
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
+steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht

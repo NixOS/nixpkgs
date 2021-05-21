@@ -3754,6 +3754,18 @@ final: prev:
     meta.homepage = "https://github.com/tmsvg/pear-tree/";
   };
 
+  pears-nvim = buildVimPluginFrom2Nix {
+    pname = "pears-nvim";
+    version = "2021-05-21";
+    src = fetchFromGitHub {
+      owner = "steelsojka";
+      repo = "pears.nvim";
+      rev = "658f9e25f46005aa0e12de81abbfadefaad56e39";
+      sha256 = "11v92n6qpy7ryhyg6yqq4b48mskzm6ypc9vgfpr2l5irppai1x1r";
+    };
+    meta.homepage = "https://github.com/steelsojka/pears.nvim/";
+  };
+
   peskcolor-vim = buildVimPluginFrom2Nix {
     pname = "peskcolor-vim";
     version = "2016-06-11";
