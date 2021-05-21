@@ -4,6 +4,12 @@
 
 In this document and related Nix expressions, we use the term, _BEAM_, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
 
+## Available versions and deprecations schedule
+
+### Elixir
+
+nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/elixir/compatibility-and-deprecations.html) and keeps the last 5 released versions of Elixir available.
+
 ## Structure {#beam-structure}
 
 All BEAM-related expressions are available via the top-level `beam` attribute, which includes:
