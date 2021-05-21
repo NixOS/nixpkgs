@@ -3538,6 +3538,18 @@ final: prev:
     meta.homepage = "https://github.com/romgrk/nvim-treesitter-context/";
   };
 
+  nvim-treesitter-pyfold = buildVimPluginFrom2Nix {
+    pname = "nvim-treesitter-pyfold";
+    version = "2021-05-20";
+    src = fetchFromGitHub {
+      owner = "eddiebergman";
+      repo = "nvim-treesitter-pyfold";
+      rev = "9a50e33acf6b6e711e6d5cc82456adb6f9b9dc3d";
+      sha256 = "0mbd5bp2c6kxn9dmc3vn3ia0silc7kb8mwwcm3q78n866ab4vpcc";
+    };
+    meta.homepage = "https://github.com/eddiebergman/nvim-treesitter-pyfold/";
+  };
+
   nvim-treesitter-refactor = buildVimPluginFrom2Nix {
     pname = "nvim-treesitter-refactor";
     version = "2021-05-03";
