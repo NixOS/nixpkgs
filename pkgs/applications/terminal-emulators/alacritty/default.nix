@@ -24,6 +24,7 @@
 , libxkbcommon
 , wayland
 , xdg-utils
+, libiconv
 
   # Darwin Frameworks
 , AppKit
@@ -81,6 +82,7 @@ rustPlatform.buildRustPackage rec {
     CoreText
     Foundation
     OpenGL
+    libiconv
   ];
 
   outputs = [ "out" "terminfo" ];
