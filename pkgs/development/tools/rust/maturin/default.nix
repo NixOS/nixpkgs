@@ -5,6 +5,7 @@
 , rustPlatform
 , pkg-config
 , dbus
+, libiconv
 , Security
 }:
 
@@ -23,8 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optional stdenv.isLinux dbus
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isLinux [ dbus ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
