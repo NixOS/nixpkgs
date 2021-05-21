@@ -4654,7 +4654,7 @@ in {
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override {
-    inherit python;
+    python3 = python;
   })).py;
 
   minio = callPackage ../development/python-modules/minio { };

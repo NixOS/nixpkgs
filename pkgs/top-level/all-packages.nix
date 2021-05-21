@@ -31330,9 +31330,7 @@ with pkgs;
 
   scotch = callPackage ../applications/science/math/scotch { };
 
-  mininet = callPackage ../tools/virtualization/mininet {
-    python = python3;
-  };
+  mininet = callPackage ../tools/virtualization/mininet { };
 
   msieve = callPackage ../applications/science/math/msieve { };
 
