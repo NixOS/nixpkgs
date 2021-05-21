@@ -8,7 +8,6 @@
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
 , withDebug ? false
-, fetchpatch
 }:
 
 with lib;
@@ -16,14 +15,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.30.1";
+  version = "1.31.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0cp6gbn38f1cr0jkr64vvwz005cvnwj3hgfxs147wap9w228k46r";
+    sha256 = "0x6vg2z7x83b127flbfqkgpakd5md7n2w39dvs8s16facdy2lvry";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -40,11 +39,6 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
-    # cgroups: fix network interfaces detection when using virsh
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/11096.patch";
-      sha256 = "0f2rd7kgbwbyq9wyn085d213ifvivnpl3qlx1gjrg42rkbi4n8jj";
-    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
