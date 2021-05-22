@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0507zw7g449zk7dcq56adcdp71inbqfdmp6y5yk4x4j7kkp6pii9";
   };
 
-  buildInputs = [ psutil ];
+  propagatedBuildInputs = [ psutil ];
 
   meta = with lib; {
     description = "Segment for Powerline showing the current memory usage in percent or absolute values.";
