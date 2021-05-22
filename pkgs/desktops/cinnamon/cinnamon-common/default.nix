@@ -6,6 +6,7 @@
 , cinnamon-desktop
 , cinnamon-menus
 , cinnamon-session
+, cinnamon-translations
 , cjs
 , fetchFromGitHub
 , gdk-pixbuf
@@ -115,7 +116,10 @@ stdenv.mkDerivation rec {
     gtk-doc
   ];
 
-  configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" "--enable-gtk-doc=no" ];
+  # use locales from cinnamon-translations (not using --localedir because datadir is used)
+  postInstall = ''
+    ln -s ${cinnamon-translations}/share/locale $out/share/locale
+  '';
 
   postPatch = ''
     find . -type f -exec sed -i \
