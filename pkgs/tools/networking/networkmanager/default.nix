@@ -51,6 +51,7 @@ in stdenv.mkDerivation rec {
     "-Dlibaudit=yes-disabled-by-default"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
+    "-Dmore_logging=false"
   ];
 
   patches = [
