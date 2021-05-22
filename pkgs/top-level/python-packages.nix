@@ -6164,6 +6164,8 @@ in {
 
   pyroute2-core = callPackage ../development/python-modules/pyroute2-core { };
 
+  pyroute2-ethtool = callPackage ../development/python-modules/pyroute2-ethtool { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
