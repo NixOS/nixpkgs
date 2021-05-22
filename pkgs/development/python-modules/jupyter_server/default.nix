@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -71,6 +72,9 @@ buildPythonPackage rec {
     "test_list_formats"
     "test_base_url"
     "test_culling"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # attempts to use trashcan, build env doesn't allow this
+    "test_delete"
   ];
 
   meta = with lib; {
