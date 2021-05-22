@@ -6166,6 +6166,8 @@ in {
 
   pyroute2-ethtool = callPackage ../development/python-modules/pyroute2-ethtool { };
 
+  pyroute2-ipdb = callPackage ../development/python-modules/pyroute2-ipdb { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
