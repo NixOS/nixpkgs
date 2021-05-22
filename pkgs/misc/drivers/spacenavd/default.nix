@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/FreeSpacenav/spacenavd/commit/d6a25d5c3f49b9676d039775efc8bf854737c43c.patch";
       sha256 = "02pdgcvaqc20qf9hi3r73nb9ds7yk2ps9nnxaj0x9p50xjnhfg5c";
     })
+    # Changes the socket path from /run/spnav.sock to $XDG_RUNTIME_DIR/spnav.sock
+    # to allow for a user service
+    ./configure-socket-path.patch
+    # Changes the pidfile path from /run/spnavd.pid to $XDG_RUNTIME_DIR/spnavd.pid
+    # to allow for a user service
+    ./configure-pidfile-path.patch
+    # Changes the config file path from /etc/spnavrc to $XDG_CONFIG_HOME/spnavrc or $HOME/.config/spnavrc
+    # to allow for a user service
+    ./configure-cfgfile-path.patch
   ];
 
   buildInputs = [ libX11 ]
