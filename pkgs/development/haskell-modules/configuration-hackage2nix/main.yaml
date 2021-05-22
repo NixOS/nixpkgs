@@ -131,6 +131,16 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  expipiplus1:
+    - VulkanMemoryAllocator
+    - autoapply
+    - exact-real
+    - language-c
+    - orbits
+    - update-nix-fetchgit
+    - vector-sized
+    - vulkan
+    - vulkan-utils
   Gabriel439:
     - annah
     - bench
