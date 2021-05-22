@@ -6170,6 +6170,8 @@ in {
 
   pyroute2-ipset = callPackage ../development/python-modules/pyroute2-ipset { };
 
+  pyroute2-protocols = callPackage ../development/python-modules/pyroute2-protocols { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
