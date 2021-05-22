@@ -185,6 +185,19 @@ let
     insmod gfxterm
     insmod png
     set gfxpayload=keep
+    set gfxmode=${concatStringsSep "," [
+      # GRUB will use the first valid mode listed here.
+      # `auto` will sometimes choose the smallest valid mode it detects.
+      # So instead we'll list a lot of possibly valid modes :/
+      #"3840x2160"
+      #"2560x1440"
+      "1920x1080"
+      "1366x768"
+      "1280x720"
+      "1024x768"
+      "800x600"
+      "auto"
+    ]}
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
