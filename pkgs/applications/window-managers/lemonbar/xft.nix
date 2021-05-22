@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A lightweight xcb based bar with XFT-support";
-    homepage = "https://github.com/drscream/bar";
+    homepage = "https://github.com/drscream/lemonbar-xft";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fortuneteller2k ];
