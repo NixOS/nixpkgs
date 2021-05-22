@@ -1945,4 +1945,13 @@ EOT
   # Tests require to run a binary which isn't built
   lsp-test = dontCheck super.lsp-test;
 
+  # 2021-05-22: Tests fail sometimes (even consistently on hydra)
+  # when running a fs-related test with >= 12 jobs. To work around
+  # this, run tests with only a single job.
+  # https://github.com/vmchale/libarchive/issues/20
+  libarchive = overrideCabal super.libarchive {
+    # TODO: We should add proper support for this to the builder.
+    testTarget = "libarchive-test --test-options='-j1'";
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
