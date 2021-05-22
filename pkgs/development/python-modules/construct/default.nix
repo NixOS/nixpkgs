@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname   = "construct";
-  version = "2.10.63";
+  version = "2.10.67";
 
   disabled = pythonOlder "3.6";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0dnj815qdxrn0q6bpwsmkca2jy02gjy6d3amqg4y6gha1kc1mymv";
+    sha256 = "sha256-XP+vjR4tW+v2iUSNSTAz2d2+R4eMTBZoIBMXcmrkkdk=";
   };
 
   # not an explicit dependency, but it's imported by an entrypoint
