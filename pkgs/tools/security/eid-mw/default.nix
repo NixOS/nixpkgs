@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     substituteInPlace plugins_tools/eid-viewer/Makefile.in \
       --replace "c_rehash" "openssl rehash"
   '';
+  # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
 
   postPatch = ''
