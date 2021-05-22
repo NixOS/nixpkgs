@@ -17,20 +17,20 @@ in {
     pname = "discord-ptb";
     binaryName = "DiscordPTB";
     desktopName = "Discord PTB";
-    version = "0.0.23";
+    version = "0.0.24";
     src = fetchurl {
       url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-      sha256 = "0vxz68vldrbmmw1alpwl7blfcy6byd6zg9m0851dm0p0ldyhsp5j";
+      sha256 = "0bjx6sdn6cvjp9w46zk6azw2whsycprpkrf3zy4mlz5n5458x48y";
     };
   };
   canary = callPackage ./base.nix rec {
     pname = "discord-canary";
     binaryName = "DiscordCanary";
     desktopName = "Discord Canary";
-    version = "0.0.121";
+    version = "0.0.122";
     src = fetchurl {
       url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-      sha256 = "0s85nh31wv39adawfmllp128n0wgyisbi604n0cngzi28rdw7bph";
+      sha256 = "0ph7gp77wzjpr7nhv13fg64j97dxjwmivshr56ly3kjhmvvanj7k";
     };
   };
 }.${branch}
