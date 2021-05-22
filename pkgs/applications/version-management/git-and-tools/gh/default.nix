@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-hI4kV7Xj0oMEfD6SzZ+KWHmMp9yGtr18HPPwkOpr5JA=";
+    sha256 = "sha256-hwqnINygXycd9W6tPjXsRcGbdTyULGL31aRl5NUxGtc=";
   };
 
-  vendorSha256 = "sha256-A7Bo0HQ5Z2SXY32jWCYgwvvInD3xYLSXvipzeaQTDiM=";
+  vendorSha256 = "sha256-acFN/StOMu8RSN/wvJsf4vSnjsmRnkrjuDb9cDMnXRs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
