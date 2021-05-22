@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch,
+{ lib, stdenv, fetchFromGitHub,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.15.1";
+  version = "3.16.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,19 +16,10 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "1pcy5m79g0l9l3d8lkbx6cq1w87z1g3sa6wwvgbgraj2v3wkyy5g";
+      sha256 = "1yqvm37l5rn5dyg4sc2hv47930s2524qrdpnjwy3zqa27r7k5n36";
     };
 
     buildInputs = [ erlang ];
-
-    patches = [
-      # TODO: remove this on next rebar3 release
-      (fetchpatch {
-        name = "escriptize-erl-libs";
-        url = "https://github.com/erlang/rebar3/commit/8049a92512420b0967a4c23acfa304d8ca7a712e.patch";
-        sha256 = "0jzdy7n2nz4v38nn76bgjcmssvqgvdhy9v2gl867ylwqn1y5sdm1";
-      })
-    ];
 
     postPatch = ''
       mkdir -p _checkouts _build/default/lib/
@@ -109,7 +100,7 @@ let
         # global-deps.patch makes it possible to use REBAR_GLOBAL_PLUGINS to
         # instruct rebar3 to always load a certain plugin. It is necessary since
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
-        patches = old.patches ++ [ ./skip-plugins.patch ./global-plugins.patch ];
+        patches = [ ./skip-plugins.patch ./global-plugins.patch ];
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";

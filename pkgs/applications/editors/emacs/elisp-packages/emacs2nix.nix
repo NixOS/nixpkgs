@@ -1,5 +1,5 @@
 let
-  pkgs = import ../../../.. { };
+  pkgs = import ../../../../.. { };
 
   src = pkgs.fetchgit {
     url = "https://github.com/ttuegel/emacs2nix.git";

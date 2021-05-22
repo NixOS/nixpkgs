@@ -1,5 +1,5 @@
 let
-  pkgs = import ../../../.. {};
+  pkgs = import ../../../../.. {};
 
   emacsEnv = pkgs.emacs.pkgs.withPackages (epkgs: let
 

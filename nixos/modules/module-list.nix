@@ -76,7 +76,6 @@
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu-pro.nix
-  ./hardware/video/ati.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
@@ -806,6 +805,7 @@
   ./services/networking/smartdns.nix
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
+  ./services/networking/solanum.nix
   ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix

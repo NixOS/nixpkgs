@@ -316,8 +316,9 @@ class Machine:
             start_command += "-cdrom " + args["cdrom"] + " "
 
         if "usb" in args:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
             start_command += (
-                "-device piix3-usb-uhci -drive "
+                "-device usb-ehci -drive "
                 + "id=usbdisk,file="
                 + args["usb"]
                 + ",if=none,readonly "

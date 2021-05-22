@@ -384,6 +384,7 @@ in
   snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   sogo = handleTest ./sogo.nix {};
+  solanum = handleTest ./solanum.nix {};
   solr = handleTest ./solr.nix {};
   sonarr = handleTest ./sonarr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
