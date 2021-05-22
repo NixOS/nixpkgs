@@ -5203,6 +5203,8 @@ in {
 
   powerline = callPackage ../development/python-modules/powerline { };
 
+  powerlineMemSegment = callPackage ../development/python-modules/powerline-mem-segment { };
+
   pox = callPackage ../development/python-modules/pox { };
 
   poyo = callPackage ../development/python-modules/poyo { };
