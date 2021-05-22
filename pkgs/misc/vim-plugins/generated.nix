@@ -327,6 +327,18 @@ final: prev:
     meta.homepage = "https://github.com/euclidianAce/BetterLua.vim/";
   };
 
+  bracey-vim = buildVimPluginFrom2Nix {
+    pname = "bracey-vim";
+    version = "2021-05-11";
+    src = fetchFromGitHub {
+      owner = "turbio";
+      repo = "bracey.vim";
+      rev = "457933c107db65ff7e2695e07209a9a2934544b7";
+      sha256 = "1x8c8l9x4i9n2rlh3a8zha0ni85v04p32w7yciwxp7ddlwzf3lwh";
+    };
+    meta.homepage = "https://github.com/turbio/bracey.vim/";
+  };
+
   brainfuck-vim = buildVimPluginFrom2Nix {
     pname = "brainfuck-vim";
     version = "2021-01-28";
