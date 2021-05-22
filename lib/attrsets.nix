@@ -309,7 +309,7 @@ rec {
    *
    * Type:
    *   mapAttrsJump ::
-   *     [String] -> (String -> AttrSet) -> AttrSet<String, AttrSet>
+   *     [a] -> (a -> AttrSet<b, c>) -> AttrSet<b, AttrSet<a, c>>
    *
    * Example:
    *   mapAttrsJump ["x86_64-linux"] (system: { hello = 42; })
