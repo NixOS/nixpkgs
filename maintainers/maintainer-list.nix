@@ -5696,6 +5696,12 @@
     githubId = 6652840;
     name = "Jade";
   };
+  lgcl = {
+    email = "dev@lgcl.de";
+    name = "Leon Vack";
+    github = "LogicalOverflow";
+    githubId = 5919957;
+  };
   lheckemann = {
     email = "git@sphalerite.org";
     github = "lheckemann";
