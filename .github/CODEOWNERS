@@ -224,3 +224,6 @@
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
+
+# GNOME
+/pkgs/desktops/gnome            @NixOS/GNOME
