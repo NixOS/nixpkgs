@@ -655,10 +655,10 @@
       elpaBuild {
         pname = "corfu";
         ename = "corfu";
-        version = "0.6";
+        version = "0.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/corfu-0.6.tar";
-          sha256 = "0zl769l3mmy4b0pj70dwjllq0224r2w4l45xvaqbj75qfqclj6cj";
+          url = "https://elpa.gnu.org/packages/corfu-0.8.tar";
+          sha256 = "1qrrky1g4k5vw56435dgkwnmnri7i51gkydd76as3l0ixm4pnp05";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1738,6 +1738,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    isearch-mb = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "isearch-mb";
+        ename = "isearch-mb";
+        version = "0.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/isearch-mb-0.2.tar";
+          sha256 = "1mfjppv33cb5f5f6cc1486msxjxfjnnkryc1yax43k6fgzjr0j4h";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/isearch-mb.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     iterators = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "iterators";
@@ -2544,10 +2559,10 @@
       elpaBuild {
         pname = "org";
         ename = "org";
-        version = "9.4.5";
+        version = "9.4.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-9.4.5.tar";
-          sha256 = "0h5qhrd984vf17qc227wz68191xfgbpq32dyhw0lcz2d9i0pl3xk";
+          url = "https://elpa.gnu.org/packages/org-9.4.6.tar";
+          sha256 = "1k49ymsi77366as2wi4kzv2f1xnbwpb47iw7iw07yxwlhmm7vskq";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2829,10 +2844,10 @@
       elpaBuild {
         pname = "pyim";
         ename = "pyim";
-        version = "3.7.5";
+        version = "3.7.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/pyim-3.7.5.tar";
-          sha256 = "09f34wgzckbxgr5xvaqrj0wdcmnfsb31a6m460f5g0acys20ams5";
+          url = "https://elpa.gnu.org/packages/pyim-3.7.6.tar";
+          sha256 = "1crimmvyppjmds9shfvxy9j5zi3mk133bv5av0fgicm7ddkivksr";
         };
         packageRequires = [ async emacs xr ];
         meta = {
@@ -3955,10 +3970,10 @@
       elpaBuild {
         pname = "vertico";
         ename = "vertico";
-        version = "0.8";
+        version = "0.10";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vertico-0.8.tar";
-          sha256 = "1cdq49csd57vqhrs1nbif79yw4s8c0p2i2ww5n5znzj7rnxwpva4";
+          url = "https://elpa.gnu.org/packages/vertico-0.10.tar";
+          sha256 = "07bzhxgp3k6q4wl9ijhx4vg8diinn782xhr8axn790a5vj199j78";
         };
         packageRequires = [ emacs ];
         meta = {

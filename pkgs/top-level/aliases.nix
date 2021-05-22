@@ -167,6 +167,7 @@ mapAliases ({
   deadpixi-sam = deadpixi-sam-unstable;
   debian_devscripts = debian-devscripts; # added 2016-03-23
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
+  deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
