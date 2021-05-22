@@ -415,6 +415,8 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
+
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };

@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   inherit (mparser) src version;
 
-  buildInputs = [ ocaml_pcre mparser ];
+  propagatedBuildInputs = [ ocaml_pcre mparser ];
 
   meta = mparser.meta // { description = "PCRE-based regular expressions"; };
 }
