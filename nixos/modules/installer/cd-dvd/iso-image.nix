@@ -201,7 +201,7 @@ let
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont /EFI/boot/unicode.pf2; then
+    if loadfont (\$root)/EFI/boot/unicode.pf2; then
       set with_fonts=true
     fi
     if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
@@ -225,11 +225,11 @@ let
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
-      set theme=/EFI/boot/grub-theme/theme.txt
+      set theme=(\$root)/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
     '' else ''
-      if background_image /EFI/boot/efi-background.png; then
+      if background_image (\$root)/EFI/boot/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
@@ -307,12 +307,12 @@ let
     ${grubMenuCfg}
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont /EFI/boot/unicode.pf2
+      loadfont (\$root)/EFI/boot/unicode.pf2
       set textmode=true
       terminal_output gfxterm console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
