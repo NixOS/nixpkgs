@@ -41,8 +41,15 @@ buildPythonPackage rec {
     ruamel_yaml
   ];
 
-  # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+
+  pytestFlagsArray = [
+
+    # parallel testing leads to failure
+    "-n" "0"
+
+    # Upstream only runs the tests in tests/ in CI, others use git clone
+    "tests"
+  ];
 
   pythonImportsCheck = [ "dateparser" ];
 

@@ -46,6 +46,11 @@ buildPythonPackage rec {
      "test_unix_ssl_server" # socket bind error on hydra when built with other packages
    ];
 
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/dabeaz/curio";
     description = "Library for performing concurrent I/O with coroutines in Python 3";

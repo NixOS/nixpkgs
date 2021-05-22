@@ -18,6 +18,10 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
+  pytestFlagsArray = [
+    "-n 1"
+  ];
+
   meta = with lib; {
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";

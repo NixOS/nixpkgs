@@ -14,6 +14,11 @@ import ./generic.nix (rec {
     sha256 = "0l5rv8jkdrb5q846v60v03mcq64yrhklidjkgwv6s1pda71g17yv";
   };
 
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
+
   meta = with lib; {
     homepage = "https://python-pillow.org/";
     description = "The friendly PIL fork (Python Imaging Library)";

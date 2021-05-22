@@ -50,7 +50,12 @@ buildPythonPackage rec {
     "test_timeout_subsequent"
   ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  pytestFlagsArray = [
+    "--ignore python2"
+
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";

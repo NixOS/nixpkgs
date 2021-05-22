@@ -17,6 +17,14 @@ buildPythonPackage rec {
   # tests which assert on strings don't decode results correctly
   doCheck = isPy3k;
 
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   pythonImportsCheck = [ "urwid" ];
 
   meta = with lib; {

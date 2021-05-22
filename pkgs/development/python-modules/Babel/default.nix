@@ -15,6 +15,11 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
+  # Disable parallel tests. multiple tests were crashing
+  pytestFlagsArray = [
+    "-n" "0"
+  ];
+
   meta = with lib; {
     homepage = "http://babel.edgewall.org";
     description = "A collection of tools for internationalizing Python applications";

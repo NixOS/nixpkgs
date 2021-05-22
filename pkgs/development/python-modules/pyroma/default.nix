@@ -18,6 +18,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils pygments setuptools ];
 
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+
+    "pyroma/tests.py"
+  ];
+
   meta = with lib; {
     description = "Test your project's packaging friendliness";
     homepage = "https://github.com/regebro/pyroma";

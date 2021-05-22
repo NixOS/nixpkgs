@@ -76,6 +76,11 @@ buildPythonPackage rec {
     "test_latex_images"
   ];
 
+  pytestFlagsArray = [
+    # parallel tests lead to failure
+    "-n" "0"
+  ];
+
   meta = with lib; {
     description = "Python documentation generator";
     longDescription = ''

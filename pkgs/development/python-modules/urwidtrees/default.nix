@@ -29,6 +29,14 @@ buildPythonPackage rec {
   checkInputs = [ glibcLocales ];
   LC_ALL="en_US.UTF-8";
 
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Tree widgets for urwid";
     homepage = "https://github.com/pazz/urwidtrees";

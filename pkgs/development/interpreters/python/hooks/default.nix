@@ -64,12 +64,14 @@ in rec {
       };
     } ./pip-install-hook.sh) {};
 
-  pytestCheckHook = callPackage ({ pytest }:
+  pytestCheckHook = callPackage ({ bootstrapped-pytest, enforcedPythonPackages ? [] }:
     makeSetupHook {
       name = "pytest-check-hook";
-      deps = [ pytest ];
+      deps = [ ];
       substitutions = {
         inherit pythonCheckInterpreter;
+        prefixPythonPath = lib.concatStringsSep ":" (lib.forEach enforcedPythonPackages (p: "${p}/${python.sitePackages}"));
+        pytest = "${bootstrapped-pytest}/${python.sitePackages}";
       };
     } ./pytest-check-hook.sh) {};
 
@@ -130,15 +132,6 @@ in rec {
         inherit pythonInterpreter pythonSitePackages setuppy;
       };
     } ./setuptools-build-hook.sh) {};
-
-  setuptoolsCheckHook = callPackage ({ setuptools }:
-    makeSetupHook {
-      name = "setuptools-check-hook";
-      deps = [ setuptools ];
-      substitutions = {
-        inherit pythonCheckInterpreter setuppy;
-      };
-    } ./setuptools-check-hook.sh) {};
 
   venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
     makeSetupHook {

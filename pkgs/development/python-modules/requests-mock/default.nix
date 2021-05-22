@@ -25,6 +25,16 @@ buildPythonPackage rec {
 
   checkInputs = [ mock purl testrepository testtools pytest ];
 
+  # pytest based tests raise:
+  #   AttributeError: 'FixtureRequest' object has no attribute 'url'
+  checkPhase = ''
+    runHook preCheck
+
+    python setup.py test
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Mock out responses from the requests package";
     homepage = "https://requests-mock.readthedocs.io";

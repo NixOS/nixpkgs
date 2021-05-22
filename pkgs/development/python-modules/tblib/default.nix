@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "tblib";
@@ -8,6 +8,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c";
   };
+
+  checkInputs = [
+    six
+  ];
 
   meta = with lib; {
     description = "Traceback fiddling library. Allows you to pickle tracebacks.";

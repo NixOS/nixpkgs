@@ -58,7 +58,6 @@ with pkgs;
               pythonRemoveBinBytecodeHook
               pythonRemoveTestsDirHook
               setuptoolsBuildHook
-              setuptoolsCheckHook
               venvShellHook
               wheelUnpackHook
 

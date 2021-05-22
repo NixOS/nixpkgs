@@ -14,13 +14,13 @@
 , flitBuildHook
 , pipBuildHook
 , pipInstallHook
+, pytestCheckHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , setuptoolsBuildHook
-, setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
 , eggBuildHook
@@ -162,7 +162,7 @@ let
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
-      setuptoolsCheckHook
+      pytestCheckHook
     ] ++ checkInputs;
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''

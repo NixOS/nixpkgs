@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytest
 , pytest-asyncio
 , pytestCheckHook
 , setuptools_scm
+, python
 }:
 
 buildPythonPackage rec {
@@ -16,6 +18,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
+
+  propagatedBuildInputs = [ pytest ];
 
   checkInputs = [
     pytest-asyncio

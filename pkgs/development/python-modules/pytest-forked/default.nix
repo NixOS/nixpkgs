@@ -18,12 +18,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  buildInputs = [
-    pytest
-  ];
-
   propagatedBuildInputs = [
     py
+    pytest
   ];
 
   checkInputs = [ pytestCheckHook ];

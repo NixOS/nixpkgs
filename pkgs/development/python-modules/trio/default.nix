@@ -5,6 +5,7 @@
 , idna
 , outcome
 , contextvars
+, pytest_6_1
 , pytestCheckHook
 , pyopenssl
 , trustme
@@ -26,7 +27,15 @@ buildPythonPackage rec {
     sha256 = "0xm0bd1rrlb4l9q0nf2n1wg7xh42ljdnm4i4j0651zi73zk6m9l7";
   };
 
-  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
+  checkInputs = [
+    astor
+    jedi
+    (pytestCheckHook.override { enforcedPythonPackages = [ pytest_6_1 ]; })
+    pylint
+    pyopenssl
+    trustme
+    yapf
+  ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [
     "getnameinfo"

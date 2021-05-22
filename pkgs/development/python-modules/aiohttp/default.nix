@@ -14,6 +14,7 @@
 , brotlipy
 , freezegun
 , gunicorn
+, pytest_6_1
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     gunicorn
     pytest-mock
     pytest-xdist
-    pytestCheckHook
+    (pytestCheckHook.override { enforcedPythonPackages = [ pytest_6_1 ]; })
     re-assert
     trustme
   ];

@@ -9,6 +9,9 @@ buildPythonPackage rec {
     sha256 = "27434596f2c5314cc9b31410c93d8f7e8885747399773cd088d3adea647a60c8";
   };
 
+  # source does not contain tests
+  doCheck = false;
+
   meta = with lib; {
     description = "eradicate removes commented-out code from Python files.";
     homepage = "https://github.com/myint/eradicate";

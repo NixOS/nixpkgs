@@ -52,6 +52,11 @@ buildPythonPackage rec {
   # requires git history to work correctly
   disabledTests = [ "default_with_excluded_data" "default_src_with_excluded_data" ];
 
+  pytestFlagsArray = [
+    # parallel testing leads to failure
+    "-n" "0"
+  ];
+
   pythonImportsCheck = [ "poetry.core" ];
 
   meta = with lib; {
