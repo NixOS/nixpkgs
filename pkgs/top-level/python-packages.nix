@@ -6168,6 +6168,8 @@ in {
 
   pyroute2-ipdb = callPackage ../development/python-modules/pyroute2-ipdb { };
 
+  pyroute2-ipset = callPackage ../development/python-modules/pyroute2-ipset { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
