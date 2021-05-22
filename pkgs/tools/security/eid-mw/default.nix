@@ -20,6 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
+  # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
   version = "5.0.21";
 
   src = fetchFromGitHub {
