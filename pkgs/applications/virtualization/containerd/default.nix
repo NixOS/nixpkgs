@@ -28,8 +28,7 @@ buildGoPackage rec {
 
   buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
 
-  BUILDTAGS = [ ]
-    ++ lib.optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optional (btrfs-progs == null) "no_btrfs";
 
   buildPhase = ''
     cd go/src/${goPackagePath}
