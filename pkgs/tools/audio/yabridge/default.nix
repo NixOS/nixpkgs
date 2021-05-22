@@ -149,7 +149,7 @@ in stdenv.mkDerivation rec {
     description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
     homepage = "https://github.com/robbert-vdh/yabridge";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
   };
 }
