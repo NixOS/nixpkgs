@@ -6172,6 +6172,8 @@ in {
 
   pyroute2-nftables = callPackage ../development/python-modules/pyroute2-nftables { };
 
+  pyroute2-nslink = callPackage ../development/python-modules/pyroute2-nslink { };
+
   pyroute2-protocols = callPackage ../development/python-modules/pyroute2-protocols { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
