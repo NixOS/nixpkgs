@@ -6057,7 +6057,9 @@ in
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ldgallery = callPackage ../tools/graphics/ldgallery { };
+  ldgallery = callPackage ../tools/graphics/ldgallery {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
