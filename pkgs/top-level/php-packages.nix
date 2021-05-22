@@ -1007,10 +1007,16 @@ in
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
       { name = "hash"; enable = lib.versionOlder php.version "7.4"; }
       { name = "iconv";
-        configureFlags = if stdenv.isDarwin then
-                           [ "--with-iconv=${libiconv}" ]
-                         else
-                           [ "--with-iconv" ];
+        configureFlags = [
+          "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
+        ];
+        patches = lib.optionals (lib.versionOlder php.version "8.0") [
+          # Header path defaults to FHS location, preventing the configure script from detecting errno support.
+          (fetchpatch {
+            url = "https://github.com/fossar/nix-phps/raw/263861a8c9bdafd7abe44db6db4ef0179643680c/pkgs/iconv-header-path.patch";
+            sha256 = "7GHnEUu+hcsQ4h3itDwk6p46ZKfib9JZ2XpWlXrdn6E=";
+          })
+        ];
         doCheck = false; }
       { name = "imap";
         buildInputs = [ uwimap openssl pam pcre' ];
