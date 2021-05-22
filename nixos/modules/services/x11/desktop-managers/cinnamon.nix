@@ -128,6 +128,7 @@ in
         cinnamon-session
         cinnamon-desktop
         cinnamon-menus
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
