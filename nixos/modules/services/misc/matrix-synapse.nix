@@ -681,12 +681,12 @@ in {
     ];
 
     users.users.matrix-synapse = {
-        group = "matrix-synapse";
-        home = cfg.dataDir;
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.matrix-synapse;
-      };
+      group = "matrix-synapse";
+      home = cfg.dataDir;
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.matrix-synapse;
+    };
 
     users.groups.matrix-synapse = {
       gid = config.ids.gids.matrix-synapse;
@@ -708,6 +708,10 @@ in {
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
+        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+        '')) ];
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
@@ -715,6 +719,7 @@ in {
         '';
         ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
+        UMask = "0077";
       };
     };
   };
