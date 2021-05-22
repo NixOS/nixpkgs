@@ -381,6 +381,8 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  fetchutils = callPackage ../tools/misc/fetchutils { };
+
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
   fetchbower = callPackage ../build-support/fetchbower {
