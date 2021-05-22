@@ -13139,6 +13139,8 @@ in
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
 
+  git-aggregator = callPackage ../development/tools/git-aggregator { };
+
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
