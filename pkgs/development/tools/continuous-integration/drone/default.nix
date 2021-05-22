@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "drone";
     repo = "drone";
     rev = "v${version}";
-    sha256 = "sha256-12Jac+mXWdUX8gWvmpde9ROv7Bi0YzvyqnNDVNJOr34=";
+    sha256 = "sha256-BxwCJf3uY34rqegZJ6H/zb63orELhq41trOgzGXQe80=";
   };
 
   preBuild = ''
