@@ -203,6 +203,13 @@ self: super: {
           sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
           revert = true;
         })
+        # fix broken location annotations (necessary for update-nix-fetchgit).
+        # Can be removed on the next hnix release after
+        # https://github.com/haskell-nix/hnix/pull/936 is merged.
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/hnix/commit/7cd998426ab7d930d288a1d6e266dc4e85cece3d.patch";
+          sha256 = "19ay6vxa90ykgdd0fis2djvki2kpgfsq7z55iyqg965m583vsfr6";
+        })
       ] ++ (drv.patches or []);
     }));
 
@@ -1405,16 +1412,19 @@ self: super: {
         }"
       '';
 
-      # 2021-04-09: test failure
-      # PR pending https://github.com/expipiplus1/update-nix-fetchgit/pull/60
-      doCheck = false;
-
+      # These can both be removed upon the release of update-nix-fetchgit-0.2.7
       patches = [
         # 2021-05-17 compile with hnix >= 0.13
         # https://github.com/expipiplus1/update-nix-fetchgit/pull/64
         (pkgs.fetchpatch {
           url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/bc28c8b26c38093aa950574802012c0cd8447ce8.patch";
           sha256 = "1dwd1jdsrx3ss6ql1bk2ch7ln74mkq6jy9ms8vi8kmf3gbg8l9fg";
+        })
+        # Fix test failure
+        # https://github.com/expipiplus1/update-nix-fetchgit/pull/60
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/4a43e1ea4e7e1c18de81e3f9fe0b86faa70865f5.patch";
+          sha256 = "1z74c1blgwr4q37m1rhlj7534qbnp3nnxf63m8j2b7iz0ljgm0m9";
         })
       ] ++ (drv.patches or []);
     }));

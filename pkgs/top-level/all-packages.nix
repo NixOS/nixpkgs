@@ -407,6 +407,8 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  fetchutils = callPackage ../tools/misc/fetchutils { };
+
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
   fetchbower = callPackage ../build-support/fetchbower {
@@ -23639,6 +23641,7 @@ in
       boost
       matplotlib
       pivy
+      ply
       pycollada
       pyside2
       pyside2-tools
@@ -26155,7 +26158,7 @@ in
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
   rofimoji = callPackage ../applications/misc/rofimoji {
-    inherit (python3Packages) buildPythonApplication ConfigArgParse pyxdg;
+    inherit (python3Packages) buildPythonApplication ConfigArgParse;
   };
 
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
