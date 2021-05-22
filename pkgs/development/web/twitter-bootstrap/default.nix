@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bootstrap";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
-    sha256 = "sha256-CsPvq8exUL2k/b/QK9c2S68DIsDDR8qxho0WgDJ3/Vs=";
+    sha256 = "sha256-eep9s1YxTHeDDh+WhDMENho/N3AfJHVitis22bIGa6w=";
   };
 
   nativeBuildInputs = [ unzip ];
