@@ -8267,6 +8267,8 @@ in {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
+  token-bucket = callPackage ../development/python-modules/token-bucket { };
+
   tokenizers = toPythonModule (callPackage ../development/python-modules/tokenizers { });
 
   tokenize-rt = toPythonModule (callPackage ../development/python-modules/tokenize-rt { });
