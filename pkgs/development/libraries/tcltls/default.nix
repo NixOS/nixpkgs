@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tcl, openssl }:
+{ lib, fetchurl, tcl, openssl }:
 
 tcl.mkTclDerivation rec {
   pname = "tcltls";
