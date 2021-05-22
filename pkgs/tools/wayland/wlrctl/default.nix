@@ -1,8 +1,9 @@
 { lib, stdenv, fetchFromSourcehut, cmake, meson, pkg-config, libxkbcommon, wayland, scdoc, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "wlrctl-${version}";
+  pname = "wlrctl";
   version = "0.2.1";
+
   src = fetchFromSourcehut {
     owner = "~brocellous";
     repo = "wlrctl";
