@@ -75,6 +75,7 @@ let
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
