@@ -78,8 +78,8 @@ let
 in
 {
   openvpn_24 = generic {
-    version = "2.4.9";
-    sha256 = "1qpbllwlha7cffsd5dlddb8rl22g9rar5zflkz1wrcllhvfkl7v4";
+    version = "2.4.11";
+    sha256 = "06s4m0xvixjhd3azrzbsf4j86kah4xwr2jp6cmcpc7db33rfyyg5";
   };
 
   openvpn = generic {
