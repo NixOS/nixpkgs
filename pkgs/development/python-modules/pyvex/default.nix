@@ -18,6 +18,10 @@ buildPythonPackage rec {
     sha256 = "sha256-cWQdrGKJyGieBow3TiMj/uB2crIF32Kvl5tVUKg/z+E=";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
+  '';
+
   propagatedBuildInputs = [
     archinfo
     bitstring

@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , cinnamon-desktop
+, cinnamon-translations
 , colord
 , glib
 , gsettings-desktop-schemas
@@ -102,6 +103,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed "s|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g" -i plugins/datetime/system-timezone.h
+  '';
+
+  # use locales from cinnamon-translations (not using --localedir because datadir is used)
+  postInstall = ''
+    ln -s ${cinnamon-translations}/share/locale $out/share/locale
   '';
 
   # So the polkit policy can reference /run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper

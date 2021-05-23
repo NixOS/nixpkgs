@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/azlux/botamusique",
-  "rev": "df38c7dbd6d59c6790cf2364d1f344b7f6f72107",
-  "date": "2021-03-13T15:44:40+08:00",
-  "path": "/nix/store/30ds4gp7aldj9rqix1xf7j2ps5blrx8w-botamusique",
-  "sha256": "06xw1pif145zcm9z8l9kzl8ayl7vy5ywr0m3a5yswybcp2fzj087",
+  "rev": "33a9e75ba9d0a382f7a76d23a0ceb626924a8b49",
+  "date": "2021-05-19T22:37:39+08:00",
+  "path": "/nix/store/dqc2vjd43cixm49w8g66wvi9zmdfwsdd-botamusique",
+  "sha256": "18lbgslx9vdwd5nrbkqfjvzaikp2swvv375v9gql7cg8p46w7i11",
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

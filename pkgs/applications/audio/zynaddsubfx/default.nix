@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
       else "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2;
-    maintainers = with maintainers; [ goibhniu metadark ];
+    maintainers = with maintainers; [ goibhniu kira-bruneau ];
     platforms = platforms.linux;
   };
 }

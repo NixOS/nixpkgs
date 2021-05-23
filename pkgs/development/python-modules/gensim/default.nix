@@ -4,7 +4,7 @@
 , numpy
 , six
 , scipy
-, smart_open
+, smart-open
 , scikit-learn, testfixtures, unittest2
 , isPy3k
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0rx37vnjspjl45v7bj123xwsjfgbwv91v8zpqpli8lgpf42xnskq";
   };
 
-  propagatedBuildInputs = [ smart_open numpy six scipy ];
+  propagatedBuildInputs = [ smart-open numpy six scipy ];
 
   checkInputs = [ scikit-learn testfixtures unittest2 ];
 
