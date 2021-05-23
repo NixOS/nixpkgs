@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, getopt, readline, texlive }:
+{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive }:
 
 lib.fix (eukleides: stdenv.mkDerivation rec {
   pname = "eukleides";
@@ -16,7 +16,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     ./gs-allowpstransparency.patch
   ];
 
-  nativeBuildInputs = [ bison flex texinfo makeWrapper ];
+  nativeBuildInputs = [ bison flex texinfo4 makeWrapper ];
 
   buildInputs = [ getopt readline ];
 
