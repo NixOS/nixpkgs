@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   outputs = ["out" "hook"];
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
       ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
       -o "$libName" \
@@ -22,9 +24,13 @@ stdenv.mkDerivation rec {
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
     fi
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -vD "$libName" "$out/lib/$libName"
 
     mkdir -p "$hook/nix-support"
@@ -36,6 +42,8 @@ stdenv.mkDerivation rec {
     export LD_PRELOAD="$out/lib/$libName"
     ''}
     SETUP_HOOK
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
