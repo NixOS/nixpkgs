@@ -6,7 +6,7 @@ var_templates_list=(
 accumulateRoles
 
 for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
+    mangleVarListGeneric ":" "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
 
 export NIX_PKG_CONFIG_WRAPPER_FLAGS_SET_@suffixSalt@=1
