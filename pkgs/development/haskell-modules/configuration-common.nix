@@ -1954,4 +1954,19 @@ EOT
     testTarget = "libarchive-test --test-options='-j1'";
   };
 
+  # 2021-05-23: Override for a quite recent Hackage release.
+  taffybar =
+    if pkgs.lib.versionAtLeast super.taffybar.version "3.2.5"
+    then throw "Drop src override for taffybar >= 3.2.5"
+    else overrideCabal super.taffybar (drv: {
+      src = pkgs.fetchFromGitHub {
+        owner = "taffybar";
+        repo = "taffybar";
+        rev = "91c83e01e131d560e704b12f0d798905e4289a3d";
+        sha256 = "1kkpkjdyd1yv8z1qlzr3jrzyk9lxac5m4f9py8igyars2nwnhhzr";
+      };
+      version = "3.2.5";
+      editedCabalFile = null;
+    });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
