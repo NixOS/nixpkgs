@@ -1265,6 +1265,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  bunyan-rs = callPackage ../development/tools/bunyan-rs { };
+
   callaudiod = callPackage ../applications/audio/callaudiod { };
 
   calls = callPackage ../applications/networking/calls { };
