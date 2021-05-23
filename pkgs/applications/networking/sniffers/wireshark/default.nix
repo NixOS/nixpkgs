@@ -104,5 +104,6 @@ in stdenv.mkDerivation {
 
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];
+    mainProgram = if withQt then "wireshark" else "tshark";
   };
 }
