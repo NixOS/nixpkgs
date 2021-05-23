@@ -143,6 +143,8 @@ in {
       oskItem
     ];
 
+    systemd.packages = [ pkgs.phosh ];
+
     programs.feedbackd.enable = true;
 
     security.pam.services.phosh = {};
