@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, readline, texlive }:
+{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, getopt, readline, texlive }:
 
 lib.fix (eukleides: stdenv.mkDerivation rec {
   pname = "eukleides";
@@ -14,7 +14,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex texinfo makeWrapper ];
 
-  buildInputs = [ readline ];
+  buildInputs = [ getopt readline ];
 
   preConfigure = ''
     substituteInPlace Makefile \
@@ -30,6 +30,11 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out/bin
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/euktoeps \
+      --prefix PATH : ${lib.makeBinPath [ getopt ]}
   '';
 
   outputs = [ "out" "doc" "tex" ];
