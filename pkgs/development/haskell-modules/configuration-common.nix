@@ -203,13 +203,6 @@ self: super: {
           sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
           revert = true;
         })
-        # fix broken location annotations (necessary for update-nix-fetchgit).
-        # Can be removed on the next hnix release after
-        # https://github.com/haskell-nix/hnix/pull/936 is merged.
-        (pkgs.fetchpatch {
-          url = "https://github.com/expipiplus1/hnix/commit/7cd998426ab7d930d288a1d6e266dc4e85cece3d.patch";
-          sha256 = "19ay6vxa90ykgdd0fis2djvki2kpgfsq7z55iyqg965m583vsfr6";
-        })
       ] ++ (drv.patches or []);
       # make sure patches are not broken by cabal file revisions
       revision = null;
