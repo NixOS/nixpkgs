@@ -5025,7 +5025,6 @@ broken-packages:
   - web-encodings
   - WeberLogic
   - webfinger-client
-  - webify
   - webkit-javascriptcore
   - webmention
   - web-output
