@@ -13677,6 +13677,8 @@ in
     lua = lua5;
   } // (config.radare or {}));
 
+  retry = callPackage ../tools/system/retry { };
+
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
 
   cutter = libsForQt515.callPackage ../development/tools/analysis/rizin/cutter.nix { };
