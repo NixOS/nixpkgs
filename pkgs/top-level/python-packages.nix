@@ -2221,6 +2221,8 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  envoy-reader = callPackage ../development/python-modules/envoy-reader { };
+
   enzyme = callPackage ../development/python-modules/enzyme { };
 
   epc = callPackage ../development/python-modules/epc { };

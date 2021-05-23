@@ -325,6 +325,7 @@ in with py.pkgs; buildPythonApplication rec {
     "efergy"
     "emonitor"
     "emulated_hue"
+    "enphase_envoy"
     "esphome"
     "everlights"
     "ezviz"
