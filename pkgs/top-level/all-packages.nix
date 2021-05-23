@@ -8352,6 +8352,8 @@ in
 
   saml2aws = callPackage ../tools/security/saml2aws {};
 
+  sammler = callPackage ../tools/security/sammler {};
+
   samplicator = callPackage ../tools/networking/samplicator { };
 
   sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
