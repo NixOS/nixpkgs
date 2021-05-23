@@ -26503,6 +26503,10 @@ in
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
+  inherit (recurseIntoAttrs (callPackage ../applications/editors/sublime/4/packages.nix { }))
+    sublime4
+    sublime4-dev;
+
   inherit (callPackage ../applications/version-management/sublime-merge {})
     sublime-merge
     sublime-merge-dev;
