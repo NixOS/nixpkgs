@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    mainProgram = "caffeine";
     maintainers = with maintainers; [ marzipankaiser ];
     description = "Status bar application to temporarily inhibit screensaver and sleep mode";
     homepage = "https://github.com/caffeine-ng/caffeine-ng";
