@@ -2,8 +2,8 @@
 , libjpeg, zlib, openssl, libwebp, catch }:
 
 stdenv.mkDerivation rec {
-  pname = "arc_unpacker-unstable";
-  version = "2021-05-17";
+  pname = "arc_unpacker";
+  version = "unstable-2021-05-17";
 
   src = fetchFromGitHub {
     owner = "vn-tools";
