@@ -5196,6 +5196,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  kho-dialga = {
+    email = "ivandashenyou@gmail.com";
+    github = "kho-dialga";
+    githubId = 55767703;
+    name = "Iván Brito";
+    };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
