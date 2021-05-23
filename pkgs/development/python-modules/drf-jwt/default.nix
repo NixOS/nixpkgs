@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , pyjwt
 , djangorestframework
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "drf-jwt";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "Styria-Digital";
     repo = "django-rest-framework-jwt";
     rev = version;
-    sha256 = "012rmm25w5gvkzi4lyyhn47y1n6g68q9gasga2mkv9i6mn8n4kp7";
+    sha256 = "sha256-++8rFXVsA5WMTt+aC4di3Rpa0BAW285/qM087i9uQ0g=";
   };
 
   propagatedBuildInputs = [
