@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     xmlto
   ];
 
+  hardeningEnable = [ "pie" ];
+
   propagatedBuildInputs = [
     expat
   ];
