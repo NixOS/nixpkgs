@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, readline, texLive }:
+{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, readline, texlive }:
 
 lib.fix (eukleides: stdenv.mkDerivation rec {
   pname = "eukleides";
@@ -14,7 +14,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex texinfo makeWrapper ];
 
-  buildInputs = [ readline texLive ];
+  buildInputs = [ readline ];
 
   preConfigure = ''
     substituteInPlace Makefile \
@@ -32,21 +32,12 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/euktoeps \
-      --set-default TEXINPUTS : \
-      --prefix TEXINPUTS : "$tex/tex/latex/eukleides" \
-      --prefix PATH : "${texLive}/bin"
-    wrapProgram $out/bin/euktopdf \
-      --set-default TEXINPUTS : \
-      --prefix TEXINPUTS : "$tex/tex/latex/eukleides" \
-      --prefix PATH : "${texLive}/bin"
-  '';
-
   outputs = [ "out" "doc" "tex" ];
 
   passthru.tlType = "run";
-  passthru.pkgs = [ eukleides.tex ];
+  passthru.pkgs = [ eukleides.tex ]
+    # packages needed by euktoeps, euktopdf and eukleides.sty
+    ++ (with texlive; collection-pstricks.pkgs ++ epstopdf.pkgs ++ iftex.pkgs ++ moreverb.pkgs);
 
   meta = {
     description = "Geometry Drawing Language";
