@@ -3,6 +3,8 @@
 { fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
 , writeShellScript, common-updater-scripts, curl
 , openssl, bzip2, bash, unzip, zip
+, libredirect
+, pkexecPath ? "/run/wrappers/bin/pkexec"
 }:
 
 let
@@ -24,6 +26,7 @@ let
   }.${stdenv.hostPlatform.system};
 
   libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango ];
+  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
@@ -89,10 +92,14 @@ in let
 
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
+    # We use `libredirect` to redirect hardcoded paths in the binary
+    # such as `/usr/bin/pkexec`. `sed`ing those out to e.g. just `pkexec`
+    # is insufficient because Sublime `stat()`s them before execution.
+    # See also: https://github.com/sublimehq/sublime_text/issues/3502
     postFixup = ''
-      sed -i 's#/usr/bin/pkexec#pkexec\x00\x00\x00\x00\x00\x00\x00\x00\x00#g' "$out/${primaryBinary}"
-
       wrapProgram $out/${primaryBinary} \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
     '';
