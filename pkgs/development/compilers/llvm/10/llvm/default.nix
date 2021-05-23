@@ -1,6 +1,7 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
 , pkgsBuildBuild
 , fetch
+, fetchpatch
 , cmake
 , python3
 , libffi
@@ -57,6 +58,13 @@ in stdenv.mkDerivation (rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+    (fetchpatch {
+      name = "uops-CMOV16rm-noreg.diff";
+      url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+      sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+      stripLen = 1;
+    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -172,12 +180,23 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   requiredSystemFeatures = [ "big-parallel" ];
-  meta = {
-    description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = "https://llvm.org/";
-    license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = lib.platforms.all;
+  meta = llvm_meta // {
+    homepage = "https://llvm.org/";
+    description = "A collection of modular and reusable compiler and toolchain technologies";
+    longDescription = ''
+      The LLVM Project is a collection of modular and reusable compiler and
+      toolchain technologies. Despite its name, LLVM has little to do with
+      traditional virtual machines. The name "LLVM" itself is not an acronym; it
+      is the full name of the project.
+      LLVM began as a research project at the University of Illinois, with the
+      goal of providing a modern, SSA-based compilation strategy capable of
+      supporting both static and dynamic compilation of arbitrary programming
+      languages. Since then, LLVM has grown to be an umbrella project consisting
+      of a number of subprojects, many of which are being used in production by
+      a wide variety of commercial and open source projects as well as being
+      widely used in academic research. Code in the LLVM project is licensed
+      under the "Apache 2.0 License with LLVM exceptions".
+    '';
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -199,5 +218,7 @@ in stdenv.mkDerivation (rec {
 
   doCheck = false;
 
-  meta.description = "man pages for LLVM ${version}";
+  meta = llvm_meta // {
+    description = "man pages for LLVM ${version}";
+  };
 })

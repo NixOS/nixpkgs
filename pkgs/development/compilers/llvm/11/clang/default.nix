@@ -1,4 +1,4 @@
-{ lib, stdenv, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -45,6 +45,18 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
+      # Revert: [Driver] Default to -fno-common for all targets
+      # https://reviews.llvm.org/D75056
+      #
+      # Maintains compatibility with packages that haven't been fixed yet, and
+      # matches gcc10's configuration in nixpkgs.
+      (fetchpatch {
+        revert = true;
+        url = "https://github.com/llvm/llvm-project/commit/0a9fc9233e172601e26381810d093e02ef410f65.diff";
+        stripLen = 1;
+        excludes = [ "docs/*" "test/*" ];
+        sha256 = "0gxgmi0qbm89mq911dahallhi8m6wa9vpklklqmxafx4rplrr8ph";
+      })
     ];
 
     postPatch = ''
@@ -95,11 +107,20 @@ let
       inherit libllvm;
     };
 
-    meta = {
-      description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = "https://llvm.org/";
-      license     = lib.licenses.ncsa;
-      platforms   = lib.platforms.all;
+    meta = llvm_meta // {
+      homepage = "https://clang.llvm.org/";
+      description = "A C language family frontend for LLVM";
+      longDescription = ''
+        The Clang project provides a language front-end and tooling
+        infrastructure for languages in the C language family (C, C++, Objective
+        C/C++, OpenCL, CUDA, and RenderScript) for the LLVM project.
+        It aims to deliver amazingly fast compiles, extremely useful error and
+        warning messages and to provide a platform for building great source
+        level tools. The Clang Static Analyzer and clang-tidy are tools that
+        automatically find bugs in your code, and are great examples of the sort
+        of tools that can be built using the Clang frontend as a library to
+        parse C/C++ code.
+      '';
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
@@ -118,6 +139,8 @@ let
 
     doCheck = false;
 
-    meta.description = "man page for Clang ${version}";
+    meta = llvm_meta // {
+      description = "man page for Clang ${version}";
+    };
   });
 in self

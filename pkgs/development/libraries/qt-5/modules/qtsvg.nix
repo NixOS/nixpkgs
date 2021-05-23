@@ -1,7 +1,7 @@
 { qtModule, qtbase }:
 
 qtModule {
-  name = "qtsvg";
+  pname = "qtsvg";
   qtInputs = [ qtbase ];
   outputs = [ "out" "dev" "bin" ];
 }

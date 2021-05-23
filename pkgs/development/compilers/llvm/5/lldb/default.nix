@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenv, llvm_meta
 , fetch
 , fetchpatch
 , cmake
@@ -73,10 +73,14 @@ stdenv.mkDerivation rec {
     cp ../docs/lldb.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = llvm_meta // {
+    homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
-    homepage    = "https://llvm.org/";
-    license     = licenses.ncsa;
-    platforms   = platforms.all;
+    longDescription = ''
+      LLDB is a next generation, high-performance debugger. It is built as a set
+      of reusable components which highly leverage existing libraries in the
+      larger LLVM Project, such as the Clang expression parser and LLVM
+      disassembler.
+    '';
   };
 }

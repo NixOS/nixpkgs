@@ -3,6 +3,7 @@
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
+, libiconv
 , which, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
@@ -137,7 +138,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
+    ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];

@@ -112,8 +112,6 @@ _EOF
   # look at ./make/configure.py search "enable_nvenc"
   ++ lib.optional stdenv.isLinux nv-codec-headers;
 
-  enableParallelBuilding = true;
-
   configureFlags = [
     "--disable-df-fetch"
     "--disable-df-verify"

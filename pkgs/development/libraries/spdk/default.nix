@@ -55,8 +55,6 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";

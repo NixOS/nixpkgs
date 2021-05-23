@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  cargoSha256 = "1xgyyxd2kz21xan0pk7rbxiym90s7m2qrzg2ddilcszva60bxdd9";
+  cargoSha256 = "0dlnlb3hqyh98y916wvdb4rd20az73brs8hqna2lgr7kv1pd77j7";
 
   postInstall = ''
     mkdir -p $out/share/glib-2.0/schemas

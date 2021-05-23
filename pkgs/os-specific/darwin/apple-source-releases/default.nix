@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, fetchurl, fetchzip, pkgs }:
+{ lib, stdenv, fetchurl, fetchzip, pkgs }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -154,7 +154,7 @@ let
     version = versions.${sdkName}.${pname};
   in fetchApple' pname version sha256;
 
-  appleDerivation' = pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
     inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
@@ -223,8 +223,9 @@ let
   applePackage' = namePath: version: sdkName: sha256:
     let
       pname = builtins.head (lib.splitString "/" namePath);
-      appleDerivation = appleDerivation' pname version sdkName sha256;
-      callPackage = self.newScope { inherit appleDerivation; };
+      appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
+      appleDerivation = appleDerivation' stdenv;
+      callPackage = self.newScope { inherit appleDerivation' appleDerivation; };
     in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
@@ -272,17 +273,16 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     libplatform     = applePackage "libplatform"       "osx-10.12.6"     "0rh1f5ybvwz8s0nwfar8s0fh7jbgwqcy903cv2x8m15iq1x599yn" {};
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "1j6541rcgjpas1fc77ip5krjgw4bvz6jq7bq7h9q7axb0jv2ns6c" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "077j6ljfh7amqpk2146rr7dsz5vasvr3als830mgv5jzl7l6vz88" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {
-      libutil = pkgs.darwin.libutil.override { headersOnly = true; };
-      hfs = pkgs.darwin.hfs.override { headersOnly = true; };
-    };
+    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {};
     libutil         = applePackage "libutil"           "osx-10.12.6"     "0lqdxaj82h8yjbjm856jjz9k2d96k0viimi881akfng08xk1246y" {};
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "02ms1p8zlgmprzn65jzr7yaqxykh3zxjcrw0c06aayim6h0dsqfy" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "1cj1vhbcs9pkmag2ms8wslagicnq9bxi2qjkszmp3ys7z7ccrbwz" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "0jzjxbmxgjzhssqd50z7kq9dlwrv5fsdshh57c0f8mdwcs19bsyx" {};
-    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {};
+    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {
+      python3 = pkgs.buildPackages.buildPackages.python3; # TODO(@Ericson2314) this shouldn't be needed.
+    };
     hfs             = applePackage "hfs"               "osx-10.12.6"     "1mj3xvqpq1mgd80b6kl1s04knqnap7hccr0gz8rjphalq14rbl5g" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
@@ -296,6 +296,10 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "1f93m7dd0ghqb2hwh905mjhzblyfr7dwffw98xhgmv1mfdnigxg0" {};
     top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
+
+    libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
+    hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
+    libresolvHeaders= pkgs.darwin.libresolv.override { headersOnly = true; };
 
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.

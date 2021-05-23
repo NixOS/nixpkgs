@@ -64,6 +64,7 @@ let
 
   useGccForLibs = isClang
     && libcxx == null
+    && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
@@ -432,14 +433,16 @@ stdenv.mkDerivation {
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
-    + optionalString ((targetPlatform ? gcc.arch) &&
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
                       isGccArchSupported targetPlatform.gcc.arch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mcpu is not very useful. You should use mtune and march
     # instead. It’s provided here for backwards compatibility.
-    + optionalString (targetPlatform ? gcc.cpu) ''
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
       echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -489,6 +492,10 @@ stdenv.mkDerivation {
 
     + optionalString stdenv.targetPlatform.isDarwin ''
         echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+    ''
+
+    + optionalString targetPlatform.isAndroid ''
+      echo "-D__ANDROID_API__=${targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
     ''
 
     # There are a few tools (to name one libstdcxx5) which do not work

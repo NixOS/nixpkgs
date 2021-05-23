@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-V62Z82p21qtvSOsoXM225/Wkc9F+dvVMz0xpVjhgZVo=";
   };
 
-  nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
+  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion
     icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
