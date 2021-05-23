@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -116,7 +116,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.13";
+  version = "0.3.15";
 
   outputs = [ "out" "dev" ];
 
@@ -124,18 +124,8 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
+    sha256 = "1qjr02cqncv20abdp1yzr55n7smhx6h9chqvb0xbp18byynvj87w";
   };
-
-  # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
-  # remove this when updating to 0.3.14 or newer
-  patches = [
-    (fetchpatch {
-      name = "label-get_cpu_ftr-as-volatile.patch";
-      url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
-      sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
-    })
-  ];
 
   inherit blas64;
 

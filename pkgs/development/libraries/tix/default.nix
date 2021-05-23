@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, tcl, tk, fetchpatch } :
 
-stdenv.mkDerivation {
+tcl.mkTclDerivation {
   version = "8.4.3";
   pname = "tix";
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "1jaz0l22xj7x1k4rb9ia6i1psnbwk4pblgq4gfvya7gg7fbb7r36";
     })
   ;
-  buildInputs = [ tcl tk ];
+  buildInputs = [ tk ];
   # the configure script expects to find the location of the sources of
   # tcl and tk in {tcl,tk}Config.sh
   # In fact, it only needs some private headers. We copy them in
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
       ln -s $i private_headers/generic;
     done;
     '';
+  addTclConfigureFlags = false;
   configureFlags = [
-    "--with-tclinclude=${tcl}/include"
     "--with-tclconfig=."
     "--with-tkinclude=${tk.dev}/include"
     "--with-tkconfig=."
@@ -52,4 +52,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

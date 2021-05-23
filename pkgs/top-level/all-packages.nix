@@ -11597,7 +11597,7 @@ in
   };
   rust_1_52 = callPackage ../development/compilers/rust/1_52.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvm_11 = llvmPackages_11.libllvm;
+    llvm_12 = llvmPackages_12.libllvm;
   };
   rust = rust_1_52;
 
@@ -18095,9 +18095,7 @@ in
 
   tcllib = callPackage ../development/libraries/tcllib { };
 
-  tcltls = callPackage ../development/libraries/tcltls {
-    openssl = openssl_1_0_2;
-  };
+  tcltls = callPackage ../development/libraries/tcltls { };
 
   tclx = callPackage ../development/libraries/tclx { };
 
@@ -27887,7 +27885,7 @@ in
 
   zcash = callPackage ../applications/blockchains/zcash { stdenv = llvmPackages_11.stdenv; };
 
-  openethereum = callPackage ../applications/blockchains/openethereum { stdenv = llvmPackages_12.stdenv; };
+  openethereum = callPackage ../applications/blockchains/openethereum { };
 
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
