@@ -98,16 +98,22 @@ let
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
   # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
-  llvmPackages = if stdenv.isDarwin
-                 then buildPackages.llvmPackages
-                 else if lib.versionAtLeast rustc.llvm.version "11"
-                      then buildPackages.llvmPackages_11
-                      else buildPackages.llvmPackages_10;
+  llvmPackages0 =
+    /**/ if stdenv.isDarwin
+      then buildPackages.llvmPackages
+    else if lib.versionAtLeast rustc.llvm.version "11"
+      then buildPackages.llvmPackages_11
+    else buildPackages.llvmPackages_10;
+  # Force the use of lld and other llvm tools for LTO
+  llvmPackages = llvmPackages0.override {
+    bootBintoolsNoLibc = null;
+    bootBintools = null;
+  };
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
-                then overrideCC stdenv llvmPackages.lldClang
+                then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
@@ -321,11 +327,11 @@ buildStdenv.mkDerivation ({
     "BUILD_OFFICIAL=1"
   ]
   ++ lib.optionals ltoSupport [
-    "AR=${llvmPackages.bintools}/bin/llvm-ar"
-    "LLVM_OBJDUMP=${llvmPackages.bintools}/bin/llvm-objdump"
-    "NM=${llvmPackages.bintools}/bin/llvm-nm"
-    "RANLIB=${llvmPackages.bintools}/bin/llvm-ranlib"
-    "STRIP=${llvmPackages.bintools}/bin/llvm-strip"
+    "AR=${buildStdenv.cc.bintools.bintools}/bin/llvm-ar"
+    "LLVM_OBJDUMP=${buildStdenv.cc.bintools.bintools}/bin/llvm-objdump"
+    "NM=${buildStdenv.cc.bintools.bintools}/bin/llvm-nm"
+    "RANLIB=${buildStdenv.cc.bintools.bintools}/bin/llvm-ranlib"
+    "STRIP=${buildStdenv.cc.bintools.bintools}/bin/llvm-strip"
   ]
   ++ extraMakeFlags;
 

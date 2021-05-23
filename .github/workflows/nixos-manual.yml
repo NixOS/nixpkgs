@@ -1,0 +1,20 @@
+name: NixOS manual checks
+
+on:
+  pull_request:
+    branches-ignore:
+      - 'release-**'
+    paths:
+      - 'nixos/**/*.xml'
+      - 'nixos/**/*.md'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v12
+    - name: Check DocBook files generated from Markdown are consistent
+      run: |
+        nixos/doc/manual/md-to-db.sh
+        git diff --exit-code

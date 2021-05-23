@@ -18,6 +18,7 @@
         "aarch64-linux"
         "armv6l-linux"
         "armv7l-linux"
+        "aarch64-darwin"
       ];
 
       forAllSystems = f: lib.genAttrs systems (system: f system);

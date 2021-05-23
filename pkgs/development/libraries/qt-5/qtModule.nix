@@ -7,7 +7,7 @@ let inherit (lib) licenses maintainers platforms; in
 args:
 
 let
-  pname = args.name;
+  inherit (args) pname;
   version = args.version or srcs.${pname}.version;
   src = args.src or srcs.${pname}.src;
 in

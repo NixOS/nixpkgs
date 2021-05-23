@@ -19,7 +19,7 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "0w6khry1ncyqy5h6996xw1f6viw4wdrfji5m8lz9gm487xlq5v0b";
   };
 
-  cargoSha256 = "0d4fz0rhqy1n30wfl2pmf76zpp21agr3h0hswp3r5bfnxqp6i54h";
+  cargoSha256 = "05lcm5fzsn3h6dl2n2yq52r2vagrgmab08kafinz2kdcvv05wpk5";
 
   # The BLAKE3 C library is intended to be built by the project depending on it
   # rather than as a standalone library.

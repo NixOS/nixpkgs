@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     ./cargo.lock.patch
   ];
 
-  cargoSha256 = "02k23idwy0sb4lnjrwnyah3qp22zj161ilbc13p75k0hdijfaxl5";
+  cargoSha256 = "0kfm1pq22dhiw138bf7jvf7amlkal90n1hc9fq44wr4chr9b2fmx";
 
   meta = with lib; {
     description = "Rust library and tool to colorize paths using LS_COLORS";

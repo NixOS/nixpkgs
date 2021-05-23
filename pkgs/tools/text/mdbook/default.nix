@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-51S4I1YIbdgXkhuT7KnhJe71nGCQmr9JmuGtp7Bcxqo=";
   };
 
-  cargoSha256 = "sha256-2kBJcImytsSd7Q0kj1bsP/NXxyy2Pr8gHb8iNf6h3/4=";
+  cargoSha256 = "sha256-4bYLrmyI7cPUes6DYREiIB9gDze0KO2jMP/jPzvWbwQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

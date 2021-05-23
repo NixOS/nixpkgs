@@ -19,7 +19,7 @@ buildPythonApplication rec {
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
-  propagatedBuildInputs = [ arrow_1 click click-didyoumean requests ];
+  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {

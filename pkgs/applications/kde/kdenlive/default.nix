@@ -26,6 +26,7 @@
 , phonon-backend-gstreamer
 , qtdeclarative
 , qtmultimedia
+, qtnetworkauth
 , qtquickcontrols2
 , qtscript
 , rttr
@@ -61,6 +62,7 @@ mkDerivation {
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
+    qtnetworkauth
     qtquickcontrols2
     qtscript
     shared-mime-info

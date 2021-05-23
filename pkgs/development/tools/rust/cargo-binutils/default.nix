@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
       cp ${./Cargo.lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "sha256-Zrl269PacPi81TrGTIDzmVndgGY5i5lYyspiOj43rpw=";
+  cargoSha256 = "sha256-6du86HxkDQAeIXScXBKuv0j4YZiG4O6IwVIXZnJgTO8=";
 
   meta = with lib; {
     description = "Cargo subcommands to invoke the LLVM tools shipped with the Rust toolchain.";

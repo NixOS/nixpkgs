@@ -176,6 +176,15 @@ let
               # Test a full stdenv bootstrap from the bootstrap tools definition
               inherit (bootstrap.test-pkgs) stdenv;
             };
+
+          # Cross compiled bootstrap tools
+          aarch64-darwin =
+            let
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
+            in {
+              # Distribution only for now
+              inherit (bootstrap) dist;
+            };
           };
 
     } // (mapTestOn ((packagePlatforms pkgs) // {

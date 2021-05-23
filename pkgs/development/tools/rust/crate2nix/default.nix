@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/crate2nix";
 
-  cargoSha256 = "sha256-6V0ifH63/s5XLo4BCexPtvlUH0UQPHFW8YHF8OCH3ik=";
+  cargoSha256 = "sha256-shWhzCaH8ZttUcq82tA7T1hwNl6F1XJy7ansA5lt+Mw=";
 
   nativeBuildInputs = [ makeWrapper ];
 

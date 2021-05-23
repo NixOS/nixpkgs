@@ -21,6 +21,7 @@
 , qca-qt5
 , qtgraphicaleffects
 , qtmultimedia
+, qtquickcontrols2
 , qtx11extras
 , breeze-icons
 , sshfs
@@ -47,6 +48,7 @@ mkDerivation {
     qca-qt5
     qtgraphicaleffects
     qtmultimedia
+    qtquickcontrols2
     qtx11extras
     # otherwise buttons are blank on non-kde
     breeze-icons

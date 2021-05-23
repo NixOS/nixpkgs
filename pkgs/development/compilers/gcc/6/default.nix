@@ -154,7 +154,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  prePatch =
+  postPatch =
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
     lib.optionalString hostPlatform.isDarwin ''
@@ -166,9 +166,8 @@ stdenv.mkDerivation ({
 
       substituteInPlace libgfortran/configure \
         --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
-    '';
-
-  postPatch =
+    ''
+  + (
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
@@ -191,7 +190,7 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
