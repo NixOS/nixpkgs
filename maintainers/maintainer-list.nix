@@ -5696,6 +5696,12 @@
     githubId = 6652840;
     name = "Jade";
   };
+  lgcl = {
+    email = "dev@lgcl.de";
+    name = "Leon Vack";
+    github = "LogicalOverflow";
+    githubId = 5919957;
+  };
   lheckemann = {
     email = "git@sphalerite.org";
     github = "lheckemann";
@@ -6452,10 +6458,10 @@
     email = "softs@metabarcoding.org";
     name = "Celine Mercier";
   };
-  metadark = {
+  kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
-    github = "metadark";
+    github = "kira-bruneau";
     githubId = 382041;
   };
   meutraa = {

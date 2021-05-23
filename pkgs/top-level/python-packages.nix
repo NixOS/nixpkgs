@@ -7684,7 +7684,7 @@ in {
 
   sly = callPackage ../development/python-modules/sly { };
 
-  smart_open = callPackage ../development/python-modules/smart_open { };
+  smart-open = callPackage ../development/python-modules/smart-open { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };
 
@@ -8288,6 +8288,8 @@ in {
   todoist = callPackage ../development/python-modules/todoist { };
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+
+  token-bucket = callPackage ../development/python-modules/token-bucket { };
 
   tokenizers = toPythonModule (callPackage ../development/python-modules/tokenizers { });
 

@@ -128,6 +128,7 @@ in
         cinnamon-session
         cinnamon-desktop
         cinnamon-menus
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
@@ -136,6 +137,9 @@ in
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         gnome.networkmanagerapplet # session requirement - also nm-applet not needed
+
+        # For a polkit authentication agent
+        polkit_gnome
 
         # packages
         nemo

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-maps";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "dafbe23bdbe9c01f88ce91c5b8587eefc73ac2d637ebcdc59ded6d332932e3ab";
+    sha256 = "384e17f76a68b700a4f988478945c3a9721711c0400725afdfcb63cf84e85f0e";
   };
 
   propagatedBuildInputs = [

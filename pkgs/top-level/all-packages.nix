@@ -1297,6 +1297,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  bunyan-rs = callPackage ../development/tools/bunyan-rs { };
+
   callaudiod = callPackage ../applications/audio/callaudiod { };
 
   calls = callPackage ../applications/networking/calls { };
@@ -1899,6 +1901,8 @@ in
   };
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
+
+  bfetch = callPackage ../tools/misc/bfetch { };
 
   bless = callPackage ../applications/editors/bless { };
 
@@ -4005,9 +4009,13 @@ in
 
   diff-so-fancy = callPackage ../applications/version-management/git-and-tools/diff-so-fancy { };
 
-  diffoscope = callPackage ../tools/misc/diffoscope {
+  diffoscopeMinimal = callPackage ../tools/misc/diffoscope {
     inherit (androidenv.androidPkgs_9_0) build-tools;
     jdk = jdk8;
+  };
+
+  diffoscope = diffoscopeMinimal.override {
+    enableBloat = true;
   };
 
   diffr = callPackage ../tools/text/diffr {
@@ -6085,7 +6093,9 @@ in
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ldgallery = callPackage ../tools/graphics/ldgallery { };
+  ldgallery = callPackage ../tools/graphics/ldgallery {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
@@ -7395,6 +7405,8 @@ in
   ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
 
   opensp = callPackage ../tools/text/sgml/opensp { };
+
+  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
 
@@ -9407,10 +9419,6 @@ in
     SDL = SDL_sixel;
   };
 
-  openconnect_pa = callPackage ../tools/networking/openconnect_pa {
-    openssl = null;
-  };
-
   openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect {
@@ -9766,6 +9774,8 @@ in
   };
 
   woeusb = callPackage ../tools/misc/woeusb { };
+
+  wslu = callPackage ../tools/system/wslu { };
 
   chase = callPackage ../tools/system/chase { };
 
@@ -12943,7 +12953,6 @@ in
   cmakeCurses = cmake.override { useNcurses = true; };
 
   cmakeWithGui = cmakeCurses.override { withQt5 = true; };
-  cmakeWithQt4Gui = cmakeCurses.override { useQt4 = true; };
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
@@ -13211,6 +13220,8 @@ in
   };
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
+
+  git-aggregator = callPackage ../development/tools/git-aggregator { };
 
   github-release = callPackage ../development/tools/github/github-release { };
 
@@ -27669,6 +27680,8 @@ in
   ytalk = callPackage ../applications/networking/instant-messengers/ytalk { };
 
   ytcc = callPackage ../tools/networking/ytcc { };
+
+  ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 

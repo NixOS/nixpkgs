@@ -2226,11 +2226,13 @@
     groups = ["default"];
     platforms = [];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0rl4ic5pzvrpgd42z0c1s2n3j39c9znksblxxvmhkzrc0ckyg2cm";
-      type = "gem";
+      url = "https://github.com/akr/ruby-terminfo";
+      rev = "8aaa20b15fcf922239c200a1cccbc8853c397bb4";
+      fetchSubmodules = false;
+      sha256 = "1ak85bmnaqwpyx07wb6wfa2cr06gb30gnmv9knijnsbv4q583xlz";
+      type = "git";
     };
-    version = "0.1.1";
+    version = "0.2";
   };
   ruby-vips = {
     dependencies = ["ffi"];

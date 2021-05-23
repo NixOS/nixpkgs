@@ -1,4 +1,4 @@
-pkgargs@{ lib, haskellPackages, writeText, gawk }:
+pkgargs@{ stdenv, lib, haskellPackages, writeText, gawk }:
 let
   generic-fetcher =
     import ./generic-fetcher.nix pkgargs;

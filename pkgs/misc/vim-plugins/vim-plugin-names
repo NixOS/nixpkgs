@@ -106,6 +106,7 @@ dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
+eddiebergman/nvim-treesitter-pyfold
 editorconfig/editorconfig-vim
 edluffy/hologram.nvim@main
 edluffy/specs.nvim@main
@@ -458,6 +459,7 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-telescope/telescope-dap.nvim
 nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-writer.nvim
 nvim-telescope/telescope-fzy-native.nvim
@@ -528,7 +530,9 @@ ray-x/aurora
 ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog
+rcarriga/nvim-dap-ui
 rhysd/committia.vim
+rhysd/conflict-marker.vim
 rhysd/devdocs.vim
 rhysd/git-messenger.vim
 rhysd/vim-clang-format
@@ -601,6 +605,7 @@ solarnz/arcanist.vim
 sonph/onehalf
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
+steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
@@ -774,8 +779,10 @@ xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
 Xuyuanp/nerdtree-git-plugin
+Xuyuanp/scrollbar.nvim
 yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
+Yggdroot/hiPairs
 Yggdroot/indentLine
 Yggdroot/LeaderF
 Yilin-Yang/vim-markbar

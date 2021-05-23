@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jOxneMqeyvMQWKPNha59H6qWSFmx+Z71SU2+M5VWMsA=";
+    hash = "sha256-hiz3dMEYNKKd9dZiGghAhGqoXXKJiZG6sECfsCYVscU=";
   };
 
-  cargoHash = "sha256-H6czxSTw93RNTaN0OJyv0RfwmGAiFkpDgUtXHCD+jrY=";
+  cargoHash = "sha256-sCvQFU9/ENVi1RHV3QDngzI/S1xuHvpWxsrxT73jdI0=";
 
   outputs = [ "out" "man" ];
 
@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "An implementation of the Language Server Protocol for LaTeX";
     homepage = "https://texlab.netlify.app";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar metadark ];
+    maintainers = with maintainers; [ doronbehar kira-bruneau ];
+    platforms = platforms.all;
   };
 }

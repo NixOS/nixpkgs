@@ -1,26 +1,59 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk3, gnome, gdk-pixbuf
-, librsvg, gsound, libmanette
-, gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
-, meson, ninja, python3, vala, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  gnome,
+  gdk-pixbuf,
+  librsvg,
+  gsound,
+  libmanette,
+  gettext,
+  itstool,
+  libxml2,
+  clutter,
+  clutter-gtk,
+  wrapGAppsHook,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "quadrapassel";
-  version = "3.38.1";
+  version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "033plabc6q3sk6qjr5nml8z6p07vcw57gxddxjk9b65wgg0rzzhr";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "1d59sxmmmhi611hvr5jmsm276j9w20hc5yq4rk0s4d3svadyap79";
   };
 
   nativeBuildInputs = [
-    meson ninja python3 vala desktop-file-utils
-    pkg-config gnome.adwaita-icon-theme
-    libxml2 itstool gettext wrapGAppsHook
+    meson
+    ninja
+    python3
+    vala
+    desktop-file-utils
+    pkg-config
+    gnome.adwaita-icon-theme
+    libxml2
+    itstool
+    gettext
+    wrapGAppsHook
   ];
+
   buildInputs = [
-    gtk3 gdk-pixbuf librsvg libmanette
-    gsound clutter libxml2 clutter-gtk
+    gtk3
+    gdk-pixbuf
+    librsvg
+    libmanette
+    gsound
+    clutter
+    libxml2
+    clutter-gtk
   ];
 
   passthru = {
@@ -33,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Classic falling-block game, Tetris";
     homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
