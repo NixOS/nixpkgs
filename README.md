@@ -24,7 +24,7 @@
 * [Matrix Chat](https://matrix.to/#/#community:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Community-maintained wiki](https://nixos.wiki/)
-* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Telegram, other IRC channels, etc.)
+* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
 # Other Project Repositories
 
