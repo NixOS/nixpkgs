@@ -2221,6 +2221,8 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  envoy-reader = callPackage ../development/python-modules/envoy-reader { };
+
   enzyme = callPackage ../development/python-modules/enzyme { };
 
   epc = callPackage ../development/python-modules/epc { };
@@ -4212,6 +4214,8 @@ in {
   memcached = callPackage ../development/python-modules/memcached { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
+
+  mercantile = callPackage ../development/python-modules/mercantile { };
 
   mercurial = toPythonModule (pkgs.mercurial.override {
     python3Packages = self;

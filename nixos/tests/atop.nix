@@ -14,7 +14,10 @@ let assertions = rec {
   '';
   unit = name: state: ''
     with subtest("Unit ${name} should be ${state}"):
-        machine.require_unit_state("${name}", "${state}")
+        if "${state}" == "active":
+            machine.wait_for_unit("${name}")
+        else:
+            machine.require_unit_state("${name}", "${state}")
   '';
   version = ''
     import re
@@ -44,9 +47,19 @@ let assertions = rec {
     if present then
       unit "atop.service" "active"
       + ''
-        with subtest("atop.service should have written some data to /var/log/atop"):
-            files = int(machine.succeed("ls -1 /var/log/atop | wc -l"))
-            assert files > 0, "Expected at least 1 data file"
+        with subtest("atop.service should write some data to /var/log/atop"):
+
+            def has_data_files(last: bool) -> bool:
+                files = int(machine.succeed("ls -1 /var/log/atop | wc -l"))
+                if files == 0:
+                    machine.log("Did not find at least one 1 data file")
+                    if not last:
+                        machine.log("Will retry...")
+                    return False
+                return True
+
+            with machine.nested("Waiting for data files"):
+                retry(has_data_files)
       '' else unit "atop.service" "inactive";
   atopRotateTimer = present:
     unit "atop-rotate.timer" (if present then "active" else "inactive");
@@ -55,11 +68,21 @@ let assertions = rec {
       unit "atopacct.service" "active"
       + ''
         with subtest("atopacct.service should enable process accounting"):
-            machine.succeed("test -f /run/pacct_source")
+            machine.wait_until_succeeds("test -f /run/pacct_source")
 
         with subtest("atopacct.service should write data to /run/pacct_shadow.d"):
-            files = int(machine.succeed("ls -1 /run/pacct_shadow.d | wc -l"))
-            assert files >= 1, "Expected at least 1 pacct_shadow.d file"
+
+            def has_data_files(last: bool) -> bool:
+                files = int(machine.succeed("ls -1 /run/pacct_shadow.d | wc -l"))
+                if files == 0:
+                    machine.log("Did not find at least one 1 data file")
+                    if not last:
+                        machine.log("Will retry...")
+                    return False
+                return True
+
+            with machine.nested("Waiting for data files"):
+                retry(has_data_files)
       '' else unit "atopacct.service" "inactive";
   netatop = present:
     if present then

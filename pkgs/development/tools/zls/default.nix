@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    zig build -Drelease-safe --prefix $out install
+    zig build -Drelease-safe -Dtarget=${stdenv.hostPlatform.parsed.cpu.name}-native --prefix $out install
   '';
 
   meta = with lib; {
     description = "Zig LSP implementation + Zig Language Server";
     changelog = "https://github.com/zigtools/zls/releases/tag/${version}";
     homepage = "https://github.com/zigtools/zls";
-    license = [ licenses.mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fortuneteller2k ];
   };
 }

@@ -225,7 +225,7 @@
     "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
     "enigma2" = ps: with ps; [ openwebifpy ];
     "enocean" = ps: with ps; [ ]; # missing inputs: enocean
-    "enphase_envoy" = ps: with ps; [ ]; # missing inputs: envoy_reader
+    "enphase_envoy" = ps: with ps; [ envoy-reader ];
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
