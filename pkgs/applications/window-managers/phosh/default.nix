@@ -24,6 +24,7 @@
 , networkmanager
 , polkit
 , libsecret
+, writeShellScript
 , writeText
 }:
 
@@ -36,9 +37,15 @@ let
     sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
   };
 
-  executable = writeText "phosh" ''
+  executable = writeShellScript "phosh" ''
+    if [ -z "$ENABLE_SYSTEMD_SESSION" ]; then
+      SESSION_MANAGER="--builtin"
+    else
+      SESSION_MANAGER="--systemd"
+    fi
+
     PHOC_INI=@out@/share/phosh/phoc.ini
-    GNOME_SESSION_ARGS="--disable-acceleration-check --session=phosh --debug"
+    GNOME_SESSION_ARGS="--disable-acceleration-check --session=phosh --debug $SESSION_MANAGER"
 
     if [ -f /etc/phosh/phoc.ini ]; then
       PHOC_INI=/etc/phosh/phoc.ini
