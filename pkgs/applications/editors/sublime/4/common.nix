@@ -68,6 +68,7 @@ in let
       done
 
       # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
+      # Sublime uses it to elevate privileges for saving files the user does not own.
       sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
 
       runHook postBuild
