@@ -10,6 +10,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname
+, commandLineArgs
 }:
 
 let
@@ -96,6 +97,12 @@ let
       grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
     '') + ''
       runHook postInstall
+    '';
+
+    preFixup = ''
+      eval gappsWrapperArgs+=(
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArg commandLineArgs)}
+      )
     '';
 
     inherit meta;

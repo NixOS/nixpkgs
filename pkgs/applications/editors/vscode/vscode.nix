@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, isInsiders ? false, commandLineArgs ? "" }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -20,6 +20,7 @@ let
   }.${system};
 in
   callPackage ./generic.nix rec {
+    inherit commandLineArgs;
     # The update script doesn't correctly change the hash for darwin, so please:
     # nixpkgs-update: no auto update
 
