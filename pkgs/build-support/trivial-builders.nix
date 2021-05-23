@@ -345,6 +345,7 @@ rec {
         };
     in runCommand name args (
       ''
+        (
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
@@ -369,6 +370,7 @@ rec {
             mv propagated-build-inputs $output_path/nix-support/propagated-build-inputs
           fi
         '') secondaryOutputs + ''
+        )
         ${postBuild}
       '');
 
