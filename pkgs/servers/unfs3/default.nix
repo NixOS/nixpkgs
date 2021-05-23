@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unfs3-0.9.22";
+  pname = "unfs3";
+  version = "0.9.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/unfs3/${name}.tar.gz";
+    url = "mirror://sourceforge/unfs3/${pname}-${version}.tar.gz";
     sha256 = "076zkyqkn56q0a8n3h65n1a68fknk4hrrp6mbhajq5s1wp5248j8";
   };
 
