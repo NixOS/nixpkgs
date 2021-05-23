@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  cargoSha256 = "sha256-cAXiAPhHdxdd8pFQ0Gq7eHO2p/Dam53gDbE583UYY/k=";
+  cargoSha256 = "sha256-I8ZH35L2CVLy6ypmdOPd8VEG/sQeGaHyT1HWNdwyZVo=";
 
   meta = with lib; {
     description = "An easy to use base16 scheme manager/builder that integrates with any workflow";

@@ -1,6 +1,6 @@
 { qtModule, qtbase, qtdeclarative, qtsvg, hunspell  }:
 
 qtModule {
-  name = "qtvirtualkeyboard";
+  pname = "qtvirtualkeyboard";
   qtInputs = [ qtbase qtdeclarative qtsvg hunspell ];
 }

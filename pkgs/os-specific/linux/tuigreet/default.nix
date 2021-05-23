@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1fk8ppxr3a8vdp7g18pp3sgr8b8s11j30mcqpdap4ai14v19idh8";
   };
 
-  cargoSha256 = "0qpambizjy6z44spnjnh2kd8nay5953mf1ga2iff2mjlv97zpq22";
+  cargoSha256 = "1ds5rcxg7qn799zp0jdn9ifkdzh9h5ibsqh688dvrqyzrsfz6x7m";
 
   meta = with lib; {
     description = "Graphical console greter for greetd";

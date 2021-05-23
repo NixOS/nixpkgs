@@ -5,7 +5,7 @@
 with lib;
 
 qtModule {
-  name = "qtmultimedia";
+  pname = "qtmultimedia";
   qtInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gstreamer gst-plugins-base libpulseaudio ]

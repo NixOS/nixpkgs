@@ -19,7 +19,7 @@ index f7ee932f214f..ef94a97c4be9 100644
    # Install in Clang resource directory.
    install(FILES ${file_name}
 -    DESTINATION ${COMPILER_RT_INSTALL_PATH}/share
-+    DESTINATION ${COMPILER_RT_INSTALL_PATH}/${CMAKE_INSTALL_FULL_INCLUDEDIR}
++    DESTINATION ${COMPILER_RT_INSTALL_PATH}/${CMAKE_INSTALL_FULL_DATADIR}
      COMPONENT ${component})
    add_dependencies(${component} ${target_name})
  

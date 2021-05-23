@@ -137,7 +137,7 @@ let
       ninja pkg-config
       python2WithPackages perl nodejs
       gnutar which
-      llvmPackages.lldClang.bintools
+      llvmPackages.bintools
     ] ++ lib.optionals (chromiumVersionAtLeast "92") [
       python3WithPackages
     ];

@@ -1,7 +1,7 @@
 { lib, qtModule, qtbase }:
 
 qtModule {
-  name = "qtmacextras";
+  pname = "qtmacextras";
   qtInputs = [ qtbase ];
   meta = with lib; {
     maintainers = with maintainers; [ periklis ];

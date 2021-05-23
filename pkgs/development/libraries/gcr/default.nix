@@ -74,8 +74,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  enableParallelBuilding = true;
-
   preFixup = ''
     wrapProgram "$out/bin/gcr-viewer" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"

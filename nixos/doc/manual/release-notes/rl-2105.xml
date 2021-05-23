@@ -102,6 +102,18 @@
    </listitem>
    <listitem>
     <para>
+     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
+     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
+     notes</link> for details.
+    </para>
+    <para>
+     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
+     in keeping with the new name. The old name remains for compatibility, but
+     it is deprecated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
      to version 4.4. The package now includes example configurations and manual
      pages by default. The NixOS module has been changed to use the upstream

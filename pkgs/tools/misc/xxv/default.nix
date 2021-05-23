@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0ppfsgdigza2jppbkg4qanjhlkpnq7p115c4471vc6vpikpfrlk3";
   };
 
-  cargoSha256 = "1gnyig87a0yqgkng52fpn6hv629vym6k7ydljnxrhb5phmj2qbqx";
+  cargoSha256 = "0pmpvlmy4pw252is34r9af1ysrp78xs8pz8cw4rys9s4fh2hmhjb";
 
   buildInputs = lib.optionals useNcurses [ ncurses ]
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
