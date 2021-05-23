@@ -1523,6 +1523,8 @@ in {
 
   commandparse = callPackage ../development/python-modules/commandparse { };
 
+  commentjson = callPackage ../development/python-modules/commentjson { };
+
   commoncode = callPackage ../development/python-modules/commoncode { };
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
