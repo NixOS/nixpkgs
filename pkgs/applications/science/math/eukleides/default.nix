@@ -9,8 +9,12 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     sha256 = "0s8cyh75hdj89v6kpm3z24i48yzpkr8qf0cwxbs9ijxj1i38ki0q";
   };
 
-  # use $CC instead of hardcoded gcc
-  patches = [ ./use-CC.patch ];
+  patches = [
+    # use $CC instead of hardcoded gcc
+    ./use-CC.patch
+    # allow PostScript transparency in epstopdf call
+    ./gs-allowpstransparency.patch
+  ];
 
   nativeBuildInputs = [ bison flex texinfo makeWrapper ];
 
