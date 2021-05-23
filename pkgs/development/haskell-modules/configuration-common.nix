@@ -1207,14 +1207,10 @@ self: super: {
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
-  # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
-  # the version bounds are not satisfied.  This can be removed if the PR at
-  # https://github.com/ananthakumaran/webify/pull/27 is merged and a new
-  # release of webify is published.
-  webify = appendPatch super.webify (pkgs.fetchpatch {
-    url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
-  });
+  # We jailbreak webify, as optparse-applicative evolved past the version bound
+  # and the corresponding (and outdated) PR was not merged for a year.
+  # https://github.com/ananthakumaran/webify/pull/27
+  webify = doJailbreak super.webify;
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
