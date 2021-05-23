@@ -38,6 +38,8 @@ common =
 
       outputs = [ "out" "dev" "man" "doc" ];
 
+      hardeningEnable = [ "pie" ];
+
       nativeBuildInputs =
         [ pkg-config ]
         ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
