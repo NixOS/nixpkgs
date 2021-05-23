@@ -38,8 +38,8 @@ mkDerivation rec {
       GPXLab is an application to display and manage GPS tracks
       previously recorded with a GPS tracker.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ sikmir ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }
