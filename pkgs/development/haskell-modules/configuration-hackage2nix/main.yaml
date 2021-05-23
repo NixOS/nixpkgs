@@ -205,8 +205,10 @@ package-maintainers:
     - cabal-fmt
     - generic-optics
     - ghcup
+    - ghcide
     - haskell-language-server
     - hedgehog
+    - hlint
     - hmatrix
     - iCalendar
     - neuron
