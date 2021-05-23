@@ -33,6 +33,8 @@ let
       inherit sha256;
     };
 
+    hardeningEnable = [ "pie" ];
+
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
