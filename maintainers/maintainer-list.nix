@@ -11147,6 +11147,12 @@
     email = "zef@zef.me";
     name = "Zef Hemel";
   };
+  zeorin = {
+    name = "Xandor Schiefer";
+    email = "me@xandor.co.za";
+    github = "zeorin";
+    githubId = 1187078;
+  };
   zeratax = {
     email = "mail@zera.tax";
     github = "ZerataX";
