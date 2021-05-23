@@ -86,6 +86,7 @@ self: super: {
   yesod-paginator = dontCheck super.yesod-paginator;
   grammatical-parsers = dontCheck super.grammatical-parsers;
   construct = dontCheck super.construct;
+  orbits = dontCheck super.orbits;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
