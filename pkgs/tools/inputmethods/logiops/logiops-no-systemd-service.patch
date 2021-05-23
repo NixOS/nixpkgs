@@ -1,0 +1,15 @@
+diff --git i/src/logid/CMakeLists.txt w/src/logid/CMakeLists.txt
+index 00ee796..c8300a5 100644
+--- i/src/logid/CMakeLists.txt
++++ w/src/logid/CMakeLists.txt
+@@ -96,10 +96,6 @@ if (SYSTEMD_FOUND AND "${SYSTEMD_SERVICES_INSTALL_DIR}" STREQUAL "")
+     string(REGEX REPLACE "[ \t\n]+" "" SYSTEMD_SERVICES_INSTALL_DIR
+            "${SYSTEMD_SERVICES_INSTALL_DIR}")
+     configure_file(logid.service.cmake ${CMAKE_BINARY_DIR}/logid.service)
+-    message(STATUS "systemd units will be installed at ${SYSTEMD_SERVICES_INSTALL_DIR}")
+-    install(FILES ${CMAKE_BINARY_DIR}/logid.service
+-            DESTINATION ${SYSTEMD_SERVICES_INSTALL_DIR}
+-            COMPONENT cp)
+ elseif(NOT SYSTEMD_FOUND AND SYSTEMD_SERVICES_INSTALL_DIR)
+     message(FATAL_ERROR "systemd is not found w/ pkg-config but SYSTEMD_SERVICES_INSTALL_DIR is defined.")
+ endif()
