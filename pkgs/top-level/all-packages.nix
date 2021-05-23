@@ -23102,6 +23102,8 @@ in
 
   dynamips = callPackage ../applications/virtualization/dynamips { };
 
+  exploitdb = callPackage ../tools/security/exploitdb { };
+
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [];
   };
