@@ -21,8 +21,8 @@ nix-build -E 'let pkgs = import ./. {};
                   brscan5-etc-files = pkgs.callPackage (import ./nixos/modules/services/hardware/sane_extra_backends/brscan5_etc_files.nix) {};
               in brscan5-etc-files.override {
                    netDevices = [
-                     {name="a"; model="MFC-7860DW"; nodename="BRW0080927AFBCE";}
-                     {name="b"; model="MFC-7860DW"; ip="192.168.1.2";}
+                     {name="a"; model="ADS-1200"; nodename="BRW0080927AFBCE";}
+                     {name="b"; model="ADS-1200"; ip="192.168.1.2";}
                    ];
               }'
 ~~~
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     cp -rp "./brscan5.ini" "$TARGET_DIR"
     cp -rp "./brsanenetdevice.cfg" "$TARGET_DIR"
 
-    export NIX_REDIRECTS="/etc/opt/brother/scanner/brscan5//brsanenetdevice.cfg=$TARGET_DIR/brsanenetdevice.cfg"
+    export NIX_REDIRECTS="/etc/opt/brother/scanner/brscan5/=$TARGET_DIR/"
 
     printf '${addAllNetDev netDevices}\n'
 

@@ -15,8 +15,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         brscan5 = {
           enable = true;
           netDevices = {
-            "a" = { model="MFC-7860DW"; nodename="BRW0080927AFBCE"; };
-            "b" = { model="MFC-7860DW"; ip="192.168.1.2"; };
+            "a" = { model="ADS-1200"; nodename="BRW0080927AFBCE"; };
+            "b" = { model="ADS-1200"; ip="192.168.1.2"; };
           };
         };
       };
@@ -24,11 +24,19 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   testScript = ''
     # sane loads libsane-brother5.so.1 successfully, and scanimage doesn't die
-    assert 'libsane-brother5.so.1", O_RDONLY|O_CLOEXEC) = 10' in machine.succeed('strace scanimage -L 2>&1')
+    strace = machine.succeed('strace scanimage -L 2>&1').split("\n")
+    regexp = 'openat\(.*libsane-brother5.so.1", O_RDONLY|O_CLOEXEC\) = \d\d*$'
+    assert len([x for x in strace if re.match(regexp,x)]) > 0
 
     # module creates a config
     cfg = machine.succeed('cat /etc/opt/brother/scanner/brscan5/brsanenetdevice.cfg')
-    assert 'DEVICE=a , "MFC-7860DW" , Unknown , NODENAME=BRW0080927AFBCE' in cfg
-    assert 'DEVICE=b , "MFC-7860DW" , Unknown , IP-ADDRESS=192.168.1.2' in cfg
+    assert 'DEVICE=a , "ADS-1200" , 0x4f9:0x459 , NODENAME=BRW0080927AFBCE' in cfg
+    assert 'DEVICE=b , "ADS-1200" , 0x4f9:0x459 , IP-ADDRESS=192.168.1.2' in cfg
+
+    # scanimage lists the two network scanners
+    scanimage = machine.succeed("scanimage -L")
+    print(scanimage)
+    assert """device `brother5:net1;dev0' is a Brother b ADS-1200""" in scanimage
+    assert """device `brother5:net1;dev1' is a Brother a ADS-1200""" in scanimage
   '';
 })
