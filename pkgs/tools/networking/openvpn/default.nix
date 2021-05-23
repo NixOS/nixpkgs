@@ -83,7 +83,7 @@ in
   };
 
   openvpn = generic {
-    version = "2.5.0";
-    sha256 = "sha256-AppCbkTWVstOEYkxnJX+b8mGQkdyT1WZ2Z35xMNHj70=";
+    version = "2.5.2";
+    sha256 = "sha256-sSdDg2kB82Xvr4KrJJOWfhshwh60POmo2hACoXycHcg=";
   };
 }
