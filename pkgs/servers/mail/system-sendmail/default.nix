@@ -15,7 +15,8 @@ let script = writeText "script" ''
   fi
 ''; in
 stdenv.mkDerivation {
-  name = "system-sendmail-1.0";
+  pname = "system-sendmail";
+  version = "1.0";
 
   src = script;
 

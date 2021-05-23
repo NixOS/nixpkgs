@@ -3669,6 +3669,12 @@
     githubId = 10353047;
     name = "Tobias Happ";
   };
+  gfrascadorio = {
+    email = "gfrascadorio@tutanota.com";
+    github = "gfrascadorio";
+    githubId = 37602871;
+    name = "Galois";
+  };
   ggpeti = {
     email = "ggpeti@gmail.com";
     github = "ggpeti";
@@ -5196,6 +5202,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  kho-dialga = {
+    email = "ivandashenyou@gmail.com";
+    github = "kho-dialga";
+    githubId = 55767703;
+    name = "Iván Brito";
+    };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
@@ -7470,6 +7482,12 @@
     github = "omnipotententity";
     githubId = 1538622;
     name = "Michael Reilly";
+  };
+  onixie = {
+    email = "onixie@gmail.com";
+    github = "onixie";
+    githubId = 817073;
+    name = "Yc. Shen";
   };
   onsails = {
     email = "andrey@onsails.com";

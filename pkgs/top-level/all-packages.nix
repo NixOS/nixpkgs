@@ -313,6 +313,8 @@ in
 
   protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
 
+  proton-caller = callPackage ../misc/emulators/proton-caller { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
@@ -5582,6 +5584,8 @@ in
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
+  heisenbridge = callPackage ../servers/heisenbridge { };
+
   helio-workstation = callPackage ../applications/audio/helio-workstation { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
@@ -7442,6 +7446,8 @@ in
 
   opae = callPackage ../development/libraries/opae { };
 
+  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
+
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
@@ -8882,6 +8888,9 @@ in
   tab-rs = callPackage ../tools/misc/tab-rs {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
+
+  inherit (callPackages ../applications/networking/taler { })
+    taler-exchange taler-merchant;
 
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
 
@@ -11636,6 +11645,9 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -13676,6 +13688,8 @@ in
     inherit (gnome2) vte;
     lua = lua5;
   } // (config.radare or {}));
+
+  retry = callPackage ../tools/system/retry { };
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
 
@@ -15790,8 +15804,6 @@ in
   libclthreads = callPackage ../development/libraries/libclthreads  { };
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
-
-  libco-canonical = callPackage ../development/libraries/libco-canonical { };
 
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
@@ -22840,6 +22852,8 @@ in
 
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
+
+  multus-cni = callPackage ../applications/networking/cluster/multus-cni {};
 
   cntr = callPackage ../applications/virtualization/cntr { };
 
