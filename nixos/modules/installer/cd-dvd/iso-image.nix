@@ -182,6 +182,9 @@ let
     # Menu configuration
     #
 
+    # Search using a "marker file"
+    search --set=root --file /EFI/nixos-installer-image
+
     insmod gfxterm
     insmod png
     set gfxpayload=keep
@@ -251,6 +254,9 @@ let
     strictDeps = true;
   } ''
     mkdir -p $out/EFI/boot/
+
+    # Add a marker so GRUB can find the filesystem.
+    touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
     MODULES="fat iso9660 part_gpt part_msdos \
@@ -383,8 +389,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
+      # Force root to be the FAT partition
+      # Otherwise it breaks rEFInd's boot
+      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
-        # \$root defaults to the drive the EFI is found on.
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
