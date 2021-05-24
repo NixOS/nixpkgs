@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-dash-to-dock";
+  pname = "gnome-shell-extension-dash-to-dock";
   version = "69";
 
   src = fetchFromGitHub {
