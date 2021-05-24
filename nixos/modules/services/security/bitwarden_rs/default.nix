@@ -121,7 +121,6 @@ in {
         EnvironmentFile = [ configFile ] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${bitwarden_rs}/bin/bitwarden_rs";
         LimitNOFILE = "1048576";
-        LimitNPROC = "64";
         PrivateTmp = "true";
         PrivateDevices = "true";
         ProtectHome = "true";
