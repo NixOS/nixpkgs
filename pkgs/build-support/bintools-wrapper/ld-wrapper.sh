@@ -24,7 +24,9 @@ fi
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
 
-# NIX_LINK_TYPE is set if ld has been called through our cc wrapper
+# NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
+# advantage of this to avoid both recalculating it, and also repeating other
+# processing cc wrapper has already done.
 if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
     linkType=$NIX_LINK_TYPE_@suffixSalt@
 else
