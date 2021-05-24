@@ -1,14 +1,16 @@
-{ lib, buildDunePackage, ocaml, csv, ocaml_lwt, uutf }:
+{ lib, ocamlPackages }:
+
+let inherit (ocamlPackages) buildDunePackage csv uutf; in
 
 buildDunePackage {
   pname = "csvtool";
-  inherit (csv) src version meta;
+  inherit (csv) src version useDune2;
 
-  minimumOCamlVersion = "4.02";
+  buildInputs = [ csv uutf ];
 
-  buildInputs = [ csv ocaml_lwt uutf ];
+  doCheck = true;
 
-  useDune2 = true;
-
-  doCheck = lib.versionAtLeast ocaml.version "4.03";
+  meta = csv.meta // {
+    description = "Command line tool for handling CSV files";
+  };
 }

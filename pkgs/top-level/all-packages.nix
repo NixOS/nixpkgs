@@ -2296,7 +2296,7 @@ in
 
   csvkit = callPackage ../tools/text/csvkit { };
 
-  inherit (ocamlPackages) csvtool;
+  csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
