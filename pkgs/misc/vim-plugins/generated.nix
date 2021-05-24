@@ -3202,6 +3202,18 @@ final: prev:
     meta.homepage = "https://github.com/arcticicestudio/nord-vim/";
   };
 
+  nord-nvim = buildVimPluginFrom2Nix {
+    pname = "nord-nvim";
+    version = "2021-05-22";
+    src = fetchFromGitHub {
+      owner = "shaunsingh";
+      repo = "nord.nvim";
+      rev = "6860c64a3002f6dbcf36c0baf7bda8c34c5083c8";
+      sha256 = "0a036xgsklqv2zwlcpyhdrip8mvgqhyb4vcsp7gwp5241917bia3";
+    };
+    meta.homepage = "https://github.com/shaunsingh/nord.nvim/";
+  };
+
   NrrwRgn = buildVimPluginFrom2Nix {
     pname = "NrrwRgn";
     version = "2020-05-29";
