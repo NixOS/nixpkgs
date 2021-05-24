@@ -59,16 +59,11 @@ stdenv.mkDerivation rec {
   _LDADD = [ "-lcrypt" "-lm" ]
     ++ optional (luaSupport) "-llua"
     ++ optionals (sslSupport) [ "-lssl" "-lcrypto" ];
-  makeFlags = [ "LDADD=$(_LDADD)" ];
+  makeFlags = [ "LDADD=$(_LDADD)" "prefix=$(out)" "MANDIR=$(out)/share/man" "BINOWN=" ];
 
   doCheck = true;
   checkInputs = [ inetutils wget ];
   checkFlags = [ "-dx" "VERBOSE=yes" ] ++ optional (!cgiSupport) "CGITESTS=";
-
-  installPhase = ''
-    install -m755 -Dt $out/bin bozohttpd
-    install -m644 -Dt $out/share/man/man8 bozohttpd.8
-  '';
 
   meta = with lib; {
     description = "Bozotic HTTP server; small and secure";
