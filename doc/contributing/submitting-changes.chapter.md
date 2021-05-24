@@ -238,7 +238,7 @@ The `staging` branch is a development branch where mass-rebuilds go. It should o
 
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 
-The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds should go via the `staging` branch. It should only see non-breaking commits that are fixing issues blocking it from being merged into the `master ` branch.
+The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master ` branch.
 
 If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
 
