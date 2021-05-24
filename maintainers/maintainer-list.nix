@@ -9507,6 +9507,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stelcodes = {
+    email = "stel@stel.codes";
+    github = "stelcodes";
+    githubId = 22163194;
+    name = "Stel Abrego";
+  };
   stephank = {
     email = "nix@stephank.nl";
     github = "stephank";
