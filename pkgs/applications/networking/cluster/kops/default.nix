@@ -73,4 +73,10 @@ rec {
     sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
     rev = "v${version}";
   };
+
+  kops_1_20 = mkKops rec {
+    version = "1.20.1";
+    sha256 = "09wxd8z5zrr64vk7lbn97rzk9dn49ciqv6qf0ymiy1kvp1fq78wk";
+    rev = "v${version}";
+  };
 }
