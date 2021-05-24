@@ -1571,6 +1571,8 @@ in
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
+  imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
+
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
