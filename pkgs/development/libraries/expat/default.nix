@@ -5,13 +5,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let
+stdenv.mkDerivation rec {
+  pname = "expat";
   version = "2.4.1";
-in stdenv.mkDerivation rec {
-  name = "expat-${version}";
 
   src = fetchurl {
-    url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${name}.tar.xz";
+    url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-zwMtDbqbkoY2VI4ysyei1msaq2PE9KE90TLC0dLy+2o=";
   };
 
@@ -25,8 +24,7 @@ in stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   preCheck = ''
-    patchShebangs ./run.sh
-    patchShebangs ./test-driver-wrapper.sh
+    patchShebangs ./configure ./run.sh ./test-driver-wrapper.sh
   '';
 
   meta = with lib; {
