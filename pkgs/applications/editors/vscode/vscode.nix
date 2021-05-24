@@ -37,6 +37,8 @@ in
 
     sourceRoot = "";
 
+    updateScript = ./update-vscodium.sh;
+
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,

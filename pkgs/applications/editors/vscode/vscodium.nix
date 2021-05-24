@@ -45,6 +45,8 @@ in
 
     tests = nixosTests.vscodium;
 
+    updateScript = ./update-vscodium.sh;
+
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
