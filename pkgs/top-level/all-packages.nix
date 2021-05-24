@@ -9960,6 +9960,8 @@ in
 
   yj = callPackage ../development/tools/yj { };
 
+  zprint = callPackage ../development/tools/zprint { };
+
   yle-dl = callPackage ../tools/misc/yle-dl {};
 
   you-get = python3Packages.callPackage ../tools/misc/you-get { };
