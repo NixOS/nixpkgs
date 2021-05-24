@@ -2245,6 +2245,12 @@
     email = "christoph.senjak@googlemail.com";
     name = "Christoph-Simon Senjak";
   };
+  davewm = {
+    name = "Dave Martin";
+    email = "mail@davemartin.me";
+    github = "davewm";
+    githubId = 5785709;
+  };
   davhau = {
     email = "d.hauer.it@gmail.com";
     name = "David Hauer";
