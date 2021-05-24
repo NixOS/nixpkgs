@@ -180,8 +180,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @jonringer
-/pkgs/applications/editors/neovim      @teto
+/pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
