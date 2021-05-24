@@ -397,6 +397,15 @@
    </listitem>
    <listitem>
     <para>
+     The WireGuard module gained a new option
+     <option>networking.wireguard.interfaces.&lt;name&gt;.peers.*.dynamicEndpointRefreshSeconds</option>
+     that implements refreshing the IP of DNS-based endpoints periodically
+     (which WireGuard itself
+     <link xlink:href="https://lists.zx2c4.com/pipermail/wireguard/2017-November/002028.html">cannot do</link>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      MariaDB has been updated to 10.5.
      Before you upgrade, it would be best to take a backup of your database and read
      <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105">
