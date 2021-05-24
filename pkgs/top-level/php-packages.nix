@@ -201,6 +201,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       , internalDeps ? []
       , postPhpize ? ""
       , preCheck ? ""
+      , prePatch ? ""
+      , postPatch ? ""
       , buildInputs ? []
       , zendExtension ? false
       , doCheck ? true
@@ -223,8 +225,15 @@ lib.makeScope pkgs.newScope (self: with self; {
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
-      prePatch = "pushd ../..";
-      postPatch = "popd";
+      prePatch = ''
+        ${prePatch}
+        pushd ../..
+      '';
+
+      postPatch = ''
+        popd
+        ${postPatch}
+      '';
 
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
@@ -290,8 +299,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           })
         ];
         # For some reason `patch` fails to remove these files correctly.
-        # Since `postPatch` is already used in `mkExtension`, we have to make it here.
-        preCheck = ''
+        postPatch = ''
           rm tests/bug43364.phpt
           rm tests/bug80268.phpt
         '';
