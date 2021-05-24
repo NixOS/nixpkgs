@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ inetutils wget ];
-  checkFlags = [ "-dx" "VERBOSE=yes" ] ++ optional (!cgiSupport) "CGITESTS=";
+  checkFlags = optional (!cgiSupport) "CGITESTS=";
 
   meta = with lib; {
     description = "Bozotic HTTP server; small and secure";
