@@ -82,9 +82,6 @@ in
         description = "Solanum IRC daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          BANDB_DBPATH = "/var/lib/solanum/ban.db";
-        };
         serviceConfig = {
           ExecStart   = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile ${configFile} -pidfile /run/solanum/ircd.pid";
           DynamicUser = true;
