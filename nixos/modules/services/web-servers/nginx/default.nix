@@ -230,13 +230,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else ((optionals hasSSL (
-            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
-          )) ++ optionals (!onlySSL) (
-            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
-          ));
+          else optionals (hasSSL || vhost.rejectSSL) (
+            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
+          ) ++ optionals (!onlySSL) (
+            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
+          );
 
         hostListen =
           if vhost.forceSSL
@@ -302,6 +302,9 @@ let
           ''}
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+          ''}
+          ${optionalString vhost.rejectSSL ''
+            ssl_reject_handshake on;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -771,20 +774,27 @@ in
       }
 
       {
-        assertion = all (conf: with conf;
-          !(addSSL && (onlySSL || enableSSL)) &&
-          !(forceSSL && (onlySSL || enableSSL)) &&
-          !(addSSL && forceSSL)
+        assertion = all (host: with host;
+          count id [ addSSL (onlySSL || enableSSL) forceSSL rejectSSL ] <= 1
         ) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.addSSL,
-          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
-          are mutually exclusive.
+          services.nginx.virtualHosts.<name>.onlySSL,
+          services.nginx.virtualHosts.<name>.forceSSL and
+          services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
         '';
       }
 
       {
-        assertion = all (conf: !(conf.enableACME && conf.useACMEHost != null)) (attrValues virtualHosts);
+        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
+          1.19.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
+        assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
