@@ -22897,6 +22897,8 @@ in
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
+  dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
+
   multus-cni = callPackage ../applications/networking/cluster/multus-cni {};
 
   cntr = callPackage ../applications/virtualization/cntr { };
