@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ];
 
     buildInputs = [ wxGTK30 ];
-    
+
     cmakeFlags = [
         "-DBUILD_CORSIXTH=OFF"
         "-DBUILD_ANIMVIEW=ON"

@@ -11,13 +11,13 @@ let
         packageDir = "${lua.env.outPath}/lib/lua/5.3";
     };
 
-    SDL2_mixer_fluid = if audioSupport then SDL2_mixer.overrideAttrs(old: rec { 
-        configureFlags = old.configureFlags ++ [ 
+    SDL2_mixer_fluid = if audioSupport then SDL2_mixer.overrideAttrs(old: rec {
+        configureFlags = old.configureFlags ++ [
             " --enable-music-midi-fluidsynth-shared"
             " --disable-music-midi-timidity"
-        ]; 
+        ];
     }) else null;
-in 
+in
 stdenv.mkDerivation rec {
     inherit version;
 
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
         ++ optional buildDocs doxygen
         ++ optional enableUnitTests catch2
     ;
-    
-    cmakeFlags = [ 
+
+    cmakeFlags = [
         "-DLUA_DIR=${lua.env.outPath}"
         "-DLUA_PACKAGES_DIR=${lua.packageDir}"
         "-DSDL_LIBRARY=${SDL2.outPath}/lib/libSDL2.so"

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
         makeWrapper ${openjdk11}/bin/java $out/bin/${pname} \
             --add-flags "-jar $out/share/java/LevelEdit.jar" \
             --prefix PATH : "$wrappedPath"
-    ''; 
+    '';
 
     meta = with lib; {
         description = "Open source clone of Theme Hospital";
