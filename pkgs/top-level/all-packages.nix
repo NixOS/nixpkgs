@@ -1205,6 +1205,8 @@ in
 
   chamber = callPackage ../tools/admin/chamber {  };
 
+  chaos = callPackage ../tools/networking/chaos {  };
+
   charm = callPackage ../applications/misc/charm { };
 
   chars = callPackage ../tools/text/chars {
