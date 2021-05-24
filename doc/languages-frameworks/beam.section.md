@@ -86,7 +86,7 @@ let
   version = "0.0.1";
   mixEnv = "prod";
 
-  mixDeps = packages.fetchMixDeps {
+  mixFodDeps = packages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src mixEnv version;
     # nix will complain and tell you the right value to replace this with
@@ -130,7 +130,7 @@ let
 
 
 in packages.mixRelease {
-  inherit src pname version mixEnv mixDeps;
+  inherit src pname version mixEnv mixFodDeps;
   # if you have build time environment variables add them here
   MY_ENV_VAR="my_value";
   preInstall = ''
