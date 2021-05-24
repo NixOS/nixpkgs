@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config
-, libglvnd, SDL, SDL_image, SDL_mixer, xorg
+, libglvnd, SDL, SDL_image, SDL_mixer, xorg, automake
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i 's/^AUTOMAKE_OPTIONS = gnu$/AUTOMAKE_OPTIONS = foreign/' Makefile.am
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ automake autoreconfHook pkg-config ];
   buildInputs = [ libglvnd SDL SDL_image SDL_mixer xorg.libSM ];
   strictDeps = true;
 
