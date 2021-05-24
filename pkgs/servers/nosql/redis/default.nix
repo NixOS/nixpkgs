@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningEnable = [ "pie" ];
+
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
 
   doCheck = false; # needs tcl
