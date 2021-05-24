@@ -19,7 +19,7 @@ let
   }:
 
   stdenv.mkDerivation {
-    inherit pname;
+    pname = "gnome-shell-extension-${pname}";
     version = builtins.toString version;
     src = fetchzip {
       url = "https://extensions.gnome.org/extension-data/${
