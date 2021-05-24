@@ -48,6 +48,7 @@ let
     "node"
     "openldap"
     "openvpn"
+    "pihole"
     "postfix"
     "postgres"
     "py-air-control"
