@@ -11,7 +11,7 @@
 , libsoup
 , gtk3
 , glib
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

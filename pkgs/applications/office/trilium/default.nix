@@ -1,4 +1,4 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.46.9";
+  version = "0.47.2";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "1qpk5z8w4wbkxs1lpnz3g8w30zygj4wxxlwj6gp1pip09xgiksm9";
+    sha256 = "04fyi0gbih6iw61b6d8lprf9qhxb6zb1pgckmi016wgv8x5ck02p";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "1n8g7l6hiw9bhzylvzlfcn2pk4i8pqkqp9lj3lcxwwqb8va52phg";
+    sha256 = "1f8csjgqq4yw1qcnlrfy5ysarazmvj2fnmnxj4sr1xjbfa78y2rr";
   };
 
 in {
@@ -55,7 +55,7 @@ in {
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 ];
+    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
 
     installPhase = ''
       runHook preInstall

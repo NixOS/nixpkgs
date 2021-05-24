@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, pillow, xlib, six, xvfb_run, sphinx }:
+, pillow, xlib, six, xvfb-run, sphinx }:
 
 buildPythonPackage rec {
   pname = "pystray";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ sphinx ];
   propagatedBuildInputs = [ pillow xlib six ];
-  checkInputs = [ xvfb_run ];
+  checkInputs = [ xvfb-run ];
 
   checkPhase = ''
     rm tests/icon_tests.py # test needs user input

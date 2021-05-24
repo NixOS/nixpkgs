@@ -38,7 +38,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
      --replace 'importlib-metadata = {version = "^1.6.0", python = "<3.8"}' \
-       'importlib-metadata = {version = ">=1.6,<2", python = "<3.8"}' \
+       'importlib-metadata = {version = ">=1.6", python = "<3.8"}' \
      --replace 'version = "^21.2.0"' 'version = ">=21.2"'
   '';
 

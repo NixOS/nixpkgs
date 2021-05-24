@@ -102,6 +102,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://pcsx2.net";
     maintainers = with maintainers; [ hrdinka govanify ];
+    mainProgram = "PCSX2";
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.

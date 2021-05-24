@@ -84,12 +84,12 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
    </para>
    <para>
     You'll need <literal>nixos-generate-config</literal> and
-    <literal>nixos-install</literal> and we'll throw in some man pages and
-    <literal>nixos-enter</literal> just in case you want to chroot into your
-    NixOS partition. They are installed by default on NixOS, but you don't have
+    <literal>nixos-install</literal>, but this also makes some man pages
+    and <literal>nixos-enter</literal> available, just in case you want to chroot into your
+    NixOS partition. NixOS installs these by default, but you don't have
     NixOS yet..
    </para>
-<screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs/nixos&gt;' --arg configuration {} -iA config.system.build.{nixos-generate-config,nixos-install,nixos-enter,manual.manpages}</screen>
+   <screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs>' -iA nixos-install-tools</screen>
   </listitem>
   <listitem>
    <note>

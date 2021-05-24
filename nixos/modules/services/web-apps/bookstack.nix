@@ -292,6 +292,8 @@ in {
         WorkingDirectory = "${bookstack}";
       };
       script = ''
+        # set permissions
+        umask 077
         # create .env file
         echo "
         APP_KEY=base64:$(head -n1 ${cfg.appKeyFile})
@@ -317,13 +319,14 @@ in {
         ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "SESSION_SECURE_COOKIE=true"}
         ${toString cfg.extraConfig}
         " > "${cfg.dataDir}/.env"
-        # set permissions
-        chmod 700 "${cfg.dataDir}/.env"
 
         # migrate db
         ${pkgs.php}/bin/php artisan migrate --force
 
-        # create caches
+        # clear & create caches (needed in case of update)
+        ${pkgs.php}/bin/php artisan cache:clear
+        ${pkgs.php}/bin/php artisan config:clear
+        ${pkgs.php}/bin/php artisan view:clear
         ${pkgs.php}/bin/php artisan config:cache
         ${pkgs.php}/bin/php artisan route:cache
         ${pkgs.php}/bin/php artisan view:cache

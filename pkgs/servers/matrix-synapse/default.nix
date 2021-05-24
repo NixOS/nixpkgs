@@ -12,17 +12,19 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.32.2";
+  version = "1.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Biwj/zORBsU8XvpMMlSjR3Nqx0q1LqaSX/vX+UDeXI8=";
+    sha256 = "sha256-lXVJfhcH9lKOCHn5f4Lc/OjgEYa5IpauKRhBsFXNWLw=";
   };
 
   patches = [
     # adds an entry point for the service
     ./homeserver-script.patch
   ];
+
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
     setuptools

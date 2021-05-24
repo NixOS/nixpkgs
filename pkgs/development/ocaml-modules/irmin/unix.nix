@@ -1,7 +1,7 @@
 { lib, buildDunePackage
 , checkseum, cmdliner, git-unix, git-cohttp-unix, yaml, fpath
 , irmin, irmin-fs, irmin-git, irmin-graphql, irmin-http
-, irmin-pack, irmin-watcher, irmin-test
+, irmin-pack, irmin-watcher, irmin-test, cacert
 }:
 
 buildDunePackage rec {
@@ -18,7 +18,9 @@ buildDunePackage rec {
     irmin-pack irmin-watcher git-cohttp-unix
   ];
 
-  checkInputs = lib.optional doCheck irmin-test;
+  checkInputs = [
+    irmin-test cacert
+  ];
 
   doCheck = true;
 

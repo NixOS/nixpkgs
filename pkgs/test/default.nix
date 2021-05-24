@@ -22,8 +22,7 @@ with pkgs;
   cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
   stdenv-inputs = callPackage ./stdenv-inputs { };
 
-  haskell-shellFor = callPackage ./haskell-shellFor { };
-  haskell-documentationTarball = callPackage ./haskell-documentationTarball { };
+  haskell = callPackage ./haskell { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
@@ -50,6 +49,8 @@ with pkgs;
   texlive = callPackage ./texlive {};
 
   cuda = callPackage ./cuda { };
+
+  trivial = callPackage ../build-support/trivial-builders/test.nix {};
 
   writers = callPackage ../build-support/writers/test.nix {};
 }

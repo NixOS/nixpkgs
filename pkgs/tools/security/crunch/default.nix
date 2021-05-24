@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ lethalman lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

@@ -13,10 +13,10 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "08151qdhf4chg9gfbs0dl0v0k5vla2gz5dfy439jzdg1d022d5rw";
-    x86_64-darwin = "1vlxxkv3wvds3xl3ir93l5q5yq2d7mcragsicfayj9x9r49ilqn3";
-    aarch64-linux = "0rxw1wsi555z41ak817sxqyyan0rm7hma640zsh8dz0yvhzdv1h8";
-    armv7l-linux = "1ijvd7r2fxxlw4zv3zx5h70b3d0b4gcq3aljsi02v1lr2zm8f8gb";
+    x86_64-linux = "08qrag9nzmngzzvs2cgbmc4zzxlb9kwn183v8caj6dvcrjvfqgbv";
+    x86_64-darwin = "0rlyr08lla3xadlh373xqcks8a9akk3x2cmakgn17q2b16988fmq";
+    aarch64-linux = "1m277940xsasqac4i88s05xrqsab99jhl3ka0zzfbixrgr2dj8q1";
+    armv7l-linux = "1qm4cggjj50vdnrx848x810gz3ahh0hndra22lsvcjdbsw8g35rk";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -25,7 +25,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.55.2";
+    version = "1.56.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -45,6 +45,7 @@ in
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git

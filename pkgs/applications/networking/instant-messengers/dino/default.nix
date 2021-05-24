@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3

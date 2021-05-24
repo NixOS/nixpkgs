@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
+{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab, fetchpatch
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
@@ -49,6 +49,9 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
+  # TODO: When bumping to next version, remove the patch
+  # for CVE-2021-28831 (assuming the patch was included in
+  # the next upstream release)
   version = "1.32.1";
 
   # Note to whoever is updating busybox: please verify that:
@@ -64,6 +67,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
+    (fetchpatch {
+      name = "CVE-2021-28831.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=f25d254dfd4243698c31a4f3153d4ac72aa9e9bd";
+      sha256 = "0y79flfbk45krwn963nnbqc21a88bsz4k4asqwvcnfk2lkciadxm";
+    }) # TODO: Removing when bumping the version
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";

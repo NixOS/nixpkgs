@@ -73,13 +73,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.10.0";
+  version = "78.10.2";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "0nywhw1y9g78fpfgmcp6vphdidpnhfxif18qx23j7p20ayymvi2gd3smm4qfr6rlb0dkzyk1vxc2dj47zd8169wlkvr6l1kfsgvrj49";
+      "3sc6n3n9bqnsq9qn9myanvxpgdx20c803prla3p236hwidz7snmyp2097ggn42xp765km55n11drxalnslsxdypgjikbfdqal05hf5r";
   };
 
   nativeBuildInputs = [
@@ -239,7 +239,7 @@ stdenv.mkDerivation rec {
     "--enable-strip"
   ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ] ++ lib.optional alsaSupport "--enable-alsa"
   ++ lib.optional calendarSupport "--enable-calendar"

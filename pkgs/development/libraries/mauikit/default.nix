@@ -3,22 +3,23 @@
 , fetchFromGitLab
 , cmake
 , extra-cmake-modules
-, kio
+, kconfig
+, kcoreaddons
+, ki18n
 , qtbase
 , qtquickcontrols2
-, syntax-highlighting
 }:
 
 mkDerivation rec {
   pname = "mauikit";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "mauikit";
     rev = "v${version}";
-    sha256 = "1wimbpbn9yqqdcjd59x83z0mw2fycjz09py2rwimfi8ldmvi5lgy";
+    sha256 = "1jz0a65bbznjg7aaq19rdyp956wn6xc1x4xigfkhj6mwsvnb49av";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,10 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    kio
+    kconfig
+    kcoreaddons
+    ki18n
     qtquickcontrols2
-    syntax-highlighting
   ];
 
   meta = with lib; {

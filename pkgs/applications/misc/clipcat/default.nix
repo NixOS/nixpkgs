@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1ffgvhkdj8wkhlgi0cj0njdm9ycxq2qda4b5qn8bmaygzr2zkwpd";
 
-  env.LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # needed for internal protobuf c wrapper library
   env.PROTOC = "${protobuf}/bin/protoc";

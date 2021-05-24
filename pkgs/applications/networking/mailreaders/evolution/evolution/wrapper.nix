@@ -1,8 +1,8 @@
-{ lib, makeWrapper, symlinkJoin, gnome3, plugins }:
+{ lib, makeWrapper, symlinkJoin, gnome, plugins }:
 
 symlinkJoin {
   name = "evolution-with-plugins";
-  paths = [ gnome3.evolution-data-server ] ++ plugins;
+  paths = [ gnome.evolution-data-server ] ++ plugins;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -10,13 +10,7 @@ symlinkJoin {
     for i in $out/bin/* $out/libexec/**; do
     if [ ! -d $i ]; then
       echo wrapping $i
-      wrapProgram $i \
-        --set LD_LIBRARY_PATH "$out/lib" \
-        --set EDS_ADDRESS_BOOK_MODULES "$out/lib/evolution-data-server/addressbook-backends/" \
-        --set EDS_CALENDAR_MODULES "$out/lib/evolution-data-server/calendar-backends/" \
-        --set EDS_CAMEL_PROVIDER_DIR "$out/lib/evolution-data-server/camel-providers/" \
-        --set EDS_REGISTRY_MODULES "$out/lib/evolution-data-server/registry-modules/" \
-        --set EVOLUTION_MODULEDIR "$out/lib/evolution/modules"
+      wrapProgram $i --set EDS_EXTRA_PREFIXES "${lib.concatStringsSep ":" plugins}"
     fi
     done
 

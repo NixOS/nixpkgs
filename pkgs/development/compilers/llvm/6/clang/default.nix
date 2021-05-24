@@ -1,4 +1,5 @@
-{ lib, stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+, buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -22,20 +23,27 @@ let
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 llvm ];
+    buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
     ];
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      ./gnu-install-dirs.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
@@ -48,12 +56,12 @@ let
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 
-    outputs = [ "out" "lib" "python" ];
+    outputs = [ "out" "lib" "dev" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${llvm}/lib/LLVMgold.so ]; then
-        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
+        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
       fi
 
       ln -sv $out/bin/clang $out/bin/cpp
@@ -70,11 +78,14 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
+
+      mkdir -p $dev/bin
+      cp bin/clang-tblgen $dev/bin
     '';
 
     passthru = {
       isClang = true;
-      inherit llvm;
+      inherit libllvm;
     };
 
     meta = {

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ashishb/adb-enhanced";
     license = licenses.asl20;
     maintainers = with maintainers; [ vtuan10 ];
+    mainProgram = "adbe";
   };
 }

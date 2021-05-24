@@ -33,6 +33,6 @@ in mkDerivation rec {
     homepage = "http://munt.sourceforge.net/";
     license = with licenses; [ lgpl21 gpl3 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

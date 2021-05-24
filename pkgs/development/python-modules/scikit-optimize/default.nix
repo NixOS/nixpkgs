@@ -5,7 +5,7 @@
 , matplotlib
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pyaml
 , pytestCheckHook
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pyaml
   ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, intltool, libgpod, curl, flac,
-  gnome3, gtk3, gettext, perlPackages, flex, libid3tag, gdl,
+  gnome, gtk3, gettext, perlPackages, flex, libid3tag, gdl,
   libvorbis, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl gettext
     flex libgpod libid3tag flac libvorbis gtk3 gdk-pixbuf
-    gdl gnome3.adwaita-icon-theme gnome3.anjuta
+    gdl gnome.adwaita-icon-theme gnome.anjuta
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   patchPhase = ''

@@ -34,7 +34,8 @@ in mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip' '${quazip}/include/quazip5' \
+      --replace '/usr/include/quazip' '${quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace '-lquazip5' '-lquazip1-qt5' \
       --replace '/usr/include/poppler' '${poppler.dev}/include/poppler'
   '';
 

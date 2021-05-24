@@ -9,9 +9,11 @@
 , freetype
 , libxcb
 , python3
+, libiconv
 , AppKit
 , CoreText
 , Security
+, fira-code
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,14 +29,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-1sekLS+jhMeFJcW7pH/X8t28//xA+L54u81uKOo1kHE=";
 
-  buildInputs = [ llvmPackages.libclang expat freetype ]
+  buildInputs = [ llvmPackages.libclang expat freetype fira-code ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
 
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     description = "Create beautiful image of your source code";

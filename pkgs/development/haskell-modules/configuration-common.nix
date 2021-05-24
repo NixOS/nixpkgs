@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "13n62v3cdkx23fywdccczcr8vsf0vmjbimmgin766bf428jlhh6h";
+      sha256 = "1wig8nw2rxgq86y88m1f1qf93z5yckidf1cs33ribmhqa1hs300p";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -75,10 +75,6 @@ self: super: {
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
-
-    # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
-    # see: https://github.com/psibi/shell-conduit/issues/12
-    doCheck = !pkgs.stdenv.isDarwin;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -117,15 +113,6 @@ self: super: {
   # Jailbreak is necessary for QuickCheck dependency.
   vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
-  conduit-extra = if pkgs.stdenv.isDarwin
-    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
-    else super.conduit-extra;
-
-  # Fix Darwin build.
-  halive = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
-    else super.halive;
-
   # Test suite fails due golden tests checking text representation
   # of normalized dhall expressions, and newer dhall versions format
   # differently.
@@ -133,19 +120,6 @@ self: super: {
     if pkgs.lib.versionOlder "0.5.2" super.hpack-dhall.version
     then throw "Drop dontCheck override for hpack-dhall > 0.5.2"
     else dontCheck super.hpack-dhall;
-
-  barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
-
-  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
-    then dontCheck (overrideCabal super.hakyll (drv: {
-      testToolDepends = [];
-    }))
-    else super.hakyll;
-
-  double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addExtraLibrary super.double-conversion pkgs.libcxx;
 
   inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -196,8 +170,48 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
+      doCheck = false;
+      # 2021-05-12: Revert a few dependency cleanups which depend on release
+      # that are not in stackage yet:
+      # * Depend on semialign-indexed for Data.Semialign.Indexed
+      #   (remove when semialign >= 1.2 in stackage)
+      # * Readd dependencies to text and unordered-containers.
+      #   (remove when relude >= 1.0.0.0 is in stackage, see
+      #   https://github.com/haskell-nix/hnix/issues/933)
+      libraryHaskellDepends = [
+        self.semialign-indexed
+      ] ++ drv.libraryHaskellDepends;
+      patches = [
+        # depend on semialign-indexed again
+        (pkgs.fetchpatch {
+          url = "https://github.com/haskell-nix/hnix/commit/16fc342a4f2974f855968472252cd9274609f177.patch";
+          sha256 = "0gm4gy3jpn4dqnrhnqlsavfpw9c1j1xa8002v54knnlw6vpk9niy";
+          revert = true;
+        })
+        # depend on text again
+        (pkgs.fetchpatch {
+          url = "https://github.com/haskell-nix/hnix/commit/73057618576e86bb87dfd42f62b855d24bbdf469.patch";
+          sha256 = "03cyk96d5ad362i1pnz9bs8ifr84kpv8phnr628gys4j6a0bqwzc";
+          revert = true;
+        })
+        # depend on unordered-containers again
+        (pkgs.fetchpatch {
+          url = "https://github.com/haskell-nix/hnix/commit/70643481883ed448b51221a030a76026fb5eb731.patch";
+          sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
+          revert = true;
+        })
+        # fix broken location annotations (necessary for update-nix-fetchgit).
+        # Can be removed on the next hnix release after
+        # https://github.com/haskell-nix/hnix/pull/936 is merged.
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/hnix/commit/7cd998426ab7d930d288a1d6e266dc4e85cece3d.patch";
+          sha256 = "19ay6vxa90ykgdd0fis2djvki2kpgfsq7z55iyqg965m583vsfr6";
+        })
+      ] ++ (drv.patches or []);
+    }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -284,32 +298,27 @@ self: super: {
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
   hspec-server = dontCheck super.hspec-server;
-  HTF = dontCheck super.HTF;
+  HTF = overrideCabal super.HTF (orig: {
+    # The scripts in scripts/ are needed to build the test suite.
+    preBuild = "patchShebangs --build scripts";
+  });
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
   http-link-header = dontCheck super.http-link-header; # non deterministic failure https://hydra.nixos.org/build/75041105
-  ihaskell = dontCheck super.ihaskell;
   influxdb = dontCheck super.influxdb;
   integer-roots = dontCheck super.integer-roots; # requires an old version of smallcheck, will be fixed in > 1.0
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
-  language-nix = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isi686) then dontCheck super.language-nix else super.language-nix; # aarch64: https://ghc.haskell.org/trac/ghc/ticket/15275
   language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
-  math-functions = if pkgs.stdenv.isDarwin
-    then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
-    else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
   matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
-  mockery = if pkgs.stdenv.isDarwin
-    then overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; }) # darwin doesn't have sub-second resolution https://github.com/hspec/mockery/issues/11
-    else super.mockery;
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
@@ -359,7 +368,6 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
-  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
@@ -451,9 +459,8 @@ self: super: {
   # https://github.com/andrewthad/haskell-ip/issues/67
   ip = dontCheck super.ip;
 
-  # https://github.com/ndmitchell/shake/issues/206
-  # https://github.com/ndmitchell/shake/issues/267
-  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
+  # https://github.com/ndmitchell/shake/issues/804
+  shake = dontCheck super.shake;
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
@@ -828,7 +835,6 @@ self: super: {
   # With ghc-8.2.x haddock would time out for unknown reason
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
-  filecache = overrideCabal super.filecache (drv: { doCheck = !pkgs.stdenv.isDarwin; });
 
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
@@ -839,20 +845,23 @@ self: super: {
     configureFlags = ["--ghc-option=-DU_DEFINE_FALSE_AND_TRUE=1"]; # https://github.com/haskell/text-icu/issues/49
   });
 
-  # aarch64 and armv7l fixes.
-  happy = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
-  hashable = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.hashable else super.hashable; # https://github.com/tibbe/hashable/issues/95
-  servant-docs =
-    let
-      f = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64)
-          then dontCheck
-          else pkgs.lib.id;
-    in doJailbreak (f super.servant-docs); # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
+  # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
+  servant-docs = doJailbreak super.servant-docs;
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
-  swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # hledger-lib requires the latest version of pretty-simple
-  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple; };
+  hledger-lib = appendPatch super.hledger-lib
+    # This patch has been merged but not released yet:
+    # https://github.com/simonmichael/hledger/pull/1512. It is
+    # important for ledger-autosync test suite:
+    # https://github.com/egh/ledger-autosync/issues/123
+    (pkgs.fetchpatch {
+      name   = "hledger-properly-escape-quotes-csv.patch";
+      url    = "https://github.com/simonmichael/hledger/commit/c9a72e1615e2ddc2824f2e248456e1042eb31e1d.patch";
+      sha256 = "10knvrd5bl9nrmi27i0pm82sfr64jy04xgbjp228qywyijpr3pqv";
+      includes = [ "Hledger/Read/CsvReader.hs" ];
+      stripLen = 1;
+    });
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -941,7 +950,16 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/5795
   # This issue can be mitigated with 'dontCheck' which skips the tests and their compilation.
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
-  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
+  # dhall-nix, dhall-nixpkgs: pull updated cabal files with updated bounds.
+  # Remove at next hackage update.
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (overrideCabal super.dhall-nix {
+    revision = "2";
+    editedCabalFile = "1w90jrkzmbv5nasafkkv0kyfmnqkngldx2lr891113h2mqbbr3wx";
+  });
+  dhall-nixpkgs = overrideCabal super.dhall-nixpkgs {
+    revision = "1";
+    editedCabalFile = "1y08jxg51sbxx0i7ra45ii2v81plzf4hssmwlrw35l8n5gib1vcg";
+  };
   dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
@@ -1056,9 +1074,6 @@ self: super: {
   # Has tasty < 1.2 requirement, but works just fine with 1.2
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
-  # Requires dhall >= 1.23.0
-  ats-pkg = dontCheck (super.ats-pkg.override { dhall = self.dhall_1_29_0; });
-
   # fake a home dir and capture generated man page
   ats-format = overrideCabal super.ats-format (old : {
     preConfigure = "export HOME=$PWD";
@@ -1086,18 +1101,6 @@ self: super: {
 
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
-
-  nix-tools = super.nix-tools.overrideScope (self: super: {
-    # Needs https://github.com/peti/hackage-db/pull/9
-    hackage-db = super.hackage-db.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        owner = "ElvishJerricco";
-        repo = "hackage-db";
-        rev = "84ca9fc75ad45a71880e938e0d93ea4bde05f5bd";
-        sha256 = "0y3kw1hrxhsqmyx59sxba8npj4ya8dpgjljc21gkgdvdy9628q4c";
-      };
-    });
-  });
 
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
@@ -1139,11 +1142,6 @@ self: super: {
       substituteInPlace hledger-flow.cabal --replace "-static" ""
     '';
   });
-
-  # gtk/gtk3 needs to be told on Darwin to use the Quartz
-  # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
-  gtk3 = appendConfigureFlags super.gtk3 (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
-  gtk = appendConfigureFlags super.gtk (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
@@ -1281,15 +1279,47 @@ self: super: {
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
-  haskell-gi-base = addBuildDepends super.haskell-gi-base [ pkgs.gobject-introspection ];
+  # nixpkgs has bumped gdkpixbuf C lib, so we need gi-gdkpixbuf_2_0_26 to link against that.
+  # This leads to all this bumps which can be removed once stackage has haskell-gi 0.25.
+  haskell-gi = self.haskell-gi_0_25_0;
+  haskell-gi-base = addBuildDepends super.haskell-gi-base_0_25_0 [ pkgs.gobject-introspection ];
+  gi-glib = self.gi-glib_2_0_25;
+  gi-cairo = self.gi-cairo_1_0_25;
+  gi-gobject = self.gi-gobject_2_0_26;
+  gi-atk = self.gi-atk_2_0_23;
+  gi-gio = self.gi-gio_2_0_28;
+  gi-harfbuzz = self.gi-harfbuzz_0_0_4;
+  gi-javascriptcore = self.gi-javascriptcore_4_0_23;
+  gi-pango = self.gi-pango_1_0_24;
+  gi-soup = self.gi-soup_2_4_24;
+  gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_26;
+  gi-gdk = self.gi-gdk_3_0_24;
+  gi-gtk = self.gi-gtk_3_0_37;
+  gi-webkit2 = self.gi-webkit2_4_0_27;
+  gi-cairo-render = doJailbreak super.gi-cairo-render;
+  gi-cairo-connector = doJailbreak super.gi-cairo-connector;
+  gi-gtk-hs = self.gi-gtk-hs_0_3_10;
+  gi-dbusmenu = self.gi-dbusmenu_0_4_9;
+  gi-xlib = self.gi-xlib_2_0_10;
+  gi-gdkx11 = self.gi-gdkx11_3_0_11;
+  gi-dbusmenugtk3 = self.gi-dbusmenugtk3_0_4_10;
 
-  # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
+  # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
-  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/compare/9727365...f842748.patch";
-    sha256 = "07l4l999lmlx7sqxf7v4f70rmxhx9r0cjblkgc4n0y6jin4iv1cb";
-    stripLen = 2;
-    extraPrefix = "";
+  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
+
+  # 2021-05-12: gi-gdkpixbuf_2_0_26 fix
+  # https://github.com/taffybar/gtk-sni-tray/pull/25
+  gtk-sni-tray = appendPatch super.gtk-sni-tray (pkgs.fetchpatch {
+    url = "https://github.com/taffybar/gtk-sni-tray/pull/25/commits/4afd84654cb3f2bd2bb7d39451706c5914fd3cdf.patch";
+    sha256 = "1xjxlh58vnykqsjq4qw8mliq3gk17mwxi4h9z8dvjyav8zqg05rn";
+  });
+
+  # 2021-05-12: gi-gdkpixbuf_2_0_26 fix
+  # https://github.com/taffybar/taffybar/pull/507
+  taffybar = appendPatch super.taffybar (pkgs.fetchpatch {
+    url = "https://github.com/taffybar/taffybar/pull/507/commits/14a650d0954000cbd2cb1018a2f3bcd40ecb564f.patch";
+    sha256 = "01rm8zida5858j5r0mw7bpmv24b03mb3rw34lbkaw3i7g62bx3a0";
   });
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
@@ -1382,9 +1412,21 @@ self: super: {
         }"
       '';
 
-      # 2021-04-09: test failure
-      # PR pending https://github.com/expipiplus1/update-nix-fetchgit/pull/60
-      doCheck = false;
+      # These can both be removed upon the release of update-nix-fetchgit-0.2.7
+      patches = [
+        # 2021-05-17 compile with hnix >= 0.13
+        # https://github.com/expipiplus1/update-nix-fetchgit/pull/64
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/bc28c8b26c38093aa950574802012c0cd8447ce8.patch";
+          sha256 = "1dwd1jdsrx3ss6ql1bk2ch7ln74mkq6jy9ms8vi8kmf3gbg8l9fg";
+        })
+        # Fix test failure
+        # https://github.com/expipiplus1/update-nix-fetchgit/pull/60
+        (pkgs.fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/4a43e1ea4e7e1c18de81e3f9fe0b86faa70865f5.patch";
+          sha256 = "1z74c1blgwr4q37m1rhlj7534qbnp3nnxf63m8j2b7iz0ljgm0m9";
+        })
+      ] ++ (drv.patches or []);
     }));
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
@@ -1395,6 +1437,12 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
+
+  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1808
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
+
+  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
+  hls-eval-plugin = dontCheck super.hls-eval-plugin;
 
   # 2021-03-19: Too restrictive upper bound on optparse-applicative
   stylish-haskell = doJailbreak super.stylish-haskell;
@@ -1424,7 +1472,7 @@ self: super: {
   });
 
   # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_13_0_0);
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_14_0_0);
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -1479,11 +1527,6 @@ self: super: {
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
-  # https://github.com/ekmett/half/issues/35
-  half = if pkgs.stdenv.isAarch64
-    then dontCheck super.half
-    else super.half;
-
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
@@ -1537,10 +1580,6 @@ self: super: {
 
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
-
-  # Add ApplicationServices on darwin
-  apecs-physics = addPkgconfigDepends super.apecs-physics
-    (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
   # Break out of overspecified constraint on QuickCheck.
   algebraic-graphs = dontCheck super.algebraic-graphs;
@@ -1786,5 +1825,129 @@ self: super: {
     sha256 = "1vmg8mmmnph34x7y0mhkcd5nzky8f1rh10pird750xbkp9zlk099";
     excludes = ["test/buildtest"];
   });
+
+  # workaround for https://github.com/peti/distribution-nixpkgs/issues/9
+  pam = super.pam.override { inherit (pkgs) pam; };
+
+  # Too strict version bounds on base:
+  # https://github.com/obsidiansystems/database-id/issues/1
+  database-id-class = doJailbreak super.database-id-class;
+
+  cabal2nix-unstable = overrideCabal super.cabal2nix-unstable {
+    passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
+  };
+
+  # Too strict version bounds on base and optparse-applicative
+  # https://github.com/diagrams/diagrams-cairo/issues/77
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
+  # Too strict version bounds on base
+  # https://github.com/gibiansky/IHaskell/issues/1217
+  ihaskell-display = doJailbreak super.ihaskell-display;
+  ihaskell-basic = doJailbreak super.ihaskell-basic;
+
+  # Fixes too strict version bounds on regex libraries
+  # Presumably to be removed at the next release
+  yi-language = appendPatch super.yi-language (pkgs.fetchpatch {
+    url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
+    sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
+    includes = [ "yi-language.cabal" ];
+    stripLen = 2;
+    extraPrefix = "";
+  });
+
+  # https://github.com/ghcjs/jsaddle/issues/123
+  jsaddle = overrideCabal super.jsaddle (drv: {
+    # lift conditional version constraint on ref-tf
+    postPatch = ''
+      sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
+    '' + (drv.postPatch or "");
+  });
+
+  # Tests need to lookup target triple x86_64-unknown-linux
+  # https://github.com/llvm-hs/llvm-hs/issues/334
+  llvm-hs = overrideCabal super.llvm-hs {
+    doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
+  };
+
+  # Fix build failure by picking patch from 8.5,
+  # we need this version of sbv for petrinizer
+  sbv_7_13 = appendPatch super.sbv_7_13
+    (pkgs.fetchpatch {
+      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
+      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
+    });
+
+  # Too strict bounds on dimensional
+  # https://github.com/enomsg/science-constants-dimensional/pull/1
+  science-constants-dimensional = doJailbreak super.science-constants-dimensional;
+
+  # Tests are flaky on busy machines
+  # https://github.com/merijn/paramtree/issues/4
+  paramtree = dontCheck super.paramtree;
+
+  # Too strict version bounds on haskell-gi
+  # https://github.com/owickstrom/gi-gtk-declarative/issues/100
+  gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
+
+  # Test assets missing from sdist
+  # https://github.com/hadolint/language-docker/issues/63
+  language-docker = overrideSrc super.language-docker {
+    src = pkgs.fetchFromGitHub {
+      owner = "hadolint";
+      repo = "language-docker";
+      rev = "refs/tags/${super.language-docker.version}";
+      sha256 = "06263jy538ni31vms5pzggmh64fyk62cv3lxnvkc6gylb94kljb8";
+      name = "language-docker-${super.language-docker.version}-source";
+    };
+  };
+
+  # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
+  tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
+
+  # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
+  # https://github.com/haskell-CI/haskell-ci/issues/507
+  haskell-ci = super.haskell-ci.override {
+    ShellCheck = self.ShellCheck_0_7_1;
+  };
+
+  Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
+    # https://github.com/adamConnerSax/Frames-streamly/issues/1
+    patchPhase = ''
+cat > example_data/acs100k.csv <<EOT
+"YEAR","REGION","STATEFIP","DENSITY","METRO","PUMA","PERWT","SEX","AGE","RACE","RACED","HISPAN","HISPAND","CITIZEN","LANGUAGE","LANGUAGED","SPEAKENG","EDUC","EDUCD","GRADEATT","GRADEATTD","EMPSTAT","EMPSTATD","INCTOT","INCSS","POVERTY"
+2006,32,1,409.6,3,2300,87.0,1,47,1,100,0,0,0,1,100,3,6,65,0,0,1,12,36000,0,347
+EOT
+    ''; });
+
+  # 2021-05-09: compilation requires patches from master,
+  # remove at next release (current is 0.1.0.4).
+  large-hashable = appendPatches super.large-hashable [
+    # Fix compilation of TH code for GHC >= 8.8
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
+      sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
+      excludes = [
+        ".travis.yml"
+        "stack**"
+      ];
+    })
+    # Fix cpp invocation
+    (pkgs.fetchpatch {
+      url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
+      sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
+    })
+  ];
+
+  # BSON defaults to requiring network instead of network-bsd which is
+  # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
+  bson = appendConfigureFlag (super.bson.override {
+    network = self.network-bsd;
+  }) "-f-_old_network";
+
+  # 2021-05-14: Testsuite is failing.
+  # https://github.com/kcsongor/generic-lens/issues/133
+  generic-optics = dontCheck super.generic-optics;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

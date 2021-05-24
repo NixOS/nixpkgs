@@ -1,52 +1,57 @@
-{ lib, stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
-
+{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
+# TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
+# This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
+# https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
+# If you're updating this derivation, check the link above to see if it's been fixed upstream
+# and try replacing all occurrences of jdk11 with jre and test whether it works.
 let
-  version = "6.0.1";
-  desktopItem = makeDesktopItem {
-    name = "stm32CubeMX";
-    exec = "stm32cubemx";
-    desktopName = "STM32CubeMX";
-    categories = "Development;";
-    icon = "stm32cubemx";
-  };
+  iconame = "STM32CubeMX";
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
-  inherit version;
-
+  version = "6.2.1";
 
   src = fetchzip {
-    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}.zip";
-    sha256 = "15vxca1pgpgxgiz4wisrw0lylffdwnn4n46z9n0q37f8hmzlrk8f";
-    stripRoot= false;
+    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
+    sha256 = "0m5h01iq0mgrr9svj4gmykfi9lsyjpqzrkvlizff26c8dqad59c5";
+    stripRoot = false;
   };
 
-  nativeBuildInputs = [ libicns imagemagick ];
+  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "stm32CubeMX";
+      exec = "stm32cubemx";
+      desktopName = "STM32CubeMX";
+      categories = "Development;";
+      comment = "STM32Cube initialization code generator";
+      icon = "stm32cubemx";
+    })
+  ];
 
   buildCommand = ''
-    mkdir -p $out/{bin,opt/STM32CubeMX,share/applications}
-    cp -r $src/. $out/opt/STM32CubeMX/
-    chmod +rx $out/opt/STM32CubeMX/STM32CubeMX.exe
+    mkdir -p $out/{bin,opt/STM32CubeMX}
+    cp -r $src/MX/. $out/opt/STM32CubeMX/
+    chmod +rx $out/opt/STM32CubeMX/STM32CubeMX
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
-    ${jre}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX.exe
+    ${jdk11}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
     EOF
     chmod +x $out/bin/${pname}
 
-    icns2png --extract $out/opt/STM32CubeMX/${pname}.icns
+    icotool --extract $out/opt/STM32CubeMX/help/${iconame}.ico
+    fdupes -dN . > /dev/null
     ls
     for size in 16 24 32 48 64 128 256; do
       mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
-      if [ -e ${pname}_"$size"x"$size"x32.png ]; then
-        mv ${pname}_"$size"x"$size"x32.png \
+      if [ $size -eq 256 ]; then
+        mv ${iconame}_*_"$size"x"$size"x32.png \
           $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
       else
-        convert -resize "$size"x"$size" ${pname}_256x256x32.png \
+        convert -resize "$size"x"$size" ${iconame}_*_256x256x32.png \
           $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
       fi
     done;
-
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with lib; {

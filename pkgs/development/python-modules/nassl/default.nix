@@ -8,12 +8,15 @@
 , tls-parser
 , cacert
 , pytestCheckHook
+, pythonOlder
 }:
 
 let
-  zlibStatic = pkgsStatic.zlib.override {
+  zlibStatic = (pkgsStatic.zlib.override {
     splitStaticOutput = false;
-  };
+  }).overrideAttrs (oldAttrs: {
+    NIX_CFLAGS_COMPILE = "${oldAttrs.NIX_CFLAGS_COMPILE} -fPIC";
+  });
   nasslOpensslArgs = {
     static = true;
     enableSSL2 = true;
@@ -67,13 +70,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nassl";
-  version = "3.1.0";
+  version = "4.0.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    sha256 = "1x1v0fpb6gcc2r0k2rsy0mc3v25s3qbva78apvi46n08c2l309ci";
+    hash = "sha256-6lk2YfI9km10YbJAn38fvo9qa4iXcByL+udCsDe+kvU=";
   };
 
   postPatch = let
@@ -108,18 +112,21 @@ buildPythonPackage rec {
     invoke package.wheel
   '';
 
+  doCheck = true;
+
+  pythonImportsCheck = [ "nassl" ];
+
   checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    # Skip online tests
-    pytest -k 'not Online'
-  '';
+  disabledTests = [
+    "Online"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/nassl";
     description = "Low-level OpenSSL wrapper for Python 3.7+";
     platforms = with platforms; linux ++ darwin;
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ veehaitch ];
   };
 }

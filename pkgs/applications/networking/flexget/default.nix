@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.110";
+  version = "3.1.121";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "e8642dcbbfe941e2d2def7bf2e28889082a78c1d041edb33dae180036832a96b";
+    sha256 = "91270a51ed29e4a578c7549ebd01665f4bcf49bf7773a15db27f4ccb13659e00";
   };
 
   postPatch = ''
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     flask-restful
     flask-restx
     flask
+    greenlet
     guessit
     html5lib
     jinja2
@@ -54,6 +55,7 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     terminaltables
     zxcvbn
+    psutil
     # plugins
     transmission-rpc
   ];

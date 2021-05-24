@@ -2,7 +2,7 @@
 , haskell, haskellPackages, nodejs
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
-, rustPlatform, openssl, pkg-config, Security
+, curl, rustPlatform, openssl, pkg-config, Security
 }:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
@@ -102,7 +102,7 @@ let
 
   elmRustPackages =  {
     elm-json = import ./packages/elm-json.nix {
-      inherit lib rustPlatform fetchurl openssl stdenv pkg-config Security;
+      inherit curl lib rustPlatform fetchurl openssl stdenv pkg-config Security;
     } // {
       meta = with lib; {
         description = "Install, upgrade and uninstall Elm dependencies";

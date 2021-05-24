@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EOxklOiazxhhIIv6c+N4uuItY/oFMAG0r/ATZ3Anlko=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   checkFlags = [
     # Username and Password use the same ports and causes collision

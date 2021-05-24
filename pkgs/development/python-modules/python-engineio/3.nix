@@ -13,6 +13,7 @@
 , websocket_client
 , websockets
 , pytestCheckHook
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -63,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ graham33 ];
+    broken = stdenv.isDarwin && (pythonAtLeast "3.9");  # See https://github.com/miguelgrinberg/python-socketio/issues/567
   };
 }

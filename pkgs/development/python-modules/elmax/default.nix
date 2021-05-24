@@ -4,12 +4,15 @@
 , httpx
 , poetry-core
 , pythonOlder
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "elmax";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -17,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-elmax";
     rev = version;
-    sha256 = "sha256-vDISJ/CVOjpM+GPF2TCm3/AMFTWTM0b/+ZPCpAEvNvY=";
+    sha256 = "sha256-Aq/OHxOmtUUmBNlFPu892C8AkTX+Ee0oca7D79InPXQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -27,8 +30,12 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # Project has no tests
-  doCheck = false;
+  checkInputs = [
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "elmax" ];
 
   meta = with lib; {

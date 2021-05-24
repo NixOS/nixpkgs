@@ -1,5 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub
 , pkg-config, taglib, alsaLib
+, zlib
 
 # Disable on-the-fly transcoding,
 # removing the dependency on ffmpeg.
@@ -20,8 +21,18 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib ] ++ lib.optionals transcodingSupport [ ffmpeg ];
+  buildInputs = [ taglib alsaLib zlib ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
+
+  # TODO(Profpatsch): write a test for transcoding support,
+  # since it is prone to break
+  postPatch = lib.optionalString transcodingSupport ''
+    substituteInPlace \
+      server/encode/encode.go \
+      --replace \
+        '"ffmpeg"' \
+        '"${lib.getBin ffmpeg}/bin/ffmpeg"'
+  '';
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";

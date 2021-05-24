@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.16.3";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    sha256 = "0if9sg83rznl37hsjw6pfk78jpxi421g9p21wd92jcd6073g4nbd";
+    sha256 = "sha256-unGAIsslGXOUHXr0FKzC9bX6+Q3mNGZ9Z/dtjz0gkj4=";
   };
 
   # Coverage is under 100 % due to the excluded tests

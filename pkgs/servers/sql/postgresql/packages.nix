@@ -6,12 +6,7 @@ self: super: {
 
     periods = super.callPackage ./ext/periods.nix { };
 
-    postgis = super.callPackage ./ext/postgis.nix {
-        gdal = self.gdal.override {
-            postgresql = self.postgresql;
-            poppler = self.poppler_0_61;
-        };
-    };
+    postgis = super.callPackage ./ext/postgis.nix { };
 
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 

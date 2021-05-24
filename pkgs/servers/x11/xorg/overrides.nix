@@ -833,6 +833,12 @@ self: super:
     '';
   });
 
+  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
+    # This makes the man pages discoverable by the default man,
+    # since it looks for packages in $PATH
+    postInstall = "mkdir $out/bin";
+  });
+
   xwd = super.xwd.overrideAttrs (attrs: {
     buildInputs = with self; attrs.buildInputs ++ [libXt];
   });

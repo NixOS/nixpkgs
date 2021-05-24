@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
     "-Dgstreamer=enabled"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
-  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+  env.FONTCONFIG_FILE = toString fontsConf; # Fontconfig error: Cannot load default config file
 
   doCheck = true;
 

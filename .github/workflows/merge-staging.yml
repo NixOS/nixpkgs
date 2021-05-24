@@ -14,6 +14,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Merge master into staging-next
+        id: staging_next
         uses: devmasx/merge-branch@v1.3.1
         with:
           type: now
@@ -22,6 +23,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge staging-next into staging
+        id: staging
         uses: devmasx/merge-branch@v1.3.1
         with:
           type: now
@@ -35,5 +37,5 @@ jobs:
         with:
           issue-number: 105153
           body: |
-            An automatic merge [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
+            An automatic merge${{ (steps.staging_next.outcome == 'failure' && ' from master to staging-next') || ((steps.staging.outcome == 'failure' && ' from staging-next to staging') || '') }} [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
 

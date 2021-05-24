@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "1.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v0zqa81yjz6hm17x9hp0iwkllymqzn84dd6r2yrhillbwnjg9bb";
+    sha256 = "1kq0gbfz9y0n0bcblyrmwv4la3lcf86lf80794sdvyvn49g0brny";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "karton.core==4.0.5" "karton-core"
+      --replace "malduck==4.1.0" "malduck"
   '';
 
   # Project has no tests

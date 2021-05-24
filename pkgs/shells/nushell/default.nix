@@ -10,6 +10,8 @@
 , libiconv
 , AppKit
 , Security
+, nghttp2
+, libgit2
 , withStableFeatures ? true
 }:
 
@@ -32,9 +34,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
+    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
+
+  # TODO investigate why tests are broken on darwin
+  # failures show that tests try to write to paths
+  # outside of TMPDIR
+  doCheck = ! stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck

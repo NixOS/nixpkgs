@@ -2,13 +2,13 @@
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "3.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "0h5yzmvs9zhhpg9l7rrgwd4rqd9n00n2ifwqf05kpymzliy6xsnk";
+    sha256 = "sha256-7/oB2Inj+iMXzigqbCNJUY7dNrFBals2BOOl+Lp+ESs=";
   };
 
   packageJSON = ./package.json;
@@ -51,8 +51,8 @@ mkYarnPackage rec {
   meta = with lib; {
     homepage = "https://vieb.dev/";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner fortuneteller2k ];
     platforms = platforms.unix;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

@@ -3,6 +3,8 @@
 , removeReferencesTo
 , zlib ? null
 , enableShared ? !stdenv.hostPlatform.isStatic
+, javaSupport ? false
+, jdk
 }:
 
 let inherit (lib) optional optionals; in
@@ -17,11 +19,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  buildInputs = optional javaSupport jdk;
+
   nativeBuildInputs = [ removeReferencesTo ];
 
   propagatedBuildInputs = optional (zlib != null) zlib;
 
-  configureFlags = optional enableShared "--enable-shared";
+  configureFlags = []
+    ++ optional enableShared "--enable-shared"
+    ++ optional javaSupport "--enable-java";
 
   patches = [
     ./bin-mv.patch

@@ -1,30 +1,30 @@
 diff --git a/meson.build b/meson.build
-index 0073eb13..0ffc6863 100644
+index a27569bd..fcf18344 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -34,7 +34,10 @@ pipewire_libexecdir = join_paths(prefix, get_option('libexecdir'))
- pipewire_localedir = join_paths(prefix, get_option('localedir'))
- pipewire_sysconfdir = join_paths(prefix, get_option('sysconfdir'))
+@@ -36,7 +36,10 @@ pipewire_libexecdir = prefix / get_option('libexecdir')
+ pipewire_localedir = prefix / get_option('localedir')
+ pipewire_sysconfdir = prefix / get_option('sysconfdir')
  
--pipewire_configdir = join_paths(pipewire_sysconfdir, 'pipewire')
+-pipewire_configdir = pipewire_sysconfdir / 'pipewire'
 +pipewire_configdir = get_option('pipewire_config_dir')
 +if pipewire_configdir == ''
-+  pipewire_configdir = join_paths(pipewire_sysconfdir, 'pipewire')
++  pipewire_configdir = pipewire_sysconfdir / 'pipewire'
 +endif
- modules_install_dir = join_paths(pipewire_libdir, pipewire_name)
+ modules_install_dir = pipewire_libdir / pipewire_name
  
  if host_machine.system() == 'linux'
 diff --git a/meson_options.txt b/meson_options.txt
-index 4b9e46b8..8c301459 100644
+index 85beb86a..372e8faa 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -56,6 +56,9 @@ option('pipewire-pulseaudio',
- option('libpulse-path',
-        description: 'Where to install the libpulse.so library',
+@@ -67,6 +67,9 @@ option('jack-devel',
+ option('libjack-path',
+        description: 'Where to install the libjack.so library',
         type: 'string')
 +option('pipewire_config_dir',
 +       type : 'string',
 +       description : 'Directory for pipewire configuration (defaults to /etc/pipewire)')
  option('spa-plugins',
         description: 'Enable spa plugins integration',
-        type: 'boolean',
+        type: 'feature',

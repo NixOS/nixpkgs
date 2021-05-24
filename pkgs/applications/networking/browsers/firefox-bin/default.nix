@@ -28,11 +28,12 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
 , pciutils
 , libheimdal
 , libpulseaudio
@@ -126,6 +127,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
+      pipewire
       pciutils
       libheimdal
       libpulseaudio
@@ -137,7 +139,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10

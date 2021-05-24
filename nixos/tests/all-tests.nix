@@ -24,8 +24,12 @@ in
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   agda = handleTest ./agda.nix {};
+  airsonic = handleTest ./airsonic.nix {};
+  amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   ammonite = handleTest ./ammonite.nix {};
+  apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
+  atop = handleTest ./atop.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   awscli = handleTest ./awscli.nix { };
@@ -47,7 +51,7 @@ in
   buildkite-agents = handleTest ./buildkite-agents.nix {};
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
-  cage = handleTest ./cage.nix {};
+  cage = handleTestOn ["x86_64-linux"] ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
   calibre-web = handleTest ./calibre-web.nix {};
   cassandra_2_1 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_1; };
@@ -88,6 +92,7 @@ in
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   deluge = handleTest ./deluge.nix {};
+  dendrite = handleTest ./dendrite.nix {};
   dhparams = handleTest ./dhparams.nix {};
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
@@ -130,14 +135,15 @@ in
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
   gerrit = handleTest ./gerrit.nix {};
+  ghostunnel = handleTest ./ghostunnel.nix {};
   gitdaemon = handleTest ./gitdaemon.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
-  gnome3 = handleTest ./gnome3.nix {};
-  gnome3-xorg = handleTest ./gnome3-xorg.nix {};
+  gnome = handleTest ./gnome.nix {};
+  gnome-xorg = handleTest ./gnome-xorg.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
@@ -212,6 +218,7 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
+  libreswan = handleTest ./libreswan.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   locate = handleTest ./locate.nix {};
@@ -297,6 +304,7 @@ in
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
+  opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
   openssh = handleTest ./openssh.nix {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
@@ -376,6 +384,7 @@ in
   snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   sogo = handleTest ./sogo.nix {};
+  solanum = handleTest ./solanum.nix {};
   solr = handleTest ./solr.nix {};
   sonarr = handleTest ./sonarr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
@@ -385,6 +394,7 @@ in
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
+  sway = handleTest ./sway.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
@@ -413,6 +423,7 @@ in
   # traefik test relies on docker-containers
   trac = handleTest ./trac.nix {};
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
+  trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};

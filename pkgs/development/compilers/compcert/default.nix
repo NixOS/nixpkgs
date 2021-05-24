@@ -27,6 +27,33 @@ let param = {
   };
   "3.8" = {
     sha256 = "1gzlyxvw64ca12qql3wnq3bidcx9ygsklv9grjma3ib4hvg7vnr7";
+    patches = [
+     # Support for Coq 8.12.2
+     (fetchpatch {
+        url = "https://github.com/AbsInt/CompCert/commit/06956421b4307054af221c118c5f59593c0e67b9.patch";
+        sha256 = "1f90q6j3xfvnf3z830bkd4d8526issvmdlrjlc95bfsqs78i1yrl";
+      })
+     # Support for Coq 8.13.0
+     (fetchpatch {
+        url = "https://github.com/AbsInt/CompCert/commit/0895388e7ebf9c9f3176d225107e21968919fb97.patch";
+        sha256 = "0qhkzgb2xl5kxys81pldp3mr39gd30lvr2l2wmplij319vp3xavd";
+      })
+     # Support for Coq 8.13.1
+     (fetchpatch {
+        url = "https://github.com/AbsInt/CompCert/commit/6bf310dd678285dc193798e89fc2c441d8430892.patch";
+        sha256 = "026ahhvpj5pksy90f8pnxgmhgwfqk4kwyvcf8x3dsanvz98d4pj5";
+      })
+     # Drop support for Coq < 8.9
+     (fetchpatch {
+        url = "https://github.com/AbsInt/CompCert/commit/7563a5df926a4c6fb1489a7a4c847641c8a35095.patch";
+        sha256 = "05vkslzy399r3dm6dmjs722rrajnyfa30xsyy3djl52isvn4gyfb";
+      })
+     # Support for Coq 8.13.2
+     (fetchpatch {
+        url = "https://github.com/AbsInt/CompCert/commit/48bc183167c4ce01a5c9ea86e49d60530adf7290.patch";
+        sha256 = "0j62lppfk26d1brdp3qwll2wi4gvpx1k70qivpvby5f7dpkrkax1";
+      })
+    ];
     useExternalFlocq = true;
   };
 }."${version}"; in

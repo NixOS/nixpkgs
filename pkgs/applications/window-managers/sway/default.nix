@@ -3,6 +3,9 @@
 , libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
+, nixosTests
+# Used by the NixOS module:
+, isNixOS ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +29,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString isNixOS ''
+    echo -e '\ninclude /etc/sway/config.d/*' >> config.in
+  '';
+
   nativeBuildInputs = [
     meson ninja pkg-config wayland scdoc
   ];
@@ -40,6 +47,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=false"
     "-Dsd-bus-provider=libsystemd"
   ];
+
+  passthru.tests.basic = nixosTests.sway;
 
   meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";

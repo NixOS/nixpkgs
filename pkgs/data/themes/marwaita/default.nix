@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "8.0";
+  version = "9.2.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0ljigm5z13r0idfkjgy5ysq9pzdj66ql269p5phhp47aagmjcv3s";
+    sha256 = "08392ybpxnbq3wswa7bvz8nnxryjg9aczvw3arnhfvmbigwq5q0s";
   };
 
   buildInputs = [

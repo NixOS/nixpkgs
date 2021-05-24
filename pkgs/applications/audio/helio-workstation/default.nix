@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
+, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome
 , pkg-config, makeWrapper
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
-    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome3.zenity
+    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -Dm755 build/Helio $out/bin
-    wrapProgram $out/bin/Helio --prefix PATH ":" ${gnome3.zenity}/bin
+    wrapProgram $out/bin/Helio --prefix PATH ":" ${gnome.zenity}/bin
 
     mkdir -p $out/share
     cp -r ../Deployment/Linux/Debian/x64/usr/share/* $out/share

@@ -12,10 +12,11 @@
 , libcap
 , pciutils
 , systemd
+, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -140,9 +141,9 @@ qtModule {
     fi
   '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
-    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optionals enableProprietaryCodecs [ "--" "-proprietary-codecs" ];
+  qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional stdenv.isLinux "-webengine-webrtc-pipewire"
+    ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -158,8 +159,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -175,6 +175,9 @@ qtModule {
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
+
+    # Pipewire
+    pipewire_0_2
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way

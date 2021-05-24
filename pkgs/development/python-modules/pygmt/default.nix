@@ -2,12 +2,17 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , gmt
 , numpy
 , netcdf4
 , pandas
 , packaging
 , xarray
+, pytest-mpl
+, ipython
+, ghostscript
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -28,12 +33,14 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
 
-  doCheck = false; # requires network access
-
-  postBuild = "export HOME=$TMP";
-
+  doCheck = false; # the *entire* test suite requires network access
+  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  postBuild = ''
+    export HOME=$TMP
+  '';
   pythonImportsCheck = [ "pygmt" ];
 
   meta = with lib; {

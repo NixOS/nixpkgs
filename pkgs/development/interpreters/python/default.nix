@@ -69,6 +69,7 @@ with pkgs;
               recursivePthLoader
             ;
           };
+          extra = _: {};
           optionalExtensions = cond: as: if cond then as else [];
           python2Extension = import ../../../top-level/python2-packages.nix;
           extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
@@ -77,6 +78,7 @@ with pkgs;
           pkgs.newScope
           otherSplices
           keep
+          extra
           (lib.extends extensions pythonPackagesFun))
         {
           overrides = packageOverrides;

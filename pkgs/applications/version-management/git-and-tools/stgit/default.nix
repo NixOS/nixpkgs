@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "16q8994widg040n1ag4m82kbn3r02n39ah7dvwa7aixhw5y35vlm";
+    sha256 = "sha256-gfPf1yRmx1Mn1TyCBWmjQJBgXLlZrDcew32C9o6uNYk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,7 +24,8 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "A patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ jshholland ];
   };
 }

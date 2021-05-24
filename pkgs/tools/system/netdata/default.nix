@@ -15,14 +15,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.29.3";
+  version = "1.31.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-GWIQZEC5agJ+Zw7l58IIAJhXP6dxirCmWVBJulzBO5Q=";
+    sha256 = "0x6vg2z7x83b127flbfqkgpakd5md7n2w39dvs8s16facdy2lvry";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -50,6 +50,8 @@ in stdenv.mkDerivation rec {
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/cgroup-network \
+       $out/libexec/netdata/plugins.d/cgroup-network.org
     mv $out/libexec/netdata/plugins.d/perf.plugin \
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
@@ -81,6 +83,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

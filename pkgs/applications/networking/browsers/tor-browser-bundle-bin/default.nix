@@ -36,7 +36,7 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, gnome3
+, gnome
 , runtimeShell
 , shared-mime-info
 , gsettings-desktop-schemas
@@ -246,7 +246,7 @@ stdenv.mkDerivation rec {
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      gnome3.adwaita-icon-theme
+      gnome.adwaita-icon-theme
       shared-mime-info
     ]}
     WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
@@ -402,6 +402,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 cap KarlJoad ];
+    mainProgram = "tor-browser";
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

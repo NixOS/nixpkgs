@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ondilo";
-  version = "0.2.0";
+  version = "0.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "JeromeHXP";
     repo = pname;
     rev = version;
-    sha256 = "0k7c9nacf7pxvfik3hkv9vvvda2sx5jrf6zwq7r077x7fw5l8d2b";
+    sha256 = "sha256-MI6K+41I/IVi+GRBdmRIHbljULDFLAwpo3W8tdxCOBM=";
   };
 
   propagatedBuildInputs = [

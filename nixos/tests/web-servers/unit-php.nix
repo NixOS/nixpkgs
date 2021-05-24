@@ -34,7 +34,7 @@ in {
     };
     users = {
       users.testuser = {
-        isNormalUser = false;
+        isSystemUser = true;
         uid = 1074;
         group = "testgroup";
       };

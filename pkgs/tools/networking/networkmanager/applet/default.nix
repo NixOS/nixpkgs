@@ -5,7 +5,7 @@
 , gettext
 , pkg-config
 , networkmanager
-, gnome3
+, gnome
 , libnotify
 , libsecret
 , polkit
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0lsjkbv66hn7acl2pg9h6hz4b700zzv4cjwrwjvy7043blw0bcla";
+    sha256 = "sha256-xw2AtI1AqcuZ7JZ8xDifZ+fwMBUopp1IFXIEEzGmRr4=";
   };
 
   mesonFlags = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     libappindicator-gtk3
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
@@ -72,9 +72,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanagerapplet";
+      versionPolicy = "odd-unstable";
     };
   };
 

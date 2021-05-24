@@ -1,5 +1,5 @@
 { lib, buildDunePackage, cohttp-lwt, graphql-cohttp, graphql-lwt, irmin
-, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix
+, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix, cacert
 }:
 
 buildDunePackage rec {
@@ -19,6 +19,7 @@ buildDunePackage rec {
     logs
     cohttp-lwt-unix
     yojson
+    cacert
   ];
 
   meta = irmin.meta // {

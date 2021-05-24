@@ -36,13 +36,13 @@ let
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
-    aarch64-linux = "aarch64";
+    aarch64-linux = "arm64";
   };
 
   hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
-  pluginArches = [ "x86_32" "x86_64" "arm32" "aarch64" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
 
 in
 
@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     reportlab
     usbutils
-    sip
+    sip_4
     dbus-python
   ] ++ lib.optionals withQt5 [
     pyqt5

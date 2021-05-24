@@ -29,6 +29,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "RequestsCaBundleTest"
+  ];
   disabledTestPaths = lib.optionals stdenv.isDarwin [ "src/crate/client/test_http.py" ];
 
   meta = with lib; {

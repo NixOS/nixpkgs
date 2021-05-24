@@ -13,7 +13,7 @@
 , file
 , gtk3
 , withGnome ? true
-, gnome3
+, gnome
 , kmod
 , fetchpatch
 }:
@@ -66,9 +66,10 @@ in stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-openconnect";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

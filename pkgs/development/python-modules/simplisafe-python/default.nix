@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "9.6.9";
+  version = "9.6.10";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1q5w5pvrgj94bzd5wig79l4hipkfrcdah54rvwyi7b8q46gw77sg";
+    sha256 = "0cc5kxxishxhkg1nqmgbh36yxs8yjfynmimzjnaqkqfrs9iq46mr";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -18,22 +18,37 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper catch ];
   buildInputs = [ boost libpng libjpeg zlib openssl libwebp ];
 
+  patches = [
+    # Add a missing `<stdexcept>` import that caused the build to fail.
+    # Failure: https://hydra.nixos.org/build/141997371/log
+    # Also submitted as an upstream PR: https://github.com/vn-tools/arc_unpacker/pull/194
+    ./add-missing-import.patch
+  ];
+
   postPatch = ''
     cp ${catch}/include/catch/catch.hpp tests/test_support/catch.h
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     pushd ..
     ./build/run_tests
     popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/arc_unpacker $out/libexec/arc_unpacker
     cp arc_unpacker $out/libexec/arc_unpacker/arc_unpacker
     cp ../GAMELIST.{htm,js} $out/share/doc/arc_unpacker
     cp -r ../etc $out/libexec/arc_unpacker
     makeWrapper $out/libexec/arc_unpacker/arc_unpacker $out/bin/arc_unpacker
+
+    runHook postInstall
   '';
 
   doCheck = true;
@@ -41,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool to extract files from visual novel archives";
     homepage = "https://github.com/vn-tools/arc_unpacker";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ midchildan ];
   };
 }

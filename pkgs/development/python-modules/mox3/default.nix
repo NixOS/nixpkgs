@@ -25,7 +25,7 @@ buildPythonPackage rec {
   buildInputs = [ subunit testrepository testtools six ];
   propagatedBuildInputs = [ pbr fixtures ];
 
-  # Disabling as several tests depdencies are missing:
+  # Disabling as several tests dependencies are missing:
   # https://opendev.org/openstack/mox3/src/branch/master/test-requirements.txt
   doCheck = false;
 

@@ -18,13 +18,13 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DROUTINO_XML_PATH=${routino}/share/routino"
-    "-DQUAZIP_INCLUDE_DIR=${quazip}/include/quazip5"
-    "-DLIBQUAZIP_LIBRARY=${quazip}/lib/libquazip.so"
   ];
 
   patches = [
     "${src}/FindPROJ4.patch"
-    "${src}/FindQuaZip5.patch"
+
+    # Support QuaZip 1.x.
+    ./pr350-support-quazip-1x.patch
   ];
 
   qtWrapperArgs = [

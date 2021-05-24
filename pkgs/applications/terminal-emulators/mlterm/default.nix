@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     "--enable-ind" #indic scripts
     "--enable-fribidi" #bidi scripts
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
-     #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
+     #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
      #and configuring ~/.mlterm/key correctly.
  ] ++ lib.optionals (!stdenv.isDarwin) [
    "--with-x=yes"

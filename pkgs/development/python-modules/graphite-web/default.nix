@@ -28,6 +28,12 @@ buildPythonPackage rec {
     ./update-django-tagging.patch
   ];
 
+  postPatch = ''
+    # https://github.com/graphite-project/graphite-web/pull/2701
+    substituteInPlace setup.py \
+      --replace "'scandir'" "'scandir; python_version < \"3.5\"'"
+  '';
+
   propagatedBuildInputs = [
     django
     memcached

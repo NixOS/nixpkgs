@@ -1,7 +1,7 @@
 { mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
-, kio, kcrash
+, kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
 , openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras, quazip
@@ -17,11 +17,11 @@ mkDerivation rec {
     sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
-    ki18n kitemmodels kitemviews kwindowsystem kio kcrash
+    ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
     openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras quazip

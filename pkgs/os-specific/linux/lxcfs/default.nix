@@ -5,13 +5,13 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "4.0.7";
+  version = "4.0.8";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
+    sha256 = "sha256-8Tack2gM3AU3coGXs5hEbAaBCo5ss1sGUFFEjZDn5Lg=";
   };
 
   nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];

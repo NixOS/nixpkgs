@@ -9,7 +9,7 @@
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? true
-, glib, gnome3, wrapGAppsHook
+, glib, gnome, wrapGAppsHook
 , csdp ? null
 , version, coq-version ? null,
 }@args:
@@ -128,7 +128,7 @@ self = stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.adwaita-icon-theme wrapGAppsHook ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
        else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''

@@ -154,9 +154,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   60;
-        proxy_send_timeout      60;
-        proxy_read_timeout      60;
+        proxy_connect_timeout   ${cfg.proxyTimeout};
+        proxy_send_timeout      ${cfg.proxyTimeout};
+        proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
@@ -398,6 +398,15 @@ in
         type = types.bool;
         description = "
           Enable recommended proxy settings.
+        ";
+      };
+
+      proxyTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = "
+          Change the proxy related timeouts in recommendedProxySettings.
         ";
       };
 
@@ -819,28 +828,38 @@ in
         # Logs directory and mode
         LogsDirectory = "nginx";
         LogsDirectoryMode = "0750";
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
+        # New file permissions
+        UMask = "0027"; # 0640 / 0750
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         # Security
         NoNewPrivileges = true;
-        # Sandboxing
+        # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
         ProtectHome = mkDefault true;
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
       };
     };
 
@@ -848,8 +867,9 @@ in
       source = configFile;
     };
 
-    # postRun hooks on cert renew can't be used to restart Nginx since renewal
-    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
+    # This service waits for all certificates to be available
+    # before reloading nginx configuration.
+    # sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let

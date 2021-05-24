@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
 
@@ -18,14 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    sha256 = "1qbq6r0yanjappsi8yglw8r54bwf32bjb2i63awmr6pk5kmhhy3r";
+    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
   };
 
   passthru = {
@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU libGL freetype fontconfig
-    polkit polkit_gnome pulseaudio
+    gnome2.gtkglext libGLU libGL minizip freetype
+    fontconfig polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
     libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
     libXrandr libXtst libXt libICE libSM libXrender

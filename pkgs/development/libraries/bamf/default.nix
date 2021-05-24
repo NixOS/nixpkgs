@@ -3,7 +3,7 @@
 , autoconf
 , automake
 , libtool
-, gnome3
+, gnome
 , which
 , fetchgit
 , libgtop
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     automake
     dbus
     docbook_xsl
-    gnome3.gnome-common
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
     libtool

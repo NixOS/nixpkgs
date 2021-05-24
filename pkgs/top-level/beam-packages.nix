@@ -14,6 +14,21 @@ rec {
 
     # Standard Erlang versions, using the generic builder.
 
+    # R24
+    erlangR24 = lib.callErlang ../development/interpreters/erlang/R24.nix {
+      wxGTK = wxGTK30;
+      # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
+      parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
+      inherit wxSupport;
+    };
+    erlangR24_odbc = erlangR24.override { odbcSupport = true; };
+    erlangR24_javac = erlangR24.override { javacSupport = true; };
+    erlangR24_odbc_javac = erlangR24.override {
+      javacSupport = true;
+      odbcSupport = true;
+    };
+
     # R23
     erlangR23 = lib.callErlang ../development/interpreters/erlang/R23.nix {
       wxGTK = wxGTK30;
@@ -126,6 +141,7 @@ rec {
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
 
+    erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;
     erlangR22 = packagesWith interpreters.erlangR22;
     erlangR21 = packagesWith interpreters.erlangR21;

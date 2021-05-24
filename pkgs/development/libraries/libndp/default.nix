@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     license = licenses.lgpl21;
   };
 

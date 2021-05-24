@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, meson, ninja, pkg-config, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
+{ fetchurl, lib, stdenv, meson, ninja, pkg-config, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome, libsoup, json-glib, glib }:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

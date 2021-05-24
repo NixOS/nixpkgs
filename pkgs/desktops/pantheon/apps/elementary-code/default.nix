@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -38,6 +39,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-4AEayj+K/lOW6jEYmvmdan1kTqqqLL1YzwcU7/3PH5U=";
   };
+
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/c50580d3336296823da9a2c50b824f21fde50286.patch";
+      sha256 = "F+ZYlnZWYCU68G4oayLfbTnvSnTb4YA0zHVGD/Uf3KA=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {

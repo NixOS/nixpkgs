@@ -9,7 +9,7 @@ with lib;
 
   isoImage.edition = "gnome";
 
-  services.xserver.desktopManager.gnome3 = {
+  services.xserver.desktopManager.gnome = {
     # Add firefox to favorite-apps
     favoriteAppsOverride = ''
       [org.gnome.shell]

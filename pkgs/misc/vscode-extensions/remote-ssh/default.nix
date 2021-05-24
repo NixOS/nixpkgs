@@ -2,7 +2,7 @@
 , vscode-utils
 , useLocalExtensions ? false}:
 # Note that useLocalExtensions requires that vscode-server is not running
-# on host. If it is, you'll need to remove ~/.vscode-server,
+# on host. If it is, you'll need to remove $HOME/.vscode-server,
 # and redo the install by running "Connect to host" on client
 
 let
@@ -11,7 +11,7 @@ let
   # patch runs on remote machine hence use of which
   # links to local node if version is 12
   patch = ''
-    f="/home/''$USER/.vscode-server/bin/''$COMMIT_ID/node"
+    f="$HOME/.vscode-server/bin/$COMMIT_ID/node"
     localNodePath=''$(which node)
     if [ -x "''$localNodePath" ]; then
       localNodeVersion=''$(node -v)
@@ -23,10 +23,10 @@ let
     fi
     ${lib.optionalString useLocalExtensions ''
       # Use local extensions
-      if [ -d ~/.vscode/extensions ]; then
-        if ! test -L "~/.vscode-server/extensions"; then
-          mkdir -p ~/.vscode-server
-          ln -s ~/.vscode/extensions ~/.vscode-server/
+      if [ -d $HOME/.vscode/extensions ]; then
+        if ! test -L "$HOME/.vscode-server/extensions"; then
+          mkdir -p $HOME/.vscode-server
+          ln -s $HOME/.vscode/extensions $HOME/.vscode-server/
         fi
       fi
     ''}

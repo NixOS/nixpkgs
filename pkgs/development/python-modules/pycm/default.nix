@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, matplotlib, numpy, pytest, seaborn }:
 
 buildPythonPackage rec {
   pname = "pycm";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [ matplotlib numpy seaborn ];
 
   checkPhase = ''
     pytest Test/

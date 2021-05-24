@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
-  version = "0.3.1";
+  version = "0.3.2";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "0x57dci0prhlj79h74yh79cazn48rn0bckz5j3z4njk4fwc3fvfx";
+    sha256 = "sha256-sBB2kqlC+2qPgQinhGxY8lq9unxgQoOOhDP5o1pUWMo=";
   };
 
   postPatch = ''

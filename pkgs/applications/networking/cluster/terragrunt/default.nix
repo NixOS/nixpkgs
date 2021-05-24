@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.29.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ubft+R2nBUNRx3SfksORxBbKY/mSvY+tKkz1UcGXyjw=";
+    sha256 = "sha256-e4DwMphX8I37MShMt5nnoizfL919mJaFCkDGNeGXHbQ=";
   };
 
   vendorSha256 = "sha256-qlSCQtiGHmlk3DyETMoQbbSYhuUSZTsvAnBKuDJI8x8=";

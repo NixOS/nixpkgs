@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
-, ApplicationServices
+, ApplicationServices, Foundation
 }:
 
 let
@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "6.9.12-8";
+  version = "6.9.12-12";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = version;
-    sha256 = "sha256-ZFCmoZOdZ3jbM5S90zBNiMGJKFylMLO0r3DB25wu3MM=";
+    sha256 = "sha256-yqMYuayQjPlTqi3+CtwP5CdsAGud/fHR0I2LwUPIq00=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optionals stdenv.isDarwin
+      [ ApplicationServices Foundation ];
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 fftw ]

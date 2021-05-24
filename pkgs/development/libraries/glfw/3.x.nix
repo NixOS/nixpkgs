@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.3";
+  version = "3.3.4";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-NfEPXjpVnFvh3Y70RZm8nDG0QwJbefF9wYNUq0BZTN4=";
+    sha256 = "sha256-BP4wxjgm0x0E68tNz5eudkVUyBnXkQlP7LY3ppZunhw=";
   };
 
   propagatedBuildInputs = [ libGL ];

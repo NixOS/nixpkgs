@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib
-, fixDarwinDylibNames, gobject-introspection, gnome3
+, fixDarwinDylibNames, gobject-introspection, gnome
 }:
 
 let
@@ -34,8 +34,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

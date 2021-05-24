@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome3, libsysprof-capture
+{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome, libsysprof-capture
 , gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
 , libpsl, python3, brotli
 }:
@@ -46,8 +46,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     propagatedUserEnvPackages = [ glib-networking.out ];
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

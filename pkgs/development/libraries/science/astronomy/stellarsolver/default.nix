@@ -25,6 +25,6 @@ mkDerivation rec {
     description = "Astrometric plate solving library";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, runCommand
+, testVersion
 , seaweedfs
 }:
 
@@ -20,10 +20,8 @@ buildGoModule rec {
 
   subPackages = [ "weed" ];
 
-  passthru.tests.check-version = runCommand "weed-version" { meta.timeout = 3; } ''
-    ${seaweedfs}/bin/weed version | grep -Fw ${version}
-    touch $out
-  '';
+  passthru.tests.version =
+    testVersion { package = seaweedfs; command = "weed version"; };
 
   meta = with lib; {
     description = "Simple and highly scalable distributed file system";

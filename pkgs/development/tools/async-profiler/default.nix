@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  patches = [
+    # https://github.com/jvm-profiling-tools/async-profiler/pull/428
+    ./0001-Fix-darwin-build.patch
+  ];
+
   fixupPhase = ''
     substituteInPlace $out/bin/async-profiler \
       --replace 'JATTACH=$SCRIPT_DIR/build/jattach' \

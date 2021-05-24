@@ -5,9 +5,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.15";
+  version = "2.2.16";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "sha256-mMnHJtXLfkZ5O0UF89kHsqBnPg9uQ5l8IYoL5TMMyD8=";
+  sha256 = "sha256-qzxguxKy2pFv0HMZKEnytdPyJPlf6/NTghIkfEzeKNY=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";

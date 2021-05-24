@@ -124,6 +124,22 @@ in runBuildTests {
     '';
   };
 
+  testIniListToValue = {
+    drv = evalFormat formats.ini { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+      foo = {
+        bar = [ null true "test" 1.2 10 ];
+        baz = false;
+        qux = "qux";
+      };
+    };
+    expected = ''
+      [foo]
+      bar=null, true, test, 1.200000, 10
+      baz=false
+      qux=qux
+    '';
+  };
+
   testTomlAtoms = {
     drv = evalFormat formats.toml {} {
       false = false;

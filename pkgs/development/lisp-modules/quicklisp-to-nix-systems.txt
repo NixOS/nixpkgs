@@ -41,6 +41,7 @@ cl-emb
 cl-fad
 cl-fuse
 cl-fuse-meta-fs
+cl-gobject-introspection
 cl-hooks
 cl-html-diff
 cl-html5-parser
@@ -122,6 +123,7 @@ fiveam
 flexi-streams
 form-fiddle
 fset
+generic-cl
 gettext
 http-body
 hu.dwim.asdf
@@ -188,6 +190,7 @@ swank
 swap-bytes
 symbol-munger
 trivia
+trivial-arguments
 trivial-backtrace
 trivial-clipboard
 trivial-features

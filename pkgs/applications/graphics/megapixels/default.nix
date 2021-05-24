@@ -5,8 +5,8 @@
 , ninja
 , pkg-config
 , wrapGAppsHook
-, gtk3
-, gnome3
+, epoxy
+, gtk4
 , zbar
 , tiffSupport ? true
 , libraw
@@ -26,20 +26,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.16.0";
+  version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "megapixels";
     rev = version;
-    sha256 = "0z7sx76x18yqf7carq6mg9lib0zbz0yrd1dsg9qd6hbf5niqis37";
+    sha256 = "0k9a5dpr5z0g7ngbhk4j22sbs1ffxiwg8wmbzgggdc9xvwmkgppr";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme zbar ]
-  ++ optional tiffSupport libraw
-  ++ optional jpgSupport graphicsmagick;
+  buildInputs = [
+    epoxy
+    gtk4
+    zbar
+  ];
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sr.ht/~martijnbraam/Megapixels";
     changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 dotlambda ];
     platforms = platforms.linux;
   };
 }

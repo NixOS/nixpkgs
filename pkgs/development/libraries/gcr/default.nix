@@ -15,18 +15,18 @@
 , makeWrapper
 , libxslt
 , vala
-, gnome3
+, gnome
 , python3
 , shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.38.1";
+  version = "3.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "F/yvnEqTpl+xxyuCZDuxAsEzRAhGh9WIbqZjE4aNnsk=";
+    sha256 = "udNkWl/ZU6VChcxk1PwEZzZGPb1NzCXK9ce1m+0wJ/U=";
   };
 
   postPatch = ''
@@ -82,13 +82,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";

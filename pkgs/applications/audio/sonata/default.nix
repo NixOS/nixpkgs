@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, wrapGAppsHook, gettext
-, python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
+, python3Packages, gnome, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
@@ -24,7 +24,7 @@ in buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3
     gdk-pixbuf

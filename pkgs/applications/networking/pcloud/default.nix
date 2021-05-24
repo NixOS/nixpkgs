@@ -21,7 +21,7 @@
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
   # AppImage, so we don't have to duplicate them here.
-  alsaLib, dbus-glib, fuse, gnome3, gtk3, libdbusmenu-gtk2, udev, nss
+  alsaLib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, udev, nss
 }:
 
 let
@@ -59,6 +59,7 @@ in stdenv.mkDerivation {
     fuse
     gtk3
     libdbusmenu-gtk2
+    libXdamage
     nss
     udev
   ];
@@ -93,7 +94,7 @@ in stdenv.mkDerivation {
 
     # This is required for the file picker dialog - otherwise pcloud just
     # crashes
-    export XDG_DATA_DIRS="${gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/${gnome3.gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
+    export XDG_DATA_DIRS="${gnome.gsettings-desktop-schemas}/share/gsettings-schemas/${gnome.gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
 
     exec "$out/app/pcloud"
     EOF

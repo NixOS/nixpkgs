@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.63.0";
+  version = "0.65.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "0l3imrcs42pqf9d6k8c1q15k5sqcnapl5zk71xl52mrxhz49lgpi";
+    sha256 = "sha256-DPfijCGORF3ThZblqaYTKN0H8+wlhtdIS8lfKfJl/bY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "starlette ==0.13.6" "starlette"
+      --replace "starlette ==" "starlette >="
   '';
 
   propagatedBuildInputs = [

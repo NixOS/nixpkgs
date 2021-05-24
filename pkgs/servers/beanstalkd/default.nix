@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, installShellFiles }:
+{ lib, stdenv, fetchurl, installShellFiles, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.12";
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installManPage doc/beanstalkd.1
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.beanstalkd;
+  };
 
   meta = with lib; {
     homepage = "http://kr.github.io/beanstalkd/";

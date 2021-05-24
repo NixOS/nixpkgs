@@ -31,6 +31,8 @@ let
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
+  downloadsUrl = "https://downloads.haskell.org/ghc";
+
 in
 
 stdenv.mkDerivation rec {
@@ -41,23 +43,23 @@ stdenv.mkDerivation rec {
   # https://downloads.haskell.org/~ghc/8.10.2/
   src = fetchurl ({
     i686-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
       sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
     };
     x86_64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
       sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
     };
     armv7l-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
       sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
     };
     aarch64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
       sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
     };
     x86_64-darwin = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
     };
   }.${stdenv.hostPlatform.system}
@@ -212,11 +214,12 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta = {
+  meta = rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [ lostnet ];
   };
 }

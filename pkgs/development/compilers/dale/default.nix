@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config llvm_6.dev ];
   buildInputs = [ libffi llvm_6 ];
 
   inherit doCheck;

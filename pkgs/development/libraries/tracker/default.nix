@@ -18,7 +18,7 @@
 , sqlite
 , libxslt
 , libstemmer
-, gnome3
+, gnome
 , icu
 , libuuid
 , libsoup
@@ -28,7 +28,7 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "tracker";
   version = "3.1.1";
 
@@ -133,7 +133,7 @@ stdenv.mkDerivation (rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
@@ -147,8 +147,3 @@ stdenv.mkDerivation (rec {
     platforms = platforms.linux;
   };
 }
-  // {
-    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
-    enableParallelBuilding = false;
-  }
-)

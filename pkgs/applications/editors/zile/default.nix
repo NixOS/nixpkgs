@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zile";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${pname}-${version}.tar.gz";
-    hash = "sha256-v7rN33aOORc6J0Z5JP5AmZCj6XvjYyoCl5hl+7mvAnc=";
+    hash = "sha256-d+t9r/PJi9yI2qGsBA3MynK4HcMvwxZuB53Xpj5Cx0E=";
   };
 
   buildInputs = [

@@ -53,7 +53,7 @@ stdenv.mkDerivation {
 
   # Add the packInstall path to the swipl pack search path
   postPatch = ''
-    echo "user:file_search_path(pack, '$out/lib/swipl/pack')." >> /build/$sourceRoot/boot/init.pl
+    echo "user:file_search_path(pack, '$out/lib/swipl/pack')." >> boot/init.pl
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

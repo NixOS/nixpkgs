@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2, cairo, glib, pkg-config, gnome3 }:
+{ lib, stdenv, fetchurl, gtk2, cairo, glib, pkg-config, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "goocanvas";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 cairo glib ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

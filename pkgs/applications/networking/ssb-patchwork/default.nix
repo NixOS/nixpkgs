@@ -2,12 +2,12 @@
 
 let
   pname = "ssb-patchwork";
-  version = "3.18.0";
+  version = "3.18.1";
   name = "Patchwork-${version}";
 
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${name}.AppImage";
-    sha256 = "1sb9q1qj5mj4cf8d9dsc498mg8a1ri2y0p9qbh44i8ykby8jkgjc";
+    sha256 = "F8n6LLbgkg3z55lSY60T+pn2lra8aPt6Ztepw1gf2rI=";
   };
 
   binary = appimageTools.wrapType2 {
@@ -47,7 +47,7 @@ in
       '';
       homepage = "https://www.scuttlebutt.nz/";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ asymmetric ninjatrappeur ];
+      maintainers = with maintainers; [ asymmetric ninjatrappeur cyplo ];
       platforms = [ "x86_64-linux" ];
     };
   }

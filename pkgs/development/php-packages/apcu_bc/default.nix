@@ -15,4 +15,5 @@ buildPecl {
   '';
 
   meta.maintainers = lib.teams.php.members;
+  meta.broken = lib.versionAtLeast php.version "8";
 }

@@ -855,7 +855,7 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
   <title><function>lib.attrsets.mapAttrsToList</function></title>
 
   <subtitle><literal>mapAttrsToList :: (String -> Any -> Any) ->
-   AttrSet -> Any</literal>
+   AttrSet -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />

@@ -2,7 +2,7 @@
 , cinnamon-desktop
 , glib
 , file
-, gnome3
+, gnome
 , gnome-doc-utils
 , fetchpatch
 , gobject-introspection
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     xorg.xkeyboardconfig
 
     libxkbcommon
-    gnome3.zenity
+    gnome.zenity
     libinput
     libstartup_notification
     libXtst

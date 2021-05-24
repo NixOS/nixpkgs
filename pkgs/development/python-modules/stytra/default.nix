@@ -8,7 +8,6 @@
 , pandas
 , tables
 , git
-, ffmpeg_3
 , scikitimage
 , matplotlib
 , qdarkstyle
@@ -59,7 +58,6 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    ffmpeg_3
     scikitimage
     matplotlib
     qdarkstyle
@@ -79,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/portugueslab/stytra";
     description = "A modular package to control stimulation and track behaviour";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ tbenst ];
   };
 }

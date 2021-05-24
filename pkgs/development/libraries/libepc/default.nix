@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk-doc, glib, avahi, gnutls, libuuid, libsoup, gtk3, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk-doc, glib, avahi, gnutls, libuuid, libsoup, gtk3, gnome }:
 
 let
   avahiWithGtk = avahi.override { gtk3Support = true; };
@@ -32,8 +32,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

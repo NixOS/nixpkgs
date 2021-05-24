@@ -3,7 +3,7 @@
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
-, gnome3/*.gnome-shell*/
+, gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
@@ -269,7 +269,7 @@ let
               --set MOZ_ENABLE_WAYLAND "1" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
+                  --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share'
                 ''
             }
         #############################

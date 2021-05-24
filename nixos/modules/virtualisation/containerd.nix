@@ -44,9 +44,7 @@ in
         KillMode = "process";
         Type = "notify";
         Restart = "always";
-        RestartSec = "5";
-        StartLimitBurst = "8";
-        StartLimitIntervalSec = "120s";
+        RestartSec = "10";
 
         # "limits" defined below are adopted from upstream: https://github.com/containerd/containerd/blob/master/containerd.service
         LimitNPROC = "infinity";
@@ -54,6 +52,13 @@ in
         LimitNOFILE = "infinity";
         TasksMax = "infinity";
         OOMScoreAdjust = "-999";
+
+        StateDirectory = "containerd";
+        RuntimeDirectory = "containerd";
+      };
+      unitConfig = {
+        StartLimitBurst = "16";
+        StartLimitIntervalSec = "120s";
       };
     };
   };

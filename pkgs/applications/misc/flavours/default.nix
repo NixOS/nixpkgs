@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-rDy859jg+F8XC4sJogIgdn1FoT8cf7S+KORt+7kboAc=";
   };
+
+  buildInputs = [ ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   cargoSha256 = "sha256-cAXiAPhHdxdd8pFQ0Gq7eHO2p/Dam53gDbE583UYY/k=";
 

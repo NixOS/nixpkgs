@@ -1,7 +1,10 @@
-{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
+{ lib
+, fetchurl
+, fetchpatch
+, substituteAll, python3, pkg-config, writeText
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
-, ffmpeg, x264, libvpx, libwebp, x265
+, ffmpeg, x264, libvpx, libwebp, x265, librsvg
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
 , pam }:
@@ -13,8 +16,11 @@ let
 
   xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
     patches = [
+      # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
+      # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
+      # patch provided by Xpra upstream
       ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
@@ -30,33 +36,38 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.0.6";
+  version = "4.2";
 
   src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
+    url = "https://xpra.org/src/${pname}-${version}.tar.gz";
+    hash = "sha256-KkQw4FJeH4G5jZ4GdP3aXZ3zxu4GALbiOI6POKJW6fk=";
   };
 
   patches = [
-    (substituteAll {
+    (substituteAll {  # correct hardcoded paths
       src = ./fix-paths.patch;
-      inherit (xorg) xkeyboardconfig;
       inherit libfakeXinerama;
     })
-    ./fix-41106.patch
+    ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
+    # Xorg won't start without. Remove on next version!
+    (fetchpatch {
+      url = "https://github.com/Xpra-org/xpra/commit/f9f242abad69363dfa558e1f6f7956ae99164b67.patch";
+      sha256 = "sha256-TOP9RuXPuqxyKY/7LSSrCWnAmJstEE+D5EwjMiVmchM=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
     libXrandr libxkbfile
     ] ++ [
     cython
+    librsvg
 
     pango cairo gdk-pixbuf atk.out gtk3 glib
 
@@ -75,7 +86,7 @@ in buildPythonApplication rec {
     pillow rencode pycrypto cryptography pycups lz4 dbus-python
     netifaces numpy pygobject3 pycairo gst-python pam
     pyopengl paramiko opencv4 python-uinput pyxdg
-    ipaddress idna
+    ipaddress idna pyinotify
   ];
 
     # error: 'import_cairo' defined but not used
@@ -83,6 +94,7 @@ in buildPythonApplication rec {
 
   setupPyBuildFlags = [
     "--with-Xdummy"
+    "--without-Xdummy_wrapper"
     "--without-strict"
     "--with-gtk3"
     # Override these, setup.py checks for headers in /usr/* paths
@@ -96,6 +108,7 @@ in buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
+      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
     )
@@ -116,12 +129,12 @@ in buildPythonApplication rec {
   };
 
   meta = {
-    homepage = "http://xpra.org/";
+    homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
-    downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
+    downloadURLRegexp = "xpra-.*[.]tar[.][gx]z$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ tstrobel offline numinit ];
+    maintainers = with maintainers; [ tstrobel offline numinit mvnetbiz ];
   };
 }

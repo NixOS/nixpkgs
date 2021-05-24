@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , Mako
@@ -12,14 +13,18 @@
 , opencl-headers
 , ocl-icd
 , pybind11
+, mesa_drivers
 }:
 
-buildPythonPackage rec {
+let
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in buildPythonPackage rec {
   pname = "pyopencl";
   version = "2021.1.4";
 
   checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers ocl-icd pybind11 ];
+  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 

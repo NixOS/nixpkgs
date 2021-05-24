@@ -38,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20210219";
-  kodiVersion = "19.0";
+  kodiReleaseDate = "20210508";
+  kodiVersion = "19.1";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "097dg6a7v4ia85jx1pmlpwzdpqcqxlrmniqd005q73zvgj67zc2p";
+    sha256 = "0jh67vw3983lnfgqzqfislawwbpq0vxxk1ljsg7mar06mlwfxb7h";
   };
 
   ffmpeg = stdenv.mkDerivation rec {

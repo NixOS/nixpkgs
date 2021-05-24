@@ -17,7 +17,7 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? [], ...
 }:
 
 /* Maintainer notes:
@@ -213,7 +213,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = "http://www.ffmpeg.org/";
+    homepage = "https://www.ffmpeg.org/";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines
@@ -224,6 +225,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];
-    inherit branch;
+    inherit branch knownVulnerabilities;
   };
 }

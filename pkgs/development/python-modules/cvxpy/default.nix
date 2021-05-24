@@ -9,7 +9,7 @@
 , osqp
 , scipy
 , scs
-, useOpenmp ? true
+, useOpenmp ? (!stdenv.isDarwin)
   # Check inputs
 , pytestCheckHook
 }:

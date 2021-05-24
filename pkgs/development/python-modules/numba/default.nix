@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "55c11d7edbba2ba715f2b56f5294cad55cfd87bff98e2627c3047c2d5cc52d16";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ numpy llvmlite setuptools ];
   pythonImportsCheck = [ "numba" ];

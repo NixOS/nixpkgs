@@ -22,6 +22,7 @@
 , qtgraphicaleffects
 , qtmultimedia
 , qtx11extras
+, breeze-icons
 , sshfs
 }:
 
@@ -47,6 +48,8 @@ mkDerivation {
     qtgraphicaleffects
     qtmultimedia
     qtx11extras
+    # otherwise buttons are blank on non-kde
+    breeze-icons
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];

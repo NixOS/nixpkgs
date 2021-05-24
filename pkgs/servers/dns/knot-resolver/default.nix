@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.3.1";
+  version = "5.3.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "9d4d6b7bcdf114acc948e5ee68c83fcbb3944f48a13b9751dbbbc190cdd729c9";
+    sha256 = "8b6f447d5fe93422d4c129a2d4004a977369c3aa6e55258ead1cbd488bc01436";
   };
 
   outputs = [ "out" "dev" ];

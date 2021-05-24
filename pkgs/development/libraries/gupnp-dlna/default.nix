@@ -8,7 +8,7 @@
 , docbook_xml_dtd_412
 , libxml2
 , gst_all_1
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -13,9 +13,10 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s ${dotty-bare}/bin/dotc $out/bin/dotc
-    ln -s ${dotty-bare}/bin/dotd $out/bin/dotd
-    ln -s ${dotty-bare}/bin/dotr $out/bin/dotr
+    ln -s ${dotty-bare}/bin/scalac $out/bin/scalac
+    ln -s ${dotty-bare}/bin/scaladoc $out/bin/scaladoc
+    ln -s ${dotty-bare}/bin/scala $out/bin/scala
+    ln -s ${dotty-bare}/bin/common $out/bin/common
   '';
 
   inherit (dotty-bare) meta;

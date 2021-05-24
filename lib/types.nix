@@ -147,9 +147,13 @@ rec {
     , # The deprecation message to display when this type is used by an option
       # If null, the type isn't deprecated
       deprecationMessage ? null
+    , # The types that occur in the definition of this type. This is used to
+      # issue deprecation warnings recursively. Can also be used to reuse
+      # nested types
+      nestedTypes ? {}
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage nestedTypes;
       description = if description == null then name else description;
     };
 
@@ -256,14 +260,14 @@ rec {
         };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
-        # the biggest int a 64-bit Nix accepts is 2^63 - 1 (9223372036854775808), for a 32-bit Nix it is 2^31 - 1 (2147483647)
-        # the smallest int a 64-bit Nix accepts is -2^63 (-9223372036854775807), for a 32-bit Nix it is -2^31 (-2147483648)
-        # u32 = unsign 32 4294967296;
+        # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
+        # the smallest int Nix accepts is -2^63 (-9223372036854775807)
+        u32 = unsign 32 4294967296;
         # u64 = unsign 64 18446744073709551616;
 
         s8 = sign 8 256;
         s16 = sign 16 65536;
-        # s32 = sign 32 4294967296;
+        s32 = sign 32 4294967296;
       };
 
     # Alias of u16 for a port number
@@ -337,7 +341,7 @@ rec {
     };
 
     shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+      check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
     path = mkOptionType {
@@ -365,6 +369,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     nonEmptyListOf = elemType:
@@ -389,6 +394,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # A version of attrsOf that's lazy in its values at the expense of
@@ -413,6 +419,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # TODO: drop this in the future:
@@ -421,6 +428,7 @@ rec {
       deprecationMessage = "Mixing lists with attribute values is no longer"
         + " possible; please use `types.attrsOf` instead. See"
         + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
+      nestedTypes.elemType = elemType;
     };
 
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
@@ -433,6 +441,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: uniq (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # Null or value of ...
@@ -451,6 +460,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     functionTo = elemType: mkOptionType {
@@ -535,6 +545,9 @@ rec {
         substSubModules = m: submoduleWith (attrs // {
           modules = m;
         });
+        nestedTypes = lib.optionalAttrs (freeformType != null) {
+          freeformType = freeformType;
+        };
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
@@ -596,6 +609,8 @@ rec {
            then functor.type mt1 mt2
            else null;
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
+      nestedTypes.left = t1;
+      nestedTypes.right = t2;
     };
 
     # Any of the types in the given list
@@ -627,6 +642,8 @@ rec {
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t1: t2: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
+        nestedTypes.coercedType = coercedType;
+        nestedTypes.finalType = finalType;
       };
 
     # Obsolete alternative to configOf.  It takes its option

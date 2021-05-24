@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, numpy, scikitlearn, setuptools_scm, cython, pytest }:
+{ lib, fetchurl, buildPythonPackage, numpy, scikit-learn, setuptools_scm, cython, pytest }:
 
 buildPythonPackage rec {
   pname = "hmmlearn";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm cython ];
-  propagatedBuildInputs = [ numpy scikitlearn ];
+  propagatedBuildInputs = [ numpy scikit-learn ];
   checkInputs = [ pytest ];
 
   checkPhase = ''

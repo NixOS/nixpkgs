@@ -8,7 +8,7 @@ rec {
 
   major = "7";
   minor = "1";
-  patch = "2";
+  patch = "3";
   tweak = "2";
 
   subdir = "${major}.${minor}.${patch}";
@@ -17,13 +17,13 @@ rec {
 
   src = fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1y19p9701msf6jjzp9d5ighvmyjzj68qzhm2bk3l5p16ys8qk9bb";
+    sha256 = "1gr9c8kv7nc9kaag1sw9r36843pfba1my80afx7p0lxj0k8pzbrm";
   };
 
   # FIXME rename
   translations = fetchSrc {
     name = "translations";
-    sha256 = "1j5251lbc35d521d92w52lgps0v5pg8mhr8y3r6x2nl9p0gvw957";
+    sha256 = "09xkr6jmnwq55savw9xjsy8l8zcyflnsg4nfwhknvm3ls8sqj4w6";
   };
 
   # the "dictionaries" archive is not used for LO build because we already build hunspellDicts packages from
@@ -31,6 +31,6 @@ rec {
 
   help = fetchSrc {
     name = "help";
-    sha256 = "1bsrkmzhhpyrmi7akmdfvz4zb543fc093az9965k14rp8l6rhnvf";
+    sha256 = "0dc981vmxfdwlyfgq84axkr99d8chm1ypknj39v0cmaqn56lpwg0";
   };
 }

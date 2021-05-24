@@ -5,7 +5,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnome3Deps = pkgs: with pkgs; [ gnome3.zenity gtksourceview gnome3.gnome-desktop gnome3.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome.gnome-desktop gnome.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -86,7 +86,7 @@ in buildFHSUserEnv {
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
-    ++ gnome3Deps pkgs
+    ++ gnomeDeps pkgs
     ++ lib.optional steamSupport pkgs.steam;
 
   multiPkgs = pkgs: with pkgs; [

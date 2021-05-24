@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
     description = "A tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

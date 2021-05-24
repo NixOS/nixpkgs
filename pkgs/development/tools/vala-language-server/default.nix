@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Code Intelligence for Vala & Genie";
     homepage = "https://github.com/benwaffle/vala-language-server";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ andreasfelix worldofpeace ];
+    maintainers = with maintainers; [ andreasfelix ];
     platforms = platforms.linux;
   };
 }

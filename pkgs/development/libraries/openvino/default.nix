@@ -83,13 +83,13 @@ stdenv.mkDerivation rec {
     cmake
     autoPatchelfHook
     addOpenGLRunpath
+    unzip
   ];
 
   buildInputs = [
     git
     protobuf
     opencv
-    unzip
     python
     tbb
     shellcheck

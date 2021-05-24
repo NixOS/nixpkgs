@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, attr, libuuid, libscrypt, libsodium, keyutils
-, liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
+, liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages, nixosTests
 , fuseSupport ? false, fuse3 ? null }:
 
 assert fuseSupport -> fuse3 != null;
@@ -38,6 +38,10 @@ stdenv.mkDerivation {
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests = {
+    smoke-test = nixosTests.bcachefs;
+  };
 
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";

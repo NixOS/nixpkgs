@@ -146,7 +146,7 @@ let
         "CRYSTAL_CONFIG_VERSION=${version}"
       ];
 
-      env.LLVM_CONFIG = "${llvmPackages.llvm}/bin/llvm-config";
+      env.LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
       env.FLAGS = "--release --single-module"; # needed for deterministic builds
 

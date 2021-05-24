@@ -25,7 +25,7 @@ self: super: let
   }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString stdenv.cc.isGNU " -static-libgcc";
+                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";

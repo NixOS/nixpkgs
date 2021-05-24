@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
@@ -13,19 +12,23 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-S4HL8vJS/dTKsR5egKRSHqZYPClcET5Le06euHPyIkU=";
+    sha256 = "sha256-A4qk7eo4maCRP4UmtWrRCPvG6YrLVSOiOcfN8pEj5Po=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   checkInputs = [
     aresponses
@@ -35,8 +38,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "aiorecollect" ];
 
   meta = with lib; {

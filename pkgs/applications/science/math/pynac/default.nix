@@ -22,22 +22,43 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      name = "handle_factor.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/handle_factor.patch?h=9.3.rc3";
-      sha256 = "sha256-U1lb5qwBqZZgklfDMhBX4K5u8bz5x42O4w7hyNy2YVw=";
-    })
+    # the five patches below are included with sage 9.3. since pynac
+    # is a self-described "Sage Math support library", we include them
+    # here.
 
+    # https://trac.sagemath.org/ticket/30688
     (fetchpatch {
       name = "power_inf_loop.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/power_inf_loop.patch?h=9.3.rc3";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/power_inf_loop.patch?h=9.3";
       sha256 = "sha256-VYeaJl8u2wl7FQ/6xnpZv1KpdNYEmJoPhuMrBADyTRs=";
     })
 
+    # https://trac.sagemath.org/ticket/31479
+    (fetchpatch {
+      name = "disable_poly_mul_expand.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/disable_poly_mul_expand.patch?h=9.3";
+      sha256 = "sha256-gRjoltU9Tzj7fjNyE25fY+iyDxERzSTOMigzxFpUqPo=";
+    })
+
+    # https://trac.sagemath.org/ticket/31530
     (fetchpatch {
       name = "too_much_sub.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/too_much_sub.patch?h=9.3.rc3";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/too_much_sub.patch?h=9.3";
       sha256 = "sha256-lw7xSQ/l+rzPu+ghWF4omYF0mKksGGPuuHJTktvbdis=";
+    })
+
+    # https://trac.sagemath.org/ticket/31554
+    (fetchpatch {
+      name = "handle_factor.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/handle_factor.patch?h=9.3";
+      sha256 = "sha256-U1lb5qwBqZZgklfDMhBX4K5u8bz5x42O4w7hyNy2YVw=";
+    })
+
+    # https://trac.sagemath.org/ticket/31645
+    (fetchpatch {
+      name = "seriesbug.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/seriesbug.patch?h=9.3";
+      sha256 = "sha256-b3//oirN7JHDYqrvE+tDYcnKpSYQJ08yBzcNlII2Dts=";
     })
   ];
 

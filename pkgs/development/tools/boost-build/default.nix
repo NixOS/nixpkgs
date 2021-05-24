@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1r4rwlq87ydmsdqrik4ly5iai796qalvw7603mridg2nwcbbnf54";
   };
 
+  patches = [
+    # Upstream defaults to gcc on darwin, but we use clang.
+    ./darwin-default-toolset.patch
+  ];
+
   nativeBuildInputs = [
     bison
   ];

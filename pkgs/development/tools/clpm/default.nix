@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ln -s ${openssl.out}/lib/libcrypto.so.* .
-    ln -s ${openssl.out}/lib/libssl.so.* .
+    ln -s ${openssl.out}/lib/libcrypto*${stdenv.hostPlatform.extensions.sharedLibrary}* .
+    ln -s ${openssl.out}/lib/libssl*${stdenv.hostPlatform.extensions.sharedLibrary}* .
     common-lisp.sh --script scripts/build.lisp
 
     runHook postBuild

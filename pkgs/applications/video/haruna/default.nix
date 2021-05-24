@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "g-fb";
     repo = "haruna";
     rev = version;
-    sha256 = "sha256-YsC0ZdLwHCO9izDIk2dTMr0U/nb60MHSxKURV8Xltss=";
+    sha256 = "sha256-gJCLc8qJolv4Yufm/OBCTTEpyoodtySAqKH+zMHCoLU=";
   };
 
   buildInputs = [

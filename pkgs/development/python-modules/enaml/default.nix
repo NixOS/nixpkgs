@@ -5,7 +5,7 @@
 , ply
 , kiwisolver
 , qtpy
-, sip
+, sip_4
 , cppy
 , bytecode
 }:
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     ply
     kiwisolver
     qtpy
-    sip
+    sip_4
     cppy
     bytecode
   ];

@@ -10,7 +10,7 @@ with import <nixpkgs> {};
 
 mkShell {
   name = "dotnet-env";
-  buildInputs = [
+  packages = [
     dotnet-sdk_3
   ];
 }
@@ -25,7 +25,7 @@ with import <nixpkgs> {};
 
 mkShell {
   name = "dotnet-env";
-  buildInputs = [
+  packages = [
     (with dotnetCorePackages; combinePackages [
       sdk_3_1
       sdk_3_0

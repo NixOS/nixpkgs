@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkg-config, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, glib, kmod, file, fetchpatch, libnma }:
+, gtk3, withGnome ? true, gnome, glib, kmod, file, fetchpatch, libnma }:
 let
   pname = "NetworkManager-vpnc";
   version = "1.2.6";
@@ -35,9 +35,10 @@ in stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-vpnc";
+      versionPolicy = "odd-unstable";
     };
   };
 

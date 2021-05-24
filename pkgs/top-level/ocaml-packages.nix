@@ -53,7 +53,7 @@ let
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
-      llvm = pkgs.llvm_8;
+      inherit (pkgs.llvmPackages_8) llvm;
     };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -81,6 +81,8 @@ let
     bos = callPackage ../development/ocaml-modules/bos { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
+
+    ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
 
     carton = callPackage ../development/ocaml-modules/carton { };
 
@@ -114,12 +116,11 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
-    camlimages_4_0 =
+    camlimages_4_1_2 =
       if lib.versionOlder "4.02" ocaml.version
       then null
-      else callPackage ../development/ocaml-modules/camlimages/4.0.nix {
+      else callPackage ../development/ocaml-modules/camlimages/4.1.2.nix {
       libpng = pkgs.libpng12;
-      giflib = pkgs.giflib_4_1;
     };
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
@@ -457,7 +458,7 @@ let
 
     git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
 
-    git-cohttp-mirage = callPackage ../development/ocaml-modules/git/cohttp-mirage.nix { };
+    git-paf = callPackage ../development/ocaml-modules/git/paf.nix { };
 
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
@@ -585,7 +586,7 @@ let
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_8;
+      libllvm = pkgs.llvmPackages_8.libllvm;
     };
 
     logs = callPackage ../development/ocaml-modules/logs { };
@@ -1075,6 +1076,8 @@ let
     ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
+
+    ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner {};
 
     ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec {};
 

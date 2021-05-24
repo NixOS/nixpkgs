@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   env.NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=enum-conversion";
+
+  # On gcc9, this would produce
+  #   error: '-Werror=enum-conversion': no option -Wenum-conversion
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast stdenv.cc.version "10")
+    "-Wno-error=enum-conversion";
 
   enableParallelBuilding = true;
 

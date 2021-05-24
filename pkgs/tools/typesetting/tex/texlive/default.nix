@@ -3,7 +3,7 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz, poppler_min
+, callPackage, ghostscriptX, harfbuzz
 , makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -11,7 +11,6 @@
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;

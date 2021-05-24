@@ -1,5 +1,5 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
   libPath = lib.makeLibraryPath [ gmp ];
@@ -7,21 +7,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-Ve9nd/IEHo7Gg4WyxqKLUV495U1k9LfDyClkuVkooyA=";
+    sha256 = "sha256-nK4wvxK5Ne1+4kaMts6pIr5FvXBgXJsGdn68gGEZUdk=";
   };
 
-  cargoSha256 = "sha256-InGMZdP0c/QKU6ao8qhAUIDcAhOTumLOz6wo/u2+ibA=";
+  cargoSha256 = "sha256-ptSbpq1ePNWmdBGfKtqFGfkdimDjU0YEo4F8VPtQMt4=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   env.OPENSSL_NO_VENDOR = 1;
-  buildInputs = [ curl zlib openssl ];
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   cargoBuildFlags = [ "--features" "no-self-update" ];
 

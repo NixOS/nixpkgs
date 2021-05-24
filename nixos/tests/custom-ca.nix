@@ -92,13 +92,19 @@ in
         { onlySSL = true;
           sslCertificate = "${example-good-cert}/server.crt";
           sslCertificateKey = "${example-good-cert}/server.key";
-          locations."/".extraConfig = "return 200 'It works!';";
+          locations."/".extraConfig = ''
+            add_header Content-Type text/plain;
+            return 200 'It works!';
+          '';
         };
       services.nginx.virtualHosts."bad.example.com" =
         { onlySSL = true;
           sslCertificate = "${example-bad-cert}/server.crt";
           sslCertificateKey = "${example-bad-cert}/server.key";
-          locations."/".extraConfig = "return 200 'It does not work!';";
+          locations."/".extraConfig = ''
+            add_header Content-Type text/plain;
+            return 200 'It does not work!';
+          '';
         };
 
       environment.systemPackages = with pkgs;
@@ -106,6 +112,7 @@ in
     };
 
   testScript = ''
+    from typing import Tuple
     def execute_as(user: str, cmd: str) -> Tuple[int, str]:
         """
         Run a shell command as a specific user.

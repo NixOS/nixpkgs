@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.20200331";
+  version = "1.0.20210317";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
     rev = "v${version}";
-    sha256 = "1cncfwhyhmg18n970lkn6yvp0i74ajznsl8dqz00asqfzmg681n1";
+    sha256 = "05rjk0xsrzcxa979vlx25k1rdz1in84gkfm9l1h9f7k4a4aa5r6j";
   };
 
   nativeBuildInputs = [ cmake git ];

@@ -118,6 +118,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; teams.freedesktop.members ++ [ ];
   };
 }

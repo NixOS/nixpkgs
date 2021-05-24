@@ -95,8 +95,9 @@ in makePackage {
 
   postFixup = ''
     # Remove references to bootstrap.
+    export openjdkOutPath='${openjdk11_headless.outPath}'
     find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${lib.escape ["+"] openjdk11_headless.outPath}[^:]*,,')"
+      new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
   '';

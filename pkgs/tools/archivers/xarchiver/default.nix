@@ -2,18 +2,18 @@
   coreutils, zip, unzip, p7zip, unrar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.14";
+  version = "0.5.4.17";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
     rev = version;
-    sha256 = "1iklwgykgymrwcc5p1cdbh91v0ih1m58s3w9ndl5kyd44bwlb7px";
+    sha256 = "00adrjpxqlaccrwjf65w3vhxfswdj0as8aj263c6f9b85llypc5v";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper wrapGAppsHook ];
-  buildInputs = [ gtk3 intltool libxslt ];
+  nativeBuildInputs = [ intltool pkg-config makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 libxslt ];
 
   postFixup = ''
     wrapProgram $out/bin/xarchiver \
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
     homepage = "https://github.com/ib/xarchiver";
     maintainers = [ lib.maintainers.domenkozar ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
 }

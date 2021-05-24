@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , bluez-tools
 , cinnamon
-, gnome3
+, gnome
 , gobject-introspection
 , intltool
 , pavucontrol
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bluez-tools
     cinnamon.xapps
-    gnome3.gnome-bluetooth
+    gnome.gnome-bluetooth
     python3Packages.python
     util-linux
   ];

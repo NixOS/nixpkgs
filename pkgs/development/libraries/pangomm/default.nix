@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome3
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome
 , ApplicationServices }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

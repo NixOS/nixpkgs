@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub, tmux, which, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "overmind";
-  version = "2.2.0";
-  goPackagePath = "github.com/DarthSim/overmind";
+  version = "2.2.2";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -15,10 +14,10 @@ buildGoPackage rec {
     owner = "DarthSim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00v6l4138vv32bqfkzrhk4hfl52a00rlg9ywhp4difgrnz7zj6xb";
+    sha256 = "zDjIwnhDoUj+zTAhtBa94dx7QhYMCTxv2DNUpeP8CP0=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "KDMzR6qAruscgS6/bHTN6RnHOlLKCm9lxkr9k3oLY+Y=";
 
   meta = with lib; {
     homepage = "https://github.com/DarthSim/overmind";

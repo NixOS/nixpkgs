@@ -22,6 +22,7 @@
 , withKerberos ? true
 , libkrb5
 , libfido2
+, nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl ? true
 }:
@@ -110,6 +111,10 @@ stdenv.mkDerivation rec {
   installFlags = [
     "sysconfdir=\${out}/etc/ssh"
   ];
+
+  passthru.tests = {
+    borgbackup-integration = nixosTests.borgbackup;
+  };
 
   meta = {
     description = "An implementation of the SSH protocol${extraDesc}";

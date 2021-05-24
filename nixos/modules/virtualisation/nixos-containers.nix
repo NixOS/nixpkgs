@@ -35,6 +35,9 @@ let
       ''
         #! ${pkgs.runtimeShell} -e
 
+        # Exit early if we're asked to shut down.
+        trap "exit 0" SIGRTMIN+3
+
         # Initialise the container side of the veth pair.
         if [ -n "$HOST_ADDRESS" ]   || [ -n "$HOST_ADDRESS6" ]  ||
            [ -n "$LOCAL_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS6" ] ||
@@ -60,8 +63,12 @@ let
 
         ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
 
-        # Start the regular stage 1 script.
-        exec "$1"
+        # Start the regular stage 2 script.
+        # We source instead of exec to not lose an early stop signal, which is
+        # also the only _reliable_ shutdown signal we have since early stop
+        # does not execute ExecStop* commands.
+        set +e
+        . "$1"
       ''
     );
 
@@ -127,12 +134,16 @@ let
       ''}
 
       # Run systemd-nspawn without startup notification (we'll
-      # wait for the container systemd to signal readiness).
+      # wait for the container systemd to signal readiness)
+      # Kill signal handling means systemd-nspawn will pass a system-halt signal
+      # to the container systemd when it receives SIGTERM for container shutdown;
+      # containerInit and stage2 have to handle this as well.
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" $extraFlags \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
+        --kill-signal=SIGRTMIN+3 \
         --bind-ro=/nix/store \
         --bind-ro=/nix/var/nix/db \
         --bind-ro=/nix/var/nix/daemon-socket \
@@ -259,13 +270,10 @@ let
     Slice = "machine.slice";
     Delegate = true;
 
-    # Hack: we don't want to kill systemd-nspawn, since we call
-    # "machinectl poweroff" in preStop to shut down the
-    # container cleanly. But systemd requires sending a signal
-    # (at least if we want remaining processes to be killed
-    # after the timeout). So send an ignored signal.
+    # We rely on systemd-nspawn turning a SIGTERM to itself into a shutdown
+    # signal (SIGRTMIN+3) for the inner container.
     KillMode = "mixed";
-    KillSignal = "WINCH";
+    KillSignal = "TERM";
 
     DevicePolicy = "closed";
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
@@ -746,8 +754,6 @@ in
       script = startScript dummyConfig;
 
       postStart = postStartScript dummyConfig;
-
-      preStop = "machinectl poweroff $INSTANCE";
 
       restartIfChanged = false;
 

@@ -1,17 +1,15 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "btrfs";
-  version = "12";
+  version = "13";
 
-  src = fetchFromGitHub {
-    owner = "knorrie";
-    repo = "python-btrfs";
-    rev = "v${version}";
-    sha256 = "sha256-ZQSp+pbHABgBTrCwC2YsUUXAf/StP4ny7MEhBgCRqgE=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-NSyzhpHYDkunuU104XnbVCcVRNDoVBz4KuJRrE7WMO0=";
   };
 
   # no tests (in v12)
@@ -23,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/knorrie/python-btrfs";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.evils ];
+    maintainers = with maintainers; [ evils Luflosi ];
   };
 }

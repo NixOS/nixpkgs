@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
-  python3, gtk3, gnome3, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
+  python3, gtk3, gnome, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "yaru";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
-  buildInputs = [ gtk3 gnome3.gnome-themes-extra ];
+  buildInputs = [ gtk3 gnome.gnome-themes-extra ];
   propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

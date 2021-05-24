@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
-, wrapGAppsHook, pythonPackages, gtk3, gnome3, gobject-introspection
+, wrapGAppsHook, pythonPackages, gtk3, gnome, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook ];
 
   propagatedBuildInputs =
-    [ gtk3 gobject-introspection libnotify libsecret gnome3.adwaita-icon-theme ] ++
+    [ gtk3 gobject-introspection libnotify libsecret gnome.adwaita-icon-theme ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
 

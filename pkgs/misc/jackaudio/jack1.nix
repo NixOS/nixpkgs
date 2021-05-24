@@ -5,7 +5,7 @@
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;

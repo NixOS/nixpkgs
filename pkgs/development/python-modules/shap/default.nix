@@ -5,7 +5,7 @@
 , pytestCheckHook
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pandas
 , tqdm
 , slicer
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pandas
     tqdm
     slicer

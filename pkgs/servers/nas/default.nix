@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
     description = "A network transparent, client/server audio transport system";
     homepage = "http://radscan.com/nas.html";
     license = licenses.mit;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

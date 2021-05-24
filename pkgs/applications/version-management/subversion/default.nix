@@ -6,13 +6,13 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
-, apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
+, apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
 , sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> apacheHttpd != null;
-assert pythonBindings -> swig != null && python != null;
+assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
@@ -31,7 +31,7 @@ let
 
     buildInputs = [ zlib apr aprutil sqlite openssl lz4 utf8proc ]
       ++ lib.optional httpSupport serf
-      ++ lib.optional pythonBindings python
+      ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
 
@@ -91,7 +91,7 @@ let
 
     enableParallelBuilding = true;
 
-    checkInputs = [ python ];
+    checkInputs = [ python3 ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with lib; {
@@ -116,8 +116,7 @@ in {
   };
 
   subversion = common {
-    version = "1.12.2";
-    sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
-    extraPatches = [ ./CVE-2020-17525.patch ];
+    version = "1.14.1";
+    sha256 = "1ag1hvcm9q92kgalzbbgcsq9clxnzmbj9nciz9lmabjx4lyajp9c";
   };
 }

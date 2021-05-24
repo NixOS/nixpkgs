@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, setuptools, six, traits
+, importlib-metadata, importlib-resources, six, traits
 }:
 
 buildPythonPackage rec {
@@ -11,9 +11,11 @@ buildPythonPackage rec {
     sha256 = "a7031ec4cfff034affc822e47ff5e6c1a0272e576d79465cdbbe25f721740322";
   };
 
-  propagatedBuildInputs = [ setuptools six traits ];
+  propagatedBuildInputs = [ importlib-metadata importlib-resources six traits ];
 
   doCheck = false; # Needs X server
+
+  pythonImportsCheck = [ "pyface" ];
 
   meta = with lib; {
     description = "Traits-capable windowing framework";

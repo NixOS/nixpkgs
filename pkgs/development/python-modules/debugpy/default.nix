@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dgjbbhy228w2zbfq5pf0hkai7742zw8mmybnzjdc9l6pw7360rq";
+    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
   };
 
   patches = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
       inherit gdb;
     })
 
+    # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
@@ -86,6 +87,8 @@ buildPythonPackage rec {
     # gevent fails to import zope.interface with Python 2.7
     "gevent"
   ];
+
+  pythonImportsCheck = [ "debugpy" ];
 
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";

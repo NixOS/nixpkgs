@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , pkg-config
-, ffmpeg_3
+, ffmpeg
 , openssl
 , qtbase
 , zlib
@@ -39,7 +39,7 @@ in mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
-  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+  buildInputs = [ ffmpeg openssl qtbase zlib ];
 
   qtWrapperArgs =
     let

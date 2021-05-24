@@ -33,7 +33,7 @@ in mkDerivation {
     description = "Smart manager for information collecting";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

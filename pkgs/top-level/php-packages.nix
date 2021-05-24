@@ -31,6 +31,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     composer1 = callPackage ../development/php-packages/composer/1.x.nix { };
 
+    deployer = callPackage ../development/php-packages/deployer { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };

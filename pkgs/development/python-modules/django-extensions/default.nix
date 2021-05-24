@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ss5x3d21c3g8i1s79l4akazlf116yp4y50gx4vrk1dxh3jb29zj";
+    sha256 = "03mhikhh49z8bxajbjf1j790b9c9vl4zf4f86iwz7g0zrd7jqlvm";
   };
 
   LC_ALL = "en_US.UTF-8";

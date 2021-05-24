@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
+, getconf
 , less
 # batgrep
 , ripgrep
@@ -48,6 +49,7 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
+    checkInputs = lib.optionals stdenv.isDarwin [ getconf ];
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -104,6 +106,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
+      checkInputs = lib.optionals stdenv.isDarwin [ getconf ];
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}

@@ -15,7 +15,7 @@ lib.makeScope newScope (self: with self; {
 
   foreign-env = callPackage ./foreign-env { };
 
-  forgit-fish = callPackage ./forgit.nix { };
+  forgit = callPackage ./forgit.nix { };
 
   fzf-fish = callPackage ./fzf-fish.nix { };
 

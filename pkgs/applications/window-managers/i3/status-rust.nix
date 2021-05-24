@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.14.7";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ndqh4bzwim32n8psgsgdd47xmlb45rhvcwla1wm506byb21nk4c";
+    sha256 = "00gzm3g297s9bfp13vnb623p7dfac3g6cdhz2b3lc6l0kmnnqs1s";
   };
 
-  cargoSha256 = "098dzwqwbhcyswm73m880z0w03i7xrq56x79vfyvacw4k27q2zm9";
+  cargoSha256 = "1dpklyv1b9h4n4k3ar5qbzivds8r4mml76986ic8zj71fy5fxn08";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -29,7 +29,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--features=notmuch"
+    "--features=maildir"
+    "--features=pulseaudio"
   ];
+
+  prePatch = ''
+    substituteInPlace src/util.rs \
+      --replace "/usr/share/i3status-rust" "$out/share"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share
+    cp -R files/* $out/share
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/i3status-rs --prefix PATH : "${ethtool}/bin"

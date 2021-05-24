@@ -46,5 +46,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/yunstanford/pytest-sanic/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    # pytest-sanic is incompatible with Sanic 21.3, see
+    # https://github.com/sanic-org/sanic/issues/2095 and
+    # https://github.com/yunstanford/pytest-sanic/issues/50.
+    broken = lib.versionAtLeast sanic.version "21.3.0";
   };
 }

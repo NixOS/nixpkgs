@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "md4c";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "mity";
     repo = pname;
     rev = "release-${version}";
-    hash = "sha256-nfMXUP1wu3ifn1QVTO/+XcfFRsThG8PlmYRv+b8AYlQ=";
+    hash = "sha256-+LObAD5JB8Vb4Rt4hTo1Z4ispxzfFkkXA2sw6TKB7Yo=";
   };
 
   nativeBuildInputs = [

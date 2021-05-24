@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tnAJyyPN/Xy1pmlgBpgO2Eb5CeHrRltjQTHmuTPBt8s=";
   };
 
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-printers/commit/5eced5ddda6f229d7265ea0a713f6c1cd181a526.patch";
+      sha256 = "lPTNqka6jjvv1JnAqVzVIQBIdDXlCOQ5ASvgZNuEUC8=";
+    })
+  ];
+
   passthru = {
     updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";

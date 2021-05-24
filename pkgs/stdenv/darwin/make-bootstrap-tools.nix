@@ -77,7 +77,7 @@ in rec {
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
 
-      cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
+      cp -rL ${llvmPackages.clang-unwrapped.lib}/lib/clang $out/lib
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
@@ -85,7 +85,7 @@ in rec {
       cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
 
       cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib

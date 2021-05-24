@@ -9,12 +9,16 @@ let
     sha256 = "031bafj88wggpvw0lgvl0djhlbhs9nls9vzwvni8yn0m0bgzc9gr";
   };
 
-  tortoiseMercurial = mercurial.overridePythonAttrs (old: rec {
+  tortoiseMercurial = (mercurial.override {
+    rustSupport = false;
+    re2Support = lib.versionAtLeast tortoisehgSrc.meta.version "5.8";
+  }).overridePythonAttrs (old: rec {
     inherit (tortoisehgSrc.meta) version;
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
       sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
     };
+    patches = [];
   });
 
 in python3Packages.buildPythonApplication {

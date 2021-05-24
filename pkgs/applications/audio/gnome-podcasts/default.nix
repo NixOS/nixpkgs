@@ -8,8 +8,10 @@
 , python3
 , pkg-config
 , glib
-, libhandy_0
+, libhandy
 , gtk3
+, appstream-glib
+, desktop-file-utils
 , dbus
 , openssl
 , sqlite
@@ -19,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "0y2332zjq7vf1v38wzwz98fs19vpzy9kl7y0xbdzqr303l59hjb1";
+    sha256 = "1ah59ac3xm3sqai8zhil8ar30pviw83cm8in1n4id77rv24xkvgm";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-GInRA/V61r42spb/JYlM8+mATSkmOxdm2zHPRWaKcck=";
+    sha256 = "1iihpfvkli09ysn46cnif53xizkwzk0m91bljmlzsygp3ip5i5yw";
   };
 
   nativeBuildInputs = [
@@ -49,9 +51,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream-glib
+    desktop-file-utils
     glib
     gtk3
-    libhandy_0
+    libhandy
     dbus
     openssl
     sqlite

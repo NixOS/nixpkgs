@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Thin-wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

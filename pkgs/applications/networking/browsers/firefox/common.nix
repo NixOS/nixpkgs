@@ -248,8 +248,8 @@ buildStdenv.mkDerivation ({
       $(< ${buildStdenv.cc}/nix-support/libc-cflags) \
       $(< ${buildStdenv.cc}/nix-support/cc-cflags) \
       $(< ${buildStdenv.cc}/nix-support/libcxx-cxxflags) \
-      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
-      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
+      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc.lib}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
+      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${lib.getDev buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
@@ -282,7 +282,7 @@ buildStdenv.mkDerivation ({
     "--disable-updater"
     "--enable-jemalloc"
     "--enable-default-toolkit=${default-toolkit}"
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-system-nspr"
     "--with-system-nss"
   ]

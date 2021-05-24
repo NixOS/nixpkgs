@@ -1,4 +1,9 @@
-{ lib, rustPlatform, yabridge }:
+{ lib
+, rustPlatform
+, yabridge
+, makeWrapper
+, wine
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "yabridgectl";
@@ -16,6 +21,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   patchFlags = [ "-p3" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram "$out/bin/yabridgectl" \
+      --prefix PATH : ${lib.makeBinPath [ wine ]}
+  '';
 
   meta = with lib; {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";

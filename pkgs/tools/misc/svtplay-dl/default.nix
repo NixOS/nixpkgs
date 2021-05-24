@@ -8,13 +8,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "3.3";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "00pz5vv39qjsw67fdlj6942371lyvv368lc82z17nnh723ck54yy";
+    sha256 = "0krskxbmlglkipqzjwgm2nmq118m8l0djgh0f8l6n2w3bjblhyfx";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];

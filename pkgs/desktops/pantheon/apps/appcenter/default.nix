@@ -37,8 +37,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8r0DlmG8xlCQ1uFHZQjXG2ls4VBrsRzrVY8Ey3/OYAU=";
+    sha256 = "MsaXdmL+M+NYAJrrwluleeNxqQg0soFbO/G/FqibBFI=";
   };
+
+  patches = [
+    # Allow build with appstream 0.14.x
+    # https://github.com/elementary/appcenter/pull/1493
+    (fetchpatch {
+      url = "https://github.com/elementary/appcenter/commit/5807dd13fe3c715f26225aed8d7a0abdea0c2a64.patch";
+      sha256 = "BvEahG9lU9ZdgooFDFhm5evRvnKVcmcHLdmZPb85gbo=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {

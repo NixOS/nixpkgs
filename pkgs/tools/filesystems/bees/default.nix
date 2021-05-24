@@ -1,4 +1,5 @@
-{ lib, stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, util-linux }:
+{ lib, stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils
+, python3Packages, util-linux, nixosTests }:
 
 let
 
@@ -55,7 +56,7 @@ let
 
 in
 
-runCommand "bees-service" {
+(runCommand "bees-service" {
   inherit bash bees coreutils;
   utillinux = util-linux; # needs to be a valid shell variable name
   btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
@@ -64,4 +65,8 @@ runCommand "bees-service" {
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-''
+'').overrideAttrs (old: {
+  passthru.tests = {
+    smoke-test = nixosTests.bees;
+  };
+})

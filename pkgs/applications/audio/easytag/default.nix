@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
-, gnome3, wrapGAppsHook
+, gnome, wrapGAppsHook
 }:
 
 let
@@ -19,13 +19,13 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
-    gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas gnome.adwaita-icon-theme
   ];
 
   doCheck = false; # fails 1 out of 9 tests
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

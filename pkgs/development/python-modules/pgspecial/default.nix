@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, psycopg2, click, sqlparse }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, psycopg2
+, click
+, configobj
+, sqlparse
+}:
 
 buildPythonPackage rec {
   pname = "pgspecial";
@@ -9,13 +17,16 @@ buildPythonPackage rec {
     sha256 = "b68feb0005f57861573d3fbb82c5c777950decfbb2d1624af57aec825db02c02";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ click sqlparse psycopg2 ];
+  propagatedBuildInputs = [
+    click
+    sqlparse
+    psycopg2
+  ];
 
-  checkPhase = ''
-    find tests -name \*.pyc -delete
-    py.test tests
-  '';
+  checkInputs = [
+    configobj
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Meta-commands handler for Postgres Database";

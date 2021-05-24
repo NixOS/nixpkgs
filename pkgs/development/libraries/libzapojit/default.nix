@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, intltool, json-glib, librest, libsoup, gnome3, gnome-online-accounts, gobject-introspection }:
+{ lib, stdenv, fetchurl, pkg-config, glib, intltool, json-glib, librest, libsoup, gnome, gnome-online-accounts, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libzapojit";
@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib json-glib librest libsoup gnome-online-accounts ]; # zapojit-0.0.pc
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -67,9 +67,10 @@ stdenv.mkDerivation rec {
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
+      --without-x
       OBJC="clang"
-      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
-      LDFLAGS="-L${libcxx}/lib"
+      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
+      LDFLAGS="-L${lib.getLib libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"

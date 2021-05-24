@@ -4,33 +4,38 @@
 , fetchCrate
 , installShellFiles
 , makeWrapper
-, coreutils
+, pkg-config
+, libgit2
+, oniguruma
 , libiconv
-, zlib
 , Security
+, zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-2FF/oB341PPGfSlXpLEs4mswjVk+3ty/jNsVJKu+fhs=";
+    sha256 = "sha256-6UveXa0rMWt5FbmhB0CsYRMGMXxL8FB/XivB4Ec93PY=";
   };
 
-  cargoHash = "sha256-+UT9cz8OPA1jpFv7HafabxJ3NmLl57K1ODydfcV1FUM";
+  cargoHash = "sha256-c6U1ZOaXZ7RnKD7q0WTkam9gL8SL/naSeHGbB5I82lk=";
 
   nativeBuildInputs = [
-    makeWrapper
     installShellFiles
+    makeWrapper
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib
   ];
+
+  RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date

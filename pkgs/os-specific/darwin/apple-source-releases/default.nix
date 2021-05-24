@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchurl, fetchzip, pkgs }:
+{ lib, stdenv, stdenvNoCC, fetchurl, fetchzip, pkgs }:
 
 let
-  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
-  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
-
   # This attrset can in theory be computed automatically, but for that to work nicely we need
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
@@ -190,17 +187,6 @@ let
     }) // (attrs.meta or {});
   });
 
-  applePackage' = namePath: version: sdkName: sha256: let
-    pname = builtins.head (lib.splitString "/" namePath);
-    appleDerivation = appleDerivation' pname version sdkName sha256;
-    callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation; });
-  in callPackage (./. + "/${namePath}");
-
-  applePackage = namePath: sdkName: sha256: let
-    pname = builtins.head (lib.splitString "/" namePath);
-    version = versions.${sdkName}.${pname};
-  in applePackage' namePath version sdkName sha256;
-
   IOKitSpecs = {
     IOAudioFamily                        = fetchApple "osx-10.10.5" "0ggq7za3iq8g02j16rj67prqhrw828jsw3ah3bxq8a1cvr55aqnq";
     IOFireWireFamily                     = fetchApple "osx-10.10.5" "059qa1m668kwvchl90cqcx35b31zaqdg61zi11y1imn5s389y2g1";
@@ -225,11 +211,35 @@ let
 
   IOKitSrcs = lib.mapAttrs (name: value: if lib.isFunction value then value name else value) IOKitSpecs;
 
+in
+
+# darwin package set
+self:
+
+let
+  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
+  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
+
+  applePackage' = namePath: version: sdkName: sha256:
+    let
+      pname = builtins.head (lib.splitString "/" namePath);
+      appleDerivation = appleDerivation' pname version sdkName sha256;
+      callPackage = self.newScope { inherit appleDerivation; };
+    in callPackage (./. + "/${namePath}");
+
+  applePackage = namePath: sdkName: sha256: let
+    pname = builtins.head (lib.splitString "/" namePath);
+    version = versions.${sdkName}.${pname};
+  in applePackage' namePath version sdkName sha256;
+
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
-  # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
-  stubPackages = {
+in
+
+developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
+    # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
+
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
@@ -290,7 +300,4 @@ let
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-  };
-
-  packages = developerToolsPackages_11_3_1 // macosPackages_11_0_1 // stubPackages;
-in packages
+}

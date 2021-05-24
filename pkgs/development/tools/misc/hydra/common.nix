@@ -37,6 +37,8 @@ let
         CatalystViewTT
         CatalystXScriptServerStarman
         CatalystXRoleApplicator
+        CryptPassphrase
+        CryptPassphraseArgon2
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -61,6 +63,7 @@ let
         SQLSplitStatement
         SetScalar
         Starman
+        StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
         TextDiff

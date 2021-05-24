@@ -12,7 +12,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -55,13 +55,7 @@ let
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
-      #
-      # Since some Gems require JIT support, there's probably no
-      # escape from this reference. Hence, it was decided to enable this
-      # feature by default, as it's enabled by default by ruby's ./configure
-      # script. If you'd like to have a ruby without reference to cc, setting
-      # jitSupport to false should remove all known references mentioned above.
-      , removeReferencesTo, jitSupport ? true
+      , removeReferencesTo, jitSupport ? false
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -112,7 +106,17 @@ let
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
           ++ op atLeast27 ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch;
+          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
+          # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
+          # the resulting error was swallowed. Newer rubygems no longer swallows
+          # this error. We upgrade rubygems when rubygemsSupport is enabled, so
+          # we have to fix this bug to prevent the install step from failing.
+          # See https://github.com/ruby/ruby/pull/2930
+          ++ op (!atLeast30 && rubygemsSupport)
+            (fetchpatch {
+              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
+              sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
+            });
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -167,8 +171,9 @@ let
         installFlags = lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
+          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
           # Remove unnecessary groff reference from runtime closure, since it's big
-          sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
+          sed -i '/NROFF/d' $rbConfig
           ${
             lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
@@ -177,7 +182,8 @@ let
                 $out/lib/libruby*
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/${passthru.libPath}/${stdenv.hostPlatform.system}/rbconfig.rb
+                $rbConfig
+              sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
           # Bundler tries to create this directory
@@ -195,8 +201,6 @@ let
           addEnvHooks "$hostOffset" addGemPath
           addEnvHooks "$hostOffset" addRubyLibPath
           EOF
-
-          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
         '' + opString docSupport ''
           # Prevent the docs from being included in the closure
           sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig

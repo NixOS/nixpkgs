@@ -85,6 +85,7 @@ mkChromiumDerivation (base: rec {
       else [ primeos thefloweringash bendlas ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "chromium";
     hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
       then ["aarch64-linux" "x86_64-linux"]
       else [];

@@ -10,7 +10,9 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+  # Libdw.c only supports x86_64, i686 and s390x
+, enableDwarf ? stdenv.targetPlatform.isx86 &&
+                !stdenv.targetPlatform.isDarwin &&
                 !stdenv.targetPlatform.isWindows
 , elfutils # for DWARF support
 
@@ -22,7 +24,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ? !(lib.any (lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -38,7 +40,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.11.20200824"
+, version ? "9.3.20210504"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -110,8 +112,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "3f50154591ada9064351ccec4adfe6df53ca2439";
-    sha256 = "1w2p5bc74aswspzvgvrhcb95hvj5ky38rgqqjvrri19z2qyiky6d";
+    rev = "049c3a83fbce67e58e70c727d89e8331608a4e04";
+    sha256 = "0dk7c9ywam9fj33lqzpwxhiwz017m58j6ixvc8b07kzp7kskaxq7";
   };
 
   enableParallelBuilding = true;
@@ -138,6 +140,9 @@ stdenv.mkDerivation (rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
+    # otherwise haddock fails when generating the compiler docs
+    export LANG=C.UTF-8
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
     echo ${version} > VERSION
@@ -256,6 +261,8 @@ stdenv.mkDerivation (rec {
     description = "The Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
+    # ghcHEAD times out on aarch64-linux on Hydra.
+    hydraPlatforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);

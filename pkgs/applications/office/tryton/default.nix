@@ -6,7 +6,7 @@
 , atk
 , gtk3
 , gtkspell3
-, gnome3
+, gnome
 , glib
 , goocanvas2
 , gdk-pixbuf
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype

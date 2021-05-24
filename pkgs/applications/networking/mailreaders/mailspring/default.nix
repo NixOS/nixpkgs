@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     libsecret
     nss
     xorg.libxkbfile
+    xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
   ];

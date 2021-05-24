@@ -160,6 +160,9 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=address-of-packed-member"
     "-Wno-error=format-overflow"
     "-Wno-error=absolute-value"
+    # Fix build with GCC 10
+    "-Wno-error=enum-conversion"
+    "-Wno-error=zero-length-bounds"
   ];
 
   postPatch = ''

@@ -48,6 +48,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  chia = {
+    members = [
+      atemu
+      lourkeur
+    ];
+    scope = "Maintain the Chia blockchain and its dependencies";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
@@ -66,7 +74,7 @@ with lib.maintainers; {
   };
 
   freedesktop = {
-    members = [ jtojnar worldofpeace ];
+    members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
@@ -89,11 +97,19 @@ with lib.maintainers; {
     members = [
       hedning
       jtojnar
-      worldofpeace
       dasj19
       maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  haskell = {
+    members = [
+      maralorn
+      cdepillabout
+      sternenseemann
+    ];
+    scope = "Maintain Haskell packages and infrastructure.";
   };
 
   home-assistant = {
@@ -135,6 +151,7 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
+      mjlbach
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
@@ -168,5 +185,14 @@ with lib.maintainers; {
       collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
+
+  serokell = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      balsoft
+      mkaito
+    ];
+    scope = "Group registration for Serokell employees who collectively maintain packages.";
   };
 }

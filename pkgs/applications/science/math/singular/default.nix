@@ -31,11 +31,9 @@ stdenv.mkDerivation rec {
     owner = "Singular";
     repo = "Singular";
 
-    # 4.2.0p2 is not tagged, but the tarball matches commit
-    # 6f68939ddf612d96e3caaaaa8275f77613ac1da8. the commit below has
-    # two extra fixes.
-    rev = "3cda50c00a849455efa2502e56596955491a353a";
-    sha256 = "sha256-OizPhGE6L2LTOrKfeDdDB6BSdvYkDVXvbbYjV14hnHM=";
+    # 4.2.0p2 is not tagged, but the tarball matches the commit below.
+    rev = "6f68939ddf612d96e3caaaaa8275f77613ac1da8";
+    sha256 = "sha256-BJNzYylzDqD/5YjzjxPRb/c96tYiuGy9Y+A7qf3ZSG8=";
 
     # if a release is tagged it will be in the format below.
     # rev = "Release${lib.replaceStrings ["."] ["-"] version}";
@@ -60,6 +58,13 @@ stdenv.mkDerivation rec {
     # https://github.com/alsa-project/alsa-firmware/issues/3 for a
     # related issue.
     ./use-older-ax-prog-cc-for-build.patch
+
+    # https://github.com/Singular/Singular/issues/1086
+    (fetchpatch {
+      name = "schubert-lib-fails-with-too-many-cpus.patch";
+      url = "https://github.com/Singular/Singular/commit/3cda50c00a849455efa2502e56596955491a353a.patch";
+      sha256 = "sha256-fgYd+2vT32w5Ki8kKx6PfZn2e4QSJcYWOwEFXtc+lSA=";
+    })
   ] ++ lib.optionals enableDocs [
     # singular supports building without 4ti2, bertini, normaliz or
     # topcom just fine, but the docbuilding does not skip manual pages
@@ -67,6 +72,13 @@ stdenv.mkDerivation rec {
     # doc2tex.pl::HandleLib, since it seems to ignore "-exclude"
     # argumens). skip them manually.
     ./disable-docs-for-optional-unpackaged-deps.patch
+
+    # fix some non-ascii characters in doc/decodegb.doc
+    (fetchpatch {
+      name = "decodegb-ascii.patch";
+      url = "https://github.com/Singular/Singular/commit/36966d9009de572ee4dbc487f3e5744098fe91be.patch";
+      sha256 = "sha256-9WcEov/oOQRC584ag6WVHFwY2aCjbM75HWyvZoEwppw=";
+    })
   ];
 
   configureFlags = [
@@ -83,9 +95,6 @@ stdenv.mkDerivation rec {
     substituteInPlace Tst/regress.cmd --replace 'mysystem_catch("hostname")' 'nix_test_runner'
 
     patchShebangs .
-  '' + lib.optionalString enableDocs ''
-    # work around encoding problem
-    sed -i -e 's/\xb7/@cdot{}/g' doc/decodegb.doc
   '';
 
   # For reference (last checked on commit 75f460d):
@@ -149,7 +158,7 @@ stdenv.mkDerivation rec {
 
   # singular tests are a bit complicated, see
   # https://github.com/Singular/Singular/tree/spielwiese/Tst
-  # https://www.singular.uni-kl.de/forum/viewtopic.php&t=2773
+  # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
   testsToRun = [
     "Old/universal.lst"
     "Buch/buch.lst"
@@ -181,7 +190,7 @@ stdenv.mkDerivation rec {
       2>"$TMPDIR/out-err.log"
 
     # unfortunately regress.cmd always returns exit code 0, so check stderr
-    # https://www.singular.uni-kl.de/forum/viewtopic.php&t=2773
+    # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
     if [[ -s "$TMPDIR/out-err.log" ]]; then
       cat "$TMPDIR/out-err.log"
       exit 1

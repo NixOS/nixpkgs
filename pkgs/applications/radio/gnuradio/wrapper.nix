@@ -4,7 +4,7 @@
 , unwrapped
 # If it's a minimal build, we don't want to wrap it with lndir and
 # wrapProgram..
-, wrap ? true
+, doWrap ? true
 # For the wrapper
 , makeWrapper
 # For lndir
@@ -96,7 +96,7 @@ let
     ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
       # 3.7 builds with qt4
-      (if unwrapped.versionAttr.major == "3.8" then
+      (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
         [
           "--prefix" "QT_PLUGIN_PATH" ":"
           "${
@@ -138,7 +138,7 @@ let
     ;
     pkgs = packages;
   };
-  self = if wrap then
+  self = if doWrap then
     stdenv.mkDerivation {
       inherit name passthru;
       buildInputs = [
