@@ -8637,6 +8637,12 @@
     githubId = 449990;
     name = "Cedric Cellier";
   };
+  rkitover = {
+    email = "rkitover@gmail.com";
+    github = "rkitover";
+    githubId = 77611;
+    name = "Rafael Kitover";
+  };
   rkoe = {
     email = "rk@simple-is-better.org";
     github = "rkoe";
