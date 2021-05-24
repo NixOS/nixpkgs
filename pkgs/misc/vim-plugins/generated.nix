@@ -2686,6 +2686,18 @@ final: prev:
     meta.homepage = "https://github.com/tomasr/molokai/";
   };
 
+  moonlight-nvim = buildVimPluginFrom2Nix {
+    pname = "moonlight-nvim";
+    version = "2021-05-16";
+    src = fetchFromGitHub {
+      owner = "shaunsingh";
+      repo = "moonlight.nvim";
+      rev = "e24e4218ec680b6396532808abf57ca0ada82e66";
+      sha256 = "0m9w3fpypsqxydjd93arbjqb5576nl40iy27i4ijlrqhgdhl49y3";
+    };
+    meta.homepage = "https://github.com/shaunsingh/moonlight.nvim/";
+  };
+
   ncm2 = buildVimPluginFrom2Nix {
     pname = "ncm2";
     version = "2020-12-19";
@@ -3200,6 +3212,18 @@ final: prev:
       sha256 = "0xpz71rj74514789v6x9wrg95n8bsag8f5ygd7js40qrwpxq6b4j";
     };
     meta.homepage = "https://github.com/arcticicestudio/nord-vim/";
+  };
+
+  nord-nvim = buildVimPluginFrom2Nix {
+    pname = "nord-nvim";
+    version = "2021-05-22";
+    src = fetchFromGitHub {
+      owner = "shaunsingh";
+      repo = "nord.nvim";
+      rev = "6860c64a3002f6dbcf36c0baf7bda8c34c5083c8";
+      sha256 = "0a036xgsklqv2zwlcpyhdrip8mvgqhyb4vcsp7gwp5241917bia3";
+    };
+    meta.homepage = "https://github.com/shaunsingh/nord.nvim/";
   };
 
   NrrwRgn = buildVimPluginFrom2Nix {
