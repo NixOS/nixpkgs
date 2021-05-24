@@ -677,6 +677,8 @@ in
 
   _3mux = callPackage ../tools/misc/3mux { };
 
+  _1config = callPackage ../tools/misc/1config { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
