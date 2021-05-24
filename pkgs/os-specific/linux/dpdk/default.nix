@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config, meson, ninja
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
-, doxygen, python3
+, doxygen, python3, python39Packages
 , shared ? false }:
 
 let
@@ -11,11 +11,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "20.05";
+  version = "21.05";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "0h0xv2zwb91b9n29afg5ihn06a8q28in64hag2f112kc19f79jj8";
+    sha256 = "02rgq7pb1vzjbqn3r2cjy1ydzkdylr71izp5hdybbkaz9jdlj4hy";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,7 @@ in stdenv.mkDerivation rec {
     pkg-config
     python3
     python3.pkgs.sphinx
+    python39Packages.pyelftools
   ];
   buildInputs = [
     jansson
