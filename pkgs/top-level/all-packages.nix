@@ -30173,6 +30173,8 @@ in
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
+  avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
+
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
