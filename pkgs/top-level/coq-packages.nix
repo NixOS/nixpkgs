@@ -79,6 +79,7 @@ let
           { case = "8.11"; out = { compcert = compcert.override { coqPackages = self; version = "3.7"; }; }; }
           { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; }; }; }
         ] {});
+      zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 
