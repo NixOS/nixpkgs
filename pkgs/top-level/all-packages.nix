@@ -27841,6 +27841,8 @@ in
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
+  faraday = callPackage ../applications/blockchains/faraday { };
+
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
