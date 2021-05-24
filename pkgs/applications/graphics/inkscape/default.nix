@@ -4,6 +4,7 @@
 , cairo
 , cmake
 , double-conversion
+, extraPythonPackages ? (pk: [])
 , fetchurl
 , fetchpatch
 , gettext
@@ -48,7 +49,7 @@ let
       numpy
       lxml
       scour
-    ]);
+    ] ++ extraPythonPackages ps);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
