@@ -569,6 +569,8 @@ samoshkin/vim-mergetool
 sbdchd/neoformat
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
+shaunsingh/moonlight.nvim@pure-lua
+shaunsingh/nord.nvim
 sheerun/vim-polyglot
 Shougo/context_filetype.vim
 Shougo/defx.nvim
