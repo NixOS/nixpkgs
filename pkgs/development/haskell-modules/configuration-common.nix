@@ -1949,7 +1949,7 @@ EOT
   # 2021-05-14: Testsuite is failing.
   # https://github.com/kcsongor/generic-lens/issues/133
   generic-optics = dontCheck super.generic-optics;
-  
+
   # ap-normalize tests are broken on macOS: https://github.com/srid/emanote/issues/15#issuecomment-846722081
   ap-normalize = dontCheck super.ap-normalize;
 
