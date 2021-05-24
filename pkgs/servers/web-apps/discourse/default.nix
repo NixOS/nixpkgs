@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-JQUgHxs2Cl2LBpg/6JLhZxje4RmPREL1IPta84kXwPw=";
+    sha256 = "sha256-w26pwGDL2j7qbporUzZATgw7E//E6xwahCbXv35QNnc=";
   };
 
   runtimeDeps = [
@@ -229,6 +229,7 @@ let
       inherit rubyEnv runtimeEnv runtimeDeps rake;
       ruby = rubyEnv.wrappedRuby;
       tests = nixosTests.discourse;
+      updateScript = ./update.py;
     };
   };
 in discourse
