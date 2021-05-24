@@ -13425,6 +13425,8 @@ in
 
   kubei = callPackage ../tools/security/kubei { };
 
+  kubeone = callPackage ../applications/networking/cluster/kubeone { };
+
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
   kubesec = callPackage ../tools/security/kubesec { };
