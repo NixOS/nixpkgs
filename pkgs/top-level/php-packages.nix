@@ -200,6 +200,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       , configureFlags ? [ "--enable-${name}" ]
       , internalDeps ? []
       , postPhpize ? ""
+      , preCheck ? ""
       , buildInputs ? []
       , zendExtension ? false
       , doCheck ? true
@@ -212,7 +213,13 @@ lib.makeScope pkgs.newScope (self: with self; {
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
+      nativeBuildInputs = [
+        (php.unwrapped.withExtensions ({...}: internalDeps))
+        autoconf
+        pkg-config
+        re2c
+      ];
+
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
@@ -234,6 +241,10 @@ lib.makeScope pkgs.newScope (self: with self; {
         ${lib.concatMapStringsSep "\n"
           (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
           internalDeps}
+      '';
+      preCheck = ''
+        substituteInPlace Makefile --replace '|(zend_)?extension(_debug)?(_ts)?' ""
+        ${preCheck}
       '';
       checkPhase = "runHook preCheck; echo n | make test; runHook postCheck";
       outputs = [ "out" "dev" ];
@@ -379,8 +390,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         ]; doCheck = false; }
       { name = "mysqli";
         internalDeps = [ php.extensions.mysqlnd ];
-        configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
-        doCheck = false; }
+        configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
       { name = "mysqlnd";
         buildInputs = [ zlib openssl ];
         # The configure script doesn't correctly add library link
@@ -552,7 +562,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xsl";
         buildInputs = [ libxslt libxml2 ];
-        doCheck = lib.versionOlder php.version "8.0";
+        internalDeps = [ php.extensions.dom ];
         configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";
