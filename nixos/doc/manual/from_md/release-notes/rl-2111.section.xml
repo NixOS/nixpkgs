@@ -12,4 +12,15 @@
       </para>
     </listitem>
   </itemizedlist>
+  <section xml:id="backward-incompatibilities">
+    <title>Backward incompatibilities</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          The <literal>staticjinja</literal> package has been upgraded
+          from 1.0.4 to 2.0.0
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </section>
