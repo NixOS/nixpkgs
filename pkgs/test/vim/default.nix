@@ -26,20 +26,18 @@ let
   wrapNeovim = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {
       extraName = suffix;
-      wrapperArgs = lib.escapeShellArgs (config.wrapperArgs ++
-        ["--add-flags" "-u ${writeText "init.vim" config.neovimRcContent}"]
-      );
+      wrapRc = true;
     });
 in
 {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
   ### neovim tests
-  ##############3
+  ##################
   nvim_with_plugins = wrapNeovim "-with-plugins" nvimConfNix;
 
   ### vim tests
-  ##############3
+  ##################
   vim_with_vim2nix = vim_configurable.customize {
     name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
   };
