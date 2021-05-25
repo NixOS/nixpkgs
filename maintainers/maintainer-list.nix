@@ -9161,6 +9161,12 @@
     githubId = 1443459;
     name = "Sheena Artrip";
   };
+  sheepforce = {
+    email = "phillip.seeber@googlemail.com";
+    github = "sheepforce";
+    githubId = 16844216;
+    name = "Phillip Seeber";
+  };
   sheganinans = {
     email = "sheganinans@gmail.com";
     github = "sheganinans";
