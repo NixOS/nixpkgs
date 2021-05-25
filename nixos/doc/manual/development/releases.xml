@@ -191,15 +191,6 @@ echo -n "20.03" > .version
     </listitem>
     <listitem>
      <para>
-      Tag the final release
-     </para>
-<programlisting>
-git tag --annotate --message="Release 19.09" 19.09
-git push upstream 19.09
-</programlisting>
-    </listitem>
-    <listitem>
-     <para>
       Update <link xlink:href="https://github.com/NixOS/nixos-homepage">nixos-homepage</link> for the release.
      </para>
      <orderedlist>
