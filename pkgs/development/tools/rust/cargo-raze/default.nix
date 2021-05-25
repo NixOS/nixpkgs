@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ curl libgit2 openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  doCheck = true;
+  doCheck = ! stdenv.isDarwin;
 
   meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
