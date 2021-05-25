@@ -41,6 +41,8 @@
 , enableOptimizations ? false
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 , enableNoSemanticInterposition ? true
+# enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+, enableLTO ? true
 , reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
@@ -102,6 +104,8 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
+  ] ++ optionals (stdenv.cc.isClang && enableLTO) [
+    stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
@@ -276,6 +280,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-system-ffi"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals enableLTO [
+    "--with-lto"
   ] ++ optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"
