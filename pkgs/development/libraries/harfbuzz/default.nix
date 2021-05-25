@@ -73,8 +73,7 @@ stdenv.mkDerivation {
   buildInputs = [ glib freetype cairo ] # recommended by upstream
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
-  propagatedBuildInputs = [ ]
-    ++ optional withGraphite2 graphite2
+  propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
 
   doCheck = true;
