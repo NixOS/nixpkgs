@@ -28,6 +28,7 @@ let
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
+  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
@@ -56,6 +57,7 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
     (mesonFeatureFlag "coretext" withCoreText)
+    (mesonFeatureFlag "introspection" isNativeCompilation)
   ];
 
   nativeBuildInputs = [
@@ -71,7 +73,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
+    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
