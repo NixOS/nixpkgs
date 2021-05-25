@@ -3523,6 +3523,12 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
+  frogamic = {
+    email = "frogamic@protonmail.com";
+    github = "frogamic";
+    githubId = 10263813;
+    name = "Dominic Shelton";
+  };
   Frostman = {
     email = "me@slukjanov.name";
     github = "Frostman";
