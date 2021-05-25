@@ -9276,6 +9276,8 @@ in
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
+  uivonim = callPackage ../applications/editors/uivonim { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
