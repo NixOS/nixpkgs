@@ -47,6 +47,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Test fails with libxml2 2.9.12
+    # https://github.com/pywemo/pywemo/issues/268, https://github.com/NixOS/nixpkgs/issues/124165
+    "test_bridge_getdevicestatus"
+  ];
+
   pythonImportsCheck = [ "pywemo" ];
 
   meta = with lib; {
