@@ -47,8 +47,11 @@ let
       license = lib.licenses.gpl2Plus; # https://wiki.gnome.org/Projects/GnomeShell/Extensions/Review#Licensing
       maintainers = with lib.maintainers; [ piegames ];
     };
-    # Store the extension's UUID, because we might need it at some places
-    passthru.extensionUuid = uuid;
+    passthru = {
+      extensionPortalSlug = pname;
+      # Store the extension's UUID, because we might need it at some places
+      extensionUuid = uuid;
+    };
   };
 in
   lib.makeOverridable buildGnomeExtension
