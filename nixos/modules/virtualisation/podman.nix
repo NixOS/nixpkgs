@@ -46,6 +46,20 @@ in
         '';
       };
 
+    dockerSocket.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Make the Podman socket available in place of the Docker socket, so
+        Docker tools can find the Podman socket.
+
+        Podman implements the Docker API.
+
+        Users must be in the <code>podman</code> group in order to connect. As
+        with Docker, members of this group can gain root access.
+      '';
+    };
+
     dockerCompat = mkOption {
       type = types.bool;
       default = false;
@@ -123,12 +137,23 @@ in
             >$out/lib/tmpfiles.d/podman.conf
         '') ];
 
+      systemd.tmpfiles.rules =
+        lib.optionals cfg.dockerSocket.enable [
+          "L! /run/docker.sock - - - - /run/podman/podman.sock"
+        ];
+
       users.groups.podman = {};
 
       assertions = [
         {
           assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
           message = "Option dockerCompat conflicts with docker";
+        }
+        {
+          assertion = cfg.dockerSocket.enable -> !config.virtualisation.docker.enable;
+          message = ''
+            The options virtualisation.podman.dockerSocket.enable and virtualisation.docker.enable conflict, because only one can serve the socket.
+          '';
         }
       ];
     }
