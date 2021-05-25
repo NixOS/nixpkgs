@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     # Cypress now verifies version by reading bin/resources/app/package.json
     mkdir -p $out/bin/resources/app
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
-    # Cypress now looks for binary_state.json in bin
-    echo '{"verified": true}' > $out/binary_state.json
+    # Cypress now looks for binary_state.json in opt
+    echo '{"verified": true}' > $out/opt/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
 
     runHook postInstall
