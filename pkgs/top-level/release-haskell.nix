@@ -295,7 +295,15 @@ let
             lib.maintainers.rnhmjoj
           ];
         };
-        constituents = accumulateDerivations [ jobs.pkgsStatic ];
+        constituents = [
+          # TODO: reenable darwin builds if static libiconv works
+          jobs.pkgsStatic.haskellPackages.hello.x86_64-linux
+          jobs.pkgsStatic.haskellPackages.hello.aarch64-linux
+          jobs.pkgsStatic.haskellPackages.lens.x86_64-linux
+          jobs.pkgsStatic.haskellPackages.lens.aarch64-linux
+          jobs.pkgsStatic.haskellPackages.random.x86_64-linux
+          jobs.pkgsStatic.haskellPackages.random.aarch64-linux
+        ];
       };
     }
   ];
