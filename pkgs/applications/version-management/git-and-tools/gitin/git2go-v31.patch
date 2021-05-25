@@ -1,0 +1,192 @@
+diff --git a/git/branch.go b/git/branch.go
+index bf7d3fc..5568681 100644
+--- a/git/branch.go
++++ b/git/branch.go
+@@ -3,7 +3,7 @@ package git
+ import (
+ 	"strings"
+ 
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // Branch is a wrapper of lib.Branch object
+diff --git a/git/clone.go b/git/clone.go
+index 54e32b0..d25ebc9 100644
+--- a/git/clone.go
++++ b/git/clone.go
+@@ -1,7 +1,7 @@
+ package git
+ 
+ import (
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // CloneOptions are mostly used git clone options from a remote
+diff --git a/git/commit.go b/git/commit.go
+index f665ecb..10e8345 100644
+--- a/git/commit.go
++++ b/git/commit.go
+@@ -5,7 +5,7 @@ import (
+ 	"strings"
+ 	"time"
+ 
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // Commit is the wrapper of actual lib.Commit object
+diff --git a/git/credentials.go b/git/credentials.go
+index bcdd5ed..ca18200 100644
+--- a/git/credentials.go
++++ b/git/credentials.go
+@@ -1,7 +1,7 @@
+ package git
+ 
+ import (
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // CredType defines the credentials type for authentication with remote
+diff --git a/git/credentials_test.go b/git/credentials_test.go
+index 556f6b2..9840f78 100644
+--- a/git/credentials_test.go
++++ b/git/credentials_test.go
+@@ -4,7 +4,7 @@ import (
+ 	"os"
+ 	"testing"
+ 	
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ func TestDefaultAuthCallbackFunc(t *testing.T) {
+diff --git a/git/fetch.go b/git/fetch.go
+index 8231ebf..12ff3b4 100644
+--- a/git/fetch.go
++++ b/git/fetch.go
+@@ -1,7 +1,7 @@
+ package git
+ 
+ import (
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // FetchOptions provides common options for fetch command
+diff --git a/git/merge.go b/git/merge.go
+index 16e6ec1..885d19f 100644
+--- a/git/merge.go
++++ b/git/merge.go
+@@ -1,7 +1,7 @@
+ package git
+ 
+ import (
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // MergeOptions defines common options for merge operation
+diff --git a/git/repository.go b/git/repository.go
+index 007c334..37cc9f6 100644
+--- a/git/repository.go
++++ b/git/repository.go
+@@ -4,7 +4,7 @@ import (
+ 	"errors"
+ 	"path/filepath"
+ 
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // Repository is the wrapper and main interface to git repository
+diff --git a/git/stash.go b/git/stash.go
+index 9b2a5da..f8ecd28 100644
+--- a/git/stash.go
++++ b/git/stash.go
+@@ -3,7 +3,7 @@ package git
+ import (
+ 	"fmt"
+ 
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // StashedItem is a change that stashed into the repository
+diff --git a/git/status.go b/git/status.go
+index 3cf1217..30ddbc0 100644
+--- a/git/status.go
++++ b/git/status.go
+@@ -1,7 +1,7 @@
+ package git
+ 
+ import (
+-	lib "github.com/libgit2/git2go/v30"
++	lib "github.com/libgit2/git2go/v31"
+ )
+ 
+ // State is the current state of the repository
+diff --git a/go.mod b/go.mod
+index 7c68db2..b6ca3ff 100644
+--- a/go.mod
++++ b/go.mod
+@@ -2,8 +2,6 @@ module github.com/isacikgoz/gitin
+ 
+ go 1.12
+ 
+-replace github.com/libgit2/git2go/v30 => ../git2go
+-
+ require (
+ 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
+ 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
+@@ -13,7 +11,7 @@ require (
+ 	github.com/justincampbell/timeago v0.0.0-20160528003754-027f40306f1d
+ 	github.com/kelseyhightower/envconfig v1.4.0
+ 	github.com/kylelemons/godebug v1.1.0 // indirect
+-	github.com/libgit2/git2go/v30 v30.0.9
++	github.com/libgit2/git2go/v31 v31.4.14
+ 	github.com/sahilm/fuzzy v0.1.0
+ 	github.com/waigani/diffparser v0.0.0-20190828052634-7391f219313d
+ 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
+diff --git a/go.sum b/go.sum
+index b99c11d..0dd999a 100644
+--- a/go.sum
++++ b/go.sum
+@@ -13,6 +13,7 @@ github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
+ github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
+ github.com/fatih/color v1.9.0 h1:8xPHl4/q1VyqGIPif1F+1V3Y3lSmrq01EabUW3CoW5s=
+ github.com/fatih/color v1.9.0/go.mod h1:eQcE1qtQxscV5RaZvpXrrb8Drkc3/DdQ+uUYCNjL+zU=
++github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510/go.mod h1:pupxD2MaaD3pAXIBCelhxNneeOaAeabZDe5s4K6zSpQ=
+ github.com/isacikgoz/gia v0.2.0 h1:fxhF8qtz0KNxSunNMWBWBoQyva267YpSestSvAyUC/s=
+ github.com/isacikgoz/gia v0.2.0/go.mod h1:pTtCjwM3VmUTZNGXirQ5ixW5NGunvFEO7ah9Boxj6IM=
+ github.com/jroimartin/gocui v0.4.0 h1:52jnalstgmc25FmtGcWqa0tcbMEWS6RpFLsOIO+I+E8=
+@@ -38,6 +39,8 @@ github.com/libgit2/git2go/v30 v30.0.5 h1:gxKqXOslpvYDZNC62f8GV34TAk0qw4wZ++IdYw8
+ github.com/libgit2/git2go/v30 v30.0.5/go.mod h1:YReiQ7xhMoyAL4ISYFLZt+OGqn6xtLqvTC1xJ9oAH7Y=
+ github.com/libgit2/git2go/v30 v30.0.9 h1:tIVbnZg6RqUL/t7hIk1VMV9Q6PIeWuTlUDEcXwYzTKQ=
+ github.com/libgit2/git2go/v30 v30.0.9/go.mod h1:bEqWPWaJjDpnkerA2FlyUdsuhc5/3UPBjYJ6SV0X3gY=
++github.com/libgit2/git2go/v31 v31.4.14 h1:6GOd3965D9e/+gjxCwZF4eQ+vB9kKB4yKFqdQr6XZ2E=
++github.com/libgit2/git2go/v31 v31.4.14/go.mod h1:c/rkJcBcUFx6wHaT++UwNpKvIsmPNqCeQ/vzO4DrEec=
+ github.com/mattn/go-colorable v0.1.2 h1:/bC9yWikZXAL9uJdulbSfyVNIR3n3trXl+v8+1sx8mU=
+ github.com/mattn/go-colorable v0.1.2/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
+ github.com/mattn/go-colorable v0.1.4 h1:snbPLB8fVfU9iwbbo30TPtbLRzwWu6aJS6Xh4eaaviA=
+@@ -66,6 +69,8 @@ golang.org/x/crypto v0.0.0-20160824173033-351dc6a5bf92 h1:6HmDSTSU7PVgeKBom4W04S
+ golang.org/x/crypto v0.0.0-20160824173033-351dc6a5bf92/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+ golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
+ golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
++golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c h1:9HhBz5L/UjnK9XLtiZhYAdue5BVKep3PMmS2LuPDt8k=
++golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c/go.mod h1:jdWPYTVW3xRLrWPugEBEK3UY2ZEsg3UU495nc5E+M+I=
+ golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
+ golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+ golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 h1:DH4skfRX4EBpamg7iV4ZlCpblAHI6s6TDM39bFZumv8=
+@@ -73,6 +78,9 @@ golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5h
+ golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+ golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 h1:YyJpGZS1sBuBCzLAR1VEpK193GlqGZbnPFnPV/5Rsb4=
+ golang.org/x/sys v0.0.0-20191026070338-33540a1f6037/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/sys v0.0.0-20201204225414-ed752295db88 h1:KmZPnMocC93w341XZp26yTJg8Za7lhb2KhkYmixoeso=
++golang.org/x/sys v0.0.0-20201204225414-ed752295db88/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/term v0.0.0-20201117132131-f5c789dd3221/go.mod h1:Nr5EML6q2oocZ2LXRh80K7BxOlk5/8JxuGnuhpl+muw=
+ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ gopkg.in/alecthomas/kingpin.v2 v2.2.6 h1:jMFz6MfLP0/4fUyZle81rXUoxOBFi19VUFKVDOQfozc=
+ gopkg.in/alecthomas/kingpin.v2 v2.2.6/go.mod h1:FMv+mEhP44yOT+4EoQTLFTRgOQ1FBLkstjWtayDeSgw=
