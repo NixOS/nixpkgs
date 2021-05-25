@@ -153,6 +153,8 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
+      "--enable-static-pie"
+      "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals withLinuxHeaders [

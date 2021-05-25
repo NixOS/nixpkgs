@@ -129,3 +129,38 @@ expandResponseParams() {
         fi
     done
 }
+
+checkLinkType() {
+    local arg mode
+    type="dynamic"
+    for arg in "$@"; do
+        if [[ "$arg" = -static ]]; then
+            type="static"
+        elif [[ "$arg" = -static-pie ]]; then
+            type="static-pie"
+        fi
+    done
+    echo "$type"
+}
+
+# When building static-pie executables we cannot have rpath
+# set. At least glibc requires rpath to be empty
+filterRpathFlags() {
+    local linkType=$1 ret="" i
+    shift
+
+    if [[ "$linkType" == "static-pie" ]]; then
+        while [[ "$#" -gt 0 ]]; do
+            i="$1"; shift 1
+            if [[ "$i" == -rpath ]]; then
+                # also skip its argument
+                shift
+            else
+                ret+="$i "
+            fi
+        done
+    else
+        ret=$@
+    fi
+    echo $ret
+}

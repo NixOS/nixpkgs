@@ -29,9 +29,10 @@ cc1=0
 cxxInclude=1
 cxxLibrary=1
 cInclude=1
-setDynamicLinker=1
 
 expandResponseParams "$@"
+linkType=$(checkLinkType "$@")
+
 declare -i n=0
 nParams=${#params[@]}
 while (( "$n" < "$nParams" )); do
@@ -60,8 +61,6 @@ while (( "$n" < "$nParams" )); do
         cxxInclude=0
     elif [ "$p" = -nostdinc++ ]; then
         cxxInclude=0
-    elif [[ "$p" = -static || "$p" = -static-pie ]]; then
-        setDynamicLinker=0
     elif [[ "$p" != -?* ]]; then
         # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
@@ -151,24 +150,24 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_CFLAGS_LINK_@suffixSalt@)
+    extraAfter+=($(filterRpathFlags "$linkType" $NIX_CFLAGS_LINK_@suffixSalt@))
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS_@suffixSalt@ again).
-    for i in $NIX_LDFLAGS_BEFORE_@suffixSalt@; do
+    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@); do
         extraBefore+=("-Wl,$i")
     done
-    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
         extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
     fi
-    for i in $NIX_LDFLAGS_@suffixSalt@; do
+    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@); do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
         else
             extraAfter+=("-Wl,$i")
         fi
     done
-    export NIX_LDFLAGS_SET_@suffixSalt@=1
+    export NIX_LINK_TYPE_@suffixSalt@=$linkType
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't
