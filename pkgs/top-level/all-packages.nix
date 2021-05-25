@@ -5080,6 +5080,8 @@ in
 
   git-vanity-hash = callPackage ../applications/version-management/git-and-tools/git-vanity-hash { };
 
+  git-vendor = callPackage ../applications/version-management/git-and-tools/git-vendor { };
+
   git-when-merged = callPackage ../applications/version-management/git-and-tools/git-when-merged { };
 
   git-workspace = callPackage ../applications/version-management/git-and-tools/git-workspace {
