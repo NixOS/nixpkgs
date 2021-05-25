@@ -5,7 +5,7 @@ on:
 jobs:
   backport:
     name: Create backport PRs
-    if: github.event.pull_request.merged == true
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
