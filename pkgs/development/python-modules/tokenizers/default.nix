@@ -76,14 +76,11 @@ in buildPythonPackage rec {
     numpy
   ];
 
-  installCheckInputs = [
+  checkInputs = [
     datasets
     pytestCheckHook
     requests
   ];
-
-  doCheck = false;
-  doInstallCheck = true;
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.
