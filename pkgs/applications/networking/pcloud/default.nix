@@ -21,19 +21,19 @@
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
   # AppImage, so we don't have to duplicate them here.
-  alsaLib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, udev, nss
+  alsaLib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.1";
-  code = "XZXB3fXZgXyQbnTkTm5XOJH9i6NsKX9lL21V";
+  version = "1.9.2";
+  code = "XZCBKnXZdbHEAu1ec7bMDQCb1oCztBc169Py";
   name = "${pname}-${version}";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${name}.zip";
-    hash = "sha256-vUrz4thp9tcU9T8d52DJUAbt6Jnv+E3pbUytzMR8d/E=";
+    hash = "sha256-9I4xl9cO1MDvdXaTv6ER/NPdqKoo0y7HNWxGl0Fn1O0=";
   };
 
   appimageContents = appimageTools.extractType2 {
