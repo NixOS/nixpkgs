@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchurl
+{ lib, stdenv, buildGoModule, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
 , installShellFiles
@@ -13,16 +13,15 @@ let
   nativeBuildInputs = [ installShellFiles cmake xz which autoconf ];
 
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cockroach";
-  version = "20.1.8";
-
-  goPackagePath = "github.com/cockroachdb/cockroach";
+  version = "21.1.1";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "0mm3hfr778c7djza8gr1clwa8wca4d3ldh9hlg80avw4x664y5zi";
+    sha256 = "11jbq754y1qd6rnrn2wz26jd4630yjpvz2yq63pqr904vg761czq";
   };
+  vendorSha256 = null;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
@@ -30,10 +29,9 @@ buildGoPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    cd $NIX_BUILD_TOP/go/src/${goPackagePath}
     patchShebangs .
     make buildoss
-    cd src/${goPackagePath}
+    cd src/github.com/cockroachdb/cockroach
     for asset in man autocomplete; do
       ./cockroachoss gen $asset
     done
