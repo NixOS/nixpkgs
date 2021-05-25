@@ -398,6 +398,14 @@ in
               How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
+
+          forceTLS = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Force implicit TLS as per RFC 8314 3.3.
+            '';
+          };
         };
 
         incoming = {
@@ -530,6 +538,7 @@ in
       smtp_authentication = cfg.mail.outgoing.authentication;
       smtp_enable_start_tls = cfg.mail.outgoing.enableStartTLSAuto;
       smtp_openssl_verify_mode = cfg.mail.outgoing.opensslVerifyMode;
+      smtp_force_tls = cfg.mail.outgoing.forceTLS;
 
       load_mini_profiler = true;
       mini_profiler_snapshots_period = 0;
@@ -542,8 +551,8 @@ in
 
       redis_host = cfg.redis.host;
       redis_port = 6379;
-      redis_slave_host = null;
-      redis_slave_port = 6379;
+      redis_replica_host = null;
+      redis_replica_port = 6379;
       redis_db = cfg.redis.dbNumber;
       redis_password = cfg.redis.passwordFile;
       redis_skip_client_commands = false;
@@ -552,8 +561,8 @@ in
       message_bus_redis_enabled = false;
       message_bus_redis_host = "localhost";
       message_bus_redis_port = 6379;
-      message_bus_redis_slave_host = null;
-      message_bus_redis_slave_port = 6379;
+      message_bus_redis_replica_host = null;
+      message_bus_redis_replica_port = 6379;
       message_bus_redis_db = 0;
       message_bus_redis_password = null;
       message_bus_redis_skip_client_commands = false;
@@ -606,6 +615,7 @@ in
       allowed_theme_repos = null;
       enable_email_sync_demon = false;
       max_digests_enqueued_per_30_mins_per_site = 10000;
+      cluster_name = null;
     };
 
     services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
@@ -667,6 +677,7 @@ in
       environment = cfg.package.runtimeEnv // {
         UNICORN_TIMEOUT = builtins.toString cfg.unicornTimeout;
         UNICORN_SIDEKIQS = builtins.toString cfg.sidekiqProcesses;
+        MALLOC_ARENA_MAX = "2";
       };
 
       preStart =
