@@ -107,7 +107,16 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
-    makam =  super.makam.override {
+    laravel-mix = super.laravel-mix.override (drv: {
+      buildInputs = [ nodejs pkgs.makeWrapper ];
+      postFixup = ''
+        # laravel-mix wants to find npx on the PATH
+        wrapProgram "$out/bin/mix" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ nodejs ]}
+      '';
+     });
+
+    makam = super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
         wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}

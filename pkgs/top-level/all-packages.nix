@@ -2822,6 +2822,8 @@ in
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  inherit (nodePackages) laravel-mix;
+
   lepton = callPackage ../tools/graphics/lepton { };
 
   lexicon = callPackage ../tools/admin/lexicon { };
