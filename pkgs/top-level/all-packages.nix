@@ -9276,6 +9276,8 @@ in
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
+  uivonim = callPackage ../applications/editors/uivonim { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
@@ -9439,6 +9441,11 @@ in
   };
 
   openconnect_gnutls = callPackage ../tools/networking/openconnect {
+    openssl = null;
+  };
+
+  openconnect_head = callPackage ../tools/networking/openconnect {
+    head = true;
     openssl = null;
   };
 

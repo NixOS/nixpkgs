@@ -11,6 +11,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v12
