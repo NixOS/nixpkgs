@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , pytestCheckHook
 , cmake
 , scipy
@@ -56,6 +57,11 @@ buildPythonPackage {
   disabledTests = [
     "test_cli_binary_classification"
     "test_model_compatibility"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fails to connect to the com.apple.fonts daemon in sandboxed mode
+    "test_plotting"
+    "test_sklearn_plotting"
   ];
 
+  __darwinAllowLocalNetworking = true;
 }
