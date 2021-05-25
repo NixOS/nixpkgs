@@ -17898,6 +17898,8 @@ in
 
   snow = callPackage ../tools/security/snow { };
 
+  snowcrash = callPackage ../tools/security/snowcrash { };
+
   soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
   soapyaudio = callPackage ../applications/radio/soapyaudio { };
