@@ -322,6 +322,7 @@ unsupported-platforms:
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
   bindings-sane:                                [ x86_64-darwin ]
+  bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   cut-the-crap:                                 [ x86_64-darwin ]
