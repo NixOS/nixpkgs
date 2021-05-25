@@ -28671,6 +28671,8 @@ in
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
+  durden = callPackage ../desktops/durden { };
+
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
   dwarf-fortress = dwarf-fortress-packages.dwarf-fortress;
