@@ -2619,6 +2619,8 @@ in {
 
   frozendict = callPackage ../development/python-modules/frozendict { };
 
+  frozenlist = callPackage ../development/python-modules/frozenlist { };
+
   fs = callPackage ../development/python-modules/fs { };
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
