@@ -25,6 +25,7 @@ let
 in
 {
   imports = [
+    ./podman-network-socket.nix
     (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
   ];
 
