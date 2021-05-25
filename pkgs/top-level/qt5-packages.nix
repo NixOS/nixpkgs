@@ -172,6 +172,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
     withQt5 = true;
   };
 
+  qtfeedback = callPackage ../development/libraries/qtfeedback { };
+
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
