@@ -11557,7 +11557,7 @@
     github = "zupo";
     githubId = 311580;
   };
-  wearemnr = {                                                                     
+  wearemnr = {
     name = "wearemnr";
     email = "wearemnr@pm.me";
     github = "wearemnr";
