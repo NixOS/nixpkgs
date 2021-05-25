@@ -47,6 +47,6 @@ in mkCoqDerivation {
   meta = {
     description = "Coq plugin embedding ELPI.";
     maintainers = [ maintainers.cohencyril ];
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
   };
 }
