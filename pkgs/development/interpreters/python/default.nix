@@ -225,6 +225,7 @@ in {
     stripBytecode = true;
     includeSiteCustomize = false;
     enableOptimizations = false;
+    enableLTO = false;
     mimetypesSupport = false;
   } // sources.python39)).overrideAttrs(old: {
     pname = "python3-minimal";
