@@ -309,6 +309,8 @@ in
         "mount-pstore" = {
           serviceConfig = {
             Type = "oneshot";
+            # skip on kernels without the pstore module
+            ExecCondition = "${pkgs.kmod}/bin/modprobe -b pstore";
             ExecStart = "${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore";
             ExecStartPost = pkgs.writeShellScript "wait-for-pstore.sh" ''
               set -eu
@@ -325,8 +327,6 @@ in
             ConditionVirtualization = "!container";
             DefaultDependencies = false; # needed to prevent a cycle
           };
-          after = [ "modprobe@pstore.service" ];
-          requires = [ "modprobe@pstore.service" ];
           before = [ "systemd-pstore.service" ];
           wantedBy = [ "systemd-pstore.service" ];
         };
