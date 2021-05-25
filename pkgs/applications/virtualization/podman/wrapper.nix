@@ -12,6 +12,7 @@
 , util-linux # nsenter
 , cni-plugins # not added to path
 , iptables
+, iproute2
 }:
 
 let
@@ -25,6 +26,7 @@ let
     fuse-overlayfs
     util-linux
     iptables
+    iproute2
   ] ++ extraPackages);
 
 in runCommand podman.name {

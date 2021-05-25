@@ -132,6 +132,7 @@ import ./make-test-python.nix (
           podman.succeed("podman ps | grep sleeping")
           podman.succeed("docker stop sleeping")
           podman.succeed("docker rm sleeping")
+          podman.succeed("docker network rm default")
 
       with subtest("A podman non-member can not use the docker cli"):
           podman.fail(su_cmd("docker version", user="mallory"))
