@@ -333,6 +333,8 @@ in {
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
+  aiosignal = callPackage ../development/python-modules/aiosignal { };
+
   aiosmb = callPackage ../development/python-modules/aiosmb { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
