@@ -248,7 +248,7 @@ in
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "radeon" "cirrus" "vesa" "modesetting" ];
         example = [
-          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
