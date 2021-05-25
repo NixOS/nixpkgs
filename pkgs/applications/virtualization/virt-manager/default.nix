@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages;
     [
-      pygobject3 ipaddress libvirt libxml2 requests
+      pygobject3 ipaddress libvirt libxml2 requests cdrtools
     ];
 
   patchPhase = ''
