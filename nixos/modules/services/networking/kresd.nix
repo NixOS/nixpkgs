@@ -115,6 +115,8 @@ in {
   config = mkIf cfg.enable {
     environment.etc."knot-resolver/kresd.conf".source = configFile; # not required
 
+    networking.resolvconf.useLocalResolver = mkDefault true;
+
     users.users.knot-resolver =
       { isSystemUser = true;
         group = "knot-resolver";
