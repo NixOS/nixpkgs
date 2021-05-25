@@ -21793,6 +21793,10 @@ in
 
   inriafonts = callPackage ../data/fonts/inriafonts { };
 
+  iosevka-ss08 = callPackage ../data/fonts/iosevka-ss08 {};
+  iosevka-term-ss08 = callPackage ../data/fonts/iosevka-term-ss08 {};
+  iosevka-fixed-ss08 = callPackage ../data/fonts/iosevka-fixed-ss08 {};
+
   iosevka = callPackage ../data/fonts/iosevka {};
   iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
 
