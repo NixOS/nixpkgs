@@ -12,11 +12,11 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.34.0";
+  version = "1.35.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lXVJfhcH9lKOCHn5f4Lc/OjgEYa5IpauKRhBsFXNWLw=";
+    sha256 = "sha256-McgLJoOS8h8C7mcbLaF0hiMkfthpDRUKyB5Effzk2ds=";
   };
 
   patches = [
@@ -27,12 +27,13 @@ buildPythonApplication rec {
   buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
-    setuptools
+    authlib
     bcrypt
     bleach
     canonicaljson
     daemonize
     frozendict
+    ijson
     jinja2
     jsonschema
     lxml
@@ -44,20 +45,20 @@ buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
+    pyjwt
     pymacaroons
     pynacl
     pyopenssl
     pysaml2
     pyyaml
     requests
+    setuptools
     signedjson
     sortedcontainers
     treq
     twisted
-    unpaddedbase64
     typing-extensions
-    authlib
-    pyjwt
+    unpaddedbase64
   ] ++ lib.optional enableSystemd systemd
     ++ lib.optional enableRedis hiredis;
 
@@ -66,7 +67,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    ${lib.optionalString (!enableRedis) "rm -r tests/replication # these tests need the optional dependency 'hiredis'"}
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
