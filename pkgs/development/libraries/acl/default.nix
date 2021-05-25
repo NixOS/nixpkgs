@@ -6,11 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "acl-2.3.0";
+  name = "acl-2.3.1";
 
   src = fetchurl {
     url = "mirror://savannah/acl/${name}.tar.gz";
-    sha256 = "sha256-vTj9u7A8eTdK9RRn6+VJfLwDNbgld/MMlRpBqVtTMAk=";
+    sha256 = "sha256-dgxhxokBs3/dXu/ur0wMeia9/disdHoe3/HODiQ8Ea8=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
