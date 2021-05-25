@@ -333,6 +333,8 @@ in {
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
+  aiosignal = callPackage ../development/python-modules/aiosignal { };
+
   aiosmb = callPackage ../development/python-modules/aiosmb { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
@@ -2618,6 +2620,8 @@ in {
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = callPackage ../development/python-modules/frozendict { };
+
+  frozenlist = callPackage ../development/python-modules/frozenlist { };
 
   fs = callPackage ../development/python-modules/fs { };
 
