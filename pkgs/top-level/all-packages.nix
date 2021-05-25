@@ -21499,7 +21499,12 @@ with pkgs;
 
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb { };
+  inherit (import ../servers/sql/cockroachdb pkgs)
+    cockroachdb_20_1
+    cockroachdb_20_2
+    cockroachdb_21_1
+  ;
+  cockroachdb = cockroachdb_20_1;
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
