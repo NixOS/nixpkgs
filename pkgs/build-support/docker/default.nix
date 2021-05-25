@@ -786,7 +786,7 @@ rec {
     fakeRootCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
-    maxLayers ? 100
+    maxLayers ? 100,
   }:
     assert
       (lib.assertMsg (maxLayers > 1)
