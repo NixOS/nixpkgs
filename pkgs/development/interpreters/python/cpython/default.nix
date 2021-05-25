@@ -39,6 +39,8 @@
 , includeSiteCustomize ? true
 , static ? stdenv.hostPlatform.isStatic
 , enableOptimizations ? false
+# enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+, enableNoSemanticInterposition ? true
 , reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
@@ -327,6 +329,17 @@ in with passthru; stdenv.mkDerivation {
     export DETERMINISTIC_BUILD=1;
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
+  '' +
+
+  # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
+  # which changes how symbols are looked up. This essentially means we can't override
+  # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
+  # that uses --enable-optimizations has the same "issue".
+  #
+  # The Fedora wiki has a good article about their journey towards enabling this flag:
+  # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+  optionalString enableNoSemanticInterposition ''
+    export CFLAGS_NODIST="-fno-semantic-interposition"
   '';
 
   setupHook = python-setup-hook sitePackages;
