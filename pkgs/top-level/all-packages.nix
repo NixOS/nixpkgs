@@ -12038,7 +12038,7 @@ in
   beam_nox = callPackage ./beam-packages.nix { wxSupport = false; };
 
   inherit (beam.interpreters)
-    erlang erlangR24 erlangR23 erlangR22 erlangR21 erlangR20 erlangR19 erlangR18
+    erlang erlangR24 erlangR23 erlangR22 erlangR21
     erlang_odbc erlang_javac erlang_odbc_javac erlang_basho_R16B02
     elixir elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7
     elixir_ls;
@@ -12050,8 +12050,6 @@ in
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages
     relxExe;
-
-  inherit (beam.packages.erlangR19) cuter lfe_1_2;
 
   inherit (beam.packages.erlangR21) lfe lfe_1_3;
 
@@ -19875,7 +19873,7 @@ in
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
   yaws = callPackage ../servers/http/yaws {
-    erlang = erlangR18;
+    erlang = erlangR21;
   };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
@@ -31502,6 +31500,8 @@ in
   alibuild = callPackage ../development/tools/build-managers/alibuild {
     python = python3;
   };
+
+  tsukae = callPackage ../applications/misc/tsukae { };
 
   tsung = callPackage ../applications/networking/tsung {};
 

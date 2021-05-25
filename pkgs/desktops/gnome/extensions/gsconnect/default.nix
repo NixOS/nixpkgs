@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-gsconnect";
+  pname = "gnome-shell-extension-gsconnect";
   version = "46";
 
   outputs = [ "out" "installedTests" ];
