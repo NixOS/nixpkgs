@@ -80,7 +80,11 @@ buildGoModule rec {
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
   '';
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests) podman-tls-ghostunnel;
+  };
 
   meta = with lib; {
     homepage = "https://podman.io/";
