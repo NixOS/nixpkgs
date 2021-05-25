@@ -1969,4 +1969,15 @@ EOT
       editedCabalFile = null;
     });
 
+  # 2021-05-25: Fixes darwin build: https://gitlab.com/lysxia/ap-normalize/-/issues/1
+  ap-normalize =
+    assert pkgs.lib.versionOlder super.ap-normalize.version "0.1.0.1";
+    overrideSrc super.ap-normalize rec {
+      version = "0.1.0.1";
+      src = pkgs.fetchurl {
+        url = "https://hackage.haskell.org/package/ap-normalize-${version}/ap-normalize-${version}.tar.gz";
+        sha256 = "1212zxc4qn6msk0w13yhrza2qjs79h78misllb4chng75jqi61l2";
+      };
+    };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
