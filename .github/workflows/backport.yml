@@ -8,7 +8,7 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2
         with:
           # required to find all branches
           fetch-depth: 0
