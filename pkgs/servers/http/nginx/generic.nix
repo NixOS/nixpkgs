@@ -116,6 +116,14 @@ stdenv.mkDerivation {
       '';
     })
     ./nix-skip-check-logs-path.patch
+    (fetchpatch {
+      # http://mailman.nginx.org/pipermail/nginx-announce/2021/000300.html
+      # https://www.openwall.com/lists/oss-security/2021/05/25/5
+      name = "CVE-2021-23017.patch";
+      url = "https://nginx.org/download/patch.2021.resolver.txt";
+      sha256 = "1npdjifgqxkd57iqhf96jiq4lw83nxpb1dk4h5iniawbx4s2ddpc";
+      extraPrefix = "";
+    })
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
