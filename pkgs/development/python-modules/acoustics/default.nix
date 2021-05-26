@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pushd tests
-    py.test ./.
+    py.test -Wignore::DeprecationWarning ./.
     popd
   '';
 
