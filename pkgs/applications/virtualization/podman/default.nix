@@ -75,6 +75,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  postFixup = lib.optionalString stdenv.isLinux ''
+    RPATH=$(patchelf --print-rpath $out/bin/podman)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
+  '';
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
