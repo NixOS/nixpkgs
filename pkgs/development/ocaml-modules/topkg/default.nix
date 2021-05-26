@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = param.propagatedBuildInputs or [];
 
   buildPhase = "${run} build";
-  createFindlibDestdir = true;
   installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   passthru = { inherit run; };
