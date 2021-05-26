@@ -6757,6 +6757,8 @@ in
 
   mdk = callPackage ../development/tools/mdk { };
 
+  mdk4 = callPackage ../tools/networking/mdk4 { };
+
   mdp = callPackage ../applications/misc/mdp { };
 
   mednafen = callPackage ../misc/emulators/mednafen { };
