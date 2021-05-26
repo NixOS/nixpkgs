@@ -60,7 +60,6 @@ stdenv.mkDerivation (args // {
 
   hardeningDisable = stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
-
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
