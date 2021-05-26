@@ -16,14 +16,18 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   buildPhase = ''
+    runHook preBuild
     make all
     make opt
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make install_ocamlfind
     mkdir -p $out/share
     cp -vai doc $out/share/
+    runHook postInstall
   '';
 
   meta = {
