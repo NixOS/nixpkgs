@@ -436,7 +436,7 @@
     </para>
     <programlisting>
       TMPDIR=$(mktemp -d)
-      slaptest -f /path/to/slapd.conf $TMPDIR
+      slaptest -f /path/to/slapd.conf -F $TMPDIR
       slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
     </programlisting>
     <para>
