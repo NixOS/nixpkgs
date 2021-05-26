@@ -958,51 +958,49 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian8i386 = {
-      name = "debian-8.11-jessie-i386";
-      fullName = "Debian 8.11 Jessie (i386)";
-      packagesList = fetchurl {
-        url = "mirror://debian/dists/jessie/main/binary-i386/Packages.xz";
-        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
-    };
-
-    debian8x86_64 = {
-      name = "debian-8.11-jessie-amd64";
-      fullName = "Debian 8.11 Jessie (amd64)";
-      packagesList = fetchurl {
-        url = "mirror://debian/dists/jessie/main/binary-amd64/Packages.xz";
-        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
-    };
-
     debian9i386 = {
-      name = "debian-9.8-stretch-i386";
-      fullName = "Debian 9.8 Stretch (i386)";
+      name = "debian-9.13-stretch-i386";
+      fullName = "Debian 9.13 Stretch (i386)";
       packagesList = fetchurl {
-        url = "http://snapshot.debian.org/archive/debian/20200301T030401Z/dists/stretch/main/binary-i386/Packages.xz";
-        sha256 = "1jglr1d1jys3xddp8f7w9j05db39fah8xy4gfkpqbd1b5d2caslz";
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-i386/Packages.xz";
+        sha256 = "sha256-fFRumd20wuVaYxzw0VPkAw5mQo8kIg+eXII15VSz9wA=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
     debian9x86_64 = {
-      name = "debian-9.8-stretch-amd64";
-      fullName = "Debian 9.8 Stretch (amd64)";
+      name = "debian-9.13-stretch-amd64";
+      fullName = "Debian 9.13 Stretch (amd64)";
       packagesList = fetchurl {
-        url = "http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-amd64/Packages.xz";
+        sha256 = "sha256-1p4DEVpTGlBE3PtbQ90kYw4QNHkW0F4rna/Xz+ncMhw=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
+    debian10i386 = {
+      name = "debian-10.9-buster-i386";
+      fullName = "Debian 10.9 Buster (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-i386/Packages.xz";
+        sha256 = "sha256-zlkbKV+IGBCyWKD4v4LFM/EUA4TYS9fkLBPuF6MgUDo=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
 
+    debian10x86_64 = {
+      name = "debian-10.9-buster-amd64";
+      fullName = "Debian 10.9 Buster (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-amd64/Packages.xz";
+        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
   };
 
 
@@ -1129,7 +1127,7 @@ rec {
     "passwd"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
 
 
   /* A set of functions that build the Linux distributions specified
