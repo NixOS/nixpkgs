@@ -7448,6 +7448,8 @@ in {
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
 
+  scikit-hep-testdata = callPackage ../development/python-modules/scikit-hep-testdata { };
+
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
   scikit-learn = callPackage ../development/python-modules/scikit-learn {
