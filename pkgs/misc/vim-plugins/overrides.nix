@@ -21,6 +21,7 @@
 , direnv
 , fzf
 , gnome
+, himalaya
 , khard
 , languagetool
 , llvmPackages
@@ -285,6 +286,23 @@ self: super: {
       license = lib.licenses.mit;
     };
   });
+
+  himalaya-vim = buildVimPluginFrom2Nix {
+    inherit (himalaya) src version;
+    pname = "himalaya-vim";
+    configurePhase = "cd vim/";
+    dependencies = with self; [ himalaya ];
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+        --replace \
+          'if !executable("himalaya")' \
+          'if v:false'
+    '';
+    postFixup = ''
+      mkdir -p $out/bin
+      ln -s ${himalaya}/bin/himalaya $out/bin/himalaya
+    '';
+  };
 
   LanguageClient-neovim =
     let
