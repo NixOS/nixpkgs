@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
+{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
+, which, cycler, dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript, gtk3
@@ -10,7 +10,6 @@
 # required for headless detection
 , libX11, wayland
 , Cocoa
-, pythonOlder
 }:
 
 let
