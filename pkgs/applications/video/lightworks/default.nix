@@ -22,14 +22,15 @@ let
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "2021.2";
+    version = "2021.2.1";
+    rev = "128456";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://cdn.lwks.com/releases/2021.2/lightworks_2021.2_r128258.deb";
-          sha256 = "sha256-IRzoysfGh/P+Xr50+cIjjaKuxdSzgCmJDICFtekfE3Y=";
+          url = "https://cdn.lwks.com/releases/${version}/lightworks_${lib.versions.majorMinor version}_r${rev}.deb";
+          sha256 = "sha256-GkTg43IUF1NgEm/wT9CZw68Dw/R2BYBU/F4bsCxQowQ=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
