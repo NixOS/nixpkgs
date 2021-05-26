@@ -660,6 +660,7 @@ in with py.pkgs; buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
+    "-vvvvvvvvvvv"
     # screenlogic/test_config_flow.py: Tries to send out UDP broadcasts
     "--deselect tests/components/screenlogic/test_config_flow.py::test_form_cannot_connect"
     # asuswrt/test_config_flow.py: Sandbox network limitations, fails with unexpected error
