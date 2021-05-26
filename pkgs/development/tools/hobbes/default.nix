@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
 
 stdenv.mkDerivation {
   name = "hobbes";
-  version = "unstable-2020-05-19";
+  version = "unstable-2021-04-28";
 
   src = fetchFromGitHub {
     owner = "morgan-stanley";
     repo = "hobbes";
-    rev = "3d80a46b44a362a97a6b963a2bf788fd1f67ade1";
-    sha256 = "03m915g3283z2nfdr03dj5k76wn917knfqxb0xj3qinbl4cka2p1";
+    rev = "737c7ca63516f6b3dca0e659c3de75d4325472d6";
+    sha256 = "0fjsmz1sbrp6464mrb9ha7p615w2l2pdldsc2ayvcrvxfyi1r4gj";
   };
 
   nativeBuildInputs = [
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    llvm_6 # LLVM 6 is latest currently supported. See https://git.io/JvK6w.
+    llvm_12
     ncurses
     readline
     zlib
