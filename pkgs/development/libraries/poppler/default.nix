@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
     cairo
     lcms
     curl
+    nss
   ] ++ lib.optionals qt5Support [
     qtbase
-  ] ++ lib.optionals utils [
-    nss
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
   ];
