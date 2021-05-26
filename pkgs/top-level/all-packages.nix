@@ -850,6 +850,8 @@ in
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
+  amidst = callPackage ../tools/games/amidst { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
@@ -13367,7 +13369,7 @@ in
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_10;
+    llvmPackages = llvmPackages_12;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
