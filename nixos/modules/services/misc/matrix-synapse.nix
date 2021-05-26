@@ -363,6 +363,7 @@ in {
         default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
+        defaultText = "psycopg2 when system.stateVersion is at least 18.03, sqlite3 when lower than 18.03";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';

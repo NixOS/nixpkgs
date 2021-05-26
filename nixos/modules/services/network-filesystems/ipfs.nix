@@ -68,6 +68,7 @@ in {
         default = if versionAtLeast config.system.stateVersion "17.09"
                   then "/var/lib/ipfs"
                   else "/var/lib/ipfs/.ipfs";
+        defaultText = "/var/lib/ipfs/.ipfs when system.stateVersion is at least 17.09, /var/lib/ipfs when lower than 17.09";
         description = "The data dir for IPFS";
       };
 
