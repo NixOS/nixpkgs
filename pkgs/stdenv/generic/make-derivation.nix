@@ -218,7 +218,15 @@ in rec {
               if attrs ? name
               then attrs.name + hostSuffix
               else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}";
-        }) // {
+        }) // (let
+          # If only `name` is given, automatically derive pname and version:
+          pname = lib.getName attrs.name;
+          version = lib.getVersion attrs.name;
+        in
+          lib.optionalAttrs
+            (!(attrs ? pname || attrs ? version) && attrs ? name && pname != "" && version != "")
+            { inherit pname version; }
+        ) // {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
