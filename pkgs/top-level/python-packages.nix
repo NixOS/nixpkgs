@@ -8560,6 +8560,8 @@ in {
 
   winsspi = callPackage ../development/python-modules/winsspi { };
 
+  wit = callPackage ../development/python-modules/wit { };
+
   wled = callPackage ../development/python-modules/wled { };
 
   woob = callPackage ../development/python-modules/woob { };
