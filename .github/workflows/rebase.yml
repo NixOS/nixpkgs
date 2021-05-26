@@ -1,7 +1,8 @@
+name: rebase
+
 on:
-  issue_comment:
-    types:
-      - created
+  repository_dispatch:
+    types: [rebase-command]
 
 # This action allows people with write access to the repo to rebase a PRs base branch
 # by commenting `/rebase ${branch}` on the PR while avoiding CODEOWNER notifications.
@@ -9,35 +10,18 @@ on:
 jobs:
   rebase:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'NixOS' && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/rebase')
+    if: github.repository_owner == 'NixOS'
     steps:
-      - uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ github.event.comment.id }}
-          reactions: eyes
-      - uses: scherermichael-oss/action-has-permission@1.0.6
-        id: check-write-access
-        with:
-          required-permission: write
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: check permissions
-        run: |
-          echo "Commenter doesn't have write access to the repo"
-          exit 1
-        if: "! steps.check-write-access.outputs.has-permission"
       - name: setup
         run: |
-          curl "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}" 2>/dev/null >pr.json
           cat <<EOF >>"$GITHUB_ENV"
-          CAN_MODIFY=$(jq -r '.maintainer_can_modify' pr.json)
-          COMMITS=$(jq -r '.commits' pr.json)
-          CURRENT_BASE=$(jq -r '.base.ref' pr.json)
-          PR_BRANCH=$(jq -r '.head.ref' pr.json)
-          COMMENT_BRANCH=$(echo ${{ github.event.comment.body }} | awk "/^\/rebase / {print \$2}")
-          PULL_REQUEST=${{ github.event.issue.number }}
+          CAN_MODIFY=${{ github.event.client_payload.pull_request.maintainer_can_modify }}
+          COMMITS=${{ github.event.client_payload.pull_request.commits }}
+          CURRENT_BASE=${{ github.event.client_payload.pull_request.base.ref }}
+          PR_BRANCH=${{ github.event.client_payload.pull_request.head.ref }}
+          COMMENT_BRANCH=${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+          PULL_REQUEST=${{ github.event.client_payload.pull_request.number }}
           EOF
-          rm pr.json
       - name: check branch
         env:
           PERMANENT_BRANCHES: "haskell-updates|master|nixos|nixpkgs|python-unstable|release|staging"
@@ -58,7 +42,7 @@ jobs:
 
           $VALID_BRANCHES
 
-          \`/rebase \${branch}\` must be at the start of the line
+          \`/rebase \${branch}\` must be at the start of the first line of the comment.
           EOF
             exit 1
           fi
@@ -123,12 +107,12 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/pulls/$PULL_REQUEST"
       - uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ github.event.issue.number }}
+          issue-number: ${{ github.event.client_payload.pull_request.number }}
           body: |
             Rebased, please reopen the pull request to restart CI
       - uses: peter-evans/create-or-update-comment@v1
         if: failure()
         with:
-          issue-number: ${{ github.event.issue.number }}
+          issue-number: ${{ github.event.client_payload.pull_request.number }}
           body: |
             [Failed to rebase](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
