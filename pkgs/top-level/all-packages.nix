@@ -850,6 +850,8 @@ in
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
+  amidst = callPackage ../tools/games/amidst { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
