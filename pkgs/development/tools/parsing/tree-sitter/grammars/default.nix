@@ -29,6 +29,7 @@
   tree-sitter-scala = (builtins.fromJSON (builtins.readFile ./tree-sitter-scala.json));
   tree-sitter-svelte = (builtins.fromJSON (builtins.readFile ./tree-sitter-svelte.json));
   tree-sitter-swift = (builtins.fromJSON (builtins.readFile ./tree-sitter-swift.json));
+  tree-sitter-tsq = (builtins.fromJSON (builtins.readFile ./tree-sitter-tsq.json));
   tree-sitter-typescript = (builtins.fromJSON (builtins.readFile ./tree-sitter-typescript.json));
   tree-sitter-verilog = (builtins.fromJSON (builtins.readFile ./tree-sitter-verilog.json));
   tree-sitter-yaml = (builtins.fromJSON (builtins.readFile ./tree-sitter-yaml.json));
