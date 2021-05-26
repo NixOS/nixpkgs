@@ -29,7 +29,7 @@ let
           The model of the network device.
         '';
 
-        example = literalExample "MFC-7860DW";
+        example = literalExample "ADS-1200";
       };
 
       ip = mkOption {
