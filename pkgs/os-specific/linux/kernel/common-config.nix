@@ -877,6 +877,8 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
+      # Rockchip PCIe endpoint controller
+      PCIE_ROCKCHIP_EP = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
       ARM_LPAE = yes;
     };
