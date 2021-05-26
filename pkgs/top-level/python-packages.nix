@@ -7013,6 +7013,8 @@ in {
 
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
+  qcengine = callPackage ../development/python-modules/qcengine { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   qdldl = callPackage ../development/python-modules/qdldl { };
