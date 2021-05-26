@@ -18055,6 +18055,7 @@ in
   stfl = callPackage ../development/libraries/stfl { };
 
   stlink = callPackage ../development/tools/misc/stlink { };
+  stlink-gui = callPackage ../development/tools/misc/stlink { withGUI = true; };
 
   stegseek = callPackage ../tools/security/stegseek {};
 
