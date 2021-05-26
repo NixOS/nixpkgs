@@ -83,6 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
+    license     = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 
