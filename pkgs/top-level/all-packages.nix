@@ -8750,7 +8750,12 @@ in
 
   subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
 
-  sudo = callPackage ../tools/security/sudo { };
+  sudo = if stdenv.isDarwin
+    then runCommand "impure-native-darwin-sudo" { } ''
+      mkdir -p $out/bin
+      ln -s /usr/bin/sudo $out/bin/sudo
+      ln -s /usr/sbin/visudo $out/bin/visudo
+    '' else callPackage ../tools/security/sudo { };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
