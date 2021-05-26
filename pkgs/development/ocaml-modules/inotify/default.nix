@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "Bindings for Linux’s filesystem monitoring interface, inotify";

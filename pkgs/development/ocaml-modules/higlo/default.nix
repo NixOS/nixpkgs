@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ xtmpl ulex ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   patches = ./install.patch;
 

@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   propagatedBuildInputs = [ libmysqlclient ];
 

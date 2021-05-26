@@ -14,7 +14,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ ocaml findlib imagemagick ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   preConfigure = "substituteInPlace Makefile --replace gcc $CC";
 

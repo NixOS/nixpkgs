@@ -17,7 +17,6 @@ stdenv.mkDerivation (args // {
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ buildInputs;
 
-  inherit createFindlibDestdir;
   inherit dontStrip;
 
   buildPhase = ''
@@ -37,6 +36,9 @@ stdenv.mkDerivation (args // {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
+  '' + lib.optionalString createFindlibDestdir ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '' + ''
     ocaml setup.ml -install
     runHook postInstall
   '';

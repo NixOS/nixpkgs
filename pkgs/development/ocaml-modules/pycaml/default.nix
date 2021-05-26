@@ -27,7 +27,9 @@ stdenv.mkDerivation {
   patches = [ "../debian/patches/*.patch" ];
 
   buildInputs = [ ncurses ocaml findlib python ocaml_make ];
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   # the Makefile is not shipped with an install target, hence we do it ourselves.
   installPhase = ''

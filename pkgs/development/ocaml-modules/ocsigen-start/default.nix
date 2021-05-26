@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   substituteInPlace "src/os_db.ml" --replace "citext" "text"
   '';
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   src = fetchFromGitHub {
     owner = "ocsigen";

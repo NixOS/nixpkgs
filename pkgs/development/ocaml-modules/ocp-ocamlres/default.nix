@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib astring pprint ];
-  createFindlibDestdir = true;
 
   installFlags = [ "BINDIR=$(out)/bin" ];
-  preInstall = "mkdir -p $out/bin";
+  preInstall = ''
+    mkdir -p $out/bin
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "A simple tool and library to embed files and directories inside OCaml executables";

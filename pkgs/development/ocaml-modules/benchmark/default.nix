@@ -12,7 +12,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_pcre ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://ocaml-benchmark.forge.ocamlcore.org/";

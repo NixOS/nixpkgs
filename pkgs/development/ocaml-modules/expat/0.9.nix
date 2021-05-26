@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ocaml findlib ounit expat];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   patches = [ ./unittest.patch ];
 

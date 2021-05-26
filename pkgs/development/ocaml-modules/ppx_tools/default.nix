@@ -64,7 +64,9 @@ else
     nativeBuildInputs = [ ocaml findlib ];
     buildInputs = [ ocaml findlib ];
 
-    createFindlibDestdir = true;
+    preInstall = ''
+      mkdir -p "$OCAMLFIND_DESTDIR"
+    '';
 
     dontStrip = true;
 

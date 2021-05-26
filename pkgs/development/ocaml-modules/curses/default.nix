@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   # Fix build for recent ncurses versions
   NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postPatch = ''
     substituteInPlace curses.ml --replace "pp gcc" "pp $CC"

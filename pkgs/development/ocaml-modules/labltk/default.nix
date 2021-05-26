@@ -54,7 +54,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" "opt" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR/stublibs

@@ -10,7 +10,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib camlp4 ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://config-file.forge.ocamlcore.org/";

@@ -11,8 +11,6 @@ stdenv.mkDerivation {
     sha256 = "13ah03pbcvrjv5lmx971hvkm9rvbvimska5wmjfvgvd20ca0gn8w";
   };
 
-  createFindlibDestdir = true;
-
   buildInputs =
     [
       ocaml findlib ocamlbuild ocamlmod ocamlify
@@ -30,6 +28,7 @@ stdenv.mkDerivation {
   '';
   installPhase = ''
     runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
     ocaml setup.ml -install
     runHook postInstall
   '';

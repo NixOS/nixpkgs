@@ -20,7 +20,9 @@ stdenv.mkDerivation {
 
   installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";

@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make build";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   doCheck = true;
 

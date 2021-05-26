@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib camlp4 ];
   propagatedBuildInputs = [ config-file lablgtk xmlm ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     platforms = ocaml.meta.platforms or [];

@@ -13,7 +13,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace 'MACHDEPCC=gcc' 'MACHDEPCC=$(CC)'

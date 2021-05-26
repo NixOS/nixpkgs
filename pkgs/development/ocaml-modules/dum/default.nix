@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ easy-format ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mjambon/dum";

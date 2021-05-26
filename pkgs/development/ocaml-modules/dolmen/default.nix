@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "-C" "src" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "An OCaml library providing clean and flexible parsers for input languages";

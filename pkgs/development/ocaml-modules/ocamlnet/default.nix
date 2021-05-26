@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config which ];
   buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   dontAddPrefix = true;
 

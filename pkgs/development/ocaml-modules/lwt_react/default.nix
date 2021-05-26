@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ lwt react ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "Helpers for using React with Lwt";

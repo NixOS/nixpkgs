@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "Easy process control in OCaml";

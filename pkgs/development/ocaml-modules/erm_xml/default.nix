@@ -16,7 +16,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "https://github.com/hannesm/xml";

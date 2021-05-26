@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ];
   buildInputs = [ ocaml findlib ];
 
-  createFindlibDestdir = true;
-
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";

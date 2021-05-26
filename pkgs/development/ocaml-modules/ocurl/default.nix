@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkg-config ocaml findlib ncurses ];
   propagatedBuildInputs = [ curl lwt ];
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
   meta = {
     description = "OCaml bindings to libcurl";
     license = lib.licenses.mit;

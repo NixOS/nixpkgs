@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postFixup =
   ''

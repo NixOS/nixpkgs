@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
 

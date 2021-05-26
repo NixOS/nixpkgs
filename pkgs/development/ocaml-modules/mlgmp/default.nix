@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   preConfigure = "make clean";
   buildInputs = [ocaml findlib gmp mpfr ncurses];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   propagatedbuildInputs = [gmp mpfr ncurses];
 

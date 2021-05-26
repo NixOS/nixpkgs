@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin "--absolute-dylibs"
   ;
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "ETH LIbrary for Numerical Analysis";

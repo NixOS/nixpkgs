@@ -43,7 +43,9 @@ EOF
   # option. Installation is handled by ocamlfind.
   dontAddPrefix = true;
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   buildFlags = [ "all" ];
 

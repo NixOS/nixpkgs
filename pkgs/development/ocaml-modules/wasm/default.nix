@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "-C" "interpreter" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postInstall = ''
     mkdir $out/bin

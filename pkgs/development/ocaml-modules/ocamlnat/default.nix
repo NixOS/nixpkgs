@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "OCaml native toplevel";

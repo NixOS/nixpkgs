@@ -27,7 +27,9 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild oasis ocaml_optcomp camlp4 ]
   ++ (param.buildInputs or []);
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta =  {
     homepage = "https://github.com/ocsigen/deriving";

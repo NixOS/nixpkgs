@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   preConfigure = "patchShebangs ./configure.sh";
 

@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   doCheck = !lib.versionAtLeast ocaml.version "4.06";
   checkTarget = "testall";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "OCaml wrapper for the Expat XML parsing library";

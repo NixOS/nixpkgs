@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib cppo ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
   dontConfigure = true;
 
   makeFlags = lib.optional minimal "minimal=1";

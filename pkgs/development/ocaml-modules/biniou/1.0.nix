@@ -18,13 +18,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib easy-format ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+    mkdir -p "$out/bin"
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  preBuild = ''
-    mkdir $out/bin
-  '';
 
   meta = with lib; {
     description = "A binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";

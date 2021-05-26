@@ -15,8 +15,6 @@ stdenv.mkDerivation {
     })
   ;
 
-  createFindlibDestdir = true;
-
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
 
   configurePhase = ''
@@ -29,6 +27,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
+    mkdir -p "$OCAMLFIND_DESTDIR"
     cp _build/src/optcomp_o.native $out/bin/optcomp-o
     cp _build/src/optcomp_r.native $out/bin/optcomp-r
     ocamlfind install optcomp META _build/src/optcomp.{a,cma,cmxa,cmxs} _build/src/pa_optcomp.{cmi,cmx,mli}

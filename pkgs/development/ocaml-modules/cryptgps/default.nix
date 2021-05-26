@@ -17,7 +17,9 @@ stdenv.mkDerivation {
 
   dontConfigure = true;	# Skip configure phase
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://projects.camlcity.org/projects/cryptgps.html";

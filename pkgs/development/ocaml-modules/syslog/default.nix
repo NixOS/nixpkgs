@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" "opt" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/rixed/ocaml-syslog";

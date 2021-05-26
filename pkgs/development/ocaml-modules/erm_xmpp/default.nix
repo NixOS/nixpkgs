@@ -28,11 +28,10 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
     ocaml setup.ml -install
     runHook postInstall
   '';
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = "https://github.com/hannesm/xmpp";

@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
       --subst-var-by XINCLUDES ""
   '';
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 

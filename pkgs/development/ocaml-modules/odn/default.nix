@@ -14,8 +14,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild type_conv ounit camlp4 ];
 
-  createFindlibDestdir = true;
-
   configurePhase = ''
     runHook preConfigure
     ocaml setup.ml -configure
@@ -28,6 +26,7 @@ stdenv.mkDerivation {
   '';
   installPhase = ''
     runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
     ocaml setup.ml -install
     runHook postInstall
   '';

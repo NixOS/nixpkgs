@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
  installPhase =
   ''
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
+    mkdir -p "$OCAMLFIND_DESTDIR"
     make install
     opaline -prefix $out
   '';
@@ -23,8 +24,6 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0jan5779nc0jf993hmvfii15ralcs20sm4mcnqwqrnhjbq6f6zpk";
   };
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = "http://ocsigen.org/ocsigen-toolkit/";

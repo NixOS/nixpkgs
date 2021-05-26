@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   buildPhase = ''
     runHook preBuild

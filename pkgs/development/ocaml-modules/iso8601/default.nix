@@ -11,7 +11,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "https://ocaml-community.github.io/ISO8601.ml/";

@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   configurePhase = "iconv_prefix=${libiconv} ocaml setup.ml -configure";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
 
   meta = {
