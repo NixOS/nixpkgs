@@ -603,7 +603,6 @@ mapAliases ({
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_hll = postgresqlPackages.pg_hll;
   pg_cron = postgresqlPackages.pg_cron;
-  pg_rational = postgresqlPackages.pg_rational;
   pg_topn = postgresqlPackages.pg_topn;
   pinentry_curses = pinentry-curses; # added 2019-10-14
   pinentry_emacs = pinentry-emacs; # added 2019-10-14
