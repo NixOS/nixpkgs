@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, cups, poppler, poppler_utils, fontconfig
+{ lib, stdenv, fetchurl, pkg-config, cups, poppler, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
 , makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
 , mupdf
@@ -19,16 +19,16 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
-    cups poppler poppler_utils fontconfig libjpeg libpng perl
+    cups poppler poppler fontconfig libjpeg libpng perl
     ijs qpdf dbus avahi ghostscript mupdf
   ];
 
   configureFlags = [
     # TODO(Profpatsch): mupdf support
     "--with-pdftops=pdftops"
-    "--with-pdftops-path=${poppler_utils}/bin/pdftops"
+    "--with-pdftops-path=${poppler}/bin/pdftops"
     "--with-gs-path=${ghostscript}/bin/gs"
-    "--with-pdftocairo-path=${poppler_utils}/bin/pdftocairo"
+    "--with-pdftocairo-path=${poppler}/bin/pdftocairo"
     "--with-ippfind-path=${cups}/bin/ippfind"
     "--enable-imagefilters"
     "--with-rcdir=no"

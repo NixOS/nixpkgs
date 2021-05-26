@@ -21,7 +21,7 @@
 , lyx
 , perl
 , pkg-config
-, poppler_utils
+, poppler
 , python3Packages
 , qtbase
 , unrtf
@@ -72,7 +72,7 @@ mkDerivation rec {
         substituteInPlace $f --replace '"groff"'     '"${lib.getBin groff}/bin/groff"'
         substituteInPlace $f --replace '"gunzip"'    '"${lib.getBin gzip}/bin/gunzip"'
         substituteInPlace $f --replace '"iconv"'     '"${lib.getBin libiconv}/bin/iconv"'
-        substituteInPlace $f --replace '"pdftotext"' '"${lib.getBin poppler_utils}/bin/pdftotext"'
+        substituteInPlace $f --replace '"pdftotext"' '"${lib.getBin poppler}/bin/pdftotext"'
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
         substituteInPlace $f --replace '"sed"'       '"${lib.getBin gnused}/bin/sed"'
         substituteInPlace $f --replace '"tar"'       '"${lib.getBin gnutar}/bin/tar"'

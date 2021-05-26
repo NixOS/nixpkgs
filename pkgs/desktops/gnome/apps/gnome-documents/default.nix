@@ -25,7 +25,7 @@
 , docbook_xml_dtd_42
 , gobject-introspection
 , inkscape
-, poppler_utils
+, poppler
 , desktop-file-utils
 , wrapGAppsHook
 , python3
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
     # building getting started
     inkscape
-    poppler_utils
+    poppler
   ];
 
   buildInputs = [

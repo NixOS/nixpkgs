@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkg-config, libxml2, meson, ninja, gtk3, glib, webkitgtk, libgee
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
+, gobject-introspection, sqlite, poppler, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
 , appstream, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ unzip unar poppler html2text coreutils curl gnugrep ]}"
       --prefix PATH : $out/bin
     )
   '';

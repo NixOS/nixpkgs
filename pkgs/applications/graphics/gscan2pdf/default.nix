@@ -2,7 +2,7 @@
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+  imagemagick, libtiff, djvulibre, poppler, ghostscript, unpaper, pdftk,
   # test dependencies
   xvfb-run, liberation_ttf, file, tesseract }:
 
@@ -73,7 +73,7 @@ perlPackages.buildPerlPackage rec {
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \
-      --prefix PATH : "${poppler_utils}/bin" \
+      --prefix PATH : "${poppler}/bin" \
       --prefix PATH : "${ghostscript}/bin" \
       --prefix PATH : "${unpaper}/bin" \
       --prefix PATH : "${pdftk}/bin"
@@ -89,7 +89,7 @@ perlPackages.buildPerlPackage rec {
     imagemagick
     libtiff
     djvulibre
-    poppler_utils
+    poppler
     ghostscript
     unpaper
     pdftk

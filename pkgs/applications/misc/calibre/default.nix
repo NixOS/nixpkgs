@@ -1,7 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
-, poppler_utils
+, poppler
 , pkg-config
 , libpng
 , imagemagick
@@ -66,7 +66,7 @@ mkDerivation rec {
     libpng
     libusb1
     podofo
-    poppler_utils
+    poppler
     qtbase
     sqlite
     xdg-utils
@@ -104,8 +104,8 @@ mkDerivation rec {
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export POPPLER_INC_DIR=${poppler.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
@@ -151,7 +151,7 @@ mkDerivation rec {
         ''${qtWrapperArgs[@]} \
         ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix PATH : ${poppler_utils.out}/bin
+        --prefix PATH : ${poppler.out}/bin
     done
   '';
 

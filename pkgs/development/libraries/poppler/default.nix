@@ -18,7 +18,7 @@
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
-, utils ? false, nss ? null
+, nss ? null
 , minimal ? false
 , suffix ? "glib"
 , inkscape
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     (mkFlag (!minimal) "GLIB")
     (mkFlag (!minimal) "CPP")
     (mkFlag (!minimal) "LIBCURL")
-    (mkFlag utils "UTILS")
+    (mkFlag (!minimal) "UTILS")
     (mkFlag qt5Support "QT5")
   ];
 

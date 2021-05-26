@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchhg
 , qmake, qttools
 , qtbase, qtsvg, qtxmlpatterns
-, poppler_utils
+, poppler
 }:
 
 with lib;
@@ -27,14 +27,14 @@ mkDerivation rec {
     substituteInPlace src/app/translations.pri \
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${getDev qttools}/bin/lrelease'
     substituteInPlace src/app/valentina/mainwindowsnogui.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler}/bin/pdftops"'
     substituteInPlace src/app/valentina/dialogs/dialogsavelayout.h \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler}/bin/pdftops"'
   '';
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ qtbase qtsvg qtxmlpatterns poppler_utils ];
+  buildInputs = [ qtbase qtsvg qtxmlpatterns poppler ];
 
   configurePhase = ''
     qmake PREFIX=/ Valentina.pro -r "CONFIG += noTests noRunPath no_ccache noDebugSymbols"

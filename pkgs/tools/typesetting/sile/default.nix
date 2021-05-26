@@ -5,7 +5,7 @@
 , pkg-config
 , autoconf
 , automake
-, poppler_utils
+, poppler
 , harfbuzz
 , icu
 , fontconfig
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   checkInputs = [
-    poppler_utils
+    poppler
   ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
