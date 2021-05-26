@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "hobbes";
+  pname = "hobbes";
   version = "unstable-2021-04-28";
 
   src = fetchFromGitHub {
