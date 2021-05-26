@@ -1,0 +1,20 @@
+name: dispatch
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    steps:
+      - name: dispatch
+        uses: peter-evans/slash-command-dispatch@v2.1.3
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          reaction-token: ${{ secrets.ACTIONS_TOKEN }}
+          issue-type: pull-request
+          permission: write
+          commands: |
+            rebase
