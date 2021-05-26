@@ -38,8 +38,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = param.propagatedBuildInputs or [];
 
-  buildPhase = "${run} build";
-  installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
+  buildPhase = ''
+    runHook preBuild
+    ${run} build
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preBuild
+    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+    runHook postBuild
+  '';
 
   passthru = { inherit run; };
 

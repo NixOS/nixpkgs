@@ -27,7 +27,11 @@ stdenv.mkDerivation {
   buildInputs = [ findlib topkg ]
   ++ optional jsooSupport js_of_ocaml;
 
-  buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build --with-js_of_ocaml ${boolToString jsooSupport}
+    runHook postBuild
+  '';
 
   inherit (topkg) installPhase;
 

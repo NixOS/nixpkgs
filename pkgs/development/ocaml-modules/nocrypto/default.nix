@@ -59,7 +59,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocamlbuild findlib topkg cpuid ocb-stubblr ];
   propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
 
-  buildPhase = "${topkg.buildPhase} --accelerate false --with-lwt ${boolToString withLwt}";
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build --accelerate false --with-lwt ${boolToString withLwt}
+    runHook postBuild
+  '';
   inherit (topkg) installPhase;
 
   meta = {
