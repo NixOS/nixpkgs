@@ -269,6 +269,8 @@ in
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
+  crackle = callPackage ../tools/networking/crackle { };
+
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
