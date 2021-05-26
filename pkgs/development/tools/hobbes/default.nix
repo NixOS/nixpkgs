@@ -11,6 +11,12 @@ stdenv.mkDerivation {
     sha256 = "0fjsmz1sbrp6464mrb9ha7p615w2l2pdldsc2ayvcrvxfyi1r4gj";
   };
 
+  # TODO: re-enable Python tests once they work on Python 3
+  # currently failing with "I don't know how to decode the primitive type: b'bool'"
+  postPatch = ''
+    rm test/Python.C
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
@@ -23,7 +29,7 @@ stdenv.mkDerivation {
     libxml2
   ];
 
-  doCheck = false; # Running tests in NixOS hangs. See https://git.io/JvK7R.
+  doCheck = true;
   checkTarget = "test";
 
   meta = with lib; {
