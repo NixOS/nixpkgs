@@ -13,7 +13,7 @@
 # To debug a binary wrapper after you compiled it, use the `strings` command
 
 escape_string_literal() {
-    # We need to make sure that special characters are escaped 
+    # We need to make sure that special characters are escaped
     # before trying to create C string literals
     result=${1//$'\\'/$'\\\\'}
     result=${result//\"/'\"'}
