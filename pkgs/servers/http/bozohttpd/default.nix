@@ -6,14 +6,15 @@
 , inetutils
 , wget
 , openssl
-, userSupport ? true
-, cgiSupport ? true
-, dirIndexSupport ? true
-, dynamicContentSupport ? true
-, sslSupport ? true
-, luaSupport ? true
+, minimal ? false
+, userSupport ? !minimal
+, cgiSupport ? !minimal
+, dirIndexSupport ? !minimal
+, dynamicContentSupport ? !minimal
+, sslSupport ? !minimal
+, luaSupport ? !minimal
 , lua
-, htpasswdSupport ? true
+, htpasswdSupport ? !minimal
 }:
 
 let inherit (lib) optional optionals;

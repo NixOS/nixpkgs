@@ -1954,6 +1954,7 @@ in
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
   bozohttpd = callPackage ../servers/http/bozohttpd { };
+  bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
   bpytop = callPackage ../tools/system/bpytop { };
 
