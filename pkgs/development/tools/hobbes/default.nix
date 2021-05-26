@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       Hobbes is a a language, embedded compiler, and runtime for efficient
       dynamic expression evaluation, data storage and analysis.
     '';
-    homepage = "https://github.com/Morgan-Stanley/hobbes";
+    homepage = "https://github.com/morganstanley/hobbes";
     license = licenses.asl20;
     maintainers = with maintainers; [ kthielen thmzlt ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
