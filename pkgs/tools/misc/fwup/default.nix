@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     xdelta
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
