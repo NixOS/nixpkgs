@@ -31165,9 +31165,10 @@ in
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
-  wordpressPlugins = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/plugins.nix { });
-
-  wordpressThemes = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/themes.nix { });
+  wordpressPackages = {
+    plugins = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/plugins.nix { });
+    themes = recurseIntoAttrs (callPackage ../servers/web-apps/wordpress/themes.nix { });
+  };
 
   wprecon = callPackage ../tools/security/wprecon { };
 

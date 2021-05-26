@@ -95,12 +95,12 @@ in rec {
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
 
-  wp-user-avatar = mkWordpressPlugin {
-    pluginName = "wp-user-avatar";
+  wp-user-avatars = mkWordpressPlugin {
+    pluginName = "wp-user-avatars";
     version = "1.4.0";
     src = fetchurl {
       url = "https://downloads.wordpress.org/plugin/wp-user-avatars.zip";
-      sha256 = "1a1iliq8p20qnn5jq8qyz07cw03kiyggjvd8457dmlf5vhbljp0l";
+      sha256 = "1hllvg9xq4ahzj0mjwnzp5slh73f6w99ayg6885cr5imkwbal7v3";
     };
     buildInputs = [ pkgs.unzip ];
     installPhase = "mkdir -p $out; cp -R * $out/";
@@ -152,10 +152,10 @@ in rec {
 
   webp-converter-for-media = mkWordpressPlugin {
     pluginName = "webp-converter-for-media";
-    version = "3.0.1";
+    version = "3.0.3";
     src = fetchurl {
       url = "https://downloads.wordpress.org/plugin/webp-converter-for-media.zip";
-      sha256 = "1rf2h3gpyfdqh43qippplqrflkh50hdypssig1xnvjwga86abwc8";
+      sha256 = "0i55cq2xz3rv60l38iqmldjy4msmd22bnfgk2w6l0ahgfrxn58fq";
     };
     buildInputs = [ pkgs.unzip ];
     installPhase = "mkdir -p $out; cp -R * $out/";
