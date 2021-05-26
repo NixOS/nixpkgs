@@ -46,7 +46,15 @@ stdenv.mkDerivation rec {
 
   COPTS =
     [
-      "-DNO_BLOCKLIST_SUPPORT" # unpackaged dependency: https://man.netbsd.org/blocklist.3
+      "-D_DEFAULT_SOURCE"
+      "-D_GNU_SOURCE"
+
+      # Ensure that we can serve >2GB files even on 32-bit systems.
+      "-D_LARGEFILE_SOURCE"
+      "-D_FILE_OFFSET_BITS=64"
+
+      # unpackaged dependency: https://man.netbsd.org/blocklist.3
+      "-DNO_BLOCKLIST_SUPPORT"
     ]
     ++ optional (!userSupport) "-DNO_USER_SUPPORT"
     ++ optional (!dirIndexSupport) "-DNO_DIRINDEX_SUPPORT"
