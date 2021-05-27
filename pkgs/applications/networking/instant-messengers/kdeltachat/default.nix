@@ -8,17 +8,18 @@
 , libdeltachat
 , qtimageformats
 , qtmultimedia
+, qtwebengine
 }:
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2021-05-18";
+  version = "unstable-2021-05-22";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "837336dc93b66912d48a3b7a2e8c1991b4d3650f";
-    sha256 = "17ms6dcfdz0y24285fqpmgvw391bxrkagsiiy4g5cyp8gfppkgaj";
+    rev = "9c22c6d6a03f620f14f289b464354159b8a76f6b";
+    sha256 = "1qmal6dng8ynp5mrkrgykz78c8zp1gbv53s479qvj0h3axrp2s8p";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ mkDerivation rec {
     libdeltachat
     qtimageformats
     qtmultimedia
+    qtwebengine
   ];
 
   meta = with lib; {

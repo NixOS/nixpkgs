@@ -1534,6 +1534,12 @@
     githubId = 510553;
     name = "Jos van Bakel";
   };
+  c4605 = {
+    email = "bolasblack@gmail.com";
+    github = "bolasblack";
+    githubId = 382011;
+    name = "c4605";
+  };
   caadar = {
     email = "v88m@posteo.net";
     github = "caadar";
@@ -6429,6 +6435,10 @@
     githubId = 44469426;
     name = "Matheus de Souza Pessanha";
     email = "matheus_pessanha2001@outlook.com";
+    keys = [{
+      longkeyid = "rsa4096/6DFD656220A3B849";
+      fingerprint = "2D4D 488F 17FB FF75 664E  C016 6DFD 6562 20A3 B849";
+    }];
   };
   meatcar = {
     email = "nixpkgs@denys.me";
