@@ -1528,6 +1528,12 @@
     githubId = 510553;
     name = "Jos van Bakel";
   };
+  c4605 = {
+    email = "bolasblack@gmail.com";
+    github = "bolasblack";
+    githubId = 382011;
+    name = "c4605";
+  };
   caadar = {
     email = "v88m@posteo.net";
     github = "caadar";
