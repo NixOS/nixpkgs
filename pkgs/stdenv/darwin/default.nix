@@ -146,7 +146,8 @@ in rec {
         inherit config shell extraBuildInputs;
 
         extraNativeBuildInputs = extraNativeBuildInputs
-          ++ lib.optionals doUpdateAutoTools [ last.pkgs.updateAutotoolsGnuConfigScriptsHook ];
+          ++ lib.optionals doUpdateAutoTools [ last.pkgs.updateAutotoolsGnuConfigScriptsHook ]
+          ++ lib.optionals doSign [ last.pkgs.darwin.sigtool ];
 
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
           cc.expand-response-params cc.bintools
@@ -641,6 +642,7 @@ in rec {
 
     extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
       pkgs.updateAutotoolsGnuConfigScriptsHook
+      pkgs.darwin.sigtool
     ];
 
     extraBuildInputs = [ pkgs.darwin.CF ];
