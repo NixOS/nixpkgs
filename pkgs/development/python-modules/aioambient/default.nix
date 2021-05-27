@@ -5,8 +5,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
 , python-engineio
 , python-socketio
@@ -27,7 +27,9 @@ buildPythonPackage rec {
     sha256 = "sha256-uqvM5F0rpw+xeCXYl4lGMt3r0ugPsUmSvujmTJ9HABk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -39,13 +41,20 @@ buildPythonPackage rec {
   checkInputs = [
     aresponses
     asynctest
+    pytest-aiohttp
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # https://github.com/bachya/aioambient/pull/84
+    substituteInPlace pyproject.toml \
+      --replace 'websockets = "^8.1"' 'websockets = ">=8.1,<10.0"'
+  '';
+
   # Ignore the examples directory as the files are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "aioambient" ];
 
   meta = with lib; {
