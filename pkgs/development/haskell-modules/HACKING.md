@@ -4,8 +4,8 @@
 This is the documentation for periodically merging the `haskell-updates` branch
 into the `master` branch.  This workflow is performed by members in the
 [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell) team.
-Each member of the team takes a two week period where they much merge the
-`haskell-updates` branch into `master`.
+Each member of the team takes a two week period where they are in charge of
+merging the `haskell-updates` branch into `master`.
 
 The goal of this workflow is to regularly merge the `haskell-updates` branch
 into the `master` branch, while making sure there are no evaluation errors or
@@ -13,7 +13,7 @@ build errors that get into `master`.
 
 The workflow generally proceeds in three main steps:
 
-1. create the initial `haskell-updates` PR
+1. create the initial `haskell-updates` PR, and update Stackage and Hackage snapshots
 1. wait for contributors to fix newly broken Haskell packages
 1. merge `haskell-updates` into `master`
 
@@ -43,7 +43,7 @@ In this section we create the PR for merging `haskell-updates` into `master`.
     $ maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
     ```
 
-1.  Push these commits to the Nixpkgs repo.
+1.  Push these commits to the Nixpkgs repository.
 
 1.  Open a PR on Nixpkgs merging `haskell-updates` into `master`.
 
@@ -52,7 +52,7 @@ Use the following message body:
 ```markdown
 ### This Merge
 
-This PR is the regularly merge of the `haskell-updates` branch into `master`.
+This PR is the regular merge of the `haskell-updates` branch into `master`.
 
 This branch is being continually built and tested by hydra at https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
@@ -85,9 +85,9 @@ defined in the file [release-haskell.nix](../../top-level/release-haskell.nix).
 
 #### Notify Maintainers
 
-When Hydra finishes building all the packages, you should generate a build
-report to notify maintainers of their broken packages.  You can do that with the
-following commands:
+When Hydra finishes building all the updated packages for the `haskell-updates`
+jobset, you should generate a build report to notify maintainers of their
+newly broken packages.  You can do that with the following commands:
 
 ```console
 $ maintainers/scripts/haskell/hydra-report.hs get-report
@@ -115,7 +115,7 @@ may be marked broken before merging `haskell-updates` into `master`.
 After getting the build report, you can see which packages and Hydra jobs are
 failing to build.  The most important jobs are the `maintained` and `mergeable`
 jobs. These are both defined in
-[`release-haskell.nix](../../top-level/release-haskell.nix).
+[`release-haskell.nix`](../../top-level/release-haskell.nix).
 
 `mergeable` is a set of the most important Haskell packages, including things
 like Pandoc and XMonad.  These packages are widely used.  We would like to
@@ -139,9 +139,9 @@ $ maintainers/scripts/haskell/hydra-report.hs get-report
 $ maintainers/scripts/haskell/hydra-report.hs mark-broken-list
 ```
 
-This shows a list of packages that are thought to be broken.
+This shows a list of packages that reported broken on `x86_64-linux` on Hydra.
 
-Next, run the following command.
+Next, run the following command:
 
 ```console
 $ maintainers/scripts/haskell/mark-broken.sh --do-commit
@@ -150,31 +150,79 @@ $ maintainers/scripts/haskell/mark-broken.sh --do-commit
 This first opens up an editor with the broken package list.  Some of these
 packages may have a maintainer in Nixpkgs.  If these maintainers have not been
 given 7 days to fix up their package, then make sure to remove those packages
-from the list.  After saving and exiting the editor, the following will
-happen:
+from the list before continuing.  After saving and exiting the editor, the
+following will happen:
 
 - packages from the list will be added to
   [`configuration-hackage2nix/broken.yaml`](configuration-hackage2nix/broken.yaml)
 - `hackage-packages.nix` will be regenerated
 - the
   [`configuration-hackage2nix/transitive-broken.yaml`](configuration-hackage2nix/transitive-broken.yaml)
-  file will be regenerated
+  file will be updated
 - `hackage-packages.nix` will be regenerated again
 - everything will be committed
 
 ### Merge `haskell-updates` into `master`
 
-(TODO)
+Now it is time to merge the `haskell-updates` PR you opened above.
 
-- mark broken packages with `mark-broken.sh`
+Before doing this, make sure of the following:
+
+- All Haskell packages that fail to build are correctly marked broken or
+  transitively broken.
+- The `maintained` and `mergeable` jobs are passing on Hydra.
+- The maintainers for any maintained Haskell packages that are newly broken
+  have been pinged on GitHub and given at least a week to fix their packages.
+  This is especially important for widely-used packages like `cachix`.
+
+When you've double-checked these points, go ahead and merge the `haskell-updates` PR.
+After merging, **make sure not to delete the `haskell-updates` branch**, since it
+causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
 
 ### Additional Info
 
-(TODO)
+Here are some additional tips that didn't fit in above.
 
-- you can restart a Hydra evaluation by logging in with github.
+-   It is possible to start a new Hydra evaluation by logging into Hydra with
+    your GitHub or Google account.
+
+-   You should occasionally merge the `master` branch into the
+    `haskell-updates` branch.
+
+    In an ideal world, when we merge `haskell-updates` into `master`, it would
+    cause few Hydra rebuilds on `master`.  Ideally, the `nixos-unstable`
+    channel would never be prevented from progressing because of needing to
+    wait for rebuilding Haskell packages.
+
+    In order to make sure that there are a minimal number of rebuilds after
+    merging `haskell-updates` into `master`, `master` should occasionally be
+    merged into the `haskell-updates` branch.
+
+    This is especially important after `staging` is merged into `master`, since
+    there is a high chance that this will cause all the Haskell packages to
+    rebuild.
+
+    However, as we are working on cleaning up `haskell-updates`, `master` will
+    continually progress.  It may not always be possible to keep the
+    `haskell-updates` branch fully up-to-date with `master` without causing
+    mass-rebuilds on the `haskell-updates` jobset.
+
+-   Make sure never to update the Hackage package hashes in
+    `pkgs/data/misc/hackage/`, or the pinned Stackage Nightly versions on the
+    release branches (like `release-21.05`).
+
+    This means that the
+    [`update-hackage.sh`](../../../maintainers/scripts/haskell/update-hackage.sh)
+    and
+    [`update-stackage.sh`](../../../maintainers/scripts/haskell/update-stackage.sh)
+    scripts should never be used on the release branches.
+
+    However, changing other files in `./.` and regenerating the package set is encouraged.
+    This can be done with
+    [`regenerated-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerated-hackage-packages.sh)
+    as described above.
 
 ## Contributor Workflow
 
-(TODO: this section is to describe the type of workflow for non-comitters to
+(TODO: this section is to describe the type of workflow for non-committers to
 contribute to `haskell-updates`)
