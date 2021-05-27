@@ -521,6 +521,7 @@ in with py.pkgs; buildPythonApplication rec {
     "rmvtransport"
     "roku"
     "roomba"
+    "roon"
     "rss_feed_template"
     "ruckus_unleashed"
     "safe_mode"
