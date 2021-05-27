@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
+, pythonOlder
 , libsodium
 , cffi
-, six
 , hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "pynacl";
   version = "1.4.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
@@ -18,15 +19,22 @@ buildPythonPackage rec {
     sha256 = "01b56hxrbif3hx8l6rwz5kljrgvlbj7shmmd2rjh0hn7974a5sal";
   };
 
-  checkInputs = [ pytest hypothesis ];
-  buildInputs = [ libsodium ];
-  propagatedBuildInputs = [ cffi six ];
+  buildInputs = [
+    libsodium
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+  ];
+
+  checkInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   SODIUM_INSTALL = "system";
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "nacl" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ va1entin ];

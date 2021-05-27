@@ -8064,6 +8064,8 @@ in {
 
   sympy = callPackage ../development/python-modules/sympy { };
 
+  syncer = callPackage ../development/python-modules/syncer { };
+
   systembridge = callPackage ../development/python-modules/systembridge { };
 
   systemd = callPackage ../development/python-modules/systemd {
