@@ -62,7 +62,7 @@ let
             (map (x: if x.optional == true then x.plugin else null)
               pluginsNormalized);
         };
-        customRC = pluginRc + customRC;
+        customRC = customRC + pluginRc;
       };
 
       # A function to get the configuration string (if any) from an element of 'plugins'
