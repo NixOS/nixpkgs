@@ -30,14 +30,14 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = writeScript "update-teampeak-server" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused
+    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused jq pup
 
     set -eu -o pipefail
 
     version=$( \
-        curl -s "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/" \
-        | grep softwareVersion \
-        | sed -E -e 's/^.*<span itemprop="softwareVersion">([^<]+)<\/span>.*$/\1/' \
+      curl https://www.teamspeak.com/en/downloads/ \
+        | pup "#server .linux .version json{}" \
+        | jq -r ".[0].text"
     )
 
     versionOld=$(nix-instantiate --eval --strict -A "teamspeak_server.version")
