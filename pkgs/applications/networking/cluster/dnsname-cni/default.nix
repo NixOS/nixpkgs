@@ -28,6 +28,10 @@ buildGoModule rec {
 
   doCheck = false; # NOTE: requires root privileges
 
+  passthru.tests = {
+    inherit (nixosTests) podman-dnsname;
+  };
+
   meta = with lib; {
     description = "DNS name resolution for containers";
     homepage = "https://github.com/containers/dnsname";
