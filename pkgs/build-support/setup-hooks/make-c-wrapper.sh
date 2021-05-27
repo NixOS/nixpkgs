@@ -50,7 +50,7 @@ for ((n = 1; n < ${#args[*]}; n += 1)); do
         escape_string_literal "${args[$((n + 1))]}"
         key="${result}"
         printf "%s\n" "    unsetenv(\"$key\");"
-        docs="${docs:+$docs$'\n'}unsetenv(\"${key}=${value}\");"
+        docs="${docs:+$docs$'\n'}unsetenv(\"${key}\");"
         n=$((n + 1))
     elif [[ "$p" == "--argv0" ]]; then
         escape_string_literal "${args[$((n + 1))]}"
