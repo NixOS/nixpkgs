@@ -28067,6 +28067,8 @@ in
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
+  erigon = callPackage ../applications/blockchains/erigon.nix { };
+
   exodus = callPackage ../applications/blockchains/exodus { };
 
   faraday = callPackage ../applications/blockchains/faraday { };
@@ -28124,8 +28126,6 @@ in
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
 
   tessera = callPackage ../applications/blockchains/tessera.nix { };
-
-  turbo-geth = callPackage ../applications/blockchains/turbo-geth.nix { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = true; };
   vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };
