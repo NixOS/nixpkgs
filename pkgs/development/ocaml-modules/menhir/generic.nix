@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  hardeningDisable = stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
 
   preBuild = ''
     # fix makefiles.

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
 
   configurePhase = ''
   make -f configure.make Makefile.config \
