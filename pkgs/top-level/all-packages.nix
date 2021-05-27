@@ -7935,6 +7935,8 @@ in
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
+  pipeworld = callPackage ../applications/window-managers/pipeworld { };
+
   pipr = callPackage ../applications/misc/pipr { };
 
   pipreqs = callPackage ../tools/misc/pipreqs { };
