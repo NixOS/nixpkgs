@@ -7156,6 +7156,8 @@ in
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  pcmsolver = callPackage ../development/libraries/pcmsolver { };
+
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
