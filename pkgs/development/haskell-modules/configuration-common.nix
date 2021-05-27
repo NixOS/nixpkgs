@@ -275,6 +275,7 @@ self: super: {
   github-rest = dontCheck super.github-rest;  # test suite needs the network
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
+  greenclip = markUnbroken (addExtraLibrary super.greenclip pkgs.xlibs.libXScrnSaver);
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
