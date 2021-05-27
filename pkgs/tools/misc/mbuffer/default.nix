@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.maier-komor.de/mbuffer.html";
     description  = "A tool for buffering data streams with a large set of unique features";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tokudan ];
     platforms = lib.platforms.linux; # Maybe other non-darwin Unix
   };
