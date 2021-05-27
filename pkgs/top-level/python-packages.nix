@@ -419,6 +419,8 @@ in {
 
   ansible-collections = callPackage ../development/python-modules/ansible/collections.nix { };
 
+  ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };
@@ -1520,6 +1522,8 @@ in {
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
+
+  commentjson = callPackage ../development/python-modules/commentjson { };
 
   commoncode = callPackage ../development/python-modules/commoncode { };
 
@@ -7212,6 +7216,8 @@ in {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+  resolvelib = callPackage ../development/python-modules/resolvelib { };
+
   responses = callPackage ../development/python-modules/responses { };
 
   respx = callPackage ../development/python-modules/respx { };
@@ -7406,11 +7412,6 @@ in {
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
   sanic = callPackage ../development/python-modules/sanic {
-    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
-    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
-      doCheck = false;
-      meta.broken = false;
-    });
     # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
     # has special logic to disable tests when this is the case.
     sanic-testing = self.sanic-testing.override { sanic = null; };

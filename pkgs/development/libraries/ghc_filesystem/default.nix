@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "filesystem";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
     rev = "v${version}";
-    hash = "sha256-SvNUzKoNiSIM0no+A0NUT6hmeUH9SzgLQLrC5XOC0Ho=";
+    hash = "sha256-qnBZ9aCrCPOgxymjbzrRs0gssijo8MJOMiy7QWWMb5c=";
   };
 
   nativeBuildInputs = [ cmake ];
