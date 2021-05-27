@@ -80,8 +80,8 @@ let
 
         auto-complete-clang-async = super.auto-complete-clang-async.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${pkgs.llvmPackages.clang}/include";
-          LDFLAGS = "-L${pkgs.llvmPackages.clang}/lib";
+          CFLAGS = "-I${pkgs.llvmPackages.libclang.lib}/include";
+          LDFLAGS = "-L${pkgs.llvmPackages.libclang.lib}/lib";
         });
 
         # part of a larger package
@@ -195,7 +195,7 @@ let
           dontUseCmakeBuildDir = true;
           doCheck = true;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.clang ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
         });
 
         # tries to write a log file to $HOME
