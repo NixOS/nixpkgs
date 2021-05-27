@@ -3483,6 +3483,8 @@ in
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
+  cgreen = callPackage ../development/libraries/cgreen { };
+
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
