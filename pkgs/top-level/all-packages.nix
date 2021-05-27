@@ -556,6 +556,8 @@ in
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
+  fetchFromGitea = callPackage ../build-support/fetchgitea { };
+
   fetchFromGitHub = callPackage ../build-support/fetchgithub {};
 
   fetchFromBitbucket = callPackage ../build-support/fetchbitbucket {};
