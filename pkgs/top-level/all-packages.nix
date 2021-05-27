@@ -25421,6 +25421,8 @@ in
 
   softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix {};
 
+  softmaker-office-2018 = callPackage ../applications/office/softmaker/softmaker_office_2018.nix {};
+
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
