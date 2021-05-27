@@ -18,6 +18,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     # Install files.
     mkdir -p $out/lib/teamspeak
     mv * $out/lib/teamspeak/
@@ -26,6 +28,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update-teampeak-server" ''
