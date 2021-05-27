@@ -7495,6 +7495,8 @@ in
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  ovftool = callPackage ../tools/virtualization/ovftool { };
+
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
