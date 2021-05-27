@@ -71,7 +71,10 @@ let
 
   trivialBuilders = self: super:
     import ../build-support/trivial-builders.nix {
-      inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.pkgsBuildHost.xorg) lndir;
+      inherit lib;
+      inherit (self) stdenv stdenvNoCC;
+      inherit (self.pkgsBuildHost.xorg) lndir;
+      inherit (self.pkgsBuildHost) replace;
       inherit (self) runtimeShell;
     };
 
