@@ -1,28 +1,21 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, six
+, fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "pysmt";
-  version = "0.9.0";
+  version = "0.9.1.dev132";
+  format = "wheel"; # dev versions are only distributed as wheels
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "051j36kpz11ik9bhvp5jgxzc3h7f18i1pf5ssdhjwyabr0n0zra3";
+  src = fetchPypi {
+    pname = "PySMT";
+    inherit format version;
+    sha256 = "01iqs7yzms3alf1rdv0gnsnmfp7g8plkjcdqbari258zp4llf6x7";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  # No tests present, only GitHub release which is 0.9.0
+  doCheck = false;
 
   pythonImportsCheck = [ "pysmt" ];
 
