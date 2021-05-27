@@ -852,6 +852,8 @@ in
 
   amidst = callPackage ../tools/games/amidst { };
 
+  gfshare = callPackage ../tools/security/gfshare { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
@@ -24198,6 +24200,8 @@ in
   smos = callPackage ../applications/misc/smos { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
+
+  spot = callPackage ../applications/audio/spot { };
 
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
