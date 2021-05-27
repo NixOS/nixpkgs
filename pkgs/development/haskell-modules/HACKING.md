@@ -63,7 +63,7 @@ I will aim to merge this PR **by 2021-TODO-TODO**. If I can merge it earlier, th
 Our workflow is currently described at `pkgs/development/haskell-modules/HACKING.md`.
 
 The short version is this:
-* We regularly update the stackage and hackage pins on `haskell-updates` (normally at the beginning of a merge window).
+* We regularly update the Stackage and Hackage pins on `haskell-updates` (normally at the beginning of a merge window).
 * The community fixes builds of Haskell packages on that branch.
 * We aim at at least one merge of `haskell-updates` into `master` every two weeks.
 * We only do the merge if the `mergeable` job is succeeding on hydra.
@@ -208,8 +208,9 @@ Here are some additional tips that didn't fit in above.
     mass-rebuilds on the `haskell-updates` jobset.
 
 -   Make sure never to update the Hackage package hashes in
-    `pkgs/data/misc/hackage/`, or the pinned Stackage Nightly versions on the
-    release branches (like `release-21.05`).
+    [`pkgs/data/misc/hackage/`](../../../pkgs/data/misc/hackage/), or the
+    pinned Stackage Nightly versions on the release branches (like
+    `release-21.05`).
 
     This means that the
     [`update-hackage.sh`](../../../maintainers/scripts/haskell/update-hackage.sh)
@@ -219,7 +220,7 @@ Here are some additional tips that didn't fit in above.
 
     However, changing other files in `./.` and regenerating the package set is encouraged.
     This can be done with
-    [`regenerated-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerated-hackage-packages.sh)
+    [`regenerate-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerate-hackage-packages.sh)
     as described above.
 
 ## Contributor Workflow
