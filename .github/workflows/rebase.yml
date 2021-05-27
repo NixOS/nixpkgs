@@ -46,14 +46,6 @@ jobs:
           EOF
             exit 1
           fi
-          if [[ "$COMMENT_BRANCH" == "$CURRENT_BASE" ]]; then
-            cat <<EOF
-          Check that the branch from the comment isn't the current base branch:
-
-          $(message)
-          EOF
-            exit 1
-          fi
           if [[ "$COMMENT_BRANCH" == "$PR_BRANCH" ]]; then
             cat <<EOF
           Check that the branch from the comment isn't the current branch:
@@ -78,41 +70,51 @@ jobs:
           EOF
             exit 1
           fi
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: rebase pull request
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git fetch origin
-          gh pr checkout "$PULL_REQUEST"
-          git rebase \
-            --onto="$(git merge-base origin/"$CURRENT_BASE" origin/"$COMMENT_BRANCH")" \
-            "HEAD~$COMMITS"
-          git push --force
-          curl \
-            -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -d "{ \"base\": \"$COMMENT_BRANCH\" }" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/$PULL_REQUEST"
-          curl \
-            -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -d '{ "state": "closed" }' \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/$PULL_REQUEST"
       - uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.client_payload.pull_request.number }}
+          token: ${{ secrets.ACTIONS_TOKEN }}
           body: |
-            Rebased, please reopen the pull request to restart CI
+            Rebasing pull request, this will take a few minutes.
+
+            The action will comment on the PR when the rebase is complete (or failed).
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACTIONS_TOKEN }}
+      - name: rebase pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+        run: |
+          git config --global user.email "actions.user@email.com"
+          git config --global user.name "actions.user"
+          git fetch origin
+          gh pr checkout "$PULL_REQUEST"
+          if [[ "$COMMENT_BRANCH" == "CURRENT_BASE" ]]; then
+            git rebase origin/"$CURRENT_BASE"
+            git push --force
+          else
+            git rebase \
+              --onto="$(git merge-base origin/"$CURRENT_BASE" origin/"$COMMENT_BRANCH")" \
+              "HEAD~$COMMITS"
+            git push --force
+            curl \
+              -X POST \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -d "{ \"base\": \"$COMMENT_BRANCH\" }" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/$PULL_REQUEST"
+          fi
+      - uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.client_payload.pull_request.number }}
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          body: |
+            Rebased pull request.
       - uses: peter-evans/create-or-update-comment@v1
         if: failure()
         with:
           issue-number: ${{ github.event.client_payload.pull_request.number }}
+          token: ${{ secrets.ACTIONS_TOKEN }}
           body: |
-            [Failed to rebase](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [Failed to rebase.](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
