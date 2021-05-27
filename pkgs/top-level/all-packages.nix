@@ -6106,6 +6106,8 @@ in
 
   last-resort = callPackage ../data/fonts/last-resort {};
 
+  la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   ldgallery = callPackage ../tools/graphics/ldgallery {
