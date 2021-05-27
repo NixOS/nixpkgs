@@ -10,6 +10,7 @@
 # required for headless detection
 , libX11, wayland
 , Cocoa
+, python
 }:
 
 let
@@ -79,6 +80,15 @@ buildPythonPackage rec {
   # Matplotlib needs to be built against a specific version of freetype in
   # order for all of the tests to pass.
   doCheck = false;
+
+  pythonImportsCheck = [ "matplotlib" "matplotlib.pyplot" "matplotlib._qhull" ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # Fix paths to libqhull library. Its path is prefixed with "lib/"
+    install_name_tool -change lib/libqhull_r.8.0.dylib \
+      ${qhull}/lib/libqhull_r.8.0.dylib \
+      $out/${python.sitePackages}/matplotlib/_qhull.*.so
+  '';
 
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
