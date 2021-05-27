@@ -21994,8 +21994,6 @@ in
 
   nordic = callPackage ../data/themes/nordic { };
 
-  nordic-polar = callPackage ../data/themes/nordic-polar { };
-
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
 
