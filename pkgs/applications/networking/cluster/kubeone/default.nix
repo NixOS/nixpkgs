@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://kubeone.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lblasc ];
-    platforms = lib.platforms.unix;
   };
 }
