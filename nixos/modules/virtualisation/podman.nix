@@ -2,6 +2,7 @@
 let
   cfg = config.virtualisation.podman;
   toml = pkgs.formats.toml { };
+  json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
 
@@ -20,6 +21,19 @@ let
       basename=$(basename $f | sed s/podman/docker/g)
       ln -s $f $man/share/man/man1/$basename
     done
+  '';
+
+  net-conflist = pkgs.runCommand "87-podman-bridge.conflist" {
+    nativeBuildInputs = [ pkgs.jq ];
+    extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
+    jqScript = ''
+      . + { "plugins": (.plugins + $extraPlugins) }
+    '';
+  } ''
+    jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
+      --argjson extraPlugins "$extraPlugins" \
+      "$jqScript" \
+      >$out
   '';
 
 in
@@ -99,6 +113,13 @@ in
       '';
     };
 
+    defaultNetwork.extraPlugins = lib.mkOption {
+      type = types.listOf json.type;
+      default = [];
+      description = ''
+        Extra CNI plugin configurations to add to podman's default network.
+      '';
+    };
 
   };
 
@@ -107,7 +128,7 @@ in
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
-      environment.etc."cni/net.d/87-podman-bridge.conflist".source = "${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist";
+      environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
