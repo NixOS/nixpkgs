@@ -13,14 +13,30 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out --enable-tests
+    runHook postConfigure
+  '';
 
-  buildPhase = "ocaml setup.ml -build";
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
 
   doCheck = true;
-  checkPhase = "ocaml setup.ml -test";
+  checkPhase = ''
+    runHook preCheck
+    ocaml setup.ml -test
+    runHook postCheck
+  '';
 
-  installPhase = "ocaml setup.ml -install";
+  installPhase = ''
+    runHook preInstall
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A pure OCaml library to read and write CSV files";
