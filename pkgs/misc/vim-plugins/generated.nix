@@ -8862,6 +8862,18 @@ final: prev:
     meta.homepage = "https://github.com/sodapopcan/vim-twiggy/";
   };
 
+  vim-ultest = buildVimPluginFrom2Nix {
+    pname = "vim-ultest";
+    version = "2021-05-27";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "vim-ultest";
+      rev = "2de66cbec0694da8f29a99e5c3167c7b9c4a7aff";
+      sha256 = "0zxici08m9mk8ia1vr4pm0lgw2fg7p1v1dny89nd0x1r1xfwy4w2";
+    };
+    meta.homepage = "https://github.com/rcarriga/vim-ultest/";
+  };
+
   vim-unimpaired = buildVimPluginFrom2Nix {
     pname = "vim-unimpaired";
     version = "2020-04-26";
