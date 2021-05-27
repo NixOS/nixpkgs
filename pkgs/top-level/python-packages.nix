@@ -7406,11 +7406,6 @@ in {
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
   sanic = callPackage ../development/python-modules/sanic {
-    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
-    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
-      doCheck = false;
-      meta.broken = false;
-    });
     # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
     # has special logic to disable tests when this is the case.
     sanic-testing = self.sanic-testing.override { sanic = null; };
