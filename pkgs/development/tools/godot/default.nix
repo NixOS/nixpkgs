@@ -1,13 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libudev ? null, libX11
-, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio ? null
-, libXi ? null, libXext, libXfixes, freetype, openssl
-, alsaLib, libGLU, zlib, yasm ? null }:
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libudev, libX11
+, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
+, libXi, libXext, libXfixes, freetype, openssl
+, alsaLib, libGLU, zlib, yasm
+, withUdev ? true
+}:
 
 let
   options = {
     touch = libXi != null;
     pulseaudio = false;
-    udev = libudev != null;
+    udev = withUdev;
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
