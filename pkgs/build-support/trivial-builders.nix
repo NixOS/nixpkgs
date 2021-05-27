@@ -350,26 +350,32 @@ rec {
         shopt -s inherit_errexit
 
         mkdir -p $out
-      '' + lib.concatMapStrings (path: ''
-        ${lndir}/bin/lndir -silent ${path} $out
-      '') paths + lib.concatMapStrings (output: ''
+      ''
+      + lib.flip lib.concatMapStrings paths (path: ''
+          ${lndir}/bin/lndir -silent ${path} $out
+        '')
+      + lib.flip lib.concatMapStrings secondaryOutputs (output: ''
           output_path=''${${output}}
           mkdir -p $output_path
-        '' + lib.concatMapStrings (path: lib.optionalString (path ? ${output}) ''
-            ${lndir}/bin/lndir -silent ${path.${output}} $output_path
+        ''
+        + lib.flip lib.concatMapStrings paths (path:
+            lib.optionalString (path.outputUnspecified or false && path ? ${output}) ''
+              ${lndir}/bin/lndir -silent ${path.${output}} $output_path
 
-            # Replace previously propagated build outputs with our
-            # main output
-            if [ -e $output_path/nix-support/propagated-build-inputs ]; then
-              cat ${path.${output}}/nix-support/propagated-build-inputs <(echo) >> propagated-build-inputs
-              rm $output_path/nix-support/propagated-build-inputs
-              ${replace}/bin/replace-literal ${path} $out propagated-build-inputs
-            fi
-          '') paths + ''
-          if [ -e propagated-build-inputs ]; then
-            mv propagated-build-inputs $output_path/nix-support/propagated-build-inputs
-          fi
-        '') secondaryOutputs + ''
+              # Replace previously propagated build outputs with our
+              # main output
+              if [ -e $output_path/nix-support/propagated-build-inputs ]; then
+                cat ${path.${output}}/nix-support/propagated-build-inputs <(echo) >> propagated-build-inputs
+                rm $output_path/nix-support/propagated-build-inputs
+                ${replace}/bin/replace-literal ${path} $out propagated-build-inputs
+              fi
+            '')
+            + ''
+              if [ -e propagated-build-inputs ]; then
+                mv propagated-build-inputs $output_path/nix-support/propagated-build-inputs
+              fi
+            '')
+      + ''
         )
         ${postBuild}
       '');
