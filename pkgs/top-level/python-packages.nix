@@ -8573,6 +8573,8 @@ in {
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 
+  uproot = callPackage ../development/python-modules/uproot { };
+
   uproot3 = callPackage ../development/python-modules/uproot3 { };
 
   uproot3-methods = callPackage ../development/python-modules/uproot3-methods { };
