@@ -147,6 +147,7 @@ in rec {
         (onFullSupported "nixos.tests.sddm.default")
         (onFullSupported "nixos.tests.shadow")
         (onFullSupported "nixos.tests.simple")
+        (onFullSupported "nixos.tests.sway")
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
