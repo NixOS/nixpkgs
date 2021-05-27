@@ -5,10 +5,15 @@ let
 
   cfg = config.services.discourse;
 
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
+  upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
+
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
                         pkgs.postgresql;
+
+  postgresqlVersion = lib.getVersion postgresqlPackage;
 
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
@@ -263,6 +268,17 @@ in
             Discourse database user.
           '';
         };
+
+        ignorePostgresqlVersion = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Whether to allow other versions of PostgreSQL than the
+            recommended one. Only effective when
+            <option>services.discourse.database.createLocally</option>
+            is enabled.
+          '';
+        };
       };
 
       redis = {
@@ -504,6 +520,12 @@ in
       {
         assertion = cfg.hostname != "";
         message = "Could not automatically determine hostname, set service.discourse.hostname manually.";
+      }
+      {
+        assertion = cfg.database.ignorePostgresqlVersion || (databaseActuallyCreateLocally -> upstreamPostgresqlVersion == postgresqlVersion);
+        message = "The PostgreSQL version recommended for use with Discourse is ${upstreamPostgresqlVersion}, you're using ${postgresqlVersion}. "
+                  + "Either update your PostgreSQL package to the correct version or set services.discourse.database.ignorePostgresqlVersion. "
+                  + "See https://nixos.org/manual/nixos/stable/index.html#module-postgresql for details on how to upgrade PostgreSQL.";
       }
     ];
 
