@@ -419,6 +419,8 @@ in {
 
   ansible-collections = callPackage ../development/python-modules/ansible/collections.nix { };
 
+  ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };
@@ -1520,6 +1522,8 @@ in {
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
+
+  commentjson = callPackage ../development/python-modules/commentjson { };
 
   commoncode = callPackage ../development/python-modules/commoncode { };
 
@@ -7211,6 +7215,8 @@ in {
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
 
   resampy = callPackage ../development/python-modules/resampy { };
+
+  resolvelib = callPackage ../development/python-modules/resolvelib { };
 
   responses = callPackage ../development/python-modules/responses { };
 
