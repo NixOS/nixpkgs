@@ -22,7 +22,7 @@ let
   usingAnnulenWebkitFork = lib.versionAtLeast qtbase.version "5.11.0";
 in
 qtModule {
-  name = "qtwebkit";
+  pname = "qtwebkit";
   qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
     ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
     ++ optional usingAnnulenWebkitFork qtwebchannel;

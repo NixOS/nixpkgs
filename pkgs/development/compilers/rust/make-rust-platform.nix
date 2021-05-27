@@ -26,6 +26,6 @@ rec {
 
   # Hooks
   inherit (callPackage ../../../build-support/rust/hooks {
-    inherit cargo;
+    inherit cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook;
 }

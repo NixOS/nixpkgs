@@ -16,7 +16,7 @@ buildGoPackage rec {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-1u+H/gJaQhltf/pq7uaAPEUlQ5R6ZByall2neNkon8s=";
+    sha256 = "sha256-jVyg+fyMuDnV/TM0Z2t+Cr17a6XBv11aWijhsqMnA5s=";
   };
 
   goPackagePath = "github.com/containerd/containerd";

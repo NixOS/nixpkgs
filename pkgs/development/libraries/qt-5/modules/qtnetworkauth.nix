@@ -1,6 +1,6 @@
 { qtModule, qtbase }:
 
 qtModule {
-  name = "qtnetworkauth";
+  pname = "qtnetworkauth";
   qtInputs = [ qtbase ];
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-emoji-selector";
+  pname = "gnome-shell-extension-emoji-selector";
   version = "19";
 
   src = fetchFromGitHub {

@@ -13,17 +13,15 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "1.0.4";
+  version = "2.0.0";
   format = "pyproject";
-
-  disabled = isPy27; # 0.4.0 drops python2 support
 
   # No tests in pypi
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "1saz6f71s693gz9c2k3bq2di2mrkj65mgmfdg86jk0z0zzjk90y1";
+    sha256 = "0z5y4l4sv4c7zmp6pj1ws3psq7i87xqbcmk648bmsa1d6prr1hil";
   };
 
   nativeBuildInputs = [

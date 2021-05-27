@@ -847,13 +847,12 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   # };
 
   NDeskOptions = stdenv.mkDerivation rec {
-    baseName = "NDesk.Options";
+    pname = "NDesk.Options";
     version = "0.2.1";
-    name = "${baseName}-${version}";
 
     src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "http://www.ndesk.org/archive/ndesk-options/ndesk-options-0.2.1.tar.gz";
+      name = "${pname}-${version}.tar.gz";
+      url = "http://www.ndesk.org/archive/ndesk-options/ndesk-options-${version}.tar.gz";
       sha256 = "1y25bfapafwmifakjzyb9c70qqpvza8g5j2jpf08j8wwzkrb6r28";
     };
 

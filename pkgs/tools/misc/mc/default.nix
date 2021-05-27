@@ -16,6 +16,7 @@
 , openssl
 , coreutils
 , autoreconfHook
+, autoSignDarwinBinariesHook
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xt6txQWV8tmiLcbCmanyizk+NYNG6/bKREqEadwWbCc=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook unzip ];
+  nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
+    # The preFixup hook rewrites the binary, which invaliates the code
+    # signature. Add the fixup hook to sign the output.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   buildInputs = [
     file

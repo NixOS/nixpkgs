@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1xm8297k0d8d0aq7fxgmibr4qva4d02cb6gnnlzq77jcmnknxv14";
   };
 
-  cargoSha256 = "1dcyhxfyq0nrjl05g1s9pjkg7vqw63wbdhlskrdcvxncmci3s7rp";
+  cargoSha256 = "1z0xxbjnhhzn1fnc3zhvy727l88qyyfqdayj5yvf3nh23m7sr87l";
 
   meta = with lib; {
     homepage = "https://github.com/myfreeweb/${pname}";

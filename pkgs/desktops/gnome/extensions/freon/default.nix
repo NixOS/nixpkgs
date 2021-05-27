@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-freon";
+  pname = "gnome-shell-extension-freon";
   version = "40";
 
   uuid = "freon@UshakovVasilii_Github.yahoo.com";

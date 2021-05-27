@@ -1,0 +1,26 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="release-21.11">
+  <title>Release 21.11 (<quote>?</quote>, 2021.11/??)</title>
+  <para>
+    In addition to numerous new and upgraded packages, this release has
+    the following highlights:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Support is planned until the end of April 2022, handing over to
+        22.05.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <section xml:id="backward-incompatibilities">
+    <title>Backward incompatibilities</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          The <literal>staticjinja</literal> package has been upgraded
+          from 1.0.4 to 2.0.0
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>

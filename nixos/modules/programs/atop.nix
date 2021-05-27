@@ -19,6 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.atop;
+        defaultText = "pkgs.atop";
         description = ''
           Which package to use for Atop.
         '';
@@ -36,6 +37,7 @@ in
         package = mkOption {
           type = types.package;
           default = config.boot.kernelPackages.netatop;
+          defaultText = "config.boot.kernelPackages.netatop";
           description = ''
             Which package to use for netatop.
           '';

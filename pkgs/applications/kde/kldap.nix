@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  cyrus_sasl, ki18n, kio, kmbox, openldap
+  cyrus_sasl, ki18n, kio, kmbox, libsecret, openldap, qtkeychain
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ ki18n kio kmbox ];
+  buildInputs = [ ki18n kio kmbox libsecret qtkeychain ];
   propagatedBuildInputs = [ cyrus_sasl openldap ];
   outputs = [ "out" "dev" ];
 }

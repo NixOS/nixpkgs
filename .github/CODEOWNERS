@@ -46,6 +46,7 @@
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
 /nixos/lib/eval-config.nix  @nbp @infinisil
+/nixos/doc @ryantm
 /nixos/doc/manual/configuration/abstractions.xml      @nbp
 /nixos/doc/manual/configuration/config-file.xml       @nbp
 /nixos/doc/manual/configuration/config-syntax.xml     @nbp
@@ -179,8 +180,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @jonringer
-/pkgs/applications/editors/neovim      @teto
+/pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio

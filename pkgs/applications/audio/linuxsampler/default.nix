@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxsampler";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "1gijf50x5xbpya5dj3v2mzj7azx4qk9p012csgddp73f0qi0n190";
+    sha256 = "sha256-xNFjxrrC0B8Oj10HIQ1AmI7pO34HuYRyyUaoB2MDmYw=";
   };
 
   preConfigure = ''

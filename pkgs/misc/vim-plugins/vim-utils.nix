@@ -232,8 +232,7 @@ let
     let
       /* pathogen mostly can set &rtp at startup time. Its used very commonly.
       */
-      pathogenImpl = lib.optionalString (pathogen != null)
-      (let
+      pathogenImpl = let
         knownPlugins = pathogen.knownPlugins or vimPlugins;
 
         plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
@@ -244,15 +243,15 @@ let
         };
       in
       ''
-        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.pathogen.rtp}"
+        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.vim-pathogen.rtp}"
         execute pathogen#infect('${pluginsEnv}/{}')
 
         filetype indent plugin on | syn on
-      '');
+      '';
 
       /* vim-plug is an extremely popular vim plugin manager.
       */
-      plugImpl = lib.optionalString (plug != null)
+      plugImpl =
       (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         call plug#begin('/dev/null')
@@ -340,10 +339,12 @@ let
 
       entries = [
         beforePlugins
-        vamImpl pathogenImpl plugImpl
+        vamImpl
         (nativeImpl packages)
         customRC
-      ];
+      ]
+      ++ lib.optional (pathogen != null) pathogenImpl
+      ++ lib.optional (plug != null) plugImpl;
 
     in
       lib.concatStringsSep "\n" (lib.filter (x: x != null && x != "") entries);

@@ -7,8 +7,15 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5 ? null
+, gssSupport ? with stdenv.hostPlatform; !(
+    !isWindows &&
+    # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    !isStatic &&
+    # the "mig" tool does not configure its compiler correctly. This could be
+    # fixed in mig, but losing gss support on cross compilation to darwin is
+    # not worth the effort.
+    !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+  ), libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:

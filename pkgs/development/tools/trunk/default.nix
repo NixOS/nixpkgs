@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     then [ libiconv CoreServices Security ]
     else [ openssl ];
 
-  cargoSha256 = "Qv7knTmNYtw0tbyWhFIV7tYkQiwFxcNPAeNiGCyeV8s=";
+  cargoSha256 = "sha256-0ehz0ETNA2gOvTJUu8uq5H+bv4VXOJMq6AA8kn65m/Q=";
 
   meta = with lib; {
     homepage = "https://github.com/thedodd/trunk";

@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

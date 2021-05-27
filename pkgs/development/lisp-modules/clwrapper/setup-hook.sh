@@ -9,7 +9,7 @@ addASDFPaths () {
 }
 
 setLisp () {
-    if [ -z "${NIX_LISP_COMMAND:-}" ]; then 
+    if [ -z "${NIX_LISP_COMMAND:-}" ]; then
       for j in "$1"/bin/*; do
           case "$(basename "$j")" in
               sbcl) NIX_LISP_COMMAND="$j" ;;
@@ -20,14 +20,14 @@ setLisp () {
           esac
       done
     fi
-    if [ -n "${NIX_LISP_COMMAND:-}" ] && [ -z "${NIX_LISP:-}" ]; then 
+    if [ -n "${NIX_LISP_COMMAND:-}" ] && [ -z "${NIX_LISP:-}" ]; then
         NIX_LISP="${NIX_LISP_COMMAND##*/}"
     fi
 }
 
 collectNixLispLDLP () {
-     if echo "$1/lib"/lib*.so* | grep . > /dev/null; then
-	 export NIX_LISP_LD_LIBRARY_PATH="${NIX_LISP_LD_LIBRARY_PATH-}${NIX_LISP_LD_LIBRARY_PATH:+:}$1/lib"
+     if echo "$1/lib"/lib*.{so,dylib}* | grep . > /dev/null; then
+     export NIX_LISP_LD_LIBRARY_PATH="${NIX_LISP_LD_LIBRARY_PATH-}${NIX_LISP_LD_LIBRARY_PATH:+:}$1/lib"
      fi
 }
 

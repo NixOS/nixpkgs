@@ -325,6 +325,7 @@ in with py.pkgs; buildPythonApplication rec {
     "efergy"
     "emonitor"
     "emulated_hue"
+    "enphase_envoy"
     "esphome"
     "everlights"
     "ezviz"
@@ -677,6 +678,8 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_sleeping_device_error"
     "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_sleeping_device_error"
     "--deselect tests/components/shelly/test_config_flow.py::test_zeroconf_require_auth"
+    # prometheus/test_init.py: Spurious AssertionError regarding humidifier_target_humidity_percent metric
+    "--deselect tests/components/prometheus/test_init.py::test_view"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests

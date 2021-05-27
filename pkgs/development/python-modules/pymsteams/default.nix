@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "rveachkc";
     repo = pname;
     rev = version;
-    sha256 = "19gnsjzf3kwcwp2rwa30zpqjqgxb9plgcsx7fqbmxnrxgw99fyqx";
+    sha256 = "sha256-PBh6AmKqdiD3WJQnVqUj4DUVv9I0ZZJ6E0McfWQIiwQ=";
   };
 
   propagatedBuildInputs = [ requests ];

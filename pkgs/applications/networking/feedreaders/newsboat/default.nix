@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0a0g9km515kipqmz6c09aj3lgy3nkzqwgnp87fh8f2vr098fn144";
   };
 
-  cargoSha256 = "11dn1ixc7i29cv8kpqfkmikdqzr2v79vlyfxcvjwhgd0r34w4xhn";
+  cargoSha256 = "03g14npkisz159gibhfxj7l36vzm7cvg355hndzpxzvhf5r5yjqg";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''

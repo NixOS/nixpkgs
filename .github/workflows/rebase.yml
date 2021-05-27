@@ -41,7 +41,7 @@ jobs:
       - name: check branch
         env:
           PERMANENT_BRANCHES: "haskell-updates|master|nixos|nixpkgs|python-unstable|release|staging"
-          VALID_BRANCHES: "haskell-updates|master|python-unstable|release-20.09|staging|staging-20.09|staging-next"
+          VALID_BRANCHES: "haskell-updates|master|python-unstable|release-20.09|release-21.05|staging|staging-20.09|staging-21.05|staging-next|staging-next-21.05"
         run: |
           message() {
             cat <<EOF

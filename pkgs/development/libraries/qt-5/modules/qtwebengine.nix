@@ -25,18 +25,10 @@
 with lib;
 
 qtModule {
-  name = "qtwebengine";
+  pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
-
-    # qmake looks for syncqt instead of syncqt.pl and fails with a cryptic
-    # error if it can't find it. syncqt.pl also has a /usr/bin/env shebang, so
-    # it can't be directly used in a sandboxed build environment.
-    (writeScriptBin "syncqt" ''
-      #!${stdenv.shell}
-      exec ${perl}/bin/perl ${qtbase.dev}/bin/syncqt.pl "$@"
-    '')
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -142,7 +134,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ optional stdenv.isLinux "-webengine-webrtc-pipewire"
+    ++ optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
     ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -176,6 +168,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
 
+  ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire
     pipewire_0_2
   ]

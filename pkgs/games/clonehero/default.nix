@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
     license = licenses.unfree;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
   };
 }

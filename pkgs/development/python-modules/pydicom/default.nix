@@ -53,6 +53,9 @@ buildPythonPackage {
   ] ++ lib.optionals stdenv.isAarch64 [
     # https://github.com/pydicom/pydicom/issues/1386
     "test_array"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # flaky, hard to reproduce failure outside hydra
+    "test_time_check"
   ];
 
   meta = with lib; {

@@ -3,13 +3,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
-  version = "0.9.1.dev7+g${lib.substring 0 7 src.rev}";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
-    rev = "9e95f0604fa30ab06445fe46e3bc93bba6092a05";
-    sha256 = "1c2qldw9vxpvdfh5wl6mfcd7zzz3v8r86ffqll311lcp2zin33dg";
+    rev = "v${version}";
+    sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
   pythonPath = with python3.pkgs; [

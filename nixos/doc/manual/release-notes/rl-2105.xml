@@ -102,6 +102,18 @@
    </listitem>
    <listitem>
     <para>
+     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
+     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
+     notes</link> for details.
+    </para>
+    <para>
+     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
+     in keeping with the new name. The old name remains for compatibility, but
+     it is deprecated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
      to version 4.4. The package now includes example configurations and manual
      pages by default. The NixOS module has been changed to use the upstream
@@ -385,6 +397,15 @@
    </listitem>
    <listitem>
     <para>
+     The WireGuard module gained a new option
+     <option>networking.wireguard.interfaces.&lt;name&gt;.peers.*.dynamicEndpointRefreshSeconds</option>
+     that implements refreshing the IP of DNS-based endpoints periodically
+     (which WireGuard itself
+     <link xlink:href="https://lists.zx2c4.com/pipermail/wireguard/2017-November/002028.html">cannot do</link>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      MariaDB has been updated to 10.5.
      Before you upgrade, it would be best to take a backup of your database and read
      <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105">
@@ -415,7 +436,7 @@
     </para>
     <programlisting>
       TMPDIR=$(mktemp -d)
-      slaptest -f /path/to/slapd.conf $TMPDIR
+      slaptest -f /path/to/slapd.conf -F $TMPDIR
       slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
     </programlisting>
     <para>
@@ -1112,6 +1133,14 @@ environment.systemPackages = [
      Nixpkgs now contains <link xlink:href="https://github.com/NixOS/nixpkgs/pull/118232">automatically packaged GNOME Shell extensions</link> from the <link xlink:href="https://extensions.gnome.org/">GNOME Extensions</link> portal. You can find them, filed by their UUID, under <literal>gnome38Extensions</literal> attribute for GNOME 3.38 and under <literal>gnome40Extensions</literal> for GNOME 40. Finally, the <literal>gnomeExtensions</literal> attribute contains extensions for the latest GNOME Shell version in Nixpkgs, listed under a more human-friendly name. The unqualified attribute scope also contains manually packaged extensions. Note that the automatically packaged extensions are provided for convenience and are not checked or guaranteed to work.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Erlang/OTP versions older than R21 got dropped. We also dropped the cuter package, as it was purely an example of how to build a package.
+     We also dropped <literal>lfe_1_2</literal> as it could not build with R21+.
+     Moving forward, we expect to only support 3 yearly releases of OTP.
+    </para>
+   </listitem>
+
   </itemizedlist>
  </section>
 </section>
