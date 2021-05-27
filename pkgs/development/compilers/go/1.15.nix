@@ -268,5 +268,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
