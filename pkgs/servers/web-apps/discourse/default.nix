@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
 , fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git, cacert
 , util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
-, gifsicle, libpsl, redis, postgresql, which, brotli, procps
+, gifsicle, libpsl, redis, postgresql, which, brotli, procps, rsync
 , nodePackages, v8
 }:
 
@@ -18,6 +18,7 @@ let
   runtimeDeps = [
     # For backups, themes and assets
     rubyEnv.wrappedRuby
+    rsync
     gzip
     gnutar
     git
