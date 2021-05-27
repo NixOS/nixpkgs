@@ -113,6 +113,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/babashka/babashka";
     license = licenses.epl10;
     platforms = graalvm11-ce.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }
