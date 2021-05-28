@@ -10,6 +10,10 @@ let
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
 
+      # enable JIT support
+      , supportJIT ? (lib.versionAtLeast version "11")
+      , llvm, clang
+
 
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
@@ -43,7 +47,9 @@ let
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optionals icuEnabled [ pkg-config ]
+      ++ lib.optionals supportJIT [ llvm clang ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -66,7 +72,8 @@ let
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ]
-      ++ lib.optionals gssSupport [ "--with-gssapi" ];
+      ++ lib.optionals gssSupport [ "--with-gssapi" ]
+      ++ lib.optionals supportJIT [ "--with-llvm" ];
 
     patches =
       [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
