@@ -359,6 +359,7 @@ in with py.pkgs; buildPythonApplication rec {
     "geo_location"
     "geofency"
     "glances"
+    "gios"
     "google"
     "google_assistant"
     "google_domains"
