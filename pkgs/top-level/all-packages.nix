@@ -4066,7 +4066,9 @@ in
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd = callPackage ../development/compilers/dmd { };
+  dmd_2_95 = callPackage ../development/compilers/dmd { version = "2.095.1"; };
+  dmd_2_96 = callPackage ../development/compilers/dmd { version = "2.096.1"; };
+  dmd = dmd_2_96;
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
