@@ -11,13 +11,13 @@ in
 
 perlPackages.buildPerlPackage rec {
   pname = "feedgnuplot";
-  version = "1.51";
+  version = "1.58";
 
   src = fetchFromGitHub {
     owner = "dkogan";
     repo = "feedgnuplot";
     rev = "v${version}";
-    sha256 = "0npk2l032cnmibjj5zf3ii09mpxciqn32lx6g5bal91bkxwn7r5i";
+    sha256 = "1qix4lwwyhqibz0a6q2rrb497rmk00v1fvmdyinj0dqmgjw155zr";
   };
 
   outputs = [ "out" ];
