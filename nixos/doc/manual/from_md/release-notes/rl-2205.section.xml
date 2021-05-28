@@ -190,6 +190,14 @@
           usage in non-X11 environments, e.g. Wayland.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.stubby</literal> module was converted to
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
