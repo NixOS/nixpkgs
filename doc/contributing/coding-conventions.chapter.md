@@ -526,6 +526,16 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     $ git diff > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
 
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
+
+- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `extraPrefix`: Prefix pathnames by this string.
+- `excludes`: Exclude files matching this pattern.
+- `includes`: Include only files matching this pattern.
+- `revert`: Revert the patch.
+
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+
 ## Package tests {#sec-package-tests}
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
