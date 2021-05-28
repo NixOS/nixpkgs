@@ -1,7 +1,7 @@
 name: Backport
 on:
   pull_request_target:
-    types: [closed]
+    types: [closed, labeled]
 jobs:
   backport:
     name: Backport Pull Request
