@@ -54,15 +54,7 @@ let
 
 
       configurePatched = configure // {
-        packages.nix = {
-          start = lib.filter (f: f != null)
-            (map (x: if x.optional == false then x.plugin else null)
-              pluginsNormalized);
-          opt = lib.filter (f: f != null)
-            (map (x: if x.optional == true then x.plugin else null)
-              pluginsNormalized);
-        };
-        customRC = pluginRc + customRC;
+        customRC = pluginRc + customRC + (configure.customRC or "");
       };
 
       # A function to get the configuration string (if any) from an element of 'plugins'
