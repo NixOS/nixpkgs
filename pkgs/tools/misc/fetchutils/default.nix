@@ -5,7 +5,7 @@ stdenvNoCC.mkDerivation rec {
   version = "unstable-2021-03-16";
 
   src = fetchFromGitHub {
-    owner = "lptstr";
+    owner = "kiedtl";
     repo = pname;
     rev = "882781a297e86f4ad4eaf143e0777fb3e7c69526";
     sha256 = "sha256-ONrVZC6GBV5v3TeBekW9ybZjDHF3FNyXw1rYknqKRbk=";
@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   buildInputs = [ bash scdoc ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = [ "PREFIX=$(out)/" ];
 
   postPatch = ''
     patchShebangs --host src/*
