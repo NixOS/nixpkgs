@@ -1,9 +1,12 @@
 { vimUtils, vim_configurable, writeText, neovim, vimPlugins
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
+, fetchFromGitLab
+, pkgs
 }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
+  inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
@@ -16,27 +19,55 @@ let
     }
   ];
 
-  nvimConfNix = neovimUtils.makeNeovimConfig {
+  nvimConfNix = makeNeovimConfig {
     inherit plugins;
     customRC = ''
       " just a comment
     '';
   };
 
-  wrapNeovim = suffix: config:
+  nvimConfDontWrap = makeNeovimConfig {
+    inherit plugins;
+    customRC = ''
+      " just a comment
+    '';
+  };
+
+  wrapNeovim2 = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {
       extraName = suffix;
-      wrapRc = true;
     });
+
+  nmt = fetchFromGitLab {
+    owner = "rycee";
+    repo = "nmt";
+    rev = "d2cc8c1042b1c2511f68f40e2790a8c0e29eeb42";
+    sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
+  };
+
+  runTest = neovim-drv: buildCommand:
+    pkgs.runCommandLocal "test-${neovim-drv.name}" ({
+      nativeBuildInputs = [ ];
+      meta.platforms = neovim-drv.meta.platforms;
+    }) (''
+      source ${nmt}/bash-lib/assertions.sh
+      vimrc="${writeText "init.vim" neovim-drv.initRc}"
+      vimrcGeneric="$out/patched.vim"
+      mkdir $out
+      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
+    '' + buildCommand);
+
 in
-{
+  pkgs.recurseIntoAttrs (
+rec {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
   ### neovim tests
   ##################
-  nvim_with_plugins = wrapNeovim "-with-plugins" nvimConfNix;
+  nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
 
   nvim_via_override = neovim.override {
+    extraName = "-via-override";
     configure = {
       packages.foo.start = [ vimPlugins.ale ];
       customRC = ''
@@ -44,6 +75,29 @@ in
       '';
     };
   };
+
+
+  # nixpkgs should detect that no wrapping is necessary
+  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimConfNix;
+
+
+  # this will generate a neovimRc content but we disable wrapping
+  nvimDontWrap = wrapNeovim2 "-dont-wrap" (makeNeovimConfig {
+    wrapRc = false;
+    customRC = ''
+      " this shouldn't trigger the creation of an init.vim
+    '';
+  });
+
+  nvim_dontwrap-test = runTest nvimDontWrap ''
+      ! grep "-u" ${nvimDontWrap}/bin/nvim
+  '';
+
+  nvim_via_override-test = runTest nvim_via_override ''
+      assertFileContent \
+        "$vimrcGeneric" \
+        "${./neovim-override.vim}"
+  '';
 
   ### vim tests
   ##################
@@ -107,4 +161,4 @@ in
   test_nvim_with_remote_plugin = neovim.override {
     configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
   };
-}
+})
