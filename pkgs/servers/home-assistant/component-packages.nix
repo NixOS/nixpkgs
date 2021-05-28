@@ -305,7 +305,7 @@
     "geofency" = ps: with ps; [ aiohttp-cors ];
     "geonetnz_quakes" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_quakes
     "geonetnz_volcano" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_volcano
-    "gios" = ps: with ps; [ ]; # missing inputs: gios
+    "gios" = ps: with ps; [ gios ];
     "github" = ps: with ps; [ PyGithub ];
     "gitlab_ci" = ps: with ps; [ python-gitlab ];
     "gitter" = ps: with ps; [ ]; # missing inputs: gitterpy
