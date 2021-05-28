@@ -37,44 +37,14 @@ jobs:
           path: ${{ env.BUILDDIR }}
           repo: calamares/calamares
       - name: "prepare env"
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install git-core jq
-          sudo apt-get -y install \
-            build-essential \
-            cmake \
-            extra-cmake-modules \
-            gettext \
-            kio-dev \
-            libatasmart-dev \
-            libboost-python-dev \
-            libkf5config-dev \
-            libkf5coreaddons-dev \
-            libkf5i18n-dev \
-            libkf5iconthemes-dev \
-            libkf5parts-dev \
-            libkf5service-dev \
-            libkf5solid-dev \
-            libkpmcore-dev \
-            libparted-dev \
-            libpolkit-qt5-1-dev \
-            libqt5svg5-dev \
-            libqt5webkit5-dev \
-            libyaml-cpp-dev \
-            os-prober \
-            pkg-config \
-            python3-dev \
-            qtbase5-dev \
-            qtdeclarative5-dev \
-            qttools5-dev \
-            qttools5-dev-tools
+        uses: calamares/actions/prepare-neon@4a561d27552565cb89b15eb78c887890a25aa719
       - name: "prepare source"
         uses: actions/checkout@v2
       - name: "prepare artifacts"
         run: tar xvzf "$BUILDDIR/calamares.tar.gz" -C / --strip-components 1
       - name: "build"
         id: build
-        uses: calamares/actions/generic-build@1ac82cf0fe2015f2b9d98539e1717f5e04f11ab7
+        uses: calamares/actions/generic-build@4a561d27552565cb89b15eb78c887890a25aa719
       - name: "notify: ok"
         if: ${{ success() && github.repository == 'calamares/calamares-extensions' }}
         uses: calamares/actions/matrix-notify@v1
@@ -83,7 +53,7 @@ jobs:
           room: ${{ secrets.MATRIX_ROOM }}
           message: |
             OK ${{ github.workflow }} in ${{ github.repository }} by ${{ github.actor }} on ${{ github.event.ref }}
-            .. ${{ steps.build.outputs.git_summary }}
+            .. ${{ steps.build.outputs.git-summary }}
       - name: "notify: fail"
         if: ${{ failure() && github.repository == 'calamares/calamares-extensions' }}
         uses: calamares/actions/matrix-notify@v1
@@ -92,5 +62,5 @@ jobs:
           room: ${{ secrets.MATRIX_ROOM }}
           message: |
             FAIL ${{ github.workflow }} in ${{ github.repository }} by ${{ github.actor }} on ${{ github.event.ref }}
-              .. ${{ steps.build.outputs.git_summary }}
+              .. ${{ steps.build.outputs.git-summary }}
               .. ${{ github.event.compare }}
