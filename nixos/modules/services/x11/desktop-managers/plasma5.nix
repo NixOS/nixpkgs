@@ -13,7 +13,6 @@ let
 
   pulseaudio = config.hardware.pulseaudio;
   pactl = "${getBin pulseaudio.package}/bin/pactl";
-  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
   sed = "${getBin pkgs.gnused}/bin/sed";
 
   gtkrc2 = writeText "gtkrc-2.0" ''
@@ -136,9 +135,6 @@ let
           fi
       fi
 
-    ''
-    + ''
-      exec "${startplasma-x11}"
     '';
 
 in
@@ -183,6 +179,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+
       # Seed our configuration into nixos-generate-config
       system.nixos-generate-config.desktopConfiguration = [''
         # Enable the Plasma 5 Desktop Environment.
@@ -190,11 +187,7 @@ in
         services.xserver.desktopManager.plasma5.enable = true;
       ''];
 
-      services.xserver.desktopManager.session = singleton {
-        name = "plasma5";
-        bgSupport = true;
-        start = startplasma;
-      };
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
 
       security.wrappers = {
         kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
@@ -371,6 +364,7 @@ in
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+      services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })

@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma5";
+    services.xserver.displayManager.defaultSession = "plasma";
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.displayManager.autoLogin = {
       enable = true;

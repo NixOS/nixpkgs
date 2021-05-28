@@ -125,6 +125,11 @@
      (<xref linkend="opt-services.libreswan.disableRedirects"/>).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Plasma desktop environment now has support for the wayland session, finally 😺!
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -192,6 +197,12 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The X11 Plasma session name is now <literal>plasma</literal>, not <literal>plasma5</literal>.
+     Please update <option>services.xserver.displayManager.defaultSession</option> accordingly.
+    </para>
+   </listitem>
    <listitem>
     <para>
      If you are using <option>services.udev.extraRules</option> to assign
