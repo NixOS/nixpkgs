@@ -1397,6 +1397,8 @@ in {
 
   clf = callPackage ../development/python-modules/clf { };
 
+  cock = callPackage ../development/python-modules/cock { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };

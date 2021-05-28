@@ -7159,6 +7159,8 @@ in
 
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
+  patray = callPackage ../tools/audio/patray { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
