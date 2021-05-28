@@ -1571,6 +1571,8 @@ in
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
+  imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
+
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -7156,6 +7158,8 @@ in
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
+
+  patray = callPackage ../tools/audio/patray { };
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
@@ -22893,6 +22897,8 @@ in
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
+  dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
+
   multus-cni = callPackage ../applications/networking/cluster/multus-cni {};
 
   cntr = callPackage ../applications/virtualization/cntr { };
@@ -25897,7 +25903,7 @@ in
 
   pistol = callPackage ../tools/misc/pistol { };
 
-  piston-cli = callPackage ../tools/misc/piston-cli { };
+  piston-cli = callPackage ../tools/misc/piston-cli { python3Packages = python39Packages; };
 
   plater = libsForQt5.callPackage ../applications/misc/plater { };
 
