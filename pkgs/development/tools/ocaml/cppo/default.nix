@@ -54,8 +54,6 @@ stdenv.mkDerivation {
 
   inherit meta;
 
-  createFindlibDestdir = true;
-
   makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
