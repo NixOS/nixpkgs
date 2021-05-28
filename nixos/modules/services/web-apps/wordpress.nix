@@ -61,8 +61,10 @@ let
     ?>
   '';
 
-  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
   secretsScript = hostStateDir: ''
+    # The match in this line is not a typo, see https://github.com/NixOS/nixpkgs/pull/124839
+    grep -q "LOOGGED_IN_KEY" "${hostStateDir}/secret-keys.php" && rm "${hostStateDir}/secret-keys.php"
     if ! test -e "${hostStateDir}/secret-keys.php"; then
       umask 0177
       echo "<?php" >> "${hostStateDir}/secret-keys.php"
