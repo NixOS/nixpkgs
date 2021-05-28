@@ -44,17 +44,7 @@ let
     log_config = logConfigFile;
 
     # Ratelimiting
-    rc_message = with cfg; {
-      per_second = rc_messages_per_second;
-      burst_count = rc_message_burst_count;
-    };
-    rc_federation = with cfg; {
-      window_size = federation_rc_window_size;
-      sleep_limit = federation_rc_sleep_limit;
-      sleep_delay = federation_rc_sleep_delay;
-      reject_limit = federation_rc_reject_limit;
-      concurrent = federation_rc_concurrent;
-    };
+    inherit (cfg) rc_message rc_federation;
 
     # Media Store
     inherit (cfg) max_upload_size max_image_pixels dynamic_thumbnails;
@@ -318,49 +308,68 @@ in
         default = "0";
         description = "Logging verbosity level.";
       };
-      rc_messages_per_second = mkOption {
-        type = types.str;
-        default = "0.2";
-        description = "Number of messages a client can send per second";
-      };
-      rc_message_burst_count = mkOption {
-        type = types.str;
-        default = "10.0";
-        description = "Number of message a client can send before being throttled";
-      };
-      federation_rc_window_size = mkOption {
-        type = types.str;
-        default = "1000";
-        description = "The federation window size in milliseconds";
-      };
-      federation_rc_sleep_limit = mkOption {
-        type = types.str;
-        default = "10";
+      rc_message = mkOption {
+        type = types.submodule {
+          options.per_second = mkOption {
+            type = types.float;
+            default = 0.2;
+            description = ''
+              The number of requests a client can send per second.
+            '';
+          };
+          options.burst_count = mkOption {
+            type = types.float;
+            default = 10.0;
+            description = ''
+              The number of requests a client can send before being throttled.
+            '';
+          };
+        };
         description = ''
-          The number of federation requests from a single server in a window
-          before the server will delay processing the request.
+          Rate limits for sending based on the account the client is using.
         '';
       };
-      federation_rc_sleep_delay = mkOption {
-        type = types.str;
-        default = "500";
-        description = ''
-          The duration in milliseconds to delay processing events from
-          remote servers by if they go over the sleep limit.
-        '';
-      };
-      federation_rc_reject_limit = mkOption {
-        type = types.str;
-        default = "50";
-        description = ''
-          The maximum number of concurrent federation requests allowed
-          from a single server
-        '';
-      };
-      federation_rc_concurrent = mkOption {
-        type = types.str;
-        default = "3";
-        description = "The number of federation requests to concurrently process from a single server";
+      rc_federation = mkOption {
+        type = types.submodule {
+          options.window_size = mkOption {
+            type = types.int;
+            default = 1000;
+            description = "The federation window size in milliseconds";
+          };
+          options.sleep_limit = mkOption {
+            type = types.int;
+            default = 10;
+            description = ''
+              The number of federation requests from a single server in a window
+              before the server will delay processing the request.
+            '';
+          };
+          options.sleep_delay = mkOption {
+            type = types.int;
+            default = 500;
+            description = ''
+              The duration in milliseconds to delay processing events from
+              remote servers by if they go over the sleep limit.
+            '';
+          };
+          options.reject_limit = mkOption {
+            type = types.int;
+            default = 50;
+            description = ''
+              The maximum number of concurrent federation requests allowed
+              from a single server.
+            '';
+          };
+          options.concurrent = mkOption {
+            type = types.int;
+            default = 3;
+            description = ''
+              The number of federation requests to concurrently process from a
+              single server.
+            '';
+          };
+        };
+        description = "Ratelimiting settings for incoming federation.";
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
@@ -761,17 +770,42 @@ in
     };
   };
 
-  imports = [
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+  imports = let
+    optionPath = path: [ "services" "matrix-synapse" ] ++ (toList path);
+    stringToType = typeConverter: oldPath: newPath:
+      (mkChangedOptionModule oldPath newPath (config:
+        let value = getAttrFromPath oldPath config;
+        in if builtins.isString value then typeConverter value else value));
+    stringToFloat = stringToType toFloat;
+    stringToInt = stringToType toInt;
+  in [
+    # Rate limiting options are now in submodules. See #120260
+    (stringToFloat (optionPath "rc_messages_per_second")
+      (optionPath [ "rc_message" "per_second" ]))
+    (stringToFloat (optionPath "rc_message_burst_count")
+      (optionPath [ "rc_message" "burst_count" ]))
+    (stringToInt (optionPath "federation_rc_window_size")
+      (optionPath [ "rc_federation" "window_size" ]))
+    (stringToInt (optionPath "federation_rc_sleep_limit")
+      (optionPath [ "rc_federation" "sleep_limit" ]))
+    (stringToInt (optionPath "federation_rc_sleep_delay")
+      (optionPath [ "rc_federation" "sleep_delay" ]))
+    (stringToInt (optionPath "federation_rc_reject_limit")
+      (optionPath [ "rc_federation" "reject_limit" ]))
+    (stringToInt (optionPath "federation_rc_concurrent")
+      (optionPath [ "rc_federation" "concurrent" ]))
+
+    # Removed Options
+    (mkRemovedOptionModule (optionPath "trusted_third_party_id_servers") ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+    (mkRemovedOptionModule (optionPath "create_local_database") ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+    (mkRemovedOptionModule (optionPath "web_client") "")
+    (mkRemovedOptionModule (optionPath "room_invite_state_types") ''
       You may add additional event types via
       `services.matrix-synapse.room_prejoin_state.additional_event_types` and
       disable the default events via
