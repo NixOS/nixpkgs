@@ -123,6 +123,8 @@ extra-packages:
 package-maintainers:
   abbradar:
     - Agda
+  berberman:
+    - nvfetcher
   bdesham:
     - pinboard-notes-backup
   cdepillabout:
