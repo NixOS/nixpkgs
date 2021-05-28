@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "chatty";
     rev = "v${version}";
-    sha256 = "1ppbsxkdlbj7afydw00s9jxmxnm5falmvx8g60bqqb4axmdz4lqz";
+    sha256 = "0h7hi69848rlazqrmxlchnrnvhk1y7lys6pcd7dqsxkvj563jlam";
   };
 
   postPatch = ''
