@@ -219,13 +219,6 @@ class SPECTemplate(object):
     out = '  installPhase = \'\'\n    ' + self.rewriteCommands(self.spec.install) + '\n    \'\';\n';
     return out
 
-  @property
-  def ocamlExtra(self):
-    if "ocaml" in self.getBuildInputs("ALL"):
-      return '  createFindlibDestdir = true;\n'
-    else:
-      return ''
-
 
   @property
   def meta(self):
@@ -243,7 +236,7 @@ class SPECTemplate(object):
   def __str__(self):
     head = '{lib, stdenv, fetchurl, ' + ', '.join(self.getBuildInputs("ALL")) + '}:\n\n'
     head += 'stdenv.mkDerivation {\n'
-    body = [ self.name, self.src, self.patch, self.buildInputs, self.configure, self.build, self.ocamlExtra, self.install, self.meta ]
+    body = [ self.name, self.src, self.patch, self.buildInputs, self.configure, self.build, self.install, self.meta ]
     return head + '\n'.join(body)
 
 
@@ -255,7 +248,7 @@ class SPECTemplate(object):
     head += 'stdenv.mkDerivation {\n'
     head += '  inherit (buildRootInput.'+self.rewriteName(self.spec.sourceHeader['name'])+') name version src;\n'
     head += '  patches = buildRootInput.'+self.rewriteName(self.spec.sourceHeader['name'])+'.patches ++ [];\n\n'
-    body = [ self.buildInputs, self.configure, self.build, self.ocamlExtra, self.install, self.meta ]
+    body = [ self.buildInputs, self.configure, self.build, self.install, self.meta ]
     return head + '\n'.join(body)
 
 
