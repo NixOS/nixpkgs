@@ -157,6 +157,13 @@ stdenv.mkDerivation {
       url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
       sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
     })
+
+    # Fix build with meson ≥ 0.57.2.
+    # https://github.com/systemd/systemd/pull/19297
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/7c5fd25119a495009ea62f79e5daec34cc464628.patch";
+      sha256 = "qWD6vEijh8yVBES0GSlt40wh34X1h3fX1eag73lT3z8=";
+    })
   ];
 
   postPatch = ''
