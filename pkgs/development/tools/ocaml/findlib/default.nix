@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "''${createFindlibDestdir-}"; then
-          mkdir -p $OCAMLFIND_DESTDIR
+          echo "${placeholder "out"}:" \
+            "createFindlibDestdir is no longer supported by the findlib setup hook." \
+            "Instead create \$OCAMLFIND_DESTDIR manually in preInstall or similar." \
+            >&2
+          exit 100
         fi
     }
 
