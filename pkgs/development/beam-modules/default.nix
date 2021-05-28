@@ -63,7 +63,7 @@ let
       };
 
       elixir_1_8 = lib'.callElixir ../interpreters/elixir/1.8.nix {
-        inherit erlang;
+        erlang = pkgs.beam.interpreters.erlangR23;
         debugInfo = true;
       };
 
