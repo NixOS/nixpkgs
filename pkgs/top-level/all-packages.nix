@@ -31643,5 +31643,7 @@ in
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 
+  zthrottle = callPackage ../tools/misc/zthrottle { };
+
   zktree = callPackage ../applications/misc/zktree {};
 }
