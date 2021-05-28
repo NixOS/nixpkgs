@@ -222,12 +222,7 @@ in
       debug = mkEnableOption "gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkOption {
-          type = types.bool;
-          default = true;
-          example = "false";
-          description = "Whether to enable the standard Metacity GNOME flashback session.";
-        };
+        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
           type = types.listOf (types.submodule {
