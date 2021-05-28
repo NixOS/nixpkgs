@@ -2,8 +2,8 @@
 }:
 
 let
-  version = "1.2.0";
-  sha256 = "1z9fmrfxqi56pj7f1506q2z41crz702jk88gv57baf6fz63m93v2";
+  version = "1.2.1";
+  sha256 = "sha256-sm5SmckaXVjF3odqzYrbC46E1nPzQ9cuNJnNSAa7RWY=";
 
 in stdenv.mkDerivation {
   pname = "git-vendor";
