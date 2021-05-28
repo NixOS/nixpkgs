@@ -72,22 +72,9 @@ jobs:
         uses: actions/checkout@v2
       - name: "prepare artifacts"
         run: tar xvzf "$BUILDDIR/calamares.tar.gz" -C / --strip-components 1
-      - name: "prepare build"
-        id: pre_build
-        run: |
-          test -n "$BUILDDIR" || { echo "! \$BUILDDIR not set" ; exit 1 ; }
-          mkdir -p $BUILDDIR
-          test -f $SRCDIR/CMakeLists.txt || { echo "! Missing $SRCDIR/CMakeLists.txt" ; exit 1 ; }
-          echo "::set-output name=message::"`git log -1 --abbrev-commit --pretty=oneline --no-decorate ${{ github.event.head_commit.id }}`
-      - name: "Calamares-Extensions: cmake"
-        working-directory: ${{ env.BUILDDIR }}
-        run: cmake $CMAKE_ARGS $SRCDIR
-      - name: "Calamares-Extensions: make"
-        working-directory: ${{ env.BUILDDIR }}
-        run: make -j2 VERBOSE=1
-      - name: "Calamares-Extensions: install"
-        working-directory: ${{ env.BUILDDIR }}
-        run: make install VERBOSE=1
+      - name: "build"
+        id: build
+        uses: calamares/actions/generic-build@1ac82cf0fe2015f2b9d98539e1717f5e04f11ab7
       - name: "notify: ok"
         if: ${{ success() && github.repository == 'calamares/calamares-extensions' }}
         uses: calamares/actions/matrix-notify@v1
@@ -96,7 +83,7 @@ jobs:
           room: ${{ secrets.MATRIX_ROOM }}
           message: |
             OK ${{ github.workflow }} in ${{ github.repository }} by ${{ github.actor }} on ${{ github.event.ref }}
-            .. ${{ steps.pre_build.outputs.message }}
+            .. ${{ steps.build.outputs.git_summary }}
       - name: "notify: fail"
         if: ${{ failure() && github.repository == 'calamares/calamares-extensions' }}
         uses: calamares/actions/matrix-notify@v1
@@ -105,5 +92,5 @@ jobs:
           room: ${{ secrets.MATRIX_ROOM }}
           message: |
             FAIL ${{ github.workflow }} in ${{ github.repository }} by ${{ github.actor }} on ${{ github.event.ref }}
-              .. ${{ steps.pre_build.outputs.message }}
+              .. ${{ steps.build.outputs.git_summary }}
               .. ${{ github.event.compare }}
