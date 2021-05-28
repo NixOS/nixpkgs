@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubesec";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rv5qywh8107rqdly1x7wkb6dljalyn9abrkm12bxa7cqscp9b4z";
+    sha256 = "sha256-vT+SiSt9QoOkGbnPdKkzE8yehNJMa/3jYC+4h4QeNmw=";
   };
 
-  vendorSha256 = "0xngnx67giwp0g7c19xhb6kmc9m3bjlwk2wwp9bn9vwkmss3ysyp";
+  vendorSha256 = "sha256-zfQu1EdwvR+LGmsbE8RA4pcOGgsukG1TMTCgPyNoVsc=";
 
   # Tests wants to download additional files
   doCheck = false;

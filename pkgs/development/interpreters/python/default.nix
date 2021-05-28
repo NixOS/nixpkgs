@@ -44,6 +44,8 @@ with pkgs;
               toPythonModule toPythonApplication
               buildSetupcfg
 
+              condaInstallHook
+              condaUnpackHook
               eggUnpackHook
               eggBuildHook
               eggInstallHook

@@ -558,6 +558,8 @@ in
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
+  fetchFromGitea = callPackage ../build-support/fetchgitea { };
+
   fetchFromGitHub = callPackage ../build-support/fetchgithub {};
 
   fetchFromBitbucket = callPackage ../build-support/fetchbitbucket {};
@@ -7157,6 +7159,8 @@ in
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  pcmsolver = callPackage ../development/libraries/pcmsolver { };
+
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
@@ -12334,6 +12338,8 @@ in
 
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 
+  pythonCondaPackages = callPackage ./../development/interpreters/python/conda { };
+
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
 
   # Should eventually be moved inside Python interpreters.
@@ -16586,6 +16592,8 @@ in
   librsync = callPackage ../development/libraries/librsync { };
 
   librsync_0_9 = callPackage ../development/libraries/librsync/0.9.nix { };
+
+  librttopo = callPackage ../development/libraries/librttopo { };
 
   libs3 = callPackage ../development/libraries/libs3 { };
 
