@@ -31,24 +31,24 @@ jobs:
           path: ${{ env.BUILDDIR }}
           repo: calamares/calamares
       - name: "prepare env"
-        uses: calamares/actions/prepare-neon@
+        uses: calamares/actions/prepare-neon@v2
       - name: "prepare source"
         uses: actions/checkout@v2
       - name: "prepare artifacts"
         run: tar xvzf "$BUILDDIR/calamares.tar.gz" -C / --strip-components 1
       - name: "build"
         id: build
-        uses: calamares/actions/generic-build@1ac82cf0fe2015f2b9d98539e1717f5e04f11ab7
+        uses: calamares/actions/generic-build@v2
       - name: "notify: ok"
         if: ${{ success() && github.repository == 'calamares/calamares-extensions' }}
-        uses: calamares/actions/matrix-notify@v1
+        uses: calamares/actions/matrix-notify@v2
         with:
           token: ${{ secrets.MATRIX_TOKEN }}
           room: ${{ secrets.MATRIX_ROOM }}
           message: "OK ${{ github.workflow }} in ${{ github.repository }} ${{ steps.build.outputs.git_summary }}"
       - name: "notify: fail"
         if: ${{ failure() && github.repository == 'calamares/calamares' }}
-        uses: calamares/actions/matrix-notify@v1
+        uses: calamares/actions/matrix-notify@v2
         with:
           token: ${{ secrets.MATRIX_TOKEN }}
           room: ${{ secrets.MATRIX_ROOM }}
