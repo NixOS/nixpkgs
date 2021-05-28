@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for Unicorn CPU emulator engine";
-    homepage = "http://www.unicorn-engine.org/";
+    homepage = "https://www.unicorn-engine.org/";
     license = [ licenses.gpl2 ];
     maintainers = with maintainers; [ bennofs ris ];
   };

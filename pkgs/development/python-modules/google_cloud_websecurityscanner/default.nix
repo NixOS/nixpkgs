@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "0.3.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26a29657e20fda4302275b92c84c16228381998797e203f85d612f93d4c62358";
+    sha256 = "1de60f880487b898b499345f46f7acf38651f5356ebca8673116003a57f25393";
   };
 
   checkInputs = [ pytest mock ];

@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, jdk, ant, makeWrapper, jre }:
+{ stdenv, fetchFromGitHub, jdk8, ant, makeWrapper, jre8 }:
 
+let jdk = jdk8; jre = jre8; in
 stdenv.mkDerivation rec {
   pname = "ili2c";
   version = "5.0.8";

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
     pname = "agate-dbf";
-    version = "0.2.1";
+    version = "0.2.2";
 
     propagatedBuildInputs = [ agate dbf dbfread ];
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0brprva3vjypb5r9lk6zy10jazp681rxsqxzhz2lr869ir4krj80";
+      sha256 = "589682b78c5c03f2dc8511e6e3edb659fb7336cd118e248896bb0b44c2f1917b";
     };
 
     meta = with stdenv.lib; {

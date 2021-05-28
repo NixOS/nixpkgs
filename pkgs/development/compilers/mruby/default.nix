@@ -1,17 +1,17 @@
-{ stdenv, ruby, bison, fetchFromGitHub }:
+{ stdenv, ruby, bison, rake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mruby";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "1y072c7dh9jf8xwy7kia6cb4dkpspq4zf24ssn7zm5f46p4waxni";
+    sha256  = "0fhfv8pi7i8jn2vgk2n2rjnbnfa12nhj514v8i4k353n7q4pmkh3";
   };
 
-  nativeBuildInputs = [ ruby bison ];
+  nativeBuildInputs = [ ruby bison rake ];
 
   # Necessary so it uses `gcc` instead of `ld` for linking.
   # https://github.com/mruby/mruby/blob/35be8b252495d92ca811d76996f03c470ee33380/tasks/toolchains/gcc.rake#L25
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    cp -R build/host/{bin,lib} $out
+    cp -R include build/host/{bin,lib} $out
   '';
 
   doCheck = true;

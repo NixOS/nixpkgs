@@ -1,16 +1,23 @@
-{ stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex }:
+{ stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "4.9.2";
+  version = "4.9.5";
   pname = "nco";
 
   nativeBuildInputs = [ flex which ];
-  buildInputs = [ netcdf netcdfcxx4 gsl udunits antlr curl ];
+  buildInputs = [ netcdf netcdfcxx4 gsl udunits antlr curl coreutils ];
 
   src = fetchzip {
     url = "https://github.com/nco/nco/archive/${version}.tar.gz";
-    sha256 = "0nip9dmdx3d5nc30bz1d2w9his1dph136l53r160aa3bmb29xwqn";
+    sha256 = "0xp377rsamn2hwhzaf0ih70wd5274flpz74grys1b7rpbvbyf1bw";
   };
+
+  prePatch = ''
+    substituteInPlace src/nco/nco_fl_utl.c \
+      --replace "/bin/cp" "${coreutils}/bin/cp"
+    substituteInPlace src/nco/nco_fl_utl.c \
+      --replace "/bin/mv" "${coreutils}/bin/mv"
+  '';
 
   meta = {
     description = "NetCDF Operator toolkit";

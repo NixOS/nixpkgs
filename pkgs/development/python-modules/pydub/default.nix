@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pydub";
-  version = "0.23.1";
+  version = "0.24.1";
   # pypi version doesn't include required data files for tests
   src = fetchFromGitHub {
     owner = "jiaaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v0bghy4j2nnkgf1r8rbz4s7war872asyy08pc0x1iy1qs275i7s";
+    sha256 = "1pv4n54kkjpbjlvwh9b6a7zyq1ylg0fjmd2q4ws9nc2a6mrcivhc";
   };
 
 

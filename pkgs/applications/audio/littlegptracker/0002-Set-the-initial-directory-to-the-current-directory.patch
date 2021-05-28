@@ -1,0 +1,27 @@
+From c3865405ca707e3284a81709577d85ce2b3db72c Mon Sep 17 00:00:00 2001
+From: Francesco Gazzetta <fgaz@fgaz.me>
+Date: Wed, 19 Aug 2020 15:06:58 +0200
+Subject: [PATCH 2/2] Set the initial directory to the current directory
+
+otherwise the user has to navigate from the nix store, which makes the program
+crash due to its size
+---
+ sources/Adapters/DEB/System/DEBSystem.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sources/Adapters/DEB/System/DEBSystem.cpp b/sources/Adapters/DEB/System/DEBSystem.cpp
+index 6e86693..65d2cdd 100644
+--- a/sources/Adapters/DEB/System/DEBSystem.cpp
++++ b/sources/Adapters/DEB/System/DEBSystem.cpp
+@@ -54,7 +54,7 @@ void DEBSystem::Boot(int argc,char **argv) {
+ 	}
+ 	Path::SetAlias("bin",dirname(buff)) ;
+ 
+-	Path::SetAlias("root","bin:..") ;
++	Path::SetAlias("root",".") ;
+ 
+ #ifdef _DEBUG
+   Trace::GetInstance()->SetLogger(*(new StdOutLogger()));
+-- 
+2.25.4
+

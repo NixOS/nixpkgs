@@ -2,16 +2,22 @@
 
 buildGoModule rec {
   pname = "tendermint";
-  version = "0.32.11";
+  version = "0.33.8";
 
   src = fetchFromGitHub {
     owner = "tendermint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17p7khfiv5aflpl4imbqp8v7gignd6v6a7g80xlnzgix5ismh84l";
+    sha256 = "1dcr60gmbkb6833n49mjmlr082ahlv7alaqycl8g3d4f93kdm5c3";
   };
 
-  modSha256 = "1sdjzj52gkqk51ml29hijzv64clmi38km5z7j7paf28dla2brfxq";
+  vendorSha256 = "0i0n89lal99fqnzva51kp9f7wzqsfmncpshwxhq26kvykp7ji7sw";
+
+  doCheck = false;
+
+  subPackages = [ "cmd/tendermint" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/tendermint/tendermint/version.GitCommit=${src.rev}" ];
 
   meta = with stdenv.lib; {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short.";

@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv }:
+{ go, cacert, git, lib, removeReferencesTo, stdenv, vend }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -13,12 +13,16 @@
 # path to go.mod and go.sum directory
 , modRoot ? "./"
 
-# modSha256 is the sha256 of the vendored dependencies
+# vendorSha256 is the sha256 of the vendored dependencies
 #
-# CAUTION: if `null` is used as a value, the derivation won't be a
-# fixed-output derivation but disable the build sandbox instead. Don't use
-# this in nixpkgs as Hydra won't build those packages.
-, modSha256
+# if vendorSha256 is null, then we won't fetch any dependencies and
+# rely on the vendor folder within the source.
+, vendorSha256
+# Whether to delete the vendor folder supplied with the source.
+, deleteVendor ? false
+# Whether to run the vend tool to regenerate the vendor directory.
+# This is useful if any dependency contain C files.
+, runVend ? false
 
 # We want parallel builds by default
 , enableParallelBuilding ? true
@@ -37,21 +41,28 @@
 with builtins;
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "modSha256" "disabled" ];
+  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  go-modules = go.stdenv.mkDerivation (let modArgs = {
+  deleteFlag = if deleteVendor then "true" else "false";
+
+  vendCommand = if runVend then "${vend}/bin/vend" else "false";
+
+  go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
+
     name = "${name}-go-modules";
 
-    nativeBuildInputs = [ go git cacert ];
+    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
     patches = args.patches or [];
+    preBuild = args.preBuild or "";
+    sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
 
@@ -64,7 +75,6 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
       cd "${modRoot}"
       runHook postConfigure
     '';
@@ -72,7 +82,27 @@ let
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
 
-      go mod download
+      if [ ${deleteFlag} == "true" ]; then
+        if [ ! -d vendor ]; then
+          echo "vendor folder does not exist, 'deleteVendor' is not needed"
+          exit 10
+        else
+          rm -rf vendor
+        fi
+      fi
+
+      if [ -d vendor ]; then
+        echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
+
+      if [ ${vendCommand} != "false" ]; then
+        echo running vend to rewrite vendor folder
+        ${vendCommand}
+      else
+        go mod vendor
+      fi
+      mkdir -p vendor
 
       runHook postBuild
     '';
@@ -81,23 +111,19 @@ let
       runHook preInstall
 
       # remove cached lookup results and tiles
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r "''${GOPATH}/pkg/mod/cache/download" $out
+      cp -r --reflink=auto vendor $out
 
       runHook postInstall
     '';
 
     dontFixup = true;
   }; in modArgs // (
-    if modSha256 == null then
-      { __noChroot = true; }
-    else
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = modSha256;
+        outputHash = vendorSha256;
       }
-  ) // overrideModAttrs modArgs);
+  ) // overrideModAttrs modArgs) else "";
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
@@ -105,6 +131,7 @@ let
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
+    GOFLAGS = "-mod=vendor";
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -112,9 +139,12 @@ let
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       export GOSUMDB=off
-      export GOPROXY=file://${go-modules}
-
+      export GOPROXY=off
       cd "$modRoot"
+      if [ -n "${go-modules}" ]; then
+          rm -rf vendor
+          ln -s ${go-modules} vendor
+      fi
 
       runHook postConfigure
     '';
@@ -183,7 +213,7 @@ let
       runHook postBuild
     '';
 
-    doCheck = args.doCheck or false;
+    doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
@@ -205,14 +235,14 @@ let
     '';
 
     preFixup = (args.preFixup or "") + ''
-      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/{bin,libexec,lib} -type f 2>/dev/null | xargs -r ${removeExpr removeReferences} || true
     '';
 
     strictDeps = true;
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules modSha256; };
+    passthru = passthru // { inherit go go-modules vendorSha256 ; };
 
     meta = {
       # Add default meta information

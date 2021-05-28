@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules,
   kconfigwidgets, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews,
   kpackage, kservice, kxmlgui, qtdeclarative,
@@ -14,5 +14,7 @@ mkDerivation {
     qtdeclarative
   ];
   propagatedBuildInputs = [ kconfigwidgets kservice ];
-  patches = (copyPathsToStore (lib.readPathsFromFile ./. ./series));
+  patches = [
+    ./0001-kcmutils-follow-symlinks.patch
+  ];
 }

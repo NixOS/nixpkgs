@@ -2,15 +2,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "remarshal";
-  version = "0.10.0";
+  version = "0.14.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1prpczb8q996i5sf27vfmp0nv85zwsiajnf9jbjkhm0k21wfvmdd";
+    sha256 = "16425aa1575a271dd3705d812b06276eeedc3ac557e7fd28e06822ad14cd0667";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil pytoml pyyaml
+    pyyaml cbor2 dateutil tomlkit u-msgpack-python
   ];
 
   meta = with stdenv.lib; {

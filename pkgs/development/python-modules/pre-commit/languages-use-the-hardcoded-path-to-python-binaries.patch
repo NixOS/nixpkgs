@@ -1,0 +1,26 @@
+diff --git a/pre_commit/languages/node.py b/pre_commit/languages/node.py
+index 26f4919..4885ec1 100644
+--- a/pre_commit/languages/node.py
++++ b/pre_commit/languages/node.py
+@@ -82,7 +82,7 @@ def install_environment(
+         envdir = fr'\\?\{os.path.normpath(envdir)}'
+     with clean_path_on_failure(envdir):
+         cmd = [
+-            sys.executable, '-mnodeenv', '--prebuilt', '--clean-src', envdir,
++            '@nodeenv@/bin/nodeenv', '--prebuilt', '--clean-src', envdir,
+         ]
+         if version != C.DEFAULT:
+             cmd.extend(['-n', version])
+diff --git a/pre_commit/languages/python.py b/pre_commit/languages/python.py
+index e17376e..0c1d2ab 100644
+--- a/pre_commit/languages/python.py
++++ b/pre_commit/languages/python.py
+@@ -204,7 +204,7 @@ def install_environment(
+ ) -> None:
+     envdir = prefix.path(helpers.environment_dir(ENVIRONMENT_DIR, version))
+     python = norm_version(version)
+-    venv_cmd = (sys.executable, '-mvirtualenv', envdir, '-p', python)
++    venv_cmd = ('@virtualenv@/bin/virtualenv', envdir, '-p', python)
+     install_cmd = ('python', '-mpip', 'install', '.', *additional_dependencies)
+
+     with clean_path_on_failure(envdir):

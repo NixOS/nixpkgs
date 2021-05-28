@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -17,17 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "2.1.5";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "19zhgzyivf3y416r5xaajx81h87zdhvrrcsagli00gp1f2169q5m";
+    sha256 = "sha256-wjYZXFnzvPSukzh1BNvyaFxKpYm+kNNFm5AsthLXGVE=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

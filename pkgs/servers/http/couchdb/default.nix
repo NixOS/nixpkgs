@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man
+{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey_1_8_5, curl, help2man
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ help2man which file pkgconfig sphinx ];
-  buildInputs = [ erlang icu openssl spidermonkey curl ];
+  buildInputs = [ erlang icu openssl spidermonkey_1_8_5 curl ];
 
   postInstall = ''
     substituteInPlace $out/bin/couchdb --replace getopt "${getopt}/bin/getopt"

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.elmerfem.org/;
+    homepage = "https://elmerfem.org/";
     description = "A finite element software for multiphysical problems.";
     platforms = platforms.unix;
     maintainers = [ maintainers.wulfsta ];

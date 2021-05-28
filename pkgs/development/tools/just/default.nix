@@ -1,29 +1,29 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash }:
+{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.5.10";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s8np28glzn3kmh59dwk86yc9fb2lm9fq2325kzmy7rkb5jsdcl1";
+    sha256 = "07fjixz8y5rxfwpyr1kiimnn27jhc20gacd17i0yvfcpy5qf8z5p";
   };
 
-  cargoSha256 = "05mrzav3aydvwac9jjckdmlxvxnlcncmkfsdb9z7zvxia4k89w1l";
+  cargoSha256 = "1zn0kiqi8p25lscjd661gczay631nwzadl36cfzqnbww6blayy1j";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    # generate completion scripts for just
+    installManPage man/just.1
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-
-    $out/bin/just --completions bash > "$out/share/bash-completion/completions/just"
-    $out/bin/just --completions fish > "$out/share/fish/vendor_completions.d/just.fish"
-    $out/bin/just --completions zsh  > "$out/share/zsh/site-functions/_just"
+    installShellCompletion --bash --name just.bash completions/just.bash
+    installShellCompletion --fish --name just.fish completions/just.fish
+    installShellCompletion --zsh  --name _just     completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash dash ];
+  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty
@@ -40,22 +40,12 @@ rustPlatform.buildRustPackage rec {
 
   # Skip "edit" when running "cargo test",
   # since this test case needs "cat".
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test --
-        --skip edit
-        ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- \
-        --skip edit \
-        ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-  '';
+  checkFlagsArray = [ "--skip=edit" ];
 
   meta = with stdenv.lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
   };
 }

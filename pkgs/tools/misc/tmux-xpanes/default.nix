@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux-xpanes";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "greymd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13q02vdk229chgbn547wwv29cj4njvz02lmw840g8qmwh73qb2pi";
+    sha256 = "0vm5mi6dqdbg0b5qh4r8sr1plpc00jryd8a2qxpp3a72cigjvvf0";
   };
 
   buildInputs = [ openssl perl ];

@@ -1,26 +1,17 @@
-{ buildDhallPackage, fetchFromGitHub, lib }:
+{ buildDhallGitHubPackage, lib }:
 
 let
   makePrelude =
-    version:
-    lib.makeOverridable
-      ( { rev, sha256, file ? "package.dhall" }:
-          buildDhallPackage {
-            name = "Prelude-${version}";
+    version: { rev, sha256 }:
+      buildDhallGitHubPackage {
+        name      = "Prelude-${version}";
+        owner     = "dhall-lang";
+        repo      = "dhall-lang";
+        directory = "Prelude";
+        file      = "package.dhall";
 
-            code =
-              let
-                src = fetchFromGitHub {
-                  owner = "dhall-lang";
-                  repo  = "dhall-lang";
-
-                  inherit rev sha256;
-                };
-
-              in
-                "${src}/Prelude/${file}";
-          }
-      );
+        inherit rev sha256;
+      };
 
 in
   lib.mapAttrs makePrelude {

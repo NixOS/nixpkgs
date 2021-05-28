@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hy";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "04dfwm336gw61fmgwikvh0cnxk682p19b4w555wl5d7mlym4rwj2";
+    sha256 = "05k05qmiiysiwdc05sxmanwhv1crfwbb3l8swxfisbzbvmv1snis";
   };
 
   checkInputs = with python3Packages; [ flake8 pytest ];

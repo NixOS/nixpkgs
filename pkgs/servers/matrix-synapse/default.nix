@@ -5,29 +5,15 @@
 with python3.pkgs;
 
 let
-  matrix-synapse-ldap3 = buildPythonPackage rec {
-    pname = "matrix-synapse-ldap3";
-    version = "0.1.4";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
-    };
-
-    propagatedBuildInputs = [ service-identity ldap3 twisted ];
-
-    # ldaptor is not ready for py3 yet
-    doCheck = !isPy3k;
-    checkInputs = [ ldaptor mock ];
-  };
-
-in buildPythonApplication rec {
+  plugins = python3.pkgs.callPackage ./plugins { };
+in
+buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.12.4";
+  version = "1.21.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0psr17ai42ma9923g9bj3q9fd8kph9rx7jpxsxwbfzr2y6lwr306";
+    sha256 = "0iip311xbzc984gzpmri5fabpb3b2ck1ywv5378pk90m02yybgi5";
   };
 
   patches = [
@@ -45,18 +31,11 @@ in buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
-    matrix-synapse-ldap3
     msgpack
     netaddr
     phonenumbers
     pillow
-    (prometheus_client.overrideAttrs (x: {
-      src = fetchPypi {
-        pname = "prometheus_client";
-        version = "0.3.1";
-        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
-      };
-    }))
+    prometheus_client
     psutil
     psycopg2
     pyasn1
@@ -72,22 +51,26 @@ in buildPythonApplication rec {
     twisted
     unpaddedbase64
     typing-extensions
+    authlib
+    pyjwt
   ] ++ lib.optional enableSystemd systemd;
 
   checkInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests = { inherit (nixosTests) matrix-synapse; };
-
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
+
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
+  passthru.plugins = plugins;
+  passthru.python = python3;
 
   meta = with stdenv.lib; {
     homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ma27 ];
+    maintainers = teams.matrix.members;
   };
 }

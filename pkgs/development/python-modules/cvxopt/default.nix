@@ -18,13 +18,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.2.4";
+  version = "1.2.5";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h9g79gxpgpy6xciqyypihw5q4ngp322lpkka1nkwk0ysybfsp7s";
+    sha256 = "0widrfxr0x0cyg72ibkv7fdzkvmf5mllchq1x4fs2a36plv8rv4l";
   };
 
   buildInputs = [ blas lapack ];

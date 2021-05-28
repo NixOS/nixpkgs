@@ -1,37 +1,55 @@
-{ stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, sassc
+, gnome3
+, gtk-engine-murrine
+, gdk-pixbuf
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
   pname = "materia-theme";
-  version = "20190912";
+  version = "20200916";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07vbql1y9jfd0m34lw1674cfr6217dzg3irk0450kny8sjrrj6dx";
+    sha256 = "0qaxxafsn5zd2ysgr0jyv5j73360mfdmxyd55askswlsfphssn74";
   };
 
-  nativeBuildInputs = [ glib libxml2 bc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    sassc
+  ];
 
-  buildInputs = [ gnome3.gnome-themes-extra gdk-pixbuf librsvg ];
+  buildInputs = [
+    gnome3.gnome-themes-extra
+    gdk-pixbuf
+    librsvg
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   dontBuild = true;
 
-  installPhase = ''
-    patchShebangs install.sh
-    sed -i install.sh \
-      -e "s|if .*which gnome-shell.*;|if true;|" \
-      -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}|"
-    ./install.sh --dest $out/share/themes
+  mesonFlags = [
+    "-Dgnome_shell_version=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+  ];
+
+  postInstall = ''
     rm $out/share/themes/*/COPYING
   '';
 
   meta = with stdenv.lib; {
     description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/nana-4/materia-theme";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.mounium ];
   };

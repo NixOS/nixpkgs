@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.2.2";
+  version = "2.3.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qqlqypxj3j5qz8jjzil7250alf0w4bx8k8ndyj2ymp8kq2z1v0j";
+    sha256 = "0as7m736wgx684wssnvhvixjkqidnhxn9i98rcdgagr67s3akfdy";
   };
 
   propagatedBuildInputs = [
@@ -57,12 +57,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'cffi>=1.9,<1.14'," "'cffi~=1.9',"
+      --replace "'cryptography>=2.5.0,<3.0.0'," "'cryptography'," \
+      --replace "'idna<2.10'," "'idna'," \
+      --replace "'requests<2.24.0'," "'requests',"
   '';
 
   # tests are not working
   # XXX: fix the tests
   doCheck = false;
+  pythonImportsCheck = [ "snowflake" "snowflake.connector" ];
 
   meta = with lib; {
     description = "Snowflake Connector for Python";

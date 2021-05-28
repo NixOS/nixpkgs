@@ -23,9 +23,9 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
     longDescription = ''
-      The intent of this module is to mimic the csv module in the Python stdlib, 
-      as opposed to more flexible serialization formats like JSON or YAML. 
-      vcf will attempt to parse the content of each record based on the data 
+      The intent of this module is to mimic the csv module in the Python stdlib,
+      as opposed to more flexible serialization formats like JSON or YAML.
+      vcf will attempt to parse the content of each record based on the data
       types specified in the meta-information lines
     '';
   };

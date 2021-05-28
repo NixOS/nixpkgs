@@ -1,17 +1,17 @@
 { stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
-  cairo, librsvg, gettext, libpaper, fribidi, pkgconfig, gperf }:
+  cairo, librsvg, gettext, libpaper, fribidi, pkgconfig, gperf, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.22";
+  version = "0.9.24";
   pname = "tuxpaint";
 
   src = fetchurl {
     url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1qrbrdck9yxpcg3si6jb9i11w8lw9h4hqad0pfaxgyiniqpr7gca";
+    sha256 = "06m1lg2pikfkmassfvvrbwqffwgixcmjh1li6akaldgkalpmfql7";
   };
 
   nativeBuildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libpng cairo
-    librsvg gettext libpaper fribidi pkgconfig gperf ];
+    librsvg gettext libpaper fribidi pkgconfig gperf imagemagick ];
   hardeningDisable = [ "format" ];
   makeFlags = [ "GPERF=${gperf}/bin/gperf"
                 "PREFIX=$$out"
@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    # Install desktop file
+    mkdir -p $out/share/applications
+    cp hildon/tuxpaint.xpm $out/share/pixmaps
+    sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
+ 
+    # Install stamps
     tar xzf $stamps
     cd tuxpaint-stamps-2014.08.23
     make install-all PREFIX=$out

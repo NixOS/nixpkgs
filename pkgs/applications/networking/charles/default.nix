@@ -3,7 +3,7 @@ stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
-, jre
+, jdk8
 }:
 
 let
@@ -31,7 +31,7 @@ let
       buildInputs = [ makeWrapper ];
 
       installPhase = ''
-        makeWrapper ${jre}/bin/java $out/bin/charles \
+        makeWrapper ${jdk8.jre}/bin/java $out/bin/charles \
           --add-flags "-Xmx1024M -Dcharles.config='~/.charles.config' -jar $out/share/java/charles.jar"
 
         for fn in lib/*.jar; do

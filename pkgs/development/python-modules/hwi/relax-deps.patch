@@ -1,0 +1,16 @@
+--- a/setup.py
++++ b/setup.py
+@@ -98,10 +98,10 @@ package_data = \
+ modules = \
+ ['hwi', 'hwi-qt']
+ install_requires = \
+-['ecdsa>=0.13.0,<0.14.0',
+- 'hidapi>=0.7.99,<0.8.0',
++['ecdsa',
++ 'hidapi',
+  'libusb1>=1.7,<2.0',
++ 'mnemonic',
+- 'mnemonic>=0.18.0,<0.19.0',
+  'pyaes>=1.6,<2.0',
+  'typing-extensions>=3.7,<4.0']
+ 

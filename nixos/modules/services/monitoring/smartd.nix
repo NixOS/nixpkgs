@@ -18,9 +18,9 @@ let
     ${optionalString nm.enable ''
       {
       ${pkgs.coreutils}/bin/cat << EOF
-      From: smartd on ${host} <root>
+      From: smartd on ${host} <${nm.sender}>
       To: undisclosed-recipients:;
-      Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
+      Subject: $SMARTD_SUBJECT
 
       $SMARTD_FULLMESSAGE
       EOF
@@ -129,6 +129,16 @@ in
             description = "Whenever to send e-mail notifications.";
           };
 
+          sender = mkOption {
+            default = "root";
+            example = "example@domain.tld";
+            type = types.str;
+            description = ''
+              Sender of the notification messages.
+              Acts as the value of <literal>email</literal> in the emails' <literal>From: ... </literal> field.
+            '';
+          };
+
           recipient = mkOption {
             default = "root";
             type = types.str;
@@ -229,11 +239,7 @@ in
 
     systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";
-
       wantedBy = [ "multi-user.target" ];
-
-      path = [ pkgs.nettools ]; # for hostname and dnsdomanname calls in smartd
-
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
     };
 

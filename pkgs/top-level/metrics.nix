@@ -7,7 +7,6 @@ runCommand "nixpkgs-metrics"
     requiredSystemFeatures = [ "benchmark" ];
   }
   ''
-    export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     nix-store --init
 

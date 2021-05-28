@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional isPy27 futures;
 
   checkInputs = [ gevent mock pytest tornado ];
-  
+
   checkPhase = ''
     pytest
   '';

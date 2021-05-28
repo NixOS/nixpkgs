@@ -4,11 +4,11 @@
 
 buildDunePackage rec {
   pname = "ppx_deriving";
-  version = "4.4.1";
+  version = "4.5";
 
   src = fetchzip {
     url = "https://github.com/ocaml-ppx/ppx_deriving/archive/v${version}.tar.gz";
-    sha256 = "1map50w2a35y83bcd19p9yakdkhp04z5as2j2wlygi0b6s0a9vba";
+    sha256 = "1v2xldag54n0xk69vv3j4nln9bzkkpq3rildq118sydzsc9v239z";
   };
 
   buildInputs = [ ppxfind cppo ounit ];

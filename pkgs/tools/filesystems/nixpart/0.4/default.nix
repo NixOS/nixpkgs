@@ -18,7 +18,7 @@ let
 
   cryptsetup = import ./cryptsetup.nix {
     inherit stdenv fetchurl python;
-    inherit (pkgs) pkgconfig libgcrypt libuuid popt lvm2;
+    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
@@ -27,17 +27,17 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux systemd coreutils;
+    inherit (pkgs) fetchpatch pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline systemd libaio gzip;
+    inherit (pkgs) fetchpatch readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) utillinux readline libuuid gettext check lvm2;
+    inherit (pkgs) fetchpatch utillinux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {

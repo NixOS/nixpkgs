@@ -17,6 +17,10 @@ let
     lib.generators.toGitINI cfg.settings
   );
 
+  replicationConfig = pkgs.writeText "replication.conf" (
+    lib.generators.toGitINI cfg.replicationSettings
+  );
+
   # Wrap the gerrit java with all the java options so it can be called
   # like a normal CLI app
   gerrit-cli = pkgs.writeShellScriptBin "gerrit" ''
@@ -106,6 +110,15 @@ in
         '';
       };
 
+      replicationSettings = mkOption {
+        type = gitIniType;
+        default = {};
+        description = ''
+          Replication configuration. This will be generated to the
+          <literal>etc/replication.config</literal> file.
+        '';
+      };
+
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
@@ -137,6 +150,13 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
+        message = "Gerrit replicationSettings require enabling the replication plugin";
+      }
+    ];
 
     services.gerrit.settings = {
       cache.directory = "/var/cache/gerrit";
@@ -194,6 +214,7 @@ in
 
         # copy the config, keep it mutable because Gerrit
         ln -sfv ${gerritConfig} etc/gerrit.config
+        ln -sfv ${replicationConfig} etc/replication.config
 
         # install the plugins
         rm -rf plugins

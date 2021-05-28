@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
+{ stdenv, fetchFromGitHub, python3Packages, ffmpeg_3, zlib, libjpeg }:
 
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication {
   };
 
   checkInputs = [ python3Packages.coverage ];
-  buildInputs = [ ffmpeg zlib libjpeg ];
+  buildInputs = [ ffmpeg_3 zlib libjpeg ];
   propagatedBuildInputs = with python3Packages; [ pillow requests x256 ];
 
   meta = with stdenv.lib; {

@@ -10,19 +10,20 @@
 , pygments
 , ipykernel
 , pyqt5
+, qtpy
 }:
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "4.6.0";
+  version = "4.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "654f423662e7dfe6a9b26fac8ec76aedcf742c339909ac49f1f0c1a1b744bcd1";
+    sha256 = "6c24397c19a49a5cf69582c931db4b0f6b00a78530a2bfd122936f2ebfae2fef";
   };
 
   checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5];
+  propagatedBuildInputs = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5 qtpy];
 
   # : cannot connect to X server
   doCheck = false;

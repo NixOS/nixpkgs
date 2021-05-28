@@ -23,17 +23,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shortwave";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "13lhlh75vw02vkcknl4nvy0yvpdf0qx811mmyja8bzs4rj1j9kr8";
+    sha256 = "1vlhp2ss06j41simjrrjg38alp85jddhqyvccy6bhfzm0gzynwld";
   };
 
-  cargoSha256 = "0aph5z54a6i5p8ga5ghhx1c9hjc8zdw5pkv9inmanca0bq3hkdlh";
+  cargoSha256 = "181699rlpr5dszc18wg0kbss3gfskxaz9lpxpgsc4yfb6ip89qnk";
 
   nativeBuildInputs = [
     cargo

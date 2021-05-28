@@ -4,10 +4,10 @@
       elpaBuild {
         pname = "org";
         ename = "org";
-        version = "20191203";
+        version = "20200817";
         src = fetchurl {
-          url = "https://orgmode.org/elpa/org-20191203.tar";
-          sha256 = "1fcgiswjnqmfzx3xkmlqyyhc4a8ms07vdsv7nkizgxqdh9hwfm2q";
+          url = "https://orgmode.org/elpa/org-20200817.tar";
+          sha256 = "159hch9zls3apxq11c5rjpmci1avyl7q3cgsrqxwgnzy8c61104d";
         };
         packageRequires = [];
         meta = {
@@ -19,10 +19,10 @@
       elpaBuild {
         pname = "org-plus-contrib";
         ename = "org-plus-contrib";
-        version = "20191203";
+        version = "20200817";
         src = fetchurl {
-          url = "https://orgmode.org/elpa/org-plus-contrib-20191203.tar";
-          sha256 = "1kvw95492acb7gqn8gxbp1vg4fyw80w43yvflxnfxdf6jnnw2wah";
+          url = "https://orgmode.org/elpa/org-plus-contrib-20200817.tar";
+          sha256 = "0n3fhcxjsk2w78p7djna4nlppa7ypjxzpq3r5dmzc8jpl71mipba";
         };
         packageRequires = [];
         meta = {

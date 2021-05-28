@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , docbook_xml_dtd_43
 , docbook-xsl-nons
 , glib
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.1";
+  version = "0.1.3";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -28,18 +27,12 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "hWJUzpQvy2V4pS8C/nW7Xrs9U9LQWMsGuTVOnm5UJc0=";
+    sha256 = "157bi1v9qqk45rkq7lg08l7g3bxwacl4h89vnr7msjmg0hri36kc";
   };
 
   patches = [
     # Installed tests are installed to different output
     ./installed-tests-path.patch
-
-    # Fix version file generation
-    (fetchpatch {
-      url = "https://github.com/hughsie/libjcat/commit/cf2d9298a5fab7278ee040bc0b4be384a7b5538e.patch";
-      sha256 = "3749qih+wfhU8ECklh5BvReJ7pS+Ao1Q7YueZ1tT0Is=";
-    })
   ];
 
   nativeBuildInputs = [

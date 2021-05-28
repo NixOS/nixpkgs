@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    substituteInPlace configure \
+      --replace 'platform.dist()[0]' '"nix"'
+    patchShebangs .
+  '';
 
   buildPhase = "./build.py";
 

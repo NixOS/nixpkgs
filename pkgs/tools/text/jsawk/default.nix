@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey }:
+{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey_38 }:
 
 stdenv.mkDerivation {
   pname = "jsawk";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
-      --prefix PATH : "${spidermonkey}/bin"
+      --prefix PATH : "${spidermonkey_38}/bin"
   '';
 
   meta = {

@@ -21,6 +21,10 @@ in
 
     buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];
 
+    # taken from https://www.redmine.org/issues/33784
+    # can be dropped when the upstream bug is closed and the fix is present in the upstream release
+    patches = [ ./0001-python3.patch ];
+
     buildPhase = ''
       mv config config.dist
       mv public/themes public/themes.dist

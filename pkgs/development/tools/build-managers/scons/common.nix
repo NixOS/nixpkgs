@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, python3Packages, python2Packages, scons }:
+{ stdenv, fetchurl, python3Packages, lib }:
 
 python3Packages.buildPythonApplication rec {
   pname = "scons";
@@ -13,7 +13,13 @@ python3Packages.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.py2 = scons.override { python3Packages = python2Packages; };
+  postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/dist" "dist"
+  '';
+
+  # The release tarballs don't contain any tests (runtest.py and test/*):
+  doCheck = lib.versionOlder version "4.0.0";
 
   meta = with stdenv.lib; {
     description = "An improved, cross-platform substitute for Make";

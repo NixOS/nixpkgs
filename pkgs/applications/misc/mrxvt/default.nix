@@ -27,14 +27,14 @@ stdenv.mkDerivation {
     sha256 = "1mqhmnlz32lvld9rc6c1hyz7gjw4anwf39yhbsjkikcgj1das0zl";
   };
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";
     longDescription = "
-    	Multitabbed lightweight terminal emulator based on rxvt. 
+    	Multitabbed lightweight terminal emulator based on rxvt.
 	Supports transparency, backgroundimages, freetype fonts, ...
     ";
     homepage = "https://sourceforge.net/projects/materm";
-    license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

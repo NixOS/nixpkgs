@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, fetchpatch
+{ stdenv, fetchFromGitLab
 , meson, ninja, nasm, pkgconfig
 , withTools ? false # "dav1d" binary
 , withExamples ? false, SDL2 # "dav1dplay" binary
@@ -9,22 +9,15 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "1gr859xzbqrsp892v9zzzgrg8smnnzgc1jmb68qzl54a4g6jrxm0";
+    sha256 = "1yawrbaazj6a2rvvb58k6kh492fjxdwlm94bl6ipry0fqmz0rlnl";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/dav1d/-/commit/e04227c5f6729b460e0b8e5fb52eae2d5acd15ef.patch";
-      sha256 = "18mpvwviqx0x9k6av98vgpjqlzcjd89g8496zsbf57bw5dadij3l";
-    })
-  ];
 
   nativeBuildInputs = [ meson ninja nasm pkgconfig ];
   # TODO: doxygen (currently only HTML and not build by default).

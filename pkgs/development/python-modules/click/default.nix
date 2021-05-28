@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "7.1.1";
+  version = "7.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k60i2fvxf8rxazlv04mnsmlsjrj5i5sda3x1ifhr0nqi7mb864a";
+    sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
   };
 
   postPatch = ''

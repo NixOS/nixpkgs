@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "smplayer";
-  version = "19.10.2";
+  version = "20.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0i2c15yxk4by2zyjhb7n08larz9pmpa6zw383aybjxqh0nd9zv9p";
+    sha256 = "0c59gfgm2ya8yb2nx7gy1zc0nrr4206213xy86y7jw0bk9mmjxmy";
   };
 
   buildInputs = [ qtscript ];

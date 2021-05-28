@@ -4,17 +4,22 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-0.8.3";
+  pname = "st";
+  version = "0.8.4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/st/${name}.tar.gz";
-    sha256 = "0ll5wbw1szs70wdf8zy1y2ig5mfbqw2w4ls8d64r8z3y4gdf76lk";
+    url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
+    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
   };
 
   inherit patches;
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
+
+  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h"
+            + optionalString stdenv.isDarwin ''
+    substituteInPlace config.mk --replace "-lrt" ""
+  '';
 
   nativeBuildInputs = [ pkgconfig ncurses ];
   buildInputs = [ libX11 libXft ] ++ extraLibs;
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [andsild];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ andsild ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

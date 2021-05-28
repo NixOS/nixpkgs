@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pyopenssl ];
-  
+
   doCheck = false; #no tests were included
 
   meta = with stdenv.lib; {

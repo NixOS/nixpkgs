@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.15.0";
+  name = "valgrind-3.16.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
+    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -38,10 +38,6 @@ stdenv.mkDerivation rec {
       sed -i coregrind/link_tool_exe_darwin.in \
           -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
-      echo "substitute hardcoded /usr/include/mach with ${xnu}/include/mach"
-      substituteInPlace coregrind/Makefile.in \
-         --replace /usr/include/mach ${xnu}/include/mach
-
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
          --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
@@ -54,7 +50,8 @@ stdenv.mkDerivation rec {
   postPatch = "";
 
   configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit";
+    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = false; # fails
 

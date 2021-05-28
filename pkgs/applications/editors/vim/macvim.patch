@@ -1,5 +1,5 @@
 diff --git a/src/MacVim/vimrc b/src/MacVim/vimrc
-index 23a06bf..dfb10fe 100644
+index af43549..dfb10fe 100644
 --- a/src/MacVim/vimrc
 +++ b/src/MacVim/vimrc
 @@ -14,35 +14,5 @@ set backspace+=indent,eol,start
@@ -29,22 +29,22 @@ index 23a06bf..dfb10fe 100644
 -" or an installation from python.org:
 -if exists("&pythonthreedll") && exists("&pythonthreehome") &&
 -      \ !filereadable(&pythonthreedll)
--  if filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/3.7/Python")
--    " MacPorts python 3.7
--    set pythonthreedll=/opt/local/Library/Frameworks/Python.framework/Versions/3.7/Python
--  elseif filereadable("/Library/Frameworks/Python.framework/Versions/3.7/Python")
+-  if filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/3.8/Python")
+-    " MacPorts python 3.8
+-    set pythonthreedll=/opt/local/Library/Frameworks/Python.framework/Versions/3.8/Python
+-  elseif filereadable("/Library/Frameworks/Python.framework/Versions/3.8/Python")
 -    " https://www.python.org/downloads/mac-osx/
--    set pythonthreedll=/Library/Frameworks/Python.framework/Versions/3.7/Python
+-    set pythonthreedll=/Library/Frameworks/Python.framework/Versions/3.8/Python
 -  endif
 -endif
 -
 +" Default cscopeprg to the Nix-installed path
 +set cscopeprg=@CSCOPE@
 diff --git a/src/Makefile b/src/Makefile
-index 24c6934..d0f094e 100644
+index fd2d5e1..37a6d6a 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -1407,7 +1407,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
+@@ -1397,7 +1397,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
  		  MacVim/MacVim.m
  MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o \
  		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o
@@ -54,10 +54,10 @@ index 24c6934..d0f094e 100644
  MACVIMGUI_LIBS_DIR =
  MACVIMGUI_LIBS1	= -framework Cocoa -framework Carbon
 diff --git a/src/auto/configure b/src/auto/configure
-index 730d6d5..0259112 100755
+index 06257a5..68437df 100755
 --- a/src/auto/configure
 +++ b/src/auto/configure
-@@ -5859,10 +5859,7 @@ $as_echo "not found" >&6; }
+@@ -5872,10 +5872,7 @@ $as_echo "not found" >&6; }
  
      for path in "${vi_cv_path_mzscheme_pfx}/lib" "${SCHEME_LIB}"; do
        if test "X$path" != "X"; then
@@ -69,7 +69,7 @@ index 730d6d5..0259112 100755
  	  MZSCHEME_LIBS="${path}/libmzscheme3m.a"
  	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
  	elif test -f "${path}/libracket3m.a"; then
-@@ -6247,23 +6244,6 @@ $as_echo ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
+@@ -6260,23 +6257,6 @@ $as_echo ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
    fi
  
    if test "x$MACOS_X" = "xyes"; then
@@ -93,7 +93,7 @@ index 730d6d5..0259112 100755
                  PERL_LIBS=`echo "$PERL_LIBS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
      PERL_CFLAGS=`echo "$PERL_CFLAGS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
    fi
-@@ -6486,13 +6466,7 @@ __:
+@@ -6499,13 +6479,7 @@ __:
  eof
  	    	    eval "`cd ${PYTHON_CONFDIR} && make -f "${tmp_mkf}" __ | sed '/ directory /d'`"
  	    rm -f -- "${tmp_mkf}"
@@ -108,7 +108,7 @@ index 730d6d5..0259112 100755
  	      vi_cv_path_python_plibs="-L${PYTHON_CONFDIR} -lpython${vi_cv_var_python_version}"
  	      	      	      	      if test -n "${python_LINKFORSHARED}" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
  	        python_link_symbol=`echo ${python_LINKFORSHARED} | sed 's/\([^ \t][^ \t]*[ \t][ \t]*[^ \t][^ \t]*\)[ \t].*/\1/'`
-@@ -6507,7 +6481,6 @@ eof
+@@ -6520,7 +6494,6 @@ eof
  	      fi
  	      vi_cv_path_python_plibs="${vi_cv_path_python_plibs} ${python_BASEMODLIBS} ${python_LIBS} ${python_SYSLIBS} ${python_LINKFORSHARED}"
  	      	      vi_cv_path_python_plibs=`echo $vi_cv_path_python_plibs | sed s/-ltermcap//`
@@ -116,7 +116,7 @@ index 730d6d5..0259112 100755
  
  fi
  
-@@ -6586,13 +6559,6 @@ rm -f core conftest.err conftest.$ac_objext \
+@@ -6599,13 +6572,6 @@ rm -f core conftest.err conftest.$ac_objext \
  $as_echo "no" >&6; }
  	fi
  
@@ -130,19 +130,19 @@ index 730d6d5..0259112 100755
  			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compile and link flags for Python are sane" >&5
  $as_echo_n "checking if compile and link flags for Python are sane... " >&6; }
  	cflags_save=$CFLAGS
-@@ -7486,11 +7452,7 @@ $as_echo "$tclver - OK" >&6; };
+@@ -7499,11 +7465,7 @@ $as_echo "$tclver - OK" >&6; };
  
        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of Tcl include" >&5
  $as_echo_n "checking for location of Tcl include... " >&6; }
 -      if test "x$MACOS_X" != "xyes"; then
  	tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /usr/local/include /usr/local/include/tcl$tclver /usr/include /usr/include/tcl$tclver"
 -      else
--		tclinc="/System/Library/Frameworks/Tcl.framework/Headers"
+-				tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /System/Library/Frameworks/Tcl.framework/Headers `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework/Versions/Current/Headers"
 -      fi
        TCL_INC=
        for try in $tclinc; do
  	if test -f "$try/tcl.h"; then
-@@ -7508,12 +7470,8 @@ $as_echo "<not found>" >&6; }
+@@ -7521,13 +7483,8 @@ $as_echo "<not found>" >&6; }
        if test -z "$SKIP_TCL"; then
  	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of tclConfig.sh script" >&5
  $as_echo_n "checking for location of tclConfig.sh script... " >&6; }
@@ -150,12 +150,13 @@ index 730d6d5..0259112 100755
  	  tclcnf=`echo $tclinc | sed s/include/lib/g`
  	  tclcnf="$tclcnf `echo $tclinc | sed s/include/lib64/g`"
 -	else
--	  	  tclcnf="/System/Library/Frameworks/Tcl.framework"
+-	  	  	  	  tclcnf=`echo $tclinc | sed s/include/lib/g`
+-	  tclcnf="$tclcnf /System/Library/Frameworks/Tcl.framework `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework"
 -	fi
  	for try in $tclcnf; do
  	  if test -f "$try/tclConfig.sh"; then
  	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $try/tclConfig.sh" >&5
-@@ -7703,10 +7661,6 @@ $as_echo "$rubyhdrdir" >&6; }
+@@ -7717,10 +7674,6 @@ $as_echo "$rubyhdrdir" >&6; }
  	if test -f "$rubylibdir/$librubya"; then
  	  librubyarg="$librubyarg"
  	  RUBY_LIBS="$RUBY_LIBS -L$rubylibdir"
@@ -167,10 +168,10 @@ index 730d6d5..0259112 100755
  
  	if test "X$librubyarg" != "X"; then
 diff --git a/src/vim.h b/src/vim.h
-index 87d1c92..8a7d5a5 100644
+index bbc01ee..5a93591 100644
 --- a/src/vim.h
 +++ b/src/vim.h
-@@ -250,17 +250,6 @@
+@@ -244,17 +244,6 @@
  # define SUN_SYSTEM
  #endif
  

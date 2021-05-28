@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
   {
     nodes = {
-      router = {config, pkgs, ...}: { 
+      router = {config, pkgs, ...}: {
         config = {
-          # This machines simulates a router with IPv6 forwarding and a static IPv6 address.
+          # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
           boot.kernel.sysctl = {
             "net.ipv6.conf.all.forwarding" = true;
           };
@@ -14,13 +14,25 @@ import ./make-test-python.nix (
             enable = true;
             # Serve router advertisements to the client machine with prefix information matching
             # any IPv6 /64 prefixes configured on this interface.
-            configFile = pkgs.writeText "corerad.toml" ''
-              [[interfaces]]
-              name = "eth1"
-              advertise = true
-                [[interfaces.prefix]]
-                prefix = "::/64"
-            '';
+            #
+            # This configuration is identical to the example in the CoreRAD NixOS module.
+            settings = {
+              interfaces = [
+                {
+                  name = "eth0";
+                  monitor = true;
+                }
+                {
+                  name = "eth1";
+                  advertise = true;
+                  prefix = [{ prefix = "::/64"; }];
+                }
+              ];
+              debug = {
+                address = "localhost:9430";
+                prometheus = true;
+              };
+            };
           };
         };
       };
@@ -66,5 +78,12 @@ import ./make-test-python.nix (
           assert (
               "/64 scope global temporary" in addrs
           ), "SLAAC temporary address was not configured on client after router advertisement"
+
+      with subtest("Verify HTTP debug server is configured"):
+          out = router.succeed("curl localhost:9430/metrics")
+
+          assert (
+              "corerad_build_info" in out
+          ), "Build info metric was not found in Prometheus output"
     '';
   })

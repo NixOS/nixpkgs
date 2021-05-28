@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx, mela, root5, qcdnum, which }:
+{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx
+, mela, root5, qcdnum, which, libtirpc
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfitter";
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran which ];
   buildInputs =
-    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum ]
+    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum libtirpc ]
     # pdf2yaml requires fmemopen and open_memstream which are not readily available on Darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) libyaml
     ;
@@ -46,6 +48,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
 
   meta = with stdenv.lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";

@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sdr.osmocom.org/trac/wiki/GrOsmoSDR";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

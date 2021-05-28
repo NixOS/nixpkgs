@@ -5,12 +5,12 @@
 
 let
   pname = "zulip";
-  version = "5.0.0";
+  version = "5.4.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/zulip/zulip-desktop/releases/download/v${version}/Zulip-${version}-x86_64.AppImage";
-    sha256 = "0qwlhkzb3lbzk3piyfx8nn827kcafrl3j1nxrn18f8px9gwasinz";
+    sha256 = "0yd4g87kcwiy1arx3y2nyb7lq1nlh4cn87762k2sd8n4s9i52c7r";
     name="${pname}-${version}.AppImage";
   };
 

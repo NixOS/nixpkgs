@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-topology-conf-${version}";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "09cls485ckdjsp4azhv3nw7chyg3r7zrqgald6yp70f7cysxcwml";
+    sha256 = "1zwxc9zhfcmyffjjbibzpdvf4kx7wv9g2zl6xz7y0d6srfr9jgw3";
   };
 
   dontBuild = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "https://www.alsa-project.org/";
     description = "ALSA topology configuration files";
 
     longDescription = ''

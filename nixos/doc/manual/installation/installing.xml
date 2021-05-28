@@ -42,7 +42,7 @@
   </para>
 
   <para>
-   If the text is too small to be legible, try <command>setfont ter-132n</command>
+   If the text is too small to be legible, try <command>setfont ter-v32n</command>
    to increase the font size.
   </para>
 
@@ -70,9 +70,13 @@
 
    <para>
     If you would like to continue the installation from a different machine you
-    need to activate the SSH daemon via <command>systemctl start
-    sshd</command>. You then must set a password for either <literal>root</literal> or
-    <literal>nixos</literal> with <command>passwd</command> to be able to login.
+    can use activated SSH daemon. You need to copy your ssh key to either
+    <literal>/home/nixos/.ssh/authorized_keys</literal> or
+    <literal>/root/.ssh/authorized_keys</literal> (Tip: For installers with a
+    modifiable filesystem such as the sd-card installer image a key can be manually
+    placed by mounting the image on a different machine). Alternatively you must set
+    a password for either <literal>root</literal> or <literal>nixos</literal> with
+    <command>passwd</command> to be able to login.
    </para>
   </section>
  </section>
@@ -146,7 +150,7 @@
        partition. It uses the initially reserved 512MiB at the start of the
        disk.
 <screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
       </para>
      </listitem>
     </orderedlist>
@@ -513,7 +517,7 @@ Retype new UNIX password: ***</screen>
 <prompt># </prompt>parted /dev/sda -- mkpart primary 512MiB -8GiB
 <prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
 <prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
   </example>
 
   <example xml:id="ex-install-sequence">
@@ -550,7 +554,7 @@ Retype new UNIX password: ***</screen>
   # Note: setting fileSystems is generally not
   # necessary, since nixos-generate-config figures them out
   # automatically in hardware-configuration.nix.
-  #<link linkend="opt-fileSystems._name__.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
+  #<link linkend="opt-fileSystems._name_.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
 
   # Enable the OpenSSH server.
   services.sshd.enable = true;

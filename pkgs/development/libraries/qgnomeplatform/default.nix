@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, nix-update-script
 , pkgconfig
 , gtk3
 , glib
@@ -14,13 +15,13 @@
 
 mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "0fb1mzs6sx76bl7f0z2xhc0jq6y1c55jrw1v3na8577is6g5ji0a";
+    sha256 = "1mwqg2zk0sfjq54vz2jjahbgi5sxw8rb71h6mgg459wp99mhlqi0";
   };
 
   patches = [
@@ -52,7 +53,7 @@ mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

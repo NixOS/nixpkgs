@@ -13,6 +13,7 @@ buildGoPackage {
     sha256 = "06kglxdgj1dfpc9bdnvhsh8z0c1pdbmwmfx4km01wpppzk06dnvm";
   };
 
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {

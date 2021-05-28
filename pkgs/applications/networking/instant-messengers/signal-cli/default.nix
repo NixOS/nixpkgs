@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.6.7";
+  version = "0.6.10";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    sha256 = "13wz2c0n89aglqjfqlma1z4jr5xnp2qlg8cqng3v9axpkkynk996";
+    sha256 = "0zglcx5ylqjc3hjkzi84mjhp9dchnnkv12qq75q5pqkx1w45rmim";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libmatthew_java dbus dbus_java ];

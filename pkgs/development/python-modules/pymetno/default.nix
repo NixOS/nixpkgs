@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "PyMetno";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "Danielhiversen";
     rev = version;
-    sha256 = "00v2r3nn48svni9rbmbf0a4ylgfcf93gk2wg7qnm1fv1qrkgscvg";
+    sha256 = "1jngf0mbn5hn166pqh1ga5snwwvv7n5kv1k9kaksrfibixkvpw6h";
   };
 
   propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];

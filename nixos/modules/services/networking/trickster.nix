@@ -106,7 +106,8 @@ in
         Restart = "always";
       };
     };
+  };
 
-  };  
+  meta.maintainers = with maintainers; [ _1000101 ];
+
 }
-

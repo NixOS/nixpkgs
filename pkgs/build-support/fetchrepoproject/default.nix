@@ -2,7 +2,7 @@
 
 { name, manifest, rev ? "HEAD", sha256
 # Optional parameters:
-, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
+, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? "", manifestName ? ""
 , localManifests ? [], createMirror ? false, useArchive ? false
 }:
 
@@ -16,6 +16,7 @@ let
     (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
     (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
     (optionalString (referenceDir != "") "--reference=${referenceDir}")
+    (optionalString (manifestName != "") "--manifest-name=${manifestName}")
   ];
 
   repoInitFlags = [

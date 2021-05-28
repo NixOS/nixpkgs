@@ -27,6 +27,16 @@ with lib;
       '';
     };
 
+    security.unprivilegedUsernsClone = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        When disabled, unprivileged users will not be able to create new namespaces.
+        By default unprivileged user namespaces are disabled.
+        This option only works in a hardened profile.
+      '';
+    };
+
     security.protectKernelImage = mkOption {
       type = types.bool;
       default = false;
@@ -113,6 +123,10 @@ with lib;
           message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
+    })
+
+    (mkIf config.security.unprivilegedUsernsClone {
+      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = mkDefault true;
     })
 
     (mkIf config.security.protectKernelImage {

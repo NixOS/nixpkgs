@@ -55,6 +55,9 @@ in {
     with subtest("git daemon starts"):
         server.wait_for_unit("git-daemon.service")
 
+    server.wait_for_unit("network-online.target")
+    client.wait_for_unit("network-online.target")
+
     with subtest("client can clone project.git"):
         client.succeed(
             "git clone git://server/project.git /project",

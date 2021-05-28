@@ -17,7 +17,6 @@ in {
       services.nextcloud = {
         enable = true;
         hostName = "nextcloud";
-        nginx.enable = true;
         caching = {
           apcu = false;
           redis = true;

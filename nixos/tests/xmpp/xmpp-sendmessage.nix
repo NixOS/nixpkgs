@@ -36,7 +36,11 @@ class CthonTest(ClientXMPP):
         def timeout_callback(arg):
             log.error("ERROR: Cannot upload file. XEP_0363 seems broken")
             sys.exit(1)
-        url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
+        try:
+            url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
+        except:
+            log.error("ERROR: Cannot run upload command. XEP_0363 seems broken")
+            sys.exit(1)
         log.info('Upload success!')
         # Test MUC
         self.plugin['xep_0045'].join_muc('testMucRoom', 'cthon98', wait=True)

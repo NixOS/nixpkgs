@@ -18,12 +18,12 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    install -D -t $bin/share/tewisay/cows go/src/${goPackagePath}/cows/*.cow
+    install -D -t $out/share/tewisay/cows go/src/${goPackagePath}/cows/*.cow
   '';
 
   preFixup = ''
-    wrapProgram $bin/bin/tewisay \
-      --prefix COWPATH : $bin/share/tewisay/cows
+    wrapProgram $out/bin/tewisay \
+      --prefix COWPATH : $out/share/tewisay/cows
   '';
 
   meta = {
@@ -31,6 +31,5 @@ buildGoPackage rec {
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = stdenv.lib.licenses.cc0;
     maintainers = [ stdenv.lib.maintainers.chiiruno ];
-    platforms = stdenv.lib.platforms.all;
   };
 }

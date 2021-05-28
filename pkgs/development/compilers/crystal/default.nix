@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
-, coreutils, git, gmp, nettools, openssl, readline, tzdata, libxml2, libyaml
+, coreutils, git, gmp, hostname, openssl, readline, tzdata, libxml2, libyaml
 , boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib, pkgconfig
 , callPackage }:
 
@@ -62,9 +62,12 @@ let
       substituteInPlace src/crystal/system/unix/time.cr \
         --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
 
-      ln -s spec/compiler spec/std
+      ln -sf spec/compiler spec/std
 
-      mkdir /tmp/crystal
+      # Dirty fix for when no sandboxing is enabled
+      rm -rf /tmp/crystal
+      mkdir -p /tmp/crystal
+
       substituteInPlace spec/std/file_spec.cr \
         --replace '/bin/ls' '${coreutils}/bin/ls' \
         --replace '/usr/share' '/tmp/crystal' \
@@ -81,7 +84,7 @@ let
         --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
 
       substituteInPlace spec/std/system_spec.cr \
-        --replace '`hostname`' '`${nettools}/bin/hostname`'
+        --replace '`hostname`' '`${hostname}/bin/hostname`'
 
       # See https://github.com/crystal-lang/crystal/pull/8640
       substituteInPlace spec/std/http/cookie_spec.cr \
@@ -107,6 +110,8 @@ let
     buildFlags = [
       "all" "docs"
     ];
+
+    LLVM_CONFIG = "${llvm}/bin/llvm-config";
 
     FLAGS = [
       "--release"

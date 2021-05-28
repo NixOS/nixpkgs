@@ -8,12 +8,11 @@
 , fastjsonschema
 , jsonschema
 , numpy
-, marshmallow
-, marshmallow-polyfield
 , networkx
 , ply
 , psutil
 , python-constraint
+, python-dateutil
 , retworkx
 , scipy
 , sympy
@@ -36,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.13.0";
+  version = "0.15.1";
 
   disabled = pythonOlder "3.5";
 
@@ -44,7 +43,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "03fgqmyahgmkf5dbw19n9c1v8p4kmpk50wxhhc8435cclvs26x9j";
+    sha256 = "1p7y36gj3675dmp05nwi0m9nc7h0bwyimir3ncf9wbkx3crrh99c";
   };
 
   nativeBuildInputs = [ cython ];
@@ -54,13 +53,12 @@ buildPythonPackage rec {
     fastjsonschema
     jsonschema
     numpy
-    marshmallow
-    marshmallow-polyfield
     matplotlib
     networkx
     ply
     psutil
     python-constraint
+    python-dateutil
     retworkx
     scipy
     sympy
@@ -74,10 +72,6 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  postPatch = ''
-    # Fix relative imports in tests
-    touch test/python/dagcircuit/__init__.py
-  '';
 
   # *** Tests ***
   checkInputs = [
@@ -94,10 +88,6 @@ buildPythonPackage rec {
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
   ];
 
-  disabledTests = [
-    "test_jupyter_jobs_pbars" # needs IBMQ provider package (qiskit-ibmq-provider), circular dependency
-  ];
-
   pytestFlagsArray = [
     "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
   ];
@@ -107,9 +97,9 @@ buildPythonPackage rec {
   preCheck = ''
     export PACKAGEDIR=$out/${python.sitePackages}
     echo "Moving Qiskit test files to package directory"
-    cp -r $TMP/source/test $PACKAGEDIR
-    cp -r $TMP/source/examples $PACKAGEDIR
-    cp -r $TMP/source/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
+    cp -r $TMP/$sourceRoot/test $PACKAGEDIR
+    cp -r $TMP/$sourceRoot/examples $PACKAGEDIR
+    cp -r $TMP/$sourceRoot/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
 
     # run pytest from Nix's $out path
     pushd $PACKAGEDIR
@@ -128,6 +118,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://qiskit.org/terra";
     downloadPage = "https://github.com/QISKit/qiskit-terra/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

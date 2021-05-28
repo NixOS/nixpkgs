@@ -81,7 +81,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
       fi
 
       ${cfg.runHook}
@@ -217,7 +217,7 @@ in
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        ${config.systemd.package}/bin/systemctl reload dhcpcd.service
+        /run/current-system/systemd/bin/systemctl reload dhcpcd.service
       '';
 
   };

@@ -2,9 +2,13 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cvxpy
 , cython
+, muparserx
+, ninja
+, nlohmann_json
 , numpy
 , openblas
 , pybind11
@@ -18,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.0";
+  version = "0.6.1";
 
   disabled = pythonOlder "3.5";
 
@@ -26,18 +30,20 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "05lsirrdnnr5yqhwkgv08d9aib8xq4xpd6aq2pfqsi9qkii2fff1";
+    sha256 = "1fnv11diis0as8zcc57mamz0gbjd6vj7nw3arxzvwa77ja803sr4";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     scikit-build
   ];
 
   buildInputs = [
     openblas
     spdlog
+    nlohmann_json
+    muparserx
   ];
 
   propagatedBuildInputs = [
@@ -47,10 +53,10 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  prePatch = ''
-    # remove dependency on PyPi cmake package, which isn't in Nixpkgs
-    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
-  '';
+  patches = [
+    # TODO: remove in favor of qiskit-aer PR #877 patch once accepted/stable
+    ./remove-conan-install.patch
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -58,11 +64,6 @@ buildPythonPackage rec {
     "-DBUILD_TESTS=True"
     "-DAER_THRUST_BACKEND=OMP"
   ];
-
-  # Needed to find qiskit.providers.aer modules in cython. This exists in GitHub, don't know why it isn't copied by default
-  postFixup = ''
-    touch $out/${python.sitePackages}/qiskit/__init__.pxd
-  '';
 
   # *** Testing ***
 
@@ -81,7 +82,7 @@ buildPythonPackage rec {
     # Tests include a compiled "circuit" which is auto-built in $HOME
     export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
-    cp -r test $HOME
+    cp -r $TMP/$sourceRoot/test $HOME
 
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
@@ -94,11 +95,8 @@ buildPythonPackage rec {
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
-    # Doesn't build on aarch64 (libmuparserx issue).
-    # Can fix by building muparserx from source (https://github.com/beltoforion/muparserx)
-    # or in future updates (e.g. Raspberry Pi enabled via https://github.com/Qiskit/qiskit-aer/pull/651 & https://github.com/Qiskit/qiskit-aer/pull/660)
-    platforms = platforms.x86_64;
   };
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.1.1";
+  version = "1.2.0";
 
   disabled = isPy27;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner  = "dipy";
     repo   = pname;
     rev    = version;
-    sha256 = "08abx0f4li6ya62ilc59miw4mk6wndizahyylxhgcrpacb6ydw28";
+    sha256 = "0x49lph400ndlvk419nd2g9ss4jg75xr7xh88ggv5d2ama19v7py";
   };
 
   nativeBuildInputs = [ cython packaging ];

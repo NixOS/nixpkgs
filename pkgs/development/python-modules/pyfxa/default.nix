@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest }:
+, grequests, mock, responses, pytest, pyjwt }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
-  version = "0.7.3";
+  version = "0.7.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f47f4285629fa6c033c79adc3fb90926c0818a42cfddb04d32818547362f1627";
+    sha256 = "6c85cd08cf05f7138dee1cf2a8a1d68fd428b7b5ad488917c70a2a763d651cdb";
   };
 
   postPatch = ''
@@ -17,15 +17,16 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    requests cryptography pybrowserid hawkauthlib six
+    pyjwt requests cryptography pybrowserid hawkauthlib six
   ];
 
   checkInputs = [
     grequests mock responses pytest
   ];
 
+  # test_oath is mostly network calls
   checkPhase = ''
-    pytest
+    pytest --ignore=fxa/tests/test_oauth.py
   '';
 
   meta = with lib; {

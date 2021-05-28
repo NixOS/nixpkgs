@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg, glew, pcre
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg_3, glew, pcre
 , rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, gnome2, lzma, nasm
 , llvm, glibmm
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [
-    curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
+    curl zlib ffmpeg_3 glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
     gnome2.pango lzma nasm llvm glibmm
   ];
 

@@ -4,13 +4,13 @@
 }:
 
 let
-  version = "4.9.3";
+  version = "4.9.6";
 
   subsurfaceSrc = (fetchFromGitHub {
-    owner = "Subsurface-divelog";
+    owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "1i07f7appifx9j205x5a7ng01wsipxr6n9a3692pm60jli2nsir5";
+    sha256 = "1w1ak0fi6ljhg2jc4mjqyrbpax3iawrnsaqq6ls7qdzrhi37rggf";
     fetchSubmodules = true;
   });
 
@@ -39,13 +39,13 @@ let
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
 
-    version = "2017-12-18";
+    version = "2018-06-02";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "79f3511d60dc9640de02a5f24656094c8982b26d";
-      sha256 = "11334w0bnfb97sv23vvj2b5hcwvr0171hxldn91jms9y12l5j15d";
+      rev = "54a357f9590d9cf011bf1713589f66bad65e00eb";
+      sha256 = "159kslp6rj0qznzxijppwvv8jnswlfgf2pw4x8ladi8vp6bzxnzi";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -77,9 +77,6 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = subsurfaceSrc;
-
-  # remove with the 4.10 release
-  patches = [ ./0001-core-fix-libgit-ifdef-to-handle-libgit2-v1.0-and-onw.patch ];
 
   buildInputs = [
     libdc googlemaps

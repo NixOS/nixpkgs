@@ -22,7 +22,5 @@ stdenv.mkDerivation {
   ''; # */
   allowedReferences = ["out"];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
-  };
+  inherit (klibc) meta;
 }

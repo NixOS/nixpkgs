@@ -15,6 +15,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' newfs_hfs.tproj/makehfs.c
+  '';
+
   sourceRoot = "diskdev_cmds-" + version;
   patches = [ "../debian/patches/*.patch" ];
 

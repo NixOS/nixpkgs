@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.fefe.de/gatling/";
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.the-kenny ];
   };
 }

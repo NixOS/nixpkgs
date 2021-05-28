@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    substituteInPlace loader/vulkan.pc.in --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include'
+    substituteInPlace loader/vulkan.pc.in \
+      --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include' \
+      --replace 'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' 'libdir=@CMAKE_INSTALL_LIBDIR@'
   '';
 
   cmakeFlags = [

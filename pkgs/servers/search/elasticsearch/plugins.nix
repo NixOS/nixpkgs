@@ -64,6 +64,23 @@ in {
     };
   };
 
+  analysis-phonetic = esPlugin rec {
+    pluginName = "analysis-phonetic";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.5.1" then "0znmbdf99bli4kvyb3vxr5x48yb6n64nl38gpa63iqsv3nlbi0hp"
+        else if version == "6.8.3" then "0ggdhf7w50bxsffmcznrjy14b578fps0f8arg3v54qvj94v9jc37"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-phonetic";
+      description = "The Phonetic Analysis plugin integrates phonetic token filter analysis with elasticsearch";
+      license = licenses.asl20;
+    };
+  };
+
   discovery-ec2 = esPlugin rec {
     pluginName = "discovery-ec2";
     version = esVersion;

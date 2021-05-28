@@ -1,15 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests, pytest }:
 
 buildPythonPackage rec {
-  version = "0.1.2";
+  version = "0.2.1";
   pname = "etelemetry";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m3dqvs3xbckmjiwppy366qmgzx0z917j1d7dadfl3bprgipy51j";
+    sha256 = "1rw8im09ppnb7z7p7rx658rp5ib8zca8byxg1kiflqwgx5c8zddz";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ ci-info ci-py requests ];
 
   # all 2 of the tests both try to pull down from a url
   doCheck = false;

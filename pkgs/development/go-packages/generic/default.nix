@@ -29,6 +29,9 @@
 # go2nix dependency file
 , goDeps ? null
 
+# Whether to delete the vendor folder supplied with the source.
+, deleteVendor ? false
+
 , dontRenameImports ? false
 
 # Do not enable this without good reason
@@ -96,6 +99,18 @@ let
       mkdir -p "go/src/$(dirname "$goPackagePath")"
       mv "$sourceRoot" "go/src/$goPackagePath"
 
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
+        rm -rf "go/src/$goPackagePath/vendor"
+      fi
+    '' + lib.optionalString (goDeps != null) ''
+      if [ -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder exists, 'goDeps' is not needed"
+        exit 10
+      fi
     '' + lib.flip lib.concatMapStrings goPath ({ src, goPackagePath }: ''
       mkdir goPath
       (cd goPath; unpackFile "${src}")
@@ -203,15 +218,15 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      mkdir -p $bin
+      mkdir -p $out
       dir="$NIX_BUILD_TOP/go/bin"
-      [ -e "$dir" ] && cp -r $dir $bin
+      [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
     '';
 
     preFixup = preFixup + ''
-      find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/{bin,libexec,lib} -type f 2>/dev/null | xargs -r ${removeExpr removeReferences} || true
     '';
 
     strictDeps = true;
@@ -234,9 +249,6 @@ let
       lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
     enableParallelBuilding = enableParallelBuilding;
-
-    # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-    outputs = args.outputs or [ "bin" "out" ];
 
     meta = {
       # Add default meta information

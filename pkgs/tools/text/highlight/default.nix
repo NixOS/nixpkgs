@@ -5,13 +5,13 @@ with stdenv.lib;
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "3.56";
+    version = "3.57";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "1pilx58dg96zm0yx7i6k92vibwpvpj8ir39f2akrsyjgijnv3sx4";
+      sha256 = "1xrk7c7akjiwh3wh9bll0qh4g0kqvbzjz9ancpadnk0k7bqi0kxf";
     };
 
     enableParallelBuilding = true;

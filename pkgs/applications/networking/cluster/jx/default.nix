@@ -1,29 +1,37 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
-  name = "jx";
-  version = "1.3.967";
+  pname = "jx";
+  version = "2.1.138";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "0a25m7sz134kch21bg6l86kvwl4cg6babqf57kqidq6kid1zgdaq";
+    sha256 = "1i45gzaql6rfplliky56lrzwjnm2qzv25kgyq7gvn9c7hjaaq65b";
   };
 
-  patches = [
-    # https://github.com/jenkins-x/jx/pull/3321
-    ./3321-fix-location-of-thrift.patch
-  ];
+  vendorSha256 = "1wvggarakshpw7m8h0x2zvd6bshd2kzbrjynfa113z90pgksvjng";
 
-  modSha256 = "0ljf0c0c3pc12nmhdbrwflcaj6hs8igzjw5hi6fyhi6n9cy87vac";
+  doCheck = false;
 
   subPackages = [ "cmd/jx" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildFlagsArray = ''
     -ldflags=
+    -s -w
     -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
+    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
+    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
+  '';
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/jx completion $shell > jx.$shell
+      installShellCompletion jx.$shell
+    done
   '';
 
   meta = with lib; {

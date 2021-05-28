@@ -3,7 +3,7 @@
 let
   version = "1.13.0";
   jarName = "bfg-${version}.jar";
-  mavenUrl = "http://central.maven.org/maven2/com/madgag/bfg/${version}/${jarName}";
+  mavenUrl = "mirror://maven/com/madgag/bfg/${version}/${jarName}";
 in
   stdenv.mkDerivation {
     inherit version jarName;

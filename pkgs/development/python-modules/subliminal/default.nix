@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dzv5csjcwgz69aimarx2c6606ckm2gbn4x2mzydcqnyai7sayhl";
+    sha256 = "12v2clnbic8320fjsvkg3xfxfa7x8inhjk61z00pzwx46g3rqhy6";
   };
 
   propagatedBuildInputs = [

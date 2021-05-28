@@ -16,6 +16,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/tartley/cbeams";
     description = "Command-line program to draw animated colored circles in the terminal";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

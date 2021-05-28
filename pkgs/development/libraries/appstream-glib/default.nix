@@ -23,7 +23,7 @@
 , pngquant
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.17";
+  name = "appstream-glib-0.7.18";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
-    sha256 = "06pm8l58y0ladimyckbvlslr5bjj9rwb70rgjmn09l41pdpipy2i";
+    sha256 = "12s7d3nqjs1fldnppbg2mkjg4280f3h8yzj3q1hiz3chh1w0vjbx";
   };
 
   nativeBuildInputs = [

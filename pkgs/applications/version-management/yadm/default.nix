@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, git, gnupg }:
 
-let version = "2.4.0"; in
+let version = "2.5.0"; in
 stdenv.mkDerivation {
   pname = "yadm";
   inherit version;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
     rev    = version;
-    sha256 = "0kpahznrkxkyj92vrhwjvldg2affi1askgwvpgbs4mg40f92szlp";
+    sha256 = "128qlx8mp7h5ifapqqgsj3fwghn3q6x6ya0y33h5r7gnassd3njr";
   };
 
   dontConfigure = true;

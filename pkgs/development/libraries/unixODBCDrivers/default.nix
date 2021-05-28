@@ -108,7 +108,7 @@
 
     buildInputs = [ unixODBC sqlite zlib libxml2 ];
 
-    configureFlags = [ "--with-odbc=${unixODBC}" ];
+    configureFlags = [ "--with-odbc=${unixODBC}" "--with-sqlite3=${sqlite.dev}" ];
 
     installTargets = [ "install-3" ];
 

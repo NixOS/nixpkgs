@@ -1,23 +1,35 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.2.3";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "1594qrwrz4bc3iipm4aqb8l1zyi04pwmiz0vdlfn12qn1p7lad5p";
+    sha256 = "053rihi8lqai3z837ddi441yl41lsg1zj9gl62s9vbjmq5l11fjh";
   };
 
-  modSha256 = "1cfhxkvwzf7sn227y6h5h19f27a9ngmpnyqdlfba5km8axqn29vm";
+  vendorSha256 = "1ra4yfplmgzxzs1nlbm0izg339fjnkfrw071y8w4m6q6wnzdhljb";
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/mdlayher/corerad/internal/build.linkTimestamp=1586881022
-    -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
+  doCheck = false;
+
+  # Since the tarball pulled from GitHub doesn't contain git tag information,
+  # we fetch the expected tag's timestamp from a file in the root of the
+  # repository.
+  preBuild = ''
+    buildFlagsArray=(
+      -ldflags="
+        -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)
+        -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
+      "
+    )
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) corerad;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/corerad";

@@ -9,13 +9,13 @@ assert enableGrpc -> c-ares != null;
 
 stdenv.mkDerivation rec {
   pname = "lightstep-tracer-cpp";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lightstep";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zwj5r0rmfk6cm5ikay4kh7na455vskylc5yrxkhisn4n850d1l4";
+    sha256 = "0d7z9isf0n8s63mvp3j75949w0yv7jsva29i62lq8yxbym688fxb";
   };
 
   nativeBuildInputs = [

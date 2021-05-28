@@ -1,7 +1,7 @@
 { stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkgconfig
 , flex, bison }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "dvdauthor-0.7.1";
 
   src = fetchurl {

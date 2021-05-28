@@ -1,19 +1,28 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkgconfig, libiconv, curl }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, perl
+, pkg-config
+, Security
+, curl
+, libiconv
+, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "16da30zbv8f7w8bxsssmrpzm41a966wby1l6ldyiiszs980qh7c5";
+    sha256 = "1s5wb5m0d77qi90pyxld98ap37xnxrz3sz5gazq0pp5i9c9xa124";
   };
 
-  cargoSha256 = "0z365pgdd95apk2zz2n0gx85s0gf8ccfbqippxqn1fdsppihib6g";
+  cargoSha256 = "10dzvzjqib751h2p1pl0z3dy2d17xwrcp9vyfrfr185yximcw2wx";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv curl ];
 

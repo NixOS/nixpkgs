@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     description = "Firmware uploader for the Teensy microcontroller boards";
     homepage = "https://www.pjrc.com/teensy/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.unix;
   };
 }

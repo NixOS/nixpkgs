@@ -263,6 +263,8 @@ Sometimes plugins require an override that must be changed when the plugin is up
 
 To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
+Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of Language Server Protocol integration with vim/neovim.
+
 ## Important repositories
 
 - [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository

@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeflate";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${version}";
-    sha256 = "1v0y7998p8a8wpblnpdyk5zzvpj8pbrpzxwxmv0b0axrhaarxrf3";
+    sha256 = "1rhichmalqz7p1hiwvn6y0isralpbf0w5nyjp4lg0asawkxy9cww";
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace /usr $out
+    substituteInPlace Makefile --replace /usr/local $out
   '';
 
   configurePhase = ''

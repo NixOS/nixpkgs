@@ -9,6 +9,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     networking.firewall.allowedTCPPorts = [ 9091 ];
 
+    security.apparmor.enable = true;
+
     services.transmission.enable = true;
   };
 

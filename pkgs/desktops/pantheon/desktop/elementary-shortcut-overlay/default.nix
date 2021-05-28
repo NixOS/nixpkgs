@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.1.1";
+  version = "1.1.2";
 
   repoName = "shortcut-overlay";
 
@@ -25,11 +26,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "03wnc3vfnrkm5i7h370n7h2mbcmaxnhynmjs37q63vq6vq7agldb";
+    sha256 = "sha256-TFS29vwDkTtoFcIVAbKskyLemqW9fxE7fQkM61DpDm0=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

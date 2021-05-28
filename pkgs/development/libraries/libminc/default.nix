@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname   = "libminc";
-  version = "2.4.03";
+  version = "unstable-2020-07-17";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
     repo   = pname;
-    rev    = "release-${version}";
-    sha256 = "0kpmqs9df836ywsqj749qbsfavf5bnldblxrmnmxqq9pywc8yfrm";
+    rev    = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
+    sha256 = "0yr4ksghpvxh9zg0a4p7hvln3qirsi08plvjp5kxx2qiyj96zsdm";
   };
 
   postPatch = ''
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib netcdf nifticlib hdf5 ];
+  buildInputs = [ zlib nifticlib ];
+  propagatedBuildInputs = [ netcdf hdf5 ];
 
   cmakeFlags = [
     "-DLIBMINC_MINC1_SUPPORT=ON"
@@ -29,17 +30,16 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   checkPhase = ''
     export LD_LIBRARY_PATH="$(pwd)"  # see #22060
-    ctest -E 'ezminc_rw_test|minc_conversion' --output-on-failure
-    # ezminc_rw_test can't find libminc_io.so.5.2.0; minc_conversion hits netcdf compilation issue
+    ctest -j1 -E 'ezminc_rw_test' --output-on-failure
+    # -j1: see https://github.com/BIC-MNI/libminc/issues/110
+    # ezminc_rw_test: can't find libminc_io.so.5.2.0
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    homepage = "https://github.com/${owner}/${pname}";
+    homepage = "https://github.com/BIC-MNI/libminc";
     description = "Medical imaging library based on HDF5";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

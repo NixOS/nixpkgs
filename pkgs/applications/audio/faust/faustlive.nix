@@ -1,26 +1,34 @@
 { stdenv, fetchFromGitHub
 , llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
-, bc, coreutils, which
+, bc, coreutils, which, libsndfile, pkg-config
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "2017-12-05";
+  version = "2.5.4";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    rev = "281fcb852dcd94f8c57ade1b2a7a3937542e1b2d";
-    sha256 = "0sw44yd9928rid9ib0b5mx2x129m7zljrayfm6jz6hrwdc5q3k9a";
+    rev = version;
+    sha256 = "0npn8fvq8iafyamq4wrj1k1bmk4xd0my2sp3gi5jdjfx6hc1sm3n";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
     llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
-    bc coreutils which
+    bc coreutils which libsndfile pkg-config
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  preBuild = "patchShebangs Build/Linux/buildversion";
+  postPatch = "cd Build";
+
+  installPhase = ''
+    install -d "$out/bin"
+    install -d "$out/share/applications"
+    install FaustLive/FaustLive "$out/bin"
+    install rsrc/FaustLive.desktop "$out/share/applications"
+  '';
 
   meta = with stdenv.lib; {
     description = "A standalone just-in-time Faust compiler";

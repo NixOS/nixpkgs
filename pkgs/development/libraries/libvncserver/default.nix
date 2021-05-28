@@ -7,9 +7,9 @@ let
   s = # Generated upstream information
   rec {
     pname = "libvncserver";
-    version = "0.9.12";
+    version = "0.9.13";
     url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
-    sha256 = "1226hb179l914919f5nm2mlf8rhaarqbf48aa649p4rwmghyx9vm"; # unpacked archive checksum
+    sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
   };
 in
 stdenv.mkDerivation {
@@ -17,18 +17,7 @@ stdenv.mkDerivation {
   src = fetchzip {
     inherit (s) url sha256;
   };
-  patches = [
-    (fetchpatch {
-      name = "CVE-2018-20750.patch";
-      url = "https://github.com/LibVNC/libvncserver/commit/09e8fc02f59f16e2583b34fe1a270c238bd9ffec.patch";
-      sha256 = "004h50786nvjl3y3yazpsi2b767vc9gqrwm1ralj3zgy47kwfhqm";
-    })
-    (fetchpatch {
-      name = "CVE-2019-15681.patch";
-      url = "https://github.com/LibVNC/libvncserver/commit/d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a.patch";
-      sha256 = "0hf0ss7all2m50z2kan4mck51ws44yim4ymn8p0d991y465y6l9s";
-    })
-  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libjpeg openssl libgcrypt libpng

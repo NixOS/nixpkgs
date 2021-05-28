@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, eigen, libav_all }:
+{ stdenv, fetchFromGitHub, cmake, eigen, libav }:
 stdenv.mkDerivation {
   pname = "musly";
   version = "unstable-2017-04-26";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1q42wvdwy2pac7bhfraqqj2czw7w2m33ms3ifjl8phm7d87i8825";
   };
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen (libav_all.override { vaapiSupport = stdenv.isLinux; }).libav_11 ];
+  buildInputs = [ eigen (libav.override { vaapiSupport = stdenv.isLinux; }) ];
   fixupPhase = if stdenv.isDarwin then ''
     install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly

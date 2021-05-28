@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${cdparanoia}/bin"
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "High quality CD audio ripper";
+    platforms = platforms.linux;
+    license = licenses.gpl3;
   };
 }

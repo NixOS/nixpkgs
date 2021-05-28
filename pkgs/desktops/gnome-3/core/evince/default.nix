@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "3.36.0";
+  version = "3.36.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1a7v534sqbg7rlrvg9x1rffdf6p9n37blp3wix6anyfl6i99n7c5";
+    sha256 = "0clg9fhgjyj23mmcmw7dp512wzgv5m18fppn05qf1frz7r11mmk5";
   };
 
   postPatch = ''
@@ -128,6 +128,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members ++ [ maintainers.vcunat ];
+    maintainers = teams.gnome.members;
   };
 }

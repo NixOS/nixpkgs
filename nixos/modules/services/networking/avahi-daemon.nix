@@ -238,6 +238,10 @@ in
     users.groups.avahi = {};
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
+    system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
+      (mkOrder 900 [ "mdns_minimal [NOTFOUND=return]" ]) # must be before resolve
+      (mkOrder 1501 [ "mdns" ]) # 1501 to ensure it's after dns
+    ]);
 
     environment.systemPackages = [ pkgs.avahi ];
 

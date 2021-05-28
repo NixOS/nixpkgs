@@ -43,6 +43,6 @@ mkDerivation rec {
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;  # should work on Darwin / macOS too
-    maintainers = with maintainers; [ bjornfor the-kenny fpletz ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

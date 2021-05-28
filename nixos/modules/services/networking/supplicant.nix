@@ -76,9 +76,9 @@ in
     networking.supplicant = mkOption {
       type = with types; attrsOf (submodule {
         options = {
-  
+
           configFile = {
-  
+
             path = mkOption {
               type = types.nullOr types.path;
               default = null;
@@ -89,7 +89,7 @@ in
                 precedence over options defined in <literal>configFile</literal>.
               '';
             };
-  
+
             writable = mkOption {
               type = types.bool;
               default = false;
@@ -98,9 +98,9 @@ in
                 <literal>wpa_supplicant</literal>.
               '';
             };
-  
+
           };
-  
+
           extraConf = mkOption {
             type = types.lines;
             default = "";
@@ -126,7 +126,7 @@ in
               use the <literal>configFile</literal> instead.
             '';
           };
-  
+
           extraCmdArgs = mkOption {
             type = types.str;
             default = "";
@@ -134,21 +134,21 @@ in
             description =
               "Command line arguments to add when executing <literal>wpa_supplicant</literal>.";
           };
-  
+
           driver = mkOption {
             type = types.nullOr types.str;
             default = "nl80211,wext";
             description = "Force a specific wpa_supplicant driver.";
           };
-  
+
           bridge = mkOption {
             type = types.str;
             default = "";
             description = "Name of the bridge interface that wpa_supplicant should listen at.";
           };
-  
+
           userControlled = {
-  
+
             enable = mkOption {
               type = types.bool;
               default = false;
@@ -159,20 +159,20 @@ in
                 access points.
               '';
             };
-  
+
             socketDir = mkOption {
               type = types.str;
               default = "/run/wpa_supplicant";
               description = "Directory of sockets for controlling wpa_supplicant.";
             };
-  
+
             group = mkOption {
               type = types.str;
               default = "wheel";
               example = "network";
               description = "Members of this group can control wpa_supplicant.";
             };
-  
+
           };
         };
       });

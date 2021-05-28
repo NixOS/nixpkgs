@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , pytest
 , numpy
@@ -8,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.5.0";
+  version = "0.8.0";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41386187b9261cd59a3ffe4cf9df58d517288a1d3f11d96749b39b4e38b0a02c";
+    sha256 = "fb083925a17ce636f33997c275f61123e63372c1db11fefac1e991ed25a4ca37";
   };
 
   propagatedBuildInputs = [
@@ -25,8 +27,9 @@ buildPythonPackage rec {
     pytest
   ];
 
+  # check_distribution incorrectly pulls pytest version
   checkPhase = ''
-    pytest
+    pytest -k 'not check_distribution'
   '';
 
   meta = with lib; {

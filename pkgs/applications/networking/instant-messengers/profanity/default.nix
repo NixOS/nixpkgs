@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, stabber, expat, libmesode
+, cmocka, libmicrohttpd, expat, sqlite, libmesode, fetchpatch
 , autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
@@ -22,16 +22,22 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.8.1";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "0fg5xcdlvhsi7a40w4jcxyj7m7wl42jy1cvsa8fi2gb6g9y568k8";
+    sha256 = "14vbblf639f90bb4npg2xv53cpvk9am9ic4pmc1vnv4m3zsndjg5";
   };
 
-  patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/profanity-im/profanity/commit/54667c022f17bdb547c3b8b4eec1c2889c9d60f3.patch";
+      sha256 = "0aqrq45im1qnq308hyhh7dqbggzmcqb0b868wr5v8v08pd94s45k";
+    })
+    ./patches/packages-osx.patch
+  ];
 
   enableParallelBuilding = true;
 
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expect readline libuuid glib openssl expat ncurses libotr
-    curl libmesode cmocka libmicrohttpd stabber
+    curl libmesode cmocka libmicrohttpd sqlite
   ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
     ++ optionals notifySupport       [ libnotify gdk-pixbuf ]
     ++ optionals traySupport         [ gnome2.gtk ]

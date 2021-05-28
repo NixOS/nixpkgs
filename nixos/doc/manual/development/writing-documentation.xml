@@ -24,8 +24,8 @@
   </para>
 
 <screen>
-  $ cd /path/to/nixpkgs/nixos/doc/manual
-  $ make
+<prompt>$ </prompt>cd /path/to/nixpkgs/nixos/doc/manual
+<prompt>$ </prompt>make
 </screen>
 
   <para>

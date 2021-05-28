@@ -1,12 +1,16 @@
-{ stdenv, python3Packages, nix, ronn }:
+{ stdenv
+, python3Packages
+, nix
+, ronn
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.9.4";
+  version = "1.9.6";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "06dpdsnz1ih0syas3x25s557qpw0f4kmypvxwaffm734djg8klmi";
+    sha256 = "0anyxmqgn4kx102l3qjhh1f2b0cg7mnlapfhriyjw0zyy5gyqvng";
   };
 
   outputs = [ "out" "doc" "man" ];

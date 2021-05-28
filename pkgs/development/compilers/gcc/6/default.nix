@@ -6,13 +6,14 @@
 , langJava ? false
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
 , texinfo ? null
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, libmpc, gettext, which
+, gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
@@ -63,9 +64,9 @@ let majorVersion = "6";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches =
-      [ ../use-source-date-epoch.patch ]
-      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+    patches = optionals (!stdenv.targetPlatform.isRedox) [
+      ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch
+    ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
@@ -119,6 +120,11 @@ stdenv.mkDerivation ({
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
     sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
+  } else if stdenv.targetPlatform.isRedox then fetchFromGitHub {
+    owner = "redox-os";
+    repo = "gcc";
+    rev = "f360ac095028d286fc6dde4d02daed48f59813fa"; # `redox` branch
+    sha256 = "1an96h8l58pppyh3qqv90g8hgcfd9hj7igvh2gigmkxbrx94khfl";
   } else fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
     sha256 = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
@@ -126,7 +132,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = if langJava || langGo then ["out" "man" "info"]
+  outputs = if langJava || langGo || langJit then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -136,21 +142,17 @@ stdenv.mkDerivation ({
   hardeningDisable = [ "format" "pie" ];
 
   prePatch =
-    (stdenv.lib.optionalString (langJava || langGo) ''
-      export lib=$out
-    '')
-
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
-    + stdenv.lib.optionalString hostPlatform.isDarwin ''
+    stdenv.lib.optionalString hostPlatform.isDarwin ''
       substituteInPlace gcc/config/darwin-c.c \
         --replace 'if (stdinc)' 'if (0)'
 
       substituteInPlace libgcc/config/t-slibgcc-darwin \
-        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
       substituteInPlace libgfortran/configure \
-        --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+        --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
     '';
 
   postPatch =
@@ -185,15 +187,18 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig)
-    ++ (optional (stdenv.targetPlatform.isVc4) flex);
+    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex);
 
   # For building runtime libs
   depsBuildTarget =
-    if hostPlatform == buildPlatform then [
-      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-    ] else assert targetPlatform == hostPlatform; [ # build != host == target
-      stdenv.cc
-    ];
+    (
+      if hostPlatform == buildPlatform then [
+        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+      ] else assert targetPlatform == hostPlatform; [ # build != host == target
+        stdenv.cc
+      ]
+    )
+    ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
     gmp mpfr libmpc libelf
@@ -244,6 +249,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
@@ -294,8 +300,8 @@ stdenv.mkDerivation ({
     (import ../common/extra-target-flags.nix {
       inherit stdenv crossStageStatic libcCross threadsCross;
     })
-    EXTRA_TARGET_FLAGS
-    EXTRA_TARGET_LDFLAGS
+    EXTRA_FLAGS_FOR_TARGET
+    EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {

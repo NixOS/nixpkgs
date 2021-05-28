@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Ekleog/todiff";
     maintainers = with maintainers; [ ekleog ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

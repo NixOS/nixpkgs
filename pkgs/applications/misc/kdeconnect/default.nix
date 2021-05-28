@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchurl
+, fetchpatch
 , extra-cmake-modules
 , kcmutils
 , kconfigwidgets
@@ -13,25 +14,55 @@
 , libfakekey
 , libXtst
 , qtx11extras
+, qtmultimedia
+, qtgraphicaleffects
 , sshfs
 , makeWrapper
 , kwayland
 , kio
+, kpeoplevcard
+, kpeople
+, kirigami2
+, pulseaudio-qt
 }:
 
 mkDerivation rec {
   pname = "kdeconnect";
-  version = "1.3.5";
+  version = "20.08.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-kde-${version}.tar.xz";
-    sha256 = "02lr3xx5s2mgddac4n3lkgr7ppf1z5m6ajs90rjix0vs8a271kp5";
+    url = "https://download.kde.org/stable/release-service/${version}/src/${pname}-kde-${version}.tar.xz";
+    sha256 = "0s76djgpx08jfmh99c7kx18mnr3w7bv4hdra120nicq89mmy7gwf";
   };
 
+  patches = [
+    # https://invent.kde.org/network/kdeconnect-kde/-/merge_requests/328
+    (fetchpatch {
+      url = "https://invent.kde.org/network/kdeconnect-kde/-/commit/6101ef3ad07d865958d58a3d2736f5536f1c5719.diff";
+      sha256 = "17mr7k13226vzcgxlmfs6q2mdc5j7vwp4iri9apmh6xlf6r591ac";
+    })
+  ];
+
   buildInputs = [
-    libfakekey libXtst
-    ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
-    qca-qt5 qtx11extras makeWrapper kwayland kio
+    libfakekey
+    libXtst
+    qtmultimedia
+    qtgraphicaleffects
+    pulseaudio-qt
+    kpeoplevcard
+    kpeople
+    kirigami2
+    ki18n
+    kiconthemes
+    kcmutils
+    kconfigwidgets
+    kdbusaddons
+    knotifications
+    qca-qt5
+    qtx11extras
+    makeWrapper
+    kwayland
+    kio
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

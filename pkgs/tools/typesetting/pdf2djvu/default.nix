@@ -15,14 +15,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.17";
+  version = "0.9.17.1";
   pname = "pdf2djvu";
 
   src = fetchFromGitHub {
     owner = "jwilk";
     repo = "pdf2djvu";
     rev = version;
-    sha256 = "1iff5ha5ls9hni9ivj05r1vzbnjrb326ivjb8d05q2sfng3gfp3z";
+    sha256 = "1igabfy3fd7qndihmkfk9incc15pjxpxh2cn5pfw5fxfwrpjrarn";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

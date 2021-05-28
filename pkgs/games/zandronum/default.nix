@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   version = "3.0.1";
 
   src = fetchhg {
-    url = "https://bitbucket.org/Torr_Samaho/zandronum-stable";
+    url = "https://hg.osdn.net/view/zandronum/zandronum-stable";
     rev = "ZA_${version}";
     sha256 = "16v5b6wfrmabs3ky6isbfhlrqdjrr1pvfxlxwk0im02kcpxxw9qw";
   };

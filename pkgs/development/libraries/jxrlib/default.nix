@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0rk3hbh00nw0wgbfbqk1szrlfg3yq7w6ar16napww3nrlm9cj65w";
   };
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace '-shared' '-dynamiclib -undefined dynamic_lookup' \
+      --replace '.so' '.dylib'
+  '';
+
   nativeBuildInputs = [ python ];
 
   makeFlags = [ "DIR_INSTALL=$(out)" "SHARED=1" ];
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the JPEG XR image codec standard";
     homepage = "https://jxrlib.codeplex.com";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
   };
 }

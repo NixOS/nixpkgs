@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, cmake, doxygen
-, libopenshot-audio, imagemagick, ffmpeg
+, libopenshot-audio, imagemagick, ffmpeg_3
 , swig, python3
 , unittest-cpp, cppzmq, zeromq
 , qtbase, qtmultimedia }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs =
-  [ imagemagick ffmpeg swig python3 unittest-cpp
+  [ imagemagick ffmpeg_3 swig python3 unittest-cpp
     cppzmq zeromq qtbase qtmultimedia ];
 
   LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;

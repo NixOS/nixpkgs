@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "ruamel.yaml";
-  version = "0.16.5";
+  version = "0.16.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "412a6f5cfdc0525dee6a27c08f5415c7fd832a7afcb7a0ed7319628aed23d408";
+    sha256 = "099c644a778bf72ffa00524f78dd0b6476bca94a1da344130f4bf3381ce5b954";
   };
 
   # Tests use relative paths

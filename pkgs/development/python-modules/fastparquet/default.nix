@@ -1,26 +1,29 @@
 { lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
-thrift, pytest, python-snappy, lz4 }:
+thrift, pytest, python-snappy, lz4, zstd }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1vnxr4r0bia2zi9csjw342l507nic6an4hr5xb3a36ggqlbaa0g5";
+    sha256 = "ViZRGEv227/RgCBYAQN8F3Z0m8WrNUT5KUdyFosjg9s=";
   };
 
   postPatch = ''
     # FIXME: package zstandard
     # removing the test dependency for now
     substituteInPlace setup.py --replace "'zstandard'," ""
+
+    # workaround for https://github.com/dask/fastparquet/issues/517
+    rm fastparquet/test/test_partition_filters_specialstrings.py
   '';
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytest python-snappy lz4 ];
+  checkInputs = [ pytest python-snappy lz4 zstd ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

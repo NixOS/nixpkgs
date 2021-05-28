@@ -5,18 +5,18 @@
 , fuse
 , pkgconfig
 , libpcap
-, zlib 
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.112";
+  version = "3.0.114";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "04ymwg9r9x9gqjwy9jbjv7zzfgwal0xlfy6z5bwl27m2ys6l5k4a";
+    sha256 = "0bilrzzlg599xy21cm7r0xb2sanngr74j3z03xgybcm10kl97i7j";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     [ fuse libpcap zlib ];
 
   postInstall = ''
+    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
     wrapProgram $out/sbin/mfscgiserv \
         --prefix PATH ":" "${python}/bin"
   '';

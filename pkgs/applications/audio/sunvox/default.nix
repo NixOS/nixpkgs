@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
-    sha256 = "15pyc3dk4dqlivgzki8sv7xpwg3bbn5xv9338g16a0dbn7s3kich";
+    sha256 = "04f7psm0lvc09nw7d2wp0sncf37bym2v7hhxp4v8c8gdgayj7k8m";
   };
 
   buildInputs = [ unzip ];

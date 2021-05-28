@@ -3,12 +3,12 @@
 , atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "4.6.8";
+  version = "4.6.11";
   pname = "pytest";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6192875be8af57b694b7c4904e909680102befcb99e610ef3d9f786952f795aa";
+    sha256 = "50fa82392f2120cc3ec2ca0a75ee615be4c479e66669789771f1758332be4353";
   };
 
   checkInputs = [ hypothesis mock ];

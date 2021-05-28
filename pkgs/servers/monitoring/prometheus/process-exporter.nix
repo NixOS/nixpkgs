@@ -6,8 +6,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/ncabatoff/process-exporter";
 
-  goDeps = ./process-exporter_deps.nix;
-
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
@@ -25,7 +23,7 @@ buildGoPackage rec {
     description = "Prometheus exporter that mines /proc to report on selected processes";
     homepage = "https://github.com/ncabatoff/process-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.linux;
   };
 }

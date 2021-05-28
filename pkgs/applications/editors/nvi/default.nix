@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     homepage = "http://www.bostic.com/vi/";
     description = "The Berkeley Vi Editor";
     license = stdenv.lib.licenses.free;
+    broken = true; # since 2020-02-08
   };
 }

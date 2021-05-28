@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk3, libjack2, lilv, lv2, pkgconfig, python
+{ stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkgconfig, python
 , serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    gtk3 libjack2 lilv lv2 python serd sord sratom suil
+    gtk2 libjack2 lilv lv2 python serd sord sratom suil
   ];
 
   meta = with stdenv.lib; {

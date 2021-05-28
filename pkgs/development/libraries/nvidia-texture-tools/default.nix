@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "nvidia-texture-tools";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
     rev = "a131e4c6b0b7c9c73ccc3c9e6f1c7e165be86bcc";
     sha256 = "1qzyr3ib5dpxyq1y33lq02qv4cww075sm9bm4f651d34q5x38sk3";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/castano/nvidia-texture-tools/commit/6474f2593428d89ec152da2502aa136ababe66ca.patch";
+      sha256 = "0akbkvm55hiv58jx71h9hj173rbnqlb5a430y9azjiix7zga42vd";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

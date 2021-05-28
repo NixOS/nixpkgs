@@ -1,19 +1,23 @@
 { stdenv, lib, fetchurl, fpc, lazarus, atk, cairo, gdk-pixbuf, glib, gtk2, libX11, pango }:
 
-stdenv.mkDerivation rec {
-  name = "ddrescueview-0.4alpha3";
+let
+  versionBase = "0.4";
+  versionSuffix = "alpha4";
+in stdenv.mkDerivation rec {
+  pname = "ddrescueview";
+  version = "${versionBase}${versionSuffix}";
+  name = "ddrescueview-0.4alpha4";
 
   src = fetchurl {
-    name = "${name}.tar.xz";
-    url = "mirror://sourceforge/ddrescueview/ddrescueview-source-0.4%7Ealpha3.tar.xz";
-    sha256 = "0603jisxkswfyh93s3i20f8ns4yf83dmgmy0lg5001rvaw9mkw9j";
+    name = "ddrescueview-${versionBase}${versionSuffix}.tar.xz";
+    url = "mirror://sourceforge/ddrescueview/ddrescueview-source-${versionBase}~${versionSuffix}.tar.xz";
+    sha256 = "0v159nlc0lrqznbbwi7zda619is5h2rjk55gz6cl807j0kd19ycc";
   };
+  sourceRoot = "ddrescueview-source-${versionBase}~${versionSuffix}/source";
 
   nativeBuildInputs = [ fpc lazarus ];
 
   buildInputs = [ atk cairo gdk-pixbuf glib gtk2 libX11 pango ];
-
-  sourceRoot = "source";
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -24,9 +28,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dt $out/bin ddrescueview
     cd ../resources/linux
-    install -Dt $out/share/applications ddrescueview.desktop
-    install -Dt $out/share/icons/hicolor/32x32/apps ddrescueview.xpm
-    install -Dt $out/share/man/man1 ddrescueview.1
+    mkdir -p "$out/share"
+    cp -ar applications icons man $out/share
   '';
 
   meta = with lib; {

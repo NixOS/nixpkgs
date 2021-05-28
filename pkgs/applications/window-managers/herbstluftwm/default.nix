@@ -8,11 +8,11 @@ assert withDoc -> asciidoc != null;
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0c1lf82z6a56g8asin91cmqhzk3anw0xwc44b31bpjixadmns57y";
+    sha256 = "1qmb4pjf2f6g0dvcg11cw9njwmxblhqzd70ai8qnlgqw1iz3nkm1";
   };
 
   outputs = [
@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     homepage = "https://herbstluftwm.org/";
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

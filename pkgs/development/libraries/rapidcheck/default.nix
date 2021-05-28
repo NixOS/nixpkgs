@@ -1,6 +1,6 @@
 { stdenv, cmake, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "rapidcheck";
   version = "unstable-2018-09-27";
 

@@ -9,6 +9,7 @@
 , python3
 , systemd
 , yajl
+, nixosTests
 }:
 
 let
@@ -24,6 +25,7 @@ let
     "test_pid.py"
     "test_pid_file.py"
     "test_preserve_fds.py"
+    "test_resources"
     "test_start.py"
     "test_uid_gid.py"
     "test_update.py"
@@ -33,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.13";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "0c5acf916yv2zv3xjvxk1sa4h3n2wljc5hw61php7q37pbjc1ppn";
+    sha256 = "0cqzk2lm1w0g2v6qhiliq565cf4p7hzh839jb01p3i5cr9kx11kc";
     fetchSubmodules = true;
   };
 
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";

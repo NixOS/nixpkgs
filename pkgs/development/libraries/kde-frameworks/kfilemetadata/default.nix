@@ -1,7 +1,7 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules,
-  attr, ebook_tools, exiv2, ffmpeg, karchive, kcoreaddons, ki18n, poppler, qtbase, qtmultimedia, taglib
+  attr, ebook_tools, exiv2, ffmpeg_3, karchive, kcoreaddons, ki18n, poppler, qtbase, qtmultimedia, taglib
 }:
 
 mkDerivation {
@@ -9,8 +9,10 @@ mkDerivation {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    attr ebook_tools exiv2 ffmpeg karchive kcoreaddons ki18n poppler qtbase qtmultimedia
+    attr ebook_tools exiv2 ffmpeg_3 karchive kcoreaddons ki18n poppler qtbase qtmultimedia
     taglib
   ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./cmake-install-paths.patch
+  ];
 }

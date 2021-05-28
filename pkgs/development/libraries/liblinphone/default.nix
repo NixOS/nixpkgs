@@ -11,7 +11,7 @@
 , doxygen
 , fetchFromGitLab
 , fetchurl
-, ffmpeg
+, ffmpeg_3
 , gdk-pixbuf
 , git
 , glib
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg
+    ffmpeg_3
     gdk-pixbuf
     git
     glib

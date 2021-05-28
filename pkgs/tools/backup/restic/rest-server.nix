@@ -19,7 +19,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dt $bin/bin rest-server
+    install -Dt $out/bin rest-server
   '';
 
   meta = with lib; {

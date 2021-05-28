@@ -37,6 +37,7 @@ in {
       name = cfg.vmDerivationName;
       postVM = ''
         ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=dynamic -O vhdx $diskImage $out/${cfg.vmFileName}
+        rm $diskImage
       '';
       format = "raw";
       diskSize = cfg.baseImageSize;

@@ -26,11 +26,11 @@ let
     writeScript "common-file-actions.sh" ''
       #!${stdenv.shell}
       set -e
-      DOCDIR="$1"
+      DOCDIR="''${1?commonFileActions: DOCDIR as argv[1] required}"
       shopt -s globstar extglob nullglob
-      ${rmNoise noiseFiles}
       mkdir -p "$DOCDIR"
       ${mvDoc docFiles}
+      ${rmNoise noiseFiles}
     '';
 
   # Shell script to check whether the build directory is empty.

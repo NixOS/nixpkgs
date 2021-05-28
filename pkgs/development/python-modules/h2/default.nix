@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1svhixk3hr78ph3nx8wi7sagx1xrvm712mmk028i2rhb92p8xq";
+    sha256 = "051gg30aca26rdxsmr9svwqm06pdz9bv21ch4n0lgi7jsvml2pw7";
   };
 
   propagatedBuildInputs = [ enum34 hpack hyperframe ];

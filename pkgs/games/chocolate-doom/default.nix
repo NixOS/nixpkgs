@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "chocolate-doom";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0ajzb767wyj8vzhjpsmgslw42b0155ji4alk26shxl7k5ijbzn0j";
+    sha256 = "1zlcqhd49c5n8vaahgaqrc2y10z86xng51sbd82xm3rk2dly25jp";
   };
 
   postPatch = ''

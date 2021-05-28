@@ -2,27 +2,29 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pandas
-, astropy
-, parfive
 , pythonOlder
-, sqlalchemy
-, scikitimage
-, glymur
+
+, asdf
+, astropy
+, astropy-helpers
 , beautifulsoup4
 , drms
-, python-dateutil
-, zeep
-, tqdm
-, asdf
-, astropy-helpers
+, glymur
 , hypothesis
+, matplotlib
+, numpy
+, pandas
+, parfive
 , pytest-astropy
-, pytestcov
 , pytest-mock
+, pytestcov
+, python-dateutil
+, scikitimage
+, scipy
+, sqlalchemy
+, towncrier
+, tqdm
+, zeep
 }:
 
 buildPythonPackage rec {
@@ -47,6 +49,7 @@ buildPythonPackage rec {
     parfive
     sqlalchemy
     scikitimage
+    towncrier
     glymur
     beautifulsoup4
     drms

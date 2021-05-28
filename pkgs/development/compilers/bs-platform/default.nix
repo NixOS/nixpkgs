@@ -4,14 +4,16 @@ let
 in
 (build-bs-platform rec {
   inherit stdenv runCommand fetchFromGitHub ninja nodejs python3;
-  version = "7.3.1";
+  version = "8.2.0";
   ocaml-version = "4.06.1";
+
+  patches = [ ./jscomp-release-ninja.patch ];
 
   src = fetchFromGitHub {
     owner = "BuckleScript";
     repo = "bucklescript";
     rev = version;
-    sha256 = "14vp6cl5ml7xb3pd0paqajb50qv62l8j5m8hi3b6fh0pm68j1yxd";
+    sha256 = "1hql7sxps1k17zmwyha6idq6nw20abpq770l55ry722birclmsmf";
     fetchSubmodules = true;
   };
 }).overrideAttrs (attrs: {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "nanorc";
-  version = "2018-09-05";
+  version = "2020-01-25";
 
   src = fetchFromGitHub {
     owner = "scopatz";
     repo = "nanorc";
-    rev = "1e589cb729d24fba470228d429e6dde07973d597";
-    sha256 = "136yxr38lzrfv8bar0c6c56rh54q9s94zpwa19f425crh44drppl";
+    rev = "2020.1.25";
+    sha256 = "1y8jk3jsl4bd6r4hzmxzcf77hv8bwm0318yv7y2npkkd3a060z8d";
   };
 
   dontBuild = true;

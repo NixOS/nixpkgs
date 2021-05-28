@@ -10,7 +10,7 @@ let
   pfft-source = fetchFromBitbucket {
     owner = "jpommier";
     repo = "pffft";
-    rev = "29e4f76ac53bef048938754f32231d7836401f79";
+    rev = "74d7261be17cf659d5930d4830609406bd7553e3";
     sha256 = "084csgqa6f1a270bhybjayrh3mpyi2jimc87qkdgsqcp8ycsx1l1";
   };
   nanovg-source = fetchFromGitHub {

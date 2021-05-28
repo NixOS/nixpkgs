@@ -2,7 +2,7 @@
 , sway-unwrapped, swaybg
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
-, withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf
+, withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
 , extraOptions ? [] # E.g.: [ "--verbose" ]
 }:
 
@@ -33,12 +33,14 @@ in symlinkJoin {
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
 
-  buildInputs = optional withGtkWrapper gdk-pixbuf;
+  buildInputs = optionals withGtkWrapper [ gdk-pixbuf glib gtk3 ];
+
+  # We want to run wrapProgram manually
+  dontWrapGApps = true;
 
   postBuild = ''
-    # We want to run wrapProgram manually to only wrap sway and add swaybg:
-    export dontWrapGApps=true
-    ${optionalString withGtkWrapper "wrapGAppsHook"}
+    ${optionalString withGtkWrapper "gappsWrapperArgsHook"}
+
     wrapProgram $out/bin/sway \
       --prefix PATH : "${swaybg}/bin" \
       ${optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \

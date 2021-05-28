@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "UTbBv5GeEB1OyQGiduhupg5Ygaj/d2PjVvGYQOX/4d0=";
+    sha256 = "1pg1zzjl167iavin6xzzm20mh3m6dvl7d8h1r571s44yj6zw2dji";
   };
 
   nativeBuildInputs = [ pkgconfig ];

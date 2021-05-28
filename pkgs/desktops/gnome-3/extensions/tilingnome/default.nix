@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ glib ];
 
   buildPhase = ''
+    runHook preBuild
     glib-compile-schemas .
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp -r * $out/share/gnome-shell/extensions/${uuid}/
+    runHook postInstall
   '';
 
   uuid = "tilingnome@rliang.github.com";

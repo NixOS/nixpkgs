@@ -13,16 +13,20 @@
 , libXi
 , ncurses5
 , qtbase
+, qtdeclarative
 , zlib
 }:
 
+let
+  buildNum = "2020-09-11-26";
+in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.7.0.29";
+  version = "1.8";
 
   src = fetchurl {
-    url = "https://github.com/GPUOpen-Tools/radeon_gpu_profiler/releases/download/v${lib.versions.majorMinor version}/RadeonGPUProfiler_${version}.tgz";
-    sha256 = "d7d4aa92231796a509dfcf92e9618cac98ae6572c12efd0871eb43afa4e8240a";
+    url = "https://github.com/GPUOpen-Tools/radeon_gpu_profiler/releases/download/v${lib.versions.majorMinor version}/RadeonDeveloperTools-${buildNum}.tgz";
+    sha256 = "1lpkh7sfpq697lm4xnkpjfchh8zpy49f4mb3c5qcn7brav5iqwfh";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -38,6 +42,7 @@ stdenv.mkDerivation rec {
     libXi
     ncurses5
     qtbase
+    qtdeclarative
     zlib
   ];
 

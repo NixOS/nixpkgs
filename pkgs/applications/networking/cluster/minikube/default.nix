@@ -11,18 +11,17 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.9.2";
+  version = "1.14.0";
 
-  # for -ldflags
-  commit = "1b78a7b8a99ad6a3c62b8d22f57120d614d17935";
+  vendorSha256 = "03imagmsfj9rv5g2sybpdx9y7vdwag3mrsjibgsbq3jhf7r1ib3g";
 
-  modSha256 = "1pxs6myszgma3rzz0nhfjbnylv6m0xzlinvmlg0c4ijvkkzxg3v5";
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "025v45427d885qkjjg7ig8fgrvjalnf1lajsj0cnbwbih2m69svg";
+    sha256 = "1nwpgfgw3vg8zy3mvjja13vdj12mys4crdm8cfimv9g3ka08dqpx";
   };
 
   nativeBuildInputs = [ go-bindata installShellFiles pkg-config which ];
@@ -30,7 +29,7 @@ buildGoModule rec {
   buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
 
   buildPhase = ''
-    make COMMIT=${commit}
+    make COMMIT=${src.rev}
   '';
 
   installPhase = ''
@@ -40,7 +39,7 @@ buildGoModule rec {
     export MINIKUBE_WANTUPDATENOTIFICATION=false
     export MINIKUBE_WANTKUBECTLDOWNLOADMSG=false
 
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
       installShellCompletion minikube.$shell
     done
@@ -50,7 +49,7 @@ buildGoModule rec {
     homepage = "https://minikube.sigs.k8s.io";
     description = "A tool that makes it easy to run Kubernetes locally";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang ];
+    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
     platforms = platforms.unix;
   };
 }

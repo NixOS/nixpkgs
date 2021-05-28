@@ -1,10 +1,10 @@
 { stdenv, swiProlog, makeWrapper,
   fetchFromGitHub,
-  lexicon ? "prolog/lexicon/clex_lexicon.pl",
+  lexiconPath ? "prolog/lexicon/clex_lexicon.pl",
   pname ? "ape",
   description ? "Parser for Attempto Controlled English (ACE)",
   license ? with stdenv.lib; licenses.lgpl3
-  }:
+}:
 
 stdenv.mkDerivation rec {
   inherit pname;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # We move the file first to avoid "same file" error in the default case
-    cp ${lexicon} new_lexicon.pl
+    cp ${lexiconPath} new_lexicon.pl
     rm prolog/lexicon/clex_lexicon.pl
     cp new_lexicon.pl prolog/lexicon/clex_lexicon.pl
   '';

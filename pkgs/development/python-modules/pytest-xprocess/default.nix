@@ -1,17 +1,19 @@
 { lib, buildPythonPackage, fetchPypi
 , psutil
 , pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06w2acg0shy0vxrmnxpqclimhgfjys5ql5kmmzr7r1lai46x1q2h";
+    sha256 = "06g1j5079ddl2sd3pxh2jg6g83b2z3l5hzbadiry2xg673dcncmb";
   };
 
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ psutil pytest ];
 
   # Remove test QoL package from install_requires

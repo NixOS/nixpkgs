@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "2.8.1";
+  version = "2.9.2";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "182s3dk7y29wql9bazlnw840xqgsbr44ad72m668qgxd82jl6y9c";
+    sha256 = "1d2ji2psla7jq3f9grb0l665nf8qsy2rlbkr2qg1d1a7mvf80x7k";
   };
 
   disabled = !isPy3k;
@@ -34,6 +34,7 @@ buildPythonPackage rec {
     and not test_send_events \
     and not test_not_standalone_aid \
     and not test_start_stop_async_acc \
+    and not test_external_zeroconf \
     and not test_start_stop_sync_acc'
   '';
 

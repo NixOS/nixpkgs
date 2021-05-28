@@ -13,15 +13,15 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-build-vms</command> 
+   <command>nixos-build-vms</command>
    <arg>
     <option>--show-trace</option>
    </arg>
-    
+
    <arg>
     <option>--no-out-link</option>
    </arg>
-    
+
    <arg>
     <option>--help</option>
   </arg>

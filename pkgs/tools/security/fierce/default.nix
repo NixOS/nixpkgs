@@ -11,7 +11,15 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "11yaz8ap9swx95j3wpqh0b6jhw6spqgfnsyn1liw9zqi4jwgiax7";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt --replace 'dnspython==1.16.0' 'dnspython'
+  '';
+
   propagatedBuildInputs = [ python3.pkgs.dns ];
+
+  # tests require network access
+  doCheck = false;
+  pythonImportsCheck = [ "fierce" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mschwager/fierce";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.com/pingus/pingus/";
     rev = "709546d9b9c4d6d5f45fc9112b45ac10c7f9417d";
-    sha256 = "sha256:11mmzk0766riaw5qyd1r5i7s7vczbbzfccm92bvgrm99iy1sj022";
+    sha256 = "11mmzk0766riaw5qyd1r5i7s7vczbbzfccm92bvgrm99iy1sj022";
     fetchSubmodules = true;
   };
 

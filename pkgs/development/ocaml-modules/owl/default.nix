@@ -6,13 +6,11 @@
 , eigen
 , stdio
 , stdlib-shims
-, openblas, blas, lapack
+, openblasCompat
 , owl-base
 , npy
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
-assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 buildDunePackage rec {
   pname = "owl";
@@ -22,7 +20,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    eigen stdio stdlib-shims openblas owl-base npy
+    eigen stdio stdlib-shims openblasCompat owl-base npy
   ];
 
   doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462

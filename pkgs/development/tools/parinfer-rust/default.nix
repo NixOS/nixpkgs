@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];
-    platforms = platforms.all;
   };
 }

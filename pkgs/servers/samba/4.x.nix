@@ -24,13 +24,14 @@
 , libtasn1
 , tdb
 , cmocka
+, rpcsvc-proto
+, nixosTests
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
 , enableProfiling ? true
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
-, enableKerberos ? true, krb5Full
 , enableRegedit ? true, ncurses
 , enableCephFS ? false, libceph
 , enableGlusterFS ? false, glusterfs, libuuid
@@ -42,11 +43,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.12.1";
+  version = "4.12.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "0xbdf9651lm4b5g60ly40nc7r8gssvnvq7m3pdma99mdcs5vcz01";
+    sha256 = "1v3cmw40csmi3jd8mhlx4bm7bk4m0426zkyin7kq11skwnsrna02";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
+    rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
     rpcgen
     fixDarwinDylibNames
@@ -91,7 +93,6 @@ stdenv.mkDerivation rec {
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb ]
-    ++ optional enableKerberos krb5Full
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
@@ -115,13 +116,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals enableKerberos [
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc=${krb5Full}"
-  ] ++ optionals (!enableLDAP) [
+  ] ++ optional (!enableDomainController)
+    "--without-ad-dc"
+  ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"
@@ -147,6 +144,10 @@ stdenv.mkDerivation rec {
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
+
+  passthru = {
+    tests.samba = nixosTests.samba;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://www.samba.org";

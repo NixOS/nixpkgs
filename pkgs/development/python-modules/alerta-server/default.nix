@@ -1,17 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pyyaml
-, python-dateutil, requests, pymongo, raven, bcrypt, flask, pyjwt, flask-cors, psycopg2, pytz, flask-compress, jinja2
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, bcrypt, blinker, flask, flask-compress, flask-cors, mohawk, psycopg2, pyjwt, pymongo, python-dateutil, pytz, pyyaml, requests, requests-hawk, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "alerta-server";
-  version = "7.4.1";
+  version = "8.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6f7740c97f2ae552a4b50bfb709596eabb01bf73715685c9b93ea9fec1821f3";
+    sha256 = "894d240c51428225264867a80094b9743d71272635a18ddfefa5832b61fed2c6";
   };
 
-  propagatedBuildInputs = [ python-dateutil requests pymongo raven bcrypt flask pyjwt flask-cors psycopg2 pytz flask-compress jinja2 pyyaml];
+  propagatedBuildInputs = [
+    bcrypt
+    blinker
+    flask
+    flask-compress
+    flask-cors
+    mohawk
+    psycopg2
+    pyjwt
+    pymongo
+    python-dateutil
+    pytz
+    pyyaml  
+    requests
+    requests-hawk
+    sentry-sdk
+  ];
 
   doCheck = false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
 

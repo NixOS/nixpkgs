@@ -5,14 +5,14 @@ with lib;
 let
 
   cfg = config.services.openldap;
-  openldap = pkgs.openldap;
+  openldap = cfg.package;
 
   dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
   configFile = pkgs.writeText "slapd.conf" ((optionalString cfg.defaultSchemas ''
-    include ${pkgs.openldap.out}/etc/schema/core.schema
-    include ${pkgs.openldap.out}/etc/schema/cosine.schema
-    include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
-    include ${pkgs.openldap.out}/etc/schema/nis.schema
+    include ${openldap.out}/etc/schema/core.schema
+    include ${openldap.out}/etc/schema/cosine.schema
+    include ${openldap.out}/etc/schema/inetorgperson.schema
+    include ${openldap.out}/etc/schema/nis.schema
   '') + ''
     ${cfg.extraConfig}
     database ${cfg.database}
@@ -44,6 +44,18 @@ in
         description = "
           Whether to enable the ldap server.
         ";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.openldap;
+        description = ''
+          OpenLDAP package to use.
+
+          This can be used to, for example, set an OpenLDAP package
+          with custom overrides to enable modules or other
+          functionality.
+        '';
       };
 
       user = mkOption {
@@ -152,10 +164,10 @@ in
         ";
         example = literalExample ''
             '''
-            include ${pkgs.openldap.out}/etc/schema/core.schema
-            include ${pkgs.openldap.out}/etc/schema/cosine.schema
-            include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
-            include ${pkgs.openldap.out}/etc/schema/nis.schema
+            include ${openldap.out}/etc/schema/core.schema
+            include ${openldap.out}/etc/schema/cosine.schema
+            include ${openldap.out}/etc/schema/inetorgperson.schema
+            include ${openldap.out}/etc/schema/nis.schema
 
             database bdb
             suffix dc=example,dc=org
@@ -229,6 +241,10 @@ in
 
     };
 
+  };
+
+  meta = {
+    maintainers = [ lib.maintainers.mic92 ];
   };
 
 

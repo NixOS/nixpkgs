@@ -2,24 +2,21 @@
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
 , perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
-, libXNVCtrl, enableXnvctrl ? false
 }:
 
 mkDerivation rec {
   pname = "mythtv";
-  version = "30.0";
+  version = "31.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
     rev = "v${version}";
-    sha256 = "1pfzjb07xwd3mfgmbr4kkiyfyvwy9fkl13ik7bvqds86m0ws5bw4";
+    sha256 = "092w5kvc1gjz6jd2lk2jhcazasz2h3xh0i5iq80k8x3znyp4i6v5";
   };
 
   patches = [
-    # Fixes build with exiv2 0.27.1.
-    ./exiv2.patch
-    # Disables OS detection used while checking for xnvctrl support.
+    # Disables OS detection used while checking if enforce_wshadow should be disabled.
     ./disable-os-detection.patch
   ];
 
@@ -29,17 +26,16 @@ mkDerivation rec {
     freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
     perl libsamplerate libbluray lzo alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
-  ] ++ stdenv.lib.optional enableXnvctrl libXNVCtrl;
+  ];
   nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
 
   configureFlags = 
-    [ "--dvb-path=${linuxHeaders}/include" ]
-    ++ stdenv.lib.optionals (!enableXnvctrl) [  "--disable-xnvctrl" ];
+    [ "--dvb-path=${linuxHeaders}/include" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.titanous ];
   };

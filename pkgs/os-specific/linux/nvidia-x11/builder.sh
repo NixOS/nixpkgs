@@ -45,6 +45,17 @@ installPhase() {
         cp -prd tls "$out/lib/"
     fi
 
+    # Install systemd power management executables
+    if [ -e nvidia-sleep.sh ]; then
+        sed -E 's#(PATH=).*#\1"$PATH"#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
+        install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
+    fi
+
+    if [ -e nvidia ]; then
+        sed -E "s#/usr(/bin/nvidia-sleep.sh)#$out\\1#" nvidia > nvidia.fixed
+        install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
+    fi
+
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
@@ -90,7 +101,6 @@ installPhase() {
         fi
 
     done
-
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -166,6 +176,5 @@ installPhase() {
         # install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
 }
-
 
 genericBuild

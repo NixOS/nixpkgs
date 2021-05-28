@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     description = "Pass extension for importing data from existing password managers";
     homepage = "https://github.com/roddhjav/pass-import";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
     platforms = platforms.unix;
   };
 }

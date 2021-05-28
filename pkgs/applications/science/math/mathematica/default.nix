@@ -3,6 +3,7 @@
 , patchelf
 , requireFile
 , callPackage
+, makeWrapper
 , alsaLib
 , dbus
 , fontconfig
@@ -11,7 +12,7 @@
 , glib
 , libssh2
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xkeyboard_config
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
+    makeWrapper
     alsaLib
     coreutils
     dbus
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     glib
     libssh2
     ncurses
-    opencv
+    opencv2
     openssl
     stdenv.cc.cc.lib
     unixODBC
@@ -106,6 +108,9 @@ stdenv.mkDerivation rec {
 
     # Remove some broken libraries
     rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
+
+    # Set environment variable to fix libQt errors - see https://github.com/NixOS/nixpkgs/issues/96490
+    wrapProgram $out/bin/mathematica --set USE_WOLFRAM_LD_LIBRARY_PATH 1
   '';
 
   preFixup = ''

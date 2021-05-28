@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , substituteAll
 , plymouth
 , pam
@@ -126,6 +127,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -rf $out/etc/apparmor.d $out/etc/init $out/etc/pam.d
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = {
     homepage = "https://github.com/CanonicalLtd/lightdm";

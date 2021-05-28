@@ -27,7 +27,7 @@
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
-, # Whetherto build terminfo.
+, # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , # What flavour to build. An empty string indicates no
@@ -59,8 +59,15 @@ let
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
-  '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+  ''
+    # We only need to build stage1 on most cross-compilation because
+    # we will be running the compiler on the native system. In some
+    # situations, like native Musl compilation, we need the compiler
+    # to actually link to our new Libc. The iOS simulator is a special
+    # exception because we can’t actually run simulators binaries
+    # ourselves.
+  + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    Stage1Only = ${if (targetPlatform.system == hostPlatform.system && !targetPlatform.isiOS) then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO

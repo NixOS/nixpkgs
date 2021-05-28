@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
@@ -14,19 +15,20 @@
 , appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
-, switchboard
+, switchboard-with-plugs
 , libunity
 , libsoup
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.6.0";
+  version = "2.7.1";
 
   repoName = "applications-menu";
 
@@ -34,11 +36,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "16ki1x6697jmfqajynx2zvwqrpjpshnd08y7vf6g7xc7zwwh38c5";
+    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -51,22 +53,29 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     vala
-   ];
+  ];
 
   buildInputs = [
     bamf
+    elementary-dock
     gnome-menus
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libunity
-    plank
-    switchboard
+    switchboard-with-plugs
     wingpanel
     zeitgeist
-   ];
+  ] ++
+  # applications-menu has a plugin to search switchboard plugins
+  # see https://github.com/NixOS/nixpkgs/issues/100209
+  # wingpanel's wrapper will need to pick up the fact that
+  # applications-menu needs a version of switchboard with all
+  # its plugins for search.
+  switchboard-with-plugs.buildInputs;
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"

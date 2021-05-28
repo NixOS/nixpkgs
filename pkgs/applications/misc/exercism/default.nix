@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "17gvz9a0sn4p36hf4l77bxhhfipf4x998iay31layqwbnzmb4xy7";
   };
 
-  modSha256 = "0pg0hxrr6jjd03wbjn5y65x02md3h352mnm1gr6vyiv7hn4ws14m";
+  vendorSha256 = "0b2m9xkac60k5rbxmb03cxf530m23av14pnsjk8067l998sm4vqi";
+
+  doCheck = false;
 
   subPackages = [ "./exercism" ];
 
@@ -19,6 +21,6 @@ buildGoModule rec {
    inherit (src.meta) homepage;
    description = "A Go based command line tool for exercism.io";
    license     = licenses.mit;
-   maintainers = [ maintainers.rbasso ];
+   maintainers = [ maintainers.rbasso maintainers.nobbz ];
   };
 }

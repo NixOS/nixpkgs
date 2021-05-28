@@ -1,21 +1,33 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, utillinux, getconf }:
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/scrypt/${pname}-${version}.tgz";
-    sha256 = "0j17yfrpi2bk5cawb4a4mzpv1vadqxh956hx0pa1gqfisknk8c16";
+    sha256 = "1hnl0r6pmyxiy4dmafmqk1db7wpc0x9rqpzqcwr9d2cmghcj6byz";
   };
+
+  outputs = [ "out" "lib" "dev" ];
+
+  configureFlags = [ "--enable-libscrypt-kdf" ];
 
   buildInputs = [ openssl ];
 
+  nativeBuildInputs = [ getconf ];
+
   patchPhase = ''
-    for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh ; do
+    for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh configure ; do
       substituteInPlace $f --replace "command -p " ""
     done
+
+    patchShebangs tests/test_scrypt.sh
   '';
+
+  doCheck = true;
+  checkTarget = "test";
+  checkInputs = [ utillinux ];
 
   meta = with stdenv.lib; {
     description = "Encryption utility";

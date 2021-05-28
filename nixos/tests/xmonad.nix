@@ -14,9 +14,16 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       extraPackages = with pkgs.haskellPackages; haskellPackages: [ xmobar ];
       config = ''
         import XMonad
+        import XMonad.Operations (restart)
         import XMonad.Util.EZConfig
-        main = launch $ def `additionalKeysP` myKeys
-        myKeys = [ ("M-C-x", spawn "xterm") ]
+        import XMonad.Util.SessionStart
+
+        main = launch $ def { startupHook = startup } `additionalKeysP` myKeys
+
+        startup = isSessionStart >>= \sessInit ->
+          if sessInit then setSessionStarted else spawn "xterm"
+
+        myKeys = [ ("M-C-x", spawn "xterm"), ("M-q", restart "xmonad" True) ]
       '';
     };
   };
@@ -30,12 +37,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.send_key("alt-ctrl-x")
     machine.wait_for_window("${user.name}.*machine")
     machine.sleep(1)
-    machine.screenshot("terminal")
-    machine.wait_until_succeeds("xmonad --restart")
+    machine.screenshot("terminal1")
+    machine.send_key("alt-q")
     machine.sleep(3)
-    machine.send_key("alt-shift-ret")
     machine.wait_for_window("${user.name}.*machine")
     machine.sleep(1)
-    machine.screenshot("terminal")
+    machine.screenshot("terminal2")
   '';
 })

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation {
   pname = "can-isotp";
-  version = "20180629";
+  version = "20200910";
 
   hardeningDisable = [ "pic" ];
   
   src = fetchFromGitHub {
     owner = "hartkopp";
     repo = "can-isotp";
-    rev = "6003f9997587e6a563cebf1f246bcd0eb6deff3d";
-    sha256 = "0b2pqb0vd1wgv2zpl7lvfavqkzr8mrwhrv7zdqkq3rz9givcv8w7";
+    rev = "21a3a59e2bfad246782896841e7af042382fcae7";
+    sha256 = "1laax93czalclg7cy9iq1r7hfh9jigh7igj06y9lski75ap2vhfq";
   };
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

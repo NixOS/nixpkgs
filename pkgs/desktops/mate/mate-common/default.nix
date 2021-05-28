@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-common";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dgp6k2l6dz7x2lnqk4y5xfkld376726hda3mrc777f821kk99nr";
+    sha256 = "0srb2ly5pjq1g0cs8m39nbfv33dvsc2j4g2gw081xis3awzh3lki";
   };
 
   enableParallelBuilding = true;

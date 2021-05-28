@@ -60,6 +60,5 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = [ maintainers.gal_bolle ];
-    platforms = platforms.all;
   };
 }

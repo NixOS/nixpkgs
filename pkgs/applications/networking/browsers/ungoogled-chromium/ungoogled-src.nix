@@ -1,6 +1,6 @@
 {
-  "81.0.4044.122" = {
-    rev = "81.0.4044.122-2";
-    sha256 = "0bbr4a2gkgm3ykdgpj8x58sd3dwam6qkifhzfs2997681g7b2v2q";
+  "85.0.4183.102" = {
+    rev = "85.0.4183.102-1";
+    sha256 = "1mdx4a5zcs3an9yx1jxx4amq8p9rcj0hv76r8y7nz6cpsfgd9n3y";
   };
 }

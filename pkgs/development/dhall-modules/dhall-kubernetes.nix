@@ -1,29 +1,16 @@
-{ buildDhallPackage, fetchFromGitHub, lib }:
+{ buildDhallGitHubPackage, lib }:
 
 let
   makeDhallKubernetes =
-    version:
-    lib.makeOverridable
-      ( { rev
-        , sha256
-        , file ? "package.dhall"
-        }:
-          buildDhallPackage {
-            name = "dhall-kubernetes-${version}";
+    version: { rev, sha256 }:
+      buildDhallGitHubPackage {
+        name  = "dhall-kubernetes-${version}";
+        owner = "dhall-lang";
+        repo  = "dhall-kubernetes";
+        file  = "package.dhall";
 
-            code =
-              let
-                src = fetchFromGitHub {
-                  owner = "dhall-lang";
-                  repo  = "dhall-kubernetes";
-
-                  inherit rev sha256;
-                };
-
-              in
-                "${src}/${file}";
-          }
-      );
+        inherit rev sha256;
+      };
 
 in
   lib.mapAttrs makeDhallKubernetes {

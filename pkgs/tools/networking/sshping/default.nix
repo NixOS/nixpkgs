@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libssh ];
 
   buildPhase = ''
-      g++ -Wall -I ext/ -o bin/sshping src/sshping.cxx -lssh
+      $CXX -Wall -I ext/ -o bin/sshping src/sshping.cxx -lssh
     '';
 
   installPhase = ''

@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -D bin/notary $bin/bin/notary
+    install -D bin/notary $out/bin/notary
     runHook postInstall
   '';
 

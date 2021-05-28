@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c8sdlqcmpajcpf6jfpi6amncibm9c3zrl1860r0vfimps50m34h";
+    sha256 = "dcebb32e474bc28aa77b944a0a64949ef3b5b852cbef6256fbc95347a04e777c";
   };
 
   propagatedBuildInputs = [
@@ -38,9 +38,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i \
-      -e 's!click>=6.0,<7.0!click!' \
-      -e 's!keyring>=8.0,<9.0!keyring!' \
-      -e 's!keyrings.alt>=1.0,<2.0!keyrings.alt!' \
+      -e 's!click>=.*!click!' \
+      -e 's!keyring>=.*!keyring!' \
+      -e 's!keyrings.alt>=.*!keyrings.alt!' \
+      -e 's!tzlocal==.*!tzlocal!' \
       requirements.txt
   '';
 

@@ -5,11 +5,11 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "ydiff";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mxcl17sx1d4vaw22ammnnn3y19mm7r6ljbarcjzi519klz26bnf";
+    sha256 = "f5430577ecd30974d766ee9b8333e06dc76a947b4aae36d39612a0787865a121";
   };
 
   patchPhase = ''

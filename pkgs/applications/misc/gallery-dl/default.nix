@@ -2,15 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.13.6";
+  version = "1.15.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "17hgryj8qsxcx3c96ir25q0wsh5q0s6c6fb33lqfdbrfxrjcixbk";
+    sha256 = "1pysh0gz3f3dxk5bfkzaii4myrgik396mf6vlks50inpbnslmqsl";
   };
 
-  doCheck = false;
   propagatedBuildInputs = with python3Packages; [ requests ];
+
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+  pytestFlagsArray = [
+    # requires network access
+    "--ignore=test/test_results.py"
+  ];
 
   meta = {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";

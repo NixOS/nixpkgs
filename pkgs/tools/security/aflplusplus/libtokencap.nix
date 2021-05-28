@@ -12,6 +12,7 @@ stdenv.mkDerivation {
 
   preInstall = ''
     mkdir -p $out/lib/afl
+    mkdir -p $out/share/doc/afl
   '';
   postInstall = ''
     mkdir $out/bin

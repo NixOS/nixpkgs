@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/f4exb/serialdv";
     platforms = platforms.linux;
     maintainers = with maintainers; [ alkeryn ];
+    license = licenses.gpl3;
   };
 }
 

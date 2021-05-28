@@ -1,21 +1,19 @@
-{ lib, fetchFromGitHub, buildDunePackage, camlp5
-, ppx_tools_versioned, ppx_deriving, re
+{ lib, fetchzip, buildDunePackage, camlp5
+, ppxlib, ppx_deriving, re, perl, ncurses
 }:
 
 buildDunePackage rec {
   pname = "elpi";
-  version = "1.10.2";
+  version = "1.11.4";
 
-  src = fetchFromGitHub {
-    owner = "LPCIC";
-    repo = "elpi";
-    rev = "v${version}";
-    sha256 = "0w5z0pxyshqawq7w5rw3nqii49y88rizvwqf202pl11xqi14icsn";
-  };
+   src = fetchzip {
+     url = "https://github.com/LPCIC/elpi/releases/download/v${version}/elpi-v${version}.tbz";
+     sha256 = "1hmjp2z52j17vwhhdkj45n9jx11jxkdg2dwa0n04yyw0qqy4m7c1";
+   };
 
   minimumOCamlVersion = "4.04";
 
-  buildInputs = [ ppx_tools_versioned ];
+  buildInputs = [ perl ncurses ppxlib ];
 
   propagatedBuildInputs = [ camlp5 ppx_deriving re ];
 
@@ -23,6 +21,12 @@ buildDunePackage rec {
     description = "Embeddable λProlog Interpreter";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/LPCIC/elpi";
   };
+
+  postPatch = ''
+    substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
+  '';
+
+  useDune2 = true;
 }

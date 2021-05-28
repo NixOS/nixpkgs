@@ -1,23 +1,29 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestrunner
+, pytestCheckHook
 , numpy
 , pillow
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "2.0.0";
   pname = "pydicom";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1483hv74fhfk4q18r4rda7yixqqdxrd1djzp3492s81ykxd4k24l";
+    sha256 = "594c91f715c415ef439f498351ae68fb770c776fc5aa72f3c87eb500dc2a7470";
   };
 
   propagatedBuildInputs = [ numpy pillow ];
-  checkInputs = [ pytest pytestrunner ];
+
+  checkInputs = [ pytest pytestrunner pytestCheckHook ];
+  disabledTests = [ "test_invalid_bit_depth_raises" ];
+  # harmless failure; see https://github.com/pydicom/pydicom/issues/1119
 
   meta = with stdenv.lib; {
     homepage = "https://pydicom.github.io";

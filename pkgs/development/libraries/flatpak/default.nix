@@ -1,21 +1,23 @@
 { stdenv
 , fetchurl
-, autoreconfHook
+, fetchpatch
+, autoconf
+, automake
+, libtool
 , docbook_xml_dtd_412
 , docbook_xml_dtd_42
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , which
 , libxml2
 , gobject-introspection
 , gtk-doc
 , intltool
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 , appstream-glib
 , substituteAll
-, glibcLocales
 , yacc
 , xdg-dbus-proxy
 , p11-kit
@@ -39,6 +41,7 @@
 , nixosTests
 , libsoup
 , lzma
+, zstd
 , ostree
 , polkit
 , python3
@@ -54,14 +57,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.6.3";
+  version = "1.8.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "17s8nqdxd4xdy7ag9bw06adxccha78jmlsa3zpqnl3qh92pg0hji";
+    sha256 = "eSZiXffCKCpe4aizwxevU9QKZjsbxrGKLch0fiZQhbA=";
   };
 
   patches = [
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext glibcLocales socat gtk3;
+      inherit coreutils gettext socat gtk3;
       smi = shared-mime-info;
       dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
@@ -101,21 +104,31 @@ stdenv.mkDerivation rec {
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
+
+    # Fix `flatpak/test-oci-registry@{user,system}.wrap.test` installed tests.
+    # https://github.com/flatpak/flatpak/pull/3762
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/c1447dadecd50f384b6d11dac18b014245267d00.patch";
+      sha256 = "UAA/wGr8/aMbx5MV+8Ilro2kgKkx2QOn88lDUjCgeDA=";
+    })
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    libtool
     libxml2
+    # TODO: replace with docbook_xml_dtd_45 https://github.com/flatpak/flatpak/pull/3760
     docbook_xml_dtd_412
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     which
     gobject-introspection
     gtk-doc
     intltool
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
     appstream-glib
     yacc
@@ -134,6 +147,7 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
+    # zstd # TODO: broken paths in .pc file
     polkit
     python3
     systemd
@@ -166,6 +180,7 @@ stdenv.mkDerivation rec {
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--localstatedir=/var"
+    "--enable-gtk-doc"
     "--enable-installed-tests"
   ];
 
@@ -174,9 +189,24 @@ stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = ''
+  postPatch = let
+    vsc-py = python3.withPackages (pp: [
+      pp.pyparsing
+    ]);
+  in ''
     patchShebangs buildutil
     patchShebangs tests
+    PATH=${stdenv.lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preConfigure = ''
+    # TODO: remove the condition once autogen.sh is shipped in the tarball
+    # https://github.com/flatpak/flatpak/pull/3761
+    if [[ -f autogen.sh ]]; then
+        NOCONFIGURE=1 ./autogen.sh
+    else
+        autoreconf --install --force --verbose
+    fi
   '';
 
   passthru = {

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.1.0";
+  version = "5.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ai1i0wydxfbdakqnrlpgdk4l2ps7gw0r9nihv9p2jgyqbl13kj3";
+    sha256 = "91759bd0ee5ef0d4fa24144dfa551670730baeca8cf2fff1cc59f734ecd21de6";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

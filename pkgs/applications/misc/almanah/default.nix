@@ -16,18 +16,19 @@
 , libxml2
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , sqlite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09rxx4s4c34d1axza6ayss33v78p44r9bpx058shllh1sf5avpcb";
+    sha256 = "IWYOnOu0C9uQ9k1dgWkJ6Kv+o/jY+6Llfsi4PusHE24=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
+    python3
     wrapGAppsHook
   ];
 

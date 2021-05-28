@@ -5,7 +5,7 @@
 let
   pname = "sound-juicer";
   version = "3.24.0";
-in stdenv.mkDerivation rec{
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

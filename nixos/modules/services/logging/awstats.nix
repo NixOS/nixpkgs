@@ -24,7 +24,7 @@ let
 
       logFile = mkOption {
         type = types.str;
-        example = "/var/spool/nginx/logs/access.log";
+        example = "/var/log/nginx/access.log";
         description = ''
           The log file to be scanned.
 
@@ -110,7 +110,7 @@ in
         {
           "mysite" = {
             domain = "example.com";
-            logFile = "/var/spool/nginx/logs/access.log";
+            logFile = "/var/log/nginx/access.log";
           };
         }
       '';

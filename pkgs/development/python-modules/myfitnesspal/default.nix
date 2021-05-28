@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.13.4";
+  version = "1.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "552cc696e170f12f75fd12b1447be01fa2d0bfd85e14da5928afd9aab2277b98";
+    sha256 = "c2275e91c794a3569a76c47c78cf2ff04d7f569a98558227e899ead7b30af0d6";
   };
 
   # Remove overly restrictive version constraints on keyring and keyrings.alt

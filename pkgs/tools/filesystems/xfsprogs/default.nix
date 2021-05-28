@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://xfs.org/";
+    homepage = "https://xfs.org/";
     description = "SGI XFS utilities";
     license = licenses.lgpl21;
     platforms = platforms.linux;

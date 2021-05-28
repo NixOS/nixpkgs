@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted,isPy37 }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "18.8.1";
+  version = "20.4.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67e360ac73b12c52058219bb5f8b3ed4105d2636707a36a7cdafb56fe06db7fe";
+    sha256 = "17938f2bca4a9cabce61346758e482ca4e600160cbc28e861493eac74a19539d";
   };
 
   checkInputs = [ pytest mock ];

@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , python
 , pytest
 , numpy
@@ -8,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "5.2.0";
+  version = "6.1.1";
+  disabled = isPy27; # setup.py no longer py3 compat
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b71vp0l4523428aw098xw6rmkl8vlcy2aag40akijbyz1nnk541";
+    sha256 = "807da52ee0d4fc1241c8f8a04d274a28d4b23d3a5f942152497d19405482d04f";
   };
 
   # Use pytest because its easier to discover tests

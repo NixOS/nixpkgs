@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notmuch-bower";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "wangp";
     repo = "bower";
     rev = version;
-    sha256 = "0vhac8yjnhb1gz60jfzg27spyn96c1rr849gc6vjym5xamw7zp0v";
+    sha256 = "0hvvlbvad6h73iiyn9xshlj073p2ddchgh0pyizh9gi8niir4fn5";
   };
 
   nativeBuildInputs = [ gawk mercury pandoc ];

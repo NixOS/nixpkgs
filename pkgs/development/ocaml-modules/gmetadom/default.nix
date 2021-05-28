@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0skmlv0pnqvg99wzzzi1h4zhwzd82xg7xpkj1kwpfy7bzinjh7ig";
   };
 
-  patches = [ ./gcc-4.3.dpatch ];
+  patches = [ ./gcc-4.3.patch ];
 
   dontDisableStatic = true;
 

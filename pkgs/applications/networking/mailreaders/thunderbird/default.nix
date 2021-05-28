@@ -6,6 +6,7 @@
 , curl
 , dbus
 , dbus-glib
+, fetchpatch
 , fetchurl
 , file
 , fontconfig
@@ -18,7 +19,6 @@
 , lib
 , libGL
 , libGLU
-, libIDL
 , libevent
 , libjpeg
 , libnotify
@@ -43,6 +43,7 @@
 , rustc
 , sqlite
 , stdenv
+, systemd
 , unzip
 , which
 , writeScript
@@ -60,25 +61,22 @@
 , waylandSupport ? true
 , libxkbcommon, calendarSupport ? true
 
-, # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+# Use official trademarked branding.  Permission obtained at:
+# https://github.com/NixOS/nixpkgs/pull/94880#issuecomment-675907971
+, enableOfficialBranding ? true
 }:
 
 assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.7.0";
+  version = "78.3.2";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "0glskn3djf739v2dphs663a2lfg5b0lbk1vlwwbzwfj9wfshvk7l07ijp84143bamvgb0lhhh0c9zx4gy5jj3x1j4196m3s1c1n7rzs";
+      "3c5b9400k3nrlabr2cvm5s3nz4ngy9qnz0j44mczh67v5xsmxi1hks8dx75s8sbbhnzmg0id4vlxfwd7i259p2xc039nkzkahmfn2wc";
   };
 
   nativeBuildInputs = [
@@ -112,7 +110,6 @@ stdenv.mkDerivation rec {
     jemalloc
     libGL
     libGLU
-    libIDL
     libevent
     libjpeg
     libnotify
@@ -176,9 +173,10 @@ stdenv.mkDerivation rec {
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${
         lib.optionalString stdenv.cc.isClang
         "-idirafter ${stdenv.cc.cc}/lib/clang/${
@@ -207,14 +205,12 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
-    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
-    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -224,12 +220,9 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
-    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
 
-    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
@@ -305,11 +298,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # FIXME: This can probably be removed as soon as we package a
-  # Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
+  # FIXME: The XUL portion of this can probably be removed as soon as we
+  # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
   postFixup = ''
     local xul="$out/lib/thunderbird/libxul.so"
-    patchelf --set-rpath "${libnotify}/lib:$(patchelf --print-rpath $xul)" $xul
+    patchelf --set-rpath "${libnotify}/lib:${lib.getLib systemd}/lib:$(patchelf --print-rpath $xul)" $xul
   '';
 
   doInstallCheck = true;
@@ -322,7 +315,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    attrPath = "thunderbird";
+    attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
       gnugrep curl runtimeShell;
@@ -335,7 +328,9 @@ stdenv.mkDerivation rec {
       eelco
       lovesegfault
       pierron
+      vcunat
     ];
     platforms = platforms.linux;
+    license = licenses.mpl20;
   };
 }

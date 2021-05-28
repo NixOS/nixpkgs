@@ -1,8 +1,17 @@
 {
   stdenv,
   fetchurl,
+  gnuplot,
+  sox,
+  flac,
+  id3v2,
+  vorbis-tools,
+  makeWrapper
 }:
 
+let
+  path = stdenv.lib.makeBinPath [ gnuplot sox flac id3v2 vorbis-tools ];
+in
 stdenv.mkDerivation rec {
   pname = "bpm-tools";
   version = "0.3";
@@ -12,14 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "151vfbs8h3cibs7kbdps5pqrsxhpjv16y2iyfqbxzsclylgfivrp";
   };
 
-  patchPhase = ''
-    patchShebangs bpm-tag
-    patchShebangs bpm-graph
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/bpm-tag --prefix PATH : "${path}"
+    wrapProgram $out/bin/bpm-graph --prefix PATH : "${path}"
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.pogo.org.uk/~mark/bpm-tools/";

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, vscode-utils, extractNuGet
 , icu, curl, openssl, lttng-ust, autoPatchelfHook
-, python3
+, python3, musl
 , pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
                                # Use version from `PATH` for default setting otherwise.
                                # Defaults to `false` as we expect it to be project specific most of the time.
@@ -37,12 +37,17 @@ let
       sha256 = languageServerSha256;
     };
   };
-in vscode-utils.buildVscodeMarketplaceExtension {
+in vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2020.3.71659";
-    sha256 = "1smhnhkfchmljz8aj1br70023ysgd2hj6pm1ncn1jxphf89qi1ja";
+    version = "2020.9.114305";
+  };
+
+  vsix = fetchurl {
+    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+    url = "https://github.com/microsoft/vscode-python/releases/download/${mktplcRef.version}/ms-python-release.vsix";
+    sha256 = "1vh0wvfvzszc58lw7dbl60knpm5l6rrsghfchhn5dvwyadx4a33h";
   };
 
   buildInputs = [
@@ -50,6 +55,7 @@ in vscode-utils.buildVscodeMarketplaceExtension {
     curl
     openssl
     lttng-ust
+    musl
   ];
 
   nativeBuildInputs = [
@@ -81,6 +87,7 @@ in vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = with lib; {
     license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.jraygauthier ];
   };
 }

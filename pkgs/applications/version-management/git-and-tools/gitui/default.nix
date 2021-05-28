@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.2.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06x4a7ynq6vznjwdm0dhzlj9353skxz65xabwr5xxa85zp2a7vcm";
+    sha256 = "0lxpdwpxizc4bczh5cl2x2xbbdam3fakvgcbbrdh43czgjwb4ds1";
   };
 
-  cargoSha256 = "08z3z1m0ik62gzj146a4imk4xx5n8sbvjs0w7gkclvlsvm9dp8q4";
+  cargoSha256 = "14x0m3pq4gapgqaljxdwmr5pk9h209ls95an9xgrq0dj6apyimgx";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 

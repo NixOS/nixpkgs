@@ -1,12 +1,12 @@
 { stdenv, gcc
+, pkgs
 , jshon
 , glib
 , nspr
 , nss
 , fetchzip
-, patchelfUnstable
 , enablePepperFlash ? false
-
+, enableExtensions ? []
 , upstream-info
 }:
 
@@ -35,7 +35,7 @@ let
     shEsc = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
     mkSh = val: "'${replaceStrings shSearch shReplace (shEsc val)}'";
     mkFlag = flag: ["--add-flags" (shEsc flag)];
-    mkEnvVar = key: val: ["--set" (shEsc key) (shEsc val)];
+    mkEnvVar = key: val: ["--set" (shEsc key) val];
     envList = mapAttrsToList mkEnvVar envVars;
     quoted = map mkSh (flatten ((map mkFlag flags) ++ envList));
   in ''
@@ -45,11 +45,11 @@ let
 
   flash = stdenv.mkDerivation rec {
     pname = "flashplayer-ppapi";
-    version = "32.0.0.363";
+    version = "32.0.0.445";
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "0znk8an892mykgbz56hyv3gz65vc9mhb3vn96c6bsvicwl1fn460";
+      sha256 = "1r9vd210d2qp501q40pjx60mzah08rg0f8jk5rpp52ddajwggalv";
       stripRoot = false;
     };
 
@@ -87,7 +87,31 @@ let
       platforms = platforms.x86_64;
     };
   };
+  extensions = stdenv.mkDerivation {
+    name = "chromium-extensions";
+    builder = let
+      extensionLoadPaths = strings.concatStringsSep "," enableExtensions;
 
+      extensionPaths = map (ext: builtins.unsafeDiscardStringContext (toString ext)) enableExtensions;
+      stripHash = storePath: strings.concatStringsSep "-" (lists.drop 1 (lists.flatten (builtins.split "-" (lists.last (builtins.split "/" storePath)))));
+      getExtensionName = storePath: lib.lists.last (builtins.split "^chromium-extensions-" (builtins.parseDrvName (stripHash storePath)).name);
+      extMap = builtins.toJSON (listToAttrs (map (extPath: { name = toString extPath; value = getExtensionName extPath; }) extensionPaths));
+    in pkgs.writeScript "builder.sh" ''
+      source $stdenv/setup
+
+      extpaths="${extensionLoadPaths}"
+      extmap='${extMap}'
+      ${mkPluginInfo {
+        allowedVars = [ "extpaths" "extmap" ];
+        flags = [
+          "--load-extension=@extpaths@"
+        ];
+        envVars = {
+          NIX_CHROMIUM_EXTENSION_MAP = "@extmap@";
+        };
+      }}
+    '';
+  };
 in {
-  enabled = optional enablePepperFlash flash;
+  enabled = optional enablePepperFlash flash ++ optional (enableExtensions != null) extensions;
 }

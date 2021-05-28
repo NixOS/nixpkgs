@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       desktopName = "GanttProject";
       genericName = "Shedule and manage projects";
       comment = meta.description;
-      categories = "Office;Application;";
+      categories = "Office;";
     };
 
     javaOptions = [

@@ -5,15 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-dash-to-dock-unstable";
-  version = "2020-04-20";
+  pname = "gnome-shell-dash-to-dock";
+  version = "69";
 
   src = fetchFromGitHub {
     owner = "micheleg";
     repo = "dash-to-dock";
-    # rev = "extensions.gnome.org-v" + version;
-    rev = "1788f31b049b622f78d0e65c56bef76169022ca9";
-    sha256 = "M3tlRbQ1PjKvNrKNtg0+CBEtzLSFQYauXJXQojdkHuk=";
+    rev = "extensions.gnome.org-v" + version;
+    hash = "sha256-YuLtC7E8dK57JSuFdbDQe5Ml+KQfl9qSdrHdVhFaNiE=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
   ];
+
+  uuid = "dash-to-dock@micxgx.gmail.com";
 
   meta = with stdenv.lib; {
     description = "A dock for the Gnome Shell";

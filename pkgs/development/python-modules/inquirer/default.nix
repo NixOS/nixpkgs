@@ -1,20 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, python-editor, readchar, blessings, pytest, pytestcov, pexpect, pytest-mock }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytestcov, pexpect, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "2.6.3";
+  version = "2.7.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01lf51y3bxsxkghbdk9hr42yvihpwi2s5zpxnra3bx41r35msvjz";
+  # PyPi archive currently broken: https://github.com/magmax/python-inquirer/issues/106
+  src = fetchFromGitHub rec {
+    owner = "magmax";
+    repo = "python-inquirer";
+    rev = version;
+    sha256 = "152l5qjgkag8zkr69ax2i5s8xcac1qvyngisrplbnbzwbpf77d0d";
   };
 
-  propagatedBuildInputs = [ python-editor readchar blessings ];
+  propagatedBuildInputs = [ blessed python-editor readchar ];
 
-  # No real changes in 2.0.0...e0edfa3
   postPatch = ''
-   substituteInPlace setup.py \
-     --replace "readchar == 2.0.1" "readchar >= 2.0.0"
+   substituteInPlace requirements.txt \
+     --replace "blessed==1.17.6" "blessed~=1.17" \
+     --replace "readchar==2.0.1" "readchar>=2.0.0"
   '';
 
   checkInputs = [ pytest pytestcov pexpect pytest-mock ];

@@ -13,7 +13,9 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  modSha256 = "03fqa7s6729g0a6ffiyc61dkldpi7vg8pvvpqak4c0mqi1dycivd";
+  vendorSha256 = "1lrmafvv5zfn9kc0p8g5vdz351n1zbaqwhwk861fxys0rdpqskyc";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
@@ -29,6 +31,5 @@ buildGoModule rec {
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
     maintainers = with maintainers; [ marsam dtzWill ];
-    platforms = platforms.all;
   };
 }

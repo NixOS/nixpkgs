@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 ="194s9rjh3yd2c3rf3zwxsxr2lwqfswjazj39yiyccy0wcxmxpv34";
+    sha256 = "111g2f3y5lmz91m755jz0x8yx5cx9ym484gch8wcv80dmr7ilb1y";
     fetchSubmodules = true;
   };
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

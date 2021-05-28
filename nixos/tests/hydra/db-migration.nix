@@ -61,7 +61,7 @@ with pkgs.lib;
           'curl -L -s http://localhost:3000/build/1 -H "Accept: application/json" |  jq .buildstatus | xargs test 0 -eq'
       )
 
-      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ jobs\" -A'")
+      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ builds\" -A'")
       assert "jobset_id" not in out
 
       original.succeed(
@@ -69,7 +69,7 @@ with pkgs.lib;
       )
       original.wait_for_unit("hydra-init.service")
 
-      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ jobs\" -A'")
+      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ builds\" -A'")
       assert "jobset_id|integer|||" in out
 
       original.succeed("hydra-backfill-ids")
@@ -79,7 +79,7 @@ with pkgs.lib;
       )
       original.wait_for_unit("hydra-init.service")
 
-      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ jobs\" -A'")
+      out = original.succeed("su -l postgres -c 'psql -d hydra <<< \"\\d+ builds\" -A'")
       assert "jobset_id|integer||not null|" in out
 
       original.wait_until_succeeds(

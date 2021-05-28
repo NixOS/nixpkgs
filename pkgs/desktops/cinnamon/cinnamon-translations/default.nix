@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
-  version = "4.4.2";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1n1nkapcgxmbv0l8hrx5cf588pi4ifx12xbz46lq4p1ijrlfivba";
+    sha256 = "0zaghha62ibhg3rir6mrfy1z3v7p7v83b6glhmj9s51nxd86fyv6";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Translations files for the Cinnamon desktop";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

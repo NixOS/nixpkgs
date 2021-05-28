@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
-  version = "11.1.0";
+  version = "12.0.4";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11nmh2b7pal67nhcygp5gpzf3n158671fjjxw0vwjgrb87hkdry9";
+    sha256 = "0vj6xpp5ss82n1zxljy5893s8l1pdhar5xqay5vvglkp8bzblin6";
   };
 
-  cargoSha256 = "1axfkyghf6gzv24is4n6kgc28nx0d6laqpdv7j1xzkf6hdixkch7";
+  cargoSha256 = "02c2pdjzd49qznm1yj3rnli48267ajjdklrb1cpj0rhpirw4rh1j";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
@@ -28,6 +28,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/XAMPPRocky/tokei";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner lilyball ];
-    platforms = platforms.all;
   };
 }

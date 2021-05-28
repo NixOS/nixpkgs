@@ -3,6 +3,7 @@
 , python
 , buildPythonPackage
 , gfortran
+, hypothesis
 , pytest
 , blas
 , lapack
@@ -21,19 +22,30 @@ let
       ${blas.implementation} = {
         include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
+        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
         libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+        runtime_library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+        runtime_library_dirs = "${blas}/lib";
       };
     });
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.18.1";
+  version = "1.19.1";
   format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77";
+    sha256 = "b8456987b637232602ceb4d663cb34106f7eb780e247d51a260b84760fd8f491";
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
@@ -58,6 +70,8 @@ in buildPythonPackage rec {
   enableParallelBuilding = true;
 
   doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+
+  checkInputs = [ hypothesis ];
 
   checkPhase = ''
     runHook preCheck

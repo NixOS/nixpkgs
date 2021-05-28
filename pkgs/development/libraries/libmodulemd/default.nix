@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "dm0uvzM5v1zDQVkonHbrT9l9ICnXZbCSiLRCMZRxhXY=";
+    sha256 = "0xl5f6a32hmli29b0rfp54h7vnagxdv9qa2r871mrgrr6fzjwvbn";
   };
 
   patches = [
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     # https://github.com/fedora-modularity/libmodulemd/pull/469
     (fetchpatch {
       url = "https://github.com/fedora-modularity/libmodulemd/commit/f72a4bea092f4d84cfc48a3e820eb10270e828d0.patch";
-      sha256 = "7/76N9ZQ7qv/DjsaMCL+YWPDzarH1JWW4Sg5HzBJLuc=";
+      sha256 = "1rrf94q1yf98w6b9bm67mb6w6qv1zqi306iv1vzspvjhsqvzmzpg";
     })
     (fetchpatch {
       url = "https://github.com/fedora-modularity/libmodulemd/commit/021ab08006b5cf601ce153174fdf403b910b8273.patch";
-      sha256 = "JibEmxMiTmu3ShhWLIWfMCtu3c30UcHqXmX9b+2VZXw=";
+      sha256 = "0z35jpnnzzb5bvmc2lglrpfnwarhky2jqmhq9avnnki22fdw89i6";
     })
   ];
 

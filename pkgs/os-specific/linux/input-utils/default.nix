@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
-    "STRIP=-s"
+    "STRIP="
   ];
 
   meta = with stdenv.lib; {

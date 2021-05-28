@@ -4,42 +4,7 @@
 
 with lib;
 
-let
-
-  # only with nscd up and running we can load NSS modules that are not integrated in NSS
-  canLoadExternalModules = config.services.nscd.enable;
-  myhostname = canLoadExternalModules;
-  mymachines = canLoadExternalModules;
-  # XXX Move these to their respective modules
-  nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
-  nsswins = canLoadExternalModules && config.services.samba.nsswins;
-  ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
-  resolved = canLoadExternalModules && config.services.resolved.enable;
-
-  hostArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf mymachines [ "mymachines" ])
-    (mkIf nssmdns [ "mdns_minimal [NOTFOUND=return]" ])
-    (mkIf nsswins [ "wins" ])
-    (mkIf resolved [ "resolve [!UNAVAIL=return]" ])
-    (mkAfter [ "dns" ])
-    (mkIf nssmdns (mkOrder 1501 [ "mdns" ])) # 1501 to ensure it's after dns
-    (mkIf myhostname (mkOrder 1600 [ "myhostname" ])) # 1600 to ensure it's always the last
-  ];
-
-  passwdArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf ldap [ "ldap" ])
-    (mkIf mymachines [ "mymachines" ])
-    (mkIf canLoadExternalModules (mkAfter [ "systemd" ]))
-  ];
-
-  shadowArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf ldap [ "ldap" ])
-  ];
-
-in {
+{
   options = {
 
     # NSS modules.  Hacky!
@@ -130,14 +95,11 @@ in {
   config = {
     assertions = [
       {
-        # generic catch if the NixOS module adding to nssModules does not prevent it with specific message.
-        assertion = config.system.nssModules.path != "" -> canLoadExternalModules;
-        message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
-      }
-      {
-        # resolved does not need to add to nssModules, therefore needs an extra assertion
-        assertion = resolved -> canLoadExternalModules;
-        message = "Loading systemd-resolved's nss-resolve NSS module requires nscd being enabled.";
+        # Prevent users from disabling nscd, with nssModules being set.
+        # If disabling nscd is really necessary, it's still possible to opt out
+        # by forcing config.system.nssModules to [].
+        assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
+        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
       }
     ];
 
@@ -158,18 +120,14 @@ in {
     '';
 
     system.nssDatabases = {
-      passwd = passwdArray;
-      group = passwdArray;
-      shadow = shadowArray;
-      hosts = hostArray;
+      passwd = mkBefore [ "files" ];
+      group = mkBefore [ "files" ];
+      shadow = mkBefore [ "files" ];
+      hosts = mkMerge [
+        (mkBefore [ "files" ])
+        (mkAfter [ "dns" ])
+      ];
       services = mkBefore [ "files" ];
     };
-
-    # Systemd provides nss-myhostname to ensure that our hostname
-    # always resolves to a valid IP address.  It returns all locally
-    # configured IP addresses, or ::1 and 127.0.0.2 as
-    # fallbacks. Systemd also provides nss-mymachines to return IP
-    # addresses of local containers.
-    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ]);
   };
 }

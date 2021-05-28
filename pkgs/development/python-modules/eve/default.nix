@@ -1,13 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, events
-, pymongo, simplejson, cerberus, werkzeug }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, flask
+, events
+, pymongo
+, simplejson
+, cerberus
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ebde455e631b8eb9d38783eedfbd7e416b4477cce3d9988880eb3e477256a11e";
+    sha256 = "a8a1216ef1d3f1a4c4fc5a7bd315eca5a3ef7dfc6b78807cdf19ddfeecafcc3e";
   };
 
   propagatedBuildInputs = [
@@ -16,13 +24,10 @@ buildPythonPackage rec {
     flask
     pymongo
     simplejson
-    werkzeug
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "werkzeug==0.15.4" "werkzeug"
-  '';
+  pythonImportsCheck = [ "eve" ];
 
   # tests call a running mongodb instance
   doCheck = false;

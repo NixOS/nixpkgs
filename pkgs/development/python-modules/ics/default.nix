@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , tatsu, arrow
-, pytest-sugar, pytestpep8, pytest-flakes, pytestcov
+, pytestCheckHook, pytestpep8, pytest-flakes
 }:
 
 buildPythonPackage rec {
@@ -22,10 +22,7 @@ buildPythonPackage rec {
       --replace "arrow>=0.11,<0.15" "arrow"
   '';
 
-  checkInputs = [ pytest-sugar pytestpep8 pytest-flakes pytestcov ];
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook pytestpep8 pytest-flakes ];
 
   meta = with stdenv.lib; {
     description = "Pythonic and easy iCalendar library (RFC 5545)";

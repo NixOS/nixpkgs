@@ -1,4 +1,4 @@
-MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
+MD_TARGETS=$(addsuffix .xml, $(basename $(shell find . -type f -regex '.*\.md$$')))
 
 .PHONY: all
 all: validate format out/html/index.html out/epub/manual.epub

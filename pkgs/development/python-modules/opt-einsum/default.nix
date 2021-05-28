@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, lib, numpy, pytest_4 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.3.0";
   pname = "opt_einsum";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "edfada4b1d0b3b782ace8bc14e80618ff629abf53143e1e6bbf9bd00b11ece77";
+    sha256 = "0jb5lia0q742d1713jk33vlj41y61sf52j6pgk7pvhxvfxglgxjr";
   };
 
   propagatedBuildInputs = [ numpy ];

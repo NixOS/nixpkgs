@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , desktop-file-utils
 , vala
 , gettext
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

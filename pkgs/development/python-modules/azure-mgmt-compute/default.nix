@@ -3,21 +3,23 @@
 , fetchPypi
 , python
 , azure-mgmt-common
+, azure-mgmt-core
 , isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "12.0.0";
+  version = "17.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0vzq93g2fpnij4rykkk3391xq2knhlbz87vhim4zvj8s45sx6z8q";
+    sha256 = "c7350b404e5d10a548ceddb034394c8fad6c852ce33a3d3b211065813c1da404";
   };
 
   propagatedBuildInputs = [
     azure-mgmt-common
+    azure-mgmt-core
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];

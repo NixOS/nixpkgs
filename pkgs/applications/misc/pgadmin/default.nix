@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       exec = "pgadmin3";
       icon = "pgAdmin3";
       type = "Application";
-      categories = "Application;Development;";
+      categories = "Development;";
       mimeType = "text/html";
     };
   in ''

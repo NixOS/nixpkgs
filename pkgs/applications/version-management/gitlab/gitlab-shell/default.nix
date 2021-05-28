@@ -2,12 +2,12 @@
 
 buildGoPackage rec {
   pname = "gitlab-shell";
-  version = "11.0.0";
+  version = "13.2.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1ca4yil8gp1cm7w939irp1x2y907z2mkdqiap8ik8mqp8svv1m44";
+    sha256 = "0drdpg4nmhzrmy8sl1f3hcd1278bpapgf0wmhi94xlyayh47j53a";
   };
 
   buildInputs = [ ruby ];
@@ -18,8 +18,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $bin/bin
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $bin/
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $out/bin
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $out/
   '';
 
   meta = with stdenv.lib; {

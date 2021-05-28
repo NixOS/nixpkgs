@@ -35,10 +35,10 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.55";
+   version = "2.56";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "0l00zszvginpriv12idc0y1x28qmicdmrwkqa007srkxvrdgxwdi";
+    sha256 = "0z83p3ifdkv5dds8s6fqqbycql1zmgppdc7ygqmm12z5zlrl9p12";
   };
   
   nativeBuildInputs = [ pkg-config file ];

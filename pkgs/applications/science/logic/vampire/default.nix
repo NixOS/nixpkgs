@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vampire";
-  version = "4.4";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
     rev = version;
-    sha256 = "0v2fdfnk7l5xr5c4y54r25g1nbp4vi85zv29nbklh3r7aws3w9q1";
+    sha256 = "0q9gqyq96amdnhxgwjyv0r2sxakikp3jvmizgj2h0spfz643p8db";
   };
 
   buildInputs = [ z3 zlib ];

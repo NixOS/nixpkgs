@@ -1,12 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, pyhamcrest }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
 
 buildPythonPackage rec {
   pname = "base58";
-  version = "1.0.3";
+  version = "2.0.1";
+  disabled = isPy27; # python 2 abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a793c599979c497800eb414c852b80866f28daaed5494703fc129592cc83e60";
+    sha256 = "365c9561d9babac1b5f18ee797508cd54937a724b6e419a130abad69cec5ca79";
   };
 
   checkInputs = [ pytest pyhamcrest ];

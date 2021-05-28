@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-      export PKG_CONFIG=${pkgconfig}/bin/pkg-config
+      export PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config
       export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
       export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
   '';

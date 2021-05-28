@@ -8,6 +8,6 @@
 
   boot.initrd.extraUdevRulesCommands = ''
     cp -v ${pkgs.bcache-tools}/lib/udev/rules.d/*.rules $out/
-  ''; 
+  '';
 
 }

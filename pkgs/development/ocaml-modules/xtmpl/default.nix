@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./jsoo.patch ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace js_of_ocaml.ppx js_of_ocaml-ppx
+  '';
+
   buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
   propagatedBuildInputs = [ iri re ];
 

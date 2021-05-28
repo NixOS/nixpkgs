@@ -1,4 +1,6 @@
-{stdenv, fetchurl, libX11, libXinerama, libXft, patches ? []}:
+{stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [], conf ? null}:
+
+with stdenv.lib;
 
 let
   name = "dwm-6.2";
@@ -18,7 +20,9 @@ stdenv.mkDerivation {
   # Allow users set their own list of patches
   inherit patches;
 
-  buildPhase = " make ";
+  # Allow users to set the config.def.h file containing the configuration
+  postPatch = let configFile = if isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
+  in optionalString (conf!=null) "cp ${configFile} config.def.h";
 
   meta = {
     homepage = "https://suckless.org/";

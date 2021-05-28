@@ -1,4 +1,4 @@
-diff --git a/quitter.py b/quitterb.py
+diff --git a/quitter.py b/quitter.py
 index a42b9d0..f544ccb 100644
 --- a/qutebrowser/misc/quitter.py
 +++ b/qutebrowser/misc/quitter.py

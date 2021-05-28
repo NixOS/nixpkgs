@@ -35,7 +35,7 @@ in
           Name of the Erlang node.
         '';
       };
-      
+
       anonymousUserCreation = mkOption {
         type = types.bool;
         default = false;

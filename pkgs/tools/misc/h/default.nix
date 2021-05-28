@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "zimbatm";
     repo = "h";
     rev = "v${version}";
-    hash = "sha256-chGrMtvLyyNtlM7PO1olVdkzkvMOk6OibHw+mqwVxIM=";
+    sha256 = "10y42nn9lgkwdjia74qfyf937nam4md3pkyfjinj7jybvcran4bj";
   };
 
   buildInputs = [ ruby ];

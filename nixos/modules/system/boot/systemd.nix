@@ -25,7 +25,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-      #"cryptsetup.target"
+      "cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -73,17 +73,13 @@ let
       "systemd-journald.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
-      "systemd-journald-audit.socket"
+      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
       # Coredumps.
       "systemd-coredump.socket"
       "systemd-coredump@.service"
-
-      # SysV init compatibility.
-      "systemd-initctl.socket"
-      "systemd-initctl.service"
 
       # Kernel module loading.
       "systemd-modules-load.service"
@@ -101,7 +97,7 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "sys-fs-fuse-connections.mount"
-      "sys-kernel-config.mount"
+      ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
@@ -164,7 +160,6 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
-      "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ optionals config.services.journald.enableHttpGateway [
@@ -201,8 +196,23 @@ let
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
-    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
+    let
+      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = pkgs.writeTextFile {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+        executable = true;
+        destination = "/bin/${scriptName}";
+        text = ''
+          #!${pkgs.runtimeShell} -e
+          ${text}
+        '';
+        checkPhase = ''
+          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
+        '';
+      };
+    in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
     config = {
@@ -247,43 +257,31 @@ let
               pkgs.gnused
               systemd
             ];
-          environment.PATH = config.path;
+          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStart}
-            '';
+          { serviceConfig.ExecStartPre =
+              makeJobScript "${name}-pre-start" config.preStart;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.script}
-            '' + " " + config.scriptArgs;
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStart}
-            '';
+          { serviceConfig.ExecStartPost =
+              makeJobScript "${name}-post-start" config.postStart;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.reload}
-            '';
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStop}
-            '';
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStop}
-            '';
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };
@@ -352,6 +350,7 @@ let
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
         '';
     };
 
@@ -404,6 +403,8 @@ let
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
     "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
+
+  proxy_env = config.networking.proxy.envVars;
 
 in
 
@@ -745,6 +746,25 @@ in
       '';
     };
 
+    systemd.tmpfiles.packages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExample "[ pkgs.lvm2 ]";
+      apply = map getLib;
+      description = ''
+        List of packages containing <command>systemd-tmpfiles</command> rules.
+
+        All files ending in .conf found in
+        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        will be included.
+        If this folder does not exist or does not contain any files an error will be returned instead.
+
+        If a <filename>lib</filename> output is available, rules are searched there and only there.
+        If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
+        and if that does not exist either, the default output will be used.
+      '';
+    };
+
     systemd.user.units = mkOption {
       description = "Definition of systemd per-user units.";
       default = {};
@@ -814,6 +834,49 @@ in
       '';
     };
 
+    systemd.watchdog.device = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/dev/watchdog";
+      description = ''
+        The path to a hardware watchdog device which will be managed by systemd.
+        If not specified, systemd will default to /dev/watchdog.
+      '';
+    };
+
+    systemd.watchdog.runtimeTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "30s";
+      description = ''
+        The amount of time which can elapse before a watchdog hardware device
+        will automatically reboot the system. Valid time units include "ms",
+        "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.rebootTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse after a reboot has been triggered
+        before a watchdog hardware device will automatically reboot the system.
+        Valid time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.kexecTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse when kexec is being executed before
+        a watchdog hardware device will automatically reboot the system. This
+        option should only be enabled if reloadTime is also enabled. Valid
+        time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
   };
 
 
@@ -822,10 +885,30 @@ in
   config = {
 
     warnings = concatLists (mapAttrsToList (name: service:
-      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
-        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
+      let
+        type = service.serviceConfig.Type or "";
+        restart = service.serviceConfig.Restart or "no";
+      in optional
+      (type == "oneshot" && (restart == "always" || restart == "on-success"))
+      "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'")
+      cfg.services);
 
     system.build.units = cfg.units;
+
+    system.nssModules = [ systemd.out ];
+    system.nssDatabases = {
+      hosts = (mkMerge [
+        [ "mymachines" ]
+        (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
+      )
+      ]);
+      passwd = (mkMerge [
+        (mkAfter [ "systemd" ])
+      ]);
+      group = (mkMerge [
+        (mkAfter [ "systemd" ])
+      ]);
+    };
 
     environment.systemPackages = [ systemd ];
 
@@ -863,6 +946,19 @@ in
           DefaultIPAccounting=yes
         ''}
         DefaultLimitCORE=infinity
+        ${optionalString (config.systemd.watchdog.device != null) ''
+          WatchdogDevice=${config.systemd.watchdog.device}
+        ''}
+        ${optionalString (config.systemd.watchdog.runtimeTime != null) ''
+          RuntimeWatchdogSec=${config.systemd.watchdog.runtimeTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.rebootTime != null) ''
+          RebootWatchdogSec=${config.systemd.watchdog.rebootTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.kexecTime != null) ''
+          KExecWatchdogSec=${config.systemd.watchdog.kexecTime}
+        ''}
+
         ${config.systemd.extraConfig}
       '';
 
@@ -910,24 +1006,20 @@ in
       "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
       "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
-      "tmpfiles.d/00-nixos.conf".text = ''
-        # This file is created automatically and should not be modified.
-        # Please change the option ‘systemd.tmpfiles.rules’ instead.
-
-        ${concatStringsSep "\n" cfg.tmpfiles.rules}
-      '';
-
-      "tmpfiles.d/home.conf".source = "${systemd}/example/tmpfiles.d/home.conf";
-      "tmpfiles.d/journal-nocow.conf".source = "${systemd}/example/tmpfiles.d/journal-nocow.conf";
-      "tmpfiles.d/portables.conf".source = "${systemd}/example/tmpfiles.d/portables.conf";
-      "tmpfiles.d/static-nodes-permissions.conf".source = "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf";
-      "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
-      "tmpfiles.d/systemd-nologin.conf".source = "${systemd}/example/tmpfiles.d/systemd-nologin.conf";
-      "tmpfiles.d/systemd-nspawn.conf".source = "${systemd}/example/tmpfiles.d/systemd-nspawn.conf";
-      "tmpfiles.d/systemd-tmp.conf".source = "${systemd}/example/tmpfiles.d/systemd-tmp.conf";
-      "tmpfiles.d/tmp.conf".source = "${systemd}/example/tmpfiles.d/tmp.conf";
-      "tmpfiles.d/var.conf".source = "${systemd}/example/tmpfiles.d/var.conf";
-      "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+      "tmpfiles.d".source = (pkgs.symlinkJoin {
+        name = "tmpfiles.d";
+        paths = map (p: p + "/lib/tmpfiles.d") cfg.tmpfiles.packages;
+        postBuild = ''
+          for i in $(cat $pathsPath); do
+            (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
+              echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
+              exit 1
+            )
+          done
+        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
+          rm -f $out/${removePrefix "tmpfiles.d/" name}
+        '') config.system.build.etc.targets;
+      }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
@@ -947,6 +1039,36 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
+
+    systemd.tmpfiles.packages = [
+      # Default tmpfiles rules provided by systemd
+      (pkgs.runCommand "systemd-default-tmpfiles" {} ''
+        mkdir -p $out/lib/tmpfiles.d
+        cd $out/lib/tmpfiles.d
+
+        ln -s "${systemd}/example/tmpfiles.d/home.conf"
+        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/var.conf"
+        ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+      '')
+      # User-specified tmpfiles rules
+      (pkgs.writeTextFile {
+        name = "nixos-tmpfiles.d";
+        destination = "/lib/tmpfiles.d/00-nixos.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the option ‘systemd.tmpfiles.rules’ instead.
+
+          ${concatStringsSep "\n" cfg.tmpfiles.rules}
+        '';
+      })
+    ];
 
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
@@ -1034,7 +1156,7 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
+    systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

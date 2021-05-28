@@ -1,4 +1,4 @@
-{ mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, base, binary
+{ mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, array, base, binary
 , bytestring, cmark, containers, directory, filepath, free, HUnit
 , indents, json, mtl, optparse-applicative, parsec, process
 , QuickCheck, quickcheck-io, split, stdenv, tasty, tasty-golden
@@ -6,11 +6,11 @@
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.8.3";
+  version = "0.8.4";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "0n6lrqj6mq044hdyraj3ss5cg74dn8k4z05xmwn2apjpm146iaw8";
-    rev = "b97e3593d564a1e069c0a022da8cbd98ca2c5a4b";
+    sha256 = "0cxlhhdjx4h9g03z83pxv91qrysbi0ab92rl52jb0yvkaix989ai";
+    rev = "5bd4fbe591fe8b456160c180cb875ef60bc57890";
   };
   postPatch = ''
     mkdir -p ./generated
@@ -18,15 +18,15 @@ mkDerivation {
     module Build_elm_format where
 
     gitDescribe :: String
-    gitDescribe = "0.8.3"
+    gitDescribe = "0.8.4"
     EOHS
   '';
   isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [
-    ansi-terminal ansi-wl-pprint base binary bytestring containers
-    directory filepath free indents json mtl optparse-applicative
-    parsec process split text
+    ansi-terminal ansi-wl-pprint array base binary bytestring
+    containers directory filepath free indents json mtl
+    optparse-applicative parsec process split text
   ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [

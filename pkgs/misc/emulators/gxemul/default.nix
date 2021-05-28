@@ -2,26 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gxemul";
-  version = "0.6.0.1";
+  version = "0.6.2";
 
   src = fetchurl {
-    url = "http://gxemul.sourceforge.net/src/${pname}-${version}.tar.gz";
-    sha256 = "1afd9l0igyv7qgc0pn3rkdgrl5d0ywlyib0qhg4li23zilyq5407";
+    url = "http://gavare.se/gxemul/src/gxemul-${version}.tar.gz";
+    sha256 = "0iqmazfn7ss5n27m1a9n9nps3vzhag1phzb7qw0wgczycmwsq0x7";
   };
 
   configurePhase = "./configure";
 
   installPhase = ''
-    mkdir -p $out/bin;
-    mkdir -p $out/share/${pname}-${version};
-    cp gxemul $out/bin;
-    cp -r doc $out/share/${pname}-${version};
-    cp -r demos $out/share/${pname}-${version};
-    cp -r ./man $out/;
+    mkdir -p {$out/bin,$out/share/${pname}-${version}}
+    cp -r {doc,demos} $out/share/${pname}-${version}
+    cp gxemul $out/bin
+    cp -r ./man $out
   '';
 
-  meta = {
-    license = stdenv.lib.licenses.bsd3;
+  meta = with stdenv.lib; {
+    homepage = "http://gavare.se/gxemul/";
     description = "Gavare's experimental emulator";
     longDescription = ''
       GXemul is a framework for full-system computer architecture
@@ -32,6 +30,6 @@ stdenv.mkDerivation rec {
       and serial controllers. The emulation is working well enough to
       allow several unmodified "guest" operating systems to run.
     '';
-    homepage = "http://gxemul.sourceforge.net/";
+    license = licenses.bsd3;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, mkYarnPackage, python2 }:
+, which, nodejs, mkYarnPackage, python2, nixosTests }:
 
 mkYarnPackage rec {
   name = "codimd";
@@ -62,6 +62,8 @@ mkYarnPackage rec {
 
     runHook postDist
   '';
+
+  passthru.tests = { inherit (nixosTests) codimd; };
 
   meta = with stdenv.lib; {
     description = "Realtime collaborative markdown notes on all platforms";

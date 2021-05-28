@@ -19,7 +19,7 @@ buildGoPackage rec {
   ];
 
   postFixup = ''
-    wrapProgram $bin/bin/dep2nix \
+    wrapProgram $out/bin/dep2nix \
       --prefix PATH : ${nix-prefetch-scripts}/bin
   '';
 

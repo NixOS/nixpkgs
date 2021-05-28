@@ -252,4 +252,61 @@ in {
       maintainers = with maintainers; [ WhittlesJr ];
     };
   };
+
+  displaylayerprogress = buildPlugin rec {
+    pname = "OctoPrint-DisplayLayerProgress";
+    version = "1.24.0";
+
+    src = fetchFromGitHub {
+      owner = "OllisGit";
+      repo = pname;
+      rev = version;
+      sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
+    };
+
+    meta = with stdenv.lib; {
+      description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
+      homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ j0hax ];
+    };
+  };
+
+  octoklipper = buildPlugin rec {
+    pname = "OctoKlipper";
+    version = "0.3.2";
+
+    src = fetchFromGitHub {
+      owner = "AliceGrey";
+      repo = "OctoprintKlipperPlugin";
+      rev = version;
+      sha256 = "15yg2blbgqp2gdpsqqm8qiiznq5qaq8wss07jimkl0865vrvlz7l";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A plugin for a better integration of Klipper into OctoPrint";
+      homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
+  octoprint-dashboard = buildPlugin rec {
+    pname = "OctoPrint-Dashboard";
+    version = "1.15.1";
+
+    src = fetchFromGitHub {
+      owner = "StefanCohen";
+      repo = pname;
+      rev = version;
+      sha256 = "1psk069g8xdpgbzmna51dh978vrildh33dn7kbbi5y31ry5c3gx6";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A dashboard for Octoprint";
+      homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ j0hax ];
+    };
+  };
 }

@@ -44,11 +44,11 @@ texlive.combine {
    <listitem>
     <para>
      You can list packages e.g. by <command>nix repl</command>.
-<programlisting><![CDATA[
-$ nix repl
-nix-repl> :l <nixpkgs>
-nix-repl> texlive.collection-<TAB>
-]]></programlisting>
+<programlisting>
+<prompt>$ </prompt>nix repl
+<prompt>nix-repl> </prompt>:l &lt;nixpkgs>
+<prompt>nix-repl> </prompt>texlive.collection-<keycap function="tab" />
+</programlisting>
     </para>
    </listitem>
    <listitem>

@@ -1,21 +1,17 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "lambda-mod-zsh-theme-unstable-2019-04-17";
+  pname = "lambda-mod-zsh-theme-unstable";
+  version = "2020-10-03";
 
   src = fetchFromGitHub {
     owner = "halfo";
     repo = "lambda-mod-zsh-theme";
-    rev = "6b83aedf9de41ea4e226cdbc78af1b7b92beb6ac";
-    sha256 = "1xf451c349fxnqbvsb07y9r1iqrwslx6x4b6drmnqqqy4yx1r5dj";
+    rev = "78347ea9709935f265e558b6345919d12323fbff";
+    sha256 = "0fvxnvgbcvwii7ghvpj5l43frllq71wwjvfg7cqfmic727z001dh";
   };
 
-  buildInputs = [ zsh ];
-
   installPhase = ''
-    chmod +x lambda-mod.zsh-theme # only executable scripts are found by `patchShebangs`
-    patchShebangs .
-
     install -Dm0644 lambda-mod.zsh-theme $out/share/zsh/themes/lambda-mod.zsh-theme
   '';
 

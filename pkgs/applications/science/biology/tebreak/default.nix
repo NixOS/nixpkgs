@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tebreak";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "adamewing";
     repo = "tebreak";
     rev = version;
-    sha256 = "194av17wz66n4zxyi56mbkik31j2wmkly5i9qmxgaxymhavzi3kq";
+    sha256 = "13mgh775d8hkl340923lfwwm4r5ps70girn8d6wgfxzwzxylz8iz";
   };
 
   nativeBuildInputs = [ findutils python3Packages.cython ];

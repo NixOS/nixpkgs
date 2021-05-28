@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "atari++";
   version = "1.83";
 

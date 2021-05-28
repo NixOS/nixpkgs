@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
-, autoconf-archive, libXfixes, libXcursor }:
+, autoconf-archive, libXfixes, libXcursor, libXcomposite }:
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = pname;
     rev = version;
-    sha256 = "0x70hd59ik37kqd8xqpwrz46np01jv324iz28x2s0kk36d7sblsj";
+    sha256 = "12xq6glg70icwsvbnfw9gm4dahlbnrc7b6adpd0mpf89h4sj2gds";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive ];
-  buildInputs = [ giblib xlibsWrapper libXfixes libXcursor ];
+  buildInputs = [ giblib xlibsWrapper libXfixes libXcursor libXcomposite ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";

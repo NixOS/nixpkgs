@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
 
   preConfigure = ''
+    # increase stack space for spacetime variant of the compiler
+    # https://github.com/ocaml/ocaml/issues/7435
+    # but disallowed by darwin sandbox
+    ulimit -s unlimited || true
+
     configureFlagsArray=(
       --bindir=$out/bin
       --libdir=$out/lib/ocaml/${ocaml.version}/site-lib

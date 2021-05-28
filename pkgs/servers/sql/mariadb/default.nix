@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, nixosTests
 , libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc450, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
@@ -23,14 +23,14 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.3.22";
+  version = "10.4.14";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1iyf1hl82nqsci5h327a537rvdrc5qcbrd1v3fc4cxy2pmfha01j";
+    sha256 = "1z469j39chq7d3dp39cljjbzcz0wl1g7rii85x46290jw1cwsbzr";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -72,6 +72,8 @@ common = rec { # attributes common to both builds
     "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
     "-DINSTALL_MYSQLTESTDIR=OFF"
     "-DINSTALL_SQLBENCHDIR=OFF"
+    "-DINSTALL_PAMDIR=share/pam/lib/security"
+    "-DINSTALL_PAMDATADIR=share/pam/etc/security"
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
@@ -94,15 +96,23 @@ common = rec { # attributes common to both builds
     rm "$out"/bin/{mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
-    rm -r $out/share/{aclocal,pkgconfig}
+    rm -r $out/share/aclocal
   '';
 
   enableParallelBuilding = true;
 
   passthru.mysqlVersion = "5.7";
 
-  meta = {
+  passthru.tests = {
+    mariadb-galera-mariabackup = nixosTests.mariadb-galera-mariabackup;
+    mariadb-galera-rsync = nixosTests.mariadb-galera-rsync;
+    mysql = nixosTests.mysql;
+    mysql-autobackup = nixosTests.mysql-autobackup;
+    mysql-backup = nixosTests.mysql-backup;
+    mysql-replication = nixosTests.mysql-replication;
+  };
 
+  meta = {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = "https://mariadb.org/";
     license     = licenses.gpl2;
@@ -118,10 +128,10 @@ client = stdenv.mkDerivation (common // {
 
   patches = common.patches ++ [
     ./cmake-plugin-includedir.patch
-    ./cmake-without-plugin-auth-pam.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
+    "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
@@ -129,7 +139,7 @@ client = stdenv.mkDerivation (common // {
 
   postInstall = common.postInstall + ''
     rm -r "$out"/share/doc
-    rm "$out"/bin/{mysqltest,mytop,wsrep_sst_rsync_wan}
+    rm "$out"/bin/{mysqltest,mytop}
     libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
     rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
@@ -152,9 +162,7 @@ server = stdenv.mkDerivation (common // {
     ++ optional stdenv.hostPlatform.isLinux linux-pam
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
-  patches = common.patches ++ optionals stdenv.hostPlatform.isDarwin [
-    ./cmake-without-plugin-auth-pam.patch
-  ];
+  patches = common.patches;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -180,6 +188,7 @@ server = stdenv.mkDerivation (common // {
   ] ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) [
     "-DWITH_JEMALLOC=static"
   ] ++ optional stdenv.hostPlatform.isDarwin [
+    "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_OQGRAPH=1"
   ];
 
@@ -189,11 +198,14 @@ server = stdenv.mkDerivation (common // {
 
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
-    rm "$out"/bin/{mysql_client_test,mysqltest}
+    rm "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
     rm -r "$out"/data # Don't need testing data
   '' + optionalString withStorageMroonga ''
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
+    mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
+    rm -r "$out"/OFF
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 

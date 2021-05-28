@@ -99,7 +99,7 @@ in
   config = mkIf cfg.enable {
     assertions = [{
       assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables with services.networking.firewall.";
+      message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
     }];
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];

@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   version = "0.4.8";
   pname = "kargo";
 
@@ -9,9 +11,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "1iq3vrmglag9gpsir03yz7556m0bz99nwb2mf594378cqzbr6db3";
   };
 
-  doCheck = false;
-
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     ansible
     boto
     cffi
@@ -24,12 +24,15 @@ python2Packages.buildPythonApplication rec {
     setuptools
   ];
 
+  checkPhase = ''
+    HOME=$TMPDIR $out/bin/kargo -v
+  '';
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/kubespray/kargo-cli";
     description = "A tool helps to deploy a kubernetes cluster with Ansible.";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [
-    ];
+    maintainers = with maintainers; [ ];
   };
 }

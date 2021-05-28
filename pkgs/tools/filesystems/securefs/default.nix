@@ -4,13 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "securefs";
-  version = "0.8.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    sha256 = "0nf0bd163gz844mikqab2mh7xjlj31ixa6hi85qxdifyjpfjv7y4";
+    sha256 = "1sxfgqgy63ml7vg7zj3glvra4wj2qmfv9jzmpm1jqy8hq7qlqlsx";
     rev = version;
     repo = "securefs";
     owner = "netheril96";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];

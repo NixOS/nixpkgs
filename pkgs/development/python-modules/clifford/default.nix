@@ -1,45 +1,56 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, numpy
-, scipy
-, numba
+, isPy27
 , future
 , h5py
-, nose
-, isPy27
+, ipython
+, numba
+, numpy
+, pytestCheckHook
+, scipy
+, sparse
 }:
 
 buildPythonPackage rec {
   pname = "clifford";
-  version = "1.2.0";
+  version = "1.3.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b27fdec70574ac928c91fe333a70ece153d75cd0499cce09acea5980ae349bee";
+    sha256 = "ade11b20d0631dfc9c2f18ce0149f1e61e4baf114108b27cfd68e5c1619ecc0c";
   };
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    numba
     future
     h5py
+    numba
+    numpy
+    scipy
+    sparse
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
+    ipython
   ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace "'numba==0.43'" "'numba'"
   '';
 
-  checkPhase = ''
-    nosetests
+  # avoid collecting local files
+  preCheck = ''
+    cd clifford/test
   '';
+
+  pytestFlagsArray = [
+    "-m \"not veryslow\""
+    "--ignore=test_algebra_initialisation.py" # fails without JIT
+    "--ignore=test_cga.py"
+  ];
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";

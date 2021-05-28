@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "bind_exporter";
@@ -13,6 +13,8 @@ buildGoPackage rec {
     repo = "bind_exporter";
     sha256 = "1nd6pc1z627w4x55vd42zfhlqxxjmfsa9lyn0g6qq19k4l85v1qm";
   };
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) bind; };
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter for bind9 server";

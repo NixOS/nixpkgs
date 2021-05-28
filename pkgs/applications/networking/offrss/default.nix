@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     sha256 = "1akw1x84jj2m9z60cvlvmz21qwlaywmw18pl7lgp3bj5nw6250p6";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
     description = "Offline RSS/Atom reader";
-    license="AGPLv3+";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ viric ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

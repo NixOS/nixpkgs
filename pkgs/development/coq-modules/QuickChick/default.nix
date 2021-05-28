@@ -27,15 +27,29 @@ let params =
     };
 
     "8.10" = rec {
-      version = "1.2.0";
+      version = "1.2.1";
       rev = "v${version}";
-      sha256 = "1xs4mr3rdb0g44736jb40k370hw3maxdk12jiq1w1dl3q5gfrhah";
+      sha256 = "17vz88xjzxh3q7hs6hnndw61r3hdfawxp5awqpgfaxx4w6ni8z46";
+    };
+
+    "8.11" = rec {
+      version = "1.3.2";
+      rev = "v${version}";
+      sha256 = "0lciwaqv288dh2f13xk2x0lrn6zyrkqy6g4yy927wwzag2gklfrs";
+    };
+
+    "8.12" = rec {
+      version = "1.4.0";
+      rev = "v${version}";
+      sha256 = "068p48pm5yxjc3yv8qwzp25bp9kddvxj81l31mjkyx3sdrsw3kyc";
     };
   };
   param = params.${coq.coq-version};
 in
 
-let recent = stdenv.lib.versionAtLeast coq.coq-version "8.8"; in
+let inherit (stdenv.lib) maintainers optional optionals versionAtLeast; in
+
+let recent = versionAtLeast coq.coq-version "8.8"; in
 
 stdenv.mkDerivation {
 
@@ -51,12 +65,16 @@ stdenv.mkDerivation {
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ])
-  ++ stdenv.lib.optionals recent
-     (with coq.ocamlPackages; [ ocamlbuild num ])
+  ++ (with coq.ocamlPackages; [ ocaml findlib ])
+  ++ optionals (recent && !versionAtLeast coq.coq-version "8.10")
+       (with coq.ocamlPackages; [ camlp5 ocamlbuild ])
+  ++ optional recent coq.ocamlPackages.num
   ;
   propagatedBuildInputs = [ ssreflect ]
-  ++ stdenv.lib.optionals recent [ coq-ext-lib simple-io ];
+  ++ optionals recent [ coq-ext-lib simple-io ]
+  ++ optional (versionAtLeast coq.coq-version "8.10")
+       coq.ocamlPackages.ocamlbuild
+  ;
 
   enableParallelBuilding = false;
 
@@ -64,7 +82,7 @@ stdenv.mkDerivation {
     make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://github.com/QuickChick/QuickChick";
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];

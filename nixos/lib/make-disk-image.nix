@@ -5,21 +5,32 @@
   config
 
 , # The size of the disk, in megabytes.
-  diskSize
+  # if "auto" size is calculated based on the contents copied to it and
+  #   additionalSpace is taken into account.
+  diskSize ? "auto"
 
-  # The files and directories to be placed in the target file system.
+, # additional disk space to be added to the image if diskSize "auto"
+  # is used
+  additionalSpace ? "512M"
+
+, # size of the boot partition, is only used if partitionTableType is
+  # either "efi" or "hybrid"
+  bootSize ? "256M"
+
+, # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target} where `source'
   # is the file system object (regular file or directory) to be
   # grafted in the file system at path `target'.
-, contents ? []
+  contents ? []
 
 , # Type of partition table to use; either "legacy", "efi", or "none".
   # For "efi" images, the GPT partition table is used and a mandatory ESP
   #   partition of reasonable size is created in addition to the root partition.
-  #   If `installBootLoader` is true, GRUB will be installed in EFI mode.
   # For "legacy", the msdos partition table is used and a single large root
-  #   partition is created. If `installBootLoader` is true, GRUB will be
-  #   installed in legacy mode.
+  #   partition is created.
+  # For "hybrid", the GPT partition table is used and a mandatory ESP
+  #   partition of reasonable size is created in addition to the root partition.
+  #   Also a legacy MBR will be present.
   # For "none", no partition table is created. Enabling `installBootLoader`
   #   most likely fails as GRUB will probably refuse to install.
   partitionTableType ? "legacy"
@@ -39,11 +50,11 @@
 
 , name ? "nixos-disk-image"
 
-, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
+, # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "none";
+assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
 # We use -E offset=X below, which is only supported by e2fsprogs
 assert partitionTableType != "none" -> fsType == "ext4";
 
@@ -57,13 +68,15 @@ let format' = format; in let
 
   filename = "nixos." + {
     qcow2 = "qcow2";
+    vdi   = "vdi";
     vpc   = "vhd";
     raw   = "img";
-  }.${format};
+  }.${format} or format;
 
   rootPartition = { # switch-case
     legacy = "1";
     efi = "2";
+    hybrid = "3";
   }.${partitionTableType};
 
   partitionDiskScript = { # switch-case
@@ -75,9 +88,18 @@ let format' = format; in let
     efi = ''
       parted --script $diskImage -- \
         mklabel gpt \
-        mkpart ESP fat32 8MiB 256MiB \
+        mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
-        mkpart primary ext4 256MiB -1
+        mkpart primary ext4 ${bootSize} -1
+    '';
+    hybrid = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart ESP fat32 8MiB ${bootSize} \
+        set 1 boot on \
+        mkpart no-fs 0 1024KiB \
+        set 2 bios_grub on \
+        mkpart primary ext4 ${bootSize} -1
     '';
     none = "";
   }.${partitionTableType};
@@ -128,19 +150,6 @@ let format' = format; in let
     }
 
     mkdir $out
-    diskImage=nixos.raw
-    truncate -s ${toString diskSize}M $diskImage
-
-    ${partitionDiskScript}
-
-    ${if partitionTableType != "none" then ''
-      # Get start & length of the root partition in sectors to $START and $SECTORS.
-      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
-
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
-    '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
-    ''}
 
     root="$PWD/root"
     mkdir -p $root
@@ -180,9 +189,35 @@ let format' = format; in let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
+    chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
+
+    diskImage=nixos.raw
+
+    ${if diskSize == "auto" then ''
+      ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
+        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) / 1000 ))
+      '' else ''
+        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') / 1000 ))
+      ''}
+      diskSize=$(( $(set -- $(du -d0 $root); echo "$1") + $additionalSpace ))
+      truncate -s "$diskSize"K $diskImage
+    '' else ''
+      truncate -s ${toString diskSize}M $diskImage
+    ''}
+
+    ${partitionDiskScript}
+
+    ${if partitionTableType != "none" then ''
+      # Get start & length of the root partition in sectors to $START and $SECTORS.
+      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+
+      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+    '' else ''
+      mkfs.${fsType} -F -L ${label} $diskImage
+    ''}
 
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
@@ -217,7 +252,7 @@ in pkgs.vmTools.runInLinuxVM (
 
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
-      ${optionalString (partitionTableType == "efi") ''
+      ${optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot

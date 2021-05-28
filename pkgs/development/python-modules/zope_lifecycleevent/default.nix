@@ -1,8 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , zope_event
 , zope_component
+, zope_interface
 }:
 
 buildPythonPackage rec {
@@ -15,6 +17,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ zope_event zope_component ];
+
+  # namespace colides with local directory
+  doCheck = false;
+
+  # zope uses pep 420 namespaces for python3, doesn't work with nix + python2
+  pythonImportsCheck = stdenv.lib.optionals isPy3k [
+    "zope.lifecycleevent"
+    "zope.interface"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/zopefoundation/zope.lifecycleevent";

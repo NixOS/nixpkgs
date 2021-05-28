@@ -20,10 +20,11 @@ stdenv.mkDerivation {
     ln -s $out/share/wasm32-wasi/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "WASI libc implementation for WebAssembly";
     homepage    = "https://wasi.dev";
-    platforms   = lib.platforms.wasi;
-    maintainers = [ lib.maintainers.matthewbauer ];
+    platforms   = platforms.wasi;
+    maintainers = [ maintainers.matthewbauer ];
+    license = with licenses; [ asl20 mit llvm-exception ];
   };
 }

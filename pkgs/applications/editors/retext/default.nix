@@ -46,11 +46,13 @@ in python.pkgs.buildPythonApplication {
   propagatedBuildInputs = [ pythonEnv ];
 
   postInstall = ''
-    wrapQtApp "$out/bin/retext" \
-      --set ASPELL_CONF "dict-dir ${buildEnv {
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "--set" "ASPELL_CONF" "dict-dir ${buildEnv {
         name = "aspell-all-dicts";
         paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
       }}"
+    )
   '';
 
   meta = with stdenv.lib; {

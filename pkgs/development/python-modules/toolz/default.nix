@@ -4,7 +4,7 @@
 , nose
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
 

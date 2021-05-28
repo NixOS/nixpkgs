@@ -70,8 +70,8 @@ in stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18" || builtins.compareVersions kernel.version "5.0" >= 0
-             || stdenv.targetPlatform.isAarch64;
+    # Package will be removed in 21.03
+    broken = true;
   };
 
 }

@@ -5,7 +5,7 @@ with stdenv.lib;
 {
   mkModDirDrv = mods: # a list of mod derivations
     let
-      recursiveDeps = modDrv: [modDrv] ++ optionals (modDrv.deps == []) (map recursiveDeps modDrv.deps);
+      recursiveDeps = modDrv: [modDrv] ++ map recursiveDeps modDrv.deps;
       modDrvs = unique (flatten (map recursiveDeps mods));
     in
     stdenv.mkDerivation {

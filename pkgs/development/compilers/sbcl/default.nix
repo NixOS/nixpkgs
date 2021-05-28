@@ -1,6 +1,7 @@
 { stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
+, disableImmobileSpace ? false
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -21,17 +22,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
-    echo "
-    (lambda (features)
-      (flet ((enable (x)
-               (pushnew x features))
-             (disable (x)
-               (setf features (remove x features))))
-    ''
-    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
-    + ''
-      )) " > customize-target-features.lisp
 
     pwd
 
@@ -80,8 +70,20 @@ stdenv.mkDerivation rec {
     export HOME=$PWD/test-home
   '';
 
+  enableFeatures = with stdenv.lib;
+    optional threadSupport "sb-thread" ++
+    optional stdenv.isAarch32 "arm";
+
+  disableFeatures = with stdenv.lib;
+    optional (!threadSupport) "sb-thread" ++
+    optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+
   buildPhase = ''
-    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
+                  stdenv.lib.concatStringsSep " "
+                    (builtins.map (x: "--with-${x}") enableFeatures ++
+                     builtins.map (x: "--without-${x}") disableFeatures)
+                }
     (cd doc/manual ; make info)
   '';
 

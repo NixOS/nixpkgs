@@ -32,11 +32,11 @@ buildGoPackage rec {
   installPhase =
     if stdenv.isDarwin
     then ''
-      install -Dm755 -t $bin/bin bin/docker-credential-osxkeychain
+      install -Dm755 -t $out/bin bin/docker-credential-osxkeychain
     ''
     else ''
-      install -Dm755 -t $bin/bin bin/docker-credential-pass
-      install -Dm755 -t $bin/bin bin/docker-credential-secretservice
+      install -Dm755 -t $out/bin bin/docker-credential-pass
+      install -Dm755 -t $out/bin bin/docker-credential-secretservice
     '';
 
   meta = with stdenv.lib; {

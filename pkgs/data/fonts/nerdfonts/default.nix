@@ -5,6 +5,9 @@
 # To select only certain fonts, put a list of strings to `fonts`: every key in
 # ./shas.nix is an optional font
 , fonts ? []
+# Whether to enable Windows font variants, their internal font name is limited
+# to 31 characters
+, enableWindowsFonts ? false
 }:
 
 let
@@ -50,6 +53,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     find -name \*.otf -exec mkdir -p $out/share/fonts/opentype/NerdFonts \; -exec mv {} $out/share/fonts/opentype/NerdFonts \;
     find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
+    ${lib.optionalString (! enableWindowsFonts) ''
+      rm -rfv $out/share/fonts/opentype/NerdFonts/*Windows\ Compatible.*
+      rm -rfv $out/share/fonts/truetype/NerdFonts/*Windows\ Compatible.*
+    ''}
   '';
 
   meta = with stdenv.lib; {

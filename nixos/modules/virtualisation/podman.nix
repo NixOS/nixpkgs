@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.podman;
 
@@ -21,13 +21,12 @@ let
     done
   '';
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
-
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
+  ];
+
   meta = {
     maintainers = lib.teams.podman.members;
   };
@@ -67,25 +66,6 @@ in
       '';
     };
 
-    libpod = mkOption {
-      default = {};
-      description = "Libpod configuration";
-      type = types.submodule {
-        options = {
-
-          extraConfig = mkOption {
-            type = types.lines;
-            default = "";
-            description = ''
-              Extra configuration that should be put in the libpod.conf
-              configuration file
-            '';
-
-          };
-        };
-      };
-    };
-
     package = lib.mkOption {
       type = types.package;
       default = podmanPackage;
@@ -103,12 +83,7 @@ in
     environment.systemPackages = [ cfg.package ]
       ++ lib.optional cfg.dockerCompat dockerCompat;
 
-    environment.etc."containers/libpod.conf".text = ''
-      cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
-
-    '' + cfg.libpod.extraConfig;
-
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
+    environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;

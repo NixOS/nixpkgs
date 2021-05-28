@@ -15,15 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ readline ncurses gettext ];
 
-  configurePhase = ''
-    autoreconf -fvi
-    ./configure
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin/
-    mv src/hstr $out/bin/
-  '';
+  configureFlags = [ "--prefix=$(out)" ];
 
   meta = {
     homepage = "https://github.com/dvorka/hstr";

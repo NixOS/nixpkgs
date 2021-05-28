@@ -47,12 +47,13 @@ in writeScript "update-${name}" ''
            grep -e "${if isBeta then "b" else ""}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${if isBeta then "" else "grep -v \"b\" |"} \
            tail -1`
 
-  curl --silent -o $HOME/shasums "$url$version/SHA512SUMS"
-  curl --silent -o $HOME/shasums.asc "$url$version/SHA512SUMS.asc"
+  curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"
+  curl --silent -o $HOME/shasums.asc "$url$version/SHA256SUMS.asc"
   gpgv --keyring=$GNUPGHOME/pubring.kbx $HOME/shasums.asc $HOME/shasums
 
-  # this is a list of sha512 and tarballs for both arches
-  shasums=`cat $HOME/shasums`
+  # this is a list of sha256 and tarballs for both arches
+  # Upstream files contains python repr strings like b'somehash', hence the sed dance
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/`
 
   cat > $tmpfile <<EOF
   {
@@ -74,7 +75,7 @@ in writeScript "update-${name}" ''
       { url = "$url$version/`echo $line | cut -d":" -f3`";
         locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
-        sha512 = "`echo $line | cut -d":" -f1`";
+        sha256 = "`echo $line | cut -d":" -f1`";
       }
   EOF
     done

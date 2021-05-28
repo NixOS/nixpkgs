@@ -1,14 +1,15 @@
-{ stdenv, fetchgit , boost, libX11, libGL, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
+{ stdenv, fetchFromGitHub, boost, libX11, libGL, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zam-plugins";
-  version = "3.12";
+  version = "3.13";
 
-  src = fetchgit {
-    url = "https://github.com/zamaudio/zam-plugins.git";
-    deepClone = true;
-    rev = "87fdee6e87dbee75c1088e2327ea59c1ab1522e4";
-    sha256 = "0kz0xygff3ca1v9nqi0dvrzy9whbzqxrls5b7hydi808d795893n";
+  src = fetchFromGitHub {
+    owner = "zamaudio";
+    repo = pname;
+    rev = version;
+    sha256 = "02blg0iqich4vx5z1ahj6avkh83yqszdiq83p9jd5qwm0i4llqjq";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -2,11 +2,11 @@
 
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
-  version = "3.5.35";
+  version = "3.5.43";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
+    sha256 = "19cx3854rk7b2056z8pvxnf4simsg5js7czsy2bys7jl6vh2x02b";
   };
 
   buildInputs = [ jdk ];
@@ -32,11 +32,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "0.9.42";
+  version = "0.9.47";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "04y71hzkdpjzbac569rhyg1zfx37j0alggbl9gnkaqfbprb2nj1h";
+    sha256 = "0krcdm73qing7z918wpml9sk6dn0284wps2ghkmlrdaklfkavk6v";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "https://geti2p.net";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.joelmo ];
+    maintainers = with maintainers; [ joelmo ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";
-  version = "unstable-2019-03-21";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
-    rev = "c4066aa3249963dc7877119cffce10f3fa8b6304";
-    sha256 = "1ahw4sv07xg5rh9vr7j28636iaxs06vnybm3li6y8dz2sky7hk88";
+    rev = "v${version}";
+    sha256 = "10c8zzp78s5bw34vvjhilipa28bsdx3jbyhnxgp8f8kawh3cvgsc";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkgconfig ];

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, curl, jansson, autoconf, automake
-, aesni ? true }:
+, aesni ? stdenv.hostPlatform.aesSupport }:
 
 let
   rev = "8393e03089c0abde61bd5d72aba8f926c3d6eca4";
@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27
-    platforms = [ "x86_64-linux" ]; 
+    platforms = [ "x86_64-linux" ];
   };
 }

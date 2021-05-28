@@ -2,7 +2,6 @@
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -11,7 +10,7 @@
   curlSupport ? true, curl,
   colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade,
-  ffmpegSupport ? false, ffmpeg,
+  ffmpegSupport ? false, ffmpeg_3,
   nvttSupport ? false, nvidia-texture-tools,
   freetypeSupport ? true, freetype,
   svgSupport ? false, librsvg,
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
@@ -51,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade
-    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional ffmpegSupport ffmpeg_3
     ++ lib.optional nvttSupport nvidia-texture-tools
     ++ lib.optional freetypeSupport freetype
     ++ lib.optional svgSupport librsvg

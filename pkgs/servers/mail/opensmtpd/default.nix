@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
-  version = "6.6.4p1";
+  version = "6.7.1p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    sha256 = "1kyph9ycq0j21dl9n1sq5fns9p4gckdi0fmnf8awrcwrdcm9dyg2";
+    sha256 = "1jh8vxfajm1mvp1v5yh6llrhjzv0n9fgab88mlwllwqynhcfjy3l";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils obadz ekleog ];
+    maintainers = with maintainers; [ obadz ekleog ];
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;

@@ -1,17 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib, writeText }:
+{ buildGoModule, fetchFromGitHub, stdenv, lib, writeText }:
 
 buildGoModule rec {
   pname = "fly";
-  version = "6.0.0";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    sha256 = "0chavwymyh5kv4fkvdjvf3p5jjx4yn9aavq66333xnsl5pn7q9dq";
+    sha256 = "0ldw40xn9nb5picly32nq558x0klvkyrr9af0jfngbvm4l5209bc";
   };
 
-  modSha256 = "1wiyfii4rmj3rp8ls0ill0sjpnpjz7l3q5fzrscm8ap1qn90gvzg";
+  vendorSha256 = "1fxbxkg7disndlmb065abnfn7sn79qclkcbizmrq49f064w1ijr4";
+
+  doCheck = false;
 
   subPackages = [ "fly" ];
 
@@ -20,12 +22,10 @@ buildGoModule rec {
       -X github.com/concourse/concourse.Version=${version}
   '';
 
-  # The fly.bash file included with this derivation can be replaced by a
-  # call to `fly completion bash` once the `completion` subcommand has
-  # made it into a release. Similarly, `fly completion zsh` will provide
-  # zsh completions. https://github.com/concourse/concourse/pull/4012
-  postInstall = ''
-    install -D -m 444 ${./fly.bash} $out/share/bash-completion/completions/fly
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}
+    $out/bin/fly completion --shell bash > $out/share/bash-completion/completions/fly
+    $out/bin/fly completion --shell zsh > $out/share/zsh/site-functions/_fly
   '';
 
   meta = with lib; {

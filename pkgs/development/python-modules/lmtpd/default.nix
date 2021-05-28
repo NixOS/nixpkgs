@@ -1,12 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ buildPythonPackage, fetchPypi, isPy3k, stdenv }:
 
 buildPythonPackage rec {
   pname = "lmtpd";
-  version = "6.1.0";
+  version = "6.2.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "256e23a3292818ecccf9a76ef52e0064c6f7e1f8602904e15337c8917ed0fafe";
+    sha256 = "2c6825d2ffa1de099440411a742f58e1b3e8deeb3345adcfd4c2c38d4baf62b3";
   };
 
   meta = with stdenv.lib; {

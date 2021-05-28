@@ -48,7 +48,7 @@ cmakeConfigurePhase() {
 
     # on macOS we want to prefer Unix-style headers to Frameworks
     # because we usually do not package the framework
-    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=LAST $cmakeFlags"
 
     # on macOS i686 was only relevant for 10.5 or earlier.
     cmakeFlags="-DCMAKE_OSX_ARCHITECTURES=x86_64 $cmakeFlags"
@@ -67,6 +67,24 @@ cmakeConfigurePhase() {
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
     cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
+
+    # The docdir flag needs to include PROJECT_NAME as per GNU guidelines,
+    # try to extract it from CMakeLists.txt.
+    if [[ -z "$shareDocName" ]]; then
+        local cmakeLists="${cmakeDir}/CMakeLists.txt"
+        if [[ -f "$cmakeLists" ]]; then
+            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
+        fi
+        # The argument sometimes contains garbage or variable interpolation.
+        # When that is the case, let’s fall back to the derivation name.
+        if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_+-]'; then
+            if [[ -n "${pname-}" ]]; then
+                shareDocName="$pname"
+            else
+                shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+            fi
+        fi
+    fi
 
     # This ensures correct paths with multiple output derivations
     # It requires the project to use variables from GNUInstallDirs module

@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "0c0y8sy12laqyanvy6mmnpjvy1yb8k3241pbxhc3nyl5zrq3hzdh";
+    sha256 = "1cip2dbvxbdlx1axz5sn4mwigwvfxb1q14byn09crv71adyfprw5";
   };
 
   nativeBuildInputs = [

@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "http://assimp.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

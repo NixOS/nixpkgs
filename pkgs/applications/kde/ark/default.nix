@@ -9,14 +9,14 @@
   libarchive, libzip,
 
   # Archive tools
-  lrzip,
+  p7zip, lrzip,
 
   # Unfree tools
   unfreeEnableUnrar ? false, unrar,
 }:
 
 let
-  extraTools = [ lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
+  extraTools = [ p7zip lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
 in
 
 mkDerivation {

@@ -3,7 +3,7 @@
 , fetchPypi
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   version = "1.4";
   pname = "x11_hash";
 

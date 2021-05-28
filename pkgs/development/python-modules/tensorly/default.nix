@@ -22,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "1ml91yaxwx4msisxbm92yf22qfrscvk58f3z2r1jhi96pw2k4i7x";
   };
 
-  propagatedBuildInputs = [ numpy scipy sparse ];
+  propagatedBuildInputs = [ numpy scipy sparse ]
+    ++ lib.optionals (!doCheck) [ nose ]; # upstream added nose to install_requires
+
   checkInputs = [ pytest nose pytorch ];
   # also has a cupy backend, but the tests are currently broken
   # (e.g. attempts to access cupy.qr instead of cupy.linalg.qr)
@@ -30,11 +32,15 @@ buildPythonPackage rec {
   # as well as tensorflow and mxnet backends, but the tests don't
   # seem to exercise these backend by default
 
+  # uses >= 140GB of ram to test
+  doCheck = false;
   checkPhase = ''
     runHook preCheck
     nosetests -e "test_cupy"
     runHook postCheck
   '';
+
+  pythonImportsCheck = [ "tensorly" ];
 
   meta = with lib; {
     description = "Tensor learning in Python";

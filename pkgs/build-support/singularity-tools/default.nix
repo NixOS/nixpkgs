@@ -86,7 +86,9 @@ rec {
             done
 
             # Create runScript and link shell
-            ln -s ${runtimeShell} bin/sh
+            if [ ! -e bin/sh ]; then
+              ln -s ${runtimeShell} bin/sh
+            fi
             mkdir -p .singularity.d
             ln -s ${runScriptFile} .singularity.d/runscript
 
@@ -97,6 +99,7 @@ rec {
             cd ..
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+            echo > /etc/resolv.conf
             TMPDIR=$(pwd -P) singularity build $out ./img
           '');
 

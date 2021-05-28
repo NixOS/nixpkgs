@@ -131,16 +131,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
-
-    # This breaks lightlocker https://github.com/elementary/session-settings/commit/b0e7a2867608c3a3916f9e4e21a68264a20e44f8
-    # TODO: shouldn't be neeed for the 5.1 greeter (awaiting release)
-    rm $out/etc/xdg/autostart/org.gnome.SettingsDaemon.ScreensaverProxy.desktop
-
     # So the polkit policy can reference /run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper
     mkdir -p $out/bin/elementary-settings-daemon
     ln -s $out/libexec/gsd-backlight-helper $out/bin/elementary-settings-daemon/gsd-backlight-helper

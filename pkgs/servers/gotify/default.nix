@@ -3,7 +3,6 @@
 , lib
 , fetchFromGitHub
 , buildGoModule
-, packr
 , sqlite
 , callPackage
 }:
@@ -21,29 +20,28 @@ buildGoModule rec {
     sha256 = import ./source-sha.nix;
   };
 
-  modSha256 = import ./mod-sha.nix;
+  vendorSha256 = import ./vendor-sha.nix;
 
-  postPatch = ''
-    substituteInPlace app.go \
-      --replace 'Version = "unknown"' 'Version = "${version}"'
-  '';
+  doCheck = false;
 
   buildInputs = [ sqlite ];
-
-  nativeBuildInputs = [ packr ];
 
   ui = callPackage ./ui.nix { };
 
   preBuild = ''
-    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && packr
+    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && go run hack/packr/packr.go
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   # Otherwise, all other subpackages are built as well and from some reason,
   # produce binaries which panic when executed and are not interesting at all
   subPackages = [ "." ];
 
   buildFlagsArray = [
-    "-ldflags='-X main.Version=${version} -X main.Mode=prod'"
+    "-ldflags=-X main.Version=${version} -X main.Mode=prod"
   ];
 
   meta = with stdenv.lib; {
@@ -51,7 +49,6 @@ buildGoModule rec {
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 
 }

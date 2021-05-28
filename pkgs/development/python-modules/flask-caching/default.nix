@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "1.8.0";
+  version = "1.9.0";
+  disabled = isPy27; # invalid python2 syntax
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d0bd13c448c1640334131ed4163a12aff7df2155e73860f07fc9e5e75de7126";
+    sha256 = "a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff";
   };
 
   propagatedBuildInputs = [ flask ];

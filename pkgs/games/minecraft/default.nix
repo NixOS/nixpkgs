@@ -24,11 +24,11 @@
 , curl
 , freetype
 , libpulseaudio
+, libuuid
 , systemd
 , flite ? null
 , libXxf86vm ? null
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
@@ -36,17 +36,17 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;Application;";
+    categories = "Game;";
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
-      curl
-      libpulseaudio
-      systemd
-      alsaLib # needed for narrator
-      flite # needed for narrator
-      libXxf86vm # needed only for versions <1.13
-    ];
+    curl
+    libpulseaudio
+    systemd
+    alsaLib # needed for narrator
+    flite # needed for narrator
+    libXxf86vm # needed only for versions <1.13
+  ];
 
   libPath = stdenv.lib.makeLibraryPath ([
     alsaLib
@@ -59,7 +59,6 @@ let
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gnome2.pango
     gtk3-x11
     gtk2-x11
@@ -67,6 +66,7 @@ let
     nss
     stdenv.cc.cc
     zlib
+    libuuid
   ] ++
   (with xorg; [
     libX11
@@ -83,14 +83,14 @@ let
     libXScrnSaver
   ]));
 in
- stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.13509";
+  version = "2.1.17627";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "1f7b4gr2cnnf6wgxdz38215v31664q2pw00yibb3cjp8a9irvs47";
+    sha256 = "04zjjyy0psfxfibzbac9w0kkgqwfpf1qmbj5gspyvhaib7k8may0";
   };
 
   icon = fetchurl {
@@ -133,6 +133,7 @@ in
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${stdenv.lib.makeBinPath [ jre ]} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';
@@ -142,6 +143,7 @@ in
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 
   passthru.updateScript = ./update.sh;

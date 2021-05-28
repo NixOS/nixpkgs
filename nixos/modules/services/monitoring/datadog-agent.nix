@@ -6,7 +6,6 @@ let
   cfg = config.services.datadog-agent;
 
   ddConf = {
-    dd_url              = "https://app.datadoghq.com";
     skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
@@ -14,6 +13,8 @@ let
   }
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
+  // optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
+  // optionalAttrs (cfg.site != null) { site = cfg.site; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
   // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
@@ -75,6 +76,27 @@ in {
       '';
       example = "/run/keys/datadog_api_key";
       type = types.path;
+    };
+
+    ddUrl = mkOption {
+      description = ''
+        Custom dd_url to configure the agent with. Useful if traffic to datadog
+        needs to go through a proxy.
+        Don't use this to point to another datadog site (EU) - use site instead.
+      '';
+      default = null;
+      example = "http://haproxy.example.com:3834";
+      type = types.nullOr types.str;
+    };
+
+    site = mkOption {
+      description = ''
+        The datadog site to point the agent towards.
+        Set to datadoghq.eu to point it to their EU site.
+      '';
+      default = null;
+      example = "datadoghq.eu";
+      type = types.nullOr types.str;
     };
 
     tags = mkOption {
