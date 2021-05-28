@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildPhase = "make all opt CPPFLAGS=-Wno-error";
+  buildPhase = ''
+    runHook preBuild
+    make all opt CPPFLAGS=-Wno-error
+    runHook postBuild
+  '';
 
-  installPhase = "make install-opt";
+  installTargets = [ "install-opt" ];
 
   meta = with lib; {
     description = "OCaml bindings for libvirt";
