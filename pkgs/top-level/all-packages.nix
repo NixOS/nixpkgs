@@ -12099,8 +12099,7 @@ in
   inherit (beam.packages.erlang)
     erlang-ls
     rebar rebar3 rebar3WithPlugins
-    fetchHex beamPackages
-    relxExe;
+    fetchHex beamPackages;
 
   inherit (beam.packages.erlangR21) lfe lfe_1_3;
 

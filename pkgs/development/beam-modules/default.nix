@@ -83,7 +83,6 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
-      relxExe = callPackage ../tools/erlang/relx-exe { };
     };
 in
 makeExtensible packages
