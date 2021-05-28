@@ -14391,7 +14391,9 @@ in
 
   chromaprint = callPackage ../development/libraries/chromaprint { };
 
-  cl = callPackage ../development/libraries/cl { };
+  cl = callPackage ../development/libraries/cl {
+    erlang = erlangR23;
+  };
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
