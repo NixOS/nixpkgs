@@ -1,5 +1,6 @@
 { lib, fetchFromGitHub, makeWrapper, gawk
 , makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
+, stdenv, shortenPerlShebang
 }:
 
 let
@@ -21,7 +22,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ makeWrapper gawk ];
+  nativeBuildInputs = [ makeWrapper gawk ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
 
   buildInputs = [ gnuplot perl ]
     ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);
@@ -36,7 +37,9 @@ perlPackages.buildPerlPackage rec {
   # Tests require gnuplot 4.6.4 and are completely skipped with gnuplot 5.
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/feedgnuplot
+  '' + ''
     wrapProgram $out/bin/feedgnuplot \
         --prefix "PATH" ":" "$PATH" \
         --prefix "PERL5LIB" ":" "$PERL5LIB"
