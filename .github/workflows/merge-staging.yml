@@ -8,7 +8,7 @@ on:
 
 jobs:
   sync-branch:
-    if: github.repository == 'NixOS/nixpkgs'
+    if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
