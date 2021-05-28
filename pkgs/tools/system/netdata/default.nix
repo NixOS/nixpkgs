@@ -1,11 +1,12 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib
 , nixosTests
+, curl, libcap, libuuid, lm_sensors, zlib
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
+, withCloud ? (!stdenv.isDarwin), json_c
 , withSsl ? true, openssl
 , withDebug ? false
 }:
@@ -22,7 +23,8 @@ in stdenv.mkDerivation rec {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0x6vg2z7x83b127flbfqkgpakd5md7n2w39dvs8s16facdy2lvry";
+    sha256 = "0735cxmljrp8zlkcq7hcxizy4j4xiv7vf782zkz5chn06n38mcik";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -33,6 +35,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withDBengine [ libuv lz4.dev judy ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
+    ++ optionals withCloud [ json_c ]
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
@@ -70,6 +73,9 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+  ] ++ optionals withCloud [
+    "--enable-cloud"
+    "--with-aclk-ng"
   ];
 
   postFixup = ''
