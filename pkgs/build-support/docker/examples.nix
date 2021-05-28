@@ -516,4 +516,29 @@ rec {
     bash
     layeredImageWithFakeRootCommands
   ];
+
+  helloOnRoot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+  };
+
+  helloOnRootNoStore = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+  };
 }
