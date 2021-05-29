@@ -19,7 +19,6 @@
   "hotedge@jonathan.jdoda.ca" = callPackage ./hot-edge { };
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
-  "material-shell@papyelgringo" = callPackage ./material-shell { };
   "nightthemeswitcher@romainvigier.fr" = callPackage ./night-theme-switcher { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
