@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libudev, libX11
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
 , libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
 , libXi, libXext, libXfixes, freetype, openssl
 , alsaLib, libGLU, zlib, yasm
