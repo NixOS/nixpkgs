@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r impatience $out/share/gnome-shell/extensions/${uuid}
+    cp -r impatience "$out/share/gnome-shell/extensions/impatience@gfxmonk.net"
     runHook postInstall
   '';
 
-  uuid = "impatience@gfxmonk.net";
+  passthru.extensionUuid = "impatience@gfxmonk.net";
 
   meta = with lib; {
     description = "Speed up builtin gnome-shell animations";

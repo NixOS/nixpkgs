@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dyagnjmk91h96xr98mc177c473bqpxcv86qf6g3kyh3arwa9shs";
   };
 
-  uuid = "caffeine@patapon.info";
+  passthru.extensionUuid = "caffeine@patapon.info";
 
   nativeBuildInputs = [
     glib gettext
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "caffeine@patapon.info" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

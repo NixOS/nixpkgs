@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  uuid = "sound-output-device-chooser@kgshank.net";
+  passthru.extensionUuid = "sound-output-device-chooser@kgshank.net";
 
   makeFlags = [
     "INSTALL_DIR=${placeholder "out"}/share/gnome-shell/extensions"

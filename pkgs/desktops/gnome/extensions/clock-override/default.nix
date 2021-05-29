@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  uuid = "clock-override@gnomeshell.kryogenix.org";
+  passthru.extensionUuid = "clock-override@gnomeshell.kryogenix.org";
 
   nativeBuildInputs = [ gettext glib ];
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions/${uuid}
-    cp -r {convenience.js,extension.js,format.js,locale,metadata.json,prefs.js,schemas} $out/share/gnome-shell/extensions/${uuid}
+    mkdir -p "$out/share/gnome-shell/extensions/clock-override@gnomeshell.kryogenix.org"
+    cp -r {convenience.js,extension.js,format.js,locale,metadata.json,prefs.js,schemas} "$out/share/gnome-shell/extensions/clock-override@gnomeshell.kryogenix.org"
     runHook postInstall
   '';
 

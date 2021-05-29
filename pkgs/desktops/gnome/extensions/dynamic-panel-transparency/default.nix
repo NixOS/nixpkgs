@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   uuid = "dynamic-panel-transparency@rockon999.github.io";
+  passthru.extensionUuid = uuid;
 
   nativeBuildInputs = [ glib ];
 

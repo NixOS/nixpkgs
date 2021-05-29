@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # installing doesn't build an unnecessary release.
   dontBuild = true;
 
-  uuid = "appindicatorsupport@rgcjonas.gmail.com";
+  passthru.extensionUuid = "appindicatorsupport@rgcjonas.gmail.com";
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}

@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  uuid = "window-corner-preview@fabiomereu.it";
+  passthru.extensionUuid = "window-corner-preview@fabiomereu.it";
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "window-corner-preview@fabiomereu.it" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

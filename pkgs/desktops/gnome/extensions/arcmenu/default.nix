@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
 
-  uuid = "arcmenu@arcmenu.com";
+  passthru.extensionUuid = "arcmenu@arcmenu.com";
 
   meta = with lib; {
     description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
