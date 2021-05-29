@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.15";
+  version = "1.4.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rj9h3mcxrgh5q8qvz7m39diyil27l5mldr49mgz6xfibk3h1w8g";
+    sha256 = "15yl9frbxsq90hq5b8znqy34fg5kqdw1jjw933kz709rbpxw4lzd";
   };
 
   propagatedBuildInputs = [
@@ -29,13 +29,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest_xdist
     mock
   ] ++ lib.optional (!isPy3k) pysqlite;
-
-  pytestFlagsArray = [
-    "-n auto"
-  ];
 
   postInstall = ''
     sed -e 's:--max-worker-restart=5::g' -i setup.cfg

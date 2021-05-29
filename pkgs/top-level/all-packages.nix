@@ -1213,6 +1213,8 @@ in
 
   chamber = callPackage ../tools/admin/chamber {  };
 
+  chaos = callPackage ../tools/networking/chaos {  };
+
   charm = callPackage ../applications/misc/charm { };
 
   chars = callPackage ../tools/text/chars {
@@ -23146,7 +23148,11 @@ in
 
   dwl = callPackage ../applications/window-managers/dwl { };
 
-  dwm = callPackage ../applications/window-managers/dwm { };
+  dwm = callPackage ../applications/window-managers/dwm {
+    # dwm is configured entirely through source modification. Allow users to
+    # specify patches through nixpkgs.config.dwm.patches
+    patches = config.dwm.patches or [];
+  };
 
   dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
@@ -26276,6 +26282,10 @@ in
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
   runc = callPackage ../applications/virtualization/runc {};
+
+  rymcast = callPackage ../applications/audio/rymcast {
+    inherit (gnome) zenity;
+  };
 
   uade123 = callPackage ../applications/audio/uade123 {};
 
