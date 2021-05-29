@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
@@ -14,10 +12,9 @@ let
 in
 
 {
-  imports = [ ../profiles/headless.nix ./amazon-init.nix ];
+  imports = [ ./amazon-init.nix ];
 
-  config = {
-
+  config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = cfg.hvm;
         message = "Paravirtualized EC2 instances are no longer supported.";
@@ -29,6 +26,9 @@ in
 
     ec2.metadata.enable = true;
 
+    profiles.headless.enable = true;
+    profiles.headless.serial.enable = true;
+
     boot.growPartition = cfg.hvm;
 
     fileSystems."/" = {
@@ -37,7 +37,7 @@ in
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf cfg.efi {
+    fileSystems."/boot" = lib.mkIf cfg.efi {
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
@@ -47,7 +47,7 @@ in
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
+    boot.kernelParams = lib.mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -58,7 +58,7 @@ in
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if (cfg.hvm && !cfg.efi) then "/dev/xvda" else "nodev";
-    boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.grub.extraPerEntryConfig = lib.mkIf (!cfg.hvm) "root (hd0)";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 0;
@@ -138,7 +138,7 @@ in
     services.udev.packages = [ pkgs.ec2-utils ];
 
     # Force getting the hostname from EC2.
-    networking.hostName = mkDefault "";
+    networking.hostName = lib.mkDefault "";
 
     # Always include cryptsetup so that Charon can use it.
     environment.systemPackages = [ pkgs.cryptsetup ];
