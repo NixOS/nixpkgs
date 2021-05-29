@@ -18,7 +18,7 @@ let
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "sha256-pv/zXcku+ZgxV1804kIfDZN0jave2qG3rgZwm4yGA6I=";
+    sha256 = "18h3hs69nw06msvs3nnymf6p94qd3x1f4d2zawqriy9fr5fz7zx6";
     patches = [ ./ecto_sql-fix.patch ];
   };
 
@@ -72,9 +72,6 @@ in beamPackages.mixRelease {
 
     mkdir -p $out
     ln -sf ${yarnDeps}/node_modules assets/node_modules
-    mix deps.compile --path $out --no-deps-check
-    mix compile --no-deps-check --path $out
-
     npm run deploy --prefix ./assets
     mix release plausible --no-deps-check --path $out
 

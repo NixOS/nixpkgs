@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq nix-prefetch-git yarn yarn2nix-moretea.yarn2nix moreutils
+#!nix-shell -i bash -p jq nix-prefetch-github yarn yarn2nix-moretea.yarn2nix moreutils
 
 # NOTE: please check on new releases which steps aren't necessary anymore!
 # Currently the following things are done:
@@ -13,14 +13,14 @@
 # * Update hashes for the tarball & the fixed-output drv with all `mix`-dependencies.
 # * Generate `yarn.lock` & `yarn.nix` in a temporary directory.
 
-set -x
+set -euxo pipefail
 
 dir="$(realpath $(dirname "$0"))"
-latest="$(curl -q https://api.github.com/repos/plausible/analytics/releases/latest \
+export latest="$(curl -q https://api.github.com/repos/plausible/analytics/releases/latest \
   | jq -r '.tag_name')"
 nix_version="$(cut -c2- <<< "$latest")"
 
-if [ "$(nix-instantiate -A plausible.version --eval | xargs echo)" = "$nix_version" ];
+if [[ "$(nix-instantiate -A plausible.version --eval --json | jq -r)" = "$nix_version" ]];
 then
   echo "Already using version $latest, skipping"
   exit 0
@@ -29,17 +29,16 @@ fi
 SRC="https://raw.githubusercontent.com/plausible/analytics/${latest}"
 
 package_json="$(curl -qf "$SRC/assets/package.json")"
-fixed_tailwind_version="$(jq '.dependencies.tailwindcss' -r <<< "$package_json" | sed -e 's,^^,,g')"
+export fixed_tailwind_version="$(jq '.dependencies.tailwindcss' -r <<< "$package_json" | sed -e 's,^^,,g')"
 
 echo "$package_json" \
-  | jq '. + {"name":"plausible","version":"'$latest'"}' \
-  | jq '.dependencies.tailwindcss = "'"$fixed_tailwind_version"'"' \
+  | jq '. + {"name":"plausible","version": $ENV.latest} | .dependencies.tailwindcss = $ENV.fixed_tailwind_version' \
   | sed -e 's,../deps/,../../tmp/deps/,g' \
   > $dir/package.json
 
-tarball_meta="$(nix-prefetch-git https://github.com/plausible/analytics --rev "$latest" --quiet)"
-tarball_hash="$(jq -r '.sha256' <<< "$tarball_meta")"
-tarball_path="$(jq -r '.path' <<< "$tarball_meta")"
+tarball_meta="$(nix-prefetch-github plausible analytics --rev "$latest")"
+tarball_hash="$(nix to-base32 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+tarball_path="$(nix-build -E 'with import ./. {}; { p }: fetchFromGitHub (builtins.fromJSON p)' --argstr p "$tarball_meta")"
 fake_hash="$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
 
 sed -i "$dir/default.nix" \
@@ -47,7 +46,7 @@ sed -i "$dir/default.nix" \
   -e '/^  src = fetchFromGitHub/,+4{;s/sha256 = "\(.*\)"/sha256 = "'"$tarball_hash"'"/}' \
   -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$fake_hash"'"/}'
 
-mix_hash="$(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo)"
+mix_hash="$(nix to-base32 $(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
 
 sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$mix_hash"'"/}'
 
@@ -56,7 +55,7 @@ trap "rm -rf $tmp_setup_dir" EXIT
 
 cp -r $tarball_path/* $tmp_setup_dir/
 cp -r "$(nix-build -A plausible.mixFodDeps)" "$tmp_setup_dir/deps"
-chmod -R a+rwx "$tmp_setup_dir"
+chmod -R u+rwx "$tmp_setup_dir"
 
 pushd $tmp_setup_dir/assets
 jq < package.json '.dependencies.tailwindcss = "'"$fixed_tailwind_version"'"' | sponge package.json
