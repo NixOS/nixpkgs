@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.oci;
+in
 {
   imports = [ ./oci-common.nix ];
 
@@ -10,6 +13,7 @@
       configFile = ./oci-config-user.nix;
       format = "qcow2";
       diskSize = 8192;
+      partitionTableType = if cfg.efi then "efi" else "legacy";
     };
 
     systemd.services.fetch-ssh-keys = {
