@@ -16,7 +16,6 @@
   "freon@UshakovVasilii_Github.yahoo.com" = callPackage ./freon { };
   "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com" = callPackage ./fuzzy-app-search { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
-  "hotedge@jonathan.jdoda.ca" = callPackage ./hot-edge { };
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "nightthemeswitcher@romainvigier.fr" = callPackage ./night-theme-switcher { };
