@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "fix-for-home-end-in-tmux.patch";
+      url = "https://github.com/troglobit/editline/commit/265c1fb6a0b99bedb157dc7c320f2c9629136518.patch";
+      sha256 = "sha256-9fhQH0hT8BcykGzOUoT18HBtWjjoXnePSGDJQp8GH30=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
