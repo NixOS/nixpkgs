@@ -36,6 +36,15 @@ in
   ##################
   nvim_with_plugins = wrapNeovim "-with-plugins" nvimConfNix;
 
+  nvim_via_override = neovim.override {
+    configure = {
+      packages.foo.start = [ vimPlugins.ale ];
+      customRC = ''
+        :help ale
+      '';
+    };
+  };
+
   ### vim tests
   ##################
   vim_with_vim2nix = vim_configurable.customize {
