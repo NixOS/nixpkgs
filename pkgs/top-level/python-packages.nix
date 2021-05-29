@@ -1126,6 +1126,10 @@ in {
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
+  boost-histogram = callPackage ../development/python-modules/boost-histogram {
+    inherit (pkgs) boost;
+  };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto = callPackage ../development/python-modules/boto { };
