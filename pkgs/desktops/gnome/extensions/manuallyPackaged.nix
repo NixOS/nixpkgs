@@ -7,7 +7,6 @@
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
   "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
-  "unredirect@vaina.lt" = callPackage ./disable-unredirect { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "dynamic-panel-transparency@rockon999.github.io" = callPackage ./dynamic-panel-transparency { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
