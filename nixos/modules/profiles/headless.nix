@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./headless-config.nix ];
+  config.profiles.headless.enable = true;
 }
