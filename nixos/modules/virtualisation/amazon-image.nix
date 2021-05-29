@@ -4,7 +4,5 @@
 { ... }:
 
 {
-  imports = [ ./amazon-config.nix ];
-
   config.ec2.enable = true;
 }

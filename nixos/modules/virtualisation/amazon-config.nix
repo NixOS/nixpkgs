@@ -12,8 +12,6 @@ let
 in
 
 {
-  imports = [ ./amazon-init.nix ];
-
   config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = cfg.hvm;
@@ -25,6 +23,7 @@ in
     ];
 
     ec2.metadata.enable = true;
+    virtualization.amazon-init.enable = true;
 
     profiles.headless.enable = true;
     profiles.headless.serial.enable = true;

@@ -1108,6 +1108,8 @@
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
+  ./virtualisation/amazon-config.nix
+  ./virtualisation/amazon-init.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/kvmgt.nix
