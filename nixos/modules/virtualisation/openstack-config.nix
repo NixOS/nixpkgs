@@ -1,7 +1,5 @@
 { pkgs, lib, ... }:
 
-with lib;
-
 let
   metadataFetcher = import ./openstack-metadata-fetcher.nix {
     targetRoot = "/";
@@ -13,11 +11,13 @@ in
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
     # The Openstack Metadata service exposes data on an EC2 API also.
-    ./ec2-data.nix
     ./amazon-init.nix
   ];
 
   config = {
+    # The Openstack Metadata service exposes data on an EC2 API also.
+    ec2.metadata.enable = true;
+
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
@@ -33,11 +33,11 @@ in
     services.openssh = {
       enable = true;
       permitRootLogin = "prohibit-password";
-      passwordAuthentication = mkDefault false;
+      passwordAuthentication = lib.mkDefault false;
     };
 
     # Force getting the hostname from Openstack metadata.
-    networking.hostName = mkDefault "";
+    networking.hostName = lib.mkDefault "";
 
     systemd.services.openstack-init = {
       path = [ pkgs.wget ];

@@ -14,7 +14,7 @@ let
 in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
+  imports = [ ../profiles/headless.nix ./amazon-init.nix ];
 
   config = {
 
@@ -26,6 +26,8 @@ in
         message = "EC2 instances using EFI must be HVM instances.";
       }
     ];
+
+    ec2.metadata.enable = true;
 
     boot.growPartition = cfg.hvm;
 

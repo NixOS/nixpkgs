@@ -1098,6 +1098,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containerd.nix
   ./virtualisation/containers.nix
+  ./virtualisation/ec2-data.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
   ./virtualisation/cri-o.nix
