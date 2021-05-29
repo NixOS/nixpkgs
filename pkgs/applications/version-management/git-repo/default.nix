@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.14.5";
+  version = "2.15.3";
 
   src = fetchFromGitHub {
     owner = "android";
