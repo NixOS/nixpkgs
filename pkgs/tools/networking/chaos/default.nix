@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "chaos-client";
     rev = "v${version}";
     sha256 = "13lblrckf65y7kd3lw4s12bi05rv4iv25sr5xbp63l9ly5sbzaz6";
   };
