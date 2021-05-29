@@ -7473,6 +7473,12 @@
     githubId = 20923;
     name = "Erik Timan";
   };
+  olebedev = {
+    email = "ole6edev@gmail.com";
+    github = "olebedev";
+    githubId = 848535;
+    name = "Oleg Lebedev";
+  };
   olejorgenb = {
     email = "olejorgenb@yahoo.no";
     github = "olejorgenb";
