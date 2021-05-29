@@ -1,6 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
-, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, libxkbcommon, libdrm
+, glib, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
@@ -14,7 +15,7 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  unwrapped = stdenv.mkDerivation {
+  unwrapped = stdenv.mkDerivation rec {
 
     inherit pname version src sourceRoot;
 
@@ -62,8 +63,8 @@ let
       '';
     };
 
-    buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
+    buildInputs = [ libsecret libXScrnSaver libxshmfence libxkbcommon ]
+      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk glib ] ++ atomEnv.packages);
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
@@ -96,6 +97,15 @@ let
       grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
     '') + ''
       runHook postInstall
+    '';
+
+    # allow for the vendored libraries to be linked
+    # lib/vscode is not a mistake, it's the same path for both vscode and vscodium
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --suffix LD_LIBRARY_PATH : ${placeholder "out"}/lib/vscode
+        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ libdrm ] ++ buildInputs)}
+      )
     '';
 
     inherit meta;
