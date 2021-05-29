@@ -498,6 +498,7 @@ mapAliases ({
   nixFlakes = nixUnstable; # added 2021-05-21
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
+  nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
   nxproxy = nx-libs; # added 2019-02-15
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
   oauth2_proxy = oauth2-proxy; # added 2021-04-18

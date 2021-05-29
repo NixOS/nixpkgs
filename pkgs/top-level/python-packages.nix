@@ -6202,6 +6202,8 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
 
+  pyroon = callPackage ../development/python-modules/pyroon { };
+
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };

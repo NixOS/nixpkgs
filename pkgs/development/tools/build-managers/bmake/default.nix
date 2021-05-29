@@ -18,6 +18,31 @@ stdenv.mkDerivation rec {
     ./fix-unexport-env-test.patch
   ];
 
+  # The generated makefile is a small wrapper for calling ./boot-strap
+  # with a given op. On a case-insensitive filesystem this generated
+  # makefile clobbers a distinct, shipped, Makefile and causes
+  # infinite recursion during tests which eventually fail with
+  # "fork: Resource temporarily unavailable"
+  configureFlags = [
+    "--without-makefile"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ./boot-strap --prefix=$out -o . op=build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./boot-strap --prefix=$out -o . op=install
+
+    runHook postInstall
+  '';
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
