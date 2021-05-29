@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.extensionUuid = "pidgin@muffinmad";
+  passthru = {
+    extensionUuid = "pidgin@muffinmad";
+    extensionPortalSlug = "pidgin-im-integration";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";

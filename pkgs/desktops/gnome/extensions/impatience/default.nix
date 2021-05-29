@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.extensionUuid = "impatience@gfxmonk.net";
+  passthru = {
+    extensionUuid = "impatience@gfxmonk.net";
+    extensionPortalSlug = "impatience";
+  };
 
   meta = with lib; {
     description = "Speed up builtin gnome-shell animations";

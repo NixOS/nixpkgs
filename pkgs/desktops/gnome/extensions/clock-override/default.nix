@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  passthru.extensionUuid = "clock-override@gnomeshell.kryogenix.org";
+  passthru = {
+    extensionUuid = "clock-override@gnomeshell.kryogenix.org";
+    extensionPortalSlug = "clock-override";
+  };
 
   nativeBuildInputs = [ gettext glib ];
 

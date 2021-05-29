@@ -39,7 +39,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
+  passthru = {
+    extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
+    extensionPortalSlug = "system-monitor";
+  };
 
   meta = with lib; {
     description = "Display system informations in gnome shell status bar";

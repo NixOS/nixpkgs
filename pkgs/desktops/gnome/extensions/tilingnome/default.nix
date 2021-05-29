@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.extensionUuid = "tilingnome@rliang.github.com";
+  passthru = {
+    extensionUuid = "tilingnome@rliang.github.com";
+    extensionPortalSlug = "tilingnome";
+  };
 
   meta = with lib; {
     description = "Tiling window management for GNOME Shell";

@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dyagnjmk91h96xr98mc177c473bqpxcv86qf6g3kyh3arwa9shs";
   };
 
-  passthru.extensionUuid = "caffeine@patapon.info";
+  passthru = {
+   extensionPortalSlug = "caffeine";
+   extensionUuid = "caffeine@patapon.info";
+  };
 
   nativeBuildInputs = [
     glib gettext

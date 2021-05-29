@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0x60pg5nl5d73av494dg29hyfml7fbf2d03wm053vx1q8a3pxbyb";
   };
 
-  passthru.extensionUuid = "emoji-selector@maestroschan.fr";
+  passthru = {
+    extensionUuid = "emoji-selector@maestroschan.fr";
+    extensionPortalSlug = "emoji-selector";
+  };
 
   nativeBuildInputs = [ glib ];
 

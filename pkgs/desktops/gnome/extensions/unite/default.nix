@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ys2kWPj/FugW/LkvLAZdbj7Ufg/KShC+EX6QrjKNVH8=";
   };
 
-  passthru.extensionUuid = "unite@hardpixel.eu";
+  passthru = {
+    extensionUuid = "unite@hardpixel.eu";
+    extensionPortalSlug = "unite";
+  };
 
   nativeBuildInputs = [ glib ];
 

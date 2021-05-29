@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [ glib gnome.gnome-shell ];
 
-  passthru.extensionUuid = "nightthemeswitcher@romainvigier.fr";
+  passthru = {
+    extensionUuid = "nightthemeswitcher@romainvigier.fr";
+    extensionPortalSlug = "night-theme-switcher";
+  };
 
   installPhase = ''
     runHook preInstall

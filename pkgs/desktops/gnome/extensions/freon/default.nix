@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
   version = "44";
 
-  passthru.extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
+  passthru = {
+    extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
+    extensionPortalSlug = "freon";
+  };
 
   src = fetchFromGitHub {
     owner = "UshakovVasilii";

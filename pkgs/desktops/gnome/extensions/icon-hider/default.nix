@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "18c8zkdrmdbghqqz7b450vhgpykgz25mgigwn2nggcb2lxmvm9ks";
   };
 
-  passthru.extensionUuid = "icon-hider@kalnitsky.org";
+  passthru = {
+    extensionUuid = "icon-hider@kalnitsky.org";
+    extensionPortalSlug = "icon-hider";
+  };
 
   installPhase = ''
     runHook preInstall
