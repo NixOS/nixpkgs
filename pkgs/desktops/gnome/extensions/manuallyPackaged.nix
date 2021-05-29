@@ -20,7 +20,6 @@
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "material-shell@papyelgringo" = callPackage ./material-shell { };
-  "mprisindicatorbutton@JasonLG1979.github.io" = callPackage ./mpris-indicator-button { };
   "nightthemeswitcher@romainvigier.fr" = callPackage ./night-theme-switcher { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
