@@ -22,7 +22,6 @@
   "material-shell@papyelgringo" = callPackage ./material-shell { };
   "mprisindicatorbutton@JasonLG1979.github.io" = callPackage ./mpris-indicator-button { };
   "nightthemeswitcher@romainvigier.fr" = callPackage ./night-theme-switcher { };
-  "noannoyance@daase.net" = callPackage ./noannoyance { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
