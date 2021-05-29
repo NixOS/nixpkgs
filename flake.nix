@@ -24,9 +24,8 @@
     {
       lib = lib.extend (final: prev: {
         inherit (import ./lib/flake-utils.nix {
-          nixpkgs = self;
           inherit systems;
-        }) mapSystem mapDefaultSystem;
+        }) mapSystems mapDefaultSystems;
 
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
