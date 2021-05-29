@@ -68,12 +68,7 @@ in
   options = {
 
     hardware.sane.brscan5.enable =
-      mkEnableOption "Brother's brscan5 scan backend" // {
-      description = ''
-        When enabled, will automatically register the "brscan5" sane
-        backend and bring configuration files to their expected location.
-      '';
-    };
+      mkEnableOption "the Brother brscan5 sane backend";
 
     hardware.sane.brscan5.netDevices = mkOption {
       default = {};
