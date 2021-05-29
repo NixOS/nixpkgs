@@ -553,14 +553,6 @@ in
           from a precalculated list.
         '';
       };
-      user_creation_max_duration = mkOption {
-        type = types.str;
-        default = "1209600000";
-        description = ''
-          Sets the expiry for the short term user creation in
-          milliseconds. The default value is two weeks.
-        '';
-      };
       bcrypt_rounds = mkOption {
         type = with types; coercedTo string toInt int;
         default = 12;
@@ -796,6 +788,9 @@ in
       (optionPath [ "rc_federation" "concurrent" ]))
 
     # Removed Options
+    (mkRemovedOptionModule (optionPath "user_creation_max_duration") ''
+      The `user_creation_max_duration` option has been removed.
+    '')
     (mkRemovedOptionModule (optionPath "trusted_third_party_id_servers") ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
