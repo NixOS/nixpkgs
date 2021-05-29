@@ -12,7 +12,7 @@
   <title>Basic Usage</title>
   <para>
    At first, a secret key is needed to be generated. This can be done with e.g.
-   <prompt>$ openssl rand -base64 64</prompt>
+   <screen><prompt>$ </prompt>openssl rand -base64 64</screen>
   </para>
   <para>
    After that, <package>plausible</package> can be deployed like this:

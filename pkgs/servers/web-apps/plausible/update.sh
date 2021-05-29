@@ -45,17 +45,17 @@ fake_hash="$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
 sed -i "$dir/default.nix" \
   -e 's,version = ".*",version = "'"$nix_version"'",' \
   -e '/^  src = fetchFromGitHub/,+4{;s/sha256 = "\(.*\)"/sha256 = "'"$tarball_hash"'"/}' \
-  -e '/^  mixDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$fake_hash"'"/}'
+  -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$fake_hash"'"/}'
 
-mix_hash="$(nix-build -A plausible.mixDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo)"
+mix_hash="$(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo)"
 
-sed -i "$dir/default.nix" -e '/^  mixDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$mix_hash"'"/}'
+sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$mix_hash"'"/}'
 
 tmp_setup_dir="$(mktemp -d)"
 trap "rm -rf $tmp_setup_dir" EXIT
 
 cp -r $tarball_path/* $tmp_setup_dir/
-cp -r "$(nix-build -A plausible.mixDeps)" "$tmp_setup_dir/deps"
+cp -r "$(nix-build -A plausible.mixFodDeps)" "$tmp_setup_dir/deps"
 chmod -R a+rwx "$tmp_setup_dir"
 
 pushd $tmp_setup_dir/assets
