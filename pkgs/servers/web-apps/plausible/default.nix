@@ -14,10 +14,12 @@ let
     sha256 = "03lm1f29gwwixnhgjish5bhi3m73qyp71ns2sczdnwnbhrw61zps";
   };
 
-  mixDeps = beamPackages.fetchMixDeps {
+  # TODO consider using `mix2nix` as soon as it supports git dependencies.
+  mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "sha256-66zSdYmis3UnbdLkPi649RbPbMPI5gVeFlaMekOy5CQ=";
+    sha256 = "sha256-pv/zXcku+ZgxV1804kIfDZN0jave2qG3rgZwm4yGA6I=";
+    patches = [ ./ecto_sql-fix.patch ];
   };
 
   yarnDeps = mkYarnModules {
@@ -28,15 +30,15 @@ let
     yarnLock = ./yarn.lock;
     preBuild = ''
       mkdir -p tmp/deps
-      cp -r ${mixDeps}/phoenix tmp/deps/phoenix
-      cp -r ${mixDeps}/phoenix_html tmp/deps/phoenix_html
+      cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
+      cp -r ${mixFodDeps}/phoenix_html tmp/deps/phoenix_html
     '';
     postBuild = ''
       echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
     '';
   };
 in beamPackages.mixRelease {
-  inherit pname version src mixDeps;
+  inherit pname version src mixFodDeps;
 
   nativeBuildInputs = [ nodejs ];
 
@@ -47,6 +49,10 @@ in beamPackages.mixRelease {
       url = "https://github.com/Ma27/analytics/commit/f2ee5892a6c3e1a861d69ed30cac43e05e9cd36f.patch";
       sha256 = "sha256-JvJ7xlGw+tHtWje+jiQChVC4KTyqqdq2q+MIcOv/k1o=";
     })
+
+    # CREATE EXTENSION requires super-user privileges. To avoid that, we just skip
+    # the responsible SQL statement here and take care of it in the module.
+    ./skip-create-ext.patch
   ];
 
   passthru = {

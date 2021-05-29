@@ -5,10 +5,10 @@ with lib;
 let
   cfg = config.services.plausible;
 
+  # FIXME consider using LoadCredential as soon as it actually works.
   envSecrets = ''
     export ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
     export SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
-    export RELEASE_TMP=/var/lib/plausible/tmp
     ${optionalString (cfg.mail.smtp.passwordFile != null) ''
       export SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
     ''}
@@ -51,9 +51,7 @@ in {
           default = "http://localhost:8123/default";
           type = types.str;
           description = ''
-            The URL to be used to connect to <package>postgres</package>. The format
-            is described in <link xlink:href="https://hexdocs.pm/ecto/Ecto.Repo.html#module-urls">
-            the elixir docs</link>.
+            The URL to be used to connect to <package>clickhouse</package>.
           '';
         };
       };
@@ -110,7 +108,7 @@ in {
 
     mail = {
       email = mkOption {
-        default = "	hello@plausible.local";
+        default = "hello@plausible.local";
         type = types.str;
         description = ''
           The email id to use for as <emphasis>from</emphasis> address of all communications
@@ -146,7 +144,7 @@ in {
             The path to the file with the password in case SMTP auth is enabled.
           '';
         };
-        enableSSL = mkEnableOption "";
+        enableSSL = mkEnableOption "SSL when connecting to the SMTP server";
         retries = mkOption {
           type = types.ints.unsigned;
           default = 2;
@@ -162,7 +160,7 @@ in {
     assertions = [
       { assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
         message = ''
-          Unable to automatically activate the admin-user if no local DB-managed for
+          Unable to automatically activate the admin-user if no locally DB-managed for
           postgres (`services.plausible.database.postgres.setup') is enabled!
         '';
       }
@@ -181,10 +179,13 @@ in {
         plausible = {
           inherit (pkgs.plausible.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
-          wantedBy = [ "multi-user.target" ]
-            ++ optional cfg.database.clickhouse.setup "clickhouse.service"
-            ++ optional cfg.database.postgres.setup "postgresql.service";
+          wantedBy = [ "multi-user.target" ];
           after = optional cfg.database.postgres.setup "plausible-postgres.service";
+          requires = optional cfg.database.clickhouse.setup "clickhouse.service"
+            ++ optionals cfg.database.postgres.setup [
+              "postgresql.service"
+              "plausible-postgres.service"
+            ];
 
           environment = {
             # NixOS specific option to avoid that it's trying to write into its store-path.
@@ -195,6 +196,8 @@ in {
             # https://plausible.io/docs/self-hosting-configuration
             PORT = toString cfg.server.port;
             DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
+
+            RELEASE_TMP = "/var/lib/plausible/tmp";
 
             ADMIN_USER_NAME = cfg.adminUser.name;
             ADMIN_USER_EMAIL = cfg.adminUser.email;
@@ -210,8 +213,11 @@ in {
             SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
             SMTP_RETRIES = toString cfg.mail.smtp.retries;
             SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
-            ${if cfg.mail.smtp.user != null then "SMTP_USER_NAME" else null} = cfg.mail.smtp.user;
-          };
+
+            SELFHOST = "true";
+          } // (optionalAttrs (cfg.mail.smtp.user != null) {
+            SMTP_USER_NAME = cfg.mail.smtp.user;
+          });
 
           path = [ pkgs.plausible ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
@@ -239,26 +245,23 @@ in {
         };
       }
       (mkIf cfg.database.postgres.setup {
-        # Unfortunately `plausible' requires super-user permissions in postgresql, so this
-        # has to be done imperatively here.
+        # `plausible' requires the `citext'-extension.
         plausible-postgres = {
           after = [ "postgresql.service" ];
           bindsTo = [ "postgresql.service" ];
           requiredBy = [ "plausible.service" ];
           partOf = [ "plausible.service" ];
           serviceConfig.Type = "oneshot";
+          unitConfig.ConditionPathExists = "!/var/lib/plausible/.db-setup";
           script = ''
-            if [ ! -e /var/lib/plausible/.db-setup ]; then
-              mkdir -p /var/lib/plausible/
-              PSQL() {
-                /run/wrappers/bin/sudo -Hu postgres ${config.services.postgresql.package}/bin/psql --port=5432 "$@"
-              }
-              PSQL -tAc "CREATE EXTENSION IF NOT EXISTS citext;"
-              PSQL -tAc "CREATE ROLE plausible WITH LOGIN;"
-              PSQL -tAc "CREATE DATABASE plausible WITH OWNER plausible;"
-              PSQL -tAc "ALTER USER plausible WITH SUPERUSER;"
-              touch /var/lib/plausible/.db-setup
-            fi
+            mkdir -p /var/lib/plausible/
+            PSQL() {
+              /run/wrappers/bin/sudo -Hu postgres ${config.services.postgresql.package}/bin/psql --port=5432 "$@"
+            }
+            PSQL -tAc "CREATE ROLE plausible WITH LOGIN;"
+            PSQL -tAc "CREATE DATABASE plausible WITH OWNER plausible;"
+            PSQL -d plausible -tAc "CREATE EXTENSION IF NOT EXISTS citext;"
+            touch /var/lib/plausible/.db-setup
           '';
         };
       })
