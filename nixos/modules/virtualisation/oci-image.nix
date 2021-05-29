@@ -1,7 +1,4 @@
-
 { config, lib, pkgs, ... }:
-
-with lib;
 
 {
   imports = [ ./oci-common.nix ];
