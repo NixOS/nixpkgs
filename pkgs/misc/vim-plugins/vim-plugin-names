@@ -643,6 +643,7 @@ thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
 TimUntersberger/neogit
+tjdevries/colorbuddy.nvim
 tjdevries/nlua.nvim
 tjdevries/train.nvim
 tmhedberg/SimpylFold
