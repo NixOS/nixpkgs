@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons libudev libX11 libXcursor libXinerama libXrandr libXrender
+    scons udev libX11 libXcursor libXinerama libXrandr libXrender
     libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
     libGLU zlib yasm
   ];
