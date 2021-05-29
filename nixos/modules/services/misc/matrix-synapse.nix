@@ -304,8 +304,8 @@ in
         '';
       };
       verbose = mkOption {
-        type = types.str;
-        default = "0";
+        type = with types; coercedTo string toInt int;
+        default = 0;
         description = "Logging verbosity level.";
       };
       rc_message = mkOption {
@@ -562,8 +562,8 @@ in
         '';
       };
       bcrypt_rounds = mkOption {
-        type = types.str;
-        default = "12";
+        type = with types; coercedTo string toInt int;
+        default = 12;
         description = ''
           Set the number of bcrypt rounds used to generate password hash.
           Larger numbers increase the work factor needed to generate the hash.
