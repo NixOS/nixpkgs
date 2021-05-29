@@ -64,7 +64,6 @@ let
 
     # Registration
     inherit (cfg) enable_registration registration_shared_secret bcrypt_rounds allow_guest_access;
-    inherit (cfg) user_creation_max_duration; # deprecated, but keeping for backwards compatibility
 
     account_threepid_delegates = filterAttrs (_: v: v != null) {
       inherit (cfg.account_threepid_delegates) email msisdn;
@@ -77,7 +76,6 @@ let
 
     # API Configuration
     inherit (cfg) macaroon_secret_key app_service_config_files room_prejoin_state;
-    inherit (cfg) expire_access_token; # deprecated by https://github.com/matrix-org/synapse/pull/5782
 
     # Signing Keys
     inherit (cfg) key_refresh_interval;
@@ -605,13 +603,6 @@ in
           Secret key for authentication tokens
         '';
       };
-      expire_access_token = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable access token expiration.
-        '';
-      };
       key_refresh_interval = mkOption {
         type = types.str;
         default = "1d";
@@ -784,6 +775,10 @@ in
     (mkRemovedOptionModule (optionPath "tls_dh_params_path") ''
       The `tls_dh_params_path` option was been removed in `matrix-synapse` v0.99.0
       since configuring and generating dh_params is no longer required.
+    '')
+    (mkRemovedOptionModule (optionPath "expire_access_token") ''
+      The `expire_access_token` option was been removed in `matrix-synapse` v1.3.0
+      since it was non-functional.
     '')
     (mkRemovedOptionModule (optionPath "trusted_third_party_id_servers") ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
