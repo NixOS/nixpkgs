@@ -610,6 +610,7 @@ in with py.pkgs; buildPythonApplication rec {
     "uvc"
     "vacuum"
     "velbus"
+    "venstar"
     "vera"
     "verisure"
     "version"
