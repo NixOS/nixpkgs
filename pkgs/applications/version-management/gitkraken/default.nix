@@ -9,7 +9,7 @@
 with lib;
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
