@@ -49,7 +49,6 @@ let
     # Media Store
     inherit (cfg) max_upload_size max_image_pixels dynamic_thumbnails;
     media_store_path = "${cfg.dataDir}/media";
-    uploads_path = "${cfg.dataDir}/uploads"; # https://github.com/matrix-org/synapse/pull/9462
   } // optionalAttrs cfg.url_preview_enabled {
     url_preview_enabled = true;
     url_preview_ip_range_blacklist = cfg.url_preview_ip_range_blacklist;
