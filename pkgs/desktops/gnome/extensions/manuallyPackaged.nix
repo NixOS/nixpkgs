@@ -34,5 +34,4 @@
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
   "unite@hardpixel.eu" = callPackage ./unite { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
-  "windowIsReady_Remover@nunofarruca@gmail.com" = callPackage ./window-is-ready-remover { };
 }
