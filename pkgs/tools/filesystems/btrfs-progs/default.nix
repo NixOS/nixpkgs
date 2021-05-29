@@ -1,6 +1,8 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
+, autoconf
+, automake
 , pkg-config
 , attr
 , acl
@@ -21,12 +23,16 @@ stdenv.mkDerivation rec {
   pname = "btrfs-progs";
   version = "5.12.1";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-lQhG/qRU+0scOfD6RUmDZEVy35HfXAYEezNb8tVHN1k=";
+  src = fetchFromGitHub {
+    owner = "kdave";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-rC9X4XzmT6PUDCajLkhuG85nRjJTqQ4mvevF4HWgHNE=";
   };
 
   nativeBuildInputs = [
+    autoconf
+    automake
     pkg-config
     asciidoc
     xmlto
@@ -41,6 +47,10 @@ stdenv.mkDerivation rec {
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+
+  preConfigure = ''
+    sh autogen.sh
+  '';
 
   postInstall = ''
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
