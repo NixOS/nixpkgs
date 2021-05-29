@@ -24,15 +24,15 @@ let
   ) deviceIds;
 
   componentHashes = {
-    "arria_lite" = "09g2knq23h3vj0s5y7hsdnqbbkr3pnv53dzpqcw2lq9mb5zfs9r0";
-    "cyclonev" = "05hrpysasyfb7xhxg68spdffxyvxcx0iagibd5jz643b7n6aalpa";
-    "cyclone" = "1x3rnwsvzrb5kwdz35sbcabxmcvj8xxpnjlpcjwfc69ybiyr6sgz";
-    "cyclone10lp" = "1x6d4hm697mjgzaxixrw5va8anr6ihhx96x2524r6axpwqf6wcja";
-    "max" = "060b7v0xh86kkjyiix7akfkzhx2kl1b3q117kp7xibnz6yrzwmy3";
-    "max10" = "05840l9pmqa4i1b3ajfaxkqz1hppls556vbq16a42acz2qs2g578";
+    "arria_lite" = "140jqnb97vrxx6398cpgpw35zrrx3z5kv1x5gr9is1xdbnf4fqhy";
+    "cyclone" = "116kf69ryqcmlc2k8ra0v32jy7nrk7w4s5z3yll7h3c3r68xcsfr";
+    "cyclone10lp" = "07wpgx9bap6rlr5bcmr9lpsxi3cy4yar4n3pxfghazclzqfi2cyl";
+    "cyclonev" = "11baa9zpmmfkmyv33w1r57ipf490gnd3dpi2daripf38wld8lgak";
+    "max" = "1zy2d42dqmn97fwmv4x6pmihh4m23jypv3nd830m1mj7jkjx9kcq";
+    "max10" = "1hvi9cpcjgbih3l6nh8x1vsp0lky5ax85jb2yqmzla80n7dl9ahs";
   };
 
-  version = "20.1.0.711";
+  version = "20.1.1.720";
   homepage = "https://fpgasoftware.intel.com";
 
   require = {name, sha256}: requireFile {
@@ -46,10 +46,10 @@ in stdenv.mkDerivation rec {
 
   src = map require ([{
     name = "QuartusLiteSetup-${version}-linux.run";
-    sha256 = "07ssrv8p8kacal6xd80n4h7l5xz13aw1m1gfqqaxig0ivsj971z5";
+    sha256 = "0mjp1rg312dipr7q95pb4nf4b8fwvxgflnd1vafi3g9cshbb1c3k";
   } {
     name = "ModelSimSetup-${version}-linux.run";
-    sha256 = "0smxasrmr1c8k6hy378knskpjmz4cgpgb35v5jclns0kx68y3c42";
+    sha256 = "1cqgv8x6vqga8s4v19yhmgrr886rb6p7sbx80528df5n4rpr2k4i";
   }] ++ (map (id: {
     name = "${id}-${version}.qdz";
     sha256 = lib.getAttr id componentHashes;
