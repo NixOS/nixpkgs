@@ -36665,6 +36665,12 @@ with pkgs;
   nix-prefetch-github = with python3Packages;
     toPythonApplication nix-prefetch-github;
 
+  nix-prefetch-openvsx = callPackage ../applications/editors/vscode/extension-registries/openvsx/nix-prefetch-openvsx { };
+
+  nix-prefetch-vscode-marketplace = callPackage ../applications/editors/vscode/extension-registries/vscode-marketplace/nix-prefetch-vscode-marketplace { };
+
+  nix-prefetch-vsix-lib = callPackage ../applications/editors/vscode/extension-registries/commons/nix-prefetch-vsix-lib { };
+
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs

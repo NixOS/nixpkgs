@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+
+# Adapt from get_vsixpkg() of the original update_install_exts.sh
+
+set -eu -o pipefail
+
+declare -a QUEUED_ARGS=()
+declare -a NONFLAG_ARGS=()
+
+source nix-prefetch-vsix-lib.sh
+
+function prepare_vsix_url {
+    prepare_vsix_publisher
+    prepare_vsix_name
+    prepare_vsix_version_specified
+    VSIX_URL="https://$VSIX_PUBLISHER.gallery.vsassets.io/_apis/public/gallery/publisher/$VSIX_PUBLISHER/extension/$VSIX_NAME/$VSIX_VERSION_SPECIFIED/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+}
+
+QUEUED_ARGS=( "$@" )
+
+VSIX_PUBLISHER=""
+VSIX_NAME=""
+VSIX_VERSION=""
+VSIX_VERSION_SPECIFIED=""
+VSIX_VERSION_FETCHED=""
+NO_ADD=0
+NO_HASH=0
+NO_META=0
+
+if [[ "${#QUEUED_ARGS[@]}" -eq 0 ]]; then
+    fail "Expect PUBLISHER and NAME"
+fi
+
+while [[ "${#QUEUED_ARGS[@]}" -gt 0 ]]; do
+    case "${QUEUED_ARGS[0]}" in
+        -h|--help)
+            echo \
+"Usage: nix-prefetch-vscode-marketplace [OPTIONS] PUBLISHER NAME VERSION=latest
+
+Fetch the vscode extension from the official marketplace
+and print the registryRef (previously \"mktplcRef\") attributes in JSON format
+
+Options:
+  -A, --no-add              Don't add the downloaded VSIX file to the Nix store.
+                            Useful when getting the hash of a large number of files.
+  --base16                  Print the hash in base-16 format.
+  --base32                  Print the hash in base-32 format.
+  --base64                  Print the hash in base-64 format.
+  -h, --help                Print this help and exit.
+  -H, --no-hash             Do not print the nix-hash value of this extension.
+                            Since the current way to get the extension version
+                            from the vscode marketplace
+                            is to download and extract the VSIX file
+                            this will not save the fetching time
+                            as it does for the Open VSX Registry.
+			    This implies \`-A\`.
+  -M, --no-meta             Do not print the meta parameters of this extension.
+                            This will not save the fetching and extracting time
+                            since extension version is also inside package.json
+  --sri                     Print the hash in SRI format.
+                            This is the default behavior
+  -t, --tmpdir TMPDIR       Specify the directory
+                            to create temporary directories in.
+                            Default to \`\"\${TMPDIR:-/tmp}\"\` by \`mktemp\`
+                            from the environment.
+  --type HASH_ALGO          Specify the hash algorithm.
+                            Default to sha256
+
+If non-flag arguments (PUBLISHER, NAME, VERSION, etc.) happen to start with '-',
+they should be escaped with a '\\' prefix or be added after '--'."
+
+            exit 0
+            ;;
+        -A|--no-add)
+            NO_ADD=1
+            shift_args
+            ;;
+        --base16)
+            HASH_FORMAT="base16"
+            shift_args
+            ;;
+        --base32)
+            HASH_FORMAT="base32"
+            shift_args
+            ;;
+        --base64)
+            HASH_FORMAT="base64"
+            shift_args
+            ;;
+        -H|--no-hash)
+            NO_HASH=1
+            shift_args
+            ;;
+        -M|--no-meta)
+            NO_META=1
+            shift_args
+            ;;
+        --sri)
+            HASH_FORMAT="sri"
+            shift_args
+            ;;
+        -t|--tmpdir)
+            if [[ "${#QUEUED_ARGS[@]}" -lt 2 ]]; then
+                fail "Expect ${QUEUED_ARGS[0]} TMPDIR"
+            fi
+            export TMPDIR="${QUEUED_ARGS[1]}"
+            shift_args 2
+            ;;
+        --type)
+            HASH_ALGO="${QUEUED_ARGS[1]}"
+            shift_args 2
+            ;;
+        -)
+            fail "Unexpected argument ${QUEUED_ARGS[0]}"
+            ;;
+        --)
+            shift_args 1
+            NONFLAG_ARGS+=( "${QUEUED_ARGS[@]}" )
+            QUEUED_ARGS=()
+            ;;
+        --?*)
+            fail "Unexpected argument ${QUEUED_ARGS[0]}"
+            ;;
+        -?*)
+            manage_shorthands
+            ;;
+        \\-*)
+            # If an argument begins with '\-'
+            # Get the second and the following characters
+            # and put into NONFLAG_ARGS
+            NONFLAG_ARGS+=("${QUEUED_ARGS[0]:1}")
+            shift_args 1
+            ;;
+        *)
+            NONFLAG_ARGS+=("${QUEUED_ARGS[0]}")
+            shift_args 1
+            ;;
+    esac
+done
+
+if [[ "${#NONFLAG_ARGS[@]}" -lt 2 ]]; then
+    fail "Expect PUBLISHER and NAME"
+fi
+VSIX_PUBLISHER="${NONFLAG_ARGS[0]}"
+VSIX_NAME="${NONFLAG_ARGS[1]}"
+if [[ "${#NONFLAG_ARGS[@]}" -lt 3 || -z "${NONFLAG_ARGS[2]}" ]]; then
+    VSIX_VERSION_SPECIFIED="latest"
+else
+    VSIX_VERSION_SPECIFIED="${NONFLAG_ARGS[2]}"
+fi
+
+create_exttmp
+trap cleanup EXIT
+
+if ! (( NO_HASH )) && ! (( NO_ADD )); then
+    add_vsix_to_store
+fi
+
+print_output
