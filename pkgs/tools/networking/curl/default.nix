@@ -3,7 +3,7 @@
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
+, opensslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
@@ -29,10 +29,10 @@ assert http2Support -> nghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert !(gnutlsSupport && sslSupport);
+assert opensslSupport -> openssl != null;
+assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
-assert !(sslSupport && wolfsslSupport);
+assert !(opensslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl ++
+    optional opensslSupport openssl ++
     optional gnutlsSupport gnutls ++
     optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       # The build fails when using wolfssl with --with-ca-fallback
       ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if opensslSupport then "--with-openssl=${openssl.dev}" else "--without-openssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
       ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit opensslSupport openssl;
   };
 
   meta = with lib; {
