@@ -1,8 +1,4 @@
-# Configuration for Amazon EC2 instances. (Note that this file is a
-# misnomer - it should be "amazon-config.nix" or so, not
-# "amazon-image.nix", since it's used not only to build images but
-# also to reconfigure instances. However, we can't rename it because
-# existing "configuration.nix" files on EC2 instances refer to it.)
+# Configuration for Amazon EC2 instances.
 
 { config, lib, pkgs, ... }:
 
