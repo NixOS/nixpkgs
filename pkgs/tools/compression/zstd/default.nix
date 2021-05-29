@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.4.9";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "18alxnym54gswsmsr5ra82q4k1q5fyzsyx0jykb2sk2nkpvx7334";
+    sha256 = "0icc0x89c35rq5bxd4d241vqxnz2i1qj2wwy01xls63p0z93brj7";
   };
 
   nativeBuildInputs = [ cmake ]
