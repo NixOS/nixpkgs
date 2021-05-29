@@ -26,7 +26,6 @@
   noannoyance = callPackage ./noannoyance { };
   paperwm = callPackage ./paperwm { };
   pidgin-im-integration = callPackage ./pidgin-im-integration { };
-  remove-dropdown-arrows = callPackage ./remove-dropdown-arrows { };
   sound-output-device-chooser = callPackage ./sound-output-device-chooser { };
   system-monitor = callPackage ./system-monitor { };
   taskwhisperer = callPackage ./taskwhisperer { };
