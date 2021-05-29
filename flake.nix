@@ -20,12 +20,14 @@
         "armv7l-linux"
         "aarch64-darwin"
       ];
-
-      forAllSystems = f: lib.genAttrs systems (system: f system);
-
     in
     {
       lib = lib.extend (final: prev: {
+        inherit (import ./lib/flake-utils.nix {
+          nixpkgs = self;
+          inherit systems;
+        }) mapSystem mapDefaultSystem;
+
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =
@@ -72,7 +74,7 @@
         }).nixos.manual.x86_64-linux;
       };
 
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      legacyPackages = lib.genAttrs systems (system: import ./. { inherit system; });
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
