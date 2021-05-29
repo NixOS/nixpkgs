@@ -1,5 +1,5 @@
 { lib, fetchurl, ocaml, buildDunePackage
-, cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, path_glob, ppx_deriving_yojson
+, cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, menhirLib, path_glob, ppx_deriving_yojson
 }:
 
 if lib.versionAtLeast ocaml.version "4.13"
@@ -19,7 +19,7 @@ buildDunePackage rec {
     sha256 = "1pwzhcr3pw24ra4j4d23vz71h0psz4xkyp7b12l2wl1slxzjbrxa";
   };
 
-  buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhir path_glob ppx_deriving_yojson ];
+  buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhir menhirLib path_glob ppx_deriving_yojson ];
 
   meta = {
     homepage = "https://github.com/hackwaly/ocamlearlybird";

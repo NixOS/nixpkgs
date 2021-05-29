@@ -5,7 +5,7 @@
 }:
 
 let
-  ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
+  ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir menhirLib ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
   inherit (coqPackages) coq flocq;
   inherit (lib) optional optionalString;

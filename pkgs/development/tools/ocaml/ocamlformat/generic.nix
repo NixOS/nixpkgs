@@ -58,6 +58,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
@@ -75,6 +77,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       dune-build-info
       ocaml-version
       # Changed since 0.16.0:
@@ -93,6 +97,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
       (ppxlib.override { version = "0.18.0"; })
       dune-build-info # lib.versionAtLeast version "0.16.0"
       ocaml-version # lib.versionAtLeast version "0.16.0"
@@ -110,6 +116,8 @@ buildDunePackage {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
     ] else [
       base
       cmdliner

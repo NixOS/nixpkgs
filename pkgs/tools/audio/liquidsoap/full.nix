@@ -59,7 +59,7 @@ stdenv.mkDerivation {
       ocamlPackages.xmlm ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
       ocamlPackages.fdkaac
-      ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir
+      ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir ocamlPackages.menhirLib
     ];
 
   hardeningDisable = [ "format" "fortify" ];

@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage
 , ocaml, cmdliner, cppo, yojson, ppxlib
-, menhir
+, menhir, menhirLib
 }:
 
 buildDunePackage rec {
@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ cppo menhir ];
-  buildInputs = [ cmdliner ];
+  buildInputs = [ cmdliner menhirLib ];
 
   configurePlatforms = [];
   propagatedBuildInputs = [ yojson ppxlib ];
