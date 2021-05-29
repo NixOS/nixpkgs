@@ -30,7 +30,6 @@
   "system-monitor@paradoxxx.zero.gmail.com" = callPackage ./system-monitor { };
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
-  "timepp@zagortenay333" = callPackage ./timepp { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
   "unite@hardpixel.eu" = callPackage ./unite { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
