@@ -26,7 +26,6 @@ let
 
     # TLS
     inherit (cfg) tls_certificate_path tls_private_key_path no_tls;
-    inherit (cfg) tls_dh_params_path; # deprecated, but keeping for backwards compatibility
 
     # Federation
 
@@ -191,14 +190,6 @@ in
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
-        '';
-      };
-      tls_dh_params_path = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "${cfg.dataDir}/homeserver.tls.dh";
-        description = ''
-          PEM dh parameters for ephemeral keys
         '';
       };
       server_name = mkOption {
@@ -789,6 +780,10 @@ in
     # Removed Options
     (mkRemovedOptionModule (optionPath "user_creation_max_duration") ''
       The `user_creation_max_duration` option has been removed.
+    '')
+    (mkRemovedOptionModule (optionPath "tls_dh_params_path") ''
+      The `tls_dh_params_path` option was been removed in `matrix-synapse` v0.99.0
+      since configuring and generating dh_params is no longer required.
     '')
     (mkRemovedOptionModule (optionPath "trusted_third_party_id_servers") ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
