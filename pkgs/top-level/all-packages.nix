@@ -31616,6 +31616,8 @@ in
 
   kodelife = callPackage ../applications/graphics/kodelife {};
 
+  bunnyfetch = callPackage ../tools/misc/bunnyfetch {};
+
   _3proxy = callPackage ../applications/networking/3proxy {};
 
   pigeon = callPackage ../development/tools/pigeon {};
