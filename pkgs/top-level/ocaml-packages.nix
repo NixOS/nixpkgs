@@ -1169,6 +1169,8 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
+
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
     stog = callPackage ../applications/misc/stog { };
