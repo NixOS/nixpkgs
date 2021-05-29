@@ -701,7 +701,7 @@
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
-    "roon" = ps: with ps; [ ]; # missing inputs: roonapi
+    "roon" = ps: with ps; [ pyroon ];
     "route53" = ps: with ps; [ boto3 ];
     "rova" = ps: with ps; [ ]; # missing inputs: rova
     "rpi_camera" = ps: with ps; [ ];

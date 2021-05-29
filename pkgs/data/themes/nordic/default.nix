@@ -52,6 +52,22 @@ stdenv.mkDerivation rec {
       sha256 = "09s9y7waygrx3p6c0c4py0ywg2ihpdmx73xhw5f92rr5nhsvish7";
       name = "Nordic-bluish-accent-standard-buttons";
     })
+
+    (fetchFromGitHub {
+      owner = "EliverLara";
+      repo = "${pname}-polar";
+      rev = "69652db56e1721ac183cd57d21a801a09655a811";
+      sha256 = "0zjd4np11mjwmc1kh2n1ig77g4wq88s2yrmnga0gvw1lf44n3qn2";
+      name = "Nordic-Polar";
+    })
+
+    (fetchFromGitHub {
+      owner = "EliverLara";
+      repo = "${pname}-polar";
+      rev = "3a67c1a2308ba3e9ec5d82f4a3416f85b6085b08";
+      sha256 = "0gpg2izh4ay78j79vjp4svmi3qy9qaw0n6ai8zwm7p25dwm56fjy";
+      name = "Nordic-Polar-standard-buttons";
+    })
   ];
 
   sourceRoot = ".";
@@ -78,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Dark Gtk theme using the Nord color pallete";
+    description = "Gtk themes using the Nord color pallete";
     homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3Only;
     platforms = platforms.all;
