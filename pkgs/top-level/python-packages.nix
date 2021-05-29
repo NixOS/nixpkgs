@@ -3097,6 +3097,8 @@ in {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heisenbridge = callPackage ../development/python-modules/heisenbridge { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };

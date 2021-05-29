@@ -1,6 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, buildPythonPackage, fetchFromGitHub
+, aiohttp, irc, pyyaml, pytestCheckHook
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage {
   pname = "heisenbridge";
   version = "unstable-2021-05-23";
 
@@ -11,13 +13,13 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-ta6n9hXRdIjfxsLy9jrzZkz6TS50/TYpFOb/BLrRWK4=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     aiohttp
     irc
     pyyaml
   ];
 
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A bouncer-style Matrix-IRC bridge.";
