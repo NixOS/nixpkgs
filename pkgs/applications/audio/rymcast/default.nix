@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp RYMCast "$out/bin/"
     wrapProgram "$out/bin/RYMCast" \
-        --set PATH "${lib.makeBinPath [ zenity ]}"
+      --set PATH "${lib.makeBinPath [ zenity ]}"
   '';
 
   meta = with lib; {
