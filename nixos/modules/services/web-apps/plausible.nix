@@ -160,7 +160,7 @@ in {
     assertions = [
       { assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
         message = ''
-          Unable to automatically activate the admin-user if no locally DB-managed for
+          Unable to automatically activate the admin-user if no locally managed DB for
           postgres (`services.plausible.database.postgres.setup') is enabled!
         '';
       }
