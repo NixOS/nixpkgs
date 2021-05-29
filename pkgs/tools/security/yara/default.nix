@@ -10,6 +10,7 @@
 , enableDotNet ? true
 , enableMacho ? true
 , enableMagic ? true, file
+, enableStatic ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,10 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableDotNet "dotnet")
     (lib.enableFeature enableMacho "macho")
     (lib.enableFeature enableMagic "magic")
+    (lib.enableFeature enableStatic "static")
   ];
+
+  doCheck = enableStatic;
 
   meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
