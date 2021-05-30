@@ -134,7 +134,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ optional stdenv.isLinux "-webengine-webrtc-pipewire"
+    ++ optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
     ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -168,6 +168,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm
 
+  ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire
     pipewire_0_2
   ]

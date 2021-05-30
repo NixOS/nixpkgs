@@ -1391,6 +1391,8 @@ in {
 
   clf = callPackage ../development/python-modules/clf { };
 
+  cock = callPackage ../development/python-modules/cock { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
@@ -1480,6 +1482,8 @@ in {
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
+
+  cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
 
   codecov = callPackage ../development/python-modules/codecov { };
 

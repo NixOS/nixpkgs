@@ -96,6 +96,10 @@ stdenv.mkDerivation rec {
     cp -r doc "$out/share"
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+  '';
+
   meta = with lib; {
     description = "The network analysis package";
     homepage = "https://igraph.org/";
