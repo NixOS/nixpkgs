@@ -5603,6 +5603,8 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  py-desmume = callPackage ../development/python-modules/py-desmume { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
