@@ -8795,6 +8795,12 @@
     githubId = 506953;
     name = "Ruud van Asseldonk";
   };
+  rvarago = {
+    email = "rafael.varago@gmail.com";
+    github = "rvarago";
+    githubId = 7365864;
+    name = "Rafael Varago";
+  };
   rvl = {
     email = "dev+nix@rodney.id.au";
     github = "rvl";
