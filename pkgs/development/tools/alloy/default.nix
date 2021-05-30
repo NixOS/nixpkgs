@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
 
-let generic = { major, version, src }:
+generic { major, version, src }:
 
   stdenv.mkDerivation rec {
     name = "${nameMajor}-${version}";
@@ -28,9 +28,9 @@ let generic = { major, version, src }:
 
       install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png
       cp -r ${desktopItem}/share/applications $out/share
-    '';
+    
 
-    meta = with lib; {
+    meta lib
       description = "Language & tool for relational models";
       longDescription = ''
         Alloy is a language for describing structures and a tool for exploring
@@ -49,7 +49,7 @@ let generic = { major, version, src }:
     };
   };
 
-in rec {
+ {
   alloy4 = let version = "4.2_2015-02-22"; in generic {
     major = "4";
     inherit version;
