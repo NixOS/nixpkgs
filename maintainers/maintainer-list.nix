@@ -2415,6 +2415,12 @@
     githubId = 896182;
     name = "devhell";
   };
+  devins2518 = {
+    email = "drsingh2518@icloud.com";
+    github = "devins2518";
+    githubId = 17111639;
+    name = "Devin Singh";
+  };
   dezgeg = {
     email = "tuomas.tynkkynen@iki.fi";
     github = "dezgeg";
