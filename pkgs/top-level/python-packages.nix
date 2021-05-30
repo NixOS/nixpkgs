@@ -7699,6 +7699,8 @@ in {
 
   skytemple-rust = callPackage ../development/python-modules/skytemple-rust { };
 
+  skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
