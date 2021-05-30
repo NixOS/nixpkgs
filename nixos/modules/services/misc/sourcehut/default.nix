@@ -119,12 +119,6 @@ in
     assertions =
       [
         {
-          assertion = with cfgIni."sr.ht"; private-key != null && stringLength private-key == 44;
-          message = "sr.ht's private key must be defined and of a 44 byte length.";
-        }
-
-        # Is it always 44 characters...? At least from the times I've generated one...
-        {
           assertion = with cfgIni.webhooks; private-key != null && stringLength private-key == 44;
           message = "The webhook's private key must be defined and of a 44 byte length.";
         }
