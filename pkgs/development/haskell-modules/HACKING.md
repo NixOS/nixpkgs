@@ -34,13 +34,13 @@ In this section we create the PR for merging `haskell-updates` into `master`.
 1.  Update the Hackage package set used by Nixpkgs and create a commit:
 
     ```console
-    $ maintainers/scripts/haskell/update-hackage.sh --do-commit
+    $ ./maintainers/scripts/haskell/update-hackage.sh --do-commit
     ```
 
 1.  Regenerate the Haskell package set used in Nixpkgs and create a commit:
 
     ```console
-    $ maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
+    $ ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
     ```
 
 1.  Push these commits to the Nixpkgs repository.
@@ -90,8 +90,8 @@ jobset, you should generate a build report to notify maintainers of their
 newly broken packages.  You can do that with the following commands:
 
 ```console
-$ maintainers/scripts/haskell/hydra-report.hs get-report
-$ maintainers/scripts/haskell/hydra-report.hs ping-maintainers
+$ ./maintainers/scripts/haskell/hydra-report.hs get-report
+$ ./maintainers/scripts/haskell/hydra-report.hs ping-maintainers
 ```
 
 The `hyda-report.hs ping-maintainers` command generates a Markdown document
@@ -135,8 +135,8 @@ Packages that do not get fixed can be marked broken with the following
 commands.  First check which packages are broken:
 
 ```console
-$ maintainers/scripts/haskell/hydra-report.hs get-report
-$ maintainers/scripts/haskell/hydra-report.hs mark-broken-list
+$ ./maintainers/scripts/haskell/hydra-report.hs get-report
+$ ./maintainers/scripts/haskell/hydra-report.hs mark-broken-list
 ```
 
 This shows a list of packages that reported a build failure on `x86_64-linux` on Hydra.
@@ -144,7 +144,7 @@ This shows a list of packages that reported a build failure on `x86_64-linux` on
 Next, run the following command:
 
 ```console
-$ maintainers/scripts/haskell/mark-broken.sh --do-commit
+$ ./maintainers/scripts/haskell/mark-broken.sh --do-commit
 ```
 
 This first opens up an editor with the broken package list.  Some of these
