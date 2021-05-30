@@ -10,19 +10,25 @@ let
                                                else typedbDirLinux;
   linuxSrc = builtins.fetchTarball {
     url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-linux-2.1.1.tar.gz";
-    sha256 = "c2be34c63c70a54b64933e5a78f597a7b99fd74a259b3b9918dae70a559c9b03";
+    sha256 = "15nwm2dr68p67c2xcqigs66gd679j1zr72gqv7qxgvflwyvyz8fb";
   };
   windowsSrc = fetchzip {
     url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-windows-2.1.1.zip";
-    sha256 = "781201deacc9a2d2e131b65e9249a4f4635e4f491eda03fe49e64da8dd33a66d";
+    sha256 = "0vd66gfshkg697z07nhy957mwqzlli4r4pmn67hx58n9mkg024kq";
   };
   macSrc = fetchzip {
     url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-mac-2.1.1.zip";
-    sha256 = "a468df72b9440c38b079f72b8e76060bbe3a0236407caa32db360b388d77149a";
+    sha256 = "16hlfy6kh2rnvcralz206q13mghb0rv8wazpg6q3h324p5rdys54";
   };
   srcFolder = if stdenv.hostPlatform.isWindows then windowsSrc
               else if stdenv.isDarwin          then macSrc
                                                else linuxSrc ;
+  javaPatch = ''
+        20c20
+        < JAVA_BIN=java
+        ---
+        > JAVA_BIN=${openjdk}/bin/java
+        '';
 
 in
 stdenv.mkDerivation rec {
@@ -30,15 +36,16 @@ stdenv.mkDerivation rec {
   version = typedbVersion;
 
   src = srcFolder;
-  
+    
+  phases = [ "buildPhase" "installPhase" ];
 
   buildDepends = [ openjdk ];
 
-  unpackPhase = ''
-        sed -i "s%/path/to/java%${openjdk}/bin/java%g" ./typedb_java.patch 
-      '';
-
-  patches = [ ./typedb_java.patch ];
+  buildPhase = ''
+    #patch after unpack
+    echo "${javaPatch}" > typedb_java.patch
+    patch ./${typedbDir}/typedb typedb_java.patch
+  '';
 
   installPhase = ''
     mkdir $out
