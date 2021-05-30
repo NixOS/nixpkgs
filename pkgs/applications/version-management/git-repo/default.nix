@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
 , python3, git, gnupg, less
 }:
 
@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/repo --prefix PATH ":" \
       "${lib.makeBinPath [ git gnupg less ]}"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "gitRepo";
+    };
+  };
 
   meta = with lib; {
     description = "Android's repo management tool";
