@@ -7691,6 +7691,8 @@ in {
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
+  skytemple-files = callPackage ../development/python-modules/skytemple-files { };
+
   skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
 
   skytemple-rust = callPackage ../development/python-modules/skytemple-rust { };
