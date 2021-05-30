@@ -3943,6 +3943,12 @@
     githubId = 54728477;
     name = "Happy River";
   };
+  haskie = {
+      email = "faebl.taylor@pm.me";
+      github = "haskie-lambda";
+      githubId = 23012490;
+      name = "Fabian Schneider";
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
