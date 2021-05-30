@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "caverym";
     repo = pname;
-    rev = "version";
+    rev = version;
     sha256 = "0968pmapg6157q4rvfp690l1sjnws8hm62lvm8kaaqysac339z7z";
   };
 

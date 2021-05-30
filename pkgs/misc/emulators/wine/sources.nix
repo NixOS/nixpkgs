@@ -44,9 +44,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "6.7";
+    version = "6.9";
     url = "https://dl.winehq.org/wine/source/6.x/wine-${version}.tar.xz";
-    sha256 = "sha256-wwUUt3YdRhFRSuAhyx41QSjXfv9UooPxQB7nAid7vqQ=";
+    sha256 = "sha256-GFVOYB3vhqmiAXKwhcZoMpFPwh511VX25U/4nn6uW/4=";
     inherit (stable) gecko32 gecko64;
 
     ## see http://wiki.winehq.org/Mono
@@ -65,13 +65,17 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-fWriizSk2+U7Mpn6w/Dlrevd4vc5MnlSWSGxQDf2p+M=";
+    sha256 = "sha256-g0NmiypafOAmKDRoRf4uz5NnhFo6uga0fKYNCF29jbE=";
     owner = "wine-staging";
     repo = "wine-staging";
-    rev = "v${version}";
+    #rev = "v${version}";
+    # FIXME: replace with line above with 6.10 release
+    # Fix https://bugs.winehq.org/show_bug.cgi?id=51172
+    rev = "5bbe3e47a559b3c04bc8791e0b398a271c772af7";
 
-    # Just keep list empty, if current release haven't broken patchsets
-    disabledPatchsets = [ ];
+    # Actually only "d3d11-Deferred_Context" cause problems, two others only dependencies
+    # see FIXME above
+    disabledPatchsets = [ "d3d11-Deferred_Context" "wined3d-CSMT_Main" "nvapi-Stub_DLL" "nvcuvid-CUDA_Video_Support" "nvencodeapi-Video_Encoder" ];
   };
 
   winetricks = fetchFromGitHub rec {

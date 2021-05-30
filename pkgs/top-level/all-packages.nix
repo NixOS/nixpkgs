@@ -994,6 +994,8 @@ in
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  twine = with python3Packages; toPythonApplication twine;
+
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = callPackage ../applications/terminal-emulators/wezterm {
@@ -4323,6 +4325,8 @@ in
   wsl-open = callPackage ../tools/misc/wsl-open { };
 
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
+
+  xjobs = callPackage ../tools/misc/xjobs { };
 
   xob = callPackage ../tools/X11/xob { };
 
@@ -8347,6 +8351,10 @@ in
 
   s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
+  s3rs = callPackage ../tools/networking/s3rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
@@ -8826,6 +8834,8 @@ in
   stabber = callPackage ../misc/stabber { };
 
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
+
+  stevenblack-blocklist  = callPackage ../tools/networking/stevenblack-blocklist { };
 
   stress = callPackage ../tools/system/stress { };
 
@@ -11690,6 +11700,7 @@ in
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
