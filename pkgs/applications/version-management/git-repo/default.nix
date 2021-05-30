@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3FSkWpHda1jVhy/633B+ippWcbKd83IlQcJYS9Qx5wQ=";
   };
 
-  patches = [ ./import-ssl-module.patch ];
-
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
 
