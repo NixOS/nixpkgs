@@ -176,18 +176,42 @@ following will happen:
 
 -   All updated files will be committed.
 
+#### Merge `master` into `haskell-updates`
+
+You should occasionally merge the `master` branch into the `haskell-updates`
+branch.
+
+In an ideal world, when we merge `haskell-updates` into `master`, it would
+cause few Hydra rebuilds on `master`.  Ideally, the `nixos-unstable` channel
+would never be prevented from progressing because of needing to wait for
+rebuilding Haskell packages.
+
+In order to make sure that there are a minimal number of rebuilds after merging
+`haskell-updates` into `master`, `master` should occasionally be merged into
+the `haskell-updates` branch.
+
+This is especially important after `staging-next` is merged into `master`,
+since there is a high chance that this will cause all the Haskell packages to
+rebuild.
+
 ### Merge `haskell-updates` into `master`
 
 Now it is time to merge the `haskell-updates` PR you opened above.
 
 Before doing this, make sure of the following:
 
-- All Haskell packages that fail to build are correctly marked broken or
-  transitively broken.
-- The `maintained` and `mergeable` jobs are passing on Hydra.
-- The maintainers for any maintained Haskell packages that are newly broken
-  have been pinged on GitHub and given at least a week to fix their packages.
-  This is especially important for widely-used packages like `cachix`.
+-   All Haskell packages that fail to build are correctly marked broken or
+    transitively broken.
+
+-   The `maintained` and `mergeable` jobs are passing on Hydra.
+
+-   The maintainers for any maintained Haskell packages that are newly broken
+    have been pinged on GitHub and given at least a week to fix their packages.
+    This is especially important for widely-used packages like `cachix`.
+
+-   Make sure you first merge the `master` branch into `haskell-updates`.  Wait
+    for Hydra to evaluate the new `haskell-updates` jobset.  Make sure you only
+    merge `haskell-updates` into `master` when there are no evaluation errors.
 
 When you've double-checked these points, go ahead and merge the `haskell-updates` PR.
 After merging, **make sure not to delete the `haskell-updates` branch**, since it
@@ -199,27 +223,6 @@ Here are some additional tips that didn't fit in above.
 
 -   It is possible to start a new Hydra evaluation by logging into Hydra with
     your GitHub or Google account.
-
--   You should occasionally merge the `master` branch into the
-    `haskell-updates` branch.
-
-    In an ideal world, when we merge `haskell-updates` into `master`, it would
-    cause few Hydra rebuilds on `master`.  Ideally, the `nixos-unstable`
-    channel would never be prevented from progressing because of needing to
-    wait for rebuilding Haskell packages.
-
-    In order to make sure that there are a minimal number of rebuilds after
-    merging `haskell-updates` into `master`, `master` should occasionally be
-    merged into the `haskell-updates` branch.
-
-    This is especially important after `staging-next` is merged into `master`, since
-    there is a high chance that this will cause all the Haskell packages to
-    rebuild.
-
-    However, as we are working on cleaning up `haskell-updates`, `master` will
-    continually progress.  It may not always be possible to keep the
-    `haskell-updates` branch fully up-to-date with `master` without causing
-    mass-rebuilds on the `haskell-updates` jobset.
 
 -   Make sure never to update the Hackage package hashes in
     [`pkgs/data/misc/hackage/`](../../../pkgs/data/misc/hackage/), or the
