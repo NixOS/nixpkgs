@@ -7693,6 +7693,8 @@ in {
 
   skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
 
+  skytemple-rust = callPackage ../development/python-modules/skytemple-rust { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
