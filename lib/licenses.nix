@@ -760,6 +760,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     # channel and NixOS images.
   };
 
+  unicode-dfs-2015 = spdx {
+    spdxId = "Unicode-DFS-2015";
+    fullName = "Unicode License Agreement - Data Files and Software (2015)";
+  };
+
   unicode-dfs-2016 = spdx {
     spdxId = "Unicode-DFS-2016";
     fullName = "Unicode License Agreement - Data Files and Software (2016)";
