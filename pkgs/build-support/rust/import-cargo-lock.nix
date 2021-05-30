@@ -1,8 +1,10 @@
-{ fetchgit, fetchurl, lib, runCommand, cargo, jq }:
+{ fetchgit, fetchurl, lib, runCommand, cargo, jq, writeTextFile }:
 
 {
   # Cargo lock file
-  lockFile
+  lockFile ? null
+  # or Cargo lock text
+, lockText ? null
 
   # Hashes for git dependencies.
 , outputHashes ? {}
@@ -21,7 +23,9 @@ let
         sha = builtins.elemAt parts 3;
       } // lib.optionalAttrs (rev != null) { inherit rev; };
 
-  packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
+  finalLockText = if lockText != null then lockText else (builtins.readFile lockFile);
+  finalLockFile = if lockFile != null then lockFile else (writeTextFile { name = "Cargo.lock"; text = lockText; });
+  packages = (builtins.fromTOML finalLockText).package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
@@ -138,7 +142,7 @@ let
   vendorDir = runCommand "cargo-vendor-dir" {} ''
     mkdir -p $out/.cargo
 
-    ln -s ${lockFile} $out/Cargo.lock
+    ln -s ${finalLockFile} $out/Cargo.lock
 
     cat > $out/.cargo/config <<EOF
     [source.crates-io]
