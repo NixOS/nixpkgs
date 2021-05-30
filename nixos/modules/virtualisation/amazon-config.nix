@@ -23,7 +23,7 @@ in
     ];
 
     ec2.metadata.enable = true;
-    virtualization.amazon-init.enable = true;
+    virtualisation.amazon-init.enable = true;
 
     profiles.headless.enable = true;
     profiles.headless.serial.enable = true;
