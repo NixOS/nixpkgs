@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "ijq";
-  version = "0.2.3";
+  version = "0.3.4";
 
   src = fetchgit {
     url = "https://git.sr.ht/~gpanders/ijq";
     rev = "v${version}";
-    sha256 = "14n54jh5387jf97zhc7aidn7w60zp5624xbvq4jdbsh96apg3bk1";
+    sha256 = "ZKxEK6SPxEC0S5yXSzITPn0HhpJa4Bcf9X8/N+ZZAeA=";
   };
 
-  vendorSha256 = "0xbni6lk6y3ig7pj2234fv7ra6b8qv0k8m3bvh59wwans8xpihzb";
+  vendorSha256 = "04KlXE2I8ZVDbyo9tBnFskLB6fo5W5/lPzSpo8KGqUU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
