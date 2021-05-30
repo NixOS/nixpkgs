@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp repo $out/bin/repo
+
+    runHook postInstall
   '';
 
   # Important runtime dependencies
