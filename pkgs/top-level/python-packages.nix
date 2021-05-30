@@ -8284,6 +8284,8 @@ in {
     inherit (pkgs) tiledb;
   };
 
+  tilequant = callPackage ../development/python-modules/tilequant { };
+
   tilestache = callPackage ../development/python-modules/tilestache { };
 
   timeago = callPackage ../development/python-modules/timeago { };
