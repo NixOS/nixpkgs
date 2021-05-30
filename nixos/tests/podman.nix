@@ -13,10 +13,23 @@ import ./make-test-python.nix (
         {
           virtualisation.podman.enable = true;
 
+          # To test docker socket support
+          virtualisation.podman.dockerSocket.enable = true;
+          environment.systemPackages = [
+            pkgs.docker-client
+          ];
+
           users.users.alice = {
             isNormalUser = true;
             home = "/home/alice";
             description = "Alice Foobar";
+            extraGroups = [ "podman" ];
+          };
+
+          users.users.mallory = {
+            isNormalUser = true;
+            home = "/home/mallory";
+            description = "Mallory Foobar";
           };
 
         };
@@ -26,9 +39,9 @@ import ./make-test-python.nix (
       import shlex
 
 
-      def su_cmd(cmd):
+      def su_cmd(cmd, user = "alice"):
           cmd = shlex.quote(cmd)
-          return f"su alice -l -c {cmd}"
+          return f"su {user} -l -c {cmd}"
 
 
       podman.wait_for_unit("sockets.target")
@@ -105,6 +118,27 @@ import ./make-test-python.nix (
           assert pid == "1"
           pid = podman.succeed("podman run --rm --init busybox readlink /proc/self").strip()
           assert pid == "2"
+
+      with subtest("A podman member can use the docker cli"):
+          podman.succeed(su_cmd("docker version"))
+
+      with subtest("Run container via docker cli"):
+          podman.succeed("docker network create default")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          podman.succeed(
+            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+          )
+          podman.succeed("docker ps | grep sleeping")
+          podman.succeed("podman ps | grep sleeping")
+          podman.succeed("docker stop sleeping")
+          podman.succeed("docker rm sleeping")
+          podman.succeed("docker network rm default")
+
+      with subtest("A podman non-member can not use the docker cli"):
+          podman.fail(su_cmd("docker version", user="mallory"))
+
+      # TODO: add docker-compose test
+
     '';
   }
 )

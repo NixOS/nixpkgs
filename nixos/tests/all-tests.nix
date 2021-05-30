@@ -335,6 +335,7 @@ in
   plotinus = handleTest ./plotinus.nix {};
   podgrab = handleTest ./podgrab.nix {};
   podman = handleTestOn ["x86_64-linux"] ./podman.nix {};
+  podman-tls-ghostunnel = handleTestOn ["x86_64-linux"] ./podman-tls-ghostunnel.nix {};
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   postfix = handleTest ./postfix.nix {};
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
