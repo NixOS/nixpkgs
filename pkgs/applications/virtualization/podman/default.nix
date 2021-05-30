@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
-, makeWrapper
 , buildGoModule
 , gpgme
 , lvm2
@@ -37,7 +36,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
@@ -70,12 +69,15 @@ buildGoModule rec {
     installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
   '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/podman \
-      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
     install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
     install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
   '' + ''
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    RPATH=$(patchelf --print-rpath $out/bin/podman)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
   '';
 
   passthru.tests = { inherit (nixosTests) podman; };
