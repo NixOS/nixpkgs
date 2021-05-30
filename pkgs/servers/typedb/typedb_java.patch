@@ -1,0 +1,4 @@
+20c20
+< JAVA_BIN=java
+---
+> JAVA_BIN=/path/to/java
