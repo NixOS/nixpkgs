@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "libccd";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0sfmn5pd7k5kyhbxnd689xmsa5v843r7sska96dlysqpljd691jc";
   };
+
+  patches = [
+    # Fix pkgconfig file with absolute CMAKE_INSTALL_*DIR
+    # https://github.com/danfis/libccd/pull/76
+    (fetchpatch {
+      url = "https://github.com/danfis/libccd/commit/cd16c4f168ae308e4c77db66ac97a2eaf47e059e.patch";
+      sha256 = "02wj21c185kwf8bn4qi4cnna0ypzqm481xw9rr8jy1i0cb1r9idg";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
