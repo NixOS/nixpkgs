@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
   '';
 
   # Fix lib extension so that fixDarwinDylibNames detects it
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString (stdenv.isDarwin && !stdenv.isAarch64) ''
     mv $lib/lib/liblowdown.{so,dylib}
   '';
 
   patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
+
+  patchPhase = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    substituteInPlace main.c \
+      --replace '#elif HAVE_SANDBOX_INIT' '#elif 0'
+  '';
+
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  installCheckPhase = "echo '# TEST' > test.md; $out/bin/lowdown test.md";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "regress";
@@ -41,4 +49,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-
