@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ check pam ];
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
-  passthru.tests = nixosTests.keymap;
+  passthru.tests = {
+    inherit (nixosTests) keymap kbd-setfont-decompress;
+  };
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";
