@@ -5767,6 +5767,8 @@ in {
 
   pygtail = callPackage ../development/python-modules/pygtail { };
 
+  pygtkspellcheck = callPackage ../development/python-modules/pygtkspellcheck { };
+
   pygtrie = callPackage ../development/python-modules/pygtrie { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
