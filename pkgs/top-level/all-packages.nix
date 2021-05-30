@@ -413,6 +413,8 @@ in
 
   fakecam-cli = callPackage ../applications/video/fakecam-cli { };
 
+  fakecam-gui = callPackage ../applications/video/fakecam-gui { };
+
   fetchutils = callPackage ../tools/misc/fetchutils { };
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
