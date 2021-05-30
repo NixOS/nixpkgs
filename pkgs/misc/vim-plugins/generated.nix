@@ -1845,6 +1845,18 @@ final: prev:
     meta.homepage = "https://github.com/gruvbox-community/gruvbox/";
   };
 
+  gruvbox-flat-nvim = buildVimPluginFrom2Nix {
+    pname = "gruvbox-flat-nvim";
+    version = "2021-05-28";
+    src = fetchFromGitHub {
+      owner = "eddyekofo94";
+      repo = "gruvbox-flat.nvim";
+      rev = "521d9234d1c8c3a0e9dc782a8f2e5776483856b0";
+      sha256 = "1k92z847ix3c7kwiyiw4x41z2sid2wyyjgv08myh93k0ivb5y4qh";
+    };
+    meta.homepage = "https://github.com/eddyekofo94/gruvbox-flat.nvim/";
+  };
+
   gruvbox-nvim = buildVimPluginFrom2Nix {
     pname = "gruvbox-nvim";
     version = "2021-05-12";

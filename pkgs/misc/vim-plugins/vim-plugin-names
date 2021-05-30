@@ -107,6 +107,7 @@ eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
 eddiebergman/nvim-treesitter-pyfold
+eddyekofo94/gruvbox-flat.nvim
 editorconfig/editorconfig-vim
 edluffy/hologram.nvim@main
 edluffy/specs.nvim@main
