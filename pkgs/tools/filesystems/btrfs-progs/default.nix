@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
 
-  # gcc bug with -O1 on ARM with gcc 4.8
-  # This should be fine on all platforms so apply universally
-  postPatch = "sed -i s/-O1/-O2/ configure";
-
   postInstall = ''
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
