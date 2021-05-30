@@ -20,14 +20,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
 #    EXCLUDE_DEFAULTS=/beehive/|/blue-curve/|/classy-red/|/clean-inspiration/|/dna/|/focus/|/impress/|/lights/|/nature-illustration/|/metropolis/|/pencil/|/piano/|/portfolio/|/progress/
 #    TEMPLATES=(''$(ls -d1 */*/ | grep -Ev ''$EXCLUDE_DEFAULTS))
-#    for i in ''$(find -mindepth 2 -maxdepth 2 ! -name material-simple -type d;find user-contrib -mindepth 2 -maxdepth 2 -type d); do
-#      zip -r ''$(basename $i).otp $i
-#    done
+    for i in ''$(find -mindepth 2 -maxdepth 2 ! -name material-simple -type d;find user-contrib -mindepth 2 -maxdepth 2 -type d); do
+      zip -r ''$(basename $i).otp $i
+    done
 #    find -mindepth 2 -maxdepth 2 ! -name material-simple -type d -exec echo zip -r ''$(echo {}|basename).otp {} \;
 #    find user-contrib -mindepth 2 -maxdepth 2 -type d -exec echo zip -r ''$(echo {}.otp {} \;
-    find -mindepth 2 -maxdepth 2 ! -name material-simple -type d -exec VAR={} echo $VAR \;
-    mkdir -p $out/share/template/common/presnt/
-    install -vDm755 *.otp $out/share/template/common/presnt/    
+#    find -mindepth 2 -maxdepth 2 ! -name material-simple -type d -exec VAR={} echo $VAR \;
+#    mkdir -p $out/share/libreoffice-impress-templates/template/common/presnt/
+#    install -vDm755 *.otp $out/share/libreoffice-impress-templates/template/common/presnt/    
+#    mkdir -p $out/share/libreoffice/template/common/presnt/
+#    install -vDm755 *.otp $out/share/libreoffice/template/common/presnt/
+    mkdir -p $out/lib/libreoffice/share/template/common/presnt/
+    install -vDm755 *.otp $out/lib/libreoffice/share/template/common/presnt/
  '';
 
   meta = with stdenv.lib; {
