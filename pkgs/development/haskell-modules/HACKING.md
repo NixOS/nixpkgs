@@ -60,7 +60,8 @@ I will aim to merge this PR **by 2021-TODO-TODO**. If I can merge it earlier, th
 
 ### haskellPackages Workflow Summary
 
-Our workflow is currently described at `pkgs/development/haskell-modules/HACKING.md`.
+Our workflow is currently described in
+[`pkgs/development/haskell-modules/HACKING.md`](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/HACKING.md).
 
 The short version is this:
 * We regularly update the Stackage and Hackage pins on `haskell-updates` (normally at the beginning of a merge window).
