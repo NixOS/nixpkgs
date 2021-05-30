@@ -4326,6 +4326,8 @@ in
 
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
+  xjobs = callPackage ../tools/misc/xjobs { };
+
   xob = callPackage ../tools/X11/xob { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
