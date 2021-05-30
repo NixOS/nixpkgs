@@ -155,14 +155,26 @@ given 7 days to fix up their package, then make sure to remove those packages
 from the list before continuing.  After saving and exiting the editor, the
 following will happen:
 
-- packages from the list will be added to
-  [`configuration-hackage2nix/broken.yaml`](configuration-hackage2nix/broken.yaml)
-- `hackage-packages.nix` will be regenerated
-- the
-  [`configuration-hackage2nix/transitive-broken.yaml`](configuration-hackage2nix/transitive-broken.yaml)
-  file will be updated
-- `hackage-packages.nix` will be regenerated again
-- everything will be committed
+-   Packages from the list will be added to
+    [`configuration-hackage2nix/broken.yaml`](configuration-hackage2nix/broken.yaml).
+    This is a list of Haskell packages that are known to be broken.
+
+-   [`hackage-packages.nix`](hackage-packages.nix) will be regenerated.  This
+    will mark all Haskell pacakges in `configuration-hackage2nix/broken.yaml`
+    as `broken`.
+
+-   The
+    [`configuration-hackage2nix/transitive-broken.yaml`](configuration-hackage2nix/transitive-broken.yaml)
+    file will be updated.  This is a list of Haskell packages that
+    depend on a package in `configuration-hackage2nix/broken.yaml` or
+    `configuration-hackage2nix/transitive-broken.yaml`
+
+-   `hackage-packages.nix` will be regenerated again.  This will set
+    `hydraPlatforms = none` for all the packages in
+    `configuration-hackage2nix/transitive-broken.yaml`.  This makes
+    sure that Hydra does not try to build any of these packages.
+
+-   All updated files will be committed.
 
 ### Merge `haskell-updates` into `master`
 
