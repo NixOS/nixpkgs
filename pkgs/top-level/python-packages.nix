@@ -7691,6 +7691,8 @@ in {
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
+  skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
