@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , stdenv
 , fetchFromGitHub
 , fetchpatch
@@ -64,7 +65,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests) mjolnir;
+    };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "A moderation tool for Matrix";
