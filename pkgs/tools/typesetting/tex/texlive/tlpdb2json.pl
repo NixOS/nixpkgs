@@ -22,12 +22,6 @@ changes to the database format in the future.
 
 =over
 
-=item C<tlpkgs>
-
-Instead of a list of packages, C<tlpkgs> is an attribute set of the form
-C<< name -> tlpkg >>. The attribute C<name> is removed from the package.
-I presume this plays better with lazy evaluation.
-
 =item C<category>
 
 Omitted when equal to C<Package>.
@@ -238,6 +232,8 @@ while (<>) {
   my ($pname) = /^name\s+($pkgName)$/ or die "Unexpected line '$_'.";
   my (%p, $run_checksum, $tlType, $relocated);
 
+  $p{'name'} = $pname;
+
   $in_package = 1;
 
   if ($pname =~ $omittedPkg) {
@@ -371,38 +367,33 @@ while (<>) {
     delete $p{$key . 'files'};
   }
 
-  # TODO: split at least schemes away from actual packages
-  #if (exists $p{'category'} and $p{'category'} =~ /^(Scheme|Collection)$/) {
-  #  delete $p{'category'};
-  #  $db{lc($1) . 's'}{$pname} = \%p;
-  #} else {
-  $db{'tlpkgs'}{$pname} = \%p;
-  #}
-}
+  # === DATABASE METADATA
+  if ($pname eq '00texlive.config') {
+    for my $meta (@{ $p{'depends'} }) {
+      my ($key, $value) = $meta =~ m,^([^/]+)/([^/]+)$,
+        or die "Cannot parse '$meta' in 00texlive.config.";
 
-die "Last line is not empty." if $in_package;
+      next if $key =~ /^(container_(format|split_(doc_|src_)files)|minrelease)/;
 
-# === DATABASE METADATA
-for my $meta (@{ $db{'tlpkgs'}{'00texlive.config'}{'depends'} }) {
-  my ($key, $value) = $meta =~ m,^([^/]+)/([^/]+)$,
-    or die "Cannot parse '$meta' in 00texlive.config.";
+      if ($key eq 'release') {
+        $db{'configs'}{$key} = $value;
+      } elsif ($key eq 'revision') {
+        die "Revision '$value' is not a number." unless $value =~ /^[0-9]+$/;
+        $db{'configs'}{$key} = 0 + $value;
+      } elsif ($key eq 'frozen') {
+        # final or snapshot?
+        die "Unexpected frozen = '$value'." unless $value =~ /^0|1$/;
+        $db{'configs'}{'frozen'} = $value ? JSON::PP::true : JSON::PP::false;
+      }
+    }
+  }
 
-  next if $key =~ /^(container_(format|split_(doc_|src_)files)|minrelease)/;
-
-  if ($key eq 'release') {
-    $db{'configs'}{$key} = $value;
-  } elsif ($key eq 'revision') {
-    die "Revision '$value' is not a number." unless $value =~ /^[0-9]+$/;
-    $db{'configs'}{$key} = 0 + $value;
-  } elsif ($key eq 'frozen') {
-    # final or snapshot?
-    die "Unexpected frozen = '$value'." unless $value =~ /^0|1$/;
-    $db{'configs'}{'frozen'} = $value ? JSON::PP::true : JSON::PP::false;
+  else {
+    push(@{ $db{'tlpkgs'} }, \%p);
   }
 }
 
-# remove metadata package
-delete $db{'tlpkgs'}{'00texlive.config'};
+die "Last line is not empty." if $in_package;
 
 # === OUTPUT
 # split output on several lines (indent) and sort the keys (canonical)

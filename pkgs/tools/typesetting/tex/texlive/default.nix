@@ -31,11 +31,14 @@ let
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
     tlpdb = with builtins; fromJSON (readFile ./texlive-snapshot.tlpdb.json);
-    orig = tlpdb.tlpkgs;
-    removeSelfDep = lib.mapAttrs
-      (n: p: if p ? depends then p // { depends = lib.remove n p.depends; }
-                            else p);
-    clean = removeSelfDep (orig // {
+    removeSelfDep = builtins.map
+      (p: if p ? depends then p // { depends = lib.remove p.name p.depends; }
+                         else p);
+    orig = lib.foldl'
+      (r: p: r // {
+        ${p.name} = builtins.removeAttrs p [ "name" ];
+      }) {} (removeSelfDep tlpdb.tlpkgs);
+    clean = orig // {
       # overrides of texlive.tlpdb
 
       # only *.po for tlmgr
@@ -57,7 +60,7 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         depends = orig.collection-plaingeneric.depends ++ [ "xdvi" ];
       };
-    }); # overrides
+    }; # overrides
     withDeps = lib.mapAttrs
       (n: p: p // {
         depends = builtins.map (dn: tl.${dn}) (p.depends or [ ]);
