@@ -1,15 +1,16 @@
 
 ## Maintainer Workflow
 
-This is the documentation for periodically merging the `haskell-updates` branch
-into the `master` branch.  This workflow is performed by members in the
-[@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell) team.
-Each member of the team takes a two week period where they are in charge of
-merging the `haskell-updates` branch into `master`.
+The goal of the [@NixOS/haskell](https://github.com/orgs/NixOS/teams/haskell)
+team is to keep the Haskell packages in Nixpkgs up-to-date, while making sure
+there are no Haskell-related evaluation errors or build errors that get into
+the Nixpkgs `master` branch.
 
-The goal of this workflow is to regularly merge the `haskell-updates` branch
-into the `master` branch, while making sure there are no evaluation errors or
-build errors that get into `master`.
+We do this by periodically merging an updated set of Haskell packages on the
+`haskell-updates` branch into the `master` branch.  Each member of the team
+takes a two week period where they are in charge of merging the
+`haskell-updates` branch into `master`.  This is the documentation for this
+workflow.
 
 The workflow generally proceeds in three main steps:
 
@@ -17,7 +18,7 @@ The workflow generally proceeds in three main steps:
 1. wait for contributors to fix newly broken Haskell packages
 1. merge `haskell-updates` into `master`
 
-We describe each of these steps in a separate section.
+Each of these steps is described in a separate section.
 
 ### Initial `haskell-updates` PR
 
