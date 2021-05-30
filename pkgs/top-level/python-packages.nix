@@ -4527,6 +4527,8 @@ in {
 
   ndjson = callPackage ../development/python-modules/ndjson { };
 
+  ndspy = callPackage ../development/python-modules/ndspy { };
+
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   neo = callPackage ../development/python-modules/neo { };
