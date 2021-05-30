@@ -221,8 +221,29 @@ causes all currently open Haskell-related pull-requests to be automatically clos
 
 Here are some additional tips that didn't fit in above.
 
--   It is possible to start a new Hydra evaluation by logging into Hydra with
-    your GitHub or Google account.
+-   Hydra tries to evalute the `haskell-updates` branch (in the
+    [`nixpkgs:haskell-updates`](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)
+    jobset) every 4 hours.  It is possible to force a new Hydra evaluation without
+    waiting 4 hours by the following steps:
+
+    1. Log into Hydra with your GitHub or Google account.
+    1. Go to the [nixpkgs:haskell-updates](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates) jobset.
+    1. Click the `Actions` button.
+    1. Select `Evaluate this jobset`.
+    1. If you refresh the page, there should be a new `Evaluation running since:` line.
+    1. Evaluations take about 10 minutes to finish.
+
+-   It is sometimes helpful to update the version of
+    [`cabal2nix` / `hackage2nix`](https://github.com/NixOS/cabal2nix) that our
+    maintainer scripts use.  This can be done with the
+    [`maintainers/scripts/haskell/update-cabal2nix-unstable.sh`](../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh)
+    script.
+
+    You might want to do this if a user contributes a fix to `cabal2nix` that
+    will immediately fix a Haskell package in Nixpkgs.  First, merge in
+    the PR to `cabal2nix`, then run `update-cabal2nix-upstable.sh`.  Finally, run
+    [`regenerate-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerate-hackage-packages.sh)
+    to regenerate the Hackage package set with the updated version of `hackage2nix`.
 
 -   Make sure never to update the Hackage package hashes in
     [`pkgs/data/misc/hackage/`](../../../pkgs/data/misc/hackage/), or the
@@ -239,6 +260,9 @@ Here are some additional tips that didn't fit in above.
     This can be done with
     [`regenerate-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerate-hackage-packages.sh)
     as described above.
+
+-   The Haskell team members generally hang out in the Matrix room
+    [#haskell-space:matrix.org](https://matrix.to/#/#haskell-space:matrix.org).
 
 ## Contributor Workflow
 
