@@ -6102,6 +6102,8 @@ in {
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
+  pypresence = callPackage ../development/python-modules/pypresence { };
+
   pyprind = callPackage ../development/python-modules/pyprind { };
 
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
