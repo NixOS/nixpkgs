@@ -2295,6 +2295,8 @@ in {
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
+  explorerscript = callPackage ../development/python-modules/explorerscript { };
+
   exrex = callPackage ../development/python-modules/exrex { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
