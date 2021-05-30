@@ -206,9 +206,9 @@ in {
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc5";
+    version = "2.1.0-rc6";
 
-    sha256 = "sha256-cj0P2bw6sTO+Y74pYn/WEpBuVGMMYCreJQjUdC3DMTE=";
+    sha256 = "0q3vl9rid6a84pb85v38hnf17vws65jjb4slw8bhm8dq8fna2a86";
 
     isUnstable = true;
   };
