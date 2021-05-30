@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   runVend = true;
-  vendorSha256 = lib.fakeSha256;
+  vendorSha256 = "06d2lsjniw1w4r6ccr48ylrggqw5k0hkd4m6ipspv7yai711wvga";
 
   doCheck = false;
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   buildFlagsArray = ''
     -v
     -trimpath
-    -ldflags=-s -w -X main.Version=${version} -X main.commit=${src.sha256}
+    -ldflags=-s -w -X main.Version=${version}
   '';
 
   meta = with lib; {
