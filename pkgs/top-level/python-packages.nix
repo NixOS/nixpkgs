@@ -5759,6 +5759,8 @@ in {
 
   pygrok = callPackage ../development/python-modules/pygrok { };
 
+  pygtfs = callPackage ../development/python-modules/pygtfs { };
+
   pygtail = callPackage ../development/python-modules/pygtail { };
 
   pygtrie = callPackage ../development/python-modules/pygtrie { };
