@@ -107,6 +107,7 @@ let
       '')
       + ''
         rm $out/bin/nvim
+        touch $out/rplugin.vim
         makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr}
       '';
 
