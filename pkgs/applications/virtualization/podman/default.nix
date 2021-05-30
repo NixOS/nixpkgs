@@ -69,6 +69,7 @@ buildGoModule rec {
     installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
   '' + lib.optionalString stdenv.isLinux ''
+    install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
     install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
     install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
   '' + ''
