@@ -28,7 +28,7 @@ In this section we create the PR for merging `haskell-updates` into `master`.
 1.  Update the Stackage Nightly resolver used by Nixpkgs and create a commit:
 
     ```console
-    $ maintainers/scripts/haskell/update-stackage.sh --do-commit
+    $ ./maintainers/scripts/haskell/update-stackage.sh --do-commit
     ```
 
 1.  Update the Hackage package set used by Nixpkgs and create a commit:
@@ -100,7 +100,7 @@ comment describes which Haskell packages are now failing to build.  It also
 pings the maintainers so that they know to fix up their packages.
 
 It may be helpful to pipe `hydra-report.hs ping-maintainers` into `xclip`
-(XOrg) or `wl-clip` (Wayland) in order to post on GitHub.
+(XOrg) or `wl-copy` (Wayland) in order to post on GitHub.
 
 This build report can be fetched and re-generated for new Hydra evaluations.
 It may help contributors to try to keep the GitHub comment updated with the
@@ -139,7 +139,7 @@ $ maintainers/scripts/haskell/hydra-report.hs get-report
 $ maintainers/scripts/haskell/hydra-report.hs mark-broken-list
 ```
 
-This shows a list of packages that reported broken on `x86_64-linux` on Hydra.
+This shows a list of packages that reported a build failure on `x86_64-linux` on Hydra.
 
 Next, run the following command:
 
@@ -198,7 +198,7 @@ Here are some additional tips that didn't fit in above.
     merging `haskell-updates` into `master`, `master` should occasionally be
     merged into the `haskell-updates` branch.
 
-    This is especially important after `staging` is merged into `master`, since
+    This is especially important after `staging-next` is merged into `master`, since
     there is a high chance that this will cause all the Haskell packages to
     rebuild.
 
