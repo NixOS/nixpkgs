@@ -114,7 +114,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = lib.optionalString libOnly ''
-    rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
+    find $out/share -maxdepth 1 -mindepth 1 ! -name "vala" -prune -exec rm -r {} \;
+    find $out/share/vala -maxdepth 1 -mindepth 1 ! -name "vapi" -prune -exec rm -r {} \;
+    rm -r $out/{bin,etc,lib/pulse-*}
   ''
     + ''
     moveToOutput lib/cmake "$dev"
