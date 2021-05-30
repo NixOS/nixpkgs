@@ -262,7 +262,7 @@ Here are some additional tips that didn't fit in above.
     as described above.
 
 -   The Haskell team members generally hang out in the Matrix room
-    [#haskell-space:matrix.org](https://matrix.to/#/#haskell-space:matrix.org).
+    [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).
 
 ## Contributor Workflow
 
