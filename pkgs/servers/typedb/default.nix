@@ -37,17 +37,18 @@ stdenv.mkDerivation rec {
 
   src = srcFolder;
     
-  phases = [ "buildPhase" "installPhase" ];
+  phases = [ "installPhase" ];
 
   buildDepends = [ openjdk ];
 
-  buildPhase = ''
-    #patch after unpack
+  installPhase = ''
+    echo "here"
+    ls -lah ../tmp
+    echo "--"
+    #patch before install
     echo "${javaPatch}" > typedb_java.patch
     patch ./${typedbDir}/typedb typedb_java.patch
-  '';
 
-  installPhase = ''
     mkdir $out
     cp -r ./${typedbDir} $out
     # add a wrapper script to $out that will move typedb to $typedb
