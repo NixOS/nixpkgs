@@ -547,6 +547,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/sdrplay.nix
   ./services/misc/sickbeard.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
