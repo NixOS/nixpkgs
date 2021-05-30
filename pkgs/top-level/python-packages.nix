@@ -7693,6 +7693,8 @@ in {
 
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
+  skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
+
   skytemple-files = callPackage ../development/python-modules/skytemple-files { };
 
   skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
