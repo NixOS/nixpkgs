@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -79,6 +80,13 @@ in stdenv.mkDerivation rec {
   )'';
 
   patches = [
+    # Fix for wine 6.8+ (remove patch in next release):
+    (fetchpatch {
+      url = "https://github.com/robbert-vdh/yabridge/commit/5577c4bfd842c60a8ae8ce2889bbfeb53a51c62b.patch";
+      sha256 = "sha256-bTT08iWwDBVqi2PZPa7oal7/MqVu8t2Bh1gpjFMqLvQ=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+
     # Hard code wine path so wine version is correct in logs
     (substituteAll {
       src = ./hardcode-wine.patch;
