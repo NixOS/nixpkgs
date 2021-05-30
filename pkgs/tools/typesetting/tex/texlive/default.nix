@@ -36,7 +36,7 @@ let
                          else p);
     orig = lib.foldl'
       (r: p: r // {
-        ${p.name} = builtins.removeAttrs p [ "name" ];
+        ${p.name} = p;
       }) {} (removeSelfDep tlpdb.tlpkgs);
     clean = orig // {
       # overrides of texlive.tlpdb
@@ -81,7 +81,7 @@ let
       version = tlpkg.cataloguedata.version or (toString tlpkg.revision);
       mkPkgV = tlType: let
         pkg = tlpkg // {
-          hash = tlpkg.${hashAttr.${tlType}};
+          sha512 = tlpkg.${hashAttr.${tlType}};
           inherit pname tlType version;
         };
         in mkPkg pkg;
@@ -106,7 +106,7 @@ let
   };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, hash, postUnpack ? "", relocated ? false, ... }@tlpkgV:
+  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", relocated ? false, ... }@tlpkgV:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
@@ -130,7 +130,7 @@ let
         "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
-      src = fetchurl { inherit urls hash; };
+      src = fetchurl { inherit urls sha512; };
 
       passthru = {
         inherit pname tlType version src;
@@ -142,7 +142,7 @@ let
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
-    in if hash == "" then
+    in if sha512 == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
       fetchurl {
         inherit urls;
