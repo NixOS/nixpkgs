@@ -1,5 +1,6 @@
-{ stdenv, lib, unstick, requireFile,
-  supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ] }:
+{ stdenv, lib, unstick, requireFile
+, supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
+}:
 
 let
   deviceIds = {
@@ -85,12 +86,12 @@ in stdenv.mkDerivation rec {
       rm -r $out/uninstall $out/logs
     '';
 
-  meta = {
+  meta = with lib; {
     inherit homepage;
     description = "FPGA design and simulation software";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
     hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore
-    maintainers = with lib.maintainers; [ kwohlfahrt ];
+    maintainers = with maintainers; [ kwohlfahrt ];
   };
 }
