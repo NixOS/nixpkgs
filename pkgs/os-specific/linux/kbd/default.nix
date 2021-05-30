@@ -8,6 +8,10 @@
 , check
 , pam
 , coreutils
+, gzip
+, bzip2
+, xz
+, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +42,13 @@ stdenv.mkDerivation rec {
       mv fgGIod/trf{,-fgGIod}.map
       mv colemak/{en-latin9,colemak}.map
       popd
+
+      # Fix paths to decompressors. Trailing space to avoid replacing `xz` in `".xz"`.
+      substituteInPlace src/libkbdfile/kbdfile.c \
+        --replace 'gzip '  '${gzip}/bin/gzip ' \
+        --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
+        --replace 'xz '    '${xz.bin}/bin/xz ' \
+        --replace 'zstd '  '${zstd.bin}/bin/zstd '
     '';
 
   postInstall = ''
