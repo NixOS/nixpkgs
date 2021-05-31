@@ -532,6 +532,7 @@ ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog
 rcarriga/nvim-dap-ui
+rcarriga/vim-ultest
 rhysd/committia.vim
 rhysd/conflict-marker.vim
 rhysd/devdocs.vim

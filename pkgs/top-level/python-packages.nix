@@ -1584,6 +1584,8 @@ in {
 
   coronavirus = callPackage ../development/python-modules/coronavirus { };
 
+  corsair-scan = callPackage ../development/python-modules/corsair-scan { };
+
   cot = callPackage ../development/python-modules/cot { };
 
   covCore = callPackage ../development/python-modules/cov-core { };
@@ -5238,6 +5240,8 @@ in {
   power = callPackage ../development/python-modules/power { };
 
   powerline = callPackage ../development/python-modules/powerline { };
+
+  powerlineMemSegment = callPackage ../development/python-modules/powerline-mem-segment { };
 
   pox = callPackage ../development/python-modules/pox { };
 
