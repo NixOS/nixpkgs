@@ -91,12 +91,16 @@ in
     };
   };
 
-  config = mkIf cfg.agent.enable {
+  config = let
+    pinentry = pkgs.pinentry.override {
+      enabledFlavors = [ cfg.agent.pinentryFlavor ];
+    };
+  in mkIf cfg.agent.enable {
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
       serviceConfig.ExecStart = [ "" ''
         ${cfg.package}/bin/gpg-agent --supervised \
-          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
+          --pinentry-program ${pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
       '' ];
     };
 
