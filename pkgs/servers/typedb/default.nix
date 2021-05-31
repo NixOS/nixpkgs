@@ -1,4 +1,4 @@
-{ stdenv, lib, openjdk, fetchurl, typedbHome ? "~/.typedb_home", fetchzip}:
+{ stdenv, lib, openjdk,typedbHome ? "~/.typedb_home", fetchzip}:
 
 let 
   typedbVersion = "2.1.1";
@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
 
   src = srcFolder;
     
-  phases = [ "installPhase" ];
+  phases = [ "installPhase" "installCheckPhase" ];
 
   buildDepends = [ openjdk ];
 
   installPhase = ''
     echo "here"
-    ls -lah ../tmp
+    ls -lah 
     echo "--"
     #patch before install
     echo "${javaPatch}" > typedb_java.patch
@@ -69,6 +69,13 @@ stdenv.mkDerivation rec {
     chmod +x $out/typedb
   '';
 
+  doInstallCheck = true;
+  installCheckPhase= ''
+      $out/typedb --help > /dev/null
+      res=`$out/typedb client`
+      echo "--"
+      echo $res
+      '';
   doCheck = true;
 
   meta = with lib; {
