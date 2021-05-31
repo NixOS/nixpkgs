@@ -1584,6 +1584,8 @@ in {
 
   coronavirus = callPackage ../development/python-modules/coronavirus { };
 
+  corsair-scan = callPackage ../development/python-modules/corsair-scan { };
+
   cot = callPackage ../development/python-modules/cot { };
 
   covCore = callPackage ../development/python-modules/cov-core { };
