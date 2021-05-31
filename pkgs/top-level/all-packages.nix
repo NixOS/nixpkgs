@@ -11606,7 +11606,7 @@ in
   };
   rust_1_52 = callPackage ../development/compilers/rust/1_52.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvm_11 = llvmPackages_11.libllvm;
+    llvm_12 = llvmPackages_12.libllvm;
   };
   rust = rust_1_52;
 

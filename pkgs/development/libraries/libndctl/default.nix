@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
-, asciidoctor, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
+, asciidoc, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , json_c, kmod, which, util-linux, udev, keyutils
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ autoreconfHook asciidoctor pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    [ autoreconfHook asciidoc pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
       which
     ];
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--without-bash"
       "--without-systemd"
+      "--disable-asciidoctor" # depends on ruby 2.7, use asciidoc instead
     ];
 
   patchPhase = ''

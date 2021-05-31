@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
+
+    # Work around lxml API misuse.
+    # https://gitlab.gnome.org/GNOME/libxml2/issues/255
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/85b1792e37b131e7a51af98a37f92472e8de5f3f.patch";
+      sha256 = "epqlNs2S0Zczox3KyCB6R2aJKh87lXydlZ0x6tLHweE=";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]

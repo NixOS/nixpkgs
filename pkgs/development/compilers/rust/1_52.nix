@@ -15,21 +15,22 @@
 , CoreFoundation, Security
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
-, llvmPackages_11, llvm_11
+, llvmPackages_11
+, llvmPackages_12, llvm_12
 } @ args:
 
 import ./default.nix {
   rustcVersion = "1.52.1";
   rustcSha256 = "sha256-Om8jom0Oj4erv78yxc19qgwLcdCYar78Vrml+/vQv5g=";
 
-  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_11.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_12.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvmPackages_12.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_12.libllvm.override { enableSharedLibraries = true; };
 
   llvmBootstrapForDarwin = llvmPackages_11;
 
   # For use at runtime
-  llvmShared = llvm_11.override { enableSharedLibraries = true; };
+  llvmShared = llvm_12.override { enableSharedLibraries = true; };
 
   # Note: the version MUST be one version prior to the version we're
   # building
@@ -55,4 +56,4 @@ import ./default.nix {
   ];
 }
 
-(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvm_11"])
+(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_12" "llvm_12"])
