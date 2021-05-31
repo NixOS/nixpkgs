@@ -15,9 +15,9 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (cfg.enable && cfg.server == "ghostunnel") {
 
-    services.ghostunnel = lib.mkIf (cfg.enable && cfg.server == "ghostunnel") {
+    services.ghostunnel = {
       enable = true;
       servers."podman-socket" = {
         inherit (cfg.tls) cert key cacert;

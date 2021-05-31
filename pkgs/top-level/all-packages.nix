@@ -30972,6 +30972,8 @@ in
 
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
 
+  brscan5 = callPackage ../applications/graphics/sane/backends/brscan5 { };
+
   dsseries = callPackage ../applications/graphics/sane/backends/dsseries { };
 
   sane-airscan = callPackage ../applications/graphics/sane/backends/airscan { };

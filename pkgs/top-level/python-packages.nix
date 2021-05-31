@@ -8482,6 +8482,8 @@ in {
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
+  typed-settings = callPackage ../development/python-modules/typed-settings { };
+
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   typer = callPackage ../development/python-modules/typer { };
