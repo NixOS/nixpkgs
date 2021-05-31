@@ -122,7 +122,8 @@ in (buildEnv {
   '' +
     # now filter hyphenation patterns, in a hacky way ATM
   (let
-    pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
+    hyphens = with lib; filter (p: p ? executes && any (hasPrefix "AddHyphen") p.executes) pkgList.splitBin.wrong;
+    pnames = uniqueStrings (map (p: p.pname) hyphens);
     script =
       writeText "hyphens.sed" (
         # pick up the header
