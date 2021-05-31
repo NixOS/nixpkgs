@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     echo 'HAVE_SANDBOX_INIT=0' > configure.local
-  ''
-    "echo 'HAVE_SANDBOX_INIT=0' > configure.local";
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
     echo '# TEST' > test.md
-    lowdown test.md
+    $out/bin/lowdown test.md
     runHook postInstallCheck
   '';
 
