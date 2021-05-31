@@ -1,9 +1,19 @@
-{ stdenv, lib, lispPackages
-, makeWrapper, wrapGAppsHook, gst_all_1
-, glib, gdk-pixbuf, cairo
-, mime-types, pango, gtk3
-, glib-networking, gsettings-desktop-schemas
-, xclip, notify-osd, enchant
+{ stdenv
+, lib
+, lispPackages
+, makeWrapper
+, wrapGAppsHook
+, gst_all_1
+, glib
+, gdk-pixbuf
+, cairo
+, mime-types
+, pango
+, gtk3
+, glib-networking
+, gsettings-desktop-schemas
+, xclip
+, enchant
 }:
 
 stdenv.mkDerivation rec {
@@ -14,17 +24,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   gstBuildInputs = with gst_all_1; [
-    gstreamer gst-libav
+    gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
   ];
   buildInputs = [
-    glib gdk-pixbuf cairo
-    mime-types pango gtk3
-    glib-networking gsettings-desktop-schemas
-    xclip notify-osd enchant
+    glib
+    gdk-pixbuf
+    cairo
+    mime-types
+    pango
+    gtk3
+    glib-networking
+    gsettings-desktop-schemas
+    xclip
+    enchant
   ] ++ gstBuildInputs;
 
   GST_PLUGIN_SYSTEM_PATH_1_0 = lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs;
