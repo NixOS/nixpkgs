@@ -87,6 +87,18 @@ let
         };
       };
 
+      B4dM4n.vscode-nixpkgs-fmt = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nixpkgs-fmt";
+          publisher = "B4dM4n";
+          version = "0.0.1";
+          sha256 = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       baccata.scaladex-search = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scaladex-search";
@@ -516,7 +528,7 @@ let
         };
       };
 
-      hashicorp.terraform = callPackage ./terraform {};
+      hashicorp.terraform = callPackage ./terraform { };
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -698,15 +710,16 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools {};
+      ms-vscode.cpptools = callPackage ./cpptools { };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
-      ms-python.python = let
-        raw-package = callPackage ./python {
-          extractNuGet = callPackage ./python/extract-nuget.nix { };
-        };
-      in
+      ms-python.python =
+        let
+          raw-package = callPackage ./python {
+            extractNuGet = callPackage ./python/extract-nuget.nix { };
+          };
+        in
         buildEnv {
           name = "vscode-extension-ms-python-python-full";
           paths = [ raw-package self.ms-toolsai.jupyter ];
@@ -786,7 +799,7 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer {};
+      matklad.rust-analyzer = callPackage ./rust-analyzer { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {
@@ -1029,7 +1042,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1094,7 +1107,7 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime {};
+      WakaTime.vscode-wakatime = callPackage ./wakatime { };
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1109,17 +1122,17 @@ let
       };
     };
 
-    aliases = self: super: {
-      # aliases
-      ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
-    };
+  aliases = self: super: {
+    # aliases
+    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+  };
 
-    # TODO: add overrides overlay, so that we can have a generated.nix
-    # then apply extension specific modifcations to packages.
+  # TODO: add overrides overlay, so that we can have a generated.nix
+  # then apply extension specific modifcations to packages.
 
-    # overlays will be applied left to right, overrides should come after aliases.
-    overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+  # overlays will be applied left to right, overrides should come after aliases.
+  overlays = lib.optionals (config.allowAliases or true) [ aliases ];
 
-    toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
+  toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-  lib.fix toFix
+lib.fix toFix

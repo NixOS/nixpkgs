@@ -63,7 +63,7 @@ let
       };
 
       elixir_1_8 = lib'.callElixir ../interpreters/elixir/1.8.nix {
-        inherit erlang;
+        erlang = pkgs.beam.interpreters.erlangR23;
         debugInfo = true;
       };
 
@@ -83,7 +83,6 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
-      relxExe = callPackage ../tools/erlang/relx-exe { };
     };
 in
 makeExtensible packages
