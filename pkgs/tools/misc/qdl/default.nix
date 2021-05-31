@@ -1,5 +1,5 @@
-{ lib 
-, stdenv 
+{ lib
+, stdenv
 , fetchFromGitHub
 , libxml2
 , libudev
