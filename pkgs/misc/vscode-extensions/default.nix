@@ -123,6 +123,18 @@ let
         };
       };
 
+      bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailwindcss";
+          publisher = "bradlc";
+          version = "0.6.6";
+          sha256 = "sha256-CRd+caKHFOXBnePr/LqNkzw0kRGYvNSkf4ecNgedpdA=";
+        };
+        meta = with lib; {
+          license = licenses.mpl20;
+        };
+      };
+
       brettm12345.nixfmt-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nixfmt-vscode";
