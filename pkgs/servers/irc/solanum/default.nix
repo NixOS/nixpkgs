@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     ./dont-create-logdir.patch
   ];
 
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+  '';
+
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
