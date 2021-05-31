@@ -90,7 +90,12 @@ let
       pkgs =
         [( if (tlpkg ? ${hashAttr.run}) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+          else ({ inherit pname version; tlType = "run"; } //
+            lib.optionalAttrs (tlpkg ? executes) {
+              inherit (tlpkg) executes;
+            } // lib.optionalAttrs (tlpkg ? postactions) {
+              inherit (tlpkg) postactions;
+            })
         )]
         ++ lib.optional (tlpkg ? ${hashAttr.doc}) (mkPkgV "doc")
         ++ lib.optional (tlpkg ? ${hashAttr.source}) (mkPkgV "source")

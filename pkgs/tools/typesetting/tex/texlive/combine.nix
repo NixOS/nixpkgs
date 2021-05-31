@@ -124,13 +124,6 @@ in (buildEnv {
   (let
     hyphens = with lib; filter (p: p ? executes && any (hasPrefix "AddHyphen") p.executes) pkgList.splitBin.wrong;
     pnames = uniqueStrings (map (p: p.pname) hyphens);
-    script =
-      writeText "hyphens.sed" (
-        # pick up the header
-        "1,/^% from/p;"
-        # pick up all sections matching packages that we combine
-        + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
-      );
   in ''
     (
       cd ./share/texmf/tex/generic/config/
@@ -138,7 +131,14 @@ in (buildEnv {
         [ -e $fname ] || continue;
         cnfOrig="$(realpath ./$fname)"
         rm ./$fname
-        cat "$cnfOrig" | sed -n -f '${script}' > ./$fname
+        cat "$cnfOrig" | sed -n \
+          -e '1,/^% from/p;' \
+      '' +
+      (lib.concatMapStrings (pname: ''
+          -e '/^% from ${pname}:$/,/^%/p;' \
+      '') pnames) +
+      ''
+        > ./$fname
       done
     )
   '') +
