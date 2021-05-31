@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
+{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
   tag ? "", xvfb-run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xine-lib,
@@ -9,14 +9,12 @@
 let optionals = lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "1q17ckblfa4fcs7wsjwsq1dj7360ymrdyjkyqmj864wzlqkw1rd2";
+    sha256 = "sha256-oDMY0nZ+SVlVF2PQqH+tl3OHr3EmCP5XJxQXaiS782c=";
   };
-
-  patches = [ ./quodlibet-feedparser6.patch ];
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
@@ -50,8 +48,6 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-    # newer gettext spews some warnings which fail the tests
-    substituteInPlace tests/test_po.py --replace "strict=True" "strict=False"
     # otherwise tests can't find the app icons; instead of creating index.theme from scratch
     # I re-used the one from hicolor-icon-theme which seems to work
     cp "${hicolor-icon-theme}/share/icons/hicolor/index.theme" quodlibet/images/hicolor
