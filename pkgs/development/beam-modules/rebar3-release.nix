@@ -51,20 +51,12 @@ let
 
     inherit src;
 
+    REBAR_IGNORE_DEPS = beamDeps != [ ];
+
     configurePhase = ''
       runHook preConfigure
       ${lib.optionalString (checkouts != null)
       "cp --no-preserve=all -R ${checkouts}/_checkouts ."}
-      ${# Prevent rebar3 from trying to manage deps
-      lib.optionalString (beamDeps != [ ]) ''
-        erl -noshell -eval '
-          {ok, Terms0} = file:consult("rebar.config"),
-          Terms = lists:keydelete(deps, 1, Terms0),
-          ok = file:write_file("rebar.config", [io_lib:format("~tp.~n", [T]) || T <- Terms]),
-          init:stop(0)
-        '
-        rm -f rebar.lock
-      ''}
       runHook postConfigure
     '';
 
