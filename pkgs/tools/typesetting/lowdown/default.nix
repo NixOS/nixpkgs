@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Fix lib extension so that fixDarwinDylibNames detects it
-  postInstall = lib.optionalString (stdenv.isDarwin) ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mv $lib/lib/liblowdown.{so,dylib}
   '';
 
