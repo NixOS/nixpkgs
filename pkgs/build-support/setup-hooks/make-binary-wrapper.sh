@@ -104,5 +104,3 @@ escapeStringLiteral() {
     result=${result//$'\r'/"\r"}
     printf "%s" "$result"
 }
-
-makeBinaryWrapper "$@"
