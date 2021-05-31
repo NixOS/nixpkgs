@@ -968,6 +968,18 @@ let
         };
       };
 
+      svelte.svelte-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svelte-vscode";
+          publisher = "svelte";
+          version = "105.0.0";
+          sha256 = "sha256-my3RzwUW5MnajAbEnqxtrIR701XH+AKYLbnKD7ivASE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
