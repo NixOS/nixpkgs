@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
-  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    echo 'HAVE_SANDBOX_INIT=0' > configure.local
+  ''
     "echo 'HAVE_SANDBOX_INIT=0' > configure.local";
 
   configurePhase = ''
