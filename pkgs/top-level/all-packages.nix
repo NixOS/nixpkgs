@@ -411,6 +411,8 @@ in
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
+  edwin = callPackage ../data/fonts/edwin { };
+
   etBook = callPackage ../data/fonts/et-book { };
 
   fetchutils = callPackage ../tools/misc/fetchutils { };
