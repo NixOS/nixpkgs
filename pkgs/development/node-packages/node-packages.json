@@ -80,6 +80,7 @@
 , "elasticdump"
 , "@electron-forge/cli"
 , "elm-oracle"
+, "elm-review"
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
