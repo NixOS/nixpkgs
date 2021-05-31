@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
+    "echo 'HAVE_SANDBOX_INIT=0' > configure.local";
+
   configurePhase = ''
     runHook preConfigure
     ./configure PREFIX=''${!outputDev} \
@@ -24,16 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   # Fix lib extension so that fixDarwinDylibNames detects it
-  postInstall = lib.optionalString (stdenv.isDarwin && !stdenv.isAarch64) ''
+  postInstall = lib.optionalString (stdenv.isDarwin) ''
     mv $lib/lib/liblowdown.{so,dylib}
   '';
 
   patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
-
-  patchPhase = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-    substituteInPlace main.c \
-      --replace '#elif HAVE_SANDBOX_INIT' '#elif 0'
-  '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   installCheckPhase = "echo '# TEST' > test.md; $out/bin/lowdown test.md";
