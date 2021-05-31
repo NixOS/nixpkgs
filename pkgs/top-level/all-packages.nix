@@ -7266,6 +7266,10 @@ in
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
+  nvfancontrol = callPackage ../tools/misc/nvfancontrol {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
+
   nvimpager = callPackage ../tools/misc/nvimpager { };
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
