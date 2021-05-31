@@ -36,6 +36,18 @@ let
         };
       };
 
+      alefragnani.project-manager = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "project-manager";
+          publisher = "alefragnani";
+          version = "12.1.0";
+          sha256 = "sha256-fYBKmWn9pJh2V0fGdqVrXj9zIl8oTrZcBycDaMOXL/8=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       alexdima.copy-relative-path = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "copy-relative-path";
@@ -120,6 +132,18 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailwindcss";
+          publisher = "bradlc";
+          version = "0.6.6";
+          sha256 = "sha256-CRd+caKHFOXBnePr/LqNkzw0kRGYvNSkf4ecNgedpdA=";
+        };
+        meta = with lib; {
+          license = licenses.mpl20;
         };
       };
 
@@ -965,6 +989,18 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      svelte.svelte-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svelte-vscode";
+          publisher = "svelte";
+          version = "105.0.0";
+          sha256 = "sha256-my3RzwUW5MnajAbEnqxtrIR701XH+AKYLbnKD7ivASE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 

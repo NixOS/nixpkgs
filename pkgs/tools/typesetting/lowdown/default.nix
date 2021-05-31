@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    echo 'HAVE_SANDBOX_INIT=0' > configure.local
+  '';
+
   configurePhase = ''
     runHook preConfigure
     ./configure PREFIX=''${!outputDev} \
@@ -30,6 +34,14 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
 
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    echo '# TEST' > test.md
+    $out/bin/lowdown test.md
+    runHook postInstallCheck
+  '';
+
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "regress";
 
@@ -41,4 +53,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-
