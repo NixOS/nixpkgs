@@ -10993,6 +10993,7 @@ let
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
       license = lib.licenses.publicDomain;
+      maintainers = with maintainers; [ xworld21 ];
     };
     passthru = {
       tlType = "run";
