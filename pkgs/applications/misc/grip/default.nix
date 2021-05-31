@@ -2,11 +2,11 @@
 , curl, cdparanoia, libid3tag, ncurses, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "grip-4.2.0";
+  name = "grip-4.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/${name}.tar.gz";
-    sha256 = "1si5kidwg0i2jg0brzyvjrzw24v3km2hdgd4kda1adzq81a3p1cs";
+    sha256 = "sha256-3bFJURPbq9rzLsJCppRjSARhcOJxC4eSfw5VxvZgQ3Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
