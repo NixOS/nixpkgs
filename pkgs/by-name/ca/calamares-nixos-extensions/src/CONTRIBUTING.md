@@ -37,5 +37,5 @@ that chat window open because it can easily take a few hours for
 someone to notice a message.
 The Matrix room is relatively new.
 
-* [![Chat on IRC](https://img.shields.io/badge/IRC-Freenode%20%23calamares-green)](https://webchat.freenode.net/?randomnick=1&channels=%23calamares)
 * [![Join us on Matrix](https://img.shields.io/badge/Matrix-%23calamares:kde.org-blue)](https://webchat.kde.org/#/room/%23calamares:kde.org)
+* [![Chat on IRC](https://img.shields.io/badge/IRC-Libera.Chat%20%23calamares-green)](https://kiwiirc.com/client/irc.libera.chat/#calamares)
