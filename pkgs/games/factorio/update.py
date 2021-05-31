@@ -58,7 +58,7 @@ RELEASE_TYPES = [
 ]
 
 RELEASE_CHANNELS = [
-    ReleaseChannel("experimental"),
+    #ReleaseChannel("experimental"),
     ReleaseChannel("stable"),
 ]
 
