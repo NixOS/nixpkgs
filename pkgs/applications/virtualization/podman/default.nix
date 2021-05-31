@@ -84,7 +84,10 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) podman;
     # related modules
-    inherit (nixosTests) podman-tls-ghostunnel;
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      podman-dnsname
+      ;
   };
 
   meta = with lib; {
