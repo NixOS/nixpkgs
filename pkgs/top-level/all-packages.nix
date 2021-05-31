@@ -1370,6 +1370,8 @@ in
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 
+  corsair = with python3Packages; toPythonApplication corsair-scan;
+
   corsmisc = callPackage ../tools/security/corsmisc { };
 
   cosign = callPackage ../tools/security/cosign {
@@ -1618,6 +1620,8 @@ in
   gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
+
+  gosh = callPackage ../tools/security/gosh { };
 
   gospider = callPackage ../tools/security/gospider { };
 
@@ -22418,6 +22422,8 @@ in
   yanone-kaffeesatz = callPackage ../data/fonts/yanone-kaffeesatz {};
 
   yaru-theme = callPackage ../data/themes/yaru {};
+
+  yaru-remix-theme = callPackage ../data/themes/yaru-remix {};
 
   zafiro-icons = callPackage ../data/icons/zafiro-icons {
     inherit (plasma5Packages) breeze-icons;

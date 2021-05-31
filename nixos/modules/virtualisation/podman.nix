@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.virtualisation.podman;
   toml = pkgs.formats.toml { };
@@ -107,7 +107,7 @@ in
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
-      environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
+      environment.etc."cni/net.d/87-podman-bridge.conflist".source = "${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist";
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
