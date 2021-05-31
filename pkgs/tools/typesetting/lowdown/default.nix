@@ -34,7 +34,12 @@ stdenv.mkDerivation rec {
   patches = lib.optional (!stdenv.hostPlatform.isStatic) ./shared.patch;
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckPhase = "echo '# TEST' > test.md; $out/bin/lowdown test.md";
+  installCheckPhase = ''
+    runHook preInstallCheck
+    echo '# TEST' > test.md
+    lowdown test.md
+    runHook postInstallCheck
+  '';
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "regress";
