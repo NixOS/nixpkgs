@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
   ] ++ lib.optionals enableJava [
     "-DWITH_JAVA=1"
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
+    "-DFLOATTEST=fp-contract"
   ];
 
   doInstallCheck = true;
