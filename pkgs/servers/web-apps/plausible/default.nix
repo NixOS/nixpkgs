@@ -73,7 +73,10 @@ in beamPackages.mixRelease {
     mkdir -p $out
     ln -sf ${yarnDeps}/node_modules assets/node_modules
     npm run deploy --prefix ./assets
-    mix release plausible --no-deps-check --path $out
+
+    # for external task you need a workaround for the no deps check flag
+    # https://github.com/phoenixframework/phoenix/issues/2690
+    mix do deps.loadpaths --no-deps-check, phx.digest
 
     runHook postBuild
   '';
