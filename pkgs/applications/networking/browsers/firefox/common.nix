@@ -16,6 +16,10 @@
 
 ### optionals
 
+## backported libraries
+
+, rust-cbindgen_latest
+
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsaLib
@@ -89,6 +93,8 @@ let
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
+
+  rust-cbindgen_pkg = if lib.versionAtLeast ffversion "89" then rust-cbindgen_latest else rust-cbindgen;
 
   # 78 ESR won't build with rustc 1.47
   inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
@@ -226,7 +232,7 @@ buildStdenv.mkDerivation ({
       perl
       pkg-config
       python3
-      rust-cbindgen
+      rust-cbindgen_pkg
       rustc
       which
       unzip
