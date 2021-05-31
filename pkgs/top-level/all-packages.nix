@@ -9727,7 +9727,7 @@ in
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_17.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/latest.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
