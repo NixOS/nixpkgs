@@ -10992,7 +10992,7 @@ let
     '';
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
-      license = lib.licenses.free;
+      license = lib.licenses.publicDomain;
     };
     passthru = {
       tlType = "run";
