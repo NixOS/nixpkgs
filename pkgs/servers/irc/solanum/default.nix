@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     ./bandb.patch # https://github.com/solanum-ircd/solanum/issues/156
   ];
 
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+  '';
+
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
