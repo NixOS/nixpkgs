@@ -134,6 +134,10 @@ let
 
       passthru = {
         inherit pname tlType version src;
+      } // lib.optionalAttrs (tlpkgV ? executes) {
+        inherit (tlpkgV) executes;
+      } // lib.optionalAttrs (tlpkgV ? postactions) {
+        inherit (tlpkgV) postactions;
       };
 
       unpackCmd = file: ''
