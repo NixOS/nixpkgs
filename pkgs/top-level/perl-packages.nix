@@ -10992,6 +10992,7 @@ let
     '';
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
+      homepage = "https://dlmf.nist.gov/LaTeXML/";
       license = lib.licenses.publicDomain;
       maintainers = with maintainers; [ xworld21 ];
     };
