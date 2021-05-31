@@ -4,6 +4,7 @@
 , llvmPackages
 , libxml2
 , zlib
+, fetchpatch
 }:
 
 let
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-bILjcKX8jPl2n1HRYvYRb7jJkobwqmSJ+hHXSn9n2ag=";
   };
+
+  patches = [
+    # glibc 2.33 support
+    (fetchpatch {
+      url = "https://github.com/ziglang/zig/commit/0fee4b55a8c58791238efe6bf2da5ce3435a5cc1.patch";
+      sha256 = "sha256-waVtolUlmGrfiRk4tWsSOij5MfUc+g57DatC6GtSx6c=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
