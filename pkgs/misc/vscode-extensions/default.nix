@@ -36,6 +36,18 @@ let
         };
       };
 
+      alefragnani.project-manager = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "project-manager";
+          publisher = "alefragnani";
+          version = "12.1.0";
+          sha256 = "sha256-fYBKmWn9pJh2V0fGdqVrXj9zIl8oTrZcBycDaMOXL/8=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       alexdima.copy-relative-path = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "copy-relative-path";
@@ -87,6 +99,18 @@ let
         };
       };
 
+      B4dM4n.vscode-nixpkgs-fmt = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nixpkgs-fmt";
+          publisher = "B4dM4n";
+          version = "0.0.1";
+          sha256 = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       baccata.scaladex-search = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scaladex-search";
@@ -108,6 +132,18 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailwindcss";
+          publisher = "bradlc";
+          version = "0.6.6";
+          sha256 = "sha256-CRd+caKHFOXBnePr/LqNkzw0kRGYvNSkf4ecNgedpdA=";
+        };
+        meta = with lib; {
+          license = licenses.mpl20;
         };
       };
 
@@ -516,7 +552,7 @@ let
         };
       };
 
-      hashicorp.terraform = callPackage ./terraform {};
+      hashicorp.terraform = callPackage ./terraform { };
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -698,15 +734,16 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools {};
+      ms-vscode.cpptools = callPackage ./cpptools { };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
-      ms-python.python = let
-        raw-package = callPackage ./python {
-          extractNuGet = callPackage ./python/extract-nuget.nix { };
-        };
-      in
+      ms-python.python =
+        let
+          raw-package = callPackage ./python {
+            extractNuGet = callPackage ./python/extract-nuget.nix { };
+          };
+        in
         buildEnv {
           name = "vscode-extension-ms-python-python-full";
           paths = [ raw-package self.ms-toolsai.jupyter ];
@@ -786,7 +823,7 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer {};
+      matklad.rust-analyzer = callPackage ./rust-analyzer { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {
@@ -955,6 +992,18 @@ let
         };
       };
 
+      svelte.svelte-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svelte-vscode";
+          publisher = "svelte";
+          version = "105.0.0";
+          sha256 = "sha256-my3RzwUW5MnajAbEnqxtrIR701XH+AKYLbnKD7ivASE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
@@ -1029,7 +1078,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1094,7 +1143,7 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime {};
+      WakaTime.vscode-wakatime = callPackage ./wakatime { };
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1109,17 +1158,17 @@ let
       };
     };
 
-    aliases = self: super: {
-      # aliases
-      ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
-    };
+  aliases = self: super: {
+    # aliases
+    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+  };
 
-    # TODO: add overrides overlay, so that we can have a generated.nix
-    # then apply extension specific modifcations to packages.
+  # TODO: add overrides overlay, so that we can have a generated.nix
+  # then apply extension specific modifcations to packages.
 
-    # overlays will be applied left to right, overrides should come after aliases.
-    overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+  # overlays will be applied left to right, overrides should come after aliases.
+  overlays = lib.optionals (config.allowAliases or true) [ aliases ];
 
-    toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
+  toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-  lib.fix toFix
+lib.fix toFix

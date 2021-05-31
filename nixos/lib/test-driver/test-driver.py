@@ -128,18 +128,18 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     return (vlan_nr, vde_socket, vde_process, fd)
 
 
-def retry(fn: Callable) -> None:
+def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
 
-    for _ in range(900):
+    for _ in range(timeout):
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
-        raise Exception("action timed out")
+        raise Exception(f"action timed out after {timeout} seconds")
 
 
 class Logger:

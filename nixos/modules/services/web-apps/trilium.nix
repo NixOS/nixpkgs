@@ -9,7 +9,7 @@ let
 
     # Disable automatically generating desktop icon
     noDesktopIcon=true
-    noBackup=${cfg.noBackup}
+    noBackup=${lib.boolToString cfg.noBackup}
 
     [Network]
     # host setting is relevant only for web deployments - set the host on which the server will listen

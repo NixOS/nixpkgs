@@ -5239,6 +5239,8 @@ in {
 
   powerline = callPackage ../development/python-modules/powerline { };
 
+  powerlineMemSegment = callPackage ../development/python-modules/powerline-mem-segment { };
+
   pox = callPackage ../development/python-modules/pox { };
 
   poyo = callPackage ../development/python-modules/poyo { };
@@ -5758,6 +5760,8 @@ in {
   pygreat = callPackage ../development/python-modules/pygreat { };
 
   pygrok = callPackage ../development/python-modules/pygrok { };
+
+  pygtfs = callPackage ../development/python-modules/pygtfs { };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
 
