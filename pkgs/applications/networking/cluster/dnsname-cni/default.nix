@@ -1,4 +1,11 @@
-{ buildGoModule, fetchFromGitHub, lib, dnsmasq }:
+{
+  buildGoModule,
+  dnsmasq,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "cni-plugin-dnsname";
@@ -11,10 +18,9 @@ buildGoModule rec {
     sha256 = "090kpq2ppan9ayajdk5vwbvww30nphylgajn2p3441d4jg2nvsm3";
   };
 
-  patches = [ ./hardcode-dnsmasq-path.patch ];
-
-  postPatch = ''
-    substituteInPlace plugins/meta/dnsname/service.go --replace '@DNSMASQ@' '${dnsmasq}/bin/dnsmasq'
+  nativeBuildInputs = [ makeWrapper ];
+  postInstall = ''
+    wrapProgram $out/bin/dnsname --prefix PATH : ${lib.makeBinPath [ dnsmasq ]}
   '';
 
   vendorSha256 = null;
