@@ -19,6 +19,10 @@ let assertions = rec {
         else:
             machine.require_unit_state("${name}", "${state}")
   '';
+  absent = ''
+    with subtest("atop should be absent"):
+        machine.fail("atop -V")
+  '';
   version = ''
     import re
 
@@ -232,5 +236,29 @@ in
       (netatop true)
       (atopgpu true)
     ];
+  };
+
+  # If the user only specified programs.atop.settings, the module should just render
+  # atoprc.
+  backwardsCompat = makeTest {
+    name = "atop-backwardsCompat";
+    machine = {
+      programs.atop = {
+        settings = {
+          flags = "faf1";
+          interval = 2;
+        };
+      };
+    };
+    testScript = with assertions;
+      builtins.concatStringsSep "\n" [
+        absent
+        (atoprc "flags faf1\\ninterval 2\\n")
+        (atopService false)
+        (atopRotateTimer false)
+        (atopacctService false)
+        (netatop false)
+        (atopgpu false)
+      ];
   };
 }
