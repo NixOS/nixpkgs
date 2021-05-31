@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
   ++ optional (!cgiSupport) "-DNO_CGIBIN_SUPPORT"
   ++ optional (htpasswdSupport) "-DDO_HTPASSWD";
 
-  _LDADD = [ "-lcrypt" "-lm" ]
+  _LDADD = [ "-lm" ]
+    ++ optional (stdenv.hostPlatform.libc != "libSystem") "-lcrypt"
     ++ optional (luaSupport) "-llua"
     ++ optionals (sslSupport) [ "-lssl" "-lcrypto" ];
   makeFlags = [ "LDADD=$(_LDADD)" "prefix=$(out)" "MANDIR=$(out)/share/man" "BINOWN=" ];
