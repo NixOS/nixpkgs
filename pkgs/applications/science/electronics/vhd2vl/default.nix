@@ -4,6 +4,7 @@
 , bison
 , flex
 , verilog
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     verilog
+    which
   ];
 
   installPhase = ''
