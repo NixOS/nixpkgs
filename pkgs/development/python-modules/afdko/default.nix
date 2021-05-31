@@ -1,38 +1,25 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
-, brotli, fontmath, mutatormath, booleanoperations
+, brotli, fontmath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
 , setuptools_scm
+, xcodebuild
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.5.1";
+  version = "3.6.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qg7dgl81yq0sp50pkhgvmf8az1svx20zmpkfa68ka9d0ssh1wjw";
+    sha256 = "1pcddk4mm02vrls65bwikn8vf7ld2kkw8hsjq8sv53q4914678mi";
   };
 
-  patches = [
-    # Skip date-dependent test. See
-    # https://github.com/adobe-type-tools/afdko/pull/1232
-    # https://github.com/NixOS/nixpkgs/pull/98158#issuecomment-704321117
-    (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/2c36ad10f9d964759f643e8ed7b0972a27aa26bd.patch";
-      sha256 = "0p6a485mmzrbfldfbhgfghsypfiad3cabcw7qlw2rh993ivpnibf";
-    })
-    # fix tests for fonttools 4.21.1
-    (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/0919e7454a0a05a1b141c23bf8134c67e6b688fc.patch";
-      sha256 = "0glly85swyl1kcc0mi8i0w4bm148bb001jz1winz5drfrw3a63jp";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ]
+    ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
 
   propagatedBuildInputs = [
     booleanoperations
@@ -46,7 +33,6 @@ buildPythonPackage rec {
     brotli
     defcon
     fontmath
-    mutatormath
     ufoprocessor
     ufonormalizer
     psautohint
