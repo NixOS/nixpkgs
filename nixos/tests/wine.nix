@@ -4,24 +4,36 @@
 }, }:
 
 let
+  inherit (pkgs.lib) concatMapStrings listToAttrs;
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
 
-  makeWineTest = variant:
-    makeTest {
-      name = "wine-${variant}";
+  hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
+  hello64 = "${pkgs.pkgsCross.mingwW64.hello}/bin/hello.exe";
+
+  makeWineTest = packageSet: exes: variant: rec {
+    name = "${packageSet}-${variant}";
+    value = makeTest {
+      inherit name;
       meta = with pkgs.lib.maintainers; { maintainers = [ chkno ]; };
 
       machine = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.winePackages."${variant}" ];
+        environment.systemPackages = [ pkgs."${packageSet}"."${variant}" ];
+        virtualisation.diskSize = "800";
       };
 
       testScript = ''
         machine.wait_for_unit("multi-user.target")
-        greeting = machine.succeed(
-            'wine ${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe'
-        )
-        assert 'Hello, world!' in greeting
+        ${concatMapStrings (exe: ''
+          greeting = machine.succeed(
+              'wine ${exe}'
+          )
+          assert 'Hello, world!' in greeting
+        '') exes}
       '';
     };
-in pkgs.lib.genAttrs [ "base" "full" "minimal" "staging" "unstable" ]
-makeWineTest
+  };
+
+  variants = [ "base" "full" "minimal" "staging" "unstable" ];
+
+in listToAttrs (map (makeWineTest "winePackages" [ hello32 ]) variants
+  ++ map (makeWineTest "wineWowPackages" [ hello32 hello64 ]) variants)
