@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     license = lib.licenses.mit;
-    maintainer = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
