@@ -13,10 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "1l1wydvi0yalas79cvhrqg563cvs57hg9rv6qnkw879r6smb2x1n";
 
-  passthru.tests = {
-    inherit (nixosTests) dendrite;
-  };
-
   meta = with lib; {
     homepage = "https://matrix.org";
     description = "Dendrite is a second-generation Matrix homeserver written in Go!";

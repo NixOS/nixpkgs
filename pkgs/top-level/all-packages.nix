@@ -984,6 +984,8 @@ in
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  twine = with python3Packages; toPythonApplication twine;
+
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = callPackage ../applications/terminal-emulators/wezterm {
@@ -7138,6 +7140,8 @@ in
 
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
+  patray = callPackage ../tools/audio/patray { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   phash = callPackage ../development/libraries/phash { };
@@ -9426,6 +9430,11 @@ in
   };
 
   openconnect_gnutls = callPackage ../tools/networking/openconnect {
+    openssl = null;
+  };
+
+  openconnect_head = callPackage ../tools/networking/openconnect {
+    head = true;
     openssl = null;
   };
 
@@ -17148,6 +17157,7 @@ in
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
+  nv-codec-headers-10 = callPackage ../development/libraries/nv-codec-headers/10_x.nix { };
 
   mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
     let
@@ -18346,6 +18356,7 @@ in
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
+    inherit (darwin.apple_sdk) sdk;
   };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
@@ -20676,7 +20687,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_11;
+  linuxPackages_latest = linuxPackages_5_12;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -27590,6 +27601,10 @@ in
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { };
+  xpraWithNvenc = callPackage ../tools/X11/xpra {
+    withNvenc = true;
+    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
 
 
@@ -28490,10 +28505,7 @@ in
     boost = boost166;
   };
 
-  pinball = callPackage ../games/pinball {
-    autoreconfHook = with buildPackages;
-      autoreconfHook.override { automake = automake115x; };
-  };
+  pinball = callPackage ../games/pinball { };
 
   pingus = callPackage ../games/pingus {};
 
