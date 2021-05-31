@@ -25,9 +25,12 @@ let
         machine.wait_for_unit("multi-user.target")
         ${concatMapStrings (exe: ''
           greeting = machine.succeed(
-              'wine ${exe}'
+              "bash -c 'wine ${exe} 2> >(tee wine-stderr >&2)'"
           )
           assert 'Hello, world!' in greeting
+          machine.fail(
+              "fgrep 'Could not find Wine Gecko. HTML rendering will be disabled.' wine-stderr"
+          )
         '') exes}
       '';
     };
