@@ -17178,6 +17178,8 @@ in
 
   mutest = callPackage ../development/libraries/mutest { };
 
+  mvapich = callPackage ../development/libraries/mvapich { };
+
   mygpoclient = pythonPackages.mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
