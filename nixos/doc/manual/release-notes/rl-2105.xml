@@ -795,7 +795,7 @@ environment.systemPackages = [
    <listitem>
     <para>
      In the <option>security.acme</option> module, use of <literal>--reuse-key</literal>
-     parameter  for Lego has been removed. It was introduced for HKPK, but this security
+     parameter for Lego has been removed. It was introduced for HKPK, but this security
      feature is now deprecated. It is a better security practice to rotate key pairs
      instead of always keeping the same. If you need to keep this parameter, you can add
      it back using <literal>extraLegoRenewFlags</literal> as an option for the
