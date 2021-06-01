@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yz1rpfvhbf7kfjck5vadbj9rd3bkx5248whaa3impdrjh7vs03x";
+    sha256 = "sha256-Y9AvLgclNZdFnZJDoH6/pf8AqHr3WmwysgpJvWKicHo=";
   };
 
   nativeBuildInputs = [
