@@ -965,7 +965,7 @@ in
         mr ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so,
       '' +
       optionalString (isEnabled (cfg: cfg.enableKwallet)) ''
-        mr ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so,
+        mr ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so,
       '' +
       optionalString config.virtualisation.lxc.lxcfs.enable ''
         mr ${pkgs.lxc}/lib/security/pam_cgfs.so
