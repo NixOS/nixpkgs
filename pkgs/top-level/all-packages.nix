@@ -5840,6 +5840,8 @@ in
 
   ipget = callPackage ../applications/networking/ipget { };
 
+  iptsd = callPackage ../applications/misc/iptsd { };
+
   ipmitool = callPackage ../tools/system/ipmitool {};
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
