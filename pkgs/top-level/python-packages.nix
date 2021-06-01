@@ -2678,6 +2678,8 @@ in {
 
   gast = callPackage ../development/python-modules/gast { };
 
+  garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
