@@ -74,6 +74,7 @@ let
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
+      topology = callPackage ../development/coq-modules/topology {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       VST = callPackage ../development/coq-modules/VST (with lib.versions;
@@ -81,6 +82,7 @@ let
           { case = "8.11"; out = { compcert = compcert.override { coqPackages = self; version = "3.7"; }; }; }
           { case = range "8.12" "8.13"; out = { compcert = compcert.override { coqPackages = self; }; }; }
         ] {});
+      zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
 

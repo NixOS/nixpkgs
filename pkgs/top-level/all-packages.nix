@@ -2724,6 +2724,8 @@ in
       Accelerate CoreGraphics CoreVideo;
   };
 
+  gpg-tui = callPackage ../tools/security/gpg-tui { };
+
   goa = callPackage ../development/tools/goa { };
 
   gohai = callPackage ../tools/system/gohai { };
@@ -31717,6 +31719,8 @@ in
   lc3tools = callPackage ../development/tools/lc3tools {};
 
   xcolor = callPackage ../tools/graphics/xcolor { };
+
+  zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
 }
