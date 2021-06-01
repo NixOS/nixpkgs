@@ -8561,6 +8561,10 @@ in {
 
   vega = callPackage ../development/python-modules/vega { };
 
+  keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
+  
+  keras-tuner = callPackage ../development/python-modules/keras-tuner { };
+
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
   venstarcolortouch = callPackage ../development/python-modules/venstarcolortouch { };
