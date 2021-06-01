@@ -9369,6 +9369,8 @@ in
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  ustreamer = callPackage ../applications/video/ustreamer { };
+
   usync = callPackage ../applications/misc/usync { };
 
   uwc = callPackage ../tools/text/uwc { };
