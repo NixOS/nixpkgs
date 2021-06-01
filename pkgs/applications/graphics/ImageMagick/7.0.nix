@@ -13,7 +13,7 @@ let
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
     else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else throw "ImageMagick is not supported on this platform.";
+    else null;
 in
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
