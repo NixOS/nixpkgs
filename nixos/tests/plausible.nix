@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "plausible";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
