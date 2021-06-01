@@ -276,7 +276,7 @@ rec {
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
-    # the nnormalized name for macOS.
+    # the normalized name for macOS.
     macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios      = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd  = { execFormat = elf;     families = { inherit bsd; }; };
