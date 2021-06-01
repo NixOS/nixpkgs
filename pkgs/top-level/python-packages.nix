@@ -4213,7 +4213,7 @@ in {
 
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
-  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
+  mechanicalsoup = callPackage ../development/python-modules/mechanicalsoup { };
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
