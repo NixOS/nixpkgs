@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://troglobit.com/editline.html";
+    homepage = "https://troglobit.com/projects/editline/";
     description = "A readline() replacement for UNIX without termcap (ncurses)";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ dtzWill oxalica ];
