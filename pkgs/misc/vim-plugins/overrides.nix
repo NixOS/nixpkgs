@@ -294,9 +294,7 @@ self: super: {
     dependencies = with self; [ himalaya ];
     preFixup = ''
       substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
-        --replace \
-          'if !executable("himalaya")' \
-          'if v:false'
+        --replace 'if !executable("himalaya")' 'if v:false'
     '';
     postFixup = ''
       mkdir -p $out/bin
