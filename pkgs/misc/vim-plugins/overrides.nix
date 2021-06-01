@@ -288,8 +288,8 @@ self: super: {
   });
 
   himalaya-vim = buildVimPluginFrom2Nix {
-    inherit (himalaya) src version;
     pname = "himalaya-vim";
+    inherit (himalaya) src version;
     configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
     preFixup = ''
