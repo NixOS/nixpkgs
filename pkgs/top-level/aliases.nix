@@ -1027,6 +1027,12 @@ mapAliases ({
     Its new location is obs-studio-plugins.obs-move-transition.
   '';
 
+  # Added 2021-06-01
+  obs-multi-rtmp = throw ''
+    obs-multi-rtmp has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-multi-rtmp.
+  '';
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
