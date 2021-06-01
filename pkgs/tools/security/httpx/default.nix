@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "v${version}";
-    sha256 = "sha256-MOe/2TMUFJXdQlwkSIFEAVvOu5DbaCfTro1/WEzQkRw=";
+    sha256 = "sha256-WUaDL1bMZ7rjlwyaqZraIKSrxj68PZiuIpgZN8l8nIo=";
   };
 
   vendorSha256 = "sha256-yk94jD8gwgmEroxg7vzfaISVakMv3+tUoq+Auas751w=";
