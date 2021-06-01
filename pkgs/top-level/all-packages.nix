@@ -5842,6 +5842,8 @@ in
 
   ipget = callPackage ../applications/networking/ipget { };
 
+  i-pi = with python3Packages; toPythonApplication i-pi;
+
   iptsd = callPackage ../applications/misc/iptsd { };
 
   ipmitool = callPackage ../tools/system/ipmitool {};
