@@ -1040,6 +1040,19 @@ let
         };
       };
 
+      tiehuis.zig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "zig";
+          publisher = "tiehuis";
+          version = "0.2.5";
+          sha256 = "sha256-P8Sep0OtdchTfnudxFNvIK+SW++TyibGVI9zd+B5tu4=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "shellcheck";
