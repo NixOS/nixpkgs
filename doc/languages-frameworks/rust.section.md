@@ -373,7 +373,7 @@ hashes need to be specified since they are not available through the
 lock file. For example:
 
 ```
-cargoDeps = {
+cargoDeps = rustPlatform.importCargoLock {
   lockFile = ./Cargo.lock;
   outputHashes = {
     "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
