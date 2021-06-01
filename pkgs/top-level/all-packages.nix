@@ -2014,6 +2014,8 @@ in
 
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
 
+  bsp-layout = callPackage ../tools/misc/bsp-layout {};
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
