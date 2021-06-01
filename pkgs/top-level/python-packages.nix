@@ -2297,6 +2297,8 @@ in {
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
+  explorerscript = callPackage ../development/python-modules/explorerscript { };
+
   exrex = callPackage ../development/python-modules/exrex { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
@@ -4527,6 +4529,8 @@ in {
 
   ndjson = callPackage ../development/python-modules/ndjson { };
 
+  ndspy = callPackage ../development/python-modules/ndspy { };
+
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   neo = callPackage ../development/python-modules/neo { };
@@ -5603,6 +5607,8 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  py-desmume = callPackage ../development/python-modules/py-desmume { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
@@ -5766,6 +5772,8 @@ in {
   pygtfs = callPackage ../development/python-modules/pygtfs { };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
+
+  pygtkspellcheck = callPackage ../development/python-modules/pygtkspellcheck { };
 
   pygtrie = callPackage ../development/python-modules/pygtrie { };
 
@@ -6099,6 +6107,8 @@ in {
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
+  pypresence = callPackage ../development/python-modules/pypresence { };
 
   pyprind = callPackage ../development/python-modules/pyprind { };
 
@@ -7687,6 +7697,18 @@ in {
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
+  skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
+
+  skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
+
+  skytemple-files = callPackage ../development/python-modules/skytemple-files { };
+
+  skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
+
+  skytemple-rust = callPackage ../development/python-modules/skytemple-rust { };
+
+  skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
@@ -8279,6 +8301,8 @@ in {
   tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;
   };
+
+  tilequant = callPackage ../development/python-modules/tilequant { };
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
