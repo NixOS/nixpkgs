@@ -43,10 +43,10 @@ in rec {
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+        cp -d ${lib.getLib darwin.Libsystem}/lib/*.o $out/lib
 
         # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
         cp -rL ${darwin.Libsystem}/include $out
         chmod -R u+w $out/include
@@ -84,21 +84,21 @@ in rec {
 
       cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
       cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
-      cp -rd ${llvmPackages.clang-unwrapped.lib}/lib/* $out/lib
+      cp -rd ${lib.getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
 
-      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
-      cp -d ${llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
-      cp -d ${llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
-      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
-      cp -d ${libffi}/lib/libffi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
+      cp -d ${lib.getLib llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${lib.getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
@@ -106,11 +106,11 @@ in rec {
       ${lib.optionalString targetPlatform.isAarch64 ''
         # copy .tbd assembly utils
         cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-        cp -d ${pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+        cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
 
         # copy package extraction tools
         cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
-        cp -d ${pkgs.xar}/lib/libxar*.dylib $out/lib
+        cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
         cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
 
         # copy sigtool
@@ -118,7 +118,7 @@ in rec {
         cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
       ''}
 
-      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
+      cp -d ${lib.getLib darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
@@ -128,7 +128,7 @@ in rec {
         cp ${cctools_}/bin/$i $out/bin
       done
 
-      cp -d ${darwin.libtapi}/lib/libtapi* $out/lib
+      cp -d ${lib.getLib darwin.libtapi}/lib/libtapi* $out/lib
 
       ${lib.optionalString targetPlatform.isx86_64 ''
         cp -rd ${pkgs.darwin.CF}/Library $out
