@@ -11880,6 +11880,8 @@ in
     jdk = oraclejdk;
   };
 
+  sqlfluff = callPackage ../development/tools/database/sqlfluff { };
+
   sqlx-cli = callPackage ../development/tools/rust/sqlx-cli {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation Security;
   };
