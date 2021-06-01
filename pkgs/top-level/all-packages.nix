@@ -7223,6 +7223,8 @@ in
 
   nnn = callPackage ../applications/misc/nnn { };
 
+  sfm = callPackage ../applications/misc/sfm { };
+
   shfm = callPackage ../applications/misc/shfm { };
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
