@@ -256,6 +256,17 @@ in
           default = [];
           description = "Other GNOME Flashback sessions to enable.";
         };
+
+        panelModulePackages = mkOption {
+          default = [ pkgs.gnome.gnome-applets ];
+          type = types.listOf types.path;
+          description = ''
+            Packages containing modules that should be made available to <literal>gnome-panel</literal> (usually for applets).
+
+            If you're packaging something to use here, please install the modules in <literal>$out/lib/gnome-panel/modules</literal>.
+          '';
+          example = literalExample "[ pkgs.gnome.gnome-applets ]";
+        };
       };
     };
 
@@ -318,6 +329,7 @@ in
             (wm:
               pkgs.gnome.gnome-flashback.mkSessionForWm {
                 inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
+                inherit (cfg.flashback) panelModulePackages;
               }
             ) flashbackWms;
 
