@@ -1039,6 +1039,8 @@ mapAliases ({
     Its new location is obs-studio-plugins.obs-ndi.
   '';
 
+  obs-v4l2sink = throw "obs-v4l2sink is integrated into upstream OBS since version 26.1";  # Added 2021-06-01
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
