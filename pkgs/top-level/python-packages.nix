@@ -123,6 +123,7 @@ in {
     pytestCheckHook
     pythonCatchConflictsHook
     pythonImportsCheckHook
+    pythonKeepWheelHook
     pythonNamespacesHook
     pythonRecompileBytecodeHook
     pythonRemoveBinBytecodeHook
