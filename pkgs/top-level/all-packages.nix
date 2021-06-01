@@ -11390,7 +11390,7 @@ in
       /**/ if platform.isDarwin then (if platform.isAarch64 then 11 else 7)
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
-      else if platform.isLinux then 7
+      else if platform.isLinux then (if platform.isRiscV then 9 else 7)
       else if platform.isWasm then 8
       else 11; # latest
     # We take the "max of the mins". Why? Since those are lower bounds of the

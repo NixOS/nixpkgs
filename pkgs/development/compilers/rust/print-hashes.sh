@@ -18,6 +18,7 @@ PLATFORMS=(
   x86_64-apple-darwin
   aarch64-apple-darwin
   powerpc64le-unknown-linux-gnu
+  riscv64gc-unknown-linux-gnu
 )
 BASEURL=https://static.rust-lang.org/dist
 VERSION=${1:-}
