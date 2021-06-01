@@ -10031,6 +10031,12 @@
     githubId = 27386;
     name = "Milan Svoboda";
   };
+  tfc = {
+    email = "jacek@galowicz.de";
+    github = "tfc";
+    githubId = 29044;
+    name = "Jacek Galowicz";
+  };
   tg-x = {
     email = "*@tg-x.net";
     github = "tg-x";

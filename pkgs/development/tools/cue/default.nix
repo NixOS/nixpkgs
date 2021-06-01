@@ -23,7 +23,7 @@ buildGoModule rec {
   meta = {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    maintainers = with lib.maintainers; [ solson ];
+    maintainers = [];
     license = lib.licenses.asl20;
   };
 }
