@@ -21,7 +21,7 @@ buildGoPackage rec {
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0
     wrapProgram $out/bin/dlv \
-      --set "disableHardening" fortify
+      --prefix disableHardening " " fortify
   '';
 
   meta = with lib; {
