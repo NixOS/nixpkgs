@@ -2830,6 +2830,8 @@ in
 
   kaldi = callPackage ../tools/audio/kaldi { };
 
+  kalk = callPackage ../tools/misc/kalk { };
+
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
   klaus = with python3Packages; toPythonApplication klaus;
