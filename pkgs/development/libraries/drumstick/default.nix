@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ solson ];
+    maintainers = [];
     description = "MIDI libraries for Qt5/C++";
     homepage = "http://drumstick.sourceforge.net/";
     license = licenses.gpl2Plus;
