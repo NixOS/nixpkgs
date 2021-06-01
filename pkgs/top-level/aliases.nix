@@ -1021,6 +1021,12 @@ mapAliases ({
     Its new location is obs-studio-plugins.obs-gstreamer.
   '';
 
+  # Added 2021-06-01
+  obs-move-transition = throw ''
+    obs-move-transition has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-move-transition.
+  '';
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */

@@ -25788,8 +25788,6 @@ in
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
-  obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
-
   obs-multi-rtmp = libsForQt5.callPackage ../applications/video/obs-studio/obs-multi-rtmp.nix { };
 
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
