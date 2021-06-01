@@ -2724,6 +2724,8 @@ in
       Accelerate CoreGraphics CoreVideo;
   };
 
+  gpg-tui = callPackage ../tools/security/gpg-tui { };
+
   goa = callPackage ../development/tools/goa { };
 
   gohai = callPackage ../tools/system/gohai { };
