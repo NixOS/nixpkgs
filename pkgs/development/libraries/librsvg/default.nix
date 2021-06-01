@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.50.5";
+  version = "2.50.6";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wlj5g1jgp93sj3rr6qspj282whz13ahnv8ca99d7zilq9s1aw1j";
+    sha256 = "iAdJGZOoevVgxdP1I7jUpLugxQilYPH5NxdytRR3rFc=";
   };
 
   nativeBuildInputs = [
