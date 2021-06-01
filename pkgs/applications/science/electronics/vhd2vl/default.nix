@@ -30,16 +30,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     flex
+    which
   ];
 
   buildInputs = [
     verilog
-    which
   ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp src/vhd2vl $out/bin/
+    runHook preInstall
+    install -D -m755 src/vhd2vl $out/bin/vdh2vl
+    runHook postInstall
   '';
 
   meta = with lib; {
