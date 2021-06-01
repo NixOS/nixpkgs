@@ -25486,6 +25486,8 @@ in
 
   softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix {};
 
+  songrec = callPackage ../applications/audio/songrec {};
+
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
