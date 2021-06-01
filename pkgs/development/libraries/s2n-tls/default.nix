@@ -13,11 +13,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+  outputs = [ "out" "dev"];
+
+  buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
+
+  propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+
+  postInstall = ''
+    substituteInPlace $out/lib/s2n/cmake/shared/s2n-targets.cmake \
+      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+  '';
 
   meta = with lib; {
     description = "C99 implementation of the TLS/SSL protocols";
