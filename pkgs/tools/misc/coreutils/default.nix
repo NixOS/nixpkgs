@@ -68,6 +68,12 @@ stdenv.mkDerivation (rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
+
+    # tests try to access user 1000 which is forbidden in sandbox
+    sed '2i print "Skipping id uid test"; exit 77' -i ./tests/id/uid.sh
+    sed '2i print "Skipping id zero test"; exit 77' -i ./tests/id/zero.sh
+    sed '2i print "Skipping misc help-versiob test"; exit 77' -i ./tests/misc/help-version.sh
+    sed '2i print "Skipping chown separator test"; exit 77' -i ./tests/chown/separator.sh
   '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
     ''
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
@@ -136,20 +142,15 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
-
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text
       manipulation utilities of the GNU operating system.  These are
       the core utilities which are expected to exist on every
       operating system.
     '';
-
     license = licenses.gpl3Plus;
-
     platforms = platforms.unix ++ platforms.windows;
-
     priority = 10;
-
     maintainers = [ maintainers.eelco ];
   };
 } // optionalAttrs stdenv.hostPlatform.isMusl {
