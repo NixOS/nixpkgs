@@ -1033,6 +1033,12 @@ mapAliases ({
     Its new location is obs-studio-plugins.obs-multi-rtmp.
   '';
 
+  # Added 2021-06-01
+  obs-ndi = throw ''
+    obs-ndi has been converted into a plugin for use with wrapOBS.
+    Its new location is obs-studio-plugins.obs-ndi.
+  '';
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */

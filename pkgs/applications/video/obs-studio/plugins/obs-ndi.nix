@@ -1,10 +1,3 @@
-# We don't have a wrapper which can supply obs-studio plugins so you have to
-# somewhat manually install this:
-
-# nix-env -f "<nixpkgs>" -iA obs-ndi
-# mkdir -p ~/.config/obs-studio/plugins/bin
-# ln -s ~/.nix-profile/lib/obs-plugins/obs-ndi.so ~/.config/obs-studio/plugins/bin/
-
 { lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi }:
 
 stdenv.mkDerivation rec {
