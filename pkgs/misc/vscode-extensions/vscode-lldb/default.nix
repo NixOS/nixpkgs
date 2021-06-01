@@ -5,14 +5,13 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-Lw9JX7x000pUd/1MnGPv+RcIKlCKFlVgEslwXgrdO4k=";
-    fetchSubmodules = true;
+    sha256 = "sha256-utElXMAJG8X7jFmY/oyrWOCkOiNG3jZHrf04vTBTi7M=";
   };
 
   lldb = callPackage ./lldb.nix {};
@@ -24,7 +23,7 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-6nN+qVb1AEAMUth7d8mfQfLul0CpHnq9F93lXlp4mS0=";
+    cargoSha256 = "sha256-ZbD/+QWvpi88bHoSvDG0FKcsTsnthYR1SYkkJhqBbbU=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -71,8 +70,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/adapter ${adapter}/{bin,lib}/* ../adapter/*.py
+    wrapProgram $ext/adapter/codelldb \
+      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     cp -t $ext/formatters ../formatters/*.py
-    ln -s ${lldb} $ext/lldb
+    ln -s ${lldb.lib} $ext/lldb
     # Mark that all components are installed.
     touch $ext/platform.ok
 
