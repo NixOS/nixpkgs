@@ -190,7 +190,7 @@ in {
           environment = {
             # NixOS specific option to avoid that it's trying to write into its store-path.
             # See also https://github.com/lau/tzdata#data-directory-and-releases
-            PLAUSIBLE_TZDATA = "/var/lib/plausible/elixir_tzdata";
+            TZDATA_DIR = "/var/lib/plausible/elixir_tzdata";
 
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration

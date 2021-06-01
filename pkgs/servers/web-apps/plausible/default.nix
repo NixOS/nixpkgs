@@ -1,5 +1,13 @@
-{ lib, stdenv, beamPackages, fetchFromGitHub, glibcLocales, cacert
-, mkYarnModules, nodejs, fetchpatch, nixosTests
+{ lib
+, stdenv
+, beamPackages
+, fetchFromGitHub
+, glibcLocales
+, cacert
+, mkYarnModules
+, nodejs
+, fetchpatch
+, nixosTests
 }:
 
 let
@@ -37,7 +45,8 @@ let
       echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
     '';
   };
-in beamPackages.mixRelease {
+in
+beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
   nativeBuildInputs = [ nodejs ];
@@ -50,6 +59,10 @@ in beamPackages.mixRelease {
       sha256 = "sha256-JvJ7xlGw+tHtWje+jiQChVC4KTyqqdq2q+MIcOv/k1o=";
     })
 
+    # Ensure that `tzdata` doesn't write into its store-path
+    # https://github.com/plausible/analytics/pull/1096, but rebased onto 1.3.0
+    ./tzdata-rebased.patch
+
     # CREATE EXTENSION requires super-user privileges. To avoid that, we just skip
     # the responsible SQL statement here and take care of it in the module.
     ./skip-create-ext.patch
@@ -60,25 +73,13 @@ in beamPackages.mixRelease {
     updateScript = ./update.sh;
   };
 
-  postPatch = ''
-    # Without this modification, tzdata tries to write in its store-path:
-    # https://github.com/lau/tzdata#data-directory-and-releases
-    echo 'config :tzdata, :data_dir, (System.get_env("PLAUSIBLE_TZDATA") || "/tmp/plausible_tzdata")' \
-      >> config/config.exs
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    mkdir -p $out
+  postBuild = ''
     ln -sf ${yarnDeps}/node_modules assets/node_modules
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
     # https://github.com/phoenixframework/phoenix/issues/2690
     mix do deps.loadpaths --no-deps-check, phx.digest
-
-    runHook postBuild
   '';
 
   meta = with lib; {
