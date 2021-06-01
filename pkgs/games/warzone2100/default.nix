@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , ninja
-, zip
+, p7zip
 , pkg-config
 , asciidoctor
 , gettext
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     ninja
-    zip
+    p7zip
     asciidoctor
     gettext
     shaderc
