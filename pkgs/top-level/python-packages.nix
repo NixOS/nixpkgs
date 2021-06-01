@@ -7471,6 +7471,8 @@ in {
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
 
+  scikit-hep-testdata = callPackage ../development/python-modules/scikit-hep-testdata { };
+
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
   scikit-learn = callPackage ../development/python-modules/scikit-learn {
@@ -8609,6 +8611,8 @@ in {
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
+
+  uproot = callPackage ../development/python-modules/uproot { };
 
   uproot3 = callPackage ../development/python-modules/uproot3 { };
 
