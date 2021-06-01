@@ -2014,6 +2014,8 @@ in
 
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
 
+  bsp-layout = callPackage ../tools/misc/bsp-layout {};
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
@@ -2831,6 +2833,8 @@ in
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kaldi = callPackage ../tools/audio/kaldi { };
+
+  kalk = callPackage ../tools/misc/kalk { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
@@ -5840,6 +5844,8 @@ in
 
   ipget = callPackage ../applications/networking/ipget { };
 
+  iptsd = callPackage ../applications/misc/iptsd { };
+
   ipmitool = callPackage ../tools/system/ipmitool {};
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
@@ -8604,6 +8610,8 @@ in
     tex = texlive.combined.scheme-small;
   };
 
+  skytemple = callPackage ../applications/misc/skytemple {};
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   # Not updated upstream since 2018, doesn't support qt newer than 5.12
@@ -9366,6 +9374,8 @@ in
   ursadb = callPackage ../servers/ursadb {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
+
+  ustreamer = callPackage ../applications/video/ustreamer { };
 
   usync = callPackage ../applications/misc/usync { };
 
@@ -31384,6 +31394,8 @@ in
   zoneminder = callPackage ../servers/zoneminder { };
 
   zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
+
+  xcp = callPackage ../tools/misc/xcp { };
 
   xcpc = callPackage ../misc/emulators/xcpc { };
 
