@@ -660,6 +660,18 @@ let
         };
       };
 
+      kahole.magit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "magit";
+          publisher = "kahole";
+          version = "0.6.13";
+          sha256 = "sha256-/SeGQV0UEqBk69cAmUXFc/OfPxNssvzZqa7NmAMQD1k=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
