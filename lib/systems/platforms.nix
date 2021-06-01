@@ -486,7 +486,6 @@ rec {
       baseConfig = "defconfig";
       DTB = true;
       extraConfig = ''
-        FTRACE n
         SERIAL_OF_PLATFORM y
       '';
     };
