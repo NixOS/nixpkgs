@@ -20,7 +20,6 @@
 , ruby
 , lua
 , capstone
-, fetchpatch
 , useX11 ? false
 , rubyBindings ? false
 , pythonBindings ? false
@@ -29,27 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.2.1";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0n3k190qjhdlj10fjqijx6ismz0g7fk28i83j0480cxdqgmmlbxc";
+    sha256 = "sha256-xndnRVlqTB/NH1ROo7xkftLP7DufsJu4CCA9MCOEeng=";
   };
-
-  patches = [
-    # fix for CVE-2021-32613
-    (fetchpatch {
-      url = "https://github.com/radareorg/radare2/commit/5e16e2d1c9fe245e4c17005d779fde91ec0b9c05.patch";
-      sha256 = "sha256-zCFNn968buLuSqfUT5E+72qz0l1tA3fEUQIxJl2nd3I=";
-    })
-    (fetchpatch {
-      name = "CVE-2021-32613.patch";
-      url = "https://github.com/radareorg/radare2/commit/049de62730f4954ef9a642f2eeebbca30a8eccdc.patch";
-      sha256 = "sha256-s8SWGuSQ6fxDCybtjO2ZW8w7H6mr+AuzVLL6dw+XKDw=";
-    })
-  ];
 
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
