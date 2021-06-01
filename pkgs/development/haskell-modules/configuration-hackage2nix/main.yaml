@@ -143,6 +143,10 @@ package-maintainers:
     - vector-sized
     - vulkan
     - vulkan-utils
+  erictapen:
+    - hakyll
+    - hakyll-contrib-hyphenation
+    - webify
   Gabriel439:
     - annah
     - bench
