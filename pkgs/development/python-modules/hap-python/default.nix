@@ -16,16 +16,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "HAP-python";
-  version = "3.4.1";
+  pname = "hap-python";
+  version = "3.5.0";
   disabled = pythonOlder "3.5";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
-    repo = pname;
+    repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "sha256-tZ6Zwlx5J62Xqpxxmt8Phdd9ngtKYhP/p3uor1dRfK8=";
+    sha256 = "1vzlfx0gpidl0rzv4z94pziwm6rj4lrilly5pykgq984y708pcqf";
   };
 
   propagatedBuildInputs = [

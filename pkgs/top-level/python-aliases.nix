@@ -36,6 +36,7 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
+  HAP-python = hap-python; # added 2021-06-01
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   setuptools_scm = setuptools-scm; # added 2021-06-03
 })
