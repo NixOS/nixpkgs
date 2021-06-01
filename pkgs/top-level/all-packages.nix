@@ -31387,6 +31387,8 @@ in
 
   zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
 
+  xcp = callPackage ../tools/misc/xcp { };
+
   xcpc = callPackage ../misc/emulators/xcpc { };
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
