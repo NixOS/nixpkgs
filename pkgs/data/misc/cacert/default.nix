@@ -18,7 +18,7 @@ let
     sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
-  version = "3.63";
+  version = "3.66";
 
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 in
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/nss-${version}.tar.gz";
-    sha256 = "0892xbjcaw6g4rd2rs4qa37nbda248cjrgxa4faaw0licbpjyb8q";
+    sha256 = "1jfdnh5l4k57r2vb07s06hqi7m2qzk0d9x25lsdsrw3cflx9x9w9";
   };
 
   outputs = [ "out" "unbundled" ];
