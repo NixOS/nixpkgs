@@ -129,7 +129,7 @@ let lispPackages = rec {
     description = "Browser";
 
     overrides = x: {
-      postInstall = ''
+      postInstall = if (!stdenv.isDarwin) then ''
         echo "Building nyxt binary"
         (
           source "$out/lib/common-lisp-settings"/*-shell-config.sh
@@ -138,6 +138,21 @@ let lispPackages = rec {
           make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
           make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags install
           cp nyxt "$out/bin/nyxt"
+        )
+        NIX_LISP_PRELAUNCH_HOOK='
+          nix_lisp_build_system nyxt/gtk-application \
+           "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
+           "" "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
+        ' "$out/bin/nyxt-lisp-launcher.sh"
+        cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
+      '' else ''
+        echo "Building nyxt binary"
+        (
+          source "$out/lib/common-lisp-settings"/*-shell-config.sh
+          cd "$out/lib/common-lisp"/*/
+          makeFlags="''${makeFlags:-}"
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
+          mv ./Nyxt.app $out/Applications
         )
         NIX_LISP_PRELAUNCH_HOOK='
           nix_lisp_build_system nyxt/gtk-application \
