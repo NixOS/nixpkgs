@@ -175,7 +175,7 @@ in
 				example = { 
 					"application/pdf" = [ pkgs.zathura "${pkgs.evince}/share/applications/org.gnome.Evince.desktop" ];
 					"inode/directory" = [ "${pkgs.spaceFM}/share/applications/spacefm.desktop" pkgs.ranger pkgs.vifm ];
-					"video/mp4" = pkgs.vifm;
+					"video/mp4" = [ pkgs.vifm ];
 				} ;
 				description = ''
 					Set that defines default launcher programs. Attribute name is the mimetype, 
