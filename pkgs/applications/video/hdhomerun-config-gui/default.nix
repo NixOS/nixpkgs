@@ -1,9 +1,6 @@
 { lib, stdenv, fetchurl, libhdhomerun, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
-
-# Version of libhdhomerun need to match the version of this package for successful build
-
   pname = "hdhomerun-config-gui";
   version = "20210224";
 
