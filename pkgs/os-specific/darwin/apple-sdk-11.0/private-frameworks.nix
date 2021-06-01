@@ -14,4 +14,5 @@
   URLFormatting = {};
   SignpostMetrics = {};
   PassKitCore = {};
+  SkyLight = {};
 }
