@@ -177,6 +177,7 @@
 , "lua-fmt"
 , "madoko"
 , "markdownlint-cli"
+, "markdownlint-cli2"
 , "markdown-link-check"
 , {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
 , "mastodon-bot"
