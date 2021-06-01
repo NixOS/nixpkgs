@@ -19279,7 +19279,7 @@ in
     zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
-    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
     # Use latest boringssl to allow http3 support
     openssl = boringssl;
@@ -19289,7 +19289,7 @@ in
     zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
-    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
 
@@ -19297,7 +19297,7 @@ in
     zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
-    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.dav nginxModules.moreheaders ];
   };
 
