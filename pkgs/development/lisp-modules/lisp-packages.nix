@@ -129,22 +129,42 @@ let lispPackages = rec {
     description = "Browser";
 
     overrides = x: {
+      patches = [
+        # Fixes a startup crash on Darwin
+        # https://github.com/atlas-engineer/nyxt/pull/1476
+        (pkgs.fetchpatch {
+          url = "https://github.com/midchildan/nyxt/commit/6184884b48b7cacdc51d104cb2299c26437a73d8.diff";
+          sha256 = "sha256-A8Hwfjn/B5fv8OTKM5i9YrNFAMbPAg9xRH7gwoMMlQs=";
+        })
+
+        # Fix list-buffers
+        (pkgs.fetchpatch {
+          url = "https://github.com/atlas-engineer/nyxt/commit/4e2efb5a456d8d647f3eeaeb52cb21f96c92471c.diff";
+          sha256 = "sha256-xt+jXZlTktznAoEWsaO5uQywo+bR9PecgTKOjY7UNvY=";
+        })
+
+        # Fix non-functional "Update" button in the buffer list
+        # https://github.com/atlas-engineer/nyxt/pull/1484
+        (pkgs.fetchpatch {
+          url = "https://github.com/midchildan/nyxt/commit/7589181d6e367442bad8011f0ef5b42fc1cfd3c5.diff";
+          sha256 = "sha256-4uXm7yxkhcArk39JBealGr1N4r/8AM5v/1VYHw1y4hw=";
+        })
+      ];
+
       postInstall = ''
         echo "Building nyxt binary"
-        (
-          source "$out/lib/common-lisp-settings"/*-shell-config.sh
-          cd "$out/lib/common-lisp"/*/
-          makeFlags="''${makeFlags:-}"
-          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
-          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags install
-          cp nyxt "$out/bin/nyxt"
-        )
+
+        # clear unnecessary environment variables to avoid hitting the limit
+        env -i \
+        NIX_LISP="$NIX_LISP" \
         NIX_LISP_PRELAUNCH_HOOK='
-          nix_lisp_build_system nyxt/gtk-application \
-           "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
-           "" "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
+          nix_lisp_build_system nyxt/gi-gtk-application \
+            "(asdf/system:component-entry-point (asdf:find-system :nyxt/gi-gtk-application))" \
+            "" \
+            "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
         ' "$out/bin/nyxt-lisp-launcher.sh"
-        cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
+
+        mv "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
       '';
     };
 

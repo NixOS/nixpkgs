@@ -1,9 +1,19 @@
-{ stdenv, lib, lispPackages
-, makeWrapper, wrapGAppsHook, gst_all_1
-, glib, gdk-pixbuf, cairo
-, mime-types, pango, gtk3
-, glib-networking, gsettings-desktop-schemas
-, xclip, notify-osd, enchant
+{ lib
+, stdenv
+, cairo
+, enchant
+, gdk-pixbuf
+, glib
+, glib-networking
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk3
+, gst_all_1
+, lispPackages
+, mime-types
+, pango
+, wrapGAppsHook
+, xclip
 }:
 
 stdenv.mkDerivation rec {
@@ -12,39 +22,75 @@ stdenv.mkDerivation rec {
 
   src = lispPackages.nyxt;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  gstBuildInputs = with gst_all_1; [
-    gstreamer gst-libav
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [
+    cairo
+    enchant
+    gdk-pixbuf
+    glib
+    glib-networking
+    gobject-introspection
+    gsettings-desktop-schemas
+    gtk3
+    mime-types
+    pango
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ];
-  buildInputs = [
-    glib gdk-pixbuf cairo
-    mime-types pango gtk3
-    glib-networking gsettings-desktop-schemas
-    xclip notify-osd enchant
-  ] ++ gstBuildInputs;
+  ]);
 
-  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs;
+  binPath = lib.optionals (!stdenv.isDarwin) [ xclip ];
 
+  doInstallCheck = !stdenv.isDarwin;
+  dontBuild = true;
   dontWrapGApps = true;
+
+  # stripping breaks the Linux build, possibly because the resulting binary is
+  # already stripped once in lispPackages.nyxt
+  dontStrip = true;
+
   installPhase = ''
-    mkdir -p $out/share/applications/
-    sed "s/VERSION/$version/" $src/lib/common-lisp/nyxt/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
-    for i in 16 32 128 256 512; do
-      mkdir -p "$out/share/icons/hicolor/''${i}x''${i}/apps/"
-      cp -f $src/lib/common-lisp/nyxt/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
-    done
+      runHook preInstall
+    '' + (if stdenv.isDarwin then ''
+      mkdir -p $out/bin $out/Applications/Nyxt.app/Contents
+      pushd $out/Applications/Nyxt.app/Contents
+      install -Dm644 $src/lib/common-lisp/nyxt/assets/Info.plist Info.plist
+      install -Dm644 $src/lib/common-lisp/nyxt/assets/nyxt.icns Resources/nyxt.icns
+      install -Dm755 $src/bin/nyxt MacOS/nyxt
+      popd
 
-    mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
-      --argv0 nyxt "''${gappsWrapperArgs[@]}"
-  '';
+      gappsWrapperArgsHook # FIXME: currently runs at preFixup
+      wrapGApp $out/Applications/Nyxt.app/Contents/MacOS/nyxt \
+        --prefix PATH : "${lib.makeBinPath binPath}" \
+        --argv0 nyxt
 
-  checkPhase = ''
+      ln -s $out/Applications/Nyxt.app/Contents/MacOS/nyxt $out/bin/nyxt
+    '' else ''
+      mkdir -p $out/share/applications/
+      sed "s/VERSION/$version/" $src/lib/common-lisp/nyxt/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
+      for i in 16 32 128 256 512; do
+        mkdir -p "$out/share/icons/hicolor/''${i}x''${i}/apps/"
+        cp -f $src/lib/common-lisp/nyxt/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
+      done
+
+      install -Dm755 $src/bin/nyxt $out/bin/nyxt
+
+      gappsWrapperArgsHook # FIXME: currently runs at preFixup
+      wrapGApp $out/bin/nyxt \
+        --prefix PATH : "${lib.makeBinPath binPath}" \
+        --argv0 nyxt
+    '') + ''
+      runHook postInstall
+    '';
+
+  installCheckPhase = ''
+    runHook preCheck
     $out/bin/nyxt -h
+    runHook postCheck
   '';
 
   meta = with lib; {
