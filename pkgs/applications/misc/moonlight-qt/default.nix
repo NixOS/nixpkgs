@@ -15,6 +15,7 @@
 , openssl
 , libopus
 , ffmpeg
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     openssl
     libopus
     ffmpeg
+    wayland
   ];
 
   meta = with lib; {
