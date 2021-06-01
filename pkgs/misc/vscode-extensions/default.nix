@@ -135,6 +135,18 @@ let
         };
       };
 
+      bodil.file-browser = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "file-browser";
+          publisher = "bodil";
+          version = "0.2.10";
+          sha256 = "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
