@@ -1124,6 +1124,8 @@ in {
     enablePython = true;
   });
 
+  boschshcpy = callPackage ../development/python-modules/boschshcpy { };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto = callPackage ../development/python-modules/boto { };
