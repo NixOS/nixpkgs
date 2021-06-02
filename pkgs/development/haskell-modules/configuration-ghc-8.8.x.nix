@@ -60,8 +60,6 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_4_0_0;
     base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
   });
 
   # Ignore overly restrictive upper version bounds.

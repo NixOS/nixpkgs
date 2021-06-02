@@ -399,9 +399,9 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_1
+ - clash-ghc_1_4_2
  - clash-lib
- - clash-lib_1_4_1
+ - clash-lib_1_4_2
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-systemverilog
@@ -546,6 +546,7 @@ dont-distribute-packages:
  - ctpl
  - cube
  - cursedcsv
+ - cursor-fuzzy-time-gen
  - cv-combinators
  - cypher
  - Dangerous
@@ -785,6 +786,7 @@ dont-distribute-packages:
  - factual-api
  - fadno-braids
  - FailureT
+ - fakedata-quickcheck
  - fallingblocks
  - falling-turnip
  - family-tree
@@ -1234,6 +1236,7 @@ dont-distribute-packages:
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
+ - hasql-th
  - hastache-aeson
  - haste-app
  - haste-gapi
@@ -1276,6 +1279,7 @@ dont-distribute-packages:
  - heavy-log-shortcuts
  - hecc
  - hedgehog-checkers-lens
+ - hedgehog-fakedata
  - hedgehog-gen-json
  - Hedi
  - hedis-pile
@@ -2093,6 +2097,7 @@ dont-distribute-packages:
  - network-topic-models
  - network-websocket
  - newsletter-mailgun
+ - newsynth
  - ngrams-loader
  - ngx-export-tools-extra
  - nikepub
@@ -2242,6 +2247,7 @@ dont-distribute-packages:
  - pkgtreediff
  - planet-mitchell
  - plocketed
+ - ploterific
  - Plot-ho-matic
  - PlslTools
  - png-file
@@ -2354,6 +2360,7 @@ dont-distribute-packages:
  - questioner
  - queuelike
  - quickbench
+ - quickcheck-combinators
  - quickcheck-poly
  - quickcheck-regex
  - quickcheck-relaxng
@@ -2842,6 +2849,8 @@ dont-distribute-packages:
  - strelka
  - strict-data
  - string-typelits
+ - stripe-haskell
+ - stripe-http-client
  - stripe-scotty
  - structural-induction
  - structured-mongoDB
@@ -3046,6 +3055,7 @@ dont-distribute-packages:
  - UMM
  - unagi-bloomfilter
  - unbound
+ - unfoldable-restricted
  - unicode-normalization
  - uni-events
  - uniformBase
@@ -3109,6 +3119,8 @@ dont-distribute-packages:
  - verdict-json
  - versioning-servant
  - vflow-types
+ - vformat-aeson
+ - vformat-time
  - vfr-waypoints
  - ViennaRNA-extras
  - vigilance
