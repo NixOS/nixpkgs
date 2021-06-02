@@ -1,4 +1,4 @@
-{ stdenv, lib, openjdk,typedbHome ? "~/.typedb_home", fetchzip}:
+{ stdenv, lib, openjdk,typedbHome ? "~/.typedb_home", fetchzip, fetchurl}:
 
 let 
   typedbVersion = "2.1.1";
@@ -12,6 +12,10 @@ let
     url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-linux-2.1.1.tar.gz";
     sha256 = "15nwm2dr68p67c2xcqigs66gd679j1zr72gqv7qxgvflwyvyz8fb";
   };
+  linuxSrcUrl = fetchurl {
+    url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-linux-2.1.1.tar.gz";
+    sha256 = "00wvkiahmrys32ckp6r59bbrzfd7jzsphniyjdj4p9bh7k339gn2";
+  };
   windowsSrc = fetchzip {
     url = "https://github.com/vaticle/typedb/releases/download/2.1.1/typedb-all-windows-2.1.1.zip";
     sha256 = "0vd66gfshkg697z07nhy957mwqzlli4r4pmn67hx58n9mkg024kq";
@@ -22,7 +26,7 @@ let
   };
   srcFolder = if stdenv.hostPlatform.isWindows then windowsSrc
               else if stdenv.isDarwin          then macSrc
-                                               else linuxSrc ;
+                                               else linuxSrcUrl ;
   javaPatch = ''
         20c20
         < JAVA_BIN=java
@@ -42,6 +46,8 @@ stdenv.mkDerivation rec {
   buildDepends = [ openjdk ];
 
   installPhase = ''
+    ls
+    tar -xf typedb-all-linux-2.1.1.tar.gz
     echo "here"
     ls -lah 
     echo "--"
