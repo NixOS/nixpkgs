@@ -188,6 +188,8 @@ with self; with super; {
 
   isort = callPackage ../development/python-modules/isort/4.nix { };
 
+  itsdangerous = callPackage ../development/python-modules/itsdangerous/1.nix { };
+
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools/2.nix { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream/2.nix { };
