@@ -56,6 +56,8 @@ with self; with super; {
 
   cliapp = callPackage ../development/python-modules/cliapp { };
 
+  click = callPackage ../development/python-modules/click/7.nix { };
+
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
