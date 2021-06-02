@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   makeFlags = [ "-C" "interpreter" ];
 
   createFindlibDestdir = true;

@@ -58,6 +58,8 @@ stdenv.mkDerivation (args // {
   ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
   ;
 
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];

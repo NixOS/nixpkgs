@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ];
 
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   configurePhase = ''
   make -f configure.make Makefile.config \
     "OCAMLBUILD_PREFIX=$out" \
