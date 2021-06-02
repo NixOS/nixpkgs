@@ -3441,6 +3441,8 @@ in {
 
   iso3166 = callPackage ../development/python-modules/iso3166 { };
 
+  ismartgate = callPackage ../development/python-modules/ismartgate { };
+
   iso-639 = callPackage ../development/python-modules/iso-639 { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
