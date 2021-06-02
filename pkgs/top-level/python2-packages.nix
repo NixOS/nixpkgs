@@ -100,6 +100,8 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
+  flask = callPackage ../development/python-modules/flask/1.nix { };
+
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
 
   flit = disabled super.flit;
