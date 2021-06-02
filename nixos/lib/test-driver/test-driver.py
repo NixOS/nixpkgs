@@ -459,7 +459,7 @@ class Machine:
     def shell_interact(self) -> None:
         """Allows you to interact with the guest shell
 
-        Should only be used during testing, not in the production test."""
+        Should only be used during test development, not in the production test."""
         self.connect()
         telnet = telnetlib.Telnet()
         telnet.sock = self.shell  # type: ignore
