@@ -11,10 +11,29 @@
         22.05.
       </para>
     </listitem>
+    <listitem>
+      <para>
+        <literal>iptables</literal> now use <literal>nf_tables</literal>
+        backend.
+      </para>
+    </listitem>
   </itemizedlist>
   <section xml:id="backward-incompatibilities">
     <title>Backward incompatibilities</title>
+    <para>
+      When upgrading from a previous release, please be aware of the
+      following incompatible changes:
+    </para>
     <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Since <literal>iptables</literal> now use
+          <literal>nf_tables</literal> backend and
+          <literal>ipset</literal> doesn’t support it, some applications
+          (ferm, shorewall, firehol, k3s) may have limited
+          functionality.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded

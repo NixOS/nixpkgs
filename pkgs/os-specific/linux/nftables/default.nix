@@ -4,7 +4,7 @@
 , gmp, jansson, readline
 , withDebugSymbols ? false
 , withPython ? false , python3
-, withXtables ? false , iptables
+, withXtables ? true , iptables-nftables-compat
 }:
 
 with lib;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmnl libnftnl libpcap
     gmp jansson readline
-  ] ++ optional withXtables iptables
+  ] ++ optional withXtables iptables-nftables-compat
     ++ optional withPython python3;
 
   preConfigure = ''
