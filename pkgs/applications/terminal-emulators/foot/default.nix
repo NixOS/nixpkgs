@@ -131,7 +131,11 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
-  mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
+  mesonFlags = [
+    "--buildtype=release"
+    "-Db_lto=true"
+    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+  ];
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
@@ -146,6 +150,15 @@ stdenv.mkDerivation rec {
     meson configure -Db_pgo=use
   '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
+  '';
+
+  outputs = [ "out" "terminfo" ];
+
+  # make sure nix-env and buildEnv also include the
+  # terminfo output when the package is installed
+  postInstall = ''
+    mkdir -p "$out/nix-support"
+    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
   '';
 
   passthru.tests = {
