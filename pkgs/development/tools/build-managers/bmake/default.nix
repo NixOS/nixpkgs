@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchurl
-, getopt
+{ lib, stdenv, fetchurl, fetchpatch
+, getopt, tzdata
 }:
 
 stdenv.mkDerivation rec {
   pname = "bmake";
-  version = "20200902";
+  version = "20210420";
 
   src = fetchurl {
     url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
-    sha256 = "1v1v81llsiy8qbpy38nml1x08dhrihwh040pqgwbwb9zy1108b08";
+    sha256 = "1ajq8v5rq3pl5y9h1hlscs83007fsyk3lhcp87z09ma370lm3ra7";
   };
+
+  # Make tests work with musl
+  # * Disable deptgt-delete_on_error test (alpine does this too)
+  # * Fix test failing due to different strerror(3) output for musl and glibc
+  postPatch = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+    sed -i unit-tests/Makefile -e '/deptgt-delete_on_error/d'
+    substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
+  '';
 
   nativeBuildInputs = [ getopt ];
 
   patches = [
+    # make bootstrap script aware of the prefix in /nix/store
     ./bootstrap-fix.patch
+    # preserve PATH from build env in unit tests
     ./fix-unexport-env-test.patch
+    # Fix localtime tests without global /etc/zoneinfo directory
+    ./fix-localtime-test.patch
+    # decouple tests from build phase
+    (fetchpatch {
+      name = "separate-tests.patch";
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
+      sha256 = "00s76jwyr83c6rkvq67b1lxs8jhm0gj2rjgy77xazqr5400slj9a";
+    })
+    # add a shebang to bmake's install(1) replacement
+    (fetchpatch {
+      name = "install-sh.patch";
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
+      sha256 = "0z8icd6akb96r4cksqnhynkn591vbxlmrrs4w6wil3r6ggk6mwa6";
+    })
   ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap
@@ -41,6 +65,16 @@ stdenv.mkDerivation rec {
     ./boot-strap --prefix=$out -o . op=install
 
     runHook postInstall
+  '';
+
+  doCheck = true;
+  checkInputs = [ tzdata ];
+  checkPhase = ''
+    runHook preCheck
+
+    ./boot-strap -o . op=test
+
+    runHook postCheck
   '';
 
   setupHook = ./setup-hook.sh;

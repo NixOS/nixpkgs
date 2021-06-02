@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-d1CErJ/vorfXgQCnSfPcM/6iIixPwFXndDqFv+mBhwY=";
+    sha256 = "sha256-78eQinKR4w7K8MFd4uyj5IPkUs0Mz5XeO7JUG/1cKLw=";
   };
 
-  vendorSha256 = "sha256-QiO5p0x8kmIN6f0uYS0IR2MlWtRYTHeZpW6Nmupjias=";
+  vendorSha256 = "sha256-9upXhTvQJ9oFfomgqja3SiifiZpl8RUQ85HwL9bDPlQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -9,12 +9,12 @@ curl="curl            \
  --cookie-jar cookies \
  --insecure           \
  --speed-time 5       \
- -#                   \
+ --progress-bar       \
  --fail               \
  $curlOpts            \
  $NIX_CURL_FLAGS"
 
-echo "Trying to fetch wheel with predicted URL: $predictedURL"
+echo "Trying to fetch with predicted URL: $predictedURL"
 
 $curl $predictedURL --output $out && exit 0
 

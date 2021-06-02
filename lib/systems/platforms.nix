@@ -481,11 +481,11 @@ rec {
   riscv-multiplatform = {
     linux-kernel = {
       name = "riscv-multiplatform";
-      target = "vmlinux";
+      target = "Image";
       autoModules = true;
       baseConfig = "defconfig";
+      DTB = true;
       extraConfig = ''
-        FTRACE n
         SERIAL_OF_PLATFORM y
       '';
     };

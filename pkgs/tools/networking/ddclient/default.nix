@@ -2,11 +2,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/ddclient/${pname}-${version}.tar.gz";
-    sha256 = "0fwyhab8yga2yi1kdfkbqxa83wxhwpagmj1w1mwkg2iffh1fjjlw";
+    sha256 = "0w14qnn72j333i3j7flxkw6bzcg4n31d8jfnvhmwa7s9rharx5p4";
   };
 
   # perl packages by default get devdoc which isn't present

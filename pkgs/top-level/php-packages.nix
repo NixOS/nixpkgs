@@ -138,6 +138,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
+    snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     swoole = callPackage ../development/php-packages/swoole { };
@@ -235,7 +237,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
           internalDeps}
       '';
-      checkPhase = "runHook preCheck; echo n | make test; runHook postCheck";
+      checkPhase = "runHook preCheck; NO_INTERACTON=yes make test; runHook postCheck";
       outputs = [ "out" "dev" ];
       installPhase = ''
         mkdir -p $out/lib/php/extensions

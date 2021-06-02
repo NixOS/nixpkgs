@@ -1,26 +1,36 @@
-{ buildGoModule, fetchFromGitHub, lib, dnsmasq }:
+{
+  buildGoModule,
+  dnsmasq,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "cni-plugin-dnsname";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "dnsname";
     rev = "v${version}";
-    sha256 = "090kpq2ppan9ayajdk5vwbvww30nphylgajn2p3441d4jg2nvsm3";
+    sha256 = "sha256-hHkQOHDso92gXFCz40iQ7j2cHTEAMsaeW8MCJV2Otqo=";
   };
 
-  patches = [ ./hardcode-dnsmasq-path.patch ];
-
-  postPatch = ''
-    substituteInPlace plugins/meta/dnsname/service.go --replace '@DNSMASQ@' '${dnsmasq}/bin/dnsmasq'
+  nativeBuildInputs = [ makeWrapper ];
+  postInstall = ''
+    wrapProgram $out/bin/dnsname --prefix PATH : ${lib.makeBinPath [ dnsmasq ]}
   '';
 
   vendorSha256 = null;
   subPackages = [ "plugins/meta/dnsname" ];
 
   doCheck = false; # NOTE: requires root privileges
+
+  passthru.tests = {
+    inherit (nixosTests) podman-dnsname;
+  };
 
   meta = with lib; {
     description = "DNS name resolution for containers";

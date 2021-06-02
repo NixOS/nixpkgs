@@ -3031,6 +3031,16 @@
     githubId = 147284;
     name = "Jason Felice";
   };
+  erdnaxe = {
+    email = "erdnaxe@crans.org";
+    github = "erdnaxe";
+    githubId = 2663216;
+    name = "Alexandre Iooss";
+    keys = [{
+      longkeyid = "rsa4096/0x6C79278F3FCDCC02";
+      fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02";
+    }];
+  };
   ericbmerritt = {
     email = "eric@afiniate.com";
     github = "ericbmerritt";
@@ -4126,6 +4136,12 @@
     github = "hongchangwu";
     githubId = 362833;
     name = "Hongchang Wu";
+  };
+  hoppla20 = {
+    email = "privat@vincentcui.de";
+    github = "hoppla20";
+    githubId = 25618740;
+    name = "Vincent Cui";
   };
   hoverbear = {
     email = "operator+nix@hoverbear.org";
@@ -6279,6 +6295,12 @@
     github = "matt-snider";
     githubId = 11810057;
     name = "Matt Snider";
+  };
+  mattchrist = {
+    email = "nixpkgs-matt@christ.systems";
+    github = "mattchrist";
+    githubId = 952712;
+    name = "Matt Christ";
   };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
@@ -10018,6 +10040,12 @@
     github = "tex";
     githubId = 27386;
     name = "Milan Svoboda";
+  };
+  tfc = {
+    email = "jacek@galowicz.de";
+    github = "tfc";
+    githubId = 29044;
+    name = "Jacek Galowicz";
   };
   tg-x = {
     email = "*@tg-x.net";
