@@ -206,7 +206,7 @@ let
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = "Create the database and database user locally. Works with socket authentication only.";
           };
         };
 
