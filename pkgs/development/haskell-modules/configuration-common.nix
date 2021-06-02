@@ -1943,8 +1943,8 @@ EOT
   # https://github.com/haskell-hvr/missingh/issues/56
   MissingH = doJailbreak super.MissingH;
 
-  # Too strict bound on random
-  # https://github.com/batterseapower/parallel-io/issues/14
+  # Too strict bound on containers
+  # https://github.com/batterseapower/parallel-io/issues/14#issuecomment-853441933
   parallel-io = doJailbreak super.parallel-io;
 
   # Disable flaky tests
