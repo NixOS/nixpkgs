@@ -129,7 +129,7 @@ let
         if exprs.type == "expr" then
           (
             let
-              mVal = ''[a-zA-Z0-9\'"_\. ]+'';
+              mVal = ''[a-zA-Z0-9\'"_\. \-]+'';
               mOp = "in|[!=<>]+";
               e = stripStr exprs.value;
               m = builtins.map stripStr (builtins.match ''^(${mVal}) *(${mOp}) *(${mVal})$'' e);
