@@ -543,6 +543,10 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    junit = callPackage ../development/ocaml-modules/junit { };
+    junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };
+    junit_alcotest = callPackage ../development/ocaml-modules/junit/alcotest.nix { };
+
     jwto = callPackage ../development/ocaml-modules/jwto { };
 
     kafka = callPackage ../development/ocaml-modules/kafka { };
