@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     description = "A recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
+    badPlatforms = [
+      "i686-linux"  # a 64-bit time_t is needed
+    ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];
   };
