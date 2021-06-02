@@ -20,6 +20,7 @@ rec {
   mkTestDriver =
     let
       testDriverScript = ./test-driver/test-driver.py;
+      testDriverLib = ./test-driver/lib;
     in
     qemu_pkg: stdenv.mkDerivation {
       name = "nixos-test-driver";
@@ -57,6 +58,7 @@ rec {
           # TODO: copy user script part into this file (append)
 
           wrapProgram $out/bin/nixos-test-driver \
+            --prefix PYTHONPATH : ${testDriverLib} \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
 
           install -m 0644 -vD driver-exports $out/nix-support/driver-exports
@@ -195,7 +197,7 @@ rec {
             wrapProgram $out/bin/nixos-run-vms \
               --add-flags "''${vms[*]}" \
               ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-              --set tests 'start_all(); join_all();' \
+              --set tests 'driver.start_all(); driver.join_all();' \
               --set VLANS '${toString vlans}' \
               ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
           ''); # "
