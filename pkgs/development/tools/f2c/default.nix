@@ -12,10 +12,14 @@ stdenv.mkDerivation {
   makeFlags = [ "-f" "makefile.u" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     install -m755 f2c $out/bin
     install -m755 xsum $out/bin
     install f2c.1t $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = with lib; {
