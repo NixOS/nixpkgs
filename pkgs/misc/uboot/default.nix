@@ -323,6 +323,18 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootQemuRiscv64Smode = buildUBoot {
+    defconfig = "qemu-riscv64_smode_defconfig";
+    extraMeta.platforms = ["riscv64-linux"];
+    extraPatches = [
+      (fetchpatch {
+        url = "https://salsa.debian.org/debian/u-boot/-/raw/5219e7584aab62650153bc73b3a98bbd2d950995/debian/patches/riscv64/qemu-riscv64_smode-sifive-fu540-fix-extlinux-define-.patch";
+        sha256 = "0vf9v8zd6k1hlglfk29mzcsz9dxsfp112llhwx627wzbsy6hrcgm";
+      })
+    ];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
