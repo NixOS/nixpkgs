@@ -196,6 +196,7 @@ self: super: builtins.intersectAttrs super {
   tcp-streams = dontCheck super.tcp-streams;
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
+  arch-web = dontCheck super.arch-web;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;

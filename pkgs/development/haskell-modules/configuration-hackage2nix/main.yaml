@@ -125,6 +125,7 @@ package-maintainers:
     - Agda
   berberman:
     - nvfetcher
+    - arch-web
   bdesham:
     - pinboard-notes-backup
   cdepillabout:

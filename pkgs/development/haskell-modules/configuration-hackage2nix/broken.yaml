@@ -171,7 +171,6 @@ broken-packages:
   - archiver
   - archlinux
   - archnews
-  - arch-web
   - arena
   - argon2
   - argparser
