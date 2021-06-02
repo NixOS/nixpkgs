@@ -27,6 +27,10 @@ let
     pname = "${pname}-deps";
     inherit src version;
     sha256 = "18h3hs69nw06msvs3nnymf6p94qd3x1f4d2zawqriy9fr5fz7zx6";
+
+    # We need ecto 3.6 as this version checks whether the database exists before
+    # trying to create it. The creation attempt would always require super-user privileges
+    # and since 3.6 this isn't the case anymore.
     patches = [ ./ecto_sql-fix.patch ];
   };
 
@@ -62,10 +66,6 @@ beamPackages.mixRelease {
     # Ensure that `tzdata` doesn't write into its store-path
     # https://github.com/plausible/analytics/pull/1096, but rebased onto 1.3.0
     ./tzdata-rebased.patch
-
-    # CREATE EXTENSION requires super-user privileges. To avoid that, we just skip
-    # the responsible SQL statement here and take care of it in the module.
-    ./skip-create-ext.patch
   ];
 
   passthru = {
