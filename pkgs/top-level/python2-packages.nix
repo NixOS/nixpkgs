@@ -192,6 +192,8 @@ with self; with super; {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream/2.nix { };
 
+  jinja2 = callPackage ../development/python-modules/jinja2/2.nix { };
+
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client/5.nix { };
