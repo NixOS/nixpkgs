@@ -211,6 +211,9 @@ self: super: {
           sha256 = "19ay6vxa90ykgdd0fis2djvki2kpgfsq7z55iyqg965m583vsfr6";
         })
       ] ++ (drv.patches or []);
+      # make sure patches are not broken by cabal file revisions
+      revision = null;
+      editedCabalFile = null;
     }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -272,9 +275,6 @@ self: super: {
   github-rest = dontCheck super.github-rest;  # test suite needs the network
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
-  #next release supports random 1.1; jailbroken because i didn't know about vty when glguy was updating the bounds
-  #should be fixed soon. maybe even before this is merged. currently glirc is 2.37
-  glirc = doJailbreak (super.glirc.override { random = self.random_1_2_0; });
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
@@ -548,10 +548,7 @@ self: super: {
   elm-yesod = markBroken super.elm-yesod;
 
   # https://github.com/Euterpea/Euterpea2/issues/40
-  Euterpea = appendPatch super.Euterpea (pkgs.fetchpatch {
-    url = "https://github.com/Euterpea/Euterpea2/pull/38.patch";
-    sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
-  });
+  Euterpea = doJailbreak super.Euterpea;
 
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
@@ -950,16 +947,7 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/5795
   # This issue can be mitigated with 'dontCheck' which skips the tests and their compilation.
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
-  # dhall-nix, dhall-nixpkgs: pull updated cabal files with updated bounds.
-  # Remove at next hackage update.
-  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (overrideCabal super.dhall-nix {
-    revision = "2";
-    editedCabalFile = "1w90jrkzmbv5nasafkkv0kyfmnqkngldx2lr891113h2mqbbr3wx";
-  });
-  dhall-nixpkgs = overrideCabal super.dhall-nixpkgs {
-    revision = "1";
-    editedCabalFile = "1y08jxg51sbxx0i7ra45ii2v81plzf4hssmwlrw35l8n5gib1vcg";
-  };
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
   dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
@@ -1156,6 +1144,23 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
+  # Jailbreak due to bounds on multiple dependencies,
+  # bound on pandoc needs to be patched since it is conditional
+  hakyll = doJailbreak (overrideCabal super.hakyll (drv: {
+    patches = [
+      # Remove when Hakyll > 4.14.0.0
+      (pkgs.fetchpatch {
+        url = "https://github.com/jaspervdj/hakyll/commit/0dc6127d81ff688e27c36ce469230320eee60246.patch";
+        sha256 = "sha256-YyRz3bAmIBODTEeS5kGl2J2x31SjiPoLzUZUlo3nHvQ=";
+      })
+      # Remove when Hakyll > 4.14.0.0
+      (pkgs.fetchpatch {
+        url = "https://github.com/jaspervdj/hakyll/commit/af9e29b5456c105dc948bc46c93e989a650b5ed1.patch";
+        sha256 = "sha256-ghc0V5L9OybNHWKmM0vhjRBN2rIvDlp+ClcK/aQst44=";
+      })
+    ];
+  }));
+
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
@@ -1207,14 +1212,10 @@ self: super: {
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
-  # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
-  # the version bounds are not satisfied.  This can be removed if the PR at
-  # https://github.com/ananthakumaran/webify/pull/27 is merged and a new
-  # release of webify is published.
-  webify = appendPatch super.webify (pkgs.fetchpatch {
-    url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
-  });
+  # We jailbreak webify, as optparse-applicative evolved past the version bound
+  # and the corresponding (and outdated) PR was not merged for a year.
+  # https://github.com/ananthakumaran/webify/pull/27
+  webify = doJailbreak super.webify;
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
@@ -1307,20 +1308,6 @@ self: super: {
   # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
   jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
-
-  # 2021-05-12: gi-gdkpixbuf_2_0_26 fix
-  # https://github.com/taffybar/gtk-sni-tray/pull/25
-  gtk-sni-tray = appendPatch super.gtk-sni-tray (pkgs.fetchpatch {
-    url = "https://github.com/taffybar/gtk-sni-tray/pull/25/commits/4afd84654cb3f2bd2bb7d39451706c5914fd3cdf.patch";
-    sha256 = "1xjxlh58vnykqsjq4qw8mliq3gk17mwxi4h9z8dvjyav8zqg05rn";
-  });
-
-  # 2021-05-12: gi-gdkpixbuf_2_0_26 fix
-  # https://github.com/taffybar/taffybar/pull/507
-  taffybar = appendPatch super.taffybar (pkgs.fetchpatch {
-    url = "https://github.com/taffybar/taffybar/pull/507/commits/14a650d0954000cbd2cb1018a2f3bcd40ecb564f.patch";
-    sha256 = "01rm8zida5858j5r0mw7bpmv24b03mb3rw34lbkaw3i7g62bx3a0";
-  });
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
@@ -1470,9 +1457,6 @@ self: super: {
     };
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
   });
-
-  # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_14_0_0);
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -1870,13 +1854,15 @@ self: super: {
     doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
   };
 
-  # Fix build failure by picking patch from 8.5,
-  # we need this version of sbv for petrinizer
-  sbv_7_13 = appendPatch super.sbv_7_13
-    (pkgs.fetchpatch {
-      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
-      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
-    });
+  # * Fix build failure by picking patch from 8.5, we need
+  #   this version of sbv for petrinizer
+  # * Pin version of crackNum that still exposes its library
+  sbv_7_13 = appendPatch (super.sbv_7_13.override {
+    crackNum = self.crackNum_2_4;
+  }) (pkgs.fetchpatch {
+    url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
+    sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
+  });
 
   # Too strict bounds on dimensional
   # https://github.com/enomsg/science-constants-dimensional/pull/1
@@ -1890,18 +1876,6 @@ self: super: {
   # https://github.com/owickstrom/gi-gtk-declarative/issues/100
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
-
-  # Test assets missing from sdist
-  # https://github.com/hadolint/language-docker/issues/63
-  language-docker = overrideSrc super.language-docker {
-    src = pkgs.fetchFromGitHub {
-      owner = "hadolint";
-      repo = "language-docker";
-      rev = "refs/tags/${super.language-docker.version}";
-      sha256 = "06263jy538ni31vms5pzggmh64fyk62cv3lxnvkc6gylb94kljb8";
-      name = "language-docker-${super.language-docker.version}-source";
-    };
-  };
 
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
@@ -1949,5 +1923,74 @@ EOT
   # 2021-05-14: Testsuite is failing.
   # https://github.com/kcsongor/generic-lens/issues/133
   generic-optics = dontCheck super.generic-optics;
+
+  # 2021-05-19: Allow random 1.2.0
+  # Remove at (presumably next release) which is > 1.3.1.0
+  hashable = overrideCabal super.hashable (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/haskell-unordered-containers/hashable/commit/78fa8fdb4f8bec5d221f34110d6afa0d0a00b5f9.patch";
+        sha256 = "0bzgp9qf53zk4rzk73x5cf2kfqncvlmihcallpplaibpslzalyi4";
+      })
+    ] ++ (drv.patches or []);
+    # fix line endings preventing patch from applying
+    prePatch = ''
+      ${pkgs.dos2unix}/bin/dos2unix hashable.cabal
+    '' + (drv.prePatch or "");
+  });
+
+  # Too strict bound on random
+  # https://github.com/haskell-hvr/missingh/issues/56
+  MissingH = doJailbreak super.MissingH;
+
+  # Too strict bound on random
+  # https://github.com/batterseapower/parallel-io/issues/14
+  parallel-io = doJailbreak super.parallel-io;
+
+  # Disable flaky tests
+  # https://github.com/DavidEichmann/alpaca-netcode/issues/2
+  alpaca-netcode = overrideCabal super.alpaca-netcode {
+    # use testTarget to also pass some flags to the test suite.
+    # TODO: We should add proper support for this to the builder.
+    testTarget = "test --test-options='-p \"!/[NOCI]/\"'";
+  };
+
+  # Tests require to run a binary which isn't built
+  lsp-test = dontCheck super.lsp-test;
+
+  # 2021-05-22: Tests fail sometimes (even consistently on hydra)
+  # when running a fs-related test with >= 12 jobs. To work around
+  # this, run tests with only a single job.
+  # https://github.com/vmchale/libarchive/issues/20
+  libarchive = overrideCabal super.libarchive {
+    # TODO: We should add proper support for this to the builder.
+    testTarget = "libarchive-test --test-options='-j1'";
+  };
+
+  # 2021-05-23: Override for a quite recent Hackage release.
+  taffybar =
+    if pkgs.lib.versionAtLeast super.taffybar.version "3.2.5"
+    then throw "Drop src override for taffybar >= 3.2.5"
+    else overrideCabal super.taffybar (drv: {
+      src = pkgs.fetchFromGitHub {
+        owner = "taffybar";
+        repo = "taffybar";
+        rev = "91c83e01e131d560e704b12f0d798905e4289a3d";
+        sha256 = "1kkpkjdyd1yv8z1qlzr3jrzyk9lxac5m4f9py8igyars2nwnhhzr";
+      };
+      version = "3.2.5";
+      editedCabalFile = null;
+    });
+
+  # 2021-05-25: Fixes darwin build: https://gitlab.com/lysxia/ap-normalize/-/issues/1
+  ap-normalize =
+    assert pkgs.lib.versionOlder super.ap-normalize.version "0.1.0.1";
+    overrideSrc super.ap-normalize rec {
+      version = "0.1.0.1";
+      src = pkgs.fetchurl {
+        url = "https://hackage.haskell.org/package/ap-normalize-${version}/ap-normalize-${version}.tar.gz";
+        sha256 = "1212zxc4qn6msk0w13yhrza2qjs79h78misllb4chng75jqi61l2";
+      };
+    };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
