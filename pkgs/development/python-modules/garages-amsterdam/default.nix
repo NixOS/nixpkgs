@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
-  version = "2.1.0";
+  version = "2.1.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "garages_amsterdam";
     rev = version;
-    sha256 = "1lg66g0im6v0m294j82229n2b7bhs6kkrp0d9nh87k2rz7zgllil";
+    sha256 = "1m0bc3bzb83apprk412s7k5r2g6p5br2hrak2a976lh9ifk1d8hj";
   };
 
   propagatedBuildInputs = [
