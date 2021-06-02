@@ -21,6 +21,17 @@
           from 1.0.4 to 2.0.0
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>createFindlibDestdir</literal> feature of the
+          <literal>findlib</literal> setup hook has been removed in all
+          ocaml package sets as it broke
+          <literal>nix-shell -A</literal>. If you still need this,
+          you’ll have to create <literal>$OCAMLFIND_DESTDIR</literal>
+          manually in <literal>preInstall</literal> or similar from now
+          on.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

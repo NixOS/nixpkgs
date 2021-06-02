@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml findlib];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta =  {
     homepage = "https://forge.ocamlcore.org/projects/calendar/";

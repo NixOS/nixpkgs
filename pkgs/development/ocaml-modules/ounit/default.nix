@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   installTargets = "install-ounit version='${ounit2.version}'";
 

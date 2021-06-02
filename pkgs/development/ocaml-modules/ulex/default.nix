@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ camlp4 ];

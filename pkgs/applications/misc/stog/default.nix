@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml uutf ];
   propagatedBuildInputs = [ findlib omd ppx_blob ocf ptime uri xtmpl ocaml_lwt higlo ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p $OCAMLFIND_DESTDIR
+  '';
 
   patches = [ ./install.patch ./uri.patch ];
 

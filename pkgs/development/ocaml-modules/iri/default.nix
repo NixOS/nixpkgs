@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ sedlex uunf uutf ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "IRI (RFC3987) native OCaml implementation";

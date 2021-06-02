@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [pcre];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   dontConfigure = true;	# Skip configure phase
 

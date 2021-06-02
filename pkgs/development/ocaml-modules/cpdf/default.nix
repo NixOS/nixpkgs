@@ -19,7 +19,9 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ncurses ];
   propagatedBuildInputs = [ camlpdf ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postInstall = ''
     mkdir -p $out/bin

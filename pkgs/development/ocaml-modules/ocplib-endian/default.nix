@@ -12,7 +12,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild cppo ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "Optimised functions to read and write int16/32/64";

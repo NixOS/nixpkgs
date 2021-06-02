@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
+    # Needs to be ported to python3 since rpm doesn't work with 2.7 anymore.
+    broken = true;
     description = "Create templates of nix expressions from RPM .spec files";
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.unix;

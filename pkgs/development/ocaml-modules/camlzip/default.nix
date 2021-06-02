@@ -39,7 +39,9 @@ stdenv.mkDerivation {
 
   inherit (param) patches;
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postPatch = param.postPatchInit + ''
     substituteInPlace Makefile \

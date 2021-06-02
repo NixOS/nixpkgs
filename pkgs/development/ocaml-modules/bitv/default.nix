@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoreconfHook which ocaml findlib ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "A bit vector library for OCaml";

@@ -17,13 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml omake findlib graphicsmagick ghostscript ];
   propagatedBuildInputs = [ libtiff libjpeg libpng giflib freetype libXpm ];
 
-  createFindlibDestdir = true;
-
   buildPhase = ''
     omake
   '';
 
   installPhase = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
     omake install
   '';
 

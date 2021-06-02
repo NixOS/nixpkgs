@@ -13,7 +13,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     homepage = "http://gallium.inria.fr/~fpottier/fix/";

@@ -17,14 +17,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-ocamlpath-override.patch ];
 
-  createFindlibDestdir = true;
-
   buildPhase = ''
     make
     make -C piqilib piqilib.cma
   '';
 
   installPhase = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
     make install;
     make ocaml-install;
   '';

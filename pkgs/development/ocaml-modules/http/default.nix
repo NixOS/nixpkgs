@@ -15,7 +15,9 @@ stdenv.mkDerivation {
   buildInputs = [ocaml findlib camlp4];
   propagatedBuildInputs = [ocaml_pcre ocamlnet];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   prePatch = ''
     BASH=$(type -tp bash)

@@ -1,35 +1,20 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, dune_2, benchmark }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, benchmark }:
 
-let param =
-  if lib.versionAtLeast ocaml.version "4.03"
-  then rec {
-    version = "0.6.2";
-    url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
-    sha256 = "15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
-    buildInputs = [ dune_2 ];
-    extra = {
-      buildPhase = "dune build -p rope";
-      installPhase = ''
-        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR rope
-      '';
-    };
-  } else {
-    version = "0.5";
-    url = "https://forge.ocamlcore.org/frs/download.php/1156/rope-0.5.tar.gz";
-    sha256 = "05fr2f5ch2rqhyaj06rv5218sbg99p1m9pq5sklk04hpslxig21f";
-    buildInputs = [ ocamlbuild ];
-    extra = { createFindlibDestdir = true; };
-  };
-in
+buildDunePackage rec {
+  version = "0.6.2";
+  pname = "rope";
 
-stdenv.mkDerivation ({
-  name = "ocaml${ocaml.version}-rope-${param.version}";
+  useDune2 = true;
+  minimumOCamlVersion = "4.03";
 
-  src = fetchurl {
-    inherit (param) url sha256;
+  src = fetchFromGitHub {
+    owner = "Chris00";
+    repo = "ocaml-rope";
+    rev = "${version}";
+    sha256 = "1g828n359xzd3zk67kaarypbr861bxqghc3c7q37f5ihqb516bs1";
   };
 
-  buildInputs = [ ocaml findlib benchmark ] ++ param.buildInputs;
+  buildInputs = [ benchmark ];
 
   meta = {
     homepage = "http://rope.forge.ocamlcore.org/";
@@ -38,4 +23,4 @@ stdenv.mkDerivation ({
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ volth ];
   };
-} // param.extra)
+}

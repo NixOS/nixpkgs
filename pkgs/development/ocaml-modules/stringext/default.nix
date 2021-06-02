@@ -15,14 +15,28 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ounit qcheck ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out"
-  + lib.optionalString doCheck " --enable-tests";
-  buildPhase = "ocaml setup.ml -build";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out ${lib.optionalString doCheck "--enable-tests"}
+    runHook postConfigure
+  '';
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
   inherit doCheck;
-  checkPhase = "ocaml setup.ml -test";
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
+  checkPhase = ''
+    runHook preCheck
+    ocaml setup.ml -test
+    runHook postCheck
+  '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://github.com/rgrinberg/stringext";

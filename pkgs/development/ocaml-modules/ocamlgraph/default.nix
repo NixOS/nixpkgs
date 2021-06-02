@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional gtkSupport lablgtk
   ;
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   buildFlags =  [ "all" ];
   installTargets = [ "install-findlib" ];

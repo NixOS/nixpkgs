@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ocaml findlib SDL SDL_image SDL_mixer SDL_ttf SDL_gfx lablgl];
 
   propagatedBuildInputs = [ SDL SDL_image SDL_mixer SDL_ttf SDL_gfx pkg-config ];
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://ocamlsdl.sourceforge.net/";

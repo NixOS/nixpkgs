@@ -18,7 +18,9 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ ocaml_sqlite3 ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mlin/ocaml-sqlite3EZ";

@@ -22,7 +22,9 @@ stdenv.mkDerivation ({
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta.description = "Compatibility package for OCaml’s standard iterator type starting from 4.07";
 

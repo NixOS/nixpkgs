@@ -15,7 +15,9 @@ stdenv.mkDerivation {
   buildInputs = [ findlib ];
   configurePlatforms = [];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-magic-mime";

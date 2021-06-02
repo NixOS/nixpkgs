@@ -162,7 +162,9 @@ self = stdenv.mkDerivation {
 
   buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postInstall = ''
     cp bin/votour $out/bin/

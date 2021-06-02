@@ -29,7 +29,9 @@ stdenv.mkDerivation {
     --replace '@1..3' '@1..2+3'
   '';
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   postInstall = ''
     mkdir $out/bin

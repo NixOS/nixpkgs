@@ -17,7 +17,9 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml camlp4 findlib ];
   propagatedBuildInputs = [ lablgtk-extras ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://zoggy.github.io/gtktop/";

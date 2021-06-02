@@ -21,8 +21,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild opaline ];
 
-  createFindlibDestdir = true;
-
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 
   installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";

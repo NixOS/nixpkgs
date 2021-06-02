@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ctypes libsodium ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 

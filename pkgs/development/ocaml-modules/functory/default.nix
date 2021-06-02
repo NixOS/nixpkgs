@@ -25,7 +25,9 @@ stdenv.mkDerivation {
 
   installTargets = [ "ocamlfind-install" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     homepage = "https://www.lri.fr/~filliatr/functory/";

@@ -14,9 +14,10 @@ stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "test";
 
-  createFindlibDestdir = true;
-
-  preInstall = "make doc";
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+    make doc
+  '';
 
   meta = {
     homepage = "https://forge.ocamlcore.org/projects/ocaml-fileutils/";

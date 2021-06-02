@@ -13,8 +13,10 @@ stdenv.mkDerivation {
   buildFlags = [ "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  preInstall = "mkdir $out/bin";
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p $out/bin
+    mkdir -p $OCAMLFIND_DESTDIR
+  '';
 
   meta = with lib; {
     homepage = "http://martin.jambon.free.fr/ocamlscript.html";

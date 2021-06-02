@@ -18,7 +18,9 @@ stdenv.mkDerivation {
 
   buildFlags = [ "all" "opt" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     description = "A small OCaml library to read and write .ini files";

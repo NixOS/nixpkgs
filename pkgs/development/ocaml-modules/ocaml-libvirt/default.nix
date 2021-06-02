@@ -17,11 +17,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
-  buildPhase = "make all opt CPPFLAGS=-Wno-error";
+  buildPhase = ''
+    runHook preBuild
+    make all opt CPPFLAGS=-Wno-error
+    runHook postBuild
+  '';
 
-  installPhase = "make install-opt";
+  installTargets = [ "install-opt" ];
 
   meta = with lib; {
     description = "OCaml bindings for libvirt";

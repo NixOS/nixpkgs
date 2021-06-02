@@ -27,8 +27,11 @@ stdenv.mkDerivation (args // {
     ''
   else setupHook;
 
-  inherit createFindlibDestdir;
   inherit dontStrip;
 
   meta = defaultMeta // meta;
+} // lib.optionalAttrs createFindlibDestdir {
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 })

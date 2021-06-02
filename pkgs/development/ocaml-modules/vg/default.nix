@@ -34,11 +34,15 @@ stdenv.mkDerivation {
                           ++ optionals pdfBackend [ uutf otfm ]
                           ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ppx ];
 
-  buildPhase = topkg.buildPhase
-    + " --with-uutf ${boolToString pdfBackend}"
-    + " --with-otfm ${boolToString pdfBackend}"
-    + " --with-js_of_ocaml ${boolToString htmlcBackend}"
-    + " --with-cairo2 false";
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build \
+      --with-uutf ${boolToString pdfBackend} \
+      --with-otfm ${boolToString pdfBackend} \
+      --with-js_of_ocaml ${boolToString htmlcBackend} \
+      --with-cairo2 false
+    runHook postBuild
+  '';
 
   inherit (topkg) installPhase;
 

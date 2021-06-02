@@ -17,7 +17,9 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ type_conv camlp4 ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "https://ocaml.janestreet.com/";

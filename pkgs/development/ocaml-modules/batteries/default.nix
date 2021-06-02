@@ -17,7 +17,9 @@ stdenv.mkDerivation {
   doCheck = lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
   checkTarget = "test";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "http://batteries.forge.ocamlcore.org/";

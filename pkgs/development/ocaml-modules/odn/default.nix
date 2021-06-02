@@ -14,11 +14,22 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild type_conv ounit camlp4 ];
 
-  createFindlibDestdir = true;
-
-  configurePhase = "ocaml setup.ml -configure";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure
+    runHook postConfigure
+  '';
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Store data using OCaml notation";

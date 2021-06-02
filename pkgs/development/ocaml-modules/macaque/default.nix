@@ -10,7 +10,9 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
   propagatedBuildInputs = [ pgocaml ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with lib; {
     description = "Macros for Caml Queries";

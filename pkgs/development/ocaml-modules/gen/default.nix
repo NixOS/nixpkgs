@@ -21,7 +21,9 @@ stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "test";
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   meta = {
     homepage = "https://github.com/c-cube/gen";

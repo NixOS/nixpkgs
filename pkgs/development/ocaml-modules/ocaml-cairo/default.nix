@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml automake gnum4 autoconf
                   findlib freetype lablgtk cairo gdk-pixbuf gtk2 pango ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
  preConfigure = ''
    aclocal -I support

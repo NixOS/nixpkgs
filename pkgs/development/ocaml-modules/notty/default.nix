@@ -23,8 +23,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;
 
-  buildPhase = topkg.buildPhase
-  + " --with-lwt ${boolToString withLwt}";
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build --with-lwt ${boolToString withLwt}
+    runHook postBuild
+  '';
 
   inherit (topkg) installPhase;
 

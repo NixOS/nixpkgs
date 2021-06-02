@@ -16,11 +16,22 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
   propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out
+    runHook postConfigure
+  '';
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$OCAMLFIND_DESTDIR"
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://github.com/hannesm/xmpp";

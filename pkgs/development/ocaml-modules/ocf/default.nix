@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ppx_tools ];
   propagatedBuildInputs = [ yojson ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   dontStrip = true;
 

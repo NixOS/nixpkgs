@@ -17,11 +17,12 @@ let
     url = "https://github.com/ocaml-community/yojson/archive/v${version}.tar.gz";
     sha256 = "10dvkndgwanvw4agbjln7kgb1n9s6lii7jw82kwxczl5rd1sgmvl";
     extra = {
-      createFindlibDestdir = true;
+      preInstall = ''
+        mkdir -p "$OCAMLFIND_DESTDIR"
+        mkdir -p "$out/bin"
+      '';
 
       makeFlags = [ "PREFIX=$(out)" ];
-
-      preBuild = "mkdir $out/bin";
     };
   };
 in

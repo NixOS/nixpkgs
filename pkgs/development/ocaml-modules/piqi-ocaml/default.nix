@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib piqi stdlib-shims ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
-  installPhase = "DESTDIR=$out make install";
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "http://piqi.org";

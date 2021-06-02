@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
   propagatedBuildInputs = [ iri re ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   dontStrip = true;
 

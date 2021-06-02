@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" "opt" ];
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p "$OCAMLFIND_DESTDIR"
+  '';
 
   dontStrip = true;
 
