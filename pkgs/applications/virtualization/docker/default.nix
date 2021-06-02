@@ -17,6 +17,7 @@ rec {
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp
       , nixosTests
+      , clientOnly ? !stdenv.isLinux
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -116,7 +117,7 @@ rec {
         ++ optional (libseccomp != null) "seccomp";
     });
   in
-    buildGoPackage ((optionalAttrs (stdenv.isLinux) {
+    buildGoPackage ((optionalAttrs (!clientOnly) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini moby;
 
@@ -137,7 +138,7 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = optionals (stdenv.isLinux) [
+    buildInputs = optionals (!clientOnly) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 
@@ -177,7 +178,7 @@ rec {
 
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
-    '' + optionalString (stdenv.isLinux) ''
+    '' + optionalString (!clientOnly) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
 
@@ -204,7 +205,7 @@ rec {
       installManPage man/*/*.[1-9]
     '';
 
-    passthru.tests = { inherit (nixosTests) docker; };
+    passthru.tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
 
     meta = {
       homepage = "https://www.docker.com/";

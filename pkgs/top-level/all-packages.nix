@@ -22849,6 +22849,8 @@ in
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
+  dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
+
   cntr = callPackage ../applications/virtualization/cntr { };
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
@@ -23018,6 +23020,7 @@ in
 
   docker = docker_20_10;
   docker-edge = docker_20_10;
+  docker-client = docker.override { clientOnly = true; };
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
