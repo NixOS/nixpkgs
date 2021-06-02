@@ -203,6 +203,12 @@ self: super: {
           sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
           revert = true;
         })
+        # allow relude < 1.0 again
+        (pkgs.fetchpatch {
+          url = "https://github.com/haskell-nix/hnix/commit/f4ea5dcb344369916586498ba33c00d0fc605a79.patch";
+          sha256 = "1ajl7d49d658xhalgf3pc5svmbq73dsysy6z434n75vb1357mx86";
+          revert = true;
+        })
       ] ++ (drv.patches or []);
       # make sure patches are not broken by cabal file revisions
       revision = null;
