@@ -28,7 +28,7 @@ let
   supportDarwin = builtins.elem "x86_64-darwin" systemsWithAnySupport;
 
   jobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
