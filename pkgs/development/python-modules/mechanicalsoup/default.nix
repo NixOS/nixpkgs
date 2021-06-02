@@ -1,6 +1,7 @@
 { lib
 , beautifulsoup4
 , buildPythonPackage
+, pythonAtLeast
 , fetchFromGitHub
 , lxml
 , pytest-httpbin
@@ -13,6 +14,8 @@
 buildPythonPackage rec {
   pname = "mechanicalsoup";
   version = "1.1.0";
+
+  disabled = ! pythonAtLeast "3.6";
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
