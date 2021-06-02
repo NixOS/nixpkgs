@@ -1,12 +1,13 @@
 { lib
 , fetchurl
 , fetchpatch
-, substituteAll, python3, pkg-config, writeText
+, substituteAll, python3, pkg-config, runCommand, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
 , ffmpeg, x264, libvpx, libwebp, x265, librsvg
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
+, withNvenc ? false, cudatoolkit, nv-codec-headers-10, nvidia_x11 ? null
 , pam }:
 
 with lib;
@@ -34,6 +35,13 @@ let
     EndSection
   '';
 
+  nvencHeaders = runCommand "nvenc-headers" {
+    inherit nvidia_x11;
+  } ''
+    mkdir -p $out/include $out/lib/pkgconfig
+    cp ${nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
+    substituteAll ${./nvenc.pc} $out/lib/pkgconfig/nvenc.pc
+  '';
 in buildPythonApplication rec {
   pname = "xpra";
   version = "4.2";
@@ -60,7 +68,8 @@ in buildPythonApplication rec {
     substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ]
+    ++ lib.optional withNvenc cudatoolkit;
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
@@ -81,13 +90,13 @@ in buildPythonApplication rec {
 
     pam
     gobject-introspection
-  ];
+  ] ++ lib.optional withNvenc nvencHeaders;
   propagatedBuildInputs = with python3.pkgs; [
     pillow rencode pycrypto cryptography pycups lz4 dbus-python
     netifaces numpy pygobject3 pycairo gst-python pam
     pyopengl paramiko opencv4 python-uinput pyxdg
     ipaddress idna pyinotify
-  ];
+  ] ++ lib.optionals withNvenc (with python3.pkgs; [pynvml pycuda]);
 
     # error: 'import_cairo' defined but not used
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
@@ -100,7 +109,7 @@ in buildPythonApplication rec {
     # Override these, setup.py checks for headers in /usr/* paths
     "--with-pam"
     "--with-vsock"
-  ];
+  ] ++ lib.optional withNvenc "--with-nvenc";
 
   dontWrapGApps = true;
   preFixup = ''
@@ -111,6 +120,9 @@ in buildPythonApplication rec {
       --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
+  '' + lib.optionalString withNvenc ''
+      --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
+  '' + ''
     )
   '';
 

@@ -331,7 +331,7 @@
     "group" = ps: with ps; [ ];
     "growatt_server" = ps: with ps; [ ]; # missing inputs: growattServer
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
-    "gtfs" = ps: with ps; [ ]; # missing inputs: pygtfs
+    "gtfs" = ps: with ps; [ pygtfs ];
     "guardian" = ps: with ps; [ aioguardian ];
     "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
@@ -701,7 +701,7 @@
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
-    "roon" = ps: with ps; [ ]; # missing inputs: roonapi
+    "roon" = ps: with ps; [ pyroon ];
     "route53" = ps: with ps; [ boto3 ];
     "rova" = ps: with ps; [ ]; # missing inputs: rova
     "rpi_camera" = ps: with ps; [ ];

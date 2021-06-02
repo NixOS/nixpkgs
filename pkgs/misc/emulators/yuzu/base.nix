@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DYUZU_USE_BUNDLED_QT=OFF"
+    "-DYUZU_USE_BUNDLED_SDL2=OFF"
+    "-DYUZU_USE_BUNDLED_FFMPEG=OFF"
     "-DENABLE_QT_TRANSLATION=ON"
     "-DYUZU_USE_QT_WEB_ENGINE=ON"
     "-DUSE_DISCORD_PRESENCE=ON"

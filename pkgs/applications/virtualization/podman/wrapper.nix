@@ -12,6 +12,7 @@
 , util-linux # nsenter
 , cni-plugins # not added to path
 , iptables
+, iproute2
 }:
 
 let
@@ -25,6 +26,7 @@ let
     fuse-overlayfs
     util-linux
     iptables
+    iproute2
   ] ++ extraPackages);
 
 in runCommand podman.name {
@@ -48,6 +50,7 @@ in runCommand podman.name {
   ln -s ${podman.man} $man
 
   mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/etc $out/etc
   ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \

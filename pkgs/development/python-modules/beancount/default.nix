@@ -7,6 +7,7 @@
 , chardet
 , dateutil
 , google-api-python-client
+, google-auth-oauthlib
 , lxml
 , oauth2client
 , ply
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     chardet
     dateutil
     google-api-python-client
+    google-auth-oauthlib
     lxml
     oauth2client
     ply

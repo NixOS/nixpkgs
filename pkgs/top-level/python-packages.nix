@@ -112,6 +112,8 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
+    condaInstallHook
+    condaUnpackHook
     eggUnpackHook
     eggBuildHook
     eggInstallHook
@@ -418,6 +420,8 @@ in {
   ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
 
   ansible-collections = callPackage ../development/python-modules/ansible/collections.nix { };
+
+  ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
@@ -1393,6 +1397,8 @@ in {
 
   clf = callPackage ../development/python-modules/clf { };
 
+  cock = callPackage ../development/python-modules/cock { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
@@ -1521,6 +1527,8 @@ in {
 
   commandparse = callPackage ../development/python-modules/commandparse { };
 
+  commentjson = callPackage ../development/python-modules/commentjson { };
+
   commoncode = callPackage ../development/python-modules/commoncode { };
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
@@ -1575,6 +1583,8 @@ in {
   cornice = callPackage ../development/python-modules/cornice { };
 
   coronavirus = callPackage ../development/python-modules/coronavirus { };
+
+  corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
   cot = callPackage ../development/python-modules/cot { };
 
@@ -2287,6 +2297,8 @@ in {
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
+  explorerscript = callPackage ../development/python-modules/explorerscript { };
+
   exrex = callPackage ../development/python-modules/exrex { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
@@ -2665,6 +2677,8 @@ in {
   });
 
   gast = callPackage ../development/python-modules/gast { };
+
+  garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
@@ -4205,7 +4219,7 @@ in {
 
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
-  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
+  mechanicalsoup = callPackage ../development/python-modules/mechanicalsoup { };
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
@@ -4285,6 +4299,8 @@ in {
   ;
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
+
+  mitogen = callPackage ../development/python-modules/mitogen { };
 
   mixpanel = callPackage ../development/python-modules/mixpanel { };
 
@@ -4516,6 +4532,8 @@ in {
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
   ndjson = callPackage ../development/python-modules/ndjson { };
+
+  ndspy = callPackage ../development/python-modules/ndspy { };
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
@@ -5231,6 +5249,8 @@ in {
 
   powerline = callPackage ../development/python-modules/powerline { };
 
+  powerlineMemSegment = callPackage ../development/python-modules/powerline-mem-segment { };
+
   pox = callPackage ../development/python-modules/pox { };
 
   poyo = callPackage ../development/python-modules/poyo { };
@@ -5591,6 +5611,8 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  py-desmume = callPackage ../development/python-modules/py-desmume { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
@@ -5751,7 +5773,11 @@ in {
 
   pygrok = callPackage ../development/python-modules/pygrok { };
 
+  pygtfs = callPackage ../development/python-modules/pygtfs { };
+
   pygtail = callPackage ../development/python-modules/pygtail { };
+
+  pygtkspellcheck = callPackage ../development/python-modules/pygtkspellcheck { };
 
   pygtrie = callPackage ../development/python-modules/pygtrie { };
 
@@ -6086,6 +6112,8 @@ in {
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
+  pypresence = callPackage ../development/python-modules/pypresence { };
+
   pyprind = callPackage ../development/python-modules/pyprind { };
 
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
@@ -6194,7 +6222,25 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
 
+  pyroon = callPackage ../development/python-modules/pyroon { };
+
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
+
+  pyroute2-core = callPackage ../development/python-modules/pyroute2-core { };
+
+  pyroute2-ethtool = callPackage ../development/python-modules/pyroute2-ethtool { };
+
+  pyroute2-ipdb = callPackage ../development/python-modules/pyroute2-ipdb { };
+
+  pyroute2-ipset = callPackage ../development/python-modules/pyroute2-ipset { };
+
+  pyroute2-ndb = callPackage ../development/python-modules/pyroute2-ndb { };
+
+  pyroute2-nftables = callPackage ../development/python-modules/pyroute2-nftables { };
+
+  pyroute2-nslink = callPackage ../development/python-modules/pyroute2-nslink { };
+
+  pyroute2-protocols = callPackage ../development/python-modules/pyroute2-protocols { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
 
@@ -7212,6 +7258,8 @@ in {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+  resolvelib = callPackage ../development/python-modules/resolvelib { };
+
   responses = callPackage ../development/python-modules/responses { };
 
   respx = callPackage ../development/python-modules/respx { };
@@ -7406,11 +7454,6 @@ in {
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
 
   sanic = callPackage ../development/python-modules/sanic {
-    # pytest-sanic is doing ok for the sole purpose of testing Sanic.
-    pytest-sanic = self.pytest-sanic.overridePythonAttrs (oldAttrs: {
-      doCheck = false;
-      meta.broken = false;
-    });
     # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
     # has special logic to disable tests when this is the case.
     sanic-testing = self.sanic-testing.override { sanic = null; };
@@ -7447,6 +7490,8 @@ in {
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
+
+  scikit-hep-testdata = callPackage ../development/python-modules/scikit-hep-testdata { };
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
@@ -7673,6 +7718,18 @@ in {
   skorch = callPackage ../development/python-modules/skorch { };
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
+
+  skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
+
+  skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
+
+  skytemple-files = callPackage ../development/python-modules/skytemple-files { };
+
+  skytemple-icons = callPackage ../development/python-modules/skytemple-icons { };
+
+  skytemple-rust = callPackage ../development/python-modules/skytemple-rust { };
+
+  skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
@@ -8267,6 +8324,8 @@ in {
     inherit (pkgs) tiledb;
   };
 
+  tilequant = callPackage ../development/python-modules/tilequant { };
+
   tilestache = callPackage ../development/python-modules/tilestache { };
 
   timeago = callPackage ../development/python-modules/timeago { };
@@ -8469,6 +8528,8 @@ in {
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
+  typed-settings = callPackage ../development/python-modules/typed-settings { };
+
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   typer = callPackage ../development/python-modules/typer { };
@@ -8570,6 +8631,8 @@ in {
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
+
+  uproot = callPackage ../development/python-modules/uproot { };
 
   uproot3 = callPackage ../development/python-modules/uproot3 { };
 

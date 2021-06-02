@@ -72,12 +72,14 @@
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh @jonringer
-/pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh @jonringer
-/doc/languages-frameworks/python.section.md     @FRidh
-/pkgs/development/tools/poetry2nix @adisbladis
+/maintainers/scripts/update-python-libraries	              @FRidh
+/pkgs/top-level/python-packages.nix                         @FRidh @jonringer
+/pkgs/development/interpreters/python                       @FRidh
+/pkgs/development/python-modules                            @FRidh @jonringer
+/doc/languages-frameworks/python.section.md                 @FRidh
+/pkgs/development/tools/poetry2nix                          @adisbladis
+/pkgs/development/interpreters/python/hooks                 @FRidh @jonringer @DavHau
+/pkgs/development/interpreters/python/conda                 @DavHau
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn

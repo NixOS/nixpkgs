@@ -119,6 +119,10 @@ let
       '';
     };
 
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
+    };
+
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
       postInstall = let

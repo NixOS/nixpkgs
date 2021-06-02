@@ -3,8 +3,11 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-21.05">
- <title>Release 21.05 (“Okapi”, 2021.05/??)</title>
+ <title>Release 21.05 (“Okapi”, 2021.05/31)</title>
 
+ <para>
+  Support is planned until the end of December 2021, handing over to 21.11.
+ </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -18,113 +21,81 @@
   </para>
 
   <itemizedlist>
+
    <listitem>
     <para>
-     Support is planned until the end of December 2021, handing over to 21.11.
+     Core version changes:
     </para>
-   </listitem>
-   <listitem>
-    <para>The default Linux kernel was updated to the 5.10 LTS series, coming from the 5.4 LTS series.</para>
-   </listitem>
-   <listitem>
-    <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
-   </listitem>
-   <listitem>
-    <para>
-     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
-     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
-     packaged, along with a rewrite to the Nix expressions, allowing users to
-     override the features upstream supports selecting to compile or not to.
-     Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
-     now point to an externally wrapped by default derivations, that allow you to
-     also add `extraPythonPackages` to the Python interpreter used by GNURadio.
-     Missing environmental variables needed for operational GUI were also added
-     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#75478</link>).
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> has a
-     <code>pkgs</code> attribute set, and there's a <code>gnuradio.callPackage</code>
-     function that extends <code>pkgs</code> with a <code>mkDerivation</code>, and a
-     <code>mkDerivationWith</code>, like Qt5. Now all <code>gnuradio.pkgs</code> are
-     defined with <code>gnuradio.callPackage</code> and some packages that depend
-     on gnuradio are defined with this as well.
-    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       gcc: 9.3.0 -> 10.3.0
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       glibc: 2.30 -> 2.32
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        default linux: 5.4 -> 5.10, all supported kernels available
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        mesa: 20.1.7 -> 21.0.1
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     <link xlink:href="https://www.privoxy.org/">Privoxy</link> has been updated
-     to version 3.0.32 (See <link xlink:href="https://lists.privoxy.org/pipermail/privoxy-announce/2021-February/000007.html">announcement</link>).
-     Compared to the previous release, Privoxy has gained support for HTTPS
-     inspection (still experimental), Brotli decompression, several new filters
-     and lots of bug fixes, including security ones. In addition, the package
-     is now built with compression and external filters support, which were
-     previously disabled.
+     Desktop Environments:
     </para>
-    <para>
-     Regarding the NixOS module, new options for HTTPS inspection have been added
-     and <option>services.privoxy.extraConfig</option> has been replaced by the new
-     <xref linkend="opt-services.privoxy.settings"/>
-     (See <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC 0042</link>
-     for the motivation).
-    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+        Gnome: 3.36 -> 3.40, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.40/">release notes</link>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Plasma5: 5.18.5 -> 5.21.3
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        kdeApplications: 20.08.1 -> 20.12.3
+      </para>
+     </listitem>
+      <listitem>
+       <para>
+         cinnamon: 4.6 -> 4.8.1
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
+
    <listitem>
     <para>
-     Python optimizations were disabled again. Builds with optimizations enabled
-     are not reproducible. Optimizations can now be enabled with an option.
+     Programming Languages and Frameworks:
     </para>
+    <itemizedlist>
+
+     <listitem>
+      <para>
+       Python optimizations were disabled again. Builds with optimizations enabled
+       are not reproducible. Optimizations can now be enabled with an option.
+      </para>
+     </listitem>
+
+    </itemizedlist>
    </listitem>
    <listitem>
-    <para>
-     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.1 "Matrix". See
-     the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
-     further details.
-    </para>
+    <para>The <package>linux_latest</package> kernel was updated to the 5.12 series. It currently is not officially supported for use with the zfs filesystem. If you use zfs, you should use a different kernel version (either the LTS kernel, or track a specific one). </para>
    </listitem>
-   <listitem>
-    <para>
-     The <option>services.packagekit.backend</option> option has been removed as
-     it only supported a single setting which would always be the default.
-     Instead new <link
-     xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
-     0042</link> compliant <xref linkend="opt-services.packagekit.settings"/>
-     and <xref linkend="opt-services.packagekit.vendorSettings"/> options have
-     been introduced.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-      <link xlink:href="https://nginx.org">Nginx</link> has been updated to stable version 1.20.0.
-      Now nginx uses the zlib-ng library by default.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
-     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
-     notes</link> for details.
-    </para>
-    <para>
-     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
-     in keeping with the new name. The old name remains for compatibility, but
-     it is deprecated.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
-     to version 4.4. The package now includes example configurations and manual
-     pages by default. The NixOS module has been changed to use the upstream
-     systemd units and write the configuration in the <literal>/etc/ipsec.d/
-     </literal> directory. In addition, two new options have been added to
-     specify connection policies
-     (<xref linkend="opt-services.libreswan.policies"/>)
-     and disable send/receive redirects
-     (<xref linkend="opt-services.libreswan.disableRedirects"/>).
-    </para>
-   </listitem>
+
   </itemizedlist>
  </section>
 
@@ -140,6 +111,20 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> 3.8 was
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finally</link>
+     packaged, along with a rewrite to the Nix expressions, allowing users to
+     override the features upstream supports selecting to compile or not to.
+     Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
+     now point to an externally wrapped by default derivations, that allow you to
+     also add `extraPythonPackages` to the Python interpreter used by GNURadio.
+     Missing environmental variables needed for operational GUI were also added
+     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#75478</link>).
+    </para>
+   </listitem>
+
    <listitem>
      <para>
        <link xlink:href="https://www.keycloak.org/">Keycloak</link>,
@@ -192,6 +177,10 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
+   </listitem>
+
    <listitem>
     <para>
      If you are using <option>services.udev.extraRules</option> to assign
@@ -304,6 +293,24 @@
       and dropping privileges, as well as the default <literal>socket-dir</literal> location changing from
       <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>mediatomb</literal> service is
+       now using by default the new and maintained fork
+       <literal>gerbera</literal> package instead of the unmaintained
+       <literal>mediatomb</literal> package. If you want to keep the old
+       behavior, you must declare it with:
+       <programlisting>
+       services.mediatomb.package = pkgs.mediatomb;
+       </programlisting>
+       One new option <literal>openFirewall</literal> has been introduced which
+       defaults to false. If you relied on the service declaration to add the
+       firewall rules itself before, you should now declare it with:
+       <programlisting>
+       services.mediatomb.openFirewall = true;
+       </programlisting>
+     </para>
    </listitem>
    <listitem>
      <para>
@@ -581,7 +588,7 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
        <programlisting>
 self: super:
 {
- mpi = super.mpich;
+  mpi = super.mpich;
 }
        </programlisting>
      </para>
@@ -785,6 +792,16 @@ environment.systemPackages = [
      the deprecated <option>services.radicale.config</option> is used.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     In the <option>security.acme</option> module, use of <literal>--reuse-key</literal>
+     parameter for Lego has been removed. It was introduced for HKPK, but this security
+     feature is now deprecated. It is a better security practice to rotate key pairs
+     instead of always keeping the same. If you need to keep this parameter, you can add
+     it back using <literal>extraLegoRenewFlags</literal> as an option for the
+     appropriate certificate.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -804,6 +821,85 @@ environment.systemPackages = [
      for details.
     </para>
    </listitem>
+
+   <listitem>
+    <para>
+     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> has a
+     <code>pkgs</code> attribute set, and there's a <code>gnuradio.callPackage</code>
+     function that extends <code>pkgs</code> with a <code>mkDerivation</code>, and a
+     <code>mkDerivationWith</code>, like Qt5. Now all <code>gnuradio.pkgs</code> are
+     defined with <code>gnuradio.callPackage</code> and some packages that depend
+     on gnuradio are defined with this as well.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://www.privoxy.org/">Privoxy</link> has been updated
+     to version 3.0.32 (See <link xlink:href="https://lists.privoxy.org/pipermail/privoxy-announce/2021-February/000007.html">announcement</link>).
+     Compared to the previous release, Privoxy has gained support for HTTPS
+     inspection (still experimental), Brotli decompression, several new filters
+     and lots of bug fixes, including security ones. In addition, the package
+     is now built with compression and external filters support, which were
+     previously disabled.
+    </para>
+    <para>
+     Regarding the NixOS module, new options for HTTPS inspection have been added
+     and <option>services.privoxy.extraConfig</option> has been replaced by the new
+     <xref linkend="opt-services.privoxy.settings"/>
+     (See <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC 0042</link>
+     for the motivation).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://kodi.tv/">Kodi</link> has been updated to version 19.1 "Matrix". See
+     the <link xlink:href="https://kodi.tv/article/kodi-190-matrix-release">announcement</link> for
+     further details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <option>services.packagekit.backend</option> option has been removed as
+     it only supported a single setting which would always be the default.
+     Instead new <link
+     xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+     0042</link> compliant <xref linkend="opt-services.packagekit.settings"/>
+     and <xref linkend="opt-services.packagekit.vendorSettings"/> options have
+     been introduced.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <link xlink:href="https://nginx.org">Nginx</link> has been updated to stable version 1.20.0.
+      Now nginx uses the zlib-ng library by default.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
+     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
+     notes</link> for details.
+    </para>
+    <para>
+     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
+     in keeping with the new name. The old name remains for compatibility, but
+     it is deprecated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://libreswan.org/">Libreswan</link> has been updated
+     to version 4.4. The package now includes example configurations and manual
+     pages by default. The NixOS module has been changed to use the upstream
+     systemd units and write the configuration in the <literal>/etc/ipsec.d/
+     </literal> directory. In addition, two new options have been added to
+     specify connection policies
+     (<xref linkend="opt-services.libreswan.policies"/>)
+     and disable send/receive redirects
+     (<xref linkend="opt-services.libreswan.disableRedirects"/>).
+    </para>
+   </listitem>
+
    <listitem>
     <para>
      The Mailman NixOS module (<literal>services.mailman</literal>) has a new
@@ -843,6 +939,29 @@ environment.systemPackages = [
     <para>
      All services should use <xref linkend="opt-systemd.services._name_.startLimitIntervalSec" /> or <literal>StartLimitIntervalSec</literal> in <xref linkend="opt-systemd.services._name_.unitConfig" /> instead.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>mediatomb</literal> service
+       declares new options. It also adapts existing options so the
+       configuration generation is now lazy. The existing option
+       <literal>customCfg</literal> (defaults to false), when enabled, stops
+       the service configuration generation completely. It then expects the
+       users to provide their own correct configuration at the right location
+       (whereas the configuration was generated and not used at all before).
+       The new option <literal>transcodingOption</literal> (defaults to no)
+       allows a generated configuration. It makes the mediatomb service pulls
+       the necessary runtime dependencies in the nix store (whereas it was
+       generated with hardcoded values before). The new option
+       <literal>mediaDirectories</literal> allows the users to declare autoscan
+       media directories from their nixos configuration:
+       <programlisting>
+       services.mediatomb.mediaDirectories = [
+         { path = "/var/lib/mediatomb/pictures"; recursive = false; hidden-files = false; }
+         { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
+       ];
+       </programlisting>
+     </para>
    </listitem>
    <listitem>
     <para>
@@ -942,7 +1061,8 @@ environment.systemPackages = [
      PulseAudio was upgraded to 14.0, with changes to the handling of default sinks.
      See its <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/14.0/">release notes</link>.
     </para>
-
+   </listitem>
+   <listitem>
     <para>
      GNOME users may wish to delete their <literal>~/.config/pulse</literal> due to the changes to stream routing
      logic. See <link xlink:href="https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/832">PulseAudio bug 832</link>

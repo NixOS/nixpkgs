@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-msrv";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7XOpK6+JVV/p+g/Lb/ORUC9msME0vtuDbmiCBmuOJ8w=";
+    sha256 = "sha256-DpgZrKy2rEKnI0/t4l3sDtNUhAwwFFSzq4CdRFqAkzY=";
   };
 
-  cargoSha256 = "sha256-KYITZHBcb5G+7PW8kwbHSsereVjH39cVLQjqNaCq2iU=";
+  cargoSha256 = "sha256-ny8EA3dkirxEiFYiSFRxHnjf3mVO2LCWVR8fPHX87Ek=";
 
   passthru = {
     updateScript = nix-update-script {

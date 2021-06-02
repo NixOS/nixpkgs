@@ -113,11 +113,11 @@ in { builder ? fetchOnly, fetchHex, fetchFromGitHub }: rec {
   };
   ranch = builder {
     name = "ranch";
-    version = "1.7.1";
+    version = "2.0.0";
     src = fetchHex {
       pkg = "ranch";
-      version = "1.7.1";
-      sha256 = "sha256-RR2FJ3h99xbZncNhYvygWTSRXbC2FBu9rC6o08evx9c=";
+      version = "2.0.0";
+      sha256 = "sha256-wgpIQMfWYjwZgS06fIKLLxvRU+8PEky2nFT+UdikKuA=";
     };
     beamDeps = [ ];
   };
@@ -128,6 +128,17 @@ in { builder ? fetchOnly, fetchHex, fetchFromGitHub }: rec {
       pkg = "jsx";
       version = "3.0.0";
       sha256 = "sha256-N77KBDX1yoovRfdqRiEedkGPvvgMNvA2HCSfx1BZ3G0=";
+    };
+    beamDeps = [ ];
+  };
+  erlfmt = builder {
+    name = "erlfmt";
+    version = "git";
+    src = fetchFromGitHub {
+      owner = "whatsapp";
+      repo = "erlfmt";
+      rev = "2e93fc4a646111357642b0179a2a63151868d890";
+      sha256 = "0n7kygycn05aqdp5dyj192mja89l4nxv2wg16qg2c0bmw9s7j2mr";
     };
     beamDeps = [ ];
   };

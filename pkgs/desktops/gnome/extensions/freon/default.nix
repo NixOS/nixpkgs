@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
-  version = "40";
+  version = "44";
 
   uuid = "freon@UshakovVasilii_Github.yahoo.com";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "UshakovVasilii";
     repo = "gnome-shell-extension-freon";
     rev = "EGO-${version}";
-    sha256 = "0ak6f5dds9kk3kqww681gs3l1mj3vf22icrvb5m257s299rq8yzl";
+    sha256 = "sha256-4DYAIC9N5id3vQe0WaOFP+MymsrPK18hbYqO4DjG+2U=";
   };
 
   nativeBuildInputs = [ glib ];

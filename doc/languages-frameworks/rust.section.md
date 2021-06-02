@@ -107,6 +107,54 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+### Importing a `Cargo.lock` file
+
+Using `cargoSha256` or `cargoHash` is tedious when using
+`buildRustPackage` within a project, since it requires that the hash
+is updated after every change to `Cargo.lock`. Therefore,
+`buildRustPackage` also supports vendoring dependencies directly from
+a `Cargo.lock` file using the `cargoLock` argument. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  }
+
+  # ...
+}
+```
+
+This will retrieve the dependencies using fixed-output derivations from
+the specified lockfile.
+
+The output hash of each dependency that uses a git source must be
+specified in the `outputHashes` attribute. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "finalfusion-0.14.0" = "17f4bsdzpcshwh74w5z119xjy2if6l2wgyjy56v621skr2r8y904";
+    };
+  }
+
+  # ...
+}
+```
+
+If you do not specify an output hash for a git dependency, building
+the package will fail and inform you of which crate needs to be
+added. To find the correct hash, you can first use `lib.fakeSha256` or
+`lib.fakeHash` as a stub hash. Building the package (and thus the
+vendored dependencies) will then inform you of the correct hash.
 
 ### Cross compilation
 
@@ -307,6 +355,37 @@ attributes can also be used:
 * `patches`: patches to apply before vendoring. This is useful when
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
+
+If a `Cargo.lock` file is available, you can alternatively use the
+`importCargoLock` function. In contrast to `fetchCargoTarball`, this
+function does not require a hash (unless git dependencies are used)
+and fetches every dependency as a separate fixed-output derivation.
+`importCargoLock` can be used as follows:
+
+```
+cargoDeps = rustPlatform.importCargoLock {
+  lockFile = ./Cargo.lock;
+};
+```
+
+If the `Cargo.lock` file includes git dependencies, then their output
+hashes need to be specified since they are not available through the
+lock file. For example:
+
+```
+cargoDeps = rustPlatform.importCargoLock {
+  lockFile = ./Cargo.lock;
+  outputHashes = {
+    "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
+  };
+};
+```
+
+If you do not specify an output hash for a git dependency, building
+`cargoDeps` will fail and inform you of which crate needs to be
+added. To find the correct hash, you can first use `lib.fakeSha256` or
+`lib.fakeHash` as a stub hash. Building `cargoDeps` will then inform
+you of the correct hash.
 
 ### Hooks
 
