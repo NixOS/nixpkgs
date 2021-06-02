@@ -256,6 +256,8 @@ with self; with super; {
 
   markdown = callPackage ../development/python-modules/markdown/3_1.nix { };
 
+  markupsafe = callPackage ../development/python-modules/markupsafe/1.nix { };
+
   matplotlib = callPackage ../development/python-modules/matplotlib/2.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
