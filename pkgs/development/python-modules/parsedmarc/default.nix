@@ -3,6 +3,7 @@
 , fetchurl
 , pythonOlder
 , lib
+, nixosTests
 
 # pythonPackages
 , tqdm
@@ -61,6 +62,7 @@ buildPythonPackage rec {
 
   passthru = {
     inherit dashboard;
+    tests = nixosTests.parsedmarc;
   };
 
   meta = {
