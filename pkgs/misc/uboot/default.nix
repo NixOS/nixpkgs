@@ -332,6 +332,12 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootQemuRiscv64Smode = buildUBoot {
+    defconfig = "qemu-riscv64_smode_defconfig";
+    extraMeta.platforms = ["riscv64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
