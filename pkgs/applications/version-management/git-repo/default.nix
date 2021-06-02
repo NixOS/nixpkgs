@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "sha256-3FSkWpHda1jVhy/633B+ippWcbKd83IlQcJYS9Qx5wQ=";
+    sha256 = "sha256-SuHp6C5ueUErvRiWDQNEmCybFIa7Iu7C/FtnHys9XqU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
