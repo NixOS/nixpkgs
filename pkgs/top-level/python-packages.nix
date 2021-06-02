@@ -5255,6 +5255,8 @@ in {
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
 
+  parsedmarc = callPackage ../development/python-modules/parsedmarc { };
+
   parsel = callPackage ../development/python-modules/parsel { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
