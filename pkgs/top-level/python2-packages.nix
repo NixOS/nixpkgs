@@ -630,6 +630,8 @@ with self; with super; {
 
   wptserve = callPackage ../development/python-modules/wptserve { };
 
+  werkzeug = callPackage ../development/python-modules/werkzeug/1.nix { };
+
   WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
 
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
