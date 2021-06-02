@@ -444,6 +444,7 @@ machine.systemctl("list-jobs --no-pager", "any-user") # spawns a shell for `any-
      <para>
       Allows you to directly interact with the guest shell.
       This should only be used during test development, not in production tests.
+      Killing the interactive session with <literal>Ctrl-d</literal> or <literal>Ctrl-c</literal> also ends the guest session.
      </para>
     </listitem>
    </varlistentry>
