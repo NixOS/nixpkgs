@@ -29,7 +29,7 @@ in {
 
     maxFanSpeed = mkOption {
       type = types.int;
-      default = 6200;
+      default = 6199;
       description = ''
         The maximum fan speed.
       '';
@@ -37,7 +37,7 @@ in {
 
     lowTemp = mkOption {
       type = types.int;
-      default = 63;
+      default = 55;
       description = ''
         The low temperature.
       '';
@@ -45,7 +45,7 @@ in {
 
     highTemp = mkOption {
       type = types.int;
-      default = 66;
+      default = 58;
       description = ''
         The high temperature.
       '';
@@ -61,7 +61,7 @@ in {
 
     pollingInterval = mkOption {
       type = types.int;
-      default = 7;
+      default = 1;
       description = ''
         The polling interval.
       '';
@@ -82,8 +82,8 @@ in {
     environment = {
       etc."mbpfan.conf".text = ''
         [general]
-        min_fan_speed = ${toString cfg.minFanSpeed}
-        max_fan_speed = ${toString cfg.maxFanSpeed}
+        min_fan1_speed = ${toString cfg.minFanSpeed}
+        max_fan1_speed = ${toString cfg.maxFanSpeed}
         low_temp = ${toString cfg.lowTemp}
         high_temp = ${toString cfg.highTemp}
         max_temp = ${toString cfg.maxTemp}
