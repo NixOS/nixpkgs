@@ -64,9 +64,6 @@ rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
 
-    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
-    export gl_cv_func_getcwd_abort_bug=no
-
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
