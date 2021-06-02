@@ -1,8 +1,8 @@
 --- a/onionshare_cli/common.py
 +++ b/onionshare_cli/common.py
-@@ -86,33 +86,10 @@ class Common:
+@@ -308,33 +308,10 @@ class Common:
          return path
- 
+
      def get_tor_paths(self):
 -        if self.platform == "Linux":
 -            tor_path = shutil.which("tor")
@@ -35,6 +35,7 @@
 +        tor_geo_ip_file_path = "@geoip@/share/tor/geoip"
 +        tor_geo_ipv6_file_path = "@geoip@/share/tor/geoip6"
 +        obfs4proxy_file_path = "@obfs4@/bin/obfs4proxy"
- 
+
          return (
              tor_path,
+
