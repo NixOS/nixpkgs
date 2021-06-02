@@ -6257,8 +6257,6 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
 
-  pyroon = callPackage ../development/python-modules/pyroon { };
-
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyroute2-core = callPackage ../development/python-modules/pyroute2-core { };
@@ -7390,6 +7388,8 @@ in {
   roman = callPackage ../development/python-modules/roman { };
 
   roombapy = callPackage ../development/python-modules/roombapy { };
+
+  roonapi = callPackage ../development/python-modules/roonapi { };
 
   ronin = callPackage ../development/python-modules/ronin { };
 
