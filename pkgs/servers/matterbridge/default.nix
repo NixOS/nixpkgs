@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchurl }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "matterbridge";
@@ -8,9 +8,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  src = fetchurl {
-    url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "sha256-yV805OWFNOxKIGd6t2kRcUzdB8xYWYHFK+W2u/QPTXg=";
+  src = fetchFromGitHub {
+    owner = "42wim";
+    repo = "matterbridge";
+    rev = "v${version}";
+    sha256 = "QPi4eCxverfBwYeE1fvx2FkQucOFCQkzoq/XhV2s2Gg=";
   };
 
   meta = with lib; {
