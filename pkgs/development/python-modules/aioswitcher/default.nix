@@ -3,7 +3,7 @@
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-sugar
@@ -12,19 +12,23 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = pname;
     rev = version;
-    sha256 = "0wvca1jbyj4bwrpkpklbxnkvdp9zs7mrvg5b9vkx2hpyr81vyxam";
+    sha256 = "sha256-Qp5iVk71JxhPVrytWuXkzpqPNPmMQubO0t9sgeQfO8c=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   checkInputs = [
     asynctest
