@@ -6045,7 +6045,9 @@ in {
     mesa_drivers = pkgs.mesa.drivers;
   };
 
-  pyopengl = callPackage ../development/python-modules/pyopengl { };
+  pyopengl = callPackage ../development/python-modules/pyopengl {
+    inherit (pkgs.python3Packages) pillow;
+  };
 
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
