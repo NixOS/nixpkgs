@@ -146,6 +146,14 @@ stdenv.mkDerivation rec {
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
 
+  outputs = [ "out" "terminfo" ];
+
+  # have terminfo in own output, so it can be installed independently on servers
+  postInstall = ''
+    mkdir -p "$terminfo/share"
+    mv "$out/share/terminfo" "$terminfo/share/"
+  '';
+
   passthru.tests = {
     clang-default-compilation = foot.override {
       inherit (llvmPackages) stdenv;
