@@ -3031,6 +3031,16 @@
     githubId = 147284;
     name = "Jason Felice";
   };
+  erdnaxe = {
+    email = "erdnaxe@crans.org";
+    github = "erdnaxe";
+    githubId = 2663216;
+    name = "Alexandre Iooss";
+    keys = [{
+      longkeyid = "rsa4096/0x6C79278F3FCDCC02";
+      fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02";
+    }];
+  };
   ericbmerritt = {
     email = "eric@afiniate.com";
     github = "ericbmerritt";
