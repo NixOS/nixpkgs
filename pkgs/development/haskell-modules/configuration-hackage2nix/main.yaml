@@ -77,10 +77,13 @@ default-package-overrides:
   - gi-javascriptcore < 4.0.23 #
   - gi-soup < 2.4.24 #
   - gi-webkit2 < 4.0.27 #
-  # 2021-05-11: the diagrams libraries still depends on pre 0.6,
-  # e. g. https://github.com/diagrams/diagrams-core/issues/115
-  # We can keep this pin presumably until base 4.15
+  # 2021-05-11: not all diagrams libraries have adjusted to
+  # monoid-extras 0.6 yet, keep them pinned to lower versions
+  # until we can do a full migration, see
+  # https://github.com/diagrams/diagrams-core/issues/115
+  # We can keep this pin at most until base 4.15
   - monoid-extras < 0.6
+  - diagrams-core < 1.5.0
   # 2021-05-11: Pin for hls 1.1.0
   - ghcide == 1.2.*
   - hls-plugin-api == 1.1.0.0
@@ -111,6 +114,7 @@ extra-packages:
   - refinery == 0.3.*                   # required by hls-tactics-plugin-1.0.0.0
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
+  - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - gi-gdk == 3.0.24                    # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gtk < 4.0                        # 2021-05-07: For haskell-gi 0.25 without gtk4
   - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
@@ -119,6 +123,9 @@ extra-packages:
 package-maintainers:
   abbradar:
     - Agda
+  berberman:
+    - nvfetcher
+    - arch-web
   bdesham:
     - pinboard-notes-backup
   cdepillabout:
@@ -127,6 +134,20 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  expipiplus1:
+    - VulkanMemoryAllocator
+    - autoapply
+    - exact-real
+    - language-c
+    - orbits
+    - update-nix-fetchgit
+    - vector-sized
+    - vulkan
+    - vulkan-utils
+  erictapen:
+    - hakyll
+    - hakyll-contrib-hyphenation
+    - webify
   Gabriel439:
     - annah
     - bench
@@ -191,8 +212,10 @@ package-maintainers:
     - cabal-fmt
     - generic-optics
     - ghcup
+    - ghcide
     - haskell-language-server
     - hedgehog
+    - hlint
     - hmatrix
     - iCalendar
     - neuron
@@ -306,7 +329,9 @@ unsupported-platforms:
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
   bindings-sane:                                [ x86_64-darwin ]
+  bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
+  crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   cut-the-crap:                                 [ x86_64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]

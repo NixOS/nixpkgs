@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1if9cybdicjhrfzi6nndqakb4sh3mw1fijhvbzbsq7ki22vwww4l";
+    sha256 = "sha256-fnWCepTUfRw+GTDXCPDvY3o6uaIfdXqvVd6rbp9HxoI=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through

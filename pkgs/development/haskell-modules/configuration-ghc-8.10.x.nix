@@ -42,13 +42,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # cabal-install needs more recent versions of Cabal and random, but an older
-  # version of base16-bytestring.
+  # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_4_0_0;
     base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
   });
 
   # cabal-install-parsers is written for Cabal 3.4

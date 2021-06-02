@@ -43,13 +43,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # cabal-install needs more recent versions of random, but an older
-  # version of base16-bytestring.
+  # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
     Cabal = null;
     base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
   });
 
   # Jailbreaks & Version Updates
