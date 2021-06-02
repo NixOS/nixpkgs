@@ -25369,6 +25369,8 @@ in
 
   natron = callPackage ../applications/video/natron { };
 
+  natural-docs = callPackage ../applications/misc/natural-docs { };
+
   neocomp  = callPackage ../applications/window-managers/neocomp { };
 
   newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
