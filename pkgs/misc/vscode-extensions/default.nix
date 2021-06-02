@@ -1153,6 +1153,18 @@ let
         };
       };
 
+      VSpaceCode.whichkey = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "whichkey";
+          publisher = "VSpaceCode";
+          version = "0.8.5";
+          sha256 = "sha256-p5fukIfk/tZFQrkf6VuT4fjmeGtKAqHDh6r6ky847ks=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       xaver.clang-format = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "clang-format";
