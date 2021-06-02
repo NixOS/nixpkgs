@@ -1,5 +1,6 @@
 { stdenv, fetchurl, nss, python3
 , blacklist ? []
+, includeEmail ? false
 
 # Used for tests only
 , runCommand
@@ -17,12 +18,18 @@ let
     sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
+  version = "3.66";
+
+  underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 in
 
 stdenv.mkDerivation {
-  name = "nss-cacert-${nss.version}";
+  name = "nss-cacert-${version}";
 
-  src = nss.src;
+  src = fetchurl {
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/nss-${version}.tar.gz";
+    sha256 = "1jfdnh5l4k57r2vb07s06hqi7m2qzk0d9x25lsdsrw3cflx9x9w9";
+  };
 
   outputs = [ "out" "unbundled" ];
 
@@ -36,6 +43,10 @@ stdenv.mkDerivation {
     EOF
 
     cat ${certdata2pem} > certdata2pem.py
+    ${optionalString includeEmail ''
+      # Disable CAs used for mail signing
+      substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
+    ''}
   '';
 
   buildPhase = ''
@@ -59,6 +70,7 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.updateScript = ./update.sh;
   passthru.tests = {
     # Test that building this derivation with a blacklist works, and that UTF-8 is supported.
     blacklist-utf8 = let
