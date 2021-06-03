@@ -8,13 +8,13 @@ let inherit (lib) optional versionAtLeast; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.4.0";
+  version = "5.4.1";
 
   useDune2 = true;
 
   src = fetchzip {
     url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
-    sha256 = "1ay1zgadnw19r9hl2awfjr22n37l7rzxd9v73pjbahavwm2ay65d";
+    sha256 = "sha256-XpoRKcdNo2j05Gxm5wmKSdwqimFDSWvmLyooPYTHAjM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
