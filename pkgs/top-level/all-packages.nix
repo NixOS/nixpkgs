@@ -18918,6 +18918,8 @@ with pkgs;
 
   ortp = callPackage ../development/libraries/ortp { };
 
+  ory-hydra = callPackage ../applications/misc/ory-hydra { };
+
   openhmd = callPackage ../development/libraries/openhmd { };
 
   openrct2 = callPackage ../games/openrct2 { };
