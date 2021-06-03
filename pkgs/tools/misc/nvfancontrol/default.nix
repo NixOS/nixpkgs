@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     export LIBRARY_PATH=${libXNVCtrl}/lib:${libX11}/lib:${libXext}/lib
   '';
 
-
   meta = with lib; {
     description = "NVidia dynamic fan control for Linux";
     homepage = "https://github.com/foucault/nvfancontrol";
