@@ -5,14 +5,19 @@ with lib;
 let
   cfg = config.services.knot;
 
-  configFile = pkgs.writeTextFile {
-    name = "knot.conf";
-    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
-           cfg.extraConfig;
-    checkPhase = lib.optionalString (cfg.keyFiles == []) ''
-      ${cfg.package}/bin/knotc --config=$out conf-check
-    '';
-  };
+  configFormat = pkgs.formats.knotConf {knot = cfg.package;};
+
+  configFile =
+    if cfg.extraConfig != null then
+      pkgs.writeTextFile {
+        name = "knot.conf";
+        text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
+               cfg.extraConfig;
+        checkPhase = lib.optionalString (cfg.keyFiles == []) ''
+          ${cfg.package}/bin/knotc --config=$out conf-check
+        '';
+      }
+    else configFormat.generate "knot.conf" cfg.settings;
 
   socketFile = "/run/knot/knot.sock";
 
@@ -43,7 +48,7 @@ in {
         type = types.listOf types.str;
         default = [];
         description = ''
-          List of additional command line paramters for knotd
+          List of additional command line parameters for knotd
         '';
       };
 
@@ -61,10 +66,19 @@ in {
       };
 
       extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+        type = types.nullOr types.lines;
+        default = null;
         description = ''
           Extra lines to be added verbatim to knot.conf
+        '';
+      };
+
+      settings = mkOption {
+        type = types.nullOr configFormat.type;
+        default = null;
+        description = ''
+          Nix structured representation of knot.conf. Mutually
+          exclusive with the use of extraConfig.
         '';
       };
 
@@ -80,6 +94,16 @@ in {
   };
 
   config = mkIf config.services.knot.enable {
+    assertions = lib.singleton {
+      assertion = cfg.extraConfig == null || cfg.settings == null;
+      message = "Only one of services.knot.extraConfig and services.knot.settings may be defined.";
+    };
+    services.knot = {
+      settings = lib.mkIf (cfg.extraConfig == null) {
+        include = cfg.keyFiles;
+      };
+    };
+
     users.users.knot = {
       isSystemUser = true;
       group = "knot";
