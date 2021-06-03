@@ -130,17 +130,175 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-class Machine:
-    def __init__(self, args: Dict[str, Any]) -> None:
-        self.name = args.get("name") or "machine"
-        self.log_serial = lambda msg: args["log_serial"](
-            f"[{self.name} LOG] {msg}", {"machine": self.name})
-        self.log_machinestate = lambda msg: args["log_machinestate"](
-            f"[{self.name} MSC] {msg}", {"machine": self.name})
-        self.script = args.get("startCommand", self.create_startcommand(args))
+class BaseStartCommand:
+    def __init__(self):
+        pass
 
-        # Can be used in child classes
-        self.tmp_dir = args["tmp_dir"]
+    def cmd(
+        self,
+        monitor_socket_path: str,
+        shell_socket_path: str,
+        allow_reboot: bool = False,  # TODO: unused, legacy?
+        tty_path: Optional[str] = None,  # TODO: currently unused
+    ):
+        tty_opts = ""
+        if tty_path is not None:
+            tty_opts += (
+                f" -chardev socket,server,nowait,id=console,path={tty_path}"
+                " -device virtconsole,chardev=console"
+            )
+        display_opts = ""
+        display_available = any(
+            x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
+        if display_available:
+            display_opts += " -nographic"
+
+        # qemu options
+        qemu_opts = ""
+        qemu_opts += (
+            "" if allow_reboot else " -no-reboot"
+            " -device virtio-serial"
+            " -device virtconsole,chardev=shell"
+            " -serial stdio"
+        )
+        # TODO: qemu script already catpures this env variable, legacy?
+        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
+
+        return (
+            f"{self._cmd}"
+            f" -monitor unix:{monitor_socket_path}"
+            f" -chardev socket,id=shell,path={shell_socket_path}"
+            f"{tty_opts}{display_opts}"
+        )
+
+    def build_environment(
+        state_dir: str,
+        shared_dir: str,
+    ):
+        return dict(os.environ).update(
+            {
+                "TMPDIR": state_dir,
+                "SHARED_DIR": shared_dir,
+                "USE_TMPDIR": "1",
+            }
+        )
+
+    def run(
+        self,
+        state_dir: str,
+        shared_dir: str,
+        monitor_socket_path: str,
+        shell_socket_path: str,
+    ):
+        return subprocess.Popen(
+            self.cmd(monitor_socket_path, shell_socket_path),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            cwd=state_dir,
+            env=self.build_environment(state_dir, shared_dir),
+        )
+
+
+class NixStartScript(BaseStartCommand):
+    """ accepts a start script from nixos/modules/virtualiation/qemu-vm.nix
+
+    Note, that appended flags in self.cmd are are passed to the qemu
+    bin by the script's final "${@}"
+    """
+
+    def __init__(self, script: str):
+        self._cmd = script
+
+
+class StartCommand(BaseStartCommand):
+    """ unused, legacy?
+    """
+
+    def __init__(
+        self,
+        allow_reboot: bool = False,
+        tty_path: Optional[str] = None,
+        netBackendArgs: Optional[str] = None,
+        netFrontendArgs: Optional[str] = None,
+        hda: Optional[Tuple[str, str]] = None,
+        cdrom: Optional[str] = None,
+        usb: Optional[str] = None,
+        bios: Optional[str] = None,
+        qemuFlags: Optional[str] = None,
+    ):
+        self._cmd = "qemu-kvm -m 384"
+
+        # networking
+        net_backend = "-netdev user,id=net0"
+        net_frontend = "-device virtio-net-pci,netdev=net0"
+        if netBackendArgs is not None:
+            net_backend += "," + netBackendArgs
+        if netFrontendArgs is not None:
+            net_frontend += "," + netFrontendArgs
+        self.cmd += f" {net_backend} {net_frontend}"
+
+        # hda
+        hda_cmd = ""
+        if hda is not None:
+            hda_path = os.path.abspath(hda[0])
+            hda_interface = hda[1]
+            if hda_interface == "scsi":
+                hda_cmd += (
+                   f" -drive id=hda,file={hda_path},werror=report,if=none"
+                   " -device scsi-hd,drive=hda"
+                )
+            else:
+                hda_cmd += (
+                    f" -drive file={hda_path},if={hda_interface},werror=report"
+                )
+        self.cmd += hda_cmd
+
+        # cdrom
+        if cdrom is not None:
+            self.cmd += f" -cdrom {cdrom}"
+
+        # usb
+        usb_cmd = ""
+        if usb is not None:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
+            usb_cmd += (
+                " -device usb-ehci"
+                f" -drive id=usbdisk,file={usb},if=none,readonly"
+                "-device usb-storage,drive=usbdisk "
+            )
+        self.cmd += usb_cmd
+
+        # bios
+        if bios is not None:
+            self.cmd += f" -bios {bios}"
+
+        # qemu flags
+        if qemuFlags is not None:
+            self.cmd += f" {qemuFlags}"
+
+
+class Machine:
+    def __init__(
+        self,
+        log_serial: Callable,
+        log_machinestate: Callable,
+        tmp_dir: str,
+        name: str = "machine",
+        start_command: StartCommand = StartCommand(),
+        keep_vm_state: bool = False,
+        allow_reboot: bool = False,
+    ) -> None:
+        self.log_serial = lambda msg: log_serial(
+            f"[{name} LOG] {msg}", {"machine": name})
+        self.log_machinestate = lambda msg: log_machinestate(
+            f"[{name} MCS] {msg}", {"machine": name})
+        self.tmp_dir = tmp_dir
+        self.keep_vm_state = keep_vm_state
+        self.allow_reboot = allow_reboot
+        self.name = name
+        self.start_command = start_command
 
         # in order to both enable plain log functions, but also nested
         # machine state logging, check if the `log_machinestate` object
@@ -158,86 +316,33 @@ class Machine:
         else:
             self.nested = dummy_nest
 
-        def create_dir(name: str) -> str:
-            path = os.path.join(self.tmp_dir, name)
-            os.makedirs(path, mode=0o700, exist_ok=True)
-            return path
+        # set up directories
+        self.shared_dir = os.path.join(self.tmp_dir, "shared-xchg")
+        os.makedirs(self.shared_dir, mode=0o700, exist_ok=True)
 
         self.state_dir = os.path.join(self.tmp_dir, f"vm-state-{self.name}")
-        if not args.get("keepVmState", False):
-            self.cleanup_statedir()
+        self.monitor_path = os.path.join(self.state_dir, "monitor")
+        self.shell_path = os.path.join(self.state_dir, "shell")
+        if (not self.keep_vm_state) and os.path.isdir(self.state_dir):
+            shutil.rmtree(self.state_dir)
+            self.log_machinestate(
+               f"deleting VM state directory {self.state_dir}\n"
+               "if you want to keep the VM state, pass --keep-vm-state"
+            )
         os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
-        self.shared_dir = create_dir("shared-xchg")
+
+        self.process: Optional[subprocess.Popen] = None
+        self.pid: Optional[int] = None
+        self.monitor: Optional[socket.socket] = None
+        self.shell: Optional[socket.socket] = None
 
         self.booted = False
         self.connected = False
-        self.pid: Optional[int] = None
-        self.socket = None
-        self.monitor: Optional[socket.socket] = None
-        self.allow_reboot = args.get("allowReboot", False)
-        self.tty_path = args.get("tty_path")
+        # Store last serial console lines for use
+        # of wait_for_console_text
+        self.last_lines: Queue = Queue()
 
-    def release(self):
-        if self.pid is not None:
-            self.process.kill()
-            self.log_machinestate("killing {} (pid {})".format(self.name, self.pid))
-
-    @staticmethod
-    def create_startcommand(args: Dict[str, str]) -> str:
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-
-        if "netBackendArgs" in args:
-            net_backend += "," + args["netBackendArgs"]
-
-        if "netFrontendArgs" in args:
-            net_frontend += "," + args["netFrontendArgs"]
-
-        start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
-        )
-
-        if "hda" in args:
-            hda_path = os.path.abspath(args["hda"])
-            if args.get("hdaInterface", "") == "scsi":
-                start_command += (
-                    "-drive id=hda,file="
-                    + hda_path
-                    + ",werror=report,if=none "
-                    + "-device scsi-hd,drive=hda "
-                )
-            else:
-                start_command += (
-                    "-drive file="
-                    + hda_path
-                    + ",if="
-                    + args["hdaInterface"]
-                    + ",werror=report "
-                )
-
-        if "cdrom" in args:
-            start_command += "-cdrom " + args["cdrom"] + " "
-
-        if "usb" in args:
-            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
-            start_command += (
-                "-device usb-ehci -drive "
-                + "id=usbdisk,file="
-                + args["usb"]
-                + ",if=none,readonly "
-                + "-device usb-storage,drive=usbdisk "
-            )
-        if "bios" in args:
-            start_command += "-bios " + args["bios"] + " "
-
-        start_command += args.get("qemuFlags", "")
-
-        return start_command
-
-    def is_up(self) -> bool:
-        return self.booted and self.connected
-
-    def wait_for_monitor_prompt(self) -> str:
+    def _wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
         answer = ""
         while True:
@@ -249,12 +354,120 @@ class Machine:
                 break
         return answer
 
+    def _wait_for_shutdown(self) -> None:
+        if not self.booted:
+            return
+
+        with self.nested("waiting for the VM to power off"):
+            sys.stdout.flush()
+            self.process.wait()
+
+            self.pid = None
+            self.booted = False
+            self.connected = False
+
+    def start(self) -> None:
+        if self.booted:
+            return
+
+        self.log_machinestate("starting vm")
+
+        def clear(path: str):
+            if os.path.exists(path):
+                os.unlink(path)
+            return path
+
+        def create_socket(path: str) -> socket.socket:
+            s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
+            s.bind(path)
+            s.listen(1)
+            return s
+
+        monitor_socket = create_socket(clear(self.monitor_path))
+        shell_socket = create_socket(clear(self.shell_path))
+        self.process = self.start_command.run(
+            self.state_dir, self.shared_dir,
+            self.monitor_path, self.shell_path,
+        )
+        self.monitor, _ = monitor_socket.accept()
+        self.shell, _ = shell_socket.accept()
+
+        def process_serial_output() -> None:
+            assert self.process.stdout is not None
+            for _line in self.process.stdout:
+                # Ignore undecodable bytes that may occur in boot menus
+                line = _line.decode(errors="ignore").replace("\r", "").rstrip()
+                self.last_lines.put(line)
+                self.log_serial(line)
+
+        _thread.start_new_thread(process_serial_output, ())
+
+        self._wait_for_monitor_prompt()
+
+        self.pid = self.process.pid
+        self.booted = True
+
+        self.log_machinestate(f"QEMU running (pid {self.pid})")
+
+    def release(self) -> bool:
+        if self.pid is None:
+            return False
+        self.process.kill()
+        return True
+
+    def connect(self) -> None:
+        if self.connected:
+            return
+
+        with self.nested("waiting for the VM to finish booting"):
+            self.start()
+
+            tic = time.time()
+            self.shell.recv(1024)
+            # TODO: Timeout
+            toc = time.time()
+
+            self.log_machinestate("connected to guest root shell")
+            self.log_machinestate("(connecting took {:.2f} seconds)".format(toc - tic))
+            self.connected = True
+
+    def shutdown(self) -> None:
+        if not self.booted:
+            return
+
+        self.log_machinestate("regular shutdown")
+        self.shell.send("poweroff\n".encode())
+        self._wait_for_shutdown()
+
+    def crash(self) -> None:
+        if not self.booted:
+            return
+
+        self.log_machinestate("forced crash")
+        self.send_monitor_command("quit")
+        self._wait_for_shutdown()
+
+    def block(self) -> None:
+        """Make the machine unreachable by shutting down eth1 (the multicast
+        interface used to talk to the other VMs).  We keep eth0 up so that
+        the test driver can continue to talk to the machine.
+        """
+        self.send_monitor_command("set_link virtio-net-pci.1 off")
+
+    def unblock(self) -> None:
+        """Make the machine reachable.
+        """
+        self.send_monitor_command("set_link virtio-net-pci.1 on")
+
+    def is_up(self) -> bool:
+        return self.booted and self.connected
+
     def send_monitor_command(self, command: str) -> str:
         message = ("{}\n".format(command)).encode()
         self.log_machinestate("sending monitor command: {}".format(command))
         assert self.monitor is not None
         self.monitor.send(message)
-        return self.wait_for_monitor_prompt()
+        return self._wait_for_monitor_prompt()
 
     def wait_for_unit(self, unit: str, user: Optional[str] = None) -> None:
         """Wait for a systemd unit to get into "active" state.
@@ -361,7 +574,7 @@ class Machine:
         output = ""
         for command in commands:
             with self.nested("must succeed: {}".format(command)):
-                (status, out) = self.execute(command)
+                status, out = self.execute(command)
                 if status != 0:
                     self.log_machinestate("output: {}".format(out))
                     raise Exception(
@@ -412,18 +625,6 @@ class Machine:
         with self.nested("waiting for failure: {}".format(command)):
             retry(check_failure)
         return output
-
-    def wait_for_shutdown(self) -> None:
-        if not self.booted:
-            return
-
-        with self.nested("waiting for the VM to power off"):
-            sys.stdout.flush()
-            self.process.wait()
-
-            self.pid = None
-            self.booted = False
-            self.connected = False
 
     def get_tty_text(self, tty: str) -> str:
         status, output = self.execute(
@@ -488,22 +689,6 @@ class Machine:
 
     def wait_for_job(self, jobname: str) -> None:
         self.wait_for_unit(jobname)
-
-    def connect(self) -> None:
-        if self.connected:
-            return
-
-        with self.nested("waiting for the VM to finish booting"):
-            self.start()
-
-            tic = time.time()
-            self.shell.recv(1024)
-            # TODO: Timeout
-            toc = time.time()
-
-            self.log_machinestate("connected to guest root shell")
-            self.log_machinestate("(connecting took {:.2f} seconds)".format(toc - tic))
-            self.connected = True
 
     def screenshot(self, filename: str) -> None:
         out_dir = os.environ.get("out", os.getcwd())
@@ -630,117 +815,6 @@ class Machine:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
 
-    def start(self) -> None:
-        if self.booted:
-            return
-
-        self.log_machinestate("starting vm")
-
-        def create_socket(path: str) -> socket.socket:
-            if os.path.exists(path):
-                os.unlink(path)
-            s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
-            s.bind(path)
-            s.listen(1)
-            return s
-
-        monitor_path = os.path.join(self.state_dir, "monitor")
-        self.monitor_socket = create_socket(monitor_path)
-
-        shell_path = os.path.join(self.state_dir, "shell")
-        self.shell_socket = create_socket(shell_path)
-
-        qemu_tty_options = ""
-        if self.tty_path is not None:
-            qemu_tty_options = " ".join(
-                [
-                    f"-chardev socket,server,nowait,id=console,path={self.tty_path}",
-                    "-device virtconsole,chardev=console",
-                ]
-            )
-
-        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
-        qemu_options = (
-            " ".join(
-                [
-                    "" if self.allow_reboot else "-no-reboot",
-                    "-monitor unix:{}".format(monitor_path),
-                    "-chardev socket,id=shell,path={}".format(shell_path),
-                    "-device virtio-serial",
-                    "-device virtconsole,chardev=shell",
-                    "-device virtio-rng-pci",
-                    "-serial stdio" if display_available else "-nographic",
-                    qemu_tty_options,
-                ]
-            )
-            + " "
-            + os.environ.get("QEMU_OPTS", "")
-        )
-
-        environment = dict(os.environ)
-        environment.update(
-            {
-                "TMPDIR": self.state_dir,
-                "SHARED_DIR": self.shared_dir,
-                "USE_TMPDIR": "1",
-                "QEMU_OPTS": qemu_options,
-            }
-        )
-
-        self.process = subprocess.Popen(
-            self.script,
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            cwd=self.state_dir,
-            env=environment,
-        )
-        self.monitor, _ = self.monitor_socket.accept()
-        self.shell, _ = self.shell_socket.accept()
-
-        # Store last serial console lines for use
-        # of wait_for_console_text
-        self.last_lines: Queue = Queue()
-
-        def process_serial_output() -> None:
-            assert self.process.stdout is not None
-            for _line in self.process.stdout:
-                # Ignore undecodable bytes that may occur in boot menus
-                line = _line.decode(errors="ignore").replace("\r", "").rstrip()
-                self.last_lines.put(line)
-                self.log_serial(line)
-
-        _thread.start_new_thread(process_serial_output, ())
-
-        self.wait_for_monitor_prompt()
-
-        self.pid = self.process.pid
-        self.booted = True
-
-        self.log_machinestate("QEMU running (pid {})".format(self.pid))
-
-    def cleanup_statedir(self) -> None:
-        if os.path.isdir(self.state_dir):
-            shutil.rmtree(self.state_dir)
-            self.log_machinestate(f"deleting VM state directory {self.state_dir}")
-            self.log_machinestate("if you want to keep the VM state, pass --keep-vm-state")
-
-    def shutdown(self) -> None:
-        if not self.booted:
-            return
-
-        self.shell.send("poweroff\n".encode())
-        self.wait_for_shutdown()
-
-    def crash(self) -> None:
-        if not self.booted:
-            return
-
-        self.log_machinestate("forced crash")
-        self.send_monitor_command("quit")
-        self.wait_for_shutdown()
-
     def wait_for_x(self) -> None:
         """Wait until it is possible to connect to the X server.  Note that
         testing the existence of /tmp/.X11-unix/X0 is insufficient.
@@ -792,15 +866,3 @@ class Machine:
         self.send_monitor_command(
             "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
         )
-
-    def block(self) -> None:
-        """Make the machine unreachable by shutting down eth1 (the multicast
-        interface used to talk to the other VMs).  We keep eth0 up so that
-        the test driver can continue to talk to the machine.
-        """
-        self.send_monitor_command("set_link virtio-net-pci.1 off")
-
-    def unblock(self) -> None:
-        """Make the machine reachable.
-        """
-        self.send_monitor_command("set_link virtio-net-pci.1 on")

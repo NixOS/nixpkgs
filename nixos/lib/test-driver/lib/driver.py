@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Iterator, Optional
+from typing import Iterator
 import atexit
 import os
 import ptpython.repl
@@ -11,6 +11,8 @@ import tempfile
 import traceback
 
 import common
+
+from machine import NixStartScript
 
 
 def test_script() -> None:
@@ -38,13 +40,13 @@ class Driver():
         for nr, vde_socket, _, _ in vde_sockets:
             os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
-        def create_machine(command):
+        def create_machine(script):
             name = "machine"
-            match = re.search("run-(.+)-vm$", command)
+            match = re.search("run-(.+)-vm$", script)
             if match:
                 name = match.group(1)
             args = {
-                "startCommand": command,
+                "startCommand": NixStartScript(script),
                 "keepVmState": keep_vm_state,
                 "name": name,
                 "redirectSerial": os.environ.get("USE_SERIAL", "0") == "1",
