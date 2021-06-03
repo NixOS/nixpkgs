@@ -24,7 +24,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
-    inherit (openjdk11.meta) license platforms;
+    inherit (openjdk11.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo petabyteboy ];
   };
   passthru = oldAttrs.passthru // {
