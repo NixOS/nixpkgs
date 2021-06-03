@@ -142,12 +142,7 @@ class Driver():
         tests = os.environ.get("tests")
         if tests is not None:
             with self.log.nested("running the VM test script"):
-                try:
-                    exec(tests, globals())
-                except Exception:
-                    common.eprint("error: ")
-                    traceback.print_exc()
-                    sys.exit(1)
+                exec(tests, globals())
         else:
             ptpython.repl.embed(
                 locals(), globals(),
