@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GPOrC9gL9lPv5SUldFxTS8ZT9YboPoDdqOAfwD0qGBQ=";
+    sha256 = "sha256-mBoqyDfGho2e4RuFwkiU2R+zb38LzByWtH4pOhguueY=";
   };
 
   vendorSha256 = "sha256-S3Gp7HkBIZNZ8rkp64XaUQUj1TggGwI9FMrVkyLCQWA=";
