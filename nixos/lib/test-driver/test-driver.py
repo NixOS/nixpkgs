@@ -1,8 +1,10 @@
 #! /somewhere/python3
 import argparse
 import time
+
 from machine import Machine
-from driver import Logger, Driver
+from logger import Logger
+from driver import Driver
 
 
 if __name__ == "__main__":
@@ -15,9 +17,9 @@ if __name__ == "__main__":
     )
     (cli_args, vm_scripts) = arg_parser.parse_known_args()
 
-    log = Logger()
+    logger = Logger()
 
-    driver = Driver(Machine, log, vm_scripts, cli_args.keep_vm_state)
+    driver = Driver(Machine, logger, vm_scripts, cli_args.keep_vm_state)
     driver.export_symbols()
 
     tic = time.time()

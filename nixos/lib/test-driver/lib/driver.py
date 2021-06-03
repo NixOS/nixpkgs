@@ -1,10 +1,6 @@
 from contextlib import contextmanager
-from queue import Queue, Empty
-from typing import Tuple, Any, Dict, Iterator
-from xml.sax.saxutils import XMLGenerator
-from colorama import Style
+from typing import Iterator, Optional
 import atexit
-import codecs
 import os
 import ptpython.repl
 import pty
@@ -12,9 +8,7 @@ import re
 import subprocess
 import sys
 import tempfile
-import time
 import traceback
-import unicodedata
 
 import common
 
@@ -54,7 +48,8 @@ class Driver():
                 "keepVmState": keep_vm_state,
                 "name": name,
                 "redirectSerial": os.environ.get("USE_SERIAL", "0") == "1",
-                "log": self.log,
+                "log_serial": log.log_serial,
+                "log_machinestate": log.log_machinestate,
                 "tmp_dir": tmp_dir,
             }
             return self.machine_class(machine_config_modifier(args))
@@ -68,7 +63,7 @@ class Driver():
                     machine.release()
                 for _, _, process, _ in vde_sockets:
                     process.terminate()
-            self.log.close()
+            self.log.release()
 
     @contextmanager
     def subtest(self, name: str) -> Iterator[None]:
@@ -77,7 +72,7 @@ class Driver():
                 yield
                 return True
             except Exception as e:
-                self.log.log(f'Test "{name}" failed with error: "{e}"')
+                self.log(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
         return False
@@ -153,75 +148,3 @@ class Driver():
             raise Exception("cannot start vde_switch")
 
         return (vlan_nr, vde_socket, vde_process, fd)
-
-
-class Logger:
-    def __init__(self) -> None:
-        self.logfile = os.environ.get("LOGFILE", "/dev/null")
-        self.logfile_handle = codecs.open(self.logfile, "wb")
-        self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
-        self.queue: "Queue[Dict[str, str]]" = Queue()
-
-        self.xml.startDocument()
-        self.xml.startElement("logfile", attrs={})
-
-        self.enable_serial_logs = True  # switchable at runtime
-
-    def close(self) -> None:
-        self.xml.endElement("logfile")
-        self.xml.endDocument()
-        self.logfile_handle.close()
-
-    def sanitise(self, message: str) -> str:
-        return "".join(ch for ch in message if unicodedata.category(ch)[0] != "C")
-
-    def maybe_prefix(self, message: str, attributes: Dict[str, str]) -> str:
-        if "machine" in attributes:
-            return "{}: {}".format(attributes["machine"], message)
-        return message
-
-    def log_line(self, message: str, attributes: Dict[str, str]) -> None:
-        self.xml.startElement("line", attributes)
-        self.xml.characters(message)
-        self.xml.endElement("line")
-
-    def log(self, message: str, attributes: Dict[str, str] = {}) -> None:
-        common.eprint(self.maybe_prefix(message, attributes))
-        self.drain_log_queue()
-        self.log_line(message, attributes)
-
-    def log_serial(self, message: str, machine: str) -> None:
-        self.enqueue({"msg": message, "machine": machine, "type": "serial"})
-        if self._print_serial_logs:
-            common.eprint(Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL)
-
-    def enqueue(self, item: Dict[str, str]) -> None:
-        self.queue.put(item)
-
-    def drain_log_queue(self) -> None:
-        try:
-            while True:
-                item = self.queue.get_nowait()
-                msg = self.sanitise(item["msg"])
-                del item["msg"]
-                self.log_line(msg, item)
-        except Empty:
-            pass
-
-    @contextmanager
-    def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
-        common.eprint(self.maybe_prefix(message, attributes))
-
-        self.xml.startElement("nest", attrs={})
-        self.xml.startElement("head", attributes)
-        self.xml.characters(message)
-        self.xml.endElement("head")
-
-        tic = time.time()
-        self.drain_log_queue()
-        yield
-        self.drain_log_queue()
-        toc = time.time()
-        self.log("({:.2f} seconds)".format(toc - tic))
-
-        self.xml.endElement("nest")

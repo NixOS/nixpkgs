@@ -1,4 +1,4 @@
-from contextlib import _GeneratorContextManager
+from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue
 from typing import Tuple, Any, Callable, Dict, Optional, List, Iterable
 import queue
@@ -133,11 +133,30 @@ def _perform_ocr_on_screenshot(
 class Machine:
     def __init__(self, args: Dict[str, Any]) -> None:
         self.name = args.get("name") or "machine"
-        self.logger = args["log"]
+        self.log_serial = lambda msg: args["log_serial"](
+            f"[{self.name} LOG] {msg}", {"machine": self.name})
+        self.log_machinestate = lambda msg: args["log_machinestate"](
+            f"[{self.name} MSC] {msg}", {"machine": self.name})
         self.script = args.get("startCommand", self.create_startcommand(args))
 
         # Can be used in child classes
         self.tmp_dir = args["tmp_dir"]
+
+        # in order to both enable plain log functions, but also nested
+        # machine state logging, check if the `log_machinestate` object
+        # has a method `nested` and provide this functionality.
+        # Ideally, just remove this logic long term and make it as  easy as
+        # possible for the user of `Machine` to provide plain standard loggers
+        @contextmanager
+        def dummy_nest(message: str) -> _GeneratorContextManager:
+            self.log_machinestate(message)
+            yield
+
+        nest_op = getattr(self.log_machinestate, "nested", None)
+        if callable(nest_op):
+            self.nested = nest_op
+        else:
+            self.nested = dummy_nest
 
         def create_dir(name: str) -> str:
             path = os.path.join(self.tmp_dir, name)
@@ -161,7 +180,7 @@ class Machine:
     def release(self):
         if self.pid is not None:
             self.process.kill()
-            self.logger.log("killing {} (pid {})".format(self.name, self.pid))
+            self.log_machinestate("killing {} (pid {})".format(self.name, self.pid))
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> str:
@@ -218,17 +237,6 @@ class Machine:
     def is_up(self) -> bool:
         return self.booted and self.connected
 
-    def log(self, msg: str) -> None:
-        self.logger.log(msg, {"machine": self.name})
-
-    def log_serial(self, msg: str) -> None:
-        self.logger.log_serial(msg, self.name)
-
-    def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
-        my_attrs = {"machine": self.name}
-        my_attrs.update(attrs)
-        return self.logger.nested(msg, my_attrs)
-
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
         answer = ""
@@ -243,7 +251,7 @@ class Machine:
 
     def send_monitor_command(self, command: str) -> str:
         message = ("{}\n".format(command)).encode()
-        self.log("sending monitor command: {}".format(command))
+        self.log_machinestate("sending monitor command: {}".format(command))
         assert self.monitor is not None
         self.monitor.send(message)
         return self.wait_for_monitor_prompt()
@@ -355,7 +363,7 @@ class Machine:
             with self.nested("must succeed: {}".format(command)):
                 (status, out) = self.execute(command)
                 if status != 0:
-                    self.log("output: {}".format(out))
+                    self.log_machinestate("output: {}".format(out))
                     raise Exception(
                         "command `{}` failed (exit code {})".format(command, status)
                     )
@@ -433,7 +441,7 @@ class Machine:
         def tty_matches(last: bool) -> bool:
             text = self.get_tty_text(tty)
             if last:
-                self.log(
+                self.log_machinestate(
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
                     f"which currently contains: {text}"
                 )
@@ -493,8 +501,8 @@ class Machine:
             # TODO: Timeout
             toc = time.time()
 
-            self.log("connected to guest root shell")
-            self.log("(connecting took {:.2f} seconds)".format(toc - tic))
+            self.log_machinestate("connected to guest root shell")
+            self.log_machinestate("(connecting took {:.2f} seconds)".format(toc - tic))
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
@@ -595,7 +603,7 @@ class Machine:
                     return True
 
             if last:
-                self.log("Last OCR attempt failed. Text was: {}".format(variants))
+                self.log_machinestate("Last OCR attempt failed. Text was: {}".format(variants))
 
             return False
 
@@ -603,7 +611,7 @@ class Machine:
             retry(screen_matches)
 
     def wait_for_console_text(self, regex: str) -> None:
-        self.log("waiting for {} to appear on console".format(regex))
+        self.log_machinestate("waiting for {} to appear on console".format(regex))
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
@@ -626,7 +634,7 @@ class Machine:
         if self.booted:
             return
 
-        self.log("starting vm")
+        self.log_machinestate("starting vm")
 
         def create_socket(path: str) -> socket.socket:
             if os.path.exists(path):
@@ -710,13 +718,13 @@ class Machine:
         self.pid = self.process.pid
         self.booted = True
 
-        self.log("QEMU running (pid {})".format(self.pid))
+        self.log_machinestate("QEMU running (pid {})".format(self.pid))
 
     def cleanup_statedir(self) -> None:
         if os.path.isdir(self.state_dir):
             shutil.rmtree(self.state_dir)
-            self.logger.log(f"deleting VM state directory {self.state_dir}")
-            self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
+            self.log_machinestate(f"deleting VM state directory {self.state_dir}")
+            self.log_machinestate("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         if not self.booted:
@@ -729,7 +737,7 @@ class Machine:
         if not self.booted:
             return
 
-        self.log("forced crash")
+        self.log_machinestate("forced crash")
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
 
@@ -763,7 +771,7 @@ class Machine:
         def window_is_visible(last_try: bool) -> bool:
             names = self.get_window_names()
             if last_try:
-                self.log(
+                self.log_machinestate(
                     "Last chance to match {} on the window list,".format(regexp)
                     + " which currently contains: "
                     + ", ".join(names)
