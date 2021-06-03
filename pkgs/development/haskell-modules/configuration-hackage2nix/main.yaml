@@ -126,6 +126,7 @@ package-maintainers:
   berberman:
     - nvfetcher
     - arch-web
+    - uusi
   bdesham:
     - pinboard-notes-backup
   cdepillabout:

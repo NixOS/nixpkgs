@@ -4318,6 +4318,8 @@ in
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
+  uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
+
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
     inherit (python3Packages) sphinx;
     inherit (darwin.apple_sdk.frameworks) Security;
