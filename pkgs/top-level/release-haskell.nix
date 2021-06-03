@@ -175,6 +175,7 @@ let
         nix-tree
         nixfmt
         nota
+        nvfetcher
         ormolu
         pandoc
         pakcs
@@ -199,6 +200,7 @@ let
         tldr-hs
         tweet-hs
         update-nix-fetchgit
+        uusi
         uqm
         uuagc
         vaultenv
