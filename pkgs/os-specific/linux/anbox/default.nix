@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl
+, fetchpatch
 , cmake, pkg-config, dbus, makeWrapper
 , boost
 , elfutils # for libdw
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  patchPhase = ''
+  prePatch = ''
     patchShebangs scripts
 
     cat >cmake/FindGMock.cmake <<'EOF'
@@ -113,6 +114,14 @@ stdenv.mkDerivation rec {
       set(GTEST_BOTH_LIBRARIES ''${GTEST_LIBRARIES} ''${GTEST_MAIN_LIBRARIES})
     EOF
   '';
+
+  patches = [
+    # Fixes compatibility with lxc 4
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/anbox/lxc4.patch?id=64243590a16aee8d4e72061886fc1b15256492c3";
+      sha256 = "1da5xyzyjza1g2q9nbxb4p3njj2sf3q71vkpvmmdphia5qnb0gk5";
+    })
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/anbox \
