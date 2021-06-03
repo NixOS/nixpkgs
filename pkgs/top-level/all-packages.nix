@@ -15477,6 +15477,8 @@ in
 
   hydra-check = with python3.pkgs; toPythonApplication hydra-check;
 
+  hydra = callPackage ../applications/misc/hydra { };
+
   hyena = callPackage ../development/libraries/hyena { };
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
