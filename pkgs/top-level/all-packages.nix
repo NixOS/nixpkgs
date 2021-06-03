@@ -11427,6 +11427,8 @@ in
   llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
+    latest_version = lib.toInt
+      (lib.versions.major llvmPackages_latest.llvm.version);
     # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
     choose = platform:
@@ -11435,7 +11437,7 @@ in
       else if platform.isAndroid then 12
       else if platform.isLinux then (if platform.isRiscV then 9 else 7)
       else if platform.isWasm then 8
-      else 11; # latest
+      else latest_version;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
