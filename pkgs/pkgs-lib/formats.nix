@@ -148,13 +148,17 @@ rec {
    … so we have an extra format just for knot.
 
   */
-  knotConf = { knot ? pkgs.knot-dns }: rec {
+  knotConf = { knot ? pkgs.knot-dns, debug ? false }: rec {
     /*
     The type isn't as strict as it could be: we're trying to strike a
     balance here between how much code we have to write (and keep
     synced with knot's behaviour) and how much checking we can do at
     evaluation time. Either way, knot checks it for complete validity
     at build time (see the definition of generate).
+
+    There is one special top-level object: "includes". This is a list
+    of paths to further config files which will be merged in at
+    runtime by knot. This is useful for secrets.
 
     Top-level objects ("sections") can be either a "settings block"
     (an attrset containing some named options) — like "server" and
@@ -165,8 +169,12 @@ rec {
     type = with lib.types; let
       jsonType = (json {}).type;
       settingsBlock = (attrsOf jsonType) // { description = "knot.conf(5) settings block"; };
-    in (attrsOf (either settingsBlock (listOf settingsBlock))) // {
-      description = "knot.conf(5)";
+    in submodule {
+      freeformType = either settingsBlock (listOf settingsBlock);
+      options.include = lib.mkOption {
+        type = listOf path;
+        default = [];
+      };
     };
 
     generateString = settings: with lib; let
@@ -176,6 +184,8 @@ rec {
         "${n}:" + (
           # Empty section
           if v == [] || v == {} then "\n"
+          # Special case: includes
+          else if n == "include" && isList v then " " + builtins.toJSON v
           # One settings block
           else if isAttrs v then "\n  " + mkPairs v
           # Multiple settings blocks
@@ -198,7 +208,18 @@ rec {
       value = generateString value;
       passAsFile = [ "value" ];
     } ''
-      knotc --config "$valuePath" conf-export >$out
+      ${lib.optionalString debug ''cat "$valuePath"; echo''}
+      # Remove includes, since we can't read these paths in the
+      # sandbox while building…
+      grep -v ^include: "$valuePath" > without-includes.conf
+
+      # Format the remaining configuration…
+      knotc --config without-includes.conf conf-export > formatted.conf
+
+      # … and splice the includes back in, while also removing the
+      # comment that contains the knot version string, making this
+      # harder to test.
+      cat <(grep ^include: "$valuePath") <(grep -v "^#" formatted.conf) > $out
     '';
   };
 }
