@@ -128,4 +128,77 @@ rec {
     '';
 
   };
+
+  /*
+  Knot uses a configuration format that looks like YAML and quacks
+  like YAML but isn't YAML. In particular:
+
+    - The top level has to be formatted in YAML style, so we can't just
+      throw JSON in
+
+    - Keys may be duplicated, in which case the resulting value is a
+      list composed of all the values set (which we use here)
+
+    - The parser cares a great deal about the order of keys: for
+      instance, when defining an ACL, the `id` attribute must be the
+      first. Unfortunately, this is not documented, nor is the error
+      message thrown if these conditions aren't fulfilled very
+      helpful.
+
+   … so we have an extra format just for knot.
+
+  */
+  knotConf = { knot ? pkgs.knot-dns }: rec {
+    /*
+    The type isn't as strict as it could be: we're trying to strike a
+    balance here between how much code we have to write (and keep
+    synced with knot's behaviour) and how much checking we can do at
+    evaluation time. Either way, knot checks it for complete validity
+    at build time (see the definition of generate).
+
+    Top-level objects ("sections") can be either a "settings block"
+    (an attrset containing some named options) — like "server" and
+    "database" — or a list of settings blocks, like "acl" and "zone".
+    We'll just validate that we have settings blocks, but not if the
+    names or contents correspond to the blocks known by knot.
+    */
+    type = with lib.types; let
+      jsonType = (json {}).type;
+      settingsBlock = (attrsOf jsonType) // { description = "knot.conf(5) settings block"; };
+    in (attrsOf (either settingsBlock (listOf settingsBlock))) // {
+      description = "knot.conf(5)";
+    };
+
+    generateString = settings: with lib; let
+      order = [ "domain" "id" "target" ];
+      attrNamesOrdered = s: intersectLists (attrNames s) order ++ subtractLists order (attrNames s);
+      mkSection = n: v:
+        "${n}:" + (
+          # Empty section
+          if v == [] || v == {} then "\n"
+          # One settings block
+          else if isAttrs v then "\n  " + mkPairs v
+          # Multiple settings blocks
+          else if isList v then concatMapStrings (settingsBlock: "\n- " + mkPairs settingsBlock) v
+          # No settings blocks!?
+          else throw "${generators.toPretty {} v} does not appear to be a valid knot.conf section."
+        );
+      mkPairs = v: concatStringsSep "\n  " (flatten (map (e: mkPair e v.${e}) (attrNamesOrdered v)));
+      mkPair = n: v:
+        if isList v then map (mkPair n) v
+        else singleton ("${n}: " + (
+          if isBool v then boolToString v
+          else if strings.isCoercibleToString v then (builtins.toJSON (toString v))
+          else throw "unsupported value type ${n}=" + (generators.toPretty {} v)
+        ));
+    in concatStringsSep "\n" (mapAttrsToList mkSection settings);
+
+    generate = name: value: pkgs.runCommandNoCC name {
+      nativeBuildInputs = [ knot ];
+      value = generateString value;
+      passAsFile = [ "value" ];
+    } ''
+      knotc --config "$valuePath" conf-export >$out
+    '';
+  };
 }
