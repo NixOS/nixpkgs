@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
-, python3, git, gnupg, less
+, python3, git, gnupg, less, openssh
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less openssh ]}"
   '';
 
   passthru = {
