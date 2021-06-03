@@ -704,6 +704,7 @@ self: super: {
   # 2021-03-12: All of this libraries have to restrictive upper bounds
   # https://github.com/diagrams/diagrams-core/issues/112
   # https://github.com/diagrams/diagrams-cairo/issues/77
+  # https://github.com/diagrams/diagrams-rasterific/issues/63
   active = doJailbreak super.active;
   statestack = doJailbreak super.statestack;
   force-layout = doJailbreak super.force-layout;
@@ -715,6 +716,7 @@ self: super: {
   diagrams-svg = doJailbreak super.diagrams-svg;
   diagrams-contrib = doJailbreak super.diagrams-contrib;
   diagrams-lib = doJailbreak super.diagrams-lib;
+  diagrams-rasterific = doJailbreak super.diagrams-rasterific;
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
