@@ -1,11 +1,11 @@
 { fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-2.6";
+  name = "gsl-2.7";
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "1a460zj9xmbgvcymkdhqh313c4l29mn9cffbi5vf33x3qygk70mp";
+    sha256 = "sha256-77vzeF2g5TA4vnkHUAYotGYVLbw8FzqH3hteui4jYCs=";
   };
 
   preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
