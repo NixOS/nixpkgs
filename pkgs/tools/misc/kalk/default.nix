@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kalk";
-  version = "0.5.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lHHnNiNy8L8GdjOj5EqtticnksPrCwhFoFatFrWEQJ4=";
+    sha256 = "sha256-1iZvp30/V0bw9NBxiKNiDgOMYJkDsGhTGdBsAPggdEg=";
   };
 
-  cargoSha256 = "sha256-Qtip9CeurTM4aY67F5tSM3fis6W/dlnaIVMQ29UoBzc=";
+  cargoSha256 = "sha256-qHXlhKeuDpebpbbGr34Uvwyg//HdCL0UoTqRf9vEfmE=";
 
   nativeBuildInputs = [ m4 ];
 
