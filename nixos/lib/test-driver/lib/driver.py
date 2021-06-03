@@ -112,11 +112,9 @@ class Driver():
             try:
                 yield
                 return True
-            except Exception as e:
-                self.log(f'Test "{name}" failed with error: "{e}"')
-                raise e
-
-        return False
+            except:
+                self.log(f'Test "{name}" failed with error:')
+                raise
 
     def export_symbols(self):
         global machines
@@ -141,7 +139,7 @@ class Driver():
             exec(os.environ["testScript"])
 
     def run_tests(self) -> None:
-        tests = os.environ.get("tests", None)
+        tests = os.environ.get("tests")
         if tests is not None:
             with self.log.nested("running the VM test script"):
                 try:
