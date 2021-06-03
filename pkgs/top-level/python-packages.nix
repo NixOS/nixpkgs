@@ -4596,6 +4596,8 @@ in {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
+  nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
+
   networkx = callPackage ../development/python-modules/networkx { };
 
   neuron-mpi = pkgs.neuron-mpi.override { inherit python; };
