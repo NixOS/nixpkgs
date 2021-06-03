@@ -2,6 +2,7 @@
 , buildGoModule
 , buildGoPackage
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 }:
 let
@@ -46,10 +47,12 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     acme = automated-providers.acme.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
-      '';
+      patches = attrs.patches or [ ] ++ [
+        (fetchpatch {
+          url = "https://github.com/vancluever/terraform-provider-acme/commit/a5834747aebc3677225c68a08ef784cfd7b35e6c.patch";
+          sha256 = "091484whrpq6ykpgpndc8kc9cbvd9wwr0b51m1yxp31750lydp8m";
+        })
+      ];
     });
 
     # Packages that don't fit the default model
