@@ -90,18 +90,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pcov = callPackage ../development/php-packages/pcov { };
 
-    pcs = buildPecl {
-      version = "1.3.3";
-      pname = "pcs";
-
-      sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
-
-      internalDeps = [ php.extensions.tokenizer ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = lib.versionAtLeast php.version "7.3"; # Runtime failure on 7.3, build error on 7.4
-    };
-
     pdo_oci = buildPecl rec {
       inherit (php.unwrapped) src version;
 
@@ -128,8 +116,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     protobuf = callPackage ../development/php-packages/protobuf { };
 
-    pthreads = callPackage ../development/php-packages/pthreads { };
-
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
     redis = callPackage ../development/php-packages/redis { };
@@ -142,51 +128,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
-    v8 = buildPecl {
-      version = "0.2.2";
-      pname = "v8";
-
-      sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
-
-      buildInputs = [ pkgs.v8 ];
-      configureFlags = [ "--with-v8=${pkgs.v8}" ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = true;
-    };
-
-    v8js = buildPecl {
-      version = "2.1.0";
-      pname = "v8js";
-
-      sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
-
-      buildInputs = [ pkgs.v8 ];
-      configureFlags = [ "--with-v8js=${pkgs.v8}" ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = true;
-    };
-
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
-
-    zmq = buildPecl {
-      version = "1.1.3";
-      pname = "zmq";
-
-      sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
-
-      configureFlags = [
-        "--with-zmq=${pkgs.zeromq}"
-      ];
-
-      nativeBuildInputs = [ pkgs.pkg-config ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = lib.versionAtLeast php.version "7.3";
-    };
   } // (let
     # Function to build a single php extension based on the php version.
     #
