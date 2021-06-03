@@ -2,6 +2,7 @@
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
+, enablePolly ? false
 }:
 
 let
@@ -39,7 +40,11 @@ let
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
       "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
+    ] ++ lib.optionals enablePolly [
+      "-DWITH_POLLY=ON"
+      "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
+
 
     patches = [
       ./purity.patch

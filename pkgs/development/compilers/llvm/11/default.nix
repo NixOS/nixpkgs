@@ -68,16 +68,30 @@ let
     # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm.out // { outputUnspecified = true; };
 
+    libllvm-polly = callPackage ./llvm {
+      inherit llvm_meta;
+      enablePolly = true;
+    };
+
+    llvm-polly = tools.libllvm-polly.lib // { outputUnspecified = true; };
+
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
     clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
-    # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.libllvm.override {
-    #  enableManpages = true;
-    #  python3 = pkgs.python3;  # don't use python-boot
-    #});
+
+    clang-polly-unwrapped = callPackage ./clang {
+      inherit llvm_meta;
+      inherit clang-tools-extra_src;
+      libllvm = tools.libllvm-polly;
+      enablePolly = true;
+    };
+
+    llvm-manpages = lowPrio (tools.libllvm.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;

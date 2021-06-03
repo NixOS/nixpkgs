@@ -3408,6 +3408,8 @@ in {
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
+  i-pi = callPackage ../development/python-modules/i-pi { };
+
   iptools = callPackage ../development/python-modules/iptools { };
 
   ipy = callPackage ../development/python-modules/IPy { };

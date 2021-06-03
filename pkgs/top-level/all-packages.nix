@@ -786,7 +786,7 @@ in
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; stdenv = gccStdenv; };
+  acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
   amass = callPackage ../tools/networking/amass { };
 
@@ -859,6 +859,8 @@ in
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
+
+  pferd = callPackage ../tools/misc/pferd {};
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -5852,6 +5854,8 @@ in
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipget = callPackage ../applications/networking/ipget { };
+
+  i-pi = with python3Packages; toPythonApplication i-pi;
 
   iptsd = callPackage ../applications/misc/iptsd { };
 
@@ -24009,6 +24013,8 @@ in
   gmtk = callPackage ../development/libraries/gmtk { };
 
   gmu = callPackage ../applications/audio/gmu { };
+
+  gnaural = callPackage ../applications/audio/gnaural { };
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
