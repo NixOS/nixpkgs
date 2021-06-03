@@ -13695,6 +13695,8 @@ in
 
   phantomjs2 = libsForQt514.callPackage ../development/tools/phantomjs2 { };
 
+  picotool = callPackage ../development/tools/picotool { };
+
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   pkgconf-unwrapped = callPackage ../development/tools/misc/pkgconf {};
