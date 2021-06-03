@@ -98,6 +98,8 @@ in stdenv.mkDerivation {
       rwk /tmp/tr_session_id_*,
       r /run/systemd/resolve/stub-resolv.conf,
 
+      r $out/share/transmission/web/**,
+
       include <local/bin.transmission-daemon>
     }
     EOF

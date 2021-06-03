@@ -1,28 +1,28 @@
 { lib
 , aiohttp
 , async-timeout
+, backports-zoneinfo
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, pytz
+, tzdata
 }:
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "2.0.2";
-  disabled = pythonOlder "3.7";
+  version = "2.1.2";
+  disabled = pythonOlder "3.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "azogue";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ajs4kbdlfn4h7f3d6lwkp4yl1rl7zyvj997nhsz93jjwxbajkpv";
+    sha256 = "0s8ki46dh39kw6qvsjcfcxa0gblyi33m3hry137kbi4lw5ws6qhr";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pytz
+    backports-zoneinfo
+    tzdata
     async-timeout
   ];
 
@@ -41,17 +42,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/azogue/aiopvpc/pull/10
-    (fetchpatch {
-      name = "use-peotry-core.patch";
-      url = "https://github.com/azogue/aiopvpc/commit/4bc2740ffd485a60acf579b4f3eb5ee6a353245c.patch";
-      sha256 = "0ynj7pqq3akdvdrvqcwnnslay3mn1q92qhk8fg95ppflzscixli6";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace pytest.ini --replace \
+    substituteInPlace pyproject.toml --replace \
       " --cov --cov-report term --cov-report html" ""
   '';
 

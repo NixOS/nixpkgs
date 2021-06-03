@@ -130,7 +130,13 @@ rec {
               {
                 virtualisation.qemu.package = qemu_pkg;
               }
-            );
+            ) ++ [(
+              {
+                # Ensure we do not use aliases. Ideally this is only set
+                # when the test framework is used by Nixpkgs NixOS tests.
+                nixpkgs.config.allowAliases = false;
+              }
+            )];
           };
 
           # FIXME: get this pkg from the module system

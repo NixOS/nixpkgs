@@ -210,7 +210,7 @@ lib.makeScope pkgs.newScope (self: {
                   poetry = if __isBootstrap then null else poetryPkg;
 
                   # The canonical name is setuptools-scm
-                  setuptools-scm = super.setuptools_scm;
+                  setuptools-scm = super.setuptools-scm;
 
                   __toPluginAble = toPluginAble self;
 

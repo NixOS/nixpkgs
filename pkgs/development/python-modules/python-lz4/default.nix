@@ -8,7 +8,7 @@
 , pytest
 , pytestcov
 , pytestrunner
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     sha256 = "009c4rbyj4cjb8fznccfpr5wrzdmi56wq990yjh22n0z2qqylmkf";
   };
 
-  nativeBuildInputs = [ setuptools_scm pkgconfig pytestrunner ];
+  nativeBuildInputs = [ setuptools-scm pkgconfig pytestrunner ];
   checkInputs = [ pytest pytestcov psutil ];
   propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
 
-  # give a hint to setuptools_scm on package version
+  # give a hint to setuptools-scm on package version
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
   '';

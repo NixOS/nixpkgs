@@ -300,7 +300,7 @@ in
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
-      geoip = 272;
+      #geoip = 272; # new module uses DynamicUser
       fcron = 273;
       sonarr = 274;
       radarr = 275;

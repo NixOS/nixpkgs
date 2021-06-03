@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
-, setuptools_scm
+, setuptools-scm
 , cheroot, portend, more-itertools, zc_lockfile, routes
 , jaraco_collections
 , objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     # required

@@ -4,7 +4,7 @@
 , tqdm
 , aiohttp
 , pytest
-, setuptools_scm
+, setuptools-scm
 , pytest-localserver
 , pytest-socket
 , pytest-asyncio
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

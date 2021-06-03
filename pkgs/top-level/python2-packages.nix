@@ -548,7 +548,7 @@ with self; with super; {
 
   setuptools = callPackage ../development/python-modules/setuptools/44.0.nix { };
 
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm/2.nix { };
+  setuptools-scm = callPackage ../development/python-modules/setuptools-scm/2.nix { };
 
   setuptoolsDarcs = callPackage ../development/python-modules/setuptoolsdarcs { };
 

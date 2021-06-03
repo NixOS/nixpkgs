@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest-asyncio
 , pytestCheckHook
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1z6r3n78bilfzkbxj083p0ib04ia1bhfgnj2qq9x6q4mmykapqm1";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
     pytest-asyncio

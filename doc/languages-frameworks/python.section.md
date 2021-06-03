@@ -847,7 +847,7 @@ using setup hooks.
 The following is an example:
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools_scm, attrs, py, setuptools, six, pluggy }:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools-scm, attrs, py, setuptools, six, pluggy }:
 
 buildPythonPackage rec {
   pname = "pytest";
@@ -864,7 +864,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ hypothesis ];
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
   meta = with lib; {

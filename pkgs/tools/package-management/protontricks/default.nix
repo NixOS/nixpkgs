@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , vdf
 , bash
 , steam-run
@@ -27,7 +27,7 @@ buildPythonApplication rec {
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ vdf ];
 
   makeWrapperArgs = [

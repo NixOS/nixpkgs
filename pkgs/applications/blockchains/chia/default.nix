@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools-scm
   ];
 
-  # give a hint to setuptools_scm on package version
+  # give a hint to setuptools-scm on package version
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = with python3Packages; [

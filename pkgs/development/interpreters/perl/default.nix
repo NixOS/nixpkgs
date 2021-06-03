@@ -1,4 +1,5 @@
-{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
+{ config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
+, callPackage
 , enableThreading ? true, coreutils, makeWrapper
 }:
 
@@ -171,18 +172,22 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "e53999d0c340769792ba18d749751b0df3d1d177"; # Mar 21, 2021
+    crossVersion = "1.3.6";
 
-    perl-cross-src = fetchurl {
-      url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "14vcpwjhq667yh0cs7ism70df8l7068vn4a0ww59hdjyj7yc84i6";
+    perl-cross-src = fetchFromGitHub {
+      name = "perl-cross-${crossVersion}";
+      owner = "arsv";
+      repo = "perl-cross";
+      rev = crossVersion;
+      sha256 = "0k5vyj40czbkfl7r3dcwxpc7dvdlp2xliaav358bviq3dq9vq9bb";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
-      cp -R perl-cross-${crossVersion}/* perl-${version}/
+      chmod -R u+w ${perl-cross-src.name}
+      cp -R ${perl-cross-src.name}/* perl-${version}/
     '';
 
     configurePlatforms = [ "build" "host" "target" ];
@@ -211,7 +216,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.8";
-    sha256 = "1zr6sdsfcmk86n3f8j65x07xkv29v0pi8bwc986ahmjx7x92xzgl";
+    version = "5.35.0";
+    sha256 = "0217nbswhkjhw60kng2p64611xna7za681kk30fkriyicd3yph6n";
   };
 }

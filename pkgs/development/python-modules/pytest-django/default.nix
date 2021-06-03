@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest
 , django
-, setuptools_scm
+, setuptools-scm
 , django-configurations
 , pytest_xdist
 , six
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "26f02c16d36fd4c8672390deebe3413678d89f30720c16efb8b2a6bf63b9041f";
   };
 
-  nativeBuildInputs = [ pytest setuptools_scm ];
+  nativeBuildInputs = [ pytest setuptools-scm ];
   checkInputs = [ pytest django-configurations pytest_xdist six ];
   propagatedBuildInputs = [ django ];
 
