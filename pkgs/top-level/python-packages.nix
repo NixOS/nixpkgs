@@ -3705,6 +3705,8 @@ in {
 
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
+  keras-tuner = callPackage ../development/python-modules/keras-tuner { };
+
   kerberos = callPackage ../development/python-modules/kerberos { };
 
   keyring = callPackage ../development/python-modules/keyring { };
