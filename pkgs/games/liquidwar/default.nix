@@ -4,7 +4,7 @@
 , SDL, SDL_image, SDL_mixer, SDL_ttf
 , curl, sqlite, libtool, readline
 , libogg, libvorbis, libcaca, csound, cunit
-, pkg-config } :
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "liquidwar6";
