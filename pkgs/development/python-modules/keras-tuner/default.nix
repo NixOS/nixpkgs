@@ -37,7 +37,6 @@ buildPythonPackage rec {
     tensorflow-tensorboard_2
   ];
   checkInputs = [
-    pytest
     pytestCheckHook
   ];
   meta = with lib; {
