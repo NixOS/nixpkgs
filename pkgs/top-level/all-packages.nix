@@ -933,7 +933,7 @@ in
   };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_11;
+    electron = electron_12;
   };
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
