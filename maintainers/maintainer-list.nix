@@ -64,6 +64,16 @@
       fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D";
     }];
   };
+  _0xbe7a = {
+    email = "nix@be7a.de";
+    name = "Bela Stoyan";
+    github = "0xbe7a";
+    githubId = 6232980;
+    keys = [{
+      longkeyid = "rsa4096/0x6510870A77F49A99";
+      fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99";
+    }];
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
