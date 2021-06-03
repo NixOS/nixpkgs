@@ -1832,7 +1832,6 @@ broken-packages:
   - haskell-awk
   - haskell-bitmex-rest
   - haskell-brainfuck
-  - haskell-ci
   - haskell-cnc
   - haskell-coffee
   - haskell-compression
