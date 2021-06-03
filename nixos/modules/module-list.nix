@@ -539,7 +539,6 @@
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
   ./services/misc/packagekit.nix
-  ./services/misc/paperless.nix
   ./services/misc/paperless-ng.nix
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
