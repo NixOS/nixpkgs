@@ -8,8 +8,8 @@ with (import ./srcs.nix {
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
@@ -48,6 +48,16 @@ in stdenv.mkDerivation {
     (fetchpatch {
       url = "https://github.com/openafs/openafs/commit/ee53dd3bc087a05e22fc4111297a51ddb30013f0.patch";
       sha256 = "0dfab3zk0dmf6iksna5n09lf5dn4f8w43q4irl2yf5dgqm35shkr";
+    })
+    # Linux: Create wrapper for setattr_prepare
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/5a5d358b02b88d6d2c7a27a75149e35b1de7db38.patch";
+      sha256 = "sha256-cZ7/ZPFjGcJpOsTy2VFZ2sq0HliXZKeigeWzQJ7m/h0=";
+    })
+    # Linux 5.12: Add user_namespace param to inode ops
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/c747b15dd2877e6d17e3e6b940ae78c1e1ccd3ea.patch";
+      sha256 = "sha256-EKsZ8BnJqKPdpGH92JLNIWkId0w7/yLmVdPVaUmveC0=";
     })
   ];
 
