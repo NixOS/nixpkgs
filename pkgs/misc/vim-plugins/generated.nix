@@ -579,6 +579,18 @@ final: prev:
     meta.homepage = "https://github.com/metakirby5/codi.vim/";
   };
 
+  colorbuddy-nvim = buildVimPluginFrom2Nix {
+    pname = "colorbuddy-nvim";
+    version = "2021-04-16";
+    src = fetchFromGitHub {
+      owner = "tjdevries";
+      repo = "colorbuddy.nvim";
+      rev = "87c80e3f4a590d0387d9b128d1f1fc456759408a";
+      sha256 = "19gfmyhmwpr8gi03w44zm056zrzaj74hplpl4psy9mylvb0ghf0k";
+    };
+    meta.homepage = "https://github.com/tjdevries/colorbuddy.nvim/";
+  };
+
   colorizer = buildVimPluginFrom2Nix {
     pname = "colorizer";
     version = "2020-07-23";
