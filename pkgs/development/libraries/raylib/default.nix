@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [
     # fixes incorrect version being set by cmake
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/raysan5/raylib/pull/1761.patch";
+      url = "https://github.com/raysan5/raylib/commit/204aa4c46fdd6986aa0130eeba658562c540759f.patch";
       sha256 = "10pl7828iy4kadach0wy4fs95vr7k08z3mxw90j8dm9xak1ri8fz";
     })
   ];
