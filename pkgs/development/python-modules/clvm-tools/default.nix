@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "test_cmd_unknown-1_txt"
   ];
 
-  # give a hint to setuptools_scm on package version
+  # give a hint to setuptools-scm on package version
   SETUPTOOLS_SCM_PRETEND_VERSION="v${version}";
 
   meta = with lib; {

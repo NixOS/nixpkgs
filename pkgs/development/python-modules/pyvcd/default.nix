@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools_scm
+, setuptools-scm
 , six
 , pytest
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "071e51a8362908ad5a2a12f078185639b98b20b653a56f01679de169d0fa425d";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 
   checkPhase = ''

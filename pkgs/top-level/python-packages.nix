@@ -7622,8 +7622,7 @@ in {
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
-  setuptools-scm = self.setuptools_scm; # added 2021-01-04
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+  setuptools-scm = callPackage ../development/python-modules/setuptools-scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 

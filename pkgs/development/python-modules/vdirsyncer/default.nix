@@ -14,7 +14,7 @@
 , pytestCheckHook
 , pytest-localserver
 , pytest-subtesthack
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
