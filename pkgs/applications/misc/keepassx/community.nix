@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DKEEPASSXC_BUILD_TYPE=Release"
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_AUTOTYPE=ON"
