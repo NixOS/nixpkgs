@@ -49,12 +49,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2021-10-20";
+  version = "unstable-2023-02-03";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "84f0268012cbe322ad858d76613f4182074510ac";
+    rev = "ddf4c57ebbe3a2e46099087570898ab5c1e1f279";
     sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
     fetchSubmodules = true;
   };
