@@ -334,7 +334,6 @@ in
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
   pantheon = handleTest ./pantheon.nix {};
-  paperless = handleTest ./paperless.nix {};
   paperless-ng = handleTest ./paperless-ng.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};

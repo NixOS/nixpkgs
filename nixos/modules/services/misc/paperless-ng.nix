@@ -73,6 +73,14 @@ in
 {
   meta.maintainers = with maintainers; [ earvstedt Flakebi ];
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "paperless"] ''
+      The paperless module has been removed as the upstream project died.
+      Users should migrate to the paperless-ng module (services.paperless-ng).
+      More information can be found in the NixOS 21.11 release notes.
+    '')
+  ];
+
   options.services.paperless-ng = {
     enable = mkOption {
       type = lib.types.bool;
@@ -180,14 +188,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.services.paperless.enable ->
-          (config.services.paperless.dataDir != cfg.dataDir && config.services.paperless.port != cfg.port);
-        message = "Paperless-ng replaces Paperless, either disable Paperless or assign a new dataDir and port to one of them";
-      }
-    ];
-
     # Enable redis if no special url is set
     services.redis.enable = mkIf (!hasAttr "PAPERLESS_REDIS" env) true;
 
