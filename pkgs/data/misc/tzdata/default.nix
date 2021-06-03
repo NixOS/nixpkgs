@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    license = with licenses; [
+      bsd3 # tzcode
+      publicDomain # tzdata
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };
