@@ -3,7 +3,7 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
 
 with lib;
 
@@ -18,7 +18,9 @@ let loName = toLower product;
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
-  inherit name src meta;
+  inherit name src;
+  meta = args.meta // { mainProgram = execName; };
+
   desktopItem = makeDesktopItem {
     name = execName;
     exec = execName;
