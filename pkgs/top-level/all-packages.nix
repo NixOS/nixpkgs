@@ -6089,6 +6089,8 @@ in
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kiterunner = callPackage ../tools/security/kiterunner { };
+
   klick = callPackage ../applications/audio/klick { };
 
   klystrack = callPackage ../applications/audio/klystrack { };
