@@ -216,7 +216,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.8";
-    sha256 = "1zr6sdsfcmk86n3f8j65x07xkv29v0pi8bwc986ahmjx7x92xzgl";
+    version = "5.35.0";
+    sha256 = "0217nbswhkjhw60kng2p64611xna7za681kk30fkriyicd3yph6n";
   };
 }
