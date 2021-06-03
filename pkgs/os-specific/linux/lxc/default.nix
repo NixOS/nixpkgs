@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, perl, docbook2x
+{ lib, stdenv, fetchpatch, fetchurl, autoreconfHook, pkg-config, perl, docbook2x
 , docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
+
+    # 4.0.10 hopefully will have the patch...
+    # https://github.com/lxc/lxc/pull/3844
+    (fetchpatch {
+      url = "https://github.com/lxc/lxc/commit/e859a5ee2cdee5111185a6a629f891aa40b2ffd6.patch";
+      sha256 = "076q3rdrs2pixzj85837frkr9ahhlcvp5bcnigjpj8g04siywg97";
+    })
   ];
 
   postPatch = ''
