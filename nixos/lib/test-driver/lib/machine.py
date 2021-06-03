@@ -211,6 +211,14 @@ class NixStartScript(BaseStartCommand):
     def __init__(self, script: str):
         self._cmd = script
 
+    @property
+    def machine_name():
+        match = re.search("run-(.+)-vm$", self._cmd)
+        name = "machine"
+        if match:
+            name = match.group(1)
+        return name
+
 
 class StartCommand(BaseStartCommand):
     """ unused, legacy?

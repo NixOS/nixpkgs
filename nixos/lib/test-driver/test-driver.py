@@ -2,7 +2,6 @@
 import argparse
 import time
 
-from machine import Machine
 from logger import Logger
 from driver import Driver
 
@@ -19,7 +18,7 @@ if __name__ == "__main__":
 
     logger = Logger()
 
-    driver = Driver(Machine, logger, vm_scripts, cli_args.keep_vm_state)
+    driver = Driver(logger, vm_scripts, cli_args.keep_vm_state)
     driver.export_symbols()
 
     tic = time.time()
