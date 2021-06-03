@@ -13533,6 +13533,8 @@ in
 
   kubicorn = callPackage ../development/tools/kubicorn {  };
 
+  kubevirt = callPackage ../development/tools/kubevirt { };
+
   kubie = callPackage ../development/tools/kubie {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
