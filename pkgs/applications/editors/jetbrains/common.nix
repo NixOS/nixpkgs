@@ -9,7 +9,7 @@ with lib;
 
 let loName = toLower product;
     hiName = toUpper product;
-    execName = concatStringsSep "-" (init (splitString "-" name));
+    mainProgram = concatStringsSep "-" (init (splitString "-" name));
     vmoptsName = loName
                + ( if (with stdenv.hostPlatform; (is32bit || isDarwin))
                    then ""
@@ -19,16 +19,16 @@ in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
   inherit name src;
-  meta = args.meta // { mainProgram = execName; };
+  meta = args.meta // { inherit mainProgram; };
 
   desktopItem = makeDesktopItem {
-    name = execName;
-    exec = execName;
+    name = mainProgram;
+    exec = mainProgram;
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = "Development;";
-    icon = execName;
+    icon = mainProgram;
     extraEntries = ''
       StartupWMClass=${wmClass}
     '';
@@ -66,13 +66,13 @@ with stdenv; lib.makeOverridable mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
     cp -a . $out/$name
-    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
+    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${mainProgram}.png
     mv bin/fsnotifier* $out/libexec/${name}/.
 
     jdk=${jdk.home}
     item=${desktopItem}
 
-    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
+    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${mainProgram}" \
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
