@@ -5,7 +5,7 @@
   coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3,
   which,
   # darwin support
-  darwin, libiconv,
+  darwin, libiconv, xcbuild,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng,
@@ -90,7 +90,8 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkg-config which ];
+    [ bison flex gperf lndir perl pkg-config which ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -131,22 +132,16 @@ stdenv.mkDerivation {
       then
         ''
           sed -i \
-              -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
-              -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
-              -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
-              -e 's|sysroot=$(/usr/bin/xcrun --sdk $sdk --show-sdk-path 2>/dev/null)|sysroot=/nonsense|' \
+              -e 's|/usr/bin/xcode-select|xcode-select|' \
+              -e 's|/usr/bin/xcrun|xcrun|' \
+              -e 's|/usr/bin/xcodebuild|xcodebuild|' \
               -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
-              -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
-              -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
-              -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
               ./configure
               substituteInPlace ./mkspecs/common/mac.conf \
                   --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
               substituteInPlace ./mkspecs/common/mac.conf \
                   --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
         ''
-        # Note on the above: \x27 is a way if including a single-quote
-        # character in the sed string arguments.
       else
         lib.optionalString libGLSupported
           ''
