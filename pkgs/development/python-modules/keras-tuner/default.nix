@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
 , pytestCheckHook
 , colorama
 , scikitlearn
