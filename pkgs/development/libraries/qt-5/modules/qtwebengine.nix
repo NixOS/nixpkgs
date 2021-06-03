@@ -220,7 +220,6 @@ qtModule {
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
-  dontUseXcbuild = true;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
