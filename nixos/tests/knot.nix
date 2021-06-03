@@ -114,46 +114,46 @@ in {
       services.knot.enable = true;
       services.knot.keyFiles = [ tsigFile ];
       services.knot.extraArgs = [ "-v" ];
-      services.knot.extraConfig = ''
-        server:
-            listen: 0.0.0.0@53
-            listen: ::@53
+      services.knot.settings = {
+        server.listen = [ "0.0.0.0@53" "::@53" ];
 
-        acl:
-          - id: notify_from_master
-            address: 192.168.0.1
-            action: notify
+        acl = lib.singleton {
+          id = "notify_from_master";
+          address = "192.168.0.1";
+          action = "notify";
+        };
 
-        remote:
-          - id: master
-            address: 192.168.0.1@53
-            key: slave_key
+        remote = lib.singleton {
+          id = "master";
+          address = "192.168.0.1@53";
+          key = "slave_key";
+        };
 
-        template:
-          - id: default
-            master: master
-            acl: [notify_from_master]
-            # zonefileless setup
-            # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
-            zonefile-sync: -1
-            zonefile-load: none
-            journal-content: all
-            # move databases below the state directory, because they need to be writable
-            journal-db: /var/lib/knot/journal
-            kasp-db: /var/lib/knot/kasp
-            timer-db: /var/lib/knot/timer
+        template = lib.singleton {
+          id = "default";
+          master = "master";
+          acl = ["notify_from_master"];
+          # zonefileless setup
+          # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
+          zonefile-sync = "-1";
+          zonefile-load = "none";
+          journal-content = "all";
+          # move databases below the state directory, because they need to be writable
+          journal-db = "/var/lib/knot/journal";
+          kasp-db = "/var/lib/knot/kasp";
+          timer-db = "/var/lib/knot/timer";
+        };
 
-        zone:
-          - domain: example.com
-            file: example.com.zone
+        zone = [
+          { domain = "example.com"; file = "example.com.zone"; }
+          { domain = "sub.example.com"; file = "sub.example.com.zone"; }
+        ];
 
-          - domain: sub.example.com
-            file: sub.example.com.zone
-
-        log:
-          - target: syslog
-            any: info
-      '';
+        log = lib.singleton {
+          target = "syslog";
+          any = "info";
+        };
+      };
     };
     client = { lib, nodes, ... }: {
       imports = [ common ];
