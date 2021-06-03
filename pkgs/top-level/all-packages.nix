@@ -2845,7 +2845,7 @@ in
 
   kaldi = callPackage ../tools/audio/kaldi { };
 
-  kalk = callPackage ../tools/misc/kalk { };
+  kalker = callPackage ../tools/misc/kalker { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
 

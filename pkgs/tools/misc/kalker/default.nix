@@ -4,7 +4,7 @@
 , rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
-  pname = "kalk";
+  pname = "kalker";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-1iZvp30/V0bw9NBxiKNiDgOMYJkDsGhTGdBsAPggdEg=";
   };
 
-  cargoSha256 = "sha256-qHXlhKeuDpebpbbGr34Uvwyg//HdCL0UoTqRf9vEfmE=";
+  cargoSha256 = "sha256-fBWnMlOLgwrOBPS2GIfOUDHQHcMMaU5r9JZVMbA+W58=";
 
   nativeBuildInputs = [ m4 ];
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://kalk.strct.net";
-    changelog = "https://github.com/PaddiM8/kalk/releases/tag/v${version}";
+    homepage = "https://kalker.strct.net";
+    changelog = "https://github.com/PaddiM8/kalker/releases/tag/v${version}";
     description = "A command line calculator";
     longDescription = ''
       A command line calculator that supports math-like syntax with user-defined

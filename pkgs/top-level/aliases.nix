@@ -340,6 +340,7 @@ mapAliases ({
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
+  kalk = kalker; # added 2021-06-03
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   kodiGBM = kodi-gbm;
