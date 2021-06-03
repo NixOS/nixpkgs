@@ -703,22 +703,18 @@ self: super: {
 
   # 2021-03-12: All of this libraries have to restrictive upper bounds
   # https://github.com/diagrams/diagrams-core/issues/112
+  # https://github.com/diagrams/diagrams-cairo/issues/77
   active = doJailbreak super.active;
   statestack = doJailbreak super.statestack;
   force-layout = doJailbreak super.force-layout;
   size-based = doJailbreak super.size-based;
   dual-tree = doJailbreak super.dual-tree;
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
   diagrams-core = doJailbreak super.diagrams-core;
   diagrams-postscript = doJailbreak super.diagrams-postscript;
   diagrams-svg = doJailbreak super.diagrams-svg;
   diagrams-contrib = doJailbreak super.diagrams-contrib;
-  # apply patch from master to add compat with optparse-applicative >= 0.16
-  diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
-    (pkgs.fetchpatch {
-      url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
-      sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
-      includes = [ "*/CmdLine.hs" ];
-    }));
+  diagrams-lib = doJailbreak super.diagrams-lib;
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
@@ -1804,10 +1800,6 @@ self: super: {
     passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
   };
 
-  # Too strict version bounds on base and optparse-applicative
-  # https://github.com/diagrams/diagrams-cairo/issues/77
-  diagrams-cairo = doJailbreak super.diagrams-cairo;
-
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
   ihaskell-display = doJailbreak super.ihaskell-display;
@@ -1949,5 +1941,9 @@ EOT
     # TODO: We should add proper support for this to the builder.
     testTarget = "libarchive-test --test-options='-j1'";
   };
+
+  # 2021-06-03: Too strict bounds on monoid-extras
+  # https://github.com/xu-hao/namespace/issues/1
+  namespace = doJailbreak super.namespace;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
