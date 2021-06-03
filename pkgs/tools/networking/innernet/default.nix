@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage doc/innernet-server.8.gz
     installManPage doc/innernet.8.gz
+    installShellCompletion doc/innernet.completions.{bash,fish,zsh}
+    installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
   '';
 
   doInstallCheck = true;

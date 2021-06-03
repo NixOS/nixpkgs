@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , isPy3k
 , pytest
 , pytest-black
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "d84e126e2a29e4fde8931ff8131240bbf30a0e7dbcc3897a8dbd8ea5ac11419c";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ pytest pytest-flake8 pytest-black pytestcov ];
   # ironically, they fail a linting test, and pytest.ini forces that test suite

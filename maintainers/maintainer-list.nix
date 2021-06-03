@@ -4361,6 +4361,16 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
+  irenes = {
+    name = "Irene Knapp";
+    email = "ireneista@gmail.com";
+    github = "IreneKnapp";
+    githubId = 157678;
+    keys = [{
+      longkeyid = "rsa4096/0xDBF252AFFB2619FD";
+      fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD";
+    }];
+  };
   ironpinguin = {
     email = "michele@catalano.de";
     github = "ironpinguin";
@@ -7313,9 +7323,9 @@
     githubId = 3159451;
     name = "Nicolas Schneider";
   };
-  nipav = {
+  nkpvk = {
     email = "niko.pavlinek@gmail.com";
-    github = "nipav";
+    github = "nkpvk";
     githubId = 16385648;
     name = "Niko Pavlinek";
   };

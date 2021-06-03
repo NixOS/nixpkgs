@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, mock }:
 
 buildPythonPackage rec {
   pname = "backports.unittest_mock";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mock ];
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
 
   # does not contain tests
   doCheck = false;

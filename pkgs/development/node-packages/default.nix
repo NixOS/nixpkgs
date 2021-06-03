@@ -331,5 +331,16 @@ let
         --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
     };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
+    };
   };
 in self

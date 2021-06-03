@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, python
 , fonttools, lxml, fs, unicodedata2
 , defcon, fontpens, fontmath, booleanoperations
-, pytest, setuptools_scm
+, pytest, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     booleanoperations

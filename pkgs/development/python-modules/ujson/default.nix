@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , isPyPy
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "c615a9e9e378a7383b756b7e7a73c38b22aeb8967a8bfbffd4741f7ffd043c4d";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ujson";

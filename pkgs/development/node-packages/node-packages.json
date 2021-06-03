@@ -261,6 +261,7 @@
 , { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
 , "vue-cli"
 , "vue-language-server"
+, "wavedrom-cli"
 , "web-ext"
 , "webpack"
 , "webpack-cli"
