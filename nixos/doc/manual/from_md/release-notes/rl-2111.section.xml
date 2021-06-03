@@ -17,7 +17,7 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          PHP now defaults to PHP 8.0, updated from 7.4
+          PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
     </itemizedlist>
