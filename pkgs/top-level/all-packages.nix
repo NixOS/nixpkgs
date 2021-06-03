@@ -11415,7 +11415,7 @@ in
   llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
-    # This returns the minimum suported version for the platform. The
+    # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then (if platform.isAarch64 then 11 else 7)
