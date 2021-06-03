@@ -1005,7 +1005,6 @@ broken-packages:
   - diagrams-gtk
   - diagrams-pdf
   - diagrams-qrcode
-  - diagrams-rasterific
   - diagrams-tikz
   - dib
   - dice2tex
