@@ -135,6 +135,18 @@ let
         };
       };
 
+      bodil.file-browser = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "file-browser";
+          publisher = "bodil";
+          version = "0.2.10";
+          sha256 = "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
@@ -595,6 +607,18 @@ let
         };
       };
 
+      JakeBecker.elixir-ls = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "elixir-ls";
+          publisher = "JakeBecker";
+          version = "0.7.0";
+          sha256 = "sha256-kFrkElD7qC1SpOx1rpcHW1D2hybHCf7cqvIO7JfPuMc=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
@@ -657,6 +681,18 @@ let
         };
         meta = {
           license = lib.licenses.bsd3;
+        };
+      };
+
+      kahole.magit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "magit";
+          publisher = "kahole";
+          version = "0.6.13";
+          sha256 = "sha256-/SeGQV0UEqBk69cAmUXFc/OfPxNssvzZqa7NmAMQD1k=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1016,6 +1052,19 @@ let
         };
       };
 
+      tiehuis.zig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "zig";
+          publisher = "tiehuis";
+          version = "0.2.5";
+          sha256 = "sha256-P8Sep0OtdchTfnudxFNvIK+SW++TyibGVI9zd+B5tu4=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "shellcheck";
@@ -1086,6 +1135,30 @@ let
           publisher = "vscodevim";
           version = "1.11.3";
           sha256 = "1smzsgcrkhghbnpy51gp28kh74l7y4s2m8pfxabb4ffb751254j0";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      VSpaceCode.vspacecode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vspacecode";
+          publisher = "VSpaceCode";
+          version = "0.9.1";
+          sha256 = "sha256-/qJKYXR0DznqwF7XuJsz+OghIBzdWjm6dAlaRX4wdRU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      VSpaceCode.whichkey = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "whichkey";
+          publisher = "VSpaceCode";
+          version = "0.8.5";
+          sha256 = "sha256-p5fukIfk/tZFQrkf6VuT4fjmeGtKAqHDh6r6ky847ks=";
         };
         meta = {
           license = lib.licenses.mit;

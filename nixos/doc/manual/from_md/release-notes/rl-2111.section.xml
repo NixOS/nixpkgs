@@ -12,8 +12,18 @@
       </para>
     </listitem>
   </itemizedlist>
+  <section xml:id="highlights">
+    <title>Highlights</title>
+    <para>
+    </para>
+  </section>
+  <section xml:id="new-services">
+    <title>New Services</title>
+    <para>
+    </para>
+  </section>
   <section xml:id="backward-incompatibilities">
-    <title>Backward incompatibilities</title>
+    <title>Backward Incompatibilities</title>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -22,5 +32,10 @@
         </para>
       </listitem>
     </itemizedlist>
+  </section>
+  <section xml:id="other-notable-changes">
+    <title>Other Notable Changes</title>
+    <para>
+    </para>
   </section>
 </section>

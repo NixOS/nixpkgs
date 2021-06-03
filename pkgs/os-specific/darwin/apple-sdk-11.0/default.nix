@@ -6,10 +6,10 @@ let
     pname = "MacOSX-SDK";
     version = "11.0.0";
 
-    # https://swscan.apple.com/content/catalogs/others/index-10.16.merged-1.sucatalog
+    # https://swscan.apple.com/content/catalogs/others/index-11-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog
     src = fetchurl {
-      url = "http://swcdn.apple.com/content/downloads/58/37/001-75138-A_59RXKDS8YM/12ksm19hgzscfc7cau3yhecz4vpkps7wbq/CLTools_macOSNMOS_SDK.pkg";
-      sha256 = "0n51ba926ckwm62w5c8lk3w5hj4ihk0p5j02321qi75wh824hl8m";
+      url = "http://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_macOSNMOS_SDK.pkg";
+      sha256 = "0n425smj4q1vxbza8fzwnk323fyzbbq866q32w288c44hl5yhwsf";
     };
 
     dontBuild = true;
@@ -24,7 +24,7 @@ let
     '';
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools/SDKs/MacOSX11.0.sdk
+      cd Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
 
       mkdir $out
       cp -r System usr $out/
