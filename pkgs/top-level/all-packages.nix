@@ -19680,7 +19680,6 @@ in
     enableDomainController = true;
     enableRegedit = true;
     enableCephFS = !pkgs.stdenv.hostPlatform.isAarch64;
-    enableGlusterFS = true;
   });
 
   sambaFull = samba4Full;
