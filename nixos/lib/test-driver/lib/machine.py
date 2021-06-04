@@ -221,73 +221,6 @@ class NixStartScript(BaseStartCommand):
         return name
 
 
-class StartCommand(BaseStartCommand):
-    """ unused, legacy?
-    """
-
-    def __init__(
-        self,
-        allow_reboot: bool = False,
-        tty_path: Optional[Path] = None,
-        netBackendArgs: Optional[str] = None,
-        netFrontendArgs: Optional[str] = None,
-        hda: Optional[Tuple[Path, str]] = None,
-        cdrom: Optional[str] = None,
-        usb: Optional[str] = None,
-        bios: Optional[str] = None,
-        qemuFlags: Optional[str] = None,
-    ):
-        self._cmd = "qemu-kvm -m 384"
-
-        # networking
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-        if netBackendArgs is not None:
-            net_backend += "," + netBackendArgs
-        if netFrontendArgs is not None:
-            net_frontend += "," + netFrontendArgs
-        self.cmd += f" {net_backend} {net_frontend}"
-
-        # hda
-        hda_cmd = ""
-        if hda is not None:
-            hda_path = hda[0].resolve()
-            hda_interface = hda[1]
-            if hda_interface == "scsi":
-                hda_cmd += (
-                   f" -drive id=hda,file={hda_path},werror=report,if=none"
-                   " -device scsi-hd,drive=hda"
-                )
-            else:
-                hda_cmd += (
-                    f" -drive file={hda_path},if={hda_interface},werror=report"
-                )
-        self.cmd += hda_cmd
-
-        # cdrom
-        if cdrom is not None:
-            self.cmd += f" -cdrom {cdrom}"
-
-        # usb
-        usb_cmd = ""
-        if usb is not None:
-            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
-            usb_cmd += (
-                " -device usb-ehci"
-                f" -drive id=usbdisk,file={usb},if=none,readonly"
-                "-device usb-storage,drive=usbdisk "
-            )
-        self.cmd += usb_cmd
-
-        # bios
-        if bios is not None:
-            self.cmd += f" -bios {bios}"
-
-        # qemu flags
-        if qemuFlags is not None:
-            self.cmd += f" {qemuFlags}"
-
-
 class Machine:
     """A handle to the machine with this name
     """
@@ -296,8 +229,8 @@ class Machine:
         log_serial: Callable,
         log_machinestate: Callable,
         tmp_dir: Path,
+        start_command: BaseStartCommand,
         name: str = "machine",
-        start_command: StartCommand = StartCommand(),
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
     ) -> None:
