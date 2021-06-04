@@ -303,10 +303,6 @@ let
             ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
         done
 
-        # For manpages, in case the program supplies them
-        mkdir -p $out/nix-support
-        echo ${browser} > $out/nix-support/propagated-user-env-packages
-
 
         #########################
         #                       #
