@@ -96,6 +96,11 @@ in
       internalInterfaces = [ "anbox0" ];
     };
 
+    # Ensures NetworkManager doesn't touch anbox0
+    networking.networkmanager.unmanaged = [
+      "anbox0"
+    ];
+
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
     in {
