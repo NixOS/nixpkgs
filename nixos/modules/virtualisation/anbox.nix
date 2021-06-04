@@ -25,6 +25,28 @@ let
     };
   };
 
+  finalImage = if cfg.imageModifications == "" then cfg.image else ( pkgs.callPackage (
+    { runCommandNoCC, squashfsTools }:
+
+    runCommandNoCC "${cfg.image.name}-modified.img" {
+      nativeBuildInputs = [
+        squashfsTools
+      ];
+    } ''
+      echo "→ Extracting Anbox root image..."
+      unsquashfs -dest rootfs ${cfg.image}
+
+      echo "→ Modifying Anbox root image..."
+      (
+      cd rootfs
+      ${cfg.imageModifications}
+      )
+
+      echo "→ Packing modified Anbox root image..."
+      mksquashfs rootfs $out -comp xz -no-xattrs -all-root
+    ''
+  ) { });
+
 in
 
 {
@@ -39,6 +61,18 @@ in
       type = types.package;
       description = ''
         Base android image for Anbox.
+      '';
+    };
+
+    imageModifications = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Commands to edit the image filesystem.
+
+        This can be used to e.g. bundle a privileged F-Droid.
+
+        Commands are ran with PWD being at the root of the filesystem.
       '';
     };
 
@@ -146,7 +180,7 @@ in
         ExecStart = ''
           ${pkgs.anbox}/bin/anbox container-manager \
             --data-path=${anboxloc} \
-            --android-image=${cfg.image} \
+            --android-image=${finalImage} \
             --container-network-address=${cfg.ipv4.container.address} \
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
