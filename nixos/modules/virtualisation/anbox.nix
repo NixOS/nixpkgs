@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
-  kernelPackages = config.boot.kernelPackages;
+
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -67,16 +67,19 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
-      message = "Anbox needs user namespace support to work properly";
+      assertion = with config.boot.kernelPackages; kernelAtLeast "5.5" && kernelOlder "5.18";
+      message = "Anbox needs a kernel with binder and ashmem support";
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    services.udev.extraRules = ''
-      KERNEL=="ashmem", NAME="%k", MODE="0666"
-      KERNEL=="binder*", NAME="%k", MODE="0666"
-    '';
+    systemd.mounts = singleton {
+      requiredBy = [ "anbox-container-manager.service" ];
+      description = "Anbox Binder File System";
+      what = "binder";
+      where = "/dev/binderfs";
+      type = "binder";
+    };
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
