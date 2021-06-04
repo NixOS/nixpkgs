@@ -151,7 +151,7 @@ in
 
     services.sourcehut.settings = {
       # URL git.sr.ht is being served at (protocol://domain)
-      "git.sr.ht".origin = mkDefault "http://git.sr.ht.local";
+      "git.sr.ht".origin = mkDefault "http://git.${cfg.originBase}";
       # Address and port to bind the debug server to
       "git.sr.ht".debug-host = mkDefault "0.0.0.0";
       "git.sr.ht".debug-port = mkDefault port;
@@ -172,7 +172,7 @@ in
       # Path to git repositories on disk
       "git.sr.ht".repos = mkDefault "/var/lib/git";
 
-      "git.sr.ht".outgoing-domain = mkDefault "http://git.sr.ht.local";
+      "git.sr.ht".outgoing-domain = mkDefault "http://git.${cfg.originBase}";
 
       # The authorized keys hook uses this to dispatch to various handlers
       # The format is a program to exec into as the key, and the user to match as the
