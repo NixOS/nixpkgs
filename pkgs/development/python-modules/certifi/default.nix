@@ -1,20 +1,25 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2021.5.30";
+  version = "2021.05.30";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-K792/UMpYBOLPvbdo93gVE8ny/hUbEWOYLrzcZF7qe4=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = "python-certifi";
+    rev = version;
+    sha256 = "1i4ljsc47iac6kl1w4w6x0qia08s9z394z9lbyzc05pm7y8a3cmj";
   };
 
-  pythonImportsCheck = [ "certifi" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "certifi" ];
 
   meta = with lib; {
     homepage = "https://certifi.io/";
