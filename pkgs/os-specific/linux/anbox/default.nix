@@ -23,7 +23,7 @@
 , SDL2_image
 , systemd
 , writeText
-, writeScript
+, writeShellScript
 }:
 
 let
@@ -34,9 +34,8 @@ let
     Exec=@out@/libexec/anbox-session-manager
   '';
 
-  anbox-application-manager = writeScript "anbox-application-manager" ''
-    #!${runtimeShell}
-    @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
+  anbox-application-manager = writeShellScript "anbox-application-manager" ''
+    exec @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
   '';
 
 in
@@ -137,6 +136,7 @@ stdenv.mkDerivation rec {
 
     substitute ${anbox-application-manager} $out/bin/anbox-application-manager \
       --subst-var out
+    chmod +x $out/bin/anbox-application-manager
   '';
 
   passthru.image = let
