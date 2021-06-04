@@ -34,6 +34,11 @@ let
         description = "Addresses who may request zone transfers.";
         default = [ ];
       };
+      allowUpdates = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to allow updates via rfc 2136.";
+      };
       extraConfig = mkOption {
         type = types.str;
         description = "Extra zone config to be appended at the end of the zone section.";
@@ -42,6 +47,7 @@ let
     };
   };
 
+  updateableZones = filter (zone: zone.allowUpdates) (attrValues cfg.zones);
   confFile = pkgs.writeText "named.conf"
     ''
       include "/etc/bind/rndc.key";
@@ -67,11 +73,11 @@ let
       ${cfg.extraConfig}
 
       ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
+          ({ name, file, master ? true, slaves ? [], masters ? [], allowUpdates ? false, extraConfig ? "" }:
             ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
-                file "${file}";
+                file "${if allowUpdates then "/var/db/${name}" else file}";
                 ${ if master then
                    ''
                      allow-transfer {
@@ -86,12 +92,19 @@ let
                    ''
                 }
                 allow-query { any; };
+                ${optionalString allowUpdates "allow-update { key rndc-key; };"}
                 ${extraConfig}
               };
             '')
           (attrValues cfg.zones) }
     '';
 
+    copyUpdateableZones = optionalString ((length updateableZones) > 0) ''
+      mkdir -m 0755 -p /var/db/bind
+      chown ${bindUser} /var/db/bind
+      ${lib.concatMapStrings (zone: "[ -e /var/db/bind/${zone.name} ] && rm /var/db/bind/${zone.name}\n") updateableZones}
+      ${lib.concatMapStrings (zone: "cp ${zone.file} /var/db/bind/${zone.name}\n") updateableZones}
+    '';
 in
 
 {
@@ -227,6 +240,7 @@ in
         if ! [ -f "/etc/bind/rndc.key" ]; then
           ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
+        ${copyUpdateableZones}
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
         chown ${bindUser} /run/named
