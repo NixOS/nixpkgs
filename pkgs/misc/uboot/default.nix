@@ -274,7 +274,7 @@ in {
   ubootOrangePiZero2 = buildUBoot {
     defconfig = "orangepi_zero2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
