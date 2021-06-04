@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    sha256 = "14j9mhrbi4gnrbv25nlsvcxzkylijzrnwbqqnrg7pr452lb3srpb";
+    sha256 = "sha256-bUo+GP3r4jUjjo0FnDrif/5P2WpiIW0lJ96m+7goO/A=";
   };
 
   # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # TODO: add proper OpenGL support. We are currently (0.8.7) getting a shader
+  # TODO: add proper OpenGL support. We are currently (0.8.8) getting a shader
   # error on execution when enabled.
   cmakeFlags = [
     "-DLAYOUT=opt"
