@@ -715,6 +715,8 @@ self: super: {
   diagrams-svg = doJailbreak super.diagrams-svg;
   diagrams-contrib = doJailbreak super.diagrams-contrib;
   # Apply patch from master to add compat with optparse-applicative >= 0.16.
+  # We unfortunately can't upgrade to 1.4.4 which includes this patch yet
+  # since it would require monoid-extras 0.6 which breaks other diagrams libs.
   diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
     (pkgs.fetchpatch {
       url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
