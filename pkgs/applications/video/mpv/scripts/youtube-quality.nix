@@ -21,13 +21,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/mpv/scripts
     cp youtube-quality.lua $out/share/mpv/scripts
-  ''
-  + lib.optionalString oscSupport
-    ''
-      cp youtube-quality-osc.lua $out/share/mpv/scripts
-    ''
-  +
-  ''
+  '' + lib.optionalString oscSupport ''
+    cp youtube-quality-osc.lua $out/share/mpv/scripts
+  '' + ''
     runHook postInstall
   '';
 
