@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/master/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa mic92 ];
+    maintainers = teams.tts.members;
   };
 }

@@ -32,6 +32,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/coqui-ai/coqpit";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa mic92 ];
+    maintainers = teams.tts.members;
   };
 }
