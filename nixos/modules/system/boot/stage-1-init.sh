@@ -389,10 +389,12 @@ mountFS() {
 
     mkdir -p "/mnt-root$mountPoint"
 
+    # For BTFS, wait for all associated devices to show up (nixpkgs#32588)
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
     local n=0
     while true; do
+        if [ "$fsType" == btrfs ]; then btrfs device ready "$device"; fi
         mount "/mnt-root$mountPoint" && break
         if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
