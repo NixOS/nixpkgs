@@ -172,6 +172,7 @@ class BaseStartCommand:
             f"{tty_opts}{display_opts}"
         )
 
+    @staticmethod
     def build_environment(
         state_dir: Path,
         shared_dir: Path,
@@ -269,9 +270,8 @@ class Machine:
         self.shell_path = self.state_dir / "shell"
         if (not self.keep_vm_state) and self.state_dir.exists():
             shutil.rmtree(self.state_dir)
-            self.log_machinestate(
-               f"deleting VM state directory {self.state_dir}\n"
-               "if you want to keep the VM state, pass --keep-vm-state"
+            log_machinestate(  # trick: shouldn't be a machine specific log
+               f"    -> delete state @ {self.state_dir}"
             )
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
@@ -302,7 +302,7 @@ class Machine:
         if not self.booted:
             return
 
-        with self.nested("waiting for the VM to power off"):
+        with self.nested("wait for the VM to power off"):
             sys.stdout.flush()
             self.process.wait()
 
@@ -316,7 +316,7 @@ class Machine:
         if self.booted:
             return
 
-        self.log_machinestate("starting vm")
+        self.log_machinestate("start")
 
         def clear(path: Path) -> Path:
             if path.exists():
@@ -325,7 +325,7 @@ class Machine:
 
         def create_socket(path: Path) -> socket.socket:
             s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
-            s.bind(path)
+            s.bind(str(path))
             s.listen(1)
             return s
 
@@ -359,9 +359,9 @@ class Machine:
         """Kill this machine
         """
         if self.pid is None:
-            return False
+            return
+        self.log_machinestate(f"kill me (pid {self.pid})")
         self.process.kill()
-        return True
 
     def connect(self) -> None:
         """Connect to this machine's root shell
@@ -369,17 +369,15 @@ class Machine:
         if self.connected:
             return
 
-        with self.nested("waiting for the VM to finish booting"):
+        with self.nested("wait for the VM to finish booting"):
             self.start()
 
+            self.log_machinestate("connect to guest root shell")
             tic = time.time()
             self.shell.recv(1024)
             # TODO: Timeout
             toc = time.time()
-
-            self.log_machinestate("connected to guest root shell")
-            diff = toc - tic
-            self.log_machinestate(f"(connecting took {diff:.2f} seconds)")
+            self.log_machinestate(f"(took {(toc - tic):.2f} seconds)")
             self.connected = True
 
     def shutdown(self) -> None:
@@ -460,7 +458,7 @@ class Machine:
         """
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
-            user_str = "" if user is None else f'under user "{user}"' 
+            user_str = "" if user is None else f'under user "{user}"'
             raise Exception(
                 f'retrieving systemctl info for unit "{unit}" {user_str}'
                 f"failed with exit code {status}"
@@ -498,7 +496,7 @@ class Machine:
         """Wether a unit has reached a specified state ("active" by default)
         """
         with self.nested(
-            f"checking if unit ‘{unit}’ has reached state '{require_state}'"
+            f"check if unit ‘{unit}’ has reached state '{require_state}'"
         ):
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
@@ -575,7 +573,7 @@ class Machine:
             status, output = self.execute(command)
             return status == 0
 
-        with self.nested(f"waiting for success: {command}"):
+        with self.nested(f"wait for success: {command}"):
             retry(check_success)
         return output
 
@@ -590,7 +588,7 @@ class Machine:
             status, output = self.execute(command)
             return status != 0
 
-        with self.nested(f"waiting for failure: {command}"):
+        with self.nested(f"wait for failure: {command}"):
             retry(check_failure)
         return output
 
@@ -618,13 +616,13 @@ class Machine:
                 )
             return len(matcher.findall(text)) > 0
 
-        with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
+        with self.nested(f"wait for {regexp} to appear on tty {tty}"):
             retry(tty_matches)
 
     def send_chars(self, chars: List[str]) -> None:
         """Send characters to this machine
         """
-        with self.nested(f"sending keys ‘{chars}‘"):
+        with self.nested(f"send keys ‘{chars}‘"):
             for char in chars:
                 self.send_key(char)
 
@@ -635,7 +633,7 @@ class Machine:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
-        with self.nested(f"waiting for file ‘{filename}‘"):
+        with self.nested(f"wait for file ‘{filename}‘"):
             retry(check_file)
 
     def wait_for_open_port(self, port: int) -> None:
@@ -644,7 +642,7 @@ class Machine:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status == 0
 
-        with self.nested(f"waiting for TCP port {port}"):
+        with self.nested(f"wait for TCP port {port}"):
             retry(port_is_open)
 
     def wait_for_closed_port(self, port: int) -> None:
@@ -682,7 +680,7 @@ class Machine:
         tmp = Path(f"{filename}.ppm")
 
         with self.nested(
-            f"making screenshot {filename}",
+            f"make screenshot {filename}",
             {"image": filename.name},
         ):
             self.send_monitor_command(f"screendump {tmp}")
@@ -777,14 +775,14 @@ class Machine:
 
             return False
 
-        with self.nested(f"waiting for {regex} to appear on screen"):
+        with self.nested(f"wait for {regex} to appear on screen"):
             retry(screen_matches)
 
     def wait_for_console_text(self, regex: str) -> None:
         """Waits until regex matches this machine's console output.
         Can match multiple lines.
         """
-        self.log_machinestate(f"waiting for {regex} to appear on console")
+        self.log_machinestate(f"wait for {regex} to appear on console")
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
@@ -822,7 +820,7 @@ class Machine:
             status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
             return status == 0
 
-        with self.nested("waiting for the X11 server"):
+        with self.nested("wait for the X11 server"):
             retry(check_x)
 
     def get_window_names(self) -> List[str]:
@@ -853,7 +851,7 @@ class Machine:
                 )
             return any(pattern.search(name) for name in names)
 
-        with self.nested("Waiting for a window to appear"):
+        with self.nested("Wait for a window to appear"):
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:

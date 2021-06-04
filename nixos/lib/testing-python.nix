@@ -34,15 +34,21 @@ rec {
       preferLocalBuild = true;
 
       buildPhase = ''
+        PYTHONPATH="${testDriverLib}:$PYTHONPATH"
         python <<EOF
         from pydoc import importfile
-        with open('driver-exports', 'w') as fp:
-          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+        with open('driver-symbols', 'w') as fp:
+          t = importfile("${testDriverScript}")
+          logger = t.Logger()
+          driver = t.Driver(logger, [])
+          test_symbols = list(driver.test_symbols().keys())
+          fp.write(','.join(test_symbols))
         EOF
       '';
 
       doCheck = true;
       checkPhase = ''
+        PYTHONPATH="${testDriverLib}:$PYTHONPATH"
         mypy --disallow-untyped-defs \
              --no-implicit-optional \
              --ignore-missing-imports ${testDriverScript}
@@ -61,7 +67,7 @@ rec {
             --prefix PYTHONPATH : ${testDriverLib} \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
 
-          install -m 0644 -vD driver-exports $out/nix-support/driver-exports
+          install -m 0644 -vD driver-symbols $out/nix-support/driver-symbols
         '';
     };
 
@@ -181,7 +187,7 @@ rec {
             ${lib.optionalString (!skipLint) ''
               PYFLAKES_BUILTINS="$(
                 echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
-                < ${lib.escapeShellArg "${testDriver}/nix-support/driver-exports"}
+                < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
               )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
             ''}
 

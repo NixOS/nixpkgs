@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Callable
 import atexit
 import os
 import ptpython.repl
@@ -8,23 +8,28 @@ import subprocess
 import tempfile
 
 from pathlib import Path
+from pprint import pprint
 
 from machine import Machine, NixStartScript
 
 
 class VLan ():
-    def __init__(self, nr: int, tmp_dir: Path):
+    def __init__(self, nr: int, tmp_dir: Path, log: Callable):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
+        self.log = lambda msg: log(
+            f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
 
         self.process: Optional[subprocess.Popen] = None
         self.pid: Optional[int] = None
         self.fd: Optional[os.file] = None
 
         # TODO: don't side-effect environment here
-        os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = self.socket_dir
+        os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
     def start(self):
+
+        self.log("start")
         pty_master, pty_slave = pty.openpty()
 
         self.process = subprocess.Popen(
@@ -45,9 +50,16 @@ class VLan ():
         if not (self.socket_dir / "ctl").exists():
             raise Exception("cannot start vde_switch")
 
+        self.log(f"running (pid {self.pid})")
+
     def release(self):
-        self.fd.close()
-        self.process.terminate()
+        if self.pid is None:
+            return
+        self.log(f"kill me (pid {self.pid})")
+        if self.fd is not None:
+            self.fd.close()
+        if self.process is not None:
+            self.process.terminate()
 
 
 class Driver():
@@ -71,8 +83,7 @@ class Driver():
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.vlans = [
-            self.log(f"starting VDE switch for network {nr}") and
-            vlan_class(nr, tmp_dir) for nr in
+            vlan_class(nr, tmp_dir, logger.log_machinestate) for nr in
             list(dict.fromkeys(os.environ.get("VLANS", "").split()))
         ]
 
@@ -81,7 +92,6 @@ class Driver():
                 yield NixStartScript(s)
 
         self.machines = [
-            self.log(f"creating VM '{cmd.machine_name}'") and
             machine_class(
                 start_command=cmd,
                 keep_vm_state=keep_vm_state,
@@ -94,14 +104,11 @@ class Driver():
 
         @atexit.register
         def clean_up() -> None:
-            with self.log.nested("cleaning up"):
+            with self.log.nested("clean up"):
                 for machine in self.machines:
-                    if not machine.release():
-                        continue
-                    self.log(f"killed {machine.name} (pid {machine.pid})")
+                    machine.release()
                 for vlan in self.vlans:
                     vlan.release()
-                    self.log(f"killed {vlan.nr} (pid {vlan.pid})")
             self.log.release()
 
     @contextmanager
@@ -116,28 +123,42 @@ class Driver():
                 self.log(f'Test "{name}" failed with error:')
                 raise
 
-    def export_symbols(self):
-        global machines
-        machines = self.machines
-        machine_eval = [
-            "global {0}; {0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
-        ]
-
-        exec("\n".join(machine_eval))
-
-        global start_all, test_script
-        start_all = self.start_all
-        test_script = self.test_script
-
-        global subtest
+    def test_symbols(self):
 
         def subtest(name):
             self.subtest(name)
 
+        general_symbols = dict(
+            pprint=pprint,
+            os=os,
+            driver=self,
+            logger=self.log,
+            vlans=self.vlans,
+            machines=self.machines,
+            start_all=self.start_all,
+            test_script=self.test_script,
+            subtest=subtest,
+        )
+        machine_symbols = {
+            m.name: self.machines[idx] for idx, m in enumerate(self.machines)
+        }
+        vlan_symbols = {
+            f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
+        }
+        print(
+            "Available Symbols:\n    "
+            + ", ".join(map(lambda m: m.name, self.machines))
+            + "  -  "
+            + ", ".join(map(lambda v: f"vlan{v.nr}", self.vlans))
+            + "\n    -------\n    "
+            + ", ".join(list(general_symbols.keys()))
+        )
+        return {**general_symbols, **machine_symbols, **vlan_symbols}
+
     def test_script(self) -> None:
         """Run the test script from the environment ('testScript')
         """
-        with self.log.nested("running the VM test script"):
+        with self.log.nested("run the VM test script"):
             exec(os.environ["testScript"])
 
     def run_tests(self) -> None:
@@ -146,11 +167,11 @@ class Driver():
         """
         tests = os.environ.get("tests")
         if tests is not None:
-            with self.log.nested("running the VM test script"):
-                exec(tests, globals())
+            with self.log.nested("run the VM test script"):
+                exec(tests, self.test_symbols())
         else:
             ptpython.repl.embed(
-                locals(), globals(),
+                self.test_symbols(), {},
                 configure=self.configure_python_repl)
 
         # TODO: Collect coverage data
@@ -162,16 +183,16 @@ class Driver():
     def start_all(self) -> None:
         """Start all machines
         """
-        with self.log.nested("starting all VLans"):
+        with self.log.nested("start all VLans"):
             for vlan in self.vlans:
                 vlan.start()
-        with self.log.nested("starting all VMs"):
+        with self.log.nested("start all VMs"):
             for machine in self.machines:
                 machine.start()
 
     def join_all(self) -> None:
         """Wait for all machines to shut down
         """
-        with self.log.nested("waiting for all VMs to finish"):
+        with self.log.nested("wait for all VMs to finish"):
             for machine in self.machines:
                 machine.wait_for_shutdown()
