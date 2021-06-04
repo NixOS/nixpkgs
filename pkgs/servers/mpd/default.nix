@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost
+# Darwin inputs
+, AudioToolbox, AudioUnit
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -114,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.6";
+      version = "0.22.8";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-Xu+MxMxR5u++R3lZHe6UQ+mEmRnWbN6173ZX39KS1A8=";
+        sha256 = "sha256-nlUgFmiIrheN/FsSlQ/16iqwBXDw6xuwJG/foPZD07M=";
       };
 
       buildInputs = [
@@ -133,7 +135,7 @@ let
         gtest
       ]
         ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
+        ++ lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit ];
 
       nativeBuildInputs = [
         meson
