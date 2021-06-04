@@ -93,27 +93,7 @@ common =
             chmod u+w $out/lib/*.so.*
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
-        '' +
-        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
-        # released with 2.3.8, we need to patch around an issue where the Nix
-        # configure step pulls in the build system's bash and other utilities
-        # when cross-compiling.
-        lib.optionalString (
-          stdenv.buildPlatform != stdenv.hostPlatform &&
-          (lib.versionOlder "2.3.8" version && !is24)
-          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
-        ) ''
-          mkdir tmp/
-          substitute corepkgs/config.nix.in tmp/config.nix.in \
-            --subst-var-by bash ${bash}/bin/bash \
-            --subst-var-by coreutils ${coreutils}/bin \
-            --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
-            --subst-var-by gzip ${gzip}/bin/gzip \
-            --subst-var-by xz ${xz}/bin/xz \
-            --subst-var-by tar ${gnutar}/bin/tar \
-            --subst-var-by tr ${coreutils}/bin/tr
-          mv tmp/config.nix.in corepkgs/config.nix.in
-          '';
+        '';
 
       configureFlags =
         [ "--with-store-dir=${storeDir}"
