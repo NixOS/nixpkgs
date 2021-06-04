@@ -1,0 +1,39 @@
+From 1aa314f5433b9b3e89a1c05b5c465fb477435e23 Mon Sep 17 00:00:00 2001
+From: Dmitri Smirnov <dmitri@smirnov.ee>
+Date: Mon, 8 Mar 2021 14:15:27 +0100
+Subject: [PATCH] =?UTF-8?q?Added=20explicit=20imports=20for=20QPainterPath?=
+ =?UTF-8?q?=20to=20fix=20builds=20with=20Qt=20=E2=89=A5=205.15?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Dmitri Smirnov <dmitri@smirnov.ee>
+---
+ client/widgets/CheckBox.cpp   | 1 +
+ client/widgets/MainAction.cpp | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/client/widgets/CheckBox.cpp b/client/widgets/CheckBox.cpp
+index a03b56e5d..725d585b7 100644
+--- a/client/widgets/CheckBox.cpp
++++ b/client/widgets/CheckBox.cpp
+@@ -22,6 +22,7 @@
+ #include <QBrush>
+ #include <QPaintEvent>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QStyleOptionButton>
+ 
+ CheckBox::CheckBox(QWidget *parent)
+diff --git a/client/widgets/MainAction.cpp b/client/widgets/MainAction.cpp
+index 4cf4bb1cf..a46c193e3 100644
+--- a/client/widgets/MainAction.cpp
++++ b/client/widgets/MainAction.cpp
+@@ -24,6 +24,7 @@
+ 
+ #include <QtCore/QSettings>
+ #include <QtGui/QPainter>
++#include <QtGui/QPainterPath>
+ #include <QtGui/QPaintEvent>
+ 
+ using namespace ria::qdigidoc4;
