@@ -79,7 +79,6 @@ while [ "$#" -gt 0 ]; do
       --fast)
         buildNix=
         fast=1
-        extraBuildFlags+=(--show-trace)
         ;;
       --profile-name|-p)
         if [ -z "$1" ]; then
