@@ -22205,6 +22205,8 @@ in
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
+  quintom-cursor-theme = callPackage ../data/icons/quintom-cursor-theme { };
+
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
   route159 = callPackage ../data/fonts/route159 { };
