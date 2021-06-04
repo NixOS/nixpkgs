@@ -203,4 +203,12 @@ with lib.maintainers; {
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
   };
+
+  tts = {
+    members = [
+      hexa
+      mic92
+    ];
+    scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
+  };
 }
