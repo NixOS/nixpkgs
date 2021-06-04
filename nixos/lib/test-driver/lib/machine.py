@@ -1,6 +1,8 @@
-from contextlib import contextmanager, _GeneratorContextManager
+from contextlib import contextmanager
 from queue import Queue
-from typing import Tuple, Any, Callable, Dict, Optional, List, Iterable
+from typing import (
+    Tuple, Any, Callable, Dict, Optional, List, Iterable, Iterator
+)
 import queue
 import io
 import _thread
@@ -16,7 +18,6 @@ import tempfile
 import telnetlib
 import time
 
-from pprint import pprint
 from pathlib import Path
 
 CHAR_TO_KEY = {
@@ -102,7 +103,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 def _perform_ocr_on_screenshot(
-    screenshot_path: str, model_ids: Iterable[int]
+    screenshot_path: Path, model_ids: Iterable[int]
 ) -> List[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
@@ -133,8 +134,7 @@ def _perform_ocr_on_screenshot(
 
 
 class BaseStartCommand:
-    def __init__(self):
-        pass
+    _cmd: str
 
     def cmd(
         self,
@@ -142,7 +142,7 @@ class BaseStartCommand:
         shell_socket_path: Path,
         allow_reboot: bool = False,  # TODO: unused, legacy?
         tty_path: Optional[Path] = None,  # TODO: currently unused
-    ):
+    ) -> str:
         tty_opts = ""
         if tty_path is not None:
             tty_opts += (
@@ -177,14 +177,16 @@ class BaseStartCommand:
     def build_environment(
         state_dir: Path,
         shared_dir: Path,
-    ):
-        return dict(os.environ).update(
+    ) -> os._Environ:
+        env = os.environ
+        env.update(
             {
-                "TMPDIR": state_dir,
-                "SHARED_DIR": shared_dir,
+                "TMPDIR": str(state_dir),
+                "SHARED_DIR": str(shared_dir),
                 "USE_TMPDIR": "1",
             }
         )
+        return env
 
     def run(
         self,
@@ -192,7 +194,7 @@ class BaseStartCommand:
         shared_dir: Path,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-    ):
+    ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(monitor_socket_path, shell_socket_path),
             stdin=subprocess.DEVNULL,
@@ -215,7 +217,7 @@ class NixStartScript(BaseStartCommand):
         self._cmd = script
 
     @property
-    def machine_name(self):
+    def machine_name(self) -> str:
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
         if match:
@@ -226,6 +228,31 @@ class NixStartScript(BaseStartCommand):
 class Machine:
     """A handle to the machine with this name
     """
+    name: str
+    log_serial: Callable
+    log_machinestate: Callable
+    nested: Callable
+    tmp_dir: Path
+    shared_dir: Path
+    state_dir: Path
+    monitor_path: Path
+    shell_path: Path
+
+    start_command: BaseStartCommand
+    keep_vm_state: bool
+    allow_reboot: bool
+
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+
+    booted: bool = False
+    connected: bool = False
+    # Store last serial console lines for use
+    # of wait_for_console_text
+    last_lines: Queue = Queue()
+
     def __init__(
         self,
         log_serial: Callable,
@@ -236,10 +263,13 @@ class Machine:
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
     ) -> None:
-        self.log_serial = lambda msg: log_serial(
+        # setattr workaround for mypy type checking, see: https://git.io/JGyNT
+        setattr(self, "log_serial", lambda msg: log_serial(
             f"[{name} LOG] {msg}", {"machine": name})
-        self.log_machinestate = lambda msg: log_machinestate(
+        )
+        setattr(self, "log_machinestate", lambda msg: log_machinestate(
             f"[{name} MCS] {msg}", {"machine": name})
+        )
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
@@ -252,15 +282,12 @@ class Machine:
         # Ideally, just remove this logic long term and make it as  easy as
         # possible for the user of `Machine` to provide plain standard loggers
         @contextmanager
-        def dummy_nest(message: str) -> _GeneratorContextManager:
+        def dummy_nest(message: str) -> Iterator[None]:
             self.log_machinestate(message)
             yield
 
         nest_op = getattr(self.log_machinestate, "nested", None)
-        if callable(nest_op):
-            self.nested = nest_op
-        else:
-            self.nested = dummy_nest
+        setattr(self, "nested", (callable(nest_op) and nest_op or dummy_nest))
 
         # set up directories
         self.shared_dir = (self.tmp_dir / "shared-xchg")
@@ -276,19 +303,8 @@ class Machine:
             )
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
-        self.process: Optional[subprocess.Popen] = None
-        self.pid: Optional[int] = None
-        self.monitor: Optional[socket.socket] = None
-        self.shell: Optional[socket.socket] = None
-
-        self.booted = False
-        self.connected = False
-        # Store last serial console lines for use
-        # of wait_for_console_text
-        self.last_lines: Queue = Queue()
-
     def _wait_for_monitor_prompt(self) -> str:
-        assert self.monitor is not None
+        assert self.monitor
         answer = ""
         while True:
             undecoded_answer = self.monitor.recv(1024)
@@ -303,6 +319,7 @@ class Machine:
         if not self.booted:
             return
 
+        assert self.process
         with self.nested("wait for the VM to power off"):
             sys.stdout.flush()
             self.process.wait()
@@ -340,7 +357,8 @@ class Machine:
         self.shell, _ = shell_socket.accept()
 
         def process_serial_output() -> None:
-            assert self.process.stdout is not None
+            assert self.process
+            assert self.process.stdout
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
@@ -356,11 +374,12 @@ class Machine:
 
         self.log_machinestate(f"QEMU running (pid {self.pid})")
 
-    def release(self) -> bool:
+    def release(self) -> None:
         """Kill this machine
         """
         if self.pid is None:
             return
+        assert self.process
         self.log_machinestate(f"kill me (pid {self.pid})")
         self.process.kill()
 
@@ -373,6 +392,7 @@ class Machine:
         with self.nested("wait for the VM to finish booting"):
             self.start()
 
+            assert self.shell
             self.log_machinestate("connect to guest root shell")
             tic = time.time()
             self.shell.recv(1024)
@@ -387,6 +407,7 @@ class Machine:
         if not self.booted:
             return
 
+        assert self.shell
         self.log_machinestate("regular shutdown")
         self.shell.send("poweroff\n".encode())
         self._wait_for_shutdown()
@@ -423,7 +444,7 @@ class Machine:
         """
         message = (f"{command}\n").encode()
         self.log_machinestate("send monitor command: {command}")
-        assert self.monitor is not None
+        assert self.monitor
         self.monitor.send(message)
         return self._wait_for_monitor_prompt()
 
@@ -469,7 +490,7 @@ class Machine:
 
         def tuple_from_line(line: str) -> Tuple[str, str]:
             match = line_pattern.match(line)
-            assert match is not None
+            assert match
             return match[1], match[2]
 
         return dict(
@@ -512,6 +533,7 @@ class Machine:
         """
         self.connect()
 
+        assert self.shell
         out_command = f"( {command} ); echo '|!=EOF' $?\n"
         self.shell.send(out_command.encode())
 
@@ -524,7 +546,7 @@ class Machine:
             if match:
                 output += match[1]
                 status_code = int(match[2])
-                return (status_code, pprint(output))
+                return (status_code, output)
             output += chunk
 
     def shell_interact(self) -> None:
@@ -672,15 +694,17 @@ class Machine:
         """
         self.wait_for_unit(jobname)
 
-    def screenshot(self, filename: str) -> None:
+    def screenshot(self, name: str) -> None:
         """Take a screenshot from this machine and place it in
         the current directory under the specified filename
         (or into $out when called from within a derivation)
         """
         out_dir = Path(os.environ.get("out", Path.cwd()))
         word_pattern = re.compile(r"^\w+$")
-        if word_pattern.match(filename):
-            filename = out_dir / f"{filename}.png"
+        if word_pattern.match(name):
+            filename = out_dir / f"{name}.png"
+        else:
+            filename = Path(name)
         tmp = Path(f"{filename}.ppm")
 
         with self.nested(
@@ -757,7 +781,7 @@ class Machine:
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path = tmpdir / "ppm"
+            screenshot_path = Path(tmpdir) / "ppm"
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 

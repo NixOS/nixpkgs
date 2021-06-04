@@ -70,9 +70,9 @@ class XmlLogger(Logger):
     def log_serial(self, message: str, attributes: Dict[str, str] = {}) -> None:
         self._enqueue((message, {"type": "serial"}))
         if self.enable_serial_logs:
-            common.print(Style.DIM + message + Style.RESET_ALL)
+            common.eprint(Style.DIM + message + Style.RESET_ALL)
 
-    def _enqueue(self, message: Dict[str, str]) -> None:
+    def _enqueue(self, message: Tuple[str, Dict[str, str]]) -> None:
         self.queue.put(message)
 
     def _drain_log_queue(self) -> None:

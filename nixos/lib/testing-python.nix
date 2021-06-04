@@ -51,9 +51,11 @@ rec {
         PYTHONPATH="${testDriverLib}:$PYTHONPATH"
         mypy --disallow-untyped-defs \
              --no-implicit-optional \
-             --ignore-missing-imports ${testDriverScript}
-        pylint --errors-only ${testDriverScript}
-        black --check --diff ${testDriverScript}
+             --ignore-missing-imports \
+             ${testDriverScript} $(find ${testDriverLib} -type f)
+
+        pylint --errors-only ${testDriverScript} $(find ${testDriverLib} -type f)
+        black --check --diff ${testDriverScript} $(find ${testDriverLib} -type f)
       '';
 
       installPhase =

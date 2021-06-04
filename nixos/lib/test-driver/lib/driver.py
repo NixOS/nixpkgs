@@ -1,7 +1,8 @@
 from contextlib import contextmanager
-from typing import Iterator, Optional, Callable
+from typing import Iterator, Optional, Callable, List, Dict, Any, Type
 import atexit
 import os
+import io
 import ptpython.repl
 import pty
 import subprocess
@@ -11,23 +12,31 @@ from pathlib import Path
 from pprint import pprint
 
 from machine import Machine, NixStartScript
+# for typing
+from logger import Logger
 
 
 class VLan ():
+    nr: int
+    socket_dir: Path
+    log: Callable
+
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    fd: Optional[io.TextIOBase]
+
     def __init__(self, nr: int, tmp_dir: Path, log: Callable):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
-        self.log = lambda msg: log(
+        # setattr workaround for mypy type checking, see: https://git.io/JGyNT
+        setattr(self, "log", lambda msg: log(
             f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
-
-        self.process: Optional[subprocess.Popen] = None
-        self.pid: Optional[int] = None
-        self.fd: Optional[os.file] = None
+        )
 
         # TODO: don't side-effect environment here
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
-    def start(self):
+    def start(self) -> None:
 
         self.log("start")
         pty_master, pty_slave = pty.openpty()
@@ -52,7 +61,7 @@ class VLan ():
 
         self.log(f"running (pid {self.pid})")
 
-    def release(self):
+    def release(self) -> None:
         if self.pid is None:
             return
         self.log(f"kill me (pid {self.pid})")
@@ -65,12 +74,12 @@ class VLan ():
 class Driver():
     def __init__(
         self,
-        logger,
-        vm_scripts,
-        keep_vm_state=False,
-        configure_python_repl=id,
-        machine_class=Machine,
-        vlan_class=VLan,
+        logger: Logger,
+        vm_scripts: List[str],
+        keep_vm_state: bool = False,
+        configure_python_repl: Callable = id,
+        machine_class: Type[Machine] = Machine,
+        vlan_class: Type[VLan] = VLan,
     ):
         """
         Args:
@@ -83,11 +92,11 @@ class Driver():
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.vlans = [
-            vlan_class(nr, tmp_dir, logger.log_machinestate) for nr in
+            vlan_class(int(nr), tmp_dir, logger.log_machinestate) for nr in
             list(dict.fromkeys(os.environ.get("VLANS", "").split()))
         ]
 
-        def cmd(scripts):
+        def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
 
@@ -111,7 +120,6 @@ class Driver():
                     vlan.release()
             self.log.release()
 
-    @contextmanager
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name
         """
@@ -123,10 +131,11 @@ class Driver():
                 self.log(f'Test "{name}" failed with error:')
                 raise
 
-    def test_symbols(self):
+    def test_symbols(self) -> Dict[str, Any]:
 
-        def subtest(name):
-            self.subtest(name)
+        @contextmanager
+        def subtest(name: str) -> Iterator[None]:
+            return self.subtest(name)
 
         general_symbols = dict(
             pprint=pprint,
@@ -195,4 +204,4 @@ class Driver():
         """
         with self.log.nested("wait for all VMs to finish"):
             for machine in self.machines:
-                machine.wait_for_shutdown()
+                machine._wait_for_shutdown()
