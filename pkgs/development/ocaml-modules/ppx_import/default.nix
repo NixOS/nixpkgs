@@ -1,7 +1,6 @@
 { lib, fetchurl, buildDunePackage
 , ppx_tools_versioned
 , ocaml-migrate-parsetree
-, ounit, ppx_deriving, ppxlib
 }:
 
 buildDunePackage rec {
@@ -20,9 +19,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ppx_tools_versioned ocaml-migrate-parsetree
   ];
-
-  doCheck = true;
-  checkInputs = [ ounit ppx_deriving ppxlib ];
 
   meta = {
     description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
