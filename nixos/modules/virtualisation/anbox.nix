@@ -82,6 +82,17 @@ in
       optional (kernel.kernelAtLeast "4.4" && kernel.kernelOlder "5.5") kernelPackages.anbox
     ;
 
+    system.requiredKernelConfig = with config.lib.kernelConfig; mkIf (kernel.kernelOlder "5.5") [
+      (isEnabled "ASHMEM")
+      (isEnabled "ANDROID")
+      (isEnabled "ANDROID_BINDER_IPC")
+      (isEnabled "ANDROID_BINDERFS")
+      # It is currently impossible to check for this with `lib.kernelConfig`.
+      # Though the default is fine:
+      # https://github.com/torvalds/linux/blob/f88cd3fb9df228e5ce4e13ec3dbad671ddb2146e/drivers/android/Kconfig#L35-L45
+      # ANDROID_BINDER_DEVICES binder,hwbinder,vndbinder
+    ];
+
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
       KERNEL=="binder*", NAME="%k", MODE="0666"
