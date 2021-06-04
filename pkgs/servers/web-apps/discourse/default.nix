@@ -1,23 +1,24 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests
-, fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git
+{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
+, fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git, cacert
 , util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
-, gifsicle, libpsl, redis, postgresql, which, brotli, procps
+, gifsicle, libpsl, redis, postgresql, which, brotli, procps, rsync
 , nodePackages, v8
 }:
 
 let
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-JQUgHxs2Cl2LBpg/6JLhZxje4RmPREL1IPta84kXwPw=";
+    sha256 = "sha256-w26pwGDL2j7qbporUzZATgw7E//E6xwahCbXv35QNnc=";
   };
 
   runtimeDeps = [
     # For backups, themes and assets
     rubyEnv.wrappedRuby
+    rsync
     gzip
     gnutar
     git
@@ -65,24 +66,38 @@ let
         gems = import ./rubyEnv/gemset.nix;
       in
         gems // {
-          mini_racer = gems.mini_racer // {
-            buildInputs = [ v8 ];
-            dontBuild = false;
-            # The Ruby extension makefile generator assumes the source
-            # is C, when it's actually C++ ¯\_(ツ)_/¯
-            postPatch = ''
-              substituteInPlace ext/mini_racer_extension/extconf.rb \
-                --replace '" -std=c++0x"' \
-                          '" -x c++ -std=c++0x"'
-            '';
-          };
+          libv8-node =
+            let
+              noopScript = writeShellScript "noop" "exit 0";
+              linkFiles = writeShellScript "link-files" ''
+                cd ../..
+
+                mkdir -p vendor/v8/out.gn/libv8/obj/
+                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+
+                ln -s ${v8}/include vendor/v8/include
+
+                mkdir -p ext/libv8-node
+                echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
+              '';
+            in gems.libv8-node // {
+              dontBuild = false;
+              postPatch = ''
+                cp ${noopScript} libexec/build-libv8
+                cp ${noopScript} libexec/build-monolith
+                cp ${noopScript} libexec/download-node
+                cp ${noopScript} libexec/extract-node
+                cp ${linkFiles} libexec/inject-libv8
+              '';
+            };
           mini_suffix = gems.mini_suffix // {
             propagatedBuildInputs = [ libpsl ];
             dontBuild = false;
             # Use our libpsl instead of the vendored one, which isn't
-            # available for aarch64
+            # available for aarch64. It has to be called
+            # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.so
+              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -111,6 +126,8 @@ let
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
+      export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+
       redis-server >/dev/null &
 
       initdb -A trust $NIX_BUILD_TOP/postgres >/dev/null

@@ -248,6 +248,8 @@ For cherry-picking a commit to a stable release branch (“backporting”), use 
 
 Add a reason for the backport by using `git cherry-pick -xe <original commit>` instead when it is not obvious from the original commit message. It is not needed when it's a minor version update that includes security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
 
+For backporting Pull Requests to stable branches, assign label `backport <branch>` to the original Pull Requests and automation should take care of the rest once the Pull Requests is merged.
+
 Here is an example of a cherry-picked commit message with good reason description:
 
 ```

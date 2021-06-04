@@ -8,6 +8,7 @@
 , openssl
 , publicsuffix-list
 , isPy27
+, libiconv
 , CoreFoundation
 , Security
 }:
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
@@ -49,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library, which is written in Rust";
     homepage = "https://github.com/ArniDagur/python-adblock/";
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ petabyteboy dotlambda ];
     license = with licenses; [ asl20 mit ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uEKTB8935YY6lpXv2tJBQ1hrRk63vALLQb6SUXsVyhQ=";
+    sha256 = "sha256-2B6w6c/qztyBb1jNA0zg+udQm41ouT1DyB6Ygpi5nC8=";
   };
 
   nativeBuildInputs = [ cmake ];

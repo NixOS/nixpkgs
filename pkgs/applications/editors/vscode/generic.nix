@@ -9,7 +9,7 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
-, executableName, longName, shortName, pname
+, executableName, longName, shortName, pname, updateScript
 }:
 
 let
@@ -19,7 +19,7 @@ let
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName tests;
+      inherit executableName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };

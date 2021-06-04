@@ -24,7 +24,7 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.6";
+  version = "3.16.7";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -32,7 +32,7 @@ in mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1vnz5kiyjircmhn4vq3fa5j2kvkxpwcsry7jc6nxl0w0dqx1zay1";
+    sha256 = "0yvb2w83dplh0my72xljglq9a4a7qkfliwslav26lw4yqxr8mr0p";
   };
 
   passthru = {

@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.20";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = pname;
     rev = version;
-    sha256 = "1nscfwycclfbll709w1q46w6rl0r5c3b85rsc7zwc3ixd1k8aajp";
+    sha256 = "sha256-oZHi/H9HOqGTFuhqPSZXntMzVJ3ZT4zNejezo0cDtqg=";
   };
 
   propagatedBuildInputs = [ attrs cryptography async-timeout ];

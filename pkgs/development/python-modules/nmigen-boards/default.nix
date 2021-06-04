@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nmigen
 , setuptools
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1flbcyb2xz174dgqv2964qra80xj2vbzbqwjb27shvxm6knj9ikf";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ setuptools nmigen ];
 
   preBuild = ''

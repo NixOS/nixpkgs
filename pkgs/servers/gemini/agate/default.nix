@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+X1ibnYAUB34u8+oNBSkjLtsArxlrg0Nq5zJrXi7Rfk=";
+    sha256 = "sha256-0sh9OuX52kvhTt681uZesOUttrxH8ZMxn6mTILQDQuU=";
   };
 
-  cargoSha256 = "sha256-EOxklOiazxhhIIv6c+N4uuItY/oFMAG0r/ATZ3Anlko=";
+  cargoSha256 = "sha256-JBmSa2sc/eor0bCcIMhGGLmcJN+wCloP0Ao9DBybQbc=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

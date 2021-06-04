@@ -32,6 +32,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-nxNQde3GZs8rnKkd41xnA+KxdxwQp3B0FPtlbCilmzs=";
   };
 
+  patches = [
+    # Load modules from path in `NIX_GNOME_PANEL_MODULESDIR` environment variable
+    # instead of gnome-panel’s libdir so that the NixOS module can make gnome-panel
+    # load modules from other packages as well.
+    ./modulesdir-env-var.patch
+  ];
+
   # make .desktop Exec absolute
   postPatch = ''
     patch -p0 <<END_PATCH

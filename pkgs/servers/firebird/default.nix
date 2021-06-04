@@ -9,7 +9,7 @@ let base = {
     changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
     license = [ "IDPL" "Interbase-1.0" ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [ marcweber superherointj ];
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -29,7 +29,7 @@ let base = {
     runHook postInstall
   '';
 
-}; in {
+}; in rec {
 
   firebird_2_5 = stdenv.mkDerivation (base // rec {
     version = "2.5.9";
@@ -69,16 +69,17 @@ let base = {
   });
 
   firebird_4 = stdenv.mkDerivation (base // rec {
-    version = "4.0.0-rc1";
+    version = "4.0.0";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
-      rev = "T4_0_0_RC1";
-      sha256 = "sha256-FLaRePosF5dtJ+fmrfvzkE6wawC9Z9YLhT/ZWkwWXb4=";
+      rev = "v${version}";
+      sha256 = "sha256-a4ex19FMfiJsUEhWUYd2YXKgJ24Jnpoab2t6x9sUuyQ=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];
   });
 
+  firebird = firebird_4;
 }

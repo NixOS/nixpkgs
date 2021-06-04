@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [ ./replace-i3lock.patch ];
+
   installPhase =
     let
       PATH =

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''
     sed -i tq \
-      -e 's|\bfq\b|'$out'/bin/fq|g' \
-      -e 's|\bnq\b|'$out'/bin/nq|g'
+      -e 's|\bnq\b|'$out'/bin/nq|g' \
+      -e 's|\bfq\b|'$out'/bin/fq|g'
   '';
   meta = with lib; {
     description = "Unix command line queue utility";

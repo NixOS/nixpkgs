@@ -3,15 +3,15 @@
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.14";
+  version = "0.16";
 
   src = fetchurl {
-    sha256 = "1vq0c8jqspvlss8hbazml44fi0mbslgnp2i9wcr0qrjpvfbl6623";
+    sha256 = "sha256-jW/JslU0O8Hl7EWeOVEt8dUcYOA1YpheAHYDYRn/Whw=";
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm clang-unwrapped python3];
-  buildInputs = [ llvmPackages.libclang ];
+  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3];
+  buildInputs = with llvmPackages; [ libclang clang-unwrapped ];
 
   cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
 

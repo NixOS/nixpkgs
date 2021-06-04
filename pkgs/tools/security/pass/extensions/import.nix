@@ -4,6 +4,7 @@
 , python3Packages
 , gnupg
 , pass
+, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,6 +54,16 @@ python3Packages.buildPythonApplication rec {
   ];
   postCheck = ''
     $out/bin/pimport --list-exporters --list-importers
+  '';
+
+  postInstall = ''
+    mkdir -p $out/lib/password-store/extensions
+    cp ${src}/scripts/import.bash $out/lib/password-store/extensions/import.bash
+    wrapProgram $out/lib/password-store/extensions/import.bash \
+      --prefix PATH : "${python3Packages.python.withPackages(_: propagatedBuildInputs)}/bin" \
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}" \
+      --run "export PREFIX"
+    cp -r ${src}/share $out/
   '';
 
   meta = with lib; {

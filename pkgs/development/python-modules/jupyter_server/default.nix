@@ -77,6 +77,8 @@ buildPythonPackage rec {
     "test_delete"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications.";
     homepage = "https://github.com/jupyter-server/jupyter_server";

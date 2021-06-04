@@ -2,11 +2,11 @@
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
+, tl-expected, hunspell, glibmm, webkitgtk, libtgvoip
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
-, xdg-utils
+, xdg-utils, libsysprof-capture, libpsl, brotli
 }:
 
 with lib;
@@ -20,27 +20,33 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {};
-  webviewPatch = fetchpatch {
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/013eff77a13b6c2629a04e07a4d09dbe60c8ca48/trunk/fix-webview-includes.patch";
-    sha256 = "0112zaysf3f02dd4bgqc5hwg66h1bfj8r4yjzb06sfi0pl9vl96l";
-  };
-
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.7.4";
+  version = "2.7.5";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1cigqvxa8lp79y7sp2w2izmmikxaxzrq9bh5ns3cy16z985nyllp";
+    sha256 = "sha256-9GxBw5ii9Musjq7D3KMf/P5BA4h690EgXRbhynHwO98=";
   };
+
+  patches = [
+    # fixes issue with ffmpeg>=4.4 crashes, hasn't been upstreamed yet
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-crash.patch";
+      sha256 = "sha256-inLXcP70yJlkkmdeXlc3HRL7Vt+Sf00LLJG33gwBKdY=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/1c91884873968997be4b0c954169d04dc839f1db/net-im/telegram-desktop/files/tdesktop-2.7.4-voice-ffmpeg44.patch";
+      sha256 = "sha256-p57LipNf7BDhVvNKRuicVqx0vU6IBL/Cvr5BAfLF4Hs=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
       --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
-    patch -d Telegram/lib_webview -p1 < "${webviewPatch}"
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -53,10 +59,10 @@ in mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk
-    tg_owt
+    tg_owt libtgvoip
     # Transitive dependencies:
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
-    at-spi2-core libXtst libthai libdatrie
+    at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
   ];
 
   cmakeFlags = [

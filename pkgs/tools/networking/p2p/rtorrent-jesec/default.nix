@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rtorrent-jesec";
-  version = "0.9.8-r13";
+  version = "0.9.8-r14";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "rtorrent";
     rev = "v${version}";
-    sha256 = "1srn1ms7dvsn994zvb8i4m6gc144ygc7wc2a23bma79cqpl7drlw";
+    sha256 = "sha256-AbjzNIha3MkCZi6MuyUfPx9r3zeXeTUzkbD7uHB85lo=";
   };
 
   nativeBuildInputs = [ cmake ];

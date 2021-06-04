@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "v${version}";
-    sha256 = "sha256-zwQDPOpctnAj6J6mQ4N7O1KJiAIu6osB/IlnM0D/hZA=";
+    sha256 = "sha256-WUaDL1bMZ7rjlwyaqZraIKSrxj68PZiuIpgZN8l8nIo=";
   };
 
-  vendorSha256 = "sha256-Cb7RomQ/+O9xgUlCudoj7zLd2vrs58d00/vk/EboJ6Q=";
+  vendorSha256 = "sha256-yk94jD8gwgmEroxg7vzfaISVakMv3+tUoq+Auas751w=";
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";

@@ -51,6 +51,8 @@ import ./make-test-python.nix (
 
         environment.systemPackages = [ pkgs.jq ];
 
+        services.postgresql.package = pkgs.postgresql_13;
+
         services.discourse = {
           enable = true;
           inherit admin;

@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./dont-create-logdir.patch
-    ./bandb.patch # https://github.com/solanum-ircd/solanum/issues/156
   ];
 
   configureFlags = [

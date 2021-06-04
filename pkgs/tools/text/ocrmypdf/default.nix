@@ -43,7 +43,7 @@ buildPythonApplication rec {
   nativeBuildInputs = with python3Packages; [
     setuptools
     setuptools-scm-git-archive
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = with python3Packages; [

@@ -4,6 +4,7 @@
 
 { nixpkgs
 , officialRelease
+, supportedSystems
 , pkgs ? import nixpkgs.outPath {}
 , nix ? pkgs.nix
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
@@ -66,7 +67,7 @@ releaseTools.sourceTarball {
     fi
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
-    for platform in i686-linux x86_64-linux x86_64-darwin; do
+    for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
         header "checking Nixpkgs on $platform"
 
         nix-env -f . \

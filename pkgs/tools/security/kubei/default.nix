@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubei";
-  version = "1.0.11";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "Portshift";
     repo = pname;
     rev = version;
-    sha256 = "0n9kzlw7wlzkc3yhq68jgjhnvig817kz0q81ydkjxp4snwc1kvw8";
+    sha256 = "sha256-QUPRw8fQ6ahBLZox6m4+feYIrcgDnCTe72nMF8iAV+Y=";
   };
 
-  vendorSha256 = "0q0vkajn5n1aqb8wwdkvg8jv6j98l70g4hb399ickamhnirk69g4";
+  vendorSha256 = "sha256-uWDQf0zcTTPBthK60bmGJBP/m+yUu5PvYAbwyd0dcWE=";
 
   meta = with lib; {
     description = "Kubernetes runtime scanner";

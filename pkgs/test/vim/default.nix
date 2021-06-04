@@ -1,14 +1,52 @@
-{ vimUtils, vim_configurable, neovim, vimPlugins
-, lib, fetchFromGitHub,
+{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
+, lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
+, neovim-unwrapped
 }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
+
+  plugins = with vimPlugins; [
+    {
+      plugin = vim-obsession;
+      config = ''
+        map <Leader>$ <Cmd>Obsession<CR>
+      '';
+    }
+  ];
+
+  nvimConfNix = neovimUtils.makeNeovimConfig {
+    inherit plugins;
+    customRC = ''
+      " just a comment
+    '';
+  };
+
+  wrapNeovim = suffix: config:
+    wrapNeovimUnstable neovim-unwrapped (config // {
+      extraName = suffix;
+      wrapRc = true;
+    });
 in
 {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
+  ### neovim tests
+  ##################
+  nvim_with_plugins = wrapNeovim "-with-plugins" nvimConfNix;
+
+  nvim_via_override = neovim.override {
+    configure = {
+      packages.foo.start = [ vimPlugins.ale ];
+      customRC = ''
+        :help ale
+      '';
+    };
+  };
+
+  ### vim tests
+  ##################
   vim_with_vim2nix = vim_configurable.customize {
     name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
   };

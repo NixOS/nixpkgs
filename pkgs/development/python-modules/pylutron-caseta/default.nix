@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.9.0";
+  version = "0.10.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07mz4hn0455qmfqs4xcqlhbf3qvrnmifd0vzpcqlqaqcn009iahq";
+    sha256 = "sha256-wKnca9sMdjvxxAW5YwLZFK/skmE6QMZG99HZRR3BIzw=";
   };
 
   propagatedBuildInputs = [

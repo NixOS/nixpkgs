@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools_scm, toml
+, pytest, backports_unittest-mock, keyring, setuptools-scm, toml
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm toml ];
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;

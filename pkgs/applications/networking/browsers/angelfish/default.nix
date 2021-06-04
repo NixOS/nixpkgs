@@ -1,6 +1,6 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
+, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules
@@ -12,6 +12,7 @@
 , knotifications
 , kpurpose
 , kwindowsystem
+, qtfeedback
 , qtquickcontrols2
 , qtwebengine
 , rustPlatform
@@ -19,20 +20,17 @@
 
 mkDerivation rec {
   pname = "angelfish";
-  version = "1.8.0";
+  version = "21.05";
 
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "plasma-mobile";
-    repo = "angelfish";
-    rev = "v${version}";
-    sha256 = "0pj2kw7lmxh7diwdcmk24qxqslavhvf23r2i6h549gbllbzk219f";
+  src = fetchurl {
+    url = "mirror://kde/stable/plasma-mobile/${version}/angelfish-${version}.tar.xz";
+    sha256 = "11jd5dwy0xa7kh5z5rc29xy3wfn20hm31908zjax4x83qqjrm075";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0cyrmhlg0kjr14842ckbjdljc2zc28al0y9i8w5l0qzr18krgc0m";
+    sha256 = "05xvh7yxndqm2bqpm06jsxiv4v02mqxaazll8wllp367qapvr21g";
   };
 
   nativeBuildInputs = [
@@ -58,6 +56,7 @@ mkDerivation rec {
     knotifications
     kpurpose
     kwindowsystem
+    qtfeedback
     qtquickcontrols2
     qtwebengine
   ];
