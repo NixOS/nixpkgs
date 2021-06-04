@@ -67,7 +67,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+      assertion = kernelPackages.kernelAtLeast "4.18";
       message = "Anbox needs user namespace support to work properly";
     };
 
