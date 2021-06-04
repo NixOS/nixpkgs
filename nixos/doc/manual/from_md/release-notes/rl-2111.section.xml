@@ -34,6 +34,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
