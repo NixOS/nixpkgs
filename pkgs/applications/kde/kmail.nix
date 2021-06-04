@@ -1,8 +1,10 @@
 { mkDerivation
 , lib
 , akonadi
+, akonadi-import-wizard
 , akonadi-search
 , extra-cmake-modules
+, kaddressbook
 , kbookmarks
 , kcalutils
 , kcmutils
@@ -20,6 +22,7 @@
 , kinit
 , kio
 , kldap
+, kleopatra
 , kmail-account-wizard
 , kmailtransport
 , knotifications
@@ -40,6 +43,7 @@
 , libsecret
 , mailcommon
 , messagelib
+, pim-data-exporter
 , pim-sieve-editor
 , qtkeychain
 , qtscript
@@ -92,6 +96,14 @@ mkDerivation {
     qtkeychain
     qtscript
     qtwebengine
+    akonadi-import-wizard
+    kaddressbook
+    kleopatra
+    pim-data-exporter
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
+  postFixup = ''
+    wrapProgram "$out/bin/kmail" \
+      --prefix PATH : "${lib.makeBinPath [ akonadi akonadi-import-wizard kaddressbook kleopatra kmail-account-wizard pim-data-exporter ]}"
+  '';
 }
