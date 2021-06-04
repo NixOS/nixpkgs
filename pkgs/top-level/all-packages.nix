@@ -21455,6 +21455,7 @@ in
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
+    ubootOrangePiZero2
     ubootPcduino3Nano
     ubootPine64
     ubootPine64LTS
