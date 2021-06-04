@@ -6,7 +6,6 @@ import io
 import _thread
 import base64
 import os
-import pathlib
 import re
 import shlex
 import shutil
@@ -16,6 +15,8 @@ import sys
 import tempfile
 import telnetlib
 import time
+
+from pathlib import Path
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -136,10 +137,10 @@ class BaseStartCommand:
 
     def cmd(
         self,
-        monitor_socket_path: str,
-        shell_socket_path: str,
+        monitor_socket_path: Path,
+        shell_socket_path: Path,
         allow_reboot: bool = False,  # TODO: unused, legacy?
-        tty_path: Optional[str] = None,  # TODO: currently unused
+        tty_path: Optional[Path] = None,  # TODO: currently unused
     ):
         tty_opts = ""
         if tty_path is not None:
@@ -172,8 +173,8 @@ class BaseStartCommand:
         )
 
     def build_environment(
-        state_dir: str,
-        shared_dir: str,
+        state_dir: Path,
+        shared_dir: Path,
     ):
         return dict(os.environ).update(
             {
@@ -185,10 +186,10 @@ class BaseStartCommand:
 
     def run(
         self,
-        state_dir: str,
-        shared_dir: str,
-        monitor_socket_path: str,
-        shell_socket_path: str,
+        state_dir: Path,
+        shared_dir: Path,
+        monitor_socket_path: Path,
+        shell_socket_path: Path,
     ):
         return subprocess.Popen(
             self.cmd(monitor_socket_path, shell_socket_path),
@@ -212,7 +213,7 @@ class NixStartScript(BaseStartCommand):
         self._cmd = script
 
     @property
-    def machine_name():
+    def machine_name(self):
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
         if match:
@@ -227,10 +228,10 @@ class StartCommand(BaseStartCommand):
     def __init__(
         self,
         allow_reboot: bool = False,
-        tty_path: Optional[str] = None,
+        tty_path: Optional[Path] = None,
         netBackendArgs: Optional[str] = None,
         netFrontendArgs: Optional[str] = None,
-        hda: Optional[Tuple[str, str]] = None,
+        hda: Optional[Tuple[Path, str]] = None,
         cdrom: Optional[str] = None,
         usb: Optional[str] = None,
         bios: Optional[str] = None,
@@ -250,7 +251,7 @@ class StartCommand(BaseStartCommand):
         # hda
         hda_cmd = ""
         if hda is not None:
-            hda_path = os.path.abspath(hda[0])
+            hda_path = hda[0].resolve()
             hda_interface = hda[1]
             if hda_interface == "scsi":
                 hda_cmd += (
@@ -292,7 +293,7 @@ class Machine:
         self,
         log_serial: Callable,
         log_machinestate: Callable,
-        tmp_dir: str,
+        tmp_dir: Path,
         name: str = "machine",
         start_command: StartCommand = StartCommand(),
         keep_vm_state: bool = False,
@@ -325,19 +326,19 @@ class Machine:
             self.nested = dummy_nest
 
         # set up directories
-        self.shared_dir = os.path.join(self.tmp_dir, "shared-xchg")
-        os.makedirs(self.shared_dir, mode=0o700, exist_ok=True)
+        self.shared_dir = (self.tmp_dir / "shared-xchg")
+        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
 
-        self.state_dir = os.path.join(self.tmp_dir, f"vm-state-{self.name}")
-        self.monitor_path = os.path.join(self.state_dir, "monitor")
-        self.shell_path = os.path.join(self.state_dir, "shell")
-        if (not self.keep_vm_state) and os.path.isdir(self.state_dir):
+        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
+        self.monitor_path = self.state_dir / "monitor"
+        self.shell_path = self.state_dir / "shell"
+        if (not self.keep_vm_state) and self.state_dir.exists():
             shutil.rmtree(self.state_dir)
             self.log_machinestate(
                f"deleting VM state directory {self.state_dir}\n"
                "if you want to keep the VM state, pass --keep-vm-state"
             )
-        os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
+        self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.process: Optional[subprocess.Popen] = None
         self.pid: Optional[int] = None
@@ -380,12 +381,12 @@ class Machine:
 
         self.log_machinestate("starting vm")
 
-        def clear(path: str):
-            if os.path.exists(path):
-                os.unlink(path)
+        def clear(path: Path) -> Path:
+            if path.exists():
+                path.unlink()
             return path
 
-        def create_socket(path: str) -> socket.socket:
+        def create_socket(path: Path) -> socket.socket:
             s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
             s.bind(path)
             s.listen(1)
@@ -699,19 +700,19 @@ class Machine:
         self.wait_for_unit(jobname)
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
+        out_dir = Path(os.environ.get("out", Path.cwd()))
         word_pattern = re.compile(r"^\w+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
-        tmp = "{}.ppm".format(filename)
+            filename = out_dir / f"{filename}.png"
+        tmp = Path(f"{filename}.ppm")
 
         with self.nested(
-            "making screenshot {}".format(filename),
-            {"image": os.path.basename(filename)},
+            f"making screenshot {filename}",
+            {"image": filename.name},
         ):
-            self.send_monitor_command("screendump {}".format(tmp))
-            ret = subprocess.run("pnmtopng {} > {}".format(tmp, filename), shell=True)
-            os.unlink(tmp)
+            self.send_monitor_command(f"screendump {tmp}")
+            ret = subprocess.run(f"pnmtopng {tmp} > {filename}", shell=True)
+            tmp.unlink()
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
@@ -731,12 +732,12 @@ class Machine:
         """Copy a file from the host into the guest via the `shared_dir` shared
         among all the VMs (using a temporary directory).
         """
-        host_src = pathlib.Path(source)
-        vm_target = pathlib.Path(target)
+        host_src = Path(source)
+        vm_target = Path(target)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = pathlib.Path(shared_td)
+            shared_temp = Path(shared_td)
             host_intermediate = shared_temp / host_src.name
-            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / host_src.name
 
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
@@ -753,11 +754,11 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = pathlib.Path(os.environ.get("out", os.getcwd()))
-        vm_src = pathlib.Path(source)
+        out_dir = Path(os.environ.get("out", Path.cwd()))
+        vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = pathlib.Path(shared_td)
-            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            shared_temp = Path(shared_td)
+            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM
@@ -778,7 +779,7 @@ class Machine:
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path = os.path.join(tmpdir, "ppm")
+            screenshot_path = tmpdir / "ppm"
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 

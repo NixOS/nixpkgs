@@ -5,19 +5,17 @@ import os
 import ptpython.repl
 import pty
 import subprocess
-import sys
 import tempfile
-import traceback
 
-import common
+from pathlib import Path
 
 from machine import Machine, NixStartScript
 
 
 class VLan ():
-    def __init__(self, nr: int, tmp_dir: str):
+    def __init__(self, nr: int, tmp_dir: Path):
         self.nr = nr
-        self.socket_dir = os.path.join(tmp_dir, f"vde{self.nr}.ctl")
+        self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
 
         self.process: Optional[subprocess.Popen] = None
         self.pid: Optional[int] = None
@@ -44,7 +42,7 @@ class VLan ():
         # an if not, dies. we could hang here forever. Fix it.
         assert self.process.stdout is not None
         self.process.stdout.readline()
-        if not os.path.exists(os.path.join(self.socket_dir, "ctl")):
+        if not (self.socket_dir / "ctl").exists():
             raise Exception("cannot start vde_switch")
 
     def release(self):
@@ -69,8 +67,8 @@ class Driver():
         self.log = logger
         self.configure_python_repl = configure_python_repl
 
-        tmp_dir = os.environ.get("TMPDIR", tempfile.gettempdir())
-        os.makedirs(tmp_dir, mode=0o700, exist_ok=True)
+        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.vlans = [
             self.log(f"starting VDE switch for network {nr}") and
