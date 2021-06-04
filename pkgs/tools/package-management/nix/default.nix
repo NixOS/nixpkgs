@@ -50,11 +50,10 @@ common =
            ];
 
       buildInputs =
-        [ curl openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
-        ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gtest lowdown ]
         ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
