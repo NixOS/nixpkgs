@@ -16,6 +16,7 @@ import tempfile
 import telnetlib
 import time
 
+from pprint import pprint
 from pathlib import Path
 
 CHAR_TO_KEY = {
@@ -396,7 +397,7 @@ class Machine:
         if not self.booted:
             return
 
-        self.log_machinestate("forced crash")
+        self.log_machinestate("simulate forced crash")
         self.send_monitor_command("quit")
         self._wait_for_shutdown()
 
@@ -421,7 +422,7 @@ class Machine:
         """Send a low level monitor command to this machine
         """
         message = (f"{command}\n").encode()
-        self.log_machinestate("sending monitor command: {command}")
+        self.log_machinestate("send monitor command: {command}")
         assert self.monitor is not None
         self.monitor.send(message)
         return self._wait_for_monitor_prompt()
@@ -523,7 +524,7 @@ class Machine:
             if match:
                 output += match[1]
                 status_code = int(match[2])
-                return (status_code, output)
+                return (status_code, pprint(output))
             output += chunk
 
     def shell_interact(self) -> None:
@@ -609,12 +610,15 @@ class Machine:
 
         def tty_matches(last: bool) -> bool:
             text = self.get_tty_text(tty)
+            res = len(matcher.findall(text)) > 0
+            if res:
+                return res
             if last:
                 self.log_machinestate(
-                    f"Last chance to match /{regexp}/ on TTY{tty}, "
-                    f"which currently contains: {text}"
+                    f"Last attempt failed to match /{regexp}/ on TTY{tty}:"
+                    f"Current text was: \n\n{text}"
                 )
-            return len(matcher.findall(text)) > 0
+            return False
 
         with self.nested(f"wait for {regexp} to appear on tty {tty}"):
             retry(tty_matches)
@@ -841,15 +845,18 @@ class Machine:
         """
         pattern = re.compile(regexp)
 
-        def window_is_visible(last_try: bool) -> bool:
+        def window_is_visible(last: bool) -> bool:
             names = self.get_window_names()
-            if last_try:
+            res = any(pattern.search(name) for name in names)
+            if res:
+                return res
+            if last:
                 self.log_machinestate(
-                    f"Last chance to match {regexp} on the window list,"
+                    f"Last attempt failed to match {regexp} on the window list,"
                     " which currently contains: "
                     ", ".join(names)
                 )
-            return any(pattern.search(name) for name in names)
+            return False
 
         with self.nested("Wait for a window to appear"):
             retry(window_is_visible)
