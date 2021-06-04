@@ -277,6 +277,13 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePiZero2 = buildUBoot {
+    defconfig = "orangepi_zero2_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];

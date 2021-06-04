@@ -74,8 +74,20 @@ in {
     '';
   };
 
+  armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h616";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
     platform = "sun50i_a64";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
+  armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h616";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };

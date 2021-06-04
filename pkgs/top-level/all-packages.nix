@@ -20057,6 +20057,7 @@ in
     buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
+    armTrustedFirmwareAllwinnerH616
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
@@ -21454,6 +21455,7 @@ in
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
+    ubootOrangePiZero2
     ubootPcduino3Nano
     ubootPine64
     ubootPine64LTS
