@@ -28956,6 +28956,8 @@ in
 
   tts = callPackage ../tools/audio/tts { };
 
+  tumiki-fighters = callPackage ../games/tumiki-fighters { };
+
   tuxpaint = callPackage ../games/tuxpaint { };
 
   tuxtype = callPackage ../games/tuxtype { };
