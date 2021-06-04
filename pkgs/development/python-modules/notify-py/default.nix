@@ -1,33 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, alsaUtils, libnotify, which, loguru, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, coreutils, alsaUtils
+, libnotify, which, jeepney, loguru, pytestCheckHook }:
 
 buildPythonPackage rec {
-  pname = "notify_py";
-  version = "0.3.1";
+  pname = "notify-py";
+  version = "0.3.3";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5ba696d18ffe1d7070f3d0a5b4923fee4d6c863de6843af105bec0ce9915ebad";
+  src = fetchFromGitHub {
+    owner = "ms7m";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1n35adwsyhz304n4ifnsz6qzkymwhyqc8sg8d76qv5psv2xsnzlf";
   };
 
-  postPatch = ''
-   substituteInPlace setup.py \
-     --replace "loguru==0.4.1" "loguru~=0.5.0"
-  '';
+  propagatedNativeBuildInputs = [ which ]
+    ++ lib.optionals stdenv.isLinux [ alsaUtils libnotify ];
+  propagatedBuildInputs = [ loguru ]
+    ++ lib.optionals stdenv.isLinux [ jeepney ];
 
-  propagatedBuildInputs = [ alsaUtils libnotify loguru which ];
+  checkInputs = [ coreutils pytestCheckHook ];
 
-  checkInputs = [ alsaUtils libnotify pytest which ];
-
-  checkPhase = ''
-    pytest
+  # Tests search for "afplay" binary which is built in to MacOS and not available in nixpkgs
+  preCheck = ''
+    mkdir $TMP/bin
+    ln -s ${coreutils}/bin/true $TMP/bin/afplay
+    export PATH="$TMP/bin:$PATH"
   '';
 
   pythonImportsCheck = [ "notifypy" ];
 
   meta = with lib; {
-    description = " Python Module for sending cross-platform desktop notifications on Windows, macOS, and Linux.";
+    description = "Python Module for sending cross-platform desktop notifications on Windows, macOS, and Linux.";
     homepage = "https://github.com/ms7m/notify-py/";
     license = licenses.mit;
     maintainers = with maintainers; [ austinbutler ];
