@@ -461,6 +461,8 @@ in {
     inherit (pkgs) antlr4;
   };
 
+  anyascii = callPackage ../development/python-modules/anyascii { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anyjson = callPackage ../development/python-modules/anyjson { };
