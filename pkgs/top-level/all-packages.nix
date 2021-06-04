@@ -28332,6 +28332,8 @@ in
 
   fava = callPackage ../applications/office/fava {};
 
+  fheroes2 = callPackage ../games/fheroes2 {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
