@@ -84,6 +84,7 @@ default-package-overrides:
   # We can keep this pin at most until base 4.15
   - monoid-extras < 0.6
   - diagrams-core < 1.5.0
+  - diagrams-lib < 1.4.4
   # 2021-05-11: Pin for hls 1.1.0
   - ghcide == 1.2.*
   - hls-plugin-api == 1.1.0.0
