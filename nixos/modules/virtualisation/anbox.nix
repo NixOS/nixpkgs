@@ -141,6 +141,18 @@ in
       "anbox0"
     ];
 
+    fileSystems = {
+      # mount -t binder none /dev/binderfs/
+      "/dev/binderfs" = {
+        device = "none";
+        fsType = "binder";
+        # `nofail` is used here since if the user enables anbox on a system
+        # without binderfs enabled in the kernel, we do not want the system to
+        # crash and burn.
+        options = [ "nofail" ];
+      };
+    };
+
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
     in {
