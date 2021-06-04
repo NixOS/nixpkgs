@@ -271,23 +271,9 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
-  ubootOrangePiZero2 = buildUBoot {
-    defconfig = "orangepi_zero2_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
   ubootOrangePiZero = buildUBoot {
     defconfig = "orangepi_zero_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
-  ubootOrangePiZero2 = buildUBoot {
-    defconfig = "orangepi_zero2_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
