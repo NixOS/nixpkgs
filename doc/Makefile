@@ -22,7 +22,7 @@ fix-misc-xml:
 .PHONY: clean
 clean:
 	rm -f ${MD_TARGETS} doc-support/result .version manual-full.xml functions/library/locations.xml functions/library/generated
-	rm -rf ./out/ ./highlightjs
+	rm -rf ./out/ ./highlightjs ./media
 
 .PHONY: validate
 validate: manual-full.xml doc-support/result
