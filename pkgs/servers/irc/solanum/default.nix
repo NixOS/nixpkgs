@@ -52,6 +52,15 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
+  postCheck = ''
+    cd tests
+    for i in {1..100}
+    do
+      ./runtests -v send1
+    done
+    cd ..
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
