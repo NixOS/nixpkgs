@@ -18604,6 +18604,8 @@ in
 
   xsimd = callPackage ../development/libraries/xsimd { };
 
+  xtl = callPackage ../development/libraries/xtl { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xxHash = callPackage ../development/libraries/xxHash {};
