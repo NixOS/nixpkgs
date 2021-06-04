@@ -33,6 +33,10 @@ class Logger:
         yield
 
 
+def sanitise(message: str) -> str:
+    return "".join(ch for ch in message if unicodedata.category(ch)[0] != "C")
+
+
 class XmlLogger(Logger):
     def __init__(self) -> None:
         Logger.__init__(self)
@@ -52,9 +56,6 @@ class XmlLogger(Logger):
         self.xml.endElement("logfile")
         self.xml.endDocument()
         self.logfile_handle.close()
-
-    def _sanitise(self, message: str) -> str:
-        return "".join(ch for ch in message if unicodedata.category(ch)[0] != "C")
 
     def _log_line(self, message: str, attributes: Dict[str, str]) -> None:
         self.xml.startElement("line", attributes)
@@ -79,7 +80,7 @@ class XmlLogger(Logger):
             while True:
                 item = self.queue.get_nowait()
                 (msg, attributes) = item
-                self.log_line(self._sanitise(msg), attributes)
+                self._log_line(sanitise(msg), attributes)
         except Empty:
             pass
 
@@ -93,10 +94,10 @@ class XmlLogger(Logger):
         self.xml.endElement("head")
 
         tic = time.time()
-        self.drain_log_queue()
+        self._drain_log_queue()
         yield
-        self.drain_log_queue()
+        self._drain_log_queue()
         toc = time.time()
-        self.log("({:.2f} seconds)".format(toc - tic))
+        self.log_machinestate(f"({(toc-tic):.2f} seconds)")
 
         self.xml.endElement("nest")
