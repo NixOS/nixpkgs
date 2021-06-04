@@ -101,6 +101,7 @@ mkDerivation {
     kleopatra
     pim-data-exporter
   ];
+  outputs = [ "out" "doc" ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
   postFixup = ''
     wrapProgram "$out/bin/kmail" \
