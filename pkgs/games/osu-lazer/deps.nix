@@ -316,8 +316,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.AspNetCore.App.Runtime.linux-x64";
-    version = "5.0.5";
-    sha256 = "026m19pddhkx5idwpi6mp1yl9yfcfgm2qjp1jh54mdja1d7ng0vk";
+    version = "5.0.6";
+    sha256 = "02zg279kpj5bb5vgyk85zz8w4i47aqxmyx8gx8f51wg32ximrgjj";
   })
   (fetchNuGet {
     name = "Microsoft.AspNetCore.Connections.Abstractions";
@@ -601,8 +601,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.App.Runtime.linux-x64";
-    version = "5.0.5";
-    sha256 = "1h5yry6k9bpqqis2fb1901csb8kipm7anm174fjj41r317vzfjfa";
+    version = "5.0.6";
+    sha256 = "1hjswra74753ndhxr4hkzdah34fdp2y6r050qfhvpj796c0k5rg0";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Platforms";
