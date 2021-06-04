@@ -274,8 +274,29 @@ start_all()
     </term>
     <listitem>
      <para>
-      Execute a shell command, raising an exception if the exit status is not
-      zero, otherwise returning the standard output.
+      Execute a shell command, raising an exception if the exit status
+      is not zero, otherwise returning the standard output. Commands
+      are run with <literal>set -euo pipefail</literal> set:
+      <itemizedlist>
+        <listitem>
+          <para>
+            If several commands are separated by <literal>;</literal>
+            and one fails, the command as a whole will fail.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            For pipelines, the last non-zero exit status will be
+            returned (if there is one, zero will be returned
+            otherwise).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Dereferencing unset variables fail the command.
+          </para>
+        </listitem>
+      </itemizedlist>
      </para>
     </listitem>
    </varlistentry>
