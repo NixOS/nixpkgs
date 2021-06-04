@@ -190,6 +190,14 @@ in
         '';
       };
 
+      extraPreStart = mkOption {
+        type = types.lines;
+        default = "";
+        description = "
+          Extra lines to be executed as part of the service preStart.
+        ";
+      };
+
       configFile = mkOption {
         type = types.path;
         default = confFile;
@@ -230,6 +238,8 @@ in
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named
         chown ${bindUser} /run/named
+
+        ${cfg.extraPreStart}
       '';
 
       serviceConfig = {
