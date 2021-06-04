@@ -29,6 +29,11 @@ python3Packages.buildPythonPackage rec {
     yarl
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "mautrix>=0.8.14,<0.9" "mautrix>=0.9,<0.10"
+  '';
+
   doCheck = false;
 
   postInstall = ''
