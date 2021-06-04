@@ -18,16 +18,10 @@
 , runtimeShell
 , buildPackages
 , pkgsBuildTarget
-, fetchpatch
 , callPackage
 }:
 
 let
-
-  inherit (lib) optionals optionalString;
-
-  version = "1.16.5";
-
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
   goBootstrap = runCommand "go-bootstrap" { } ''
@@ -56,7 +50,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  inherit version;
+  version = "1.16.5";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
@@ -66,12 +60,12 @@ stdenv.mkDerivation rec {
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
-    ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  propagatedBuildInputs = optionals stdenv.isDarwin [ xcbuild ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  depsTargetTargetPropagated = optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
 
@@ -131,14 +125,14 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
-  '' + optionalString stdenv.isAarch32 ''
+  '' + lib.optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
@@ -226,7 +220,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
@@ -254,12 +248,12 @@ stdenv.mkDerivation rec {
   '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
   '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
     rm -rf bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
   '' else "");
