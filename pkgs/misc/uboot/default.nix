@@ -11,6 +11,7 @@
 , swig
 , meson-tools
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
