@@ -3561,6 +3561,12 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
+  frogamic = {
+    email = "frogamic@protonmail.com";
+    github = "frogamic";
+    githubId = 10263813;
+    name = "Dominic Shelton";
+  };
   Frostman = {
     email = "me@slukjanov.name";
     github = "Frostman";
@@ -7104,6 +7110,12 @@
     github = "multun";
     githubId = 5047140;
     name = "Victor Collod";
+  };
+  musfay = {
+    email = "musfay@protonmail.com";
+    github = "musfay";
+    githubId = 33374965;
+    name = "Mustafa Çalışkan";
   };
   mupdt = {
     email = "nix@pdtpartners.com";

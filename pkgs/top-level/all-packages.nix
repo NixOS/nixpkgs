@@ -6097,6 +6097,8 @@ in
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kiterunner = callPackage ../tools/security/kiterunner { };
+
   klick = callPackage ../applications/audio/klick { };
 
   klystrack = callPackage ../applications/audio/klystrack { };
@@ -18602,6 +18604,8 @@ in
 
   xsimd = callPackage ../development/libraries/xsimd { };
 
+  xtl = callPackage ../development/libraries/xtl { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xxHash = callPackage ../development/libraries/xxHash {};
@@ -22202,6 +22206,8 @@ in
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
+
+  quintom-cursor-theme = callPackage ../data/icons/quintom-cursor-theme { };
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
@@ -30916,6 +30922,8 @@ in
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
+
+  qdl = callPackage ../tools/misc/qdl { };
 
   rargs = callPackage ../tools/misc/rargs { };
 
