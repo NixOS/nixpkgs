@@ -8694,6 +8694,8 @@ in {
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 
+  unidic-lite = callPackage ../development/python-modules/unidic-lite { };
+
   unidiff = callPackage ../development/python-modules/unidiff { };
 
   unifi = callPackage ../development/python-modules/unifi { };
