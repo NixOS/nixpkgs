@@ -1,8 +1,6 @@
 from contextlib import contextmanager
 from queue import Queue
-from typing import (
-    Tuple, Any, Callable, Dict, Optional, List, Iterable, Iterator
-)
+from typing import Tuple, Any, Callable, Dict, Optional, List, Iterable, Iterator
 import queue
 import io
 import _thread
@@ -150,15 +148,16 @@ class BaseStartCommand:
                 " -device virtconsole,chardev=console"
             )
         display_opts = ""
-        display_available = any(
-            x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
+        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
         if display_available:
             display_opts += " -nographic"
 
         # qemu options
         qemu_opts = ""
         qemu_opts += (
-            "" if allow_reboot else " -no-reboot"
+            ""
+            if allow_reboot
+            else " -no-reboot"
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -serial stdio"
@@ -226,8 +225,8 @@ class NixStartScript(BaseStartCommand):
 
 
 class Machine:
-    """A handle to the machine with this name
-    """
+    """A handle to the machine with this name"""
+
     name: str
     log_serial: Callable
     log_machinestate: Callable
@@ -264,11 +263,15 @@ class Machine:
         allow_reboot: bool = False,
     ) -> None:
         # setattr workaround for mypy type checking, see: https://git.io/JGyNT
-        setattr(self, "log_serial", lambda msg: log_serial(
-            f"[{name} LOG] {msg}", {"machine": name})
+        setattr(
+            self,
+            "log_serial",
+            lambda msg: log_serial(f"[{name} LOG] {msg}", {"machine": name}),
         )
-        setattr(self, "log_machinestate", lambda msg: log_machinestate(
-            f"[{name} MCS] {msg}", {"machine": name})
+        setattr(
+            self,
+            "log_machinestate",
+            lambda msg: log_machinestate(f"[{name} MCS] {msg}", {"machine": name}),
         )
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
@@ -290,7 +293,7 @@ class Machine:
         setattr(self, "nested", (callable(nest_op) and nest_op or dummy_nest))
 
         # set up directories
-        self.shared_dir = (self.tmp_dir / "shared-xchg")
+        self.shared_dir = self.tmp_dir / "shared-xchg"
         self.shared_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
@@ -299,7 +302,7 @@ class Machine:
         if (not self.keep_vm_state) and self.state_dir.exists():
             shutil.rmtree(self.state_dir)
             log_machinestate(  # trick: shouldn't be a machine specific log
-               f"    -> delete state @ {self.state_dir}"
+                f"    -> delete state @ {self.state_dir}"
             )
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
@@ -329,8 +332,7 @@ class Machine:
             self.connected = False
 
     def start(self) -> None:
-        """Start this machine
-        """
+        """Start this machine"""
         if self.booted:
             return
 
@@ -350,8 +352,10 @@ class Machine:
         monitor_socket = create_socket(clear(self.monitor_path))
         shell_socket = create_socket(clear(self.shell_path))
         self.process = self.start_command.run(
-            self.state_dir, self.shared_dir,
-            self.monitor_path, self.shell_path,
+            self.state_dir,
+            self.shared_dir,
+            self.monitor_path,
+            self.shell_path,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
@@ -375,8 +379,7 @@ class Machine:
         self.log_machinestate(f"QEMU running (pid {self.pid})")
 
     def release(self) -> None:
-        """Kill this machine
-        """
+        """Kill this machine"""
         if self.pid is None:
             return
         assert self.process
@@ -384,8 +387,7 @@ class Machine:
         self.process.kill()
 
     def connect(self) -> None:
-        """Connect to this machine's root shell
-        """
+        """Connect to this machine's root shell"""
         if self.connected:
             return
 
@@ -402,8 +404,7 @@ class Machine:
             self.connected = True
 
     def shutdown(self) -> None:
-        """Shut down this machine
-        """
+        """Shut down this machine"""
         if not self.booted:
             return
 
@@ -413,8 +414,7 @@ class Machine:
         self._wait_for_shutdown()
 
     def crash(self) -> None:
-        """Simulate to crash this machine
-        """
+        """Simulate to crash this machine"""
         if not self.booted:
             return
 
@@ -430,18 +430,15 @@ class Machine:
         self.send_monitor_command("set_link virtio-net-pci.1 off")
 
     def unblock(self) -> None:
-        """Make this machine reachable.
-        """
+        """Make this machine reachable."""
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
     def is_up(self) -> bool:
-        """Wether this machine is booted and it's root shell is connected
-        """
+        """Wether this machine is booted and it's root shell is connected"""
         return self.booted and self.connected
 
     def send_monitor_command(self, command: str) -> str:
-        """Send a low level monitor command to this machine
-        """
+        """Send a low level monitor command to this machine"""
         message = (f"{command}\n").encode()
         self.log_machinestate("send monitor command: {command}")
         assert self.monitor
@@ -515,11 +512,8 @@ class Machine:
         return self.execute(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
-        """Wether a unit has reached a specified state ("active" by default)
-        """
-        with self.nested(
-            f"check if unit ‘{unit}’ has reached state '{require_state}'"
-        ):
+        """Wether a unit has reached a specified state ("active" by default)"""
+        with self.nested(f"check if unit ‘{unit}’ has reached state '{require_state}'"):
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
             if state != require_state:
@@ -529,8 +523,7 @@ class Machine:
                 )
 
     def execute(self, command: str) -> Tuple[int, str]:
-        """Execute a shell command on this machine.
-        """
+        """Execute a shell command on this machine."""
         self.connect()
 
         assert self.shell
@@ -566,9 +559,7 @@ class Machine:
                 status, out = self.execute(command)
                 if status != 0:
                     self.log_machinestate(f"output: {out}")
-                    raise Exception(
-                        f"command `{command}` failed (exit code {status})"
-                    )
+                    raise Exception(f"command `{command}` failed (exit code {status})")
                 output += out
         return output
 
@@ -579,9 +570,7 @@ class Machine:
             with self.nested(f"must fail: {command}"):
                 (status, out) = self.execute(command)
                 if status == 0:
-                    raise Exception(
-                        f"command `{command}` unexpectedly succeeded"
-                    )
+                    raise Exception(f"command `{command}` unexpectedly succeeded")
                 output += out
         return output
 
@@ -616,8 +605,7 @@ class Machine:
         return output
 
     def get_tty_text(self, tty: str) -> str:
-        """Obtain text from a specified tty of this machine
-        """
+        """Obtain text from a specified tty of this machine"""
         status, output = self.execute(
             f"fold -w$(stty -F /dev/tty{tty} size | "
             f"awk '{{print $2}}') /dev/vcs{tty}"
@@ -646,8 +634,7 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: List[str]) -> None:
-        """Send characters to this machine
-        """
+        """Send characters to this machine"""
         with self.nested(f"send keys ‘{chars}‘"):
             for char in chars:
                 self.send_key(char)
@@ -664,6 +651,7 @@ class Machine:
 
     def wait_for_open_port(self, port: int) -> None:
         """Waits until the specified port is opened on this machine."""
+
         def port_is_open(_: Any) -> bool:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status == 0
@@ -673,6 +661,7 @@ class Machine:
 
     def wait_for_closed_port(self, port: int) -> None:
         """Waits until the specified port is closed on this machine."""
+
         def port_is_closed(_: Any) -> bool:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status != 0
@@ -680,18 +669,15 @@ class Machine:
         retry(port_is_closed)
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        """Starts a systemctl job on this machine
-        """
+        """Starts a systemctl job on this machine"""
         return self.systemctl(f"start {jobname}", user)
 
     def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        """Stops a systemctl job on this machine
-        """
+        """Stops a systemctl job on this machine"""
         return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
-        """Alias as wait for units
-        """
+        """Alias as wait for units"""
         self.wait_for_unit(jobname)
 
     def screenshot(self, name: str) -> None:
@@ -775,8 +761,7 @@ class Machine:
                 shutil.copy(intermediate, abs_target)
 
     def dump_tty_contents(self, tty: str) -> None:
-        """Debugging: Dump the contents of the TTY<n>
-        """
+        """Debugging: Dump the contents of the TTY<n>"""
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
@@ -886,8 +871,7 @@ class Machine:
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
-        """Sleep the machine for x nr of seconds
-        """
+        """Sleep the machine for x nr of seconds"""
         # We want to sleep in *guest* time, not *host* time.
         self.succeed(f"sleep {secs}")
 
@@ -895,6 +879,4 @@ class Machine:
         """Forward a TCP port on the host to a TCP port on the guest.
         Useful during interactive testing.
         """
-        self.send_monitor_command(
-            f"hostfwd_add tcp::{host_port}-:{guest_port}"
-        )
+        self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")

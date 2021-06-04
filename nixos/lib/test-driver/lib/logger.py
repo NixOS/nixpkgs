@@ -43,8 +43,7 @@ class XmlLogger(Logger):
 
         self.logfile = os.environ.get("LOGFILE")
         if self.logfile is None:
-            raise Exception(
-                "Using XmlLogger, but LOGFILE env variable not defined")
+            raise Exception("Using XmlLogger, but LOGFILE env variable not defined")
         self.logfile_handle = codecs.open(self.logfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
         self.queue: "Queue[Tuple[str,Dict[str, str]]]" = Queue()

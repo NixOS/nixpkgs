@@ -12,11 +12,12 @@ from pathlib import Path
 from pprint import pprint
 
 from machine import Machine, NixStartScript
+
 # for typing
 from logger import Logger
 
 
-class VLan ():
+class VLan:
     nr: int
     socket_dir: Path
     log: Callable
@@ -29,8 +30,8 @@ class VLan ():
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
         # setattr workaround for mypy type checking, see: https://git.io/JGyNT
-        setattr(self, "log", lambda msg: log(
-            f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
+        setattr(
+            self, "log", lambda msg: log(f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
         )
 
         # TODO: don't side-effect environment here
@@ -71,7 +72,7 @@ class VLan ():
             self.process.terminate()
 
 
-class Driver():
+class Driver:
     def __init__(
         self,
         logger: Logger,
@@ -92,8 +93,8 @@ class Driver():
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.vlans = [
-            vlan_class(int(nr), tmp_dir, logger.log_machinestate) for nr in
-            list(dict.fromkeys(os.environ.get("VLANS", "").split()))
+            vlan_class(int(nr), tmp_dir, logger.log_machinestate)
+            for nr in list(dict.fromkeys(os.environ.get("VLANS", "").split()))
         ]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
@@ -108,7 +109,8 @@ class Driver():
                 log_serial=logger.log_serial,
                 log_machinestate=logger.log_machinestate,
                 tmp_dir=tmp_dir,
-            ) for cmd in cmd(vm_scripts)
+            )
+            for cmd in cmd(vm_scripts)
         ]
 
         @atexit.register
@@ -121,8 +123,7 @@ class Driver():
             self.log.release()
 
     def subtest(self, name: str) -> Iterator[None]:
-        """Group logs under a given test name
-        """
+        """Group logs under a given test name"""
         with self.log.nested(name):
             try:
                 yield
@@ -132,7 +133,6 @@ class Driver():
                 raise
 
     def test_symbols(self) -> Dict[str, Any]:
-
         @contextmanager
         def subtest(name: str) -> Iterator[None]:
             return self.subtest(name)
@@ -165,8 +165,7 @@ class Driver():
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
     def test_script(self) -> None:
-        """Run the test script from the environment ('testScript')
-        """
+        """Run the test script from the environment ('testScript')"""
         with self.log.nested("run the VM test script"):
             exec(os.environ["testScript"])
 
@@ -180,8 +179,8 @@ class Driver():
                 exec(tests, self.test_symbols())
         else:
             ptpython.repl.embed(
-                self.test_symbols(), {},
-                configure=self.configure_python_repl)
+                self.test_symbols(), {}, configure=self.configure_python_repl
+            )
 
         # TODO: Collect coverage data
 
@@ -190,8 +189,7 @@ class Driver():
                 machine.execute("sync")
 
     def start_all(self) -> None:
-        """Start all machines
-        """
+        """Start all machines"""
         with self.log.nested("start all VLans"):
             for vlan in self.vlans:
                 vlan.start()
@@ -200,8 +198,7 @@ class Driver():
                 machine.start()
 
     def join_all(self) -> None:
-        """Wait for all machines to shut down
-        """
+        """Wait for all machines to shut down"""
         with self.log.nested("wait for all VMs to finish"):
             for machine in self.machines:
                 machine._wait_for_shutdown()
