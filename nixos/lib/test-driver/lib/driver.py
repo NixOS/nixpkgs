@@ -106,6 +106,8 @@ class Driver():
 
     @contextmanager
     def subtest(self, name: str) -> Iterator[None]:
+        """Group logs under a given test name
+        """
         with self.log.nested(name):
             try:
                 yield
@@ -133,10 +135,15 @@ class Driver():
             self.subtest(name)
 
     def test_script(self) -> None:
+        """Run the test script from the environment ('testScript')
+        """
         with self.log.nested("running the VM test script"):
             exec(os.environ["testScript"])
 
     def run_tests(self) -> None:
+        """Run all tests from the environment ('test')
+        or drop into a python repl for interactive execution
+        """
         tests = os.environ.get("tests")
         if tests is not None:
             with self.log.nested("running the VM test script"):
@@ -153,6 +160,8 @@ class Driver():
                 machine.execute("sync")
 
     def start_all(self) -> None:
+        """Start all machines
+        """
         with self.log.nested("starting all VLans"):
             for vlan in self.vlans:
                 vlan.start()
@@ -161,6 +170,8 @@ class Driver():
                 machine.start()
 
     def join_all(self) -> None:
+        """Wait for all machines to shut down
+        """
         with self.log.nested("waiting for all VMs to finish"):
             for machine in self.machines:
                 machine.wait_for_shutdown()

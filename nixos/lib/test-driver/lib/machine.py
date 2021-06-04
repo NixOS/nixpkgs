@@ -203,10 +203,10 @@ class BaseStartCommand:
 
 
 class NixStartScript(BaseStartCommand):
-    """ accepts a start script from nixos/modules/virtualiation/qemu-vm.nix
+    """A start script from nixos/modules/virtualiation/qemu-vm.nix
 
-    Note, that appended flags in self.cmd are are passed to the qemu
-    bin by the script's final "${@}"
+    Note, that any dynamically appended flags in self.cmd are are passed
+    to the qemu bin by the script's final "${@}"
     """
 
     def __init__(self, script: str):
@@ -289,6 +289,8 @@ class StartCommand(BaseStartCommand):
 
 
 class Machine:
+    """A handle to the machine with this name
+    """
     def __init__(
         self,
         log_serial: Callable,
@@ -376,6 +378,8 @@ class Machine:
             self.connected = False
 
     def start(self) -> None:
+        """Start this machine
+        """
         if self.booted:
             return
 
@@ -419,12 +423,16 @@ class Machine:
         self.log_machinestate(f"QEMU running (pid {self.pid})")
 
     def release(self) -> bool:
+        """Kill this machine
+        """
         if self.pid is None:
             return False
         self.process.kill()
         return True
 
     def connect(self) -> None:
+        """Connect to this machine's root shell
+        """
         if self.connected:
             return
 
@@ -442,6 +450,8 @@ class Machine:
             self.connected = True
 
     def shutdown(self) -> None:
+        """Shut down this machine
+        """
         if not self.booted:
             return
 
@@ -450,6 +460,8 @@ class Machine:
         self._wait_for_shutdown()
 
     def crash(self) -> None:
+        """Simulate to crash this machine
+        """
         if not self.booted:
             return
 
@@ -458,21 +470,25 @@ class Machine:
         self._wait_for_shutdown()
 
     def block(self) -> None:
-        """Make the machine unreachable by shutting down eth1 (the multicast
+        """Make this machine unreachable by shutting down eth1 (the multicast
         interface used to talk to the other VMs).  We keep eth0 up so that
         the test driver can continue to talk to the machine.
         """
         self.send_monitor_command("set_link virtio-net-pci.1 off")
 
     def unblock(self) -> None:
-        """Make the machine reachable.
+        """Make this machine reachable.
         """
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
     def is_up(self) -> bool:
+        """Wether this machine is booted and it's root shell is connected
+        """
         return self.booted and self.connected
 
     def send_monitor_command(self, command: str) -> str:
+        """Send a low level monitor command to this machine
+        """
         message = (f"{command}\n").encode()
         self.log_machinestate("sending monitor command: {command}")
         assert self.monitor is not None
@@ -506,6 +522,9 @@ class Machine:
         retry(check_active)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
+        """Get information for a unit on this machine.
+        Optionally provide a user to query a unit running under that user.
+        """
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             user_str = "" if user is None else f'under user "{user}"' 
@@ -528,6 +547,9 @@ class Machine:
         )
 
     def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
+        """Execute a low level systemctl query on this machine.
+        Optionally provide a user to query within the scope of that user.
+        """
         if user is not None:
             q = q.replace("'", "\\'")
             return self.execute(
@@ -540,6 +562,8 @@ class Machine:
         return self.execute(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
+        """Wether a unit has reached a specified state ("active" by default)
+        """
         with self.nested(
             f"checking if unit ‘{unit}’ has reached state '{require_state}'"
         ):
@@ -552,6 +576,8 @@ class Machine:
                 )
 
     def execute(self, command: str) -> Tuple[int, str]:
+        """Execute a shell command on this machine.
+        """
         self.connect()
 
         out_command = f"( {command} ); echo '|!=EOF' $?\n"
@@ -636,6 +662,8 @@ class Machine:
         return output
 
     def get_tty_text(self, tty: str) -> str:
+        """Obtain text from a specified tty of this machine
+        """
         status, output = self.execute(
             f"fold -w$(stty -F /dev/tty{tty} size | "
             f"awk '{{print $2}}') /dev/vcs{tty}"
@@ -661,12 +689,14 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: List[str]) -> None:
+        """Send characters to this machine
+        """
         with self.nested(f"sending keys ‘{chars}‘"):
             for char in chars:
                 self.send_key(char)
 
     def wait_for_file(self, filename: str) -> None:
-        """Waits until the file exists in machine's file system."""
+        """Waits until the specified file exists in machine's file system."""
 
         def check_file(_: Any) -> bool:
             status, _ = self.execute(f"test -e {filename}")
@@ -676,6 +706,7 @@ class Machine:
             retry(check_file)
 
     def wait_for_open_port(self, port: int) -> None:
+        """Waits until the specified port is opened on this machine."""
         def port_is_open(_: Any) -> bool:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status == 0
@@ -684,6 +715,7 @@ class Machine:
             retry(port_is_open)
 
     def wait_for_closed_port(self, port: int) -> None:
+        """Waits until the specified port is closed on this machine."""
         def port_is_closed(_: Any) -> bool:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status != 0
@@ -691,15 +723,25 @@ class Machine:
         retry(port_is_closed)
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
+        """Starts a systemctl job on this machine
+        """
         return self.systemctl(f"start {jobname}", user)
 
     def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
+        """Stops a systemctl job on this machine
+        """
         return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
+        """Alias as wait for units
+        """
         self.wait_for_unit(jobname)
 
     def screenshot(self, filename: str) -> None:
+        """Take a screenshot from this machine and place it in
+        the current directory under the specified filename
+        (or into $out when called from within a derivation)
+        """
         out_dir = Path(os.environ.get("out", Path.cwd()))
         word_pattern = re.compile(r"^\w+$")
         if word_pattern.match(filename):
@@ -717,9 +759,9 @@ class Machine:
                 raise Exception("Cannot convert screenshot")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
-        """Copy a file from the host into the guest by piping it over the
+        """Copy a file from the host into the machine by piping it over the
         shell into the destination file. Works without host-guest shared folder.
-        Prefer copy_from_host for whenever possible.
+        Prefer copy_from_host whenever possible.
         """
         with open(source, "rb") as fh:
             content_b64 = base64.b64encode(fh.read()).decode()
@@ -729,7 +771,7 @@ class Machine:
             )
 
     def copy_from_host(self, source: str, target: str) -> None:
-        """Copy a file from the host into the guest via the `shared_dir` shared
+        """Copy a file from the host into the machine via the `shared_dir` shared
         among all the VMs (using a temporary directory).
         """
         host_src = Path(source)
@@ -749,9 +791,10 @@ class Machine:
             self.succeed(make_command(["cp", "-r", vm_intermediate, vm_target]))
 
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
-        """Copy a file from the VM (specified by an in-VM source path) to a path
-        relative to `$out`. The file is copied via the `shared_dir` shared among
-        all the VMs (using a temporary directory).
+        """Copy a file from the machine into the host via the `shared_dir`
+        shared among all the VMs (using a temporary directory). The target
+        file is specified relative to the current directory
+        (or into $out when called from within a derivation)
         """
         # Compute the source, target, and intermediate shared file names
         out_dir = Path(os.environ.get("out", Path.cwd()))
@@ -805,6 +848,9 @@ class Machine:
             retry(screen_matches)
 
     def wait_for_console_text(self, regex: str) -> None:
+        """Waits until regex matches this machine's console output.
+        Can match multiple lines.
+        """
         self.log_machinestate(f"waiting for {regex} to appear on console")
         # Buffer the console output, this is needed
         # to match multiline regexes.
@@ -821,6 +867,9 @@ class Machine:
                 return
 
     def send_key(self, key: str) -> None:
+        """Send a key to the machine (low level).
+        Keys are mapped over a compatibility map.
+        """
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command(f"sendkey {key}")
 
@@ -844,11 +893,21 @@ class Machine:
             retry(check_x)
 
     def get_window_names(self) -> List[str]:
+        """Retrieve the names of the open windows of this machine via
+        'xwininfo'
+
+        CAVE: does not work on wayland hosts.
+        """
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
     def wait_for_window(self, regexp: str) -> None:
+        """Wait until a window apprers in the machine that matches
+        the given regex. Windows optained via 'xwininfo'.
+
+        CAVE: does not work on wayland hosts.
+        """
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -865,6 +924,8 @@ class Machine:
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
+        """Sleep the machine for x nr of seconds
+        """
         # We want to sleep in *guest* time, not *host* time.
         self.succeed(f"sleep {secs}")
 
