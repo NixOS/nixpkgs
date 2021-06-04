@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     homepage = "https://anbox.io";
     description = "Android in a box";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo samueldr ];
     platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };
 
