@@ -49,6 +49,7 @@
 , webkitgtk
 , vte
 , glib-networking
+, qemu-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
   '';
 
   postPatch = ''
