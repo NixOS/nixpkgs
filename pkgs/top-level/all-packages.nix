@@ -30921,6 +30921,8 @@ in
 
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
+  qdl = callPackage ../tools/misc/qdl { };
+
   rargs = callPackage ../tools/misc/rargs { };
 
   rauc = callPackage ../tools/misc/rauc { };

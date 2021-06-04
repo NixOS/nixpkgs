@@ -7105,6 +7105,12 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
+  musfay = {
+    email = "musfay@protonmail.com";
+    github = "musfay";
+    githubId = 33374965;
+    name = "Mustafa Çalışkan";
+  };
   mupdt = {
     email = "nix@pdtpartners.com";
     github = "mupdt";
