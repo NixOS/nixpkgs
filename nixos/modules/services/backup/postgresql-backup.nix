@@ -17,6 +17,8 @@ let
       path = [ pkgs.coreutils pkgs.gzip config.services.postgresql.package ];
 
       script = ''
+        set -e -o pipefail
+
         umask 0077 # ensure backup is only readable by postgres user
 
         if [ -e ${cfg.location}/${db}.sql.gz ]; then
@@ -24,7 +26,9 @@ let
         fi
 
         ${dumpCmd} | \
-          gzip -c > ${cfg.location}/${db}.sql.gz
+          gzip -c > ${cfg.location}/${db}.in-progress.sql.gz
+
+        mv ${cfg.location}/${db}.in-progress.sql.gz ${cfg.location}/${db}.sql.gz
       '';
 
       serviceConfig = {
