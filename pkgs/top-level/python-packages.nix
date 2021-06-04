@@ -7417,6 +7417,8 @@ in {
 
   runway-python = callPackage ../development/python-modules/runway-python { };
 
+  ruyaml = callPackage ../development/python-modules/ruyaml { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   rxv = callPackage ../development/python-modules/rxv { };
