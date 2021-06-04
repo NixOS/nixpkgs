@@ -74,7 +74,13 @@ in
     environment.systemPackages = with pkgs; [ anbox ];
 
     boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
+    boot.extraModulePackages =
+      let
+        inherit (kernelPackages) kernel;
+      in
+      # Inverted condition from `meta.broken` on `kernelPackages.anbox`.
+      optional (kernel.kernelAtLeast "4.4" && kernel.kernelOlder "5.5") kernelPackages.anbox
+    ;
 
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
