@@ -11,19 +11,22 @@ let
 
 in buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.9.0";
+  version = "0.10.0-rc1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1543ljjl3jg3ayid7ifi4bamqh4gq85pmlbs3m8i7phjbbm7g9dn";
+    sha256 = "1dha8awxw910wjk11nckran20qhgafl16dmcm5mxn30y6cvn0r4s";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
+
   postPatch = ''
     sed -i -e '/alembic>/d' requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "mautrix>=0.8.11,<0.9" "mautrix>=0.9,<0.10"
   '';
 
   propagatedBuildInputs = [
