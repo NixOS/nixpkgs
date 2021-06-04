@@ -77,6 +77,13 @@ default-package-overrides:
   - gi-javascriptcore < 4.0.23 #
   - gi-soup < 2.4.24 #
   - gi-webkit2 < 4.0.27 #
+  # 2021-05-11: not all diagrams libraries have adjusted to
+  # monoid-extras 0.6 yet, keep them pinned to lower versions
+  # until we can do a full migration, see
+  # https://github.com/diagrams/diagrams-core/issues/115
+  # We can keep this pin at most until base 4.15
+  - monoid-extras < 0.6
+  - diagrams-core < 1.5.0
   # 2021-05-11: Pin for hls 1.1.0
   - ghcide == 1.2.*
   - hls-plugin-api == 1.1.0.0
