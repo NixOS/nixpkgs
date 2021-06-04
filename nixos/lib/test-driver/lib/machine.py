@@ -547,6 +547,7 @@ class Machine:
         Should only be used during testing, not in the production test."""
         self.connect()
         assert self.shell
+        self.log("Terminal is ready (there is no prompt):")
         telnet = telnetlib.Telnet()
         telnet.sock = self.shell
         telnet.interact()
