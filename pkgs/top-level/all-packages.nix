@@ -25627,6 +25627,8 @@ in
     jdk = jdk11;
   };
 
+  netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
+
   ncdu = callPackage ../tools/misc/ncdu { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
