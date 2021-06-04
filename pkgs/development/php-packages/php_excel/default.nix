@@ -1,4 +1,4 @@
-{ buildPecl, fetchurl, lib, libxl }:
+{ buildPecl, fetchurl, lib, libxl, php }:
 let
   pname = "php_excel";
   phpVersion = "php7";
@@ -20,5 +20,6 @@ buildPecl {
     "--with-libxl-libdir=${libxl}/lib"
   ];
 
+  meta.broken = lib.versionAtLeast php.version "8.0";
   meta.maintainers = lib.teams.php.members;
 }

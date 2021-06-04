@@ -1,4 +1,4 @@
-{ stdenv, buildPecl, lib, pcre', pkg-config, cyrus_sasl, icu64
+{ stdenv, buildPecl, lib, pcre2, pkg-config, cyrus_sasl, icu64
 , openssl, snappy, zlib, darwin }:
 
 buildPecl {
@@ -14,7 +14,7 @@ buildPecl {
     openssl
     snappy
     zlib
-    pcre'
+    pcre2
   ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta.maintainers = lib.teams.php.members;
