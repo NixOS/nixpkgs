@@ -80,29 +80,29 @@ rec {
   # v3.1.1 (LTS)
 
   aspnetcore_3_1 = buildAspNetCore {
-    version = "3.1.8";
+    version = "3.1.15";
     sha512 = {
-      x86_64-linux = "0i3dqsmh5x2aaagw30zvr0ydmzms5j6xvmwq0yx79r1hncw0zg8w1zq7cxvaddszl13d24wxb8vm4varkiv3fy8z3n2ndmhlqa2qcyw";
-      aarch64-linux = "3f3xky7jqpqwnsg730ka1576ppsspi25xlqsrqmwlbanad0r89lidfppr34nsys9gb5f1vx1zkv73dn4jhl6yawnas9j9f8nhi5mq40";
-      x86_64-darwin = "1gbiizljh80m9sqv4ynvch7si55if43f4ccfd9ynakwm777fddbg8py338l7irnxc5rid3xzw7c0yj5p8f22n38krlxkvr1zcwij68b";
+      x86_64-linux = "f1bc75c3af3308dd4d1448570a85a2f5ab9d21df474965b7216452e9dccd6f10028c18e3e291864f8f19b18e1f203c80a9fdcacb303b5a5763d7579cdb014cfe";
+      aarch64-linux = "574db7a64e6afe6e55dbc4f95b5d87bfde9cec973e9501f8b8ce6a11383edc97b600a3e926cda53a3711d2d7bc195dbe5d77ecb954c8d09a6b332b45c07e6512";
+      x86_64-darwin = "973920703eb1ebe70279dbd78f5098f755753582504fe9fa55cf9d16d93f597ce464b741b13b5d6a3228f0a1a9a7e8303ec4f4d8f0c343dbf7ecca7abb45144d";
     };
   };
 
   netcore_3_1 = buildNetCore {
-    version = "3.1.8";
+    version = "3.1.15";
     sha512 = {
-      x86_64-linux = "19gbb92lkfwmx4ic27v5g4cs8qzxiq8cv7sw9pxa8kibgr7lgifvg8dh3pd0i30a78yg5lc3fsdy0jal5i2k049nak72rfhxhrk5yxc";
-      aarch64-linux = "0h0zfj82wafk6brmh35ah1qfxgxs4nm3wc47i14vhvkg78rz25w46rnah88zf9gkllnbhfxkw1ivcl4mm6l4ri9hv9367rr627hybvf";
-      x86_64-darwin = "0zcp77lh6rvj1vlnjnnd9gqrwazn9v572l0x6r7b9pkjjq7fdh5cnjcc1cvkv9rb00mssd9jjv7yjdpv4i8i9hwby85g9bn500qx42c";
+      x86_64-linux = "0de999a51cdd53a2efa4ae3552834b540d59f598438675cb9b2ab1f16b41a64dbf0a25a2c8e65324bbdc594935046bc6ee32d8f8c25a95f607da2985f903ed55";
+      aarch64-linux = "9b36ac1479808e486c56a0cf29ac334109cb77306dfe98c72eebbebf53cc34d1e22f404850a6da41bff0a8121781ca79bba23a9c5d82d024a2f4e6c3bff29f59";
+      x86_64-darwin = "d77b57f9939707744af5bd854f9fa391bd8084beafdb7d609c85b5a9eb058521807627f0147e78329e86e00eec88440f6c806e5d0e319b0f8bfcbfb07821846c";
     };
   };
 
   sdk_3_1 = buildNetCoreSdk {
-    version = "3.1.402";
+    version = "3.1.409";
     sha512 = {
-      x86_64-linux = "2zdb5cl4swg7kvnla6kgnnwg3kkb3rj2ccizg43fw89h8nacr1klz3zdl5km9l553lvm364dy8xsdwm79bw1ch0qgff6snnbbxlw5a2";
-      aarch64-linux = "1aq8fhsn15362x99dfp72m67zbswrg30xscy1n983mmq76qn5ha6sy8pyj84l7qcs0n1b7akb77qyi3d2ns8bd2wl6s1dacl24gn10p";
-      x86_64-darwin = "1gk6sgd9gdc6nr64mdfj6lhzdi6ixi5c1r0i1b7bhkg2xycx5cnbgjycrpqh17h6wbp68dz4mkg5hf1y3527hdwypa9k0sqdg3yrdb8";
+      x86_64-linux = "63d24f1039f68abc46bf40a521f19720ca74a4d89a2b99d91dfd6216b43a81d74f672f74708efa6f6320058aa49bf13995638e3b8057efcfc84a2877527d56b6";
+      aarch64-linux = "edc011e5ee64fc76e8004aa73d439e7cea922ab00be6c70250c5f73cf6838b1935f5d3d3c9aa65f83bfd3923751bc1a6d92be3fba64a0a09a4acb4fd8d6db4c7";
+      x86_64-darwin = "b8cb6287a655e069311dce89e8eeee3b1ea953112856ce5a77731550c34d3f64625fb318bdb1257a78e0deb75a06f6d09835490aa8dc64249fad9b3a75ed438b";
     };
   };
 
