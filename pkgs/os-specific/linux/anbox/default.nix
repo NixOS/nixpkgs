@@ -36,13 +36,6 @@ let
 
   anbox-application-manager = writeScript "anbox-application-manager" ''
     #!${runtimeShell}
-
-    ${systemd}/bin/busctl --user call \
-        org.freedesktop.DBus \
-        /org/freedesktop/DBus \
-        org.freedesktop.DBus \
-        StartServiceByName "su" org.anbox 0
-
     @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
   '';
 
