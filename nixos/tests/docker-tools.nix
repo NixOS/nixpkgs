@@ -23,15 +23,15 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("includeStorePath"):
         with subtest("assumption"):
             docker.succeed("${examples.helloOnRoot} | docker load")
-            docker.succeed("set -euo pipefail; docker run --rm hello | grep -i hello")
+            docker.succeed("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
         with subtest("includeStorePath = false; breaks example"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
-            docker.fail("set -euo pipefail; docker run --rm hello | grep -i hello")
+            docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
-            docker.succeed("set -euo pipefail; docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
 
     with subtest("Ensure Docker images use a stable date by default"):
