@@ -705,6 +705,7 @@ self: super: {
   # https://github.com/diagrams/diagrams-core/issues/112
   # https://github.com/diagrams/diagrams-cairo/issues/77
   # https://github.com/diagrams/diagrams-rasterific/issues/63
+  # https://github.com/diagrams/diagrams-cairo/issues/77
   active = doJailbreak super.active;
   statestack = doJailbreak super.statestack;
   force-layout = doJailbreak super.force-layout;
@@ -724,6 +725,10 @@ self: super: {
       includes = [ "*/CmdLine.hs" ];
     }));
   diagrams-rasterific = doJailbreak super.diagrams-rasterific;
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
+  # https://github.com/diagrams/diagrams-solve/issues/4
+  diagrams-solve = dontCheck super.diagrams-solve;
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
@@ -740,9 +745,6 @@ self: super: {
 
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
-
-  # https://github.com/diagrams/diagrams-solve/issues/4
-  diagrams-solve = dontCheck super.diagrams-solve;
 
   # test suite does not compile with recent versions of QuickCheck
   integer-logarithms = dontCheck (super.integer-logarithms);
@@ -1808,10 +1810,6 @@ self: super: {
   cabal2nix-unstable = overrideCabal super.cabal2nix-unstable {
     passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
   };
-
-  # Too strict version bounds on base and optparse-applicative
-  # https://github.com/diagrams/diagrams-cairo/issues/77
-  diagrams-cairo = doJailbreak super.diagrams-cairo;
 
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
