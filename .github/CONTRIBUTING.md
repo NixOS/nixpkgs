@@ -65,7 +65,8 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - New Packages / Modules
 - Security / Patch updates
 - Version updates which include new functionality (but no breaking changes)
-- Software which is always meant to be at it's latest. (E.g. `spotify`, `steam`, or `discord`)
+- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
+- Security critical applications (E.g. `firefox`)
 
 ## Generating 21.11 Release Notes
 
