@@ -241,6 +241,8 @@ in
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  clifm = callPackage ../applications/misc/clifm { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
@@ -1417,6 +1419,8 @@ in
 
   dfmt = callPackage ../tools/text/dfmt { };
 
+  diopser = callPackage ../applications/audio/diopser { };
+
   diskonaut = callPackage ../tools/misc/diskonaut { };
 
   diskus = callPackage ../tools/misc/diskus {
@@ -1899,6 +1903,8 @@ in
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   blur-effect = callPackage ../tools/graphics/blur-effect { };
+
+  bootiso = callPackage ../tools/cd-dvd/bootiso { };
 
   butane = callPackage ../development/tools/butane { };
 
@@ -7260,6 +7266,8 @@ in
 
   nnn = callPackage ../applications/misc/nnn { };
 
+  sfm = callPackage ../applications/misc/sfm { };
+
   shfm = callPackage ../applications/misc/shfm { };
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
@@ -8500,6 +8508,8 @@ in
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  senpai = callPackage ../applications/networking/irc/senpai { };
+
   skim = callPackage ../tools/misc/skim { };
 
   seaweedfs = callPackage ../applications/networking/seaweedfs { };
@@ -9381,6 +9391,8 @@ in
   untex = callPackage ../tools/text/untex { };
 
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
+
+  unvanquished = callPackage ../games/unvanquished { };
 
   up = callPackage ../tools/misc/up { };
 
@@ -11642,6 +11654,8 @@ in
   opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
 
   open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
+
+  passerine = callPackage ../development/compilers/passerine { };
 
   pforth = callPackage ../development/compilers/pforth {};
 
@@ -14973,6 +14987,8 @@ in
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
+
+  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -22910,6 +22926,8 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
+  boops = callPackage ../applications/audio/boops { };
+
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
@@ -25318,6 +25336,7 @@ in
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
+    youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
@@ -25517,6 +25536,8 @@ in
   smtube = libsForQt514.callPackage ../applications/video/smtube {};
 
   softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix {};
+
+  songrec = callPackage ../applications/audio/songrec {};
 
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
@@ -27960,6 +27981,8 @@ in
 
   btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
 
+  charge-lnd = callPackage ../applications/blockchains/charge-lnd { };
+
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   dashpay = callPackage ../applications/blockchains/dashpay.nix { };
@@ -30215,6 +30238,8 @@ in
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
+  avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
+
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
@@ -31735,6 +31760,8 @@ in
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};
+
+  ryzenadj = callPackage ../os-specific/linux/ryzenadj {};
 
   vpsfree-client = callPackage ../tools/virtualization/vpsfree-client {};
 
