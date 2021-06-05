@@ -227,6 +227,8 @@ in {
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
+  aio-geojson-geonetnz-quakes = callPackage ../development/python-modules/aio-geojson-geonetnz-quakes { };
+
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
