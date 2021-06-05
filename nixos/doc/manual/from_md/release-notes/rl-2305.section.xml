@@ -121,6 +121,13 @@
           <link xlink:href="https://search.nixos.org/packages?channel=unstable&amp;show=utm&amp;from=0&amp;size=1&amp;sort=relevance&amp;type=packages&amp;query=utm">package</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Resilio sync secret keys can now be provided using a secrets
+          file at runtime, preventing these secrets from ending up in
+          the Nix store.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
