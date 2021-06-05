@@ -664,6 +664,18 @@ final: prev:
     meta.homepage = "https://github.com/tzachar/compe-tabnine/";
   };
 
+  compe-tmux = buildVimPluginFrom2Nix {
+    pname = "compe-tmux";
+    version = "2021-05-31";
+    src = fetchFromGitHub {
+      owner = "andersevenrud";
+      repo = "compe-tmux";
+      rev = "b199db008d07caf7f1d488ac3f171910416528a4";
+      sha256 = "1qiir95bz046ppp6pp8k6m00jrjcy2yp098s72lwfnsls6pqsgpf";
+    };
+    meta.homepage = "https://github.com/andersevenrud/compe-tmux/";
+  };
+
   completion-buffers = buildVimPluginFrom2Nix {
     pname = "completion-buffers";
     version = "2021-01-17";
