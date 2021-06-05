@@ -13,6 +13,19 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-q3dDV0eop2NxXHFrlppWsZrO2Hz1q5xhs1DnB6PvG9g=";
 
+  buildFlagsArray = ''
+    -ldflags=
+      -s -w
+      -X main.Version=v${version}
+      -X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}
+      -extldflags -static
+  '';
+
+  BUILDTAGS = "dfrunmount dfrunsecurity dfsecrets dfssh dfrunnetwork";
+  preBuild = ''
+    makeFlagsArray+=(BUILD_TAGS="${BUILDTAGS}")
+  '';
+
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
     mv $out/bin/shellrepeater $out/bin/earthly-shellrepeater
