@@ -2748,6 +2748,8 @@ in {
 
   georss-generic-client = callPackage ../development/python-modules/georss-generic-client { };
 
+  georss-nrcan-earthquakes-client = callPackage ../development/python-modules/georss-nrcan-earthquakes-client { };
+
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
