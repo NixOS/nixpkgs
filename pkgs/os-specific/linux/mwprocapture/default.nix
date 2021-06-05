@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "4236";
 
   src = fetchurl {
-    url = "http://www.magewell.com/files/drivers/ProCaptureForLinux_${version}.tar.gz";
+    url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${version}.tar.gz";
     sha256 = "1mfgj84km276sq5i8dny1vqp2ycqpvgplrmpbqwnk230d0w3qs74";
   };
 
