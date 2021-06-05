@@ -2742,6 +2742,8 @@ in {
 
   geopy = callPackage ../development/python-modules/geopy { };
 
+  georss-client = callPackage ../development/python-modules/georss-client { };
+
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
