@@ -8425,6 +8425,12 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  ratsclub = {
+    email = "victor@freire.dev.br";
+    github = "ratsclub";
+    githubId = 25647735;
+    name = "Victor Freire";
+  };
   ravloony = {
     email = "ravloony@gmail.com";
     name = "Tom Macdonald";

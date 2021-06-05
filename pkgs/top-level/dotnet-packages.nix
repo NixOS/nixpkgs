@@ -37,6 +37,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     sha256 = "cYz0ewJdK9nRlMKmigk3IENfOXvJRhXJfLXshaqgZ6o=";
     outputFiles = [ "lib/*" ];
     dllFiles = [ "Fantomas*.dll" ];
+
+    meta = with lib; {
+      description = "FSharp source code formatter";
+      homepage = "https://github.com/fsprojects/fantomas";
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   FSharpCompilerCodeDom = fetchNuGet {
