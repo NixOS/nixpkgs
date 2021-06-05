@@ -119,6 +119,8 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/anbox/give-more-time-to-start.patch?id=058b56d4b332ef3379551b343bf31e0f2004321a";
       sha256 = "0iiz3c7fgfgl0dvx8sf5hv7a961xqnihwpz6j8r0ib9v8piwxh9a";
     })
+    # Ensures generated desktop files work on store path change
+    ./0001-NixOS-Use-anbox-from-PATH-in-desktop-files.patch
   ];
 
   postInstall = ''
