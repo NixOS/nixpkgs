@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "BShapr";
+  pname = "bshapr";
   version = "0.12";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BShapr";
     rev = "v${version}";
     sha256 = "sha256-2DySlD5ZTxeQ2U++Dr67bek5oVbAiOHCxM6S5rTTZN0=";
   };
