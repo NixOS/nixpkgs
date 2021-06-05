@@ -152,9 +152,9 @@ in
             Type = "simple";
             User = user;
             Restart = "always";
+            ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
           };
 
-          serviceConfig.ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
         };
       };
     };

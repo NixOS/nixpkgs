@@ -89,7 +89,7 @@ in
 
           description = "lists.sr.ht website service";
 
-          script = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
+          serviceConfig.ExecStart = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
         };
 
         listssrht-process = {
@@ -102,8 +102,8 @@ in
             Type = "simple";
             User = user;
             Restart = "always";
+            ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.process worker --loglevel=info";
           };
-          script = "${cfg.python}/bin/celery -A ${drv.pname}.process worker --loglevel=info";
         };
 
         listssrht-lmtp = {
@@ -116,8 +116,8 @@ in
             Type = "simple";
             User = user;
             Restart = "always";
+            ExecStart = "${cfg.python}/bin/listssrht-lmtp";
           };
-          script = "${cfg.python}/bin/listssrht-lmtp";
         };
 
 
@@ -131,9 +131,8 @@ in
             Type = "simple";
             User = user;
             Restart = "always";
+            ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
           };
-
-          script = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
         };
       };
     };

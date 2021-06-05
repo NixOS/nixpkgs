@@ -86,7 +86,7 @@ in
 
           description = "todo.sr.ht website service";
 
-          script = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
+          serviceConfig.ExecStart = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
         };
 
        todosrht-lmtp = {
@@ -99,9 +99,8 @@ in
            Type = "simple";
            User = user;
            Restart = "always";
+           ExecStart = "${cfg.python}/bin/todosrht-lmtp";
          };
-
-         script = "${cfg.python}/bin/todosrht-lmtp";
        };
 
         todosrht-webhooks = {
@@ -114,9 +113,9 @@ in
             Type = "simple";
             User = user;
             Restart = "always";
+            ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
           };
 
-          script = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
         };
       };
     };
