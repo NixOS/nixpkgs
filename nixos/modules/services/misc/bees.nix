@@ -104,10 +104,11 @@ in
             configOptsStr = escapeShellArgs configOpts;
           in
           {
-            # Values from https://github.com/Zygo/bees/blob/v0.6.1/scripts/beesd@.service.in
+            # Values from https://github.com/Zygo/bees/blob/v0.6.5/scripts/beesd@.service.in
             ExecStart = "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${escapeShellArgs fs.extraOptions}";
             ExecStopPost = "${pkgs.bees}/bin/bees-service-wrapper cleanup ${configOptsStr}";
             CPUAccounting = true;
+            CPUSchedulingPolicy = "batch";
             CPUWeight = 12;
             IOSchedulingClass = "idle";
             IOSchedulingPriority = 7;
@@ -119,7 +120,7 @@ in
             Restart = "on-abnormal";
             StartupCPUWeight = 25;
             StartupIOWeight = 25;
-            SyslogIdentifier = "bees"; # would otherwise be "bees-service-wrapper"
+            SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
           };
         wantedBy = [ "multi-user.target" ];
       })
