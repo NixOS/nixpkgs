@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 7be6da5afc39bb736c0fb5c6c6ba245e98c0efe0
-  ref: refs/tags/6.0.46
+  revision: 6416bc1a2867938dd39705a3daef25bc5dedfd16
+  ref: refs/tags/6.0.47
   specs:
-    metasploit-framework (6.0.46)
+    metasploit-framework (6.0.47)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -125,22 +125,22 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.1)
-    aws-partitions (1.464.0)
-    aws-sdk-core (3.114.0)
+    aws-partitions (1.465.0)
+    aws-sdk-core (3.114.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.239.0)
+    aws-sdk-ec2 (1.240.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.54.0)
+    aws-sdk-iam (1.55.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.43.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.95.1)
+    aws-sdk-s3 (1.96.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -149,7 +149,7 @@ GEM
     bcrypt (3.1.16)
     bcrypt_pbkdf (1.1.0)
     bindata (2.4.10)
-    bson (4.12.0)
+    bson (4.12.1)
     builder (3.2.4)
     concurrent-ruby (1.0.5)
     cookiejar (0.3.3)
@@ -239,7 +239,7 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.9)
     method_source (1.0.0)
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.5.3)
     minitest (5.14.4)
     mqtt (0.5.0)
     msgpack (1.4.2)
@@ -252,7 +252,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.7)
-    nokogiri (1.11.6)
+    nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     octokit (4.21.0)
@@ -352,7 +352,7 @@ GEM
     ruby-macho (2.5.1)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.4)
-    ruby_smb (2.0.9)
+    ruby_smb (2.0.10)
       bindata
       openssl-ccm
       openssl-cmac

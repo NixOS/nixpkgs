@@ -3,19 +3,22 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.3";
+  version = "4.2.8";
 
   src = fetchgit {
     url = "https://github.com/open-eid/DigiDoc4-Client";
     rev = "v${version}";
-    sha256 = "1hj49vvg8vrayr9kpz73fafa7k298hmiamkyd8c3ipy6s51xh6q4";
+    sha256 = "02k2s6l79ssvrksa0midm7bq856llrmq0n40yxwm3j011nvc8vsm";
     fetchSubmodules = true;
   };
 
   tsl = fetchurl {
     url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
-    sha256 = "0llr2fj8vd097hcr1d0xmzdy4jydv0b5j5qlksbjffs22rqgal14";
+    sha256 = "0klz9blrp0jjhlr9k1i266afp44pqmii1x0y8prk0417ia3fxpli";
   };
+
+  # Adds explicit imports for QPainterPath, fixed in upstream (https://github.com/open-eid/DigiDoc4-Client/pull/914)
+  patches = [ ./qt5.15.patch ];
 
   nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
 
