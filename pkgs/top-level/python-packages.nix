@@ -2752,6 +2752,8 @@ in {
 
   georss-tfs-incidents-client = callPackage ../development/python-modules/georss-tfs-incidents-client { };
 
+  georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
+
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
