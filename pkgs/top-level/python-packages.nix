@@ -2750,6 +2750,8 @@ in {
 
   georss-ign-sismologia-client = callPackage ../development/python-modules/georss-ign-sismologia-client { };
 
+  georss-ingv-centro-nazionale-terremoti-client = callPackage ../development/python-modules/georss-ingv-centro-nazionale-terremoti-client { };
+
   georss-nrcan-earthquakes-client = callPackage ../development/python-modules/georss-nrcan-earthquakes-client { };
 
   georss-qld-bushfire-alert-client = callPackage ../development/python-modules/georss-qld-bushfire-alert-client { };
