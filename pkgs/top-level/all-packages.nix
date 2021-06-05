@@ -2274,6 +2274,8 @@ in
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
+  wlrctl = callPackage ../tools/wayland/wlrctl { };
+
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
   wob = callPackage ../tools/wayland/wob { };
