@@ -21,13 +21,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-14002";
+  version = "5.0-14345";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "53222560650e4a99eceafcd537d4e04d1c50b3a6";
-    sha256 = "1m71gk9hm011fpv5hmpladf7abkylmawgr60d0czkr276pzg04ky";
+    rev = "2f8c9a77356b8eac8fdff0e9312fe2a8896c92b5";
+    sha256 = "0aw67drwsbswqcg18y1rx3di3hcq03pn7idk8s0mfi7sa8wja9i4";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
