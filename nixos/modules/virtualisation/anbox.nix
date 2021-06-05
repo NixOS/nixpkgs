@@ -187,7 +187,8 @@ in
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
             --use-rootfs-overlay \
-            --privileged
+            --privileged \
+            --daemon
         '';
       };
     };
