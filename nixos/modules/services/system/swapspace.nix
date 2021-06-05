@@ -22,7 +22,7 @@ in {
         type = types.path;
         default = "/var/lib/swap";
         description = ''
-          Location of the swap files. This directory will be restrticted to root.
+          Location of the swap files. This directory will be restricted to root.
         '';
       };
 
@@ -66,16 +66,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [ "d '${cfg.path}' 0700 - - - - " ];
     systemd.services.swapspace = with pkgs; {
       description = "SwapSpace Daemon";
-      preStart = ''
-        mkdir -p "${cfg.path}"
-        chmod 700 "${cfg.path}"
-      '';
       serviceConfig = {
         Type = "simple";
-        ExecStart =
-          ''${pkgs.swapspace}/sbin/swapspace --swappath="${cfg.path}"''
+        ExecStart = ''${pkgs.swapspace}/bin/swapspace --swappath="${cfg.path}"''
           + optionalString (cfg.cooldown != null)
           " --cooldown=${toString cfg.cooldown}"
           + optionalString (cfg.minSwapSize != null)
@@ -85,7 +81,6 @@ in {
         Restart = "always";
         RestartSec = 30;
       };
-      after = [ "local-fs.target" "systemd-udev-settle.service" ];
       wantedBy = [ "multi-user.target" ];
     };
   };
