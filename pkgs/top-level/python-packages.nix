@@ -225,6 +225,8 @@ in {
 
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
+  aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
+
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   ailment = callPackage ../development/python-modules/ailment { };
