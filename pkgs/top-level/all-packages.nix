@@ -18651,7 +18651,7 @@ in
   libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
-    llvmPackages = llvmPackages_11;
+    llvmPackages = llvmPackages_12;
   };
 
   zimlib = callPackage ../development/libraries/zimlib { };
