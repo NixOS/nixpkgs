@@ -37,6 +37,10 @@
 
 let
 
+  inherit (lib)
+    optionals
+    ;
+
   mkDbExtraCommand = contents: let
     contentsList = if builtins.isList contents then contents else [ contents ];
   in ''
@@ -532,7 +536,7 @@ rec {
         passthru.layer = layer;
         passthru.imageTag =
           if tag != null
-            then lib.toLower tag
+            then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
         # Docker can't be made to run darwin binaries
@@ -786,7 +790,11 @@ rec {
     fakeRootCommands ? "",
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
-    maxLayers ? 100
+    maxLayers ? 100,
+    # Whether to include store paths in the image. You generally want to leave
+    # this on, but tooling may disable this to insert the store paths more
+    # efficiently via other means, such as bind mounting the host store.
+    includeStorePaths ? true,
   }:
     assert
       (lib.assertMsg (maxLayers > 1)
@@ -834,7 +842,9 @@ rec {
         '';
       };
 
-      closureRoots = [ baseJson ] ++ contentsList;
+      closureRoots = optionals includeStorePaths /* normally true */ (
+        [ baseJson ] ++ contentsList
+      );
       overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
 
       # These derivations are only created as implementation details of docker-tools,

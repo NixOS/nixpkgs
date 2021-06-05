@@ -1156,6 +1156,23 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
+  # Jailbreak due to bounds on multiple dependencies,
+  # bound on pandoc needs to be patched since it is conditional
+  hakyll = doJailbreak (overrideCabal super.hakyll (drv: {
+    patches = [
+      # Remove when Hakyll > 4.14.0.0
+      (pkgs.fetchpatch {
+        url = "https://github.com/jaspervdj/hakyll/commit/0dc6127d81ff688e27c36ce469230320eee60246.patch";
+        sha256 = "sha256-YyRz3bAmIBODTEeS5kGl2J2x31SjiPoLzUZUlo3nHvQ=";
+      })
+      # Remove when Hakyll > 4.14.0.0
+      (pkgs.fetchpatch {
+        url = "https://github.com/jaspervdj/hakyll/commit/af9e29b5456c105dc948bc46c93e989a650b5ed1.patch";
+        sha256 = "sha256-ghc0V5L9OybNHWKmM0vhjRBN2rIvDlp+ClcK/aQst44=";
+      })
+    ];
+  }));
+
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
@@ -1207,14 +1224,10 @@ self: super: {
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
-  # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
-  # the version bounds are not satisfied.  This can be removed if the PR at
-  # https://github.com/ananthakumaran/webify/pull/27 is merged and a new
-  # release of webify is published.
-  webify = appendPatch super.webify (pkgs.fetchpatch {
-    url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
-  });
+  # We jailbreak webify, as optparse-applicative evolved past the version bound
+  # and the corresponding (and outdated) PR was not merged for a year.
+  # https://github.com/ananthakumaran/webify/pull/27
+  webify = doJailbreak super.webify;
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6

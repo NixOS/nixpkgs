@@ -182,13 +182,29 @@ let
     # Menu configuration
     #
 
+    # Search using a "marker file"
+    search --set=root --file /EFI/nixos-installer-image
+
     insmod gfxterm
     insmod png
     set gfxpayload=keep
+    set gfxmode=${concatStringsSep "," [
+      # GRUB will use the first valid mode listed here.
+      # `auto` will sometimes choose the smallest valid mode it detects.
+      # So instead we'll list a lot of possibly valid modes :/
+      #"3840x2160"
+      #"2560x1440"
+      "1920x1080"
+      "1366x768"
+      "1280x720"
+      "1024x768"
+      "800x600"
+      "auto"
+    ]}
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont /EFI/boot/unicode.pf2; then
+    if loadfont (\$root)/EFI/boot/unicode.pf2; then
       set with_fonts=true
     fi
     if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
@@ -212,11 +228,11 @@ let
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
-      set theme=/EFI/boot/grub-theme/theme.txt
+      set theme=(\$root)/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
     '' else ''
-      if background_image /EFI/boot/efi-background.png; then
+      if background_image (\$root)/EFI/boot/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
@@ -238,6 +254,9 @@ let
     strictDeps = true;
   } ''
     mkdir -p $out/EFI/boot/
+
+    # Add a marker so GRUB can find the filesystem.
+    touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
     MODULES="fat iso9660 part_gpt part_msdos \
@@ -294,12 +313,12 @@ let
     ${grubMenuCfg}
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont /EFI/boot/unicode.pf2
+      loadfont (\$root)/EFI/boot/unicode.pf2
       set textmode=true
       terminal_output gfxterm console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
@@ -370,8 +389,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
+      # Force root to be the FAT partition
+      # Otherwise it breaks rEFInd's boot
+      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
-        # \$root defaults to the drive the EFI is found on.
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
@@ -403,7 +424,9 @@ let
       mkdir ./boot
       cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
         "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
-      touch --date=@0 ./EFI ./boot
+
+      # Rewrite dates for everything in the FS
+      find . -exec touch --date=2000-01-01 {} +
 
       usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
       # Make the image 110% as big as the files need to make up for FAT overhead

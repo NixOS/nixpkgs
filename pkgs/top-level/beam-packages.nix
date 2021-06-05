@@ -1,4 +1,4 @@
-{ callPackage, wxGTK30, openssl_1_0_2, buildPackages, wxSupport ? true }:
+{ callPackage, wxGTK30, buildPackages, wxSupport ? true }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix { };
@@ -72,47 +72,6 @@ rec {
       odbcSupport = true;
     };
 
-    # R20
-    erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix {
-      wxGTK = wxGTK30;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
-    };
-    erlangR20_odbc = erlangR20.override { odbcSupport = true; };
-    erlangR20_javac = erlangR20.override { javacSupport = true; };
-    erlangR20_odbc_javac = erlangR20.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
-    # R19
-    erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
-      wxGTK = wxGTK30;
-      openssl = openssl_1_0_2;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
-    };
-    erlangR19_odbc = erlangR19.override { odbcSupport = true; };
-    erlangR19_javac = erlangR19.override { javacSupport = true; };
-    erlangR19_odbc_javac = erlangR19.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
-    # R18
-    erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
-      wxGTK = wxGTK30;
-      openssl = openssl_1_0_2;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
-    };
-    erlangR18_odbc = erlangR18.override { odbcSupport = true; };
-    erlangR18_javac = erlangR18.override { javacSupport = true; };
-    erlangR18_odbc_javac = erlangR18.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
     # Basho fork, using custom builder.
     erlang_basho_R16B02 =
       lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
@@ -128,7 +87,7 @@ rec {
     inherit (packages.erlang)
       elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_ls;
 
-    inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
+    inherit (packages.erlang) lfe lfe_1_3;
   };
 
   # Helper function to generate package set with a specific Erlang version.
@@ -145,8 +104,5 @@ rec {
     erlangR23 = packagesWith interpreters.erlangR23;
     erlangR22 = packagesWith interpreters.erlangR22;
     erlangR21 = packagesWith interpreters.erlangR21;
-    erlangR20 = packagesWith interpreters.erlangR20;
-    erlangR19 = packagesWith interpreters.erlangR19;
-    erlangR18 = packagesWith interpreters.erlangR18;
   };
 }

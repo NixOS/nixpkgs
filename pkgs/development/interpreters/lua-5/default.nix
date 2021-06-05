@@ -3,8 +3,8 @@
 
 rec {
   lua5_4 = callPackage ./interpreter.nix {
-    sourceVersion = { major = "5"; minor = "4"; patch = "2"; };
-    hash = "0ksj5zpj74n0jkamy3di1p6l10v4gjnd2zjnb453qc6px6bhsmqi";
+    sourceVersion = { major = "5"; minor = "4"; patch = "3"; };
+    hash = "1yxvjvnbg4nyrdv10bq42gz6dr66pyan28lgzfygqfwy2rv24qgq";
 
     patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };

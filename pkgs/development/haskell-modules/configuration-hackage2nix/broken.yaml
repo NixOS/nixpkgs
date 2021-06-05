@@ -1675,7 +1675,6 @@ broken-packages:
   - grasp
   - gray-code
   - greencard
-  - greenclip
   - greg-client
   - gremlin-haskell
   - Grempa
@@ -1745,7 +1744,6 @@ broken-packages:
   - hakismet
   - hakka
   - hako
-  - hakyll
   - hakyll-shortcode
   - HaLeX
   - halfs
@@ -5026,7 +5024,6 @@ broken-packages:
   - web-encodings
   - WeberLogic
   - webfinger-client
-  - webify
   - webkit-javascriptcore
   - webmention
   - web-output
