@@ -77,7 +77,7 @@ where the builder can do anything it wants, but typically starts with
 source $stdenv/setup
 ```
 
-to let `stdenv` set up the environment (e.g., process the `buildInputs`). If you want, you can still use `stdenv`’s generic builder:
+to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from `buildInputs`). If you want, you can still use `stdenv`’s generic builder:
 
 ```bash
 source $stdenv/setup
@@ -116,13 +116,13 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See <xref linkend="ssec-setup-hooks" /> for details.
+As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their `bin` directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See <xref linkend="ssec-setup-hooks" /> for details.
 
 Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see <xref linkend="chap-cross" /> for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
 
 The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
-The dependency is propagated when it forces some of its other-transitive (non-immediate) downstream dependencies to also take it on as an immediate dependency. Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
+The dependency is propagated when it forces some of its other-transitive (non-immediate) downstream dependencies to also take it on as an immediate dependency. Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if the propagated dependency.
 
 It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. The exact rules for dependency propagation can be given by assigning to each dependency two integers based one how its host and target platforms are offset from the depending derivation’s platforms. Those offsets are given below in the descriptions of each dependency list attribute. Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in sort a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
@@ -617,12 +617,12 @@ Hook executed at the end of the install phase.
 
 ### The fixup phase {#ssec-fixup-phase}
 
-The fixup phase performs some (Nix-specific) post-processing actions on the files installed under `$out` by the install phase. The default `fixupPhase` does the following:
+The fixup phase performs (Nix-specific) post-processing actions on the files installed under `$out` by the install phase. The default `fixupPhase` does the following:
 
 - It moves the `man/`, `doc/` and `info/` subdirectories of `$out` to `share/`.
 - It strips libraries and executables of debug information.
 - On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` in order to prevent unnecessary runtime dependencies.
-- It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`.
+- It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`. See <xref linkend="setup-hook-patch-shebangs"/> for details.
 
 #### Variables controlling the fixup phase
 
@@ -668,7 +668,7 @@ If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries
 
 ##### `dontPatchShebangs` {#var-stdenv-dontPatchShebangs}
 
-If set, scripts starting with `#!` do not have their interpreter paths rewritten to paths in the Nix store.
+If set, scripts starting with `#!` do not have their interpreter paths rewritten to paths in the Nix store. See <xref linkend="setup-hook-patch-shebangs"/> on how patching shebangs works.
 
 ##### `dontPruneLibtoolFiles` {#var-stdenv-dontPruneLibtoolFiles}
 
@@ -885,7 +885,7 @@ addEnvHooks "$hostOffset" myBashFunction
 
 The *existence* of setups hooks has long been documented and packages inside Nixpkgs are free to use this mechanism. Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions. Because of the existing issues with this system, there’s little benefit from mandating it be stable for any period of time.
 
-First, let’s cover some setup hooks that are part of Nixpkgs default stdenv. This means that they are run for every package built using `stdenv.mkDerivation`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
+First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 ### `move-docs.sh`
 
@@ -899,9 +899,37 @@ This setup hook compresses any man pages that have been installed. The compressi
 
 This runs the strip command on installed binaries and libraries. This removes unnecessary information like debug symbols when they are not needed. This also helps to reduce the installed size of packages.
 
-### `patch-shebangs.sh`
+### `patch-shebangs.sh` {#setup-hook-patch-shebangs}
 
-This setup hook patches installed scripts to use the full path to the shebang interpreter. A shebang interpreter is the first commented line of a script telling the operating system which program will run the script (e.g `#!/bin/bash`). In Nix, we want an exact path to that interpreter to be used. This often replaces `/bin/sh` with a path in the Nix store.
+This setup hook patches installed scripts to use Nix store paths to their shebang interpreter as found in the build environment's `PATH`. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system what interpreter to use to execute the script's contents.
+
+::: note
+The [generic builder](https://github.com/NixOS/nixpkgs/blob/6ba632c2a442082f353bf2d7028fda11a888d099/pkgs/stdenv/generic/builder.sh) populates `PATH` from inputs of the derivation.
+:::
+
+`#!/bin/sh` will be rewritten to `#!/nix/store/<hash>-some-bash/bin/sh`.
+`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`. Interpreters that are already in the store are left untouched.
+
+::: note
+A script file must be marked as executable, otherwise it will not be
+considered. [Trivial Builders](#chap-trivial-builders) do this automatically where appropriate.
+:::
+
+This mechanism ensures that the interpreter for a given script is always found and is exactly the one specified by the build.
+
+It can be disabled by setting [`dontPatchShebangs`](#var-stdenv-dontPatchShebangs):
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  dontPatchShebangs = true;
+  # ...
+}
+```
+
+The file [`patch-shebangs.sh`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh) defines the [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24) function. It is used to implement [`patchShebangsAuto`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107), the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
+
+If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
 
 ### `audit-tmpdir.sh`
 
