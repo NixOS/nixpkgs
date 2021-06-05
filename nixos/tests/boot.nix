@@ -17,11 +17,11 @@ let
         ];
     }).config.system.build.isoImage;
 
-  pythonDict = params: "\n    {\n        ${concatStringsSep ",\n        " (mapAttrsToList (name: param: "\"${name}\": \"${param}\"") params)},\n    }\n";
-
   makeBootTest = name: extraConfig:
     let
-      machineConfig = pythonDict ({ qemuFlags = "-m 768"; } // extraConfig);
+      machineConfig = builtins.toJSON ({
+        qemuFlags = "-m 768";
+      } // extraConfig);
     in
       makeTest {
         inherit iso;
@@ -29,7 +29,10 @@ let
         nodes = { };
         testScript =
           ''
-            machine = create_machine(${machineConfig})
+            import json
+
+            config = """${machineConfig}"""
+            machine = create_machine(json.loads(config))
             machine.start()
             machine.wait_for_unit("multi-user.target")
             machine.succeed("nix verify -r --no-trust /run/current-system")
@@ -60,7 +63,7 @@ let
           config.system.build.netbootIpxeScript
         ];
       };
-      machineConfig = pythonDict ({
+      machineConfig = builtins.toJSON ({
         qemuFlags = "-boot order=n -m 2000";
         netBackendArgs = "tftp=${ipxeBootDir},bootfile=netboot.ipxe";
       } // extraConfig);
@@ -69,7 +72,10 @@ let
         name = "boot-netboot-" + name;
         nodes = { };
         testScript = ''
-            machine = create_machine(${machineConfig})
+            import json
+
+            config = """${machineConfig}"""
+            machine = create_machine(json.loads(config))
             machine.start()
             machine.wait_for_unit("multi-user.target")
             machine.shutdown()
