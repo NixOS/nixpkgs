@@ -74,6 +74,8 @@ let
   autoLoginSessionName =
     "${dmcfg.sessionData.autologinSession}.desktop";
 
+  themeQtPluginPath = concatMapStringsSep ":" (p: "${p}/lib/qt-${qt5.qtbase.version}/plugins") (cfg.qtPlugins libsForQt5);
+  themeQmlPath = concatMapStringsSep ":" (p: "${p}/lib/qt-${qt5.qtbase.version}/qml") (cfg.qtPlugins libsForQt5);
 in
 {
   imports = [
@@ -130,7 +132,25 @@ in
         type = types.str;
         default = "";
         description = ''
-          Greeter theme to use.
+            Greeter theme to use.
+          '';
+      };
+
+      qtPlugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
+        default = p: [ ];
+        description = ''
+          A list of Qt plugins whose pathes are added into sddm runtime
+          environment. qtbase is awlays added, so it is not necessary here.
+        '';
+        example = libsForQt: with libsForQt; [ qtgraphicaleffects ];
+      };
+
+      package = mkOption {
+        type = with types; nullOr package;
+        default = null;
+        description = ''
+          The sddm theme package.
         '';
       };
 
@@ -206,8 +226,8 @@ in
     services.xserver.displayManager.job = {
       environment = {
         # Load themes from system environment
-        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
-        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+        QT_PLUGIN_PATH = removePrefix ":" "${themeQtPluginPath}:/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}";
+        QML2_IMPORT_PATH = removePrefix ":" "${themeQmlPath}:/run/current-system/sw/${pkgs.qt5.qtbase.qtQmlPrefix}";
       };
 
       execCmd = "exec /run/current-system/sw/bin/sddm";
@@ -262,7 +282,7 @@ in
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 
-    environment.systemPackages = [ sddm ];
+    environment.systemPackages = [ sddm cfg.package ];
     services.dbus.packages = [ sddm ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
