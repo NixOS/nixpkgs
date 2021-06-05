@@ -150,6 +150,16 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
   <itemizedlist>
    <listitem>
     <para>
+      <literal>services.xserver.xidlehook</literal>
+      is available as a drop-in replacement for
+      <literal>services.xserver.xautolock</literal>.
+      (<literal>xautolock</literal> users are encouraged to switch --
+      <literal>xautolock</literal> has been unmaintained upstream
+      since 2007.)
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     The kubernetes kube-proxy now supports a new hostname configuration
     <literal>services.kubernetes.proxy.hostname</literal> which has to
     be set if the hostname of the node should be non default.
