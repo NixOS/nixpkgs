@@ -16823,8 +16823,9 @@ in
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
-  libunwind = if stdenv.isDarwin
-    then darwin.libunwind
+  libunwind =
+    if stdenv.isDarwin then darwin.libunwind
+    else if stdenv.hostPlatform.isRiscV then llvmPackages_latest.libunwind
     else callPackage ../development/libraries/libunwind { };
 
   libuv = callPackage ../development/libraries/libuv {
