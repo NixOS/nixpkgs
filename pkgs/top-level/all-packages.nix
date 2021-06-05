@@ -9263,7 +9263,7 @@ in
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
-  twtxt = callPackage ../applications/networking/twtxt { };
+  twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
