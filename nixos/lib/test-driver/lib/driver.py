@@ -16,14 +16,17 @@ from vlan import VLan
 from startcommand import NixStartScript
 from machine import Machine
 
-# for typing
-from logger import Logger
+from logger import nested
+import logging
+
+
+rootlog = logging.getLogger()
 
 
 class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
-    logger: Logger
+
     vm_scripts: List[str]
     tests: str
     keep_vm_state: bool = False
@@ -32,7 +35,6 @@ class Driver:
 
     def __init__(
         self,
-        logger: Logger,
         vm_scripts: List[str],
         tests: str,
         keep_vm_state: bool = False,
@@ -43,14 +45,13 @@ class Driver:
         Args:
             - configure_python_repl: a function to configure ptpython.repl
         """
-        self.log = logger
         self.tests = tests
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         self.vlans = [
-            vlan_class(int(nr), tmp_dir, logger.log_machinestate)
+            vlan_class(int(nr), tmp_dir)
             for nr in list(dict.fromkeys(os.environ.get("VLANS", "").split()))
         ]
 
@@ -63,8 +64,6 @@ class Driver:
                 start_command=cmd,
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
-                log_serial=logger.log_serial,
-                log_machinestate=logger.log_machinestate,
                 tmp_dir=tmp_dir,
             )
             for cmd in cmd(vm_scripts)
@@ -72,21 +71,20 @@ class Driver:
 
         @atexit.register
         def clean_up() -> None:
-            with self.log.nested("clean up"):
+            with nested(rootlog, "clean up"):
                 for machine in self.machines:
                     machine.release()
                 for vlan in self.vlans:
                     vlan.release()
-            self.log.release()
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
-        with self.log.nested(name):
+        with nested(rootlog, name):
             try:
                 yield
                 return True
             except:
-                self.log(f'Test "{name}" failed with error:')
+                rootlog.error(f'Test "{name}" failed with error:')
                 raise
 
     def test_symbols(self) -> Dict[str, Any]:
@@ -98,7 +96,7 @@ class Driver:
             pprint=pprint,
             os=os,
             driver=self,
-            logger=self.log,
+            logger=rootlog,
             vlans=self.vlans,
             machines=self.machines,
             start_all=self.start_all,
@@ -123,12 +121,11 @@ class Driver:
 
     def test_script(self) -> None:
         """Run the test script"""
-        with self.log.nested("run the VM test script"):
+        with nested(rootlog, "run the VM test script"):
             exec(self.tests, self.test_symbols())
 
     def run_tests(self) -> None:
-        """Run the test script (for non-interactive test runs)
-        """
+        """Run the test script (for non-interactive test runs)"""
         self.test_script()
         # TODO: Collect coverage data
         for machine in self.machines:
@@ -137,15 +134,15 @@ class Driver:
 
     def start_all(self) -> None:
         """Start all machines"""
-        with self.log.nested("start all VLans"):
+        with nested(rootlog, "start all VLans"):
             for vlan in self.vlans:
                 vlan.start()
-        with self.log.nested("start all VMs"):
+        with nested(rootlog, "start all VMs"):
             for machine in self.machines:
                 machine.start()
 
     def join_all(self) -> None:
         """Wait for all machines to shut down"""
-        with self.log.nested("wait for all VMs to finish"):
+        with nested(rootlog, "wait for all VMs to finish"):
             for machine in self.machines:
                 machine._wait_for_shutdown()

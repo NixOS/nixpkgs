@@ -1,0 +1,40 @@
+version: 1
+formatters:
+    driver:
+        format: '%(message)s'
+    control:
+        format: '<%(instance)s CTRL - %(levelname)s>: %(message)s'
+    serial:
+        format: '[%(instance)s LOG - %(levelname)s]: %(message)s'
+    json:
+        class: logger.JsonFormatter
+handlers:
+    driver:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: control
+        stream: ext://sys.stderr
+    control:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: control
+        stream: ext://sys.stderr
+    serial:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: serial
+        stream: ext://sys.stdout
+
+loggers:
+    machine.CTL: # the machine control plane
+        handlers: [control]
+    machine.LOG: # the machine logs
+        handlers: [serial]
+    vlan.CTL: # the vlan control plane
+        handlers: [control]
+    vlan.LOG: # the vlan logs
+        handlers: [serial]
+
+root:
+    level: INFO
+    handlers: [driver]

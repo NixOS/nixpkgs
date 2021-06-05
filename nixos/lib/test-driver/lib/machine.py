@@ -22,8 +22,16 @@ import time
 
 from pathlib import Path
 
+from logger import nested
+
 # for typing
 from startcommand import StartCommand
+
+import logging
+
+ctllog = logging.getLogger("machine.CTL")
+log = logging.getLogger("machine.LOG")
+rootlog = logging.getLogger()
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -143,9 +151,6 @@ class Machine:
     the machine lifecycle with the help of a start script / command."""
 
     name: str
-    log_serial: Callable
-    log_machinestate: Callable
-    nested: Callable
     tmp_dir: Path
     shared_dir: Path
     state_dir: Path
@@ -169,43 +174,17 @@ class Machine:
 
     def __init__(
         self,
-        log_serial: Callable,
-        log_machinestate: Callable,
         tmp_dir: Path,
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
     ) -> None:
-        # setattr workaround for mypy type checking, see: https://git.io/JGyNT
-        setattr(
-            self,
-            "log_serial",
-            lambda msg: log_serial(f"[{name} LOG] {msg}", {"machine": name}),
-        )
-        setattr(
-            self,
-            "log_machinestate",
-            lambda msg: log_machinestate(f"[{name} MCS] {msg}", {"machine": name}),
-        )
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
-
-        # in order to both enable plain log functions, but also nested
-        # machine state logging, check if the `log_machinestate` object
-        # has a method `nested` and provide this functionality.
-        # Ideally, just remove this logic long term and make it as  easy as
-        # possible for the user of `Machine` to provide plain standard loggers
-        @contextmanager
-        def dummy_nest(message: str) -> Iterator[None]:
-            self.log_machinestate(message)
-            yield
-
-        nest_op = getattr(self.log_machinestate, "nested", None)
-        setattr(self, "nested", (callable(nest_op) and nest_op or dummy_nest))
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -216,9 +195,7 @@ class Machine:
         self.shell_path = self.state_dir / "shell"
         if (not self.keep_vm_state) and self.state_dir.exists():
             shutil.rmtree(self.state_dir)
-            log_machinestate(  # trick: shouldn't be a machine specific log
-                f"    -> delete state @ {self.state_dir}"
-            )
+            rootlog.info(f"    -> delete state @ {self.state_dir}")
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
     def _wait_for_monitor_prompt(self) -> str:
@@ -238,7 +215,7 @@ class Machine:
             return
 
         assert self.process
-        with self.nested("wait for the VM to power off"):
+        with nested(ctllog, "wait for the VM to power off"):
             sys.stdout.flush()
             self.process.wait()
 
@@ -251,7 +228,7 @@ class Machine:
         if self.booted:
             return
 
-        self.log_machinestate("start")
+        ctllog.info("start")
 
         def clear(path: Path) -> Path:
             if path.exists():
@@ -282,7 +259,7 @@ class Machine:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 self.last_lines.put(line)
-                self.log_serial(line)
+                log.info(line)
 
         _thread.start_new_thread(process_serial_output, ())
 
@@ -291,14 +268,14 @@ class Machine:
         self.pid = self.process.pid
         self.booted = True
 
-        self.log_machinestate(f"QEMU running (pid {self.pid})")
+        ctllog.info(f"QEMU running (pid {self.pid})")
 
     def release(self) -> None:
         """Kill this machine"""
         if self.pid is None:
             return
         assert self.process
-        self.log_machinestate(f"kill me (pid {self.pid})")
+        ctllog.info(f"kill me (pid {self.pid})")
         self.process.kill()
 
     def connect(self) -> None:
@@ -306,16 +283,16 @@ class Machine:
         if self.connected:
             return
 
-        with self.nested("wait for the VM to finish booting"):
+        with nested(ctllog, "wait for the VM to finish booting"):
             self.start()
 
             assert self.shell
-            self.log_machinestate("connect to guest root shell")
+            ctllog.info("connect to guest root shell")
             tic = time.time()
             self.shell.recv(1024)
             # TODO: Timeout
             toc = time.time()
-            self.log_machinestate(f"(took {(toc - tic):.2f} seconds)")
+            ctllog.info(f"(took {(toc - tic):.2f} seconds)")
             self.connected = True
 
     def shutdown(self) -> None:
@@ -324,7 +301,7 @@ class Machine:
             return
 
         assert self.shell
-        self.log_machinestate("regular shutdown")
+        ctllog.info("regular shutdown")
         self.shell.send("poweroff\n".encode())
         self._wait_for_shutdown()
 
@@ -333,7 +310,7 @@ class Machine:
         if not self.booted:
             return
 
-        self.log_machinestate("simulate forced crash")
+        ctllog.info("simulate forced crash")
         self.send_monitor_command("quit")
         self._wait_for_shutdown()
 
@@ -355,7 +332,7 @@ class Machine:
     def send_monitor_command(self, command: str) -> str:
         """Send a low level monitor command to this machine"""
         message = (f"{command}\n").encode()
-        self.log_machinestate("send monitor command: {command}")
+        ctllog.info("send monitor command: {command}")
         assert self.monitor
         self.monitor.send(message)
         return self._wait_for_monitor_prompt()
@@ -428,7 +405,9 @@ class Machine:
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
         """Wether a unit has reached a specified state ("active" by default)"""
-        with self.nested(f"check if unit ‘{unit}’ has reached state '{require_state}'"):
+        with nested(
+            ctllog, f"check if unit ‘{unit}’ has reached state '{require_state}'"
+        ):
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
             if state != require_state:
@@ -462,19 +441,19 @@ class Machine:
         Should only be used during testing, not in the production test."""
         self.connect()
         assert self.shell
-        self.log("Terminal is ready (there is no prompt):")
+        ctllog.info("Terminal is ready (there is no prompt):")
         telnet = telnetlib.Telnet()
-        telnet.sock = self.shell
+        telnet.sock = self.shell  # type: ignore
         telnet.interact()
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
         output = ""
         for command in commands:
-            with self.nested(f"must succeed: {command}"):
+            with nested(ctllog, f"must succeed: {command}"):
                 status, out = self.execute(command)
                 if status != 0:
-                    self.log_machinestate(f"output: {out}")
+                    ctllog.info(f"output: {out}")
                     raise Exception(f"command `{command}` failed (exit code {status})")
                 output += out
         return output
@@ -483,7 +462,7 @@ class Machine:
         """Execute each command and check that it fails."""
         output = ""
         for command in commands:
-            with self.nested(f"must fail: {command}"):
+            with nested(ctllog, f"must fail: {command}"):
                 (status, out) = self.execute(command)
                 if status == 0:
                     raise Exception(f"command `{command}` unexpectedly succeeded")
@@ -501,7 +480,7 @@ class Machine:
             status, output = self.execute(command)
             return status == 0
 
-        with self.nested(f"wait for success: {command}"):
+        with nested(ctllog, f"wait for success: {command}"):
             retry(check_success)
         return output
 
@@ -516,7 +495,7 @@ class Machine:
             status, output = self.execute(command)
             return status != 0
 
-        with self.nested(f"wait for failure: {command}"):
+        with nested(ctllog, f"wait for failure: {command}"):
             retry(check_failure)
         return output
 
@@ -540,18 +519,18 @@ class Machine:
             if res:
                 return res
             if last:
-                self.log_machinestate(
+                ctllog.info(
                     f"Last attempt failed to match /{regexp}/ on TTY{tty}:"
                     f"Current text was: \n\n{text}"
                 )
             return False
 
-        with self.nested(f"wait for {regexp} to appear on tty {tty}"):
+        with nested(ctllog, f"wait for {regexp} to appear on tty {tty}"):
             retry(tty_matches)
 
     def send_chars(self, chars: List[str]) -> None:
         """Send characters to this machine"""
-        with self.nested(f"send keys ‘{chars}‘"):
+        with nested(ctllog, f"send keys ‘{chars}‘"):
             for char in chars:
                 self.send_key(char)
 
@@ -562,7 +541,7 @@ class Machine:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
-        with self.nested(f"wait for file ‘{filename}‘"):
+        with nested(ctllog, f"wait for file ‘{filename}‘"):
             retry(check_file)
 
     def wait_for_open_port(self, port: int) -> None:
@@ -572,7 +551,7 @@ class Machine:
             status, _ = self.execute(f"nc -z localhost {port}")
             return status == 0
 
-        with self.nested(f"wait for TCP port {port}"):
+        with nested(ctllog, f"wait for TCP port {port}"):
             retry(port_is_open)
 
     def wait_for_closed_port(self, port: int) -> None:
@@ -609,7 +588,8 @@ class Machine:
             filename = Path(name)
         tmp = Path(f"{filename}.ppm")
 
-        with self.nested(
+        with nested(
+            ctllog,
             f"make screenshot {filename}",
             {"image": filename.name},
         ):
@@ -700,18 +680,18 @@ class Machine:
                     return True
 
             if last:
-                self.log_machinestate(f"Last OCR attempt failed. Text was: {variants}")
+                ctllog.info(f"Last OCR attempt failed. Text was: {variants}")
 
             return False
 
-        with self.nested(f"wait for {regex} to appear on screen"):
+        with nested(ctllog, f"wait for {regex} to appear on screen"):
             retry(screen_matches)
 
     def wait_for_console_text(self, regex: str) -> None:
         """Waits until regex matches this machine's console output.
         Can match multiple lines.
         """
-        self.log_machinestate(f"wait for {regex} to appear on console")
+        ctllog.info(f"wait for {regex} to appear on console")
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
@@ -749,7 +729,7 @@ class Machine:
             status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
             return status == 0
 
-        with self.nested("wait for the X11 server"):
+        with nested(ctllog, "wait for the X11 server"):
             retry(check_x)
 
     def get_window_names(self) -> List[str]:
@@ -776,14 +756,14 @@ class Machine:
             if res:
                 return res
             if last:
-                self.log_machinestate(
+                ctllog.info(
                     f"Last attempt failed to match {regexp} on the window list,"
                     " which currently contains: "
                     ", ".join(names)
                 )
             return False
 
-        with self.nested("Wait for a window to appear"):
+        with nested(ctllog, "Wait for a window to appear"):
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:

@@ -1,13 +1,18 @@
 """The VLan knows how to manage the lifecycle of
 virtual distributed ethernet (VDE) switch for guest machines
 """
-from typing import Optional, Callable
+from typing import Optional
 import os
 import io
 import pty
 import subprocess
 
 from pathlib import Path
+
+import logging
+
+ctllog = logging.getLogger("vlan.CTL")
+# log = logging.getLogger("vlan.LOG")
 
 
 class VLan:
@@ -20,26 +25,21 @@ class VLan:
 
     nr: int
     socket_dir: Path
-    log: Callable
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
     fd: Optional[io.TextIOBase]
 
-    def __init__(self, nr: int, tmp_dir: Path, log: Callable):
+    def __init__(self, nr: int, tmp_dir: Path):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
-        # setattr workaround for mypy type checking, see: https://git.io/JGyNT
-        setattr(
-            self, "log", lambda msg: log(f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
-        )
 
         # TODO: don't side-effect environment here
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
     def start(self) -> None:
 
-        self.log("start")
+        ctllog.info("start")
         pty_master, pty_slave = pty.openpty()
 
         self.process = subprocess.Popen(
@@ -58,16 +58,15 @@ class VLan:
         assert self.process.stdout is not None
         self.process.stdout.readline()
         if not (self.socket_dir / "ctl").exists():
-            raise Exception("cannot start vde_switch")
+            ctllog.error("cannot start vde_switch")
 
-        self.log(f"running (pid {self.pid})")
+        ctllog.info(f"running (pid {self.pid})")
 
     def release(self) -> None:
         if self.pid is None:
             return
-        self.log(f"kill me (pid {self.pid})")
+        ctllog.info(f"kill me (pid {self.pid})")
         if self.fd is not None:
             self.fd.close()
         if self.process is not None:
             self.process.terminate()
-

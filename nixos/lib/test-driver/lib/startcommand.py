@@ -16,6 +16,7 @@ class StartCommand:
     run. Any such start command is expected to hapily receive and
     append additional qemu args.
     """
+
     _cmd: str
 
     def cmd(
@@ -108,5 +109,3 @@ class NixStartScript(StartCommand):
         if match:
             name = match.group(1)
         return name
-
-

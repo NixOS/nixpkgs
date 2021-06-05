@@ -23,12 +23,13 @@ rec {
       testDriverLib = ./test-driver/lib;
       ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
+      name = "nixos-test-driver";
     in
     { qemu_pkg ? pkgs.qemu_test, enableOCR ? false}: stdenv.mkDerivation {
-      name = "nixos-test-driver";
+      inherit name;
 
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ (python3.withPackages (p: [ p.ptpython p.colorama ])) ];
+      buildInputs = [ (python3.withPackages (p: [ p.ptpython p.python-json-logger ])) ];
       checkInputs = with python3Packages; [ pylint black mypy ];
 
       dontUnpack = true;
@@ -41,8 +42,7 @@ rec {
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
           t = importfile("${testDriverScript}")
-          logger = t.Logger()
-          driver = t.Driver(logger, [])
+          driver = t.Driver([], "")
           test_symbols = list(driver.test_symbols().keys())
           fp.write(','.join(test_symbols))
         EOF
@@ -64,9 +64,12 @@ rec {
         ''
           mkdir -p $out/bin
           cp ${testDriverScript} $out/bin/nixos-test-driver
+          # FIX: exec -a does not work for python shebangs
+          substituteInPlace $out/bin/nixos-test-driver --subst-var name
           chmod u+x $out/bin/nixos-test-driver
 
           wrapProgram $out/bin/nixos-test-driver \
+            --argv0  ${name} \
             --prefix PYTHONPATH : ${testDriverLib} \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
             ${lib.optionalString enableOCR
