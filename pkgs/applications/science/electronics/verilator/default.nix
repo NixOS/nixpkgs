@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
       src/vlcovgen
   '';
 
+  # Tools that are built during build phase, but need to be manually linked or
+  # copied to the correct location.
+  postInstall = ''
+    ln -s $out/share/verilator/include $out/include
+    ln -s $out/share/verilator/bin/verilator_includer $out/bin/verilator_includer
+  '';
+
   meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
     homepage    = "https://www.veripool.org/wiki/verilator";
