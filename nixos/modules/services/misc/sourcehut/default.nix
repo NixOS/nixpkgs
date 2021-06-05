@@ -10,6 +10,7 @@ let
   python = pkgs.sourcehut.python.withPackages (ps: with ps; [
     gunicorn
     # Sourcehut services
+    srht
     buildsrht
     dispatchsrht
     gitsrht
@@ -137,7 +138,7 @@ in
         )
         cfg.settings);
 
-    environment.systemPackages = with pkgs.sourcehut.python.pkgs; map toPythonApplication [ srht ];
+    environment.systemPackages = [ pkgs.sourcehut.coresrht ];
 
     # PostgreSQL server
     services.postgresql.enable = mkOverride 999 true;

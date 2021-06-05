@@ -42,16 +42,18 @@ in {
 
   services.sourcehut = {
     <link linkend="opt-services.sourcehut.enable">enable</link> = true;
-    <link linkend="opt-services.sourcehut.originBase">originBase</link> = "${fqdn}";
+    <link linkend="opt-services.sourcehut.originBase">originBase</link> = fqdn;
     <link linkend="opt-services.sourcehut.services">services</link> = [ "meta" "man" "git" ];
     <link linkend="opt-services.sourcehut.settings">settings</link> = {
-        "sr.ht".environment = "production";
-        global-domain = "${fqdn}";
-        origin = "https://${fqdn}";
-        # Produce keys with srht-keygen.
-        network-key = "SECRET";
-        service-key = "SECRET";
-        private-key= "SECRET";
+        "sr.ht" = {
+          environment = "production";
+          global-domain = fqdn;
+          origin = "https://${fqdn}";
+          # Produce keys with srht-keygen from <package>sourcehut.coresrht</package>.
+          network-key = "SECRET";
+          service-key = "SECRET";
+        };
+        webhooks.private-key= "SECRET";
     };
   };
 
