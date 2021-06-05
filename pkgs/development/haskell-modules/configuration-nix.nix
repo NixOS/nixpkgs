@@ -826,4 +826,11 @@ self: super: builtins.intersectAttrs super {
 
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
+
+  # Make tophat find itself for _compiling_ its test suite
+  tophat = overrideCabal super.tophat (drv: {
+    postPatch = ''
+      sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
+    '' + (drv.postPatch or "");
+  });
 }
