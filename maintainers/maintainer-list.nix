@@ -7261,6 +7261,16 @@
     githubId = 10180857;
     name = "Anmol Sethi";
   };
+  nicbk = {
+    email = "nicolas@nicbk.com";
+    github = "nicbk";
+    githubId = 77309427;
+    name = "Nicolás Kennedy";
+    keys = [{
+      longkeyid = "rsa4096/0xC061089EFEBF7A35";
+      fingerprint = "7BC1 77D9 C222 B1DC FB2F  0484 C061 089E FEBF 7A35";
+    }];
+  };
   nichtsfrei = {
     email = "philipp.eder@posteo.net";
     github = "nichtsfrei";
