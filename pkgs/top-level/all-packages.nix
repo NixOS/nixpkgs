@@ -1904,6 +1904,8 @@ in
 
   blur-effect = callPackage ../tools/graphics/blur-effect { };
 
+  bootiso = callPackage ../tools/cd-dvd/bootiso { };
+
   butane = callPackage ../development/tools/butane { };
 
   charles = charles4;
