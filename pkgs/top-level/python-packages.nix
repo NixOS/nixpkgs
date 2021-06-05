@@ -223,6 +223,8 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
+
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   ailment = callPackage ../development/python-modules/ailment { };
