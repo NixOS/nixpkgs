@@ -1311,10 +1311,6 @@ self: super: {
   gi-gdkx11 = self.gi-gdkx11_3_0_11;
   gi-dbusmenugtk3 = self.gi-dbusmenugtk3_0_4_10;
 
-  # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
-  # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
-  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
-
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
