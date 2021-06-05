@@ -25,8 +25,7 @@ buildGoModule rec {
   postInstall = ''
     scdoc < doc/senpai.1.scd > doc/senpai.1
     scdoc < doc/senpai.5.scd > doc/senpai.5
-    installManPage doc/senpai.1
-    installManPage doc/senpai.5
+    installManPage doc/senpai.*
   '';
 
   meta = with lib; {
