@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub
-, llvmPackages, ncurses, cmake, libxml2, symlinkJoin
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
+, symlinkJoin, breakpointHook }:
 
 let
   luajitRev = "9143e86498436892cb4316550be4d45b68a61224";
@@ -9,27 +8,30 @@ let
     url = "https://github.com/LuaJIT/LuaJIT/archive/${luajitRev}.tar.gz";
     sha256 = "0kasmyk40ic4b9dwd4wixm0qk10l88ardrfimwmq36yc5dhnizmy";
   };
-in
-stdenv.mkDerivation rec {
+  llvmMerged = symlinkJoin {
+    name = "llvmClangMerged";
+    paths = with llvmPackages; [
+      llvm.out
+      llvm.dev
+      llvm.lib
+      clang-unwrapped.out
+      clang-unwrapped.dev
+      clang-unwrapped.lib
+    ];
+  };
+in stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.0.0-beta3";
 
   src = fetchFromGitHub {
-    owner  = "terralang";
-    repo   = "terra";
-    rev    = "release-${version}";
+    owner = "terralang";
+    repo = "terra";
+    rev = "release-${version}";
     sha256 = "15ik32xnwyf3g57jvvaz24f6a18lv3a86341rzjbs30kd5045qzd";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    (symlinkJoin {
-      name = "llvmClangMerged";
-      paths = with llvmPackages; [ llvm clang-unwrapped ];
-    })
-    ncurses
-    libxml2
-  ];
+  buildInputs = [ llvmMerged ncurses libxml2 ];
 
   cmakeFlags = [
     "-DHAS_TERRA_VERSION=0"
@@ -47,10 +49,17 @@ stdenv.mkDerivation rec {
     ./get-compiler-from-envvar-fix-cpu-detection.patch
     ./nix-cflags.patch
     ./disable-luajit-file-download.patch
+    ./nix-add-test-paths.patch
   ];
+
+  INCLUDE_PATH = "${llvmMerged}/lib/clang/10.0.1/include";
+
   postPatch = ''
     substituteInPlace src/terralib.lua \
       --subst-var-by NIX_LIBC_INCLUDE ${lib.getDev stdenv.cc.libc}/include
+
+    substituteInPlace src/CMakeLists.txt \
+      --subst-var INCLUDE_PATH
   '';
 
   preConfigure = ''
@@ -69,9 +78,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A low-level counterpart to Lua";
-    homepage    = "http://terralang.org/";
-    platforms   = platforms.x86_64;
+    homepage = "http://terralang.org/";
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ jb55 thoughtpolice ];
-    license     = licenses.mit;
+    license = licenses.mit;
   };
 }
