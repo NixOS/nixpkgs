@@ -24,6 +24,8 @@ common =
   , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
+  , enableDocumentation ? lib.versionOlder version "2.4pre" ||
+                          stdenv.hostPlatform == stdenv.buildPlatform
   , pname, version, suffix ? "", src
   , patches ? [ ]
   }:
@@ -36,16 +38,20 @@ common =
 
       VERSION_SUFFIX = suffix;
 
-      outputs = [ "out" "dev" "man" "doc" ];
+      outputs =
+        [ "out" "dev" ]
+        ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
       nativeBuildInputs =
         [ pkg-config ]
         ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
+        ++ lib.optionals (is24 && enableDocumentation) [
+          (lib.getBin lowdown) mdbook
+        ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
             bison flex
-            (lib.getBin lowdown) mdbook
             jq
            ];
 
@@ -120,6 +126,7 @@ common =
           "--sysconfdir=${confDir}"
           "--enable-gc"
         ]
+        ++ lib.optional (!enableDocumentation) "--disable-doc-gen"
         ++ lib.optionals (!is24) [
           # option was removed in 2.4
           "--disable-init-state"
@@ -162,7 +169,7 @@ common =
         license = lib.licenses.lgpl2Plus;
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" "man" ];
+        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
       };
 
       passthru = {
