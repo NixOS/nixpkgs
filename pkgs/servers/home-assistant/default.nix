@@ -181,7 +181,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.6.1";
+  hassVersion = "2021.6.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -200,7 +200,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1bw0h3r9xaabjmsra4d3bq7gxr83mjdvyz6q0j57mfq2sawda6mf";
+    sha256 = "1bk28404yd7vf00w45n1lyswyd0iadaa8jrikv861zh9bk1xm27y";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
