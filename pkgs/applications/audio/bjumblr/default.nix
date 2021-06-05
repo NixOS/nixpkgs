@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, libX11, cairo, lv2, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
-  pname = "BJumblr";
+  pname = "bjumblr";
   version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BJumblr";
     rev = version;
     sha256 = "1nbxi54023vck3qgmr385cjzinmdnvz62ywb6bcksmc3shl080mg";
   };
