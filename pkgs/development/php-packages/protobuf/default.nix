@@ -1,4 +1,4 @@
-{ buildPecl, lib, pcre', fetchpatch }:
+{ buildPecl, lib, pcre2, fetchpatch }:
 
 buildPecl {
   pname = "protobuf";
@@ -6,7 +6,7 @@ buildPecl {
   version = "3.14.0";
   sha256 = "1ldc4s28hq61cfg8l4c06pgicj0ng7k37f28a0dnnbs7xkr7cibd";
 
-  buildInputs = [ pcre' ];
+  buildInputs = [ pcre2 ];
 
   patches = [
     # TODO: remove with next update

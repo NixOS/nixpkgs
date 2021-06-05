@@ -114,21 +114,24 @@ Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly diff
 
 ### `buildFlagsArray` and `buildFlags`: {#ex-goBuildFlags-noarray}
 
-These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`. The most common use case of these attributes is to make the resulting executable aware of its own version. For example:
+These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`.
 
 ```nix
   buildFlagsArray = [
-    # Note: single quotes are not needed.
-    "-ldflags=-X main.Version=${version} -X main.Commit=${version}"
+    "-tags=release"
   ];
 ```
 
+### `ldflags` {#var-go-ldflags}
+
+Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
+
 ```nix
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=${version}
-    -X main.Commit=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+  ];
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}

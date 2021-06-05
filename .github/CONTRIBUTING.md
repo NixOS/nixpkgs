@@ -59,6 +59,16 @@ Follow these steps to backport a change into a release branch in compliance with
 5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-20.09`) as the target branch of the pull request, and link to the pull request in which the original change was comitted to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[20.09]`.
 6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
 
+## Generating 21.11 Release Notes
+
+Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
+
+Steps for updating 21.11 Release notes:
+
+1. Edit `nixos/doc/manual/release-notes/rl-2111.section.md` with the desired changes
+2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2111.section.xml`
+3. Include changes to `rl-2111.section.md` and `rl-2111.section.xml` in the same commit.
+
 ## Reviewing contributions
 
 See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#chap-reviewing-contributions).

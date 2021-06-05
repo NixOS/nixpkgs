@@ -64,6 +64,16 @@
       fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D";
     }];
   };
+  _0xbe7a = {
+    email = "nix@be7a.de";
+    name = "Bela Stoyan";
+    github = "0xbe7a";
+    githubId = 6232980;
+    keys = [{
+      longkeyid = "rsa4096/0x6510870A77F49A99";
+      fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99";
+    }];
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -3545,6 +3555,12 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
+  frogamic = {
+    email = "frogamic@protonmail.com";
+    github = "frogamic";
+    githubId = 10263813;
+    name = "Dominic Shelton";
+  };
   Frostman = {
     email = "me@slukjanov.name";
     github = "Frostman";
@@ -4344,6 +4360,16 @@
     github = "ingenieroariel";
     githubId = 54999;
     name = "Ariel Nunez";
+  };
+  irenes = {
+    name = "Irene Knapp";
+    email = "ireneista@gmail.com";
+    github = "IreneKnapp";
+    githubId = 157678;
+    keys = [{
+      longkeyid = "rsa4096/0xDBF252AFFB2619FD";
+      fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD";
+    }];
   };
   ironpinguin = {
     email = "michele@catalano.de";
@@ -7079,6 +7105,12 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
+  musfay = {
+    email = "musfay@protonmail.com";
+    github = "musfay";
+    githubId = 33374965;
+    name = "Mustafa Çalışkan";
+  };
   mupdt = {
     email = "nix@pdtpartners.com";
     github = "mupdt";
@@ -7297,9 +7329,9 @@
     githubId = 3159451;
     name = "Nicolas Schneider";
   };
-  nipav = {
+  nkpvk = {
     email = "niko.pavlinek@gmail.com";
-    github = "nipav";
+    github = "nkpvk";
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
@@ -8746,10 +8778,14 @@
     }];
   };
   roosemberth = {
-    email = "roosembert.palacios+nixpkgs@gmail.com";
+    email = "roosembert.palacios+nixpkgs@posteo.ch";
     github = "roosemberth";
     githubId = 3621083;
     name = "Roosembert (Roosemberth) Palacios";
+    keys = [{
+      longkeyid = "rsa2048/0xCAAAECE5C2242BB7";
+      fingerprint = "78D9 1871 D059 663B 6117  7532 CAAA ECE5 C224 2BB7";
+    }];
   };
   rople380 = {
     name = "rople380";

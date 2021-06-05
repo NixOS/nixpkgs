@@ -6,6 +6,8 @@
 , setJavaClassPath
 }:
 
+assert (stdenv.isDarwin && stdenv.isx86_64);
+
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     result = stdenv.mkDerivation {
   name = if sourcePerArch.packageType == "jdk"

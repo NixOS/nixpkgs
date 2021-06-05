@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
 
   checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 

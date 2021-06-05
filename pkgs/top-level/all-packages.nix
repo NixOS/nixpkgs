@@ -786,7 +786,7 @@ in
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; stdenv = gccStdenv; };
+  acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
   amass = callPackage ../tools/networking/amass { };
 
@@ -859,6 +859,8 @@ in
   gobgp = callPackage ../tools/networking/gobgp { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
+
+  pferd = callPackage ../tools/misc/pferd {};
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -1089,7 +1091,7 @@ in
   }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist {};
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php74; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -1403,6 +1405,8 @@ in
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
+
+  deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
@@ -2393,6 +2397,8 @@ in
 
   ioport = callPackage ../os-specific/linux/ioport {};
 
+  dgoss = callPackage ../tools/misc/dgoss { };
+
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
@@ -2843,7 +2849,7 @@ in
 
   kaldi = callPackage ../tools/audio/kaldi { };
 
-  kalk = callPackage ../tools/misc/kalk { };
+  kalker = callPackage ../tools/misc/kalker { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
@@ -5855,6 +5861,8 @@ in
 
   ipget = callPackage ../applications/networking/ipget { };
 
+  i-pi = with python3Packages; toPythonApplication i-pi;
+
   iptsd = callPackage ../applications/misc/iptsd { };
 
   ipmitool = callPackage ../tools/system/ipmitool {};
@@ -6090,6 +6098,8 @@ in
   kibi = callPackage ../applications/editors/kibi { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
+
+  kiterunner = callPackage ../tools/security/kiterunner { };
 
   klick = callPackage ../applications/audio/klick { };
 
@@ -7298,6 +7308,10 @@ in
   nuttcp = callPackage ../tools/networking/nuttcp { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
+
+  nvfancontrol = callPackage ../tools/misc/nvfancontrol {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   nvimpager = callPackage ../tools/misc/nvimpager { };
 
@@ -11417,7 +11431,7 @@ in
   llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
-    # This returns the minimum suported version for the platform. The
+    # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then (if platform.isAarch64 then 11 else 7)
@@ -12278,7 +12292,7 @@ in
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php74;
+  php = php80;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
@@ -12295,13 +12309,6 @@ in
   };
   php74Extensions = recurseIntoAttrs php74.extensions;
   php74Packages = recurseIntoAttrs php74.packages;
-
-  # Import PHP73 interpreter, extensions and packages
-  php73 = callPackage ../development/interpreters/php/7.3.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
-  php73Extensions = recurseIntoAttrs php73.extensions;
-  php73Packages = recurseIntoAttrs php73.packages;
 
 
   picoc = callPackage ../development/interpreters/picoc {};
@@ -18592,6 +18599,8 @@ in
 
   xsimd = callPackage ../development/libraries/xsimd { };
 
+  xtl = callPackage ../development/libraries/xtl { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xxHash = callPackage ../development/libraries/xxHash {};
@@ -18646,7 +18655,7 @@ in
   libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
-    llvmPackages = llvmPackages_11;
+    llvmPackages = llvmPackages_12;
   };
 
   zimlib = callPackage ../development/libraries/zimlib { };
@@ -19056,7 +19065,7 @@ in
 
   dspam = callPackage ../servers/mail/dspam { };
 
-  engelsystem = callPackage ../servers/web-apps/engelsystem { };
+  engelsystem = callPackage ../servers/web-apps/engelsystem { php = php74; };
 
   envoy = callPackage ../servers/http/envoy { };
 
@@ -19793,7 +19802,6 @@ in
     enableDomainController = true;
     enableRegedit = true;
     enableCephFS = !pkgs.stdenv.hostPlatform.isAarch64;
-    enableGlusterFS = true;
   });
 
   sambaFull = samba4Full;
@@ -20616,8 +20624,6 @@ in
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
-    ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18
-
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
       withDriver = true;
@@ -20789,6 +20795,9 @@ in
     zfs = zfsStable;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
+  } // lib.optionalAttrs (config.allowAliases or false) {
+    # aliases or removed packages
+    ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18
   });
 
   # The current default kernel / kernel modules.
@@ -22192,6 +22201,8 @@ in
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
+
+  quintom-cursor-theme = callPackage ../data/icons/quintom-cursor-theme { };
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
@@ -24014,6 +24025,8 @@ in
 
   gmu = callPackage ../applications/audio/gmu { };
 
+  gnaural = callPackage ../applications/audio/gnaural { };
+
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
   gnumeric = callPackage ../applications/office/gnumeric { };
@@ -24881,9 +24894,7 @@ in
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
 
-  lightworks = callPackage ../applications/video/lightworks {
-    portaudio = portaudio2014;
-  };
+  lightworks = callPackage ../applications/video/lightworks { };
 
   lingot = callPackage ../applications/audio/lingot { };
 
@@ -24935,7 +24946,7 @@ in
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { };
+  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php74; };
 
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
@@ -25362,6 +25373,7 @@ in
   mutt-with-sidebar = mutt.override {
     withSidebar = true;
   };
+  mutt-wizard = callPackage ../tools/misc/mutt-wizard { };
 
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
@@ -25374,6 +25386,8 @@ in
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
+
+  natural-docs = callPackage ../applications/misc/natural-docs { };
 
   neocomp  = callPackage ../applications/window-managers/neocomp { };
 
@@ -30901,6 +30915,8 @@ in
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
+
+  qdl = callPackage ../tools/misc/qdl { };
 
   rargs = callPackage ../tools/misc/rargs { };
 

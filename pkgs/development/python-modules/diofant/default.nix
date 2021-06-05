@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestrunner
-, setuptools_scm
+, setuptools-scm
 , isort
 , mpmath
 , strategies
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     isort
     pytestrunner
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

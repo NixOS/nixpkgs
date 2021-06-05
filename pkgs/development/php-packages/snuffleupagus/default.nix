@@ -2,7 +2,7 @@
 , lib
 , php
 , fetchFromGitHub
-, pcre'
+, pcre2
 , fetchpatch
 }:
 
@@ -17,7 +17,7 @@ buildPecl rec {
   };
 
   buildInputs = [
-    pcre'
+    pcre2
   ];
 
   internalDeps = with php.extensions; [

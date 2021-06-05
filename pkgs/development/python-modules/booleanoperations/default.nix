@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , fonttools, fs, pyclipper, defcon, fontpens
-, setuptools_scm, pytest
+, setuptools-scm, pytest
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     fonttools

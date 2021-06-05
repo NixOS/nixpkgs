@@ -1,5 +1,5 @@
 { stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm, pytestCheckHook
+, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , appdirs
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "1cdkrl5vw26iy7s23v2zpr39m6g5xsgxhfhagzzflgfbvdc56s93";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.

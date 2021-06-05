@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest-asyncio
 , pytest-timeout
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [

@@ -1417,6 +1417,8 @@ in {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+  click-option-group = callPackage ../development/python-modules/click-option-group { };
+
   click-plugins = callPackage ../development/python-modules/click-plugins { };
 
   click-spinner = callPackage ../development/python-modules/click-spinner { };
@@ -3407,6 +3409,8 @@ in {
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  i-pi = callPackage ../development/python-modules/i-pi { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -7622,8 +7626,7 @@ in {
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
-  setuptools-scm = self.setuptools_scm; # added 2021-01-04
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+  setuptools-scm = callPackage ../development/python-modules/setuptools-scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 

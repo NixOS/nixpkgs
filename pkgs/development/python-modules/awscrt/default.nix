@@ -11,7 +11,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isAarch64 ([ gcc10 perl ]);
+  nativeBuildInputs = [ cmake ] ++
+    # gcc <10 is not supported, LLVM on darwin is just fine
+    lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [ gcc10 perl ];
 
   dontUseCmakeConfigure = true;
 

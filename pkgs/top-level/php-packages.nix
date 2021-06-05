@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkg-config, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
-, html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
+, html-tidy, libzip, zlib, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
 , freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
 , readline, rsync, fetchpatch, valgrind
@@ -19,8 +19,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     pname = "php-${pname}";
   });
 
-  pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
-
   php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
@@ -28,8 +26,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
-
-    composer1 = callPackage ../development/php-packages/composer/1.x.nix { };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
@@ -92,18 +88,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pcov = callPackage ../development/php-packages/pcov { };
 
-    pcs = buildPecl {
-      version = "1.3.3";
-      pname = "pcs";
-
-      sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
-
-      internalDeps = [ php.extensions.tokenizer ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = lib.versionAtLeast php.version "7.3"; # Runtime failure on 7.3, build error on 7.4
-    };
-
     pdo_oci = buildPecl rec {
       inherit (php.unwrapped) src version;
 
@@ -130,8 +114,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     protobuf = callPackage ../development/php-packages/protobuf { };
 
-    pthreads = callPackage ../development/php-packages/pthreads { };
-
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
     redis = callPackage ../development/php-packages/redis { };
@@ -144,51 +126,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
-    v8 = buildPecl {
-      version = "0.2.2";
-      pname = "v8";
-
-      sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
-
-      buildInputs = [ pkgs.v8 ];
-      configureFlags = [ "--with-v8=${pkgs.v8}" ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = true;
-    };
-
-    v8js = buildPecl {
-      version = "2.1.0";
-      pname = "v8js";
-
-      sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
-
-      buildInputs = [ pkgs.v8 ];
-      configureFlags = [ "--with-v8js=${pkgs.v8}" ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = true;
-    };
-
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
-
-    zmq = buildPecl {
-      version = "1.1.3";
-      pname = "zmq";
-
-      sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
-
-      configureFlags = [
-        "--with-zmq=${pkgs.zeromq}"
-      ];
-
-      nativeBuildInputs = [ pkgs.pkg-config ];
-
-      meta.maintainers = lib.teams.php.members;
-      meta.broken = lib.versionAtLeast php.version "7.3";
-    };
   } // (let
     # Function to build a single php extension based on the php version.
     #
@@ -297,8 +237,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         doCheck = false; }
       { name = "exif"; doCheck = false; }
       { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
-      { name = "fileinfo"; buildInputs = [ pcre' ]; }
-      { name = "filter"; buildInputs = [ pcre' ]; }
+      { name = "fileinfo"; buildInputs = [ pcre2 ]; }
+      { name = "filter"; buildInputs = [ pcre2 ]; }
       { name = "ftp"; buildInputs = [ openssl ]; }
       { name = "gd";
         buildInputs = [ zlib gd ];
@@ -350,11 +290,10 @@ lib.makeScope pkgs.newScope (self: with self; {
         ];
         doCheck = false; }
       { name = "imap";
-        buildInputs = [ uwimap openssl pam pcre' ];
+        buildInputs = [ uwimap openssl pam pcre2 ];
         configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
         # uwimap doesn't build on darwin.
         enable = (!stdenv.isDarwin); }
-      # interbase (7.3, 7.2)
       { name = "intl";
         buildInputs = [ icu64 ];
         patches = lib.optionals (lib.versionOlder php.version "7.4") [
@@ -377,7 +316,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         ];
         doCheck = false; }
       { name = "mbstring"; buildInputs = [ oniguruma ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
-          pcre'
+          pcre2
         ]; doCheck = false; }
       { name = "mysqli";
         internalDeps = [ php.extensions.mysqlnd ];
@@ -425,7 +364,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache";
-        buildInputs = [ pcre' ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
+        buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
         patches = lib.optionals (lib.versionOlder php.version "7.4") [
@@ -480,7 +419,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ];
         doCheck = false; }
       { name = "pgsql";
-        buildInputs = [ pcre' ];
+        buildInputs = [ pcre2 ];
         configureFlags = [ "--with-pgsql=${postgresql}" ];
         doCheck = false; }
       { name = "posix"; doCheck = false; }
@@ -493,11 +432,10 @@ lib.makeScope pkgs.newScope (self: with self; {
         '';
         doCheck = false;
       }
-      # recode (7.3, 7.2)
       { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
       { name = "shmop"; }
       { name = "simplexml";
-        buildInputs = [ libxml2 pcre' ];
+        buildInputs = [ libxml2 pcre2 ];
         configureFlags = [ "--enable-simplexml" ]
           # Required to build on darwin.
           ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
@@ -558,7 +496,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";
-        buildInputs = [ libzip pcre' ];
+        buildInputs = [ libzip pcre2 ];
         configureFlags = [ "--with-zip" ]
           ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
           ++ lib.optionals (lib.versionOlder php.version "7.3") [ "--with-libzip" ];

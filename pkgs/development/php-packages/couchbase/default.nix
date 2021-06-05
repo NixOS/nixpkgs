@@ -14,7 +14,6 @@ buildPecl {
   };
 
   configureFlags = [ "--with-couchbase" ];
-  broken = lib.versionAtLeast php.version "8.0";
 
   buildInputs = [ libcouchbase zlib ];
   internalDeps = lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
@@ -45,5 +44,6 @@ buildPecl {
     '')
   ];
 
+  meta.broken = lib.versionAtLeast php.version "8.0";
   meta.maintainers = lib.teams.php.members;
 }

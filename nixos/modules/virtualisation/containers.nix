@@ -67,7 +67,13 @@ in
 
     storage.settings = mkOption {
       type = toml.type;
-      default = {};
+      default = {
+        storage = {
+          driver = "overlay";
+          graphroot = "/var/lib/containers/storage";
+          runroot = "/run/containers/storage";
+        };
+      };
       description = "storage.conf configuration";
     };
 
