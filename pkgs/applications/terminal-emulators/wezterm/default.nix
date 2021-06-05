@@ -87,9 +87,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = runtimeDeps;
 
   postInstall = ''
-    mkdir -p $terminfo/share/terminfo/w
+    mkdir -p $terminfo/share/terminfo/w $out/nix-support
     tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
-    mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
