@@ -33,8 +33,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Fantomas = fetchNuGet {
     baseName = "Fantomas";
-    version = "1.6.0";
-    sha256 = "1b9rd3i76b5xzv0j62dvfr1ksdwvb59vxw6jhzpi018axjn6757q";
+    version = "4.4.0";
+    sha256 = "cYz0ewJdK9nRlMKmigk3IENfOXvJRhXJfLXshaqgZ6o=";
     outputFiles = [ "lib/*" ];
     dllFiles = [ "Fantomas*.dll" ];
   };
