@@ -3,7 +3,7 @@
 }:
 let
   pname = "josm";
-  version = "17833";
+  version = "17919";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
