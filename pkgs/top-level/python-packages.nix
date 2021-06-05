@@ -2752,6 +2752,8 @@ in {
 
   georss-nrcan-earthquakes-client = callPackage ../development/python-modules/georss-nrcan-earthquakes-client { };
 
+  georss-tfs-incidents-client = callPackage ../development/python-modules/georss-tfs-incidents-client { };
+
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
