@@ -203,7 +203,7 @@ in
       "builds.sr.ht::worker".timeout = mkDefault "3m";
     };
 
-    services.nginx.virtualHosts."logs.sr.ht" =
+    services.nginx.virtualHosts."logs.${cfg.originBase}" =
       if scfg.enableWorker then {
         listen = with builtins; let address = split ":" cfg.settings."builds.sr.ht::worker".name;
         in [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
