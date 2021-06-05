@@ -462,9 +462,9 @@ Preferred source hash type is sha256. There are several ways to get it.
 
     For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
 
-    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn't applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73")). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
+    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: warning
+::: {.warning}
 This method has security problems. Check below for details.
 :::
 
