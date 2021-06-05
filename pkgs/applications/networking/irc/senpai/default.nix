@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "2021-05-27";
+  version = "unstable-2021-05-27";
 
   src = fetchFromSourcehut {
     owner = "~taiite";
