@@ -165,6 +165,7 @@ glepnir/zephyr-nvim@main
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular
+GoldsteinE/compe-latex-symbols
 google/vim-codefmt
 google/vim-jsonnet
 google/vim-maktaba

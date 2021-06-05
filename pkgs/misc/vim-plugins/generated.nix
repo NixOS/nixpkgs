@@ -652,6 +652,18 @@ final: prev:
     meta.homepage = "https://github.com/tami5/compe-conjure/";
   };
 
+  compe-latex-symbols = buildVimPluginFrom2Nix {
+    pname = "compe-latex-symbols";
+    version = "2021-05-14";
+    src = fetchFromGitHub {
+      owner = "GoldsteinE";
+      repo = "compe-latex-symbols";
+      rev = "70f58e53e142e3c59fe0f673dd54ce690ae57367";
+      sha256 = "0p4xss3zyp6002hsa6dx989zhp672mc30b57w5cjhcgbknw0iy1l";
+    };
+    meta.homepage = "https://github.com/GoldsteinE/compe-latex-symbols/";
+  };
+
   compe-tabnine = buildVimPluginFrom2Nix {
     pname = "compe-tabnine";
     version = "2021-05-09";
