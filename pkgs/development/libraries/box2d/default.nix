@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://github.com/erincatto/Box2D/archive/v${version}.tar.gz";
+    url = "https://github.com/erincatto/box2d/archive/v${version}.tar.gz";
     sha256 = "0p03ngsmyz0r5kbpiaq10ns4fxwkjvvawi8k6pfall46b93wizsq";
   };
 
