@@ -126,6 +126,13 @@ in
       # ANDROID_BINDER_DEVICES binder,hwbinder,vndbinder
     ];
 
+    systemd.mounts = optional (!useAnboxModules) {
+      requiredBy = [ "anbox-container-manager.service" ];
+      description = "Anbox Binder File System";
+      what = "binder";
+      where = "/dev/binderfs";
+      type = "binder";
+    };
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
@@ -140,18 +147,6 @@ in
     networking.networkmanager.unmanaged = [
       "anbox0"
     ];
-
-    fileSystems = {
-      # mount -t binder none /dev/binderfs/
-      "/dev/binderfs" = {
-        device = "none";
-        fsType = "binder";
-        # `nofail` is used here since if the user enables anbox on a system
-        # without binderfs enabled in the kernel, we do not want the system to
-        # crash and burn.
-        options = [ "nofail" ];
-      };
-    };
 
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
