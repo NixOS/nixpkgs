@@ -218,6 +218,11 @@ let
       # Kernel TLS
       TLS         = whenAtLeast "4.13" module;
       TLS_DEVICE  = whenAtLeast "4.18" yes;
+
+      # infiniband
+      INFINIBAND = module;
+      INFINIBAND_IPOIB = module;
+      INFINIBAND_IPOIB_CM = yes;
     };
 
     wireless = {
