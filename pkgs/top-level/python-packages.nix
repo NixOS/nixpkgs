@@ -2195,6 +2195,8 @@ in {
 
   elementpath = callPackage ../development/python-modules/elementpath { };
 
+  elevate = callPackage ../development/python-modules/elevate { };
+
   eliot = callPackage ../development/python-modules/eliot { };
 
   elmax = callPackage ../development/python-modules/elmax { };
