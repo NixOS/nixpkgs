@@ -241,6 +241,8 @@ in
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  clifm = callPackage ../applications/misc/clifm { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
