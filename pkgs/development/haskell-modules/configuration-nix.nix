@@ -819,4 +819,8 @@ self: super: builtins.intersectAttrs super {
   # itself causing an infinite recursion at evaluation
   # time
   random = dontCheck super.random;
+
+  # Since this package is primarily used by nixpkgs maintainers and is probably
+  # not used to link against by anyone, we can make it’s closure smaller.
+  cabal2nix-unstable = justStaticExecutables super.cabal2nix-unstable;
 }
