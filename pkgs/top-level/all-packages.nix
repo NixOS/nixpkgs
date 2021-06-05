@@ -8502,6 +8502,8 @@ in
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  senpai = callPackage ../applications/networking/irc/senpai { };
+
   skim = callPackage ../tools/misc/skim { };
 
   seaweedfs = callPackage ../applications/networking/seaweedfs { };
