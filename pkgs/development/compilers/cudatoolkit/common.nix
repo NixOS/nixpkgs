@@ -147,6 +147,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/nix-support
     echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
 
+    # Set the host compiler to be used by nvcc for CMake-based projects:
+    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
     mkdir -p $lib/lib
