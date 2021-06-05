@@ -137,7 +137,7 @@ in
         )
         cfg.settings);
 
-    environment.systemPackages = [ cfg.python ];
+    environment.systemPackages = with pkgs.sourcehut.python.pkgs; map toPythonApplication [ srht ];
 
     # PostgreSQL server
     services.postgresql.enable = mkOverride 999 true;
