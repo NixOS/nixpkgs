@@ -823,4 +823,7 @@ self: super: builtins.intersectAttrs super {
   # Since this package is primarily used by nixpkgs maintainers and is probably
   # not used to link against by anyone, we can make it’s closure smaller.
   cabal2nix-unstable = justStaticExecutables super.cabal2nix-unstable;
+
+  # test suite needs local redis daemon
+  nri-redis = dontCheck super.nri-redis;
 }
