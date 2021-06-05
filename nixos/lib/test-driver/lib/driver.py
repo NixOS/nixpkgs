@@ -21,10 +21,23 @@ from logger import Logger
 
 
 class Driver:
+    """A handle to the driver that sets up the environment
+    and runs the tests"""
+    logger: Logger
+    vm_scripts: List[str]
+    tests: str
+    interactive: bool = False
+    keep_vm_state: bool = False
+    configure_python_repl: Callable = id
+    machine_class: Type[Machine] = Machine
+    vlan_class: Type[VLan] = VLan
+
     def __init__(
         self,
         logger: Logger,
         vm_scripts: List[str],
+        tests: str,
+        interactive: bool = False,
         keep_vm_state: bool = False,
         configure_python_repl: Callable = id,
         machine_class: Type[Machine] = Machine,
@@ -36,6 +49,8 @@ class Driver:
         """
         self.log = logger
         self.configure_python_repl = configure_python_repl
+        self.tests = tests
+        self.interactive = interactive
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
@@ -115,16 +130,14 @@ class Driver:
     def test_script(self) -> None:
         """Run the test script from the environment ('testScript')"""
         with self.log.nested("run the VM test script"):
-            exec(os.environ["testScript"])
+            exec(self.tests, self.test_symbols())
 
     def run_tests(self) -> None:
         """Run all tests from the environment ('test')
         or drop into a python repl for interactive execution
         """
-        tests = os.environ.get("tests")
-        if tests is not None:
-            with self.log.nested("run the VM test script"):
-                exec(tests, self.test_symbols())
+        if not self.interactive:
+            self.test_script()
         else:
             ptpython.repl.embed(
                 self.test_symbols(), {}, configure=self.configure_python_repl
