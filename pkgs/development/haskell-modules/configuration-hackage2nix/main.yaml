@@ -306,6 +306,12 @@ package-maintainers:
     - yarn-lock
     - yarn2nix
     - large-hashable
+    - haskell-ci
+    - diagrams
+    # owothia
+    - irc-client
+    - chatter
+    - envy
   terlar:
     - nix-diff
   turion:
