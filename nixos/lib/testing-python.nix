@@ -21,8 +21,10 @@ rec {
     let
       testDriverScript = ./test-driver/test-driver.py;
       testDriverLib = ./test-driver/lib;
+      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
+      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
     in
-    qemu_pkg: stdenv.mkDerivation {
+    { qemu_pkg ? pkgs.qemu_test, enableOCR ? false}: stdenv.mkDerivation {
       name = "nixos-test-driver";
 
       nativeBuildInputs = [ makeWrapper ];
@@ -63,43 +65,102 @@ rec {
           mkdir -p $out/bin
           cp ${testDriverScript} $out/bin/nixos-test-driver
           chmod u+x $out/bin/nixos-test-driver
-          # TODO: copy user script part into this file (append)
 
           wrapProgram $out/bin/nixos-test-driver \
             --prefix PYTHONPATH : ${testDriverLib} \
             --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+            ${lib.optionalString enableOCR
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
 
           install -m 0644 -vD driver-symbols $out/nix-support/driver-symbols
         '';
     };
 
   # Run an automated test suite in the given virtual network.
-  runTests = {
-    # the script that runs the network
-    driver,
-    # a source position in the format of builtins.unsafeGetAttrPos
-    # for meta.position
-    pos,
-  }:
+  runTests = { driver, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
-
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
-
       buildCommand =
         ''
           mkdir -p $out
-
-          tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
+          ${driver}/bin/nixos-test-driver
         '';
 
       passthru = driver.passthru // {
         inherit driver;
       };
-
-      inherit pos;
+      inherit pos; # for better debugging
     };
 
+
+  # Generate convenience wrappers for running the test driver
+  # has vlans, vms and test script defaulted through env variables
+  # also instantiates test script with nodes, if it's a function (contract)
+  mkDriver = { testScript, testDriverName, qemu_pkg ? pkgs.qemu_test, enableOCR ? false}:
+    let
+      build-vms = import ./build-vms.nix {
+        inherit system pkgs minimal specialArgs;
+        extraConfigurations = extraConfigurations ++ (pkgs.lib.optional (qemu_pkg != pkgs.qemu_test)
+          {
+            virtualisation.qemu.package = qemu_pkg;
+          }
+        ) ++ [(
+          {
+            # Ensure we do not use aliases. Ideally this is only set
+            # when the test framework is used by Nixpkgs NixOS tests.
+            nixpkgs.config.allowAliases = false;
+          }
+        )];
+      };
+
+      # FIXME: get this pkg from the module system
+      testDriver = mkTestDriver { inherit qemu_pkg enableOCR;};
+
+      nodes = build-vms.buildVirtualNetwork (
+        t.nodes or (if t ? machine then { machine = t.machine; } else { })
+      );
+      vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
+      vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
+
+      testScript' =
+        # Call the test script with the computed nodes.
+        if lib.isFunction testScript
+        then testScript { inherit nodes; }
+        else testScript;
+
+    in
+    lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        testScript = testScript';
+        preferLocalBuild = true;
+        testName = name;
+        passthru = passthru // {
+          inherit nodes;
+        };
+      }
+      ''
+        mkdir -p $out/bin
+
+        vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
+
+        echo -n "$testScript" > $out/test-script
+        ${lib.optionalString (!skipLint) ''
+           PYFLAKES_BUILTINS="$(
+            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+            < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
+           )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
+        ''}
+
+         # set defaults through environment
+        # see: ./test-driver/test-driver.py argparse implementation
+        wrapProgram $out/bin/nixos-test-driver \
+           --set startScripts "''${vmStartScripts[*]}" \
+          --set testScript "$out/test-script" \
+          --set vlans '${toString vlans}'
+       ''); # "
 
   makeTest =
     { testScript
@@ -122,100 +183,26 @@ rec {
       # This means $name can at most be 50 bytes long.
       maxTestNameLen = 50;
       testNameLen = builtins.stringLength name;
-
-
-
-      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
-
-      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
-
-      # Generate convenience wrappers for running the test driver
-      # interactively with the specified network, and for starting the
-      # VMs from the command line.
-      mkDriver = qemu_pkg:
-        let
-          build-vms = import ./build-vms.nix {
-            inherit system pkgs minimal specialArgs;
-            extraConfigurations = extraConfigurations ++ (pkgs.lib.optional (qemu_pkg != null)
-              {
-                virtualisation.qemu.package = qemu_pkg;
-              }
-            ) ++ [(
-              {
-                # Ensure we do not use aliases. Ideally this is only set
-                # when the test framework is used by Nixpkgs NixOS tests.
-                nixpkgs.config.allowAliases = false;
-              }
-            )];
-          };
-
-          # FIXME: get this pkg from the module system
-          testDriver = mkTestDriver (if qemu_pkg == null then pkgs.qemu_test else qemu_pkg);
-
-          nodes = build-vms.buildVirtualNetwork (
-            t.nodes or (if t ? machine then { machine = t.machine; } else { })
-          );
-          vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
-          vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
-
-          testScript' =
-            # Call the test script with the computed nodes.
-            if lib.isFunction testScript
-            then testScript { inherit nodes; }
-            else testScript;
-
-          testDriverName = with builtins;
-            if testNameLen > maxTestNameLen then
-              abort
-                ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
-                  "it's currently ${toString testNameLen} characters long.")
-            else
-              "nixos-test-driver-${name}";
-        in
-        lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
-          {
-            nativeBuildInputs = [ makeWrapper ];
-            testScript = testScript';
-            preferLocalBuild = true;
-            testName = name;
-            passthru = passthru // {
-              inherit nodes;
-            };
-          }
-          ''
-            mkdir -p $out/bin
-
-            echo -n "$testScript" > $out/test-script
-            ${lib.optionalString (!skipLint) ''
-              PYFLAKES_BUILTINS="$(
-                echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
-                < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
-              )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
-            ''}
-
-            ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-            vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
-            wrapProgram $out/bin/nixos-test-driver \
-              --add-flags "''${vms[*]}" \
-              ${lib.optionalString enableOCR
-                "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
-              --run "export testScript=\"\$(${coreutils}/bin/cat $out/test-script)\"" \
-              --set VLANS '${toString vlans}'
-            ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-            wrapProgram $out/bin/nixos-run-vms \
-              --add-flags "''${vms[*]}" \
-              ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-              --set tests 'driver.start_all(); driver.join_all();' \
-              --set VLANS '${toString vlans}' \
-              ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-          ''); # "
+      testDriverName = with builtins;
+        if testNameLen > maxTestNameLen then
+          abort
+            ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+              "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${name}";
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
         meta = (drv.meta or { }) // t.meta;
       };
 
-      driver = mkDriver null;
-      driverInteractive = mkDriver pkgs.qemu;
+      driver = mkDriver {
+        inherit testScript testDriverName enableOCR;
+        qemu_pkg = pkgs.qemu_test;
+      };
+      driverInteractive = mkDriver {
+        inherit testScript testDriverName enableOCR;
+        qemu_pkg = pkgs.qemu;
+      };
 
       test = passMeta (runTests { inherit driver pos; });
 
@@ -283,6 +270,8 @@ rec {
         client.succeed("sync") # flush all data before pulling the plug
       '';
 
+      testDriver = mkTestDriver { inherit qemu; };
+
       vmRunCommand = writeText "vm-run" ''
         xchg=vm-state-client/xchg
         ${coreutils}/bin/mkdir $out
@@ -301,7 +290,7 @@ rec {
         unset xchg
 
         export tests='${testScript}'
-        ${mkTestDriver qemu}/bin/nixos-test-driver --keep-vm-state ${vm.config.system.build.vm}/bin/run-*-vm
+        ${testDriver}/bin/nixos-test-driver --keep-vm-state ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
     in

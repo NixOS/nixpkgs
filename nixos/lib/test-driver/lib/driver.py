@@ -1,12 +1,12 @@
-"""The Driver knows how to initialize the test environment
-and start the tests.
+"""The Driver domain knows how to initialize the test environment,
+specifically available symbols machines & vlans, start them up
+and run the tests.
 """
 
 from contextlib import contextmanager
-from typing import Iterator, Callable, List, Dict, Any, Type
+from typing import Iterator, List, Dict, Any, Type
 import atexit
 import os
-import ptpython.repl
 import tempfile
 
 from pathlib import Path
@@ -26,9 +26,7 @@ class Driver:
     logger: Logger
     vm_scripts: List[str]
     tests: str
-    interactive: bool = False
     keep_vm_state: bool = False
-    configure_python_repl: Callable = id
     machine_class: Type[Machine] = Machine
     vlan_class: Type[VLan] = VLan
 
@@ -37,9 +35,7 @@ class Driver:
         logger: Logger,
         vm_scripts: List[str],
         tests: str,
-        interactive: bool = False,
         keep_vm_state: bool = False,
-        configure_python_repl: Callable = id,
         machine_class: Type[Machine] = Machine,
         vlan_class: Type[VLan] = VLan,
     ):
@@ -48,9 +44,7 @@ class Driver:
             - configure_python_repl: a function to configure ptpython.repl
         """
         self.log = logger
-        self.configure_python_repl = configure_python_repl
         self.tests = tests
-        self.interactive = interactive
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
@@ -128,23 +122,15 @@ class Driver:
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
     def test_script(self) -> None:
-        """Run the test script from the environment ('testScript')"""
+        """Run the test script"""
         with self.log.nested("run the VM test script"):
             exec(self.tests, self.test_symbols())
 
     def run_tests(self) -> None:
-        """Run all tests from the environment ('test')
-        or drop into a python repl for interactive execution
+        """Run the test script (for non-interactive test runs)
         """
-        if not self.interactive:
-            self.test_script()
-        else:
-            ptpython.repl.embed(
-                self.test_symbols(), {}, configure=self.configure_python_repl
-            )
-
+        self.test_script()
         # TODO: Collect coverage data
-
         for machine in self.machines:
             if machine.is_up():
                 machine.execute("sync")
