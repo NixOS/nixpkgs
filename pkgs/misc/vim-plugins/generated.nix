@@ -688,6 +688,18 @@ final: prev:
     meta.homepage = "https://github.com/andersevenrud/compe-tmux/";
   };
 
+  compe-zsh = buildVimPluginFrom2Nix {
+    pname = "compe-zsh";
+    version = "2021-04-03";
+    src = fetchFromGitHub {
+      owner = "tamago324";
+      repo = "compe-zsh";
+      rev = "1a46a0ee661242f6a015b2abead34b606bb97171";
+      sha256 = "0m8fmsx4bwmgqgjpwpldckp68hpx6qfschwdg275xsxkzw8pdnbk";
+    };
+    meta.homepage = "https://github.com/tamago324/compe-zsh/";
+  };
+
   completion-buffers = buildVimPluginFrom2Nix {
     pname = "completion-buffers";
     version = "2021-01-17";

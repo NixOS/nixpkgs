@@ -622,6 +622,7 @@ t9md/vim-choosewin
 t9md/vim-smalls
 TaDaa/vimade
 takac/vim-hardtime
+tamago324/compe-zsh
 tami5/compe-conjure
 tami5/lispdocs.nvim
 tami5/sql.nvim
