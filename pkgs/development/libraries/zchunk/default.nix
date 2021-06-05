@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.1.9";
+  version = "1.1.11";
 
   outputs = [ "out" "lib" "dev" ];
 
