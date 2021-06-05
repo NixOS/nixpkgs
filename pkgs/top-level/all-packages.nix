@@ -9782,8 +9782,6 @@ with pkgs;
 
   stremio = qt5.callPackage ../applications/video/stremio { };
 
-  stubby = callPackage ../tools/networking/stubby { };
-
   sunwait = callPackage ../applications/misc/sunwait { };
 
   surface-control = callPackage ../applications/misc/surface-control { };
@@ -16496,7 +16494,8 @@ with pkgs;
 
   getdata = callPackage ../development/libraries/getdata { };
 
-  getdns = callPackage ../development/libraries/getdns { };
+  inherit (callPackages ../development/libraries/getdns { })
+    getdns stubby;
 
   gettext = callPackage ../development/libraries/gettext { };
 
