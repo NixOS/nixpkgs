@@ -1,3 +1,7 @@
+""" The Machine domain knows how to interact with the guest machine.
+It also knows how to start them up via (nixpkgs) start scripts / commands.
+"""
+
 from contextlib import contextmanager
 from queue import Queue
 from typing import Tuple, Any, Callable, Dict, Optional, List, Iterable, Iterator
@@ -17,6 +21,9 @@ import telnetlib
 import time
 
 from pathlib import Path
+
+# for typing
+from startcommand import StartCommand
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -131,101 +138,9 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-class BaseStartCommand:
-    _cmd: str
-
-    def cmd(
-        self,
-        monitor_socket_path: Path,
-        shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
-        tty_path: Optional[Path] = None,  # TODO: currently unused
-    ) -> str:
-        tty_opts = ""
-        if tty_path is not None:
-            tty_opts += (
-                f" -chardev socket,server,nowait,id=console,path={tty_path}"
-                " -device virtconsole,chardev=console"
-            )
-        display_opts = ""
-        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
-        if display_available:
-            display_opts += " -nographic"
-
-        # qemu options
-        qemu_opts = ""
-        qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
-            " -device virtio-serial"
-            " -device virtconsole,chardev=shell"
-            " -serial stdio"
-        )
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
-
-        return (
-            f"{self._cmd}"
-            f" -monitor unix:{monitor_socket_path}"
-            f" -chardev socket,id=shell,path={shell_socket_path}"
-            f"{tty_opts}{display_opts}"
-        )
-
-    @staticmethod
-    def build_environment(
-        state_dir: Path,
-        shared_dir: Path,
-    ) -> os._Environ:
-        env = os.environ
-        env.update(
-            {
-                "TMPDIR": str(state_dir),
-                "SHARED_DIR": str(shared_dir),
-                "USE_TMPDIR": "1",
-            }
-        )
-        return env
-
-    def run(
-        self,
-        state_dir: Path,
-        shared_dir: Path,
-        monitor_socket_path: Path,
-        shell_socket_path: Path,
-    ) -> subprocess.Popen:
-        return subprocess.Popen(
-            self.cmd(monitor_socket_path, shell_socket_path),
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            cwd=state_dir,
-            env=self.build_environment(state_dir, shared_dir),
-        )
-
-
-class NixStartScript(BaseStartCommand):
-    """A start script from nixos/modules/virtualiation/qemu-vm.nix
-
-    Note, that any dynamically appended flags in self.cmd are are passed
-    to the qemu bin by the script's final "${@}"
-    """
-
-    def __init__(self, script: str):
-        self._cmd = script
-
-    @property
-    def machine_name(self) -> str:
-        match = re.search("run-(.+)-vm$", self._cmd)
-        name = "machine"
-        if match:
-            name = match.group(1)
-        return name
-
-
 class Machine:
-    """A handle to the machine with this name"""
+    """A handle to the machine with this name, that also knows how to manage
+    the machine lifecycle with the help of a start script / command."""
 
     name: str
     log_serial: Callable
@@ -237,7 +152,7 @@ class Machine:
     monitor_path: Path
     shell_path: Path
 
-    start_command: BaseStartCommand
+    start_command: StartCommand
     keep_vm_state: bool
     allow_reboot: bool
 
@@ -257,7 +172,7 @@ class Machine:
         log_serial: Callable,
         log_machinestate: Callable,
         tmp_dir: Path,
-        start_command: BaseStartCommand,
+        start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,

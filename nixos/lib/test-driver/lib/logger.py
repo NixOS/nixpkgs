@@ -1,3 +1,7 @@
+"""The Logger domain knows how to present test output to users
+or machines (for automated parsing)
+"""
+
 from contextlib import contextmanager
 from typing import Tuple, Dict, Iterator
 from queue import Queue, Empty
@@ -8,12 +12,9 @@ import os
 import time
 import unicodedata
 
-import common
-
 
 class Logger:
-    def __init__(self) -> None:
-        self.enable_serial_logs = True  # switchable at runtime
+    enable_serial_logs: bool = True  # switchable at runtime
 
     def release(self) -> None:
         pass
@@ -25,10 +26,12 @@ class Logger:
         if self.enable_serial_logs:
             print(Style.DIM + message + Style.RESET_ALL)
 
+    # "default" action when the class instance itself is used as callable
     __call__ = log_machinestate
 
     @contextmanager
     def nested(self, message: str) -> Iterator[None]:
+        # during plain logging, this is a no-op
         self.log_machinestate(message)
         yield
 
@@ -62,14 +65,11 @@ class XmlLogger(Logger):
         self.xml.endElement("line")
 
     def log_machinestate(self, message: str, attributes: Dict[str, str] = {}) -> None:
-        common.eprint(message, attributes)
         self._drain_log_queue()
         self._log_line(message, attributes)
 
     def log_serial(self, message: str, attributes: Dict[str, str] = {}) -> None:
         self._enqueue((message, {"type": "serial"}))
-        if self.enable_serial_logs:
-            common.eprint(Style.DIM + message + Style.RESET_ALL)
 
     def _enqueue(self, message: Tuple[str, Dict[str, str]]) -> None:
         self.queue.put(message)
@@ -85,7 +85,6 @@ class XmlLogger(Logger):
 
     @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
-        common.eprint(message)
 
         self.xml.startElement("nest", attrs={})
         self.xml.startElement("head", attributes)

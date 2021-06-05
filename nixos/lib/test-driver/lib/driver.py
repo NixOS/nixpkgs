@@ -1,75 +1,23 @@
+"""The Driver knows how to initialize the test environment
+and start the tests.
+"""
+
 from contextlib import contextmanager
-from typing import Iterator, Optional, Callable, List, Dict, Any, Type
+from typing import Iterator, Callable, List, Dict, Any, Type
 import atexit
 import os
-import io
 import ptpython.repl
-import pty
-import subprocess
 import tempfile
 
 from pathlib import Path
 from pprint import pprint
 
-from machine import Machine, NixStartScript
+from vlan import VLan
+from startcommand import NixStartScript
+from machine import Machine
 
 # for typing
 from logger import Logger
-
-
-class VLan:
-    nr: int
-    socket_dir: Path
-    log: Callable
-
-    process: Optional[subprocess.Popen]
-    pid: Optional[int]
-    fd: Optional[io.TextIOBase]
-
-    def __init__(self, nr: int, tmp_dir: Path, log: Callable):
-        self.nr = nr
-        self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
-        # setattr workaround for mypy type checking, see: https://git.io/JGyNT
-        setattr(
-            self, "log", lambda msg: log(f"[VLAN NR {self.nr}] {msg}", {"vde": self.nr})
-        )
-
-        # TODO: don't side-effect environment here
-        os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
-
-    def start(self) -> None:
-
-        self.log("start")
-        pty_master, pty_slave = pty.openpty()
-
-        self.process = subprocess.Popen(
-            ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700"],
-            stdin=pty_slave,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=False,
-        )
-        self.pid = self.process.pid
-        self.fd = os.fdopen(pty_master, "w")
-        self.fd.write("version\n")
-
-        # TODO: perl version checks if this can be read from
-        # an if not, dies. we could hang here forever. Fix it.
-        assert self.process.stdout is not None
-        self.process.stdout.readline()
-        if not (self.socket_dir / "ctl").exists():
-            raise Exception("cannot start vde_switch")
-
-        self.log(f"running (pid {self.pid})")
-
-    def release(self) -> None:
-        if self.pid is None:
-            return
-        self.log(f"kill me (pid {self.pid})")
-        if self.fd is not None:
-            self.fd.close()
-        if self.process is not None:
-            self.process.terminate()
 
 
 class Driver:
