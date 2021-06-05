@@ -23,8 +23,7 @@ let
 
   pkg = self: stdenv.mkDerivation (attrs // {
     name = "${name}-${version}";
-    inherit version;
-    inherit src;
+    inherit version src buildInputs;
 
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
@@ -41,7 +40,7 @@ let
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
     '';
 
-    buildInputs = buildInputs ++ [ elixir hex ];
+    nativeBuildInputs = [ elixir hex ];
     propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
     buildPhase = attrs.buildPhase or ''
