@@ -25,7 +25,7 @@ If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.
 
 ## Syntax {#sec-contributing-markup}
 
-As per [RFC 0062](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
+As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
 Additionally, the following syntax extensions are currently used:
 
