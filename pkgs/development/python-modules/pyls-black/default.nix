@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, black, toml, pytest, python-language-server, isPy3k
+, black, toml, pytestCheckHook, python-language-server, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  checkPhase = ''
-    pytest
-  '';
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ black toml python-language-server ];
 
