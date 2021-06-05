@@ -21,13 +21,14 @@ let
   release_version = "12.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
+  rev = ""; # When using a Git commit
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
 
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "llvmorg-${version}";
+    rev = if rev != "" then rev else "llvmorg-${version}";
     sha256 = "07jz8pywc2qqa1srdnqg5p2y4lx3ki1inpigarzgxc3j20r4gb58";
   };
 
