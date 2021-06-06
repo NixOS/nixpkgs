@@ -126,7 +126,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
         name="$(basename "$symlink")"
         rm "$symlink"
-        test -f "$bazelOut/external/@$name.marker" && rm "$bazelOut/external/@$name.marker"
+        test -f "$bazelOut/external/@$name.marker" && rm "$bazelOut/external/@$name.marker" || true
       done
 
       # Patching symlinks to remove build directory reference
