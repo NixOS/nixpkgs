@@ -173,7 +173,7 @@ with super;
       MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
-      pkgs.mysql.client
+      pkgs.mariadb.client
       pkgs.libmysqlclient
     ];
   });
