@@ -68,7 +68,7 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
-    ghc8104 = callPackage ../development/compilers/ghc/8.10.4.nix {
+    ghc8106 = callPackage ../development/compilers/ghc/8.10.6.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
       # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
       bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
@@ -76,6 +76,10 @@ in {
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
@@ -147,9 +151,9 @@ in {
       ghc = bh.compiler.ghc884;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
-    ghc8104 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8104;
-      ghc = bh.compiler.ghc8104;
+    ghc8106 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8106;
+      ghc = bh.compiler.ghc8106;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghc901 = callPackage ../development/haskell-modules {

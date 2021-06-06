@@ -11411,7 +11411,7 @@ with pkgs;
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8104;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8106;
 
   inherit (haskellPackages) ghc;
 
