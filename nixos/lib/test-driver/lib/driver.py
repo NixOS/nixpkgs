@@ -27,46 +27,36 @@ class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
 
-    vm_scripts: List[str]
     tests: str
-    keep_vm_state: bool = False
-    machine_class: Type[Machine] = Machine
-    vlan_class: Type[VLan] = VLan
+    vlans: List[VLan]
+    machines: List[Machine]
 
     def __init__(
         self,
-        vm_scripts: List[str],
+        start_scripts: List[str],
+        vlans: List[int],
         tests: str,
         keep_vm_state: bool = False,
-        machine_class: Type[Machine] = Machine,
-        vlan_class: Type[VLan] = VLan,
     ):
-        """
-        Args:
-            - configure_python_repl: a function to configure ptpython.repl
-        """
         self.tests = tests
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
-        self.vlans = [
-            vlan_class(int(nr), tmp_dir)
-            for nr in list(dict.fromkeys(os.environ.get("VLANS", "").split()))
-        ]
+        self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
 
         self.machines = [
-            machine_class(
+            Machine(
                 start_command=cmd,
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
             )
-            for cmd in cmd(vm_scripts)
+            for cmd in cmd(start_scripts)
         ]
 
         @atexit.register

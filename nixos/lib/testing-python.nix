@@ -16,16 +16,19 @@ rec {
 
   inherit pkgs;
 
-
-  mkTestDriver =
+  # Reifies and kcoorectly wraps the python test driver for
+  # the respective qemu version and with or without ocr support
+  mkTestDriver = {
+      qemu_pkg ? pkgs.qemu_test
+    , enableOCR ? false
+  }:
     let
       testDriverScript = ./test-driver/test-driver.py;
       testDriverLib = ./test-driver/lib;
       ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
       name = "nixos-test-driver";
-    in
-    { qemu_pkg ? pkgs.qemu_test, enableOCR ? false}: stdenv.mkDerivation {
+    in  stdenv.mkDerivation {
       inherit name;
 
       nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +45,7 @@ rec {
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
           t = importfile("${testDriverScript}")
-          driver = t.Driver([], "")
+          driver = t.Driver([], [], "")
           test_symbols = list(driver.test_symbols().keys())
           fp.write(','.join(test_symbols))
         EOF
@@ -132,7 +135,12 @@ rec {
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      nodeHostNames = map (c: c.config.system.name) (lib.attrValues nodes);
+      dynamicSymbols = (
+        map (c: c.config.system.name) (lib.attrValues nodes)
+      ) ++ (
+        map (n: "vlan${n}") vlans
+      );
+
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
         (builtins.attrNames nodes);
@@ -168,12 +176,10 @@ rec {
         vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
-        echo ${lib.concatStringsSep "," nodeHostNames} > $out/nodenames
-
         echo -n "$testScript" > $out/test-script
         ${lib.optionalString (!skipLint) ''
            PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," dynamicSymbols)},
             < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
            )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
@@ -184,8 +190,9 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
-       ''); # "
+       '');
 
+  # Make a full-blown test
   makeTest =
     { testScript
     , enableOCR ? false

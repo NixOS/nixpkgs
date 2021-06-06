@@ -62,7 +62,9 @@ if __name__ == "__main__":
     if not args.keep_vm_state:
         logging.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
-    driver = Driver(args.start_scripts, args.test_script, args.keep_vm_state)
+    driver = Driver(
+        args.start_scripts, args.vlans, args.test_script, args.keep_vm_state
+    )
 
     if not args.interactive():
         tic = time.time()
