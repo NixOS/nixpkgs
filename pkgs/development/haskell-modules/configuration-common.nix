@@ -203,12 +203,11 @@ self: super: {
           sha256 = "0pqmijfkysjixg3gb4kmrqdif7s2saz8qi6k337jf15i0npzln8d";
           revert = true;
         })
-        # fix broken location annotations (necessary for update-nix-fetchgit).
-        # Can be removed on the next hnix release after
-        # https://github.com/haskell-nix/hnix/pull/936 is merged.
+        # allow relude < 1.0 again
         (pkgs.fetchpatch {
-          url = "https://github.com/expipiplus1/hnix/commit/7cd998426ab7d930d288a1d6e266dc4e85cece3d.patch";
-          sha256 = "19ay6vxa90ykgdd0fis2djvki2kpgfsq7z55iyqg965m583vsfr6";
+          url = "https://github.com/haskell-nix/hnix/commit/f4ea5dcb344369916586498ba33c00d0fc605a79.patch";
+          sha256 = "1ajl7d49d658xhalgf3pc5svmbq73dsysy6z434n75vb1357mx86";
+          revert = true;
         })
       ] ++ (drv.patches or []);
       # make sure patches are not broken by cabal file revisions
@@ -704,6 +703,9 @@ self: super: {
 
   # 2021-03-12: All of this libraries have to restrictive upper bounds
   # https://github.com/diagrams/diagrams-core/issues/112
+  # https://github.com/diagrams/diagrams-cairo/issues/77
+  # https://github.com/diagrams/diagrams-rasterific/issues/63
+  # https://github.com/diagrams/diagrams-cairo/issues/77
   active = doJailbreak super.active;
   statestack = doJailbreak super.statestack;
   force-layout = doJailbreak super.force-layout;
@@ -713,13 +715,20 @@ self: super: {
   diagrams-postscript = doJailbreak super.diagrams-postscript;
   diagrams-svg = doJailbreak super.diagrams-svg;
   diagrams-contrib = doJailbreak super.diagrams-contrib;
-  # apply patch from master to add compat with optparse-applicative >= 0.16
+  # Apply patch from master to add compat with optparse-applicative >= 0.16.
+  # We unfortunately can't upgrade to 1.4.4 which includes this patch yet
+  # since it would require monoid-extras 0.6 which breaks other diagrams libs.
   diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
     (pkgs.fetchpatch {
       url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
       sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
       includes = [ "*/CmdLine.hs" ];
     }));
+  diagrams-rasterific = doJailbreak super.diagrams-rasterific;
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
+  # https://github.com/diagrams/diagrams-solve/issues/4
+  diagrams-solve = dontCheck super.diagrams-solve;
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
@@ -736,9 +745,6 @@ self: super: {
 
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
-
-  # https://github.com/diagrams/diagrams-solve/issues/4
-  diagrams-solve = dontCheck super.diagrams-solve;
 
   # test suite does not compile with recent versions of QuickCheck
   integer-logarithms = dontCheck (super.integer-logarithms);
@@ -1305,10 +1311,6 @@ self: super: {
   gi-gdkx11 = self.gi-gdkx11_3_0_11;
   gi-dbusmenugtk3 = self.gi-dbusmenugtk3_0_4_10;
 
-  # 2021-05-17: Needs some manual patching to be compatible with haskell-gi-base 0.25
-  # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
-  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk ./patches/jsaddle-webkit2gtk.patch;
-
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
@@ -1398,22 +1400,6 @@ self: super: {
           pkgs.lib.makeBinPath deps
         }"
       '';
-
-      # These can both be removed upon the release of update-nix-fetchgit-0.2.7
-      patches = [
-        # 2021-05-17 compile with hnix >= 0.13
-        # https://github.com/expipiplus1/update-nix-fetchgit/pull/64
-        (pkgs.fetchpatch {
-          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/bc28c8b26c38093aa950574802012c0cd8447ce8.patch";
-          sha256 = "1dwd1jdsrx3ss6ql1bk2ch7ln74mkq6jy9ms8vi8kmf3gbg8l9fg";
-        })
-        # Fix test failure
-        # https://github.com/expipiplus1/update-nix-fetchgit/pull/60
-        (pkgs.fetchpatch {
-          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/4a43e1ea4e7e1c18de81e3f9fe0b86faa70865f5.patch";
-          sha256 = "1z74c1blgwr4q37m1rhlj7534qbnp3nnxf63m8j2b7iz0ljgm0m9";
-        })
-      ] ++ (drv.patches or []);
     }));
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
@@ -1821,10 +1807,6 @@ self: super: {
     passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
   };
 
-  # Too strict version bounds on base and optparse-applicative
-  # https://github.com/diagrams/diagrams-cairo/issues/77
-  diagrams-cairo = doJailbreak super.diagrams-cairo;
-
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
   ihaskell-display = doJailbreak super.ihaskell-display;
@@ -1943,8 +1925,8 @@ EOT
   # https://github.com/haskell-hvr/missingh/issues/56
   MissingH = doJailbreak super.MissingH;
 
-  # Too strict bound on random
-  # https://github.com/batterseapower/parallel-io/issues/14
+  # Too strict bound on containers
+  # https://github.com/batterseapower/parallel-io/issues/14#issuecomment-853441933
   parallel-io = doJailbreak super.parallel-io;
 
   # Disable flaky tests
@@ -1967,30 +1949,8 @@ EOT
     testTarget = "libarchive-test --test-options='-j1'";
   };
 
-  # 2021-05-23: Override for a quite recent Hackage release.
-  taffybar =
-    if pkgs.lib.versionAtLeast super.taffybar.version "3.2.5"
-    then throw "Drop src override for taffybar >= 3.2.5"
-    else overrideCabal super.taffybar (drv: {
-      src = pkgs.fetchFromGitHub {
-        owner = "taffybar";
-        repo = "taffybar";
-        rev = "91c83e01e131d560e704b12f0d798905e4289a3d";
-        sha256 = "1kkpkjdyd1yv8z1qlzr3jrzyk9lxac5m4f9py8igyars2nwnhhzr";
-      };
-      version = "3.2.5";
-      editedCabalFile = null;
-    });
-
-  # 2021-05-25: Fixes darwin build: https://gitlab.com/lysxia/ap-normalize/-/issues/1
-  ap-normalize =
-    assert pkgs.lib.versionOlder super.ap-normalize.version "0.1.0.1";
-    overrideSrc super.ap-normalize rec {
-      version = "0.1.0.1";
-      src = pkgs.fetchurl {
-        url = "https://hackage.haskell.org/package/ap-normalize-${version}/ap-normalize-${version}.tar.gz";
-        sha256 = "1212zxc4qn6msk0w13yhrza2qjs79h78misllb4chng75jqi61l2";
-      };
-    };
+  # unrestrict bounds for hashable and semigroups
+  # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
+  reactive-banana = doJailbreak super.reactive-banana;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

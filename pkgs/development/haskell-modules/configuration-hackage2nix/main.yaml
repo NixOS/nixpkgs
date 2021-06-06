@@ -84,12 +84,15 @@ default-package-overrides:
   # We can keep this pin at most until base 4.15
   - monoid-extras < 0.6
   - diagrams-core < 1.5.0
+  - diagrams-lib < 1.4.4
   # 2021-05-11: Pin for hls 1.1.0
   - ghcide == 1.2.*
   - hls-plugin-api == 1.1.0.0
   - hls-explicit-imports-plugin < 1.0.0.2
   # 2021-05-12: remove once versions >= 5.0.0 is in stackage
   - futhark < 0.19.5
+  # 2021-06-05: remove once pandoc 2.14 is in stackage
+  - pandoc-crossref < 0.3.11.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -126,6 +129,7 @@ package-maintainers:
   berberman:
     - nvfetcher
     - arch-web
+    - uusi
   bdesham:
     - pinboard-notes-backup
   cdepillabout:
@@ -302,6 +306,12 @@ package-maintainers:
     - yarn-lock
     - yarn2nix
     - large-hashable
+    - haskell-ci
+    - diagrams
+    # owothia
+    - irc-client
+    - chatter
+    - envy
   terlar:
     - nix-diff
   turion:
@@ -395,6 +405,7 @@ unsupported-platforms:
   PortMidi:                                     [ x86_64-darwin ]
   posix-api:                                    [ x86_64-darwin ]
   Raincat:                                      [ x86_64-darwin ]
+  reactive-balsa:                               [ x86_64-darwin ] # depends on alsa-core
   reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   reflex-dom-fragment-shader-canvas:            [ x86_64-darwin, aarch64-linux ]
   reflex-dom:                                   [ x86_64-darwin, aarch64-linux ]
