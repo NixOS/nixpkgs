@@ -405,6 +405,7 @@ unsupported-platforms:
   PortMidi:                                     [ x86_64-darwin ]
   posix-api:                                    [ x86_64-darwin ]
   Raincat:                                      [ x86_64-darwin ]
+  reactive-balsa:                               [ x86_64-darwin ] # depends on alsa-core
   reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   reflex-dom-fragment-shader-canvas:            [ x86_64-darwin, aarch64-linux ]
   reflex-dom:                                   [ x86_64-darwin, aarch64-linux ]
