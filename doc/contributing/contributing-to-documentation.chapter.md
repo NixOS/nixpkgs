@@ -47,6 +47,11 @@ Additionally, the following syntax extensions are currently used:
   - []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
   ```
 
+- []{#ssec-contributing-markup-automatic-links}
+  If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example, `[](#chap-contributing)` will result in [](#chap-contributing).
+
+  This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
+
 - []{#ssec-contributing-markup-admonitions}
   **Admonitions**, set off from the text to bring attention to something.
 

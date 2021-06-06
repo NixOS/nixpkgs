@@ -65,7 +65,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
 ::: {.note}
-This is a rather philosophical description that isn't very Nixpkgs-specific. For an overview of all the relevant attributes given to `mkDerivation`, see <xref linkend="ssec-stdenv-dependencies"/>. For a description of how everything is implemented, see <xref linkend="ssec-cross-dependency-implementation"/>.
+This is a rather philosophical description that isn't very Nixpkgs-specific. For an overview of all the relevant attributes given to `mkDerivation`, see [](#ssec-stdenv-dependencies). For a description of how everything is implemented, see [](#ssec-cross-dependency-implementation).
 :::
 
 In this section we explore the relationship between both runtime and build-time dependencies and the 3 Autoconf platforms.
@@ -158,7 +158,7 @@ One would think that `localSystem` and `crossSystem` overlap horribly with the t
 
 ### Implementation of dependencies {#ssec-cross-dependency-implementation}
 
-The categories of dependencies developed in <xref linkend="ssec-cross-dependency-categorization"/> are specified as lists of derivations given to `mkDerivation`, as documented in <xref linkend="ssec-stdenv-dependencies"/>. In short, each list of dependencies for "host → target" of "foo → bar" is called `depsFooBar`, with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `depsFooBar` is automatically taken from `pkgsFooBar`. (These `pkgsFooBar`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
+The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for "host → target" of "foo → bar" is called `depsFooBar`, with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `depsFooBar` is automatically taken from `pkgsFooBar`. (These `pkgsFooBar`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
 
 Now, for most of Nixpkgs's history, there were no `pkgsFooBar` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them for libraries to show that the host platform is irrelevant.
 

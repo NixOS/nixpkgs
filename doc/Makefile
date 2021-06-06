@@ -7,6 +7,7 @@ pandoc_media_dir = media
 pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracketed_spans+definition_lists+pipe_tables+raw_attribute
 pandoc_flags = --extract-media=$(pandoc_media_dir) \
 	--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
+	--lua-filter=labelless-link-is-xref.lua \
 	-f commonmark$(pandoc_commonmark_enabled_extensions)+smart
 
 .PHONY: all
