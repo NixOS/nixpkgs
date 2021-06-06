@@ -66,9 +66,7 @@ in {
     };
 
   in (mkMerge [{
-
-    environment.systemPackages = [ cfg.package pkgs.ipsecTools ];
-
+    environment.systemPackages = [ cfg.package ];
     boot.kernelModules = [ "tun" "openvswitch" ];
 
     boot.extraModulePackages = [ cfg.package ];
@@ -146,6 +144,8 @@ in {
 
   }
   (mkIf (cfg.ipsec && (versionOlder cfg.package.version "2.6.0")) {
+    environment.systemPackages = [ pkgs.ipsecTools ];
+
     services.racoon.enable = true;
     services.racoon.configPath = "${runDir}/ipsec/etc/racoon/racoon.conf";
 

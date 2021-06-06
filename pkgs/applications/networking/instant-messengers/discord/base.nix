@@ -3,7 +3,7 @@
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb
+, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
 , mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
 }:
 
@@ -23,6 +23,7 @@ in stdenv.mkDerivation rec {
     libXScrnSaver
     libXtst
     libxcb
+    libxshmfence
     mesa
     nss
     wrapGAppsHook

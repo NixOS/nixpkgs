@@ -40,8 +40,7 @@ in {
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
-          The interfaces <command>wpa_supplicant</command> will use. If empty, it will
-          automatically use all wireless interfaces.
+          The interfaces <command>wpa_supplicant</command> will use.
         '';
       };
 
@@ -220,7 +219,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = flip mapAttrsToList cfg.networks (name: cfg: {
+    assertions = [
+      { assertion = cfg.interfaces != [];
+        message = ''
+          No network interfaces for wpa_supplicant have been configured.
+          Please, specify at least one using networking.wireless.interfaces.
+        '';
+      }
+    ] ++ flip mapAttrsToList cfg.networks (name: cfg: {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
@@ -255,20 +261,7 @@ in {
         then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
         fi
         iface_args="-s -u -D${cfg.driver} ${configStr}"
-        ${if ifaces == [] then ''
-          for i in $(cd /sys/class/net && echo *); do
-            DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
-            if [ -e "$UEVENT_PATH" ]; then
-              source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
-              fi
-            fi
-          done
-        '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
+        args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         exec wpa_supplicant $args
       '';
     };

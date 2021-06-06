@@ -1,5 +1,7 @@
 { lib
 , fetchFromGitLab
+, makeDesktopItem
+, copyDesktopItems
 , rustPlatform
 , pkg-config
 , clang
@@ -23,10 +25,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-uNTSU06Fz/ud04K40e98rb7o/uAht0DsiJOXeHX72vw=";
 
-  nativeBuildInputs = [ clang pkg-config ];
+  nativeBuildInputs = [ clang copyDesktopItems pkg-config ];
   buildInputs = [ glib gtk4 pipewire ];
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
+
+  desktopItems = makeDesktopItem {
+    name = "Helvum";
+    exec = pname;
+    desktopName = "Helvum";
+    genericName = "Helvum";
+    categories = "AudioVideo;";
+  };
 
   meta = with lib; {
     description = "A GTK patchbay for pipewire";

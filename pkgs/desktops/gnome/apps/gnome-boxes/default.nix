@@ -49,15 +49,16 @@
 , webkitgtk
 , vte
 , glib-networking
+, qemu-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "40.1";
+  version = "40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "seKPLH+3a/T7uGLQ1S6BG5TL6f8W8GdAiWRWhpCILvg=";
+    sha256 = "hzN1mi2GpWNnWWpTSQRjO4HKqlxFpWNtsulZDHFK6Nk=";
   };
 
   doCheck = true;
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
   '';
 
   postPatch = ''
