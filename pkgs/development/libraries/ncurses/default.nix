@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
