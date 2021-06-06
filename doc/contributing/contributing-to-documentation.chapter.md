@@ -7,7 +7,7 @@ You can quickly check your edits with `make`:
 ```ShellSession
 $ cd /path/to/nixpkgs/doc
 $ nix-shell
-[nix-shell]$ make $makeFlags
+[nix-shell]$ make
 ```
 
 If you experience problems, run `make debug` to help understand the docbook errors.

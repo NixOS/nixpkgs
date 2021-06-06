@@ -300,6 +300,12 @@
     githubId = 335271;
     name = "James Alexander Feldman-Crough";
   };
+  afontain = {
+    email = "antoine.fontaine@epfl.ch";
+    github = "necessarily-equal";
+    githubId = 59283660;
+    name = "Antoine Fontaine";
+  };
   aforemny = {
     email = "aforemny@posteo.de";
     github = "aforemny";
@@ -8425,6 +8431,12 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  ratsclub = {
+    email = "victor@freire.dev.br";
+    github = "ratsclub";
+    githubId = 25647735;
+    name = "Victor Freire";
+  };
   ravloony = {
     email = "ravloony@gmail.com";
     name = "Tom Macdonald";
@@ -8636,6 +8648,12 @@
     github = "rixed";
     githubId = 449990;
     name = "Cedric Cellier";
+  };
+  rkitover = {
+    email = "rkitover@gmail.com";
+    github = "rkitover";
+    githubId = 77611;
+    name = "Rafael Kitover";
   };
   rkoe = {
     email = "rk@simple-is-better.org";

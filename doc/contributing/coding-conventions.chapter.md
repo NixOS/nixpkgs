@@ -183,9 +183,6 @@
 
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
-- The top-level `lib` must be used in the master and 21.05 branch over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled which is the case for ofborg.
-  `lib` is unrelated to `stdenv`, and so `stdenv.lib` should only be used as a convenience alias when developing locally to avoid having to modify the function inputs just to test something out.
-
 ## Package naming {#sec-package-naming}
 
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.

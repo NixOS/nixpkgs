@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, maven, jdk8_headless }:
 
 let
-  version = "1.2021.6";
+  version = "1.2021.7";
 
   src = fetchFromGitHub {
     owner = "plantuml";
     repo = "plantuml-server";
     rev = "v${version}";
-    sha256 = "sha256:1v69vabdq9pv75wzb6n5s198iy5ijfcx6lgjqwxz7n5ns3blf6sz";
+    sha256 = "sha256-kY7b3ocm1zudGIf72MNMZDUG2t2FFqucRr3kRaFv7mo=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central
@@ -28,7 +28,7 @@ let
     installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256:1fvir7yvg4a4dc4kiv2d5q081cygj7s2lmxj90j8zzkggyq7v8zh";
+    outputHash = "sha256-HzT5rBycrd48KskWKAGtkMKdCDQ8NPYADVWZh8K0ll4=";
   };
 in
 
