@@ -8357,6 +8357,18 @@ final: prev:
     meta.homepage = "https://github.com/mhinz/vim-signify/";
   };
 
+  vim-simpledb = buildVimPluginFrom2Nix {
+    pname = "vim-simpledb";
+    version = "2020-10-02";
+    src = fetchFromGitHub {
+      owner = "ivalkeen";
+      repo = "vim-simpledb";
+      rev = "1e9e72160dd01c837b5afb4f75cbb587a15b31b5";
+      sha256 = "1y0i876p2pxx7gbr04acnv94cjrincsbg03bqxr89xbqlbggxf0w";
+    };
+    meta.homepage = "https://github.com/ivalkeen/vim-simpledb/";
+  };
+
   vim-slash = buildVimPluginFrom2Nix {
     pname = "vim-slash";
     version = "2019-08-28";
