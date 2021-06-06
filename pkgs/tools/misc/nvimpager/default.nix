@@ -1,31 +1,32 @@
 { fetchFromGitHub
 , lib, stdenv
 , ncurses, neovim, procps
-, pandoc, lua51Packages, util-linux
+, scdoc, lua51Packages, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xy5387szfw0bp8dr7d4z33wd4xva7q219rvz8gc0vvv1vsy73va";
+    sha256 = "sha256-okYnPwuxU/syxcKIMUBc25r791D6Bug2w2axH4vvmAY=";
   };
 
   buildInputs = [
     ncurses # for tput
     procps # for nvim_get_proc() which uses ps(1)
   ];
-  nativeBuildInputs = [ pandoc ];
+  nativeBuildInputs = [ scdoc ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "nvimpager.configured" ];
+  buildFlags = [ "nvimpager.configured" "nvimpager.1" ];
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
+    substituteInPlace makefile --replace '$(shell git log -1 --no-show-signature --pretty="%ct")' 1623019602
     '';
 
   doCheck = true;
