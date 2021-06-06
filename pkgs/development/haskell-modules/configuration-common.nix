@@ -1953,8 +1953,4 @@ EOT
   # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
   reactive-banana = doJailbreak super.reactive-banana;
 
-  # Example executable doesn't compile
-  # https://github.com/aquarial/discord-haskell/issues/69
-  discord-haskell = setBuildTarget super.discord-haskell "lib:discord-haskell";
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
