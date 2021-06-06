@@ -155,7 +155,6 @@ with lib.maintainers; {
   matrix = {
     members = [
       ma27
-      pacien
       fadenb
       mguentner
       ekleog
