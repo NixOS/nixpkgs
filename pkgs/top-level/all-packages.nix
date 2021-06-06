@@ -24160,7 +24160,7 @@ in
   gv = callPackage ../applications/misc/gv { };
 
   gvisor = callPackage ../applications/virtualization/gvisor {
-    go = go_1_14;
+    go = go_1_16;
   };
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
