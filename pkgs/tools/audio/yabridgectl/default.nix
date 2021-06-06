@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = yabridge.src;
   sourceRoot = "source/tools/yabridgectl";
-  cargoHash = "sha256-cB4Xp8pNLQRcPQ6HtVkDkLbfNSmM9yl+oRcEzcqrmkY=";
+  cargoHash = "sha256-GY868xz+3uBeLy7tlludmbd8dJAot2/ewe5gToRtJnw=";
 
   patches = [
     # By default, yabridgectl locates libyabridge.so by using
@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
+    platforms = yabridge.meta.platforms;
   };
 }
