@@ -21,7 +21,7 @@ writeScript "update-${attrPath}" ''
   set -eux
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
-  gpg --import ${../firefox-bin/mozilla.asc}
+  gpg --receive-keys 61B7B526D98F0353
 
   url=${baseUrl}
 
