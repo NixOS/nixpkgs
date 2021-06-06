@@ -35,7 +35,7 @@ args@{
 # required for the build as configured, rather than fetching all the dependencies
 # which may not work in some situations (e.g. Java code which ends up relying on
 # Debian-specific /usr/share/java paths, but doesn't in the configured build).
-, fetchConfigured ? false
+, fetchConfigured ? true
 
 # Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
 # NIX_LDFLAGS. This is necessary when using a custom toolchain which

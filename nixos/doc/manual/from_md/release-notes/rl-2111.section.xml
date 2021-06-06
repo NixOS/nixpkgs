@@ -56,6 +56,13 @@
           this version for the entire lifecycle of the 21.11 release.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Those making use of <literal>buildBazelPackage</literal> will
+          need to regenerate the fetch hashes (preferred), or set
+          <literal>fetchConfigured = false;</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="other-notable-changes">
