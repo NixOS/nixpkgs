@@ -28,5 +28,11 @@
     "url": "https://bin.equinox.io/a/fcZQXtHSDgM/ngrok-2.3.40-darwin-amd64",
     "sha256": "80c8fb121d6c93350d84351d9516674f4e20a3e003cdd7dcb4c3e7c48b9c5b07",
     "version": "2.3.40"
+  },
+  "darwin-arm64": {
+    "sys": "darwin-arm64",
+    "url": "https://bin.equinox.io/a/3TEKdZeyAnt/ngrok-2.3.40-darwin-arm64",
+    "sha256": "c9e6dfec454f9faec92a13dfd3f3857de982007e3b85987bb875aa0d74ca8101",
+    "version": "2.3.40"
   }
 }
