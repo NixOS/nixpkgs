@@ -46,7 +46,7 @@ let
   # list of all compilers to test specific packages on
   all = with compilerNames; [
     ghc884
-    ghc8104
+    ghc8105
     ghc901
   ];
 
@@ -206,11 +206,11 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = all;
-      Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
+      Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8105 ];
       funcmp = all;
       # Doesn't currently work on ghc-9.0:
       # https://github.com/haskell/haskell-language-server/issues/297
-      haskell-language-server = with compilerNames; [ ghc884 ghc8104 ];
+      haskell-language-server = with compilerNames; [ ghc884 ghc8105 ];
       hoogle = all;
       hsdns = all;
       jailbreak-cabal = all;
