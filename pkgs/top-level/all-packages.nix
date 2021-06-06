@@ -25657,8 +25657,6 @@ in
 
   navipowm = callPackage ../applications/misc/navipowm { };
 
-  navit = libsForQt5.callPackage ../applications/misc/navit { };
-
   netbeans = callPackage ../applications/editors/netbeans {
     jdk = jdk11;
   };
