@@ -626,6 +626,7 @@ dont-distribute-packages:
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
+ - diagrams-pandoc
  - diagrams-pgf
  - diagrams-reflex
  - diagrams-wx
@@ -1083,6 +1084,7 @@ dont-distribute-packages:
  - hails-bin
  - hakyll-elm
  - hakyll-ogmarkup
+ - hakyll-typescript
  - halberd
  - hall-symbols
  - halma-gui
@@ -2317,6 +2319,7 @@ dont-distribute-packages:
  - push-notify-apn
  - push-notify-ccs
  - push-notify-general
+ - puzzle-draw-cmdline
  - pvd
  - qd-vec
  - qhs
