@@ -231,7 +231,7 @@ stdenv.mkDerivation rec {
     if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
       makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
                   $out/bin/qemu-kvm \
-                  --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
+                  --add-flags "\$([ -r /dev/kvm -a -w /dev/kvm ] && echo -enable-kvm)"
     fi
   '';
 
