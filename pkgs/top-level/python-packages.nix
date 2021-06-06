@@ -2918,6 +2918,8 @@ in {
 
   google-cloud-bigquery-datatransfer = callPackage ../development/python-modules/google-cloud-bigquery-datatransfer { };
 
+  google-cloud-bigquery-logging = callPackage ../development/python-modules/google-cloud-bigquery-logging { };
+
   google-cloud-bigtable = callPackage ../development/python-modules/google-cloud-bigtable { };
 
   google-cloud-container = callPackage ../development/python-modules/google-cloud-container { };
