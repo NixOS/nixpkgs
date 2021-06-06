@@ -3,20 +3,25 @@
   elisp-ffi = melpaBuild rec {
     pname = "elisp-ffi";
     version = "1.0.0";
+
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
       rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
+
     buildInputs = [ pkgs.libffi ];
+
     preBuild = "make";
+
     recipe = pkgs.writeText "recipe" ''
       (elisp-ffi
       :repo "skeeto/elisp-ffi"
       :fetcher github
       :files ("ffi-glue" "ffi.el"))
     '';
+
     meta = {
       description = "Emacs Lisp Foreign Function Interface";
       longDescription = ''
@@ -65,27 +70,22 @@
     };
   };
 
-  apheleia = callPackage ./apheleia {};
-
-  emacspeak = callPackage ./emacspeak {};
-
-  ess-R-object-popup =
-    callPackage ./ess-R-object-popup { };
-
-  evil-markdown = callPackage ./evil-markdown { };
-
-  font-lock-plus = callPackage ./font-lock-plus { };
-
   ghc-mod = melpaBuild {
     pname = "ghc";
     version = pkgs.haskellPackages.ghc-mod.version;
+
     src = pkgs.haskellPackages.ghc-mod.src;
+
     packageRequires = [ haskell-mode ];
+
     propagatedUserEnvPkgs = [ pkgs.haskellPackages.ghc-mod ];
+
     recipe = pkgs.writeText "recipe" ''
       (ghc-mod :repo "DanielG/ghc-mod" :fetcher github :files ("elisp/*.el"))
     '';
+
     fileSpecs = [ "elisp/*.el" ];
+
     meta = {
       description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
       license = bsd3;
@@ -97,31 +97,27 @@
   haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
+
     src = pkgs.fetchFromGitHub {
       owner = "roelvandijk";
       repo = "emacs-haskell-unicode-input-method";
       rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
       sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
     };
+
     recipe = pkgs.writeText "recipe" ''
       (emacs-haskell-unicode-input-method
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
+
     packageRequires = [];
+
     meta = {
       homepage = "https://melpa.org/#haskell-unicode-input-method/";
       license = lib.licenses.free;
     };
   };
-
-  helm-words = callPackage ./helm-words { };
-
-  isearch-plus = callPackage ./isearch-plus { };
-
-  isearch-prop = callPackage ./isearch-prop { };
-
-  jam-mode = callPackage ./jam-mode { };
 
   llvm-mode = trivialBuild {
     pname = "llvm-mode";
@@ -150,6 +146,7 @@
     };
 
     patches = [
+      # Fix: avatar loading when imagemagick support is not available
       (pkgs.fetchpatch {
         url = "https://github.com/alphapapa/matrix-client.el/commit/5f49e615c7cf2872f48882d3ee5c4a2bff117d07.patch";
         sha256 = "07bvid7s1nv1377p5n61q46yww3m1w6bw4vnd4iyayw3fby1lxbm";
@@ -187,11 +184,6 @@
 
   };
 
-  mu4e-patch = callPackage ./mu4e-patch { };
-
-  org-mac-link =
-    callPackage ./org-mac-link { };
-
   ott-mode = self.trivialBuild {
     pname = "ott-mod";
 
@@ -205,10 +197,23 @@
     };
   };
 
-  perl-completion =
-    callPackage ./perl-completion { };
+  # Packages made the classical callPackage way
+
+  emacspeak = callPackage ./emacspeak { };
+
+  ess-R-object-popup = callPackage ./ess-R-object-popup { };
+
+  font-lock-plus = callPackage ./font-lock-plus { };
+
+  helm-words = callPackage ./helm-words { };
+
+  jam-mode = callPackage ./jam-mode { };
+
   nano-theme = callPackage ./nano-theme { };
 
+  org-mac-link = callPackage ./org-mac-link { };
+
+  perl-completion = callPackage ./perl-completion { };
 
   pod-mode = callPackage ./pod-mode { };
 
@@ -247,34 +252,34 @@
   # closer to the old outdated package infra.
   #
   # Ideally this should be dropped some time during/after 20.03
+
+  autoComplete = self.melpaStablePackages.auto-complete;
   bbdb3 = self.melpaStablePackages.bbdb;
-  jade = self.jade-mode;
-  # scalaMode2 = null;  # No clear mapping as of now
-  flymakeCursor = self.melpaStablePackages.flymake-cursor;
+  colorTheme = self.color-theme;
   cryptol = self.melpaStablePackages.cryptol-mode;
+  d = self.melpaStablePackages.d-mode;
+  emacsw3m = self.w3m;
+  erlangMode = self.melpaStablePackages.erlang;
+  flymakeCursor = self.melpaStablePackages.flymake-cursor;
+  graphvizDot = self.melpaStablePackages.graphviz-dot-mode;
+  haskellMode = self.melpaStablePackages.haskell-mode;
+  hsc3Mode = self.hsc3-mode;
+  idris = self.melpaStablePackages.idris-mode;
+  jade = self.jade-mode;
+  js2 = self.melpaStablePackages.js2-mode;
+  loremIpsum = self.lorem-ipsum;
+  markdownMode = self.melpaStablePackages.markdown-mode;
   maudeMode = self.maude-mode;
   phpMode = self.melpaStablePackages.php-mode;
-  idris = self.melpaStablePackages.idris-mode;
-  rainbowDelimiters = self.melpaStablePackages.rainbow-delimiters;
-  colorTheme = self.color-theme;
-  sbtMode = self.melpaStablePackages.sbt-mode;
-  markdownMode = self.melpaStablePackages.markdown-mode;
-  scalaMode1 = self.melpaStablePackages.scala-mode;
   prologMode = self.prolog-mode;
-  hsc3Mode = self.hsc3-mode;
-  graphvizDot = self.melpaStablePackages.graphviz-dot-mode;
-  proofgeneral_HEAD = self.proof-general;
   proofgeneral = self.melpaStablePackages.proof-general;
-  haskellMode = self.melpaStablePackages.haskell-mode;
-  writeGood = self.melpaStablePackages.writegood-mode;
-  erlangMode = self.melpaStablePackages.erlang;
-  d = self.melpaStablePackages.d-mode;
-  autoComplete = self.melpaStablePackages.auto-complete;
-  tuaregMode = self.melpaStablePackages.tuareg;
+  proofgeneral_HEAD = self.proof-general;
+  rainbowDelimiters = self.melpaStablePackages.rainbow-delimiters;
+  sbtMode = self.melpaStablePackages.sbt-mode;
+  scalaMode1 = self.melpaStablePackages.scala-mode;
+  # scalaMode2 = null;  # No clear mapping as of now
   structuredHaskellMode = self.melpaStablePackages.shm;
+  tuaregMode = self.melpaStablePackages.tuareg;
+  writeGood = self.melpaStablePackages.writegood-mode;
   xmlRpc = self.melpaStablePackages.xml-rpc;
-  emacsw3m = self.w3m;
-  loremIpsum = self.lorem-ipsum;
-  js2 = self.melpaStablePackages.js2-mode;
-
 }
