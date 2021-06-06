@@ -703,6 +703,7 @@ broken-packages:
   - commander
   - Commando
   - commodities
+  - commonmark-cli
   - commsec
   - compactable
   - Compactable
@@ -1038,6 +1039,7 @@ broken-packages:
   - direct-plugins
   - direct-rocksdb
   - direm
+  - discord-haskell
   - discordian-calendar
   - discord-types
   - discrete
@@ -1884,6 +1886,7 @@ broken-packages:
   - haskey
   - haskheap
   - haskhol-core
+  - hasklepias
   - haskmon
   - haskoin
   - haskoin-util
@@ -1895,6 +1898,7 @@ broken-packages:
   - haskus-binary
   - haskyapi
   - hasmin
+  - hasqlator-mysql
   - hasql-backend
   - hasql-class
   - hasql-cursor-transaction
@@ -2079,6 +2083,7 @@ broken-packages:
   - hlogger
   - HLogger
   - hlongurl
+  - hlrdb-core
   - hls-exactprint-utils
   - hls-floskell-plugin
   - hls-fourmolu-plugin
@@ -3405,6 +3410,7 @@ broken-packages:
   - parser-helper
   - parsers-megaparsec
   - parsimony
+  - parsley
   - parsnip
   - partage
   - partial-records
@@ -3465,6 +3471,7 @@ broken-packages:
   - persistent-cereal
   - persistent-database-url
   - persistent-discover
+  - persistent-documentation
   - persistent-equivalence
   - persistent-migration
   - persistent-mongoDB
@@ -3610,6 +3617,7 @@ broken-packages:
   - postmaster
   - potato-tool
   - potoki-core
+  - powerdns
   - powermate
   - powerpc
   - powerqueue-levelmem
@@ -3761,6 +3769,7 @@ broken-packages:
   - quiver
   - quokka
   - quoridor-hs
+  - raaz
   - RabbitMQ
   - rad
   - radian
@@ -3982,6 +3991,9 @@ broken-packages:
   - SableCC2Hs
   - safe-buffer-monad
   - safe-coerce
+  - safe-coloured-text-gen
+  - safe-coloured-text-layout
+  - safe-coloured-text-terminfo
   - safecopy-migrate
   - safecopy-store
   - safe-freeze
@@ -4334,6 +4346,7 @@ broken-packages:
   - sparse-lin-alg
   - special-functors
   - special-keys
+  - speculate
   - speculation
   - sphinx
   - sphinxesc
@@ -4817,6 +4830,7 @@ broken-packages:
   - typed-encoding
   - typedflow
   - typedquery
+  - typed-time
   - typed-wire
   - type-eq
   - type-fun
@@ -4887,6 +4901,7 @@ broken-packages:
   - unpack-funcs
   - unroll-ghc-plugin
   - unsafely
+  - unsatisfiable
   - unsequential
   - unused
   - uom-plugin
@@ -5182,6 +5197,7 @@ broken-packages:
   - yahoo-web-search
   - yajl
   - yall
+  - yam-app
   - yam-config
   - yaml-pretty-extras
   - YamlReference
