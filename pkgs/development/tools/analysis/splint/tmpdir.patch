@@ -1,0 +1,16 @@
+Have Splint honor $TMPDIR.
+
+--- splint-3.1.2/src/context.c	2004-07-31 21:04:26.000000000 +0200
++++ splint-3.1.2/src/context.c	2008-07-11 10:55:16.000000000 +0200
+@@ -801,7 +801,10 @@ context_resetAllFlags (void) 
+                 val = cstring_makeLiteral (env != NULL ? env : DEFAULT_TMPDIR);
+ 	      }
+ # else
+-	      val = cstring_makeLiteral (DEFAULT_TMPDIR);
++	      {
++		char *env = getenv ("TMPDIR");
++		val = cstring_makeLiteral (env != NULL ? env : DEFAULT_TMPDIR);
++	      }
+ # endif /* !defined(OS2) && !defined(MSDOS) */
+ 
+ 	      break;

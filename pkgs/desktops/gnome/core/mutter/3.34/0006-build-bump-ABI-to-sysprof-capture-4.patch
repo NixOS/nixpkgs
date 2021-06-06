@@ -1,0 +1,102 @@
+From 0c95e5a5b31eab93f149b90982680f38e8977063 Mon Sep 17 00:00:00 2001
+Message-Id: <0c95e5a5b31eab93f149b90982680f38e8977063.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sat,  4 Jul 2020 12:01:28 -0700
+Subject: [PATCH 6/7] build: bump ABI to sysprof-capture-4
+
+From: Christian Hergert <chergert@redhat.com>
+
+GLib will now be linking against sysprof-capture-4.a. To support that,
+sysprof had to remove the GLib dependency from sysprof-capture-4 which
+had the side-effect of breaking ABi.
+
+This bumps the dependency and includes a fallback to compile just the
+libsysprof-capture-4.a using a subproject wrap.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1352
+(cherry picked from commit 2c08eb6d163b6758efec9eafe1d5c17fc1ab3692)
+---
+ meson.build              | 20 ++++++++++++++++++--
+ src/meson.build          |  8 ++++++--
+ subprojects/sysprof.wrap |  4 ++++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+ create mode 100644 subprojects/sysprof.wrap
+
+diff --git a/meson.build b/meson.build
+index 86970df..3dc0098 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,6 +1,6 @@
+ project('mutter', 'c',
+   version: '3.34.6',
+-  meson_version: '>= 0.50.0',
++  meson_version: '>= 0.51.0',
+   license: 'GPLv2+'
+ )
+ 
+@@ -52,6 +52,9 @@ gbm_req = '>= 10.3'
+ # screen cast version requirements
+ libpipewire_req = '>= 0.2.5'
+ 
++# profiler requirements
++sysprof_req = '>= 3.37.2'
++
+ gnome = import('gnome')
+ pkg = import('pkgconfig')
+ i18n  = import('i18n')
+@@ -275,7 +278,20 @@ endif
+ 
+ have_profiler = get_option('profiler')
+ if have_profiler
+-  sysprof_dep = dependency('sysprof-capture-3')
++  # libsysprof-capture support
++  sysprof_dep = dependency('sysprof-capture-4',
++    required: true,
++    default_options: [
++      'enable_examples=false',
++      'enable_gtk=false',
++      'enable_tests=false',
++      'enable_tools=false',
++      'libsysprof=false',
++      'with_sysprofd=none',
++      'help=false',
++    ],
++    fallback: ['sysprof', 'libsysprof_capture_dep'],
++  )
+ endif
+ 
+ required_functions = [
+diff --git a/src/meson.build b/src/meson.build
+index a9fffa2..a91baa1 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -711,9 +711,13 @@ if have_profiler
+     'backends/meta-profiler.h',
+   ]
+ 
+-  dbus_interfaces_dir = join_paths(datadir, 'dbus-1', 'interfaces')
+-  sysprof3_dbus_file = join_paths(dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
++  if sysprof_dep.type_name() == 'pkgconfig'
++    sysprof_dbus_interfaces_dir = join_paths(sysprof_dep.get_pkgconfig_variable('datadir'), 'dbus-1', 'interfaces')
++  else
++    sysprof_dbus_interfaces_dir = join_paths(meson.source_root(), 'subprojects', 'sysprof', 'src')
++  endif
+ 
++  sysprof3_dbus_file = join_paths(sysprof_dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
+   dbus_sysprof3_profiler_built_sources = gnome.gdbus_codegen('meta-dbus-sysprof3-profiler',
+       sysprof3_dbus_file,
+       interface_prefix: 'org.gnome.',
+diff --git a/subprojects/sysprof.wrap b/subprojects/sysprof.wrap
+new file mode 100644
+index 0000000..c8f5883
+--- /dev/null
++++ b/subprojects/sysprof.wrap
+@@ -0,0 +1,4 @@
++[wrap-git]
++directory=sysprof
++url=https://gitlab.gnome.org/GNOME/sysprof.git
++revision=cae28263ff5dd4a510d82f3dc2e3a3b3d9b386fb
+-- 
+git-series 0.9.1

@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    teamocil (1.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  teamocil
+
+BUNDLED WITH
+   2.1.4

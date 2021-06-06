@@ -1,0 +1,18 @@
+--- a/testing/functional/test_restart.py
++++ b/testing/functional/test_restart.py
+@@ -323,14 +323,7 @@ class RestartTestWithoutEncryption(RestartTest):
+         https://launchpad.net/bugs/929067
+         """
+
+-        if platform.system().startswith(u'Linux'):
+-            tarcmd = u"tar"
+-        elif platform.system().startswith(u'Darwin'):
+-            tarcmd = u"gtar"
+-        elif platform.system().endswith(u'BSD'):
+-            tarcmd = u"gtar"
+-        else:
+-            raise Exception(u"Platform %s not supported by tar/gtar." % platform.platform())
++        tarcmd = u"tar"
+
+         # Intial normal backup
+         self.backup("full", "testfiles/blocktartest")

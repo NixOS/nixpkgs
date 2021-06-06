@@ -1,0 +1,13 @@
+diff --git c/src/settings/appsettings.cpp i/src/settings/appsettings.cpp
+index ff99f64..fa929ae 100644
+--- c/src/settings/appsettings.cpp
++++ i/src/settings/appsettings.cpp
+@@ -80,7 +80,7 @@ void AppSettings::applyLanguage(QLocale::Language lang)
+     QLocale::setDefault(locale);
+ 
+     s_appTranslator.load(locale, QStringLiteral(PROJECT_NAME), QStringLiteral("_"), QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("translations"), QStandardPaths::LocateDirectory));
+-    s_qtTranslator.load(locale, QStringLiteral("qtbase"), QStringLiteral("_"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
++    s_qtTranslator.load(locale, QStringLiteral("qtbase"), QStringLiteral("_"), QLatin1String("@qttranslations@/translations"));
+ }
+ 
+ QLocale::Language AppSettings::defaultLanguage()

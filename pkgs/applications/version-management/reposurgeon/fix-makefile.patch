@@ -1,0 +1,12 @@
+diff -Naur reposurgeon-3.44/Makefile reposurgeon-3.44-new/Makefile
+--- reposurgeon-3.44/Makefile	2018-04-29 12:27:43.000000000 -0700
++++ reposurgeon-3.44-new/Makefile	2018-08-01 17:38:15.582789739 -0700
+@@ -36,7 +36,7 @@
+ MANPAGES = reposurgeon.1 repotool.1 repodiffer.1 repomapper.1 repocutter.1
+ HTMLFILES = $(MANPAGES:.1=.html) \
+             dvcs-migration-guide.html features.html reporting-bugs.html
+-SHARED    = README.md NEWS TODO reposurgeon-git-aliases $(HTMLFILES)
++SHARED    = reposurgeon-git-aliases $(HTMLFILES)
+ 
+ all:  $(MANPAGES) $(HTMLFILES)
+ 

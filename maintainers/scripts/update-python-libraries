@@ -1,0 +1,5 @@
+#!/bin/sh
+build=`nix-build -E "with import (fetchTarball "channel:nixpkgs-unstable") {}; python3.withPackages(ps: with ps; [ packaging requests toolz ])"`
+python=${build}/bin/python
+exec ${python} pkgs/development/interpreters/python/update-python-libraries/update-python-libraries.py $@
+

@@ -1,0 +1,59 @@
+commit d514e3fc42eb14a1bc5846b27ef89f50ba3a5d48
+Author: Ludovic Courtès <ludo@gnu.org>
+Date:   Tue Oct 11 10:14:26 2016 +0200
+
+    Remove 'umask' calls from 'mkdir'.
+    
+    Fixes <http://bugs.gnu.org/24659>.
+    
+    * libguile/filesys.c (SCM_DEFINE): Remove calls to 'umask' when MODE is
+    unbound; instead, use 0777 as the mode.  Update docstring to clarify
+    this.
+
+diff --git a/libguile/filesys.c b/libguile/filesys.c
+index c8acb13ef..921f765f1 100644
+--- a/libguile/filesys.c
++++ b/libguile/filesys.c
+@@ -1,4 +1,5 @@
+-/* Copyright (C) 1996,1997,1998,1999,2000,2001, 2002, 2004, 2006, 2008 Free Software Foundation, Inc.
++/* Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2004, 2006,
++ *   2009, 2010, 2011, 2012, 2013, 2014, 2016 Free Software Foundation, Inc.
+  * 
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+@@ -791,26 +792,21 @@ SCM_DEFINE (scm_delete_file, "delete-file", 1, 0, 0,
+ SCM_DEFINE (scm_mkdir, "mkdir", 1, 1, 0,
+             (SCM path, SCM mode),
+ 	    "Create a new directory named by @var{path}.  If @var{mode} is omitted\n"
+-	    "then the permissions of the directory file are set using the current\n"
+-	    "umask.  Otherwise they are set to the decimal value specified with\n"
+-	    "@var{mode}.  The return value is unspecified.")
++	    "then the permissions of the directory are set to @code{#o777}\n"
++	    "masked with the current umask (@pxref{Processes, @code{umask}}).\n"
++	    "Otherwise they are set to the value specified with @var{mode}.\n"
++	    "The return value is unspecified.")
+ #define FUNC_NAME s_scm_mkdir
+ {
+   int rv;
+-  mode_t mask;
++  mode_t c_mode;
+ 
+-  if (SCM_UNBNDP (mode))
+-    {
+-      mask = umask (0);
+-      umask (mask);
+-      STRING_SYSCALL (path, c_path, rv = mkdir (c_path, 0777 ^ mask));
+-    }
+-  else
+-    {
+-      STRING_SYSCALL (path, c_path, rv = mkdir (c_path, scm_to_uint (mode)));
+-    }
++  c_mode = SCM_UNBNDP (mode) ? 0777 : scm_to_uint (mode);
++
++  STRING_SYSCALL (path, c_path, rv = mkdir (c_path, c_mode));
+   if (rv != 0)
+     SCM_SYSERROR;
++
+   return SCM_UNSPECIFIED;
+ }
+ #undef FUNC_NAME

@@ -1,0 +1,21 @@
+diff --git a/rpy2/rinterface_lib/embedded.py b/rpy2/rinterface_lib/embedded.py
+index 1f4babbf..322363c5 100644
+--- a/rpy2/rinterface_lib/embedded.py
++++ b/rpy2/rinterface_lib/embedded.py
+@@ -118,6 +118,16 @@ def _initr(
+         if openrlib.R_HOME is None:
+             raise ValueError('openrlib.R_HOME cannot be None.')
+         os.environ['R_HOME'] = openrlib.R_HOME
++
++        # path to libraries
++        existing = os.environ.get('R_LIBS_SITE')
++        if existing is not None:
++            prefix = existing + ':'
++        else:
++            prefix = ''
++        additional = '@NIX_R_LIBS_SITE@'
++        os.environ['R_LIBS_SITE'] = prefix + additional
++
+         options_c = [ffi.new('char[]', o.encode('ASCII')) for o in _options]
+         n_options = len(options_c)
+         n_options_c = ffi.cast('int', n_options)

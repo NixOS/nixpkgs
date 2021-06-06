@@ -1,0 +1,57 @@
+{
+  "EncConv": {
+    "owner": "Alexey-T",
+    "rev": "2021.01.01",
+    "sha256": "18fp7yz2rl80a6xw7v4bgc4092l74fb6p6z4yf312r7gw7b8naq6"
+  },
+  "ATBinHex-Lazarus": {
+    "owner": "Alexey-T",
+    "rev": "2021.02.13",
+    "sha256": "1p2r2q1al6rcsdbbg8ilm4xn6w48bj348khxdmpak7vfwx9741h8"
+  },
+  "ATFlatControls": {
+    "owner": "Alexey-T",
+    "rev": "2021.05.16",
+    "sha256": "sha256-oQW0M8Sx1bC+keOWivXwlD5SDKJuO5Sk/3HiO9HvJtY="
+  },
+  "ATSynEdit": {
+    "owner": "Alexey-T",
+    "rev": "2021.05.31",
+    "sha256": "sha256-4B6/I0CH9gfslwUbCTTI4kycgTHUjLGtVrCctfO6gRo="
+  },
+  "ATSynEdit_Cmp": {
+    "owner": "Alexey-T",
+    "rev": "2021.05.03",
+    "sha256": "sha256-zns83XA2SslHRGqa3iro0phIBlz5/neJ34TTYAKhX5Q="
+  },
+  "EControl": {
+    "owner": "Alexey-T",
+    "rev": "2021.05.27",
+    "sha256": "sha256-D0UBK69V28Izs9FgevtvX6vyDU7KpfIGJqcqpWaxU9E="
+  },
+  "ATSynEdit_Ex": {
+    "owner": "Alexey-T",
+    "rev": "2021.05.27",
+    "sha256": "sha256-1zhSB6bgeW5G6RAZvhznNTpRk0uEDZnLXsk+cgElKLw="
+  },
+  "Python-for-Lazarus": {
+    "owner": "Alexey-T",
+    "rev": "2021.04.16",
+    "sha256": "sha256-HN3Lr3uDCyNk+8+J09ivyC0LZxQ6x6SaUH4swZJBFkM="
+  },
+  "Emmet-Pascal": {
+    "owner": "Alexey-T",
+    "rev": "2020.09.05",
+    "sha256": "0qfiirxnk5g3whx8y8hp54ch3h6gkkd01yf79m95bwar5qvdfybg"
+  },
+  "CudaText-lexers": {
+    "owner": "Alexey-T",
+    "rev": "2021.02.01",
+    "sha256": "051jnrhfpl9n5pgrssf68lj732zxhvjbvna4746ngmdyxvw6dqfd"
+  },
+  "bgrabitmap": {
+    "owner": "bgrabitmap",
+    "rev": "v11.3.1",
+    "sha256": "1f95rdpfwqy9fipzybi17nbhq46zj45yjps21p2hplhinrr49n2p"
+  }
+}

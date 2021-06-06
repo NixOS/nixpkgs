@@ -1,0 +1,13 @@
+diff --git a/salt/utils/rsax931.py b/salt/utils/rsax931.py
+index f827cc6db8..b728595186 100644
+--- a/salt/utils/rsax931.py
++++ b/salt/utils/rsax931.py
+@@ -74,7 +74,7 @@
+     """
+     Attempt to load libcrypto.
+     """
+-    return cdll.LoadLibrary(_find_libcrypto())
++    return cdll.LoadLibrary('@libcrypto@')
+ 
+ 
+ def _init_libcrypto():

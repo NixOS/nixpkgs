@@ -1,0 +1,19 @@
+diff --git a/tcl/uutcl.c b/tcl/uutcl.c
+index f101f2ce52b..71c24688dc4 100644
+--- a/tcl/uutcl.c
++++ b/tcl/uutcl.c
+@@ -48,14 +48,6 @@
+ #include <tcl.h>
+ #endif
+
+-/*
+- * The following variable is a special hack that is needed in order for
+- * Sun shared libraries to be used for Tcl.
+- */
+-
+-extern int matherr();
+-int *tclDummyMathPtr = (int *) matherr;
+-
+ #include <uudeview.h>
+ #include <uuint.h>
+ #include <fptools.h>

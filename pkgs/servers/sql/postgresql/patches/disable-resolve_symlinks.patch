@@ -1,0 +1,14 @@
+diff --git a/src/port/exec.c b/src/port/exec.c
+index c79e8ba..42c4091 100644
+--- a/src/port/exec.c
++++ b/src/port/exec.c
+@@ -216,6 +216,9 @@ find_my_exec(const char *argv0, char *retpath)
+ static int
+ resolve_symlinks(char *path)
+ {
++    // On NixOS we *want* stuff relative to symlinks.
++    return 0;
++
+ #ifdef HAVE_READLINK
+ 	struct stat buf;
+ 	char		orig_wd[MAXPGPATH],

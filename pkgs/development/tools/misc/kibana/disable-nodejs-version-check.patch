@@ -1,0 +1,19 @@
+diff -Naur a/src/setup_node_env/node_version_validator.js b/src/setup_node_env/node_version_validator.js
+--- a/src/setup_node_env/node_version_validator.js	2018-11-16 03:28:42.000000000 +0100
++++ b/src/setup_node_env/node_version_validator.js	2018-12-01 12:19:48.238337176 +0100
+@@ -26,7 +26,7 @@
+ var currentVersion = process && process.version || null;
+ var rawRequiredVersion = pkg && pkg.engines && pkg.engines.node || null;
+ var requiredVersion = rawRequiredVersion ? 'v' + rawRequiredVersion : rawRequiredVersion;
+-var isVersionValid = !!currentVersion && !!requiredVersion && currentVersion === requiredVersion;
++var isVersionValid = !!currentVersion && !!requiredVersion;
+ 
+ // Validates current the NodeJS version compatibility when Kibana starts.
+ if (!isVersionValid) {
+@@ -35,4 +35,4 @@
+   // Actions to apply when validation fails: error report + exit.
+   console.error(errorMessage);
+   process.exit(1);
+-}
+\ No newline at end of file
++}

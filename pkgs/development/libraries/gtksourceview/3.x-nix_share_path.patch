@@ -1,0 +1,11 @@
+--- a/gtksourceview/gtksourceview-utils.c	2014-07-13 16:13:57.418687726 +0200
++++ b/gtksourceview/gtksourceview-utils.c	2014-07-13 16:14:20.550847767 +0200
+@@ -68,6 +68,8 @@
+ 							 basename,
+ 							 NULL));
+ 
++        g_ptr_array_add (dirs, g_build_filename ("@NIX_SHARE_PATH@", SOURCEVIEW_DIR, basename, NULL));
++
+ 	g_ptr_array_add (dirs, NULL);
+ 
+ 	return (gchar**) g_ptr_array_free (dirs, FALSE);

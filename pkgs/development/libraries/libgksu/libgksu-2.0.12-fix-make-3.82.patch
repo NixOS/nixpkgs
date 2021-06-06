@@ -1,0 +1,19 @@
+--- libgksu/Makefile.am-orig	2010-08-22 16:11:19.872577459 -0500
++++ libgksu/Makefile.am	2010-08-22 16:11:55.289599110 -0500
+@@ -17,11 +17,11 @@
+ 
+ if GCONF_SCHEMAS_INSTALL
+ install-data-local:
+-        if test -z "$(DESTDIR)" ; then \
+-          for p in $(schemas_DATA) ; do \
+-            GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$$p ; \
+-          done \
+-        fi
++	if test -z "$(DESTDIR)" ; then \
++		for p in $(schemas_DATA) ; do \
++			GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$$p ; \
++		done \
++	fi
+ else
+ install-data-local:
+ endif

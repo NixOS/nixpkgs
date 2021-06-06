@@ -1,0 +1,11 @@
+diff --git a/fbreader/src/database/booksdb/BooksDB.cpp b/fbreader/src/database/booksdb/BooksDB.cpp
+index e33a22e76..1b6092800 100644
+--- a/fbreader/src/database/booksdb/BooksDB.cpp
++++ b/fbreader/src/database/booksdb/BooksDB.cpp
+@@ -146,5 +146,5 @@ shared_ptr<Book> BooksDB::loadBook(const std::string &fileName) {
+ 	myFindFileId->setFileName(fileName);
+ 	if (!myFindFileId->run()) {
+-		return false;
++		return 0;
+ 	}
+ 	((DBIntValue&)*myLoadBook->parameter("@file_id").value()) = myFindFileId->fileId();

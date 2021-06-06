@@ -1,0 +1,29 @@
+{ lib, stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
+
+stdenv.mkDerivation rec {
+  pname = "sipsak";
+  version = "4.1.2.1";
+
+  buildInputs = [
+    autoreconfHook
+    openssl
+    c-ares
+  ];
+
+  NIX_CFLAGS_COMPILE = "--std=gnu89";
+
+  src = fetchurl {
+    url = "https://github.com/sipwise/sipsak/archive/mr${version}.tar.gz";
+    sha256 = "769fe59966b1962b67aa35aad7beb9a2110ebdface36558072a05c6405fb5374";
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/sipwise/sipsak";
+    description = "SIP Swiss army knife";
+    license = lib.licenses.gpl2;
+    maintainers = with maintainers; [ sheenobu ];
+    platforms = with platforms; unix;
+  };
+
+}
+

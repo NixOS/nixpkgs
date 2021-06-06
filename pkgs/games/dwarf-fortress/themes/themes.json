@@ -1,0 +1,87 @@
+[
+  {
+    "name": "afro-graphics",
+    "version": "47.04",
+    "sha256": "1x1ir0qi3g8wgzwm1pnrkrqb6lhnjq87vs30l8kva6y5wr4sz7q0"
+  },
+  {
+    "name": "autoreiv",
+    "version": "47.01",
+    "sha256": "1c2xchlfq7ajpcq8qgrzkw5yfgm0k3fiwq6n7l4724dlbim3rjp2"
+  },
+  {
+    "name": "cla",
+    "version": "0.47.xx-v26.3",
+    "sha256": "0ca81r3821jja4pqib75qxcsgg3s0wxzyq1jb4jc0495cvzxw7qa"
+  },
+  {
+    "name": "dfgraphics",
+    "version": "42.05",
+    "sha256": "18xyqn458hh8l2qgbvrvz17nbp6yk91d7rqlxlp1g5wr9qfq28rp"
+  },
+  {
+    "name": "gemset",
+    "version": "47.04",
+    "sha256": "015nkkdnpykhz6a1n8qi3wgap19a4wavz4n2xbvfa4g770lcjd92"
+  },
+  {
+    "name": "ironhand",
+    "version": "47.04",
+    "sha256": "0x3hi1isgc2cv7c3qz87rm7ik0kbd748djpnghvjdqpj3a0n1ih2"
+  },
+  {
+    "name": "jolly-bastion",
+    "version": "47.04",
+    "sha256": "0799ad90g62nvpdcl6zq3vr2nvfc62lprm4br9n2hbs8wgrra6rq"
+  },
+  {
+    "name": "mayday",
+    "version": "47.04a",
+    "sha256": "1hpj40762n81grsddg3nc5jxc0bqmy2xamxvsgxzb2bx0b7akz0w"
+  },
+  {
+    "name": "meph",
+    "version": "47.04_v5.5.0_V1.1.2",
+    "sha256": "0q8hfm66rag61qd2hab7lsr4nyg52bn1hvy6bl7z6kv4yj5cra50"
+  },
+  {
+    "name": "obsidian",
+    "version": "47.04a",
+    "sha256": "0y5kmj362i9y8w1n5d1nx80yq88c0xqps9i02gvnls6r421a4nms"
+  },
+  {
+    "name": "phoebus",
+    "version": "47.04a",
+    "sha256": "1ihbqs5a3b8pydbcynblvgw2bxkgr9hhpmgjlji7a7zvz8m6h6pw"
+  },
+  {
+    "name": "rally-ho",
+    "version": "47.04",
+    "sha256": "0pmvpfbj07ll674lw7mjgkb4kgjk4mxr82fjq4ppvwrnzx6vi2g0"
+  },
+  {
+    "name": "spacefox",
+    "version": "47.04",
+    "sha256": "0sk3k5bcpfl2xind4vfrgzbcqqbw0mg47pm3d3h44vi6hl3bdaqj"
+  },
+  {
+    "name": "taffer",
+    "version": "47.04",
+    "sha256": "1ly2sc0pb2kybb8grj19zx372whblmd0bj8p64akpi2rrywi13sy"
+  },
+  {
+    "name": "tergel",
+    "version": "47.01",
+    "sha256": "142sd1i11vvirn68rp4gqzl67ww597df1lc57ycnpnz0n3q39kxy"
+  },
+  {
+    "name": "vettlingr",
+    "version": "1.4a",
+    "sha256": "1p4y0dm52rb49dnmcnivddlsd94m4gr1pxn04fpjbrvck22klgpj"
+  },
+  {
+    "name": "wanderlust",
+    "version": "47.04",
+    "sha256": "1z56m8zplq5d18sbkwg5lwcy8iwfa5hbxixsm3hdxm04qyld1z89"
+  }
+]

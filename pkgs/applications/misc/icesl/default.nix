@@ -1,0 +1,39 @@
+{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM, libXext, dialog, makeWrapper }:
+let
+  lpath = lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
+in
+stdenv.mkDerivation rec {
+  pname = "iceSL";
+  version = "2.1.10";
+
+  src =  if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {
+    url = "https://gforge.inria.fr/frs/download.php/file/37268/icesl${version}-amd64.zip";
+    sha256 = "0dv3mq6wy46xk9blzzmgbdxpsjdaxid3zadfrysxlhmgl7zb2cn2";
+  } else if stdenv.hostPlatform.system == "i686-linux" then fetchzip {
+    url = "https://gforge.inria.fr/frs/download.php/file/37267/icesl${version}-i386.zip";
+    sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
+  } else throw "Unsupported architecture";
+
+  nativeBuildInputs = [ makeWrapper ];
+  installPhase = ''
+    cp -r ./ $out
+    mkdir $out/oldbin
+    mv $out/bin/IceSL-slicer $out/oldbin/IceSL-slicer
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${lpath}" \
+      $out/oldbin/IceSL-slicer
+    makeWrapper $out/oldbin/IceSL-slicer $out/bin/icesl --prefix PATH : ${dialog}/bin
+  '';
+
+  meta = with lib; {
+    description = "GPU-accelerated procedural modeler and slicer for 3D printing";
+    homepage = "http://shapeforge.loria.fr/icesl/index.html";
+    license = licenses.inria-icesl;
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ mgttlinger ];
+  };
+}

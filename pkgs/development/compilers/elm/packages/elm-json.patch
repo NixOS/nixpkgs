@@ -1,0 +1,43 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5440d72..6e173fa 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -774,15 +774,6 @@ version = "0.1.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
+ 
+-[[package]]
+-name = "openssl-src"
+-version = "111.11.0+1.1.1h"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "380fe324132bea01f45239fadfec9343adb044615f29930d039bec1ae7b9fa5b"
+-dependencies = [
+- "cc",
+-]
+-
+ [[package]]
+ name = "openssl-sys"
+ version = "0.9.58"
+@@ -792,7 +783,6 @@ dependencies = [
+  "autocfg",
+  "cc",
+  "libc",
+- "openssl-src",
+  "pkg-config",
+  "vcpkg",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index 4d319f2..6f4d0e5 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -21,8 +21,8 @@ colored = "2.0"
+ dialoguer = "0.6"
+ dirs = "3.0"
+ fs2 = "0.4"
+-isahc = { version = "0.9", features = ["static-ssl"] }
+-curl = {version = "0.4", features = ["static-curl", "static-ssl", "force-system-lib-on-osx", "http2"]}
++isahc = "0.9"
++curl = {version = "0.4", features = ["force-system-lib-on-osx", "http2"]}
+ ctrlc = "3.1"
+ console = "0.12"
+ 

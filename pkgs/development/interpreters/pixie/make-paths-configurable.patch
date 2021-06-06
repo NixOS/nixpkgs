@@ -1,0 +1,122 @@
+From 0cbb82e606610d36e52c70d888995fbbf9b0d7c8 Mon Sep 17 00:00:00 2001
+From: Herwig Hochleitner <herwig@bendlas.net>
+Date: Sun, 28 Feb 2016 16:34:14 +0100
+Subject: [PATCH] make paths configurable
+
+---
+ dust    | 52 ----------------------------------------------------
+ dust.in | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+), 52 deletions(-)
+ delete mode 100755 dust
+ create mode 100755 dust.in
+
+diff --git a/dust b/dust
+deleted file mode 100755
+index ffced9b..0000000
+--- a/dust
++++ /dev/null
+@@ -1,52 +0,0 @@
+-#!/usr/bin/env bash
+-
+-base_path=$0
+-if [ -L "$base_path" ]; then
+-    base_path=`readlink $base_path`
+-fi
+-base_path=`dirname $base_path`
+-
+-pixie_path=`which pixie-vm`
+-if [ -z "$pixie_path" ]; then
+-    echo "Error: 'pixie-vm' must be on your PATH"
+-    exit 1
+-fi
+-
+-function set_load_path() {
+-    load_path=""
+-    if ([ -f "project.edn" ] || [ -f "project.pxi" ]) && [ -f ".load-path" ]; then
+-        load_path="`cat .load-path`"
+-    fi
+-}
+-
+-if [ ! -f "project.edn" ] && [ -f "project.pxi" ]; then
+-	echo "Warning: 'project.pxi' is deprecated, please use 'project.edn'."
+-	echo "To start you can run the following command:"
+-	echo "  pixie-vm -l $base_path/src -e '(require dust.project :as p) (p/load-project!) (prn (dissoc @p/*project* :path))'"
+-	echo
+-fi
+-
+-set_load_path
+-run_dust="$pixie_path -l $base_path/src $load_path $base_path/run.pxi"
+-
+-case $1 in
+-    ""|"repl")
+-        rlwrap_cmd=""
+-        if [ -n "`which rlwrap`" ]; then
+-            rlwrap_cmd="rlwrap -aignored -n"
+-        fi
+-        $rlwrap_cmd $pixie_path $load_path
+-        ;;
+-    "run")
+-        shift
+-        file=$1
+-        shift
+-        $pixie_path $load_path $file $@
+-        ;;
+-    -h|--help)
+-        $run_dust help
+-        ;;
+-    *)
+-        $run_dust $@
+-        ;;
+-esac
+diff --git a/dust.in b/dust.in
+new file mode 100755
+index 0000000..44a7fbd
+--- /dev/null
++++ b/dust.in
+@@ -0,0 +1,43 @@
++#!/usr/bin/env bash
++
++base_path=@basePath@
++pixie_path=@pixiePath@
++
++function set_load_path() {
++    load_path=""
++    if ([ -f "project.edn" ] || [ -f "project.pxi" ]) && [ -f ".load-path" ]; then
++        load_path="`cat .load-path`"
++    fi
++}
++
++if [ ! -f "project.edn" ] && [ -f "project.pxi" ]; then
++	echo "Warning: 'project.pxi' is deprecated, please use 'project.edn'."
++	echo "To start you can run the following command:"
++	echo "  pixie-vm -l $base_path/src -e '(require dust.project :as p) (p/load-project!) (prn (dissoc @p/*project* :path))'"
++	echo
++fi
++
++set_load_path
++run_dust="$pixie_path -l $base_path/src $load_path $base_path/run.pxi"
++
++case $1 in
++    ""|"repl")
++        rlwrap_cmd=""
++        if [ -n "`which rlwrap`" ]; then
++            rlwrap_cmd="rlwrap -aignored -n"
++        fi
++        $rlwrap_cmd $pixie_path $load_path
++        ;;
++    "run")
++        shift
++        file=$1
++        shift
++        $pixie_path $load_path $file $@
++        ;;
++    -h|--help)
++        $run_dust help
++        ;;
++    *)
++        $run_dust $@
++        ;;
++esac
+-- 
+2.7.1
+

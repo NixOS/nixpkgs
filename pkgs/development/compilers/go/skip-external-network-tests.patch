@@ -1,0 +1,26 @@
+diff --git a/src/cmd/go/go_test.go b/src/cmd/go/go_test.go
+index 85cae90..94b4edd 100644
+--- a/src/cmd/go/go_test.go
++++ b/src/cmd/go/go_test.go
+@@ -4946,6 +4946,8 @@ func TestBuildmodePIE(t *testing.T) {
+ }
+ 
+ func TestExecBuildX(t *testing.T) {
++	t.Skipf("skipping, test requires networking")
++
+ 	tooSlow(t)
+ 	if !canCgo {
+ 		t.Skip("skipping because cgo not enabled")
+diff --git a/src/net/dial_test.go b/src/net/dial_test.go
+index 00a84d1..27f9ec9 100644
+--- a/src/net/dial_test.go
++++ b/src/net/dial_test.go
+@@ -968,6 +968,8 @@ func TestDialerControl(t *testing.T) {
+ // mustHaveExternalNetwork is like testenv.MustHaveExternalNetwork
+ // except that it won't skip testing on non-iOS builders.
+ func mustHaveExternalNetwork(t *testing.T) {
++	t.Skipf("Nix sandbox does not have networking")
++
+ 	t.Helper()
+ 	ios := runtime.GOOS == "darwin" && (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64")
+ 	if testenv.Builder() == "" || ios {

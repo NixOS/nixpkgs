@@ -1,0 +1,36 @@
+--- a/onionshare/gui_common.py
++++ b/onionshare/gui_common.py
+@@ -391,29 +391,10 @@ class GuiCommon:
+         }
+ 
+     def get_tor_paths(self):
+-        if self.common.platform == "Linux":
+-            tor_path = shutil.which("tor")
+-            obfs4proxy_file_path = shutil.which("obfs4proxy")
+-            prefix = os.path.dirname(os.path.dirname(tor_path))
+-            tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
+-            tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
+-        elif self.common.platform == "Windows":
+-            base_path = self.get_resource_path("tor")
+-            tor_path = os.path.join(base_path, "Tor", "tor.exe")
+-            obfs4proxy_file_path = os.path.join(base_path, "Tor", "obfs4proxy.exe")
+-            tor_geo_ip_file_path = os.path.join(base_path, "Data", "Tor", "geoip")
+-            tor_geo_ipv6_file_path = os.path.join(base_path, "Data", "Tor", "geoip6")
+-        elif self.common.platform == "Darwin":
+-            base_path = self.get_resource_path("tor")
+-            tor_path = os.path.join(base_path, "tor")
+-            obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy")
+-            tor_geo_ip_file_path = os.path.join(base_path, "geoip")
+-            tor_geo_ipv6_file_path = os.path.join(base_path, "geoip6")
+-        elif self.common.platform == "BSD":
+-            tor_path = "/usr/local/bin/tor"
+-            tor_geo_ip_file_path = "/usr/local/share/tor/geoip"
+-            tor_geo_ipv6_file_path = "/usr/local/share/tor/geoip6"
+-            obfs4proxy_file_path = "/usr/local/bin/obfs4proxy"
++        tor_path = "@tor@/bin/tor"
++        tor_geo_ip_file_path = "@geoip@/share/tor/geoip"
++        tor_geo_ipv6_file_path = "@geoip@/share/tor/geoip6"
++        obfs4proxy_file_path = "@obfs4@/bin/obfs4proxy"
+ 
+         return (
+             tor_path,
