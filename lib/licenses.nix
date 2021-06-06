@@ -346,6 +346,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = "Unspecified free software license";
   };
 
+  ftl = spdx {
+    spdxId = "FTL";
+    fullName = "Freetype Project License";
+  };
+
   g4sl = {
     fullName = "Geant4 Software License";
     url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
