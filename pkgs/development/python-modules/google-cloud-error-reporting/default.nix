@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'google-cloud-logging>=1.14.0, <2.1' 'google-cloud-logging>=1.14.0'
+      --replace 'google-cloud-logging>=1.14.0, <2.4' 'google-cloud-logging>=1.14.0'
   '';
 
   propagatedBuildInputs = [ google-cloud-logging libcst proto-plus ];
