@@ -3033,6 +3033,8 @@ in
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
+  notemap = callPackage ../tools/networking/notemap { };
+
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
   noti = callPackage ../tools/misc/noti {
