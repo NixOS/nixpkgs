@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/muttmua/mutt/-/commit/4a2becbdb4422aaffe3ce314991b9d670b7adf17.patch";
       sha256 = "1dcfv1pfxchw3bjlcggjmy9fmldpzhmb1bffy03l25pjglbc4n95";
     })
+    # CVE-2021-32055
+    (fetchpatch {
+      url = "https://gitlab.com/muttmua/mutt/-/commit/7c4779ac24d2fb68a2a47b58c7904118f40965d5.patch";
+      sha256 = "11fwy05rrr8akyxic2y37r8kq3l0rqjhfmbn1ilq7055205pmlca";
+    })
   ] ++ optional smimeSupport [
     (fetchpatch {
       url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";

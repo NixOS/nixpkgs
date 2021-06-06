@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , pythonOlder
 , pytest
@@ -16,6 +17,15 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "05jbqcbjg50ydwl0fijhdlqcq7fl6v99kjva66kmmzzza7vwa872";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-1000518-redux.patch";
+      url = "https://github.com/aaugustin/websockets/commit/547a26b685d08cac0aa64e5e65f7867ac0ea9bc0.patch";
+      excludes = [ "docs/changelog.rst" ];
+      sha256 = "1wgsvza53ga8ldrylb3rqc17yxcrchwsihbq6i6ldpycq83q5akq";
+    })
+  ];
 
   disabled = pythonOlder "3.3";
 

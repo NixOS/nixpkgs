@@ -4,15 +4,15 @@ with lib;
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.4.3";
+  version = "1.4.6";
   # git commit for the above version's tag
-  commit = "269548fa27e0089a8b8278fc4fc781d7f65a939b";
+  commit = "d71fcd7d8303cbf684402823e425e9dd2e99285d";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
+    sha256 = "1an4gzg7fz24nq7vb3k8ddv5r0s98x88mz0z67197brsmi4pwy58";
   };
 
   goPackagePath = "github.com/containerd/containerd";

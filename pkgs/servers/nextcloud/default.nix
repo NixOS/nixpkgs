@@ -16,8 +16,10 @@ let
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/
       cp -R . $out/
+      runHook postInstall
     '';
 
     meta = with stdenv.lib; {
@@ -63,8 +65,8 @@ in {
   };
 
   nextcloud21 = generic {
-    version = "21.0.1";
-    sha256 = "dd7c8ccc01547914a75b44bbf86028289c8919dc39f4e2e720147b6bd596aebe";
+    version = "21.0.2";
+    sha256 = "5e5b38109a3485db5fd2d248f24478eabe6c0790ec10b030acbbee207d5511fe";
   };
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'

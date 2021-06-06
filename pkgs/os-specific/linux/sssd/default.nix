@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
+{ stdenv, fetchFromGitHub, autoreconfHook, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
+  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen, pkg-config,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
@@ -12,11 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "1.16.4";
+  version = "1.16.5";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/released/sssd/${pname}-${version}.tar.gz";
-    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
+  src = fetchFromGitHub {
+    owner = "SSSD";
+    repo = pname;
+    rev = "${pname}-${builtins.replaceStrings ["."] ["_"] version}";
+    sha256 = "0zbs04lkjbp7y92anmafl7gzamcnq1f147p13hc4byyvjk9rg6f7";
   };
   patches = [
     # Fix build failure against samba 4.12.0rc1
@@ -55,8 +57,9 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils doxygen python python3 popt
+                  samba nfs-utils python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
@@ -90,8 +93,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System Security Services Daemon";
-    homepage = "https://fedorahosted.org/sssd/";
-    license = licenses.gpl3;
+    homepage = "https://sssd.io/";
+    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.e-user ];
   };

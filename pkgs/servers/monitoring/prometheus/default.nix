@@ -37,6 +37,16 @@ in buildGoPackage rec {
       url = "https://github.com/prometheus/prometheus/commit/8b64b70fe4a5aa2877c95aa12c6798b12d3ff7ec.patch";
       sha256 = "sha256-RuXT5pBXv8z6WoE59KNGh+OXr1KGLGWs/n0Hjf4BuH8=";
     })
+    (fetchpatch {
+      # https://github.com/prometheus/prometheus/security/advisories/GHSA-vx57-7f4q-fpc7
+      name = "CVE-2021-29622.patch";
+      url = "https://github.com/prometheus/prometheus/commit/6eeded0fdf760e81af75d9c44ce539ab77da4505.patch";
+      sha256 = "0d5d9r7aswgw3p77bsd4nf58d9nn0cwpvijs6q0rnvcbp84wcil1";
+      excludes = [
+        "CHANGELOG.md"
+        "VERSION"
+      ];
+    })
   ];
 
   postPatch = ''

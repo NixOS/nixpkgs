@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvpn";
-  version = "2.4.9";
+  version = "2.4.11";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.xz";
-    sha256 = "1qpbllwlha7cffsd5dlddb8rl22g9rar5zflkz1wrcllhvfkl7v4";
+    sha256 = "06s4m0xvixjhd3azrzbsf4j86kah4xwr2jp6cmcpc7db33rfyyg5";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
