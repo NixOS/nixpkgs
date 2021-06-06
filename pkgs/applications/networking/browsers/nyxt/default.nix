@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     xclip notify-osd enchant
   ] ++ gstBuildInputs;
 
-  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs;
+  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstBuildInputs;
 
   dontWrapGApps = true;
   installPhase = ''

@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
   version = "1.18.4";
 
   outputs = [
+    "bin"
     "out"
     "dev"
     # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
     # - https://github.com/NixOS/nixpkgs/pull/98767
     # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
-  outputBin = "dev";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
@@ -92,14 +92,14 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for prog in "$dev/bin/"*; do
+    for prog in "$bin/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
         wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH_1_0=$GST_PLUGIN_SYSTEM_PATH_1_0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 
   preFixup = ''
-    moveToOutput "share/bash-completion" "$dev"
+    moveToOutput "share/bash-completion" "$bin"
   '';
 
   setupHook = ./setup-hook.sh;
