@@ -864,6 +864,25 @@ let
       '';
     };
 
+    process = {
+      exporterConfig = {
+        enable = true;
+        settings.process_names = [
+          # Remove nix store path from process name
+          { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-process-exporter.service")
+        wait_for_open_port(9256)
+        wait_until_succeeds(
+            "curl -sSf localhost:9256/metrics | grep -q '{}'".format(
+                'namedprocess_namegroup_cpu_seconds_total{groupname="process-exporter '
+            )
+        )
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
