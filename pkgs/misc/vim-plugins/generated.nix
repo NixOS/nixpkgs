@@ -2506,6 +2506,18 @@ final: prev:
     meta.homepage = "https://github.com/mengelbrecht/lightline-bufferline/";
   };
 
+  lightline-gruvbox-vim = buildVimPluginFrom2Nix {
+    pname = "lightline-gruvbox-vim";
+    version = "2018-03-23";
+    src = fetchFromGitHub {
+      owner = "shinchu";
+      repo = "lightline-gruvbox.vim";
+      rev = "21659af1fc980ebe7de0f475e57c3fda9a82c2d3";
+      sha256 = "0h9br1r5vbrx5cplnk34xlg1kagasj3zn18f8d4ifi0pibyq6pm1";
+    };
+    meta.homepage = "https://github.com/shinchu/lightline-gruvbox.vim/";
+  };
+
   lightline-vim = buildVimPluginFrom2Nix {
     pname = "lightline-vim";
     version = "2021-05-30";
