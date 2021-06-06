@@ -8,7 +8,7 @@ rec {
       , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? false
+      , tiniRev, tiniSha256, buildxSupport ? true
       # package dependencies
       , stdenv, fetchFromGitHub, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
