@@ -1907,6 +1907,16 @@
     githubId = 3392199;
     name = "Calum MacRae";
   };
+  cmars = {
+    email = "nix@cmars.tech";
+    github = "cmars";
+    githubId = 23741;
+    name = "Casey Marshall";
+    keys = [{
+      longkeyid = "rsa3072/0x6DEC2758ACD5A973";
+      fingerprint = "6B78 7E5F B493 FA4F D009  5D10 6DEC 2758 ACD5 A973";
+    }];
+  };
   cmcdragonkai = {
     email = "roger.qiu@matrix.ai";
     github = "cmcdragonkai";
