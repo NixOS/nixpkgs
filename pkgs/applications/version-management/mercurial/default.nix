@@ -1,12 +1,13 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext
 , re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
-, guiSupport ? false, tk ? null
+, gitSupport ? false
+, guiSupport ? false, tk
 , ApplicationServices
 }:
 
 let
-  inherit (python3Packages) docutils python fb-re2;
+  inherit (python3Packages) docutils python fb-re2 pygit2;
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
@@ -42,7 +43,7 @@ in python3Packages.buildPythonApplication rec {
   } else null;
   cargoRoot = if rustSupport then "rust" else null;
 
-  propagatedBuildInputs = lib.optional re2Support fb-re2;
+  propagatedBuildInputs = lib.optional re2Support fb-re2 ++ lib.optional gitSupport pygit2;
   nativeBuildInputs = [ makeWrapper gettext ]
     ++ lib.optionals rustSupport (with rustPlatform; [
          cargoSetupHook
