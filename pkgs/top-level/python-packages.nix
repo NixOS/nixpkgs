@@ -2910,6 +2910,8 @@ in {
 
   google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
 
+  google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
+
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
   google-cloud-automl = callPackage ../development/python-modules/google-cloud-automl { };
