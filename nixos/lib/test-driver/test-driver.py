@@ -441,7 +441,7 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
