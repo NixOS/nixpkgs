@@ -44,7 +44,7 @@ import ./make-test-python.nix (
             xandikos_default.wait_for_open_port(8080)
             xandikos_default.succeed("curl --fail http://localhost:8080/")
             xandikos_default.succeed(
-                "curl -s --fail --location http://localhost:8080/ | grep -qi Xandikos"
+                "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
             )
             xandikos_client.wait_for_unit("network.target")
             xandikos_client.fail("curl --fail http://xandikos_default:8080/")
@@ -55,15 +55,15 @@ import ./make-test-python.nix (
             xandikos_proxy.wait_for_open_port(8080)
             xandikos_proxy.succeed("curl --fail http://localhost:8080/")
             xandikos_proxy.succeed(
-                "curl -s --fail --location http://localhost:8080/ | grep -qi Xandikos"
+                "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
             )
             xandikos_client.wait_for_unit("network.target")
             xandikos_client.fail("curl --fail http://xandikos_proxy:8080/")
             xandikos_client.succeed(
-                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/ | grep -qi Xandikos"
+                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/ | grep -i Xandikos"
             )
             xandikos_client.succeed(
-                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/user/ | grep -qi Xandikos"
+                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/user/ | grep -i Xandikos"
             )
       '';
     }
