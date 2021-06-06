@@ -30326,6 +30326,8 @@ in
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
 
+  depotdownloader = callPackage ../tools/misc/depotdownloader { };
+
   desmume = callPackage ../misc/emulators/desmume { inherit (pkgs.gnome2) gtkglext libglade; };
 
   dbacl = callPackage ../tools/misc/dbacl { };
