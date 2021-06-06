@@ -1949,4 +1949,8 @@ EOT
     testTarget = "libarchive-test --test-options='-j1'";
   };
 
+  # unrestrict bounds for hashable and semigroups
+  # https://github.com/HeinrichApfelmus/reactive-banana/issues/215
+  reactive-banana = doJailbreak super.reactive-banana;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
