@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.1.0";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yyk9ix1jms5q4kk76cfxzy42wzzyl5qladdswjy5l0pg6iypr8i";
+    sha256 = "sha256-56UQdZudVf9jyYPjxCy/XDX5tzEPTWEevjaX2mV2vLQ=";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
