@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar3, fetchMixDeps, makeWrapper, git }:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
 
 { pname
 , version
@@ -23,7 +23,8 @@ let
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 stdenv.mkDerivation (overridable // {
-  nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ];
+  # rg is used as a better grep to search for erlang references in the final release
+  nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ripgrep ];
   buildInputs = builtins.attrValues mixNixDeps;
 
   MIX_ENV = mixEnv;
@@ -96,8 +97,8 @@ stdenv.mkDerivation (overridable // {
     # removing unused erlang reference from resulting derivation to reduce
     # closure size
     if [ -e $out/erts-* ]; then
-      echo "ERTS found in $dir - removing references to erlang to reduce closure size"
-      for file in $out/erts-*/bin/{erl,start}; do
+      echo "ERTS found in $out - removing references to erlang to reduce closure size"
+      for file in $(rg "${erlang}/lib/erlang" "$out" --text --files-with-matches); do
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
     fi
