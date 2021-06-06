@@ -3798,7 +3798,6 @@ broken-packages:
   - react-haskell
   - reaction-logic
   - reactive-bacon
-  - reactive-banana
   - reactive-thread
   - react-tutorial-haskell-server
   - readability
