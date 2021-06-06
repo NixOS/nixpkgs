@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XnOCmxQ6YCO1C7RYHzcZY4ihrt2KommWTkTD9y+B5tg=";
+    sha256 = "sha256-8o7pr9msuMfIN7UMX+/gppmD3MWXt2hBqb7vcLUE22M=";
   };
 
   propagatedBuildInputs = [ google-cloud-core grpc_google_iam_v1 libcst proto-plus sqlparse ];
