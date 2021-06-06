@@ -70,7 +70,9 @@ with lib;
     };
 
     # Enable wpa_supplicant, but don't start it by default.
+    networking.usePredictableInterfaceNames = mkDefault false;
     networking.wireless.enable = mkDefault true;
+    networking.wireless.interfaces = mkDefault [ "wlan0" ];
     systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
 
     # Tell the Nix evaluator to garbage collect more aggressively.
