@@ -1,7 +1,7 @@
 { lib
 , sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
-, withBaseWrapper ? true, extraSessionCommands ? "", dbus
+, withBaseWrapper ? true, extraSessionCommands ? "", postSessionCommands ? "", dbus
 , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
 , extraOptions ? [] # E.g.: [ "--verbose" ]
 # Used by the NixOS module:
@@ -23,10 +23,11 @@ let
      fi
      if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
        export DBUS_SESSION_BUS_ADDRESS
-       exec ${sway}/bin/sway "$@"
+       ${sway}/bin/sway "$@"
      else
-       exec ${dbus}/bin/dbus-run-session ${sway}/bin/sway "$@"
+       ${dbus}/bin/dbus-run-session ${sway}/bin/sway "$@"
      fi
+     ${postSessionCommands}
    '';
 in symlinkJoin {
   name = "sway-${sway.version}";
