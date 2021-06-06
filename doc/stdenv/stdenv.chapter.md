@@ -39,9 +39,9 @@ stdenv.mkDerivation {
 }
 ```
 
-This attribute ensures that the `bin` subdirectories of these packages appear in the `PATH` environment variable during the build, that their `include` subdirectories are searched by the C compiler, and so on. (See <xref linkend="ssec-setup-hooks" /> for details.)
+This attribute ensures that the `bin` subdirectories of these packages appear in the `PATH` environment variable during the build, that their `include` subdirectories are searched by the C compiler, and so on. (See [](#ssec-setup-hooks) for details.)
 
-Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see <xref linkend="sec-stdenv-phases" />.) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
+Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see [](#sec-stdenv-phases).) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
 
 ```nix
 stdenv.mkDerivation {
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
 (Note the use of `''`-style string literals, which are very convenient for large multi-line script fragments because they don’t need escaping of `"` and `\`, and because indentation is intelligently removed.)
 
-There are many other attributes to customise the build. These are listed in <xref linkend="ssec-stdenv-attributes" />.
+There are many other attributes to customise the build. These are listed in [](#ssec-stdenv-attributes).
 
 While the standard environment provides a generic builder, you can still supply your own build script:
 
@@ -116,9 +116,9 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See <xref linkend="ssec-setup-hooks" /> for details.
+As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
 
-Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see <xref linkend="chap-cross" /> for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
+Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
 
 The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
@@ -911,7 +911,7 @@ This verifies that no references are left from the install binaries to the direc
 
 ### `multiple-outputs.sh` {#multiple-outputs.sh}
 
-This setup hook adds configure flags that tell packages to install files into any one of the proper outputs listed in `outputs`. This behavior can be turned off by setting `setOutputFlags` to false in the derivation environment. See <xref linkend="chap-multiple-output" /> for more information.
+This setup hook adds configure flags that tell packages to install files into any one of the proper outputs listed in `outputs`. This behavior can be turned off by setting `setOutputFlags` to false in the derivation environment. See [](#chap-multiple-output) for more information.
 
 ### `move-sbin.sh` {#move-sbin.sh}
 
@@ -991,7 +991,7 @@ Creates a temporary package database and registers every Haskell build input in 
 
 ### GNOME platform {#gnome-platform}
 
-Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in <xref linkend="sec-language-gnome" />.
+Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in [](#sec-language-gnome).
 
 ### autoPatchelfHook {#setup-hook-autopatchelfhook}
 

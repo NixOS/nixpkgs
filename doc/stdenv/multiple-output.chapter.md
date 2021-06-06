@@ -38,7 +38,7 @@ $ nix-env -iA nixpkgs.coreutils.info
 installs the `"out"` output (`coreutils.meta.outputsToInstall` is `[ "out" ]`) instead of the requested `"info"`.
 :::
 
-The only recourse to select an output with `nix-env` is to override the package’s `meta.outputsToInstall`, using the functions described in <xref linkend="chap-overrides" />. For example, the following overlay adds the `"info"` output for the `coreutils` package:
+The only recourse to select an output with `nix-env` is to override the package’s `meta.outputsToInstall`, using the functions described in [](#chap-overrides). For example, the following overlay adds the `"info"` output for the `coreutils` package:
 
 ```nix
 self: super:
@@ -53,7 +53,7 @@ self: super:
 
 In the Nix language the individual outputs can be reached explicitly as attributes, e.g. `coreutils.info`, but the typical case is just using packages as build inputs.
 
-When a multiple-output derivation gets into a build input of another derivation, the `dev` output is added if it exists, otherwise the first output is added. In addition to that, `propagatedBuildOutputs` of that package which by default contain `$outputBin` and `$outputLib` are also added. (See <xref linkend="multiple-output-file-type-groups" />.)
+When a multiple-output derivation gets into a build input of another derivation, the `dev` output is added if it exists, otherwise the first output is added. In addition to that, `propagatedBuildOutputs` of that package which by default contain `$outputBin` and `$outputLib` are also added. (See [](#multiple-output-file-type-groups).)
 
 In some cases it may be desirable to combine different outputs under a single store path. A function `symlinkJoin` can be used to do this. (Note that it may negate some closure size benefits of using a multiple-output package.)
 
@@ -70,7 +70,7 @@ outputs = [ "bin" "dev" "out" "doc" ];
 Often such a single line is enough. For each output an equally named environment variable is passed to the builder and contains the path in nix store for that output. Typically you also want to have the main `out` output, as it catches any files that didn’t get elsewhere.
 
 ::: {.note}
-There is a special handling of the `debug` output, described at <xref linkend="stdenv-separateDebugInfo" />.
+There is a special handling of the `debug` output, described at [](#stdenv-separateDebugInfo).
 :::
 
 ### “Binaries first” {#multiple-output-file-binaries-first-convention}
