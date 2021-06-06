@@ -77,6 +77,10 @@ rec {
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
+      postPatch = ''
+        patchShebangs .
+      '';
+
       buildPhase = ''
         export GOCACHE="$TMPDIR/go-cache"
         # build engine
@@ -86,11 +90,6 @@ rec {
         export VERSION="${version}"
         ./hack/make.sh dynbinary
         cd -
-      '';
-
-      postPatch = ''
-        patchShebangs .
-        substituteInPlace ./hack/make.sh --replace libsystemd-journal libsystemd
       '';
 
       installPhase = ''
@@ -144,6 +143,14 @@ rec {
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
 
+    postPatch = ''
+      patchShebangs .
+      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
+    '' + optionalString buildxSupport ''
+      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
+    '';
+
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
     buildPhase = ''
       export GOCACHE="$TMPDIR/go-cache"
@@ -160,14 +167,6 @@ rec {
       export CGO_ENABLED=1
       go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
       cd -
-    '';
-
-    postPatch = ''
-      patchShebangs .
-      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString buildxSupport ''
-      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
     '';
 
     outputs = ["out" "man"];
