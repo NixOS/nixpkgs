@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zVRD2lWRaKtSlZn84Rqpj+a1OT7Wcak524TKsBctueE=";
+    sha256 = "sha256-jNlX9LKajHqYPgpCfCcSUzxBu3AHt2qMyI1sZQdcZ5o=";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
