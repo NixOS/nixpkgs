@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, jre, coreutils, gradle_6, git, perl
+{ lib, stdenv, fetchurl, fetchgit, jre_headless, coreutils, gradle_6, git, perl
 , makeWrapper }:
 
 let
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jre_headless}"
   '';
 
   nativeBuildInputs = [ git gradle_6 makeWrapper ];
