@@ -207,6 +207,8 @@
 
   perl-completion =
     callPackage ./perl-completion { };
+  nano-theme = callPackage ./nano-theme { };
+
 
   pod-mode = callPackage ./pod-mode { };
 
