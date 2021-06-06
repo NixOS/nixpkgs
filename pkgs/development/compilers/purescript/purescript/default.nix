@@ -62,5 +62,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";
+    changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }
