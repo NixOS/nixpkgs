@@ -93,21 +93,21 @@ stdenv.mkDerivation (overridable // {
     if [ -e $out/releases/COOKIE ]; then # absent in special cases, i.e. elixir-ls
       rm $out/releases/COOKIE
     fi
-    # TODO remove the uneeded reference too erlang
-    # one possible way would be
-    # for f in $(${findutils}/bin/find $out -name start); do
-    #   substituteInPlace $f \
-    #     --replace 'ROOTDIR=${erlang}/lib/erlang' 'ROOTDIR=""'
-    # done
-    # What is left to do is to check that erlang is not required on
-    # the host
+    # removing unused erlang reference from resulting derivation to reduce
+    # closure size
+    if [ -e $out/erts-* ]; then
+      echo "ERTS found in $dir - removing references to erlang to reduce closure size"
+      for file in $out/erts-*/bin/{erl,start}; do
+        substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
+      done
+    fi
 
     patchShebangs $out
     runHook postFixup
   '';
-  # TODO figure out how to do a Fixed Output Derivation and add the output hash
-  # This doesn't play well at the moment with Phoenix projects
-  # for example that have frontend dependencies
 
+  # TODO investigate why the resulting closure still has
+  # a reference to erlang.
+  # uncommenting the following will fail the build
   # disallowedReferences = [ erlang ];
 })
