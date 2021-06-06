@@ -94,12 +94,18 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+      ];
       sha256 = "07h2gd6cwwq17lrwjpfah1xvr8ny8700qvi971qacrr7ssicw2pw";
     };
 
     i686-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+      ];
       sha256 = "145kniiby5nnd0ll3v2gggzxz52bqbrdp72hvh96i8qnzi0fq25a";
     };
   };
