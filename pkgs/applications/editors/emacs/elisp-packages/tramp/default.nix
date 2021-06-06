@@ -1,16 +1,28 @@
-{ lib, stdenv, fetchurl, emacs, texinfo }:
+{ lib
+, stdenv
+, fetchurl
+, emacs
+, texinfo
+}:
 
 stdenv.mkDerivation rec {
-  name = "tramp-2.4.2";
+  pname = "tramp";
+  version = "2.5.0";
+
   src = fetchurl {
-    url = "mirror://gnu/tramp/${name}.tar.gz";
-    sha256 = "082nwvi99y0bvpl1yhn4yjc8a613jh1pdck253lxn062lkcxxw61";
+    url = "mirror://gnu/tramp/${pname}-${version}.tar.gz";
+    sha256 = "sha256-w+6HJA8kFb75Z+7vM1zDnzOnkSSIXKnLVyCcEh+nMGY=";
   };
-  buildInputs = [ emacs texinfo ];
+
+  buildInputs = [
+    emacs
+    texinfo
+  ];
+
   meta = {
-    description = "Transparently access remote files from Emacs. Newer versions than built-in.";
     homepage = "https://www.gnu.org/software/tramp";
+    description = "Transparently access remote files from Emacs. Newer versions than built-in.";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    inherit (emacs.meta) platforms;
   };
 }
