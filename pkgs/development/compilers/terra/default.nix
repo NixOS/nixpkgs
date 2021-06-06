@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook }:
+, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false }:
 
 let
   luajitRev = "9143e86498436892cb4316550be4d45b68a61224";
@@ -19,6 +19,7 @@ let
       clang-unwrapped.lib
     ];
   };
+  cuda = cudaPackages.cudatoolkit_11;
 in stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.0.0-beta3";
@@ -31,13 +32,13 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmMerged ncurses libxml2 ];
+  buildInputs = [ llvmMerged ncurses libxml2 ] ++ lib.optional enableCUDA cuda;
 
   cmakeFlags = [
     "-DHAS_TERRA_VERSION=0"
     "-DTERRA_VERSION=${src.rev}"
     "-DTERRA_LUA=luajit"
-  ];
+  ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
   doCheck = true;
   enableParallelBuilding = true;
