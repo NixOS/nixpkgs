@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "874defad583e90e55a3e83aff27eb5fe108d9197d839cd45f3eacf2395881806";
+    sha256 = "sha256-UjYzSWtP4cp0p7Is2qIGWBgEhjgTv0YeL0N9D7etIbY=";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];
