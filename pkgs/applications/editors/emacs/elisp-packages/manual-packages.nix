@@ -65,6 +65,8 @@
     };
   };
 
+  apheleia = callPackage ./apheleia {};
+
   emacspeak = callPackage ./emacspeak {};
 
   ess-R-object-popup =
