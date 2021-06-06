@@ -42,6 +42,8 @@ buildPythonPackage rec {
     "test_zero_downtime"
     # flaky
     "test_keep_alive_client_timeout"
+    "test_check_timeouts_request_timeout"
+    "test_check_timeouts_response_timeout"
     "test_reloader_live"
   ];
 

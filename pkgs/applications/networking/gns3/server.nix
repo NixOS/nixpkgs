@@ -24,7 +24,8 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2"
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
+      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
   '';
 
   propagatedBuildInputs = with python.pkgs; [

@@ -411,6 +411,8 @@ in
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
+  edwin = callPackage ../data/fonts/edwin { };
+
   etBook = callPackage ../data/fonts/et-book { };
 
   fetchutils = callPackage ../tools/misc/fetchutils { };
@@ -856,6 +858,10 @@ in
 
   amidst = callPackage ../tools/games/amidst { };
 
+  gamemode = callPackage ../tools/games/gamemode {
+    libgamemode32 = pkgsi686Linux.gamemode.lib;
+  };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
@@ -935,7 +941,7 @@ in
   };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_11;
+    electron = electron_12;
   };
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
@@ -2273,6 +2279,8 @@ in
   wlogout = callPackage ../tools/wayland/wlogout { };
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
+
+  wlrctl = callPackage ../tools/wayland/wlrctl { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
@@ -11672,7 +11680,7 @@ in
 
   ponyc = callPackage ../development/compilers/ponyc {
     # Upstream pony has dropped support for versions compiled with gcc.
-    stdenv = clangStdenv;
+    stdenv = llvmPackages_9.stdenv;
   };
 
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
@@ -14881,6 +14889,8 @@ in
       inherit fontconfig fontDirectories;
     };
 
+  f2c = callPackage ../development/tools/f2c { };
+
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
@@ -17187,6 +17197,8 @@ in
 
   mutest = callPackage ../development/libraries/mutest { };
 
+  mvapich = callPackage ../development/libraries/mvapich { };
+
   mygpoclient = pythonPackages.mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
@@ -18618,6 +18630,8 @@ in
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xsimd = callPackage ../development/libraries/xsimd { };
+
+  xtensor = callPackage ../development/libraries/xtensor { };
 
   xtl = callPackage ../development/libraries/xtl { };
 
@@ -26324,6 +26338,8 @@ in
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
+  retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
+
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
@@ -28352,6 +28368,8 @@ in
 
   fava = callPackage ../applications/office/fava {};
 
+  fheroes2 = callPackage ../games/fheroes2 {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
@@ -28941,11 +28959,15 @@ in
 
   toppler = callPackage ../games/toppler { };
 
+  torus-trooper = callPackage ../games/torus-trooper { };
+
   trackballs = callPackage ../games/trackballs { };
 
   tremulous = callPackage ../games/tremulous { };
 
   tts = callPackage ../tools/audio/tts { };
+
+  tumiki-fighters = callPackage ../games/tumiki-fighters { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
 
@@ -30400,6 +30422,10 @@ in
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
 
   faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
+
+  faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
+
+  faustStk = callPackage ../applications/audio/faustStk  { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
