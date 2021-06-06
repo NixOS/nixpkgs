@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     owner = "dolphin-emu";
     repo = "dolphin";
     rev = "2f8c9a77356b8eac8fdff0e9312fe2a8896c92b5";
-    sha256 = "0aw67drwsbswqcg18y1rx3di3hcq03pn7idk8s0mfi7sa8wja9i4";
+    sha256 = "0kg85jd58086argvljz8blhqfhfj716hp9jlr1vr593xp2vni2xl";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
