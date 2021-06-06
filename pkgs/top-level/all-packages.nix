@@ -876,6 +876,8 @@ in
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
+  veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
@@ -30345,6 +30347,8 @@ in
   darcnes = callPackage ../misc/emulators/darcnes { };
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
+
+  depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   desmume = callPackage ../misc/emulators/desmume { inherit (pkgs.gnome2) gtkglext libglade; };
 
