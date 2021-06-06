@@ -82,8 +82,7 @@ stdenv.mkDerivation (overridable // {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
+  postFixup = ''
     if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
       rm "$out/bin/${pname}.bat" # windows file
     fi
@@ -102,9 +101,6 @@ stdenv.mkDerivation (overridable // {
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
     fi
-
-    patchShebangs $out
-    runHook postFixup
   '';
 
   # TODO investigate why the resulting closure still has
