@@ -212,6 +212,8 @@
 
   pod-mode = callPackage ./pod-mode { };
 
+  power-mode = callPackage ./power-mode { };
+
   railgun = callPackage ./railgun { };
 
   structured-haskell-mode = self.shm;
