@@ -1949,4 +1949,5 @@ EOT
     testTarget = "libarchive-test --test-options='-j1'";
   };
 
+  reactive-banana = super.reactive-banana.override { hashable = self.hashable_1_2_7_0; semigroups = self.semigroups_0_18_5;};
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
