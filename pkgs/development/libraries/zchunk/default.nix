@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-MqnHtqOjLl6R5GZ4f2UX1iLoO9FUT2IfZlSN58wW8JA=";
+    sha256 = "1x7nrrhcafml6sgqr5h73v3hlcyq2275npngik4j6kr7wlj9dsmg";
   };
 
   nativeBuildInputs = [
