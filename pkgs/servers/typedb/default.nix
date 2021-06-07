@@ -25,7 +25,7 @@ let
     };
   };
 
-  currentSystem = systems.${system} or throw "unsupported system ${system}";
+  currentSystem = systems.${system} or (throw "unsupported system ${system}");
   typedbDir = currentSystem.dir;
   srcFolder = currentSystem.src;
   javaPatch = ''
@@ -59,26 +59,30 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    if [[ "${system}" -eq "x86_64-linux" ]]; then
-      tar -xf typedb-all-linux-2.1.1.tar.gz
-    fi # the rest is already unpacked by fetchzip
+    #echo "here"
+    #ls
+    #echo "here2"
+    #if [[ "${system}" -eq "x86_64-linux" ]]; then
+    #  tar -xf typedb-all-linux-2.1.1.tar.gz
+    #fi # the rest is already unpacked by fetchzip
 
     #patch before install
     echo "${javaPatch}" > typedb_java.patch
     echo "${typedb-properties-patch}" > typedb-properties.patch
-    patch ./${typedbDir}/typedb typedb_java.patch
-    patch ./${typedbDir}/server/conf/typedb.properties typedb-properties.patch
+    patch ./typedb typedb_java.patch
+    patch ./server/conf/typedb.properties typedb-properties.patch
     mkdir $out
-    cp -r ./${typedbDir} $out
+    cp -r ./* $out
+
 
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/typedb --help > /dev/null
-    res=`$out/typedb client`
-    echo "--"
-    echo $res
+    #$out/typedb --help > /dev/null
+    #res=`$out/typedb client`
+    #echo "--"
+    #echo $res
   '';
   doCheck = true;
 
