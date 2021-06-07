@@ -99,9 +99,22 @@ in
       LockFile = "/run/geoipupdate/.lock";
     };
 
+    systemd.services.geoipupdate-create-db-dir = {
+      serviceConfig.Type = "oneshot";
+      script = ''
+        mkdir -p ${cfg.settings.DatabaseDirectory}
+        chmod 0755 ${cfg.settings.DatabaseDirectory}
+      '';
+    };
+
     systemd.services.geoipupdate = {
       description = "GeoIP Updater";
-      after = [ "network-online.target" "nss-lookup.target" ];
+      requires = [ "geoipupdate-create-db-dir.service" ];
+      after = [
+        "geoipupdate-create-db-dir.service"
+        "network-online.target"
+        "nss-lookup.target"
+      ];
       wants = [ "network-online.target" ];
       startAt = cfg.interval;
       serviceConfig = {
@@ -122,8 +135,6 @@ in
             geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
             script = ''
-              mkdir -p "${cfg.settings.DatabaseDirectory}"
-              chmod 755 "${cfg.settings.DatabaseDirectory}"
               chown geoip "${cfg.settings.DatabaseDirectory}"
 
               cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
