@@ -222,6 +222,8 @@ stdenv.mkDerivation rec {
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
+  doCheck = true;
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
