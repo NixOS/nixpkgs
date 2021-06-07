@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
+    # remove git command from makefile as we run from a tarball
+    # replace with actual timestamp of the commit
     substituteInPlace makefile --replace '$(shell git log -1 --no-show-signature --pretty="%ct")' 1623019602
     '';
 
