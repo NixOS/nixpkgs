@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "dracut is an event driven initramfs infrastructure";
-    homepage = https://dracut.wiki.kernel.org;
+    homepage = "https://dracut.wiki.kernel.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ cmcdragonkai ];
     platforms = platforms.linux;
