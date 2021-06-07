@@ -63,7 +63,7 @@ The second argument (`super`) corresponds to the result of the evaluation of the
 
 The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
 
-Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in <xref linkend="sec-modify-via-packageOverrides"/>. Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
+Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
 
 ## Using overlays to configure alternatives {#sec-overlays-alternatives}
 

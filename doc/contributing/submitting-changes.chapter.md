@@ -71,6 +71,7 @@ Security fixes are submitted in the same way as other changes and thus the same 
 - If a new version fixing the vulnerability has been released, update the package;
 - If the security fix comes in the form of a patch and a CVE is available, then add the patch to the Nixpkgs tree, and apply it to the package.
   The name of the patch should be the CVE identifier, so e.g. `CVE-2019-13636.patch`; If a patch is fetched the name needs to be set as well, e.g.:
+
   ```nix
   (fetchpatch {
     name = "CVE-2019-11068.patch";
@@ -89,7 +90,7 @@ There is currently no policy when to remove a package.
 
 Before removing a package, one should try to find a new maintainer or fix smaller issues first.
 
-### Steps to remove a package from Nixpkgs
+### Steps to remove a package from Nixpkgs {#steps-to-remove-a-package-from-nixpkgs}
 
 We use jbidwatcher as an example for a discontinued project here.
 
@@ -100,6 +101,7 @@ We use jbidwatcher as an example for a discontinued project here.
 1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/misc/vim-plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
 
     For example in this case:
+
     ```
     jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
     ```

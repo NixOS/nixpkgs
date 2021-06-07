@@ -24,12 +24,20 @@
   </section>
   <section xml:id="new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht">sourcehut</link>, a
+          collection of tools useful for software development. Available
+          as
+          <link xlink:href="options.html#opt-services.sourcehut.enable">services.sourcehut</link>.
         </para>
       </listitem>
     </itemizedlist>
