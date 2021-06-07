@@ -294,7 +294,10 @@ in
         environment = env // {
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
         };
-        preStart = ''
+        preStart =
+        let
+          runAs = if config.security.sudo.enable then "${pkgs.sudo}/bin/sudo" else "${pkgs.doas}/bin/doas";
+        in ''
           mkdir -p ${baseDir}
           chown hydra.hydra ${baseDir}
           chmod 0750 ${baseDir}
@@ -310,11 +313,11 @@ in
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              ${runAs} -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
+              ${runAs} -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
               touch ${baseDir}/.db-created
             fi
-            echo "create extension if not exists pg_trgm" | ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
+            echo "create extension if not exists pg_trgm" | ${runAs} -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
           ''}
 
           if [ ! -e ${cfg.gcRootsDir} ]; then
