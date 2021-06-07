@@ -82,6 +82,9 @@ stdenv.mkDerivation (overridable // {
     runHook postInstall
   '';
 
+  # Stripping of the binary is intentional
+  # even though it does not affect beam files
+  # it is necessary for NIFs binaries
   postFixup = ''
     if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
       rm "$out/bin/${pname}.bat" # windows file
@@ -97,6 +100,8 @@ stdenv.mkDerivation (overridable // {
     # closure size
     if [ -e $out/erts-* ]; then
       echo "ERTS found in $out - removing references to erlang to reduce closure size"
+      # there is a link in $out/erts-*/bin/start always
+      # sometimes there are links in dependencies like bcrypt compiled binaries
       for file in $(rg "${erlang}/lib/erlang" "$out" --text --files-with-matches); do
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
