@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pythonPath = (with python2Packages; [ numpy matplotlib plotly ]) ;
 
   preConfigure = ''
-    patchShebangs .
+    patchShebangs autogen.sh
     ./autogen.sh
     export CC=mpicc
     export CXX=mpic++
