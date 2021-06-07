@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openmpi, python2Packages, autoconf, automake } :
+{ stdenv, fetchFromGitHub, mpi, python2Packages, autoconf, automake } :
 
 stdenv.mkDerivation rec {
   pname = "hp2p";
