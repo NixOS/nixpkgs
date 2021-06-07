@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ lua51Packages.busted util-linux neovim ];
-  checkPhase = ''script -c "busted --lpath './?.lua' test"'';
+  checkPhase = ''
+    runHook preCheck
+    script -c "busted --lpath './?.lua' test"
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Use neovim as pager";
