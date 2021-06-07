@@ -150,6 +150,26 @@ in
         ReadWritePaths = cfg.settings.DatabaseDirectory;
         RuntimeDirectory = "geoipupdate";
         RuntimeDirectoryMode = 0700;
+        CapabilityBoundingSet = "";
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
       };
     };
 
