@@ -1,6 +1,5 @@
 { callPackage }:
 {
-  "appindicatorsupport@rgcjonas.gmail.com" = callPackage ./appindicator { };
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "caffeine@patapon.info" = callPackage ./caffeine { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
