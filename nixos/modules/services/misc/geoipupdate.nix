@@ -142,4 +142,6 @@ in
       };
     };
   };
+
+  meta.maintainers = [ lib.maintainers.talyz ];
 }
