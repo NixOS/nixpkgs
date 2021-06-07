@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.6.2";
+  version = "2021.6.3";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -295,13 +295,13 @@
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
     "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect_aio
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
-    "gdacs" = ps: with ps; [ ]; # missing inputs: aio_georss_gdacs
+    "gdacs" = ps: with ps; [ aio-georss-gdacs ];
     "generic" = ps: with ps; [ ];
     "generic_thermostat" = ps: with ps; [ sqlalchemy ];
     "geniushub" = ps: with ps; [ ]; # missing inputs: geniushub-client
     "geo_json_events" = ps: with ps; [ geojson-client ];
     "geo_location" = ps: with ps; [ ];
-    "geo_rss_events" = ps: with ps; [ ]; # missing inputs: georss_generic_client
+    "geo_rss_events" = ps: with ps; [ georss-generic-client ];
     "geofency" = ps: with ps; [ aiohttp-cors ];
     "geonetnz_quakes" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_quakes
     "geonetnz_volcano" = ps: with ps; [ ]; # missing inputs: aio_geojson_geonetnz_volcano
@@ -384,7 +384,7 @@
     "idteck_prox" = ps: with ps; [ ]; # missing inputs: rfk101py
     "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
     "iglo" = ps: with ps; [ ]; # missing inputs: iglo
-    "ign_sismologia" = ps: with ps; [ ]; # missing inputs: georss_ign_sismologia_client
+    "ign_sismologia" = ps: with ps; [ georss-ign-sismologia-client ];
     "ihc" = ps: with ps; [ defusedxml ]; # missing inputs: ihcsdk
     "image" = ps: with ps; [ aiohttp-cors pillow ];
     "image_processing" = ps: with ps; [ aiohttp-cors ];
@@ -668,7 +668,7 @@
     "pyload" = ps: with ps; [ ];
     "python_script" = ps: with ps; [ restrictedpython ];
     "qbittorrent" = ps: with ps; [ ]; # missing inputs: python-qbittorrent
-    "qld_bushfire" = ps: with ps; [ ]; # missing inputs: georss_qld_bushfire_alert_client
+    "qld_bushfire" = ps: with ps; [ georss-qld-bushfire-alert-client ];
     "qnap" = ps: with ps; [ ]; # missing inputs: qnapstats
     "qrcode" = ps: with ps; [ pillow ]; # missing inputs: pyzbar
     "quantum_gateway" = ps: with ps; [ ]; # missing inputs: quantum-gateway
