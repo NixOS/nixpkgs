@@ -22,6 +22,7 @@ in python.pkgs.buildPythonPackage {
     sha256 = sha256Hash;
   };
 
+  # postPatch replacements should be removed on the update.
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
