@@ -6,7 +6,7 @@
 
 - Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
 
-- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in <xref linkend="sec-package-naming"/>.
+- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [](#sec-package-naming).
 
 - Function calls with attribute set arguments are written as
 
@@ -183,9 +183,6 @@
 
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
-- The top-level `lib` must be used in the master and 21.05 branch over its alias `stdenv.lib` as it now causes evaluation errors when aliases are disabled which is the case for ofborg.
-  `lib` is unrelated to `stdenv`, and so `stdenv.lib` should only be used as a convenience alias when developing locally to avoid having to modify the function inputs just to test something out.
-
 ## Package naming {#sec-package-naming}
 
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
@@ -212,7 +209,7 @@ There are a few naming guidelines:
 
 - Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also <xref linkend="sec-versioning" />
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -465,9 +462,9 @@ Preferred source hash type is sha256. There are several ways to get it.
 
     For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
 
-    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn't applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73")). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
+    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: warning
+::: {.warning}
 This method has security problems. Check below for details.
 :::
 

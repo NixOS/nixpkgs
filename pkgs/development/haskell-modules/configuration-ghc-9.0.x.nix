@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 10.x.
-  llvmPackages = pkgs.llvmPackages_10;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
 
   # Disable GHC 9.0.x core libraries.
   array = null;

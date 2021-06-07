@@ -44,7 +44,7 @@ pet = buildGoModule rec {
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
 
-### Example for `buildGoPackage`
+### Example for `buildGoPackage` {#example-for-buildgopackage}
 
 In the following is an example expression using buildGoPackage, the following arguments are of special significance to the function:
 
@@ -114,21 +114,24 @@ Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly diff
 
 ### `buildFlagsArray` and `buildFlags`: {#ex-goBuildFlags-noarray}
 
-These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`. The most common use case of these attributes is to make the resulting executable aware of its own version. For example:
+These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`.
 
 ```nix
   buildFlagsArray = [
-    # Note: single quotes are not needed.
-    "-ldflags=-X main.Version=${version} -X main.Commit=${version}"
+    "-tags=release"
   ];
 ```
 
+### `ldflags` {#var-go-ldflags}
+
+Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
+
 ```nix
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=${version}
-    -X main.Commit=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+  ];
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -137,4 +140,4 @@ Removes the pre-existing vendor directory. This should only be used if the depen
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
+Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.

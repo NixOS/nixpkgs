@@ -33,10 +33,17 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Fantomas = fetchNuGet {
     baseName = "Fantomas";
-    version = "1.6.0";
-    sha256 = "1b9rd3i76b5xzv0j62dvfr1ksdwvb59vxw6jhzpi018axjn6757q";
+    version = "4.4.0";
+    sha256 = "cYz0ewJdK9nRlMKmigk3IENfOXvJRhXJfLXshaqgZ6o=";
     outputFiles = [ "lib/*" ];
     dllFiles = [ "Fantomas*.dll" ];
+
+    meta = with lib; {
+      description = "FSharp source code formatter";
+      homepage = "https://github.com/fsprojects/fantomas";
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   FSharpCompilerCodeDom = fetchNuGet {
@@ -72,6 +79,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "4.1.17";
     sha256 = "1yk23ir66fgqm5r6qyf66zf64l0s223l3yd7p9yvbyimyg0hgzb1";
     outputFiles = [ "*" ];
+  };
+
+  FSharpData = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "4.1.1";
+    sha256 = "0ytjiQi8vQQU51JYexnC13Bi7NqVmLRzM75SOZ+hhQU=";
+    outputFiles = [ "lib/*" ];
+
+    meta = with lib; {
+      description = "F# Data: Library for Data Access";
+      homepage = "https://fsprojects.github.io/FSharp.Data/";
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   FSharpData225 = fetchNuGet {
@@ -153,9 +174,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpFormatting = fetchNuGet {
     baseName = "FSharp.Formatting";
-    version = "2.9.8";
-    sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
-    outputFiles = [ "lib/net40/*" ];
+    version = "11.2.0";
+    sha256 = "4IMrd+jpRZw+vBXx4X89/B/Fdpiuy2hwtmQNGWQp0wM=";
+    outputFiles = [ "lib/*" ];
+    postUnpack = ''
+      chmod -R a+r $sourceRoot
+    '';
+
+    meta = with lib; {
+      description = "F# tools for generating documentation (Markdown processor and F# code formatter)";
+      homepage = "https://fsprojects.github.io/FSharp.Formatting/";
+      longDescription = ''
+        The FSharp.Formatting package includes libraries and tools for processing F# script files,
+        markdown and components for documentation generation.
+      '';
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   NUnit3 = fetchNuGet {
@@ -609,50 +644,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  FSharpData = buildDotnetPackage rec {
-    baseName = "FSharp.Data";
-    version = "2.2.3";
-
-    src = fetchFromGitHub {
-      owner = "fsharp";
-      repo = baseName;
-      rev = version;
-      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
-    };
-
-    buildInputs = [ fsharp ];
-
-    fileProvidedTypes = fetchurl {
-      name = "ProvidedTypes.fs";
-      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs";
-      sha256 = "1lb056v1xld1rfx6a8p8i2jz8i6qa2r2823n5izsf1qg1qgf2980";
-    };
-
-    fileDebugProvidedTypes = fetchurl {
-      name = "DebugProvidedTypes.fs";
-      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs";
-      sha256 = "1whyrf2jv6fs7kgysn2086v15ggjsd54g1xfs398mp46m0nxp91f";
-    };
-
-    preConfigure = ''
-       # Copy single-files-in-git-repos
-       mkdir -p "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src"
-       cp -v "${fileProvidedTypes}" "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src/ProvidedTypes.fs"
-       cp -v "${fileDebugProvidedTypes}" "paket-files/fsprojects/FSharp.TypeProviders.StarterPack/src/DebugProvidedTypes.fs"
-    '';
-
-    xBuildFiles = [ "src/FSharp.Data.fsproj" "src/FSharp.Data.DesignTime.fsproj" ];
-    outputFiles = [ "bin/*.dll" "bin/*.xml" ];
-
-    meta = {
-      description = "F# Data: Library for Data Access";
-      homepage = "https://fsharp.github.io/FSharp.Data/";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ obadz ];
-      platforms = with lib.platforms; linux;
-    };
-  };
-
   # FSharpxExtras = buildDotnetPackage rec {
   #   baseName = "FSharpx.Extras";
   #   version = "1.8.41";
@@ -967,6 +958,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ obadz ];
       platforms = with lib.platforms; linux;
+    };
+  };
+
+  YamlDotNet = fetchNuGet {
+    baseName = "YamlDotNet";
+    version = "11.1.1";
+    sha256 = "rwZ/QyDVrN3wGrEYKY3QY5Xqo2Tp3FkR6dh4QrC+QS0=";
+    outputFiles = [ "lib/*" ];
+
+    meta = with lib; {
+      description = "YamlDotNet is a .NET library for YAML";
+      homepage = "https://github.com/aaubry/YamlDotNet";
+      license = licenses.mit;
+      maintainers = [ maintainers.ratsclub ];
     };
   };
 

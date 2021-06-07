@@ -18,19 +18,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "0dfnn5ar7zgvgvxcvw5f6vwpkgkwa017y07s7mvdv44zf4hzsj3s";
+      sha256 = "1ga2hn9br71dyzn3p9jvjiksvnq21p6i5hp1z1j5fpz9la28nqzf";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1l3i7mxlzb2dkq6ff37rvnaarikxzxj0fg9i2kk26s8pz7vpqgjh";
+      sha256 = "1kv7dm1nw85lw3brrclkj7xc9p021jx3n8wgp2fg3572s86ypskw";
     };
 
 
@@ -62,5 +62,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";
+    changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }

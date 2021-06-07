@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git }:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
 
 { pname
 , version
@@ -23,7 +23,8 @@ let
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 stdenv.mkDerivation (overridable // {
-  nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ];
+  # rg is used as a better grep to search for erlang references in the final release
+  nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ripgrep ];
   buildInputs = builtins.attrValues mixNixDeps;
 
   MIX_ENV = mixEnv;
@@ -31,7 +32,6 @@ stdenv.mkDerivation (overridable // {
   HEX_OFFLINE = 1;
   DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
   # the api with `mix local.rebar rebar path` makes a copy of the binary
-  MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
 
   postUnpack = ''
@@ -82,8 +82,10 @@ stdenv.mkDerivation (overridable // {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
+  # Stripping of the binary is intentional
+  # even though it does not affect beam files
+  # it is necessary for NIFs binaries
+  postFixup = ''
     if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
       rm "$out/bin/${pname}.bat" # windows file
     fi
@@ -94,21 +96,20 @@ stdenv.mkDerivation (overridable // {
     if [ -e $out/releases/COOKIE ]; then # absent in special cases, i.e. elixir-ls
       rm $out/releases/COOKIE
     fi
-    # TODO remove the uneeded reference too erlang
-    # one possible way would be
-    # for f in $(${findutils}/bin/find $out -name start); do
-    #   substituteInPlace $f \
-    #     --replace 'ROOTDIR=${erlang}/lib/erlang' 'ROOTDIR=""'
-    # done
-    # What is left to do is to check that erlang is not required on
-    # the host
-
-    patchShebangs $out
-    runHook postFixup
+    # removing unused erlang reference from resulting derivation to reduce
+    # closure size
+    if [ -e $out/erts-* ]; then
+      echo "ERTS found in $out - removing references to erlang to reduce closure size"
+      # there is a link in $out/erts-*/bin/start always
+      # sometimes there are links in dependencies like bcrypt compiled binaries
+      for file in $(rg "${erlang}/lib/erlang" "$out" --text --files-with-matches); do
+        substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
+      done
+    fi
   '';
-  # TODO figure out how to do a Fixed Output Derivation and add the output hash
-  # This doesn't play well at the moment with Phoenix projects
-  # for example that have frontend dependencies
 
+  # TODO investigate why the resulting closure still has
+  # a reference to erlang.
+  # uncommenting the following will fail the build
   # disallowedReferences = [ erlang ];
 })

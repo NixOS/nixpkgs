@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
+    ocaml findlib ocamlgraph zarith menhir menhirLib
     # Compressed Sessions
     # Emacs compilation of why3.el
     emacs

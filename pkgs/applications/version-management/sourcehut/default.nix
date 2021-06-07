@@ -31,6 +31,7 @@ let
 in
 with python.pkgs; recurseIntoAttrs {
   inherit python;
+  coresrht = toPythonApplication srht;
   buildsrht = toPythonApplication buildsrht;
   dispatchsrht = toPythonApplication dispatchsrht;
   gitsrht = toPythonApplication gitsrht;

@@ -728,7 +728,7 @@ in
 
         services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
         services.mysql.enable = lib.mkDefault createLocalMySQL;
-        services.mysql.package = lib.mkIf createLocalMySQL pkgs.mysql;
+        services.mysql.package = lib.mkIf createLocalMySQL pkgs.mariadb;
       };
 
   meta.doc = ./keycloak.xml;

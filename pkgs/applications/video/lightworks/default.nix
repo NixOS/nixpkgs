@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
-, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsaLib, udev
+, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsaLib, udev, libjack2
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -18,6 +18,7 @@ let
     openssl
     libuuid
     alsaLib
+    libjack2
     udev
   ];
 

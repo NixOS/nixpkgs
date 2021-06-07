@@ -191,6 +191,8 @@ let
 
     containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
 
+    cooltt = callPackage ../development/ocaml-modules/cooltt { };
+
     cow = callPackage ../development/ocaml-modules/cow { };
 
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
@@ -642,6 +644,10 @@ let
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
+
+    menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
+
+    menhirSdk = callPackage ../development/ocaml-modules/menhir/sdk.nix { };
 
     merlin =
       if lib.versionAtLeast ocaml.version "4.11"
@@ -1168,6 +1174,8 @@ let
     };
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
+
+    stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 

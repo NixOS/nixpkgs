@@ -29,6 +29,7 @@ dont-distribute-packages:
  - Advgame
  - Advise-me
  - aern2-real
+ - aern2-real_0_2_7_0
  - AERN-Net
  - AERN-Real
  - AERN-Real-Double
@@ -93,7 +94,6 @@ dont-distribute-packages:
  - ApplePush
  - approx-rand-test
  - arbor-monad-metric-datadog
- - arch-hs
  - archlinux-web
  - arduino-copilot
  - arff
@@ -399,9 +399,7 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_2
  - clash-lib
- - clash-lib_1_4_2
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-systemverilog
@@ -440,6 +438,7 @@ dont-distribute-packages:
  - cnc-spec-compiler
  - Coadjute
  - codec
+ - code-conjure
  - codec-rpm
  - codemonitor
  - cognimeta-utils
@@ -625,8 +624,6 @@ dont-distribute-packages:
  - dhall-docs
  - dhcp-lease-parser
  - dia-functions
- - diagrams-braille
- - diagrams-builder
  - diagrams-haddock
  - diagrams-html5
  - diagrams-pandoc
@@ -782,9 +779,9 @@ dont-distribute-packages:
  - extemp
  - extensible-data
  - extract-dependencies
+ - extrapolate
  - Facts
  - factual-api
- - fadno-braids
  - FailureT
  - fakedata-quickcheck
  - fallingblocks
@@ -970,7 +967,6 @@ dont-distribute-packages:
  - global-config
  - glome-hs
  - GlomeView
- - gloss-banana
  - gloss-devil
  - gloss-examples
  - gloss-sodium
@@ -1086,28 +1082,8 @@ dont-distribute-packages:
  - hadoop-tools
  - haggis
  - hails-bin
- - hakyll-agda
- - hakyll-alectryon
- - hakyll-blaze-templates
- - hakyll-contrib
- - hakyll-contrib-csv
- - hakyll-contrib-elm
- - hakyll-contrib-hyphenation
- - hakyll-contrib-i18n
- - hakyll-contrib-links
- - hakyll-dhall
- - hakyll-dir-list
  - hakyll-elm
- - hakyll-favicon
- - hakyll-filestore
- - hakyll-images
  - hakyll-ogmarkup
- - hakyll-process
- - hakyll-R
- - hakyll-sass
- - hakyll-series
- - hakyll-shakespeare
- - hakyll-shortcut-links
  - hakyll-typescript
  - halberd
  - hall-symbols
@@ -1351,10 +1327,10 @@ dont-distribute-packages:
  - HLearn-datastructures
  - HLearn-distributions
  - hledger-api
+ - hlrdb
  - hls
  - hly
  - hmark
- - hmatrix-sundials
  - hmeap
  - hmeap-utils
  - hmep
@@ -1610,7 +1586,6 @@ dont-distribute-packages:
  - iteratee-parsec
  - iteratee-stm
  - iterio-server
- - iterm-show-diagrams
  - iter-stats
  - ivor
  - ivory-avr-atmega328p-registers
@@ -1680,7 +1655,6 @@ dont-distribute-packages:
  - karakuri
  - katip-elasticsearch
  - katip-rollbar
- - kawaii
  - keera-hails-i18n
  - keera-hails-mvc-environment-gtk
  - keera-hails-mvc-model-lightmodel
@@ -1917,7 +1891,6 @@ dont-distribute-packages:
  - marquise
  - marvin
  - masakazu-bot
- - master-plan
  - matchers
  - mathblog
  - mathlink
@@ -2000,6 +1973,7 @@ dont-distribute-packages:
  - Monocle
  - monte-carlo
  - moo
+ - moo-nad
  - morley
  - morloc
  - morphisms-functors-inventory
@@ -2118,6 +2092,7 @@ dont-distribute-packages:
  - NoSlow
  - notmuch-haskell
  - notmuch-web
+ - nri-prelude_0_6_0_1
  - numerical
  - numeric-ode
  - numhask-hedgehog
@@ -2344,7 +2319,6 @@ dont-distribute-packages:
  - push-notify-apn
  - push-notify-ccs
  - push-notify-general
- - puzzle-draw
  - puzzle-draw-cmdline
  - pvd
  - qd-vec
@@ -2417,18 +2391,10 @@ dont-distribute-packages:
  - rdioh
  - react-flux-servant
  - reactive
- - reactive-balsa
- - reactive-banana-automation
- - reactive-banana-bunch
- - reactive-banana-gi-gtk
  - reactive-banana-sdl
- - reactive-banana-sdl2
- - reactive-banana-threepenny
  - reactive-banana-wx
  - reactive-fieldtrip
  - reactive-glut
- - reactive-jack
- - reactive-midyim
  - reactor
  - readline-statevar
  - readpyc
@@ -2559,6 +2525,7 @@ dont-distribute-packages:
  - ruler-core
  - runtime-arbitrary
  - S3
+ - safe-coloured-text-layout-gen
  - safe-numeric
  - safer-file-handles
  - safer-file-handles-bytestring
@@ -2929,7 +2896,6 @@ dont-distribute-packages:
  - tensorflow-core-ops
  - tensorflow-logging
  - tensorflow-ops
- - termbox-banana
  - terminal-text
  - terrahs
  - testbench
@@ -3248,6 +3214,7 @@ dont-distribute-packages:
  - yajl-enumerator
  - yam
  - yam-datasource
+ - yam-job
  - yam-logger
  - yaml-rpc-scotty
  - yaml-rpc-snap
@@ -3255,6 +3222,7 @@ dont-distribute-packages:
  - yam-redis
  - yam-transaction
  - yam-transaction-odbc
+ - yam-transaction-postgresql
  - yam-web
  - yarr-image-io
  - yavie

@@ -25,13 +25,6 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  postPatch = ''
-    # https://github.com/angr/angrop/issues/35
-    substituteInPlace setup.py \
-      --replace "packages=['angrop']," "packages=find_packages()," \
-      --replace "from distutils.core import setup" "from setuptools import find_packages, setup"
-  '';
-
   # Tests have additional requirements, e.g., angr binaries
   # cle is executing the tests with the angr binaries already and is a requirement of angr
   doCheck = false;
