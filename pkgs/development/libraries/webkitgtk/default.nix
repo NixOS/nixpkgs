@@ -107,6 +107,10 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
       excludes = [ "Source/WebKit/ChangeLog" ];
     })
+
+    # hides webkit processes from the macOS Dock
+    # https://source.atlas.engineer/view/repository/macports-port
+    ./0001-Prevent-WebKitWebProcess-from-being-in-the-dock-or-p.patch
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

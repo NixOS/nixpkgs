@@ -1,0 +1,51 @@
+--- a/Source/WebKit/PlatformGTK.cmake
++++ b/Source/WebKit/PlatformGTK.cmake
+@@ -32,6 +32,10 @@
+     "SourcesGTK.txt"
+ )
+ 
++find_library(APPKIT_FRAMEWORK NAMES AppKit)
++target_link_libraries(WebKit PRIVATE ${APPKIT_FRAMEWORK})
++list(APPEND WebKit_SOURCES WebProcess/gtk/NSApplicationActivationPolicy.mm)
++
+ if (NOT USE_GTK4)
+     list(APPEND WebKit_SOURCES
+         UIProcess/ViewGestureController.cpp
+--- a/Source/WebKit/WebProcess/gtk/WebProcessMainGtk.cpp
++++ b/Source/WebKit/WebProcess/gtk/WebProcessMainGtk.cpp
+@@ -31,6 +31,7 @@
+ #include "WebProcess.h"
+ #include <WebCore/GtkVersioning.h>
+ #include <libintl.h>
++#include "NSApplicationActivationPolicy.h"
+ 
+ #if PLATFORM(X11)
+ #include <X11/Xlib.h>
+@@ -64,6 +65,7 @@
+ 
+         bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+         bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
++        SetActivationPolicyProhibited ();
+ 
+         return true;
+     }
+--- /dev/null
++++ b/Source/WebKit/WebProcess/gtk/NSApplicationActivationPolicy.h
+@@ -0,0 +1,4 @@
++
++// This is the C "trampoline" function that will be used
++// to invoke a specific Objective-C method FROM C++
++void SetActivationPolicyProhibited ();
+--- /dev/null
++++ b/Source/WebKit/WebProcess/gtk/NSApplicationActivationPolicy.mm
+@@ -0,0 +1,10 @@
++#include "config.h"
++#import "NSApplicationActivationPolicy.h"
++#import <AppKit/AppKit.h>
++
++// C "trampoline" function to invoke Objective-C method
++void SetActivationPolicyProhibited ()
++{
++    [NSApp setActivationPolicy: NSApplicationActivationPolicyProhibited];
++    return;
++}
