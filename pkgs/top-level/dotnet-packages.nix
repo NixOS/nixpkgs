@@ -174,9 +174,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpFormatting = fetchNuGet {
     baseName = "FSharp.Formatting";
-    version = "2.9.8";
-    sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
-    outputFiles = [ "lib/net40/*" ];
+    version = "11.2.0";
+    sha256 = "4IMrd+jpRZw+vBXx4X89/B/Fdpiuy2hwtmQNGWQp0wM=";
+    outputFiles = [ "lib/*" ];
+    postUnpack = ''
+      chmod -R a+r $sourceRoot
+    '';
+
+    meta = with lib; {
+      description = "F# tools for generating documentation (Markdown processor and F# code formatter)";
+      homepage = "https://fsprojects.github.io/FSharp.Formatting/";
+      longDescription = ''
+        The FSharp.Formatting package includes libraries and tools for processing F# script files,
+        markdown and components for documentation generation.
+      '';
+      license = licenses.asl20;
+      maintainers = [ maintainers.ratsclub ];
+    };
   };
 
   NUnit3 = fetchNuGet {

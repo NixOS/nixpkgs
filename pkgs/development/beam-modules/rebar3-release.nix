@@ -46,7 +46,8 @@ let
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
 
-    dontStrip = true;
+    # ensure we strip any native binaries (eg. NIFs, ports)
+    stripDebugList = lib.optional (releaseType == "release") "rel";
 
     inherit src;
 
