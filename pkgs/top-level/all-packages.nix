@@ -20512,7 +20512,9 @@ in
 
     digimend = callPackage ../os-specific/linux/digimend { };
 
-    dpdk = callPackage ../os-specific/linux/dpdk { };
+    dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+
+    dpdk = throw "The dpdk driver has been renamed to dpdk-mods.";
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
