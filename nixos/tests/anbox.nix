@@ -17,6 +17,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
     test-support.displayManager.auto.user = "alice";
 
     virtualisation.anbox.enable = true;
+    # The AArch64 anbox image will not start.
+    # Meanwhile the postmarketOS images work just fine.
+    virtualisation.anbox.image = pkgs.anbox-postmarketos-image;
     virtualisation.memorySize = 2500;
   };
 
