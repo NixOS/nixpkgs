@@ -1,15 +1,15 @@
 { lib, fetchurl, buildDunePackage
 , cstruct, cstruct-sexp, domain-name, fmt, ppx_cstruct, ppx_sexp_conv, logs, hkdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, ocaml_lwt, ptime, rresult, sexplib, x509
-, alcotest, cstruct-unix, ounit2
+, alcotest, cstruct-unix, ounit2, randomconv
 }:
 
 buildDunePackage rec {
   pname = "tls";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
-    sha256 = "ca95fa59a82f7d38b0b495fc0cd1ff54e7728492a292895d0067c1ba9de81b7b";
+    sha256 = "sha256-IE6Fuvem8A3lZ/M8GLNYNwCG+v7BbPQ4QdYS+fKT50c=";
   };
 
   minimumOCamlVersion = "4.08";
@@ -40,6 +40,7 @@ buildDunePackage rec {
     alcotest
     cstruct-unix
     ounit2
+    randomconv
   ];
 
   meta = with lib; {
