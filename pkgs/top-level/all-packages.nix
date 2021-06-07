@@ -224,6 +224,8 @@ in
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  calico = callPackage ../tools/networking/calico { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
