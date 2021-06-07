@@ -56,6 +56,7 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "script"
     "snmp"
     "smokeping"
     "sql"
