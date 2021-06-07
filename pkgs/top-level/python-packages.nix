@@ -7713,6 +7713,8 @@ in {
 
   smartypants = callPackage ../development/python-modules/smartypants { };
 
+  smbprotocol = callPackage ../development/python-modules/smbprotocol { };
+
   smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
 
   smdebug-rulesconfig = callPackage ../development/python-modules/smdebug-rulesconfig { };
