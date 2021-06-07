@@ -223,6 +223,10 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
+
+  aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
+
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -1417,6 +1421,8 @@ in {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+  click-option-group = callPackage ../development/python-modules/click-option-group { };
+
   click-plugins = callPackage ../development/python-modules/click-plugins { };
 
   click-spinner = callPackage ../development/python-modules/click-spinner { };
@@ -2193,6 +2199,8 @@ in {
 
   elementpath = callPackage ../development/python-modules/elementpath { };
 
+  elevate = callPackage ../development/python-modules/elevate { };
+
   eliot = callPackage ../development/python-modules/eliot { };
 
   elmax = callPackage ../development/python-modules/elmax { };
@@ -2737,6 +2745,22 @@ in {
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = callPackage ../development/python-modules/geopy { };
+
+  georss-client = callPackage ../development/python-modules/georss-client { };
+
+  georss-generic-client = callPackage ../development/python-modules/georss-generic-client { };
+
+  georss-ign-sismologia-client = callPackage ../development/python-modules/georss-ign-sismologia-client { };
+
+  georss-ingv-centro-nazionale-terremoti-client = callPackage ../development/python-modules/georss-ingv-centro-nazionale-terremoti-client { };
+
+  georss-nrcan-earthquakes-client = callPackage ../development/python-modules/georss-nrcan-earthquakes-client { };
+
+  georss-qld-bushfire-alert-client = callPackage ../development/python-modules/georss-qld-bushfire-alert-client { };
+
+  georss-tfs-incidents-client = callPackage ../development/python-modules/georss-tfs-incidents-client { };
+
+  georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
   getmac = callPackage ../development/python-modules/getmac { };
 
@@ -3407,6 +3431,8 @@ in {
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  i-pi = callPackage ../development/python-modules/i-pi { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -7622,8 +7648,7 @@ in {
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
-  setuptools-scm = self.setuptools_scm; # added 2021-01-04
-  setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+  setuptools-scm = callPackage ../development/python-modules/setuptools-scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
@@ -7889,6 +7914,8 @@ in {
 
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp { };
 
+  sphinxcontrib-excel-table = callPackage ../development/python-modules/sphinxcontrib-excel-table { };
+
   sphinxcontrib-fulltoc = callPackage ../development/python-modules/sphinxcontrib-fulltoc { };
 
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp { };
@@ -8070,6 +8097,8 @@ in {
   subarulink = callPackage ../development/python-modules/subarulink { };
 
   subdownloader = callPackage ../development/python-modules/subdownloader { };
+
+  subliminal = callPackage ../development/python-modules/subliminal { };
 
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;

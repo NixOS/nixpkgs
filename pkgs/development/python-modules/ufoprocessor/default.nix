@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , defcon, fonttools, lxml, fs
 , mutatormath, fontmath, fontparts
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     defcon

@@ -159,13 +159,6 @@ let
         inherit lib config stdenv;
       }) mkDerivation;
 
-      # Slated for removal in 21.11
-      lib = if config.allowAliases or true then builtins.trace
-        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
-         + " Please use `lib` instead."
-         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
-        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
-
       inherit fetchurlBoot;
 
       inherit overrides;

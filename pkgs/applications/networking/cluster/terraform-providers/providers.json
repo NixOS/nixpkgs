@@ -607,6 +607,13 @@
     "sha256": "1nq7k8qa7rv8xyryjigwpwcwvj1sw85c4j46rkfdv70b6js25jz3",
     "version": "0.3.0"
   },
+  "metal": {
+    "owner": "equinix",
+    "repo": "terraform-provider-metal",
+    "rev": "v2.1.0",
+    "sha256": "06i3rj6ig8hxbncdpa8b11v8pr3zhi90ppmf77jjin1114ikd172",
+    "version": "2.1.0"
+  },
   "metalcloud": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-metalcloud",

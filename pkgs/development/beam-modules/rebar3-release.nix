@@ -46,7 +46,8 @@ let
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
 
-    dontStrip = true;
+    # ensure we strip any native binaries (eg. NIFs, ports)
+    stripDebugList = lib.optional (releaseType == "release") "rel";
 
     inherit src;
 
@@ -80,9 +81,20 @@ let
       dir=${if releaseType == "escript"
             then "bin"
             else "rel"}
-      mkdir -p "$out/$dir"
+      mkdir -p "$out/$dir" "$out/bin"
       cp -R --preserve=mode "_build/${profile}/$dir" "$out"
+      ${lib.optionalString (releaseType == "release")
+        "find $out/rel/*/bin -type f -executable -exec ln -s -t $out/bin {} \\;"}
       runHook postInstall
+    '';
+
+    postInstall = ''
+      for dir in $out/rel/*/erts-*; do
+        echo "ERTS found in $dir - removing references to erlang to reduce closure size"
+        for f in $dir/bin/{erl,start}; do
+          substituteInPlace "$f" --replace "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
+        done
+      done
     '';
 
     meta = {

@@ -65,10 +65,14 @@
     };
   };
 
+  apheleia = callPackage ./apheleia {};
+
   emacspeak = callPackage ./emacspeak {};
 
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
+
+  evil-markdown = callPackage ./evil-markdown { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
@@ -87,6 +91,8 @@
       license = bsd3;
     };
   };
+
+  git-undo = callPackage ./git-undo { };
 
   haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
@@ -110,6 +116,10 @@
   };
 
   helm-words = callPackage ./helm-words { };
+
+  isearch-plus = callPackage ./isearch-plus { };
+
+  isearch-prop = callPackage ./isearch-prop { };
 
   jam-mode = callPackage ./jam-mode { };
 
@@ -177,6 +187,8 @@
 
   };
 
+  mu4e-patch = callPackage ./mu4e-patch { };
+
   org-mac-link =
     callPackage ./org-mac-link { };
 
@@ -205,6 +217,8 @@
   sv-kalender = callPackage ./sv-kalender { };
 
   tramp = callPackage ./tramp { };
+
+  youtube-dl = callPackage ./youtube-dl { };
 
   zeitgeist = callPackage ./zeitgeist { };
 

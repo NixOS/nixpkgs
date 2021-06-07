@@ -341,10 +341,10 @@ let
         beforePlugins
         vamImpl
         (nativeImpl packages)
-        customRC
       ]
       ++ lib.optional (pathogen != null) pathogenImpl
-      ++ lib.optional (plug != null) plugImpl;
+      ++ lib.optional (plug != null) plugImpl
+      ++ [ customRC ];
 
     in
       lib.concatStringsSep "\n" (lib.filter (x: x != null && x != "") entries);

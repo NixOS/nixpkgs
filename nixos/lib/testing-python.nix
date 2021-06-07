@@ -130,7 +130,13 @@ rec {
               {
                 virtualisation.qemu.package = qemu_pkg;
               }
-            );
+            ) ++ [(
+              {
+                # Ensure we do not use aliases. Ideally this is only set
+                # when the test framework is used by Nixpkgs NixOS tests.
+                nixpkgs.config.allowAliases = false;
+              }
+            )];
           };
 
           # FIXME: get this pkg from the module system
@@ -190,8 +196,7 @@ rec {
               --add-flags "''${vms[*]}" \
               ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
               --set tests 'start_all(); join_all();' \
-              --set VLANS '${toString vlans}' \
-              ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
+              --set VLANS '${toString vlans}'
           ''); # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {

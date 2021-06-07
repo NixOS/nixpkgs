@@ -13,6 +13,7 @@ alvan/vim-closetag
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
+andersevenrud/compe-tmux@main
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim@main
@@ -164,6 +165,7 @@ glepnir/zephyr-nvim@main
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular
+GoldsteinE/compe-latex-symbols
 google/vim-codefmt
 google/vim-jsonnet
 google/vim-maktaba
@@ -212,6 +214,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 itspriddle/vim-shellcheck
+ivalkeen/vim-simpledb
 ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
@@ -298,6 +301,7 @@ kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
 kristijanhusak/vim-carbon-now-sh
+kristijanhusak/vim-dadbod-completion
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
@@ -574,6 +578,7 @@ SevereOverfl0w/deoplete-github
 shaunsingh/moonlight.nvim@pure-lua
 shaunsingh/nord.nvim
 sheerun/vim-polyglot
+shinchu/lightline-gruvbox.vim
 Shougo/context_filetype.vim
 Shougo/defx.nvim
 Shougo/denite.nvim
@@ -619,6 +624,7 @@ t9md/vim-choosewin
 t9md/vim-smalls
 TaDaa/vimade
 takac/vim-hardtime
+tamago324/compe-zsh
 tami5/compe-conjure
 tami5/lispdocs.nvim
 tami5/sql.nvim
@@ -643,6 +649,7 @@ thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
 TimUntersberger/neogit
+tjdevries/colorbuddy.nvim
 tjdevries/nlua.nvim
 tjdevries/train.nvim
 tmhedberg/SimpylFold

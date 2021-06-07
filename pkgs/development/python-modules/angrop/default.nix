@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.0.7491";
+  version = "9.0.7833";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UWqHNgJ8vUbLK3n9tvwOgHyOyTXsqRJKaAPWQfqi3lo=";
+    sha256 = "sha256-JhD4/P5/IhmLBvmG3XoIEYVkowK+dDoLuwOdMhGi5q8=";
   };
 
   propagatedBuildInputs = [
@@ -24,13 +24,6 @@ buildPythonPackage rec {
     progressbar
     tqdm
   ];
-
-  postPatch = ''
-    # https://github.com/angr/angrop/issues/35
-    substituteInPlace setup.py \
-      --replace "packages=['angrop']," "packages=find_packages()," \
-      --replace "from distutils.core import setup" "from setuptools import find_packages, setup"
-  '';
 
   # Tests have additional requirements, e.g., angr binaries
   # cle is executing the tests with the angr binaries already and is a requirement of angr

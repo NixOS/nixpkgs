@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hiz3dMEYNKKd9dZiGghAhGqoXXKJiZG6sECfsCYVscU=";
+    hash = "sha256-h08RRcuQG1IjuCA6Xk71+MXKprZ/w5+H2edbG3rtVSY=";
   };
 
-  cargoHash = "sha256-sCvQFU9/ENVi1RHV3QDngzI/S1xuHvpWxsrxT73jdI0=";
+  cargoHash = "sha256-78S9Bmq6TIMiAV3HpMC8jK9fH+0Y+jXAW9V1Druyfg8=";
 
   outputs = [ "out" "man" ];
 

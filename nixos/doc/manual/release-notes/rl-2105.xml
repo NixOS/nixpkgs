@@ -56,7 +56,7 @@
     <itemizedlist>
      <listitem>
       <para>
-        Gnome: 3.36 -> 3.40, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.40/">release notes</link>
+        GNOME: 3.36 -> 40, see its <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">release notes</link>
       </para>
      </listitem>
      <listitem>
@@ -181,6 +181,15 @@
     <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
    </listitem>
 
+   <listitem>
+    <para>
+     Enabling wireless networking now requires specifying at least one network
+     interface using <xref linkend="opt-networking.wireless.interfaces"/>.
+     This is to avoid a race condition with the card initialisation (see
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/101963">issue
+     #101963</link> for more information).
+    </para>
+   </listitem>
    <listitem>
     <para>
      If you are using <option>services.udev.extraRules</option> to assign

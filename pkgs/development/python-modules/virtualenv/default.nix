@@ -16,7 +16,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, setuptools_scm
+, setuptools-scm
 , six
 , stdenv
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

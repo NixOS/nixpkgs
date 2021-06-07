@@ -14,21 +14,46 @@
   </itemizedlist>
   <section xml:id="highlights">
     <title>Highlights</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          PHP now defaults to PHP 8.0, updated from 7.4.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="new-services">
     <title>New Services</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
+          a GeoIP database updater from MaxMind. Available as
+          <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="backward-incompatibilities">
     <title>Backward Incompatibilities</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
           from 1.0.4 to 2.0.0
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.geoip-updater</literal> was broken and has
+          been replaced by
+          <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP 7.3 is no longer supported due to upstream not supporting
+          this version for the entire lifecycle of the 21.11 release.
         </para>
       </listitem>
     </itemizedlist>
