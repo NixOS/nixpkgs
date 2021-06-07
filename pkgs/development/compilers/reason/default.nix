@@ -1,5 +1,5 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppx_tools_versioned, utop, cppo
+{ lib, callPackage, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +18,6 @@ stdenv.mkDerivation rec {
     menhir
   ];
 
-  propagatedBuildInputs = [
-    menhirLib
-    merlin-extend
-    ppx_tools_versioned
-  ];
-
   buildInputs = [
     cppo
     dune_2
@@ -32,7 +26,14 @@ stdenv.mkDerivation rec {
     menhir
     menhirSdk
     ocaml
+    ppxlib
     utop
+  ];
+
+  propagatedBuildInputs = [
+    menhirLib
+    merlin-extend
+    ppx_derivers
   ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
