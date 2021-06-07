@@ -294,7 +294,7 @@ in
         environment = env // {
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
         };
-        preStart = 
+        preStart =
         let
           runAs = if config.security.sudo.enable then "${pkgs.sudo}/bin/sudo" else "${pkgs.doas}/bin/doas";
         in ''
