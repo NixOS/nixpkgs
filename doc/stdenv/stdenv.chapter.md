@@ -1057,7 +1057,55 @@ The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package
 
 ### cmake
 
-Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting configurePhase to a custom value, or by setting dontUseCmakeConfigure. cmakeFlags controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
+Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake, however, if ninja is present, then the ninja generator will be used instead. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. By default, the cmake configurePhase can be thought of as:
+
+```sh
+mkdir build
+cd build
+cmake .. $cmakeFlags
+```
+
+#### Variables controlling CMake
+
+##### dontUseCmakeConfigure
+
+Avoid running `cmake` during the configure step altogether.
+
+##### cmakeFlags
+
+Flags passed to cmake. `cmakeFlags = "-DBUILD_SHARED_LIB=ON -DENABLE_LTO=ON";`
+
+##### cmakeFlagsArray
+
+Flag array passed to cmake. `cmakeFlagsArray = [ "-DBUILD_SHARED_LIB=ON" "-DENABLE_LTO=ON" ];`
+
+::: note
+::: title
+Caution with whitespace
+:::
+
+The bash stringification will destroy boundaries between whitespace with both `cmakeFlags` and `cmakeFlagsArray`. Ensure to use single quotes `'` to preserve whitespace.
+:::
+
+##### dontUseCmakeBuildDir
+
+Avoid creating and changing directory to `build`.
+
+##### cmakeDir
+
+Set directory which contains the top-level CMakeLists.txt file. Defaults to the parent directory, otherwise the current directory if `dontUseCmakeBuildDir` is set to true. For example, if a project has the cmake files located in a top-level source directory called `cmake/`, then you will want to set the value to `../cmake` so that cmake can reference CMakeLists.txt from the build directory.
+
+##### dontFixCmake
+
+Avoid replacing instances of `/usr` and `/opt` with `/var/empty` in cmake files.
+
+##### dontAddPrefix
+
+Avoid setting `-DCMAKE_INSTALL_PREFIX` to `$prefix`.
+
+##### doCheck
+
+Will run ctest tests when set to true. When set to false, it will avoid building and running tests.
 
 ### xcbuildHook
 
