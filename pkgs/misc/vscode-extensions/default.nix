@@ -660,6 +660,18 @@ let
         };
       };
 
+      johnpapa.vscode-peacock = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-peacock";
+          publisher = "johnpapa";
+          version = "3.9.1";
+          sha256 = "1g7apzzgfm8s9sjavhwr8jpf9slhq8b9jfkww3q5n41mzzx8m94p";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-styled-components";
