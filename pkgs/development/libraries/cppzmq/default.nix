@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     # Tests try to download googletest at compile time; there is no option
     # to use a system one and no simple way to download it beforehand.
     "-DCPPZMQ_BUILD_TESTS=OFF"
-  ];
+  ]
+  # enable drafts if zeromq has them
+  ++ builtins.filter (a: a == "-DENABLE_DRAFTS=ON") zeromq.cmakeFlags;
 
   meta = with lib; {
     homepage = "https://github.com/zeromq/cppzmq";
