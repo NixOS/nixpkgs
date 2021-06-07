@@ -4841,6 +4841,8 @@ in
 
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
 
+  freshfetch = callPackage ../tools/misc/freshfetch { };
+
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
