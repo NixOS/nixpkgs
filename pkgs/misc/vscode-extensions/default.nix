@@ -1165,6 +1165,18 @@ let
         };
       };
 
+      wix.vscode-import-cost = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-import-cost";
+          publisher = "wix";
+          version = "2.15.0";
+          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       xaver.clang-format = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "clang-format";
